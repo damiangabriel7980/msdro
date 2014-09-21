@@ -1,0 +1,32 @@
+<div class="jumbotron">
+
+    <a href="javascript:;" class="btn btn-default col-xs-offset-2" ng-click="showForm = !showForm" type="button" ng-hide="showForm">Add new!</a>
+    <div class="form-horizontal" ng-show="showForm">
+        <div class="form-group">
+            <span class="col-xs-2 control-label">Name</span>
+            <div class="col-xs-8">
+                <div class="form-group row">
+                    <div class="col-xs-4">
+                        <input type="text" class="form-control" id="inputName" placeholder="Name" ng-model="newChild.name">
+                    </div>
+                    <div class="col-xs-4">
+                        <input type="text" class="form-control" placeholder="Surname" id="inputSurame" ng-model="newChild.surname">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <a href="javascript:;" class="btn btn-default col-xs-offset-2" ng-click="addChild()" type="button">Save!</a>
+            <a href="javascript:;" ng-click="showForm = !showForm">Cancel</a>
+        </div>
+    </div>
+    <table class="table">
+        <tbody ng-repeat="child in children">
+        <tr>
+            <td>{{child.name}}</td>
+            <td>{{child.surname}}</td>
+            <td><a href="javascript:;" class="btn btn-danger" ng-click="deleteChild(child._id)">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

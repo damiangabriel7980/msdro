@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" ng-app="cloudAdminApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+    <script src="components/angular/angular.js"></script>
+    <script src="components/angular-resource/angular-resource.js"></script>
+    <script src="components/angular-route/angular-route.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+    <script src="javascript/app.js"></script>
+    <script src="javascript/controllers.js"></script>
+    <script src="javascript/services.js"></script>
+
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top ng-scope">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#/" class="navbar-brand">Cloud Gradi</a>
+            <a href="#/children" class="navbar-brand"><span class="fa fa-child">Children</span></a>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span> <%= user.local.username %> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="profile">Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="logout">Sign Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="view-container">
+    <div ng-view class="view-frame" ></div>
+</div>
+
+</body>
+</html>

@@ -16,3 +16,10 @@ node_modules
 
 config/secretDatabase.js
 config/secretAuth.js
+
+node_modules
+dist
+.tmp
+.sass-cache
+public/components
+.idea/
