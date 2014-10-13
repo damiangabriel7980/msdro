@@ -1,74 +1,72 @@
-var Child       = require('./models/persons');
+var Content     = require('./models/content');
 var bodyParser	= require('body-parser');
 
 module.exports = function(app, router) {
 
-    router.route('/children')
+    router.route('/content')
 
         .post(function(req, res) {
 
-            var child = new Child();
+            var content = new Content();
 
-            child.type      = 'CHILD'
-            child.name      = req.body.name;
-            child.surname   = req.body.surname;
-//            child.birthDate = req.body.birthDate;
+            content.title    = req.body.title;
+            content.author   = req.body.author;
 
-            child.save(function(err){
+            content.save(function(err){
                 if(err) {
                     res.send(err);
                 }
 
-                res.json(child);
+                res.json(content);
             });
 
         })
 
         .get(function(req, res) {
-            Child.find(function(err, children) {
+            Content.find(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                res.json(children);
+                res.json(cont);
             });
         });
 
-    router.route('/children/:child_id')
+    router.route('/content/:content_id')
 
         .get(function(req, res) {
-            Child.findById(req.params.child_id, function(err, child) {
+            Content.findById(req.params.content_id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                res.json(child);
+                res.json(cont);
             })
         })
 
         .put(function(req, res) {
-            Child.findById(req.params.child_id, function(err, child) {
+            Content.findById(req.params.content_id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                child.name = req.body.name;
+                cont.title = req.body.title;
 
-                child.save(function(err){
+                cont.save(function(err){
                     if(err) {
                         res.send(err);
                     }
 
-                    res.json({ message: "Child updated!"});
+                    res.json({ message: "Content updated!"});
                 })
             });
 
         })
 
         .delete(function(req, res) {
-            Child.remove({
-                _id: req.params.child_id
-            }, function(err, child) {
+            Content.remove({
+                _id: req.params.content_id
+            }, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }

@@ -63,6 +63,12 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '/teste',
             templateUrl: 'partials/elearning/teste.ejs'
         })
+        //utility state used for dev:
+        .state('utility', {
+            url: '/util',
+            templateUrl: 'partials/utility.ejs',
+            controller: 'ContentController'
+        })
 }]);
 
 cloudAdminApp.run(

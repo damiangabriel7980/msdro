@@ -1,7 +1,7 @@
-var cloudAdminServices = angular.module('cloudAdminServices', ['ngResource'])
+var cloudAdminServices = angular.module('cloudAdminServices', ['ngResource']);
 
-cloudAdminServices.factory('ChildrenService', ['$resource', function($resource){
-    return $resource('api/children/:id', {}, {
+cloudAdminServices.factory('ContentService', ['$resource', function($resource){
+    return $resource('api/content/:id', {}, {
         query: { method: 'GET', isArray: true },
         save: { method: 'POST'},
         delete: { method: 'DELETE'}

@@ -1,0 +1,31 @@
+<div class="jumbotron">
+
+    <div class="form-horizontal">
+        <div>Add content:</div>
+        <div class="form-group">
+            <span class="col-xs-2 control-label">Title</span>
+            <div class="col-xs-8">
+                <div class="form-group row">
+                    <div class="col-xs-4">
+                        <input type="text" class="form-control" id="inputTitle" placeholder="Titlu" ng-model="newContent.title">
+                    </div>
+                    <div class="col-xs-4">
+                        <input type="text" class="form-control" placeholder="Autor" id="inputAuthor" ng-model="newContent.author">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <a href="javascript:;" class="btn btn-default col-xs-offset-2" ng-click="addContent()" type="button">Add!</a>
+        </div>
+    </div>
+    <table class="table">
+        <tbody ng-repeat="cont in content">
+        <tr>
+            <td>{{cont.title}}</td>
+            <td>{{cont.author}}</td>
+            <td><a href="javascript:;" class="btn btn-danger" ng-click="deleteContent(cont._id)">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
