@@ -10,58 +10,58 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
     $stateProvider
         .state('home',{
             url: '/',
-            templateUrl: 'partials/home.html'
+            templateUrl: 'partials/home.ejs'
         })
         .state('noutati', {
             abstract: true,
             url: '/noutati',
-            templateUrl: 'partials/noutati/noutati.html'
+            templateUrl: 'partials/noutati/noutati.ejs'
         })
         .state('noutati.articole',{
             url: '/articole',
-            templateUrl: 'partials/noutati/articole.html'
+            templateUrl: 'partials/noutati/articole.ejs'
         })
         .state('noutati.articoleLegislative',{
             url: '/articoleLegislative',
-            templateUrl: 'partials/noutati/articoleLegislative.html'
+            templateUrl: 'partials/noutati/articoleLegislative.ejs'
         })
         .state('biblioteca', {
             abstract: true,
             url: '/biblioteca',
-            templateUrl: '/partials/biblioteca/biblioteca.html'
+            templateUrl: '/partials/biblioteca/biblioteca.ejs'
         })
         .state('biblioteca.produse',{
             url: '/produse',
-            templateUrl: 'partials/biblioteca/produse.html'
+            templateUrl: 'partials/biblioteca/produse.ejs'
         })
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice',
-            templateUrl: 'partials/biblioteca/articoleStiintifice.html'
+            templateUrl: 'partials/biblioteca/articoleStiintifice.ejs'
         })
         .state('biblioteca.manualMerck',{
             url: '/manualMerck',
-            templateUrl: 'partials/biblioteca/manualMerck.html'
+            templateUrl: 'partials/biblioteca/manualMerck.ejs'
         })
         .state('calendar',{
             url: '/calendar',
-            templateUrl: 'partials/calendar.html'
+            templateUrl: 'partials/calendar.ejs'
         })
         .state('elearning', {
             abstract: true,
             url: '/elearning',
-            templateUrl: '/partials/elearning/elearning.html'
+            templateUrl: '/partials/elearning/elearning.ejs'
         })
         .state('elearning.multimedia',{
             url: '/multimedia',
-            templateUrl: 'partials/elearning/multimedia.html'
+            templateUrl: 'partials/elearning/multimedia.ejs'
         })
         .state('elearning.transmisii',{
             url: '/transmisii',
-            templateUrl: 'partials/elearning/transmisii.html'
+            templateUrl: 'partials/elearning/transmisii.ejs'
         })
         .state('elearning.teste',{
             url: '/teste',
-            templateUrl: 'partials/elearning/teste.html'
+            templateUrl: 'partials/elearning/teste.ejs'
         })
 }]);
 
