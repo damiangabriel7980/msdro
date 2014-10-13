@@ -7,6 +7,7 @@
     <script src="components/angular/angular.js"></script>
     <script src="components/angular-resource/angular-resource.js"></script>
     <script src="components/angular-route/angular-route.js"></script>
+    <script src="components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 
     <script src="javascript/app.js"></script>
@@ -20,27 +21,72 @@
 <body>
 
 <!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top ng-scope">
+<div class="navbar navbar-default navbar-fixed-top ng-scope" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="#/" class="navbar-brand">Cloud Gradi</a>
-            <a href="#/children" class="navbar-brand"><span class="fa fa-child">Children</span></a>
+            <a class="navbar-brand" href="#">Brand</a>
         </div>
 
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <div class="collapse navbar-collapse" collapse="navCollapsed">
 
+            <ul class="nav navbar-nav">
+                <li ng-class="{'active': $state.includes('home')}"><a ui-sref="home" href="#/"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="dropdown" ng-class="{'active': $state.includes('noutati')}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-globe"></span> Noutati <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="noutati.articole" href="#/articole">Articole</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="noutati.articoleLegislative" href="#/articoleLegislative">Articole legislative</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-book"></span> Biblioteca <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="biblioteca.produse" href="#/produse">Produse</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="biblioteca.articoleStiintifice" href="#/articoleStiintifice">Articole stiintifice</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="biblioteca.manualMerck" href="#/manualMerck">Manualul merck</a></li>
+                    </ul>
+                </li>
+                <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar"><span class="glyphicon glyphicon-calendar">Calendar</span></a></li>
+                <li class="dropdown" ng-class="{'active': $state.includes('elearning')}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-download"></span> E-learning <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="elearning.multimedia" href="#/multimedia">Multimedia</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="elearning.transmisii" href="#/transmisii">Transmisii live</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="elearning.teste" href="#/teste">Teste interactive</a></li>
+                    </ul>
+                </li>
+            </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form class="navbar-form navbar-right" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default sr-only">Submit</button>
+                    </form>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-user"></span> <%= user.local.username %> <b class="caret"></b>
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" role="menu">
                         <li><a href="profile">Profile</a></li>
                         <li class="divider"></li>
                         <li><a href="logout">Sign Out</a></li>
@@ -52,9 +98,7 @@
 </div>
 
 
-<div class="view-container">
-    <div ng-view class="view-frame" ></div>
-</div>
+<div ui-view class="view-container"></div>
 
 </body>
 </html>
