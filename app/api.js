@@ -9,8 +9,13 @@ module.exports = function(app, router) {
 
             var content = new Content();
 
-            content.title    = req.body.title;
-            content.author   = req.body.author;
+            content.title         = req.body.title;
+            content.author        = req.body.author;
+            content.description   = req.body.description;
+            content.text          = req.body.text;
+            content.type          = req.body.type.value;
+            content.lastUpdated   = new Date();
+
 
             content.save(function(err){
                 if(err) {

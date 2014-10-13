@@ -3,16 +3,30 @@
     <div class="form-horizontal">
         <div>Add content:</div>
         <div class="form-group">
-            <span class="col-xs-2 control-label">Title</span>
-            <div class="col-xs-8">
+            <div class="col-xs-12">
                 <div class="form-group row">
                     <div class="col-xs-4">
-                        <input type="text" class="form-control" id="inputTitle" placeholder="Titlu" ng-model="newContent.title">
+                        <input type="text" class="form-control" placeholder="Titlu" ng-model="newContent.title">
                     </div>
                     <div class="col-xs-4">
                         <input type="text" class="form-control" placeholder="Autor" id="inputAuthor" ng-model="newContent.author">
                     </div>
+                    <div class="col-xs-4">
+                        <input type="text" class="form-control" placeholder="Descriere" id="inputDescription" ng-model="newContent.description">
+                    </div>
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12">
+                <textarea placeholder="Continut" ng-model="newContent.text" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-3">
+                Tip:
+                <select ng-model="newContent.type" ng-options="c as c.label for c in contentTypes" class="form-control">
+                </select>
             </div>
         </div>
         <div class="form-group">

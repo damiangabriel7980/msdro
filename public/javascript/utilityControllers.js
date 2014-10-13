@@ -9,6 +9,11 @@ cloudAdminControllers.controller('ContentController', ['$scope', 'ContentService
         lastUpdated: ""
     };
 
+    $scope.contentTypes = [
+        { label: 'Articol', value: 1 },
+        { label: 'Stire', value: 2 }
+    ];
+
     $scope.content = ContentService.query();
 
     $scope.deleteContent = function(id){
