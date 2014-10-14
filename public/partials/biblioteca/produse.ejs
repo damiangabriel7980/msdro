@@ -1,1 +1,58 @@
-produse
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body>
+<div class="container" id="content">
+    <div class="row margintop20px">
+        <div class="col-xs-3" >
+            <h4 class="h-title">Arii terapeutice</h4>
+            <ul class="list-unstyled" ng-repeat="area in areas">
+
+                 <ul class="list-unstyled" ng-repeat="post in area">
+                     <li ng-if="post.tarea"><a href="#"/>{{post.tarea}}</li>
+                     <li ng-if="post.tareasp"><a href="#"/>{{post.tareasp[0].titleArea}}</li>
+                         <ul ng-repeat="subarea in post.tareasp">
+
+                             <li ng-if="subarea.tarea"><i class="glyphicon glyphicon-chevron-up "></i><a href="#"/>{{subarea.tarea}}</li>
+                         </ul>
+
+                     <!--<li ng-if="!post.tarea.isArray">{{post.tarea}}</li>-->
+                    <br/>
+                </ul>
+
+            </ul>
+            <hr class="visible-phone ">
+        </div>
+
+        <div class="col-xs-9">
+             <ul class="panel-group">
+                        <li class="col-xs-3">
+                            <a ui-sref="biblioteca.productDetails" href="#/productDetails"></a>
+                            <div class="product thumbnail">
+                                <div class="caption">
+                                    <!--<h4><a href=""></a></h4>-->
+
+                                    <p></p>
+                                </div>
+                           </div>
+                        </li>
+
+            </ul>
+        </div>
+
+        <div class="col-xs-1 hidden-phone">
+                <ul class="nav nav-list">
+                    <li ><a href=""/></li>
+                    <li class="divider"></li>
+
+                        <li class=''><a href=""></a></li>
+
+                </ul>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

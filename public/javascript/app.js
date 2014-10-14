@@ -32,17 +32,19 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('biblioteca.produse',{
             url: '/produse',
-            templateUrl: 'partials/biblioteca/produse.ejs'
+            templateUrl: 'partials/biblioteca/produse.ejs',
+            controller: 'therapeuticControllerCtrl'
+        })
+        .state('biblioteca.productDetails',{
+            url: '/productDetails',
+            templateUrl: 'partials/biblioteca/productDetails.ejs',
+            controller: 'therapeuticControllerCtrl'
         })
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice',
             templateUrl: 'partials/biblioteca/articoleStiintifice.ejs'
         })
-        .state('biblioteca.manualMerck',{
-            url: '/manualMerck',
-            templateUrl: 'partials/biblioteca/manualMerck.ejs'
-        })
-        .state('calendar',{
+       .state('calendar',{
             url: '/calendar',
             templateUrl: 'partials/calendar.ejs'
         })

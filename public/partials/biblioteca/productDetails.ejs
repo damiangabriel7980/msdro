@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name='layout' content='user-layout'/>
+</head>
+
+<body>
+<div class="container" id="content">
+    <div class="row margintop20px">
+        <div class="col-xs-3 hidden-xs" >
+            <h4 class="h-title">Arii terapeutice</h4>
+            <ul class="list-unstyled" ng-repeat="area in areas">
+
+                <ul class="list-unstyled" ng-repeat="post in area">
+                    <li ng-if="post.tarea"><a href="#"/>{{post.tarea}}</li>
+                    <li ng-if="post.tareasp"><a href="#"/>{{post.tareasp[0].titleArea}}</li>
+                    <ul ng-repeat="subarea in post.tareasp">
+
+                        <li ng-if="subarea.tarea"><i class="glyphicon glyphicon-chevron-up "></i><a href="#"/>{{subarea.tarea}}</li>
+                    </ul>
+
+                    <!--<li ng-if="!post.tarea.isArray">{{post.tarea}}</li>-->
+                    <br/>
+                </ul>
+
+            </ul>
+            <hr class="visible-phone ">
+        </div>
+
+        <div class="col-xs-9 well well-content">
+            <div class="row">
+                <h3>${product?.name}</h3>
+
+                <div class="left">
+                    <a class="thumbnail"><img src="${product.getImage()}" alt="${product?.name}" height="300px" width="300px"/></a>
+                    <a href="${product?.getURL()}" target="_blank" class="btn btn-warning btn-block margintop10px"><i class="glyphicon glyhicon-share glyphicon-white"></i>&nbsp;</a>
+                    <hr class="margintop10px marginbottom0">
+                </div>
+
+                <div class="text-content">${product?.description}</div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

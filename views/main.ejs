@@ -14,6 +14,7 @@
     <script src="javascript/controllers.js"></script>
     <!--Utility controllers used for dev:-->
     <script src="javascript/utilityControllers.js"></script>
+    <script src="javascript/therapeuticControllerCtrl.js"></script>
     <script src="javascript/services.js"></script>
 
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
@@ -58,7 +59,7 @@
                         <li class="divider"></li>
                         <li><a ui-sref="biblioteca.articoleStiintifice" href="#/articoleStiintifice">Articole stiintifice</a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="biblioteca.manualMerck" href="#/manualMerck">Manualul merck</a></li>
+                        <li><a ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" target="_blank">Manualul merck</a></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar"><span class="glyphicon glyphicon-calendar">Calendar</span></a></li>
