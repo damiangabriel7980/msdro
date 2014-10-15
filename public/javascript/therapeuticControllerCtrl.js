@@ -9,20 +9,32 @@
  * */
 
 
-cloudAdminControllers.controller('therapeuticControllerCtrl', function($scope, $http) {
+cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therapeuticAreaService', function($scope, therapeuticAreaService){
 
-    $scope.init = function() {
-
-        $http.get('javascript/Therapeutic_Areas.json').
-            success(function(data, status, headers, config) {
-                $scope.areas = data;
-            }).
-            error(function(data, status, headers, config) {
-                // log error
-            });
+    $scope.newTherapeuticArea = {
+        version_ther:     "",
+        has_children: "",
+        last_updated: "",
+        nameT: "",
+        parent_therapeutic_area: "",
+        enableT:      ""
     };
 
-    $scope.init();
+    $scope.therapeuticAreas = therapeuticAreaService.query();
 
+    $scope.deleteTherapeuticArea = function(id){
+        therapeuticAreaService.delete({id: id});
+        $scope.therapeuticAreas = $scope.therapeuticAreas.filter(function(cont){ return (cont._id != id); });
+    };
 
-});
+    $scope.addTherapeuticArea = function(){
+        if($scope.newTherapeuticArea){
+            ProductService.save($scope.newTherapeuticArea).$promise
+                .then(function(cont) {
+                    $scope.therapeuticAreas.push(cont);
+                });
+            $scope.newTherapeuticArea = {};
+        }
+    };
+
+}]);

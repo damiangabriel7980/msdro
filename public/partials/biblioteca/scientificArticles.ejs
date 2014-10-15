@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div class="container" id="content">
+    <div class="row margintop20px">
+        <div class="col-xs-3 hidden-xs">
+            <h4 class="h-title">
+                Cele mai citite articole stiintifice
+            </h4>
+            <g:each in="${popularArt}" var="article">
+                <div class="popular">
+                    <h5><a href="<g:createLink controller="articleUser" action="articleDetails" params="${[id:article?.id]}"/>" title="${article?.title}">${article?.title}</a></h5>
+                    <p><textTrim:trim text="${article?.text}" size="150"/> <a href="<g:createLink controller="articleUser" action="articleDetails" params="${[id:article?.id]}"/>"><g:message code="user.article.readMore" /></a></p>
+                </div>
+            </g:each>
+        </div>
+
+        <g:if test="${articles.size()}">
+            <g:each in="${articles}" var="article">
+                <div class="article">
+                    <div class="row">
+                        <div class="col-xs-3 pagination-centered">
+                            <a href="<g:createLink controller="articleUser" action="articleDetails" params="${[id:article?.id]}"/>">
+                            <img src="${article.getImage()}" height="300px" width="300px"/>
+                            </a>
+                        </div>
+                        <div class="col-xs-9">
+                            <h4><a href="<g:createLink controller="articleUser" action="articleDetails" params="${[id:article?.id]}"/>">${article?.title}</a></h4>
+                            <p><textTrim:trim text="${article?.text}" size="500"/></p>
+
+                            <p class="marginbottom0 bold">${article?.author}</p>
+                            <p class="marginbottom40px">${article?.lastUpdated?.format('dd/MM/yyyy')}</p>
+                            <a href="<g:createLink controller="articleUser" action="articleDetails" params="${[id:article?.id]}"/>" class="btn"><g:message code="user.article.title.seeMore" /></a>
+                        </div>
+                    </div>
+                </div>
+            </g:each>
+        </g:if>
+
+        <g:else>
+            <div class="alert alert-block">
+                <p><g:message code="user.article.noArticles" /></p>
+            </div>
+        </g:else>
+            <g:if test="${total > AppConstants.DEFAULT_ARTICLES_ON_PAGES}">
+                <div class="pagination-centered"><a href="#" class="btn btn-primary" id="load-more-articles" data-limit="${AppConstants.DEFAULT_ARTICLES_ON_PAGES}" data-total="${total}" data-type="${params?.type}"><g:message code="user.article.button.more" /></a></div>
+            </g:if>
+        </div>
+    </div>
+</div>
+</body>
+</html>

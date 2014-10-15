@@ -3,6 +3,7 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.router',
         'cloudAdminControllers',
         'cloudAdminServices'
+
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -40,9 +41,9 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/biblioteca/productDetails.ejs',
             controller: 'therapeuticControllerCtrl'
         })
-        .state('biblioteca.articoleStiintifice',{
-            url: '/articoleStiintifice',
-            templateUrl: 'partials/biblioteca/articoleStiintifice.ejs'
+        .state('biblioteca.scientificArticles',{
+            url: '/scientificArticles',
+            templateUrl: 'partials/biblioteca/scientificArticles.ejs'
         })
        .state('calendar',{
             url: '/calendar',
@@ -70,6 +71,18 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '/util',
             templateUrl: 'partials/utility.ejs',
             controller: 'ContentController'
+        })
+        //util_prod user for dev to create products
+        .state('util_prod', {
+            url: '/util_Products',
+            templateUrl: 'partials/util_Products.ejs',
+            controller: 'productsController'
+        })
+        //util_therapy user for dev to create products
+        .state('util_therap', {
+            url: '/util_therapeutic_areas',
+            templateUrl: 'partials/util_therapeutic_areas.ejs',
+            controller: 'therapeuticControllerCtrl'
         })
 }]);
 
