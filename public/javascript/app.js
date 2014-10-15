@@ -13,18 +13,18 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/home.ejs'
         })
         .state('noutati', {
-            abstract: true,
-            url: '/noutati',
+            //abstract: true,
+            url: '/noutati/:articleType',
             templateUrl: 'partials/noutati/noutati.ejs'
         })
-        .state('noutati.articole',{
-            url: '/articole',
-            templateUrl: 'partials/noutati/articole.ejs'
-        })
-        .state('noutati.articoleLegislative',{
-            url: '/articoleLegislative',
-            templateUrl: 'partials/noutati/articoleLegislative.ejs'
-        })
+//        .state('noutati.articole',{
+//            url: '/articole',
+//            templateUrl: 'partials/noutati/articole.ejs'
+//        })
+//        .state('noutati.articoleLegislative',{
+//            url: '/articoleLegislative',
+//            templateUrl: 'partials/noutati/articoleLegislative.ejs'
+//        })
         .state('biblioteca', {
             abstract: true,
             url: '/biblioteca',

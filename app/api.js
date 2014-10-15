@@ -5,28 +5,6 @@ module.exports = function(app, router) {
 
     router.route('/content')
 
-        .post(function(req, res) {
-
-            var content = new Content();
-
-            content.title         = req.body.title;
-            content.author        = req.body.author;
-            content.description   = req.body.description;
-            content.text          = req.body.text;
-            content.type          = req.body.type.value;
-            content.lastUpdated   = new Date();
-
-
-            content.save(function(err){
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(content);
-            });
-
-        })
-
         .get(function(req, res) {
             Content.find(function(err, cont) {
                 if(err) {
@@ -47,36 +25,18 @@ module.exports = function(app, router) {
 
                 res.json(cont);
             })
-        })
+        });
 
-        .put(function(req, res) {
-            Content.findById(req.params.content_id, function(err, cont) {
+    router.route('/content/:content_type')
+
+        .get(function(req, res) {
+            console.log("Content type = "+req.content_type);
+            Content.findByType(req.params.content_type, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                cont.title = req.body.title;
-
-                cont.save(function(err){
-                    if(err) {
-                        res.send(err);
-                    }
-
-                    res.json({ message: "Content updated!"});
-                })
-            });
-
-        })
-
-        .delete(function(req, res) {
-            Content.remove({
-                _id: req.params.content_id
-            }, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json({ message: 'Succesfully deleted'});
+                res.json(cont);
             })
         });
 

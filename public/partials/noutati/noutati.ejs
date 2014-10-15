@@ -1,2 +1,17 @@
-<div>Noutati</div>
-<div ui-view></div>
+<div class="container">
+    <a href="javascript:;" class="btn btn-default col-xs-offset-2" ng-click="test()" type="button">Test</a>
+    <div class="col-md-12">
+        <div class="col-md-3">
+            <div ng-repeat="cont in content">
+                <div class="col-md-12">
+                    <div class="col-md-3">image</div>
+                    <div class="col-md-9">
+                        <div class="col-md-12">{{cont.title}}</div>
+                        <!--<div class="col-md-12">{{getHeader(cont.text)}}</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">articole</div>
+    </div>
+</div>
