@@ -1,1 +1,44 @@
-transmisii
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name='layout' content='user-layout'/>
+    <!--<script>-->
+        <!--var swfVersionStr = "11.2.0";-->
+        <!--var xiSwfUrlStr = "/flash/playerProductInstall.swf";-->
+        <!--var flashvars = {};-->
+        <!--flashvars.inputUrl = "rtmp://${inputUrl}";-->
+        <!--flashvars.inputWidth = "480";-->
+        <!--flashvars.inputHeight = "360";-->
+        <!--flashvars.inputStreamName = "livestream";-->
+        <!--flashvars.inputNoSignalImage = "${inputNoSignalImage}";-->
+        <!--var params = {};-->
+        <!--params.quality = "high";-->
+        <!--params.bgcolor = "#ffffff";-->
+        <!--params.allowscriptaccess = "always";-->
+        <!--params.allowfullscreen = "true";-->
+        <!--params.wmode = "transparent";-->
+        <!--params.scale = "exactFit";-->
+        <!--var attributes = {};-->
+        <!--attributes.id = "simpleSubscriber3";-->
+        <!--attributes.name = "simpleSubscriber3";-->
+        <!--attributes.align = "middle";-->
+    <!--</script>-->
+</head>
+
+<body>
+<div class="container" id="content">
+    <div class="row margintop20px">
+        <h3>Transmisii live</h3>
+        <div id="videoContainer" align="center" class="col-xs-12 well well-content" style="width: 480px;height: 350px;resize: both; overflow: auto;">
+            <div id="myContent">
+                <object type="application/x-shockwave-flash" id="simpleSubscriber3" name="simpleSubscriber3" align="middle" data="/flash/simpleSubscriber3.swf" width="100%" height="100%"><param name="quality" value="high"><param name="bgcolor" value="#ffffff"><param name="allowscriptaccess" value="always"><param name="allowfullscreen" value="true"><param name="wmode" value="transparent"><param name="scale" value="exactFit"><param name="flashvars" value="inputUrl=rtmp://qualitance.srfms.com:2111/live&amp;inputWidth=480&amp;inputHeight=360&amp;inputStreamName=livestream&amp;inputNoSignalImage=https://s3-eu-west-1.amazonaws.com/msdapp/resources/rsz_no_signal.jpg"></object>
+            </div>
+        </div>
+    </div>
+
+    <div class="row margintop20px">
+        <span class="col-xs-3"><button id="toggleFullScreen" class="btn btn-small hide">Fullscreen</button></span>
+    </div>
+</div>
+</body>
+</html>

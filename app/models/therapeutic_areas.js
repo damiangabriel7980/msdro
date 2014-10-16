@@ -11,10 +11,9 @@ var therapeuticAreaSchema		= new Schema({
     version_ther:     Number,
     has_children: Number,
     last_updated: Date,
-    nameT: String,
-    id_for_children: Number,
-    parent_therapeutic_area: Number,
-    enableT:      Number
+    name: String,
+    parent_id: Number,
+    enable:      Number
 });
 
 module.exports = mongoose.model('therapeuticAreas', therapeuticAreaSchema);

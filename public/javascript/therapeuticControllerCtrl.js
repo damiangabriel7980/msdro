@@ -15,10 +15,9 @@ cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therap
         version_ther:     "",
         has_children: "",
         last_updated: "",
-        nameT: "",
-        parent_therapeutic_area: "",
-        id_for_children: "",
-        enableT:      ""
+        name: "",
+        parent_id: "",
+        enable:      ""
     };
 
     $scope.therapeuticAreas = therapeuticAreaService.query();
@@ -38,4 +37,6 @@ cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therap
         }
     };
 
-}]);
+ }]);
+
+

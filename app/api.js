@@ -32,7 +32,9 @@ module.exports = function(app, router) {
 
                 res.json(cont);
             });
-        });
+        })
+
+
 
     router.route('/content/:content_id')
 
@@ -170,11 +172,10 @@ module.exports = function(app, router) {
             therapeutic_area.version_ther = req.body.version_ther;
             therapeutic_area.has_children = req.body.has_children;
             therapeutic_area.last_updated = new Date();
-            therapeutic_area.enableT = req.body.enableT;
-            therapeutic_area.id_for_children = req.body.id_for_children;
-            therapeutic_area.parent_therapeutic_area = req.body.parent_therapeutic_area;
+            therapeutic_area.enable = req.body.enable;
+            therapeutic_area.parent_id = req.body.parent_id;
 
-            therapeutic_area.nameT = req.body.nameT;
+            therapeutic_area.name = req.body.name;
 
             therapeutic_area.save(function(err){
                 if(err) {
@@ -196,10 +197,12 @@ module.exports = function(app, router) {
             });
         });
 
+
+
     router.route('/therapeutic_areas/:therapeutic_areas_id')
 
         .get(function(req, res) {
-            Therapeutic_Area.findById(req.params.therapeutic_areas_id, function(err, cont) {
+            Therapeutic_Area.findById(req.params._id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -209,7 +212,7 @@ module.exports = function(app, router) {
         })
 
         .put(function(req, res) {
-            Therapeutic_Area.findById(req.params.therapeutic_areas_id, function(err, cont) {
+            Therapeutic_Area.findById(req.params._id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -218,10 +221,9 @@ module.exports = function(app, router) {
                 cont.version_ther = req.body.version_ther;
                 cont.has_children = req.body.has_children;
                 cont.last_updated = new Date();
-                cont.enableT = req.body.enableT;
-                cont.parent_therapeutic_area = req.body.parent_therapeutic_area;
-                cont.id_for_children = req.body.id_for_children;
-                cont.nameT = req.body.nameT;
+                cont.enable = req.body.enable;
+                cont.parent_id = req.body.parent_id;
+                cont.name = req.body.name;
 
                 cont.save(function(err){
                     if(err) {

@@ -8,21 +8,20 @@
     <div class="row margintop20px">
         <div class="col-xs-3" >
             <h4 class="h-title">Arii terapeutice</h4>
-            <ul class="list-unstyled" ng-repeat="area in areas">
 
-                 <ul class="list-unstyled" ng-repeat="post in area">
-                     <li ng-if="post.tarea"><a href="#"/>{{post.tarea}}</li>
-                     <li ng-if="post.tareasp"><a href="#"/>{{post.tareasp[0].titleArea}}</li>
-                         <ul ng-repeat="subarea in post.tareasp">
-
-                             <li ng-if="subarea.tarea"><i class="glyphicon glyphicon-chevron-up "></i><a href="#"/>{{subarea.tarea}}</li>
-                         </ul>
-
-                     <!--<li ng-if="!post.tarea.isArray">{{post.tarea}}</li>-->
-                    <br/>
+            <ul class="list-unstyled" ng-repeat="area in therapeuticAreas">
+                <li ng-if="area.parent_id===0"><a href="#"/>{{area.name}}</li>
+                <ul ng-if="area.has_children=='1'" ng-repeat="area2 in therapeuticAreas | filter : {_id : area.parent_id}">
+                    <li><a href="#"/>
+                        {{area2.name}}
+                        </li>
+                </ul>
+                <br/>
                 </ul>
 
-            </ul>
+
+
+         </ul>
             <hr class="visible-phone ">
         </div>
 
