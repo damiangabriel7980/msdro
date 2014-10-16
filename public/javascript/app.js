@@ -15,7 +15,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('noutati', {
             //abstract: true,
             url: '/noutati/:articleType',
-            templateUrl: 'partials/noutati/noutati.ejs'
+            templateUrl: 'partials/noutati/noutati.ejs',
+            controller: 'ContentController'
         })
 //        .state('noutati.articole',{
 //            url: '/articole',
@@ -81,6 +82,10 @@ cloudAdminApp.run(
             // to active whenever 'contacts.list' or one of its decendents is active.
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
+
+            //amazon service paths
+            $rootScope.pathAmazonResources = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/";
+            $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/msddev-test/";
         }
     ]
 );

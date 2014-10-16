@@ -27,17 +27,16 @@ module.exports = function(app, router) {
             })
         });
 
-    router.route('/content/:content_type')
+    router.route('/content/type/:content_type')
 
         .get(function(req, res) {
-            console.log("Content type = "+req.content_type);
-            Content.findByType(req.params.content_type, function(err, cont) {
+            Content.find({type: req.params.content_type}, {}, function (err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
                 res.json(cont);
-            })
+            });
         });
 
     app.use('/api', router);
