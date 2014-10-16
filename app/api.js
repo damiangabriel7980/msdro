@@ -1,6 +1,6 @@
 var Content     = require('./models/content');
 var Products    = require('./models/products');
-var therapeutic_Area = require('./models/therapeutic_areas');
+var Therapeutic_Area = require('./models/therapeutic_areas');
 var bodyParser	= require('body-parser');
 
 module.exports = function(app, router) {
@@ -111,10 +111,10 @@ module.exports = function(app, router) {
             });
         });
 
-    router.route('/products/:products_id_product')
+    router.route('/products/:products_id')
 
         .get(function(req, res) {
-            Products.findById(req.params.products_id_product, function(err, cont) {
+            Products.findById(req.params.products_id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -124,7 +124,7 @@ module.exports = function(app, router) {
         })
 
         .put(function(req, res) {
-            Products.findById(req.params.products_id_product, function(err, cont) {
+            Products.findById(req.params.products_id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -151,7 +151,7 @@ module.exports = function(app, router) {
 
         .delete(function(req, res) {
             Products.remove({
-                _id: req.params.products_id_product
+                _id: req.params.products_id
             }, function(err, cont) {
                 if(err) {
                     res.send(err);
@@ -165,12 +165,13 @@ module.exports = function(app, router) {
 
         .post(function(req, res) {
 
-            var therapeutic_area = new therapeutic_Area();
+            var therapeutic_area = new Therapeutic_Area();
 
             therapeutic_area.version_ther = req.body.version_ther;
             therapeutic_area.has_children = req.body.has_children;
             therapeutic_area.last_updated = new Date();
             therapeutic_area.enableT = req.body.enableT;
+            therapeutic_area.id_for_children = req.body.id_for_children;
             therapeutic_area.parent_therapeutic_area = req.body.parent_therapeutic_area;
 
             therapeutic_area.nameT = req.body.nameT;
@@ -186,7 +187,7 @@ module.exports = function(app, router) {
         })
 
         .get(function(req, res) {
-            therapeutic_Area.find(function(err, cont) {
+            Therapeutic_Area.find(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -198,7 +199,7 @@ module.exports = function(app, router) {
     router.route('/therapeutic_areas/:therapeutic_areas_id')
 
         .get(function(req, res) {
-            therapeutic_Area.findById(req.params.products_id_product, function(err, cont) {
+            Therapeutic_Area.findById(req.params.therapeutic_areas_id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -208,7 +209,7 @@ module.exports = function(app, router) {
         })
 
         .put(function(req, res) {
-            therapeutic_Area.findById(req.params.therapeutic_areas_id, function(err, cont) {
+            Therapeutic_Area.findById(req.params.therapeutic_areas_id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -219,7 +220,7 @@ module.exports = function(app, router) {
                 cont.last_updated = new Date();
                 cont.enableT = req.body.enableT;
                 cont.parent_therapeutic_area = req.body.parent_therapeutic_area;
-
+                cont.id_for_children = req.body.id_for_children;
                 cont.nameT = req.body.nameT;
 
                 cont.save(function(err){
@@ -234,7 +235,7 @@ module.exports = function(app, router) {
         })
 
         .delete(function(req, res) {
-            therapeutic_Area.remove({
+            Therapeutic_Area.remove({
                 _id: req.params.therapeutic_areas_id
             }, function(err, cont) {
                 if(err) {

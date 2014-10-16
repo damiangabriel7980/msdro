@@ -12,7 +12,6 @@
 cloudAdminControllers.controller('productsController', ['$scope', 'ProductService', function($scope, ProductService){
 
     $scope.newProduct = {
-        id_product: "",
         version_prod: "",
         description: "",
         enableP:      "",
@@ -26,7 +25,7 @@ cloudAdminControllers.controller('productsController', ['$scope', 'ProductServic
 
     $scope.deleteProduct = function(id){
         ProductService.delete({id: id});
-        $scope.products = $scope.products.filter(function(cont){ return (cont._id_product != id); });
+        $scope.products = $scope.products.filter(function(cont){ return (cont._id != id); });
     };
 
     $scope.addProduct = function(){

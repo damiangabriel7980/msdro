@@ -17,6 +17,7 @@ cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therap
         last_updated: "",
         nameT: "",
         parent_therapeutic_area: "",
+        id_for_children: "",
         enableT:      ""
     };
 
@@ -29,7 +30,7 @@ cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therap
 
     $scope.addTherapeuticArea = function(){
         if($scope.newTherapeuticArea){
-            ProductService.save($scope.newTherapeuticArea).$promise
+            therapeuticAreaService.save($scope.newTherapeuticArea).$promise
                 .then(function(cont) {
                     $scope.therapeuticAreas.push(cont);
                 });

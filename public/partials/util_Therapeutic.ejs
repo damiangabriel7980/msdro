@@ -1,0 +1,47 @@
+<div class="jumbotron">
+
+    <div class="form-horizontal">
+        <div>Add content:</div>
+        <div class="form-group">
+            <span class="col-xs-2 control-label">Title</span>
+            <div class="col-xs-8">
+                <div class="form-group row">
+                    <div class="col-xs-2">
+                        <input type="text" class="form-control" placeholder="Version" id="version_ther" ng-model="newTherapeuticArea.version_ther">
+                    </div>
+                    <div class="col-xs-2">
+                        <input type="text" class="form-control" placeholder="Has_Children" id="hasChildren" ng-model="newTherapeuticArea.has_children">
+                    </div>
+                    <div class="col-xs-2">
+                        <input type="text" class="form-control" placeholder="Name_Therap_Area" id="nameT" ng-model="newTherapeuticArea.nameT">
+                    </div>
+                    <div class="col-xs-2">
+                        <input type="text" class="form-control" placeholder="Parent ID" id="parentTA" ng-model="newTherapeuticArea.parent_therapeutic_area">
+                    </div>
+                    <div class="col-xs-2">
+                        <input type="text" class="form-control" placeholder="Id for Children" id="idForChild" ng-model="newTherapeuticArea.id_for_children">
+                    </div>
+                    <div class="col-xs-2">
+                        <input type="text" class="form-control" placeholder="Enable(0/1)" id="enableT" ng-model="newTherapeuticArea.enableT">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <a href="javascript:;" class="btn btn-default col-xs-offset-2" ng-click="addTherapeuticArea()" type="button">Add!</a>
+        </div>
+    </div>
+    <table class="table">
+        <tbody ng-repeat="cont in therapeuticAreas">
+        <tr>
+            <td>{{cont.version_ther}}</td>
+            <td>{{cont.has_children}}</td>
+            <td>{{cont.nameT}}</td>
+            <td>{{cont.parent_therapeutic_area}}</td>
+            <td>{{cont.last_updated}}</td>
+            <td>{{cont.enableT}}</td>
+            <td><a href="javascript:;" class="btn btn-danger" ng-click="deleteTherapeuticArea(cont._id)">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

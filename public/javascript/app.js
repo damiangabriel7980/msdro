@@ -80,8 +80,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         //util_therapy user for dev to create products
         .state('util_therap', {
-            url: '/util_therapeutic_areas',
-            templateUrl: 'partials/util_therapeutic_areas.ejs',
+            url: '/util_Therapeutic',
+            templateUrl: 'partials/util_Therapeutic.ejs',
             controller: 'therapeuticControllerCtrl'
         })
 }]);

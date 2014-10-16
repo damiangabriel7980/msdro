@@ -9,7 +9,7 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
 }]);
 
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
-    return $resource('api/products/:products_id_product', {}, {
+    return $resource('api/products/:id', {}, {
         query: { method: 'GET', isArray: true },
         save: { method: 'POST'},
         delete: { method: 'DELETE'}
@@ -17,7 +17,7 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
 }]);
 
 cloudAdminServices.factory('therapeuticAreaService', ['$resource', function($resource){
-    return $resource('api/therapeutic_areas/:therapeutic_areas_id', {}, {
+    return $resource('api/therapeutic_areas/:id', {}, {
         query: { method: 'GET', isArray: true },
         save: { method: 'POST'},
         delete: { method: 'DELETE'}
