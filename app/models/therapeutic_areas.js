@@ -12,7 +12,7 @@ var therapeuticAreaSchema		= new Schema({
     has_children: Number,
     last_updated: Date,
     name: String,
-    parent_id: Number,
+    parent_id: String,
     enable:      Number
 });
 
