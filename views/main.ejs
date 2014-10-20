@@ -21,6 +21,7 @@
 
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/customStyles.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 </head>
 <body>
@@ -59,9 +60,9 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="biblioteca.produse" href="#/produse">Produse</a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="biblioteca.scientificArticles" href="#/scientificArticles">Articole stiintifice</a></li>
+                        <li><a ui-sref="biblioteca.articoleStiintifice" href="#/articoleStiintifice">Articole stiintifice</a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" target="_blank">Manualul merck</a></li>
+                        <li><a ui-sref="biblioteca.manualMerck" href="#/manualMerck">Manualul merck</a></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar"><span class="glyphicon glyphicon-calendar">Calendar</span></a></li>

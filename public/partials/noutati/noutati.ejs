@@ -1,2 +1,25 @@
-<div>Noutati</div>
-<div ui-view></div>
+<div class="container articlesStyles">
+    <!--<a href="javascript:;" class="btn btn-default col-xs-offset-2" ng-click="test()" type="button">Test</a>-->
+    <div class="col-xs-12">
+        <div class="col-xs-3">
+            <div class="col-xs-12">
+                Cele mai citite {{title}}
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div ng-repeat="cont in content">
+                <div class="col-xs-12 articleBox">
+                    <div class="col-xs-3 displayImage">
+                        <img src="{{imagePre+cont.image_path}}"/>
+                    </div>
+                    <div class="col-xs-9">
+                        <div class="col-xs-12 title">{{cont.title}}</div>
+                        <div class="col-xs-12 trimmedArticle">{{createHeader(cont.text,200)}}</div>
+                        <div class="col-xs-12 author">{{cont.author}}</div>
+                        <div class="col-xs-12 lastUpdate">{{cont.last_updated}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
