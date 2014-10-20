@@ -85,13 +85,13 @@ module.exports = function(app, router) {
 
             var product = new Products();
 
-            product.version_prod = req.body.version_prod;
+            product.version = req.body.version;
             product.description = req.body.description;
-            product.enableP = req.body.enableP;
+            product.enable = req.body.enable;
             product.file_path = req.body.file_path;
             product.image_path = req.body.image_path;
             product.last_updated = new Date();
-            product.nameP = req.body.nameP;
+            product.name = req.body.name;
 
             product.save(function(err){
                 if(err) {
@@ -116,7 +116,7 @@ module.exports = function(app, router) {
     router.route('/products/:products_id')
 
         .get(function(req, res) {
-            Products.findById(req.params.products_id, function(err, cont) {
+            Products.findById(req.params._id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -126,19 +126,19 @@ module.exports = function(app, router) {
         })
 
         .put(function(req, res) {
-            Products.findById(req.params.products_id, function(err, cont) {
+            Products.findById(req.params._id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
 
-                cont.version_prod = req.body.version_prod;
+                cont.version = req.body.version;
                 cont.description = req.body.description;
-                cont.enableP = req.body.enableP;
+                cont.enable = req.body.enable;
                 cont.file_path = req.body.file_path;
                 cont.image_path = req.body.image_path;
                 cont.last_updated = new Date();
-                cont.nameP = req.body.nameP;
+                cont.name = req.body.name;
 
                 cont.save(function(err){
                     if(err) {

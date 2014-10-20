@@ -30,10 +30,11 @@
                         <li class="col-xs-3">
                             <a ui-sref="biblioteca.productDetails" href="#/productDetails"></a>
                             <div class="product thumbnail">
-                                <div class="caption">
-                                    <!--<h4><a href=""></a></h4>-->
+                                <div class="caption" ng-repeat="prod in products">
+                                    <img src="{{amazon + prod.image_path}}" alt="{{prod.name}}" height="300px" width="300px"/>
+                                    <h4><a href="#"></a>{{prod.name}}</h4>-->
 
-                                    <p></p>
+                                    <p>{{prod.description.text()}}</p>
                                 </div>
                            </div>
                         </li>

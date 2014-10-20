@@ -21,6 +21,7 @@ cloudAdminControllers.controller('productsController', ['$scope', 'ProductServic
         nameP: ""
     };
 
+    $scope.amazon = "https://s3-eu-west-1.amazonaws.com/msddev-test/";
     $scope.products = ProductService.query();
 
     $scope.deleteProduct = function(id){
