@@ -12,10 +12,9 @@
 
     <script src="javascript/app.js"></script>
     <script src="javascript/controllers.js"></script>
-    <!--Utility controllers used for dev:-->
-    <script src="javascript/utilityControllers.js"></script>
     <script src="javascript/therapeuticControllerCtrl.js"></script>
     <script src="javascript/productsController.js"></script>
+    <script src="javascript/ContentController.js"></script>
     <script src="javascript/services.js"></script>
     <script src="javascript/require.js"></script>
 
@@ -48,9 +47,9 @@
                         <span class="glyphicon glyphicon-globe"></span> Noutati <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="noutati.articole" href="#/articole">Articole</a></li>
+                        <li><a ui-sref="noutati({articleType:1})">Articole</a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="noutati.articoleLegislative" href="#/articoleLegislative">Articole legislative</a></li>
+                        <li><a ui-sref="noutati({articleType:2})">Articole legislative</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
