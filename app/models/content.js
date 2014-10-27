@@ -13,7 +13,8 @@ var ContentSchema		= new Schema({
     last_updated: Date,
     version:      Number,
     enable:       Number,
-    image_path:   String
+    image_path:   String,
+    groupsID:     Array
 });
 
 module.exports = mongoose.model('Content', ContentSchema);
