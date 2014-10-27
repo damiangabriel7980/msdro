@@ -11,6 +11,17 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
     }
 }]);
 
+//cloudAdminServices.factory('UserGroup', ['$resource', function($resource){
+//    return {
+//        getById: $resource('api/userGroup/:group_id', {}, {
+//            query: { method: 'GET', isArray: true }
+//        }),
+//        getByType: $resource('api/userGroup', {}, {
+//            query: { method: 'GET', isArray: true }
+//        })
+//    }
+//}]);
+
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     return $resource('api/products/:id', {}, {
         query: { method: 'GET', isArray: true }
