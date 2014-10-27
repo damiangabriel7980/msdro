@@ -4,6 +4,7 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
         console.log($stateParams.articleType);
         console.log($rootScope.pathAmazonDev);
     };
+//    $scope.test();
     $scope.imagePre = $rootScope.pathAmazonDev;
 
     switch($stateParams.articleType){

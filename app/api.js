@@ -39,7 +39,6 @@ module.exports = function(app, router) {
                 if(err) {
                     res.send(err);
                 }
-                console.log(cont);
                 res.json(cont);
             });
         });
