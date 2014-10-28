@@ -1,0 +1,13 @@
+<div ng-repeat="cont in content">
+    <div class="col-xs-12 articleBox">
+        <div class="col-xs-3 displayImage">
+            <img ng-src="{{imagePre+cont.image_path}}"/>
+        </div>
+        <div class="col-xs-9">
+            <div class="col-xs-12 title" ui-sref="noutati.articol({articleId:cont._id})">{{cont.title}}</div>
+            <div class="col-xs-12 trimmedArticle">{{createHeader(cont.text,200)}}</div>
+            <div class="col-xs-12 author">{{cont.author}}</div>
+            <div class="col-xs-12 lastUpdate">{{cont.last_updated}}</div>
+        </div>
+    </div>
+</div>

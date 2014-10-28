@@ -26,8 +26,11 @@ module.exports = function(app, router) {
                 if(err) {
                     res.send(err);
                 }
-
-                res.json(cont);
+                if(cont.length == 1){
+                    res.json(cont[0]);
+                }else{
+                    res.json(null);
+                }
             })
         });
 
