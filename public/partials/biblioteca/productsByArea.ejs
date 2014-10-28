@@ -1,0 +1,14 @@
+<ul class="panel-group" style="list-style: none;">
+    <li class="col-xs-3" ng-repeat="prod in products | orderBy:'name'">
+        <a ui-sref="biblioteca.productDetails" href="#/productDetails"></a>
+        <div class="thumbnail">
+            <div class="caption">
+                <img src="{{amazon + prod.image_path}}" alt="{{prod.name}}" height="250px" width="250px"/>
+                <h4><a href="#"></a>{{prod.name}}</h4>
+
+                <p>{{prod.description | htmlToPlaintext | limitTo: 200}}...</p>
+            </div>
+        </div>
+    </li>
+
+</ul>

@@ -3,6 +3,7 @@ var Products    = require('./models/products');
 var Therapeutic_Area = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
 var bodyParser	= require('body-parser');
+var Events = require('./models/events');
 
 module.exports = function(app, router) {
 
@@ -45,15 +46,6 @@ module.exports = function(app, router) {
 
     router.route('/products')
 
-        .get(function(req, res) {
-            Products.find({type: req.params.area_id}, {}, function (err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        })
     .get(function(req, res) {
         Products.find(function(err, cont) {
             if(err) {
@@ -74,6 +66,30 @@ module.exports = function(app, router) {
 
                 res.json(cont);
             })
+        });
+
+    router.route('/products/productsByArea/:id')
+
+        .get(function(req, res) {
+            var test = new Array(req.params.id);
+            if(test[0]!=="544f7b258e8df17f7e9ff1db")
+            {Products.find({area_parent: {$in :test}}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                 console.log(cont);
+                res.json(cont);
+            })}
+            else
+            {
+                Products.find(function(err, cont) {
+                    if(err) {
+                        res.send(err);
+                    }
+
+                    res.json(cont);
+                });
+            }
         });
 
     router.route('/therapeutic_areas')
@@ -122,6 +138,17 @@ module.exports = function(app, router) {
 
                 res.json(cont);
             })
+        });
+    router.route('/calendar')
+        .get(function(req,res){
+            Events.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+
         });
 
     app.use('/api', router);

@@ -9,8 +9,15 @@
  * */
 
 
-cloudAdminControllers.controller('productsController', ['$scope', 'ProductService', function($scope, ProductService){
+cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'ProductService','$stateParams', function($scope,$rootScope,ProductService,$stateParams){
 
-    $scope.products = ProductService.query();
-
-}]);
+    $scope.allAreas=1;
+    $scope.filtProd=[];
+    $scope.products = ProductService.getByArea.query({id:$stateParams.id});
+    $scope.amazon = $rootScope.pathAmazonDev;
+  }])
+    .filter('htmlToPlaintext', function() {
+        return function(text) {
+            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        }
+    });

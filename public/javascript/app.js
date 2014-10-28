@@ -2,7 +2,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
     [
         'ui.router',
         'cloudAdminControllers',
-        'cloudAdminServices'
+        'cloudAdminServices',
+        'ui.calendar'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -36,6 +37,11 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/biblioteca/produse.ejs',
             controller: 'therapeuticControllerCtrl'
         })
+        .state('biblioteca.produse.productsByArea',{
+            url: '/productsByArea/:id',
+            templateUrl: 'partials/biblioteca/productsByArea.ejs',
+            controller: 'productsController'
+        })
         .state('biblioteca.productDetails',{
             url: '/productDetails',
             templateUrl: 'partials/biblioteca/productDetails.ejs',
@@ -48,7 +54,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
        .state('calendar',{
             url: '/calendar',
-            templateUrl: 'partials/calendar.ejs'
+            templateUrl: 'partials/calendar.ejs',
+            controller: 'eventsController'
         })
         .state('elearning', {
             abstract: true,

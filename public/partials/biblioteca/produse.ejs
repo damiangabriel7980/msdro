@@ -5,16 +5,15 @@
 
 <body>
 <div class="col-xs-offset-1" id="content">
-    <div class="row margintop20px" ng-controller="productsController">
+    <div class="row margintop20px">
         <div class="col-xs-2" >
             <h4 class="h-title">Arii terapeutice</h4>
 
             <ul class="list">
-                <li>Toate ariile terapeutice</li>
-                <li  ng-repeat="area in therapeuticAreas" ng-click="productsFiltered(area)">{{area.name}}
+                <li ui-sref="biblioteca.produse.productsByArea({id:area._id})"  ng-repeat="area in therapeuticAreas | orderBy:'name'">{{area.name}}
                 <br/>
                 <ul ng-if="area.has_children=='1'" >
-                    <li ng-repeat="area2 in therapeuticAreas | filter : { parent_id : area._id.toString()}" ng-click="productsFiltered(area2)">
+                    <li ng-repeat="area2 in therapeuticAreas | filter : { parent_id : area._id.toString()}" ui-sref="biblioteca.produse.productsByArea({id:area._id})">
                         {{area2.name}}
                         </li>
                 </ul>
@@ -25,20 +24,7 @@
         </div>
 
         <div class="col-xs-9" >
-             <ul class="panel-group" style="list-style: none;">
-                        <li class="col-xs-3" ng-repeat="prod in filtProd">
-                            <a ui-sref="biblioteca.productDetails" href="#/productDetails"></a>
-                            <div class="thumbnail">
-                                <div class="caption">
-                                    <img src="{{amazon + prod.image_path}}" alt="{{prod.name}}" height="250px" width="250px"/>
-                                    <h4><a href="#"></a>{{prod.name}}</h4>
-
-                                    <p>{{prod.description | htmlToPlaintext | limitTo: 200}}...</p>
-                                </div>
-                           </div>
-                        </li>
-
-            </ul>
+            <ui-view></ui-view>
         </div>
 
         <div class="col-xs-1 hidden-phone">

@@ -24,10 +24,10 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
 
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/products/:id', {}, {
+        getAll: $resource('api/products/', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        getByArea: $resource('api/products/:id', {}, {
+        getByArea: $resource('api/products/productsByArea/:id', {}, {
             query: { method: 'GET', isArray: true }
         })
     }
@@ -35,6 +35,12 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
 
 cloudAdminServices.factory('therapeuticAreaService', ['$resource', function($resource){
     return $resource('api/therapeutic_areas/:id', {}, {
+        query: { method: 'GET', isArray: true }
+    });
+}]);
+
+cloudAdminServices.factory('eventsService', ['$resource', function($resource){
+    return $resource('api/calendar/', {}, {
         query: { method: 'GET', isArray: true }
     });
 }]);
