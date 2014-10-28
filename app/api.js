@@ -21,7 +21,8 @@ module.exports = function(app, router) {
     router.route('/content/:content_id')
 
         .get(function(req, res) {
-            Content.findById(req.params.content_id, function(err, cont) {
+            var userGr = req.user.groupsID.split(",");
+            Content.find({_id:req.params.content_id, groupsID: { $in: userGr}}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -33,12 +34,11 @@ module.exports = function(app, router) {
     router.route('/content/type/:content_type')
 
         .get(function(req, res) {
-            console.log(req.user.groupsID);
-            Content.find({type: req.params.content_type, groupsID: req.user.groupsID}, {}, function (err, cont) {
+            var userGr = req.user.groupsID.split(",");
+            Content.find({type: req.params.content_type, groupsID: { $in: userGr}}, function (err, cont) {
                 if(err) {
                     res.send(err);
                 }
-                console.log(cont);
                 res.json(cont);
             });
         });
