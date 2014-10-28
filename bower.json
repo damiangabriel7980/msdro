@@ -17,7 +17,9 @@
     "jquery": "~1.11.1",
     "angular-bootstrap": "~0.11.0",
     "angular-strap": "~2.1.1",
-    "momentjs": "~2.8.3"
+    "momentjs": "~2.8.3",
+    "calendar.js":"latest",
+      "fullcalendar":"latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

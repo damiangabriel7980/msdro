@@ -11,7 +11,8 @@ var ProductSchema		= new Schema({
     file_path:   String,
     image_path:  String,
     last_updated: Date,
-    name: String
+    name: String,
+    area_parent: {type: String, ref :'therapeuticAreas'}
 });
 
 module.exports = mongoose.model('Products', ProductSchema);

@@ -4,37 +4,36 @@
 </head>
 
 <body>
-<div class="container" id="content">
-    <div class="row margintop20px">
-        <div class="col-xs-3" >
+<div class="col-xs-offset-1" id="content">
+    <div class="row margintop20px" ng-controller="productsController">
+        <div class="col-xs-2" >
             <h4 class="h-title">Arii terapeutice</h4>
 
-            <ul class="list-unstyled" ng-repeat="area in therapeuticAreas">
-                <li ng-if="area.parent_id==='0'"><a href="#"/>{{area.name}}</li>
-                <ul ng-if="area.has_children=='1'" ng-repeat="area2 in therapeuticAreas | filter : { parent_id : area._id.toString()}">
-                    <li><a href="#"/>
+            <ul class="list">
+                <li>Toate ariile terapeutice</li>
+                <li  ng-repeat="area in therapeuticAreas" ng-click="productsFiltered(area)">{{area.name}}
+                <br/>
+                <ul ng-if="area.has_children=='1'" >
+                    <li ng-repeat="area2 in therapeuticAreas | filter : { parent_id : area._id.toString()}" ng-click="productsFiltered(area2)">
                         {{area2.name}}
                         </li>
                 </ul>
+                </li>
                 <br/>
                 </ul>
-
-
-
-         </ul>
             <hr class="visible-phone ">
         </div>
 
-        <div class="col-xs-9" ng-controller="productsController">
-             <ul class="panel-group">
-                        <li class="col-xs-3">
+        <div class="col-xs-9" >
+             <ul class="panel-group" style="list-style: none;">
+                        <li class="col-xs-3" ng-repeat="prod in filtProd">
                             <a ui-sref="biblioteca.productDetails" href="#/productDetails"></a>
-                            <div class="product thumbnail">
-                                <div class="caption" ng-repeat="prod in products">
-                                    <img src="{{amazon + prod.image_path}}" alt="{{prod.name}}" height="300px" width="300px"/>
-                                    <h4><a href="#"></a>{{prod.name}}</h4>-->
+                            <div class="thumbnail">
+                                <div class="caption">
+                                    <img src="{{amazon + prod.image_path}}" alt="{{prod.name}}" height="250px" width="250px"/>
+                                    <h4><a href="#"></a>{{prod.name}}</h4>
 
-                                    <p>{{prod.description.text()}}</p>
+                                    <p>{{prod.description | htmlToPlaintext | limitTo: 200}}...</p>
                                 </div>
                            </div>
                         </li>

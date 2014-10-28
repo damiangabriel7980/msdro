@@ -46,14 +46,23 @@ module.exports = function(app, router) {
     router.route('/products')
 
         .get(function(req, res) {
-            Products.find(function(err, cont) {
+            Products.find({type: req.params.area_id}, {}, function (err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
                 res.json(cont);
             });
+        })
+    .get(function(req, res) {
+        Products.find(function(err, cont) {
+            if(err) {
+                res.send(err);
+            }
+
+            res.json(cont);
         });
+    });
 
     router.route('/products/:products_id')
 

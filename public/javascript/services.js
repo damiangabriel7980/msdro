@@ -23,9 +23,14 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
 //}]);
 
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
-    return $resource('api/products/:id', {}, {
-        query: { method: 'GET', isArray: true }
-    });
+    return {
+        getAll: $resource('api/products/:id', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getByArea: $resource('api/products/:id', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
 }]);
 
 cloudAdminServices.factory('therapeuticAreaService', ['$resource', function($resource){

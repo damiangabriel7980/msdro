@@ -13,7 +13,10 @@ var therapeuticAreaSchema		= new Schema({
     last_updated: Date,
     name: String,
     parent_id: String,
-    enable:      Number
+    enable:      Number,
+    products :[
+    {type: Schema.Types.ObjectId, ref: 'Products'}
+]
 });
 
 module.exports = mongoose.model('therapeuticAreas', therapeuticAreaSchema);

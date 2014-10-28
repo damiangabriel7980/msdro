@@ -3,7 +3,6 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.router',
         'cloudAdminControllers',
         'cloudAdminServices'
-
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -36,7 +35,6 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '/produse',
             templateUrl: 'partials/biblioteca/produse.ejs',
             controller: 'therapeuticControllerCtrl'
-//            controller: 'productsController'
         })
         .state('biblioteca.productDetails',{
             url: '/productDetails',
