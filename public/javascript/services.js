@@ -44,3 +44,8 @@ cloudAdminServices.factory('eventsService', ['$resource', function($resource){
         query: { method: 'GET', isArray: true }
     });
 }]);
+cloudAdminServices.factory('eventsService2', ['$resource', function($resource){
+    return $resource('api/calendar/:id', {}, {
+        query: { method: 'GET', isArray: false }
+    });
+}]);
