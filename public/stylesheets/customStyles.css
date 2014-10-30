@@ -22,3 +22,20 @@
 .articlesStyles .articleBox .author {
   font-weight: bold;
 }
+.articlesStyles .articleDetail .title {
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid lightgray;
+}
+.articlesStyles .articleDetail .articleContent img {
+  width: 300px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+.articlesStyles .stretchHorizontal {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.articlesStyles .paddingTop10 {
+  padding-top: 10px;
+}

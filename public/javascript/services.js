@@ -33,3 +33,16 @@ cloudAdminServices.factory('therapeuticAreaService', ['$resource', function($res
         query: { method: 'GET', isArray: true }
     });
 }]);
+
+cloudAdminServices.factory('FormatService', function () {
+    return {
+        formatMongoDate: function (date) {
+            var d = date.substring(0,10).split('-');
+            if(d.length == 3){
+                return d[2]+"/"+d[1]+"/"+d[0];
+            }else{
+                return null;
+            }
+        }
+    }
+});

@@ -1,8 +1,13 @@
-cloudAdminControllers.controller('ContentArticleController', ['$scope', '$rootScope', '$stateParams', 'ContentService', function($scope, $rootScope, $stateParams, ContentService){
+cloudAdminControllers.controller('ContentArticleController', ['$scope', '$rootScope', '$stateParams', 'ContentService', 'FormatService', '$sce', function($scope, $rootScope, $stateParams, ContentService, FormatService, $sce){
 
-    $scope.imagePre = $rootScope.pathAmazonDev;
+    var imagePre = $rootScope.pathAmazonDev;
 
-    $scope.currentArticle = ContentService.getById.query({content_id: $stateParams.articleId});
-    console.log($scope.currentArticle);
+    ContentService.getById.query({content_id: $stateParams.articleId}).$promise.then(function (resp) {
+        console.log(resp);
+        $scope.currentArticle = resp;
+        $scope.date = FormatService.formatMongoDate(resp.last_updated);
+        $scope.image = imagePre + resp.image_path;
+        $scope.articleContent = $sce.trustAsHtml(resp.text);
+    });
 
 }]);

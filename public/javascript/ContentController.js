@@ -2,17 +2,17 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
 
     $scope.imagePre = $rootScope.pathAmazonDev;
 
-    if($stateParams.articleType=1){
+    if($stateParams.articleType==1){
         $scope.title = "articole";
         $scope.sr = "noutati.articol({articleId:cont._id})";
         $scope.btn = "Vezi articol";
     }
-    if($stateParams.articleType=2){
+    if($stateParams.articleType==2){
         $scope.title = "articole legislative";
         $scope.sr = "noutati.articol({articleId:cont._id})";
         $scope.btn = "Vezi articol";
     }
-    if($stateParams.articleType=3){
+    if($stateParams.articleType==3){
         $scope.title = "articole stiintifice";
         $scope.sr = "biblioteca.articoleStiintifice.articol({articleId:cont._id})";
         $scope.btn = "Vezi articol";
