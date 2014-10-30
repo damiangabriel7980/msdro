@@ -18,7 +18,8 @@
     "cookie-parser": "~1.0.0",
     "method-override": "~1.0.0",
     "express-session": "~1.0.0",
-    "i18n": "~0.5.0"
+    "i18n": "~0.5.0",
+    "usergrid": ">=0.10.7"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install"
