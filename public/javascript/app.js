@@ -19,14 +19,15 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/noutati/noutati.ejs',
             controller: 'ContentController'
         })
-//        .state('noutati.articole',{
-//            url: '/articole',
-//            templateUrl: 'partials/noutati/articole.ejs'
-//        })
-//        .state('noutati.articoleLegislative',{
-//            url: '/articoleLegislative',
-//            templateUrl: 'partials/noutati/articoleLegislative.ejs'
-//        })
+        .state('noutati.listaArticole',{
+            url: '/listaArticole',
+            templateUrl: 'partials/noutati/listaArticole.ejs'
+        })
+        .state('noutati.articol',{
+            url: '/articol/:articleId',
+            templateUrl: 'partials/noutati/articol.ejs',
+            controller: 'ContentArticleController'
+        })
         .state('biblioteca', {
             abstract: true,
             url: '/biblioteca',
@@ -51,6 +52,15 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '/articoleStiintifice/:articleType',
             templateUrl: 'partials/noutati/noutati.ejs',
             controller: 'ContentController'
+        })
+        .state('biblioteca.articoleStiintifice.listaArticole',{
+            url: '/listaArticole',
+            templateUrl: 'partials/noutati/listaArticole.ejs'
+        })
+        .state('biblioteca.articoleStiintifice.articol',{
+            url: '/articol/:articleId',
+            templateUrl: 'partials/noutati/articol.ejs',
+            controller: 'ContentArticleController'
         })
        .state('calendar',{
             url: '/calendar',

@@ -18,6 +18,7 @@
     <script src="javascript/therapeuticControllerCtrl.js"></script>
     <script src="javascript/ContentController.js"></script>
     <script src="javascript/productsController.js"></script>
+    <script src="javascript/ContentArticleController.js"></script>
     <script src="javascript/services.js"></script>
     <script src="javascript/eventsController.js"></script>
     <script src="javascript/require.js"></script>
@@ -52,9 +53,9 @@
                         <span class="glyphicon glyphicon-globe"></span> Noutati <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="noutati({articleType:1})">Articole</a></li>
+                        <li><a ui-sref="noutati.listaArticole({articleType:1})">Articole</a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="noutati({articleType:2})">Articole legislative</a></li>
+                        <li><a ui-sref="noutati.listaArticole({articleType:2})">Articole legislative</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
@@ -64,7 +65,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="biblioteca.produse" href="#/produse">Produse</a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="biblioteca.articoleStiintifice({articleType:3})" href="#/articoleStiintifice">Articole stiintifice</a></li>
+                        <li><a ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})">Articole stiintifice</a></li>
                         <li class="divider"></li>
                         <li><a ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" target="_blank">Manualul merck</a></li>
                     </ul>

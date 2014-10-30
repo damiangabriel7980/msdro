@@ -3,7 +3,7 @@ var cloudAdminServices = angular.module('cloudAdminServices', ['ngResource']);
 cloudAdminServices.factory('ContentService', ['$resource', function($resource){
     return {
         getById: $resource('api/content/:content_id', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         getByType: $resource('api/content/type/:content_type', {}, {
             query: { method: 'GET', isArray: true }
@@ -49,3 +49,16 @@ cloudAdminServices.factory('eventsService2', ['$resource', function($resource){
         query: { method: 'GET', isArray: false }
     });
 }]);
+
+cloudAdminServices.factory('FormatService', function () {
+    return {
+        formatMongoDate: function (date) {
+            var d = date.substring(0,10).split('-');
+            if(d.length == 3){
+                return d[2]+"/"+d[1]+"/"+d[0];
+            }else{
+                return null;
+            }
+        }
+    }
+});
