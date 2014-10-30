@@ -15,6 +15,8 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
             break;
     }
 
+    $scope.type = $stateParams.articleType;
+
     var htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '');
     };
