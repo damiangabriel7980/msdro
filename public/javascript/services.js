@@ -29,6 +29,9 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
         }),
         getByArea: $resource('api/products/productsByArea/:id', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        getSingle: $resource('api/products/:id', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

@@ -9,11 +9,17 @@
  * */
 
 
-cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'ProductService','$stateParams', function($scope,$rootScope,ProductService,$stateParams){
+cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce', function($scope,$rootScope,ProductService,$stateParams,$sce){
 
     $scope.allAreas=1;
     $scope.filtProd=[];
-    $scope.products = ProductService.getByArea.query({id:$stateParams.id});
+    ProductService.getByArea.query({id:$stateParams.id}).$promise.then(function(result){
+            $scope.products = result;}
+    );
+    ProductService.getSingle.query({id:$stateParams.id}).$promise.then(function(result){
+        $scope.selectedProduct = result;
+        $scope.ProductDetailsHTML = $sce.trustAsHtml(result.description);
+    });
     $scope.amazon = $rootScope.pathAmazonDev;
   }])
     .filter('htmlToPlaintext', function() {

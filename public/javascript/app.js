@@ -43,10 +43,10 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/biblioteca/productsByArea.ejs',
             controller: 'productsController'
         })
-        .state('biblioteca.productDetails',{
-            url: '/productDetails',
+        .state('biblioteca.produse.prodById',{
+            url: '/produse/:id',
             templateUrl: 'partials/biblioteca/productDetails.ejs',
-            controller: 'therapeuticControllerCtrl'
+            controller: 'productsController'
         })
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice/:articleType',
