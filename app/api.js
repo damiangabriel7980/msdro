@@ -150,6 +150,16 @@ module.exports = function(app, router) {
             });
 
         });
+    router.route('/calendar/:id')
+        .get(function(req,res){
+            Events.findById(req.params.id,function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
 
+                res.json(cont);
+            });
+
+        });
     app.use('/api', router);
 };
