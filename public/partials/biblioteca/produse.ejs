@@ -4,41 +4,27 @@
 </head>
 
 <body>
-<div class="container" id="content">
+<div class="col-xs-offset-1" id="content">
     <div class="row margintop20px">
-        <div class="col-xs-3" >
+        <div class="col-xs-2" >
             <h4 class="h-title">Arii terapeutice</h4>
 
-            <ul class="list-unstyled" ng-repeat="area in therapeuticAreas">
-                <li ng-if="area.parent_id==='0'"><a href="#"/>{{area.name}}</li>
-                <ul ng-if="area.has_children=='1'" ng-repeat="area2 in therapeuticAreas | filter : { parent_id : area._id.toString()}">
-                    <li><a href="#"/>
+            <ul class="list">
+                <li ui-sref="biblioteca.produse.productsByArea({id:area._id})"  ng-repeat="area in therapeuticAreas | orderBy:'name'">{{area.name}}
+                <br/>
+                <ul ng-if="area.has_children=='1'" >
+                    <li ng-repeat="area2 in therapeuticAreas | filter : { parent_id : area._id.toString()}" ui-sref="biblioteca.produse.productsByArea({id:area._id})">
                         {{area2.name}}
                         </li>
                 </ul>
+                </li>
                 <br/>
                 </ul>
-
-
-
-         </ul>
             <hr class="visible-phone ">
         </div>
 
-        <div class="col-xs-9" ng-controller="productsController">
-             <ul class="panel-group">
-                        <li class="col-xs-3">
-                            <a ui-sref="biblioteca.productDetails" href="#/productDetails"></a>
-                            <div class="product thumbnail">
-                                <div class="caption">
-                                    <!--<h4><a href=""></a></h4>-->
-
-                                    <p></p>
-                                </div>
-                           </div>
-                        </li>
-
-            </ul>
+        <div class="col-xs-9" >
+            <ui-view></ui-view>
         </div>
 
         <div class="col-xs-1 hidden-phone">

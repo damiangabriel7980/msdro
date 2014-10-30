@@ -5,13 +5,14 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
 var ProductSchema		= new Schema({
-    version_prod:     Number,
+    version:     Number,
     description: String,
-    enableP:      Number,
+    enable:      Number,
     file_path:   String,
     image_path:  String,
     last_updated: Date,
-    nameP: String
+    name: String,
+    area_parent: Array
 });
 
 module.exports = mongoose.model('Products', ProductSchema);

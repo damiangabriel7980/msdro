@@ -3,22 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-
+    <script src="components/jquery/dist/jquery.js"></script>
+    <script src="components/jquery-ui/ui/jquery-ui.js"></script>
     <script src="components/angular/angular.js"></script>
     <script src="components/angular-resource/angular-resource.js"></script>
     <script src="components/angular-route/angular-route.js"></script>
     <script src="components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-
+    <script src="components/fullcalendar/fullcalendar.js"></script>
+    <script src="components/angular-ui-calendar/src/calendar.js"></script>
+    <script src="components/fullcalendar/gcal.js"></script>
     <script src="javascript/app.js"></script>
     <script src="javascript/controllers.js"></script>
     <script src="javascript/therapeuticControllerCtrl.js"></script>
-    <script src="javascript/productsController.js"></script>
     <script src="javascript/ContentController.js"></script>
+    <script src="javascript/productsController.js"></script>
     <script src="javascript/ContentArticleController.js"></script>
     <script src="javascript/services.js"></script>
+    <script src="javascript/eventsController.js"></script>
     <script src="javascript/require.js"></script>
-
+    <script src="javascript/modalCtrl.js"></script>
+    <link rel='stylesheet' href='components/fullcalendar/fullcalendar.css' />
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/style.css">
     <link rel="stylesheet" href="stylesheets/customStyles.css">
@@ -62,7 +67,7 @@
                         <li class="divider"></li>
                         <li><a ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})">Articole stiintifice</a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="biblioteca.manualMerck" href="#/manualMerck">Manualul merck</a></li>
+                        <li><a ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" target="_blank">Manualul merck</a></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar"><span class="glyphicon glyphicon-calendar">Calendar</span></a></li>
