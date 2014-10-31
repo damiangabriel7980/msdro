@@ -55,14 +55,13 @@ module.exports = function(app, client) {
                     // no: set a new cookie
                     res.cookie('userToken',token, { maxAge: 60000, httpOnly: true });
                     console.log('cookie created successfully');
-                    res.render('main.ejs', {username:req.body.email});
                 }
                 else
                 {
                     // yes, cookie was already present
-                    console.log('cookie exists', cookie);
-                    res.redirect('/');
+                    console.log('cookie exists: ', cookie);
                 }
+                res.redirect('/');
             }
         });
     });

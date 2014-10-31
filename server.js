@@ -15,8 +15,6 @@ var session      = require('express-session');
 
 var usergrid = require('usergrid');
 
-var configDB = require('./config/database.js');
-
 // configuration ===============================================================
 var client = new usergrid.client({
     orgName:'qualitance.leaderamp',
