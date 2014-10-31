@@ -23,12 +23,12 @@
     <script src="javascript/eventsController.js"></script>
     <script src="javascript/require.js"></script>
     <script src="javascript/modalCtrl.js"></script>
+    <script src="modules/apigee-javascript-sdk-2.0.9/apigee.min.js"></script>
     <link rel='stylesheet' href='components/fullcalendar/fullcalendar.css' />
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/style.css">
     <link rel="stylesheet" href="stylesheets/customStyles.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <%console.log(token);%>
 </head>
 <body>
 
@@ -96,12 +96,12 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-user"></span> Username <b class="caret"></b>
+                        <span class="glyphicon glyphicon-user"></span> <%=username%> <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="profile">Profile</a></li>
                         <li class="divider"></li>
-                        <li><a href="logout">Sign Out</a></li>
+                        <li><a href="#" onclick='logoutAndDestoryToken("<%=username%>","<%=token%>",true,null)'>Sign Out</a></li>
                     </ul>
                 </li>
             </ul>

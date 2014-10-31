@@ -44,7 +44,7 @@ module.exports = function(app, client) {
             }else{
                 console.log("Login ok");
                 var token = client.token;
-                res.render('main2.ejs', {token: token});
+                res.render('main2.ejs', {username:req.body.email, token: token});
             }
         });
     });
