@@ -92,6 +92,10 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '/multimedia',
             templateUrl: 'partials/elearning/multimedia.ejs'
         })
+        .state('elearning.multimedia.multimediaByArea',{
+            url: '/multimedia/:id',
+            templateUrl: 'partials/elearning/multimediaByArea.ejs'
+        })
         .state('elearning.transmisii',{
             url: '/transmisii',
             templateUrl: 'partials/elearning/transmisii.ejs'

@@ -164,5 +164,27 @@ module.exports = function(app, router) {
             });
 
         });
+    router.route('/multimedia/:id')
+        .get(function(req,res){
+            Events.findById(req.params.id,function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+
+        });
+    router.route('/multimedia')
+        .get(function(req,res){
+            Events.(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+
+        });
     app.use('/api', router);
 };

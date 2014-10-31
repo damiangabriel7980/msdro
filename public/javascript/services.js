@@ -65,3 +65,13 @@ cloudAdminServices.factory('FormatService', function () {
         }
     }
 });
+cloudAdminServices.factory('multimediaService2', ['$resource', function($resource){
+    return $resource('api/multimedia/:id', {}, {
+        query: { method: 'GET', isArray: false }
+    });
+}]);
+cloudAdminServices.factory('multimediaService', ['$resource', function($resource){
+    return $resource('api/multimedia', {}, {
+        query: { method: 'GET', isArray: true }
+    });
+}]);
