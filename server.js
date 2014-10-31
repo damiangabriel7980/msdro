@@ -6,8 +6,6 @@ var express  = require('express');
 var path = require('path');
 var app      = express();
 var port     = process.env.PORT || 8080;
-var mongoose = require('mongoose');
-var passport = require('passport');
 var flash    = require('connect-flash');
 
 var morgan       = require('morgan');
@@ -15,12 +13,20 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 
+var usergrid = require('usergrid');
+
 var configDB = require('./config/database.js');
 
 // configuration ===============================================================
-mongoose.connect(configDB.url); // connect to our database
-
-require('./config/passport')(passport); // pass passport for configuration
+var client = new usergrid.client({
+    orgName:'qualitance.leaderamp',
+    appName:'msd',
+    authType:usergrid.AUTH_CLIENT_ID,
+    clientId:'b3U6OZ4E6jyyEeS4q9tVRb7NeA',
+    clientSecret:'b3U6KNFzp2OcurK-m7aLG4F_71TkmHs',
+    logging: false, //optional - turn on logging, off by default
+    buildCurl: false //optional - turn on curl commands, off by default
+});
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
@@ -28,18 +34,10 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.set('view engine', 'ejs'); // set up ejs for templating
-
-// required for passport
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes ======================================================================
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, client); // load our routes and pass in our app and client
 
 // api ======================================================================
 require('./app/api.js')(app, express.Router()); // load our routes and pass in our app and fully configured passport
