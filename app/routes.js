@@ -3,25 +3,28 @@ module.exports = function(app, client) {
 // normal routes ===============================================================
 
     // show the home page (will also have our login links)
-    app.get('/', isLoggedIn, function (req, res) {
-        res.render('main2.ejs', {
-            user: getUser()
-        });
-    }, function (req,res) {
-        res.redirect('/login');
+    app.get('/', function (req, res) {
+        if(hasToken(req)){
+            res.render('main.ejs');
+        }else{
+            res.redirect('/login');
+        }
     });
 
     // PROFILE SECTION =========================
-    app.get('/profile', isLoggedIn, function (req, res) {
-        res.render('profile.ejs', {
-            user: req.user
-        });
+    app.get('/profile', function (req, res) {
+        console.log(req.cookies);
+        if(hasToken(req)){
+            res.render('profile.ejs');
+        }else{
+            res.redirect('/login');
+        }
     });
 
     // LOGOUT ==============================
     app.get('/logout', function (req, res) {
-        client.logout();
-        res.redirect('/');
+        if(hasToken(req)) res.clearCookie('userToken');
+        res.redirect('/login');
     });
 
 // =============================================================================
@@ -32,6 +35,7 @@ module.exports = function(app, client) {
     // LOGIN ===============================
     // show the login form
     app.get('/login', function (req, res) {
+        console.log("Cookies: ", req.cookies);
         res.render('auth.ejs', { message: "" });
     });
 
@@ -44,7 +48,21 @@ module.exports = function(app, client) {
             }else{
                 console.log("Login ok");
                 var token = client.token;
-                res.render('main2.ejs', {username:req.body.email, token: token});
+                // set a cookie
+                var cookie = req.cookies.userToken;
+                if (cookie === undefined)
+                {
+                    // no: set a new cookie
+                    res.cookie('userToken',token, { maxAge: 60000, httpOnly: true });
+                    console.log('cookie created successfully');
+                    res.render('main.ejs', {username:req.body.email});
+                }
+                else
+                {
+                    // yes, cookie was already present
+                    console.log('cookie exists', cookie);
+                    res.redirect('/');
+                }
             }
         });
     });
@@ -63,28 +81,16 @@ module.exports = function(app, client) {
 //    }));
 
 // ensure user is logged in
-    function isLoggedIn() {
-        client.getLoggedInUser(function (err, data, user) {
-            if (err) {
-                console.log("Not logged in");
-                //error - could not get logged in user
-                return false;
-            } else {
-                console.log("User is logged in");
-                //success - got logged in user
-                return true;
-            }
-        });
-    }
-    function getUser(){
-        client.getLoggedInUser(function(err, data, user) {
-            if(err) {
-                console.log("Cannot get logged in user");
-                return null;
-            } else {
-                console.log(user);
-                return user;
-            }
-        });
-    }
+    var hasToken = function(req){
+        var cookie = req.cookies.userToken;
+        if (cookie === undefined)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    };
 };
+
