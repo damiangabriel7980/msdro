@@ -1,3 +1,5 @@
+var usergrid = require('usergrid');
+
 module.exports = function(app, client) {
 
 // normal routes ===============================================================
@@ -13,7 +15,6 @@ module.exports = function(app, client) {
 
     // PROFILE SECTION =========================
     app.get('/profile', function (req, res) {
-        console.log(req.cookies);
         if(hasToken(req)){
             res.render('profile.ejs');
         }else{
@@ -23,7 +24,16 @@ module.exports = function(app, client) {
 
     // LOGOUT ==============================
     app.get('/logout', function (req, res) {
-        if(hasToken(req)) res.clearCookie('userToken');
+        if(hasToken(req)){
+            var appUserClient = new usergrid.client({
+                orgName:'qualitance.leaderamp',
+                appName:'msd',
+                authType:usergrid.AUTH_APP_USER,
+                token:req.cookies.userToken
+            });
+            appUserClient.logout();
+            res.clearCookie('userToken');
+        }
         res.redirect('/login');
     });
 
@@ -35,7 +45,6 @@ module.exports = function(app, client) {
     // LOGIN ===============================
     // show the login form
     app.get('/login', function (req, res) {
-        console.log("Cookies: ", req.cookies);
         res.render('auth.ejs', { message: "" });
     });
 
@@ -43,10 +52,9 @@ module.exports = function(app, client) {
     app.post('/login', function (req,res) {
         client.login(req.body.email,req.body.password, function (err) {
             if(err){
-                console.log("Login error");
                 res.render('auth.ejs', {message: "Incorrect login credentials"})
             }else{
-                console.log("Login ok");
+                //Login ok. Get token
                 var token = client.token;
                 // set a cookie
                 var cookie = req.cookies.userToken;
@@ -54,12 +62,10 @@ module.exports = function(app, client) {
                 {
                     // no: set a new cookie
                     res.cookie('userToken',token, { maxAge: 60000, httpOnly: true });
-                    console.log('cookie created successfully');
                 }
                 else
                 {
                     // yes, cookie was already present
-                    console.log('cookie exists: ', cookie);
                 }
                 res.redirect('/');
             }
