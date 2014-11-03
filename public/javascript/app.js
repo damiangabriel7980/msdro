@@ -43,10 +43,10 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/biblioteca/productsByArea.ejs',
             controller: 'productsController'
         })
-        .state('biblioteca.productDetails',{
-            url: '/productDetails',
+        .state('biblioteca.produse.prodById',{
+            url: '/produse/:id',
             templateUrl: 'partials/biblioteca/productDetails.ejs',
-            controller: 'therapeuticControllerCtrl'
+            controller: 'productsController'
         })
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice/:articleType',
@@ -67,6 +67,22 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/calendar.ejs',
             controller: 'eventsController'
         })
+        .state('calendar.calendarDetails',{
+            parent:'calendar',
+            url: '/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                console.log('Open modal');
+                $modal.open({
+                    templateUrl: 'partials/calendarDetails.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'modalCtrl'
+                })
+            }]
+
+        })
+
         .state('elearning', {
             abstract: true,
             url: '/elearning',
@@ -75,6 +91,10 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('elearning.multimedia',{
             url: '/multimedia',
             templateUrl: 'partials/elearning/multimedia.ejs'
+        })
+        .state('elearning.multimedia.multimediaByArea',{
+            url: '/multimedia/:id',
+            templateUrl: 'partials/elearning/multimediaByArea.ejs'
         })
         .state('elearning.transmisii',{
             url: '/transmisii',

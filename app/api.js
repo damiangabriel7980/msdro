@@ -59,10 +59,10 @@ module.exports = function(app, router) {
         });
     });
 
-    router.route('/products/:products_id')
+    router.route('/products/:id')
 
         .get(function(req, res) {
-            Products.findById(req.params.products_id, function(err, cont) {
+            Products.findById(req.params.id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -75,7 +75,7 @@ module.exports = function(app, router) {
 
         .get(function(req, res) {
             var test = new Array(req.params.id);
-            if(test[0]!=="544f7b258e8df17f7e9ff1db")
+            if(req.params.id!='0')
             {Products.find({area_parent: {$in :test}}, function(err, cont) {
                 if(err) {
                     res.send(err);
@@ -153,6 +153,38 @@ module.exports = function(app, router) {
             });
 
         });
+    router.route('/calendar/:id')
+        .get(function(req,res){
+            Events.findById(req.params.id,function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
 
+                res.json(cont);
+            });
+
+        });
+    router.route('/multimedia/:id')
+        .get(function(req,res){
+            Events.findById(req.params.id,function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+
+        });
+    router.route('/multimedia')
+        .get(function(req,res){
+            Events.(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+
+        });
     app.use('/api', router);
 };
