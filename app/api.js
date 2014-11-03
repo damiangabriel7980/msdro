@@ -177,7 +177,7 @@ module.exports = function(app, router) {
         });
     router.route('/multimedia')
         .get(function(req,res){
-            Events.(function(err, cont) {
+            Events.find(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
