@@ -5,7 +5,7 @@ var UserGroup = require('./models/userGroup');
 var bodyParser	= require('body-parser');
 var Events = require('./models/events');
 
-module.exports = function(app, router) {
+module.exports = function(app, router,client) {
 
     router.route('/content')
 
@@ -49,48 +49,50 @@ module.exports = function(app, router) {
 
     router.route('/products')
 
-    .get(function(req, res) {
-        Products.find(function(err, cont) {
-            if(err) {
-                res.send(err);
-            }
+    .get(function(req,res){
 
-            res.json(cont);
-        });
-    });
+//Call request to initiate the API call
+    client.request({method: 'GET' , endpoint: 'products'}, function (error, result) {
+        if (error) {
+            res.send(error);
+        } else {
+            res.json(result);
+        }
+    })});
 
     router.route('/products/:id')
 
-        .get(function(req, res) {
-            Products.findById(req.params.id, function(err, cont) {
+        .get(function(req,res){
+            var y = req.params.id.toString();
+            client.request({method: 'GET' , endpoint: 'products', qs:{ql:"uuid = " +y}}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
-
-                res.json(cont);
-            })
-        });
+                console.log(cont);
+                res.json(cont.entities);
+            })});
 
     router.route('/products/productsByArea/:id')
 
         .get(function(req, res) {
-            var test = new Array(req.params.id);
+            var x = req.params.id;
             if(req.params.id!='0')
-            {Products.find({area_parent: {$in :test}}, function(err, cont) {
+            {
+            client.request({method: 'GET' , endpoint: 'products', qs:{ql:"area_parent= '" + x + "'"}}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
                  console.log(cont);
-                res.json(cont);
+                res.send(cont.entities);
             })}
             else
             {
-                Products.find(function(err, cont) {
-                    if(err) {
-                        res.send(err);
+                client.request({method: 'GET' , endpoint: 'products'}, function (error, result) {
+                    if (error) {
+                        res.send(error);
+                    } else {
+                        res.send(result.entities);
                     }
-
-                    res.json(cont);
                 });
             }
         });
@@ -98,25 +100,13 @@ module.exports = function(app, router) {
     router.route('/therapeutic_areas')
 
         .get(function(req, res) {
-            Therapeutic_Area.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
+            client.request({method: 'GET' , endpoint: 'therapeuticareas'}, function (error, result) {
+                if (error) {
+                    res.send(error);
+                } else {
+                    res.send(result.entities);
                 }
-
-                res.json(cont);
             });
-        });
-
-    router.route('/therapeutic_areas/:therapeutic_areas_id')
-
-        .get(function(req, res) {
-            Therapeutic_Area.findById(req.params._id, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            })
         });
 
     router.route('/userGroup')
@@ -177,7 +167,7 @@ module.exports = function(app, router) {
         });
     router.route('/multimedia')
         .get(function(req,res){
-            Events.(function(err, cont) {
+            Events.find(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }

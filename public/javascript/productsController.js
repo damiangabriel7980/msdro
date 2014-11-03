@@ -14,9 +14,9 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     $scope.allAreas=1;
     $scope.filtProd=[];
     ProductService.getByArea.query({id:$stateParams.id}).$promise.then(function(result){
-            $scope.products = result;}
-    );
-    ProductService.getSingle.query({id:$stateParams.id}).$promise.then(function(result){
+         $scope.products = result;
+    });
+            ProductService.getSingle.query({id:$stateParams.id}).$promise.then(function(result){
         $scope.selectedProduct = result;
         $scope.ProductDetailsHTML = $sce.trustAsHtml(result.description);
     });
