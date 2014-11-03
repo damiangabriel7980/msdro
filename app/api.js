@@ -63,14 +63,17 @@ module.exports = function(app, router,client) {
     router.route('/products/:id')
 
         .get(function(req,res){
-            var y = req.params.id.toString();
-            client.request({method: 'GET' , endpoint: 'products', qs:{ql:"uuid = " +y}}, function(err, cont) {
+            if(req.params.id!='0')
+            {
+            var y = req.params.id;
+            client.getEntity({method: 'GET' , type: 'products', uuid: y }, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
                 console.log(cont);
-                res.json(cont.entities);
-            })});
+                res.json(cont._data);
+            })
+            }});
 
     router.route('/products/productsByArea/:id')
 

@@ -7,7 +7,7 @@
                 <h4><a href="#"></a>{{prod.name}}</h4>
 
                 <p>{{prod.description | htmlToPlaintext | limitTo: 190}}...
-                <button class="button btn-info pull-right" ui-sref="biblioteca.produse.prodById({id:prod._id})">Detalii produs</button>
+                <button class="button btn-info pull-right" ui-sref="biblioteca.produse.prodById({id:prod.uuid})">Detalii produs</button>
                 </p>
             </div>
         </div>

@@ -16,10 +16,6 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     ProductService.getByArea.query({id:$stateParams.id}).$promise.then(function(result){
          $scope.products = result;
     });
-            ProductService.getSingle.query({id:$stateParams.id}).$promise.then(function(result){
-        $scope.selectedProduct = result;
-        $scope.ProductDetailsHTML = $sce.trustAsHtml(result.description);
-    });
     $scope.amazon = $rootScope.pathAmazonDev;
   }])
     .filter('htmlToPlaintext', function() {
