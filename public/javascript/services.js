@@ -54,13 +54,16 @@ cloudAdminServices.factory('FormatService', function () {
         }
     }
 });
-cloudAdminServices.factory('multimediaService2', ['$resource', function($resource){
-    return $resource('api/multimedia/:id', {}, {
-        query: { method: 'GET', isArray: false }
-    });
-}]);
 cloudAdminServices.factory('multimediaService', ['$resource', function($resource){
-    return $resource('api/multimedia', {}, {
-        query: { method: 'GET', isArray: true }
-    });
+    return {
+        getAll: $resource('api/multimedia/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getByArea: $resource('api/multimedia/multimediaByArea/:id', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getSingle: $resource('api/multimedia2/:idd', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
 }]);

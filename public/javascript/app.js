@@ -90,11 +90,28 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('elearning.multimedia',{
             url: '/multimedia',
-            templateUrl: 'partials/elearning/multimedia.ejs'
+            templateUrl: 'partials/elearning/multimedia.ejs' ,
+            controller: 'therapeuticControllerCtrl'
         })
         .state('elearning.multimedia.multimediaByArea',{
             url: '/multimedia/:id',
-            templateUrl: 'partials/elearning/multimediaByArea.ejs'
+            templateUrl: 'partials/elearning/multimediaByArea.ejs',
+            controller: 'multimediaController'
+        })
+        .state('elearning.multimedia.multimediaById',{
+            parent:'elearning.multimedia.multimediaByArea',
+            url: '/multimedia2/:idd',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                console.log('Open modal');
+                $modal.open({
+                    templateUrl: 'partials/elearning/multimediaDetails.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'multimediaDetailsController'
+                })
+            }]
+
         })
         .state('elearning.transmisii',{
             url: '/transmisii',

@@ -103,7 +103,7 @@ module.exports = function(app, router,client) {
     router.route('/therapeutic_areas')
 
         .get(function(req, res) {
-            client.request({method: 'GET' , endpoint: 'therapeuticareas'}, function (error, result) {
+            client.request({method: 'GET' , endpoint: 'therapeuticareas',qs:{limit:50}}, function (error, result) {
                 if (error) {
                     res.send(error);
                 } else {
@@ -137,47 +137,71 @@ module.exports = function(app, router,client) {
         });
     router.route('/calendar')
         .get(function(req,res){
-            Events.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
+            client.request({method: 'GET' , endpoint: 'evenimentes',qs:{limit:50}}, function (error, result) {
+                if (error) {
+                    res.send(error);
+                } else {
+                    console.log(result);
+                    res.send(result.entities);
                 }
-
-                res.json(cont);
             });
 
         });
     router.route('/calendar/:id')
         .get(function(req,res){
-            Events.findById(req.params.id,function(err, cont) {
+            client.getEntity({method: 'GET' , type: 'evenimentes', uuid: req.params.id},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                res.json(cont);
+                res.json(cont._data);
             });
 
         });
-    router.route('/multimedia/:id')
+    router.route('/multimedia2/:idd')
         .get(function(req,res){
-            Events.findById(req.params.id,function(err, cont) {
+            client.getEntity({method: 'GET' , type: 'multimedia', uuid: req.params.idd},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                res.json(cont);
+                res.json(cont._data);
             });
 
         });
     router.route('/multimedia')
         .get(function(req,res){
-            Events.find(function(err, cont) {
+            client.getEntity({method: 'GET' , type: 'multimedia'},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                res.json(cont);
+                res.send(cont.entities);
             });
 
+        });
+    router.route('/multimedia/multimediaByArea/:id')
+        .get(function(req,res){
+            var x = req.params.id;
+            if(req.params.id!='0')
+            {
+                client.request({method: 'GET' , endpoint: 'multimedia',qs:{ql:"parent_id= " + x},limit:50}, function(err, cont) {
+                    if(err) {
+                        res.send(err);
+                    }
+                    console.log(cont);
+                    res.send(cont.entities);
+                })}
+            else
+            {
+                client.request({method: 'GET' , endpoint: 'multimedia', qs:{limit:50}}, function (error, result) {
+                    if (error) {
+                        res.send(error);
+                    } else {
+                        res.send(result.entities);
+                    }
+                });
+            }
         });
     app.use('/api', router);
 };
