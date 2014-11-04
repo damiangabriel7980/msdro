@@ -122,9 +122,14 @@ gulp.task('migrateDB', function () {
     //--------------------------------------- migrate all columns except for the ones that are pk, fk, or in list below
     var columnExceptions = ["version","used"];
 
-    //-------------------------------------------------------------------------------------------- rename columns below
+    //--------------------------------------------------------------------------------- rename columns for tables below
     var renameColumns = {
-        "last_updated": "modified"
+        "cities": {
+            "name": "city-name"
+        },
+        "calendar-events": {
+            "name": "event-name"
+        }
     };
 
     //------------------------------------------------------------------------------------------------ useful functions
@@ -138,7 +143,6 @@ gulp.task('migrateDB', function () {
         return false;
     };
     var isMigrateCandidate = function(columnName){
-        //TODO arrayContainsString doesn't work
         if(((columnName.indexOf("id") > -1) && (columnName.indexOf("_") > -1)) || columnName=="id" || arrayContainsString(columnExceptions,columnName)){
             return false;
         }else{
@@ -150,72 +154,72 @@ gulp.task('migrateDB', function () {
 
     sql.connect();
 
+    var objectsAdded = 0;
+
     for(var table in toMigrate){
         sql.query("SELECT * FROM "+schema+"."+table, function (err, rows, fields) {
             if (err) {
                 console.log(err);
             } else {
-                for(var row in rows){
-                    var newJson = {};
-                    if(rows.hasOwnProperty(row)){
-                        var rowData = rows[row];
-                        for (var column in rowData){
-                            if(rowData.hasOwnProperty(column)){
-                                var columnData = rowData[column];
-                                //------------------------------------------ here we have the column and columnData
-                                if(columnData){//                            to play with
-//                                console.log(column+":"+columnData);
-                                    if(isMigrateCandidate(column)){
-                                        var columnName = column;
-                                        var valueToWrite = columnData;
+                //---------------------------------------------------------- First, empty collection
+                //TODO Separate gulp script for emtying all collections
+                var collectionName = toMigrate[fields[0]['table']];
+                console.log(collectionName);
+                apigee.request({method: 'DELETE', endpoint: collectionName+"/?limit=&ql="}, function (err, data) {
+                    if(err){
+                        console.log("!------------------------------- Error at removing collection");
+                        console.log(data);
+                        console.log("-------------------------------!");
+                    }else{
+                        for(var row in rows){
+                            var newJson = {};
+                            if(rows.hasOwnProperty(row)){
+                                var rowData = rows[row];
+                                for (var column in rowData){
+                                    if(rowData.hasOwnProperty(column)){
+                                        var columnData = rowData[column];
+                                        //------------------------------------------ now we have the column and columnData
+                                        if(columnData){//                            to play with
+//                                            console.log(column+":"+columnData);
+                                            if(isMigrateCandidate(column)){
+                                                var columnName = column;
+                                                var valueToWrite = columnData;
 
-                                        if(renameColumns[columnName])columnName = renameColumns[columnName];
+                                                if(renameColumns[collectionName]){
+                                                    if(renameColumns[collectionName][columnName]){
+                                                        columnName = renameColumns[collectionName][columnName];
+                                                    }
+                                                }
 
-                                        if(isDate(columnData)) valueToWrite = columnData.valueOf();
+                                                if(isDate(columnData)) valueToWrite = columnData.valueOf();
 
-                                        newJson[columnName]=valueToWrite;
+                                                newJson[columnName]=valueToWrite;
+                                            }
+                                        }else{
+                                            if(isMigrateCandidate(column)) newJson[column]=columnData;
+                                        }
                                     }
-                                }else{
-                                    newJson[column]=columnData;
                                 }
                             }
+
+//                            console.log(newJson); //-------- now we have a json entry that we can add to it's collection
+
+                            apigee.request({method: 'POST', endpoint: collectionName, body: newJson}, function (err,data) {
+                                if(err){
+                                    console.log("!------------------------------- Error at adding entry");
+                                    console.log(data);
+                                    console.log("-------------------------------!");
+                                }else{
+                                    objectsAdded++;
+                                    if (objectsAdded % 200 == 0) console.log("Total added = "+objectsAdded);
+                                }
+                            });
                         }
                     }
-                console.log(newJson);
-                }
+                });
             }
         });
     }
-
-//    sql.query("SELECT * FROM msd.quiz", function (err, rows, fields) {
-//        if (err) {
-//            console.log(err);
-//        } else {
-//            for(var row in rows){
-//                var newJson = {};
-//                if(rows.hasOwnProperty(row)){
-//                    var rowData = rows[row];
-//                    for (var column in rowData){
-//                        if(rowData.hasOwnProperty(column)){
-//                            var columnData = rowData[column];
-//                            if(columnData){
-////                                console.log(column+":"+columnData);
-//                                if(isMigrateCandidate(column)){
-//                                    newJson[column]=columnData;
-//                                    if(isDate(columnData)){
-//                                        dates.push(column);
-//                                    }
-//                                }
-//                            }else{
-//
-//                            }
-//                        }
-//                    }
-//                }
-////                console.log(newJson);
-//            }
-//        }
-//    });
 
     sql.end();
 });
