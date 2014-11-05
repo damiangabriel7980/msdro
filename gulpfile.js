@@ -126,7 +126,6 @@ gulp.task('migrateDB', function () {
     });
 
     //------------------------------------------------------------------------------------------------------- constants
-    const const_null = "NULL";
     const schema = "msd";
 
 //    var dnm = ["content_user_group","databasechangelog","DATABASECHANGELOG","databasechangeloglock","DATABASECHANGELOGLOCK","event_user_group",
@@ -150,12 +149,38 @@ gulp.task('migrateDB', function () {
         "question":"questions",
         "quiz":"quizes",
         "slide":"slides",
-        "tag":"tags"
+        "tag":"tags",
+        "user_job":"jobs"
     };
+
+    //-------------------- mappings (table1, table2, connection_table, table1_connect_id, table2_connect_id, connection_name)
+    //-------------------- table1 is owner
+    var connections = [
+        ["county","city","city","county_id",null,"contains"],
+        ["user_group","content","content_user_group","user_group_id","content_id","canAccess"],
+        ["question","answer","answer","question_id",null,"hasAnswers"],
+        ["user_group","event","event_user_group","user_group_id","event_id","canAttend"],
+        ["general_content","therapeutic_areas","general_content_therapeutic_areas","general_content_id","therapeutic_area_id","inArea"],
+        ["multimedia","quiz","multimedia",null,"quiz_id","quizAttached"],
+        ["multimedia","therapeutic_areas","multimedia_therapeutic_areas","multimedia_id","therapeutic_area_id","inArea"],
+        ["user_group","multimedia","multimedia_user_group","user_group_id","multimedia_id","canAccess"],
+        ["user_group","presentation","presentation","user_group_id",null,"canAccess"],
+        ["user_group","product","product_user_group","user_group_id","product_id","canAccess"],
+        ["quiz","question","question","quiz_id",null,"hasQuestions"],
+        ["presentation","slide","slide","presentation_id",null,"hasSlides"],
+        ["product","therapeutic_areas","therapeutic_area_product","product_id","therapeutic_area_id","inArea"],
+        ["user","city","user","id","city_id","livesIn"],
+        ["user","user_job","user","id","user_job_id","worksAs"],
+        ["user_group","user","user_group_users","user_group_id","user_id","contains"],
+        ["user","role","user_role","user_id","role_id","roleOwned"],
+        ["user","therapeutic_area","user_therapeutic_area","user_id","therapeutic_area_id","inArea"]
+    ];
+    //------------------------------------------------------------------- treat these tables uniquely
     var specificMappings = {
         "user_group": "groups",
         "user": "users",
-        "therapeutic_area":"therapeutic_areas"
+        "role": "roles",
+        "therapeutic_area":"therapeutic-areas"
     };
 
     //--------------------------------------- migrate all columns except for the ones that are pk, fk, or in list below
@@ -194,6 +219,7 @@ gulp.task('migrateDB', function () {
     sql.connect();
 
     var objectsAdded = 0;
+    var limit = 10; //used for testing; for no limit, set limit = 0
 
     for(var table in toMigrate){
         sql.query("SELECT * FROM "+schema+"."+table, function (err, rows, fields) {
@@ -202,6 +228,7 @@ gulp.task('migrateDB', function () {
             } else {
                 //TODO Separate gulp script for emtying all collections
                 var collectionName = toMigrate[fields[0]['table']];
+                var it = 0;
                 for(var row in rows){
                     var newJson = {};
                     if(rows.hasOwnProperty(row)){
@@ -227,7 +254,11 @@ gulp.task('migrateDB', function () {
                                         newJson[columnName]=valueToWrite;
                                     }
                                 }else{
-                                    if(isMigrateCandidate(column)) newJson[column]=columnData;
+                                    if(isMigrateCandidate(column)){
+                                        newJson[column]=columnData;
+                                        it++;
+                                        if(limit!=0 && it>limit) break;
+                                    }
                                 }
                             }
                         }
