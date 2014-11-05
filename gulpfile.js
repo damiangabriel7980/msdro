@@ -60,6 +60,45 @@ gulp.task('watch', function() {
     });
 });
 
+gulp.task('deleteCollections', function () {
+    var apigee = new usergrid.client({
+        orgName:'andrei.paduraru',
+        appName:'testmsd',
+        authType:usergrid.AUTH_CLIENT_ID,
+        clientId:'b3U6yvFz2mAnEeSkR8-U-7j7tQ',
+        clientSecret:'b3U6kRcnxmjRJusz9CPfgSXq8HVnQgo',
+        logging: false, //optional - turn on logging, off by default
+        buildCurl: false //optional - turn on curl commands, off by default
+    });
+
+    var ent;
+
+    apigee.createCollection({type: 'cities'}, function (err,data) {
+        if(err){
+            console.log("Error");
+        }else{
+            while(data.hasNextPage()){
+                data.getNextPage(function (err) {
+                    if(err){
+                        console.log("Error");
+                    }else{
+                        console.log("Got page");
+                        while(data.hasNextEntity()){
+                            data.getNextEntity().destroy(function (err) {
+                                if(err){
+                                    console.log("Err");
+                                }else{
+                                    data = null;
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    })
+});
+
 gulp.task('migrateDB', function () {
 
     // connect to sql db
