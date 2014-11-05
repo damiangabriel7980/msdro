@@ -203,5 +203,27 @@ module.exports = function(app, router,client) {
                 });
             }
         });
+    router.route('/teste')
+        .get(function(req,res){
+            client.request({method: 'GET' , endpoint: 'quizzes',qs:{limit:50}}, function (error, result) {
+                if (error) {
+                    res.send(error);
+                    return ;
+                } else {
+                    console.log(result);
+                    res.send(result.entities);
+                }
+            });
+        });
+    router.route('/teste/:id')
+        .get(function(req,res){
+            client.request({method: 'GET' , type: 'questions', qs:{ql:"quiz_id=" + req.params.id}},function(err, cont) {
+                if(err) {
+                    res.send(err);
+                    return ;
+                }
+                res.send(cont.entities);
+            });
+        });
     app.use('/api', router);
 };
