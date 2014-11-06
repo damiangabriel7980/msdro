@@ -133,6 +133,9 @@ gulp.task('migrateDB', function () {
 //               "user_group_users","user_role","user_session","user_therapeutic_area"];
 
     //------------------------------------------------------------------- migrate following tables and assign new names
+    //                                                                    order is very important !!! never migrate an
+    //                                                                    entity that will point to another before mapping
+    //                                                                    the entity it points to first (see "connections" below)
     var toMigrate = {
         "answer":"answers",
         "base_user":"base-users",
@@ -156,18 +159,18 @@ gulp.task('migrateDB', function () {
     //-------------------- mappings (table1, table2, connection_table, table1_connect_id, table2_connect_id, connection_name)
     //-------------------- table1 is owner
     var connections = [
-        ["county","city","city","county_id",null,"contains"],
+        ["county","city","city","county_id","id","contains"],
         ["user_group","content","content_user_group","user_group_id","content_id","canAccess"],
-        ["question","answer","answer","question_id",null,"hasAnswers"],
+        ["question","answer","answer","question_id","id","hasAnswers"],
         ["user_group","event","event_user_group","user_group_id","event_id","canAttend"],
         ["general_content","therapeutic_areas","general_content_therapeutic_areas","general_content_id","therapeutic_area_id","inArea"],
-        ["multimedia","quiz","multimedia",null,"quiz_id","quizAttached"],
+        ["multimedia","quiz","multimedia","id","quiz_id","quizAttached"],
         ["multimedia","therapeutic_areas","multimedia_therapeutic_areas","multimedia_id","therapeutic_area_id","inArea"],
         ["user_group","multimedia","multimedia_user_group","user_group_id","multimedia_id","canAccess"],
-        ["user_group","presentation","presentation","user_group_id",null,"canAccess"],
+        ["user_group","presentation","presentation","user_group_id","id","canAccess"],
         ["user_group","product","product_user_group","user_group_id","product_id","canAccess"],
-        ["quiz","question","question","quiz_id",null,"hasQuestions"],
-        ["presentation","slide","slide","presentation_id",null,"hasSlides"],
+        ["quiz","question","question","quiz_id","id","hasQuestions"],
+        ["presentation","slide","slide","presentation_id","id","hasSlides"],
         ["product","therapeutic_areas","therapeutic_area_product","product_id","therapeutic_area_id","inArea"],
         ["user","city","user","id","city_id","livesIn"],
         ["user","user_job","user","id","user_job_id","worksAs"],
@@ -193,7 +196,19 @@ gulp.task('migrateDB', function () {
         },
         "calendar-events": {
             "name": "event-name"
+        },
+        "user": {
+            "password": "old-pass"
+        },
+        "role": {
+            "authority": "name"
+        },
+        "user_group": {
+            "display_name": "path"
         }
+    };
+    var getRidOfSpaces = {
+        "user_group": ["display_name"]
     };
 
     //------------------------------------------------------------------------------------------------ useful functions
@@ -207,11 +222,33 @@ gulp.task('migrateDB', function () {
         return false;
     };
     var isMigrateCandidate = function(columnName){
-        if(((columnName.indexOf("id") > -1) && (columnName.indexOf("_") > -1)) || columnName=="id" || arrayContainsString(columnExceptions,columnName)){
+        if(arrayContainsString(columnExceptions,columnName)){
             return false;
         }else{
             return true;
         }
+    };
+
+    var isPkOrFk = function(columnName){
+        if(((columnName.indexOf("id") > -1) && (columnName.indexOf("_") > -1)) || columnName=="id"){
+            return true;
+        }else{
+            return false;
+        }
+    };
+
+    var renameColumn = function(collectionName, columnName){
+
+        //check if column needs to be explicitly renamed
+        if(renameColumns[collectionName]){
+            if(renameColumns[collectionName][columnName]){
+                columnName = renameColumns[collectionName][columnName];
+            }
+        }else{
+            //implicitly rename columns that were primary/foreign keys to old_[columnName]
+            if(isPkOrFk(columnName)) columnName = "old_"+columnName;
+        }
+        return columnName;
     };
 
     //------------------------------------------------------------------------------------------ iterate through SQL DB
@@ -219,7 +256,7 @@ gulp.task('migrateDB', function () {
     sql.connect();
 
     var objectsAdded = 0;
-    var limit = 10; //used for testing; for no limit, set limit = 0
+    var limit = 100; //used for testing; for no limit, set limit = 0
 
     for(var table in toMigrate){
         sql.query("SELECT * FROM "+schema+"."+table, function (err, rows, fields) {
@@ -237,32 +274,31 @@ gulp.task('migrateDB', function () {
                             if(rowData.hasOwnProperty(column)){
                                 var columnData = rowData[column];
                                 //------------------------------------------ now we have the column and columnData
-                                if(columnData){//                            to play with
-//                                    console.log(column+":"+columnData);
-                                    if(isMigrateCandidate(column)){
-                                        var columnName = column;
-                                        var valueToWrite = columnData;
+                                //                                           to play with
+                                //
+                                var columnName = renameColumn(collectionName,column);
+                                var valueToWrite = columnData;
+                                if(isMigrateCandidate(column)){
+                                    if(columnData){
 
-                                        if(renameColumns[collectionName]){
-                                            if(renameColumns[collectionName][columnName]){
-                                                columnName = renameColumns[collectionName][columnName];
+                                        //if column data cannot contain spaces for some reason, replace them with a dash
+                                        if(getRidOfSpaces[collectionName]){
+                                            if(arrayContainsString(getRidOfSpaces[collectionName],column)){
+                                                valueToWrite = valueToWrite.replace(" ","-");
                                             }
                                         }
 
+                                        //format dates
                                         if(isDate(columnData)) valueToWrite = columnData.valueOf();
-
-                                        newJson[columnName]=valueToWrite;
                                     }
-                                }else{
-                                    if(isMigrateCandidate(column)){
-                                        newJson[column]=columnData;
-                                        it++;
-                                        if(limit!=0 && it>limit) break;
-                                    }
+                                    newJson[columnName]=columnData;
                                 }
                             }
+
                         }
                     }
+                    it++;
+                    if(limit!=0 && it>limit) break;
 
 //                    console.log(newJson); //-------- now we have a json entry that we can add to it's collection
 
