@@ -78,7 +78,7 @@ gulp.task('deleteCollections', function () {
         "slides","tags","jobs","groups","users","roles","therapeutic-areas"];
 
     for(var col in toDelete){
-        apigee.request({method: 'DELETE', endpoint:toDelete[col]+"?limit=1000&ql="}, function (err,data) {
+        apigee.request({method: 'DELETE', endpoint:toDelete[col]+"?limit=15&ql="}, function (err,data) {
             if(err){
                 console.log(data);
             }
@@ -177,10 +177,10 @@ gulp.task('migrateDB', function () {
 
     //--------------------------------------------------------------------------------- rename columns for tables below
     var renameColumns = {
-        "cities": {
+        "city": {
             "name": "city-name"
         },
-        "calendar-events": {
+        "event": {
             "name": "event-name"
         },
         "user": {
@@ -189,7 +189,7 @@ gulp.task('migrateDB', function () {
         "role": {
             "authority": "name"
         },
-        "groups": {
+        "user_group": {
             "display_name": "path"
         }
     };
@@ -231,12 +231,12 @@ gulp.task('migrateDB', function () {
         return 'id';
     };
 
-    var renameColumn = function(collectionName, columnName){
+    var renameColumn = function(table_old, columnName){
 
         //check if column needs to be explicitly renamed
-        if(renameColumns[collectionName]){
-            if(renameColumns[collectionName][columnName]){
-                columnName = renameColumns[collectionName][columnName];
+        if(renameColumns[table_old]){
+            if(renameColumns[table_old][columnName]){
+                columnName = renameColumns[table_old][columnName];
             }
         }else{
             //implicitly rename columns that were primary/foreign keys to old_[columnName]
@@ -305,14 +305,14 @@ gulp.task('migrateDB', function () {
                                 //------------------------------------------ now we have the column and columnData
                                 //                                           to play with
                                 //
-                                var columnName = renameColumn(collectionName,column);  //name used for apigee
+                                var columnName = renameColumn(table_old,column);  //name used for apigee
                                 var valueToWrite = columnData;                        //value used for apigee
 
                                 if(isMigrateCandidate(column) && !isFk(column) && column!=pk){
                                     if(columnData){
                                         //if column data is not allowed to contain spaces, replace them with a dash
-                                        if(getRidOfSpaces[collectionName]){
-                                            if(arrayContainsString(getRidOfSpaces[collectionName],column)){
+                                        if(getRidOfSpaces[table_old]){
+                                            if(arrayContainsString(getRidOfSpaces[table_old],column)){
                                                 valueToWrite = valueToWrite.replace(" ","-");
                                             }
                                         }
