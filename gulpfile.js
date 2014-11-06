@@ -181,7 +181,8 @@ gulp.task('migrateDB', function () {
         ["user","user_job","user","id","user_job_id","worksAs"],
         ["user_group","user","user_group_users","user_group_id","user_id","contains"],
         ["user","role","user_role","user_id","role_id","roleOwned"],
-        ["user","therapeutic_area","user_therapeutic_area","user_id","therapeutic_area_id","inArea"]
+        ["user","therapeutic_area","user_therapeutic_area","user_id","therapeutic_area_id","inArea"],
+        ["therapeutic_area","therapeutic_area","therapeutic_area","id","parent_therapeutic_area_id","childOf"]
     ];
 
     //------------------------------------------------------- migrate all columns except for the ones in the list below
@@ -230,12 +231,17 @@ gulp.task('migrateDB', function () {
         }
     };
 
-    var isPkOrFk = function(columnName){
-        if(((columnName.indexOf("id") > -1) && (columnName.indexOf("_") > -1)) || columnName=="id"){
+    var isFk = function(columnName){
+        if((columnName.indexOf("id") > -1) && (columnName.indexOf("_") > -1)){
             return true;
         }else{
             return false;
         }
+    };
+
+    var getPk = function(){
+        //in my case, pk is always "id"
+        return "id";
     };
 
     var renameColumn = function(collectionName, columnName){
@@ -247,14 +253,22 @@ gulp.task('migrateDB', function () {
             }
         }else{
             //implicitly rename columns that were primary/foreign keys to old_[columnName]
-            if(isPkOrFk(columnName)) columnName = "old_"+columnName;
+//            if(isPkOrFk(columnName)) columnName = "old_"+columnName;
         }
         return columnName;
     };
 
-    //------------------------------------------------------------------------------------------ iterate through SQL DB
+    //--------------------------------------------------------------------- iterate through SQL DB and migrate all data
 
     sql.connect();
+
+    var pkfk = {
+        "table_old": {
+            "row_id_as_str": [
+                {"attr1": "val"}, {"attr2": "val"}
+            ]
+        }
+    };
 
     var objectsAdded = 0;
     var limit = 100; //used for testing; for no limit, set limit = 0
@@ -264,12 +278,15 @@ gulp.task('migrateDB', function () {
             if (err) {
                 console.log(err);
             } else {
-                //TODO Separate gulp script for emtying all collections
-                var collectionName = toMigrate[fields[0]['table']];
+                //TODO Separate gulp script for emptying all collections
+                var table_old = fields[0]['table']; //get sql table name
+                var collectionName = toMigrate[table_old]; //get new collection name
                 var it = 0;
                 for(var row in rows){
                     var newJson = {};
+                    var pk = getPk();
                     if(rows.hasOwnProperty(row)){
+//                        /*
                         var rowData = rows[row];
                         for (var column in rowData){
                             if(rowData.hasOwnProperty(column)){
@@ -277,48 +294,59 @@ gulp.task('migrateDB', function () {
                                 //------------------------------------------ now we have the column and columnData
                                 //                                           to play with
                                 //
-                                var columnName = renameColumn(collectionName,column);
-                                var valueToWrite = columnData;
-                                if(isMigrateCandidate(column)){
-                                    if(columnData){
+                                var columnName = renameColumn(collectionName,column);  //name used for apigee
+                                var valueToWrite = columnData;                        //value used for apigee
 
-                                        //if column data cannot contain spaces for some reason, replace them with a dash
-                                        if(getRidOfSpaces[collectionName]){
-                                            if(arrayContainsString(getRidOfSpaces[collectionName],column)){
-                                                valueToWrite = valueToWrite.replace(" ","-");
+                                if(isFk(column) || column == pk){
+                                    //add to Pk/Fk Array
+                                    if(!pkfk[table_old]) pkfk[table_old] = {};
+                                    if(!pkfk[table_old][pk]) pkfk[table_old][pk] = [];
+                                    pkfk[table_old][pk].push({"column":column, "data":columnData});
+                                }else{
+                                    if(isMigrateCandidate(column)){
+                                        if(columnData){
+                                            //if column data is not allowed to contain spaces, replace them with a dash
+                                            if(getRidOfSpaces[collectionName]){
+                                                if(arrayContainsString(getRidOfSpaces[collectionName],column)){
+                                                    valueToWrite = valueToWrite.replace(" ","-");
+                                                }
                                             }
-                                        }
 
-                                        //format dates
-                                        if(isDate(columnData)) valueToWrite = columnData.valueOf();
+                                            //format dates
+                                            if(isDate(columnData)) valueToWrite = columnData.valueOf();
+                                        }
+                                        newJson[columnName]=valueToWrite;
                                     }
-                                    newJson[columnName]=columnData;
                                 }
                             }
 
                         }
+                        it++;
+                        if(limit!=0 && it>limit) break;
+
+//                        console.log(newJson); //-------- now we have a json entry that we can add to it's collection
+
+                        apigee.request({method: 'POST', endpoint: collectionName, body: newJson}, function (err,data) {
+                            if(err){
+                                console.log("!------------------------------- Error at adding entry");
+                                console.log(data);
+                                console.log("-------------------------------!");
+                            }else{
+                                objectsAdded++;
+                                if (objectsAdded % 200 == 0) console.log("Total added = "+objectsAdded);
+                            }
+                        });
+//                        */
                     }
-                    it++;
-                    if(limit!=0 && it>limit) break;
 
-//                    console.log(newJson); //-------- now we have a json entry that we can add to it's collection
-
-                    apigee.request({method: 'POST', endpoint: collectionName, body: newJson}, function (err,data) {
-                        if(err){
-                            console.log("!------------------------------- Error at adding entry");
-                            console.log(data);
-                            console.log("-------------------------------!");
-                        }else{
-                            objectsAdded++;
-                            if (objectsAdded % 200 == 0) console.log("Total added = "+objectsAdded);
-                        }
-                    });
                 }
             }
         });
+        console.log(pkfk);
     }
-
     sql.end();
+
+    //----------------------------------------------------------------- iterate through SQL DB and migrate all mappings
 });
 
 gulp.task('default', ['sass', 'js', 'watch']);
