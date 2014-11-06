@@ -241,7 +241,7 @@ gulp.task('migrateDB', function () {
 
     var getPk = function(){
         //in my case, pk is always "id"
-        return "id";
+        return 'id';
     };
 
     var renameColumn = function(collectionName, columnName){
@@ -253,9 +253,29 @@ gulp.task('migrateDB', function () {
             }
         }else{
             //implicitly rename columns that were primary/foreign keys to old_[columnName]
+            //this was removed
 //            if(isPkOrFk(columnName)) columnName = "old_"+columnName;
         }
         return columnName;
+    };
+
+    var makeRequest = function(endpoint,body,myParam){
+        apigee.request({method: 'POST', endpoint: endpoint, body: body}, function (err,data) {
+            if(err){
+                console.log("!------------------------------- Error at adding entry");
+                console.log(data);
+                console.log("-------------------------------!");
+            }else{
+
+            }
+        });
+    };
+
+    var executedSqlBocks = function (sqlBocks) {
+        for(var i=0; i<sqlBocks.length; i++){
+            if(sqlBocks[i]==false) return false;
+        }
+        return true;
     };
 
     //--------------------------------------------------------------------- iterate through SQL DB and migrate all data
@@ -263,17 +283,22 @@ gulp.task('migrateDB', function () {
     sql.connect();
 
     var pkfk = {
+        /*
         "table_old": {
-            "row_id_as_str": [
-                {"attr1": "val"}, {"attr2": "val"}
+            "old_row_id_as_str": [
+                {"attr1": "val"}, {"attr2": "val"}, ....., newRowId
             ]
         }
+        */
     };
+
+    var sqlBocks = {}; //put each sql query in a execution block
 
     var objectsAdded = 0;
     var limit = 100; //used for testing; for no limit, set limit = 0
 
     for(var table in toMigrate){
+        sqlBocks[table]=false;
         sql.query("SELECT * FROM "+schema+"."+table, function (err, rows, fields) {
             if (err) {
                 console.log(err);
@@ -299,9 +324,10 @@ gulp.task('migrateDB', function () {
 
                                 if(isFk(column) || column == pk){
                                     //add to Pk/Fk Array
-                                    if(!pkfk[table_old]) pkfk[table_old] = {};
-                                    if(!pkfk[table_old][pk]) pkfk[table_old][pk] = [];
-                                    pkfk[table_old][pk].push({"column":column, "data":columnData});
+                                    if(pkfk[table_old]===undefined) pkfk[table_old] = {};
+                                    if(pkfk[table_old][rowData[pk].toString()]===undefined) pkfk[table_old][rowData[pk].toString()] = [];
+//                                    console.log(pkfk[table_old][rowData[pk]]);
+                                    pkfk[table_old][rowData[pk].toString()].push({"column":column, "data":columnData});
                                 }else{
                                     if(isMigrateCandidate(column)){
                                         if(columnData){
@@ -326,27 +352,63 @@ gulp.task('migrateDB', function () {
 
 //                        console.log(newJson); //-------- now we have a json entry that we can add to it's collection
 
-                        apigee.request({method: 'POST', endpoint: collectionName, body: newJson}, function (err,data) {
-                            if(err){
-                                console.log("!------------------------------- Error at adding entry");
-                                console.log(data);
-                                console.log("-------------------------------!");
-                            }else{
-                                objectsAdded++;
-                                if (objectsAdded % 200 == 0) console.log("Total added = "+objectsAdded);
-                            }
-                        });
+//                        makeRequest(collectionName,body,null);
+
+                        objectsAdded++;
+                        if (objectsAdded % 200 == 0) console.log("Total added = "+objectsAdded);
+
 //                        */
                     }
 
                 }
+                sqlBocks[table_old]=true;
+//                console.log(pkfk);
             }
         });
-        console.log(pkfk);
     }
     sql.end();
 
+    var postExecution = function () {
+        if(executedSqlBocks(sqlBocks)){
+            clearInterval(checkForCompletion);
+            //--------------------------------------------------------------------------------- all sql is now executed
+            console.log(pkfk);
+        }
+    };
+    var checkForCompletion = setInterval(postExecution, 3000);
+
+
     //----------------------------------------------------------------- iterate through SQL DB and migrate all mappings
+});
+
+gulp.task('testA', function () {
+    // connect to apigee
+    var apigee = new usergrid.client({
+        orgName:'andrei.paduraru',
+        appName:'testmsd',
+        authType:usergrid.AUTH_CLIENT_ID,
+        clientId:'b3U6yvFz2mAnEeSkR8-U-7j7tQ',
+        clientSecret:'b3U6kRcnxmjRJusz9CPfgSXq8HVnQgo',
+        logging: false, //optional - turn on logging, off by default
+        buildCurl: false //optional - turn on curl commands, off by default
+    });
+
+    var makeRequest = function(endpoint,body,myParam){
+        apigee.request({method: 'PUT', endpoint: endpoint, body: body}, function (err,data) {
+            if(err){
+                console.log("!------------------------------- Error at adding entry");
+                console.log(data);
+                console.log("-------------------------------!");
+            }else{
+                console.log(myParam+" at "+data.entities[0].uuid);
+            }
+        });
+    };
+
+    for(var i=1; i<10; i++){
+        makeRequest('tests',{"valoare":i},i);
+    }
+
 });
 
 gulp.task('default', ['sass', 'js', 'watch']);
