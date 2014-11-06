@@ -71,32 +71,19 @@ gulp.task('deleteCollections', function () {
         buildCurl: false //optional - turn on curl commands, off by default
     });
 
-    var ent;
+    var toDelete = [
+            "answers","base-users","carousel-contents","cities","articles",
+        "counties","calendar-events","public-articles","multimedia",
+        "parameters","presentations","products","questions","quizes",
+        "slides","tags","jobs","groups","users","roles","therapeutic-areas"];
 
-    apigee.createCollection({type: 'cities'}, function (err,data) {
-        if(err){
-            console.log("Error");
-        }else{
-            while(data.hasNextPage()){
-                data.getNextPage(function (err) {
-                    if(err){
-                        console.log("Error");
-                    }else{
-                        console.log("Got page");
-                        while(data.hasNextEntity()){
-                            data.getNextEntity().destroy(function (err) {
-                                if(err){
-                                    console.log("Err");
-                                }else{
-                                    data = null;
-                                }
-                            });
-                        }
-                    }
-                });
+    for(var col in toDelete){
+        apigee.request({method: 'DELETE', endpoint:toDelete[col]+"?limit=1000&ql="}, function (err,data) {
+            if(err){
+                console.log(data);
             }
-        }
-    })
+        });
+    }
 });
 
 gulp.task('migrateDB', function () {
@@ -202,7 +189,7 @@ gulp.task('migrateDB', function () {
         "role": {
             "authority": "name"
         },
-        "user_group": {
+        "groups": {
             "display_name": "path"
         }
     };
@@ -259,46 +246,44 @@ gulp.task('migrateDB', function () {
         return columnName;
     };
 
-    var makeRequest = function(endpoint,body,myParam){
+    var makeRequest = function(endpoint,body,table_old,oldId){
         apigee.request({method: 'POST', endpoint: endpoint, body: body}, function (err,data) {
             if(err){
                 console.log("!------------------------------- Error at adding entry");
+                console.log("entity: "+endpoint);
                 console.log(data);
                 console.log("-------------------------------!");
             }else{
-
+                pkMappings[table_old].push([oldId,data.entities[0].uuid]);
             }
+            apigeeRequestsPending--;
         });
-    };
-
-    var executedSqlBocks = function (sqlBocks) {
-        for(var i=0; i<sqlBocks.length; i++){
-            if(sqlBocks[i]==false) return false;
-        }
-        return true;
     };
 
     //--------------------------------------------------------------------- iterate through SQL DB and migrate all data
 
     sql.connect();
 
-    var pkfk = {
+    var pkMappings = {
         /*
-        "table_old": {
-            "old_row_id_as_str": [
-                {"attr1": "val"}, {"attr2": "val"}, ....., newRowId
+        "table_old": [
+                [
+                "old_row_id_as_str",
+                "new_row_id_as_str"
+                ]
             ]
         }
         */
     };
 
-    var sqlBocks = {}; //put each sql query in a execution block
+    var sqlBocks = {}; //put each sql query in an execution block
 
-    var objectsAdded = 0;
-    var limit = 100; //used for testing; for no limit, set limit = 0
+    var apigeeRequestsPending = 0;
+    var sqlRequestsPending = 0;
+    var limit = 10; //used for testing; for no limit, set limit = 0
 
     for(var table in toMigrate){
-        sqlBocks[table]=false;
+        sqlRequestsPending++;
         sql.query("SELECT * FROM "+schema+"."+table, function (err, rows, fields) {
             if (err) {
                 console.log(err);
@@ -306,6 +291,7 @@ gulp.task('migrateDB', function () {
                 //TODO Separate gulp script for emptying all collections
                 var table_old = fields[0]['table']; //get sql table name
                 var collectionName = toMigrate[table_old]; //get new collection name
+                pkMappings[table_old]=[]; //initialize pk mappings
                 var it = 0;
                 for(var row in rows){
                     var newJson = {};
@@ -322,27 +308,19 @@ gulp.task('migrateDB', function () {
                                 var columnName = renameColumn(collectionName,column);  //name used for apigee
                                 var valueToWrite = columnData;                        //value used for apigee
 
-                                if(isFk(column) || column == pk){
-                                    //add to Pk/Fk Array
-                                    if(pkfk[table_old]===undefined) pkfk[table_old] = {};
-                                    if(pkfk[table_old][rowData[pk].toString()]===undefined) pkfk[table_old][rowData[pk].toString()] = [];
-//                                    console.log(pkfk[table_old][rowData[pk]]);
-                                    pkfk[table_old][rowData[pk].toString()].push({"column":column, "data":columnData});
-                                }else{
-                                    if(isMigrateCandidate(column)){
-                                        if(columnData){
-                                            //if column data is not allowed to contain spaces, replace them with a dash
-                                            if(getRidOfSpaces[collectionName]){
-                                                if(arrayContainsString(getRidOfSpaces[collectionName],column)){
-                                                    valueToWrite = valueToWrite.replace(" ","-");
-                                                }
+                                if(isMigrateCandidate(column) && !isFk(column) && column!=pk){
+                                    if(columnData){
+                                        //if column data is not allowed to contain spaces, replace them with a dash
+                                        if(getRidOfSpaces[collectionName]){
+                                            if(arrayContainsString(getRidOfSpaces[collectionName],column)){
+                                                valueToWrite = valueToWrite.replace(" ","-");
                                             }
-
-                                            //format dates
-                                            if(isDate(columnData)) valueToWrite = columnData.valueOf();
                                         }
-                                        newJson[columnName]=valueToWrite;
+
+                                        //format dates
+                                        if(isDate(columnData)) valueToWrite = columnData.valueOf();
                                     }
+                                    newJson[columnName]=valueToWrite;
                                 }
                             }
 
@@ -352,30 +330,30 @@ gulp.task('migrateDB', function () {
 
 //                        console.log(newJson); //-------- now we have a json entry that we can add to it's collection
 
-//                        makeRequest(collectionName,body,null);
-
-                        objectsAdded++;
-                        if (objectsAdded % 200 == 0) console.log("Total added = "+objectsAdded);
+                        makeRequest(collectionName,newJson,table_old,rowData[pk].toString());
+                        apigeeRequestsPending++;
 
 //                        */
                     }
 
                 }
-                sqlBocks[table_old]=true;
-//                console.log(pkfk);
+                sqlRequestsPending--;
             }
         });
     }
     sql.end();
 
     var postExecution = function () {
-        if(executedSqlBocks(sqlBocks)){
+        if(sqlRequestsPending==0 && apigeeRequestsPending==0){
             clearInterval(checkForCompletion);
-            //--------------------------------------------------------------------------------- all sql is now executed
-            console.log(pkfk);
+            //---------------------------------------------------------------------------------------------------------- all sql is now executed and
+            //                                                                                                           all apigee requests received response
+            console.log(pkMappings);
+        }else{
+            console.log("Requests pending = "+apigeeRequestsPending);
         }
     };
-    var checkForCompletion = setInterval(postExecution, 3000);
+    var checkForCompletion = setInterval(postExecution, 5000);
 
 
     //----------------------------------------------------------------- iterate through SQL DB and migrate all mappings
