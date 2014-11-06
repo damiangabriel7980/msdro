@@ -153,7 +153,12 @@ gulp.task('migrateDB', function () {
         "quiz":"quizes",
         "slide":"slides",
         "tag":"tags",
-        "user_job":"jobs"
+        "user_job":"jobs",
+        //ai grija cu astea
+        "user_group": "groups",
+        "user": "users",
+        "role": "roles",
+        "therapeutic_area":"therapeutic-areas"
     };
 
     //-------------------- mappings (table1, table2, connection_table, table1_connect_id, table2_connect_id, connection_name)
@@ -178,15 +183,8 @@ gulp.task('migrateDB', function () {
         ["user","role","user_role","user_id","role_id","roleOwned"],
         ["user","therapeutic_area","user_therapeutic_area","user_id","therapeutic_area_id","inArea"]
     ];
-    //------------------------------------------------------------------- treat these tables uniquely
-    var specificMappings = {
-        "user_group": "groups",
-        "user": "users",
-        "role": "roles",
-        "therapeutic_area":"therapeutic-areas"
-    };
 
-    //--------------------------------------- migrate all columns except for the ones that are pk, fk, or in list below
+    //------------------------------------------------------- migrate all columns except for the ones in the list below
     var columnExceptions = ["version","used"];
 
     //--------------------------------------------------------------------------------- rename columns for tables below
@@ -207,6 +205,9 @@ gulp.task('migrateDB', function () {
             "display_name": "path"
         }
     };
+
+    //------------ replace spaces with dashes for columns (represented by arrays) in tables (represented by keys) below
+    //------------ [in apigee, a unique column cannot contain spaces in any entry]
     var getRidOfSpaces = {
         "user_group": ["display_name"]
     };
