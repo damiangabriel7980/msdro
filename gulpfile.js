@@ -232,18 +232,14 @@ gulp.task('migrateDB', function () {
     };
 
     var renameColumn = function(table_old, columnName){
-
+        columnName = [columnName];
         //check if column needs to be explicitly renamed
         if(renameColumns[table_old]){
             if(renameColumns[table_old][columnName]){
                 columnName = renameColumns[table_old][columnName];
             }
-        }else{
-            //implicitly rename columns that were primary/foreign keys to old_[columnName]
-            //this was removed
-//            if(isPkOrFk(columnName)) columnName = "old_"+columnName;
         }
-        return [columnName];
+        return columnName;
     };
 
     var makeRequest = function(endpoint,body,table_old,oldId){
