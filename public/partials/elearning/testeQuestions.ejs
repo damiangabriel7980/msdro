@@ -1,0 +1,25 @@
+<div class="row">
+    <div class="col-xs-6">
+        <p><span id="info-question" class="label label-info"></span></p>
+    </div>
+
+    <div class="col-xs-6">
+        <p class="pull-right"><span id="info-time" class="label label-info"></span></p>
+    </div>
+</div>
+
+<hr class="margintop5px marginbottom10px">
+<div id="quiz-content">
+    <div id="question" class="marginbottom10px">
+     <h4>{{newQuestions[contor].text}}</h4>
+    <!--<input type = "checkbox" ng-repeat="answer in answersFiltered">{{answer.text}}</input>-->
+    </div>
+    <!--<div id="answers" class="marginleft10px"></div>-->
+</div>
+</div>
+
+<div class="modal-footer">
+    <a class="btn pull-left btn-primary" ng-class="clasa" ng-click="previousQuestion()">Back</a>
+    <a class="btn pull-right btn-primary" ng-class="hideNext" ng-click="nextQuestion()">Next</a>
+    <a class="btn pull-right btn-primary" ng-class="hideFinish" ng-click="finishJob()" ui-sref="elearning.teste">Finish</a>
+</div>

@@ -11,7 +11,7 @@ cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'tes
                 $scope.testeFiltered.push($scope.teste[i]);
         }
     });
-    $scope.questions = testeService.getByTest.query({id:$stateParams.id});
+    //$scope.questions = testeService.getByTest.query({id:$stateParams.id});
     $scope.amazon = $rootScope.pathAmazonDev;
 }])
     .filter('htmlToPlaintext', function() {

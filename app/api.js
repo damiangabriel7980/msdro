@@ -216,14 +216,42 @@ module.exports = function(app, router,client) {
             });
         });
     router.route('/teste/:id')
-        .get(function(req,res){
-            client.request({method: 'GET' , type: 'questions', qs:{ql:"quiz_id=" + req.params.id}},function(err, cont) {
-                if(err) {
+        .get(function(req,res) {
+            client.request({method: 'GET', endpoint: 'questions',
+                qs: {ql: "quiz_id =" + req.params.id, limit: 1000}
+            }, function (err, cont) {
+                if (err) {
                     res.send(err);
-                    return ;
+                    return;
                 }
+                console.log(cont);
                 res.send(cont.entities);
             });
+            //var options = {
+            //    type: "answers", //Required - the type of collection to be retrieved
+            //    client: client //Required
+            //};
+            //
+            ////Create a collection object to hold the response
+            //var collection = new Usergrid.collection(options);
+            //
+            ////Call request to initiate the API call
+            //collection.fetch(function (error, result) {
+            //    if (error) {
+            //        res.send(error);
+            //        return;
+            //    } else {
+            //        res.send(result.entities);
+            //    }
+            //    //    client.request({method: 'GET', endpoint: 'answers', qs: {limit: 1000}}, function (err, cont2) {
+            //    //                if (err) {
+            //    //                    res.send(err);
+            //    //                    return;
+            //    //                }
+            //    //                console.log(cont2);
+            //    //                res.send(cont2.entities);
+            //    //            });
+            //});
         });
     app.use('/api', router);
 };

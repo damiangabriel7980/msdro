@@ -131,10 +131,12 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                     templateUrl: 'partials/elearning/testeQuestions.ejs',
                     backdrop: true,
                     size: 'lg',
+                    keyboard: false,
                     windowClass: 'fade',
                     controller: 'testeQuestionsController'
                 })
             }]
+            //onExit:{url: '/teste'}
         })
         //utility state used for dev:
         .state('utility', {

@@ -23,9 +23,9 @@
 
 
                     <div class="row">
-                        <img src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/video.png" alt="{{quiz.title}}" height="250px" width="250px"/>
+                        <img ng-if="quiz.entity!='SLIDE'" src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/video.png" alt="{{quiz.title}}" height="250px" width="250px"/>
+                        <img ng-if="quiz.entity=='SLIDE'" src="https://s3-eu-west-1.amazonaws.com/msddev-test/multimedia/4/slide/multimedia_88.png" height="250px" width="250px" />
                         <h4><a href="#"></a>{{quiz.title}}</h4>
-
                         <p>{{quiz.description | htmlToPlaintext | limitTo: 190}}...
                             <button class="button btn-info pull-right" ui-sref="elearning.teste.quizById({id:quiz.uuid})">Sustine testul</button>
                         </p>
