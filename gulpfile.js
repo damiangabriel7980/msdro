@@ -154,15 +154,15 @@ gulp.task('migrateDB', function () {
         ["user_group","content","content_user_group","user_group_id","content_id","canAccess"],
         ["question","answer","answer","question_id","id","hasAnswers"],
         ["user_group","event","event_user_group","user_group_id","event_id","canAttend"],
-        ["general_content","therapeutic_areas","general_content_therapeutic_areas","general_content_id","therapeutic_area_id","inArea"],
+        ["general_content","therapeutic_area","general_content_therapeutic_areas","general_content_id","therapeutic_area_id","inArea"],
         ["multimedia","quiz","multimedia","id","quiz_id","quizAttached"],
-        ["multimedia","therapeutic_areas","multimedia_therapeutic_areas","multimedia_id","therapeutic_area_id","inArea"],
+        ["multimedia","therapeutic_area","multimedia_therapeutic_areas","multimedia_id","therapeutic_area_id","inArea"],
         ["user_group","multimedia","multimedia_user_group","user_group_id","multimedia_id","canAccess"],
         ["user_group","presentation","presentation","user_group_id","id","canAccess"],
         ["user_group","product","product_user_group","user_group_id","product_id","canAccess"],
         ["quiz","question","question","quiz_id","id","hasQuestions"],
         ["presentation","slide","slide","presentation_id","id","hasSlides"],
-        ["product","therapeutic_areas","therapeutic_area_product","product_id","therapeutic_area_id","inArea"],
+        ["product","therapeutic_area","therapeutic_area_product","product_id","therapeutic_area_id","inArea"],
         ["user","city","user","id","city_id","livesIn"],
         ["user","user_job","user","id","user_job_id","worksAs"],
         ["user_group","user","user_group_users","user_group_id","user_id","users"],
@@ -266,21 +266,24 @@ gulp.task('migrateDB', function () {
                 console.log("At: "+endpoint);
                 console.log(data);
                 console.log("-------------------------------!");
+                mappingsProcessedWithError++;
             }else{
-                apigeeRequestsPending--;
+                mappingsSuccessful++;
             }
+            apigeeRequestsPending--;
         });
     };
 
     var searchInPkMappings = function (table_old,old_row_id) {
-        // I assume the value I am searching has to be there. No point in slowing things down
         var i=0;
-        while(true){
+//        console.log("table: "+table_old+"; id: "+old_row_id);
+        while(i<pkMappings[table_old].length){
             if(pkMappings[table_old][i][0]==old_row_id){
                 return pkMappings[table_old][i][1];
             }
             i++;
         }
+        return null;
     };
 
     var sqlMapRequest = function (old_table_from, old_table_to, link_table, link_col_from, link_col_to, relationName) {
@@ -296,11 +299,20 @@ gulp.task('migrateDB', function () {
 //                        console.log(rowData[link_col_from]+" - "+rowData[link_col_to]);
                         var new_id_from = searchInPkMappings(old_table_from,old_id_from);
                         var new_id_to = searchInPkMappings(old_table_to,old_id_to);
-                        var collectionFrom = toMigrate[old_table_from];
-                        var collectionTo = toMigrate[old_table_to];
-                        var requestString = collectionFrom+"/"+new_id_from+"/"+relationName+"/"+collectionTo+"/"+new_id_to;
-                        apigeeRequestsPending++;
-                        mappingRequest(requestString);
+                        if(new_id_from!=null && new_id_to!=null){
+                            var collectionFrom = toMigrate[old_table_from];
+                            var collectionTo = toMigrate[old_table_to];
+                            var requestString;
+                            if(collectionFrom == "groups" && collectionTo == "users"){
+                                requestString = collectionFrom+"/"+new_id_from+"/"+collectionTo+"/"+new_id_to;
+                            }else{
+                                requestString = collectionFrom+"/"+new_id_from+"/"+relationName+"/"+collectionTo+"/"+new_id_to;
+                            }
+                            apigeeRequestsPending++;
+                            mappingRequest(requestString);
+                        }else{
+                            mappingsFailedToProcess++;
+                        }
                     }
                 }
                 sqlRequestsPending--;
@@ -328,6 +340,10 @@ gulp.task('migrateDB', function () {
 
     var apigeeRequestsPending = 0;
     var sqlRequestsPending = 0;
+
+    var mappingsFailedToProcess = 0;
+    var mappingsProcessedWithError = 0;
+    var mappingsSuccessful = 0;
 
     for(var table in toMigrate){
         sqlRequestsPending++;
@@ -394,7 +410,7 @@ gulp.task('migrateDB', function () {
             clearInterval(checkForCompletion);
             //---------------------------------------------------------------------------------------------------------- all sql is now executed and
             //                                                                                                           all apigee requests received response
-            console.log(pkMappings);
+//            console.log(pkMappings);
             //--------------------------------------------------------- iterate through SQL DB and migrate all mappings
             for(var con in connections){
                 var c = connections[con];
@@ -407,6 +423,9 @@ gulp.task('migrateDB', function () {
                     clearInterval(checkFinal);
                     sql.end();
                     console.log("ALL DONE");
+                    console.log("Mappings successful = "+mappingsSuccessful);
+                    console.log("Mappings processed with errors = "+mappingsProcessedWithError);
+                    console.log("Mappings failed to process = "+mappingsFailedToProcess);
                 }else{
                     console.log("Requests pending = "+apigeeRequestsPending);
                 }
