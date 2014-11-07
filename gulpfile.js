@@ -174,22 +174,23 @@ gulp.task('migrateDB', function () {
     //------------------------------------------------------- migrate all columns except for the ones in the list below
     var columnExceptions = ["version","used"];
 
-    //--------------------------------------------------------------------------------- rename columns for tables below
+    //---------------------------------------------------------------- rename columns for tables below
+    //                                                                 add more names in array to duplicate that column
     var renameColumns = {
         "city": {
-            "name": "city-name"
+            "name": ["city-name"]
         },
         "event": {
-            "name": "event-name"
+            "name": ["event-name"]
         },
         "user": {
-            "password": "old-pass"
+            "password": ["old-pass"]
         },
         "role": {
-            "authority": "name"
+            "authority": ["name"]
         },
         "user_group": {
-            "display_name": "path"
+            "display_name": ["path","title"]
         }
     };
 
@@ -242,7 +243,7 @@ gulp.task('migrateDB', function () {
             //this was removed
 //            if(isPkOrFk(columnName)) columnName = "old_"+columnName;
         }
-        return columnName;
+        return [columnName];
     };
 
     var makeRequest = function(endpoint,body,table_old,oldId){
@@ -323,8 +324,6 @@ gulp.task('migrateDB', function () {
         });
     };
 
-    //--------------------------------------------------------------------- iterate through SQL DB and migrate all data
-
     sql.connect();
 
     var pkMappings = {
@@ -348,6 +347,7 @@ gulp.task('migrateDB', function () {
     var mappingsProcessedWithError = 0;
     var mappingsSuccessful = 0;
 
+    //--------------------------------------------------------------------- iterate through SQL DB and migrate all data
     console.log("Migrating tables");
     for(var table in toMigrate){
         sqlRequestsPending++;
@@ -372,7 +372,7 @@ gulp.task('migrateDB', function () {
                                 //------------------------------------------ now we have the column and columnData
                                 //                                           to play with
                                 //
-                                var columnName = renameColumn(table_old,column);  //name used for apigee
+                                var columnNames = renameColumn(table_old,column);  //name used for apigee
                                 var valueToWrite = columnData;                        //value used for apigee
 
                                 if(isMigrateCandidate(column) && !isFk(column) && column!=pk){
@@ -387,7 +387,9 @@ gulp.task('migrateDB', function () {
                                         //format dates
                                         if(isDate(columnData)) valueToWrite = columnData.valueOf();
                                     }
-                                    newJson[columnName]=valueToWrite;
+                                    for(var k=0; k<columnNames.length; k++){
+                                        newJson[columnNames[k]]=valueToWrite;
+                                    }
                                 }
                             }
 
