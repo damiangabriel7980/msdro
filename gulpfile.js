@@ -165,8 +165,8 @@ gulp.task('migrateDB', function () {
         ["product","therapeutic_area","therapeutic_area_product","product_id","therapeutic_area_id","inArea"],
         ["user","city","user","id","city_id","livesIn"],
         ["user","user_job","user","id","user_job_id","worksAs"],
-        ["user_group","user","user_group_users","user_group_id","user_id","users"],
-        ["user","role","user_role","user_id","role_id","roles"],
+        ["user_group","user","user_group_users","user_group_id","user_id",null],
+        ["role","user","user_role","role_id","user_id",null],
         ["user","therapeutic_area","user_therapeutic_area","user_id","therapeutic_area_id","inArea"],
         ["therapeutic_area","therapeutic_area","therapeutic_area","id","parent_therapeutic_area_id","childOf"]
     ];
@@ -302,12 +302,15 @@ gulp.task('migrateDB', function () {
                         if(new_id_from!=null && new_id_to!=null){
                             var collectionFrom = toMigrate[old_table_from];
                             var collectionTo = toMigrate[old_table_to];
-                            var requestString;
-                            if(collectionFrom == "groups" && collectionTo == "users"){
+
+                            var requestString = collectionFrom+"/"+new_id_from+"/"+relationName+"/"+collectionTo+"/"+new_id_to;
+
+                            //these connections need to be treated as exceptions
+                            if(relationName==null){
                                 requestString = collectionFrom+"/"+new_id_from+"/"+collectionTo+"/"+new_id_to;
-                            }else{
-                                requestString = collectionFrom+"/"+new_id_from+"/"+relationName+"/"+collectionTo+"/"+new_id_to;
                             }
+
+                            //make the request using requestString
                             apigeeRequestsPending++;
                             mappingRequest(requestString);
                         }else{
@@ -345,6 +348,7 @@ gulp.task('migrateDB', function () {
     var mappingsProcessedWithError = 0;
     var mappingsSuccessful = 0;
 
+    console.log("Migrating tables");
     for(var table in toMigrate){
         sqlRequestsPending++;
         sql.query("SELECT * FROM "+schema+"."+table, function (err, rows, fields) {
@@ -412,6 +416,7 @@ gulp.task('migrateDB', function () {
             //                                                                                                           all apigee requests received response
 //            console.log(pkMappings);
             //--------------------------------------------------------- iterate through SQL DB and migrate all mappings
+            console.log("Migrating mappings");
             for(var con in connections){
                 var c = connections[con];
                 sqlRequestsPending++;
