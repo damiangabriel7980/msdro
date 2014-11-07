@@ -35,9 +35,6 @@ cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootSco
             $scope.clasa='hide';
     }
     $scope.finishJob = function(){
-    //$state.$current.go('elearning.teste',{url: '/teste',
-    //    templateUrl: 'partials/elearning/teste.ejs',
-    //    controller: 'testeController'});
             $modalInstance.close();
             }
 }]);

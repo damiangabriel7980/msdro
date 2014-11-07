@@ -17,6 +17,11 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
          $scope.products = result;
     });
     $scope.amazon = $rootScope.pathAmazonDev;
+    $scope.closeLi=$sce.trustAsHtml("ng-class='hide'<\/li>");
+    $scope.showElem ='{display: list-item}';
+    $scope.hideElem = function(){
+        $scope.showElem='{display: none}';
+    }
   }])
     .filter('htmlToPlaintext', function() {
         return function(text) {

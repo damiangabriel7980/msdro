@@ -79,7 +79,7 @@ module.exports = function(app, router,client) {
 
         .get(function(req, res) {
             var x = req.params.id;
-            if(req.params.id!='0')
+            if(req.params.id!='0'&&req.params.id!='339df1ba-6104-11e4-9b03-83702f045177')
             {
             client.request({method: 'GET' , endpoint: 'products', qs:{ql:"area_parent= '" + x + "'"}}, function(err, cont) {
                 if(err) {
@@ -227,31 +227,6 @@ module.exports = function(app, router,client) {
                 console.log(cont);
                 res.send(cont.entities);
             });
-            //var options = {
-            //    type: "answers", //Required - the type of collection to be retrieved
-            //    client: client //Required
-            //};
-            //
-            ////Create a collection object to hold the response
-            //var collection = new Usergrid.collection(options);
-            //
-            ////Call request to initiate the API call
-            //collection.fetch(function (error, result) {
-            //    if (error) {
-            //        res.send(error);
-            //        return;
-            //    } else {
-            //        res.send(result.entities);
-            //    }
-            //    //    client.request({method: 'GET', endpoint: 'answers', qs: {limit: 1000}}, function (err, cont2) {
-            //    //                if (err) {
-            //    //                    res.send(err);
-            //    //                    return;
-            //    //                }
-            //    //                console.log(cont2);
-            //    //                res.send(cont2.entities);
-            //    //            });
-            //});
         });
     app.use('/api', router);
 };

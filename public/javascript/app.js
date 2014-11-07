@@ -129,14 +129,14 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                 console.log('Open modal');
                 $modal.open({
                     templateUrl: 'partials/elearning/testeQuestions.ejs',
-                    backdrop: true,
+                    backdrop: 'static',
                     size: 'lg',
                     keyboard: false,
+                    mouse:false,
                     windowClass: 'fade',
                     controller: 'testeQuestionsController'
                 })
             }]
-            //onExit:{url: '/teste'}
         })
         //utility state used for dev:
         .state('utility', {
