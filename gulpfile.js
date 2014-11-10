@@ -62,11 +62,11 @@ gulp.task('watch', function() {
 
 gulp.task('deleteCollections', function () {
     var apigee = new usergrid.client({
-        orgName:'andrei.paduraru',
-        appName:'testmsd',
+        orgName:'qualitance.leaderamp',
+        appName:'msd',
         authType:usergrid.AUTH_CLIENT_ID,
-        clientId:'b3U6yvFz2mAnEeSkR8-U-7j7tQ',
-        clientSecret:'b3U6kRcnxmjRJusz9CPfgSXq8HVnQgo',
+        clientId:'b3U6OZ4E6jyyEeS4q9tVRb7NeA',
+        clientSecret:'b3U6KNFzp2OcurK-m7aLG4F_71TkmHs',
         logging: false, //optional - turn on logging, off by default
         buildCurl: false //optional - turn on curl commands, off by default
     });
@@ -78,7 +78,7 @@ gulp.task('deleteCollections', function () {
         "slides","tags","jobs","groups","users","roles","therapeutic-areas"];
 
     for(var col in toDelete){
-        apigee.request({method: 'DELETE', endpoint:toDelete[col]+"?limit=15&ql="}, function (err,data) {
+        apigee.request({method: 'DELETE', endpoint:toDelete[col]+"?limit=120&ql="}, function (err,data) {
             if(err){
                 console.log(data);
             }
@@ -103,18 +103,18 @@ gulp.task('migrateDB', function () {
 
     // connect to apigee
     var apigee = new usergrid.client({
-        orgName:'andrei.paduraru',
-        appName:'testmsd',
+        orgName:'qualitance.leaderamp',
+        appName:'msd',
         authType:usergrid.AUTH_CLIENT_ID,
-        clientId:'b3U6yvFz2mAnEeSkR8-U-7j7tQ',
-        clientSecret:'b3U6kRcnxmjRJusz9CPfgSXq8HVnQgo',
+        clientId:'b3U6OZ4E6jyyEeS4q9tVRb7NeA',
+        clientSecret:'b3U6KNFzp2OcurK-m7aLG4F_71TkmHs',
         logging: false, //optional - turn on logging, off by default
         buildCurl: false //optional - turn on curl commands, off by default
     });
 
     //------------------------------------------------------------------------------------------------------- constants
     const schema = "msd";
-    const limit = 10; //used for testing; for no limit, set limit = 0
+    const limit = 0; //used for testing; for no limit, set limit = 0
 
 //    var dnm = ["content_user_group","databasechangelog","DATABASECHANGELOG","databasechangeloglock","DATABASECHANGELOGLOCK","event_user_group",
 //               "folder","general_content_therapeutic_areas","multimedia_user_group","product_user_group","role","therapeutic_area_product",
