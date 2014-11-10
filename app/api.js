@@ -4,8 +4,18 @@ var Therapeutic_Area = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
 var bodyParser	= require('body-parser');
 var Events = require('./models/events');
+var usergrid = require('usergrid');
 
-module.exports = function(app, router,client) {
+module.exports = function(app, router) {
+
+    var getClient = function(req){
+        return new usergrid.client({
+            orgName:'qualitance.leaderamp',
+            appName:'msd',
+            authType:usergrid.AUTH_APP_USER,
+            token:req.cookies.userToken
+        });
+    };
 
     router.route('/content')
 
@@ -52,7 +62,7 @@ module.exports = function(app, router,client) {
     .get(function(req,res){
 
 //Call request to initiate the API call
-    client.request({method: 'GET' , endpoint: 'products'}, function (error, result) {
+    getClient(req).request({method: 'GET' , endpoint: 'products'}, function (error, result) {
         if (error) {
             res.send(error);
         } else {
@@ -66,7 +76,7 @@ module.exports = function(app, router,client) {
             if(req.params.id!='0')
             {
             var y = req.params.id;
-            client.getEntity({method: 'GET' , type: 'products', uuid: y }, function(err, cont) {
+            getClient(req).getEntity({method: 'GET' , type: 'products', uuid: y }, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -81,7 +91,7 @@ module.exports = function(app, router,client) {
             var x = req.params.id;
             if(req.params.id!='0'&&req.params.id!='339df1ba-6104-11e4-9b03-83702f045177')
             {
-            client.request({method: 'GET' , endpoint: 'products', qs:{ql:"area_parent= '" + x + "'"}}, function(err, cont) {
+            getClient(req).request({method: 'GET' , endpoint: 'products', qs:{ql:"area_parent= '" + x + "'"}}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -90,7 +100,7 @@ module.exports = function(app, router,client) {
             })}
             else
             {
-                client.request({method: 'GET' , endpoint: 'products'}, function (error, result) {
+                getClient(req).request({method: 'GET' , endpoint: 'products'}, function (error, result) {
                     if (error) {
                         res.send(error);
                     } else {
@@ -103,7 +113,7 @@ module.exports = function(app, router,client) {
     router.route('/therapeutic_areas')
 
         .get(function(req, res) {
-            client.request({method: 'GET' , endpoint: 'therapeuticareas',qs:{limit:50}}, function (error, result) {
+            getClient(req).request({method: 'GET' , endpoint: 'therapeuticareas',qs:{limit:50}}, function (error, result) {
                 if (error) {
                     res.send(error);
                 } else {
@@ -137,7 +147,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/calendar')
         .get(function(req,res){
-            client.request({method: 'GET' , endpoint: 'evenimentes',qs:{limit:50}}, function (error, result) {
+            getClient(req).request({method: 'GET' , endpoint: 'evenimentes',qs:{limit:50}}, function (error, result) {
                 if (error) {
                     res.send(error);
                 } else {
@@ -149,7 +159,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/calendar/:id')
         .get(function(req,res){
-            client.getEntity({method: 'GET' , type: 'evenimentes', uuid: req.params.id},function(err, cont) {
+            getClient(req).getEntity({method: 'GET' , type: 'evenimentes', uuid: req.params.id},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -160,7 +170,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/multimedia2/:idd')
         .get(function(req,res){
-            client.getEntity({method: 'GET' , type: 'multimedia', uuid: req.params.idd},function(err, cont) {
+            getClient(req).getEntity({method: 'GET' , type: 'multimedia', uuid: req.params.idd},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -171,7 +181,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/multimedia')
         .get(function(req,res){
-            client.getEntity({method: 'GET' , type: 'multimedia'},function(err, cont) {
+            getClient(req).getEntity({method: 'GET' , type: 'multimedia'},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -185,7 +195,7 @@ module.exports = function(app, router,client) {
             var x = req.params.id;
             if(req.params.id!='0')
             {
-                client.request({method: 'GET' , endpoint: 'multimedia',qs:{ql:"parent_id= " + x},limit:50}, function(err, cont) {
+                getClient(req).request({method: 'GET' , endpoint: 'multimedia',qs:{ql:"parent_id= " + x},limit:50}, function(err, cont) {
                     if(err) {
                         res.send(err);
                     }
@@ -194,7 +204,7 @@ module.exports = function(app, router,client) {
                 })}
             else
             {
-                client.request({method: 'GET' , endpoint: 'multimedia', qs:{limit:50}}, function (error, result) {
+                getClient(req).request({method: 'GET' , endpoint: 'multimedia', qs:{limit:50}}, function (error, result) {
                     if (error) {
                         res.send(error);
                     } else {
@@ -205,7 +215,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/teste')
         .get(function(req,res){
-            client.request({method: 'GET' , endpoint: 'quizzes',qs:{limit:50}}, function (error, result) {
+            getClient(req).request({method: 'GET' , endpoint: 'quizzes',qs:{limit:50}}, function (error, result) {
                 if (error) {
                     res.send(error);
                     return ;
@@ -217,7 +227,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/teste/:id')
         .get(function(req,res) {
-            client.request({method: 'GET', endpoint: 'questions',
+            getClient(req).request({method: 'GET', endpoint: 'questions',
                 qs: {ql: "quiz_id =" + req.params.id, limit: 1000}
             }, function (err, cont) {
                 if (err) {

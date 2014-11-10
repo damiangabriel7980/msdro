@@ -54,7 +54,7 @@ module.exports = function(app, client) {
                 if (cookie === undefined)
                 {
                     // no: set a new cookie
-                    res.cookie('userToken',token, { maxAge: 60000, httpOnly: true });
+                    res.cookie('userToken',token, { maxAge: 180000000, httpOnly: false });
                 }
                 else
                 {
