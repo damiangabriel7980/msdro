@@ -181,7 +181,8 @@ gulp.task('migrateDB', function () {
             "name": ["city-name"]
         },
         "event": {
-            "name": ["event-name"]
+            "name": ["event-name"],
+            "type": ["event-type"]
         },
         "user": {
             "password": ["old-pass"]
@@ -191,6 +192,18 @@ gulp.task('migrateDB', function () {
         },
         "user_group": {
             "display_name": ["path","title"]
+        },
+        "content": {
+            "type": ["article-type"]
+        },
+        "general_content": {
+            "type": ["gcType"]
+        },
+        "multimedia": {
+            "type": ["multimediaType"]
+        },
+        "quiz": {
+            "entity": ["quiz-entity"]
         }
     };
 
