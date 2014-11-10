@@ -10,7 +10,7 @@
             <h4 class="h-title">Arii terapeutice</h4>
 
             <ul class="list">
-                <li ui-sref="biblioteca.produse.productsByArea({id:area.uuid})"  ng-repeat="area in therapeuticAreas | filter : {parent_id:&#34;0&#34;}">{{area.name}}
+                <li ui-sref="biblioteca.produse.productsByArea({id:area.metadata.connecting.inarea.toString()})"  ng-repeat="area in therapeuticAreas">{{area.name}}
                 <br/>
                 <!--<ul ng-if="area.has_children==1">-->
                     <!--<li ng-repeat="area2 in therapeuticAreas | filter : { parent_id : area.uuid}" ui-sref="biblioteca.produse.productsByArea({id:area2.uuid})">-->

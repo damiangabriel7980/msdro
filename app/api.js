@@ -81,12 +81,19 @@ module.exports = function(app, router,client) {
             var x = req.params.id;
             if(req.params.id!='0'&&req.params.id!='339df1ba-6104-11e4-9b03-83702f045177')
             {
-            client.request({method: 'GET' , endpoint: 'products', qs:{ql:"area_parent= '" + x + "'"}}, function(err, cont) {
-                if(err) {
+            client.request({method: 'GET' , endpoint: x}, function(err, cont) {
+                if (err) {
                     res.send(err);
                 }
-                 console.log(cont);
-                res.send(cont.entities);
+
+                var prods = [];
+                for (var i = 0; i < cont.entities.length; i++)
+                {
+                    if(!cont.entities[i].username&&cont.entities[i].type!='multimedium')
+                        prods.push(cont.entities[i]);
+                }
+                console.log(prods);
+                res.send(prods);
             })}
             else
             {
@@ -103,11 +110,35 @@ module.exports = function(app, router,client) {
     router.route('/therapeutic_areas')
 
         .get(function(req, res) {
-            client.request({method: 'GET' , endpoint: 'therapeuticareas',qs:{limit:50}}, function (error, result) {
+            client.request({method: 'GET' , endpoint: 'therapeutic-areas',qs:{limit:50}}, function (error, result) {
                 if (error) {
                     res.send(error);
                 } else {
-                    res.send(result.entities);
+                    //console.log(result);
+                    var rawResults=result.entities;
+                    var correctResults=[];
+                    for(var x =0; x<rawResults.length;x++){
+                        //if(rawResults[x].metadata.connections==undefined)
+                            correctResults.push(rawResults[x]);
+                        if(rawResults[x].metadata.connecting.childof!=null) {
+                            client.request({
+                                    method: 'GET',
+                                    endpoint: rawResults[x].metadata.connecting.childof
+                                }, function (error, result2) {
+                                    if (error) {
+                                        res.send(error)
+                                    }
+                                    else {
+                                        //console.log(result2);
+                                        for(var y =0; y < result2.entities.length;y++)
+                                        {correctResults.push(result2.entities[y]);}
+                                    }
+                                }
+                            )
+                        }
+                    }
+                    console.log(correctResults);
+                    res.send(correctResults);
                 }
             });
         });
@@ -137,7 +168,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/calendar')
         .get(function(req,res){
-            client.request({method: 'GET' , endpoint: 'evenimentes',qs:{limit:50}}, function (error, result) {
+            client.request({method: 'GET' , endpoint: 'calendar-events',qs:{limit:50}}, function (error, result) {
                 if (error) {
                     res.send(error);
                 } else {
@@ -149,11 +180,11 @@ module.exports = function(app, router,client) {
         });
     router.route('/calendar/:id')
         .get(function(req,res){
-            client.getEntity({method: 'GET' , type: 'evenimentes', uuid: req.params.id},function(err, cont) {
+            client.getEntity({method: 'GET' , type: 'calendar-events', uuid: req.params.id},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
-
+                console.log(cont._data);
                 res.json(cont._data);
             });
 
@@ -205,7 +236,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/teste')
         .get(function(req,res){
-            client.request({method: 'GET' , endpoint: 'quizzes',qs:{limit:50}}, function (error, result) {
+            client.request({method: 'GET' , endpoint: 'quizes',qs:{limit:50}}, function (error, result) {
                 if (error) {
                     res.send(error);
                     return ;

@@ -7,16 +7,15 @@
     <div class="row-margintop20px">
         <div class="col-xs-3 hidden-xs">
             <h4 style="border-bottom: 1px solid #d97c1e;">Evenimentele urmatoare:</h4>
-             <div class="event blue" ng-repeat="event in events2Filtered">
+             <div class="event blue" ng-repeat="eventim in events2Filtered">
                     <div class="row">
                         <div class="col-xs-4 date">
-                            <h2>{{event.start | asDate | date:'dd'}}</h2>
-                            <h5>{{event.start | asDate | date:'MMM'}}</h5>
+                            <h2>{{eventim.start | asDate | date:'dd'}}</h2>
+                            <h5>{{eventim.start | asDate | date:'MMM'}}</h5>
                           </div>
 
                         <div class="col-xs-8">
-                            <h4 ui-sref="calendar.calendarDetails({id:event.uuid})">{{event.name}}</h4>
-                            <p>{{event.description | htmlToPlaintext |limitTo: 50}}...</p>
+                            <h4 ui-sref="calendar.calendarDetails({id:eventim.uuid})">{{eventim['event-name']}}</h4>
                         </div>
                     </div>
                 </div>

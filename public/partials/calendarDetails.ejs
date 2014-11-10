@@ -1,14 +1,13 @@
 <div>
         <div class="modal-header">
-            <h3 class="modal-title">{{itemsEvent.name}}</h3>
+            <h3 class="modal-title">{{itemsEvent['event-name']}}</h3>
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-xs-8"><p class="medium-lineheight"><strong>{{itemsEvent.place}}</strong></p></div>
+                <div class="col-xs-8"><p class="medium-lineheight"><strong>Location: Here</strong></p></div>
                 <div class="col-xs-4"><span class="label label-info pull-right"><i class="icon-facetime-video icon-white"></i>{{itemsEvent.start | asDate | date: 'dd/MM/yyyy'}} - {{itemsEvent.end | asDate | date: 'dd/MM/yyyy'}}</span></div>
             </div>
             <hr>
-            <div class="text-content">{{itemsEvent.description}}</div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-warning float-left" ng-click="cancell()">Inchide</button>

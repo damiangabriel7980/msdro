@@ -20,6 +20,8 @@
     <script src="javascript/productsController.js"></script>
     <script src="javascript/productDetailsController.js"></script>
     <script src="javascript/ContentArticleController.js"></script>
+    <script src="javascript/testeController.js"></script>
+    <script src="javascript/testeQuestionsController.js"></script>
         <script src="javascript/services.js"></script>
     <script src="javascript/eventsController.js"></script>
     <script src="javascript/require.js"></script>
@@ -114,6 +116,30 @@
 
 
 <div ui-view class="view-container"></div>
+<div id="footer" class="margintop30px">
+    <div class="container">
 
+            <div class="col-xs-6">
+                <a href="http://www.msd.ro/">
+                    <img src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/msd_green.png"  class="pull-left" style="height:28px;margin-right:10px;"/>
+                </a>
+           </div>
+
+            <div id="msieDiv" class="hide span6 text-right">
+                <a href="#contact-modal" data-toggle="modal" class="pull-right flink">Contact</a>
+                <a href="https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf" target="_blank" class="pull-right flink marginright15px" rel="nofollow" >Farmacologie</a>
+                <a target="_blank" href="https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf" rel="nofollow" class="pull-right marginright15px flink">Termeni si conditii</a>
+            </div>
+
+            <div id="notMsieDiv" class="span6 text-right" style="overflow: auto; -webkit-overflow-scrolling: touch !important;">
+
+                <a href="#contact-modal" data-toggle="modal" class="pull-right flink">Contact</a>
+                <a data-fancybox-type="iframe" href="https://docs.google.com/gview?url=https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf&embedded=true" rel="nofollow" class="fancybox-media pull-right marginright15px flink">Farmacologie</a>
+                <a data-fancybox-type="iframe" href="https://docs.google.com/gview?url=https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf&embedded=true" rel="nofollow" class="fancybox-media pull-right marginright15px flink">Termeni si conditii</a>
+            </div>
+
+
+    </div>
+</div>
 </body>
 </html>
