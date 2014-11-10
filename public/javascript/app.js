@@ -46,7 +46,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('biblioteca.produse.prodById',{
             url: '/produse/:id',
             templateUrl: 'partials/biblioteca/productDetails.ejs',
-            controller: 'productsController'
+            controller: 'productDetailsController'
         })
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice/:articleType',
@@ -90,11 +90,28 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('elearning.multimedia',{
             url: '/multimedia',
-            templateUrl: 'partials/elearning/multimedia.ejs'
+            templateUrl: 'partials/elearning/multimedia.ejs' ,
+            controller: 'therapeuticControllerCtrl'
         })
         .state('elearning.multimedia.multimediaByArea',{
             url: '/multimedia/:id',
-            templateUrl: 'partials/elearning/multimediaByArea.ejs'
+            templateUrl: 'partials/elearning/multimediaByArea.ejs',
+            controller: 'multimediaController'
+        })
+        .state('elearning.multimedia.multimediaById',{
+            parent:'elearning.multimedia.multimediaByArea',
+            url: '/multimedia2/:idd',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                console.log('Open modal');
+                $modal.open({
+                    templateUrl: 'partials/elearning/multimediaDetails.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'multimediaDetailsController'
+                })
+            }]
+
         })
         .state('elearning.transmisii',{
             url: '/transmisii',
@@ -102,7 +119,24 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('elearning.teste',{
             url: '/teste',
-            templateUrl: 'partials/elearning/teste.ejs'
+            templateUrl: 'partials/elearning/teste.ejs',
+            controller: 'testeController'
+        })
+        .state('elearning.teste.quizById',{
+            parent:'elearning.teste',
+            url: '/teste/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                console.log('Open modal');
+                $modal.open({
+                    templateUrl: 'partials/elearning/testeQuestions.ejs',
+                    backdrop: 'static',
+                    size: 'lg',
+                    keyboard: false,
+                    mouse:false,
+                    windowClass: 'fade',
+                    controller: 'testeQuestionsController'
+                })
+            }]
         })
         //utility state used for dev:
         .state('utility', {

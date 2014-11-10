@@ -14,13 +14,14 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     $scope.allAreas=1;
     $scope.filtProd=[];
     ProductService.getByArea.query({id:$stateParams.id}).$promise.then(function(result){
-            $scope.products = result;}
-    );
-    ProductService.getSingle.query({id:$stateParams.id}).$promise.then(function(result){
-        $scope.selectedProduct = result;
-        $scope.ProductDetailsHTML = $sce.trustAsHtml(result.description);
+         $scope.products = result;
     });
     $scope.amazon = $rootScope.pathAmazonDev;
+    $scope.closeLi=$sce.trustAsHtml("ng-class='hide'<\/li>");
+    $scope.showElem ='{display: list-item}';
+    $scope.hideElem = function(){
+        $scope.showElem='{display: none}';
+    }
   }])
     .filter('htmlToPlaintext', function() {
         return function(text) {

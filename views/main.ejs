@@ -18,11 +18,14 @@
     <script src="javascript/therapeuticControllerCtrl.js"></script>
     <script src="javascript/ContentController.js"></script>
     <script src="javascript/productsController.js"></script>
+    <script src="javascript/productDetailsController.js"></script>
     <script src="javascript/ContentArticleController.js"></script>
-    <script src="javascript/services.js"></script>
+        <script src="javascript/services.js"></script>
     <script src="javascript/eventsController.js"></script>
     <script src="javascript/require.js"></script>
     <script src="javascript/modalCtrl.js"></script>
+    <script src="javascript/multimediaController.js"></script>
+    <script src="javascript/multimediaDetailsController.js"></script>
     <script src="modules/apigee-javascript-sdk-2.0.9/apigee.min.js"></script>
     <link rel='stylesheet' href='components/fullcalendar/fullcalendar.css' />
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
@@ -77,7 +80,7 @@
                         <span class="glyphicon glyphicon-download"></span> E-learning <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="elearning.multimedia" href="#/multimedia">Multimedia</a></li>
+                        <li><a ui-sref="elearning.multimedia.multimediaByArea({id:0})" href="#/multimedia">Multimedia</a></li>
                         <li class="divider"></li>
                         <li><a ui-sref="elearning.transmisii" href="#/transmisii">Transmisii live</a></li>
                         <li class="divider"></li>

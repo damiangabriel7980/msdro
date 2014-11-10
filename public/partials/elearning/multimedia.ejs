@@ -1,1 +1,43 @@
-multimedia
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body>
+<div class="col-xs-offset-1" id="content">
+    <div class="row margintop20px">
+        <div class="col-xs-2" >
+            <h4 class="h-title">Arii terapeutice</h4>
+
+            <ul class="list">
+                <li ui-sref="elearning.multimedia.multimediaByArea({id:area.uuid})"  ng-repeat="area in therapeuticAreas | orderBy:'name'">{{area.parent_id=='0' ? area.name: "<\/li>"}}
+                    <br/>
+                    <ul ng-if="area.has_children==1">
+                        <li ng-repeat="area2 in therapeuticAreas | filter : { parent_id : area.uuid}" ui-sref="elearning.multimedia.multimediaByArea({id:area2.uuid})">
+                            {{area2.name}}
+                        </li>
+                    </ul>
+                </li>
+                <br/>
+            </ul>
+            <hr class="visible-phone ">
+        </div>
+
+        <div class="col-xs-9" >
+            <ui-view></ui-view>
+        </div>
+
+        <div class="col-xs-1 hidden-phone">
+            <ul class="nav nav-list">
+                <li ><a href=""/></li>
+                <li class="divider"></li>
+
+                <li class=''><a href=""></a></li>
+
+            </ul>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

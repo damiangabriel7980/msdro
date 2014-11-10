@@ -1,0 +1,16 @@
+<ul class="articles" style="list-style: none;">
+    <li class="col-xs-8" ng-repeat="prod in multimedias | orderBy:'title'">
+
+
+            <div class="row">
+                <img src="{{amazon + prod.file_path}}" alt="{{prod.title}}" height="250px" width="250px"/>
+                <h4><a href="#"></a>{{prod.title}}</h4>
+
+                <p>{{prod.description | htmlToPlaintext | limitTo: 190}}...
+                    <button class="button btn-info pull-right" ui-sref="elearning.multimedia.multimediaById({idd:prod.uuid})">Vezi material</button>
+                </p>
+            </div>
+
+    </li>
+
+</ul>

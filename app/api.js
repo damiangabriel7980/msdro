@@ -5,7 +5,7 @@ var UserGroup = require('./models/userGroup');
 var bodyParser	= require('body-parser');
 var Events = require('./models/events');
 
-module.exports = function(app, router) {
+module.exports = function(app, router,client) {
 
     router.route('/content')
 
@@ -49,48 +49,53 @@ module.exports = function(app, router) {
 
     router.route('/products')
 
-    .get(function(req, res) {
-        Products.find(function(err, cont) {
-            if(err) {
-                res.send(err);
-            }
+    .get(function(req,res){
 
-            res.json(cont);
-        });
-    });
+//Call request to initiate the API call
+    client.request({method: 'GET' , endpoint: 'products'}, function (error, result) {
+        if (error) {
+            res.send(error);
+        } else {
+            res.json(result);
+        }
+    })});
 
     router.route('/products/:id')
 
-        .get(function(req, res) {
-            Products.findById(req.params.id, function(err, cont) {
+        .get(function(req,res){
+            if(req.params.id!='0')
+            {
+            var y = req.params.id;
+            client.getEntity({method: 'GET' , type: 'products', uuid: y }, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
-
-                res.json(cont);
+                console.log(cont);
+                res.json(cont._data);
             })
-        });
+            }});
 
     router.route('/products/productsByArea/:id')
 
         .get(function(req, res) {
-            var test = new Array(req.params.id);
-            if(req.params.id!='0')
-            {Products.find({area_parent: {$in :test}}, function(err, cont) {
+            var x = req.params.id;
+            if(req.params.id!='0'&&req.params.id!='339df1ba-6104-11e4-9b03-83702f045177')
+            {
+            client.request({method: 'GET' , endpoint: 'products', qs:{ql:"area_parent= '" + x + "'"}}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
                  console.log(cont);
-                res.json(cont);
+                res.send(cont.entities);
             })}
             else
             {
-                Products.find(function(err, cont) {
-                    if(err) {
-                        res.send(err);
+                client.request({method: 'GET' , endpoint: 'products'}, function (error, result) {
+                    if (error) {
+                        res.send(error);
+                    } else {
+                        res.send(result.entities);
                     }
-
-                    res.json(cont);
                 });
             }
         });
@@ -98,25 +103,13 @@ module.exports = function(app, router) {
     router.route('/therapeutic_areas')
 
         .get(function(req, res) {
-            Therapeutic_Area.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
+            client.request({method: 'GET' , endpoint: 'therapeuticareas',qs:{limit:50}}, function (error, result) {
+                if (error) {
+                    res.send(error);
+                } else {
+                    res.send(result.entities);
                 }
-
-                res.json(cont);
             });
-        });
-
-    router.route('/therapeutic_areas/:therapeutic_areas_id')
-
-        .get(function(req, res) {
-            Therapeutic_Area.findById(req.params._id, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            })
         });
 
     router.route('/userGroup')
@@ -144,47 +137,96 @@ module.exports = function(app, router) {
         });
     router.route('/calendar')
         .get(function(req,res){
-            Events.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
+            client.request({method: 'GET' , endpoint: 'evenimentes',qs:{limit:50}}, function (error, result) {
+                if (error) {
+                    res.send(error);
+                } else {
+                    console.log(result);
+                    res.send(result.entities);
                 }
-
-                res.json(cont);
             });
 
         });
     router.route('/calendar/:id')
         .get(function(req,res){
-            Events.findById(req.params.id,function(err, cont) {
+            client.getEntity({method: 'GET' , type: 'evenimentes', uuid: req.params.id},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                res.json(cont);
+                res.json(cont._data);
             });
 
         });
-    router.route('/multimedia/:id')
+    router.route('/multimedia2/:idd')
         .get(function(req,res){
-            Events.findById(req.params.id,function(err, cont) {
+            client.getEntity({method: 'GET' , type: 'multimedia', uuid: req.params.idd},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                res.json(cont);
+                res.json(cont._data);
             });
 
         });
     router.route('/multimedia')
         .get(function(req,res){
-            Events.find(function(err, cont) {
+            client.getEntity({method: 'GET' , type: 'multimedia'},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                res.json(cont);
+                res.send(cont.entities);
             });
 
+        });
+    router.route('/multimedia/multimediaByArea/:id')
+        .get(function(req,res){
+            var x = req.params.id;
+            if(req.params.id!='0')
+            {
+                client.request({method: 'GET' , endpoint: 'multimedia',qs:{ql:"parent_id= " + x},limit:50}, function(err, cont) {
+                    if(err) {
+                        res.send(err);
+                    }
+                    console.log(cont);
+                    res.send(cont.entities);
+                })}
+            else
+            {
+                client.request({method: 'GET' , endpoint: 'multimedia', qs:{limit:50}}, function (error, result) {
+                    if (error) {
+                        res.send(error);
+                    } else {
+                        res.send(result.entities);
+                    }
+                });
+            }
+        });
+    router.route('/teste')
+        .get(function(req,res){
+            client.request({method: 'GET' , endpoint: 'quizzes',qs:{limit:50}}, function (error, result) {
+                if (error) {
+                    res.send(error);
+                    return ;
+                } else {
+                    console.log(result);
+                    res.send(result.entities);
+                }
+            });
+        });
+    router.route('/teste/:id')
+        .get(function(req,res) {
+            client.request({method: 'GET', endpoint: 'questions',
+                qs: {ql: "quiz_id =" + req.params.id, limit: 1000}
+            }, function (err, cont) {
+                if (err) {
+                    res.send(err);
+                    return;
+                }
+                console.log(cont);
+                res.send(cont.entities);
+            });
         });
     app.use('/api', router);
 };

@@ -11,17 +11,6 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
     }
 }]);
 
-//cloudAdminServices.factory('UserGroup', ['$resource', function($resource){
-//    return {
-//        getById: $resource('api/userGroup/:group_id', {}, {
-//            query: { method: 'GET', isArray: true }
-//        }),
-//        getByType: $resource('api/userGroup', {}, {
-//            query: { method: 'GET', isArray: true }
-//        })
-//    }
-//}]);
-
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     return {
         getAll: $resource('api/products/', {}, {
@@ -37,7 +26,7 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
 }]);
 
 cloudAdminServices.factory('therapeuticAreaService', ['$resource', function($resource){
-    return $resource('api/therapeutic_areas/:id', {}, {
+    return $resource('api/therapeutic_areas', {}, {
         query: { method: 'GET', isArray: true }
     });
 }]);
@@ -65,13 +54,13 @@ cloudAdminServices.factory('FormatService', function () {
         }
     }
 });
-cloudAdminServices.factory('multimediaService2', ['$resource', function($resource){
-    return $resource('api/multimedia/:id', {}, {
-        query: { method: 'GET', isArray: false }
-    });
-}]);
-cloudAdminServices.factory('multimediaService', ['$resource', function($resource){
-    return $resource('api/multimedia', {}, {
-        query: { method: 'GET', isArray: true }
-    });
+cloudAdminServices.factory('testeService', ['$resource', function($resource){
+    return {
+        getAll: $resource('api/teste/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getByTest: $resource('api/teste/:id', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
 }]);

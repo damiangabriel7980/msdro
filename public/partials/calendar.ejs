@@ -10,12 +10,12 @@
              <div class="event blue" ng-repeat="event in events2Filtered">
                     <div class="row">
                         <div class="col-xs-4 date">
-                            <h2>{{event.start | date:'dd'}}</h2>
-                            <h5>{{event.start | date:'MMM'}}</h5>
-                        </div>
+                            <h2>{{event.start | asDate | date:'dd'}}</h2>
+                            <h5>{{event.start | asDate | date:'MMM'}}</h5>
+                          </div>
 
                         <div class="col-xs-8">
-                            <h4 ui-sref="calendar.calendarDetails({id:event._id})">{{event.name}}</h4>
+                            <h4 ui-sref="calendar.calendarDetails({id:event.uuid})">{{event.name}}</h4>
                             <p>{{event.description | htmlToPlaintext |limitTo: 50}}...</p>
                         </div>
                     </div>

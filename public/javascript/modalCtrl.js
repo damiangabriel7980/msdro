@@ -11,4 +11,9 @@ cloudAdminControllers.controller('modalCtrl',['$scope','eventsService2','$stateP
     $scope.cancell = function () {
         $modalInstance.dismiss('cancel');
     };
-}]);
+}])
+.filter("asDate", function () {
+    return function (input) {
+        return new Date(input);
+    }
+});
