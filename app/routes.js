@@ -1,4 +1,5 @@
 var usergrid = require('usergrid');
+var crypto = require("crypto-js");
 
 module.exports = function(app, client) {
 
@@ -41,18 +42,10 @@ module.exports = function(app, client) {
 // AUTHENTICATE (FIRST LOGIN) ==================================================
 // =============================================================================
 
-    // locally --------------------------------
-    // LOGIN ===============================
-    // show the login form
-    app.get('/login', function (req, res) {
-        res.render('auth.ejs', { message: "" });
-    });
-
-    // process the login form
-    app.post('/login', function (req,res) {
-        client.login(req.body.email,req.body.password, function (err) {
+    var loginUser = function (req, res, username, pass) {
+        client.login(username,pass, function (err) {
             if(err){
-                res.render('auth.ejs', {message: "Incorrect login credentials"})
+                res.render('auth.ejs', {message: "Incorrect login credentials"});
             }else{
                 //Login ok. Get token
                 var token = client.token;
@@ -61,7 +54,7 @@ module.exports = function(app, client) {
                 if (cookie === undefined)
                 {
                     // no: set a new cookie
-                    res.cookie('userToken',token, { maxAge: 60000, httpOnly: true });
+                    res.cookie('userToken',token, { maxAge: 180000000, httpOnly: false });
                 }
                 else
                 {
@@ -70,6 +63,65 @@ module.exports = function(app, client) {
                 res.redirect('/');
             }
         });
+    };
+
+    // locally --------------------------------
+    // LOGIN ===============================
+    // show the login form
+    app.get('/login', function (req, res) {
+        if(hasToken(req)){
+            res.render('main.ejs');
+        }else{
+            res.render('auth.ejs', { message: "" });
+        }
+
+    });
+
+    // process the login form
+    app.post('/login', function (req,res) {
+        var entered_pass = req.body.password;
+        var entered_user = req.body.email;
+        client.request({method: 'GET', endpoint: '/users/'+req.body.email}, function (err,data) {
+            if(err){
+                res.render('auth.ejs', {message: "Incorrect login credentials"});
+            }else{
+                if(data.entities.length != 1){
+                    res.render('auth.ejs', {message: "Incorrect login credentials"});
+                }else{
+                    var ent = data.entities[0];
+                    if(ent['state']!=="ACCEPTED") {
+                        res.render('auth.ejs', {message: "Incorrect login credentials"});
+                    }else{
+                        var old_pass = ent['old-pass'];
+                        if(old_pass!==undefined && old_pass!==null){
+                            //user logged in the first time; check password against old one
+
+                            var entered_pass_enc = crypto.SHA256(entered_pass).toString();
+                            if(entered_pass_enc === old_pass){
+                                //password is correct; create new pass and delete old one
+                                client.request({method:'PUT', endpoint:'users/'+entered_user+'/password', body: {"newpassword":entered_pass, "oldpassword":null}}, function (err,data) {
+                                    if(err){
+                                        res.render('auth.ejs', {message: "Error at login"});
+                                    }else{
+                                        client.request({method: 'PUT', endpoint: '/users/'+entered_user, body:{"old-pass":null}}, function (err,data) {
+                                            loginUser(req,res,entered_user,entered_pass);
+                                        });
+                                    }
+                                });
+                            }else{
+                                res.render('auth.ejs', {message: "Incorrect login credentials"});
+                            }
+                        }else{
+                            //user already has a new password; proceed with login
+                            loginUser(req,res,entered_user,entered_pass);
+                        }
+                    }
+
+                }
+            }
+        });
+
+
     });
 
     // SIGNUP =================================

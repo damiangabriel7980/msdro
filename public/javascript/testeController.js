@@ -5,11 +5,11 @@ cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'tes
     var date = new Date();
     testeService.getAll.query().$promise.then(function(result){
         $scope.teste = result;
-        $scope.testeFiltered = [];
-        for (var i = 0; i < $scope.teste.length; i++) {
-            if (new Date($scope.teste[i].expiry_date).getMonth() + 1 >= date.getMonth() + 1 && (new Date($scope.teste[i].expiry_date).getDay() >= date.getDay()))
-                $scope.testeFiltered.push($scope.teste[i]);
-        }
+        //$scope.testeFiltered = [];
+        //for (var i = 0; i < $scope.teste.length; i++) {
+        //    if (new Date($scope.teste[i].expiry_date).getMonth() + 1 >= date.getMonth() + 1 && (new Date($scope.teste[i].expiry_date).getDay() >= date.getDay()))
+        //        $scope.testeFiltered.push($scope.teste[i]);
+        //}
     });
     //$scope.questions = testeService.getByTest.query({id:$stateParams.id});
     $scope.amazon = $rootScope.pathAmazonDev;

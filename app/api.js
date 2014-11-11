@@ -4,8 +4,18 @@ var Therapeutic_Area = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
 var bodyParser	= require('body-parser');
 var Events = require('./models/events');
+var usergrid = require('usergrid');
 
-module.exports = function(app, router,client) {
+module.exports = function(app, router) {
+
+    var getClient = function(req){
+        return new usergrid.client({
+            orgName:'qualitance.leaderamp',
+            appName:'msd',
+            authType:usergrid.AUTH_APP_USER,
+            token:req.cookies.userToken
+        });
+    };
 
     router.route('/content')
 
@@ -52,7 +62,7 @@ module.exports = function(app, router,client) {
     .get(function(req,res){
 
 //Call request to initiate the API call
-    client.request({method: 'GET' , endpoint: 'products'}, function (error, result) {
+    getClient(req).request({method: 'GET' , endpoint: 'products'}, function (error, result) {
         if (error) {
             res.send(error);
         } else {
@@ -66,7 +76,7 @@ module.exports = function(app, router,client) {
             if(req.params.id!='0')
             {
             var y = req.params.id;
-            client.getEntity({method: 'GET' , type: 'products', uuid: y }, function(err, cont) {
+            getClient(req).getEntity({method: 'GET' , type: 'products', uuid: y }, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -81,8 +91,8 @@ module.exports = function(app, router,client) {
             var x = req.params.id;
             if(req.params.id!='0'&&req.params.id!='339df1ba-6104-11e4-9b03-83702f045177')
             {
-            client.request({method: 'GET' , endpoint: x}, function(err, cont) {
-                if (err) {
+            getClient(req).request({method: 'GET' , endpoint: 'therapeutic-areas/' + req.params.id + '/connecting/inarea', qs:{limit:100}}, function(err, cont) {
+                if(err) {
                     res.send(err);
                 }
 
@@ -97,7 +107,7 @@ module.exports = function(app, router,client) {
             })}
             else
             {
-                client.request({method: 'GET' , endpoint: 'products'}, function (error, result) {
+                getClient(req).request({method: 'GET' , endpoint: 'products'}, function (error, result) {
                     if (error) {
                         res.send(error);
                     } else {
@@ -110,36 +120,36 @@ module.exports = function(app, router,client) {
     router.route('/therapeutic_areas')
 
         .get(function(req, res) {
-            client.request({method: 'GET' , endpoint: 'therapeutic-areas',qs:{limit:50}}, function (error, result) {
+            getClient(req).request({method: 'GET' , endpoint: 'therapeutic-areas',qs:{limit:50}}, function (error, result) {
                 if (error) {
                     res.send(error);
                 } else {
-                    //console.log(result);
-                    var rawResults=result.entities;
-                    var correctResults=[];
-                    for(var x =0; x<rawResults.length;x++){
-                        //if(rawResults[x].metadata.connections==undefined)
-                            correctResults.push(rawResults[x]);
-                        if(rawResults[x].metadata.connecting.childof!=null) {
-                            client.request({
-                                    method: 'GET',
-                                    endpoint: rawResults[x].metadata.connecting.childof
-                                }, function (error, result2) {
-                                    if (error) {
-                                        res.send(error)
-                                    }
-                                    else {
-                                        //console.log(result2);
-                                        for(var y =0; y < result2.entities.length;y++)
-                                        {correctResults.push(result2.entities[y]);}
-                                    }
-                                }
-                            )
-                        }
-                    }
-                    console.log(correctResults);
-                    res.send(correctResults);
+                    ////console.log(result);
+                    //var rawResults=result.entities;
+                    //var correctResults=[];
+                    //for(var x =0; x<rawResults.length;x++){
+                    //    //if(rawResults[x].metadata.connections==undefined)
+                    //        correctResults.push(rawResults[x]);
+                    //    if(rawResults[x].metadata.connecting.childof!=null) {
+                    //        getClient(req).request({
+                    //                method: 'GET',
+                    //                endpoint: rawResults[x].metadata.connecting.childof
+                    //            }, function (error, result2) {
+                    //                if (error) {
+                    //                    res.send(error)
+                    //                }
+                    //                else {
+                    //                    //console.log(result2);
+                    //                    for(var y =0; y < result2.entities.length;y++)
+                    //                    {correctResults.push(result2.entities[y]);}
+                    //                }
+                    //            }
+                    //        )
+                    //    }
+                    console.log(result);
+                    res.send(result.entities);
                 }
+
             });
         });
 
@@ -168,7 +178,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/calendar')
         .get(function(req,res){
-            client.request({method: 'GET' , endpoint: 'calendar-events',qs:{limit:50}}, function (error, result) {
+            getClient(req).request({method: 'GET' , endpoint: 'calendar-events',qs:{limit:50}}, function (error, result) {
                 if (error) {
                     res.send(error);
                 } else {
@@ -180,7 +190,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/calendar/:id')
         .get(function(req,res){
-            client.getEntity({method: 'GET' , type: 'calendar-events', uuid: req.params.id},function(err, cont) {
+            getClient(req).getEntity({method: 'GET' , type: 'calendar-events', uuid: req.params.id},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -191,7 +201,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/multimedia2/:idd')
         .get(function(req,res){
-            client.getEntity({method: 'GET' , type: 'multimedia', uuid: req.params.idd},function(err, cont) {
+            getClient(req).getEntity({method: 'GET' , type: 'multimedia', uuid: req.params.idd},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -202,7 +212,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/multimedia')
         .get(function(req,res){
-            client.request({method: 'GET' , type: 'multimedia'},function(err, cont) {
+            getClient(req).getEntity({method: 'GET' , type: 'multimedia'},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -214,18 +224,28 @@ module.exports = function(app, router,client) {
     router.route('/multimedia/multimediaByArea/:id')
         .get(function(req,res){
             var x = req.params.id;
-            if(req.params.id!='0')
-            {
-                client.request({method: 'GET' , endpoint: 'therapeutic-areas/' + x + '/connecting/inarea',qs:{limit:50}}, function(err, cont) {
-                    if(err) {
+            if(req.params.id!='0') {
+                getClient(req).request({method: 'GET',endpoint: 'therapeutic-areas/' + x + '/connecting/inarea',qs: {limit: 50}},function(err, cont){
+
+                    if (err) {
+                        console.log(err);
                         res.send(err);
+                        return ;
                     }
                     console.log(cont);
-                    res.send(cont.entities);
-                })}
+                    var prods = [];
+                    for (var i = 0; i < cont.entities.length; i++)
+                    {
+                        if(cont.entities[i].type=='multimedium')
+                            prods.push(cont.entities[i]);
+                    }
+                    console.log(prods);
+                    res.send(prods);
+                })
+            }
             else
             {
-                client.request({method: 'GET' , endpoint: 'multimedia', qs:{limit:50}}, function (error, result) {
+                getClient(req).request({method: 'GET' , endpoint: 'multimedia', qs:{limit:50}}, function (error, result) {
                     if (error) {
                         res.send(error);
                     } else {
@@ -236,7 +256,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/teste')
         .get(function(req,res){
-            client.request({method: 'GET' , endpoint: 'quizes',qs:{limit:50}}, function (error, result) {
+            getClient(req).request({method: 'GET' , endpoint: 'quizes',qs:{limit:50}}, function (error, result) {
                 if (error) {
                     res.send(error);
                     return ;
@@ -248,9 +268,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/teste/:id')
         .get(function(req,res) {
-            client.request({method: 'GET', endpoint: 'questions',
-                qs: {ql: "quiz_id =" + req.params.id, limit: 1000}
-            }, function (err, cont) {
+            getClient(req).request({method: 'GET', endpoint: 'quizes/' + req.params.id + '/connections/hasquestions',qs: {limit: 1000}}, function (err, cont) {
                 if (err) {
                     res.send(err);
                     return;
