@@ -20,11 +20,10 @@ module.exports = function(app, router) {
     router.route('/content')
 
         .get(function(req, res) {
-            Content.find(function(err, cont) {
+            getClient(req).request({method: 'GET', endpoint:'articles'},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
-
                 res.json(cont);
             });
         });
@@ -32,29 +31,62 @@ module.exports = function(app, router) {
     router.route('/content/:content_id')
 
         .get(function(req, res) {
-            var userGr = req.user.groupsID.split(",");
-            Content.find({_id:req.params.content_id, groupsID: { $in: userGr}}, function(err, cont) {
+//            var userGr = req.user.groupsID.split(",");
+            getClient(req).request({method:'GET', endpoint:'articles', uuid:req.params.content_id}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
-                if(cont.length == 1){
-                    res.json(cont[0]);
-                }else{
-                    res.json(null);
-                }
+                console.log(cont);
             })
         });
 
     router.route('/content/type/:content_type')
 
         .get(function(req, res) {
-            var userGr = req.user.groupsID.split(",");
-            Content.find({type: req.params.content_type, groupsID: { $in: userGr}}, function (err, cont) {
-                if(err) {
-                    res.send(err);
+            var myClient = getClient(req);
+            myClient.getLoggedInUser(function (err,data,user) {
+                if(err){
+                    console.log("Error getting user");
+                }else{
+                    var username = user.get('username');
+                    myClient.request({method:'GET', endpoint:"users/"+username+"/groups"}, function (err, cont) {
+                        var groups = cont['entities'];
+                        var accessPaths = [];
+                        for(var group in groups){
+                            if(groups[group]['metadata']['connections']){
+                                if(groups[group]['metadata']['connections']['canaccess']){
+                                    accessPaths.push(groups[group]['metadata']['connections']['canaccess'].concat("/articles"));
+                                }
+                            }
+                        }
+                        var articlesArray = [];
+//                        console.log(accessPaths);
+                        var requestsPending = 0;
+                        for(var path in accessPaths){
+                            requestsPending++;
+                            myClient.request({method:'GET', endpoint:accessPaths[path], qs:{ql:"select * where article-type="+req.params.content_type}}, function (err, cont) {
+                                for(var c in cont['entities']){
+                                    if(articlesArray.indexOf(cont['entities'][c]['uuid'])==-1) articlesArray.push(cont['entities'][c]['uuid']);
+                                }
+                                requestsPending--;
+                            });
+                        }
+                        var requestsFinished = function () {
+                            if(requestsPending == 0){
+                                clearInterval(checkForCompletion);
+                                console.log(articlesArray);
+                            }
+                        };
+                        var checkForCompletion = setInterval(requestsFinished, 500);
+
+//                        if(err) {
+//                            res.send(err);
+//                        }
+//                        res.json(cont['entities']);
+                    });
                 }
-                res.json(cont);
             });
+
         });
 
     router.route('/products')

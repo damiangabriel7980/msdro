@@ -78,7 +78,7 @@ gulp.task('deleteCollections', function () {
         "slides","tags","jobs","groups","users","roles","therapeutic-areas"];
 
     for(var col in toDelete){
-        apigee.request({method: 'DELETE', endpoint:toDelete[col]+"?limit=120&ql="}, function (err,data) {
+        apigee.request({method: 'DELETE', endpoint:toDelete[col]+"?limit=200&ql="}, function (err,data) {
             if(err){
                 console.log(data);
             }
@@ -114,7 +114,7 @@ gulp.task('migrateDB', function () {
 
     //------------------------------------------------------------------------------------------------------- constants
     const schema = "msd";
-    const limit = 0; //used for testing; for no limit, set limit = 0
+    const limit = 200; //used for testing; for no limit, set limit = 0
 
 //    var dnm = ["content_user_group","databasechangelog","DATABASECHANGELOG","databasechangeloglock","DATABASECHANGELOGLOCK","event_user_group",
 //               "folder","general_content_therapeutic_areas","multimedia_user_group","product_user_group","role","therapeutic_area_product",
