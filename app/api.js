@@ -121,37 +121,58 @@ module.exports = function(app, router) {
 
         .get(function(req, res) {
             getClient(req).request({method: 'GET' , endpoint: 'therapeutic-areas',qs:{limit:50}}, function (error, result) {
+                var rawResults=result.entities;
+                var correctResults=[];
+                var urlParent;
                 if (error) {
                     res.send(error);
+                    return;
                 } else {
-                    ////console.log(result);
-                    //var rawResults=result.entities;
-                    //var correctResults=[];
-                    //for(var x =0; x<rawResults.length;x++){
-                    //    //if(rawResults[x].metadata.connections==undefined)
-                    //        correctResults.push(rawResults[x]);
-                    //    if(rawResults[x].metadata.connecting.childof!=null) {
-                    //        getClient(req).request({
-                    //                method: 'GET',
-                    //                endpoint: rawResults[x].metadata.connecting.childof
-                    //            }, function (error, result2) {
-                    //                if (error) {
-                    //                    res.send(error)
-                    //                }
-                    //                else {
-                    //                    //console.log(result2);
-                    //                    for(var y =0; y < result2.entities.length;y++)
-                    //                    {correctResults.push(result2.entities[y]);}
-                    //                }
-                    //            }
-                    //        )
-                    //    }
-                    console.log(result);
-                    res.send(result.entities);
-                }
+                    //console.log(result);
 
-            });
-        });
+                    for(var x =0; x<rawResults.length;x++){
+                        //if()
+                           // correctResults.push(rawResults[x]);
+
+                        if(rawResults[x].metadata['connections']!=undefined) {
+                            console.log(rawResults[x].metadata['connections'].childof);
+                            urlParent=rawResults[x].metadata['connections']['childof'].toString();
+                            if( urlParent.charAt( 0 ) == '/' )
+                                urlParent = urlParent.substring( 1 );
+                            //console.log(urlParent);
+                            getClient(req).request({
+                                    method: 'GET',
+                                    endpoint: urlParent
+                                }, function (error, result2) {
+                                    if (error) {
+                                        res.send(error)
+                                    }
+                                    else {
+                                        //console.log(result2.entities);
+                                        if(correctResults.length==0) {
+                                            correctResults.push(result2.entities[0]);
+                                        }
+                                        else{
+                                            for(var y=0;y<correctResults.length;y++)
+                                            {
+                                            if(correctResults[y].name!=result2.entities[0].name)
+                                                correctResults.push(result2.entities[0]);
+                                            }
+                                        }
+                                        console.log(correctResults);
+                                    }
+
+                                }
+                            )
+                        }
+
+                }
+                    //console.log(rawResults);
+                    //console.log(correctResults)
+                    console.log(correctResults);
+                    res.send([rawResults,correctResults]);
+            }
+        })});
 
     router.route('/userGroup')
 
