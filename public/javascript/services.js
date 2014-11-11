@@ -31,6 +31,17 @@ cloudAdminServices.factory('therapeuticAreaService', ['$resource', function($res
     });
 }]);
 
+cloudAdminServices.factory('multimediaService', ['$resource', function($resource){
+    return {
+        getByArea: $resource('api/multimedia/multimediaByArea/:id', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getSingle: $resource('api/multimedia2/:idd', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
 cloudAdminServices.factory('eventsService', ['$resource', function($resource){
     return $resource('api/calendar/', {}, {
         query: { method: 'GET', isArray: true }

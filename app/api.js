@@ -202,7 +202,7 @@ module.exports = function(app, router,client) {
         });
     router.route('/multimedia')
         .get(function(req,res){
-            client.getEntity({method: 'GET' , type: 'multimedia'},function(err, cont) {
+            client.request({method: 'GET' , type: 'multimedia'},function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -216,7 +216,7 @@ module.exports = function(app, router,client) {
             var x = req.params.id;
             if(req.params.id!='0')
             {
-                client.request({method: 'GET' , endpoint: 'multimedia',qs:{ql:"parent_id= " + x},limit:50}, function(err, cont) {
+                client.request({method: 'GET' , endpoint: 'therapeutic-areas/' + x + '/connecting/inarea',qs:{limit:50}}, function(err, cont) {
                     if(err) {
                         res.send(err);
                     }
