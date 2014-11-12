@@ -6,6 +6,7 @@
     <script src="components/jquery/dist/jquery.js"></script>
     <script src="components/jquery-ui/ui/jquery-ui.js"></script>
     <script src="components/angular/angular.js"></script>
+    <script src="components/angular-sanitize/angular-sanitize.js"></script>
     <script src="components/angular-resource/angular-resource.js"></script>
     <script src="components/angular-route/angular-route.js"></script>
     <script src="components/angular-ui-router/release/angular-ui-router.js"></script>
@@ -23,11 +24,15 @@
     <script src="javascript/eventsController.js"></script>
     <script src="javascript/require.js"></script>
     <script src="javascript/modalCtrl.js"></script>
+    <script src="javascript/ProfileController.js"></script>
+    <script src="components/angular-ui-select/dist/select.min.js"></script>
+    <link rel='stylesheet' href='components/angular-ui-select/dist/select.min.css' />
+    <link rel='stylesheet' href='components/select2/select2.css' />
     <link rel='stylesheet' href='components/fullcalendar/fullcalendar.css' />
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <link rel="stylesheet" href="stylesheets/customStyles.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css"/>
+    <link rel="stylesheet" href="stylesheets/customStyles.css"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"/>
 </head>
 <body>
 
@@ -98,7 +103,7 @@
                         <span class="glyphicon glyphicon-user"></span> <%= user.username %> <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="profile">Profile</a></li>
+                        <li><a style="cursor: pointer;" ng-click="showProfile()">Profile</a></li>
                         <li class="divider"></li>
                         <li><a href="logout">Sign Out</a></li>
                     </ul>
@@ -107,7 +112,6 @@
         </div>
     </div>
 </div>
-
 
 <div ui-view class="view-container"></div>
 

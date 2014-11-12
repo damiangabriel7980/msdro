@@ -11,6 +11,20 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
     }
 }]);
 
+cloudAdminServices.factory('ProfileService', ['$resource', function($resource){
+    return {
+        getUserData: $resource('api/userdata/', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        getCounties: $resource('api/counties/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getCities: $resource('api/cities/:county_name', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
+
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     return {
         getAll: $resource('api/products/', {}, {

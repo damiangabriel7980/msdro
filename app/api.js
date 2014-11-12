@@ -4,6 +4,8 @@ var Therapeutic_Area = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
 var bodyParser	= require('body-parser');
 var Events = require('./models/events');
+var Counties = require('./models/counties');
+var Cities = require('./models/cities');
 
 module.exports = function(app, router) {
 
@@ -44,6 +46,41 @@ module.exports = function(app, router) {
                     res.send(err);
                 }
                 res.json(cont);
+            });
+        });
+
+    router.route('/userdata')
+
+        .get(function(req, res) {
+            var user = req.user;
+            res.json(user);
+        });
+
+    router.route('/counties')
+
+        .get(function(req, res) {
+            Counties.find({}, {name: 1}, function (err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/cities/:county_name')
+
+        .get(function(req, res) {
+            Counties.find({name: req.params.county_name}, function (err, counties) {
+                if(err) {
+                    res.send(err);
+                }
+                Cities.find({_id: {$in: counties[0].citiesID}}, function (err, cities) {
+                    if(err) {
+                        console.log("errr");
+                        res.send(err);
+                    }
+                    res.json(cities);
+                });
             });
         });
 

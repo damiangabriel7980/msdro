@@ -3,7 +3,9 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.router',
         'cloudAdminControllers',
         'cloudAdminServices',
-        'ui.calendar'
+        'ui.calendar',
+        'ngSanitize',
+        'ui.select'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -159,8 +161,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
 }]);
 
 cloudAdminApp.run(
-    [            '$rootScope', '$state', '$stateParams',
-        function ($rootScope,   $state,   $stateParams) {
+    [            '$rootScope', '$state', '$stateParams', '$modal',
+        function ($rootScope,   $state,   $stateParams, $modal) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -172,6 +174,16 @@ cloudAdminApp.run(
             //amazon service paths
             $rootScope.pathAmazonResources = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/";
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/msddev-test/";
+
+            //profile modal
+            $rootScope.showProfile = function(){
+                $modal.open({
+                    templateUrl: 'partials/profile.html',
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'ProfileController'
+                });
+            }
         }
     ]
 );
