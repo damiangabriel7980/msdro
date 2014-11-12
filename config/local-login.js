@@ -19,7 +19,8 @@ module.exports = function(passport) {
 
             // asynchronous
             process.nextTick(function() {
-                User.findOne({ 'local.email' :  email }, function(err, user) {
+                console.log(email);
+                User.findOne({ 'username' :  { $regex: new RegExp("^" + email, "i") }}, function(err, user) {
                     // if there are any errors, return the error
                     if (err)
                         return done(err);
