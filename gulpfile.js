@@ -6,8 +6,11 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     notify = require('gulp-notify'),
     webserver = require('gulp-webserver'),
-    mongoose = require('mongoose'),
+    MongoClient = require('mongodb').MongoClient,
+    ObjectID = require('mongodb').ObjectID,
+    assert = require('assert'),
     mysql = require('mysql');
+
 
 // sass task
 gulp.task('sass', function () {
@@ -60,16 +63,6 @@ gulp.task('watch', function() {
 });
 
 gulp.task('deleteCollections', function () {
-    var apigee = new usergrid.client({
-        orgName:'qualitance.leaderamp',
-        appName:'msd',
-        authType:usergrid.AUTH_CLIENT_ID,
-        clientId:'b3U6OZ4E6jyyEeS4q9tVRb7NeA',
-        clientSecret:'b3U6KNFzp2OcurK-m7aLG4F_71TkmHs',
-        logging: false, //optional - turn on logging, off by default
-        buildCurl: false //optional - turn on curl commands, off by default
-    });
-
     var toDelete = [
         "answers","base-users","carousel-contents","cities","articles",
         "counties","calendar-events","public-articles","multimedia",
@@ -100,20 +93,9 @@ gulp.task('migrateDB', function () {
         }
     });
 
-    // connect to apigee
-    var apigee = new usergrid.client({
-        orgName:'qualitance.leaderamp',
-        appName:'msd',
-        authType:usergrid.AUTH_CLIENT_ID,
-        clientId:'b3U6OZ4E6jyyEeS4q9tVRb7NeA',
-        clientSecret:'b3U6KNFzp2OcurK-m7aLG4F_71TkmHs',
-        logging: false, //optional - turn on logging, off by default
-        buildCurl: false //optional - turn on curl commands, off by default
-    });
-
     //------------------------------------------------------------------------------------------------------- constants
     const schema = "msd";
-    const limit = 200; //used for testing; for no limit, set limit = 0
+    const limit = 0; //used for testing; for no limit, set limit = 0
 
 //    var dnm = ["content_user_group","databasechangelog","DATABASECHANGELOG","databasechangeloglock","DATABASECHANGELOGLOCK","event_user_group",
 //               "folder","general_content_therapeutic_areas","multimedia_user_group","product_user_group","role","therapeutic_area_product",
@@ -149,25 +131,25 @@ gulp.task('migrateDB', function () {
     //-------------------- mappings (table1, table2, connection_table, table1_connect_id, table2_connect_id, connection_name)
     //-------------------- table1 is owner
     var connections = [
-        ["county","city","city","county_id","id","contains"],
-        ["user_group","content","content_user_group","user_group_id","content_id","canAccess"],
-        ["question","answer","answer","question_id","id","hasAnswers"],
-        ["user_group","event","event_user_group","user_group_id","event_id","canAttend"],
-        ["general_content","therapeutic_area","general_content_therapeutic_areas","general_content_id","therapeutic_area_id","inArea"],
-        ["multimedia","quiz","multimedia","id","quiz_id","quizAttached"],
-        ["multimedia","therapeutic_area","multimedia_therapeutic_areas","multimedia_id","therapeutic_area_id","inArea"],
-        ["user_group","multimedia","multimedia_user_group","user_group_id","multimedia_id","canAccess"],
-        ["user_group","presentation","presentation","user_group_id","id","canAccess"],
-        ["user_group","product","product_user_group","user_group_id","product_id","canAccess"],
-        ["quiz","question","question","quiz_id","id","hasQuestions"],
-        ["presentation","slide","slide","presentation_id","id","hasSlides"],
-        ["product","therapeutic_area","therapeutic_area_product","product_id","therapeutic_area_id","inArea"],
-        ["user","city","user","id","city_id","livesIn"],
-        ["user","user_job","user","id","user_job_id","worksAs"],
-        ["user_group","user","user_group_users","user_group_id","user_id",null],
-        ["role","user","user_role","role_id","user_id",null],
-        ["user","therapeutic_area","user_therapeutic_area","user_id","therapeutic_area_id","inArea"],
-        ["therapeutic_area","therapeutic_area","therapeutic_area","id","parent_therapeutic_area_id","childOf"]
+        ["county","city","city","county_id","id","citiesIds"],
+        ["user_group","content","content_user_group","user_group_id","content_id","articlesIds"],
+        ["question","answer","answer","question_id","id","answersIds"],
+        ["user_group","event","event_user_group","user_group_id","event_id","eventsIds"],
+        ["general_content","therapeutic_area","general_content_therapeutic_areas","general_content_id","therapeutic_area_id","therapeuticAreasIds"],
+        ["multimedia","quiz","multimedia","id","quiz_id","quizesIds"],
+        ["multimedia","therapeutic_area","multimedia_therapeutic_areas","multimedia_id","therapeutic_area_id","therapeuticAreasIds"],
+        ["user_group","multimedia","multimedia_user_group","user_group_id","multimedia_id","multimediaIds"],
+        ["user_group","presentation","presentation","user_group_id","id","presentationsIds"],
+        ["user_group","product","product_user_group","user_group_id","product_id","productsIds"],
+        ["quiz","question","question","quiz_id","id","questionsIds"],
+        ["presentation","slide","slide","presentation_id","id","slidesIds"],
+        ["product","therapeutic_area","therapeutic_area_product","product_id","therapeutic_area_id","therapeuticAreasIds"],
+        ["user","city","user","id","city_id","citiesIds"],
+        ["user","user_job","user","id","user_job_id","jobsIds"],
+        ["user_group","user","user_group_users","user_group_id","user_id","usersIds"],
+        ["role","user","user_role","role_id","user_id","usersIds"],
+        ["user","therapeutic_area","user_therapeutic_area","user_id","therapeutic_area_id","therapeuticAreasIds"],
+        ["therapeutic_area","therapeutic_area","therapeutic_area","id","parent_therapeutic_area_id","parentIds"]
     ];
 
     //------------------------------------------------------- migrate all columns except for the ones in the list below
@@ -176,40 +158,74 @@ gulp.task('migrateDB', function () {
     //---------------------------------------------------------------- rename columns for tables below
     //                                                                 add more names in array to duplicate that column
     var renameColumns = {
-        "city": {
-            "name": ["city-name"]
-        },
-        "event": {
-            "name": ["event-name"],
-            "type": ["event-type"]
-        },
-        "user": {
-            "password": ["old-pass"]
-        },
-        "role": {
-            "authority": ["name"]
-        },
-        "user_group": {
-            "display_name": ["path","title"]
-        },
-        "content": {
-            "type": ["article-type"]
-        },
-        "general_content": {
-            "type": ["gcType"]
-        },
-        "multimedia": {
-            "type": ["multimediaType"]
-        },
-        "quiz": {
-            "entity": ["quiz-entity"]
-        }
+//        "city": {
+//            "name": ["city-name"]
+//        },
+//        "event": {
+//            "name": ["event-name"],
+//            "type": ["event-type"]
+//        },
+//        "user": {
+//            "password": ["old-pass"]
+//        },
+//        "role": {
+//            "authority": ["name"]
+//        },
+//        "user_group": {
+//            "display_name": ["path","title"]
+//        },
+//        "content": {
+//            "type": ["article-type"]
+//        },
+//        "general_content": {
+//            "type": ["gcType"]
+//        },
+//        "multimedia": {
+//            "type": ["multimediaType"]
+//        },
+//        "quiz": {
+//            "entity": ["quiz-entity"]
+//        }
     };
 
     //------------ replace spaces with dashes for columns (represented by arrays) in tables (represented by keys) below
     //------------ [in apigee, a unique column cannot contain spaces in any entry]
     var getRidOfSpaces = {
-        "user_group": ["display_name"]
+//        "user_group": ["display_name"]
+    };
+
+    // ------------------------------------------------------------------------------------------------ mongo functions
+    var insertDocuments = function(db, collectionName, jsonDoc, callback) {
+        // Get the documents collection
+        var collection = db.collection(collectionName);
+        // Insert some documents
+        collection.insert(jsonDoc , function(err, result) {
+            if(err){
+                console.log("!------------------------------- Error at adding entry");
+                console.log("collectionName: "+collectionName);
+                console.log(err);
+                console.log(result);
+                console.log("-------------------------------!");
+            }else{
+                callback(result);
+            }
+
+        });
+    };
+
+    var updateDocuments = function (db, collectionFrom, new_id_from, relationName, newArr, callback) {
+        // Get the documents collection
+        var collection = db.collection(relationName);
+        // Insert some documents
+        var sett = {};
+        sett[relationName] = newArr;
+        collection.update({ _id : new_id_from }
+            , { $set: sett }, function(err, result) {
+                assert.equal(err, null);
+                assert.equal(1, result.result.n);
+                console.log("Updated the document with the field a equal to 2");
+                callback(result);
+            });
     };
 
     //------------------------------------------------------------------------------------------------ useful functions
@@ -254,33 +270,97 @@ gulp.task('migrateDB', function () {
         return columnName;
     };
 
-    var makeRequest = function(endpoint,body,table_old,oldId){
-        apigee.request({method: 'POST', endpoint: endpoint, body: body}, function (err,data) {
-            if(err){
-                console.log("!------------------------------- Error at adding entry");
-                console.log("entity: "+endpoint);
-                console.log(data);
-                console.log("-------------------------------!");
+    var makeRequest = function(db, endpoint,body,table_old,oldId){
+        insertDocuments(db, endpoint, body, function(result){
+            if(result[0]){
+                pkMappings[table_old].push([oldId,result[0]['_id'].toString()]);
             }else{
-                pkMappings[table_old].push([oldId,data.entities[0].uuid]);
+                console.log("!------------------------------- Error at adding entry");
+                console.log("Result size different than expected. Id may not have been returned");
+                console.log("endpoint: "+endpoint);
+                console.log("body: "+body);
+                console.log("-------------------------------!");
             }
-            apigeeRequestsPending--;
+            mongoRequestsPending--;
         });
     };
 
-    var mappingRequest = function (endpoint) {
-        apigee.request({method: 'POST', endpoint:endpoint}, function (err,data) {
-            if(err){
+    var mappingRequest = function (db, collectionFrom, new_id_from, new_id_to, relationName) {
+        var collection = db.collection(collectionFrom);
+        // find document to update
+        collection.find({"_id" : ObjectID(new_id_from)}).toArray(function(err, docs) {
+            if(err!=null){
                 console.log("!------------------------------- Error at mapping relation");
-                console.log("At: "+endpoint);
-                console.log(data);
+                console.log("Error retrieving collection");
+                console.log("At: "+collectionFrom);
+                console.log(docs);
                 console.log("-------------------------------!");
                 mappingsProcessedWithError++;
+                mongoRequestsPending--;
             }else{
-                mappingsSuccessful++;
+                if(docs[0]){
+                    console.log(docs[0]);
+                    var newArr;
+                    if(docs[0][relationName]){
+                        newArr = docs[0][relationName];
+                    }else{
+                        newArr = [];
+                    }
+                    console.log(newArr);
+                    newArr.push(new_id_to);
+                    console.log(newArr);
+                    console.log("==================================================");
+                    // Insert updated array
+                    var sett = {};
+                    sett[relationName] = newArr;
+                    collection.update({ "_id" : ObjectID(new_id_from) }
+                        , { $set: sett }, function(err, result) {
+                            if(err!=null){
+                                mappingsSuccessful++;
+                                mongoRequestsPending--;
+                            }else{
+                                console.log("!------------------------------- Error at mapping relation");
+                                console.log("Could not update collection");
+                                console.log("At: "+collectionFrom);
+                                console.log("Id: "+new_id_from.toString());
+                                console.log("Set to update: "+sett[relationName]);
+                                console.log(docs);
+                                console.log("-------------------------------!");
+                                mappingsProcessedWithError++;
+                                mongoRequestsPending--;
+                            }
+                        });
+                }else{
+                    console.log("!------------------------------- Error at mapping relation");
+                    console.log("Unexpected size of result");
+                    console.log("At: "+collectionFrom);
+                    console.log(docs);
+                    console.log("-------------------------------!");
+                    mappingsProcessedWithError++;
+                    mongoRequestsPending--;
+                }
             }
-            apigeeRequestsPending--;
         });
+        // Insert some documents
+//        collection.update({ a : 2 }
+//            , { $set: { b : 1 } }, function(err, result) {
+//                assert.equal(err, null);
+//                assert.equal(1, result.result.n);
+//                console.log("Updated the document with the field a equal to 2");
+//                callback(result);
+//            });
+//        apigee.request({method: 'POST', endpoint:endpoint}, function (err,data) {
+//            if(err){
+//                console.log("!------------------------------- Error at mapping relation");
+//                console.log("At: "+endpoint);
+//                console.log(data);
+//                console.log("-------------------------------!");
+//                mappingsProcessedWithError++;
+//            }else{
+//                mappingsSuccessful++;
+//            }
+//            mongoRequestsPending--;
+//        });
     };
 
     var searchInPkMappings = function (table_old,old_row_id) {
@@ -295,7 +375,7 @@ gulp.task('migrateDB', function () {
         return null;
     };
 
-    var sqlMapRequest = function (old_table_from, old_table_to, link_table, link_col_from, link_col_to, relationName) {
+    var sqlMapRequest = function (db, old_table_from, old_table_to, link_table, link_col_from, link_col_to, relationName) {
         sql.query("SELECT "+link_col_from+", "+link_col_to+" FROM "+schema+"."+link_table, function (err,rows,fields) {
             if(err){
                 console.log(err);
@@ -310,18 +390,12 @@ gulp.task('migrateDB', function () {
                         var new_id_to = searchInPkMappings(old_table_to,old_id_to);
                         if(new_id_from!=null && new_id_to!=null){
                             var collectionFrom = toMigrate[old_table_from];
-                            var collectionTo = toMigrate[old_table_to];
+//                            var collectionTo = toMigrate[old_table_to];
 
-                            var requestString = collectionFrom+"/"+new_id_from+"/"+relationName+"/"+collectionTo+"/"+new_id_to;
-
-                            //these connections need to be treated as exceptions
-                            if(relationName==null){
-                                requestString = collectionFrom+"/"+new_id_from+"/"+collectionTo+"/"+new_id_to;
-                            }
-
-                            //make the request using requestString
-                            apigeeRequestsPending++;
-                            mappingRequest(requestString);
+                            //make the request
+                            mongoRequestsPending++;
+//                            console.log(db+" - "+ collectionFrom+" - "+ new_id_from.constructor.toString() +" - "+ new_id_to.constructor.toString()+" - "+ relationName);
+                            mappingRequest(db, collectionFrom, new_id_from, new_id_to, relationName);
                         }else{
                             mappingsFailedToProcess++;
                         }
@@ -346,150 +420,142 @@ gulp.task('migrateDB', function () {
          */
     };
 
-    var sqlBocks = {}; //put each sql query in an execution block
-
-    var apigeeRequestsPending = 0;
+    var mongoRequestsPending = 0;
     var sqlRequestsPending = 0;
 
     var mappingsFailedToProcess = 0;
     var mappingsProcessedWithError = 0;
     var mappingsSuccessful = 0;
 
-    //--------------------------------------------------------------------- iterate through SQL DB and migrate all data
-    console.log("Migrating tables");
-    for(var table in toMigrate){
-        sqlRequestsPending++;
-        sql.query("SELECT * FROM "+schema+"."+table, function (err, rows, fields) {
-            if (err) {
-                console.log(err);
-            } else {
-                var table_old = fields[0]['table']; //get sql table name
-                var collectionName = toMigrate[table_old]; //get new collection name
-                pkMappings[table_old]=[]; //initialize pk mappings
-                var it = 0;
-                for(var row in rows){
-                    var newJson = {};
-                    var pk = getPk();
-                    if(rows.hasOwnProperty(row)){
+    // ---------------------------------------------------------------------------------------- connect to mongo client
+    MongoClient.connect('mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test', function (err,mongoDB) {
+        console.log("Connected to mongo server");
+
+        //--------------------------------------------------------------------- iterate through SQL DB and migrate all data
+        console.log("Migrating tables");
+        for(var table in toMigrate){
+            sqlRequestsPending++;
+            sql.query("SELECT * FROM "+schema+"."+table, function (err, rows, fields) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    var table_old = fields[0]['table']; //get sql table name
+                    var collectionName = toMigrate[table_old]; //get new collection name
+                    pkMappings[table_old]=[]; //initialize pk mappings
+                    var it = 0;
+                    for(var row in rows){
+                        var newJson = {};
+                        var pk = getPk();
+                        if(rows.hasOwnProperty(row)){
 //                        /*
-                        var rowData = rows[row];
-                        for (var column in rowData){
-                            if(rowData.hasOwnProperty(column)){
-                                var columnData = rowData[column];
-                                //------------------------------------------ now we have the column and columnData
-                                //                                           to play with
-                                //
-                                var columnNames = renameColumn(table_old,column);  //name used for apigee
-                                var valueToWrite = columnData;                        //value used for apigee
+                            var rowData = rows[row];
+                            for (var column in rowData){
+                                if(rowData.hasOwnProperty(column)){
+                                    var columnData = rowData[column];
+                                    //------------------------------------------ now we have the column and columnData
+                                    //                                           to play with
+                                    //
+                                    var columnNames = renameColumn(table_old,column);  //name used for mongo
+                                    var valueToWrite = columnData;                        //value used for mongo
 
-                                if(isMigrateCandidate(column) && !isFk(column) && column!=pk){
-                                    if(columnData){
-                                        //if column data is not allowed to contain spaces, replace them with a dash
-                                        if(getRidOfSpaces[table_old]){
-                                            if(arrayContainsString(getRidOfSpaces[table_old],column)){
-                                                valueToWrite = valueToWrite.replace(" ","-");
+                                    if(isMigrateCandidate(column) && !isFk(column) && column!=pk){
+                                        if(columnData){
+                                            //if column data is not allowed to contain spaces, replace them with a dash
+                                            if(getRidOfSpaces[table_old]){
+                                                if(arrayContainsString(getRidOfSpaces[table_old],column)){
+                                                    valueToWrite = valueToWrite.replace(" ","-");
+                                                }
                                             }
-                                        }
 
-                                        //format dates
-                                        if(isDate(columnData)) valueToWrite = columnData.valueOf();
-                                    }
-                                    for(var k=0; k<columnNames.length; k++){
-                                        newJson[columnNames[k]]=valueToWrite;
+                                            //format dates
+                                            if(isDate(columnData)) valueToWrite = columnData;
+                                        }
+                                        for(var k=0; k<columnNames.length; k++){
+                                            newJson[columnNames[k]]=valueToWrite;
+                                        }
                                     }
                                 }
-                            }
 
-                        }
-                        it++;
-                        if(limit!=0 && it>limit) break;
+                            }
+                            it++;
+                            if(limit!=0 && it>limit) break;
 
 //                        console.log(newJson); //-------- now we have a json entry that we can add to it's collection
 
-                        makeRequest(collectionName,newJson,table_old,rowData[pk]);
-                        apigeeRequestsPending++;
+                            mongoRequestsPending++;
+                            makeRequest(mongoDB, collectionName,newJson,table_old,rowData[pk]);
 
 //                        */
+                        }
+
                     }
-
+                    sqlRequestsPending--;
                 }
-                sqlRequestsPending--;
-            }
-        });
-    }
-
-    var postExecution = function () {
-        if(sqlRequestsPending==0 && apigeeRequestsPending==0){
-            clearInterval(checkForCompletion);
-            //---------------------------------------------------------------------------------------------------------- all sql is now executed and
-            //                                                                                                           all apigee requests received response
-//            console.log(pkMappings);
-            //--------------------------------------------------------- iterate through SQL DB and migrate all mappings
-            console.log("Migrating mappings");
-            for(var con in connections){
-                var c = connections[con];
-                sqlRequestsPending++;
-                sqlMapRequest(c[0], c[1], c[2], c[3], c[4], c[5]);
-            }
-
-            var allDone = function () {
-                if(apigeeRequestsPending==0 && sqlRequestsPending==0){
-                    clearInterval(checkFinal);
-                    sql.end();
-                    console.log("ALL DONE");
-                    console.log("Mappings successful = "+mappingsSuccessful);
-                    console.log("Mappings processed with errors = "+mappingsProcessedWithError);
-                    console.log("Mappings failed to process = "+mappingsFailedToProcess);
-                }else{
-                    console.log("Requests pending = "+apigeeRequestsPending);
-                }
-            };
-            var checkFinal = setInterval(allDone, 3000);
-        }else{
-            console.log("Requests pending = "+apigeeRequestsPending);
+            });
         }
-    };
-    var checkForCompletion = setInterval(postExecution, 3000);
+
+        var postExecution = function () {
+            if(sqlRequestsPending==0 && mongoRequestsPending==0){
+                clearInterval(checkForCompletion);
+                //---------------------------------------------------------------------------------------------------------- all sql is now executed and
+                //                                                                                                           all mongo requests received response
+//            console.log(pkMappings);
+                //--------------------------------------------------------- iterate through SQL DB and migrate all mappings
+                console.log("Migrating mappings");
+                for(var con in connections){
+                    var c = connections[con];
+                    sqlRequestsPending++;
+                    sqlMapRequest(mongoDB, c[0], c[1], c[2], c[3], c[4], c[5]);
+                }
+
+                var allDone = function () {
+                    if(mongoRequestsPending==0 && sqlRequestsPending==0){
+                        clearInterval(checkFinal);
+                        sql.end();
+                        mongoDB.close();
+                        console.log("ALL DONE");
+                        console.log("Mappings successful = "+mappingsSuccessful);
+                        console.log("Mappings processed with errors = "+mappingsProcessedWithError);
+                        console.log("Mappings failed to process = "+mappingsFailedToProcess);
+                    }else{
+                        console.log("Requests pending = "+mongoRequestsPending);
+                    }
+                };
+                var checkFinal = setInterval(allDone, 500);
+            }else{
+                console.log("Requests pending = "+mongoRequestsPending);
+            }
+        };
+        var checkForCompletion = setInterval(postExecution, 500);
+
+    });
 });
 
 gulp.task('testA', function () {
-    // connect to apigee
-    var apigee = new usergrid.client({
-        orgName:'andrei.paduraru',
-        appName:'testmsd',
-        authType:usergrid.AUTH_CLIENT_ID,
-        clientId:'b3U6yvFz2mAnEeSkR8-U-7j7tQ',
-        clientSecret:'b3U6kRcnxmjRJusz9CPfgSXq8HVnQgo',
-        logging: false, //optional - turn on logging, off by default
-        buildCurl: false //optional - turn on curl commands, off by default
+    MongoClient.connect('mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test', function (err,db) {
+
+        // Get the documents collection
+        var collection = db.collection('test');
+        // Insert some documents
+
+//        collection.find({"_id":ObjectID("54626d54e8c919e9beef56db")}).toArray(function(err,docs) {
+//            console.log(docs);
+//
+//            });
+
+        var arr = {};
+        arr['arr'] = [1,1,1];
+        collection.update({ "_id":ObjectID("54626d54e8c919e9beef56db") }
+            , { $set: arr }, function(err, result) {
+                if(err){
+                    console.log("error");
+                    console.log(result);
+                }
+                db.close();
+            });
+
+
     });
-
-    var searchInPkMappings = function (table_old,old_row_id) {
-        // I assume the value I am searching has to be there. No point in slowing things down
-        var i=0;
-        while(true){
-            if(pkMappings[table_old][i][0]==old_row_id){
-                return pkMappings[table_old][i][1];
-            }
-            i++;
-        }
-    };
-
-    var pkMappings = { answer: [
-        [ 15, 'ec054244-6672-11e4-b4aa-ed3dc5a05e43' ],
-        [ 12, 'ec0716fa-6672-11e4-9433-93d16653f435' ],
-        [ 13, 'ec07170e-6672-11e4-81c1-1f2dcdb5a5b5' ],
-        [ 14, 'ec0653aa-6672-11e4-9d50-a7769b091e78' ],
-        [ 16, 'ec08015a-6672-11e4-a500-e7d2db3eae03' ],
-        [ 17, 'ec3097fa-6672-11e4-a226-db8f2f620242' ],
-        [ 21, 'ec31d07a-6672-11e4-82d4-593dfbb9871b' ],
-        [ 20, 'ec337e2a-6672-11e4-b584-3106a16c43e4' ],
-        [ 19, 'ec374eba-6672-11e4-81a6-41242bf02de5' ],
-        [ 18, 'ec39237a-6672-11e4-897d-6b2aa4bb459d' ]
-    ]
-    };
-
-    console.log(searchInPkMappings("answer",16));
 
 });
 
