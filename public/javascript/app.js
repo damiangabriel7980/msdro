@@ -71,7 +71,6 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             parent:'calendar',
             url: '/:id',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                console.log('Open modal');
                 $modal.open({
                     templateUrl: 'partials/calendarDetails.ejs',
                     backdrop: true,

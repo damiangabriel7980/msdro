@@ -2,8 +2,8 @@ var Content     = require('./models/articles');
 var Products    = require('./models/products');
 var Therapeutic_Area = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
-var bodyParser	= require('body-parser');
 var Events = require('./models/events');
+var Multimedia = require('./models/multimedia');
 
 module.exports = function(app, router) {
 
@@ -107,18 +107,6 @@ module.exports = function(app, router) {
             });
         });
 
-    //router.route('/therapeutic_areas/:therapeutic_areas_id')
-    //
-    //    .get(function(req, res) {
-    //        Therapeutic_Area.findById(req.params._id, function(err, cont) {
-    //            if(err) {
-    //                res.send(err);
-    //            }
-    //
-    //            res.json(cont);
-    //        })
-    //    });
-
     router.route('/userGroup')
 
         .get(function(req, res) {
@@ -166,9 +154,9 @@ module.exports = function(app, router) {
         });
     router.route('/multimedia2/:idd')
         .get(function(req,res){
-            multimedia.findById(req.params.idd,function(err, cont) {
+            Multimedia.findById(req.params.idd,function(err, cont) {
                 if(err) {
-                    res.send(err);
+                    res.json(err);
                 }
 
                 res.json(cont);
@@ -177,45 +165,41 @@ module.exports = function(app, router) {
         });
     router.route('/multimedia')
         .get(function(req,res){
-            multimedia.find(function(err, cont) {
+            Multimedia.find(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
 
-                res.send(cont);
+                res.json(cont);
             });
 
         });
     router.route('/multimedia/multimediaByArea/:id')
         .get(function(req,res){
-            var x = req.params.id;
-            if(req.params.id!='0') {
-                multimedia.findById(x,function(err, cont){
-
+            var x = [];
+            x.push(req.params.id);
+            console.log(x);
+            if (x[0] != 0) {
+                console.log(x[0]);
+                Multimedia.find({'enable': false}, function (err, cont) {
                     if (err) {
                         console.log(err);
-                        res.send(err);
-                        return ;
+                        res.json(err);
+                        return;
                     }
                     console.log(cont);
-                    var prods = [];
-                    for (var i = 0; i < cont.length; i++)
-                    {
-                        if(cont[i].type=='multimedia')
-                            prods.push(cont.entities[i]);
-                    }
-                    console.log(prods);
-                    res.send(prods);
-                })
+                    res.json(cont);
+                });
             }
-            else
-            {
-                multimedia.find(function (error, result) {
+            else {
+                Multimedia.find({},function (error, result) {
                     if (error) {
-                        res.send(error);
-                    } else {
-                        res.send(result);
+                        //console.log(error);
+                        res.json(error);
+                        return;
                     }
+                    console.log(result);
+                    res.json(result);
                 });
             }
         });
