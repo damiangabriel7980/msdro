@@ -22,7 +22,7 @@ module.exports = function(app, router) {
     router.route('/content/:content_id')
 
         .get(function(req, res) {
-            var userGr = req.user.groupsID.split(",");
+            var userGr = req.user.groupsID;
             Content.find({_id:req.params.content_id, groupsID: { $in: userGr}}, function(err, cont) {
                 if(err) {
                     res.send(err);
@@ -38,7 +38,7 @@ module.exports = function(app, router) {
     router.route('/content/type/:content_type')
 
         .get(function(req, res) {
-            var userGr = req.user.groupsID.split(",");
+            var userGr = req.user.groupsID;
             Content.find({type: req.params.content_type, groupsID: { $in: userGr}}, function (err, cont) {
                 if(err) {
                     res.send(err);

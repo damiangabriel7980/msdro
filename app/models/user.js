@@ -1,12 +1,11 @@
 // load the things we need
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
 var crypto   = require('crypto-js/sha256');
 // define the schema for our user model
 var userSchema = mongoose.Schema({
-
-        password     : String,
-        username     : String
+    password     : String,
+    username     : String,
+    groupsID     : Array
 });
 
 // generating a hash
