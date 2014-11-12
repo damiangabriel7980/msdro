@@ -132,25 +132,25 @@ gulp.task('migrateDB', function () {
     //-------------------- mappings (table1, table2, connection_table, table1_connect_id, table2_connect_id, connection_name)
     //-------------------- table1 is owner
     var connections = [
-        ["county","city","city","county_id","id","citiesIds"],
-        ["user_group","content","content_user_group","user_group_id","content_id","articlesIds"],
-        ["question","answer","answer","question_id","id","answersIds"],
-        ["user_group","event","event_user_group","user_group_id","event_id","eventsIds"],
-        ["general_content","therapeutic_area","general_content_therapeutic_areas","general_content_id","therapeutic_area_id","therapeuticAreasIds"],
-        ["multimedia","quiz","multimedia","id","quiz_id","quizesIds"],
-        ["multimedia","therapeutic_area","multimedia_therapeutic_areas","multimedia_id","therapeutic_area_id","therapeuticAreasIds"],
-        ["user_group","multimedia","multimedia_user_group","user_group_id","multimedia_id","multimediaIds"],
-        ["user_group","presentation","presentation","user_group_id","id","presentationsIds"],
-        ["user_group","product","product_user_group","user_group_id","product_id","productsIds"],
-        ["quiz","question","question","quiz_id","id","questionsIds"],
-        ["presentation","slide","slide","presentation_id","id","slidesIds"],
-        ["product","therapeutic_area","therapeutic_area_product","product_id","therapeutic_area_id","therapeuticAreasIds"],
-        ["user","city","user","id","city_id","citiesIds"],
-        ["user","user_job","user","id","user_job_id","jobsIds"],
-        ["user_group","user","user_group_users","user_group_id","user_id","usersIds"],
-        ["role","user","user_role","role_id","user_id","usersIds"],
-        ["user","therapeutic_area","user_therapeutic_area","user_id","therapeutic_area_id","therapeuticAreasIds"],
-        ["therapeutic_area","therapeutic_area","therapeutic_area","id","parent_therapeutic_area_id","parentIds"]
+        ["county","city","city","county_id","id",false],
+        ["content","user_group","content_user_group","content_id","user_group_id",false],
+        ["question","answer","answer","question_id","id",false],
+        ["event","user_group","event_user_group","event_id","user_group_id",false],
+        ["general_content","therapeutic_area","general_content_therapeutic_areas","general_content_id","therapeutic_area_id",false],
+        ["multimedia","quiz","multimedia","id","quiz_id",false],
+        ["multimedia","therapeutic_area","multimedia_therapeutic_areas","multimedia_id","therapeutic_area_id",false],
+        ["multimedia","user_group","multimedia_user_group","multimedia_id","user_group_id",false],
+        ["presentation","user_group","presentation","id","user_group_id",false],
+        ["product","user_group","product_user_group","product_id","user_group_id",false],
+        ["quiz","question","question","quiz_id","id",false],
+        ["presentation","slide","slide","presentation_id","id",false],
+        ["product","therapeutic_area","therapeutic_area_product","product_id","therapeutic_area_id",false],
+        ["user","city","user","id","city_id",false],
+        ["user","user_job","user","id","user_job_id",false],
+        ["user","user_group","user_group_users","user_id","user_group_id",false],
+        ["user","role","user_role","user_id","role_id",false],
+        ["user","therapeutic_area","user_therapeutic_area","user_id","therapeutic_area_id",false],
+        ["therapeutic_area","therapeutic_area","therapeutic_area","id","parent_therapeutic_area_id",false]
     ];
 
     //------------------------------------------------------- migrate all columns except for the ones in the list below
@@ -349,7 +349,7 @@ gulp.task('migrateDB', function () {
         return null;
     };
 
-    var sqlMapRequest = function (db, old_table_from, old_table_to, link_table, link_col_from, link_col_to, relationName) {
+    var sqlMapRequest = function (db, old_table_from, old_table_to, link_table, link_col_from, link_col_to, bothWays) {
         sql.query("SELECT "+link_col_from+", "+link_col_to+" FROM "+schema+"."+link_table, function (err,rows,fields) {
             if(err){
                 console.log(err);
@@ -364,7 +364,8 @@ gulp.task('migrateDB', function () {
                         var new_id_to = searchInPkMappings(old_table_to,old_id_to);
                         if(new_id_from!=null && new_id_to!=null){
                             var collectionFrom = toMigrate[old_table_from];
-//                            var collectionTo = toMigrate[old_table_to];
+                            var collectionTo = toMigrate[old_table_to];
+                            var relationName = collectionTo+"ID";
 
                             //make the request
                             mongoRequestsPending++;
