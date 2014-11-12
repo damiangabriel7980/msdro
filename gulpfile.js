@@ -68,14 +68,6 @@ gulp.task('deleteCollections', function () {
         "counties","calendar-events","public-articles","multimedia",
         "parameters","presentations","products","questions","quizes",
         "slides","tags","jobs","groups","users","roles","therapeutic-areas"];
-
-    for(var col in toDelete){
-        apigee.request({method: 'DELETE', endpoint:toDelete[col]+"?limit=200&ql="}, function (err,data) {
-            if(err){
-                console.log(data);
-            }
-        });
-    }
 });
 
 gulp.task('migrateDB', function () {
@@ -213,21 +205,6 @@ gulp.task('migrateDB', function () {
         });
     };
 
-    var updateDocuments = function (db, collectionFrom, new_id_from, relationName, newArr, callback) {
-        // Get the documents collection
-        var collection = db.collection(relationName);
-        // Insert some documents
-        var sett = {};
-        sett[relationName] = newArr;
-        collection.update({ _id : new_id_from }
-            , { $set: sett }, function(err, result) {
-                assert.equal(err, null);
-                assert.equal(1, result.result.n);
-                console.log("Updated the document with the field a equal to 2");
-                callback(result);
-            });
-    };
-
     //------------------------------------------------------------------------------------------------ useful functions
     var isDate = function(columnData){
         return (columnData.constructor.toString().indexOf("Date") > -1);
@@ -299,23 +276,11 @@ gulp.task('migrateDB', function () {
                 mongoRequestsPending--;
             }else{
                 if(docs[0]){
-                    console.log(docs[0]);
-                    var newArr;
-                    if(docs[0][relationName]){
-                        newArr = docs[0][relationName];
-                    }else{
-                        newArr = [];
-                    }
-                    console.log(newArr);
-                    newArr.push(new_id_to);
-                    console.log(newArr);
-                    console.log("==================================================");
-                    // Insert updated array
                     var sett = {};
-                    sett[relationName] = newArr;
+                    sett[relationName] = new_id_to;
                     collection.update({ "_id" : ObjectID(new_id_from) }
-                        , { $set: sett }, function(err, result) {
-                            if(err!=null){
+                        , { $push: sett }, function(err, result) {
+                            if(err==null){
                                 mappingsSuccessful++;
                                 mongoRequestsPending--;
                             }else{
@@ -394,7 +359,6 @@ gulp.task('migrateDB', function () {
 
                             //make the request
                             mongoRequestsPending++;
-//                            console.log(db+" - "+ collectionFrom+" - "+ new_id_from.constructor.toString() +" - "+ new_id_to.constructor.toString()+" - "+ relationName);
                             mappingRequest(db, collectionFrom, new_id_from, new_id_to, relationName);
                         }else{
                             mappingsFailedToProcess++;
