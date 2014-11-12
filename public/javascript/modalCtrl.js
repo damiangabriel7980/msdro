@@ -1,46 +1,19 @@
 /**
  * Created by miricaandrei23 on 29.10.2014.
  */
-cloudAdminControllers.controller('modalCtrl', function ($scope, $modal, $log) {
+cloudAdminControllers.controller('modalCtrl',['$scope','eventsService2','$stateParams','$modal','$log','$modalInstance',function ($scope,eventsService2,$stateParams, $modal, $log,$modalInstance) {
 
-    $scope.items = ['item1', 'item2', 'item3'];
-
-    $scope.open = function (size) {
-
-        var modalInstance = $modal.open({
-            templateUrl: 'myModalContent.html',
-            controller: 'ModalInstanceCtrl',
-            size: size,
-            resolve: {
-                items: function () {
-                    return $scope.items;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (selectedItem) {
-            $scope.selected = selectedItem;
-        }, function () {
-            $log.info('Modal dismissed at: ' + new Date());
-        });
-    };
-})
-
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
-
-.controller('modalInstanceCtrl', function ($scope, $modalInstance, items) {
-
-    $scope.items = items;
-    $scope.selected = {
-        item: $scope.items[0]
+    $scope.itemsEvent= eventsService2.query({id:$stateParams.id});
+    $scope.okk = function () {
+        $modalInstance.close();
     };
 
-    $scope.ok = function () {
-        $modalInstance.close($scope.selected.item);
-    };
-
-    $scope.cancel = function () {
+    $scope.cancell = function () {
         $modalInstance.dismiss('cancel');
     };
+}])
+.filter("asDate", function () {
+    return function (input) {
+        return new Date(input);
+    }
 });

@@ -7,16 +7,15 @@
     <div class="row-margintop20px">
         <div class="col-xs-3 hidden-xs">
             <h4 style="border-bottom: 1px solid #d97c1e;">Evenimentele urmatoare:</h4>
-             <div class="event blue" ng-repeat="event in events2Filtered">
+             <div class="event blue" ng-repeat="eventim in events2Filtered">
                     <div class="row">
                         <div class="col-xs-4 date">
-                            <h2>{{event.start | date:'dd'}}</h2>
-                            <h5>{{event.start | date:'MMM'}}</h5>
-                        </div>
+                            <h2>{{eventim.start | asDate | date:'dd'}}</h2>
+                            <h5>{{eventim.start | asDate | date:'MMM'}}</h5>
+                          </div>
 
                         <div class="col-xs-8">
-                            <h4 ng-click="open()">{{event.name}}</h4>
-                            <p>{{event.description | htmlToPlaintext |limitTo: 20}}.../></p>
+                            <h4 ui-sref="calendar.calendarDetails({id:eventim.uuid})">{{eventim['event-name']}}</h4>
                         </div>
                     </div>
                 </div>
@@ -24,28 +23,5 @@
 <div calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="realEvents" class="well col-xs-8 well-content col-xs-offset-1"></div>
         </div>
 </div>
-<div ng-controller="modalCtrl">
-    <script type="text/ng-template" id="myModalContent.html">
-        <div class="modal-header">
-            <h3 class="modal-title">I'm a modal!</h3>
-        </div>
-        <div class="modal-body">
-            <ul>
-                <li ng-repeat="item in items">
-                    <a ng-click="selected.item = item">{{ item }}</a>
-                </li>
-            </ul>
-            Selected: <b>{{ selected.item }}</b>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-        </div>
-    </script>
-
-    <button class="btn btn-default" ng-click="open()">Open me!</button>
-    <button class="btn btn-default" ng-click="open('lg')">Large modal</button>
-    <button class="btn btn-default" ng-click="open('sm')">Small modal</button>
-    <div ng-show="selected">Selection from a modal: {{ selected }}</div>
-</div>
+<ng-view></ng-view>
 </body>

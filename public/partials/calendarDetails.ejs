@@ -1,24 +1,15 @@
-<div class="modal fade" modal="showModal" close="cancel()">
-    <div class="modal" id="myModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> <h3>${event?.type==2 ? '<i class="icon-facetime-video icon-white margintop10px"></i> ' : ''} ${event?.name}</h3></div>
-                <div class="modal-body">
-                    <div class="event-details">
-                        <div class="row">
-                            <div class="span8"><p class="medium-lineheight"><strong><g:message code="user.calendar.details.location" /></strong> ${event?.place}</p></div>
-                            <div class="span4"><span class="label label-${event?.type == 1 ? 'info' : 'warning'} pull-right">${event?.type == 1 ? '<i class="icon-calendar icon-white"></i>' : '<i class="icon-facetime-video icon-white"></i>'} ${event?.start?.format('dd/MM/yyyy')} - ${event?.end.format('dd/MM/yyyy')}</span></div>
-                        </div>
-
-                        <hr>
-                        <div class="text-content">${event?.description}</div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <a href="#" class="btn pull-left" data-dismiss="modal">Inchide</a>
-                </div>
-            </div>
+<div>
+        <div class="modal-header">
+            <h3 class="modal-title">{{itemsEvent['event-name']}}</h3>
         </div>
-    </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-xs-8"><p class="medium-lineheight"><strong>Location: Here</strong></p></div>
+                <div class="col-xs-4"><span class="label label-info pull-right"><i class="icon-facetime-video icon-white"></i>{{itemsEvent.start | asDate | date: 'dd/MM/yyyy'}} - {{itemsEvent.end | asDate | date: 'dd/MM/yyyy'}}</span></div>
+            </div>
+            <hr>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-warning float-left" ng-click="cancell()">Inchide</button>
+        </div>
 </div>

@@ -1,1 +1,54 @@
-teste
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div class="col-xs-offset-1" id="content">
+    <div class="row margintop20px">
+        <div class="col-xs-2" >
+            <h4 class="h-title">Istoric teste interactive</h4>
+
+            <ul class="list">
+                <li ng-repeat="quiz in teste">{{quiz.title}} - {{quiz.last_updated | asDate | date: "dd/MM/yyyy"}} - expira la {{quiz.expiry_date | asDate | date: "dd/MM/yyyy"}}
+                    <br/>
+                </li>
+                <br/>
+            </ul>
+            <hr class="visible-phone ">
+        </div>
+
+        <div class="col-xs-9" >
+            <ul class="articles" style="list-style: none;">
+                <li class="col-xs-9" ng-repeat="quiz in teste | orderBy:'title'">
+
+
+                    <div class="row">
+                        <img ng-if="quiz.entity!='SLIDE'" src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/video.png" alt="{{quiz.title}}" height="250px" width="250px"/>
+                        <img ng-if="quiz.entity=='SLIDE'" src="https://s3-eu-west-1.amazonaws.com/msddev-test/multimedia/4/slide/multimedia_88.png" height="250px" width="250px" />
+                        <h4><a href="#"></a>{{quiz.title}}</h4>
+                        <p>{{quiz.description | htmlToPlaintext | limitTo: 190}}...
+                            <button class="button btn-info pull-right" ui-sref="elearning.teste.quizById({id:quiz.uuid})">Sustine testul</button>
+                        </p>
+                    </div>
+
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="col-xs-1 hidden-phone">
+            <ul class="nav nav-list">
+                <li ><a href=""/></li>
+                <li class="divider"></li>
+
+                <li class=''><a href=""></a></li>
+
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

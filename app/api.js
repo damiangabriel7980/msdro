@@ -59,10 +59,10 @@ module.exports = function(app, router) {
         });
     });
 
-    router.route('/products/:products_id')
+    router.route('/products/:id')
 
         .get(function(req, res) {
-            Products.findById(req.params.products_id, function(err, cont) {
+            Products.findById(req.params.id, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -107,17 +107,17 @@ module.exports = function(app, router) {
             });
         });
 
-    router.route('/therapeutic_areas/:therapeutic_areas_id')
-
-        .get(function(req, res) {
-            Therapeutic_Area.findById(req.params._id, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            })
-        });
+    //router.route('/therapeutic_areas/:therapeutic_areas_id')
+    //
+    //    .get(function(req, res) {
+    //        Therapeutic_Area.findById(req.params._id, function(err, cont) {
+    //            if(err) {
+    //                res.send(err);
+    //            }
+    //
+    //            res.json(cont);
+    //        })
+    //    });
 
     router.route('/userGroup')
 
@@ -150,9 +150,97 @@ module.exports = function(app, router) {
                 }
 
                 res.json(cont);
+            }).limit(50);
+
+        });
+    router.route('/calendar/:id')
+        .get(function(req,res){
+            Events.findById(req.params.id,function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                console.log(cont);
+                res.json(cont);
             });
 
         });
+    router.route('/multimedia2/:idd')
+        .get(function(req,res){
+            multimedia.findById(req.params.idd,function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
 
+                res.json(cont);
+            });
+
+        });
+    router.route('/multimedia')
+        .get(function(req,res){
+            multimedia.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.send(cont);
+            });
+
+        });
+    router.route('/multimedia/multimediaByArea/:id')
+        .get(function(req,res){
+            var x = req.params.id;
+            if(req.params.id!='0') {
+                multimedia.findById(x,function(err, cont){
+
+                    if (err) {
+                        console.log(err);
+                        res.send(err);
+                        return ;
+                    }
+                    console.log(cont);
+                    var prods = [];
+                    for (var i = 0; i < cont.length; i++)
+                    {
+                        if(cont[i].type=='multimedia')
+                            prods.push(cont.entities[i]);
+                    }
+                    console.log(prods);
+                    res.send(prods);
+                })
+            }
+            else
+            {
+                multimedia.find(function (error, result) {
+                    if (error) {
+                        res.send(error);
+                    } else {
+                        res.send(result);
+                    }
+                });
+            }
+        });
+    router.route('/teste')
+        .get(function(req,res){
+            teste.find(function (error, result) {
+                if (error) {
+                    res.send(error);
+                    return ;
+                } else {
+                    console.log(result);
+                    res.send(result);
+                }
+            });
+        });
+    router.route('/teste/:id')
+        .get(function(req,res) {
+            teste.findById(req.params.id, function (err, cont) {
+                if (err) {
+                    res.send(err);
+                    return;
+                }
+                console.log(cont);
+                res.send(cont);
+            });
+        });
     app.use('/api', router);
 };
