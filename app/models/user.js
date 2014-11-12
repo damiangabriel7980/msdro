@@ -16,8 +16,6 @@ userSchema.methods.generateHash = function(password) {
 
 // checking if password is valid
 userSchema.methods.validPassword = function(password) {
-    console.log(crypto(password).toString());
-    console.log(this.password);
      return crypto(password).toString()===this.password;
 };
 

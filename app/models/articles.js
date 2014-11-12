@@ -4,7 +4,7 @@ var Schema			= mongoose.Schema;
 //type: 1 = normal
 //      2 = legislativ
 //      3 = stiintific
-var ContentSchema		= new Schema({
+var articlesSchema		= new Schema({
     title:        String,
     author:       String,
     description:  String,
@@ -17,4 +17,4 @@ var ContentSchema		= new Schema({
     groupsID:     Array
 });
 
-module.exports = mongoose.model('Content', ContentSchema);
+module.exports = mongoose.model('articles', articlesSchema);

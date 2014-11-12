@@ -1,4 +1,4 @@
-var Content     = require('./models/content');
+var Content     = require('./models/articles');
 var Products    = require('./models/products');
 var Therapeutic_Area = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
