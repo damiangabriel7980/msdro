@@ -129,7 +129,7 @@ gulp.task('migrateDB', function () {
         "therapeutic_area":"therapeutic-areas"
     };
 
-    //-------------------- mappings (table1, table2, connection_table, table1_connect_id, table2_connect_id, connection_name)
+    //-------------------- mappings (table1, table2, connection_table, table1_connect_id, table2_connect_id, bidirectional)
     //-------------------- table1 is owner
     var connections = [
         ["county","city","city","county_id","id",false],
@@ -365,11 +365,14 @@ gulp.task('migrateDB', function () {
                         if(new_id_from!=null && new_id_to!=null){
                             var collectionFrom = toMigrate[old_table_from];
                             var collectionTo = toMigrate[old_table_to];
-                            var relationName = collectionTo+"ID";
 
                             //make the request
                             mongoRequestsPending++;
-                            mappingRequest(db, collectionFrom, new_id_from, new_id_to, relationName);
+                            mappingRequest(db, collectionFrom, new_id_from, new_id_to, collectionTo+"ID");
+                            if(bothWays){
+                                mongoRequestsPending++;
+                                mappingRequest(db, collectionTo, new_id_to, new_id_from, collectionFrom+"ID");
+                            }
                         }else{
                             mappingsFailedToProcess++;
                         }
