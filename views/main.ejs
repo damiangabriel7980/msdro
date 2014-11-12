@@ -22,6 +22,12 @@
     <script src="javascript/services.js"></script>
     <script src="javascript/eventsController.js"></script>
     <script src="javascript/require.js"></script>
+    <script src="javascript/productDetailsController.js"></script>
+    <script src="javascript/multimediaController.js"></script>
+    <script src="javascript/multimediaDetailsController.js"></script>
+    <script src="javascript/testeController.js"></script>
+    <script src="javascript/testeQuestionsController.js"></script>
+    <script src="javascript/require.js"></script>
     <script src="javascript/modalCtrl.js"></script>
     <link rel='stylesheet' href='components/fullcalendar/fullcalendar.css' />
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
@@ -63,7 +69,7 @@
                         <span class="glyphicon glyphicon-book"></span> Biblioteca <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="biblioteca.produse" href="#/produse">Produse</a></li>
+                        <li><a ui-sref="biblioteca.produse.productsByArea({id:0})" href="#/produse">Produse</a></li>
                         <li class="divider"></li>
                         <li><a ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})">Articole stiintifice</a></li>
                         <li class="divider"></li>

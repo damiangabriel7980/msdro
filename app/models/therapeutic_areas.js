@@ -8,15 +8,11 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
 var therapeuticAreaSchema		= new Schema({
-    version_ther:     Number,
-    has_children: Number,
+    has_children: Boolean,
     last_updated: Date,
     name: String,
-    parent_id: String,
-    enable:      Number,
-    products :[
-    {type: Schema.Types.ObjectId, ref: 'Products'}
-]
+    enabled:      Boolean,
+    "therapeutic-areasID": Array
 });
 
-module.exports = mongoose.model('therapeuticAreas', therapeuticAreaSchema);
+module.exports = mongoose.model('therapeutic-areas', therapeuticAreaSchema);

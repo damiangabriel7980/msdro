@@ -12,7 +12,7 @@
 cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therapeuticAreaService', function($scope, therapeuticAreaService){
 
    therapeuticAreaService.query().$promise.then(function(correctResults){
-       $scope.therapeuticAreas = correctResults[0];
+       $scope.therapeuticAreas = correctResults;
     });
 
  }]);

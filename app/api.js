@@ -75,8 +75,8 @@ module.exports = function(app, router) {
 
         .get(function(req, res) {
             var test = new Array(req.params.id);
-            if(test[0]!=="544f7b258e8df17f7e9ff1db")
-            {Products.find({area_parent: {$in :test}}, function(err, cont) {
+            if(test[0]!=0)
+            {Products.find({'therapeutic-areasID': {$in :test}}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
