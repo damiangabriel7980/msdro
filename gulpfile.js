@@ -68,6 +68,15 @@ gulp.task('deleteCollections', function () {
         "counties","calendar-events","public-articles","multimedia",
         "parameters","presentations","products","questions","quizes",
         "slides","tags","jobs","groups","users","roles","therapeutic-areas"];
+    MongoClient.connect('mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test', function (err,db) {
+        for(var c in toDelete){
+            var collection = db.collection(toDelete[c]);
+            collection.drop();
+        }
+        db.close();
+    });
+
+
 });
 
 gulp.task('migrateDB', function () {
