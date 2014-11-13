@@ -4,6 +4,9 @@ var Therapeutic_Area = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
 var Events = require('./models/events');
 var Multimedia = require('./models/multimedia');
+var Teste=require('./models/quizes');
+var Questions=require('./models/questions');
+var Answers = require('./models/answers');
 
 module.exports = function(app, router) {
 
@@ -180,14 +183,14 @@ module.exports = function(app, router) {
             x.push(req.params.id);
             console.log(x);
             if (x[0] != 0) {
-                console.log(x[0]);
-                Multimedia.find({'enable': false}, function (err, cont) {
+                //console.log(x[0]);
+                Multimedia.find({'therapeutic-areasID': {$in : x }}, function (err, cont) {
                     if (err) {
-                        console.log(err);
+                        //console.log(err);
                         res.json(err);
                         return;
                     }
-                    console.log(cont);
+                    //console.log(cont);
                     res.json(cont);
                 });
             }
@@ -205,25 +208,41 @@ module.exports = function(app, router) {
         });
     router.route('/teste')
         .get(function(req,res){
-            teste.find(function (error, result) {
+            Teste.find(function (error, result) {
                 if (error) {
                     res.send(error);
                     return ;
                 } else {
-                    console.log(result);
-                    res.send(result);
+                    //console.log(result);
+                    res.json(result);
                 }
             });
         });
     router.route('/teste/:id')
         .get(function(req,res) {
-            teste.findById(req.params.id, function (err, cont) {
+            var y = req.params.id.split(",");
+            console.log(y);
+            Questions.find({_id: {$in : y} }, function (err, cont) {
                 if (err) {
+                    console.log(err);
                     res.send(err);
                     return;
                 }
-                console.log(cont);
-                res.send(cont);
+                else{
+                    var answers=[];
+                    Answers.find({},function(err,cont2){
+                            answers=cont2;
+                        //console.log(cont);
+                        //console.log(answers);
+                        //console.log(x);
+                        var qa={};
+                        qa["questions"]=cont;
+                        qa["answers"]=answers;
+                        res.json(qa);
+                        });
+
+                }
+
             });
         });
     app.use('/api', router);

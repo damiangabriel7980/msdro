@@ -12,7 +12,8 @@
 <div id="quiz-content">
     <div id="question" class="marginbottom10px">
      <h4>{{newQuestions[contor].text}}</h4>
-    <!--<input type = "checkbox" ng-repeat="answer in answersFiltered">{{answer.text}}</input>-->
+    <span ng-repeat="ans in answersFiltered" ng-if="newQuestions[contor]['answersID'].indexOf(ans._id) > -1"><input type="checkbox" >{{ans.text}}
+        </span>
     </div>
     <!--<div id="answers" class="marginleft10px"></div>-->
 </div>

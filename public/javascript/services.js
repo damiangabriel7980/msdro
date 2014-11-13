@@ -71,7 +71,7 @@ cloudAdminServices.factory('testeService', ['$resource', function($resource){
             query: { method: 'GET', isArray: true }
         }),
         getByTest: $resource('api/teste/:id', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
