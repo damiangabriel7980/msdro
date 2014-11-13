@@ -8,24 +8,24 @@
             <div class="col-md-12">
                 <div class="col-md-12">
                     <div class="col-md-4">
-                        <img ng-src="{{image}}"/>
+                        <img ng-src="{{image}}" style="width: 100%;"/>
                     </div>
                     <div class="col-md-8">
                         <div class="form-group col-md-6">
                             <label for="nume">Nume:</label>
-                            <input type="text" class="form-control" id="nume"/>
+                            <input type="text" class="form-control" id="nume" value="{{firstName}}"/>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="prenume">Prenume:</label>
-                            <input type="text" class="form-control" id="prenume"/>
+                            <input type="text" class="form-control" id="prenume" value="{{lastName}}"/>
                         </div>
                         <div class="form-group col-md-12">
                             <label for="telefon">Telefon:</label>
-                            <input type="text" class="form-control" id="telefon"/>
+                            <input type="text" class="form-control" id="telefon" value="{{phone}}"/>
                         </div>
                         <div class="col-md-12">
                             <label for="abonat">Abonat la newsletter</label>
-                            <input type="checkbox" id="abonat"/>
+                            <input type="checkbox" id="abonat" checked="{{newsletter}}"/>
                         </div>
                         <div class="col-md-12">
                             <a class="btn btn-default"><i class="glyphicon glyphicon-camera"></i>&nbsp;Schimba fotografia</a>
@@ -37,7 +37,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Judet: </label>
-                            <ui-select ng-model="county.selected" theme="select2" ng-disabled="false" style="width: 100%;">
+                            <ui-select ng-model="county.selected" theme="select2" ng-disabled="false" style="width: 100%;" id="county">
                                 <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
                                 <ui-select-choices repeat="county in counties | propsFilter: {name: $select.search}">
                                     <div ng-bind-html="county.name | highlight: $select.search"></div>
@@ -48,7 +48,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Oras: </label>
-                            <ui-select ng-model="city.selected" theme="select2" ng-disabled="false" style="width: 100%;">
+                            <ui-select ng-model="city.selected" theme="select2" ng-disabled="false" style="width: 100%;" id="city">
                                 <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
                                 <ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">
                                     <div ng-bind-html="city.name | highlight: $select.search"></div>
@@ -56,20 +56,125 @@
                             </ui-select>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="areas">Arii terapeutice:</label>
+                                <select class="form-control" id="areas" style="width: 100%;">
+                                    <option name="pleaseSelectOne" value="pleaseSelectOne">Adauga arii terapeutice</option>
+                                    <option name="iWantThemAll" value="iWantThemAll">Toate</option>
+                                    <option ng-repeat="area in allAreas" ng-bind-html="area.name"></option>
+                                </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <a class="btn btn-primary pull-right">Salveaza</a>
+                    </div>
                 </div>
             </div>
         </accordion-group>
         <accordion-group>
             <accordion-heading><i class="glyphicon glyphicon-lock"></i>&nbsp;&nbsp;Loc de munca</accordion-heading>
-            ahkfh fhkfhkfh
+            <div class="col-md-12">
+                <div class="form-group col-md-6">
+                    <label for="tipLoc">Tip loc de munca<sup>*</sup>:</label>
+                    <select class="form-control" id="tipLoc" style="width: 100%;">
+                        <option name="chooseTipLoc" value="chooseTipLoc">Selecteaza o optiune</option>
+                        <option name="Spital" value="Spital">Spital</option>
+                        <option name="CMI" value="CMI">CMI</option>
+                        <option name="Policlinica" value="Policlinica">Policlinica</option>
+                        <option name="Farmacie" value="Farmacie">Farmacie</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="locMunca">Loc de munca<sup>*</sup>:</label>
+                    <input type="text" class="form-control" id="locMunca"/>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group col-md-4">
+                    <label for="numeStrada">Numele strazii<sup>*</sup>:</label>
+                    <input type="text" class="form-control" id="numeStrada"/>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="numarStrada">Numarul strazii<sup>*</sup>:</label>
+                    <input type="text" class="form-control" id="numarStrada"/>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="codPostal">Cod postal:</label>
+                    <input type="text" class="form-control" id="codPostal"/>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group col-md-12">
+                    <label for="codPostal">Alte informatii, adresa:</label>
+                    <input type="text" class="form-control" id="alteInfoAdr"/>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <a class="btn btn-primary pull-right">Salveaza loc de munca</a>
+            </div>
         </accordion-group>
         <accordion-group>
             <accordion-heading><i class="glyphicon glyphicon-tags"></i>&nbsp;&nbsp;Contul meu</accordion-heading>
-            ahkfh fhkfhkfh
+            <div class="col-md-12">
+                <h4>Schimba e-mail</h4>
+                <hr/>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group col-md-6">
+                    <label for="emailNew"><sup>*</sup>Adresa de e-mail:</label>
+                    <input type="text" class="form-control" id="emailNew"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="changeEmailPass"><sup>*</sup>Parola:</label>
+                    <input type="text" class="form-control" id="changeEmailPass"/>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <a class="btn btn-danger pull-right">Schimba e-mail</a>
+            </div>
+            <div class="col-md-12">
+                <h4>Schimba parola</h4>
+                <hr/>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group col-md-12">
+                    <label for="oldPass"><sup>*</sup>Parola:</label>
+                    <input type="text" class="form-control" id="oldPass"/>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group col-md-6">
+                    <label for="newPass"><sup>*</sup>Parola noua:</label>
+                    <input type="text" class="form-control" id="newPass"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="confirmPass"><sup>*</sup>Repeta parola:</label>
+                    <input type="text" class="form-control" id="confirmPass"/>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <a class="btn btn-danger pull-right">Schimba parola</a>
+            </div>
         </accordion-group>
         <accordion-group>
             <accordion-heading><i class="glyphicon glyphicon-briefcase"></i>&nbsp;&nbsp;Punctele mele</accordion-heading>
-            ahkfh fhkfhkfh
+            <div class="col-md-12">
+                <h4>Total puncte: {{pointsTotal}}</h4>
+                <hr/>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-4">Puncte acumulate din slide:</div>
+                <div class="col-md-8"><label class="label label-primary">{{pointsSlide}}</label></div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-4">Puncte acumulate din video:</div>
+                <div class="col-md-8"><label class="label label-primary">{{pointsVideo}}</label></div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-4">Puncte acumulate din articole:</div>
+                <div class="col-md-8"><label class="label label-primary">{{pointsArticles}}</label></div>
+            </div>
         </accordion-group>
     </accordion>
 </div>

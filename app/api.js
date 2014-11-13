@@ -54,7 +54,39 @@ module.exports = function(app, router) {
 
         .get(function(req, res) {
             var user = req.user;
-            res.json(user);
+            var userCopy = {};
+            userCopy['name'] = user.name;
+            userCopy['image_path'] = user.image_path;
+            userCopy['phone'] = user.phone;
+            userCopy['points'] = user.points;
+            userCopy['subscription'] = user.subscription;
+            userCopy['username'] = user.username;
+            userCopy['therapeutic-areasID'] = user['therapeutic-areasID'];
+            userCopy['citiesID'] = user.citiesID;
+            Cities.find({_id:user.citiesID[0]}, function (err, city) {
+                if(err){
+                    res.send(err);
+                }
+                if(city[0]){
+                    userCopy['city_id'] = city[0]._id;
+                    userCopy['city_name'] = city[0].name;
+                    Counties.find({citiesID: {$in: [userCopy['city_id'].toString()]}}, function (err, county) {
+                        if(err){
+                            res.send(err);
+                        }
+                        if(county[0]){
+                            userCopy['county_id'] = county[0]._id;
+                            userCopy['county_name'] = county[0].name;
+                            res.json(userCopy);
+                        }else{
+                            res.send(err);
+                        }
+                    });
+                }else{
+                    res.send(err);
+                }
+
+            });
         });
 
     router.route('/counties')
@@ -77,7 +109,6 @@ module.exports = function(app, router) {
                 }
                 Cities.find({_id: {$in: counties[0].citiesID}}, function (err, cities) {
                     if(err) {
-                        console.log("errr");
                         res.send(err);
                     }
                     res.json(cities);
