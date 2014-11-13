@@ -3,8 +3,9 @@
  */
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
+
+
 var EventsSchema		= new Schema({
-    version:        Number,
     description:  String,
     enable:         String,
     end:        Date,
@@ -13,8 +14,7 @@ var EventsSchema		= new Schema({
     place:       String,
     privacy:   String,
     start: Date,
-    type: Number,
-    group_ident: String
+    type: Number
 });
 
-module.exports = mongoose.model('Events', EventsSchema);
+module.exports = mongoose.model('calendar-events', EventsSchema);

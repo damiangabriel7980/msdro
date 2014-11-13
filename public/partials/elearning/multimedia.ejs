@@ -10,15 +10,15 @@
             <h4 class="h-title">Arii terapeutice</h4>
 
             <ul class="list">
-                <li ui-sref="elearning.multimedia.multimediaByArea({id:area.uuid})"  ng-repeat="area in therapeuticAreas | orderBy:'name'">{{area.name}}
-                    <br/>
-                    <!--<ul ng-if="area.has_children==1">-->
-                        <!--<li ng-repeat="area2 in therapeuticAreas | filter : { parent_id : area.uuid}" ui-sref="elearning.multimedia.multimediaByArea({id:area2.uuid})">-->
-                            <!--{{area2.name}}-->
-                        <!--</li>-->
-                    <!--</ul>-->
+                <li ui-sref="elearning.multimedia.multimediaByArea({id:area._id})"  ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
+                    {{area.name}}
+                    <ul ng-if="area.has_children">
+                        <li ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'" ui-sref="elearning.multimedia.multimediaByArea({id:area2._id})">
+                            {{area2.name}}
+                        </li>
+                        <!--<li>ceva</li>-->
+                    </ul>
                 </li>
-                <br/>
             </ul>
             <hr class="visible-phone ">
         </div>
