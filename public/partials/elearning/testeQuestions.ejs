@@ -4,18 +4,18 @@
     </div>
 
     <div class="col-xs-6">
-        <p class="pull-right"><span id="info-time" class="label label-info"></span></p>
+        <p class="pull-right"><timer interval="1000" countdown="countdown">{{countdown}}</timer></p>
     </div>
 </div>
-
 <hr class="margintop5px marginbottom10px">
 <div id="quiz-content">
     <div id="question" class="marginbottom10px">
-     <h4>{{newQuestions[contor].text}}</h4>
+
+     <h4 class="pull-left">{{newQuestions[contor].text}}</h4>
+
     <span ng-repeat="ans in answersFiltered" ng-if="newQuestions[contor]['answersID'].indexOf(ans._id) > -1"><input type="checkbox" >{{ans.text}}
         </span>
     </div>
-    <!--<div id="answers" class="marginleft10px"></div>-->
 </div>
 </div>
 

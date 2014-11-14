@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams', function($scope,eventsService,$stateParams){
+cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state', function($scope,eventsService,$stateParams,$modal,$state){
 var date = new Date();
     var y=$(date);
      eventsService.query().$promise.then(function(result){
@@ -10,21 +10,45 @@ var date = new Date();
        $scope.eventsS=[];
        for(var i = 0; i < $scope.events.length; i++)
        {
-           $scope.eventsS[i] = {id:$scope.events[i].uuid, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: new Date($scope.events[i].end),allDay: false, color: 'green',className: 'events'};
+           $scope.eventsS[i] = {id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: new Date($scope.events[i].end),allDay: false, color: 'green',className: 'events'};
        }
         $scope.realEvents=[$scope.eventsS];
+         $scope.eventRender = function(event, element) {
+             element.find('.fc-event-title').css({textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', width: 'inherit', display: 'block'});
+             element.attr('title', event.title);
+         };
         $scope.uiConfig = {
-            calendar:{
-                eventSources:$scope.realEvents,
+            calendar: {
+                eventSources: $scope.realEvents,
                 height: 450,
                 editable: true,
-                header:{
+                header: {
                     left: 'month basicWeek basicDay agendaWeek agendaDay',
                     center: 'title',
                     right: 'today prev,next'
-            }
-        }
-    }});
+                },
+                eventRender: function(event, element) {
+                    element.qtip({
+                        content: {
+                            text: event.title
+                        },
+                        position: {
+                            my: 'left center',
+                            at: 'right center'
+                        },
+                        show: {
+                            solo: true,
+                            event: 'mouseover'
+                        },
+                        hide: 'click mouseout'
+                    });
+                },
+                eventClick:function(event){
+                    $state.go("calendar.calendarDetails", {"id": event.id})
+                }
+
+     }}})
+    ;
     eventsService.query().$promise.then(function(result) {
         $scope.events2 = result;
         $scope.events2Filtered = [];

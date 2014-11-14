@@ -5,7 +5,9 @@
         <div class="pull-left">
             <a class="thumbnail"><video src="{{videosrc}}" controls="controls" alt="{{selectedMultimedia.title}}" height="300" width="300"/></a>
             <hr class="margintop10px marginbottom0">
+            <a class="btn pull-right btn-primary" ng-click="okk()" ui-sref="elearning.multimedia.multimediaByArea({id:0})">Close</a>
         </div>
         <div class = "pull-right">{{selectedMultimedia.description}}</div>
+
     </div>
 </div>

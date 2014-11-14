@@ -1,9 +1,9 @@
-<div class="articles">
+<div class="articles col-xs-9">
     <span class="col-xs-3" ng-repeat="prod in products | orderBy:'name'">
 
         <div class="thumbnail">
             <div class="caption">
-                <img src="{{amazon + prod.image_path}}" alt="{{prod.name}}" height="250px" width="250px"/>
+                <img src="{{amazon + prod.image_path}}" alt="{{prod.name}}" height="150px" width="150px"/>
                 <h4><a href="#"></a>{{prod.name}}</h4>
 
                 <p>{{prod.description | htmlToPlaintext | limitTo: 190}}...
@@ -13,4 +13,15 @@
         </div>
     </span>
 
+</div>
+<div class=" col-xs-offset-1 col-xs-2">
+    <ul class="nav nav-list">
+        <li class="active" ng-click="reset()">A - Z</li>
+        <li class="divider"></li>
+
+        <li ng-repeat="letter in firstLetters | mySort" ng-click="filterResults($index)">
+            {{letter}}
+        </li>
+
+    </ul>
 </div>

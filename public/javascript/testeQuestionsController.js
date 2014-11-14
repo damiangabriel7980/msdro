@@ -21,6 +21,7 @@ cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootSco
         }
     });
     $scope.contor=0;
+    $scope.countdown=100;
     $scope.clasa='hide';
     $scope.hideNext='show';
     $scope.hideFinish='hide';
