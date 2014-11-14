@@ -21,6 +21,9 @@ cloudAdminServices.factory('ProfileService', ['$resource', function($resource){
         }),
         getCities: $resource('api/cities/:county_name', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        uploadProfile: $resource('api/userProfile/:newData', {}, {
+            save: { method: 'POST'}
         })
     }
 }]);

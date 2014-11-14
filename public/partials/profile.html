@@ -14,7 +14,7 @@
                         <div class="col-md-8">
                             <div class="form-group col-md-6" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine}">
                                 <label for="nume">Nume:</label>
-                                <input type="text" class="form-control" id="nume" name="nume" ng-model="firstName" ng-pattern="/^[a-zA-Z]{3,30}$/" required>
+                                <input type="text" class="form-control" id="nume" name="nume" ng-model="firstName" ng-pattern="/^[a-zA-Z\s.']{3,30}$/" required>
                             </div>
                             <div class="form-group col-md-6" ng-class="{'has-error': profileForm.prenume.$invalid && !profileForm.prenume.$pristine}">
                                 <label for="prenume">Prenume:</label>
@@ -26,7 +26,7 @@
                             </div>
                             <div class="col-md-12">
                                 <label for="abonat">Abonat la newsletter</label>
-                                <input type="checkbox" id="abonat" checked="{{newsletter}}"/>
+                                <input type="checkbox" id="abonat" ng-model="newsletter" ng-checked="newsletter"/>
                             </div>
                             <div class="col-md-12">
                                 <a class="btn btn-default"><i class="glyphicon glyphicon-camera"></i>&nbsp;Schimba fotografia</a>

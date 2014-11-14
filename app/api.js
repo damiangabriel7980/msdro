@@ -9,6 +9,16 @@ var Cities = require('./models/cities');
 var Multimedia = require('./models/multimedia');
 var User = require('./models/user');
 
+//regexp for node js config
+var regexp = require('../node_modules/node-regexp');
+regexp.letter = "[a-zA-Z]";
+regexp.space = "\\s";
+regexp.number = "[0-9]";
+
+var rgLetter = "[a-zA-Z]";
+var rgNumber = "[0-9]";
+var rgSpace = "\\s";
+
 module.exports = function(app, router) {
 
     router.route('/content')
@@ -115,6 +125,20 @@ module.exports = function(app, router) {
                     res.json(cities);
                 });
             });
+        });
+
+    router.route('/userProfile')
+
+        .post(function (req, res) {
+            var newData = req.body.newData;
+            var namePatt = regexp().start().must(regexp.letter).end();
+            var phonePatt = new RegExp("/^[0-9]{10,20}$/");
+            if(!namePatt.test(newData.firstName)){
+                res.json({"message": "Invalid first name"});
+            }else{
+                console.log(newData.firstName);
+                res.json({"message": "Updated"});
+            }
         });
 
     router.route('/products')

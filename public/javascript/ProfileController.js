@@ -19,7 +19,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.firstName = allNames[0];
         $scope.lastName = allNames[1];
         $scope.phone = resp.phone;
-        $scope.newsletter = resp.subscription == 1 ? "true":"false";
+        $scope.newsletter = resp.subscription == 1;
         $scope.image = imagePre + resp.image_path;
         $scope.userTherapeuticAreas = resp['therapeutic-areasID'];
 
@@ -27,10 +27,10 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
 
         $scope.county['selected'] = {};
         $scope.county['selected']['name'] = resp.county_name;
-        $scope.county['selected']['id'] = resp.county_id;
+        $scope.county['selected']['_id'] = resp.county_id;
         $scope.city['selected'] = {};
         $scope.city['selected']['name'] = resp.city_name;
-        $scope.city['selected']['id'] = resp.city_id;
+        $scope.city['selected']['_id'] = resp.city_id;
 
         var cityDefault = true;
 
@@ -132,7 +132,17 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     //user profile
     $scope.submitProfileForm = function (isValid) {
         if(isValid){
-            console.log("All good");
+            var toSend = {};
+            toSend.firstName = this.firstName;
+            toSend.lastName = this.lastName;
+            toSend.phone = this.phone;
+            toSend.newsletter = this.newsletter;
+            toSend.therapeuticAreas = $scope.userTherapeuticAreas;
+            toSend.county = this.county.selected._id;
+            toSend.city = this.city.selected._id;
+            ProfileService.uploadProfile.save({newData:toSend}).$promise.then(function (resp) {
+                console.log(resp.message);
+            });
         }
     };
 
