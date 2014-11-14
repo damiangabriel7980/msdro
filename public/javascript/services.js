@@ -21,9 +21,6 @@ cloudAdminServices.factory('ProfileService', ['$resource', function($resource){
         }),
         getCities: $resource('api/cities/:county_name', {}, {
             query: { method: 'GET', isArray: true }
-        }),
-        getAllAreas: $resource('api/userAreas/:county_name', {}, {
-            query: { method: 'GET', isArray: true }
         })
     }
 }]);

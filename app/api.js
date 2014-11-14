@@ -7,6 +7,7 @@ var Events = require('./models/events');
 var Counties = require('./models/counties');
 var Cities = require('./models/cities');
 var Multimedia = require('./models/multimedia');
+var User = require('./models/user');
 
 module.exports = function(app, router) {
 
@@ -92,7 +93,7 @@ module.exports = function(app, router) {
     router.route('/counties')
 
         .get(function(req, res) {
-            Counties.find({}, {name: 1}, function (err, cont) {
+            Counties.find({$query:{}, $orderby: {name: 1}}, {name: 1}, function (err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -167,11 +168,10 @@ module.exports = function(app, router) {
     router.route('/therapeutic_areas')
 
         .get(function(req, res) {
-            Therapeutic_Area.find(function(err, cont) {
+            Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
-
                 res.json(cont);
             });
         });

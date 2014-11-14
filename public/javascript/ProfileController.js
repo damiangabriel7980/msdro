@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '$modalInstance', 'ProfileService', 'therapeuticAreaService' ,function($scope, $rootScope, $modalInstance, ProfileService, therapeuticAreaService){
+cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '$modalInstance', 'ProfileService', 'therapeuticAreaService' , '$sce',function($scope, $rootScope, $modalInstance, ProfileService, therapeuticAreaService, $sce){
 
     var imagePre = $rootScope.pathAmazonDev;
 
@@ -21,7 +21,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.phone = resp.phone;
         $scope.newsletter = resp.subscription == 1 ? "true":"false";
         $scope.image = imagePre + resp.image_path;
-        $scope.areasIn = resp['therapeutic-areasID'];
+        $scope.userTherapeuticAreas = resp['therapeutic-areasID'];
 
         //select user's county and city
 
@@ -37,7 +37,13 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.$watch('county.selected', function () {
             if($scope.county.selected!==undefined){
                 ProfileService.getCities.query({county_name:$scope.county.selected.name}).$promise.then(function (resp) {
-                    $scope.cities = resp;
+                    $scope.cities = resp.sort(function(a,b){
+                        if ( a.name < b.name )
+                            return -1;
+                        if ( a.name > b.name )
+                            return 1;
+                        return 0;
+                    });
                 });
                 if(!cityDefault) $scope.city.selected = undefined;
                 cityDefault = false;
@@ -54,8 +60,11 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
 
+    //get all
     therapeuticAreaService.query().$promise.then(function (resp) {
         var areasOrganised = [];
+        areasOrganised.push({id:0, name:"Adauga arii terapeutice"});
+        areasOrganised.push({id:1, name:"Toate"});
         for(var i=0; i<resp.length; i++){
             var thisArea = resp[i];
             if(thisArea['therapeutic-areasID'].length == 0){
@@ -66,14 +75,51 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                     for(var j=0; j < resp.length; j++){
                         if(resp[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
                             //found one children. Add it
-                            areasOrganised.push({id: resp[j]._id, name:"&nbsp;&nbsp;&nbsp;&nbsp;"+resp[j].name});
+                            areasOrganised.push({id: resp[j]._id, name:"0"+resp[j].name});
                         }
                     }
                 }
             }
         }
         $scope.allAreas = areasOrganised;
+        $scope.selectedArea = $scope.allAreas[0];
+
     });
+
+    var findInUserAreas = function (id) {
+        var index = -1;
+        var i=0;
+        var found = false;
+        while(!found && i<$scope.userTherapeuticAreas.length){
+            if($scope.userTherapeuticAreas[i].id==id){
+                found = true;
+                index = i;
+            }
+            i++;
+        }
+        return index;
+    };
+
+    $scope.areaWasSelected = function (sel) {
+        if(sel.id!=0){
+            if(sel.id==1){
+                $scope.userTherapeuticAreas = [];
+                for(var i=2; i<$scope.allAreas.length; i++){
+                    $scope.userTherapeuticAreas.push($scope.allAreas[i]);
+                }
+            }else{
+                var index = findInUserAreas(sel.id);
+                if(index==-1) $scope.userTherapeuticAreas.push(sel);
+            }
+        }
+    };
+
+    $scope.removeUserArea = function (id) {
+        var index = findInUserAreas(id);
+        if(index>-1){
+            $scope.userTherapeuticAreas.splice(index,1);
+        }
+    };
 
     //----------------------------------------------------------------------------------------------------- User points
     $scope.pointsTotal = 0;
