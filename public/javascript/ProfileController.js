@@ -127,6 +127,15 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     $scope.pointsVideo = 0;
     $scope.pointsArticles = 0;
 
+    //------------------------------------------------------------------------------------------------ form submissions
+
+    //user profile
+    $scope.submitProfileForm = function (isValid) {
+        if(isValid){
+            console.log("All good");
+        }
+    };
+
     //------------------------------------------------------------------------------------- other functions / variables
 
     //open first accordion group by default
