@@ -9,15 +9,15 @@ var Cities = require('./models/cities');
 var Multimedia = require('./models/multimedia');
 var User = require('./models/user');
 
-//regexp for node js config
-var regexp = require('../node_modules/node-regexp');
-regexp.letter = "[a-zA-Z]";
-regexp.space = "\\s";
-regexp.number = "[0-9]";
+var XRegExp = require('xregexp').XRegExp;
 
-var rgLetter = "[a-zA-Z]";
-var rgNumber = "[0-9]";
-var rgSpace = "\\s";
+var s3 = require('s3');
+var s3Client = s3.createClient({
+    s3Options:{
+        accessKeyId: "AKIAJYA22DHN4HZ6MXHQ",
+        secretAccessKey: "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"
+    }
+});
 
 module.exports = function(app, router) {
 
@@ -130,14 +130,38 @@ module.exports = function(app, router) {
     router.route('/userProfile')
 
         .post(function (req, res) {
+            var ans = {};
             var newData = req.body.newData;
-            var namePatt = regexp().start().must(regexp.letter).end();
-            var phonePatt = new RegExp("/^[0-9]{10,20}$/");
-            if(!namePatt.test(newData.firstName)){
-                res.json({"message": "Invalid first name"});
+            console.log(newData);
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var phonePatt = new XRegExp('^[0-9]{10,20}$');
+            if((!namePatt.test(newData.firstName.toString())) || (!namePatt.test(newData.lastName.toString()))){
+                ans.error = true;
+                ans.message = "Invalid name";
+                res.json(ans);
             }else{
-                console.log(newData.firstName);
-                res.json({"message": "Updated"});
+                if(!phonePatt.test(newData.phone.toString())){
+                    ans.error = true;
+                    ans.message = "Invalid phone number";
+                    res.json(ans);
+                }else{
+                    var upd = User.update({_id:req.user._id}, {
+                        name: newData.firstName+" "+newData.lastName,
+                        phone: newData.phone,
+                        subscription: newData.newsletter?1:0,
+                        "therapeutic-areasID": newData.therapeuticAreas,
+                        citiesID: [newData.city]
+                    }, function () {
+                        if(!upd._castError){
+                            ans.error = false;
+                            ans.message = "Datele au fost modificate";
+                        }else{
+                            ans.error = true;
+                            ans.message = "Eroare la actualizare. Verificati datele";
+                        }
+                        res.json(ans);
+                    });
+                }
             }
         });
 

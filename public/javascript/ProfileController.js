@@ -130,6 +130,9 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     //------------------------------------------------------------------------------------------------ form submissions
 
     //user profile
+
+    //user profile alert messages
+    $scope.userProfileAlert = {newAlert:false, type:"", message:""};
     $scope.submitProfileForm = function (isValid) {
         if(isValid){
             var toSend = {};
@@ -142,6 +145,13 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
             toSend.city = this.city.selected._id;
             ProfileService.uploadProfile.save({newData:toSend}).$promise.then(function (resp) {
                 console.log(resp.message);
+                $scope.userProfileAlert.message = resp.message;
+                if(resp.error){
+                    $scope.userProfileAlert.type = "danger";
+                }else{
+                    $scope.userProfileAlert.type = "success";
+                }
+                $scope.userProfileAlert.newAlert = true;
             });
         }
     };
