@@ -8,6 +8,7 @@ var Counties = require('./models/counties');
 var Cities = require('./models/cities');
 var Multimedia = require('./models/multimedia');
 var User = require('./models/user');
+var Job = require('./models/jobs');
 
 var XRegExp = require('xregexp').XRegExp;
 
@@ -88,7 +89,25 @@ module.exports = function(app, router) {
                         if(county[0]){
                             userCopy['county_id'] = county[0]._id;
                             userCopy['county_name'] = county[0].name;
-                            res.json(userCopy);
+                            if(user['jobsID']){
+                                if(user['jobsID'][0]){
+                                    var jobId = user.jobsID[0];
+                                    Job.find({_id:jobId}, function (err, job) {
+                                        if(err){
+                                            res.send(err);
+                                        }else{
+                                            userCopy.job = job;
+                                            res.json(userCopy);
+                                        }
+                                    })
+
+                                }else{
+                                    res.json(userCopy);
+                                }
+
+                            }else{
+                                res.json(userCopy);
+                            }
                         }else{
                             res.send(err);
                         }
@@ -158,6 +177,91 @@ module.exports = function(app, router) {
                         }else{
                             ans.error = true;
                             ans.message = "Eroare la actualizare. Verificati datele";
+                        }
+                        res.json(ans);
+                    });
+                }
+            }
+        });
+
+    router.route('/userJob')
+
+        .post(function (req, res) {
+            var ans = {error:false};
+            var job = req.body.job;
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var numberPatt = new XRegExp('^[0-9]{1,5}$');
+            if(!numberPatt.test(job.street_number.toString())) {
+                ans.error = true;
+                ans.message = "Invalid street number";
+            }
+            if(!namePatt.test(job.street_name.toString())) {
+                ans.error = true;
+                ans.message = "Invalid street name";
+            }
+            if(!namePatt.test(job.job_name.toString())) {
+                ans.error = true;
+                ans.message = "Invalid job name";
+            }
+            if(!isNaN(parseInt(job.job_type))){
+                if(parseInt(job.job_type)<1 || parseInt(job.job_type>4)){
+                    ans.error = true;
+                    ans.message = "Invalid job type";
+                }
+            }else{
+                ans.error = true;
+                ans.message = "Invalid job type";
+            }
+            if(ans.error){
+                res.json(ans);
+            }else{
+                if(job._id==0){
+                    //create new
+                    var newJob = new Job({
+                        job_type: job.job_type,
+                        job_name: job.job_name,
+                        street_name: job.street_name,
+                        street_number: job.street_number,
+                        postal_code: job.postal_code,
+                        job_address: job.job_address
+                    });
+                    newJob.save(function (err, inserted) {
+                        if(err){
+                            ans.error = true;
+                            ans.message = "Error creating job. Please check field values";
+                            res.json(ans);
+                        }else{
+                            //update user to point to new job
+                            console.log(inserted);
+                            var idInserted = inserted._id.toString();
+                            var upd = User.update({_id:req.user._id}, {jobsID: [idInserted]}, function () {
+                                if(!upd._castError){
+                                    ans.error = false;
+                                    ans.message = "Locul de munca a fost adaugat";
+                                }else{
+                                    ans.error = true;
+                                    ans.message = "Eroare la adaugarea locului de munca. Va rugam sa verificati datele";
+                                }
+                                res.json(ans);
+                            });
+                        }
+                    });
+                }else{
+                    //update existing
+                    var upd = Job.update({_id:job._id}, {
+                        job_type: job.job_type,
+                        job_name: job.job_name,
+                        street_name: job.street_name,
+                        street_number: job.street_number,
+                        postal_code: job.postal_code,
+                        job_address: job.job_address
+                    }, function () {
+                        if(!upd._castError){
+                            ans.error = false;
+                            ans.message = "Locul de munca a fost adaugat";
+                        }else{
+                            ans.error = true;
+                            ans.message = "Eroare la adaugarea locului de munca. Va rugam sa verificati datele";
                         }
                         res.json(ans);
                     });

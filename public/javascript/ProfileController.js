@@ -9,11 +9,11 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
 
     $scope.county = {};
     $scope.city = {};
+    $scope.jobTypes = ["Spital","CMI","Policlinica","Farmacie"];
 
     ProfileService.getUserData.query().$promise.then(function (resp) {
 
         $scope.userData = resp;
-        console.log(resp);
 
         var allNames = resp.name.split(" ");
         $scope.firstName = allNames[0];
@@ -22,6 +22,20 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.newsletter = resp.subscription == 1;
         $scope.image = imagePre + resp.image_path;
         $scope.userTherapeuticAreas = resp['therapeutic-areasID'];
+        console.log(resp);
+        if(resp.job){
+            $scope.job = resp.job[0];
+        }else{
+            $scope.job = {
+                _id: 0,
+                job_type: "",
+                job_name: "",
+                street_name: "",
+                street_number: "",
+                postal_code: "",
+                job_address: ""
+            };
+        }
 
         //select user's county and city
 
@@ -144,7 +158,6 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
             toSend.county = this.county.selected._id;
             toSend.city = this.city.selected._id;
             ProfileService.uploadProfile.save({newData:toSend}).$promise.then(function (resp) {
-                console.log(resp.message);
                 $scope.userProfileAlert.message = resp.message;
                 if(resp.error){
                     $scope.userProfileAlert.type = "danger";
@@ -153,6 +166,23 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 }
                 $scope.userProfileAlert.newAlert = true;
             });
+        }
+    };
+
+    //user job
+    $scope.submitJobForm = function (isValid) {
+        if(isValid){
+            switch(this.selectedJob){
+                case("Spital"): this.job['job_type']=1; break;
+                case("CMI"): this.job['job_type']=2; break;
+                case("Policlinica"): this.job['job_type']=3; break;
+                case("Farmacie"): this.job['job_type']=4; break;
+                default: this.job['job_type']=null; break;
+            }
+            ProfileService.uploadJob.save({job: this.job}).$promise.then(function (resp) {
+                console.log(resp.message);
+            });
+            console.log(this.job);
         }
     };
 
