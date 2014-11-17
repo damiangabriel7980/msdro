@@ -230,15 +230,23 @@ module.exports = function(app, router) {
                 }
                 else{
                     var answers=[];
+                    var test=[];
                     Answers.find({},function(err,cont2){
                             answers=cont2;
                         //console.log(cont);
                         //console.log(answers);
                         //console.log(x);
                         var qa={};
-                        qa["questions"]=cont;
-                        qa["answers"]=answers;
-                        res.json(qa);
+
+                        Teste.find({questionsID: {$in: y}},function(err,cont3){
+
+                            qa["questions"]=cont;
+                            qa["answers"]=answers;
+                            test=cont3;
+                            qa["test"]=test;
+                            res.json(qa);
+                        })
+
                         });
 
                 }

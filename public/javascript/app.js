@@ -3,7 +3,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.router',
         'cloudAdminControllers',
         'cloudAdminServices',
-        'ui.calendar'
+        'ui.calendar',
+        'timer'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

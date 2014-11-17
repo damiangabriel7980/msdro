@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 05.11.2014.
  */
-cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce', '$modalInstance','$location','$state', function($scope,$rootScope,testeService,$stateParams,$sce,$modalInstance,$location,$state) {
+cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce', '$modalInstance','$location','$state','$timeout', function($scope,$rootScope,testeService,$stateParams,$sce,$modalInstance,$location,$state,$timeout) {
     testeService.getByTest.query({id:$stateParams.id}).$promise.then(function(result){
         $scope.questions=result["questions"];
         $scope.newQuestions = [];
@@ -19,22 +19,30 @@ cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootSco
                     $scope.answersFiltered.push(result["answers"][j]);
             }
         }
+        if($scope.newQuestions.length==1)
+            $scope.hidef='show';
+        else
+            $scope.hidef='hide';
+       $scope.countdownT=parseInt(result["test"][0].time*60);
     });
+    $timeout(function() {
+        $scope.par=$scope.countdownT;
+        $("timer").start;
+    }, 3000);
     $scope.contor=0;
-    $scope.countdown=100;
     $scope.clasa='hide';
     $scope.hideNext='show';
-    $scope.hideFinish='hide';
+    $scope.hideFinish=$scope.hidef;
     $scope.nextQuestion= function(){
         $scope.clasa='show';
         $scope.contor++;
-        if($scope.contor===$scope.newQuestions.length) {
+        if($scope.contor===$scope.newQuestions.length-1) {
                $scope.hideFinish = 'show';
             $scope.hideNext='hide';
         }
     }
     $scope.previousQuestion= function(){
-        if($scope.contor===$scope.newQuestions.length)
+        if($scope.contor===$scope.newQuestions.length-1)
         {
             $scope.hideFinish='hide';
             $scope.hideNext='show';

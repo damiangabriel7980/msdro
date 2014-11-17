@@ -1,26 +1,18 @@
-<div class="row">
-    <div class="col-xs-6">
-        <p><span id="info-question" class="label label-info"></span></p>
+<div id="modal-content">
+    <div class="modal-header" >
+        {{newQuestions[contor].text}}
+        <div class="pull-right"><timer ng-attr-countdown="par" autostart="false" max-time-unit="'minute'" interval="1000">{{mminutes}} minute{{minutesS}}, {{sseconds}} second{{secondsS}}</timer></div>
     </div>
-
-    <div class="col-xs-6">
-        <p class="pull-right"><timer interval="1000" countdown="countdown">{{countdown}}</timer></p>
-    </div>
-</div>
-<hr class="margintop5px marginbottom10px">
-<div id="quiz-content">
-    <div id="question" class="marginbottom10px">
-
-     <h4 class="pull-left">{{newQuestions[contor].text}}</h4>
-
+    <div id="question" class="marginbottom10px modal-body">
+    <div>
     <span ng-repeat="ans in answersFiltered" ng-if="newQuestions[contor]['answersID'].indexOf(ans._id) > -1"><input type="checkbox" >{{ans.text}}
         </span>
+        </div>
     </div>
 </div>
-</div>
-
 <div class="modal-footer">
     <a class="btn pull-left btn-primary" ng-class="clasa" ng-click="previousQuestion()">Back</a>
-    <a class="btn pull-right btn-primary" ng-class="hideNext" ng-click="nextQuestion()">Next</a>
+    <a class="btn pull-right btn-primary" ng-if="newQuestions.length>1" ng-class="hideNext" ng-click="nextQuestion()">Next</a>
     <a class="btn pull-right btn-primary" ng-class="hideFinish" ng-click="finishJob()" ui-sref="elearning.teste">Finish</a>
+</div>
 </div>
