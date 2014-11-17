@@ -20,12 +20,8 @@
                     </div>
                 </div>
          </div>
-<div calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="realEvents" class="well col-xs-8 well-content col-xs-offset-1"></div>
+<div id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="realEvents" class="well col-xs-8 well-content col-xs-offset-1"></div>
         </div>
 </div>
-<div id="eventContent" title="Event Details" style="display:none;">
-    Start: <span id="startTime"></span><br>
-    End: <span id="endTime"></span><br><br>
-    <p id="eventInfo"></p>
-</div><ng-view></ng-view>
+<ng-view></ng-view>
 </body>

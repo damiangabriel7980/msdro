@@ -12,11 +12,14 @@ var date = new Date();
        {
            $scope.eventsS[i] = {id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: new Date($scope.events[i].end),allDay: false, color: 'green',className: 'events'};
        }
-        $scope.realEvents=[$scope.eventsS];
-         $scope.eventRender = function(event, element) {
-             element.find('.fc-event-title').css({textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', width: 'inherit', display: 'block'});
-             element.attr('title', event.title);
-         };
+
+         $scope.realEvents=[$scope.eventsS];
+         $scope.eventRender = function(data, event, view){
+
+             $('.fc-event-inner').tooltip({text:''});
+             $('.fc-event-inner').attr('title',data.title);
+             $('.fc-event-inner').tooltip({text:data.title});
+         }
         $scope.uiConfig = {
             calendar: {
                 eventSources: $scope.realEvents,
@@ -27,22 +30,7 @@ var date = new Date();
                     center: 'title',
                     right: 'today prev,next'
                 },
-                eventRender: function(event, element) {
-                    element.qtip({
-                        content: {
-                            text: event.title
-                        },
-                        position: {
-                            my: 'left center',
-                            at: 'right center'
-                        },
-                        show: {
-                            solo: true,
-                            event: 'mouseover'
-                        },
-                        hide: 'click mouseout'
-                    });
-                },
+                eventMouseover: $scope.eventRender,
                 eventClick:function(event){
                     $state.go("calendar.calendarDetails", {"id": event.id})
                 }
