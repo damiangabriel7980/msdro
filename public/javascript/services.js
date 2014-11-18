@@ -37,6 +37,23 @@ cloudAdminServices.factory('ProfileService', ['$resource', function($resource){
     }
 }]);
 
+cloudAdminServices.factory('HomeService', ['$resource', function($resource){
+    return {
+        getUserEvents: $resource('api/userHomeEvents/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getUserNews: $resource('api/userHomeNews/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getUserScientificNews: $resource('api/userHomeScientific/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getUserElearning: $resource('api/userHomeElearning/', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
+
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     return {
         getAll: $resource('api/products/', {}, {

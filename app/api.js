@@ -155,14 +155,16 @@ module.exports = function(app, router) {
             var newData = req.body.newData;
             var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
+            //check name
             if((!namePatt.test(newData.firstName.toString())) || (!namePatt.test(newData.lastName.toString()))){
                 ans.error = true;
                 ans.message = "Numele si prenumele trebuie sa contina doar caractere, minim 3";
                 res.json(ans);
             }else{
+                //check phone number
                 if(!phonePatt.test(newData.phone.toString())){
                     ans.error = true;
-                    ans.message = "Invalid phone number";
+                    ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
                     res.json(ans);
                 }else{
                     var upd = User.update({_id:req.user._id}, {
@@ -353,6 +355,41 @@ module.exports = function(app, router) {
                     }
                 }
             }
+        });
+
+    router.route('/userHomeEvents')
+        .get(function (req,res) {
+            Events.find({groupsID: {$in: req.user.groupsID}}, function (err, events) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.json(events);
+                }
+            });
+        });
+
+    router.route('/userHomeNews')
+
+        .get(function(req, res) {
+            var userGr = req.user.groupsID;
+            Content.find({type: { $in: [1,2]}, groupsID: { $in: userGr}}).sort({last_updated: -1}).limit(4).exec(function (err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/userHomeScientific')
+
+        .get(function(req, res) {
+            var userGr = req.user.groupsID;
+            Content.find({type: 3, groupsID: { $in: userGr}}).sort({last_updated: -1}).limit(4).exec(function (err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                res.json(cont);
+            });
         });
 
     router.route('/products')

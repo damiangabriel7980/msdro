@@ -39,3 +39,21 @@
 .articlesStyles .paddingTop10 {
   padding-top: 10px;
 }
+.noPadding {
+  padding: 0;
+}
+.homeStyles .wellContainer {
+  padding: 0 15px 0 0;
+}
+.homeStyles .wellContainer .well .title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #0000ff;
+}
+.homeStyles .wellContainer .well .header {
+  font-size: 14px;
+}
+.homeStyles .wellContainer .well .readMore {
+  font-size: 13px;
+  color: #0000ff;
+}

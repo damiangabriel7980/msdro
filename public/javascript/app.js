@@ -13,7 +13,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
     $stateProvider
         .state('home',{
             url: '/',
-            templateUrl: 'partials/home.ejs'
+            templateUrl: 'partials/home.ejs',
+            controller: 'HomeController'
         })
         .state('noutati', {
             //abstract: true,
@@ -173,6 +174,7 @@ cloudAdminApp.run(
             //amazon service paths
             $rootScope.pathAmazonResources = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/";
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/msddev-test/";
+            $rootScope.articleDefaultImage = $rootScope.pathAmazonDev+"resources/article.jpg";
 
             //profile modal
             $rootScope.showProfile = function(){
