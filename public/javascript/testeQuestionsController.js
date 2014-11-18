@@ -25,10 +25,14 @@ cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootSco
             $scope.hidef='hide';
        $scope.countdownT=parseInt(result["test"][0].time*60);
     });
+
+
     $timeout(function() {
         $scope.par=$scope.countdownT;
-        $("timer").start;
-    }, 3000);
+        $scope.$broadcast('timer-set-countdown', $scope.par);
+        $scope.$broadcast('timer-start');
+    }, 2000);
+    //$scope.par=200;
     $scope.contor=0;
     $scope.clasa='hide';
     $scope.hideNext='show';
