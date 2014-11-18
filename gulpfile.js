@@ -88,7 +88,7 @@ gulp.task('migrateDB', function () {
         password : '',
         typeCast : function (field, next) {
             if (field.type == 'BIT' && field.length == 1) {
-                return (field.string() == '1'); // 1 = true, 0 = false
+                return (field.buffer()[0] == 1); // 1 = true, 0 = false
             }
             return next();
         }
