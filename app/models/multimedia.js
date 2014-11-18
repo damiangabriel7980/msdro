@@ -4,6 +4,8 @@
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
+//type: 1 = video, 2 = slide
+
 var multimediaSchema		= new Schema({
     author : String,
     description : String,
@@ -20,4 +22,4 @@ var multimediaSchema		= new Schema({
     type : Number
 });
 
-module.exports = mongoose.model('multimedia', multimediaSchema);
+module.exports = mongoose.model('multimedia', multimediaSchema, 'multimedia');

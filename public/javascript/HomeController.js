@@ -1,11 +1,13 @@
 cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce',function($scope, $rootScope, HomeService, $sce) {
 
     $scope.imagePre = $rootScope.pathAmazonDev;
+    $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
+    $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/widgets/merckBox.html');
+    $scope.merckManualImage = $rootScope.merckManualImage;
 
     //------------------------------------------------------------------------------------------------- get all content
     HomeService.getUserEvents.query().$promise.then(function (resp) {
         $scope.events = resp;
-        console.log(resp);
     });
     HomeService.getUserNews.query().$promise.then(function (resp) {
         $scope.news = resp;
@@ -15,7 +17,6 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     });
     HomeService.getUserMultimedia.query().$promise.then(function (resp) {
         $scope.multimedia = resp;
-        console.log(resp);
     });
 
     //------------------------------------------------------------------------------------------------ useful functions
@@ -26,5 +27,9 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.createHeader = function (text,length) {
         return htmlToPlainText(text).substring(0,length)+"...";
     };
+
+    $scope.toDate = function (ISOdate) {
+        return new Date(ISOdate);
+    }
 
 }]);

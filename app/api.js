@@ -359,11 +359,22 @@ module.exports = function(app, router) {
 
     router.route('/userHomeEvents')
         .get(function (req,res) {
-            Events.find({groupsID: {$in: req.user.groupsID}, start: {$gte: new Date()}, enable: true}).sort({start: 1}).exec(function (err, events) {
+            Events.find({groupsID: {$in: req.user.groupsID}, start: {$gte: new Date()}, enable: {$ne: false}}).sort({start: 1}).exec(function (err, events) {
                 if(err){
                     res.send(err);
                 }else{
                     res.json(events);
+                }
+            });
+        });
+
+    router.route('/userHomeMultimedia')
+        .get(function (req,res) {
+            Multimedia.find({groupsID: {$in: req.user.groupsID}, enable: {$ne: false}}, function (err, multimedia) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.json(multimedia);
                 }
             });
         });
