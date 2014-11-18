@@ -9,10 +9,12 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     });
     HomeService.getUserNews.query().$promise.then(function (resp) {
         $scope.news = resp;
-        console.log(resp);
     });
     HomeService.getUserScientificNews.query().$promise.then(function (resp) {
         $scope.scientificNews = resp;
+    });
+    HomeService.getUserMultimedia.query().$promise.then(function (resp) {
+        $scope.multimedia = resp;
         console.log(resp);
     });
 

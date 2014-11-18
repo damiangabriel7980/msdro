@@ -48,7 +48,7 @@ cloudAdminServices.factory('HomeService', ['$resource', function($resource){
         getUserScientificNews: $resource('api/userHomeScientific/', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        getUserElearning: $resource('api/userHomeElearning/', {}, {
+        getUserMultimedia: $resource('api/userHomeMultimedia/', {}, {
             query: { method: 'GET', isArray: true }
         })
     }

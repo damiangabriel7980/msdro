@@ -23,7 +23,6 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.newsletter = resp.subscription == 1;
         $scope.image = imagePre + resp.image_path;
         $scope.userTherapeuticAreas = resp['therapeutic-areasID'];
-        console.log(resp);
         if(resp.job){
             $scope.job = resp.job[0];
         }else{
