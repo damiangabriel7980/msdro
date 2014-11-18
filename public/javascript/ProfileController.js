@@ -17,7 +17,8 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
 
         var allNames = resp.name.split(" ");
         $scope.firstName = allNames[0];
-        $scope.lastName = allNames[1];
+        allNames.splice(0,1);
+        $scope.lastName = allNames.join(" ");
         $scope.phone = resp.phone;
         $scope.newsletter = resp.subscription == 1;
         $scope.image = imagePre + resp.image_path;
@@ -144,8 +145,6 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     //------------------------------------------------------------------------------------------------ form submissions
 
     //user profile
-
-    //user profile alert messages
     $scope.userProfileAlert = {newAlert:false, type:"", message:""};
     $scope.submitProfileForm = function (isValid) {
         if(isValid){
@@ -170,6 +169,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     };
 
     //user job
+    $scope.userJobAlert = {newAlert:false, type:"", message:""};
     $scope.submitJobForm = function (isValid) {
         if(isValid){
             switch(this.selectedJob){
@@ -180,9 +180,53 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 default: this.job['job_type']=null; break;
             }
             ProfileService.uploadJob.save({job: this.job}).$promise.then(function (resp) {
-                console.log(resp.message);
+                $scope.userJobAlert.message = resp.message;
+                if(resp.error){
+                    $scope.userJobAlert.type = "danger";
+                }else{
+                    $scope.userJobAlert.type = "success";
+                }
+                $scope.userJobAlert.newAlert = true;
             });
-            console.log(this.job);
+        }
+    };
+
+    //user change email
+    $scope.userChangeMailAlert = {newAlert:false, type:"", message:""};
+    $scope.submitEmailForm = function (isValid) {
+        if(isValid){
+            var toSend = {};
+            toSend.mail = this.changeMail;
+            toSend.pass = this.changePass;
+            ProfileService.changeEmail.save({userData: toSend}).$promise.then(function (resp) {
+                $scope.userChangeMailAlert.message = resp.message;
+                if(resp.error){
+                    $scope.userChangeMailAlert.type = "danger";
+                }else{
+                    $scope.userChangeMailAlert.type = "success";
+                }
+                $scope.userChangeMailAlert.newAlert = true;
+            });
+        }
+    };
+
+    //user change pass
+    $scope.userChangePassAlert = {newAlert:false, type:"", message:""};
+    $scope.submitChangePassForm = function (isValid) {
+        if(isValid){
+            var toSend = {};
+            toSend.oldPass = this.oldPass;
+            toSend.newPass = this.newPass;
+            toSend.confirmPass = this.confirmPass;
+            ProfileService.changePassword.save({userData: toSend}).$promise.then(function (resp) {
+                $scope.userChangePassAlert.message = resp.message;
+                if(resp.error){
+                    $scope.userChangePassAlert.type = "danger";
+                }else{
+                    $scope.userChangePassAlert.type = "success";
+                }
+                $scope.userChangePassAlert.newAlert = true;
+            });
         }
     };
 

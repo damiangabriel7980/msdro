@@ -12,6 +12,8 @@ var Job = require('./models/jobs');
 
 var XRegExp = require('xregexp').XRegExp;
 
+var SHA256   = require('crypto-js/sha256');
+
 var s3 = require('s3');
 var s3Client = s3.createClient({
     s3Options:{
@@ -151,12 +153,11 @@ module.exports = function(app, router) {
         .post(function (req, res) {
             var ans = {};
             var newData = req.body.newData;
-            console.log(newData);
             var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
             if((!namePatt.test(newData.firstName.toString())) || (!namePatt.test(newData.lastName.toString()))){
                 ans.error = true;
-                ans.message = "Invalid name";
+                ans.message = "Numele si prenumele trebuie sa contina doar caractere, minim 3";
                 res.json(ans);
             }else{
                 if(!phonePatt.test(newData.phone.toString())){
@@ -193,24 +194,24 @@ module.exports = function(app, router) {
             var numberPatt = new XRegExp('^[0-9]{1,5}$');
             if(!numberPatt.test(job.street_number.toString())) {
                 ans.error = true;
-                ans.message = "Invalid street number";
+                ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
             }
             if(!namePatt.test(job.street_name.toString())) {
                 ans.error = true;
-                ans.message = "Invalid street name";
+                ans.message = "Numele strazii trebuie sa contina doar litere, minim 3";
             }
             if(!namePatt.test(job.job_name.toString())) {
                 ans.error = true;
-                ans.message = "Invalid job name";
+                ans.message = "Locul de munca trebuie sa contina doar litere, minim 3";
             }
             if(!isNaN(parseInt(job.job_type))){
                 if(parseInt(job.job_type)<1 || parseInt(job.job_type>4)){
                     ans.error = true;
-                    ans.message = "Invalid job type";
+                    ans.message = "Selectati un tip de loc de munca";
                 }
             }else{
                 ans.error = true;
-                ans.message = "Invalid job type";
+                ans.message = "Selectati un tip de loc de munca";
             }
             if(ans.error){
                 res.json(ans);
@@ -228,16 +229,15 @@ module.exports = function(app, router) {
                     newJob.save(function (err, inserted) {
                         if(err){
                             ans.error = true;
-                            ans.message = "Error creating job. Please check field values";
+                            ans.message = "Eroare la crearea locului de munca. Va rugam verificati campurile";
                             res.json(ans);
                         }else{
                             //update user to point to new job
-                            console.log(inserted);
                             var idInserted = inserted._id.toString();
                             var upd = User.update({_id:req.user._id}, {jobsID: [idInserted]}, function () {
                                 if(!upd._castError){
                                     ans.error = false;
-                                    ans.message = "Locul de munca a fost adaugat";
+                                    ans.message = "Locul de munca a fost salvat";
                                 }else{
                                     ans.error = true;
                                     ans.message = "Eroare la adaugarea locului de munca. Va rugam sa verificati datele";
@@ -265,6 +265,92 @@ module.exports = function(app, router) {
                         }
                         res.json(ans);
                     });
+                }
+            }
+        });
+
+    router.route('/changeEmail')
+        .post(function (req, res) {
+            var ans = {error: true, message:"Server error"};
+            var userData = req.body.userData;
+            //check if mail is valid
+            var mailPatt = new XRegExp('^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$', 'i');
+            if(!mailPatt.test(userData.mail.toString())){
+                ans.error = true;
+                ans.message = "E-mail invalid";
+                res.json(ans);
+            }else{
+                //check if mail already exists
+                User.find({username: userData.mail}, function(err, result){
+                    if(err){
+                        ans.error = true;
+                        ans.message = "Eroare la schimbarea adresei de e-mail";
+                        res.json(ans);
+                    }else{
+                        if(result.length == 0){
+                            //check password
+                            if(SHA256(userData.pass).toString() === req.user.password){
+                                var upd = User.update({_id:req.user._id}, {username: userData.mail}, function () {
+                                    if(!upd._castError){
+                                        ans.error = false;
+                                        ans.message = "Adresa de e-mail a fost modificata";
+                                        res.json(ans);
+                                    }else{
+                                        ans.error = true;
+                                        ans.message = "Eroare la schimbarea adresei de e-mail";
+                                        res.json(ans);
+                                    }
+                                });
+                            }else{
+                                ans.error = true;
+                                ans.message = "Parola incorecta";
+                                res.json(ans);
+                            }
+                        }else{
+                            ans.error = true;
+                            ans.message = "Acest e-mail este deja folosit";
+                            res.json(ans);
+                        }
+                    }
+                });
+            }
+        });
+
+    router.route('/changePassword')
+        .post(function (req, res) {
+            var ans = {error: true, message:"Server error"};
+            var userData = req.body.userData;
+            //check if password is correct
+            if(SHA256(userData.oldPass).toString() !== req.user.password){
+                ans.error = true;
+                ans.message = "Parola nu este corecta";
+                res.json(ans);
+            }else{
+                //check if new password length is valid
+                if(userData.newPass.toString().length < 6 || userData.newPass.toString.length > 32){
+                    ans.error = true;
+                    ans.message = "Parola noua trebuie sa contina intre 6 si 32 de caractere";
+                    res.json(ans);
+                }else{
+                    //check if passwords match
+                    if(userData.newPass !== userData.confirmPass){
+                        ans.error = true;
+                        ans.message = "Parolele nu corespund";
+                        res.json(ans);
+                    }else{
+                        //change password
+                        var upd = User.update({_id:req.user._id}, {password: SHA256(userData.newPass).toString()}, function () {
+                            if(!upd._castError){
+                                ans.error = false;
+                                ans.message = "Parola a fost schimbata";
+                                res.json(ans);
+                            }else{
+                                ans.error = true;
+                                ans.message = "Eroare la schimbarea parolei";
+                                res.json(ans);
+                            }
+                        });
+                    }
                 }
             }
         });

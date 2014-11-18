@@ -27,6 +27,12 @@ cloudAdminServices.factory('ProfileService', ['$resource', function($resource){
         }),
         uploadJob: $resource('api/userJob/:job', {}, {
             save: { method: 'POST'}
+        }),
+        changeEmail: $resource('api/changeEmail/:userData', {}, {
+            save: { method: 'POST'}
+        }),
+        changePassword: $resource('api/changePassword/:userData', {}, {
+            save: { method: 'POST'}
         })
     }
 }]);
