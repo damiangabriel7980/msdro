@@ -13,6 +13,10 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
 
     $scope.allAreas=1;
     $scope.filtProd=[];
+    $scope.lmt=8;
+    $scope.increaseLimit=function(){
+        $scope.lmt+=8;
+    }
     $scope.firstLetters=[];
     ProductService.getByArea.query({id:$stateParams.id}).$promise.then(function(result){
          $scope.products = result;

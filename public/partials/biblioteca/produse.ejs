@@ -4,7 +4,7 @@
 </head>
 
 <body>
-<div class="col-xs-offset-1" id="content">
+<div class="col-xs-special" id="content">
     <div class="row margintop20px">
         <div class="col-xs-2" >
             <h4 class="h-title">Arii terapeutice</h4>
@@ -16,7 +16,6 @@
                     <li ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'" ui-sref="biblioteca.produse.productsByArea({id:area2._id})">
                         {{area2.name}}
                         </li>
-                    <!--<li>ceva</li>-->
                 </ul>
                 </li>
                 </ul>

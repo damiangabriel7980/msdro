@@ -1,8 +1,8 @@
-<div class="articles col-xs-9">
-    <span class="col-xs-3" ng-repeat="prod in products | orderBy:'name'">
+<div class="col-xs-10">
+    <ul class="thumbnails products" style="list-style: none">
 
-        <div class="thumbnail">
-            <div class="caption">
+        <li class="col-xs-3" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
+            <div class="thumbnail">
                 <img src="{{amazon + prod.image_path}}" alt="{{prod.name}}" height="150px" width="150px"/>
                 <h4><a href="#"></a>{{prod.name}}</h4>
 
@@ -10,11 +10,12 @@
                 <button class="button btn-info pull-right" ui-sref="biblioteca.produse.prodById({id:prod._id})">Detalii produs</button>
                 </p>
             </div>
-        </div>
-    </span>
+            <br />
+        </li>
 
+    </ul>
 </div>
-<div class=" col-xs-offset-1 col-xs-2">
+<div class="col-xs-2">
     <ul class="nav nav-list">
         <li class="active" ng-click="reset()">A - Z</li>
         <li class="divider"></li>
@@ -24,4 +25,7 @@
         </li>
 
     </ul>
+</div>
+<div style="clear: both;margin:0 auto;" align="center">
+    <button class="button btn-info" ng-click="increaseLimit()">Mai multe produse</button>
 </div>
