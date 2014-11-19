@@ -17,20 +17,6 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/home.ejs',
             controller: 'HomeController'
         })
-        .state('home.merckManual',{
-            parent:'home',
-            url: '/merckManual',
-            onEnter: ['$modal', function($modal) {
-                $modal.open({
-                    templateUrl: 'partials/modals/merckManual.html',
-                    backdrop: true,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller: 'MerckManualController'
-                })
-            }]
-
-        })
         .state('noutati', {
             //abstract: true,
             url: '/noutati/:articleType',

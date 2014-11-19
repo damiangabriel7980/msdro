@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', function($scope, $rootScope, HomeService, $sce) {
+cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal', function($scope, $rootScope, HomeService, $sce, $modal) {
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
@@ -30,6 +30,17 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     $scope.toDate = function (ISOdate) {
         return new Date(ISOdate);
-    }
+    };
+
+    //merck modal
+    $rootScope.showMerckManual = function(){
+        $modal.open({
+            templateUrl: 'partials/modals/merckManual.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'MerckManualController',
+            windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html'
+        });
+    };
 
 }]);

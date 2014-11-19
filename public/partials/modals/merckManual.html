@@ -1,9 +1,10 @@
 <div class="modal-header">
     <div class="modal-title"><h3>Manualul merck</h3></div>
 </div>
-<div class="modal-body">
-   <ng-pdf templateUrl="/partials/pdfViewer.html">
-   </ng-pdf>
+<div class="modal-body col-md-12" style="height: 80%;">
+    <div class="col-md-12" style="height: 100%;">
+        <ng-pdf scale="4" template-url="partials/modals/merckPdfViewer.html"></ng-pdf>
+    </div>
 </div>
 <div class="modal-footer">
     <a class="btn btn-default" ng-click="closeModal()">Inchide</a>
