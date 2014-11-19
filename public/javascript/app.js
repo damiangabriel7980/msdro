@@ -5,7 +5,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'cloudAdminServices',
         'ui.calendar',
         'ngSanitize',
-        'ui.select'
+        'ui.select',
+        'pdf'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -15,6 +16,20 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '/',
             templateUrl: 'partials/home.ejs',
             controller: 'HomeController'
+        })
+        .state('home.merckManual',{
+            parent:'home',
+            url: '/merckManual',
+            onEnter: ['$modal', function($modal) {
+                $modal.open({
+                    templateUrl: 'partials/modals/merckManual.html',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'MerckManualController'
+                })
+            }]
+
         })
         .state('noutati', {
             //abstract: true,

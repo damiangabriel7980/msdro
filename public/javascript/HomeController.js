@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce',function($scope, $rootScope, HomeService, $sce) {
+cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', function($scope, $rootScope, HomeService, $sce) {
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
