@@ -109,6 +109,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                 console.log('Open modal');
                 $modal.open({
                     templateUrl: 'partials/elearning/multimediaDetails.ejs',
+                    windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html',
                     backdrop: 'static',
                     keyboard: false,
                     size: 'lg',

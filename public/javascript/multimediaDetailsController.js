@@ -12,6 +12,10 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
 
     $scope.amazon = $rootScope.pathAmazonDev;
 
+    $scope.getVideoSrc = function(filepath){
+        return $sce.trustAsResourceUrl($rootScope.pathAmazonDev+filepath)
+    };
+
     $scope.okk = function () {
         $modalInstance.close();
     };
