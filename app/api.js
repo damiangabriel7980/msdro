@@ -11,6 +11,7 @@ var Job = require('./models/jobs');
 var Teste=require('./models/quizes');
 var Questions=require('./models/questions');
 var Answers = require('./models/answers');
+var Slides = require('./models/slides');
 
 var XRegExp = require('xregexp').XRegExp;
 
@@ -533,32 +534,16 @@ module.exports = function(app, router) {
         });
     router.route('/multimedia/multimediaByArea/:id')
         .get(function(req,res){
-            var x = [];
-            x.push(req.params.id);
-            console.log(x);
-            if (x[0] != 0) {
-                //console.log(x[0]);
-                Multimedia.find({'therapeutic-areasID': {$in : x }}, function (err, cont) {
-                    if (err) {
-                        //console.log(err);
-                        res.json(err);
-                        return;
-                    }
-                    //console.log(cont);
-                    res.json(cont);
-                });
-            }
-            else {
-                Multimedia.find({},function (error, result) {
-                    if (error) {
-                        //console.log(error);
-                        res.json(error);
-                        return;
-                    }
-                    console.log(result);
-                    res.json(result);
-                });
-            }
+            var findObj = {};
+            if(req.params.id!=0) findObj = {'therapeutic-areasID': {$in: [req.params.id]}};
+            //find all by area
+            Multimedia.find(findObj, function (err, multimedia) {
+                if (err) {
+                    res.json(err);
+                }else{
+                    res.json(multimedia);
+                }
+            });
         });
     router.route('/teste')
         .get(function(req,res){

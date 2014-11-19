@@ -22,8 +22,9 @@
     "angular-pdf": "~0.3.2",
     "angular-ui-calendar": "latest",
     "angular-timer":"latest",
-      "qtip2":"latest",
-      "perfect-tooltip":"latest"
+    "qtip2":"latest",
+    "perfect-tooltip":"latest",
+    "video-js":"latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

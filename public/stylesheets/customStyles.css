@@ -60,3 +60,6 @@
 .homeStyles .wellContainer .well .day {
   font-size: 30px;
 }
+.therapeuticAreas li {
+  cursor: pointer;
+}

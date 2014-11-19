@@ -175,10 +175,15 @@ cloudAdminApp.run(
             $rootScope.$stateParams = $stateParams;
 
             //amazon service paths
-            $rootScope.pathAmazonResources = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/";
+            //pathAmazonDev needs to be changed in production
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/msddev-test/";
-            $rootScope.articleDefaultImage = $rootScope.pathAmazonResources+"article.jpg";
+            $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
+
             $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merckManual.jpg";
+
+            $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
+            $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
+            $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
 
             //profile modal
             $rootScope.showProfile = function(){
