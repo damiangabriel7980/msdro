@@ -2,13 +2,15 @@ var Content     = require('./models/articles');
 var Products    = require('./models/products');
 var Therapeutic_Area = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
-var bodyParser	= require('body-parser');
 var Events = require('./models/events');
 var Counties = require('./models/counties');
 var Cities = require('./models/cities');
 var Multimedia = require('./models/multimedia');
 var User = require('./models/user');
 var Job = require('./models/jobs');
+var Teste=require('./models/quizes');
+var Questions=require('./models/questions');
+var Answers = require('./models/answers');
 
 var XRegExp = require('xregexp').XRegExp;
 
@@ -535,14 +537,14 @@ module.exports = function(app, router) {
             x.push(req.params.id);
             console.log(x);
             if (x[0] != 0) {
-                console.log(x[0]);
-                Multimedia.find({'enable': false}, function (err, cont) {
+                //console.log(x[0]);
+                Multimedia.find({'therapeutic-areasID': {$in : x }}, function (err, cont) {
                     if (err) {
-                        console.log(err);
+                        //console.log(err);
                         res.json(err);
                         return;
                     }
-                    console.log(cont);
+                    //console.log(cont);
                     res.json(cont);
                 });
             }
@@ -560,25 +562,49 @@ module.exports = function(app, router) {
         });
     router.route('/teste')
         .get(function(req,res){
-            teste.find(function (error, result) {
+            Teste.find(function (error, result) {
                 if (error) {
                     res.send(error);
                     return ;
                 } else {
-                    console.log(result);
-                    res.send(result);
+                    //console.log(result);
+                    res.json(result);
                 }
             });
         });
     router.route('/teste/:id')
         .get(function(req,res) {
-            teste.findById(req.params.id, function (err, cont) {
+            var y = req.params.id.split(",");
+            console.log(y);
+            Questions.find({_id: {$in : y} }, function (err, cont) {
                 if (err) {
+                    console.log(err);
                     res.send(err);
                     return;
                 }
-                console.log(cont);
-                res.send(cont);
+                else{
+                    var answers=[];
+                    var test=[];
+                    Answers.find({},function(err,cont2){
+                            answers=cont2;
+                        //console.log(cont);
+                        //console.log(answers);
+                        //console.log(x);
+                        var qa={};
+
+                        Teste.find({questionsID: {$in: y}},function(err,cont3){
+
+                            qa["questions"]=cont;
+                            qa["answers"]=answers;
+                            test=cont3;
+                            qa["test"]=test;
+                            res.json(qa);
+                        })
+
+                        });
+
+                }
+
             });
         });
     app.use('/api', router);

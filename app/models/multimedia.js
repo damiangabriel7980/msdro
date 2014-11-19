@@ -16,10 +16,10 @@ var multimediaSchema		= new Schema({
     points : Number,
     quizesID : Array,
     run_time: Number,
-    'therapeutic-areasID' : Array,
+    "therapeutic-areasID" : Array,
     thumbnail_path : String,
     title : String,
     type : Number
 });
 
-module.exports = mongoose.model('multimedia', multimediaSchema, 'multimedia');
+module.exports = mongoose.model('multimedia', multimediaSchema,'multimedia');
