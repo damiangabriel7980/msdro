@@ -143,7 +143,7 @@ gulp.task('migrateDB', function () {
         ["presentation","user_group","presentation","id","user_group_id",false],
         ["product","user_group","product_user_group","product_id","user_group_id",false],
         ["quiz","question","question","quiz_id","id",false],
-        ["presentation","slide","slide","presentation_id","id",false],
+        ["multimedia","slide","slide","presentation_id","id",false],
         ["product","therapeutic_area","therapeutic_area_product","product_id","therapeutic_area_id",false],
         ["user","city","user","id","city_id",false],
         ["user","user_job","user","id","user_job_id",false],
