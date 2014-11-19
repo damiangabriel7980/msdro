@@ -3,16 +3,20 @@
  */
 cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce', '$modalInstance','$location','$state','$timeout','$cookies','userService', function($scope,$rootScope,testeService,$stateParams,$sce,$modalInstance,$location,$state,$timeout,$cookies,userService) {
     testeService.getQ.query({id:$stateParams.id,idd:$stateParams.idd}).$promise.then(function(result){
-        $scope.questions=result["questions"];
-        $scope.newQuestions = [];
+        $scope.newQuestions=result["questions"];
         $scope.answersFiltered=result["answers"];
-        $scope.len = $scope.questions.length;
-        for(var i = 0; i < $scope.len ; i++) {
-            var idx = Math.floor(Math.random() * $scope.questions.length);
-            $scope.newQuestions.push($scope.questions[idx]);
-            $scope.questions.splice(idx, 1);
-        }
         $scope.test=result["test"];
+        $scope.idx=[];
+        $scope.randomidx=[];
+        $scope.len = $scope.test[0].questionsID.length;
+        for(var i = 0; i < $scope.len ; i++) {
+            $scope.idx.push(i);
+        }
+        for (var i = 0; i < $scope.len; i++) {
+            var idx2 = Math.floor(Math.random() * $scope.idx.length);
+            $scope.randomidx.push($scope.idx[idx2]);
+            $scope.idx.splice(idx2, 1);
+        }
        $scope.countdownT=parseInt(result["test"][0].time*60);
         $scope.chk= new Array($scope.answersFiltered.length);
         for(var i=0;i<$scope.chk.length;i++)
@@ -60,21 +64,16 @@ $scope.modifyChk = function(index)
         }
             testeService.getQ.query({
                 id: $stateParams.id,
-                idd: $scope.test[0].questionsID[$scope.cc]
+                idd: $scope.test[0].questionsID[$scope.randomidx[$scope.cc]]
             }).$promise.then(function (result) {
-                $scope.questions = result["questions"];
-                $scope.newQuestions = [];
+                $scope.newQuestions = result["questions"];
                 $scope.answersFiltered = result["answers"];
                     if(!$scope.ansForChk[$scope.cc])
                     {
                          $scope.ansForChk.push($scope.answersFiltered);
                     }
-                $scope.len = $scope.questions.length;
-                for (var i = 0; i < $scope.len; i++) {
-                    var idx = Math.floor(Math.random() * $scope.questions.length);
-                    $scope.newQuestions.push($scope.questions[idx]);
-                    $scope.questions.splice(idx, 1);
-                }
+                //$scope.len = $scope.questions.length;
+
                     if($scope.chkFinal[$scope.cc])
                         $scope.chk=$scope.chkFinal[$scope.cc];
                     else
@@ -96,7 +95,7 @@ $scope.modifyChk = function(index)
         $scope.chk=$scope.chkFinal[$scope.cc];
         testeService.getQ.query({
             id: $stateParams.id,
-            idd: $scope.test[0].questionsID[$scope.cc]
+            idd: $scope.test[0].questionsID[$scope.randomidx[$scope.cc]]
         }).$promise.then(function (result) {
                 $scope.questions = result["questions"];
                 $scope.newQuestions = [];
