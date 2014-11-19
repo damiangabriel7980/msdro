@@ -4,7 +4,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'cloudAdminControllers',
         'cloudAdminServices',
         'ui.calendar',
-        'timer'
+        'timer',
+        'ngCookies'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -125,7 +126,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('elearning.teste.quizById',{
             parent:'elearning.teste',
-            url: '/teste/:id',
+            url: '/:id/questions/:idd',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 console.log('Open modal');
                 $modal.open({

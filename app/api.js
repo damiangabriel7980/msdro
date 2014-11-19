@@ -7,6 +7,7 @@ var Multimedia = require('./models/multimedia');
 var Teste=require('./models/quizes');
 var Questions=require('./models/questions');
 var Answers = require('./models/answers');
+var User=require('./models/user');
 
 module.exports = function(app, router) {
 
@@ -79,7 +80,8 @@ module.exports = function(app, router) {
         .get(function(req, res) {
             var test = new Array(req.params.id);
             if(test[0]!=0)
-            {Products.find({'therapeutic-areasID': {$in :test}}, function(err, cont) {
+            {
+                Products.find({'therapeutic-areasID': {$in :test}}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -218,40 +220,74 @@ module.exports = function(app, router) {
                 }
             });
         });
-    router.route('/teste/:id')
+    router.route('/teste/:id/questions/:idd')
         .get(function(req,res) {
-            var y = req.params.id.split(",");
-            console.log(y);
-            Questions.find({_id: {$in : y} }, function (err, cont) {
+            Teste.find({_id: req.params.id}, function (err, testR) {
+                //console.log(req.params.id);
                 if (err) {
                     console.log(err);
                     res.send(err);
                     return;
                 }
-                else{
-                    var answers=[];
-                    var test=[];
-                    Answers.find({},function(err,cont2){
-                            answers=cont2;
-                        //console.log(cont);
-                        //console.log(answers);
-                        //console.log(x);
-                        var qa={};
-
-                        Teste.find({questionsID: {$in: y}},function(err,cont3){
-
-                            qa["questions"]=cont;
-                            qa["answers"]=answers;
-                            test=cont3;
-                            qa["test"]=test;
-                            res.json(qa);
-                        })
-
-                        });
-
+                else {
+                    var qa = {};
+                    qa["test"] = testR;
+                    Questions.find({_id: req.params.idd}, function (err2, cont) {
+                        if (err) {
+                            console.log(err);
+                            res.send(err);
+                            return;
+                        }
+                        else {
+                            qa["questions"] = cont;
+                            Answers.find({_id: {$in:qa["questions"][0].answersID}},function(err,cont2) {
+                                if(err)
+                                {
+                                    res.send(err);
+                                    return;
+                                }
+                                else {
+                                    qa["answers"] = cont2;
+                                    res.send(qa);
+                                }
+                            });
+                        }
+                    })
                 }
+            })
+        })
 
+    router.route('/user')
+        .get(function(req,res){
+            User.find(function (error, result) {
+                if (error) {
+                    res.send(error);
+                    return ;
+                } else {
+                    //console.log(result);
+                    res.json(result);
+                }
             });
-        });
+        })
+        .put(function(req, res) {
+        console.log(req.body.score);
+        //console.log(req.user.username);
+        User.findOne({ username :  { $regex: new RegExp("^" + req.user.username, "i") }},function(err,usr){
+            if(err) {
+                console.log(err);
+                res.send(err)
+            }
+            else {
+                //console.log(req.body.score_obtained);
+                usr.points += req.body.score;
+                req.user.points=usr.points;
+                console.log(usr);
+                usr.save(function(err){
+                    if(err)
+                        res.send(err);
+                })
+            }
+        }) ;
+    });
     app.use('/api', router);
 };

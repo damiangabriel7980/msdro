@@ -5,7 +5,10 @@ var crypto   = require('crypto-js/sha256');
 var userSchema = mongoose.Schema({
     password     : String,
     username     : String,
-    groupsID     : Array
+    groupsID     : Array,
+    points: Number,
+    points_slide: Number,
+    points_video: Number
 });
 
 // generating a hash

@@ -72,6 +72,18 @@ cloudAdminServices.factory('testeService', ['$resource', function($resource){
         }),
         getByTest: $resource('api/teste/:id', {}, {
             query: { method: 'GET', isArray: false }
+        }),
+        getQ: $resource('api/teste/:id/questions/:idd',{},{
+            query: { method: 'GET', isArray: false }
         })
+
     }
+}]);
+cloudAdminServices.factory('userService', ['$resource', function($resource){
+    return {
+        postTest: $resource('api/user',{},{
+                save:{method:'PUT'}
+            }
+        )
+    };
 }]);
