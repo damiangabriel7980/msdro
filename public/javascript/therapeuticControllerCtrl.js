@@ -15,6 +15,11 @@ cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therap
        $scope.therapeuticAreas = correctResults;
     });
 
+    $scope.toggleActive = function(){
+        $('.list-group li').removeClass('active');
+        $(this).addClass('active');
+    }
+
  }]);
 
 
