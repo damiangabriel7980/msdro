@@ -545,6 +545,28 @@ module.exports = function(app, router) {
                 }
             });
         });
+
+    router.route('/slidesByMultimediaId/:multimedia_id')
+        .get(function(req,res){
+            Multimedia.find({_id: req.params.multimedia_id, groupsID: {$in: req.user.groupsID}, enable: {$ne: false}}, function (err, multimedia) {
+                if(err){
+                    res.send(err);
+                }else{
+                    if(multimedia[0]){
+                        Slides.find({_id: {$in: multimedia[0]._doc.slidesID}}).sort({no_of_order: 1}).exec(function (err, slides) {
+                            if(err){
+                                res.send(err);
+                            }else{
+                                res.json(slides);
+                            }
+                        });
+                    }else{
+                        res.send(err);
+                    }
+                }
+            })
+        });
+
     router.route('/teste')
         .get(function(req,res){
             Teste.find(function (error, result) {

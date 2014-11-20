@@ -81,6 +81,9 @@ cloudAdminServices.factory('multimediaService', ['$resource', function($resource
         }),
         getSingle: $resource('api/multimedia2/:idd', {}, {
             query: { method: 'GET', isArray: false }
+        }),
+        getSlides: $resource('api/slidesByMultimediaId/:multimedia_id', {}, {
+            query: { method: 'GET', isArray: true }
         })
     }
 }]);

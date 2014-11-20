@@ -7,7 +7,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ngSanitize',
         'ui.select',
         'pdf',
-        'timer'
+        'timer',
+        'mySlider'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

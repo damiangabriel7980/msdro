@@ -12,7 +12,12 @@
             </video>
         </div>
     </div>
-    <div class="col-md-12 noPadding" ng-if="selectedMultimedia.type==2">no slides yet</div>
+    <div class="col-md-12 noPadding" ng-if="selectedMultimedia.type==2">
+        <div class="col-md-8 col-md-offset-2">
+            <ng-slides-view my-input="slidesArray" slides-template="modules/my_slider/slider_template.html"
+                            url-prefix="{{pathAmazonDev}}" path-to-slides="image_path"></ng-slides-view>
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
     <a class="btn pull-right btn-primary" ng-click="okk()" ui-sref="elearning.multimedia.multimediaByArea({id:0})">Close</a>
