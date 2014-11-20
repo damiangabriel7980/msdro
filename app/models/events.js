@@ -9,6 +9,7 @@ var EventsSchema		= new Schema({
     description:  String,
     enable:         String,
     end:        Date,
+    groupsID: Array,
     last_updated: Date,
     name:      String,
     place:       String,

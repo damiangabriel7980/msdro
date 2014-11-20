@@ -136,15 +136,21 @@ module.exports = function(app, router) {
             })
         });
     router.route('/calendar')
-        .get(function(req,res){
-            Events.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
+        .get(function(req,res) {
+            User.findOne({username: {$regex: new RegExp("^" + req.user.username, "i")}}, function (err, usr) {
+                if (err) {
+                    console.log(err);
+                    res.send(err)
                 }
-
-                res.json(cont);
-            }).limit(50);
-
+                else {
+                    Events.find({groupsID: {$in: usr.groupsID}}, function (err, cont) {
+                        if (err) {
+                            res.send(err);
+                        }
+                        res.json(cont);
+                    }).limit(50);
+                }
+            })
         });
     router.route('/calendar/:id')
         .get(function(req,res){
