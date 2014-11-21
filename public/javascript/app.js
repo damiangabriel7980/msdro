@@ -8,8 +8,7 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.select',
         'pdf',
         'timer',
-        'mySlider',
-        'ngCookies'
+        'mySlider'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

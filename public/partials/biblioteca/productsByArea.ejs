@@ -1,21 +1,22 @@
-<div class="col-xs-10">
-    <ul class="thumbnails products" style="list-style: none">
-
-        <li class="col-xs-3" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
-            <div class="thumbnail">
-                <img src="{{amazon + prod.image_path}}" alt="{{prod.name}}" height="150px" width="150px"/>
-                <h4><a href="#"></a>{{prod.name}}</h4>
-
-                <p>{{prod.description | htmlToPlaintext | limitTo: 190}}...
-                <button class="button btn-info pull-right" ui-sref="biblioteca.produse.prodById({id:prod._id})">Detalii produs</button>
-                </p>
+<div class="col-md-10">
+    <div class="row noPadding">
+        <div class="col-md-3 noPadding" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt" style="padding: 0 15px 0 0; width: 250px;">
+            <div class="col-md-12 well" style="min-height: 450px;">
+                <div class="col-md-12 noPadding">
+                    <img src="{{amazon + prod.image_path}}" alt="{{prod.name}}" style="width: 100%;"/>
+                </div>
+                <div class="col-md-12 noPadding" style="min-height: 250px;">
+                    <div class="col-md-12 noPadding"><h4>{{prod.name}}</h4></div>
+                    <div class="col-md-12 noPadding">{{prod.description | htmlToPlaintext | limitTo: 100}}...</div>
+                </div>
+                <div class="col-md-12 noPadding">
+                    <button class="btn btn-sm btn-info pull-right" ui-sref="biblioteca.produse.prodById({id:prod._id})">Detalii produs</button>
+                </div>
             </div>
-            <br />
-        </li>
-
-    </ul>
+        </div>
+    </div>
 </div>
-<div class="col-xs-2">
+<div class="col-md-2">
     <ul class="nav nav-list">
         <li class="active" ng-click="reset()">A - Z</li>
         <li class="divider"></li>
@@ -27,5 +28,5 @@
     </ul>
 </div>
 <div style="clear: both;margin:0 auto;" align="center">
-    <button class="button btn-info" ng-click="increaseLimit()">Mai multe produse</button>
+    <button class="btn btn-sm btn-info" ng-click="increaseLimit()">Mai multe produse</button>
 </div>

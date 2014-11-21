@@ -3,6 +3,7 @@
  */
 cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state', function($scope,eventsService,$stateParams,$modal,$state){
 var date = new Date();
+    $scope.realEvents=[];
     var y=$(date);
      eventsService.query().$promise.then(function(result){
         $scope.events =result;
@@ -10,7 +11,7 @@ var date = new Date();
        $scope.eventsS=[];
        for(var i = 0; i < $scope.events.length; i++)
        {
-           $scope.eventsS[i] = {id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: new Date($scope.events[i].end),allDay: false, color: 'green',className: 'events'};
+           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: new Date($scope.events[i].end),allDay: false, color: 'green',className: 'events'});
        }
 
          $scope.realEvents=[$scope.eventsS];
