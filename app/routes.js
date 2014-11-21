@@ -22,6 +22,25 @@ module.exports = function(app, passport) {
 		res.redirect('/');
 	});
 
+    //access merck manual
+    app.get('/merckManual', isLoggedIn, function (req, res) {
+        console.log("======================================================================");
+        var range = req.headers.range;
+        if(range){
+            var brk = range.toString().match(/(.*)=(\d*)-(\d*)/);
+            var noBytes = parseInt(brk[3])-parseInt(brk[2]);
+            console.log(parseInt(brk[3])-parseInt(brk[2]));
+            if(noBytes>65535 && noBytes!=1048575){
+                res.status(401).end();
+            }else{
+                res.sendFile('/private_storage/merck.pdf', {root: __dirname});
+            }
+        }else{
+            console.log("no range");
+            res.status(401).end();
+        }
+    });
+
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
 // =============================================================================
