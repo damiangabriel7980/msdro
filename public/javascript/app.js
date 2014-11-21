@@ -19,6 +19,20 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/home.ejs',
             controller: 'HomeController'
         })
+        .state('contact',{
+            parent:'home',
+            url: '',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/contact.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'contactCtrl'
+                })
+            }]
+
+        })
         .state('noutati', {
             //abstract: true,
             url: '/noutati/:articleType',
