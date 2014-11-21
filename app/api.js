@@ -571,22 +571,10 @@ module.exports = function(app, router) {
                     }else{
                         res.send(err);
                     }
-                    //console.log(cont);
-                    res.json(cont);
-                });
+
             }
-            else {
-                Multimedia.find({},function (error, result) {
-                    if (error) {
-                        //console.log(error);
-                        res.json(error);
-                        return;
-                    }
-                    console.log(result);
-                    res.json(result);
-                });
-            }
-        });
+
+        })});
 
     router.route('/teste')
         .get(function(req,res){
