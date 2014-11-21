@@ -1,0 +1,8 @@
+<div class="col-md-12">
+    <button class="btn btn-default" ng-click="goPrevious()"><i class="glyphicon glyphicon-chevron-left"></i></button>
+    <button class="btn btn-default" ng-click="goNext()"><i class="glyphicon glyphicon-chevron-right"></i></button>
+    <span style="padding-left: 10px;">Page: {{pageToDisplay}} / {{pageCount}}</span>
+</div>
+<div class="col-md-12" style="height: 80%; overflow-x:hidden; overflow-y: scroll;">
+    <canvas id="pdf-canvas" style="width: 100%;"></canvas>
+</div>
