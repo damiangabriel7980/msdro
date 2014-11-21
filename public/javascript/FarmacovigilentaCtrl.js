@@ -1,0 +1,10 @@
+/**
+ * Created by miricaandrei23 on 21.11.2014.
+ */
+cloudAdminControllers.controller('FarmacovigilentaCtrl', ['$scope', '$rootScope', '$sce', '$modalInstance', '$resource', function($scope, $rootScope, $sce, $modalInstance, $resource) {
+    $scope.pdfUrl="https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf";
+
+    $scope.closeModal = function(){
+        $modalInstance.close();
+    }
+}]);

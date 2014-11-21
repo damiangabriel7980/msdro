@@ -83,14 +83,14 @@
 
             <div id="msieDiv" class="hide col-md-6 text-right">
                 <a ui-sref="contact">Contact </a>
-                <a href="https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf" target="_blank" class="pull-right flink marginright15px" rel="nofollow">Farmacovigilenta</a>
-                <a target="_blank" href="https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf" rel="nofollow" class="pull-right marginright15px flink">Termeni si Conditii</a>
+                <a ng-click="showFarmaModal()">Farmacovigilenta</a>
+                <a ng-click="showTermsModal()">Termeni si conditii</a>
             </div>
 
             <div id="notMsieDiv" class="col-md-6 text-right">
 
                 <a ui-sref="contact">Contact </a>
-                <a data-fancybox-type="iframe" href="https://docs.google.com/gview?url=https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf&amp;embedded=true" rel="nofollow" class="fancybox-media pull-right marginright15px flink">Farmacovigilenta</a>
-                <a data-fancybox-type="iframe" href="https://docs.google.com/gview?url=https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf&amp;embedded=true" rel="nofollow" class="fancybox-media pull-right marginright15px flink">Termeni si Conditii </a>
+                <a ng-click="showFarmaModal()">Farmacovigilenta</a>
+                <a ng-click="showTermsModal()">Termeni si conditii</a>
             </div>
     </div>

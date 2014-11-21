@@ -42,5 +42,23 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
             windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html'
         });
     };
+    $rootScope.showFarmaModal = function(){
+        $modal.open({
+            templateUrl: 'partials/modals/Farma.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'FarmacovigilentaCtrl',
+            windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html'
+        });
+    };
+    $rootScope.showTermsModal = function(){
+        $modal.open({
+            templateUrl: 'partials/modals/Terms.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'TermsCtrl',
+            windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html'
+        });
+    };
 
 }]);
