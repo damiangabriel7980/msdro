@@ -1,8 +1,14 @@
 <div class="col-md-12">
     <button class="btn btn-default" ng-click="goPrevious()"><i class="glyphicon glyphicon-chevron-left"></i></button>
     <button class="btn btn-default" ng-click="goNext()"><i class="glyphicon glyphicon-chevron-right"></i></button>
+    <button class="btn btn-default" ng-click="rotateLeft()"><i class="glyphicon glyphicon-circle-arrow-left"></i></button>
+    <button class="btn btn-default" ng-click="rotateRight()"><i class="glyphicon glyphicon-circle-arrow-right"></i></button>
+    <button class="btn btn-default" ng-click="zoomIn()"><i class="glyphicon glyphicon-plus"></i></button>
+    <button class="btn btn-default" ng-click="zoomOut()"><i class="glyphicon glyphicon-minus"></i></button>
+    <button class="btn btn-default" ng-click="fitToScreen()"><i class="glyphicon glyphicon-fullscreen"></i></button>
     <span style="padding-left: 10px;">Page: {{pageToDisplay}} / {{pageCount}}</span>
 </div>
-<div class="col-md-12" style="height: 80%; overflow-x:hidden; overflow-y: scroll;">
-    <canvas id="pdf-canvas" style="width: 100%;"></canvas>
+<div class="col-md-12" style="height: 80%; overflow: scroll;">
+    <!--IMPORTANT - zoom in/out uses the style attribute in this form-->
+    <canvas id="pdf-canvas" style="width:100%;" class="rotate0"></canvas>
 </div>
