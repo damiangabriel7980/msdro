@@ -11,6 +11,49 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
     }
 }]);
 
+cloudAdminServices.factory('ProfileService', ['$resource', function($resource){
+    return {
+        getUserData: $resource('api/userdata/', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        getCounties: $resource('api/counties/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getCities: $resource('api/cities/:county_name', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        uploadProfile: $resource('api/userProfile/:newData', {}, {
+            save: { method: 'POST'}
+        }),
+        uploadJob: $resource('api/userJob/:job', {}, {
+            save: { method: 'POST'}
+        }),
+        changeEmail: $resource('api/changeEmail/:userData', {}, {
+            save: { method: 'POST'}
+        }),
+        changePassword: $resource('api/changePassword/:userData', {}, {
+            save: { method: 'POST'}
+        })
+    }
+}]);
+
+cloudAdminServices.factory('HomeService', ['$resource', function($resource){
+    return {
+        getUserEvents: $resource('api/userHomeEvents/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getUserNews: $resource('api/userHomeNews/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getUserScientificNews: $resource('api/userHomeScientific/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getUserMultimedia: $resource('api/userHomeMultimedia/', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
+
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     return {
         getAll: $resource('api/products/', {}, {
@@ -38,6 +81,9 @@ cloudAdminServices.factory('multimediaService', ['$resource', function($resource
         }),
         getSingle: $resource('api/multimedia2/:idd', {}, {
             query: { method: 'GET', isArray: false }
+        }),
+        getSlides: $resource('api/slidesByMultimediaId/:multimedia_id', {}, {
+            query: { method: 'GET', isArray: true }
         })
     }
 }]);

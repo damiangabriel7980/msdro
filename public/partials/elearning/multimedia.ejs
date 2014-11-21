@@ -6,16 +6,18 @@
 <body>
 <div class="col-xs-offset-1" id="content">
     <div class="row margintop20px">
-        <div class="col-xs-2" >
+        <div class="col-xs-3 therapeuticAreas">
             <h4 class="h-title">Arii terapeutice</h4>
 
-            <ul class="list-group" style="list-style: none">
-                <li ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
-                    <span class="list-group-item" ui-sref="elearning.multimedia.multimediaByArea({id:area._id})">{{area.name}}</span>
+            <ul class="list">
+                <li ui-sref="elearning.multimedia.multimediaByArea({id:0})">Toate ariile terapeutice</li>
+                <li ui-sref="elearning.multimedia.multimediaByArea({id:area._id})"  ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
+                    {{area.name}}
                     <ul ng-if="area.has_children">
-                        <li ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'" >
-                            <span class="list-group-item" ui-sref="elearning.multimedia.multimediaByArea({id:area2._id})">{{area2.name}}</span>
+                        <li ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'" ui-sref="elearning.multimedia.multimediaByArea({id:area2._id})">
+                            {{area2.name}}
                         </li>
+                        <!--<li>ceva</li>-->
                     </ul>
                 </li>
             </ul>
@@ -24,17 +26,6 @@
 
         <div class="col-xs-9" >
             <ui-view></ui-view>
-        </div>
-
-        <div class="col-xs-1 hidden-phone">
-            <ul class="nav nav-list">
-                <li ><a href=""/></li>
-                <li class="divider"></li>
-
-                <li class=''><a href=""></a></li>
-
-            </ul>
-
         </div>
     </div>
 </div>

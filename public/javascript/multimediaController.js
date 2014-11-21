@@ -17,7 +17,10 @@ cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' 
     multimediaService.getByArea.query({id:$stateParams.id}).$promise.then(function(result){
         $scope.multimedias = result;
     });
-    $scope.amazon = $rootScope.pathAmazonDev;
+
+    $scope.amazonPre = $rootScope.pathAmazonDev;
+//    $scope.defaultVideoImg = $rootScope.defaultVideoImage;
+//    $scope.defaultSlideImg = $rootScope.defaultSlideImage;
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {

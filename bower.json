@@ -17,8 +17,14 @@
     "jquery": "~1.11.1",
     "angular-bootstrap": "~0.11.0",
     "angular-strap": "~2.1.1",
+    "angular-ui-select": "~0.8.3",
+    "select2": "~3.4.5",
+    "angular-pdf": "~0.3.2",
     "angular-ui-calendar": "latest",
-    "angular-timer":"latest"
+    "angular-timer":"latest",
+    "qtip2":"latest",
+    "perfect-tooltip":"latest",
+    "video-js":"latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

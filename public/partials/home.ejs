@@ -1,28 +1,75 @@
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-
-<body>
-    <div class="row">
-
-        <div class="col-xs-3">
-        <div class="well widget black">
-         </div>
+<div class="col-md-12 homeStyles">
+    <div ng-class="{'col-md-3':events.length!=0, 'col-md-4':events.length==0}" class="wellContainer">
+        <div class="col-md-12 well">
+            <div class="col-md-12">
+                <h4>Ultimele noutati</h4>
             </div>
-        <div class="col-xs-3">
-            <div class="well widget black">
-            </div>
-        </div>
-        <div class="col-xs-3">
-            <div class="well widget black">
-            </div>
-        </div>
-        <div class="col-xs-3">
-            <div class="well widget black">
+            <div class="col-md-12 noPadding" ng-repeat="n in news">
+                <div class="col-md-12 noPadding"><hr/></div>
+                <div class="col-md-4 noPadding">
+                    <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
+                        <img ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
+                    </a>
+                </div>
+                <div class="col-md-8 noPadding">
+                    <div class="col-md-12 title"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title}}</a></div>
+                    <div class="col-md-12 header">{{createHeader(n.text,100)}}<a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})" class="readMore">Citeste mai mult</a></div>
+                </div>
             </div>
         </div>
+    </div>
+    <div ng-class="{'col-md-3':events.length!=0, 'col-md-4':events.length==0}" class="wellContainer">
+        <div class="col-md-12 well">
+            <div class="col-md-12">
+                <h4>Ultimele noutati stiintifice</h4>
+            </div>
+            <div class="col-md-12 noPadding" ng-repeat="n in scientificNews">
+                <div class="col-md-12 noPadding"><hr/></div>
+                <div class="col-md-4 noPadding">
+                    <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
+                        <img ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
+                    </a>
+                </div>
+                <div class="col-md-8 noPadding">
+                    <div class="col-md-12 title"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title}}</a></div>
+                    <div class="col-md-12 header">{{createHeader(n.text,100)}}<a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})" class="readMore">Citeste mai mult</a></div>
+                </div>
+            </div>
         </div>
-</body>
-
-</html>
+    </div>
+    <div ng-class="{'col-md-3':events.length!=0, 'col-md-4':events.length==0}" class="wellContainer">
+        <div class="col-md-12 well">
+            <div class="col-md-12">
+                <h4>E-learning</h4>
+            </div>
+            <div class="col-md-12 noPadding" ng-repeat="m in multimedia">
+                <div class="col-md-12 noPadding">
+                    <div class="col-md-12"><hr/></div>
+                    <div class="col-md-12 title">
+                        <i class="glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>
+                        &nbsp;{{m.title+"("+m.author+")"}}</div>
+                    <div ng-if="m.description" class="col-md-12 description">{{m.description}}</div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="events.length > multimedia.length || events.length==0" class="col-md-12 noPadding" ng-include="merckBoxUrl"></div>
+    </div>
+    <div ng-if="events.length!=0" class="col-md-3 wellContainer">
+        <div class="col-md-12 well">
+            <div class="col-md-12">
+                <h4>Evenimente urmatoare</h4>
+            </div>
+            <div class="col-md-12 noPadding" ng-repeat="e in events">
+                <div class="col-md-12 noPadding"><hr/></div>
+                <div class="col-md-4 noPadding">
+                    <div class="day">{{toDate(e.start).getDate()}}</div><div class="month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
+                </div>
+                <div class="col-md-8 noPadding">
+                    <div class="col-md-12 title">{{e.name}}</div>
+                    <div class="col-md-12 header">{{e.description.length>50?createHeader(e.description,50):e.description}}</div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="events.length <= multimedia.length" class="col-md-12 noPadding" ng-include="merckBoxUrl"></div>
+    </div>
+</div>

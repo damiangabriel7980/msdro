@@ -4,6 +4,8 @@
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
+//type: 1 = video, 2 = slide
+
 var multimediaSchema		= new Schema({
     author : String,
     description : String,

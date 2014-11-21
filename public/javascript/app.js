@@ -4,7 +4,11 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'cloudAdminControllers',
         'cloudAdminServices',
         'ui.calendar',
+        'ngSanitize',
+        'ui.select',
+        'pdf',
         'timer',
+        'mySlider',
         'ngCookies'
     ]);
 
@@ -13,7 +17,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
     $stateProvider
         .state('home',{
             url: '/',
-            templateUrl: 'partials/home.ejs'
+            templateUrl: 'partials/home.ejs',
+            controller: 'HomeController'
         })
         .state('noutati', {
             //abstract: true,
@@ -106,6 +111,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                 console.log('Open modal');
                 $modal.open({
                     templateUrl: 'partials/elearning/multimediaDetails.ejs',
+                    windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html',
                     backdrop: 'static',
                     keyboard: false,
                     size: 'lg',
@@ -126,7 +132,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('elearning.teste.quizById',{
             parent:'elearning.teste',
-            url: '/:id/questions/:idd',
+            url: '/teste/:id',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 console.log('Open modal');
                 $modal.open({
@@ -161,8 +167,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
 }]);
 
 cloudAdminApp.run(
-    [            '$rootScope', '$state', '$stateParams',
-        function ($rootScope,   $state,   $stateParams) {
+    [            '$rootScope', '$state', '$stateParams', '$modal',
+        function ($rootScope,   $state,   $stateParams, $modal) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -172,8 +178,25 @@ cloudAdminApp.run(
             $rootScope.$stateParams = $stateParams;
 
             //amazon service paths
-            $rootScope.pathAmazonResources = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/";
+            //pathAmazonDev needs to be changed in production
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/msddev-test/";
+            $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
+
+            $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merckManual.jpg";
+
+            $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
+            $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
+            $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
+
+            //profile modal
+            $rootScope.showProfile = function(){
+                $modal.open({
+                    templateUrl: 'partials/profile.html',
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'ProfileController'
+                });
+            }
         }
     ]
 );
