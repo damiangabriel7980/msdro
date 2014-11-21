@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 05.11.2014.
  */
-cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce', '$modalInstance','$location','$state','$timeout','$cookies','userService', function($scope,$rootScope,testeService,$stateParams,$sce,$modalInstance,$location,$state,$timeout,$cookies,userService) {
+cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce', '$modalInstance','$location','$state','$timeout','userService', function($scope,$rootScope,testeService,$stateParams,$sce,$modalInstance,$location,$state,$timeout,userService) {
     testeService.getQ.query({id:$stateParams.id,idd:$stateParams.idd}).$promise.then(function(result){
         $scope.newQuestions=result["questions"];
         $scope.answersFiltered=result["answers"];
