@@ -63,3 +63,20 @@
 .therapeuticAreas li {
   cursor: pointer;
 }
+#footer {
+  background: #da288c;
+  padding: 5px 0;
+  width: 100%;
+  margin-top:865px;
+}
+ul.products li {
+  display: inline-block !important;
+  vertical-align: top;
+  margin: 0 20px;
+  float: inherit !important;
+  *display: inline;
+  *zoom: 1;
+}
+.col-xs-special{
+  margin-left: 3%;
+}

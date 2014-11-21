@@ -45,7 +45,7 @@
             <div class="col-md-12 noPadding" ng-repeat="m in multimedia">
                 <div class="col-md-12 noPadding">
                     <div class="col-md-12"><hr/></div>
-                    <div class="col-md-12 title">
+                    <div class="col-md-12 title" ui-sref="elearning.multimedia.multimediaById({idd:m._id})">
                         <i class="glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>
                         &nbsp;{{m.title+"("+m.author+")"}}</div>
                     <div ng-if="m.description" class="col-md-12 description">{{m.description}}</div>
@@ -65,7 +65,7 @@
                     <div class="day">{{toDate(e.start).getDate()}}</div><div class="month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
                 </div>
                 <div class="col-md-8 noPadding">
-                    <div class="col-md-12 title">{{e.name}}</div>
+                    <div class="col-md-12 title" ui-sref="calendar.calendarDetails({id:e._id})">{{e.name}}</div>
                     <div class="col-md-12 header">{{e.description.length>50?createHeader(e.description,50):e.description}}</div>
                 </div>
             </div>
