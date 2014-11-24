@@ -17,7 +17,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
     $stateProvider
         .state('home',{
             url: '/',
-            templateUrl: 'partials/home.ejs',
+            templateUrl: 'partials/medic/home.ejs',
             controller: 'HomeController'
         })
         .state('contact',{
@@ -25,7 +25,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
-                    templateUrl: 'partials/contact.ejs',
+                    templateUrl: 'partials/medic/contact.ejs',
                     backdrop: true,
                     size: 'lg',
                     windowClass: 'fade',
@@ -37,55 +37,55 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('noutati', {
             //abstract: true,
             url: '/noutati/:articleType',
-            templateUrl: 'partials/noutati/noutati.ejs',
+            templateUrl: 'partials/medic/noutati/noutati.ejs',
             controller: 'ContentController'
         })
         .state('noutati.listaArticole',{
             url: '/listaArticole',
-            templateUrl: 'partials/noutati/listaArticole.ejs'
+            templateUrl: 'partials/medic/noutati/listaArticole.ejs'
         })
         .state('noutati.articol',{
             url: '/articol/:articleId',
-            templateUrl: 'partials/noutati/articol.ejs',
+            templateUrl: 'partials/medic/noutati/articol.ejs',
             controller: 'ContentArticleController'
         })
         .state('biblioteca', {
             abstract: true,
             url: '/biblioteca',
-            templateUrl: '/partials/biblioteca/biblioteca.ejs'
+            templateUrl: '/partials/medic/biblioteca/biblioteca.ejs'
         })
         .state('biblioteca.produse',{
             url: '/produse',
-            templateUrl: 'partials/biblioteca/produse.ejs',
+            templateUrl: 'partials/medic/biblioteca/produse.ejs',
             controller: 'therapeuticControllerCtrl'
         })
         .state('biblioteca.produse.productsByArea',{
             url: '/productsByArea/:id',
-            templateUrl: 'partials/biblioteca/productsByArea.ejs',
+            templateUrl: 'partials/medic/biblioteca/productsByArea.ejs',
             controller: 'productsController'
         })
         .state('biblioteca.produse.prodById',{
             url: '/produse/:id',
-            templateUrl: 'partials/biblioteca/productDetails.ejs',
+            templateUrl: 'partials/medic/biblioteca/productDetails.ejs',
             controller: 'productDetailsController'
         })
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice/:articleType',
-            templateUrl: 'partials/noutati/noutati.ejs',
+            templateUrl: 'partials/medic/noutati/noutati.ejs',
             controller: 'ContentController'
         })
         .state('biblioteca.articoleStiintifice.listaArticole',{
             url: '/listaArticole',
-            templateUrl: 'partials/noutati/listaArticole.ejs'
+            templateUrl: 'partials/medic/noutati/listaArticole.ejs'
         })
         .state('biblioteca.articoleStiintifice.articol',{
             url: '/articol/:articleId',
-            templateUrl: 'partials/noutati/articol.ejs',
+            templateUrl: 'partials/medic/noutati/articol.ejs',
             controller: 'ContentArticleController'
         })
        .state('calendar',{
             url: '/calendar',
-            templateUrl: 'partials/calendar.ejs',
+            templateUrl: 'partials/medic/calendar.ejs',
             controller: 'eventsController'
         })
         .state('calendar.calendarDetails',{
@@ -93,7 +93,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '/:id',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
-                    templateUrl: 'partials/calendarDetails.ejs',
+                    templateUrl: 'partials/medic/calendarDetails.ejs',
                     backdrop: true,
                     size: 'lg',
                     windowClass: 'fade',
@@ -106,16 +106,16 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('elearning', {
             abstract: true,
             url: '/elearning',
-            templateUrl: '/partials/elearning/elearning.ejs'
+            templateUrl: '/partials/medic/elearning/elearning.ejs'
         })
         .state('elearning.multimedia',{
             url: '/multimedia',
-            templateUrl: 'partials/elearning/multimedia.ejs' ,
+            templateUrl: 'partials/medic/elearning/multimedia.ejs' ,
             controller: 'therapeuticControllerCtrl'
         })
         .state('elearning.multimedia.multimediaByArea',{
             url: '/multimedia/:id',
-            templateUrl: 'partials/elearning/multimediaByArea.ejs',
+            templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
             controller: 'multimediaController'
         })
         .state('elearning.multimedia.multimediaById',{
@@ -124,8 +124,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 console.log('Open modal');
                 $modal.open({
-                    templateUrl: 'partials/elearning/multimediaDetails.ejs',
-                    windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html',
+                    templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
+                    windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html',
                     backdrop: 'static',
                     keyboard: false,
                     size: 'lg',
@@ -137,11 +137,11 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('elearning.transmisii',{
             url: '/transmisii',
-            templateUrl: 'partials/elearning/transmisii.ejs'
+            templateUrl: 'partials/medic/elearning/transmisii.ejs'
         })
         .state('elearning.teste',{
             url: '/teste',
-            templateUrl: 'partials/elearning/teste.ejs',
+            templateUrl: 'partials/medic/elearning/teste.ejs',
             controller: 'testeController'
         })
         .state('elearning.teste.quizById',{
@@ -150,7 +150,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 console.log('Open modal');
                 $modal.open({
-                    templateUrl: 'partials/elearning/testeQuestions.ejs',
+                    templateUrl: 'partials/medic/elearning/testeQuestions.ejs',
                     backdrop: 'static',
                     size: 'lg',
                     keyboard: false,
@@ -163,19 +163,19 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         //utility state used for dev:
         .state('utility', {
             url: '/util',
-            templateUrl: 'partials/utility.ejs',
+            templateUrl: 'partials/medic/utility.ejs',
             controller: 'ContentController'
         })
         //util_prod user for dev to create products
         .state('util_prod', {
             url: '/util_Products',
-            templateUrl: 'partials/util_Products.ejs',
+            templateUrl: 'partials/medic/util_Products.ejs',
             controller: 'productsController'
         })
         //util_therapy user for dev to create products
         .state('util_therap', {
             url: '/util_Therapeutic',
-            templateUrl: 'partials/util_Therapeutic.ejs',
+            templateUrl: 'partials/medic/util_Therapeutic.ejs',
             controller: 'therapeuticControllerCtrl'
         })
 }]);
@@ -205,7 +205,7 @@ cloudAdminApp.run(
             //profile modal
             $rootScope.showProfile = function(){
                 $modal.open({
-                    templateUrl: 'partials/profile.html',
+                    templateUrl: 'partials/medic/profile.html',
                     size: 'lg',
                     windowClass: 'fade',
                     controller: 'ProfileController'

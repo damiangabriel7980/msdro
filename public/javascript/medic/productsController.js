@@ -16,7 +16,7 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     $scope.lmt=8;
     $scope.increaseLimit=function(){
         $scope.lmt+=8;
-    }
+    };
     $scope.firstLetters=[];
     ProductService.getByArea.query({id:$stateParams.id}).$promise.then(function(result){
          $scope.products = result;
@@ -62,7 +62,7 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
         $scope.showElem='{display: none}';
     }
   }])
-    .filter('htmlToPlaintext', function() {
+    .filter('htmlToPlaintext2', function() {
         return function(text) {
             return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
         }

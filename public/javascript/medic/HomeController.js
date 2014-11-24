@@ -2,7 +2,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
-    $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/widgets/merckBox.html');
+    $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
     $scope.merckManualImage = $rootScope.merckManualImage;
 
     //------------------------------------------------------------------------------------------------- get all content

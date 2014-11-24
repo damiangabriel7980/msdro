@@ -1,5 +1,13 @@
 <!doctype html>
 <head>
+    <script src="components/fullcalendar/fullcalendar.js"></script>
+    <script src="components/fullcalendar/gcal.js"></script>
+    <script src="components/perfect-tooltip/js/jquery.tooltip.js"></script>
+    <script src="components/qtip2/jquery.qtip.js"></script>
+    <script src="components/qtip2/jquery.qtip.min.js"></script>
+    <link rel='stylesheet' href='components/fullcalendar/fullcalendar.css' />
+    <link href='components/qtip2/jquery.qtip.css' rel='stylesheet' />
+    <link rel='stylesheet' href='components/perfect-tooltip/css/tooltip.css' />
 
 </head>
 <body>
@@ -10,8 +18,8 @@
              <div class="event blue" ng-repeat="eventim in events2Filtered">
                     <div class="row">
                         <div class="col-xs-4 date">
-                            <h2>{{eventim.start | asDate | date:'dd'}}</h2>
-                            <h5>{{eventim.start | asDate | date:'MMM'}}</h5>
+                            <h2>{{eventim.start | filter: asDate | date:'dd'}}</h2>
+                            <h5>{{eventim.start | filter: asDate | date:'MMM'}}</h5>
                           </div>
 
                         <div class="col-xs-8">
