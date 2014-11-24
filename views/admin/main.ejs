@@ -1,1 +1,131 @@
-i'm admin
+<!doctype html>
+<html lang="en" ng-app="cloudAdminApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!--Core-modules-->
+    <script src="components/jquery/dist/jquery.js"></script>
+    <script src="components/jquery-ui/ui/jquery-ui.js"></script>
+    <script src="components/angular/angular.js"></script>
+    <script src="components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="components/angular-resource/angular-resource.js"></script>
+    <script src="components/angular-route/angular-route.js"></script>
+    <script src="components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+    <script src="components/angular-ui-select/dist/select.min.js"></script>
+    <script src="modules/google_analytics/angulartics-ga.js"></script>
+    <script src="components/aws-sdk/dist/aws-sdk.min.js"></script>
+
+
+
+    <!--Controllers-->
+    <script src="javascript/admin/app.js"></script>
+
+
+    <!--Plug-ins-->
+
+
+
+
+    <!--Stylesheets-->
+    <link rel='stylesheet' href='components/angular-ui-select/dist/select.min.css' />
+    <link rel='stylesheet' href='components/select2/select2.css' />
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/customStyles.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top ng-scope" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Logo</a>
+        </div>
+
+        <div class="collapse navbar-collapse" collapse="navCollapsed">
+
+            <ul class="nav navbar-nav">
+                <li class="dropdown" ng-class="{'active': $state.includes('ManageUsers')}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-globe"></span> Users <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="manage">Gestiune utilizatori</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="ManageUsers.newAccounts">Conturi noi</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="ManageUsers.groups">Grupuri</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="ManageUsers.importCSV">Import</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" ng-class="{'active': $state.includes('ManageContent')}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-book"></span> Continut <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="ManageContent.manageProducts">Produse</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="ManageContent.manageArticles">Articole</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="ManageContent.manageEvents">Evenimente</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="ManageContent.manageIndex">Indexare</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="ManageContent.manageIntro">Intro</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="ManageContent.manageCarousel">Carousel</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="ManageContent.manageGeneralContent">Continut general</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" ng-class="{'active': $state.includes('ManageElearning')}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-download"></span> E-learning <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="ManageElearning.manageMultimedia" href="#/manageMultimedia">Multimedia</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="ManageElearning.manageQuiz" href="#/manageQuiz">Teste interactive</a></li>
+                    </ul>
+                </li>
+                <li ng-class="{'active': $state.includes('ManageAreas')}"><a ui-sref="ManageAreas" href="#/ManageAreas"><span>Arii terapeutice</span></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form class="navbar-form navbar-right" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default sr-only">Submit</button>
+                    </form>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span> <%= user.username %> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a style="cursor: pointer;" ng-click="showProfile()">Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="logout">Sign Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div ui-view class="view-container"></div>
+
+</body>
+</html>
