@@ -159,24 +159,6 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                 })
             }]
         })
-        //utility state used for dev:
-        .state('utility', {
-            url: '/util',
-            templateUrl: 'partials/medic/utility.ejs',
-            controller: 'ContentController'
-        })
-        //util_prod user for dev to create products
-        .state('util_prod', {
-            url: '/util_Products',
-            templateUrl: 'partials/medic/util_Products.ejs',
-            controller: 'productsController'
-        })
-        //util_therapy user for dev to create products
-        .state('util_therap', {
-            url: '/util_Therapeutic',
-            templateUrl: 'partials/medic/util_Therapeutic.ejs',
-            controller: 'therapeuticControllerCtrl'
-        })
 }]);
 
 cloudAdminApp.run(
