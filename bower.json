@@ -23,7 +23,8 @@
     "angular-timer":"latest",
     "qtip2":"latest",
     "perfect-tooltip":"latest",
-    "video-js":"latest"
+    "video-js":"latest",
+    "aws-sdk": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

@@ -22,7 +22,8 @@
     "mongoose": "latest",
     "passport": "latest",
     "passport-local": "latest",
-    "s3": "~4.3.1"
+    "s3": "~4.3.1",
+    "aws-sdk": "latest"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install"
