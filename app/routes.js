@@ -8,16 +8,16 @@ module.exports = function(app, passport) {
 	// show the home page (will also have our login links)
 	app.get('/', isLoggedIn, function(req, res) {
         transportUser(req, res, {
-            "ROLE_FARMACIST": "main.ejs",
-            "ROLE_ADMIN": "main2.ejs"
+            "ROLE_FARMACIST": "medic/main.ejs",
+            "ROLE_ADMIN": "admin/main.ejs"
         }, true);
 	});
 
 	// PROFILE SECTION =========================
 	app.get('/profile', isLoggedIn, function(req, res) {
         transportUser(req, res, {
-            "ROLE_FARMACIST": "profile.ejs",
-            "ROLE_ADMIN": "profile2.ejs"
+            "ROLE_FARMACIST": "medic/profile.ejs",
+            "ROLE_ADMIN": "admin/profile2.ejs"
         }, true);
 	});
 
