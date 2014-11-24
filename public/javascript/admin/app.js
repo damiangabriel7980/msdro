@@ -6,122 +6,103 @@ var cloudAdminApp = angular.module('cloudAdminApp',
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/");
+    $urlRouterProvider.otherwise("/utlizatori/gestionareConturi");
     $stateProvider
         .state('utilizatori', {
             abstract: true,
             url: '/utilizatori',
-            templateUrl: 'partials/admin/utilizatori/utilizatori.ejs',
-            controller: 'UsersController'
+            templateUrl: 'partials/admin/utilizatori/utilizatori.html'
         })
         .state('utilizatori.gestionareConturi',{
             url: '/gestionareConturi',
-            templateUrl: 'partials/admin/utilizatori/gestionareConturi.ejs'
+            templateUrl: 'partials/admin/utilizatori/gestionareConturi.html'
         })
         .state('utilizatori.conturiNoi',{
             url: '/conturiNoi',
-            templateUrl: 'partials/admin/utilizatori/conturiNoi.ejs',
-            controller: 'ConturiNoiController'
+            templateUrl: 'partials/admin/utilizatori/conturiNoi.html'
         })
         .state('utilizatori.grupuri',{
             url: '/grupuri',
-            templateUrl: 'partials/admin/utilizatori/grupuri.ejs',
-            controller: 'GrupuriController'
+            templateUrl: 'partials/admin/utilizatori/grupuri.html'
         })
         .state('utilizatori.importUsers',{
             url: '/importUsers',
-            templateUrl: 'partials/admin/utilizatori/importUsers.ejs',
-            controller: 'ImportUsersController'
+            templateUrl: 'partials/admin/utilizatori/importUsers.html'
         })
         .state('continut', {
             abstract: true,
             url: '/continut',
-            templateUrl: '/partials/admin/continut/continut.ejs'
+            templateUrl: '/partials/admin/continut/continut.html'
         })
         .state('continut.produse',{
             url: '/produse',
-            templateUrl: 'partials/admin/continut/produse.ejs',
-            controller: 'ProduseController'
+            templateUrl: 'partials/admin/continut/produse.html'
         })
         .state('continut.articole',{
             url: '/articole',
-            templateUrl: 'partials/admin/continut/articole.ejs',
-            controller: 'ArticoleController'
+            templateUrl: 'partials/admin/continut/articole.html'
         })
         .state('continut.evenimente',{
             url: '/evenimente',
-            templateUrl: 'partials/admin/continut/evenimente.ejs',
-            controller: 'EvenimenteController'
+            templateUrl: 'partials/admin/continut/evenimente.html'
         })
         .state('continut.indexareContinut',{
             url: '/indexareContinut',
-            templateUrl: 'partials/admin/continut/indexareContinut.ejs',
-            controller: 'IndexareContinutController'
+            templateUrl: 'partials/admin/continut/indexareContinut.html'
         })
         .state('continut.intro',{
             url: '/intro',
-            templateUrl: 'partials/admin/continut/intro.ejs',
-            controller: 'IntroController'
+            templateUrl: 'partials/admin/continut/intro.html'
         })
         .state('continut.carouselMedic',{
             url: '/carouselMedic',
-            templateUrl: 'partials/admin/continut/carouselMedic.ejs',
-            controller: 'CarouselMedicController'
+            templateUrl: 'partials/admin/continut/carouselMedic.html'
         })
         .state('continut.carouselPublic',{
             url: '/carouselPublic',
-            templateUrl: 'partials/admin/continut/produse.ejs',
-            controller: 'ProduseController'
+            templateUrl: 'partials/admin/continut/produse.html'
         })
         .state('continut.continutPublic',{
             url: '/continutPublic',
-            templateUrl: 'partials/admin/continut/continutPublic.ejs',
-            controller: 'ContinutPublicController'
+            templateUrl: 'partials/admin/continut/continutPublic.html'
         })
         .state('newsletter', {
             abstract: true,
             url: '/newsletter',
-            templateUrl: '/partials/admin/newsletter/newsletter.ejs'
+            templateUrl: '/partials/admin/newsletter/newsletter.html'
         })
         .state('newsletter.consolaNewsletter',{
             url: '/consolaNewsletter',
-            templateUrl: 'partials/admin/newsletter/consolaNewsletter.ejs',
-            controller: 'ConsolaNewsletterController'
+            templateUrl: 'partials/admin/newsletter/consolaNewsletter.html'
         })
         .state('newsletter.rapoarteUtilizare',{
             url: '/rapoarteUtilizare',
-            templateUrl: 'partials/admin/newsletter/rapoarteUtilizare.ejs',
-            controller: 'RapoarteUtilizareController'
+            templateUrl: 'partials/admin/newsletter/rapoarteUtilizare.html'
         })
         .state('newsletter.rapoarteGlobale',{
             url: '/rapoarteGlobale',
-            templateUrl: 'partials/admin/newsletter/rapoarteGlobale.ejs',
-            controller: 'RapoarteGlobaleController'
+            templateUrl: 'partials/admin/newsletter/rapoarteGlobale.html'
         })
         .state('elearning', {
             abstract: true,
             url: '/elearning',
-            templateUrl: '/partials/admin/elearning/elearning.ejs'
+            templateUrl: '/partials/admin/elearning/elearning.html'
         })
         .state('elearning.multimedia',{
             url: '/multimedia',
-            templateUrl: 'partials/admin/elearning/multimedia.ejs',
-            controller: 'MultimediaController'
+            templateUrl: 'partials/admin/elearning/multimedia.html'
         })
         .state('elearning.transmisiiLive',{
             url: '/transmisiiLive',
-            templateUrl: 'partials/admin/elearning/transmisiiLive.ejs',
-            controller: 'TransmisiiLiveController'
+            templateUrl: 'partials/admin/elearning/transmisiiLive.html'
         })
         .state('elearning.testeInteractive',{
             url: '/testeInteractive',
-            templateUrl: 'partials/admin/elearning/testeInteractive.ejs',
-            controller: 'TesteInteractiveController'
+            templateUrl: 'partials/admin/elearning/testeInteractive.html'
         })
         .state('ariiTerapeutice',{
             url: '/ariiTerapeutice',
-            templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeutice.ejs',
-            controller: 'AriiTerapeuticeController'
+            templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeutice.html'
         })
 
 }]);

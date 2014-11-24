@@ -1,0 +1,1 @@
+var cloudAdminServices = angular.module('cloudAdminServices', ['ngResource']);
