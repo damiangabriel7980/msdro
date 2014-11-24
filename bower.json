@@ -20,11 +20,12 @@
     "angular-ui-select": "~0.8.3",
     "select2": "~3.4.5",
     "angular-ui-calendar": "latest",
-    "angular-timer": "latest",
-    "qtip2": "latest",
-    "perfect-tooltip": "latest",
-    "video-js": "latest",
-    "angular-growl":"latest"
+    "angular-timer":"latest",
+    "qtip2":"latest",
+    "perfect-tooltip":"latest",
+    "video-js":"latest",
+    "angular-growl":"latest",
+    "aws-sdk": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
@@ -34,7 +35,6 @@
   "resolutions": {
     "bootstrap": "^3.2.0",
     "jquery": "~2.x",
-    "fullcalendar": "~1.x",
-    "angular": "~1.2.0"
+    "fullcalendar": "~1.x"
   }
 }

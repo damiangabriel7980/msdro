@@ -5,7 +5,8 @@ var gulp = require('gulp'),
     watch = require('gulp-watch'),
     concat = require('gulp-concat'),
     notify = require('gulp-notify'),
-    webserver = require('gulp-webserver');;
+    webserver = require('gulp-webserver'),
+    AWS = require('aws-sdk');
 
 // sass task
 gulp.task('sass', function () {
@@ -54,6 +55,31 @@ gulp.task('watch', function() {
 
     gulp.watch('./assets/js/**/*.js', function() {
         gulp.run('js');
+    });
+});
+
+//test amazon
+gulp.task('test', function () {
+    /*
+    uses aws-sdk
+    */
+    //environment credentials
+    var AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN;
+    // Note that environment credentials are loaded by default,
+// the following line is shown for clarity:
+    AWS.config.credentials = new AWS.EnvironmentCredentials('AWS');
+
+// Now set temporary credentials seeded from the master credentials
+    // generic:
+    AWS.config.credentials = new AWS.TemporaryCredentials();
+    //for IAM user:
+    AWS.config.credentials = new AWS.TemporaryCredentials({
+        RoleArn: 'arn:aws:iam::1234567890:role/TemporaryCredentials'
+    });
+
+// subsequent requests will now use temporary credentials from AWS STS.
+    new AWS.S3().listBucket(function(err, data) {
+
     });
 });
 
