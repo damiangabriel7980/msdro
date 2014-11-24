@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 05.11.2014.
  */
-cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce', '$modalInstance','$location','$state','$timeout','userService', function($scope,$rootScope,testeService,$stateParams,$sce,$modalInstance,$location,$state,$timeout,userService) {
+cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce', '$modalInstance','$location','$state','$timeout','userService','growl', function($scope,$rootScope,testeService,$stateParams,$sce,$modalInstance,$location,$state,$timeout,userService,growl) {
     testeService.getQ.query({id:$stateParams.id,idd:$stateParams.idd}).$promise.then(function(result){
         $scope.newQuestions=result["questions"];
         $scope.answersFiltered=result["answers"];
@@ -122,6 +122,7 @@ $scope.modifyChk = function(index)
             }
             var obj=angular.fromJson('{"score":'+ $scope.score_obtained + '}');
             $scope.vari2=userService.postTest.save(obj);
+            growl.addSuccessMessage("Your score is:" + $scope.score_obtained.toString());
             $modalInstance.close();
         }
       else
@@ -136,6 +137,7 @@ $scope.modifyChk = function(index)
             }
             $scope.obj=angular.fromJson('{"score":'+ $scope.score_obtained + '}');
             $scope.vari2=userService.postTest.save($scope.obj);
+            growl.addSuccessMessage("Your score is:" + $scope.score_obtained.toString());
             $modalInstance.close();
         }
     }
@@ -150,6 +152,7 @@ $scope.modifyChk = function(index)
             }
             var obj=angular.fromJson('{"score":'+ $scope.score_obtained + '}');
             $scope.vari2=userService.postTest.save(obj);
+            growl.addSuccessMessage("Your score is:" + $scope.score_obtained.toString());
             $modalInstance.close();
         }
         else
@@ -164,6 +167,7 @@ $scope.modifyChk = function(index)
             }
             $scope.obj=angular.fromJson('{"score":'+ $scope.score_obtained + '}');
             $scope.vari2=userService.postTest.save($scope.obj);
+            growl.addSuccessMessage("Your score is " + $scope.score_obtained.toString(),{_ttl: 3000});
             $modalInstance.close();
         }
     }

@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 05.11.2014.
  */
-cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce', function($scope,$rootScope,testeService,$stateParams,$sce){
+cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce','growl', function($scope,$rootScope,testeService,$stateParams,$sce,growl){
     var date = new Date();
     testeService.getAll.query().$promise.then(function(result){
         $scope.teste = result;
