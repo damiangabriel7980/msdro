@@ -11,8 +11,8 @@ var Job = require('./models/jobs');
 var Teste=require('./models/quizes');
 var Questions=require('./models/questions');
 var Answers = require('./models/answers');
-var User=require('./models/user');
 var Slides = require('./models/slides');
+var Roles=require('./models/roles');
 
 var XRegExp = require('xregexp').XRegExp;
 
@@ -25,6 +25,25 @@ var s3Client = s3.createClient({
         secretAccessKey: "uwJlkBuf/3iJIzNfAiE0RIPF68pCiZeZcG2h868r"
     }
 });
+
+//middleware to ensure a user has admin rights
+function hasAdminRights(req, res, next) {
+    Roles.find({_id: {$in: req.user.rolesID}}, function (err, roles) {
+        if(err){
+            res.status(500).end();
+        }else{
+            if(roles[0]){
+                if(roles[0].authority === "ROLE_ADMIN"){
+                    return next();
+                }else{
+                    res.status(403).end();
+                }
+            }else{
+                res.status(404).end();
+            }
+        }
+    });
+}
 
 module.exports = function(app, router) {
 
