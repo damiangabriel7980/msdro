@@ -45,7 +45,20 @@ function hasAdminRights(req, res, next) {
     });
 }
 
+
 module.exports = function(app, router) {
+
+    router.route('/admin/utilizatori/grupuri')
+
+        .get(hasAdminRights, function(req, res) {
+            UserGroup.find({}, {display_name: 1, description: 1} ,function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
 
     router.route('/content')
 
@@ -486,29 +499,6 @@ module.exports = function(app, router) {
             });
         });
 
-    router.route('/userGroup')
-
-        .get(function(req, res) {
-            UserGroup.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        });
-
-    router.route('/userGroup/:group_id')
-
-        .get(function(req, res) {
-            UserGroup.findById(req.params.group_id, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            })
-        });
     router.route('/calendar')
         .get(function(req,res) {
             User.findOne({username: {$regex: new RegExp("^" + req.user.username, "i")}}, function (err, usr) {

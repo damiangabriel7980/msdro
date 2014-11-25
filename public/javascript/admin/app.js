@@ -2,7 +2,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
     [
         'ui.router',
         'cloudAdminControllers',
-        'cloudAdminServices'
+        'cloudAdminServices',
+        'ngTable'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
