@@ -6,7 +6,7 @@ var cloudAdminApp = angular.module('cloudAdminApp',
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/utlizatori/gestionareConturi");
+    $urlRouterProvider.otherwise("/utilizatori/gestionareConturi");
     $stateProvider
         .state('utilizatori', {
             abstract: true,
