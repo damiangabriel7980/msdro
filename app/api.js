@@ -60,6 +60,18 @@ module.exports = function(app, router) {
             });
         });
 
+    router.route('/admin/utilizatori/utilizatori')
+
+        .get(hasAdminRights, function(req, res) {
+            User.find({}, {username: 1}).limit(0).exec(function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
     router.route('/content')
 
         .get(function(req, res) {

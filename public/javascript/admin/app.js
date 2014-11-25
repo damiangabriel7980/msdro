@@ -3,7 +3,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.router',
         'cloudAdminControllers',
         'cloudAdminServices',
-        'ngTable'
+        'ngTable',
+        'frapontillo.bootstrap-duallistbox'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

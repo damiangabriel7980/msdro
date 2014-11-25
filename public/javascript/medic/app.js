@@ -159,6 +159,11 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                 })
             }]
         })
+        .state('groupFeatures', {
+            url: '/groupFeatures/:feature',
+            templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
+            controller: 'FeaturesController'
+        })
 }]);
 
 cloudAdminApp.run(

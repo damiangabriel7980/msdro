@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'GrupuriService', function($scope, $rootScope, $stateParams, $filter, ngTableParams, GrupuriService){
+cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'GrupuriService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, GrupuriService, $modal){
     GrupuriService.getAllGroups.query().$promise.then(function (resp) {
         console.log(resp);
         var data = resp;
@@ -25,4 +25,14 @@ cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '
             }
         });
     });
+
+    $scope.addGroup = function(){
+        $modal.open({
+            templateUrl: 'partials/admin/utilizatori/modalAddGroup.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'AddGroupController'
+        });
+    }
+
 }]);
