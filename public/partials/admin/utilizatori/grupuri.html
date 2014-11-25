@@ -3,13 +3,19 @@
     <div class="col-md-3"><div class="btn btn-default pull-right">Adauga grupuri utilizatori</div></div>
 </div>
 <div class="col-md-12">
-    <table ng-table="tableParams" show-filter="true" class="table">
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="group in $data">
             <td data-title="'Display name'" filter="{ 'display_name': 'text' }" sortable="'display_name'">
                 {{group.display_name}}
             </td>
             <td data-title="'Description'" sortable="'description'">
                 {{group.description}}
+            </td>
+            <td data-title="'Actiuni'">
+                <div class="btn-group">
+                    <div class="btn btn-default"><i class="glyphicon glyphicon-cog"></i></div>
+                    <div class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></div>
+                </div>
             </td>
         </tr>
     </table>
