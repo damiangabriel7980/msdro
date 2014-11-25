@@ -6,7 +6,7 @@ var cloudAdminApp = angular.module('cloudAdminApp',
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/utlizatori/gestionareConturi");
+    $urlRouterProvider.otherwise("/utilizatori/gestionareConturi");
     $stateProvider
         .state('utilizatori', {
             abstract: true,
@@ -23,7 +23,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('utilizatori.grupuri',{
             url: '/grupuri',
-            templateUrl: 'partials/admin/utilizatori/grupuri.html'
+            templateUrl: 'partials/admin/utilizatori/grupuri.html',
+            controller: 'GrupuriController'
         })
         .state('utilizatori.importUsers',{
             url: '/importUsers',

@@ -25,7 +25,8 @@
     "perfect-tooltip": "latest",
     "video-js": "latest",
     "angular-growl": "latest",
-    "aws-sdk": "latest"
+    "aws-sdk": "latest",
+    "angular-bootstrap-duallistbox": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
