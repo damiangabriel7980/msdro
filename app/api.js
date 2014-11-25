@@ -676,5 +676,249 @@ module.exports = function(app, router) {
             }
         }) ;
     });
+
+
+    //Admin area
+    router.route('/admin/products')
+        .get(function(req, res) {
+            Products.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+        })
+        .post(function(req, res) {
+
+            var product = new Products(); 		// create a new instance of the Bear model
+            product.name = req.body.name;  // set the bears name (comes from the request)
+            product.description=req.body.description ;
+            product.enable= req.body.enable     ;
+            product.file_path= req.body.file_path  ;
+            product.image_path= req.body.image_path ;
+            product.last_updated=req.body.last_updated;
+            product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
+            product.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Product created!' });
+            });
+
+        });
+    router.route('/admin/products/:id')
+        .get(function(req, res) {
+            Products.findById(req.params._id, function(err, product) {
+                if (err)
+                    res.send(err);
+                res.json(product);
+            });
+        })
+    .put(function(req, res) {
+
+        Products.findById(req.params._id, function(err, product) {
+
+            if (err)
+                res.send(err);
+
+            product.name = req.body.name;  // set the bears name (comes from the request)
+            product.description=req.body.description ;
+            product.enable= req.body.enable     ;
+            product.file_path= req.body.file_path  ;
+            product.image_path= req.body.image_path ;
+            product.last_updated=req.body.last_updated;
+            product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
+            // save the bear
+            product.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Product updated!' });
+            });
+
+        });
+    })
+        .delete(function(req, res) {
+            Products.remove({
+                _id: req.params._id
+            }, function(err,prod) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted' });
+            });
+        });
+
+    router.route('/admin/content')
+
+        .get(function(req, res) {
+            Content.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+        })
+    .post(function(req, res) {
+
+        var content = new Content(); 		// create a new instance of the Bear model
+            content.title = req.body.title;  // set the bears name (comes from the request)
+            content.author=req.body.author ;
+            content.description= req.body.description     ;
+            content.text= req.body.text  ;
+            content.type= req.body.type ;
+            content.last_updated=req.body.last_updated;
+            content.version= req.body.version ;
+            content.enable=req.body.enable;
+            content.image_path=req.body.image_path;
+            content.groupsID=req.body.groupsID;
+
+            content.save(function(err) {
+            if (err)
+                res.send(err);
+
+            res.json({ message: 'Content created!' });
+        });
+
+    });
+    router.route('/admin/content/:id')
+
+        .get(function(req, res) {
+            Content.find({_id:req.params.id}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                if(cont.length == 1){
+                    res.json(cont[0]);
+                }else{
+                    res.json(null);
+                }
+            })
+        })
+        .put(function(req, res) {
+
+            Content.findById(req.params.id, function(err, content) {
+
+                if (err)
+                    res.send(err);
+
+                content.title = req.body.title;  // set the bears name (comes from the request)
+                content.author=req.body.author ;
+                content.description= req.body.description     ;
+                content.text= req.body.text  ;
+                content.type= req.body.type ;
+                content.last_updated=req.body.last_updated;
+                content.version= req.body.version ;
+                content.enable=req.body.enable;
+                content.image_path=req.body.image_path;
+                content.groupsID=req.body.groupsID;
+                content.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Content updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Content.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
+
+    router.route('/admin/events')
+
+        .get(function(req, res) {
+            Events.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+        })
+        .post(function(req, res) {
+
+            var event = new Events(); 		// create a new instance of the Bear model
+            event.description = req.body.description;  // set the bears name (comes from the request)
+            event.enable=req.body.enable ;
+            event.end= req.body.end     ;
+            event.groupsID= req.body.groupsID  ;
+            event.last_updated= req.body.last_updated ;
+            event.name=req.body.name;
+            event.place= req.body.place ;
+            event.privacy=req.body.privacy;
+            event.start=req.body.start;
+            event.type=req.body.type;
+
+            event.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Event created!' });
+            });
+
+        });
+    router.route('/admin/events/:id')
+
+        .get(function(req, res) {
+            Events.find({_id:req.params.id}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                if(cont.length == 1){
+                    res.json(cont[0]);
+                }else{
+                    res.json(null);
+                }
+            })
+        })
+        .put(function(req, res) {
+
+            Events.findById(req.params.id, function(err, event) {
+
+                if (err)
+                    res.send(err);
+
+                event.description = req.body.description;  // set the bears name (comes from the request)
+                event.enable=req.body.enable ;
+                event.end= req.body.end     ;
+                event.groupsID= req.body.groupsID  ;
+                event.last_updated= req.body.last_updated ;
+                event.name=req.body.name;
+                event.place= req.body.place ;
+                event.privacy=req.body.privacy;
+                event.start=req.body.start;
+                event.type=req.body.type;
+               event.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Event updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Events.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
+
+
+
     app.use('/api', router);
 };

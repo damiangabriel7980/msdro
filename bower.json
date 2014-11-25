@@ -26,7 +26,8 @@
     "video-js": "latest",
     "angular-growl": "latest",
     "aws-sdk": "latest",
-    "angular-bootstrap-duallistbox": "latest"
+    "angular-bootstrap-duallistbox": "latest",
+    "ng-table":"latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

@@ -2,7 +2,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
     [
         'ui.router',
         'cloudAdminControllers',
-        'cloudAdminServices'
+        'cloudAdminServices',
+        'ngTable'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -37,15 +38,18 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('continut.produse',{
             url: '/produse',
-            templateUrl: 'partials/admin/continut/produse.html'
+            templateUrl: 'partials/admin/continut/produse.html',
+            controller:'productsCtrl'
         })
         .state('continut.articole',{
             url: '/articole',
-            templateUrl: 'partials/admin/continut/articole.html'
+            templateUrl: 'partials/admin/continut/articole.html',
+            controller:'articlesCtrl'
         })
         .state('continut.evenimente',{
             url: '/evenimente',
-            templateUrl: 'partials/admin/continut/evenimente.html'
+            templateUrl: 'partials/admin/continut/evenimente.html',
+            controller:'eventsCtrl'
         })
         .state('continut.indexareContinut',{
             url: '/indexareContinut',

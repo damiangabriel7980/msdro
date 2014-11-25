@@ -1,1 +1,23 @@
-produse
+<div class="container-fluid">
+<div class="well">
+    <div class="row">
+        <div class="col-xs-5"><h3>Gestionare Produse</h3></div>
+                <div class="col-xs-2 pull-right">
+            <a href="#" class="btn btn-info pull-right margintop20px" id="add-product"><i class="glyphicon glyphicon-plus-sign"></i> Adauga produs</a>
+        </div>
+    </div>
+</div>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="prod in $data">
+            <td data-title="'Name'" filter="{ 'name': 'text' }" sortable="'name'">{{prod.name}}</td>
+            <td data-title="'Description'" sortable="'description'" ng-bind-html="renderHtml(prod.description)"></td>
+            <td>
+                <div class="btn-group-sm"  role="group" style="display: flex">
+                <button class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+                <button class="btn btn-info"><i class="glyphicon glyphicon-cog"></i></button>
+                    </div>
+            </td>
+        </tr>
+    </table>
+
+</div>
