@@ -59,10 +59,36 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/admin/continut/articole.html',
             controller:'articlesCtrl'
         })
+        .state('continut.articole.adaugaArticol',{
+            parent:'continut.articole',
+            url: '',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/articoleAdd.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"articlesAddCtrl"
+                })
+            }]
+        })
         .state('continut.evenimente',{
             url: '/evenimente',
             templateUrl: 'partials/admin/continut/evenimente.html',
             controller:'eventsCtrl'
+        })
+        .state('continut.evenimente.adaugaEveniment',{
+            parent:'continut.evenimente',
+            url: '',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/evenimenteAdd.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"eventsAddCtrl"
+                })
+            }]
         })
         .state('continut.indexareContinut',{
             url: '/indexareContinut',
@@ -111,6 +137,19 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/admin/elearning/multimedia.html',
             controller: 'multimediaCtrl'
         })
+        .state('elearning.multimedia.adaugaMultimedia',{
+            parent:'elearning.multimedia',
+            url: '',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/elearning/multimediaAdd.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"multimediaAddCtrl"
+                })
+            }]
+        })
         .state('elearning.transmisiiLive',{
             url: '/transmisiiLive',
             templateUrl: 'partials/admin/elearning/transmisiiLive.html'
@@ -120,12 +159,37 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/admin/elearning/testeInteractive.html',
             controller: 'testeInteractiveCtrl'
         })
+        .state('elearning.testeInteractive.adaugaTest',{
+            parent:'elearning.testeInteractive',
+            url: '',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/elearning/testeInteractiveAdd.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"testeAddCtrl"
+                })
+            }]
+        })
         .state('ariiTerapeutice',{
             url: '/ariiTerapeutice',
             templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeutice.html',
             controller: 'ariiTerapeuticeCtrl'
         })
-
+        .state('ariiTerapeutice.adaugaArie',{
+            parent:'ariiTerapeutice',
+            url: '',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeAdd.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"ariiTerapeuticeAddCtrl"
+                })
+            }]
+        })
 }]);
 
 cloudAdminApp.run(
