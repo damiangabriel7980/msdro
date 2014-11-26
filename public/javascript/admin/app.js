@@ -41,6 +41,19 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/admin/continut/produse.html',
             controller:'productsCtrl'
         })
+        .state('continut.produse.adaugaProdus',{
+            parent:'continut.produse',
+            url: '',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/productsAdd.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"productsAddCtrl"
+                })
+            }]
+        })
         .state('continut.articole',{
             url: '/articole',
             templateUrl: 'partials/admin/continut/articole.html',
