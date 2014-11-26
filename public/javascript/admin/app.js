@@ -95,7 +95,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('elearning.multimedia',{
             url: '/multimedia',
-            templateUrl: 'partials/admin/elearning/multimedia.html'
+            templateUrl: 'partials/admin/elearning/multimedia.html',
+            controller: 'multimediaCtrl'
         })
         .state('elearning.transmisiiLive',{
             url: '/transmisiiLive',
@@ -103,11 +104,13 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('elearning.testeInteractive',{
             url: '/testeInteractive',
-            templateUrl: 'partials/admin/elearning/testeInteractive.html'
+            templateUrl: 'partials/admin/elearning/testeInteractive.html',
+            controller: 'testeInteractiveCtrl'
         })
         .state('ariiTerapeutice',{
             url: '/ariiTerapeutice',
-            templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeutice.html'
+            templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeutice.html',
+            controller: 'ariiTerapeuticeCtrl'
         })
 
 }]);

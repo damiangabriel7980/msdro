@@ -99,3 +99,4 @@ ul.products li {
 .growl{top:auto !important;}
 .margintop20px{margin-top:20px !important; }
 .marginbottom0{margin-bottom: 0px;}
+.specialSublist{list-style: none;display: inline;}

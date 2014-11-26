@@ -1,1 +1,29 @@
-testeInteractive
+<div class="container-fluid">
+    <div class="well">
+        <div class="row">
+            <div class="col-xs-5"><h3>Gestionare Teste</h3></div>
+            <div class="col-xs-2 pull-right">
+                <a href="#" class="btn btn-info pull-right margintop20px" id="add-test"><i class="glyphicon glyphicon-plus-sign"></i> Adauga test</a>
+            </div>
+        </div>
+    </div>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="cont in $data">
+            <td data-title="'Nume'" filter="{ 'title': 'text' }" sortable="'title'">{{cont.title}}</td>
+            <td data-title="'Numar intrebari'" sortable="'no_of_exam_questions'">{{cont.no_of_exam_questions}}</td>
+            <td data-title="'Numar incercari'" sortable="'times'">{{cont.times}}</td>
+            <td data-title="'Timp'" sortable="'time'" >{{cont.time}}</td>
+            <td data-title="'Puncte'" sortable="'points'" >{{cont.points}}</td>
+            <td data-title="'Data expirare'" sortable="'end'">{{cont.expiry_date | asDate|date:'dd/MM/yyyy'}}</td>
+            <td data-title="'Status'" sortable="'expired'" ng-if="cont.expired==false" ><span class="label label-warning">Expirat</span></td>
+            <td data-title="'Status'" sortable="'expired'" ng-if="cont.expired==true"><span class="label label-warning">Activ</span></td>
+            <td>
+                <div class="btn-group-sm"  role="group" style="display: flex">
+                    <button class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button class="btn btn-info"><i class="glyphicon glyphicon-cog"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</div>

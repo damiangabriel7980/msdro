@@ -42,4 +42,40 @@ cloudAdminServices.factory('EventsAdminService', ['$resource', function($resourc
         })
     }
 }]);
+cloudAdminServices.factory('MultimediaAdminService', ['$resource', function($resource){
+    return {
+        getAll: $resource('api/admin/multimedia/', {}, {
+            query: { method: 'GET', isArray: true },
+            save: { method: 'POST'}
+        }),
+        deleteOrUpdateMultimedia:$resource('api/admin/multimedia/:id', {}, {
+            delete: { method: 'DELETE'},
+            update: { method: 'PUT'}
+        })
+    }
+}]);
+cloudAdminServices.factory('testeAdminService', ['$resource', function($resource){
+    return {
+        getAll: $resource('api/admin/teste/', {}, {
+            query: { method: 'GET', isArray: true },
+            save: { method: 'POST'}
+        }),
+        deleteOrUpdateteste:$resource('api/admin/teste/:id', {}, {
+            delete: { method: 'DELETE'},
+            update: { method: 'PUT'}
+        })
+    }
+}]);
+cloudAdminServices.factory('ariiAdminService', ['$resource', function($resource){
+    return {
+        getAll: $resource('api/admin/arii/', {}, {
+            query: { method: 'GET', isArray: true },
+            save: { method: 'POST'}
+        }),
+        deleteOrUpdatearii:$resource('api/admin/arii/:id', {}, {
+            delete: { method: 'DELETE'},
+            update: { method: 'PUT'}
+        })
+    }
+}]);
 
