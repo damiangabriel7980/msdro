@@ -12,4 +12,4 @@ var UserGroupSchema		= new Schema({
     defaultGroup: Boolean
 });
 
-module.exports = mongoose.model('UserGroup', UserGroupSchema);
+module.exports = mongoose.model('UserGroup', UserGroupSchema, 'groups');

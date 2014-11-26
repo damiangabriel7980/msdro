@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <!--Core-modules-->
-    <script src="components/jquery/dist/jquery.js"></script>
+    <script src="components/jquery/jquery.js"></script>
     <script src="components/jquery-ui/ui/jquery-ui.js"></script>
     <script src="components/angular/angular.js"></script>
     <script src="components/angular-sanitize/angular-sanitize.js"></script>
@@ -16,6 +16,8 @@
     <script src="components/angular-ui-select/dist/select.min.js"></script>
     <script src="modules/google_analytics/angulartics-ga.js"></script>
     <script src="components/aws-sdk/dist/aws-sdk.min.js"></script>
+    <script src="components/bootstrap-duallistbox/dist/jquery.bootstrap-duallistbox.min.js"></script>
+    <script src="components/angular-bootstrap-duallistbox/dist/angular-bootstrap-duallistbox.min.js"></script>
 
 
 
@@ -23,12 +25,17 @@
     <script src="javascript/admin/app.js"></script>
     <script src="javascript/admin/controllers.js"></script>
     <script src="javascript/admin/services.js"></script>
+    <script src="javascript/admin/UtilizatoriControllers/GrupuriController.js"></script>
+    <script src="javascript/admin/UtilizatoriControllers/AddGroupController.js"></script>
+    <script src="javascript/admin/UtilizatoriControllers/DeleteGroupController.js"></script>
 
 
     <!--Plug-ins-->
-
+    <script src="components/ng-table/ng-table.min.js"></script>
+    <script src="components/ng-table/ng-table.min.js"></script>
 
     <!--Stylesheets-->
+    <link rel='stylesheet' href='components/ng-table/ng-table.min.css' />
     <link rel='stylesheet' href='components/angular-ui-select/dist/select.min.css' />
     <link rel='stylesheet' href='components/select2/select2.css' />
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
@@ -67,7 +74,7 @@
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('continut')}">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Utilizatori <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Continut <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="continut.produse"> Produse </a></li>
                         <li class="divider"></li>
