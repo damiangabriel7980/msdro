@@ -14,9 +14,11 @@ var Answers = require('./models/answers');
 var Slides = require('./models/slides');
 var Roles=require('./models/roles');
 
-var XRegExp = require('xregexp').XRegExp;
+var XRegExp  = require('xregexp').XRegExp;
 
 var SHA256   = require('crypto-js/sha256');
+
+var mongoose = require('mongoose');
 
 var s3 = require('s3');
 var s3Client = s3.createClient({
@@ -25,6 +27,8 @@ var s3Client = s3.createClient({
         secretAccessKey: "uwJlkBuf/3iJIzNfAiE0RIPF68pCiZeZcG2h868r"
     }
 });
+
+//================================================================================== useful db administration functions
 
 //middleware to ensure a user has admin rights
 function hasAdminRights(req, res, next) {
@@ -45,6 +49,107 @@ function hasAdminRights(req, res, next) {
     });
 }
 
+//returns ONLY id's of entities connected to specified document in array
+var findConnectedEntitiesIds = function(connected_to_entity, connection_name, connected_to_id, callback){
+    var qry = {};
+    qry[connection_name] = {$in: [connected_to_id]};
+    connected_to_entity.find(qry, function (err, documents) {
+        if(err){
+            callback("Error finding connecting entities", null);
+        }else{
+            var ret = [];
+            for(var i=0; i<documents.length; i++){
+                ret.push(documents[i]._id);
+            }
+            callback(false, ret);
+        }
+    });
+};
+
+//returns entities connected to specified document
+var findConnectedEntities = function(connected_to_entity, connection_name, connected_to_id, callback){
+    var qry = {};
+    qry[connection_name] = {$in: [connected_to_id]};
+    connected_to_entity.find(qry, function (err, documents) {
+        if(err){
+            callback("Error finding connecting entities", null);
+        }else{
+            callback(false, documents);
+        }
+    });
+};
+
+//returns entities connected to specified document,
+//but only returns the attributes specified in projection
+var findConnectedEntitiesWithProjection = function(connected_to_entity, connection_name, connected_to_id, projection, callback){
+    var qry = {};
+    qry[connection_name] = {$in: [connected_to_id]};
+    connected_to_entity.find(qry, projection, function (err, documents) {
+        if(err){
+            callback("Error finding connecting entities", null);
+        }else{
+            callback(false, documents);
+        }
+    });
+};
+
+var connectEntitiesToEntity = function (connecting_array_of_ids, connectedEntity, connection_name, id_document_to_connect_to, callback) {
+    //convert string id's to ObjectId's
+    var format_connecting_array = [];
+    for(var i=0; i<connecting_array_of_ids.length; i++){
+        if(typeof connecting_array_of_ids[i] === "string"){
+            format_connecting_array.push(mongoose.Types.ObjectId(connecting_array_of_ids[i]));
+        }else{
+            format_connecting_array.push(connecting_array_of_ids[i]);
+        }
+    }
+    //insert only strings in connections array
+    if(typeof id_document_to_connect_to !== "string") id_document_to_connect_to = id_document_to_connect_to.toString();
+    //use $addToSet to avoid inserting duplicates
+    var upd = {};
+    upd[connection_name] = id_document_to_connect_to;
+    connectedEntity.update({_id:{$in: format_connecting_array}}, {$addToSet: upd}, {multi: true}, function (err, res) {
+        callback(err, res);
+    });
+};
+
+var disconnectEntitiesFromEntity = function (array_of_ids_to_disconnect, connectedEntity, connection_name, id_document_to_disconnect_from, callback) {
+    //convert string id's to ObjectId's
+    var format_connecting_array = [];
+    for(var i=0; i<array_of_ids_to_disconnect.length; i++){
+        if(typeof array_of_ids_to_disconnect[i] === "string"){
+            format_connecting_array.push(mongoose.Types.ObjectId(array_of_ids_to_disconnect[i]));
+        }else{
+            format_connecting_array.push(array_of_ids_to_disconnect[i]);
+        }
+    }
+    //insert only strings in connections array
+    if(typeof id_document_to_disconnect_from !== "string") id_document_to_disconnect_from = id_document_to_disconnect_from.toString();
+    //use $addToSet to avoid inserting duplicates
+    var upd = {};
+    upd[connection_name] = id_document_to_disconnect_from;
+    connectedEntity.update({_id:{$in: format_connecting_array}}, {$pull: upd}, {multi: true}, function (err, res) {
+        callback(err, res);
+    });
+};
+
+var disconnectAllEntitiesFromEntity = function (connectedEntity, connection_name, id_document_to_disconnect_from, callback) {
+    findConnectedEntitiesIds(connectedEntity, connection_name, id_document_to_disconnect_from, function (err, array_of_ids) {
+        if(err){
+            callback("Error finding connected entities", null);
+        }else{
+            disconnectEntitiesFromEntity(array_of_ids, connectedEntity, connection_name, id_document_to_disconnect_from, function (err, success) {
+                if(err){
+                    callback("Error at disconnecting entities", null);
+                }else{
+                    callback(null, "Entities disconnected: "+success);
+                }
+            });
+        }
+    });
+};
+
+//====================================================================================================== module exports
 
 module.exports = function(app, router) {
 
@@ -70,6 +175,87 @@ module.exports = function(app, router) {
                 }
                 res.json(cont);
             });
+        });
+
+    router.route('/admin/utilizatori/addGroup')
+
+        .post(hasAdminRights, function (req, res) {
+            var ans = {};
+            var data = req.body.data;
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            //check if name exists
+            if(!data.group.display_name){
+                ans.error = true;
+                ans.message = "Numele este obligatoriu";
+                res.json(ans);
+            }else{
+                //validate name
+                if(!namePatt.test(data.group.display_name.toString())){
+                    ans.error = true;
+                    ans.message = "Numele trebuie sa aiba doar caractere, minim 3";
+                    res.json(ans);
+                }else{
+                    //add group
+                    var newGroup = new UserGroup(data.group);
+                    newGroup.save(function (err, inserted) {
+                        if(err){
+                            ans.error = true;
+                            ans.message = "Eroare la crearea grupului. Va rugam verificati campurile";
+                            res.json(ans);
+                        }else{
+                            //update users to point to new group
+                            var idGroupInserted = inserted._id.toString();
+                            //extract id's from users
+                            var ids = [];
+                            for(var i=0; i<data.users.length; i++){
+                                ids.push(data.users[i]._id);
+                            }
+                            connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
+                                if(err){
+                                    console.log(err);
+                                    ans.error = true;
+                                    ans.message = "Eroare la adaugarea utilizatorilor in grup.";
+                                    res.json(ans);
+                                }else{
+                                    ans.error = false;
+                                    ans.message = "S-a creat grupul. S-au adaugat "+result+" utlizatori";
+                                    res.json(ans);
+                                }
+                            })
+                        }
+                    });
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/deleteGroup')
+
+        .post(hasAdminRights, function (req, res) {
+            var group_id = req.body.id;
+            console.log(group_id);
+            //disconnect users from group first
+            disconnectAllEntitiesFromEntity(User, "groupsID", group_id, function (err, resp1) {
+                if(err){
+                    res.json({error: true, message: err});
+                }else{
+                    //now remove the group itself
+                    UserGroup.remove({_id: group_id}, function (err, resp2) {
+                        if(err){
+                            res.json({error: true, message: "Eroare la stergerea grupului"});
+                        }else{
+                            res.json({error: false, message: "Grupul a fost sters. "+resp1});
+                        }
+                    });
+                }
+            })
+        });
+
+    router.route(hasAdminRights, '/admin/utilizatori/test')
+
+        .post(function (req, res) {
+            var data = req.body.data;
+            console.log("route ok");
+            res.json({message: "route ok"});
         });
 
     router.route('/content')

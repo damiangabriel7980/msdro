@@ -6,6 +6,9 @@
         </div>
         <div class="col-md-12 modal-body">
             <div class="col-md-12" style="margin-bottom: 15px;">
+                <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
+            </div>
+            <div class="col-md-12" style="margin-bottom: 15px;">
                 <div class="col-md-6 noPadding">
                     <div class="form-group col-md-12" style="padding-left: 0;">
                         <label for="nume">Nume:</label>
@@ -25,8 +28,8 @@
                         <input type="checkbox" id="grupDefault" ng-model="grupDefault">
                     </div>
                     <div class="col-md-12">
-                        <label for="contentExplicit">Content explicit</label>
-                        <input type="checkbox" id="contentExplicit" ng-model="contentExplicit">
+                        <label for="contentSpecific">Content specific</label>
+                        <input type="checkbox" id="contentSpecific" ng-model="contentSpecific">
                     </div>
                 </div>
             </div>
