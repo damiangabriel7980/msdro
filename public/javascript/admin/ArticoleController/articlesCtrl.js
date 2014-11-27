@@ -6,7 +6,11 @@
  */
 cloudAdminControllers.controller('articlesCtrl', ['$scope','$rootScope' ,'ContentService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,ContentService,$stateParams,$sce,ngTableParams,$filter){
     ContentService.getAll.query().$promise.then(function(result){
-        var contents = result;
+        var contents = result['content'];
+        $scope.grupe=result['groups'];
+        $scope.groupMap={};
+        for(var i =0;i<$scope.grupe.length;i++)
+            $scope.groupMap[$scope.grupe[i]._id]=$scope.grupe[i].display_name;
         console.log(result);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page

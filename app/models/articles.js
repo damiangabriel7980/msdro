@@ -12,7 +12,7 @@ var articlesSchema		= new Schema({
     type:         Number,
     last_updated: Date,
     version:      Number,
-    enable:       Number,
+    enable:       Boolean,
     image_path:   String,
     groupsID:     Array
 });

@@ -945,12 +945,23 @@ module.exports = function(app, router) {
                 if(err) {
                     res.send(err);
                 }
-
-                res.json(cont);
+                else {
+                    var contents={};
+                    contents['content']=cont;
+                    UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
+                        if(err) {
+                            console.log(err);
+                            res.send(err);
+                        }
+                        contents['groups']=cont2;
+                        console.log(contents);
+                        res.json(contents);
+                    });
+                }
             });
         })
     .post(function(req, res) {
-
+            console.log(req);
         var content = new Content(); 		// create a new instance of the Bear model
             content.title = req.body.title;  // set the bears name (comes from the request)
             content.author=req.body.author ;
@@ -962,12 +973,19 @@ module.exports = function(app, router) {
             content.enable=req.body.enable;
             content.image_path=req.body.image_path;
             content.groupsID=req.body.groupsID;
-
-            content.save(function(err) {
+            console.log(content.toString());
+            console.log(typeof content);
+            content.save(function(err,result) {
             if (err)
+            {
+                console.log(err);
                 res.send(err);
+            }
+                else{
+                console.log(result);
+                res.json({ message: 'Content created!' });
+            }
 
-            res.json({ message: 'Content created!' });
         });
 
     });
@@ -981,6 +999,7 @@ module.exports = function(app, router) {
                 if(cont.length == 1){
                     res.json(cont[0]);
                 }else{
+                    findConnectedEntitiesWithProjection();
                     res.json(null);
                 }
             })

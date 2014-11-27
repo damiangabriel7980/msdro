@@ -33,8 +33,8 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
 }]);
 cloudAdminServices.factory('ContentService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/admin/content/', {}, {
-            query: { method: 'GET', isArray: true },
+        getAll: $resource('api/admin/content', {}, {
+            query: { method: 'GET', isArray: false },
             save: { method: 'POST'}
         }),
         deleteOrUpdateContent:$resource('api/admin/content/:id', {}, {
