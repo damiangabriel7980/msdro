@@ -1,0 +1,54 @@
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+</script>
+<div class="modal-header">
+    <div class="modal-title"><h3>Adauga test</h3></div>
+</div>
+<div class="modal-body" style="height: 70%;">
+    <div class="row">
+        <div class="col-xs-4">
+            <label class="label label-default">Titlu:</label>
+            <input type="text" class="form-control col-xs-12">
+        </div>
+        <div class="col-xs-4">
+            <label class="label label-default">Prag de promovare:</label>
+
+            <input type="text" class="form-control col-xs-12">
+        </div>
+        <div class="col-xs-4">
+            <label class="label label-default">Nr. intrebari/test:</label>
+            <input type="text" class="form-control col-xs-12">
+        </div>
+        <div class="col-xs-4">
+            <label class="label label-default">Nr. incercari:</label>
+
+            <input type="text" class="form-control col-xs-12">
+        </div>
+        <div class="col-xs-4">
+            <label class="label label-default">Puncte:</label>
+            <input type="text" class="form-control col-xs-12">
+        </div>
+        <div class="col-xs-4">
+            <label class="label label-default">Timp:</label>
+
+            <input type="text" class="form-control col-xs-12">
+        </div>
+        <div class="col-xs-12">
+            <label class="label label-default">Descriere:</label>
+            <form method="post">
+                <textarea style="width:100%"></textarea>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn pull-right btn-primary" ng-click="okk()">Close</a>
+</div>
