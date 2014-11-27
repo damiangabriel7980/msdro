@@ -1,0 +1,58 @@
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+</script>
+<div class="modal-header">
+    <div class="modal-title"><h3>Adauga articol</h3></div>
+</div>
+<div class="modal-body" style="height: 70%;">
+    <div class="row">
+        <div class="col-xs-6">
+            <label class="label label-default">Nume articol:</label>
+            <input type="text" class="form-control col-xs-12">
+        </div>
+        <div class="col-xs-6">
+            <label class="label label-default">Nume autor:</label>
+
+            <input type="text" class="form-control col-xs-12">
+        </div>
+        <div>
+            <label class="label label-default">Tip document:</label>
+            <select class="form-control">
+                <option>Ceva1</option>
+                <option>Ceva2</option>
+                <option>Ceva3</option>
+            </select>
+            </div>
+        <div>
+            <label class="label label-default">Teste interactive:</label>
+            <select class="form-control">
+                <option>Ceva1</option>
+                <option>Ceva2</option>
+                <option>Ceva3</option>
+            </select>
+        </div>
+        <div>
+            <label class="label label-default">Acces grup:</label>
+            <ui-select multiple="true" theme="select2">
+                <ui-select-choices>
+
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <label class="label label-default">Text:</label>
+        <form method="post">
+            <textarea style="width:100%"></textarea>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn pull-right btn-primary" ng-click="okk()">Close</a>
+</div>

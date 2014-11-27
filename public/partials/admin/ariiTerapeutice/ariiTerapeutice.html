@@ -1,1 +1,33 @@
-arii terapeutice
+<div class="container-fluid">
+    <div class="well">
+        <div class="row">
+            <div class="col-xs-5"><h3>Gestionare Arii Terapeutice</h3></div>
+            <div class="col-xs-2 pull-right">
+                <a ui-sref="ariiTerapeutice.adaugaArie" class="btn btn-info pull-right margintop20px" id="add-multimedia"><i class="glyphicon glyphicon-plus-sign"></i> Adauga arie</a>
+            </div>
+        </div>
+    </div>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="cont in $data" ng-if="cont['therapeutic-areasID'].length==0">
+            <td data-title="'Nume arie'"  filter="{ 'name': 'text' }" sortable="'name'">{{cont.name}}</td>
+            <td data-title="'Nume subarie'">
+                <ul style="list-style: none">
+                    <li class="margintop20px" ng-repeat="cont2 in $data | filter : { 'therapeutic-areasID' : cont._id } | orderBy: 'name'">{{cont2.name}}&nbsp;
+                            <span class="btn-group-sm pull-right"  role="group" style="display: flex">
+                                <button class="btn btn-danger btn-sm" disabled="disabled"><i class="glyphicon glyphicon-trash"></i></button>
+                                <button class="btn btn-info btn-sm" ui-sref="ariiTerapeutice.editArie({id: cont2._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                            </span>
+                        <br />
+                    </li>
+                </ul>
+            </td>
+            <td data-title="'Actiuni'">
+                <div class="btn-group-sm"  role="group" style="display: flex">
+                    <button class="btn btn-danger" disabled="disabled"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button class="btn btn-info" ui-sref="ariiTerapeutice.editArie({id: cont._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</div>

@@ -1,0 +1,70 @@
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+
+</script>
+<script>
+    $(function() {
+        $( "#datepicker" ).datepicker();
+    });
+</script>
+<div class="modal-header">
+    <div class="modal-title"><h3>Adauga eveniment</h3></div>
+</div>
+<div class="modal-body" style="height: 70%;">
+    <div class="row">
+        <div class="col-xs-6">
+            <label class="label label-default">Denumire:</label>
+            <input type="text" class="form-control col-xs-12">
+        </div>
+        <div class="col-xs-4">
+            <label class="label label-default">Tip:</label>
+
+            <select class="form-control">
+                <option>Ceva1</option>
+                <option>Ceva2</option>
+                <option>Ceva3</option>
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <input type="checkbox">Privat
+        </div>
+        <div class="col-xs-6">
+            <label class="label label-default">Data inceput:</label>
+            <p class="input-group">
+                <input type="text" class="form-control" ng-click="open1($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened1" min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+            </p>
+
+        </div>
+        <div class="col-xs-6">
+            <label class="label label-default">Data sfarsit:</label>
+            <p class="input-group">
+                <input type="text" ng-click="open2($event)" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened2" min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+
+            </p>
+
+        </div>
+        <div>
+            <label class="label label-default">Acces grup:</label>
+            <ui-select multiple="true" theme="select2">
+                <ui-select-choices>
+
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <label class="label label-default">Detalii:</label>
+        <form method="post">
+            <textarea style="width:100%"></textarea>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn pull-right btn-primary" ng-click="okk()">Close</a>
+</div>

@@ -1,1 +1,26 @@
-multimedia
+<div class="container-fluid">
+    <div class="well">
+        <div class="row">
+            <div class="col-xs-5"><h3>Gestionare Multimedia</h3></div>
+            <div class="col-xs-2 pull-right">
+                <a ui-sref="elearning.multimedia.adaugaMultimedia" class="btn btn-info pull-right margintop20px" id="add-multimedia"><i class="glyphicon glyphicon-plus-sign"></i> Adauga multimedia</a>
+            </div>
+        </div>
+    </div>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="cont in $data">
+            <td data-title="'Tip'" sortable="'type'">{{cont.type==1?"Film":"Slide"}}</td>
+            <td data-title="'Nume multimedia'" filter="{ 'title': 'text' }" sortable="'title'">{{cont.title}}</td>
+            <td data-title="'Autor'" filter="{ 'author': 'text' }" sortable="'author'">{{cont.author}}</td>
+            <td data-title="'Descriere'" sortable="'description'" >{{cont.description}}</td>
+
+            <td>
+                <div class="btn-group-sm"  role="group" style="display: flex">
+                    <button class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button class="btn btn-info"><i class="glyphicon glyphicon-cog"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</div>
