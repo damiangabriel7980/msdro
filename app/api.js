@@ -496,11 +496,16 @@ module.exports = function(app, router) {
                     ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
                     res.json(ans);
                 }else{
+                    console.log(newData.therapeuticAreas);
+                    var serializedAreas = [];
+                    for(var i=0; i<newData.therapeuticAreas.length; i++){
+                        serializedAreas.push(newData.therapeuticAreas[i].id.toString());
+                    }
                     var upd = User.update({_id:req.user._id}, {
                         name: newData.firstName+" "+newData.lastName,
                         phone: newData.phone,
                         subscription: newData.newsletter?1:0,
-                        "therapeutic-areasID": newData.therapeuticAreas,
+                        "therapeutic-areasID": serializedAreas,
                         citiesID: [newData.city]
                     }, function () {
                         if(!upd._castError){

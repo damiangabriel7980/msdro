@@ -21,7 +21,8 @@ var userSchema = mongoose.Schema({
     subscription: Number,
     password     : String,
     username     : String,
-    groupsID     : Array
+    groupsID     : Array,
+    'therapeutic-areasID': Array
 });
 
 // generating a hash
