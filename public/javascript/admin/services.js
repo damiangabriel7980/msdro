@@ -13,6 +13,7 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
             save: { method: 'POST'}
         }),
         deleteOrUpdateProduct:$resource('api/admin/products/:id', {}, {
+            getProduct: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}
         })
@@ -25,6 +26,7 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
             save: { method: 'POST'}
         }),
         deleteOrUpdateContent:$resource('api/admin/content/:id', {}, {
+            getContent: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}
         })
@@ -37,6 +39,7 @@ cloudAdminServices.factory('EventsAdminService', ['$resource', function($resourc
             save: { method: 'POST'}
         }),
         deleteOrUpdateEvents:$resource('api/admin/events/:id', {}, {
+            getEvent: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}
         })
@@ -49,6 +52,7 @@ cloudAdminServices.factory('MultimediaAdminService', ['$resource', function($res
             save: { method: 'POST'}
         }),
         deleteOrUpdateMultimedia:$resource('api/admin/multimedia/:id', {}, {
+            getMultimedia: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}
         })
@@ -61,6 +65,7 @@ cloudAdminServices.factory('testeAdminService', ['$resource', function($resource
             save: { method: 'POST'}
         }),
         deleteOrUpdateteste:$resource('api/admin/teste/:id', {}, {
+            getTest: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}
         })
@@ -73,6 +78,7 @@ cloudAdminServices.factory('ariiAdminService', ['$resource', function($resource)
             save: { method: 'POST'}
         }),
         deleteOrUpdatearii:$resource('api/admin/arii/:id', {}, {
+            getArea: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}
         })

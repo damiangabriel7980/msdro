@@ -13,8 +13,8 @@
             <td data-title="'Description'" sortable="'description'" ng-bind-html="renderHtml(prod.description)"></td>
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
-                <button class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
-                <button class="btn btn-info"><i class="glyphicon glyphicon-cog"></i></button>
+                <button class="btn btn-danger" disabled="disabled"><i class="glyphicon glyphicon-trash"></i></button>
+                <button class="btn btn-info" ui-sref="continut.produse.editProdus({id:prod._id})"><i class="glyphicon glyphicon-cog"></i></button>
                     </div>
             </td>
         </tr>

@@ -709,7 +709,7 @@ module.exports = function(app, router) {
         });
     router.route('/admin/products/:id')
         .get(function(req, res) {
-            Products.findById(req.params._id, function(err, product) {
+            Products.findById(req.params.id, function(err, product) {
                 if (err)
                     res.send(err);
                 res.json(product);
@@ -717,7 +717,7 @@ module.exports = function(app, router) {
         })
     .put(function(req, res) {
 
-        Products.findById(req.params._id, function(err, product) {
+        Products.findById(req.params.id, function(err, product) {
 
             if (err)
                 res.send(err);
@@ -741,7 +741,7 @@ module.exports = function(app, router) {
     })
         .delete(function(req, res) {
             Products.remove({
-                _id: req.params._id
+                _id: req.params.id
             }, function(err,prod) {
                 if (err)
                     res.send(err);

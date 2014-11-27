@@ -54,6 +54,19 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                 })
             }]
         })
+        .state('continut.produse.editProdus',{
+            parent:'continut.produse',
+            url: '/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/productsEdit.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"productsEditCtrl"
+                })
+            }]
+        })
         .state('continut.articole',{
             url: '/articole',
             templateUrl: 'partials/admin/continut/articole.html',
@@ -187,6 +200,19 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                     size: 'lg',
                     windowClass: 'fade',
                     controller:"ariiTerapeuticeAddCtrl"
+                })
+            }]
+        })
+        .state('ariiTerapeutice.editArie',{
+            parent:'ariiTerapeutice',
+            url: '/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeEdit.ejs',
+                    backdrop: true,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"ariiTerapeuticeEditCtrl"
                 })
             }]
         })
