@@ -17,8 +17,8 @@ cloudAdminControllers.controller('AddGroupController', ['$scope','GrupuriService
         var toSend = {group:{},users:{}};
         toSend.group.display_name = this.nume;
         toSend.group.description = this.descriere;
-        toSend.group.default_group = this.grupDefault?true:false;
-        toSend.group.content_specific = this.content_specific?true:false;
+        toSend.group.default_group = this.grupDefault?1:0;
+        toSend.group.content_specific = this.contentSpecific?true:false;
         toSend.users = this.selectedUsers;
         GrupuriService.addGroup.save({data: toSend}).$promise.then(function (resp) {
             $scope.statusAlert.message = resp.message;
@@ -27,6 +27,7 @@ cloudAdminControllers.controller('AddGroupController', ['$scope','GrupuriService
             }else{
                 $scope.statusAlert.type = "success";
             }
+            prevScope.refreshTable();
             $scope.statusAlert.newAlert = true;
         });
     };

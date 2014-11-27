@@ -5,7 +5,6 @@ cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '
 
     $scope.refreshTable = function () {
         GrupuriService.getAllGroups.query().$promise.then(function (resp) {
-            console.log(resp);
             var data = resp;
 
             $scope.tableParams = new ngTableParams({
@@ -53,6 +52,22 @@ cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '
             controller: 'DeleteGroupController',
             resolve: {
                 idToDelete: function () {
+                    return id;
+                },
+                prevScope: function () {
+                    return $scope;
+                }
+            }
+        });
+    };
+    $scope.editGroup = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/utilizatori/modalEditGroup.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'EditGroupController',
+            resolve: {
+                idToEdit: function () {
                     return id;
                 },
                 prevScope: function () {

@@ -165,6 +165,22 @@ module.exports = function(app, router) {
             });
         });
 
+    router.route('/admin/utilizatori/groupDetails/:id')
+
+        .get(hasAdminRights, function(req, res) {
+            UserGroup.find({_id: req.params.id}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }else{
+                    if(cont[0]){
+                        res.json(cont[0]);
+                    }else{
+                        res.json({error: true, message:"Nu s-a gasit grupul"});
+                    }
+                }
+            });
+        });
+
     router.route('/admin/utilizatori/utilizatori')
 
         .get(hasAdminRights, function(req, res) {
@@ -177,7 +193,21 @@ module.exports = function(app, router) {
             });
         });
 
+    router.route('/admin/utilizatori/utilizatoriDinGrup/:id')
+
+        .get(hasAdminRights, function(req, res) {
+            var id = req.params.id;
+            User.find({groupsID: {$in:[id]}}, {username: 1}).limit(0).exec(function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
     router.route('/admin/utilizatori/addGroup')
+        //used for both creating new groups and editing existing ones
 
         .post(hasAdminRights, function (req, res) {
             var ans = {};
@@ -196,32 +226,97 @@ module.exports = function(app, router) {
                     res.json(ans);
                 }else{
                     //add group
-                    var newGroup = new UserGroup(data.group);
-                    newGroup.save(function (err, inserted) {
+                    new UserGroup(data.group).save(function (err, inserted) {
                         if(err){
+                            console.log(err);
                             ans.error = true;
-                            ans.message = "Eroare la crearea grupului. Va rugam verificati campurile";
+                            ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
                             res.json(ans);
                         }else{
-                            //update users to point to new group
+                            console.log(inserted);
                             var idGroupInserted = inserted._id.toString();
+                            //update users to point to this group
                             //extract id's from users
                             var ids = [];
                             for(var i=0; i<data.users.length; i++){
                                 ids.push(data.users[i]._id);
                             }
+                            console.log(ids);
                             connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
                                 if(err){
                                     console.log(err);
                                     ans.error = true;
-                                    ans.message = "Eroare la adaugarea utilizatorilor in grup.";
+                                    ans.message = "Eroare la adaugarea utilizatorilor noi in grup.";
                                     res.json(ans);
                                 }else{
                                     ans.error = false;
-                                    ans.message = "S-a creat grupul. S-au adaugat "+result+" utlizatori";
+                                    ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
                                     res.json(ans);
                                 }
                             })
+                        }
+                    });
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/editGroup')
+        //used for both creating new groups and editing existing ones
+
+        .post(hasAdminRights, function (req, res) {
+            var ans = {};
+            var data = req.body.data;
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            //check if name exists
+            if(!data.group.display_name){
+                ans.error = true;
+                ans.message = "Numele este obligatoriu";
+                res.json(ans);
+            }else{
+                //validate name
+                if(!namePatt.test(data.group.display_name.toString())){
+                    ans.error = true;
+                    ans.message = "Numele trebuie sa aiba doar caractere, minim 3";
+                    res.json(ans);
+                }else{
+                    //update group
+                    UserGroup.update({_id: data.id}, data.group, function (err, Wres) {
+                        if(err){
+                            console.log(err);
+                            ans.error = true;
+                            ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
+                            res.json(ans);
+                        }else{
+                            console.log(Wres);
+                            //now we need to add some users
+                            //first disconnect preexisting users from group, just in case this is an editGroup operation
+                            disconnectAllEntitiesFromEntity(User, "groupsID", data.id, function (err, result) {
+                                if(err){
+                                    console.log(err);
+                                    ans.error = true;
+                                    ans.message = "Eroare la stergerea utilizatorilor vechi din grup.";
+                                }else{
+                                    //update users to point to this group
+                                    //extract id's from users
+                                    var ids = [];
+                                    for(var i=0; i<data.users.length; i++){
+                                        ids.push(data.users[i]._id);
+                                    }
+                                    console.log(ids);
+                                    connectEntitiesToEntity(ids, User, "groupsID", data.id, function (err, result) {
+                                        if(err){
+                                            console.log(err);
+                                            ans.error = true;
+                                            ans.message = "Eroare la adaugarea utilizatorilor noi in grup.";
+                                            res.json(ans);
+                                        }else{
+                                            ans.error = false;
+                                            ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
+                                            res.json(ans);
+                                        }
+                                    })
+                                }
+                            });
                         }
                     });
                 }
