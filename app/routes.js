@@ -240,7 +240,6 @@ var transportUser = function (req, res, paths, sendUserInfo) {
                 res.redirect('/');
             }else{
                 if(roles[0]){
-                    console.log(roles[0]);
                     if(paths[roles[0].authority]){
                         if(sendUserInfo){
                             res.render(paths[roles[0].authority], {user: req.user});

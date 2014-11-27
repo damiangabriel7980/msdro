@@ -149,7 +149,56 @@ var disconnectAllEntitiesFromEntity = function (connectedEntity, connection_name
     });
 };
 
-//====================================================================================================== module exports
+//=========================================================================================== functions for user groups
+
+var getNonSpecificUserGroupsIds = function(user, callback){
+    //find all group ids with non-specific content for user
+    UserGroup.find({_id: {$in: user.groupsID}, content_specific: {$ne: true}}, {_id:1}, function (err, groups) {
+        if(err){
+            callback(err, null);
+        }else{
+            //now make an array of those id's
+            var arr = [];
+            for(var i=0; i<groups.length; i++){
+                arr.push(groups[i]._id.toString());
+            }
+            callback(null, arr);
+        }
+    });
+};
+
+//get content for all non content_specific groups plus one content_specific group
+//if specific content group is null, get non specific content only
+//tip: content_type can be injected; ex: {$in: [1,3]}
+var getUserContent = function (user, content_type, specific_content_group_id, limit, sortDescendingByAttribute, callback) {
+    //first get non specific content groups only
+    getNonSpecificUserGroupsIds(user, function(err, arrayOfGroupsIds){
+        if(err){
+            callback(err, null);
+        }else{
+            //if we have specific content group id, add it to our array
+            if(specific_content_group_id) arrayOfGroupsIds.push(specific_content_group_id.toString());
+            //now get user content for our array of groups
+            var myCursor = Content.find({groupsID: {$in: arrayOfGroupsIds}, enable: {$ne: false}, type: content_type});
+            if(sortDescendingByAttribute){
+                var attr = {};
+                attr[sortDescendingByAttribute] = -1;
+                myCursor = myCursor.sort(attr);
+            }
+            if(limit) myCursor=myCursor.limit(limit);
+            myCursor.exec(function (err, content) {
+                if(err){
+                    callback(err, null);
+                }else{
+                    console.log(arrayOfGroupsIds);
+                    callback(null, content);
+                }
+            });
+        }
+    });
+};
+
+//================================================================================================ module exports admin
 
 module.exports = function(app, router) {
 
@@ -353,6 +402,19 @@ module.exports = function(app, router) {
             res.json({message: "route ok"});
         });
 
+    //============================================================================================= module exports user
+
+    router.route('/groups/specialGroups')
+
+        .get(function(req, res) {
+            UserGroup.find({_id: {$in: req.user.groupsID}, content_specific: {$exists:true, $ne: false}}, function(err, groups) {
+                if(err) {
+                    res.send(err);
+                }
+                res.json(groups);
+            });
+        });
+
     router.route('/content')
 
         .get(function(req, res) {
@@ -373,7 +435,7 @@ module.exports = function(app, router) {
                 if(err) {
                     res.send(err);
                 }
-                if(cont.length == 1){
+                if(cont[0]){
                     res.json(cont[0]);
                 }else{
                     res.json(null);
@@ -381,15 +443,17 @@ module.exports = function(app, router) {
             })
         });
 
-    router.route('/content/type/:content_type')
+    router.route('/content/type')
 
-        .get(function(req, res) {
-            var userGr = req.user.groupsID;
-            Content.find({type: req.params.content_type, groupsID: { $in: userGr}}, function (err, cont) {
-                if(err) {
+        .post(function(req, res) {
+            var cType = req.body.content_type;
+            var specialGroupSelected = req.body.specialGroupSelected;
+            getUserContent(req.user, cType, specialGroupSelected, null, null, function (err, content) {
+                if(err){
                     res.send(err);
+                }else{
+                    res.json(content);
                 }
-                res.json(cont);
             });
         });
 
@@ -715,9 +779,9 @@ module.exports = function(app, router) {
 
     router.route('/userHomeNews')
 
-        .get(function(req, res) {
-            var userGr = req.user.groupsID;
-            Content.find({type: { $in: [1,2]}, groupsID: { $in: userGr}}).sort({last_updated: -1}).limit(4).exec(function (err, cont) {
+        .post(function(req, res) {
+            var specialGroupSelected = req.body.specialGroupSelected;
+            getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "last_updated", function (err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -727,9 +791,9 @@ module.exports = function(app, router) {
 
     router.route('/userHomeScientific')
 
-        .get(function(req, res) {
-            var userGr = req.user.groupsID;
-            Content.find({type: 3, groupsID: { $in: userGr}}).sort({last_updated: -1}).limit(4).exec(function (err, cont) {
+        .post(function(req, res) {
+            var specialGroupSelected = req.body.specialGroupSelected;
+            getUserContent(req.user, 3, specialGroupSelected, 4, "last_updated", function (err, cont) {
                 if(err) {
                     res.send(err);
                 }

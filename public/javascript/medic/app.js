@@ -162,7 +162,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('groupFeatures', {
             url: '/groupFeatures/:feature',
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
-            controller: 'FeaturesController'
+            controller: 'DisplayFeaturesController'
         })
 }]);
 
@@ -187,6 +187,10 @@ cloudAdminApp.run(
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
+
+            //TODO: Send special group info on req-res stream to avoid information loss on refresh;
+            $rootScope.specialGroupSelected = null;
+            $rootScope.specialGroups = null;
 
             //profile modal
             $rootScope.showProfile = function(){
