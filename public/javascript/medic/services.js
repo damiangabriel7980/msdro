@@ -5,7 +5,15 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
         getById: $resource('api/content/:content_id', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        getByType: $resource('api/content/type/:content_type', {}, {
+        getByType: $resource('api/content/type', {}, {
+            query: { method: 'POST', isArray: true }
+        })
+    }
+}]);
+
+cloudAdminServices.factory('SpecialFeaturesService', ['$resource', function($resource){
+    return {
+        getSpecialGroups: $resource('api/groups/specialGroups', {}, {
             query: { method: 'GET', isArray: true }
         })
     }
@@ -42,11 +50,11 @@ cloudAdminServices.factory('HomeService', ['$resource', function($resource){
         getUserEvents: $resource('api/userHomeEvents/', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        getUserNews: $resource('api/userHomeNews/', {}, {
-            query: { method: 'GET', isArray: true }
+        getUserNews: $resource('api/userHomeNews', {}, {
+            query: { method: 'POST', isArray: true }
         }),
-        getUserScientificNews: $resource('api/userHomeScientific/', {}, {
-            query: { method: 'GET', isArray: true }
+        getUserScientificNews: $resource('api/userHomeScientific', {}, {
+            query: { method: 'POST', isArray: true }
         }),
         getUserMultimedia: $resource('api/userHomeMultimedia/', {}, {
             query: { method: 'GET', isArray: true }

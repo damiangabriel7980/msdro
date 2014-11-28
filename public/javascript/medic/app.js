@@ -162,7 +162,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('groupFeatures', {
             url: '/groupFeatures/:feature',
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
-            controller: 'FeaturesController'
+            controller: 'DisplayFeaturesController'
         })
 }]);
 
@@ -187,6 +187,9 @@ cloudAdminApp.run(
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
+
+            $rootScope.specialGroupSelected = sessionStorage.specialGroupSelected?angular.fromJson(sessionStorage.specialGroupSelected):null;
+            $rootScope.specialGroups = null;
 
             //profile modal
             $rootScope.showProfile = function(){

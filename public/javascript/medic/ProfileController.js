@@ -14,6 +14,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     ProfileService.getUserData.query().$promise.then(function (resp) {
 
         $scope.userData = resp;
+        console.log(resp);
 
         var allNames = resp.name.split(" ");
         $scope.firstName = allNames[0];
@@ -22,7 +23,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.phone = resp.phone;
         $scope.newsletter = resp.subscription == 1;
         $scope.image = imagePre + resp.image_path;
-        $scope.userTherapeuticAreas = resp['therapeutic-areasID'];
+        $scope.userTherapeuticAreas = resp['therapeutic-areasID']?resp['therapeutic-areasID']:[];
         if(resp.job){
             $scope.job = resp.job[0];
         }else{
@@ -152,6 +153,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
             toSend.lastName = this.lastName;
             toSend.phone = this.phone;
             toSend.newsletter = this.newsletter;
+            console.log($scope.userTherapeuticAreas);
             toSend.therapeuticAreas = $scope.userTherapeuticAreas;
             toSend.county = this.county.selected._id;
             toSend.city = this.city.selected._id;

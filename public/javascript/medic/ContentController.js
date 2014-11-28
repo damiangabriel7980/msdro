@@ -26,6 +26,6 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
         return htmlToPlainText(text).substring(0,length)+"...";
     };
 
-    $scope.content = ContentService.getByType.query({content_type: $stateParams.articleType});
+    $scope.content = ContentService.getByType.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null});
 
 }]);
