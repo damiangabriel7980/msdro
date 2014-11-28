@@ -188,8 +188,7 @@ cloudAdminApp.run(
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
 
-            //TODO: Send special group info on req-res stream to avoid information loss on refresh;
-            $rootScope.specialGroupSelected = null;
+            $rootScope.specialGroupSelected = sessionStorage.specialGroupSelected?angular.fromJson(sessionStorage.specialGroupSelected):null;
             $rootScope.specialGroups = null;
 
             //profile modal

@@ -43,7 +43,6 @@
     <script src="javascript/medic/testeController.js"></script>
     <script src="javascript/medic/testeQuestionsController.js"></script>
     <script src="javascript/medic/DisplayFeaturesController.js"></script>
-    <script src="javascript/medic/FeaturesMenuController.js"></script>
     <script src="javascript/medic/SpecialGroupsMenuController.js"></script>
 
 <!--Plug-ins-->
@@ -65,7 +64,7 @@
 <body>
 
 <!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top ng-scope" role="navigation">
+<div class="navbar navbar-default navbar-fixed-top ng-scope" role="navigation" ng-controller="SpecialGroupsMenuController">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
@@ -116,12 +115,12 @@
                         <li><a ui-sref="elearning.teste" href="#/teste">Teste interactive</a></li>
                     </ul>
                 </li>
-                <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures')}" ng-controller="FeaturesMenuController">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-if="specialGroups!==null">
+                <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures')}" ng-if="groupFeatures">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-download"></span> {{specialGroupSelected?specialGroupSelected.display_name:""}} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li ng-repeat="feat in groupFeatures"><a ui-sref="groupFeatures({feature:'arcoxiaApp'})">Arcoxia</a></li>
+                        <li ng-repeat="feat in groupFeatures"><a ui-sref="groupFeatures({feature: feat})">{{feat}}</a></li>
                     </ul>
                 </li>
             </ul>
@@ -138,12 +137,12 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-user"></span> {{specialGroupSelected?specialGroupSelected.display_name:"<%= user.username %>"}} <b class="caret"></b>
                     </a>
-                    <ul class="dropdown-menu" role="menu" ng-controller="SpecialGroupsMenuController">
+                    <ul class="dropdown-menu" role="menu">
                         <li ng-repeat="group in specialGroups">
                             <a style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}}</a>
                         </li>
-                        <li><a style="cursor: pointer;" ng-click="showProfile()">Profile</a></li>
                         <li class="divider"></li>
+                        <li><a style="cursor: pointer;" ng-click="showProfile()">Profile</a></li>
                         <li><a href="logout">Sign Out</a></li>
                     </ul>
                 </li>
