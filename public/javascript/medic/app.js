@@ -188,9 +188,6 @@ cloudAdminApp.run(
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
 
-            $rootScope.specialGroupSelected = sessionStorage.specialGroupSelected?angular.fromJson(sessionStorage.specialGroupSelected):null;
-            $rootScope.specialGroups = null;
-
             //profile modal
             $rootScope.showProfile = function(){
                 $modal.open({

@@ -2,33 +2,35 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
 
     SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
         console.log(resp);
-        $rootScope.specialGroups = resp;
-        if(sessionStorage.specialGroupSelected){
-            $rootScope.specialGroupSelected = angular.fromJson(sessionStorage.specialGroupSelected);
+        if(resp.length != 0){
+            $rootScope.specialGroups = resp;
+            if(sessionStorage.specialGroupSelected){
+                console.log("gs");
+                $scope.selectSpecialGroup(angular.fromJson(sessionStorage.specialGroupSelected));
+            }else{
+                console.log("gns");
+                $scope.selectSpecialGroup(resp[0]);
+            }
         }else{
-            $rootScope.specialGroupSelected = resp[0];
+            $rootScope.specialGroupSelected = null;
+            sessionStorage.specialGroupSelected = null;
         }
     });
 
     $scope.selectSpecialGroup = function(group){
-        var currentGroup = sessionStorage.specialGroupSelected?angular.fromJson(sessionStorage.specialGroupSelected):null;
-        if(currentGroup){
-            if(currentGroup._id !== group._id){
-                sessionStorage.specialGroupSelected = angular.toJson(group);
-                $rootScope.specialGroupSelected = group;
-                //load group features into array. use "DisplayFeatureController" to establish paths for them
-                switch(group.display_name){
-                    case "MSD Diabetes": $scope.groupFeatures = ["Januvia"]; break;
-                    default: $scope.groupFeatures = null; break;
-                }
-                if($state.includes('groupFeatures')){
-                    //if user changed his group while being on a feature page, redirect him to home
-                    $state.go('home');
-                }else{
-                    //if he changed his group while being on another page, just reload the page
-                    $state.reload();
-                }
-            }
+        sessionStorage.specialGroupSelected = angular.toJson(group);
+        $rootScope.specialGroupSelected = group;
+        //load group features into array. use "DisplayFeatureController" to establish paths for them
+        switch(group.display_name){
+            case "MSD Diabetes": $scope.groupFeatures = ["Januvia"]; break;
+            default: $scope.groupFeatures = null; break;
+        }
+        if($state.includes('groupFeatures')){
+            //if user changed his group while being on a feature page, redirect him to home
+            $state.go('home');
+        }else{
+            //if he changed his group while being on another page, just reload the page
+            $state.reload();
         }
     };
 
