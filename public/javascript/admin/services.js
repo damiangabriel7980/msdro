@@ -22,8 +22,8 @@ cloudAdminServices.factory('GrupuriService', ['$resource', function($resource){
         groupDetails: $resource('api/admin/utilizatori/groupDetails/:id', {}, {
             query: { method: 'GET', isArray: false}
         }),
-        test: $resource('api/admin/utilizatori/test/:data', {}, {
-            save: { method: 'POST'}
+        testSomething: $resource('api/admin/utilizatori/test/:data', {}, {
+            query: { method: 'POST'}
         })
     }
 }]);

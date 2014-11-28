@@ -79,7 +79,7 @@ cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '
 
     $scope.test = function(){
         var toSend = {};
-        GrupuriService.test.save({data: toSend}).$promise.then(function(resp){
+        GrupuriService.testSomething.query({data: toSend}).$promise.then(function(resp){
             console.log(resp);
         });
     }

@@ -26,7 +26,8 @@
     "aws-sdk": "latest"
   },
   "scripts": {
-    "postinstall": "bower cache clean && bower install"
+    "postinstall": "bower cache clean && bower install",
+    "start": "AWS_ACCESS_KEY_ID='AKIAIM6KJKTQ3DODHQPA' AWS_SECRET_ACCESS_KEY='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' node server.js"
   },
   "devDependencies": {
     "gulp": "^3.8.8",

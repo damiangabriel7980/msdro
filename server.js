@@ -14,9 +14,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var configDB = require('./config/database.js');
-
+var AWS = require('aws-sdk');
+// console.log(process.env);
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
+
+AWS.config.credentials = new AWS.EnvironmentCredentials('AWS'); // connect to amazon
 
 require('./config/passport')(passport); // pass passport for configuration
 
@@ -38,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 // api ======================================================================
-require('./app/api.js')(app, express.Router()); // load our routes and pass in our app and fully configured passport
+require('./app/api.js')(app, express.Router(), AWS); // load our routes and pass in our app and fully configured passport and AWS client
 
 // launch ======================================================================
 app.listen(port);

@@ -20,14 +20,6 @@ var SHA256   = require('crypto-js/sha256');
 
 var mongoose = require('mongoose');
 
-var s3 = require('s3');
-var s3Client = s3.createClient({
-    s3Options:{
-        accessKeyId: "AKIAJYA22DHN4HZ6MXHQ",
-        secretAccessKey: "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"
-    }
-});
-
 //================================================================================== useful db administration functions
 
 //middleware to ensure a user has admin rights
@@ -200,7 +192,18 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 
 //================================================================================================ module exports admin
 
-module.exports = function(app, router) {
+module.exports = function(app, router, AWS) {
+
+// get temporary credentials for S3
+    router.route('/admin/s3tc')
+
+        .post(hasAdminRights, function (req, res) {
+            AWS.config.credentials = new AWS.TemporaryCredentials({
+                RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
+            });
+            var s3 = new AWS.S3();
+            res.json(s3);
+        });
 
     router.route('/admin/utilizatori/grupuri')
 
@@ -394,12 +397,15 @@ module.exports = function(app, router) {
             })
         });
 
-    router.route(hasAdminRights, '/admin/utilizatori/test')
+    router.route('/admin/utilizatori/test')
 
-        .post(function (req, res) {
-            var data = req.body.data;
+        .post(hasAdminRights, function (req, res) {
             console.log("route ok");
-            res.json({message: "route ok"});
+//            AWS.config.credentials = new AWS.TemporaryCredentials({
+//                RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
+//            });
+//            var s3 = new AWS.S3();
+//            res.json(s3);
         });
 
     //============================================================================================= module exports user
