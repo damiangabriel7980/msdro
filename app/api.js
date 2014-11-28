@@ -13,6 +13,7 @@ var Questions=require('./models/questions');
 var Answers = require('./models/answers');
 var Slides = require('./models/slides');
 var Roles=require('./models/roles');
+var Carousel=require('./models/carousel_Medic');
 
 var XRegExp  = require('xregexp').XRegExp;
 
@@ -754,6 +755,17 @@ module.exports = function(app, router) {
                 }
             }
         });
+
+    router.route('/userHomeCarousel')
+        .get(function (req,res) {
+            Carousel.find({},(function (err, elements) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.json(elements);
+                }
+            })
+        )});
 
     router.route('/userHomeEvents')
         .get(function (req,res) {

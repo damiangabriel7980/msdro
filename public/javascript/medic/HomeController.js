@@ -4,6 +4,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
     $scope.merckManualImage = $rootScope.merckManualImage;
+    $scope.myInterval = 2000;
 
     //------------------------------------------------------------------------------------------------- get all content
     HomeService.getUserEvents.query().$promise.then(function (resp) {
@@ -19,6 +20,29 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         $scope.multimedia = resp;
     });
 
+    HomeService.getCarousel.query().$promise.then(function(resp){
+        $scope.HomeCarousel=resp;
+
+    });
+
+    $scope.$watch('HomeCarousel', function(values) {
+        var i, a = [], b;
+
+        for (i = 0; i <  $scope.HomeCarousel.length; i += 3) {
+            b = { image1:  $scope.HomeCarousel[i] };
+
+            if ($scope.HomeCarousel[i + 2]) {
+                b.image2=$scope.HomeCarousel[i + 1];
+                b.image3=$scope.HomeCarousel[i + 2];
+            }
+
+            a.push(b);
+        }
+
+        $scope.groupedSlides = a;
+    }, true);
+
+
     //------------------------------------------------------------------------------------------------ useful functions
     var htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '');
@@ -31,6 +55,8 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.toDate = function (ISOdate) {
         return new Date(ISOdate);
     };
+
+
 
     //merck modal
     $rootScope.showMerckManual = function(){

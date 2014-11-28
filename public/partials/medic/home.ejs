@@ -1,3 +1,16 @@
+<carousel interval="myInterval">
+    <slide ng-repeat="carouselItem in groupedSlides" active="slide.active" active="slide.active">
+        <div>
+        <img ng-src="{{pathAmazonDev+carouselItem.image1.image_path}}" style="margin:auto;">
+        <img ng-src="{{pathAmazonDev+carouselItem.image2.image_path}}" style="margin:auto;">
+            <img ng-src="{{pathAmazonDev+carouselItem.image3.image_path}}" style="margin:auto;">
+        </div>
+        <div class="carousel-caption">
+            <h4>Slide {{$index}}</h4>
+            <p>{{carouselItem.title}}</p>
+        </div>
+    </slide>
+</carousel>
 <div class="col-md-12 homeStyles">
     <div ng-class="{'col-md-3':events.length!=0, 'col-md-4':events.length==0}" class="wellContainer">
         <div class="col-md-12 well">
