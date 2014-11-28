@@ -35,6 +35,14 @@ cloudAdminControllers.controller('articlesCtrl', ['$scope','$rootScope' ,'Conten
         return $sce.trustAsHtml(htmlCode);
     };
 
+    $scope.enableArticle=function(article,id_article){
+        if(article.enable==true)
+            article.enable=false;
+        else
+            article.enable=true;
+        ContentService.deleteOrUpdateContent.update({id:id_article},article);
+    }
+
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {
