@@ -9,7 +9,8 @@ var UserGroupSchema		= new Schema({
     display_name: String,
     description:  String,
     image_path:   String,
-    defaultGroup: Boolean
+    default_group: Number,
+    content_specific: Boolean
 });
 
 module.exports = mongoose.model('UserGroup', UserGroupSchema, 'groups');

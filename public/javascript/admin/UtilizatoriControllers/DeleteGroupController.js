@@ -4,8 +4,8 @@ cloudAdminControllers.controller('DeleteGroupController', ['$scope','GrupuriServ
 
         GrupuriService.deleteGroup.save({id: idToDelete}).$promise.then(function (resp) {
             console.log(resp);
-            $modalInstance.close();
             prevScope.refreshTable();
+            $modalInstance.close();
         });
     };
 

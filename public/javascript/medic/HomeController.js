@@ -9,10 +9,10 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     HomeService.getUserEvents.query().$promise.then(function (resp) {
         $scope.events = resp;
     });
-    HomeService.getUserNews.query().$promise.then(function (resp) {
+    HomeService.getUserNews.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         $scope.news = resp;
     });
-    HomeService.getUserScientificNews.query().$promise.then(function (resp) {
+    HomeService.getUserScientificNews.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         $scope.scientificNews = resp;
     });
     HomeService.getUserMultimedia.query().$promise.then(function (resp) {

@@ -149,7 +149,56 @@ var disconnectAllEntitiesFromEntity = function (connectedEntity, connection_name
     });
 };
 
-//====================================================================================================== module exports
+//=========================================================================================== functions for user groups
+
+var getNonSpecificUserGroupsIds = function(user, callback){
+    //find all group ids with non-specific content for user
+    UserGroup.find({_id: {$in: user.groupsID}, content_specific: {$ne: true}}, {_id:1}, function (err, groups) {
+        if(err){
+            callback(err, null);
+        }else{
+            //now make an array of those id's
+            var arr = [];
+            for(var i=0; i<groups.length; i++){
+                arr.push(groups[i]._id.toString());
+            }
+            callback(null, arr);
+        }
+    });
+};
+
+//get content for all non content_specific groups plus one content_specific group
+//if specific content group is null, get non specific content only
+//tip: content_type can be injected; ex: {$in: [1,3]}
+var getUserContent = function (user, content_type, specific_content_group_id, limit, sortDescendingByAttribute, callback) {
+    //first get non specific content groups only
+    getNonSpecificUserGroupsIds(user, function(err, arrayOfGroupsIds){
+        if(err){
+            callback(err, null);
+        }else{
+            //if we have specific content group id, add it to our array
+            if(specific_content_group_id) arrayOfGroupsIds.push(specific_content_group_id.toString());
+            //now get user content for our array of groups
+            var myCursor = Content.find({groupsID: {$in: arrayOfGroupsIds}, enable: {$ne: false}, type: content_type});
+            if(sortDescendingByAttribute){
+                var attr = {};
+                attr[sortDescendingByAttribute] = -1;
+                myCursor = myCursor.sort(attr);
+            }
+            if(limit) myCursor=myCursor.limit(limit);
+            myCursor.exec(function (err, content) {
+                if(err){
+                    callback(err, null);
+                }else{
+                    console.log(arrayOfGroupsIds);
+                    callback(null, content);
+                }
+            });
+        }
+    });
+};
+
+//================================================================================================ module exports admin
 
 module.exports = function(app, router) {
 
@@ -165,6 +214,22 @@ module.exports = function(app, router) {
             });
         });
 
+    router.route('/admin/utilizatori/groupDetails/:id')
+
+        .get(hasAdminRights, function(req, res) {
+            UserGroup.find({_id: req.params.id}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }else{
+                    if(cont[0]){
+                        res.json(cont[0]);
+                    }else{
+                        res.json({error: true, message:"Nu s-a gasit grupul"});
+                    }
+                }
+            });
+        });
+
     router.route('/admin/utilizatori/utilizatori')
 
         .get(hasAdminRights, function(req, res) {
@@ -177,7 +242,21 @@ module.exports = function(app, router) {
             });
         });
 
+    router.route('/admin/utilizatori/utilizatoriDinGrup/:id')
+
+        .get(hasAdminRights, function(req, res) {
+            var id = req.params.id;
+            User.find({groupsID: {$in:[id]}}, {username: 1}).limit(0).exec(function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
     router.route('/admin/utilizatori/addGroup')
+        //used for both creating new groups and editing existing ones
 
         .post(hasAdminRights, function (req, res) {
             var ans = {};
@@ -196,32 +275,97 @@ module.exports = function(app, router) {
                     res.json(ans);
                 }else{
                     //add group
-                    var newGroup = new UserGroup(data.group);
-                    newGroup.save(function (err, inserted) {
+                    new UserGroup(data.group).save(function (err, inserted) {
                         if(err){
+                            console.log(err);
                             ans.error = true;
-                            ans.message = "Eroare la crearea grupului. Va rugam verificati campurile";
+                            ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
                             res.json(ans);
                         }else{
-                            //update users to point to new group
+                            console.log(inserted);
                             var idGroupInserted = inserted._id.toString();
+                            //update users to point to this group
                             //extract id's from users
                             var ids = [];
                             for(var i=0; i<data.users.length; i++){
                                 ids.push(data.users[i]._id);
                             }
+                            console.log(ids);
                             connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
                                 if(err){
                                     console.log(err);
                                     ans.error = true;
-                                    ans.message = "Eroare la adaugarea utilizatorilor in grup.";
+                                    ans.message = "Eroare la adaugarea utilizatorilor noi in grup.";
                                     res.json(ans);
                                 }else{
                                     ans.error = false;
-                                    ans.message = "S-a creat grupul. S-au adaugat "+result+" utlizatori";
+                                    ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
                                     res.json(ans);
                                 }
                             })
+                        }
+                    });
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/editGroup')
+        //used for both creating new groups and editing existing ones
+
+        .post(hasAdminRights, function (req, res) {
+            var ans = {};
+            var data = req.body.data;
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            //check if name exists
+            if(!data.group.display_name){
+                ans.error = true;
+                ans.message = "Numele este obligatoriu";
+                res.json(ans);
+            }else{
+                //validate name
+                if(!namePatt.test(data.group.display_name.toString())){
+                    ans.error = true;
+                    ans.message = "Numele trebuie sa aiba doar caractere, minim 3";
+                    res.json(ans);
+                }else{
+                    //update group
+                    UserGroup.update({_id: data.id}, data.group, function (err, Wres) {
+                        if(err){
+                            console.log(err);
+                            ans.error = true;
+                            ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
+                            res.json(ans);
+                        }else{
+                            console.log(Wres);
+                            //now we need to add some users
+                            //first disconnect preexisting users from group, just in case this is an editGroup operation
+                            disconnectAllEntitiesFromEntity(User, "groupsID", data.id, function (err, result) {
+                                if(err){
+                                    console.log(err);
+                                    ans.error = true;
+                                    ans.message = "Eroare la stergerea utilizatorilor vechi din grup.";
+                                }else{
+                                    //update users to point to this group
+                                    //extract id's from users
+                                    var ids = [];
+                                    for(var i=0; i<data.users.length; i++){
+                                        ids.push(data.users[i]._id);
+                                    }
+                                    console.log(ids);
+                                    connectEntitiesToEntity(ids, User, "groupsID", data.id, function (err, result) {
+                                        if(err){
+                                            console.log(err);
+                                            ans.error = true;
+                                            ans.message = "Eroare la adaugarea utilizatorilor noi in grup.";
+                                            res.json(ans);
+                                        }else{
+                                            ans.error = false;
+                                            ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
+                                            res.json(ans);
+                                        }
+                                    })
+                                }
+                            });
                         }
                     });
                 }
@@ -258,6 +402,19 @@ module.exports = function(app, router) {
             res.json({message: "route ok"});
         });
 
+    //============================================================================================= module exports user
+
+    router.route('/groups/specialGroups')
+
+        .get(function(req, res) {
+            UserGroup.find({_id: {$in: req.user.groupsID}, content_specific: {$exists:true, $ne: false}}, function(err, groups) {
+                if(err) {
+                    res.send(err);
+                }
+                res.json(groups);
+            });
+        });
+
     router.route('/content')
 
         .get(function(req, res) {
@@ -278,7 +435,7 @@ module.exports = function(app, router) {
                 if(err) {
                     res.send(err);
                 }
-                if(cont.length == 1){
+                if(cont[0]){
                     res.json(cont[0]);
                 }else{
                     res.json(null);
@@ -286,15 +443,17 @@ module.exports = function(app, router) {
             })
         });
 
-    router.route('/content/type/:content_type')
+    router.route('/content/type')
 
-        .get(function(req, res) {
-            var userGr = req.user.groupsID;
-            Content.find({type: req.params.content_type, groupsID: { $in: userGr}}, function (err, cont) {
-                if(err) {
+        .post(function(req, res) {
+            var cType = req.body.content_type;
+            var specialGroupSelected = req.body.specialGroupSelected;
+            getUserContent(req.user, cType, specialGroupSelected, null, null, function (err, content) {
+                if(err){
                     res.send(err);
+                }else{
+                    res.json(content);
                 }
-                res.json(cont);
             });
         });
 
@@ -401,11 +560,16 @@ module.exports = function(app, router) {
                     ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
                     res.json(ans);
                 }else{
+                    console.log(newData.therapeuticAreas);
+                    var serializedAreas = [];
+                    for(var i=0; i<newData.therapeuticAreas.length; i++){
+                        serializedAreas.push(newData.therapeuticAreas[i].id.toString());
+                    }
                     var upd = User.update({_id:req.user._id}, {
                         name: newData.firstName+" "+newData.lastName,
                         phone: newData.phone,
                         subscription: newData.newsletter?1:0,
-                        "therapeutic-areasID": newData.therapeuticAreas,
+                        "therapeutic-areasID": serializedAreas,
                         citiesID: [newData.city]
                     }, function () {
                         if(!upd._castError){
@@ -615,9 +779,9 @@ module.exports = function(app, router) {
 
     router.route('/userHomeNews')
 
-        .get(function(req, res) {
-            var userGr = req.user.groupsID;
-            Content.find({type: { $in: [1,2]}, groupsID: { $in: userGr}}).sort({last_updated: -1}).limit(4).exec(function (err, cont) {
+        .post(function(req, res) {
+            var specialGroupSelected = req.body.specialGroupSelected;
+            getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "last_updated", function (err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -627,9 +791,9 @@ module.exports = function(app, router) {
 
     router.route('/userHomeScientific')
 
-        .get(function(req, res) {
-            var userGr = req.user.groupsID;
-            Content.find({type: 3, groupsID: { $in: userGr}}).sort({last_updated: -1}).limit(4).exec(function (err, cont) {
+        .post(function(req, res) {
+            var specialGroupSelected = req.body.specialGroupSelected;
+            getUserContent(req.user, 3, specialGroupSelected, 4, "last_updated", function (err, cont) {
                 if(err) {
                     res.send(err);
                 }
