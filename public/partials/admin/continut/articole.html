@@ -12,11 +12,18 @@
             <td data-title="'Titlu'" filter="{ 'title': 'text' }" sortable="'title'">{{cont.title}}</td>
             <td data-title="'Text'" sortable="'text'" >{{cont.text| htmlToPlaintext | limitTo : 200}}...</td>
             <td data-title="'Autor'" filter="{ 'author': 'text' }" sortable="'author'">{{cont.author}}</td>
-            <td data-title="'Tip'" sortable="'type'">{{cont.type==1?"Legislativ":cont.type==2?"Noutati":"Stiintific"}}</td>
+            <td data-title="'Tip'" sortable="'type'">{{cont.type==1?"Noutati":cont.type==2?"Legislativ":"Stiintific"}}</td>
+            <td data-title="'Grup'" sortable="'groupsID'">
+                <ul>
+                    <li class="margintop20px" ng-repeat="c in cont.groupsID">{{groupMap[c]}}&nbsp;
+
+                    </li>
+                </ul>
+            </td>
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
-                    <button class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
-                    <button class="btn btn-info"><i class="glyphicon glyphicon-cog"></i></button>
+                    <button ui-sref="continut.articole.stergeArticol({id:cont._id})" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button ui-sref="continut.articole.updateArticol({id:cont._id})" class="btn btn-info"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>
         </tr>

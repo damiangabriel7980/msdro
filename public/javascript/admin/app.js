@@ -48,7 +48,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
                     templateUrl: 'partials/admin/continut/productsAdd.ejs',
-                    backdrop: true,
+                    backdrop: 'static',
+                    keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
                     controller:"productsAddCtrl"
@@ -61,7 +62,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
                     templateUrl: 'partials/admin/continut/productsEdit.ejs',
-                    backdrop: true,
+                    backdrop: 'static',
+                    keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
                     controller:"productsEditCtrl"
@@ -79,10 +81,39 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
                     templateUrl: 'partials/admin/continut/articoleAdd.ejs',
-                    backdrop: true,
+                    backdrop: 'static',
+                    keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
                     controller:"articlesAddCtrl"
+                })
+            }]
+        })
+        .state('continut.articole.stergeArticol',{
+            parent:'continut.articole',
+            url: '/delete/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/articoleDelete.ejs',
+                    backdrop: 'static',
+                    keyboard: false,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"articlesDeleteCtrl"
+                })
+            }]
+        })
+        .state('continut.articole.updateArticol',{
+            parent:'continut.articole',
+            url: '/update/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/articoleUpdate.ejs',
+                    backdrop: 'static',
+                    keyboard: false,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"articlesUpdateCtrl"
                 })
             }]
         })
@@ -97,7 +128,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
                     templateUrl: 'partials/admin/continut/evenimenteAdd.ejs',
-                    backdrop: true,
+                    backdrop: 'static',
+                    keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
                     controller:"eventsAddCtrl"
@@ -157,7 +189,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
                     templateUrl: 'partials/admin/elearning/multimediaAdd.ejs',
-                    backdrop: true,
+                    backdrop: 'static',
+                    keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
                     controller:"multimediaAddCtrl"
@@ -179,7 +212,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
                     templateUrl: 'partials/admin/elearning/testeInteractiveAdd.ejs',
-                    backdrop: true,
+                    backdrop: 'static',
+                    keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
                     controller:"testeAddCtrl"
@@ -197,7 +231,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
                     templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeAdd.ejs',
-                    backdrop: true,
+                    backdrop: 'static',
+                    keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
                     controller:"ariiTerapeuticeAddCtrl"
@@ -210,7 +245,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
                     templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeEdit.ejs',
-                    backdrop: true,
+                    backdrop: 'static',
+                    keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
                     controller:"ariiTerapeuticeEditCtrl"
