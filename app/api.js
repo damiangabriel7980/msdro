@@ -1005,12 +1005,11 @@ module.exports = function(app, router) {
             })
         })
         .put(function(req, res) {
-
             Content.findById(req.params.id, function(err, content) {
 
-                if (err)
+                if (err) {
                     res.send(err);
-
+                }
                 content.title = req.body.title;  // set the bears name (comes from the request)
                 content.author=req.body.author ;
                 content.description= req.body.description     ;
@@ -1021,6 +1020,7 @@ module.exports = function(app, router) {
                 content.enable=req.body.enable;
                 content.image_path=req.body.image_path;
                 content.groupsID=req.body.groupsID;
+                console.log(content);
                 content.save(function(err) {
                     if (err)
                         res.send(err);

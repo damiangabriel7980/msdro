@@ -1,31 +1,30 @@
 /**
- * Created by miricaandrei23 on 26.11.2014.
+ * Created by miricaandrei23 on 27.11.2014.
  */
-/**
- * Created by miricaandrei23 on 25.11.2014.
- */
-cloudAdminControllers.controller('articlesAddCtrl', ['$scope','$rootScope' ,'ContentService','$stateParams','$sce','$filter','$modalInstance','$state', function($scope,$rootScope,ContentService,$stateParams,$sce,$filter,$modalInstance,$state){
+cloudAdminControllers.controller('articlesUpdateCtrl', ['$scope','$rootScope' ,'ContentService','$stateParams','$sce','$filter','$modalInstance','$state', function($scope,$rootScope,ContentService,$stateParams,$sce,$filter,$modalInstance,$state){
     ContentService.getAll.query().$promise.then(function(result) {
         $scope.grupe=result['groups'];
         $scope.groupMap={};
         for(var i =0;i<$scope.grupe.length;i++)
             $scope.groupMap[$scope.grupe[i]._id]=$scope.grupe[i].display_name;
+        for(var i=0;i<$scope.grupe.length;i++)
+        {
+            for(var j=0;j<$scope.article.groupsID.length;j++)
+            {
+                if($scope.grupe[i]._id==$scope.article.groupsID[j])
+                    $scope.grupeUser.push($scope.grupe[i]);
+            }
+        }
         $scope.selectedGroup=$scope.grupe[0];
     });
-    $scope.articolNou= {
-        title: "",
-        author: "",
-        description: "",
-        text: "",
-        type: "",
-        last_updated: new Date(),
-        version: 1,
-        enable: false,
-        image_path: "",
-        groupsID: $scope.grupeUser
-    };
+    ContentService.deleteOrUpdateContent.getContent({id:$stateParams.id}).$promise.then(function(result2){
+        $scope.grupeUser=[];
+        $scope.article=result2;
 
-    $scope.grupeUser=[];
+       tinyMCE.activeEditor.setContent($scope.article.text);
+    });
+
+
     var findInUserGroup = function (id) {
         var index = -1;
         var i=0;
@@ -42,8 +41,8 @@ cloudAdminControllers.controller('articlesAddCtrl', ['$scope','$rootScope' ,'Con
     $scope.groupWasSelected = function (sel) {
         if(sel._id!=0){
 
-                var index = findInUserGroup(sel._id);
-                if(index==-1) $scope.grupeUser.push(sel);
+            var index = findInUserGroup(sel._id);
+            if(index==-1) $scope.grupeUser.push(sel);
 
         }
     };
@@ -54,17 +53,16 @@ cloudAdminControllers.controller('articlesAddCtrl', ['$scope','$rootScope' ,'Con
             $scope.grupeUser.splice(index,1);
         }
     };
-    $scope.createArticle=function(){
+    $scope.updateArticle=function(){
+        $scope.article.text=tinyMCE.activeEditor.getContent();
         var id_groups=[];
         for(var i=0;i<$scope.grupeUser.length;i++)
             id_groups.push($scope.grupeUser[i]._id)
-        $scope.articolNou.groupsID=id_groups;
-        $scope.articolNou.text=tinyMCE.activeEditor.getContent();
-        if($scope.articolNou){
-            ContentService.getAll.save($scope.articolNou);
-            $scope.newPerson = {};
+        $scope.article.groupsID=id_groups;
+        if($scope.article){
+            ContentService.deleteOrUpdateContent.update({id:$stateParams.id},$scope.article);
             $state.go('continut.articole');
-            tinyMCE.remove();
+            tinyMCE.remove()
             $modalInstance.close();
         }
     };
@@ -73,7 +71,7 @@ cloudAdminControllers.controller('articlesAddCtrl', ['$scope','$rootScope' ,'Con
     };
     $scope.okk = function () {
         $state.go('continut.articole');
-        tinyMCE.remove();
+        tinyMCE.remove()
         $modalInstance.close();
     };
 }]);
