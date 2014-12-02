@@ -104,3 +104,29 @@ ul.products li {
 .carousel-inner .next        { left:  33%; }
 .carousel-inner .prev        { left: -33%; }
 .carousel-control.left,.carousel-control.right {background-image:none;}
+.img-carousel
+{
+  width:30%;
+  margin-top: -5%;
+}
+
+.wrapping-div{
+  margin-left: -20%;
+  height: 150px;
+  width:140%;
+  overflow: hidden;
+  margin-bottom: 25px;
+}
+.my-carousel-caption{
+  margin-bottom: -2% !important;
+  right: 45% !important;
+}
+.carousel-indicators{
+  left: 69%;
+}
+.carousel-indicators .active{
+  background-color: orange !important;
+}
+.carousel-indicators li{
+  border-radius: 0px !important;
+}
