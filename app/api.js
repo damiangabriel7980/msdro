@@ -20,6 +20,8 @@ var SHA256   = require('crypto-js/sha256');
 
 var mongoose = require('mongoose');
 
+var AWS = require('aws-sdk');
+
 //================================================================================== useful db administration functions
 
 //middleware to ensure a user has admin rights
@@ -192,17 +194,24 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 
 //================================================================================================ module exports admin
 
-module.exports = function(app, router, AWS) {
+module.exports = function(app, router) {
 
-// get temporary credentials for S3
+//========================================== get temporary credentials for S3
     router.route('/admin/s3tc')
 
-        .post(hasAdminRights, function (req, res) {
-            AWS.config.credentials = new AWS.TemporaryCredentials({
-                RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
+        .get(hasAdminRights, function (req, res) {
+            var sts = new AWS.STS();
+            sts.assumeRole({
+                RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin',
+                RoleSessionName: req.user.username,
+                DurationSeconds: 900
+            }, function (err, data) {
+                if(err){
+                    res.send(404).end();
+                }else{
+                    res.json(data);
+                }
             });
-            var s3 = new AWS.S3();
-            res.json(s3);
         });
 
     router.route('/admin/utilizatori/grupuri')
@@ -400,12 +409,19 @@ module.exports = function(app, router, AWS) {
     router.route('/admin/utilizatori/test')
 
         .post(hasAdminRights, function (req, res) {
-            console.log("route ok");
-//            AWS.config.credentials = new AWS.TemporaryCredentials({
-//                RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
-//            });
-//            var s3 = new AWS.S3();
-//            res.json(s3);
+            console.log(req.user.username);
+            var sts = new AWS.STS();
+            sts.assumeRole({
+                RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin',
+                RoleSessionName: req.user.username,
+                DurationSeconds: 900
+            }, function (err, data) {
+                if(err){
+                    res.send(404).end();
+                }else{
+                    res.json(data);
+                }
+            });
         });
 
     //============================================================================================= module exports user
