@@ -1,132 +1,197 @@
 .articlesStyles .articleBox {
-  padding: 5px 5px 5px 5px;
-  margin-bottom: 15px;
-  border: 1px solid #a3a3a3;
-  border-radius: 3px;
-  background-color: #dbe0ff;
-}
-.articlesStyles .articleBox .displayImage {
-  padding: 0;
-}
-.articlesStyles .articleBox .displayImage img {
-  width: 205px;
-}
-.articlesStyles .articleBox .title {
-  font-size: 17px;
-  font-weight: bold;
-  padding-bottom: 10px;
-}
-.articlesStyles .articleBox .trimmedArticle {
-  padding-bottom: 10px;
-}
-.articlesStyles .articleBox .author {
-  font-weight: bold;
-}
-.articlesStyles .articleDetail .title {
-  font-size: 20px;
-  font-weight: bold;
-  border-bottom: 1px solid lightgray;
-}
-.articlesStyles .articleDetail .articleContent img {
-  width: 300px;
-  padding-right: 15px;
-  padding-bottom: 15px;
-}
-.articlesStyles .stretchHorizontal {
-  padding-left: 0px;
-  padding-right: 0px;
-}
-.articlesStyles .paddingTop10 {
-  padding-top: 10px;
-}
-.noPadding {
-  padding: 0;
-}
-.homeStyles .wellContainer {
-  padding: 0 15px 0 0;
-}
-.homeStyles .wellContainer .well .title {
-  font-size: 14px;
-  font-weight: bold;
-  color: #0000ff;
-}
-.homeStyles .wellContainer .well .header {
-  font-size: 14px;
-}
-.homeStyles .wellContainer .well .readMore {
-  font-size: 13px;
-  color: #0000ff;
-}
-.homeStyles .wellContainer .well .day {
-  font-size: 30px;
-}
-.therapeuticAreas li {
-  cursor: pointer;
-}
-.rotate0 {
-  -webkit-transform: rotate(0deg);
-  transform: rotate(0deg);
-}
-.rotate90 {
-  -webkit-transform: rotate(90deg);
-  transform: rotate(90deg);
-}
-.rotate180 {
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-.rotate270 {
-  -webkit-transform: rotate(270deg);
-  transform: rotate(270deg);
-}
-#footer {
-  background: #da288c;
-  padding: 5px 0;
-  width: 100%;
-  clear:both;
-}
-ul.products li {
-  display: inline-block !important;
-  vertical-align: top;
-  margin: 0 20px;
-  float: inherit !important;
-  *display: inline;
-  *zoom: 1;
-}
-.col-xs-special{
-  margin-left: 3%;
-}
-.growl{top:auto !important;}
-.margintop20px{margin-top:20px !important; }
-.marginbottom0{margin-bottom: 0px;}
-.specialSublist{list-style: none;display: inline;}
-.carousel-inner .active.left { left: -33%; }
-.carousel-inner .next        { left:  33%; }
-.carousel-inner .prev        { left: -33%; }
-.carousel-control.left,.carousel-control.right {background-image:none;}
-.img-carousel
-{
-  width:30%;
-  margin-top: -5%;
+    padding: 5px 5px 5px 5px;
+    margin-bottom: 15px;
+    border: 1px solid #a3a3a3;
+    border-radius: 3px;
+    background-color: #dbe0ff
 }
 
-.wrapping-div{
-  margin-left: -20%;
-  height: 150px;
-  width:140%;
-  overflow: hidden;
-  margin-bottom: 25px;
+.articlesStyles .articleBox .displayImage {
+    padding: 0
 }
-.my-carousel-caption{
-  margin-bottom: -2% !important;
-  right: 45% !important;
+
+.articlesStyles .articleBox .displayImage img {
+    width: 205px
 }
-.carousel-indicators{
-  left: 69%;
+
+.articlesStyles .articleBox .title {
+    font-size: 17px;
+    font-weight: bold;
+    padding-bottom: 10px
 }
-.carousel-indicators .active{
-  background-color: orange !important;
+
+.articlesStyles .articleBox .trimmedArticle {
+    padding-bottom: 10px
 }
-.carousel-indicators li{
-  border-radius: 0px !important;
+
+.articlesStyles .articleBox .author {
+    font-weight: bold
+}
+
+.articlesStyles .articleDetail .title {
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #d3d3d3
+}
+
+.articlesStyles .articleDetail .articleContent img {
+    width: 300px;
+    padding-right: 15px;
+    padding-bottom: 15px
+}
+
+.articlesStyles .stretchHorizontal {
+    padding-left: 0;
+    padding-right: 0
+}
+
+.articlesStyles .paddingTop10 {
+    padding-top: 10px
+}
+
+.noPadding {
+    padding: 0
+}
+
+.homeStyles .container-fluid {
+    padding: 0 15px 0 0
+}
+
+.homeStyles .container-fluid .well .title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #00f
+}
+
+.homeStyles .container-fluid .well .header {
+    font-size: 14px
+}
+
+.homeStyles .container-fluid .well .readMore {
+    font-size: 13px;
+    color: #00f
+}
+
+.homeStyles .container-fluid .well .day {
+    font-size: 30px
+}
+
+.therapeuticAreas li {
+    cursor: pointer
+}
+
+#footer {
+    background: #da288c;
+    padding: 5px 0;
+    width: 100%;
+    clear: both
+}
+
+ul.products li {
+    display: inline-block !important;
+    vertical-align: top;
+    margin: 0 20px;
+    float: inherit !important;
+    *display: inline;
+    *zoom: 1
+}
+
+.col-xs-special {
+    margin-left: 3%
+}
+
+.list li::selection {
+    background-color: #3adf00
+}
+
+.rotate0 {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg)
+}
+
+.rotate90 {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg)
+}
+
+.rotate180 {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+
+.rotate270 {
+    -webkit-transform: rotate(270deg);
+    transform: rotate(270deg)
+}
+
+.growl {
+    top: auto !important
+}
+
+.margintop20px {
+    margin-top: 20px !important
+}
+
+.marginbottom0 {
+    margin-bottom: 0
+}
+
+.specialSublist {
+    list-style: none;
+    display: inline
+}
+
+.carousel-inner .active.left {
+    left: -33%
+}
+
+.carousel-inner .next {
+    left: 33%
+}
+
+.carousel-inner .prev {
+    left: -33%
+}
+
+.carousel-control.left, .carousel-control.right {
+    background-image: none
+}
+
+.img-carousel {
+    width: 30%;
+    margin-top: -5%
+}
+
+.my-carousel-caption {
+    margin-bottom: -2% !important;
+    right: 45% !important
+}
+
+.wrapping-div {
+    margin-left: -20%;
+    height: 150px;
+    width: 140%;
+    overflow: hidden;
+    margin-bottom: 25px
+}
+
+.carousel-indicators {
+    left: 69%
+}
+
+.carousel-indicators .active {
+    background-color: #ffa500 !important
+}
+
+.carousel-indicators li {
+    border-radius: 0 !important
+}
+
+.container-fluid {
+    margin-left: 12% !important;
+    margin-right: 12% !important
+}
+
+.my-img-thumbnail {
+    border-radius: 10px !important
 }

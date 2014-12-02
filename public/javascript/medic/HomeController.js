@@ -48,7 +48,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     //------------------------------------------------------------------------------------------------ useful functions
     var htmlToPlainText = function(text) {
-        return String(text).replace(/<[^>]+>/gm, '');
+        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
     };
 
     $scope.createHeader = function (text,length) {
