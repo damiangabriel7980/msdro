@@ -195,3 +195,15 @@ ul.products li {
 .my-img-thumbnail {
     border-radius: 10px !important
 }
+.justified{
+    text-align: justify;
+    text-justify: inter-word;
+}
+.readMore{
+    vertical-align: bottom;
+}
+.readMoreEye{
+    position:absolute;
+    bottom:0px;
+    left:0px;
+}

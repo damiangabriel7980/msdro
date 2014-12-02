@@ -11,41 +11,46 @@
     </slide>
 </carousel>
 <div class="container-fluid homeStyles">
-    <div ng-class="{'col-md-6':events.length!=0, 'col-md-4':events.length==0}">
+    <div ng-class="{'col-md-6':events.length!=0, 'col-md-5':events.length==0}">
         <div class="col-md-12">
             <div class="col-md-12">
                 <h4>ULTIMELE NOUTATI</h4>
             </div>
-            <div class="col-md-4 noPadding" style="float:left" ng-repeat="n in news | limitTo: 3">
+            <div class="col-md-4 noPadding readMore" style="float:left;height: 350px" ng-repeat="n in news | limitTo: 3">
                 <div class="col-md-9 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
                     </a>
                 </div>
                 <div class="col-md-9 noPadding">
-                    <div class="col-md-12 title"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title | limitTo : 30}}</a></div>
-                    <div class="col-md-12 header">{{createHeader(n.text,80)}}<br/><div><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})" class="readMore"><i class="glyphicon glyphicon-eye-open"></i></a></div></div>
+                    <div class="col-md-12 title"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title | limitTo : 30}}...</a></div>
+                    <div class="col-md-12 header justified">{{createHeader(n.text,80)}}<br/>
+                    </div>
                 </div>
+                <div class="readMoreEye"> <a  ui-sref="noutati.articol({articleType:n.type, articleId:n._id})" class="readMore" ><i class="glyphicon glyphicon-eye-open"></i></a></div>
             </div>
         </div>
         <hr align="center" width="50%"/>
-        <div class="col-md-12">
+        <div class="col-md-12" >
             <div class="col-md-12">
                 <h4>ULTIMELE NOUTATI STIINTIFICE</h4>
             </div>
-            <div class="col-md-4 noPadding" style="float:left" ng-repeat="n in scientificNews | limitTo: 3">
+            <div class="col-md-4 noPadding readMore" style="float:left; height: 350px" ng-repeat="n in scientificNews | limitTo: 3">
                 <div class="col-md-9 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
                     </a>
                 </div>
                 <div class="col-md-9 noPadding">
-                    <div class="col-md-12 title"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title | limitTo : 30}}</a></div>
-                    <div class="col-md-12 header">{{createHeader(n.text,80)}}<br/><div><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})" class="readMore"><i class="glyphicon glyphicon-eye-open"></i></a></div></div>
+                    <div class="col-md-12 title"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title | limitTo : 30}}...</a></div>
+                    <div class="col-md-12 header justified">{{createHeader(n.text,80)}}<br/></div>
                 </div>
+                <div class="readMoreEye"><a  ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="glyphicon glyphicon-eye-open"></i></a></div>
             </div>
         </div>
     </div>
+    <hr style="-webkit-transform:rotate(90deg);-webkit-transform-origin-x: 1%;" />
+
     <div ng-class="{'col-md-3':events.length!=0, 'col-md-4':events.length==0}">
         <div class="col-md-12">
             <div class="col-md-12">
@@ -79,7 +84,8 @@
         </div>
 
     </div>
-    <div ng-if="events.length > multimedia.length" class="col-md-3 noPadding" ng-include="merckBoxUrl"></div>
+<hr style="-webkit-transform:rotate(90deg);-webkit-transform-origin-x: 1%;" />
+        <div ng-if="events.length > multimedia.length" class="col-md-3 noPadding" ng-include="merckBoxUrl"></div>
     <div ng-if="events.length <= multimedia.length || events.length==0" class="col-md-3" ng-include="merckBoxUrl"></div>
 </div>
 <div id="footer" class="margintop30px" style="height: 35px;">
