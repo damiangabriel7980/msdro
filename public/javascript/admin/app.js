@@ -268,8 +268,8 @@ cloudAdminApp.run(
             $rootScope.$stateParams = $stateParams;
 
             //amazon service paths
-            //pathAmazonDev needs to be changed in production
-            $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/msddev-test/";
+            $rootScope.amazonBucket = sessionStorage.defaultAmazonBucket;
+            $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/"+$rootScope.amazonBucket+"/";
             $rootScope.amazonBucket = "msddev-test";
 
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";

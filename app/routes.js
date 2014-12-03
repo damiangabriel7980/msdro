@@ -242,7 +242,7 @@ var transportUser = function (req, res, paths, sendUserInfo) {
                 if(roles[0]){
                     if(paths[roles[0].authority]){
                         if(sendUserInfo){
-                            res.render(paths[roles[0].authority], {user: req.user});
+                            res.render(paths[roles[0].authority], {user: req.user, amazonBucket: process.env.amazonBucket});
                         }else{
                             res.render(paths[roles[0].authority]);
                         }
