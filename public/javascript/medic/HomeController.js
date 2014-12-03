@@ -64,29 +64,29 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     //merck modal
     $rootScope.showMerckManual = function(){
         $modal.open({
-            templateUrl: 'partials/modals/merckManual.html',
+            templateUrl: 'partials/medic/modals/merckManual.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'MerckManualController',
-            windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html'
+            windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
     $rootScope.showFarmaModal = function(){
         $modal.open({
-            templateUrl: 'partials/modals/Farma.html',
+            templateUrl: 'partials/medic/modals/Farma.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'FarmacovigilentaCtrl',
-            windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html'
+            windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
     $rootScope.showTermsModal = function(){
         $modal.open({
-            templateUrl: 'partials/modals/Terms.html',
+            templateUrl: 'partials/medic/modals/Terms.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'TermsCtrl',
-            windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html'
+            windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
 

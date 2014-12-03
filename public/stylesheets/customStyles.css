@@ -81,7 +81,7 @@
 }
 
 #footer {
-    background: #da288c;
+    background: #009D97;
     padding: 5px 0;
     width: 100%;
     clear: both
@@ -246,7 +246,42 @@ ul.products li {
     body {
         font-size: 11px;
     }
+    .newsClass{
+        float:left !important;
+        height: 240px !important;
+    }
+    .paddingLeft {
+        padding-left: 0px;
+    }
+    .smallScreen{
+        margin-top: -5%;
+    }
+    .MerckSmall{
+        margin-top: -8%;
+    }
+    .noPadd{
+        padding: 0 !important;
+    }
+    .calendar-style{
+        margin-top: -55% !important;height: 60px !important;float: left;border-left: 1px solid black;
+        margin-left: 3% !important;}
+}
+.link-footer{
+    color:white !important;
+    cursor:hand ;
+}
 
+.customFloatLeft{
+    float:left;
+}
+
+.calendar-style{
+    margin-top:-40%;height: 60px;float: left;border-left: 1px solid black;margin-left: 15%
+}
+
+.newsClass{
+    float:left;
+    height: 350px;
 }
 .container-fluid-carousel{
     margin-left: auto !important;
