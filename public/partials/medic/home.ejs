@@ -1,3 +1,4 @@
+<div class="container-fluid container-fluid-carousel">
 <carousel interval="myInterval">
     <slide ng-repeat="carouselItem in HomeCarousel track by $index" active="slide.active">
         <div class="wrapping-div">
@@ -5,104 +6,108 @@
             <a ui-sref="noutati.articol({articleId:HomeCarousel[$index].articleID})"><img class="img-carousel" ng-src="{{pathAmazonDev+HomeCarousel[$index].image_path}}" style="margin-right:10px;"></a>
             <a ui-sref="noutati.articol({articleId:HomeCarousel[($index+1)==HomeCarousel.length?0:$index+1].articleID})"> <img class="img-carousel" ng-src="{{pathAmazonDev+HomeCarousel[($index+1)==HomeCarousel.length?0:$index+1].image_path}}" style="margin-right:10px;"></a>
         </div>
-        <div class="my-carousel-caption carousel-caption">
+        <div class="my-carousel-caption carousel-caption col-sm-4">
             <h1>{{carouselItem.title}}</h1>
         </div>
     </slide>
 </carousel>
+</div>
 <div class="container-fluid homeStyles">
-    <div ng-class="{'col-md-6':events.length!=0, 'col-md-5':events.length==0}">
-        <div class="col-md-12">
-            <div class="col-md-12">
+    <div ng-class="{'col-sm-6':events.length!=0, 'col-sm-5':events.length==0}">
+        <div class="col-sm-12">
+            <div class="col-sm-12">
                 <h4>ULTIMELE NOUTATI</h4>
             </div>
-            <div class="col-md-4 noPadding readMore" style="float:left;height: 350px" ng-repeat="n in news | limitTo: 3">
-                <div class="col-md-9 noPadding">
+            <div class="col-sm-4 noPadding readMore" style="float:left;height: 350px" ng-repeat="n in news | limitTo: 3">
+                <div class="col-sm-9 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
-                        <img class="my-img-thumbnail" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
+                        <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
                     </a>
                 </div>
-                <div class="col-md-9 noPadding">
-                    <div class="col-md-12 title"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title | limitTo : 30}}...</a></div>
-                    <div class="col-md-12 header justified">{{createHeader(n.text,80)}}<br/>
+                <div class="col-sm-9 noPadding">
+                    <div class="col-sm-12 title noPadding"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title | limitTo : 30}}...</a></div>
+                    <div class="col-sm-12 header justified noPadding">{{createHeader(n.text,80)}}<br/>
                     </div>
                 </div>
                 <div class="readMoreEye"> <a  ui-sref="noutati.articol({articleType:n.type, articleId:n._id})" class="readMore" ><i class="glyphicon glyphicon-eye-open"></i></a></div>
             </div>
         </div>
-        <hr align="center" width="50%"/>
-        <div class="col-md-12" >
-            <div class="col-md-12">
+        <hr align="center" width="75%"/>
+        <div class="col-sm-12" >
+            <div class="col-sm-12">
                 <h4>ULTIMELE NOUTATI STIINTIFICE</h4>
             </div>
-            <div class="col-md-4 noPadding readMore" style="float:left; height: 350px" ng-repeat="n in scientificNews | limitTo: 3">
-                <div class="col-md-9 noPadding">
+            <div class="col-sm-4 noPadding readMore" style="float:left; height: 350px" ng-repeat="n in scientificNews | limitTo: 3">
+                <div class="col-sm-9 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
-                        <img class="my-img-thumbnail" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
+                        <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
                     </a>
                 </div>
-                <div class="col-md-9 noPadding">
-                    <div class="col-md-12 title"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title | limitTo : 30}}...</a></div>
-                    <div class="col-md-12 header justified">{{createHeader(n.text,80)}}<br/></div>
+                <div class="col-sm-9 noPadding">
+                    <div class="col-sm-12 title noPadding"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title | limitTo : 30}}...</a></div>
+                    <div class="col-sm-12 header justified noPadding">{{createHeader(n.text,80)}}<br/></div>
                 </div>
                 <div class="readMoreEye"><a  ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="glyphicon glyphicon-eye-open"></i></a></div>
             </div>
         </div>
     </div>
-    <hr style="-webkit-transform:rotate(90deg);-webkit-transform-origin-x: 1%;" />
+    <hr class="hrNewColor" height="50%" style="-webkit-transform:rotate(90deg);-webkit-transform-origin-x: 1%;" />
 
-    <div ng-class="{'col-md-3':events.length!=0, 'col-md-4':events.length==0}">
-        <div class="col-md-12">
-            <div class="col-md-12">
+    <div ng-class="{'col-sm-3':events.length!=0, 'col-sm-4':events.length==0}">
+        <div class="col-sm-12">
+            <div class="col-sm-12">
                 <h4>E-LEARNING</h4>
             </div>
-            <div class="col-md-12 noPadding" ng-repeat="m in multimedia | limitTo: 3">
-                <div class="col-md-12 noPadding">
-                    <div class="col-md-12"><hr/></div>
-                    <div class="col-md-12 title" ui-sref="elearning.multimedia.multimediaById({idd:m._id})">
-                        <i class="glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>
-                        &nbsp;{{m.title+"("+m.author+")"}}</div>
-                    <div ng-if="m.description" class="col-md-12 description">{{m.description}}</div>
+            <div class="col-sm-12 noPadding" ng-repeat="m in multimedia | limitTo: 3">
+                <div class="col-sm-12 noPadding">
+                    <div class="col-sm-12"><hr/></div>
+
+                    <div class="col-sm-12" ui-sref="elearning.multimedia.multimediaById({idd:m._id})">
+
+                        <div><i class="glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;{{m.title+"("+m.author+")"}}</div>
+                        <div class="paddingLeft">{{m.description}}</div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-12"><hr/></div>
-        <div class="col-md-12">
-            <div class="col-md-12">
+        <div class="col-sm-12"><hr/></div>
+        <div class="col-sm-12">
+            <div class="col-sm-12">
                 <h4>EVENIMENTE URMATOARE:</h4>
             </div>
-            <div class="col-md-12" ng-repeat="e in events | limitTo: 3">
-                <div class="col-md-12 noPadding"><hr/></div>
-                <div class="col-md-1 noPadding">
+            <div class="col-sm-12" ng-repeat="e in events | limitTo: 3">
+                <div class="col-sm-12 noPadding"><hr/></div>
+                <div class="col-sm-1 noPadding">
                     <div class="day">{{toDate(e.start).getDate()}}</div><div class="month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
+                    <div style="height: 40px;float: left;border-left: 1px solid #eee"></div>
                 </div>
-                <div class="col-md-8 noPadding">
-                    <div class="col-md-12 title" ui-sref="calendar.calendarDetails({id:e._id})">{{e.name}}</div>
-                    <div class="col-md-12 header">{{e.description.length>50?createHeader(e.description,50):e.description}}</div>
+                <div class="col-sm-10 noPadding">
+                    <div class="col-sm-12 title" ui-sref="calendar.calendarDetails({id:e._id})"><b>{{e.name}}</b></div>
+                    <div class="col-sm-12 header margintop5px">{{e.description.length>50?createHeader(e.description,50):e.description}}</div>
                 </div>
             </div>
         </div>
 
     </div>
-<hr style="-webkit-transform:rotate(90deg);-webkit-transform-origin-x: 1%;" />
-        <div ng-if="events.length > multimedia.length" class="col-md-3 noPadding" ng-include="merckBoxUrl"></div>
-    <div ng-if="events.length <= multimedia.length || events.length==0" class="col-md-3" ng-include="merckBoxUrl"></div>
+<hr class="hrNewColor" style="-webkit-transform:rotate(90deg);-webkit-transform-origin-x: 1%;" />
+        <div ng-if="events.length > multimedia.length" class="col-sm-3 noPadding" ng-include="merckBoxUrl"></div>
+    <div ng-if="events.length <= multimedia.length || events.length==0" class="col-sm-3" ng-include="merckBoxUrl"></div>
 </div>
 <div id="footer" class="margintop30px" style="height: 35px;">
-            <div class="col-md-6">
+            <div class="col-sm-6">
                 <a href="http://www.msd.ro/">
-                    <img src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/msd_white.png" class="pull-left" style="height:28px;margin-right:10px;">
+                    <img src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/msd_white.png" class="pull-left img-responsive" style="height:28px;margin-right:10px;">
                 </a>
 
             </div>
 
-            <div id="msieDiv" class="hide col-md-6 text-right">
+            <div id="msieDiv" class="hide col-sm-6 text-right">
                 <a ui-sref="contact">Contact </a>
                 <a ng-click="showFarmaModal()">Farmacovigilenta</a>
                 <a ng-click="showTermsModal()">Termeni si conditii</a>
             </div>
 
-            <div id="notMsieDiv" class="col-md-6 text-right">
+            <div id="notMsieDiv" class="col-sm-6 text-right">
 
                 <a ui-sref="contact">Contact </a>
                 <a ng-click="showFarmaModal()">Farmacovigilenta</a>
