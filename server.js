@@ -1,5 +1,7 @@
 // server.js
 
+console.log("Amazon bucket = "+process.env.amazonBucket);
+
 // set up ======================================================================
 // get all the tools we need
 var express  = require('express');

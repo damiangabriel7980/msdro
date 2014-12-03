@@ -27,8 +27,10 @@
     "angular-growl": "latest",
     "aws-sdk": "latest",
     "angular-bootstrap-duallistbox": "latest",
-    "ng-table":"latest",
-    "tinymce":"latest"
+    "ng-table": "latest",
+    "tinymce": "latest",
+    "ng-file-upload": "latest",
+    "ng-file-upload-shim": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
@@ -39,6 +41,7 @@
     "bootstrap": "^3.2.0",
     "jquery": "~2.x",
     "fullcalendar": "~1.x",
-    "angular": "~1.2.0"
+    "angular": "~1.2.0",
+    "es5-shim": ">=3.4.0"
   }
 }

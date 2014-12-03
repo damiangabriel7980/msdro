@@ -20,13 +20,36 @@ var SHA256   = require('crypto-js/sha256');
 
 var mongoose = require('mongoose');
 
-var s3 = require('s3');
-var s3Client = s3.createClient({
-    s3Options:{
-        accessKeyId: "AKIAJYA22DHN4HZ6MXHQ",
-        secretAccessKey: "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"
-    }
-});
+var AWS = require('aws-sdk');
+
+var amazonBucket = process.env.amazonBucket;
+
+//================================================================================================= amazon s3 functions
+var getS3Credentials = function(RoleSessionName, callback){
+    var sts = new AWS.STS();
+    sts.assumeRole({
+        RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin',
+        RoleSessionName: RoleSessionName,
+        DurationSeconds: 900
+    }, function (err, data) {
+        if(err){
+            callback(err, null);
+        }else{
+            callback(null, data);
+        }
+    });
+};
+
+var getS3Client = function (callback) {
+    getS3Credentials('nodeServerRequest', function (err, data) {
+        if(err){
+            callback(err, null);
+        }else{
+            AWS.config.update({accessKeyId: data.Credentials.AccessKeyId, secretAccessKey: data.Credentials.SecretAccessKey, sessionToken: data.Credentials.SessionToken});
+            callback(new AWS.S3());
+        }
+    });
+};
 
 //================================================================================== useful db administration functions
 
@@ -202,6 +225,20 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 
 module.exports = function(app, router) {
 
+//========================================== get temporary credentials for S3
+    router.route('/admin/s3tc')
+
+        .get(hasAdminRights, function (req, res) {
+            getS3Credentials(req.user.username, function(err, data){
+                if(err){
+                    console.log(err);
+                    res.status(404).end();
+                }else{
+                    res.json(data);
+                }
+            });
+        });
+
     router.route('/admin/utilizatori/grupuri')
 
         .get(hasAdminRights, function(req, res) {
@@ -309,6 +346,19 @@ module.exports = function(app, router) {
             }
         });
 
+    router.route('/admin/utilizatori/changeGroupLogo')
+        .post(hasAdminRights, function (req,res) {
+            var data = req.body.data;
+            UserGroup.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
+                if(err){
+                    console.log("Error at usergroup change logo. Group id = "+data.id+"; Key = "+data.path);
+                    res.json({error:true});
+                }else{
+                    res.json({error:false, updated:wRes});
+                }
+            });
+        });
+
     router.route('/admin/utilizatori/editGroup')
         //used for both creating new groups and editing existing ones
 
@@ -376,30 +426,54 @@ module.exports = function(app, router) {
 
         .post(hasAdminRights, function (req, res) {
             var group_id = req.body.id;
-            console.log(group_id);
-            //disconnect users from group first
-            disconnectAllEntitiesFromEntity(User, "groupsID", group_id, function (err, resp1) {
+            var logo;
+            //find group logo to remove it from amazon
+            UserGroup.find({_id: req.body.id}, {image_path: 1}, function (err, group) {
                 if(err){
                     res.json({error: true, message: err});
                 }else{
-                    //now remove the group itself
-                    UserGroup.remove({_id: group_id}, function (err, resp2) {
-                        if(err){
-                            res.json({error: true, message: "Eroare la stergerea grupului"});
-                        }else{
-                            res.json({error: false, message: "Grupul a fost sters. "+resp1});
-                        }
-                    });
+                    if(group[0]){
+                        logo = group[0].image_path;
+                        //disconnect users from group first
+                        disconnectAllEntitiesFromEntity(User, "groupsID", group_id, function (err, resp1) {
+                            if(err){
+                                res.json({error: true, message: err});
+                            }else{
+                                //now remove the group itself
+                                UserGroup.remove({_id: group_id}, function (err, resp2) {
+                                    if(err){
+                                        res.json({error: true, message: "Eroare la stergerea grupului"});
+                                    }else{
+                                        //remove image from amazon
+                                        if(logo){
+                                            getS3Client(function (s3) {
+                                                s3.deleteObject({Bucket: amazonBucket, Key: logo}, function (err, data) {
+                                                    if(err){
+                                                        console.log(err);
+                                                        res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea nu s-a putut sterge"});
+                                                    }else{
+                                                        res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea asociata grupului a fost stearsa"});
+                                                    }
+                                                });
+                                            });
+                                        }else{
+                                            res.json({error: false, message: "Grupul a fost sters. "+resp1});
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                    }else{
+                        res.json({error: true, message: "Nu s-a gasit grupul"});
+                    }
                 }
-            })
+            });
         });
 
-    router.route(hasAdminRights, '/admin/utilizatori/test')
+    router.route('/admin/utilizatori/test')
 
-        .post(function (req, res) {
-            var data = req.body.data;
-            console.log("route ok");
-            res.json({message: "route ok"});
+        .post(hasAdminRights, function (req, res) {
+            res.status(200).end();
         });
 
     //============================================================================================= module exports user

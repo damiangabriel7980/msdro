@@ -1,6 +1,9 @@
-cloudAdminControllers.controller('EditGroupController', ['$scope','GrupuriService', '$modalInstance', 'prevScope', 'idToEdit', function($scope, GrupuriService, $modalInstance, prevScope, idToEdit){
+cloudAdminControllers.controller('EditGroupController', ['$scope','GrupuriService', '$modalInstance', 'prevScope', 'idToEdit', 'AmazonService', '$rootScope', function($scope, GrupuriService, $modalInstance, prevScope, idToEdit, AmazonService, $rootScope){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
+    $scope.uploadAlert = {newAlert:false, type:"", message:""};
+    
+    var groupDataLoaded = false;
 
     GrupuriService.groupDetails.query({id: idToEdit}).$promise.then(function (resp) {
         console.log(resp);
@@ -8,12 +11,15 @@ cloudAdminControllers.controller('EditGroupController', ['$scope','GrupuriServic
         $scope.descriere = resp.description;
         $scope.grupDefault = resp.default_group?(resp.default_group==1):false;
         $scope.contentSpecific = resp.content_specific?resp.content_specific:false;
+        $scope.logo = resp.image_path;
+        $scope.idGroup = resp._id;
         GrupuriService.getAllUsers.query().$promise.then(function (resp) {
             $scope.users = resp;
             GrupuriService.getAllUsersByGroup.query({id: idToEdit}).$promise.then(function (resp) {
                 $scope.selectedUsers = resp;
                 //selectedUsers is populated, but the list is not refreshed
                 console.log(resp);
+                groupDataLoaded = true;
             });
         });
     });
@@ -36,6 +42,71 @@ cloudAdminControllers.controller('EditGroupController', ['$scope','GrupuriServic
             }
             $scope.statusAlert.newAlert = true;
         });
+    };
+
+    var putLogoS3 = function (body) {
+        AmazonService.getClient(function (s3) {
+            var extension = body.name.split('.').pop();
+            var key = "userGroup/"+$scope.idGroup+"/image-logo/logo"+$scope.idGroup+"."+extension;
+            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
+                if (err) {
+                    console.log(err);
+                    $scope.uploadAlert.type = "danger";
+                    $scope.uploadAlert.message = "Upload esuat!";
+                    $scope.uploadAlert.newAlert = true;
+                    $scope.$apply();
+                } else {
+                    //update database as well
+                    GrupuriService.changeGroupLogo.save({data:{id:$scope.idGroup, path:key}}).$promise.then(function (resp) {
+                        if(resp.error){
+                            $scope.uploadAlert.type = "danger";
+                            $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
+                            $scope.uploadAlert.newAlert = true;
+                        }else{
+                            $scope.logo = key;
+                            $scope.uploadAlert.type = "success";
+                            $scope.uploadAlert.message = "Logo updated!";
+                            $scope.uploadAlert.newAlert = true;
+                            console.log("Upload complete");
+                        }
+                    });
+                }
+            });
+            req.on('httpUploadProgress', function (evt) {
+                var progress = parseInt(100.0 * evt.loaded / evt.total);
+                $scope.$apply(function() {
+                    console.log(progress);
+                })
+            });
+        });
+    };
+
+    $scope.fileSelected = function($files, $event){
+        //make sure group data is loaded. we need to access it to form the amazon key
+        if(groupDataLoaded){
+            //make sure a file was actually loaded
+            if($files[0]){
+                AmazonService.getClient(function (s3) {
+                    var key;
+                    //if there already is a logo, delete it. Then upload new
+                    if($scope.logo){
+                        key = $scope.logo;
+                        s3.deleteObject({Bucket: $rootScope.amazonBucket, Key:key}, function (err, data) {
+                            if(err){
+                                $scope.uploadAlert.type = "danger";
+                                $scope.uploadAlert.message = "Eroare la stergerea logo-ului vechi!";
+                                $scope.uploadAlert.newAlert = true;
+                                $scope.$apply();
+                            }else{
+                                putLogoS3($files[0]);
+                            }
+                        });
+                    }else{
+                        putLogoS3($files[0]);
+                    }
+                });
+            }
+        }
     };
 
     $scope.closeModal = function(){

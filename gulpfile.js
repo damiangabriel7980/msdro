@@ -60,26 +60,56 @@ gulp.task('watch', function() {
 
 //test amazon
 gulp.task('test', function () {
-    /*
-    uses aws-sdk
-    */
-    //environment credentials
-    var AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN;
+//    IAM_msdAdmin
+//    Access Key ID:        AKIAIM6KJKTQ3DODHQPA
+//    Secret Access Key:    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
+
+//    export AWS_ACCESS_KEY_ID="AKIAIM6KJKTQ3DODHQPA"
+//    export AWS_SECRET_ACCESS_KEY="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"
+
+//    IAM users sign-in link:
+//    https://578381890239.signin.aws.amazon.com/console
+
+//    resource format:     arn:aws:s3:::*/*
+//    "Action":["s3:GetObject", "s3:PutObject"],
+
     // Note that environment credentials are loaded by default,
-// the following line is shown for clarity:
+    // the following line is shown for clarity:
     AWS.config.credentials = new AWS.EnvironmentCredentials('AWS');
+//    console.log(AWS.config.credentials);
 
 // Now set temporary credentials seeded from the master credentials
-    // generic:
-    AWS.config.credentials = new AWS.TemporaryCredentials();
+//    generic:
+//    AWS.config.credentials = new AWS.TemporaryCredentials();
+
     //for IAM user:
     AWS.config.credentials = new AWS.TemporaryCredentials({
-        RoleArn: 'arn:aws:iam::1234567890:role/TemporaryCredentials'
+        RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
     });
 
 // subsequent requests will now use temporary credentials from AWS STS.
-    new AWS.S3().listBucket(function(err, data) {
+    var s3 = new AWS.S3();
+    console.log("================================================================ START");
+//    console.log(s3.config.credentials);
+    s3.getObject({Bucket: 'msddev-test', Key: 'multimedia/1/slide/multimedia_1.jpg'}, function (err, data) {
+        console.log(err);
+        console.log(data);
+        console.log("                                                     msddev-test");
+        console.log("================================================================");
+    });
 
+    s3.getObject({Bucket: 'msddev-test2', Key: 'multimedia/13/slide/multimedia_22.jpg'}, function (err, data) {
+        console.log(err);
+        console.log(data);
+        console.log("                                                    msddev-test2");
+        console.log("================================================================");
+    });
+
+    s3.listBuckets(function(err, data) {
+        console.log(err);
+        console.log(data);
+        console.log("                                                    list buckets");
+        console.log("================================================================");
     });
 });
 
