@@ -264,12 +264,66 @@ ul.products li {
     }
     .calendar-style{
         margin-top: -55% !important;height: 60px !important;float: left;border-left: 1px solid black;
-        margin-left: 3% !important;}
+        margin-left: 0% !important;}
 }
 .link-footer{
     color:white !important;
     cursor:hand ;
 }
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .navbar-collapse.collapse {
+        display: none !important;
+    }
+    .navbar-collapse.collapse.in {
+        display: block !important;
+    }
+    .navbar-header .collapse, .navbar-toggle {
+        display:block !important;
+    }
+    .navbar-header {
+        float:none;
+    }
+}
+
+@media(max-width: 768px){
+    .newsClass{
+        float:left !important;
+        height: auto !important;
+    }
+    .calendar-style{
+        display: none;
+    }
+    .hrNewColor{
+        display: none;
+    }
+}
+
+@media(max-width: 1366px){
+    .noPadd{
+        padding: 0 !important;
+    }
+    .calendar-style{
+        margin-top: -55% !important;height: 60px !important;float: left;border-left: 1px solid black;
+        margin-left: 0% !important;}
+    .my-carousel-caption {
+        margin-bottom: -2% !important;
+        right: 45% !important;
+        margin-left: 4% !important;
+    }
+    .smallScreen{
+        margin-top: -4%;
+    }
+    .MerckSmall{
+        margin-top: -6%;
+    }
+}
+
+.well{
+    background-color: transparent;
+    border: hidden;
+}
+
 
 .customFloatLeft{
     float:left;

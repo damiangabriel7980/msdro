@@ -18,7 +18,7 @@
             <div class="col-sm-12">
                 <h4>ULTIMELE NOUTATI</h4>
             </div>
-            <div class="col-sm-4 noPadding readMore newsClass" ng-repeat="n in news | limitTo: 3">
+            <div class="col-sm-4 well noPadding readMore newsClass" ng-repeat="n in news | limitTo: 3">
                 <div class="col-sm-9 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
@@ -37,7 +37,7 @@
             <div class="col-sm-12">
                 <h4>ULTIMELE NOUTATI STIINTIFICE</h4>
             </div>
-            <div class="col-sm-4 noPadding readMore newsClass" ng-repeat="n in scientificNews | limitTo: 3">
+            <div class="col-sm-4 noPadding well readMore newsClass" ng-repeat="n in scientificNews | limitTo: 3">
                 <div class="col-sm-9 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
@@ -58,7 +58,7 @@
             <div class="col-sm-12">
                 <h4>E-LEARNING</h4>
             </div>
-            <div class="col-sm-12 noPadding" ng-repeat="m in multimedia | limitTo: 3">
+            <div class="col-sm-12 noPadding well" ng-repeat="m in multimedia | limitTo: 3">
                 <div class="col-sm-12 noPadding">
                     <div class="col-sm-12"><hr/></div>
 
@@ -75,7 +75,7 @@
             <div class="col-sm-12">
                 <h4>EVENIMENTE URMATOARE:</h4>
             </div>
-            <div class="col-sm-12 noPadd" ng-repeat="e in events | limitTo: 3">
+            <div class="col-sm-12 noPadd well" ng-repeat="e in events | limitTo: 3">
                 <div class="col-sm-12 noPadding"><hr/></div>
                 <div class="col-sm-2 noPadding">
                     <div class="day customFloatLeft">{{toDate(e.start).getDate()}}</div><div class="month customFloatLeft">{{monthsArray[toDate(e.start).getMonth()]}}</div>
@@ -90,8 +90,8 @@
 
     </div>
 <hr class="hrNewColor" style="-webkit-transform:rotate(90deg);-webkit-transform-origin-x: 1%;" />
-        <div ng-if="events.length > multimedia.length" class="col-sm-3 noPadding MerckSmall" ng-include="merckBoxUrl"></div>
-    <div ng-if="events.length <= multimedia.length || events.length==0" class="col-sm-3" ng-include="merckBoxUrl"></div>
+        <div ng-if="events.length > multimedia.length" class="col-sm-3 noPadding MerckSmall well" ng-include="merckBoxUrl"></div>
+    <div ng-if="events.length <= multimedia.length || events.length==0" class="col-sm-3 well" ng-include="merckBoxUrl"></div>
 </div>
 <div id="footer" class="margintop30px" style="height: 35px;">
             <div class="col-sm-6">
