@@ -1,5 +1,7 @@
 // server.js
 
+console.log("Amazon bucket = "+process.env.amazonBucket);
+
 // set up ======================================================================
 // get all the tools we need
 var express  = require('express');
@@ -14,7 +16,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var configDB = require('./config/database.js');
-// console.log(process.env);
+
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
 

@@ -81,13 +81,8 @@ cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '
         var toSend = {};
         GrupuriService.testSomething.query({data: toSend}).$promise.then(function(resp){
             console.log(resp);
-            AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
-            var s3 = new AWS.S3();
-            s3.getObject({Bucket: 'msddev-test', Key: 'multimedia/1/slide/multimedia_1.jpg'}, function (err, data) {
-                console.log(err);
-                console.log(data);
-            });
         });
-    }
+    };
+
 
 }]);
