@@ -24,6 +24,8 @@ var AWS = require('aws-sdk');
 
 var amazonBucket = process.env.amazonBucket;
 
+var cookieSig = require('express-session/node_modules/cookie-signature');
+
 //================================================================================================= amazon s3 functions
 var getS3Credentials = function(RoleSessionName, callback){
     var sts = new AWS.STS();
@@ -204,7 +206,7 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, router) {
+module.exports = function(app, sessionSecret, router) {
 
 //======================================================================================================= secure routes
 
@@ -222,37 +224,48 @@ module.exports = function(app, router) {
     function hasAdminRights(req, res, next) {
         console.log("check admin");
         try{
-            //get session store info for this session
-            var ssi = req.sessionStore.sessions[req.sessionID];
-            ssi = JSON.parse(ssi);
-            //now get user id
-            var userID = ssi['passport']['user'];
-            //now get user's roles
-            User.find({_id: userID}, {rolesID :1}, function (err, data) {
-                if(err){
-                    console.log(err);
-                    res.status(403).end();
-                }else{
-                    var roles = data[0].rolesID;
-                    //now get roles
-                    Roles.find({_id: {$in: roles}}, function (err, data) {
-                        if(err){
-                            console.log(err);
-                            res.status(403).end();
-                        }else{
-                            var admin = false;
-                            for(var i=0; i<data.length; i++){
-                                if(data[i].authority === "ROLE_ADMIN") admin=true;
-                            }
-                            if(admin === true){
-                                next();
-                            }else{
+            //get encripted session id from cookie
+            var esidc = req.cookies['connect.sid'];
+            //get node session id from request
+            var sid = req.sessionID;
+            //encrypt sid using session secret
+            var esid = "s:"+cookieSig.sign(sid, sessionSecret);
+            //if esid matches esidc then user is authentic
+            if(esid === esidc){
+                //get session store info for this session
+                var ssi = req.sessionStore.sessions[req.sessionID];
+                ssi = JSON.parse(ssi);
+                //now get user id
+                var userID = ssi['passport']['user'];
+                //now get user's roles
+                User.find({_id: userID}, {rolesID :1}, function (err, data) {
+                    if(err){
+                        console.log(err);
+                        res.status(403).end();
+                    }else{
+                        var roles = data[0].rolesID;
+                        //now get roles
+                        Roles.find({_id: {$in: roles}}, function (err, data) {
+                            if(err){
+                                console.log(err);
                                 res.status(403).end();
+                            }else{
+                                var admin = false;
+                                for(var i=0; i<data.length; i++){
+                                    if(data[i].authority === "ROLE_ADMIN") admin=true;
+                                }
+                                if(admin === true){
+                                    next();
+                                }else{
+                                    res.status(403).end();
+                                }
                             }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
+            }else{
+                res.status(403).end();
+            }
         }catch(e){
             console.log(e);
             res.status(403).end();
