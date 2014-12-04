@@ -118,10 +118,24 @@ ul.products li {
   margin-top: -5%;
 
 }
+
+.img-carousel-prev {
+  width: 30%;
+  margin-top: -5%
+}
+.img-carousel-next {
+  width: 30%;
+  margin-top: -5%
+}
+
+.img-carousel-center{
+  width: 38%;
+  margin-top: -5%
+}
+
 .my-carousel-caption{
   margin-bottom: -2% !important;
   right: 45% !important;
-  left:21%;
 }
 .wrapping-div{
   margin-left: -20%;
@@ -173,7 +187,11 @@ ul.products li {
 .MerckContentAlign{
   text-align: justify;
 }
-@media(max-width: 1025px) {
+
+@media (max-width: 1025px) {
+  .leftBorder{
+    border-left: 2px solid #000000;
+  }
   h1 {
     font-size: 26px;
   }
@@ -183,8 +201,6 @@ ul.products li {
   .carousel-caption{
     left: 23% !important;
   }
-}
-@media(max-width: 1025px) {
   body {
     font-size: 11px;
   }
@@ -196,10 +212,10 @@ ul.products li {
     padding-left: 0px;
   }
   .smallScreen{
-    margin-top: -5%;
+    margin-top: 0%;
   }
   .MerckSmall{
-    margin-top: -8%;
+    margin-top: 0%;
   }
   .noPadd{
     padding: 0 !important;
@@ -207,6 +223,18 @@ ul.products li {
   .calendar-style{
     margin-top: -55% !important;height: 60px !important;float: left;border-left: 1px solid black;
     margin-left: 110% !important;}
+  .container-fluid{
+    margin-left: 0% !important;
+    margin-right: 0% !important;
+  }
+  .img-carousel-prev {
+    width: 15%;
+    margin-top: -5%
+  }
+  .img-carousel-next {
+    width: 15%;
+    margin-top: -5%
+  }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -252,7 +280,7 @@ ul.products li {
     margin-top: -5%;
   }
   .MerckSmall{
-    margin-top: -8%;
+    margin-top: 0%;
   }
   .noPadd{
     padding: 0 !important;
@@ -270,6 +298,14 @@ ul.products li {
   .calendar-style{
     margin-top: -100% !important;height: 60px !important;float: left;border-left: 1px solid black;
     margin-left: 110% !important;}
+  .img-carousel-prev {
+    width: 30%;
+    margin-top: -5%
+  }
+  .img-carousel-next {
+    width: 30%;
+    margin-top: -5%
+  }
 }
 
 
@@ -278,10 +314,10 @@ ul.products li {
     padding: 0 !important;
   }
   .smallScreen{
-    margin-top: -4%;
+    margin-top: 0%;
   }
   .MerckSmall {
-    margin-top: -6%;
+    margin-top: 0%;
   }
   .my-carousel-caption {
     margin-bottom: -2% !important;
@@ -299,11 +335,36 @@ ul.products li {
     float:left !important;
     height: auto !important;
   }
+
+  .rightBorder{
+    border-right: 0px !important;
+  }
+
+  .leftBorder{
+    border-left: 0px !important;
+  }
+
   .calendar-style{
     display: none;
   }
   .hrNewColor{
     display: none;
+  }
+  .img-carousel-prev {
+    width: 10%;
+    margin-top: -5%
+  }
+
+  .img-carousel-next {
+    width: 10%;
+    margin-top: -5%
+  }
+  .img-carousel-center {
+    width: 38%;
+    margin-top: -5%
+  }
+  .titluCarousel{
+    width:193%;
   }
 }
 
@@ -323,6 +384,14 @@ ul.products li {
 
 .customFloatLeft{
   float:left;
+}
+
+.rightBorder{
+  border-right: 1px solid #000000;
+}
+
+.leftBorder{
+  border-left: 1px solid #000000;
 }
 
 .newsClass{

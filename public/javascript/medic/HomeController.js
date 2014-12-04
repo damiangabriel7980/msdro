@@ -92,11 +92,15 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
 
 }])
-    .directive('disableNgAnimate', ['$animate', function($animate) {
+    .directive('setNgAnimate', ['$animate', function ($animate) {
         return {
-            restrict: 'A',
-            link: function(scope, element) {
-                $animate.enabled(false, element);
+            link: function ($scope, $element, $attrs) {
+                $scope.$watch( function() {
+                    return $scope.$eval($attrs.setNgAnimate, $scope);
+                }, function(valnew, valold){
+                    console.log('Directive animation Enabled: ' + valnew);
+                    $animate.enabled(!!valnew, $element);
+                });
             }
         };
     }]);

@@ -81,7 +81,7 @@
 }
 
 #footer {
-    background: #009D97;
+    background: #009d97;
     padding: 5px 0;
     width: 100%;
     clear: both
@@ -162,15 +162,24 @@ ul.products li {
     margin-top: -5%
 }
 
-.img-carousel-center{
+.img-carousel-prev {
+    width: 30%;
+    margin-top: -5%
+}
+
+.img-carousel-next {
+    width: 30%;
+    margin-top: -5%
+}
+
+.img-carousel-center {
     width: 38%;
     margin-top: -5%
 }
 
 .my-carousel-caption {
     margin-bottom: -2% !important;
-    right: 45% !important;
-    left:21%;
+    right: 45% !important
 }
 
 .wrapping-div {
@@ -195,7 +204,7 @@ ul.products li {
 
 .container-fluid {
     margin-left: 12%;
-    margin-right: 12%;
+    margin-right: 12%
 }
 
 .my-img-thumbnail {
@@ -239,125 +248,266 @@ ul.products li {
 
 @media (max-width: 1025px) {
     h1 {
-        font-size: 26px;
+        font-size: 26px
     }
-    h4 {
-        font-size: 14px;
-    }
-    .carousel-caption{
-        left: 23% !important;
-    }
-     body {
-        font-size: 11px;
-    }
-    .newsClass{
-        float:left !important;
-        height: 240px !important;
-    }
-    .paddingLeft {
-        padding-left: 0px;
-    }
-    .smallScreen{
-        margin-top: -5%;
-    }
-    .MerckSmall{
-        margin-top: -8%;
-    }
-    .noPadd{
-        padding: 0 !important;
-    }
-    .calendar-style{
-        margin-top: -55% !important;height: 60px !important;float: left;border-left: 1px solid black;
-        margin-left: 110% !important;}
-    .container-fluid{
-        margin-left: 0% !important;
-        margin-right: 0% !important;
-    }
-}
 
-.link-footer{
-    color:white !important;
-    cursor:hand ;
+    h4 {
+        font-size: 14px
+    }
+
+    .carousel-caption {
+        left: 23% !important
+    }
+
+    body {
+        font-size: 11px
+    }
+
+    .newsClass {
+        float: left !important;
+        height: 240px !important
+    }
+
+    .paddingLeft {
+        padding-left: 0
+    }
+
+    .smallScreen {
+        margin-top: -5%
+    }
+
+    .MerckSmall {
+        margin-top: 0%
+    }
+
+    .noPadd {
+        padding: 0 !important
+    }
+
+    .calendar-style {
+        margin-top: -55% !important;
+        height: 60px !important;
+        float: left;
+        border-left: 1px solid #000;
+        margin-left: 110% !important
+    }
+
+    .container-fluid {
+        margin-left: 0 !important;
+        margin-right: 0 !important
+    }
+
+    .img-carousel-prev {
+        width: 30%;
+        margin-top: -5%
+    }
+
+    .img-carousel-next {
+        width: 30%;
+        margin-top: -5%
+    }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
     .navbar-collapse.collapse {
-        display: none !important;
+        display: none !important
     }
+
     .navbar-collapse.collapse.in {
-        display: block !important;
+        display: block !important
     }
+
     .navbar-header .collapse, .navbar-toggle {
-        display:block !important;
+        display: block !important
     }
+
     .navbar-header {
-        float:none;
+        float: none
+    }
+
+    .container-fluid {
+        margin-left: 1% !important;
+        margin-right: 1% !important
+    }
+
+}
+
+@media (max-width: 1025px) {
+    .leftBorder{
+        border-left: 2px solid #000000;
+    }
+    h1 {
+        font-size: 26px
+    }
+
+    h4 {
+        font-size: 14px
+    }
+
+    .carousel-caption {
+        left: 23% !important
+    }
+
+    body {
+        font-size: 11px
+    }
+
+    .newsClass {
+        float: left !important;
+        height: 240px !important
+    }
+
+    .paddingLeft {
+        padding-left: 0
+    }
+
+    .smallScreen {
+        margin-top: 0%
+    }
+
+    .MerckSmall {
+        margin-top: 0%
+    }
+
+    .noPadd {
+        padding: 0 !important
+    }
+
+    .calendar-style {
+        margin-top: -55% !important;
+        height: 60px !important;
+        float: left;
+        border-left: 1px solid #000;
+        margin-left: 110% !important
+    }
+
+    .container-fluid {
+        margin-left: 4%;
+        margin-right: 4%
     }
 }
 
-@media (min-width: 1025px) and (max-width: 1366px) {
-    .calendar-style{
-        margin-top: -100% !important;height: 60px !important;float: left;border-left: 1px solid black;
-        margin-left: 110% !important;}
+@media (min-width: 1025px) and (max-width: 1365px) {
+    .calendar-style {
+        margin-top: -100% !important;
+        height: 60px !important;
+        float: left;
+        border-left: 1px solid #000;
+        margin-left: 110% !important
+    }
+
+    .img-carousel-prev {
+        width: 30%;
+        margin-top: -5%
+    }
+    .img-carousel-next {
+        width: 30%;
+        margin-top: -5%
+    }
 }
 
+@media (max-width: 1366px) {
+    .noPadd {
+        padding: 0 !important
+    }
 
-@media(max-width: 768px){
-    .newsClass{
-        float:left !important;
-        height: auto !important;
+    .smallScreen {
+        margin-top: 0%
     }
-    .calendar-style{
-        display: none;
-    }
-    .hrNewColor{
-        display: none;
-    }
-}
 
-@media(max-width: 1366px){
-    .noPadd{
-        padding: 0 !important;
+    .MerckSmall {
+        margin-top: 0%
     }
 
     .my-carousel-caption {
         margin-bottom: -2% !important;
         right: 45% !important;
-        margin-left: 4% !important;
+        margin-left: 4% !important
     }
-    .smallScreen{
-        margin-top: -4%;
-    }
-    .MerckSmall{
-        margin-top: -6%;
-    }
-    .container-fluid{
+
+    .container-fluid {
         margin-left: 6%;
-        margin-right: 6%;
+        margin-right: 6%
     }
 }
 
-.well{
+@media (max-width: 768px) {
+    .newsClass {
+        float: left !important;
+        height: auto !important
+    }
+
+    .rightBorder{
+        border-right: 0px !important;
+    }
+
+    .leftBorder{
+        border-left: 0px !important;
+    }
+
+    .calendar-style {
+        display: none
+    }
+
+    .hrNewColor {
+        display: none
+    }
+    .img-carousel-prev {
+        width: 10%;
+        margin-top: -5%
+    }
+
+    .img-carousel-next {
+        width: 10%;
+        margin-top: -5%
+    }
+    .img-carousel-center {
+        width: 38%;
+        margin-top: -5%
+    }
+    .titluCarousel{
+        width:193%;
+    }
+}
+
+.well {
     background-color: transparent;
-    border: hidden;
+    border: hidden
 }
 
-
-.customFloatLeft{
-    float:left;
+.rightBorder{
+    border-right: 1px solid #000000;
 }
 
-.calendar-style{
-    margin-top:-40%;height: 60px;float: left;border-left: 1px solid black;margin-left: 15%
+.leftBorder{
+    border-left: 1px solid #000000;
 }
 
-.newsClass{
-    float:left;
-    height: 350px;
+.link-footer {
+    color: #fff !important;
+    cursor: hand
 }
-.container-fluid-carousel{
+
+.calendar-style {
+    margin-top: -40%;
+    height: 60px;
+    float: left;
+    border-left: 1px solid #000;
+    margin-left: 15%
+}
+
+.customFloatLeft {
+    float: left
+}
+
+.newsClass {
+    float: left;
+    height: 350px
+}
+
+.container-fluid-carousel {
     margin-left: auto !important;
     margin-right: auto !important;
-    padding-left: 0px !important;
-    padding-right: 0px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important
 }

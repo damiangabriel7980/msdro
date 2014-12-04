@@ -1,13 +1,13 @@
 <div class="container-fluid container-fluid-carousel">
-<carousel disable-ng-animate interval="myInterval">
+<carousel disable-ng-animate interval="myInterval" set-ng-animate="true">
     <slide ng-repeat="carouselItem in HomeCarousel track by $index" active="slide.active">
         <div class="wrapping-div">
-        <a ui-sref="noutati.articol({articleId:HomeCarousel[($index-1)<0?HomeCarousel.length-1:$index-1].articleID})"><img class="img-carousel" ng-src="{{pathAmazonDev+HomeCarousel[($index-1)<0?HomeCarousel.length-1:$index-1].image_path}}" style="border-right:10px solid white;"></a>
+        <a ui-sref="noutati.articol({articleId:HomeCarousel[($index-1)<0?HomeCarousel.length-1:$index-1].articleID})"><img class="img-carousel-prev" ng-src="{{pathAmazonDev+HomeCarousel[($index-1)<0?HomeCarousel.length-1:$index-1].image_path}}" style="border-right:10px solid white;"></a>
             <a ui-sref="noutati.articol({articleId:HomeCarousel[$index].articleID})"><img class="img-carousel-center" ng-src="{{pathAmazonDev+HomeCarousel[$index].image_path}}" style="margin-right:10px;"></a>
-            <a ui-sref="noutati.articol({articleId:HomeCarousel[($index+1)==HomeCarousel.length?0:$index+1].articleID})"> <img class="img-carousel" ng-src="{{pathAmazonDev+HomeCarousel[($index+1)==HomeCarousel.length?0:$index+1].image_path}}" style="border-right:10px solid white;"></a>
+            <a ui-sref="noutati.articol({articleId:HomeCarousel[($index+1)==HomeCarousel.length?0:$index+1].articleID})"> <img class="img-carousel-next" ng-src="{{pathAmazonDev+HomeCarousel[($index+1)==HomeCarousel.length?0:$index+1].image_path}}" style="border-right:10px solid white;"></a>
         </div>
         <div class="my-carousel-caption carousel-caption col-sm-4">
-            <h1>{{carouselItem.title}}</h1>
+            <h1 class="titluCarousel">{{carouselItem.title}}</h1>
         </div>
     </slide>
 </carousel>
@@ -51,9 +51,8 @@
             </div>
         </div>
     </div>
-    <hr class="hrNewColor" height="50%" style="-webkit-transform:rotate(90deg);-webkit-transform-origin-x: 1%;" />
 
-    <div ng-class="{'col-sm-3':events.length!=0, 'col-sm-4':events.length==0}" class="smallScreen">
+    <div ng-class="{'col-sm-3':events.length!=0, 'col-sm-4':events.length==0}" class="smallScreen rightBorder leftBorder">
         <div class="col-sm-12 noPadd">
             <div class="col-sm-12 noPadding">
                 <h4>E-LEARNING</h4>
@@ -88,7 +87,6 @@
         </div>
 
     </div>
-<hr class="hrNewColor" style="-webkit-transform:rotate(90deg);-webkit-transform-origin-x: 1%;" />
         <div ng-if="events.length > multimedia.length" class="col-sm-3 noPadding MerckSmall well" ng-include="merckBoxUrl"></div>
     <div ng-if="events.length <= multimedia.length || events.length==0" class="col-sm-3 well" ng-include="merckBoxUrl"></div>
 </div>
