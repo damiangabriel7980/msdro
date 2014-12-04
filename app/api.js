@@ -540,7 +540,7 @@ module.exports = function(app, sessionSecret, router) {
     router.route('/admin/utilizatori/continut/getAllContent')
 
         .get(function(req, res) {
-            PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1} ,function(err, cont) {
+            PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
                 if(err) {
                     console.log(err);
                     res.send(err);

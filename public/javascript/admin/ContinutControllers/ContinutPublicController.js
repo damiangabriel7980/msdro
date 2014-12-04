@@ -68,6 +68,27 @@ cloudAdminControllers.controller('ContinutPublicController', ['$scope', '$rootSc
             }
         });
     };
+
+    $scope.toogleContentEnable = function (id, enabled) {
+        $modal.open({
+            templateUrl: 'partials/admin/continut/continutPublic/modalToogleEnablePublicContent.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'ToggleEnablePublicContentController',
+            resolve: {
+                idToDelete: function () {
+                    return id;
+                },
+                isEnabled: function () {
+                    return enabled;
+                },
+                prevScope: function () {
+                    return $scope;
+                }
+            }
+        });
+    };
+
     $scope.editContent = function (id) {
         $modal.open({
             templateUrl: 'partials/admin/continut/continutPublic/modalEditPublicContent.html',
