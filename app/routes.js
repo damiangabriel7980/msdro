@@ -17,7 +17,7 @@ module.exports = function(app, passport) {
 	app.get('/profile', isLoggedIn, function(req, res) {
         transportUser(req, res, {
             "ROLE_FARMACIST": "medic/profile.ejs",
-            "ROLE_ADMIN": "admin/profile2.ejs"
+            "ROLE_ADMIN": "admin/profile.ejs"
         }, true);
 	});
 
