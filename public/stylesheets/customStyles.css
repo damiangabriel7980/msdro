@@ -87,6 +87,10 @@
     clear: both
 }
 
+.textBlue{
+    color:#009d97;
+}
+
 ul.products li {
     display: inline-block !important;
     vertical-align: top;
@@ -203,8 +207,8 @@ ul.products li {
 }
 
 .container-fluid {
-    margin-left: 12%;
-    margin-right: 12%
+    margin-left: 8%;
+    margin-right: 8%
 }
 
 .my-img-thumbnail {
@@ -222,8 +226,15 @@ ul.products li {
 
 .readMoreEye {
     position: absolute;
-    bottom: 0;
+    bottom: -8%;
     left: 0
+}
+
+.dayFont{
+font-size: 20px;
+}
+.monthFont{
+font-size: 12px;
 }
 
 .paddingLeft {
@@ -246,7 +257,14 @@ ul.products li {
     text-align: justify
 }
 
+.col-Left{
+    margin-left: -7%;
+}
+
 @media (max-width: 1025px) {
+    .col-Left{
+        margin-left: -7%;
+    }
     h1 {
         font-size: 26px
     }
@@ -285,11 +303,9 @@ ul.products li {
     }
 
     .calendar-style {
-        margin-top: -55% !important;
         height: 60px !important;
         float: left;
-        border-left: 1px solid #000;
-        margin-left: 110% !important
+        border-left: 1px solid #D9D7D7;
     }
 
     .container-fluid {
@@ -306,6 +322,20 @@ ul.products li {
         width: 30%;
         margin-top: -5%
     }
+}
+
+
+.well{
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.marginELearn{
+    margin-left: -3%;
+}
+
+.grey-eye{
+    color:#D9D7D7;
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -333,8 +363,11 @@ ul.products li {
 }
 
 @media (max-width: 1025px) {
+    .col-Left{
+        margin-left: -7%;
+    }
     .leftBorder{
-        border-left: 2px solid #000000;
+        border-left: 2px solid #D9D7D7;
     }
     h1 {
         font-size: 26px
@@ -374,11 +407,9 @@ ul.products li {
     }
 
     .calendar-style {
-        margin-top: -55% !important;
         height: 60px !important;
         float: left;
-        border-left: 1px solid #000;
-        margin-left: 110% !important
+        border-left: 1px solid #D9D7D7;
     }
 
     .container-fluid {
@@ -389,11 +420,9 @@ ul.products li {
 
 @media (min-width: 1025px) and (max-width: 1365px) {
     .calendar-style {
-        margin-top: -100% !important;
         height: 60px !important;
         float: left;
-        border-left: 1px solid #000;
-        margin-left: 110% !important
+        border-left: 1px solid #D9D7D7;
     }
 
     .img-carousel-prev {
@@ -476,11 +505,11 @@ ul.products li {
 }
 
 .rightBorder{
-    border-right: 1px solid #000000;
+    border-right: 1px solid #D9D7D7;
 }
 
 .leftBorder{
-    border-left: 1px solid #000000;
+    border-left: 1px solid #D9D7D7;
 }
 
 .link-footer {
@@ -489,10 +518,9 @@ ul.products li {
 }
 
 .calendar-style {
-    margin-top: -40%;
     height: 60px;
     float: left;
-    border-left: 1px solid #000;
+    border-left: 1px solid #D9D7D7;
     margin-left: 15%
 }
 
@@ -502,7 +530,7 @@ ul.products li {
 
 .newsClass {
     float: left;
-    height: 350px
+    height: 286px
 }
 
 .container-fluid-carousel {

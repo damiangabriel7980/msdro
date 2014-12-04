@@ -13,7 +13,7 @@
 </carousel>
 </div>
 <div class="container-fluid homeStyles">
-    <div ng-class="{'col-sm-6':events.length!=0, 'col-sm-5':events.length==0}">
+    <div ng-class="{'col-sm-5':events.length!=0, 'col-sm-4':events.length==0}">
         <div class="col-sm-12">
             <div class="col-sm-12 noPadding">
                 <h4>ULTIMELE NOUTATI</h4>
@@ -25,11 +25,11 @@
                     </a>
                 </div>
                 <div class="col-sm-9 noPadding">
-                    <div class="col-sm-12 title noPadding"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title | limitTo : 30}}...</a></div>
+                    <div class="col-sm-12 title noPadding"><a class="textBlue" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title | limitTo : 30}}...</b></a></div>
                     <div class="col-sm-12 header justified noPadding">{{createHeader(n.text,80)}}<br/>
                     </div>
                 </div>
-                <div class="readMoreEye"> <a  ui-sref="noutati.articol({articleType:n.type, articleId:n._id})" class="readMore" ><i class="glyphicon glyphicon-eye-open"></i></a></div>
+                <div class="readMoreEye"> <a  ui-sref="noutati.articol({articleType:n.type, articleId:n._id})" class="readMore" ><i class="glyphicon glyphicon-eye-open grey-eye"></i></a></div>
             </div>
         </div>
         <hr align="center" width="75%"/>
@@ -44,26 +44,24 @@
                     </a>
                 </div>
                 <div class="col-sm-9 noPadding">
-                    <div class="col-sm-12 title noPadding"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">{{n.title | limitTo : 30}}...</a></div>
+                    <div class="col-sm-12 title noPadding"><a class="textBlue" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title | limitTo : 30}}...</b></a></div>
                     <div class="col-sm-12 header justified noPadding">{{createHeader(n.text,80)}}<br/></div>
                 </div>
-                <div class="readMoreEye"><a  ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="glyphicon glyphicon-eye-open"></i></a></div>
+                <div class="readMoreEye"><a  ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="glyphicon glyphicon-eye-open grey-eye"></i></a></div>
             </div>
         </div>
     </div>
 
-    <div ng-class="{'col-sm-3':events.length!=0, 'col-sm-4':events.length==0}" class="smallScreen rightBorder leftBorder">
+    <div ng-class="{'col-sm-4':events.length!=0, 'col-sm-5':events.length==0}" class="smallScreen rightBorder leftBorder">
         <div class="col-sm-12 noPadd">
             <div class="col-sm-12 noPadding">
                 <h4>E-LEARNING</h4>
             </div>
             <div class="col-sm-12 noPadding well" ng-repeat="m in multimedia | limitTo: 3">
-                <div class="col-sm-12 noPadding">
-                    <div class="col-sm-12"><hr/></div>
-
+                <div class="col-sm-12 noPadding marginELearn margintop20px">
                     <div class="col-sm-12" ui-sref="elearning.multimedia.multimediaById({idd:m._id})">
 
-                        <div><i class="glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;{{m.title+"("+m.author+")"}}</div>
+                        <div class="textBlue"><i class="glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i><b>&nbsp;{{m.title+"("+m.author+")"}}</b></div>
                         <div class="paddingLeft">{{m.description}}</div>
                     </div>
                 </div>
@@ -74,13 +72,13 @@
             <div class="col-sm-12 noPadding">
                 <h4>EVENIMENTE URMATOARE:</h4>
             </div>
-            <div class="col-sm-12 noPadd well" ng-repeat="e in events | limitTo: 3">
+            <div class="col-sm-12 noPadding well" ng-repeat="e in events | limitTo: 3">
                 <div class="col-sm-2 noPadding">
-                    <div class="day customFloatLeft">{{toDate(e.start).getDate()}}</div><div class="month customFloatLeft">{{monthsArray[toDate(e.start).getMonth()]}}</div>
+                    <div class="day customFloatLeft textBlue"><b><span class="dayFont">{{toDate(e.start).getDate()}}</span><br/><span class="monthFont">{{monthsArray[toDate(e.start).getMonth()]}}</span></b></div>
                     <div class="calendar-style"></div>
                 </div>
-                <div class="col-sm-10 noPadding">
-                    <div class="col-sm-12 title " ui-sref="calendar.calendarDetails({id:e._id})"><b>{{e.name}}</b></div>
+                <div class="col-sm-10 noPadding col-Left">
+                    <div class="col-sm-12 title textBlue" ui-sref="calendar.calendarDetails({id:e._id})"><b>{{e.name}}</b></div>
                     <div class="col-sm-12 header margintop5px ">{{e.description.length>20?createHeader(e.description,20):e.description}}</div>
                 </div>
             </div>
