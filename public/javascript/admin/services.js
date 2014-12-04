@@ -43,6 +43,13 @@ cloudAdminServices.factory('GrupuriService', ['$resource', function($resource){
         })
     }
 }]);
+cloudAdminServices.factory('ContinutPublicService', ['$resource', function($resource){
+    return {
+        getAllContent: $resource('api/admin/utilizatori/continut/getAllContent', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     return {
         getAll: $resource('api/admin/products/', {}, {

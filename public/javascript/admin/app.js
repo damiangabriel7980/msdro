@@ -155,7 +155,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('continut.continutPublic',{
             url: '/continutPublic',
-            templateUrl: 'partials/admin/continut/continutPublic.html'
+            templateUrl: 'partials/admin/continut/continutPublic.html',
+            controller: 'ContinutPublicController'
         })
         .state('newsletter', {
             abstract: true,

@@ -13,6 +13,7 @@ var Questions=require('./models/questions');
 var Answers = require('./models/answers');
 var Slides = require('./models/slides');
 var Roles=require('./models/roles');
+var PublicContent = require('./models/publicContent');
 
 var XRegExp  = require('xregexp').XRegExp;
 
@@ -534,6 +535,18 @@ module.exports = function(app, sessionSecret, router) {
 
         .post(function (req, res) {
             res.status(200).end();
+        });
+
+    router.route('/admin/utilizatori/continut/getAllContent')
+
+        .get(function(req, res) {
+            PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1} ,function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
         });
 
 
