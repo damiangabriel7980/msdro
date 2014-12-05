@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-cloudAdminControllers.controller('AddGroupController', ['$scope','GrupuriService', '$modalInstance', 'prevScope',function($scope, GrupuriService, $modalInstance, prevScope){
+cloudAdminControllers.controller('AddGroupController', ['$scope','GrupuriService', '$modalInstance', '$state',function($scope, GrupuriService, $modalInstance, $state){
 
     $scope.selectedUsers = {};
 
@@ -27,13 +27,12 @@ cloudAdminControllers.controller('AddGroupController', ['$scope','GrupuriService
             }else{
                 $scope.statusAlert.type = "success";
             }
-            prevScope.refreshTable();
             $scope.statusAlert.newAlert = true;
         });
     };
 
     $scope.closeModal = function(){
-        prevScope.refreshTable();
+        $state.reload();
         $modalInstance.close();
     }
 
