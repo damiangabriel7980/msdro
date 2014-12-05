@@ -566,6 +566,19 @@ module.exports = function(app, sessionSecret, router) {
             })
         });
 
+    router.route('/admin/utilizatori/continutPublic/toggleContent')
+
+        .post(function(req, res) {
+            console.log(req.body.data);
+            PublicContent.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({error: false});
+                }
+            });
+        });
+
     router.route('/admin/utilizatori/continutPublic/addContent')
 
         .post(function(req, res) {

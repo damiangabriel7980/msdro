@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('AddPublicContentController', ['$scope','ContinutPublicService','$modalInstance', 'prevScope', 'AmazonService', function($scope, ContinutPublicService, $modalInstance, prevScope, AmazonService){
+cloudAdminControllers.controller('AddPublicContentController', ['$scope','ContinutPublicService','$modalInstance', '$state', 'AmazonService', function($scope, ContinutPublicService, $modalInstance, $state, AmazonService){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.selectedTherapeuticAreas = [];
@@ -116,7 +116,7 @@ cloudAdminControllers.controller('AddPublicContentController', ['$scope','Contin
     };
 
     $scope.closeModal = function(){
-        prevScope.refreshTable();
+        $state.reload();
         $modalInstance.close();
     }
 

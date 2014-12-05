@@ -42,12 +42,7 @@ cloudAdminControllers.controller('ContinutPublicController', ['$scope', '$rootSc
             templateUrl: 'partials/admin/continut/continutPublic/modalAddPublicContent.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'AddPublicContentController',
-            resolve: {
-                prevScope: function () {
-                    return $scope;
-                }
-            }
+            controller: 'AddPublicContentController'
         });
     };
 
@@ -60,9 +55,6 @@ cloudAdminControllers.controller('ContinutPublicController', ['$scope', '$rootSc
             resolve: {
                 idToDelete: function () {
                     return id;
-                },
-                prevScope: function () {
-                    return $scope;
                 }
             }
         });
@@ -75,14 +67,11 @@ cloudAdminControllers.controller('ContinutPublicController', ['$scope', '$rootSc
             windowClass: 'fade',
             controller: 'ToggleEnablePublicContentController',
             resolve: {
-                idToDelete: function () {
+                idToToggle: function () {
                     return id;
                 },
                 isEnabled: function () {
                     return enabled;
-                },
-                prevScope: function () {
-                    return $scope;
                 }
             }
         });
@@ -97,9 +86,6 @@ cloudAdminControllers.controller('ContinutPublicController', ['$scope', '$rootSc
             resolve: {
                 idToEdit: function () {
                     return id;
-                },
-                prevScope: function () {
-                    return $scope;
                 }
             }
         });

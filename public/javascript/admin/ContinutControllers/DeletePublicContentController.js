@@ -1,7 +1,6 @@
-cloudAdminControllers.controller('DeletePublicContentController', ['$scope','ContinutPublicService', '$modalInstance', 'prevScope',function($scope, ContinutPublicService, $modalInstance, prevScope){
+cloudAdminControllers.controller('DeletePublicContentController', ['$scope','ContinutPublicService', '$modalInstance', '$state',function($scope, ContinutPublicService, $modalInstance, $state){
 
     $scope.closeModal = function(){
-        prevScope.refreshTable();
         $modalInstance.close();
     }
 

@@ -57,6 +57,9 @@ cloudAdminServices.factory('ContinutPublicService', ['$resource', function($reso
         editContent: $resource('api/admin/utilizatori/continutPublic/editContent/:data', {}, {
             save: { method: 'POST', isArray: false }
         }),
+        toggleContent: $resource('api/admin/utilizatori/continutPublic/toggleContent/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
         getTherapeuticAreas: $resource('api/therapeutic_areas', {}, {
             query: { method: 'GET', isArray: true }
         }),

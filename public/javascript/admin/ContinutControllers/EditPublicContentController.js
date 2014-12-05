@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$rootScope', 'ContinutPublicService', '$modalInstance', 'prevScope', 'idToEdit', 'AmazonService', function($scope, $rootScope, ContinutPublicService, $modalInstance, prevScope, idToEdit, AmazonService){
+cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$rootScope', 'ContinutPublicService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', function($scope, $rootScope, ContinutPublicService, $modalInstance, $state, idToEdit, AmazonService){
 
     var contentDataLoaded = false;
 
@@ -272,7 +272,7 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
     };
 
     $scope.closeModal = function(){
-        prevScope.refreshTable();
+        $state.reload();
         $modalInstance.close();
     }
 
