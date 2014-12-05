@@ -45,7 +45,13 @@ cloudAdminServices.factory('GrupuriService', ['$resource', function($resource){
 }]);
 cloudAdminServices.factory('ContinutPublicService', ['$resource', function($resource){
     return {
-        getAllContent: $resource('api/admin/utilizatori/continut/getAllContent', {}, {
+        getAllContent: $resource('api/admin/utilizatori/continutPublic/getAllContent', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        addContent: $resource('api/admin/utilizatori/continutPublic/addContent/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        getTherapeuticAreas: $resource('api/therapeutic_areas', {}, {
             query: { method: 'GET', isArray: true }
         })
     }

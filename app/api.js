@@ -537,7 +537,7 @@ module.exports = function(app, sessionSecret, router) {
             res.status(200).end();
         });
 
-    router.route('/admin/utilizatori/continut/getAllContent')
+    router.route('/admin/utilizatori/continutPublic/getAllContent')
 
         .get(function(req, res) {
             PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
@@ -547,6 +547,44 @@ module.exports = function(app, sessionSecret, router) {
                 }
                 res.json(cont);
             });
+        });
+
+    router.route('/admin/utilizatori/continutPublic/addContent')
+
+        .post(function(req, res) {
+            var data = req.body.data;
+            var ans = {};
+            //validate author and title
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
+                ans.error = true;
+                ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
+                res.json(ans);
+            }else{
+                //validate type
+                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                    ans.error = true;
+                    ans.message = "Verificati tipul";
+                    res.json(ans);
+                }else{
+                    //form object to persist
+                    data.enable = false;
+                    data.last_updated = new Date();
+                    //persist object
+                    var content = new PublicContent(data);
+                    content.save(function (err, inserted) {
+                        if(err){
+                            ans.error = true;
+                            ans.message = "Eroare la salvare. Verificati campurile";
+                            res.json(ans);
+                        }else{
+                            ans.error = false;
+                            ans.message = "Continutul a fost salvat cu succes!";
+                            res.json(ans);
+                        }
+                    });
+                }
+            }
         });
 
 

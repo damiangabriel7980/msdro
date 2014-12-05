@@ -18,7 +18,7 @@
                 <div class="btn-group">
                     <div class="btn btn-default" ng-click="editContent(content._id)"><i class="glyphicon glyphicon-cog"></i></div>
                     <div class="btn btn-danger" ng-click="deleteContent(content._id)"><i class="glyphicon glyphicon-trash"></i></div>
-                    <div class="btn" ng-class="{'btn-primary':content.enable===true,'btn-danger':content.enable===false}" ng-click="toogleContentEnable(content._id, content.enable)"><i class="glyphicon" ng-class="{'glyphicon-lock':content.enable===true,'glyphicon-share':content.enable===false}"></i></div>
+                    <div class="btn" ng-class="{'btn-primary':content.enable===false,'btn-danger':content.enable===true}" ng-click="toogleContentEnable(content._id, content.enable)"><i class="glyphicon" ng-class="{'glyphicon-lock':content.enable===true,'glyphicon-share':content.enable===false}"></i></div>
                 </div>
             </td>
         </tr>
