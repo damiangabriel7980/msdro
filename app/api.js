@@ -22,14 +22,24 @@ var SHA256   = require('crypto-js/sha256');
 var mongoose = require('mongoose');
 
 var AWS = require('aws-sdk');
-
+//form sts object from environment variables. Used for retrieving temporary credentials to front end
+var sts = new AWS.STS();
+//configure credentials for use on server only; assign credentials based on role (never use master credentials)
+AWS.config.credentials = new AWS.EnvironmentCredentials('AWS');
+AWS.config.credentials = new AWS.TemporaryCredentials({
+    RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
+});
+//s3 object for use on server
+var s3 = new AWS.S3();
+//bucket retrieved from environment variables
 var amazonBucket = process.env.amazonBucket;
 
+//used to sign cookies based on session secret
 var cookieSig = require('express-session/node_modules/cookie-signature');
 
 //================================================================================================= amazon s3 functions
+// Used for retrieving temporary credentials to front end
 var getS3Credentials = function(RoleSessionName, callback){
-    var sts = new AWS.STS();
     sts.assumeRole({
         RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin',
         RoleSessionName: RoleSessionName,
@@ -43,14 +53,10 @@ var getS3Credentials = function(RoleSessionName, callback){
     });
 };
 
-var getS3Client = function (callback) {
-    getS3Credentials('nodeServerRequest', function (err, data) {
-        if(err){
-            callback(err, null);
-        }else{
-            AWS.config.update({accessKeyId: data.Credentials.AccessKeyId, secretAccessKey: data.Credentials.SecretAccessKey, sessionToken: data.Credentials.SessionToken});
-            callback(new AWS.S3());
-        }
+//function for deleting object from amazon
+var deleteObjectS3 = function (key, callback) {
+    s3.deleteObject({Bucket: amazonBucket, Key: key}, function (err, data) {
+        callback(err, data);
     });
 };
 
@@ -507,15 +513,13 @@ module.exports = function(app, sessionSecret, router) {
                                     }else{
                                         //remove image from amazon
                                         if(logo){
-                                            getS3Client(function (s3) {
-                                                s3.deleteObject({Bucket: amazonBucket, Key: logo}, function (err, data) {
-                                                    if(err){
-                                                        console.log(err);
-                                                        res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea nu s-a putut sterge"});
-                                                    }else{
-                                                        res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea asociata grupului a fost stearsa"});
-                                                    }
-                                                });
+                                            s3.deleteObject({Bucket: amazonBucket, Key: logo}, function (err, data) {
+                                                if(err){
+                                                    console.log(err);
+                                                    res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea nu s-a putut sterge"});
+                                                }else{
+                                                    res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea asociata grupului a fost stearsa"});
+                                                }
                                             });
                                         }else{
                                             res.json({error: false, message: "Grupul a fost sters. "+resp1});
@@ -651,6 +655,64 @@ module.exports = function(app, sessionSecret, router) {
                     });
                 }
             }
+        });
+
+    router.route('/admin/utilizatori/continutPublic/deleteContent')
+
+        .post(function (req, res) {
+            var content_id = req.body.id;
+            //find files to remove from amazon
+            PublicContent.find({_id: content_id}, {image_path: 1, file_path: 1}, function (err, content) {
+                if(err){
+                    res.json({error: true, message: err});
+                }else{
+                    if(content[0]){
+                        var image = content[0].image_path;
+                        var file = content[0].file_path;
+                        console.log(image);
+                        console.log(file);
+                        //remove content
+                        PublicContent.remove({_id: content_id}, function (err, success) {
+                            if(err){
+                                res.json({error: true, message: "Eroare la stergerea continutului"});
+                            }else{
+                                //remove image and file from amazon
+                                if(image){
+                                    deleteObjectS3(image, function (err, data) {
+                                        if(err){
+                                            res.json({error: true, message: "Grupul a fost sters. Eroare la stergerea fisierelor asociate"});
+                                        }else{
+                                            if(file){
+                                                deleteObjectS3(file, function (err, data) {
+                                                    if(err){
+                                                        res.json({error: true, message: "Grupul a fost sters. Eroare la stergerea fisierelor asociate"});
+                                                    }else{
+                                                        res.json({error: false, message: "Grupul a fost sters. Fisierele asociate au fost sterse"});
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }else{
+                                    if(file){
+                                        deleteObjectS3(file, function (err, data) {
+                                            if(err){
+                                                res.json({error: true, message: "Grupul a fost sters. Eroare la stergerea fisierelor asociate"});
+                                            }else{
+                                                res.json({error: false, message: "Grupul a fost sters. Fisierele asociate au fost sterse"});
+                                            }
+                                        });
+                                    }else{
+                                        res.json({error: false, message: "Grupul a fost sters. Nu s-au gasit fisiere asociate"});
+                                    }
+                                }
+                            }
+                        });
+                    }else{
+                        res.json({error: true, message: "Nu s-a gasit continutul"});
+                    }
+                }
+            });
         });
 
     router.route('/admin/utilizatori/continutPublic/changeImageOrFile')
