@@ -48,11 +48,20 @@ cloudAdminServices.factory('ContinutPublicService', ['$resource', function($reso
         getAllContent: $resource('api/admin/utilizatori/continutPublic/getAllContent', {}, {
             query: { method: 'GET', isArray: true }
         }),
+        getContentById: $resource('api/admin/utilizatori/continutPublic/getById/:id', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
         addContent: $resource('api/admin/utilizatori/continutPublic/addContent/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        editContent: $resource('api/admin/utilizatori/continutPublic/editContent/:data', {}, {
             save: { method: 'POST', isArray: false }
         }),
         getTherapeuticAreas: $resource('api/therapeutic_areas', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        changeImageOrFile: $resource('api/admin/utilizatori/continutPublic/changeImageOrFile/:data', {}, {
+            save: { method: 'POST'}
         })
     }
 }]);

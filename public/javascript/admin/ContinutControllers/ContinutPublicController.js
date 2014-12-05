@@ -3,7 +3,6 @@ cloudAdminControllers.controller('ContinutPublicController', ['$scope', '$rootSc
     $scope.refreshTable = function () {
         ContinutPublicService.getAllContent.query().$promise.then(function (resp) {
             var data = resp;
-            console.log(resp);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page

@@ -5,7 +5,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'cloudAdminServices',
         'ngTable',
         'frapontillo.bootstrap-duallistbox',
-        'angularFileUpload'
+        'angularFileUpload',
+        'ui.tinymce'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -274,6 +275,10 @@ cloudAdminApp.run(
             $rootScope.amazonBucket = "msddev-test";
 
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
+
+            $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
+            $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
+            $rootScope.defaultFileImage = $rootScope.pathAmazonResources+"file.png";
         }
     ]
 );

@@ -1,9 +1,17 @@
-cloudAdminControllers.controller('AddPublicContentController', ['$scope','ContinutPublicService','$modalInstance', 'prevScope',function($scope, ContinutPublicService, $modalInstance, prevScope){
+cloudAdminControllers.controller('AddPublicContentController', ['$scope','ContinutPublicService','$modalInstance', 'prevScope', 'AmazonService', function($scope, ContinutPublicService, $modalInstance, prevScope, AmazonService){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.selectedTherapeuticAreas = [];
     $scope.selectedType = 1;
 
+    $scope.tinymceOptions = {
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    };
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
 
@@ -68,7 +76,6 @@ cloudAdminControllers.controller('AddPublicContentController', ['$scope','Contin
     //------------------------------------------------------------------------------------------------- form submission
 
     $scope.addContent = function () {
-        console.log($scope.selectedTherapeuticAreas);
         var toSend = {};
         toSend.title = this.titlu?this.titlu:"";
         toSend.author = this.autor?this.autor:"";
@@ -81,7 +88,7 @@ cloudAdminControllers.controller('AddPublicContentController', ['$scope','Contin
         }
         toSend['therapeutic-areasID'] = areasIDs;
         //get content text
-        toSend.text=tinyMCE.activeEditor.getContent();
+        toSend.text = this.contentText?this.contentText:"";
         //send data to server
         console.log(toSend);
         ContinutPublicService.addContent.save({data: toSend}).$promise.then(function (resp) {
@@ -109,7 +116,6 @@ cloudAdminControllers.controller('AddPublicContentController', ['$scope','Contin
     };
 
     $scope.closeModal = function(){
-        tinyMCE.remove();
         prevScope.refreshTable();
         $modalInstance.close();
     }

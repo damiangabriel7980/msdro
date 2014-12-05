@@ -549,6 +549,23 @@ module.exports = function(app, sessionSecret, router) {
             });
         });
 
+    router.route('/admin/utilizatori/continutPublic/getById/:id')
+
+        .get(function(req, res) {
+            console.log(req.params.id);
+            PublicContent.find({_id: req.params.id}, function (err, cont) {
+                if(err){
+                    res.send(err);
+                }else{
+                    if(cont[0]){
+                        res.send(cont[0]);
+                    }else{
+                        res.send({message: "No content found"});
+                    }
+                }
+            })
+        });
+
     router.route('/admin/utilizatori/continutPublic/addContent')
 
         .post(function(req, res) {
@@ -584,6 +601,69 @@ module.exports = function(app, sessionSecret, router) {
                         }
                     });
                 }
+            }
+        });
+
+    router.route('/admin/utilizatori/continutPublic/editContent')
+
+        .post(function(req, res) {
+            var data = req.body.data.toUpdate;
+            var id = req.body.data.id;
+            var ans = {};
+            //validate author and title
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
+                ans.error = true;
+                ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
+                res.json(ans);
+            }else{
+                //validate type
+                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                    ans.error = true;
+                    ans.message = "Verificati tipul";
+                    res.json(ans);
+                }else{
+                    //refresh last_updated field
+                    data.last_updated = new Date();
+                    PublicContent.update({_id: id}, data, function (err, wRes) {
+                        if(err){
+                            ans.error = true;
+                            ans.message = "Eroare la actualizare. Verificati campurile";
+                            res.json(ans);
+                        }else{
+                            ans.error = false;
+                            ans.message = "Continutul a fost modificat cu succes!";
+                            res.json(ans);
+                        }
+                    });
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/continutPublic/changeImageOrFile')
+        .post(function (req,res) {
+            var data = req.body.data;
+            var qry = {};
+            var ok = true;
+            if(data.type === "image"){
+                qry['image_path'] = data.path;
+            }else{
+                if(data.type === "file"){
+                    qry['file_path'] = data.path;
+                }else{
+                    ok = false;
+                    res.json({error:true});
+                }
+            }
+            if(ok){
+                PublicContent.update({_id:data.id}, qry, function (err, wRes) {
+                    if(err){
+                        console.log("Error at content "+data.type+"_path; id = "+data.id+"; Key = "+data.path);
+                        res.json({error:true});
+                    }else{
+                        res.json({error:false, updated:wRes});
+                    }
+                });
             }
         });
 

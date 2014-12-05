@@ -30,7 +30,8 @@
     "ng-table": "latest",
     "tinymce": "latest",
     "ng-file-upload": "latest",
-    "ng-file-upload-shim": "latest"
+    "ng-file-upload-shim": "latest",
+    "angular-ui-tinymce": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
