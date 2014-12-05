@@ -14,6 +14,7 @@ var Answers = require('./models/answers');
 var Slides = require('./models/slides');
 var Roles=require('./models/roles');
 var PublicContent = require('./models/publicContent');
+var PublicCarousel = require('./models/publicCarousel');
 
 var XRegExp  = require('xregexp').XRegExp;
 
@@ -680,14 +681,14 @@ module.exports = function(app, sessionSecret, router) {
                                 if(image){
                                     deleteObjectS3(image, function (err, data) {
                                         if(err){
-                                            res.json({error: true, message: "Grupul a fost sters. Eroare la stergerea fisierelor asociate"});
+                                            res.json({error: true, message: "Continutul a fost sters. Eroare la stergerea fisierelor asociate"});
                                         }else{
                                             if(file){
                                                 deleteObjectS3(file, function (err, data) {
                                                     if(err){
-                                                        res.json({error: true, message: "Grupul a fost sters. Eroare la stergerea fisierelor asociate"});
+                                                        res.json({error: true, message: "Continutul a fost sters. Eroare la stergerea fisierelor asociate"});
                                                     }else{
-                                                        res.json({error: false, message: "Grupul a fost sters. Fisierele asociate au fost sterse"});
+                                                        res.json({error: false, message: "Continutul a fost sters. Fisierele asociate au fost sterse"});
                                                     }
                                                 });
                                             }
@@ -697,13 +698,13 @@ module.exports = function(app, sessionSecret, router) {
                                     if(file){
                                         deleteObjectS3(file, function (err, data) {
                                             if(err){
-                                                res.json({error: true, message: "Grupul a fost sters. Eroare la stergerea fisierelor asociate"});
+                                                res.json({error: true, message: "Continutul a fost sters. Eroare la stergerea fisierelor asociate"});
                                             }else{
-                                                res.json({error: false, message: "Grupul a fost sters. Fisierele asociate au fost sterse"});
+                                                res.json({error: false, message: "Continutul a fost sters. Fisierele asociate au fost sterse"});
                                             }
                                         });
                                     }else{
-                                        res.json({error: false, message: "Grupul a fost sters. Nu s-au gasit fisiere asociate"});
+                                        res.json({error: false, message: "Continutul a fost sters. Nu s-au gasit fisiere asociate"});
                                     }
                                 }
                             }
@@ -740,6 +741,18 @@ module.exports = function(app, sessionSecret, router) {
                     }
                 });
             }
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/getAllImages')
+
+        .get(function(req, res) {
+            PublicCarousel.find({}, function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
         });
 
 
