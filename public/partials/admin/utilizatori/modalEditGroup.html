@@ -20,16 +20,26 @@
                     </div>
                 </div>
                 <div class="col-md-6 noPadding">
-                    <div class="col-md-12">
-                        incarca logo
+                    <div class="col-md-6" style="padding: 0;">
+                        <div class="col-md-12">
+                            <img no-cache-src="{{pathAmazonDev+logo}}" ng-if="logo" style="width:100px;">
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
+                        </div>
+                        <div class="col-md-12">
+                            <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <label for="grupDefault">Group default</label>
-                        <input type="checkbox" id="grupDefault" ng-model="grupDefault">
-                    </div>
-                    <div class="col-md-12">
-                        <label for="contentSpecific">Content specific</label>
-                        <input type="checkbox" id="contentSpecific" ng-model="contentSpecific">
+                    <div class="col-md-6" style="padding: 0; text-align: right;">
+                        <div class="col-md-12">
+                            <label for="grupDefault">Group default</label>
+                            <input type="checkbox" id="grupDefault" ng-model="grupDefault">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="contentSpecific">Content specific</label>
+                            <input type="checkbox" id="contentSpecific" ng-model="contentSpecific">
+                        </div>
                     </div>
                 </div>
             </div>

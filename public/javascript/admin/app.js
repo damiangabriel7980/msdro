@@ -5,7 +5,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'cloudAdminServices',
         'ngTable',
         'frapontillo.bootstrap-duallistbox',
-        'slick'
+        'slick',
+        'angularFileUpload'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -268,8 +269,10 @@ cloudAdminApp.run(
             $rootScope.$stateParams = $stateParams;
 
             //amazon service paths
-            //pathAmazonDev needs to be changed in production
-            $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/msddev-test/";
+            $rootScope.amazonBucket = sessionStorage.defaultAmazonBucket;
+            $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/"+$rootScope.amazonBucket+"/";
+            $rootScope.amazonBucket = "msddev-test";
+
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
         }
     ]

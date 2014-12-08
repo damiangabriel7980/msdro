@@ -1,4 +1,17 @@
 var cloudAdminServices = angular.module('cloudAdminServices', ['ngResource']);
+cloudAdminServices.factory('AmazonService', ['$resource', function($resource){
+    var getCredentialsFromServer = $resource('api/admin/s3tc', {}, {
+        query: { method: 'GET', isArray: false }
+    });
+    return {
+        getClient: function (callback) {
+            getCredentialsFromServer.query().$promise.then(function (resp) {
+                AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
+                callback(new AWS.S3());
+            });
+        }
+    }
+}]);
 cloudAdminServices.factory('GrupuriService', ['$resource', function($resource){
     return {
         getAllGroups: $resource('api/admin/utilizatori/grupuri', {}, {
@@ -16,14 +29,17 @@ cloudAdminServices.factory('GrupuriService', ['$resource', function($resource){
         editGroup: $resource('api/admin/utilizatori/editGroup/:data', {}, {
             save: { method: 'POST'}
         }),
+        changeGroupLogo: $resource('api/admin/utilizatori/changeGroupLogo/:data', {}, {
+            save: { method: 'POST'}
+        }),
         deleteGroup: $resource('api/admin/utilizatori/deleteGroup/:id', {}, {
             save: { method: 'POST', isArray: false}
         }),
         groupDetails: $resource('api/admin/utilizatori/groupDetails/:id', {}, {
             query: { method: 'GET', isArray: false}
         }),
-        test: $resource('api/admin/utilizatori/test/:data', {}, {
-            save: { method: 'POST'}
+        testSomething: $resource('api/admin/utilizatori/test/:data', {}, {
+            query: { method: 'POST'}
         })
     }
 }]);

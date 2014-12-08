@@ -21,34 +21,40 @@ var SHA256   = require('crypto-js/sha256');
 
 var mongoose = require('mongoose');
 
-var s3 = require('s3');
-var s3Client = s3.createClient({
-    s3Options:{
-        accessKeyId: "AKIAJYA22DHN4HZ6MXHQ",
-        secretAccessKey: "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"
-    }
-});
+var AWS = require('aws-sdk');
 
-//================================================================================== useful db administration functions
+var amazonBucket = process.env.amazonBucket;
 
-//middleware to ensure a user has admin rights
-function hasAdminRights(req, res, next) {
-    Roles.find({_id: {$in: req.user.rolesID}}, function (err, roles) {
+var cookieSig = require('express-session/node_modules/cookie-signature');
+
+//================================================================================================= amazon s3 functions
+var getS3Credentials = function(RoleSessionName, callback){
+    var sts = new AWS.STS();
+    sts.assumeRole({
+        RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin',
+        RoleSessionName: RoleSessionName,
+        DurationSeconds: 900
+    }, function (err, data) {
         if(err){
-            res.status(500).end();
+            callback(err, null);
         }else{
-            if(roles[0]){
-                if(roles[0].authority === "ROLE_ADMIN"){
-                    return next();
-                }else{
-                    res.status(403).end();
-                }
-            }else{
-                res.status(404).end();
-            }
+            callback(null, data);
         }
     });
-}
+};
+
+var getS3Client = function (callback) {
+    getS3Credentials('nodeServerRequest', function (err, data) {
+        if(err){
+            callback(err, null);
+        }else{
+            AWS.config.update({accessKeyId: data.Credentials.AccessKeyId, secretAccessKey: data.Credentials.SecretAccessKey, sessionToken: data.Credentials.SessionToken});
+            callback(new AWS.S3());
+        }
+    });
+};
+
+//================================================================================== useful db administration functions
 
 //returns ONLY id's of entities connected to specified document in array
 var findConnectedEntitiesIds = function(connected_to_entity, connection_name, connected_to_id, callback){
@@ -199,13 +205,104 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
     });
 };
 
-//================================================================================================ module exports admin
+//======================================================================================================================================= routes for admin
 
-module.exports = function(app, router) {
+module.exports = function(app, sessionSecret, router) {
+
+//======================================================================================================= secure routes
+
+// middleware to ensure user is logged in
+    function isLoggedIn(req, res, next) {
+        console.log("check login");
+        if (req.isAuthenticated()){
+            return next();
+        }else{
+            res.status(403).end();
+        }
+    }
+
+//middleware to ensure a user has admin rights
+    function hasAdminRights(req, res, next) {
+        console.log("check admin");
+        try{
+            //get encripted session id from cookie
+            var esidc = req.cookies['connect.sid'];
+            //get node session id from request
+            var sid = req.sessionID;
+            //encrypt sid using session secret
+            var esid = "s:"+cookieSig.sign(sid, sessionSecret);
+            //if esid matches esidc then user is authentic
+            if(esid === esidc){
+                //get session store info for this session
+                var ssi = req.sessionStore.sessions[req.sessionID];
+                ssi = JSON.parse(ssi);
+                //now get user id
+                var userID = ssi['passport']['user'];
+                //now get user's roles
+                User.find({_id: userID}, {rolesID :1}, function (err, data) {
+                    if(err){
+                        console.log(err);
+                        res.status(403).end();
+                    }else{
+                        var roles = data[0].rolesID;
+                        //now get roles
+                        Roles.find({_id: {$in: roles}}, function (err, data) {
+                            if(err){
+                                console.log(err);
+                                res.status(403).end();
+                            }else{
+                                var admin = false;
+                                for(var i=0; i<data.length; i++){
+                                    if(data[i].authority === "ROLE_ADMIN") admin=true;
+                                }
+                                if(admin === true){
+                                    next();
+                                }else{
+                                    res.status(403).end();
+                                }
+                            }
+                        });
+                    }
+                });
+            }else{
+                res.status(403).end();
+            }
+        }catch(e){
+            console.log(e);
+            res.status(403).end();
+        }
+
+    }
+
+//only logged in users can access a route
+    app.all("/api/*", isLoggedIn, function(req, res, next) {
+        next(); // if the middleware allowed us to get here,
+        // just move on to the next route handler
+    });
+
+//only admin can access "/admin" routes
+    app.all("/api/admin/*", hasAdminRights, function(req, res, next) {
+        next(); // if the middleware allowed us to get here,
+        // just move on to the next route handler
+    });
+
+//========================================== get temporary credentials for S3
+    router.route('/admin/s3tc')
+
+        .get(function (req, res) {
+            getS3Credentials(req.user.username, function(err, data){
+                if(err){
+                    console.log(err);
+                    res.status(404).end();
+                }else{
+                    res.json(data);
+                }
+            });
+        });
 
     router.route('/admin/utilizatori/grupuri')
 
-        .get(hasAdminRights, function(req, res) {
+        .get(function(req, res) {
             UserGroup.find({}, {display_name: 1, description: 1} ,function(err, cont) {
                 if(err) {
                     console.log(err);
@@ -217,7 +314,7 @@ module.exports = function(app, router) {
 
     router.route('/admin/utilizatori/groupDetails/:id')
 
-        .get(hasAdminRights, function(req, res) {
+        .get(function(req, res) {
             UserGroup.find({_id: req.params.id}, function(err, cont) {
                 if(err) {
                     res.send(err);
@@ -233,7 +330,7 @@ module.exports = function(app, router) {
 
     router.route('/admin/utilizatori/utilizatori')
 
-        .get(hasAdminRights, function(req, res) {
+        .get(function(req, res) {
             User.find({}, {username: 1}).limit(0).exec(function(err, cont) {
                 if(err) {
                     console.log(err);
@@ -245,7 +342,7 @@ module.exports = function(app, router) {
 
     router.route('/admin/utilizatori/utilizatoriDinGrup/:id')
 
-        .get(hasAdminRights, function(req, res) {
+        .get(function(req, res) {
             var id = req.params.id;
             User.find({groupsID: {$in:[id]}}, {username: 1}).limit(0).exec(function(err, cont) {
                 if(err) {
@@ -259,7 +356,7 @@ module.exports = function(app, router) {
     router.route('/admin/utilizatori/addGroup')
         //used for both creating new groups and editing existing ones
 
-        .post(hasAdminRights, function (req, res) {
+        .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
             var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
@@ -310,10 +407,23 @@ module.exports = function(app, router) {
             }
         });
 
+    router.route('/admin/utilizatori/changeGroupLogo')
+        .post(function (req,res) {
+            var data = req.body.data;
+            UserGroup.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
+                if(err){
+                    console.log("Error at usergroup change logo. Group id = "+data.id+"; Key = "+data.path);
+                    res.json({error:true});
+                }else{
+                    res.json({error:false, updated:wRes});
+                }
+            });
+        });
+
     router.route('/admin/utilizatori/editGroup')
         //used for both creating new groups and editing existing ones
 
-        .post(hasAdminRights, function (req, res) {
+        .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
             var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
@@ -375,35 +485,571 @@ module.exports = function(app, router) {
 
     router.route('/admin/utilizatori/deleteGroup')
 
-        .post(hasAdminRights, function (req, res) {
+        .post(function (req, res) {
             var group_id = req.body.id;
-            console.log(group_id);
-            //disconnect users from group first
-            disconnectAllEntitiesFromEntity(User, "groupsID", group_id, function (err, resp1) {
+            var logo;
+            //find group logo to remove it from amazon
+            UserGroup.find({_id: req.body.id}, {image_path: 1}, function (err, group) {
                 if(err){
                     res.json({error: true, message: err});
                 }else{
-                    //now remove the group itself
-                    UserGroup.remove({_id: group_id}, function (err, resp2) {
-                        if(err){
-                            res.json({error: true, message: "Eroare la stergerea grupului"});
-                        }else{
-                            res.json({error: false, message: "Grupul a fost sters. "+resp1});
-                        }
-                    });
+                    if(group[0]){
+                        logo = group[0].image_path;
+                        //disconnect users from group first
+                        disconnectAllEntitiesFromEntity(User, "groupsID", group_id, function (err, resp1) {
+                            if(err){
+                                res.json({error: true, message: err});
+                            }else{
+                                //now remove the group itself
+                                UserGroup.remove({_id: group_id}, function (err, resp2) {
+                                    if(err){
+                                        res.json({error: true, message: "Eroare la stergerea grupului"});
+                                    }else{
+                                        //remove image from amazon
+                                        if(logo){
+                                            getS3Client(function (s3) {
+                                                s3.deleteObject({Bucket: amazonBucket, Key: logo}, function (err, data) {
+                                                    if(err){
+                                                        console.log(err);
+                                                        res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea nu s-a putut sterge"});
+                                                    }else{
+                                                        res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea asociata grupului a fost stearsa"});
+                                                    }
+                                                });
+                                            });
+                                        }else{
+                                            res.json({error: false, message: "Grupul a fost sters. "+resp1});
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                    }else{
+                        res.json({error: true, message: "Nu s-a gasit grupul"});
+                    }
                 }
-            })
+            });
         });
 
-    router.route(hasAdminRights, '/admin/utilizatori/test')
+    router.route('/admin/utilizatori/test')
 
         .post(function (req, res) {
-            var data = req.body.data;
-            console.log("route ok");
-            res.json({message: "route ok"});
+            res.status(200).end();
         });
 
-    //============================================================================================= module exports user
+
+    router.route('/admin/products')
+        .get(function(req, res) {
+            Products.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+        })
+        .post(function(req, res) {
+
+            var product = new Products(); 		// create a new instance of the Bear model
+            product.name = req.body.name;  // set the bears name (comes from the request)
+            product.description=req.body.description ;
+            product.enable= req.body.enable     ;
+            product.file_path= req.body.file_path  ;
+            product.image_path= req.body.image_path ;
+            product.last_updated=req.body.last_updated;
+            product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
+            product.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Product created!' });
+            });
+
+        });
+    router.route('/admin/products/:id')
+        .get(function(req, res) {
+            Products.findById(req.params.id, function(err, product) {
+                if (err)
+                    res.send(err);
+                res.json(product);
+            });
+        })
+        .put(function(req, res) {
+
+            Products.findById(req.params.id, function(err, product) {
+
+                if (err)
+                    res.send(err);
+
+                product.name = req.body.name;  // set the bears name (comes from the request)
+                product.description=req.body.description ;
+                product.enable= req.body.enable     ;
+                product.file_path= req.body.file_path  ;
+                product.image_path= req.body.image_path ;
+                product.last_updated=req.body.last_updated;
+                product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
+                // save the bear
+                product.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Product updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Products.remove({
+                _id: req.params.id
+            }, function(err,prod) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted' });
+            });
+        });
+
+    router.route('/admin/content')
+
+        .get(function(req, res) {
+            Content.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                else {
+                    var contents={};
+                    contents['content']=cont;
+                    UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
+                        if(err) {
+                            console.log(err);
+                            res.send(err);
+                        }
+                        contents['groups']=cont2;
+                        console.log(contents);
+                        res.json(contents);
+                    });
+                }
+            });
+        })
+        .post(function(req, res) {
+            console.log(req);
+            var content = new Content(); 		// create a new instance of the Bear model
+            content.title = req.body.title;  // set the bears name (comes from the request)
+            content.author=req.body.author ;
+            content.description= req.body.description     ;
+            content.text= req.body.text  ;
+            content.type= req.body.type ;
+            content.last_updated=req.body.last_updated;
+            content.version= req.body.version ;
+            content.enable=req.body.enable;
+            content.image_path=req.body.image_path;
+            content.groupsID=req.body.groupsID;
+            console.log(content.toString());
+            console.log(typeof content);
+            content.save(function(err,result) {
+                if (err)
+                {
+                    console.log(err);
+                    res.send(err);
+                }
+                else{
+                    console.log(result);
+                    res.json({ message: 'Content created!' });
+                }
+
+            });
+
+        });
+    router.route('/admin/content/:id')
+
+        .get(function(req, res) {
+            Content.find({_id:req.params.id}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                if(cont.length == 1){
+                    res.json(cont[0]);
+                }else{
+                    findConnectedEntitiesWithProjection();
+                    res.json(null);
+                }
+            })
+        })
+        .put(function(req, res) {
+            Content.findById(req.params.id, function(err, content) {
+
+                if (err) {
+                    res.send(err);
+                }
+                content.title = req.body.title;  // set the bears name (comes from the request)
+                content.author=req.body.author ;
+                content.description= req.body.description     ;
+                content.text= req.body.text  ;
+                content.type= req.body.type ;
+                content.last_updated=req.body.last_updated;
+                content.version= req.body.version ;
+                content.enable=req.body.enable;
+                content.image_path=req.body.image_path;
+                content.groupsID=req.body.groupsID;
+                console.log(content);
+                content.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Content updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Content.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
+
+    router.route('/admin/events')
+
+        .get(function(req, res) {
+            Events.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+        })
+        .post(function(req, res) {
+
+            var event = new Events(); 		// create a new instance of the Bear model
+            event.description = req.body.description;  // set the bears name (comes from the request)
+            event.enable=req.body.enable ;
+            event.end= req.body.end     ;
+            event.groupsID= req.body.groupsID  ;
+            event.last_updated= req.body.last_updated ;
+            event.name=req.body.name;
+            event.place= req.body.place ;
+            event.privacy=req.body.privacy;
+            event.start=req.body.start;
+            event.type=req.body.type;
+
+            event.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Event created!' });
+            });
+
+        });
+    router.route('/admin/events/:id')
+
+        .get(function(req, res) {
+            Events.find({_id:req.params.id}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                if(cont.length == 1){
+                    res.json(cont[0]);
+                }else{
+                    res.json(null);
+                }
+            })
+        })
+        .put(function(req, res) {
+
+            Events.findById(req.params.id, function(err, event) {
+
+                if (err)
+                    res.send(err);
+
+                event.description = req.body.description;  // set the bears name (comes from the request)
+                event.enable=req.body.enable ;
+                event.end= req.body.end     ;
+                event.groupsID= req.body.groupsID  ;
+                event.last_updated= req.body.last_updated ;
+                event.name=req.body.name;
+                event.place= req.body.place ;
+                event.privacy=req.body.privacy;
+                event.start=req.body.start;
+                event.type=req.body.type;
+                event.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Event updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Events.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
+
+    router.route('/admin/multimedia')
+
+        .get(function(req, res) {
+            Multimedia.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+        })
+        .post(function(req, res) {
+
+            var multimedia = new Multimedia(); 		// create a new instance of the Bear model
+            multimedia.author = req.body.author;  // set the bears name (comes from the request)
+            multimedia.description=req.body.description ;
+            multimedia.enable= req.body.enable    ;
+            multimedia.file_path= req.body.file_path  ;
+            multimedia.groupsID= req.body.groupsID ;
+            multimedia.last_updated=req.body.last_updated;
+            multimedia.points= req.body.points ;
+            multimedia.quizesID=req.body.quizesID;
+            multimedia['therapeutic-areasID']=req.body['therapeutic-areasID'];
+            multimedia.thumbnail_path=req.body.thumbnail_path;
+            multimedia.title=req.body.title;
+            multimedia.type=req.body.type;
+
+            multimedia.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Multimedia created!' });
+            });
+
+        });
+    router.route('/admin/multimedia/:id')
+
+        .get(function(req, res) {
+            Multimedia.find({_id:req.params.id}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                if(cont.length == 1){
+                    res.json(cont[0]);
+                }else{
+                    res.json(null);
+                }
+            })
+        })
+        .put(function(req, res) {
+
+            Multimedia.findById(req.params.id, function(err, multimedia) {
+
+                if (err)
+                    res.send(err);
+
+                multimedia.author = req.body.author;  // set the bears name (comes from the request)
+                multimedia.description=req.body.description ;
+                multimedia.enable= req.body.enable    ;
+                multimedia.file_path= req.body.file_path  ;
+                multimedia.groupsID= req.body.groupsID ;
+                multimedia.last_updated=req.body.last_updated;
+                multimedia.points= req.body.points ;
+                multimedia.quizesID=req.body.quizesID;
+                multimedia['therapeutic-areasID']=req.body['therapeutic-areasID'];
+                multimedia.thumbnail_path=req.body.thumbnail_path;
+                multimedia.title=req.body.title;
+                multimedia.type=req.body.type;
+                multimedia.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Multimedia updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Multimedia.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
+
+
+    router.route('/admin/teste')
+
+        .get(function(req, res) {
+            Teste.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+        })
+        .post(function(req, res) {
+
+            var test = new Teste(); 		// create a new instance of the Bear model
+            test.description = req.body.description;  // set the bears name (comes from the request)
+            test.enabled=req.body.enabled ;
+            test.entity= req.body.entity   ;
+            test.expired= req.body.expired  ;
+            test.expiry_date= req.body.expiry_date ;
+            test.last_updated=req.body.last_updated;
+            test.no_of_exam_questions= req.body.no_of_exam_questions ;
+            test.points=req.body.points;
+            test.questionsID=req.body.questionsID;
+            test.time=req.body.time;
+            test.times=req.body.times;
+            test.title=req.body.title;
+            test.treshhold=req.body.treshhold;
+
+            test.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Test created!' });
+            });
+
+        });
+    router.route('/admin/teste/:id')
+
+        .get(function(req, res) {
+            Teste.find({_id:req.params.id}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                if(cont.length == 1){
+                    res.json(cont[0]);
+                }else{
+                    res.json(null);
+                }
+            })
+        })
+        .put(function(req, res) {
+
+            Teste.findById(req.params.id, function(err, test) {
+
+                if (err)
+                    res.send(err);
+
+                test.description = req.body.description;  // set the bears name (comes from the request)
+                test.enabled=req.body.enabled ;
+                test.entity= req.body.entity   ;
+                test.expired= req.body.expired  ;
+                test.expiry_date= req.body.expiry_date ;
+                test.last_updated=req.body.last_updated;
+                test.no_of_exam_questions= req.body.no_of_exam_questions ;
+                test.points=req.body.points;
+                test.questionsID=req.body.questionsID;
+                test.time=req.body.time;
+                test.times=req.body.times;
+                test.title=req.body.title;
+                test.treshhold=req.body.treshhold;
+                test.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Test updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Teste.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
+
+
+    router.route('/admin/arii')
+
+        .get(function(req, res) {
+            Therapeutic_Area.find(function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+
+                res.json(cont);
+            });
+        })
+        .post(function(req, res) {
+
+            var therapeutic = new Therapeutic_Area(); 		// create a new instance of the Bear model
+            therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
+            therapeutic.last_updated=req.body.last_updated ;
+            therapeutic.name= req.body.name   ;
+            therapeutic.enabled= req.body.enabled  ;
+            therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
+            therapeutic.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Area created!' });
+            });
+
+        });
+    router.route('/admin/arii/:id')
+
+        .get(function(req, res) {
+            Therapeutic_Area.find({_id:req.params.id}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                if(cont.length == 1){
+                    res.json(cont[0]);
+                }else{
+                    res.json(null);
+                }
+            })
+        })
+        .put(function(req, res) {
+
+            Therapeutic_Area.findById(req.params.id, function(err, therapeutic) {
+
+                if (err)
+                    res.send(err);
+
+                therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
+                therapeutic.last_updated=req.body.last_updated ;
+                therapeutic.name= req.body.name   ;
+                therapeutic.enabled= req.body.enabled  ;
+                therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
+                therapeutic.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Area updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Therapeutic_Area.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
+
+    //==================================================================================================================================== routes for user
 
     router.route('/groups/specialGroups')
 
@@ -1040,519 +1686,6 @@ module.exports = function(app, router) {
             }
         }) ;
     });
-
-
-    //Admin area
-    router.route('/admin/products')
-        .get(function(req, res) {
-            Products.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        })
-        .post(function(req, res) {
-
-            var product = new Products(); 		// create a new instance of the Bear model
-            product.name = req.body.name;  // set the bears name (comes from the request)
-            product.description=req.body.description ;
-            product.enable= req.body.enable     ;
-            product.file_path= req.body.file_path  ;
-            product.image_path= req.body.image_path ;
-            product.last_updated=req.body.last_updated;
-            product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
-            product.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Product created!' });
-            });
-
-        });
-    router.route('/admin/products/:id')
-        .get(function(req, res) {
-            Products.findById(req.params.id, function(err, product) {
-                if (err)
-                    res.send(err);
-                res.json(product);
-            });
-        })
-    .put(function(req, res) {
-
-        Products.findById(req.params.id, function(err, product) {
-
-            if (err)
-                res.send(err);
-
-            product.name = req.body.name;  // set the bears name (comes from the request)
-            product.description=req.body.description ;
-            product.enable= req.body.enable     ;
-            product.file_path= req.body.file_path  ;
-            product.image_path= req.body.image_path ;
-            product.last_updated=req.body.last_updated;
-            product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
-            // save the bear
-            product.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Product updated!' });
-            });
-
-        });
-    })
-        .delete(function(req, res) {
-            Products.remove({
-                _id: req.params.id
-            }, function(err,prod) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted' });
-            });
-        });
-
-    router.route('/admin/content')
-
-        .get(function(req, res) {
-            Content.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                else {
-                    var contents={};
-                    contents['content']=cont;
-                    UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
-                        if(err) {
-                            console.log(err);
-                            res.send(err);
-                        }
-                        contents['groups']=cont2;
-                        console.log(contents);
-                        res.json(contents);
-                    });
-                }
-            });
-        })
-    .post(function(req, res) {
-            console.log(req);
-        var content = new Content(); 		// create a new instance of the Bear model
-            content.title = req.body.title;  // set the bears name (comes from the request)
-            content.author=req.body.author ;
-            content.description= req.body.description     ;
-            content.text= req.body.text  ;
-            content.type= req.body.type ;
-            content.last_updated=req.body.last_updated;
-            content.version= req.body.version ;
-            content.enable=req.body.enable;
-            content.image_path=req.body.image_path;
-            content.groupsID=req.body.groupsID;
-            console.log(content.toString());
-            console.log(typeof content);
-            content.save(function(err,result) {
-            if (err)
-            {
-                console.log(err);
-                res.send(err);
-            }
-                else{
-                console.log(result);
-                res.json({ message: 'Content created!' });
-            }
-
-        });
-
-    });
-    router.route('/admin/content/:id')
-
-        .get(function(req, res) {
-            Content.find({_id:req.params.id}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
-                }else{
-                    findConnectedEntitiesWithProjection();
-                    res.json(null);
-                }
-            })
-        })
-        .put(function(req, res) {
-            Content.findById(req.params.id, function(err, content) {
-
-                if (err) {
-                    res.send(err);
-                }
-                content.title = req.body.title;  // set the bears name (comes from the request)
-                content.author=req.body.author ;
-                content.description= req.body.description     ;
-                content.text= req.body.text  ;
-                content.type= req.body.type ;
-                content.last_updated=req.body.last_updated;
-                content.version= req.body.version ;
-                content.enable=req.body.enable;
-                content.image_path=req.body.image_path;
-                content.groupsID=req.body.groupsID;
-                console.log(content);
-                content.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Content updated!' });
-                });
-
-            });
-        })
-        .delete(function(req, res) {
-            Content.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted!' });
-            });
-        });
-
-    router.route('/admin/events')
-
-        .get(function(req, res) {
-            Events.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        })
-        .post(function(req, res) {
-
-            var event = new Events(); 		// create a new instance of the Bear model
-            event.description = req.body.description;  // set the bears name (comes from the request)
-            event.enable=req.body.enable ;
-            event.end= req.body.end     ;
-            event.groupsID= req.body.groupsID  ;
-            event.last_updated= req.body.last_updated ;
-            event.name=req.body.name;
-            event.place= req.body.place ;
-            event.privacy=req.body.privacy;
-            event.start=req.body.start;
-            event.type=req.body.type;
-
-            event.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Event created!' });
-            });
-
-        });
-    router.route('/admin/events/:id')
-
-        .get(function(req, res) {
-            Events.find({_id:req.params.id}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
-                }else{
-                    res.json(null);
-                }
-            })
-        })
-        .put(function(req, res) {
-
-            Events.findById(req.params.id, function(err, event) {
-
-                if (err)
-                    res.send(err);
-
-                event.description = req.body.description;  // set the bears name (comes from the request)
-                event.enable=req.body.enable ;
-                event.end= req.body.end     ;
-                event.groupsID= req.body.groupsID  ;
-                event.last_updated= req.body.last_updated ;
-                event.name=req.body.name;
-                event.place= req.body.place ;
-                event.privacy=req.body.privacy;
-                event.start=req.body.start;
-                event.type=req.body.type;
-               event.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Event updated!' });
-                });
-
-            });
-        })
-        .delete(function(req, res) {
-            Events.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted!' });
-            });
-        });
-
-    router.route('/admin/multimedia')
-
-        .get(function(req, res) {
-            Multimedia.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        })
-        .post(function(req, res) {
-
-            var multimedia = new Multimedia(); 		// create a new instance of the Bear model
-            multimedia.author = req.body.author;  // set the bears name (comes from the request)
-            multimedia.description=req.body.description ;
-            multimedia.enable= req.body.enable    ;
-            multimedia.file_path= req.body.file_path  ;
-            multimedia.groupsID= req.body.groupsID ;
-            multimedia.last_updated=req.body.last_updated;
-            multimedia.points= req.body.points ;
-            multimedia.quizesID=req.body.quizesID;
-            multimedia['therapeutic-areasID']=req.body['therapeutic-areasID'];
-            multimedia.thumbnail_path=req.body.thumbnail_path;
-            multimedia.title=req.body.title;
-            multimedia.type=req.body.type;
-
-            multimedia.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Multimedia created!' });
-            });
-
-        });
-    router.route('/admin/multimedia/:id')
-
-        .get(function(req, res) {
-            Multimedia.find({_id:req.params.id}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
-                }else{
-                    res.json(null);
-                }
-            })
-        })
-        .put(function(req, res) {
-
-           Multimedia.findById(req.params.id, function(err, multimedia) {
-
-                if (err)
-                    res.send(err);
-
-               multimedia.author = req.body.author;  // set the bears name (comes from the request)
-               multimedia.description=req.body.description ;
-               multimedia.enable= req.body.enable    ;
-               multimedia.file_path= req.body.file_path  ;
-               multimedia.groupsID= req.body.groupsID ;
-               multimedia.last_updated=req.body.last_updated;
-               multimedia.points= req.body.points ;
-               multimedia.quizesID=req.body.quizesID;
-               multimedia['therapeutic-areasID']=req.body['therapeutic-areasID'];
-               multimedia.thumbnail_path=req.body.thumbnail_path;
-               multimedia.title=req.body.title;
-               multimedia.type=req.body.type;
-                multimedia.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Multimedia updated!' });
-                });
-
-            });
-        })
-        .delete(function(req, res) {
-            Multimedia.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted!' });
-            });
-        });
-
-
-    router.route('/admin/teste')
-
-        .get(function(req, res) {
-            Teste.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        })
-        .post(function(req, res) {
-
-            var test = new Teste(); 		// create a new instance of the Bear model
-            test.description = req.body.description;  // set the bears name (comes from the request)
-            test.enabled=req.body.enabled ;
-            test.entity= req.body.entity   ;
-            test.expired= req.body.expired  ;
-            test.expiry_date= req.body.expiry_date ;
-            test.last_updated=req.body.last_updated;
-            test.no_of_exam_questions= req.body.no_of_exam_questions ;
-            test.points=req.body.points;
-            test.questionsID=req.body.questionsID;
-            test.time=req.body.time;
-            test.times=req.body.times;
-            test.title=req.body.title;
-            test.treshhold=req.body.treshhold;
-
-            test.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Test created!' });
-            });
-
-        });
-    router.route('/admin/teste/:id')
-
-        .get(function(req, res) {
-            Teste.find({_id:req.params.id}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
-                }else{
-                    res.json(null);
-                }
-            })
-        })
-        .put(function(req, res) {
-
-            Teste.findById(req.params.id, function(err, test) {
-
-                if (err)
-                    res.send(err);
-
-                test.description = req.body.description;  // set the bears name (comes from the request)
-                test.enabled=req.body.enabled ;
-                test.entity= req.body.entity   ;
-                test.expired= req.body.expired  ;
-                test.expiry_date= req.body.expiry_date ;
-                test.last_updated=req.body.last_updated;
-                test.no_of_exam_questions= req.body.no_of_exam_questions ;
-                test.points=req.body.points;
-                test.questionsID=req.body.questionsID;
-                test.time=req.body.time;
-                test.times=req.body.times;
-                test.title=req.body.title;
-                test.treshhold=req.body.treshhold;
-                test.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Test updated!' });
-                });
-
-            });
-        })
-        .delete(function(req, res) {
-            Teste.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted!' });
-            });
-        });
-
-
-    router.route('/admin/arii')
-
-        .get(function(req, res) {
-            Therapeutic_Area.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        })
-        .post(function(req, res) {
-
-            var therapeutic = new Therapeutic_Area(); 		// create a new instance of the Bear model
-            therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
-            therapeutic.last_updated=req.body.last_updated ;
-            therapeutic.name= req.body.name   ;
-            therapeutic.enabled= req.body.enabled  ;
-            therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
-            therapeutic.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Area created!' });
-            });
-
-        });
-    router.route('/admin/arii/:id')
-
-        .get(function(req, res) {
-            Therapeutic_Area.find({_id:req.params.id}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
-                }else{
-                    res.json(null);
-                }
-            })
-        })
-        .put(function(req, res) {
-
-            Therapeutic_Area.findById(req.params.id, function(err, therapeutic) {
-
-                if (err)
-                    res.send(err);
-
-                therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
-                therapeutic.last_updated=req.body.last_updated ;
-                therapeutic.name= req.body.name   ;
-                therapeutic.enabled= req.body.enabled  ;
-                therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
-                therapeutic.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Area updated!' });
-                });
-
-            });
-        })
-        .delete(function(req, res) {
-            Therapeutic_Area.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted!' });
-            });
-        });
 
     app.use('/api', router);
 };
