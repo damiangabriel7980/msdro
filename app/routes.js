@@ -6,7 +6,7 @@ module.exports = function(app, passport) {
 // normal routes ===============================================================
 
     app.get('/', function (req, res) {
-        res.render('public/main.ejs');
+        res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket});
     });
 
 	// show the home page (will also have our login links)

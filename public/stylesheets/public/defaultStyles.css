@@ -1,16 +1,51 @@
 body {
   padding-top: 70px;
 }
-.nav .navbar-link {
+.navbar-fixed-top {
+  height: 70px;
+  padding-top: 10px;
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+.navbar-fixed-top .navbar-brand {
+  padding: 5px 15px;
+}
+.navbar-fixed-top .navbar-link {
   color: #000000;
 }
-.nav .navbar-link a {
+.navbar-fixed-top .navbar-link a {
   padding-left: 5px;
   padding-right: 5px;
 }
-.nav .link-divider {
+.navbar-fixed-top .link-divider {
   height: 16px;
   width: 1px;
   margin-top: 17px;
   background-color: #000000;
+}
+.navbar-fixed-top .navbar-nav > li > a {
+  padding: 15px 0 7px 0;
+  margin: 0 10px 0 10px;
+}
+.navbar-fixed-top .navbar-nav > li > a:hover {
+  color: #009d96;
+}
+.navbar-fixed-top .navbar-nav > .active > a {
+  color: #009d96;
+  font-weight: bold;
+  background-color: #ffffff;
+}
+.navbar-fixed-top .navbar-nav > .active > a:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 0px;
+  border: 3px solid #bbbbbb;
+  border-radius: 5px;
+  left: 0;
+  top: 40px;
+}
+.navbar-fixed-top .navbar-nav > .active > a:hover {
+  color: #009d96;
+  background-color: #ffffff;
 }
