@@ -5,8 +5,9 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'cloudAdminServices',
         'ngTable',
         'frapontillo.bootstrap-duallistbox',
-        'slick',
-        'angularFileUpload'
+        'angularFileUpload',
+        'ui.tinymce',
+        'ui.select'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -152,11 +153,13 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('continut.carouselPublic',{
             url: '/carouselPublic',
-            templateUrl: 'partials/admin/continut/produse.html'
+            templateUrl: 'partials/admin/continut/carouselPublic/carouselPublic.html',
+            controller: 'CarouselPublicController'
         })
         .state('continut.continutPublic',{
             url: '/continutPublic',
-            templateUrl: 'partials/admin/continut/continutPublic.html'
+            templateUrl: 'partials/admin/continut/continutPublic/continutPublic.html',
+            controller: 'ContinutPublicController'
         })
         .state('newsletter', {
             abstract: true,
@@ -274,6 +277,10 @@ cloudAdminApp.run(
             $rootScope.amazonBucket = "msddev-test";
 
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
+
+            $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
+            $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
+            $rootScope.defaultFileImage = $rootScope.pathAmazonResources+"file.png";
         }
     ]
 );

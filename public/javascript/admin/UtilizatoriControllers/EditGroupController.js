@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('EditGroupController', ['$scope','GrupuriService', '$modalInstance', 'prevScope', 'idToEdit', 'AmazonService', '$rootScope', function($scope, GrupuriService, $modalInstance, prevScope, idToEdit, AmazonService, $rootScope){
+cloudAdminControllers.controller('EditGroupController', ['$scope','GrupuriService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', '$rootScope', function($scope, GrupuriService, $modalInstance, $state, idToEdit, AmazonService, $rootScope){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
@@ -110,7 +110,7 @@ cloudAdminControllers.controller('EditGroupController', ['$scope','GrupuriServic
     };
 
     $scope.closeModal = function(){
-        prevScope.refreshTable();
+        $state.reload();
         $modalInstance.close();
     }
 

@@ -43,6 +43,59 @@ cloudAdminServices.factory('GrupuriService', ['$resource', function($resource){
         })
     }
 }]);
+cloudAdminServices.factory('ContinutPublicService', ['$resource', function($resource){
+    return {
+        getAllContent: $resource('api/admin/utilizatori/continutPublic/getAllContent', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getContentById: $resource('api/admin/utilizatori/continutPublic/getById/:id', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        addContent: $resource('api/admin/utilizatori/continutPublic/addContent/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        editContent: $resource('api/admin/utilizatori/continutPublic/editContent/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        toggleContent: $resource('api/admin/utilizatori/continutPublic/toggleContent/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        deleteContent: $resource('api/admin/utilizatori/continutPublic/deleteContent/:id', {}, {
+            save: { method: 'POST', isArray: false}
+        }),
+        getTherapeuticAreas: $resource('api/therapeutic_areas', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        changeImageOrFile: $resource('api/admin/utilizatori/continutPublic/changeImageOrFile/:data', {}, {
+            save: { method: 'POST'}
+        })
+    }
+}]);
+cloudAdminServices.factory('CarouselPublicService', ['$resource', function($resource){
+    return {
+        getAllImages: $resource('api/admin/utilizatori/carouselPublic/getAllImages', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getContentByType: $resource('api/admin/utilizatori/carouselPublic/contentByType/:type', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        addImage: $resource('api/admin/utilizatori/carouselPublic/addImage/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        toggleImage: $resource('api/admin/utilizatori/carouselPublic/toggleImage/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        deleteImage: $resource('api/admin/utilizatori/carouselPublic/deleteImage/:id', {}, {
+            save: { method: 'POST', isArray: false}
+        }),
+        getById: $resource('api/admin/utilizatori/carouselPublic/getById/:id', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        editImage: $resource('api/admin/utilizatori/carouselPublic/editImage/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        })
+    }
+}]);
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     return {
         getAll: $resource('api/admin/products/', {}, {
