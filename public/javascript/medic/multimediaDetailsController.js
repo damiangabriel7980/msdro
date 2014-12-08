@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 03.11.2014.
  */
-cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multimediaService','$stateParams','$modal','$log','$modalInstance','$rootScope','$sce',function ($scope,multimediaService,$stateParams, $modal, $log,$modalInstance,$rootScope,$sce) {
+cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multimediaService','$stateParams','$modal','$log','$modalInstance','$rootScope','$sce','$state',function ($scope,multimediaService,$stateParams, $modal, $log,$modalInstance,$rootScope,$sce,$state) {
 
     multimediaService.getSingle.query({idd:$stateParams.idd}).$promise.then(function(result){
         $scope.selectedMultimedia = result;
@@ -24,10 +24,12 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
     };
 
     $scope.okk = function () {
+        $state.go('elearning.multimedia');
         $modalInstance.close();
     };
 
     $scope.cancell = function () {
+        $state.go('elearning.multimedia');
         $modalInstance.dismiss('cancel');
     };
 }]);

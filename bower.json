@@ -27,8 +27,8 @@
     "angular-growl": "latest",
     "aws-sdk": "latest",
     "angular-bootstrap-duallistbox": "latest",
-    "ng-table":"latest",
-    "tinymce":"latest"
+    "ng-table": "latest",
+    "tinymce": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
@@ -37,8 +37,9 @@
   "appPath": "app",
   "resolutions": {
     "bootstrap": "^3.2.0",
-    "jquery": "~2.x",
+    "jquery": "~1.11.1",
     "fullcalendar": "~1.x",
-    "angular": "~1.2.0"
+    "angular": "~1.2.0",
+    "angular-touch": ">=1.2.10"
   }
 }

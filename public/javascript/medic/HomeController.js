@@ -1,9 +1,10 @@
-cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal', function($scope, $rootScope, HomeService, $sce, $modal) {
+cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate', function($scope, $rootScope, HomeService, $sce, $modal,$animate) {
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
     $scope.merckManualImage = $rootScope.merckManualImage;
+    $scope.myInterval = 60000;
 
     //------------------------------------------------------------------------------------------------- get all content
     HomeService.getUserEvents.query().$promise.then(function (resp) {
@@ -19,9 +20,32 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         $scope.multimedia = resp;
     });
 
+    HomeService.getCarousel.query().$promise.then(function(resp){
+        $scope.HomeCarousel=resp;
+
+    });
+
+        //$scope.$watch('HomeCarousel', function(values) {
+    //    var i, a = [], b;
+    //
+    //    for (i = 0; i <  $scope.HomeCarousel.length; i += 3) {
+    //        b = { image1:  $scope.HomeCarousel[i] };
+    //
+    //        if ($scope.HomeCarousel[i + 2]) {
+    //            b.image2=$scope.HomeCarousel[i + 1];
+    //            b.image3=$scope.HomeCarousel[i + 2];
+    //        }
+    //
+    //        a.push(b);
+    //    }
+    //
+    //    $scope.groupedSlides = a;
+    //}, true);
+
+
     //------------------------------------------------------------------------------------------------ useful functions
     var htmlToPlainText = function(text) {
-        return String(text).replace(/<[^>]+>/gm, '');
+        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
     };
 
     $scope.createHeader = function (text,length) {
@@ -32,33 +56,52 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         return new Date(ISOdate);
     };
 
+
+
     //merck modal
     $rootScope.showMerckManual = function(){
         $modal.open({
-            templateUrl: 'partials/modals/merckManual.html',
+            templateUrl: 'partials/medic/modals/merckManual.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'MerckManualController',
-            windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html'
+            windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
     $rootScope.showFarmaModal = function(){
         $modal.open({
-            templateUrl: 'partials/modals/Farma.html',
+            templateUrl: 'partials/medic/modals/Farma.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'FarmacovigilentaCtrl',
-            windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html'
+            windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
     $rootScope.showTermsModal = function(){
         $modal.open({
-            templateUrl: 'partials/modals/Terms.html',
+            templateUrl: 'partials/medic/modals/Terms.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'TermsCtrl',
-            windowTemplateUrl: 'partials/modals/responsiveModalTemplate.html'
+            windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
 
+
 }]);
+//angular.module('ui.bootstrap.setNgAnimate', ['ngAnimate'])
+//    .directive('setNgAnimate', ['$animate', function ($animate) {
+//        return {
+//            link: function ($scope, $element, $attrs) {
+//
+//                $scope.$watch( function() {
+//                    return $scope.$eval($attrs.setNgAnimate, $scope);
+//                }, function(valnew, valold){
+//                    $animate.enabled(!!valnew, $element);
+//                });
+//
+//
+//            }
+//        };
+//    }]);
+
