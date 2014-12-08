@@ -44,7 +44,7 @@
                                 <ui-select ng-model="county.selected" theme="select2" ng-disabled="false" style="width: 100%;" id="county" required>
                                     <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
                                     <ui-select-choices repeat="county in counties | propsFilter: {name: $select.search}">
-                                        <div ng-bind-html="county.name | highlight: $select.search"></div>
+                                        <div ng-bind-html="trustAsHtml((county.name | highlight: $select.search))"></div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -55,7 +55,7 @@
                                 <ui-select ng-model="city.selected" theme="select2" ng-disabled="false" style="width: 100%;" id="city" required>
                                     <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
                                     <ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">
-                                        <div ng-bind-html="city.name | highlight: $select.search"></div>
+                                        <div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>

@@ -755,6 +755,64 @@ module.exports = function(app, sessionSecret, router) {
             });
         });
 
+    router.route('/admin/utilizatori/carouselPublic/contentByType/:type')
+
+        .get(function(req, res) {
+            PublicContent.find({type: req.params.type}, {title: 1}).sort({title: 1}).exec(function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/admin/utilizatori/continutPublic/addImage')
+
+        .post(function(req, res) {
+            var data = req.body.data;
+            console.log(data);
+            var ans = {};
+            //validate title and description
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            if(!patt.test(data.title.toString()) || !patt.test(data.description.toString())){
+                ans.error = true;
+                ans.message = "Titlul si descrierea sunt obligatorii (minim 3 caractere)";
+                res.json(ans);
+            }else{
+                //validate type
+                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                    ans.error = true;
+                    ans.message = "Verificati tipul";
+                    res.json(ans);
+                }else{
+                    //check if content_id exists
+                    if(typeof data.content_id === "string" && data.content_id.length === 24){
+                        //form object to persist
+                        data.enable = false;
+                        data.last_updated = new Date();
+                        //persist object
+                        var img = new PublicCarousel(data);
+                        img.save(function (err, inserted) {
+                            if(err){
+                                ans.error = true;
+                                ans.message = "Eroare la salvare. Verificati campurile";
+                                res.json(ans);
+                            }else{
+                                ans.error = false;
+                                ans.message = "Se incarca imaginea...";
+                                res.json(ans);
+                            }
+                        });
+                    }else{
+                        ans.error = true;
+                        ans.message = "Selectati un continut";
+                        res.json(ans);
+                    }
+                }
+            }
+        });
+
 
     router.route('/admin/products')
         .get(function(req, res) {

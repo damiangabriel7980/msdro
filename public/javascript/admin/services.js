@@ -75,6 +75,12 @@ cloudAdminServices.factory('CarouselPublicService', ['$resource', function($reso
     return {
         getAllImages: $resource('api/admin/utilizatori/carouselPublic/getAllImages', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        getContentByType: $resource('api/admin/utilizatori/carouselPublic/contentByType/:type', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        addImage: $resource('api/admin/utilizatori/continutPublic/addImage/:data', {}, {
+            save: { method: 'POST', isArray: false }
         })
     }
 }]);

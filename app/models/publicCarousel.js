@@ -13,7 +13,8 @@ var publicCarouselSchema		= new Schema({
     type:         Number,
     content_id:   String,
     image_path:   String,
-    enable:       Boolean
+    enable:       Boolean,
+    last_updated: Date
 });
 
 module.exports = mongoose.model('public-carousel', publicCarouselSchema, 'public-carousel');
