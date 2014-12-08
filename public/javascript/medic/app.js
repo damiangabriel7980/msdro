@@ -9,7 +9,6 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'timer',
         'mySlider',
         'angular-growl',
-        'angular-flexslider',
         'angular-carousel'
     ]);
 
