@@ -90,6 +90,38 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 82);
     $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});},2000);
 
+    /* --- carousel --- */
+
+    $scope.imgArray = [
+        {
+            imgSrc : "stylesheets/img/img1.jpg",
+            text : "Text 1"
+        },
+        {
+            imgSrc : "stylesheets/img/img2.jpg",
+            text : "Text 2"
+        },
+        {
+            imgSrc : "stylesheets/img/img3.jpg",
+            text : "Text 3"
+        },
+        {
+            imgSrc : "stylesheets/img/img4.jpg",
+            text : "Text 4"
+        },
+        {
+            imgSrc : "stylesheets/img/img5.jpg",
+            text : "Text 5"
+        }
+    ]
+
+    $scope.selectedIndex = 1;
+
+    $scope.setSlide = function(index)
+    {
+        $scope.selectedIndex = index;
+    }
+
     $(document).on('ajaxComplete', function () {
         $("#footer").css({'margin-top': 0});
         var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 82);
