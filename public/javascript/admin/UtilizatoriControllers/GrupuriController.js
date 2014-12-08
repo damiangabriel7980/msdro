@@ -35,12 +35,7 @@ cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '
             templateUrl: 'partials/admin/utilizatori/modalAddGroup.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'AddGroupController',
-            resolve: {
-                prevScope: function () {
-                    return $scope;
-                }
-            }
+            controller: 'AddGroupController'
         });
     };
 
@@ -53,9 +48,6 @@ cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '
             resolve: {
                 idToDelete: function () {
                     return id;
-                },
-                prevScope: function () {
-                    return $scope;
                 }
             }
         });
@@ -69,9 +61,6 @@ cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '
             resolve: {
                 idToEdit: function () {
                     return id;
-                },
-                prevScope: function () {
-                    return $scope;
                 }
             }
         });

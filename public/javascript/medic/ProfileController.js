@@ -238,7 +238,12 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
 
     $scope.closeModal = function(){
         $modalInstance.close();
-    }
+    };
+
+    $scope.trustAsHtml = function (val) {
+        return $sce.trustAsHtml(val);
+    };
+
 }]).filter('propsFilter', function() {
     //used for select2
     return function(items, props) {

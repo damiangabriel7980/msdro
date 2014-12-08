@@ -13,6 +13,8 @@ var Questions=require('./models/questions');
 var Answers = require('./models/answers');
 var Slides = require('./models/slides');
 var Roles=require('./models/roles');
+var PublicContent = require('./models/publicContent');
+var PublicCarousel = require('./models/publicCarousel');
 
 var XRegExp  = require('xregexp').XRegExp;
 
@@ -21,14 +23,24 @@ var SHA256   = require('crypto-js/sha256');
 var mongoose = require('mongoose');
 
 var AWS = require('aws-sdk');
-
+//form sts object from environment variables. Used for retrieving temporary credentials to front end
+var sts = new AWS.STS();
+//configure credentials for use on server only; assign credentials based on role (never use master credentials)
+AWS.config.credentials = new AWS.EnvironmentCredentials('AWS');
+AWS.config.credentials = new AWS.TemporaryCredentials({
+    RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
+});
+//s3 object for use on server
+var s3 = new AWS.S3();
+//bucket retrieved from environment variables
 var amazonBucket = process.env.amazonBucket;
 
+//used to sign cookies based on session secret
 var cookieSig = require('express-session/node_modules/cookie-signature');
 
 //================================================================================================= amazon s3 functions
+// Used for retrieving temporary credentials to front end
 var getS3Credentials = function(RoleSessionName, callback){
-    var sts = new AWS.STS();
     sts.assumeRole({
         RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin',
         RoleSessionName: RoleSessionName,
@@ -42,14 +54,10 @@ var getS3Credentials = function(RoleSessionName, callback){
     });
 };
 
-var getS3Client = function (callback) {
-    getS3Credentials('nodeServerRequest', function (err, data) {
-        if(err){
-            callback(err, null);
-        }else{
-            AWS.config.update({accessKeyId: data.Credentials.AccessKeyId, secretAccessKey: data.Credentials.SecretAccessKey, sessionToken: data.Credentials.SessionToken});
-            callback(new AWS.S3());
-        }
+//function for deleting object from amazon
+var deleteObjectS3 = function (key, callback) {
+    s3.deleteObject({Bucket: amazonBucket, Key: key}, function (err, data) {
+        callback(err, data);
     });
 };
 
@@ -358,7 +366,7 @@ module.exports = function(app, sessionSecret, router) {
         .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             //check if name exists
             if(!data.group.display_name){
                 ans.error = true;
@@ -425,7 +433,7 @@ module.exports = function(app, sessionSecret, router) {
         .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             //check if name exists
             if(!data.group.display_name){
                 ans.error = true;
@@ -506,15 +514,13 @@ module.exports = function(app, sessionSecret, router) {
                                     }else{
                                         //remove image from amazon
                                         if(logo){
-                                            getS3Client(function (s3) {
-                                                s3.deleteObject({Bucket: amazonBucket, Key: logo}, function (err, data) {
-                                                    if(err){
-                                                        console.log(err);
-                                                        res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea nu s-a putut sterge"});
-                                                    }else{
-                                                        res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea asociata grupului a fost stearsa"});
-                                                    }
-                                                });
+                                            s3.deleteObject({Bucket: amazonBucket, Key: logo}, function (err, data) {
+                                                if(err){
+                                                    console.log(err);
+                                                    res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea nu s-a putut sterge"});
+                                                }else{
+                                                    res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea asociata grupului a fost stearsa"});
+                                                }
                                             });
                                         }else{
                                             res.json({error: false, message: "Grupul a fost sters. "+resp1});
@@ -534,6 +540,395 @@ module.exports = function(app, sessionSecret, router) {
 
         .post(function (req, res) {
             res.status(200).end();
+        });
+
+    router.route('/admin/utilizatori/continutPublic/getAllContent')
+
+        .get(function(req, res) {
+            PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/admin/utilizatori/continutPublic/getById/:id')
+
+        .get(function(req, res) {
+            PublicContent.find({_id: req.params.id}, function (err, cont) {
+                if(err){
+                    res.send(err);
+                }else{
+                    if(cont[0]){
+                        res.send(cont[0]);
+                    }else{
+                        res.send({message: "No content found"});
+                    }
+                }
+            })
+        });
+
+    router.route('/admin/utilizatori/continutPublic/toggleContent')
+
+        .post(function(req, res) {
+            PublicContent.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({error: false});
+                }
+            });
+        });
+
+    router.route('/admin/utilizatori/continutPublic/addContent')
+
+        .post(function(req, res) {
+            var data = req.body.data;
+            var ans = {};
+            //validate author and title
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
+                ans.error = true;
+                ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
+                res.json(ans);
+            }else{
+                //validate type
+                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                    ans.error = true;
+                    ans.message = "Verificati tipul";
+                    res.json(ans);
+                }else{
+                    //form object to persist
+                    data.enable = false;
+                    data.last_updated = new Date();
+                    //persist object
+                    var content = new PublicContent(data);
+                    content.save(function (err, inserted) {
+                        if(err){
+                            ans.error = true;
+                            ans.message = "Eroare la salvare. Verificati campurile";
+                            res.json(ans);
+                        }else{
+                            ans.error = false;
+                            ans.message = "Continutul a fost salvat cu succes!";
+                            res.json(ans);
+                        }
+                    });
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/continutPublic/editContent')
+
+        .post(function(req, res) {
+            var data = req.body.data.toUpdate;
+            var id = req.body.data.id;
+            var ans = {};
+            //validate author and title
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
+                ans.error = true;
+                ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
+                res.json(ans);
+            }else{
+                //validate type
+                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                    ans.error = true;
+                    ans.message = "Verificati tipul";
+                    res.json(ans);
+                }else{
+                    //refresh last_updated field
+                    data.last_updated = new Date();
+                    PublicContent.update({_id: id}, data, function (err, wRes) {
+                        if(err){
+                            ans.error = true;
+                            ans.message = "Eroare la actualizare. Verificati campurile";
+                            res.json(ans);
+                        }else{
+                            ans.error = false;
+                            ans.message = "Continutul a fost modificat cu succes!";
+                            res.json(ans);
+                        }
+                    });
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/continutPublic/deleteContent')
+
+        .post(function (req, res) {
+            var content_id = req.body.id;
+            //find files to remove from amazon
+            PublicContent.find({_id: content_id}, {image_path: 1, file_path: 1}, function (err, content) {
+                if(err){
+                    res.json({error: true, message: err});
+                }else{
+                    if(content[0]){
+                        var image = content[0].image_path;
+                        var file = content[0].file_path;
+                        console.log(image);
+                        console.log(file);
+                        //remove content
+                        PublicContent.remove({_id: content_id}, function (err, success) {
+                            if(err){
+                                res.json({error: true, message: "Eroare la stergerea continutului"});
+                            }else{
+                                //remove image and file from amazon
+                                if(image){
+                                    deleteObjectS3(image, function (err, data) {
+                                        if(err){
+                                            res.json({error: true, message: "Continutul a fost sters. Eroare la stergerea fisierelor asociate"});
+                                        }else{
+                                            if(file){
+                                                deleteObjectS3(file, function (err, data) {
+                                                    if(err){
+                                                        res.json({error: true, message: "Continutul a fost sters. Eroare la stergerea fisierelor asociate"});
+                                                    }else{
+                                                        res.json({error: false, message: "Continutul a fost sters. Fisierele asociate au fost sterse"});
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }else{
+                                    if(file){
+                                        deleteObjectS3(file, function (err, data) {
+                                            if(err){
+                                                res.json({error: true, message: "Continutul a fost sters. Eroare la stergerea fisierelor asociate"});
+                                            }else{
+                                                res.json({error: false, message: "Continutul a fost sters. Fisierele asociate au fost sterse"});
+                                            }
+                                        });
+                                    }else{
+                                        res.json({error: false, message: "Continutul a fost sters. Nu s-au gasit fisiere asociate"});
+                                    }
+                                }
+                            }
+                        });
+                    }else{
+                        res.json({error: true, message: "Nu s-a gasit continutul"});
+                    }
+                }
+            });
+        });
+
+    router.route('/admin/utilizatori/continutPublic/changeImageOrFile')
+        .post(function (req,res) {
+            var data = req.body.data;
+            var qry = {};
+            var ok = true;
+            if(data.type === "image"){
+                qry['image_path'] = data.path;
+            }else{
+                if(data.type === "file"){
+                    qry['file_path'] = data.path;
+                }else{
+                    ok = false;
+                    res.json({error:true});
+                }
+            }
+            if(ok){
+                PublicContent.update({_id:data.id}, qry, function (err, wRes) {
+                    if(err){
+                        console.log("Error at content "+data.type+"_path; id = "+data.id+"; Key = "+data.path);
+                        res.json({error:true});
+                    }else{
+                        res.json({error:false, updated:wRes});
+                    }
+                });
+            }
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/getAllImages')
+
+        .get(function(req, res) {
+            PublicCarousel.find({}, function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/contentByType/:type')
+
+        .get(function(req, res) {
+            PublicContent.find({type: req.params.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/addImage')
+
+        .post(function(req, res) {
+            var data = req.body.data.toAdd;
+            var ext = req.body.data.extension;
+            var ans = {};
+            //validate title and description
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            if(!patt.test(data.title.toString()) || !patt.test(data.description.toString())){
+                ans.error = true;
+                ans.message = "Titlul si descrierea sunt obligatorii (minim 3 caractere)";
+                res.json(ans);
+            }else{
+                //validate type
+                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                    ans.error = true;
+                    ans.message = "Verificati tipul";
+                    res.json(ans);
+                }else{
+                    //check if content_id exists
+                    if(typeof data.content_id === "string" && data.content_id.length === 24){
+                        //form object to persist
+                        data.enable = false;
+                        data.last_updated = new Date();
+                        //persist object
+                        var img = new PublicCarousel(data);
+                        img.save(function (err, inserted) {
+                            if(err){
+                                ans.error = true;
+                                ans.message = "Eroare la salvare. Verificati campurile";
+                                res.json(ans);
+                            }else{
+                                //update image_path
+                                var imagePath = "generalCarousel/image_"+inserted._id+"."+ext;
+                                PublicCarousel.update({_id: inserted._id}, {image_path: imagePath}, function (err, wRes) {
+                                    if(err){
+                                        ans.error = true;
+                                        ans.message = "Eroare la salvare. Verificati campurile";
+                                        res.json(ans);
+                                    }else{
+                                        ans.error = false;
+                                        ans.message = "Se incarca imaginea...";
+                                        ans.key = imagePath;
+                                        res.json(ans);
+                                    }
+                                });
+                            }
+                        });
+                    }else{
+                        ans.error = true;
+                        ans.message = "Selectati un continut";
+                        res.json(ans);
+                    }
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/toggleImage')
+
+        .post(function(req, res) {
+            PublicCarousel.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({error: false});
+                }
+            });
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/deleteImage')
+
+        .post(function (req, res) {
+            var image_id = req.body.id;
+            //find image to remove from amazon
+            PublicCarousel.find({_id: image_id}, {image_path: 1}, function (err, image) {
+                if(err){
+                    res.json({error: true, message: err});
+                }else{
+                    if(image[0]){
+                        var imageS3 = image[0].image_path;
+                        console.log(imageS3);
+                        //remove from database
+                        PublicCarousel.remove({_id: image_id}, function (err, success) {
+                            if(err){
+                                res.json({error: true, message: "Eroare la stergerea imaginii"});
+                            }else{
+                                //remove image from amazon
+                                if(imageS3){
+                                    deleteObjectS3(imageS3, function (err, data) {
+                                        if(err){
+                                            res.json({error: true, message: "Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon"});
+                                        }else{
+                                            res.json({error: false, message: "Imaginea a fost stearsa din baza de date si de pe Amazon."});
+                                        }
+                                    });
+                                }else{
+                                    res.json({error: false, message: "Imaginea a fost stearsa din baza de date."});
+                                }
+                            }
+                        });
+                    }else{
+                        res.json({error: true, message: "Nu s-a gasit imaginea"});
+                    }
+                }
+            });
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/editImage')
+
+        .post(function(req, res) {
+            var data = req.body.data.toUpdate;
+            var id = req.body.data.id;
+            var ans = {};
+            //validate title and description
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            if(!patt.test(data.title.toString()) || !patt.test(data.description.toString())){
+                ans.error = true;
+                ans.message = "Titlul si descrierea sunt obligatorii (minim 3 caractere)";
+                res.json(ans);
+            }else{
+                //validate type
+                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                    ans.error = true;
+                    ans.message = "Verificati tipul";
+                    res.json(ans);
+                }else{
+                    //check if content_id exists
+                    if(typeof data.content_id === "string" && data.content_id.length === 24){
+                        //refresh last_updated field
+                        data.last_updated = new Date();
+                        PublicCarousel.update({_id: id}, data, function (err, wRes) {
+                            if(err){
+                                ans.error = true;
+                                ans.message = "Eroare la actualizare. Verificati campurile";
+                                res.json(ans);
+                            }else{
+                                ans.error = false;
+                                ans.message = "Datele au fost modificate cu succes!";
+                                res.json(ans);
+                            }
+                        });
+                    }else{
+                        ans.error = true;
+                        ans.message = "Selectati un continut";
+                        res.json(ans);
+                    }
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/getById/:id')
+
+        .get(function(req, res) {
+            PublicCarousel.find({_id: req.params.id}, function (err, cont) {
+                if(err){
+                    res.send(err);
+                }else{
+                    if(cont[0]){
+                        res.send(cont[0]);
+                    }else{
+                        res.send({message: "No image found"});
+                    }
+                }
+            })
         });
 
 
@@ -1192,7 +1587,7 @@ module.exports = function(app, sessionSecret, router) {
         .post(function (req, res) {
             var ans = {};
             var newData = req.body.newData;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
             //check name
             if((!namePatt.test(newData.firstName.toString())) || (!namePatt.test(newData.lastName.toString()))){
@@ -1236,7 +1631,7 @@ module.exports = function(app, sessionSecret, router) {
         .post(function (req, res) {
             var ans = {error:false};
             var job = req.body.job;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             var numberPatt = new XRegExp('^[0-9]{1,5}$');
             if(!numberPatt.test(job.street_number.toString())) {
                 ans.error = true;

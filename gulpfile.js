@@ -87,30 +87,8 @@ gulp.task('test', function () {
         RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
     });
 
-// subsequent requests will now use temporary credentials from AWS STS.
+// subsequent requests will now use temporary credentials
     var s3 = new AWS.S3();
-    console.log("================================================================ START");
-//    console.log(s3.config.credentials);
-    s3.getObject({Bucket: 'msddev-test', Key: 'multimedia/1/slide/multimedia_1.jpg'}, function (err, data) {
-        console.log(err);
-        console.log(data);
-        console.log("                                                     msddev-test");
-        console.log("================================================================");
-    });
-
-    s3.getObject({Bucket: 'msddev-test2', Key: 'multimedia/13/slide/multimedia_22.jpg'}, function (err, data) {
-        console.log(err);
-        console.log(data);
-        console.log("                                                    msddev-test2");
-        console.log("================================================================");
-    });
-
-    s3.listBuckets(function(err, data) {
-        console.log(err);
-        console.log(data);
-        console.log("                                                    list buckets");
-        console.log("================================================================");
-    });
 });
 
 gulp.task('default', ['sass', 'js', 'watch']);
