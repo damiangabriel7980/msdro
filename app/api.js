@@ -767,7 +767,7 @@ module.exports = function(app, sessionSecret, router) {
             });
         });
 
-    router.route('/admin/utilizatori/continutPublic/addImage')
+    router.route('/admin/utilizatori/carouselPublic/addImage')
 
         .post(function(req, res) {
             var data = req.body.data;
@@ -811,6 +811,57 @@ module.exports = function(app, sessionSecret, router) {
                     }
                 }
             }
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/toggleImage')
+
+        .post(function(req, res) {
+            console.log(req.body.data);
+            PublicCarousel.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({error: false});
+                }
+            });
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/deleteImage')
+
+        .post(function (req, res) {
+            var image_id = req.body.id;
+            //find image to remove from amazon
+            PublicCarousel.find({_id: image_id}, {image_path: 1}, function (err, image) {
+                if(err){
+                    res.json({error: true, message: err});
+                }else{
+                    if(image[0]){
+                        var imageS3 = image[0].image_path;
+                        console.log(imageS3);
+                        //remove from database
+                        PublicCarousel.remove({_id: image_id}, function (err, success) {
+                            if(err){
+                                res.json({error: true, message: "Eroare la stergerea imaginii"});
+                            }else{
+                                //remove image from amazon
+                                if(imageS3){
+                                    deleteObjectS3(imageS3, function (err, data) {
+                                        if(err){
+                                            res.json({error: true, message: "Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon"});
+                                        }else{
+                                            res.json({error: false, message: "Imaginea a fost stearsa din baza de date si de pe Amazon."});
+                                        }
+                                    });
+                                }else{
+                                    res.json({error: false, message: "Imaginea a fost stearsa din baza de date."});
+                                }
+                            }
+                        });
+                    }else{
+                        res.json({error: true, message: "Nu s-a gasit imaginea"});
+                    }
+                }
+            });
         });
 
 

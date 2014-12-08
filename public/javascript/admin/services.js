@@ -79,8 +79,14 @@ cloudAdminServices.factory('CarouselPublicService', ['$resource', function($reso
         getContentByType: $resource('api/admin/utilizatori/carouselPublic/contentByType/:type', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        addImage: $resource('api/admin/utilizatori/continutPublic/addImage/:data', {}, {
+        addImage: $resource('api/admin/utilizatori/carouselPublic/addImage/:data', {}, {
             save: { method: 'POST', isArray: false }
+        }),
+        toggleImage: $resource('api/admin/utilizatori/carouselPublic/toggleImage/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        deleteImage: $resource('api/admin/utilizatori/carouselPublic/deleteImage/:id', {}, {
+            save: { method: 'POST', isArray: false}
         })
     }
 }]);
