@@ -87,6 +87,12 @@ cloudAdminServices.factory('CarouselPublicService', ['$resource', function($reso
         }),
         deleteImage: $resource('api/admin/utilizatori/carouselPublic/deleteImage/:id', {}, {
             save: { method: 'POST', isArray: false}
+        }),
+        getById: $resource('api/admin/utilizatori/carouselPublic/getById/:id', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        editImage: $resource('api/admin/utilizatori/carouselPublic/editImage/:data', {}, {
+            save: { method: 'POST', isArray: false }
         })
     }
 }]);

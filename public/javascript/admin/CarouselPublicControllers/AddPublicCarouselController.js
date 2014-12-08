@@ -26,9 +26,7 @@ cloudAdminControllers.controller('AddPublicCarouselController', ['$scope','$root
     $scope.addImage = function () {
         //check if image was selected
         if(fileSelected){
-            //form amazon key
             var extension = fileSelected.name.split('.').pop();
-            var key;
 
             //form object to add to database
             var toSend = {};
@@ -37,18 +35,9 @@ cloudAdminControllers.controller('AddPublicCarouselController', ['$scope','$root
             toSend.order_index = this.ordine?this.ordine:"";
             toSend.type = $scope.selectedType;
             toSend.content_id = $scope.content.selected._id;
-            try{
-                key = "generalCarousel/image_"+toSend.content_id+"."+extension;
-            }catch(e){
-                $scope.uploadAlert.type = "danger";
-                $scope.uploadAlert.message = "Selectati un continut!";
-                $scope.uploadAlert.newAlert = true;
-                return;
-            }
-            toSend.image_path = key;
 
             //send data to server
-            CarouselPublicService.addImage.save({data: toSend}).$promise.then(function (resp) {
+            CarouselPublicService.addImage.save({data: {toAdd: toSend, extension: extension}}).$promise.then(function (resp) {
                 $scope.statusAlert.newAlert = false;
                 $scope.uploadAlert.newAlert = false;
                 if(resp.error){
@@ -61,7 +50,7 @@ cloudAdminControllers.controller('AddPublicCarouselController', ['$scope','$root
                     $scope.statusAlert.newAlert = true;
                     //upload image to Amazon
                     AmazonService.getClient(function (s3) {
-                        var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: fileSelected, ACL:'public-read'}, function (err, data) {
+                        var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: resp.key, Body: fileSelected, ACL:'public-read'}, function (err, data) {
                             if (err) {
                                 console.log(err);
                                 $scope.uploadAlert.type = "danger";

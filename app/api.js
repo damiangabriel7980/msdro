@@ -366,7 +366,7 @@ module.exports = function(app, sessionSecret, router) {
         .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             //check if name exists
             if(!data.group.display_name){
                 ans.error = true;
@@ -433,7 +433,7 @@ module.exports = function(app, sessionSecret, router) {
         .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             //check if name exists
             if(!data.group.display_name){
                 ans.error = true;
@@ -557,7 +557,6 @@ module.exports = function(app, sessionSecret, router) {
     router.route('/admin/utilizatori/continutPublic/getById/:id')
 
         .get(function(req, res) {
-            console.log(req.params.id);
             PublicContent.find({_id: req.params.id}, function (err, cont) {
                 if(err){
                     res.send(err);
@@ -574,7 +573,6 @@ module.exports = function(app, sessionSecret, router) {
     router.route('/admin/utilizatori/continutPublic/toggleContent')
 
         .post(function(req, res) {
-            console.log(req.body.data);
             PublicContent.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
                 if(err){
                     res.send({error: true});
@@ -590,7 +588,7 @@ module.exports = function(app, sessionSecret, router) {
             var data = req.body.data;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -629,7 +627,7 @@ module.exports = function(app, sessionSecret, router) {
             var id = req.body.data.id;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -758,7 +756,7 @@ module.exports = function(app, sessionSecret, router) {
     router.route('/admin/utilizatori/carouselPublic/contentByType/:type')
 
         .get(function(req, res) {
-            PublicContent.find({type: req.params.type}, {title: 1}).sort({title: 1}).exec(function(err, cont) {
+            PublicContent.find({type: req.params.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
                 if(err) {
                     console.log(err);
                     res.send(err);
@@ -770,11 +768,11 @@ module.exports = function(app, sessionSecret, router) {
     router.route('/admin/utilizatori/carouselPublic/addImage')
 
         .post(function(req, res) {
-            var data = req.body.data;
-            console.log(data);
+            var data = req.body.data.toAdd;
+            var ext = req.body.data.extension;
             var ans = {};
             //validate title and description
-            var patt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.description.toString())){
                 ans.error = true;
                 ans.message = "Titlul si descrierea sunt obligatorii (minim 3 caractere)";
@@ -799,9 +797,20 @@ module.exports = function(app, sessionSecret, router) {
                                 ans.message = "Eroare la salvare. Verificati campurile";
                                 res.json(ans);
                             }else{
-                                ans.error = false;
-                                ans.message = "Se incarca imaginea...";
-                                res.json(ans);
+                                //update image_path
+                                var imagePath = "generalCarousel/image_"+inserted._id+"."+ext;
+                                PublicCarousel.update({_id: inserted._id}, {image_path: imagePath}, function (err, wRes) {
+                                    if(err){
+                                        ans.error = true;
+                                        ans.message = "Eroare la salvare. Verificati campurile";
+                                        res.json(ans);
+                                    }else{
+                                        ans.error = false;
+                                        ans.message = "Se incarca imaginea...";
+                                        ans.key = imagePath;
+                                        res.json(ans);
+                                    }
+                                });
                             }
                         });
                     }else{
@@ -816,7 +825,6 @@ module.exports = function(app, sessionSecret, router) {
     router.route('/admin/utilizatori/carouselPublic/toggleImage')
 
         .post(function(req, res) {
-            console.log(req.body.data);
             PublicCarousel.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
                 if(err){
                     res.send({error: true});
@@ -862,6 +870,65 @@ module.exports = function(app, sessionSecret, router) {
                     }
                 }
             });
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/editImage')
+
+        .post(function(req, res) {
+            var data = req.body.data.toUpdate;
+            var id = req.body.data.id;
+            var ans = {};
+            //validate title and description
+            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            if(!patt.test(data.title.toString()) || !patt.test(data.description.toString())){
+                ans.error = true;
+                ans.message = "Titlul si descrierea sunt obligatorii (minim 3 caractere)";
+                res.json(ans);
+            }else{
+                //validate type
+                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                    ans.error = true;
+                    ans.message = "Verificati tipul";
+                    res.json(ans);
+                }else{
+                    //check if content_id exists
+                    if(typeof data.content_id === "string" && data.content_id.length === 24){
+                        //refresh last_updated field
+                        data.last_updated = new Date();
+                        PublicCarousel.update({_id: id}, data, function (err, wRes) {
+                            if(err){
+                                ans.error = true;
+                                ans.message = "Eroare la actualizare. Verificati campurile";
+                                res.json(ans);
+                            }else{
+                                ans.error = false;
+                                ans.message = "Datele au fost modificate cu succes!";
+                                res.json(ans);
+                            }
+                        });
+                    }else{
+                        ans.error = true;
+                        ans.message = "Selectati un continut";
+                        res.json(ans);
+                    }
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/carouselPublic/getById/:id')
+
+        .get(function(req, res) {
+            PublicCarousel.find({_id: req.params.id}, function (err, cont) {
+                if(err){
+                    res.send(err);
+                }else{
+                    if(cont[0]){
+                        res.send(cont[0]);
+                    }else{
+                        res.send({message: "No image found"});
+                    }
+                }
+            })
         });
 
 
@@ -1520,7 +1587,7 @@ module.exports = function(app, sessionSecret, router) {
         .post(function (req, res) {
             var ans = {};
             var newData = req.body.newData;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
             //check name
             if((!namePatt.test(newData.firstName.toString())) || (!namePatt.test(newData.lastName.toString()))){
@@ -1564,7 +1631,7 @@ module.exports = function(app, sessionSecret, router) {
         .post(function (req, res) {
             var ans = {error:false};
             var job = req.body.job;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             var numberPatt = new XRegExp('^[0-9]{1,5}$');
             if(!numberPatt.test(job.street_number.toString())) {
                 ans.error = true;
