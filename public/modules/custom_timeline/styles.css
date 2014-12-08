@@ -1,0 +1,167 @@
+.timelineBody {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  min-height: 270px;
+  min-width: 1200px;
+  padding-top: 65px;
+}
+.timelineBody .timeBox {
+  position: absolute;
+  cursor: pointer;
+}
+.timelineBody .timeBox .timeBoxLine {
+  position: absolute;
+  left: 0;
+  border: 1px solid #009d96;
+  height: 20px;
+}
+.timelineBody .timeBox .zi {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  float: left;
+  font-size: 35px;
+  font-weight: bold;
+  color: #009d96;
+}
+.timelineBody .timeBox .luna {
+  position: absolute;
+  left: 40px;
+  bottom: 6px;
+  float: left;
+  font-size: 18px;
+  font-weight: bold;
+}
+.timelineBody .timeBox .isCollapsed {
+  position: absolute;
+  left: 65px;
+  bottom: 9px;
+  float: left;
+}
+.timelineBody .timeBox .nume {
+  position: absolute;
+  left: 80px;
+  bottom: 9px;
+  font-size: 15px;
+  float: left;
+  width: 170px;
+  background-color: rgba(255, 255, 255, 0.9);
+  min-height: 33px;
+  border: 1px solid #eeeeee;
+  text-align: center;
+}
+.timelineBody .timeBox2 {
+  position: absolute;
+  cursor: pointer;
+}
+.timelineBody .timeBox2 .timeBoxLine {
+  position: absolute;
+  left: 0;
+  border: 1px solid #009d96;
+  height: 33px;
+}
+.timelineBody .timeBox2 .zi {
+  position: absolute;
+  left: 15px;
+  bottom: 0;
+  float: left;
+  font-size: 35px;
+  font-weight: bold;
+  color: #009d96;
+  border: 1px solid #eeeeee;
+  width: 235px;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+.timelineBody .timeBox2 .luna {
+  position: absolute;
+  left: 55px;
+  bottom: 6px;
+  float: left;
+  font-size: 18px;
+  font-weight: bold;
+}
+.timelineBody .timeBox2 .isCollapsed {
+  position: absolute;
+  left: 0;
+  bottom: 9px;
+  float: left;
+}
+.timelineBody .timeBox2 .nume {
+  position: absolute;
+  left: 80px;
+  bottom: 9px;
+  font-size: 15px;
+  float: left;
+  width: 170px;
+  min-height: 33px;
+  text-align: center;
+}
+.timelineBody .timeGrid {
+  position: absolute;
+}
+.timelineBody .timeGrid .gridd {
+  position: absolute;
+  width: 1200px;
+  height: 25px;
+  border-radius: 12px;
+  top: 65px;
+  background-color: #009d96;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAHCAQAAAB9jN+sAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAE0lEQVQI12P4/58BD2BiYBii0gCzTwILoELU3QAAAABJRU5ErkJggg==);
+  background-repeat: repeat-x;
+  background-position: 0px 21px;
+  overflow: hidden;
+}
+.timelineBody .timeGrid .gridd .month {
+  position: absolute;
+}
+.timelineBody .timeGrid .gridd .month .monthLine {
+  float: left;
+  border: 1px solid;
+  border-color: #ffffff;
+  height: 10px;
+}
+.timelineBody .timeGrid .gridd .month .monthName {
+  float: left;
+  color: #ffffff;
+  font-weight: bold;
+  padding-left: 3px;
+}
+.timelineBody .timeGrid .todayBox {
+  position: absolute;
+  left: 600px;
+}
+.timelineBody .timeGrid .todayBox .dateShow {
+  background-color: #67cad3;
+  min-height: 40px;
+  min-width: 60px;
+  position: absolute;
+  top: -50px;
+  left: -30px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding-top: 7px;
+  text-align: center;
+}
+.timelineBody .timeGrid .todayBox .arrowDown {
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #67cad3;
+}
+.timelineBody .timeGrid .todayBox .lineDown {
+  border: 1px solid;
+  border-color: rgba(103, 202, 211, 0.4);
+  height: 70px;
+  width: 0px;
+  position: absolute;
+  top: -5px;
+}
