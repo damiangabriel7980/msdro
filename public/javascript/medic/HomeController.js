@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal', function($scope, $rootScope, HomeService, $sce, $modal) {
+cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate', function($scope, $rootScope, HomeService, $sce, $modal,$animate) {
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
@@ -25,24 +25,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     });
 
-    $scope.basicUsageOptions = {
-        $AutoPlay: true
-    };
-
-    $scope.sliderWithArrowOptions = {
-        $DragOrientation: 3,                            //[Optional] Orientation to drag slide, 0 no drag, 1 horizental, 2 vertical, 3 either, default value is 1 (Note that the $DragOrientation should be the same as $PlayOrientation when $DisplayPieces is greater than 1, or parking position is not 0)
-        $SlideDuration: 800,                            //[Optional] Specifies default duration (swipe) for slide in milliseconds, default value is 500
-
-        $ArrowNavigatorOptions: {                       //[Optional] Options to specify and enable arrow navigator or not
-            $Class: $JssorArrowNavigator$,              //[Requried] Class to create arrow navigator instance
-            $ChanceToShow: 2,                           //[Required] 0 Never, 1 Mouse Over, 2 Always
-            $AutoCenter: 2,                             //[Optional] Auto center arrows in parent container, 0 No, 1 Horizontal, 2 Vertical, 3 Both, default value is 0
-            $Steps: 1                                   //[Optional] Steps to go for each navigation request, default value is 1
-        }
-    }
-
-
-    //$scope.$watch('HomeCarousel', function(values) {
+        //$scope.$watch('HomeCarousel', function(values) {
     //    var i, a = [], b;
     //
     //    for (i = 0; i <  $scope.HomeCarousel.length; i += 3) {
@@ -105,17 +88,20 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     };
 
 
-}])
-    .directive('setNgAnimate', ['$animate', function ($animate) {
-        return {
-            link: function ($scope, $element, $attrs) {
-                $scope.$watch( function() {
-                    return $scope.$eval($attrs.setNgAnimate, $scope);
-                }, function(valnew, valold){
-                    console.log('Directive animation Enabled: ' + valnew);
-                    $animate.enabled(!!valnew, $element);
-                });
-            }
-        };
-    }]);
+}]);
+//angular.module('ui.bootstrap.setNgAnimate', ['ngAnimate'])
+//    .directive('setNgAnimate', ['$animate', function ($animate) {
+//        return {
+//            link: function ($scope, $element, $attrs) {
+//
+//                $scope.$watch( function() {
+//                    return $scope.$eval($attrs.setNgAnimate, $scope);
+//                }, function(valnew, valold){
+//                    $animate.enabled(!!valnew, $element);
+//                });
+//
+//
+//            }
+//        };
+//    }]);
 
