@@ -5,8 +5,12 @@ module.exports = function(app, passport) {
 
 // normal routes ===============================================================
 
+    app.get('/', function (req, res) {
+        res.render('public/main.ejs');
+    });
+
 	// show the home page (will also have our login links)
-	app.get('/', isLoggedIn, function(req, res) {
+	app.get('/pro', isLoggedIn, function(req, res) {
         transportUser(req, res, {
             "ROLE_FARMACIST": "medic/main.ejs",
             "ROLE_ADMIN": "admin/main.ejs"
@@ -59,7 +63,7 @@ module.exports = function(app, passport) {
 
 		// process the login form
 		app.post('/login', passport.authenticate('local-login', {
-			successRedirect : '/', // redirect to the secure profile section
+			successRedirect : '/pro', // redirect to the secure profile section
 			failureRedirect : '/login', // redirect back to the signup page if there is an error
 			failureFlash : true // allow flash messages
 		}));

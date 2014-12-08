@@ -1,0 +1,1 @@
+var publicServices = angular.module('publicServices', ['ngResource']);
