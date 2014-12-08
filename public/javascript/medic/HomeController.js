@@ -5,7 +5,6 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
     $scope.merckManualImage = $rootScope.merckManualImage;
     $scope.myInterval = 60000;
-
     //------------------------------------------------------------------------------------------------- get all content
     HomeService.getUserEvents.query().$promise.then(function (resp) {
         $scope.events = resp;
@@ -87,8 +86,22 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         });
     };
 
+    $("#footer").css({'top': 0});
+    var margin = Math.floor($(window).height() - $(".view-container").outerHeight() - $('#footer').outerHeight() - 60);
+    $("#footer").css({'top': (margin > 80 ? margin : 80)});
 
+    $(document).on('ajaxComplete', function () {
+        $("#footer").css({'top': 0});
+        var margin = Math.floor($(window).height() - $(".view-container").outerHeight() - $('#footer').outerHeight() - 60);
+        $("#footer").css({'top': (margin > 80 ? margin : 80)});
+    });
+    $(window).on('resize', function () {
+        $("#footer").css({'top': 0});
+        var margin = Math.floor($(window).height() - $(".view-container").outerHeight() - $('#footer').outerHeight() - 60);
+        $("#footer").css({'top': (margin > 80 ? margin : 80)});
+    });
 }]);
+
 //angular.module('ui.bootstrap.setNgAnimate', ['ngAnimate'])
 //    .directive('setNgAnimate', ['$animate', function ($animate) {
 //        return {
@@ -104,4 +117,3 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 //            }
 //        };
 //    }]);
-

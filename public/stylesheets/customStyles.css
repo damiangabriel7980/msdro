@@ -84,7 +84,9 @@
     background: #009d97;
     padding: 5px 0;
     width: 100%;
-    clear: both
+    clear: both;
+    height: 35px;
+    margin-top:7%;
 }
 
 .textBlue{
@@ -421,6 +423,11 @@ font-size: 12px;
     left:-2px;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.view-container {
+    min-height:100%;
+    position:relative;
 }
 
 @media (max-width: 1025px) {
