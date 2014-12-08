@@ -15,6 +15,7 @@ var Slides = require('./models/slides');
 var Roles=require('./models/roles');
 var PublicContent = require('./models/publicContent');
 var PublicCarousel = require('./models/publicCarousel');
+var Carousel=require('./models/carousel_Medic');
 
 var XRegExp  = require('xregexp').XRegExp;
 
@@ -1631,7 +1632,7 @@ module.exports = function(app, sessionSecret, router) {
         .post(function (req, res) {
             var ans = {error:false};
             var job = req.body.job;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
             var numberPatt = new XRegExp('^[0-9]{1,5}$');
             if(!numberPatt.test(job.street_number.toString())) {
                 ans.error = true;
@@ -1795,6 +1796,17 @@ module.exports = function(app, sessionSecret, router) {
                 }
             }
         });
+
+    router.route('/userHomeCarousel')
+        .get(function (req,res) {
+            Carousel.find({},(function (err, elements) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.json(elements);
+                }
+            })
+        )});
 
     router.route('/userHomeEvents')
         .get(function (req,res) {

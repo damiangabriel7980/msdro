@@ -8,7 +8,9 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'pdf',
         'timer',
         'mySlider',
-        'angular-growl'
+        'angular-growl',
+        'angular-flexslider',
+        'angular-carousel'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

@@ -58,6 +58,9 @@ cloudAdminServices.factory('HomeService', ['$resource', function($resource){
         }),
         getUserMultimedia: $resource('api/userHomeMultimedia/', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        getCarousel: $resource('api/userHomeCarousel/', {}, {
+            query: { method: 'GET', isArray: true }
         })
     }
 }]);

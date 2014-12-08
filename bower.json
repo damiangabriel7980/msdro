@@ -44,5 +44,7 @@
     "fullcalendar": "~1.x",
     "angular": "~1.2.15",
     "es5-shim": ">=3.4.0"
+    "angular": "~1.2.0",
+    "angular-touch": ">=1.2.10"
   }
 }
