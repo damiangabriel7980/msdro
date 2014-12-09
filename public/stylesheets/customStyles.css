@@ -713,7 +713,6 @@ font-size: 12px;
 }
 .carousel-container .carousel-controll {
   position: absolute;
-  outline: 1px dashed red;
   width: 100px;
   height: 20px;
   right: 130px;
@@ -724,12 +723,12 @@ font-size: 12px;
   margin: 5px;
   width: 10px;
   height: 10px;
-  background-color: #000060;
+  background-color: white;
   cursor: pointer;
 }
 .carousel-container .carousel-controll .carousel-controll-element:hover {
-  outline: 2px solid orange;
+  outline: 2px solid white;
 }
 .carousel-container .carousel-controll .carousel-controll-element.selected {
-  background-color: red;
+  background-color: orange;
 }

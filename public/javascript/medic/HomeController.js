@@ -24,24 +24,6 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     });
 
-        //$scope.$watch('HomeCarousel', function(values) {
-    //    var i, a = [], b;
-    //
-    //    for (i = 0; i <  $scope.HomeCarousel.length; i += 3) {
-    //        b = { image1:  $scope.HomeCarousel[i] };
-    //
-    //        if ($scope.HomeCarousel[i + 2]) {
-    //            b.image2=$scope.HomeCarousel[i + 1];
-    //            b.image3=$scope.HomeCarousel[i + 2];
-    //        }
-    //
-    //        a.push(b);
-    //    }
-    //
-    //    $scope.groupedSlides = a;
-    //}, true);
-
-
     //------------------------------------------------------------------------------------------------ useful functions
     var htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
