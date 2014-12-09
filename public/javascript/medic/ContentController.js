@@ -1,7 +1,10 @@
 cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '$stateParams', 'ContentService', function($scope, $rootScope, $stateParams, ContentService){
 
     $scope.imagePre = $rootScope.pathAmazonDev;
-
+    $scope.lmt=3;
+    $scope.increaseLimit=function(){
+        $scope.lmt+=3;
+    };
     if($stateParams.articleType==1){
         $scope.title = "articole";
         $scope.sr = "noutati.articol({articleId:cont._id})";

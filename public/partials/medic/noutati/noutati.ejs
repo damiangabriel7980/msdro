@@ -1,15 +1,15 @@
 <div class="container-fluid articlesStyles">
     <div class="col-xs-12">
-        <div class="col-xs-4">
-            <div class="col-xs-12">
-                <h3>CELE MAI CITITE STIRI</h3>
+        <div class="col-xs-4 rightBorder hidden-xs hidden-sm">
+            <div class="col-xs-12 padd35px">
+            <h4>CELE MAI CITITE STIRI</h4>
             </div>
             <div ng-repeat="cont in content | orderBy: last_updated| limitTo: 3">
                 <div class="col-xs-12 articleBox">
                      <div class="col-xs-12">
-                        <div class="col-xs-12 title" ui-sref="{{sr}}">{{cont.title}}</div>
+                        <div class="col-xs-12 title" style="color:#1c9893" ui-sref="{{sr}}">{{cont.title}}</div>
                         <div class="col-xs-12 trimmedArticle">{{createHeader(cont.text,100)}}</div>
-                        <div class="col-xs-12"><a ui-sref="{{sr}}">Citeste mai mult &nbsp;<i class="glyphicon glyphicon-eye-open"></i> </a></div>
+                        <div class="col-xs-12"><a style="color:#1c9893" ui-sref="{{sr}}">Citeste mai mult &nbsp;<i style="color:#bfbfbe" class=" glyphicon glyphicon-eye-open"></i> </a></div>
                     </div>
                 </div>
             </div>

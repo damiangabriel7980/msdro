@@ -511,6 +511,11 @@ font-size: 12px;
     }
 }
 
+.articleEye{
+    color: #1c9893;
+    background-color: transparent;
+}
+
 .specialGlyph {
     position: absolute;
     right: 0;
@@ -562,6 +567,22 @@ font-size: 12px;
     color:#D9D7D7;
 }
 
+.img-back{
+    background-color: #ddd;
+}
+
+.padd35px{
+    padding-left: 35px;
+}
+
+.my-col-xs-12{
+    margin-bottom: 15px;
+    width: 100%;
+    float: left;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+}
 
 .specialGlyph{
     position: absolute;
