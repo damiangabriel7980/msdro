@@ -87,33 +87,17 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     };
 
     setTimeout(function(){$("#footer").css({'margin-top': 0});
-    var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 82);
-    $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});},2000);
+    var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 80);
+    $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});},1000);
 
     $(document).on('ajaxComplete', function () {
         $("#footer").css({'margin-top': 0});
-        var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 82);
+        var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 80);
         $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});
     });
     $(window).on('resize', function () {
         $("#footer").css({'margin-top': 0});
-        var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 82);
+        var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 80);
         $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});
     });
 }]);
-
-//angular.module('ui.bootstrap.setNgAnimate', ['ngAnimate'])
-//    .directive('setNgAnimate', ['$animate', function ($animate) {
-//        return {
-//            link: function ($scope, $element, $attrs) {
-//
-//                $scope.$watch( function() {
-//                    return $scope.$eval($attrs.setNgAnimate, $scope);
-//                }, function(valnew, valold){
-//                    $animate.enabled(!!valnew, $element);
-//                });
-//
-//
-//            }
-//        };
-//    }]);

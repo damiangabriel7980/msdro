@@ -5,21 +5,21 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
     if($stateParams.articleType==1){
         $scope.title = "articole";
         $scope.sr = "noutati.articol({articleId:cont._id})";
-        $scope.btn = "Vezi articol";
+        $scope.btn = "Vezi stire";
     }
     if($stateParams.articleType==2){
         $scope.title = "articole legislative";
         $scope.sr = "noutati.articol({articleId:cont._id})";
-        $scope.btn = "Vezi articol";
+        $scope.btn = "Vezi stire";
     }
     if($stateParams.articleType==3){
         $scope.title = "articole stiintifice";
         $scope.sr = "biblioteca.articoleStiintifice.articol({articleId:cont._id})";
-        $scope.btn = "Vezi articol";
+        $scope.btn = "Vezi stire";
     }
 
     var htmlToPlainText = function(text) {
-        return String(text).replace(/<[^>]+>/gm, '');
+        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
     };
 
     $scope.createHeader = function (text,length) {
