@@ -21,26 +21,10 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     HomeService.getCarousel.query().$promise.then(function(resp){
         $scope.HomeCarousel=resp;
-
+        for(var i=0;i<$scope.HomeCarousel.length;i++)
+            $scope.hideTitle[i]='hide';
     });
-
-        //$scope.$watch('HomeCarousel', function(values) {
-    //    var i, a = [], b;
-    //
-    //    for (i = 0; i <  $scope.HomeCarousel.length; i += 3) {
-    //        b = { image1:  $scope.HomeCarousel[i] };
-    //
-    //        if ($scope.HomeCarousel[i + 2]) {
-    //            b.image2=$scope.HomeCarousel[i + 1];
-    //            b.image3=$scope.HomeCarousel[i + 2];
-    //        }
-    //
-    //        a.push(b);
-    //    }
-    //
-    //    $scope.groupedSlides = a;
-    //}, true);
-
+    $scope.hideTitle=[];
 
     //------------------------------------------------------------------------------------------------ useful functions
     var htmlToPlainText = function(text) {
@@ -92,34 +76,13 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     /* --- carousel --- */
 
-    $scope.imgArray = [
-        {
-            imgSrc : "stylesheets/img/img1.jpg",
-            text : "Text 1"
-        },
-        {
-            imgSrc : "stylesheets/img/img2.jpg",
-            text : "Text 2"
-        },
-        {
-            imgSrc : "stylesheets/img/img3.jpg",
-            text : "Text 3"
-        },
-        {
-            imgSrc : "stylesheets/img/img4.jpg",
-            text : "Text 4"
-        },
-        {
-            imgSrc : "stylesheets/img/img5.jpg",
-            text : "Text 5"
-        }
-    ]
-
     $scope.selectedIndex = 1;
 
     $scope.setSlide = function(index)
     {
+        //$scope.hideTitle[index-1]='hide';
         $scope.selectedIndex = index;
+        //$scope.hideTitle[index]='show';
     }
 
     $(document).on('ajaxComplete', function () {

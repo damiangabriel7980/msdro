@@ -260,58 +260,217 @@ font-size: 12px;
     margin-left: -7%;
 }
 
+@media(min-width: 1367px){
+    .newsClass {
+        float: left;
+        height: 310px !important;
+    }
+    .carousel-container .carousel-controll {
+        position: absolute;
+        width: 5%;
+        height: 6%;
+        right: 23%;
+        bottom: 11%;
+    }
+}
+
+@media(max-width: 1366px){
+    .noPadd{
+        padding: 0 !important;
+    }
+    .smallScreen{
+        margin-top: 0%;
+    }
+    .MerckSmall {
+        margin-top: 0%;
+    }
+    .my-carousel-caption {
+        margin-bottom: -2% !important;
+        right: 45% !important;
+        margin-left: 4% !important;
+    }
+    .container-fluid{
+        margin-left: 6%;
+        margin-right: 6%;
+    }
+    .customFloatLeftSearch{
+        margin-left: 28%;
+    }
+    .mySearch {
+        margin-left: 55%;
+        margin-bottom: 5%;
+        padding-bottom: 0;
+        position: absolute;
+    }
+    .newsClass {
+        float: left;
+        height: 310px;
+    }
+    .carousel-container .carousel-controll {
+        position: absolute;
+        width: 7%;
+        height: 6%;
+        right: 23%;
+        bottom: 11%;
+    }
+
+}
+
+@media (min-width: 1025px) and (max-width: 1365px) {
+    .calendar-style{
+        height: 60px !important;float: left;border-left: 1px solid #D9D7D7;
+    }
+    .img-carousel-prev {
+        width: 30%;
+        margin-top: -5%
+    }
+    .img-carousel-next {
+        width: 30%;
+        margin-top: -5%
+    }
+    .newsClass {
+        float: left;
+        height: 315px !important;
+    }
+    .mySearch {
+        margin-left: 57% !important;
+        margin-bottom: 5%;
+        padding-bottom: 0;
+        position: absolute;
+    }
+    .customFloatLeftSearch{
+        margin-left: 20% !important;
+    }
+}
+
 @media (max-width: 1025px) {
     .col-Left{
         margin-left: -7%;
     }
+    .leftBorder{
+        border-left: 2px solid #D9D7D7;
+    }
     h1 {
-        font-size: 26px
+        font-size: 26px;
     }
-
     h4 {
-        font-size: 14px
+        font-size: 14px;
     }
-
-    .carousel-caption {
-        left: 23% !important
+    .carousel-caption{
+        left: 23% !important;
     }
-
     body {
-        font-size: 11px
+        font-size: 11px;
     }
-
-    .newsClass {
-        float: left !important;
-        height: 240px !important
+    .newsClass{
+        float:left !important;
+        height: 240px !important;
     }
-
     .paddingLeft {
-        padding-left: 0
+        padding-left: 0px;
     }
-
-    .smallScreen {
+    .smallScreen{
+        margin-top: 0%;
+    }
+    .MerckSmall{
+        margin-top: 0%;
+    }
+    .noPadd{
+        padding: 0 !important;
+    }
+    .calendar-style{
+        height: 60px !important;float: left;border-left: 1px solid #D9D7D7;
+    }
+    .container-fluid{
+        margin-left: 0% !important;
+        margin-right: 0% !important;
+    }
+    .img-carousel-prev {
+        width: 15%;
         margin-top: -5%
     }
-
-    .MerckSmall {
-        margin-top: 0%
+    .img-carousel-next {
+        width: 15%;
+        margin-top: -5%
     }
-
-    .noPadd {
-        padding: 0 !important
+    .customFloatLeftSearch{
+        margin-left: 5% !important;
     }
-
-    .calendar-style {
-        height: 60px !important;
-        float: left;
-        border-left: 1px solid #D9D7D7;
+    .mySearch {
+        margin-left: 58% !important;
+        margin-bottom: 7% !important;
+        padding-bottom: 0;
+        position: absolute;
     }
+    .carousel-indicators {
+        left: 73%;
+    }
+    .carousel-container .carousel-controll {
+        position: absolute;
+        width: 9% !important;
+        height: 6%;
+        right: 23%;
+        bottom: 11%;
+    }
+}
 
+@media (min-width: 768px) and (max-width: 991px) {
+    .navbar-collapse.collapse {
+        display: none !important;
+    }
+    .navbar-collapse.collapse.in {
+        display: block !important;
+    }
+    .navbar-header .collapse, .navbar-toggle {
+        display:block !important;
+    }
+    .navbar-header {
+        float:none;
+    }
+    .container-fluid{
+        margin-left: 1% !important;
+        margin-right: 1% !important;
+    }
+    .hiddenSearch{
+        width: 33%;
+        float: right;
+        margin-top: 1%;
+    }
+}
+
+@media(max-width: 768px){
     .container-fluid {
-        margin-left: 0 !important;
-        margin-right: 0 !important
+        margin-left: -5% !important;
+        margin-right: -5% !important;
     }
 
+    .carousel-container .carousel-controll {
+        position: absolute;
+        width: 11% !important;
+        height: 6%;
+        right: 23%;
+        bottom: 11%;
+    }
+
+    .newsClass{
+        float:left !important;
+        height: auto !important;
+    }
+
+    .rightBorder{
+        border-right: 0px !important;
+    }
+
+    .leftBorder{
+        border-left: 0px !important;
+    }
+
+    .calendar-style{
+        display: none;
+    }
+    .hrNewColor{
+        display: none;
+    }
     .img-carousel-prev {
         width: 30%;
         margin-top: -5%
@@ -321,16 +480,34 @@ font-size: 12px;
         width: 30%;
         margin-top: -5%
     }
-    .customFloatLeftSearch{
-        margin-left: 5% !important;
+    .img-carousel-center {
+        width: 30%;
+        margin-top: -5%
     }
-    .mySearch{
-        margin-left: 35% !important;
-        margin-bottom: 7% !important;
-        padding-bottom: 0;
+    .titluCarousel{
+        width:193%;
+        font-size: 16px !important;
+    }
+    .wrapping-div {
+        margin-left: -20%;
+        height: 150px;
+        width: 145%;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+    .carousel-caption {
+        left: 12% !important;
+    }
+    .hiddenSearch{
+        width: 33%;
+        float: right;
+        margin-top: 1%;
+    }
+    .merckTitle{
+        font-size: 14px !important;
     }
     .carousel-indicators {
-        left: 73%;
+        left: 69%;
     }
 }
 
@@ -385,33 +562,6 @@ font-size: 12px;
     color:#D9D7D7;
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
-    .navbar-collapse.collapse {
-        display: none !important
-    }
-
-    .navbar-collapse.collapse.in {
-        display: block !important
-    }
-
-    .navbar-header .collapse, .navbar-toggle {
-        display: block !important
-    }
-
-    .navbar-header {
-        float: none
-    }
-
-    .container-fluid {
-        margin-left: 1% !important;
-        margin-right: 1% !important
-    }
-    .hiddenSearch{
-        width: 33%;
-        float: right;
-        margin-top: 1%;
-    }
-}
 
 .specialGlyph{
     position: absolute;
@@ -432,91 +582,7 @@ font-size: 12px;
     position:relative;
 }
 
-@media (max-width: 1025px) {
-    .col-Left{
-        margin-left: -7%;
-    }
-    .leftBorder{
-        border-left: 2px solid #D9D7D7;
-    }
-    h1 {
-        font-size: 26px
-    }
 
-    h4 {
-        font-size: 14px
-    }
-
-    .carousel-caption {
-        left: 23% !important
-    }
-
-    body {
-        font-size: 11px
-    }
-
-    .newsClass {
-        float: left !important;
-        height: 240px !important
-    }
-
-    .paddingLeft {
-        padding-left: 0
-    }
-
-    .smallScreen {
-        margin-top: 0%
-    }
-
-    .MerckSmall {
-        margin-top: 0%
-    }
-
-    .noPadd {
-        padding: 0 !important
-    }
-
-    .calendar-style {
-        height: 60px !important;
-        float: left;
-        border-left: 1px solid #D9D7D7;
-    }
-
-    .container-fluid {
-        margin-left: 4%;
-        margin-right: 4%
-    }
-}
-
-@media (min-width: 1025px) and (max-width: 1365px) {
-    .calendar-style {
-        height: 60px !important;
-        float: left;
-        border-left: 1px solid #D9D7D7;
-    }
-
-    .img-carousel-prev {
-        width: 30%;
-        margin-top: -5%
-    }
-    .img-carousel-next {
-        width: 30%;
-        margin-top: -5%
-    }
-    .newsClass {
-        float: left;
-        height: 315px !important;
-    }
-    .mySearch{
-        margin-left: 36% !important;
-        margin-bottom: 5%;
-        padding-bottom: 0;
-    }
-    .customFloatLeftSearch{
-        margin-left: 20% !important;
-    }
-
-}
 
 .profileClass:hover{
     background-color: transparent !important;
@@ -534,120 +600,16 @@ font-size: 12px;
 }
 
 .mySearch{
-    margin-left: 32%;
-    margin-bottom: 4%;
+    margin-left: 54%;
+    top:1%;
+    margin-bottom: 14%;
     padding-bottom: 0;
-}
-
-@media (max-width: 1366px) {
-    .noPadd {
-        padding: 0 !important
-    }
-
-    .smallScreen {
-        margin-top: 0%
-    }
-
-    .MerckSmall {
-        margin-top: 0%
-    }
-
-    .my-carousel-caption {
-        margin-bottom: -2% !important;
-        right: 45% !important;
-        margin-left: 4% !important
-    }
-
-    .container-fluid {
-        margin-left: 6%;
-        margin-right: 6%
-    }
-    .customFloatLeftSearch{
-        margin-left: 28%;
-    }
-    .mySearch{
-        margin-left: 35%;
-        margin-bottom: 5%;
-        padding-bottom: 0;
-    }
-    .newsClass {
-        float: left;
-        height: 310px;
-    }
-}
-
-@media(min-width: 1366px){
-    .newsClass {
-        float: left;
-        height: 310px !important;
-    }
+    position: absolute;
 }
 
 
-@media (max-width: 768px) {
-    .container-fluid {
-        margin-left: -5% !important;
-        margin-right: -5% !important;
-    }
-    .newsClass {
-        float: left !important;
-        height: auto !important
-    }
 
-    .rightBorder{
-        border-right: 0px !important;
-    }
 
-    .leftBorder{
-        border-left: 0px !important;
-    }
-
-    .calendar-style {
-        display: none
-    }
-
-    .hrNewColor {
-        display: none
-    }
-    .img-carousel-prev {
-        width: 30%;
-        margin-top: -5%
-    }
-
-    .img-carousel-next {
-        width: 30%;
-        margin-top: -5%
-    }
-    .img-carousel-center {
-        width: 30%;
-        margin-top: -5%
-    }
-    .titluCarousel{
-        width:193%;
-        font-size: 16px !important;
-    }
-    .wrapping-div {
-        margin-left: -20%;
-        height: 150px;
-        width: 145%;
-        overflow: hidden;
-        margin-bottom: 25px;
-    }
-    .carousel-caption {
-        left: 12% !important;
-    }
-    .hiddenSearch{
-        width: 33%;
-        float: right;
-        margin-top: 1%;
-    }
-    .merckTitle{
-        font-size: 14px !important;
-    }
-    .carousel-indicators {
-        left: 69%;
-    }
-}
 
 .well {
     background-color: transparent;
@@ -699,7 +661,7 @@ font-size: 12px;
 }
 .carousel-container .main-carousel {
   height: 150px;
-  width: 1060px;
+  width: 55%;
   margin: 0 auto;
   overflow: visible!important;
 }
@@ -711,25 +673,23 @@ font-size: 12px;
   -webkit-user-drag: none;
   user-drag: none;
 }
-.carousel-container .carousel-controll {
-  position: absolute;
-  outline: 1px dashed red;
-  width: 100px;
-  height: 20px;
-  right: 130px;
-  bottom: 20px;
-}
+
 .carousel-container .carousel-controll .carousel-controll-element {
   float: left;
   margin: 5px;
   width: 10px;
   height: 10px;
-  background-color: #000060;
+  background-color: white;
   cursor: pointer;
 }
 .carousel-container .carousel-controll .carousel-controll-element:hover {
-  outline: 2px solid orange;
+  outline: 2px solid white;
 }
 .carousel-container .carousel-controll .carousel-controll-element.selected {
-  background-color: red;
+  background-color: orange;
+}
+.carousel-title{
+    position: absolute;
+    top: 55%;
+    left: 3%;
 }
