@@ -576,3 +576,56 @@ ul.products li {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
+
+
+
+
+
+
+.carousel-container
+{
+  position: relative;
+  width: 100%;
+  .main-carousel
+  {
+    height: 150px;
+    width: 1060px;
+    margin: 0 auto;
+    overflow: visible!important;
+
+    .unselectable-image
+    {
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      user-drag: none;
+    }
+  }
+
+  .carousel-controll {
+    position: absolute;
+    outline: 1px dashed red;
+    width: 100px;
+    height: 20px;
+    right:130px;
+    bottom: 20px;
+
+    .carousel-controll-element {
+      float: left;
+      margin: 5px;
+      width: 10px;
+      height: 10px;
+      background-color: #000060;
+      cursor: pointer;
+      &:hover {
+        outline:2px solid orange;
+      }
+      &.selected {
+        background-color: red;
+      }
+    }
+  }
+}
+

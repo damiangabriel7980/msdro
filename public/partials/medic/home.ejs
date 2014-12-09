@@ -1,11 +1,11 @@
 
 <!--<div class="container-fluid container-fluid-carousel">-->
-<ul rn-carousel class="image">
-    <!--<li ng-repeat="carouselItem in HomeCarousel track by $index">-->
-    <li><div class="layer">{{pathAmazonDev+HomeCarousel[($index-1)<0?HomeCarousel.length-1:$index-1].image_path}}</div></li>
-    <li><div class="layer">{{pathAmazonDev+HomeCarousel[$index].image_path}}</div></li>
-    <li><div class="layer">{{pathAmazonDev+HomeCarousel[($index+1)==HomeCarousel.length?0:$index+1].image_path}}</div></li>
-</ul>
+<!--<ul rn-carousel class="image">-->
+    <!--&lt;!&ndash;<li ng-repeat="carouselItem in HomeCarousel track by $index">&ndash;&gt;-->
+    <!--<li><div class="layer">{{pathAmazonDev+HomeCarousel[($index-1)<0?HomeCarousel.length-1:$index-1].image_path}}</div></li>-->
+    <!--<li><div class="layer">{{pathAmazonDev+HomeCarousel[$index].image_path}}</div></li>-->
+    <!--<li><div class="layer">{{pathAmazonDev+HomeCarousel[($index+1)==HomeCarousel.length?0:$index+1].image_path}}</div></li>-->
+<!--</ul>-->
 
 <!--<carousel interval="myInterval">-->
     <!--<slide ng-repeat="carouselItem in HomeCarousel track by $index" style="-webkit-transition: all ls ease" active="slide.active">-->
@@ -47,6 +47,23 @@
     <!--</slide>-->
 <!--</carousel>-->
 <!--</div>-->
+<div class="carousel-container">
+    <ul rn-carousel rn-carousel-index="selectedIndex" class="image main-carousel" rn-carousel-auto-slide="5" >
+        <li ng-repeat="image in imgArray">
+            <img class="unselectable-image" ng-src="{{image.imgSrc}}">
+        </li>
+    </ul>
+    <div class="carousel-controll">
+        <div class="carousel-controll-element"
+             ng-repeat="image in imgArray"
+             ng-class='{selected:$index==selectedIndex}'
+             ng-click="setSlide($index)"   >
+        </div>
+    </div>
+</div>
+
+
+
 <div class="container-fluid homeStyles">
     <div ng-class="{'col-xs-6':events.length!=0, 'col-xs-5':events.length==0}">
         <div class="col-xs-12">

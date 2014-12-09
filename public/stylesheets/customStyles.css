@@ -70,24 +70,28 @@
 }
 
 #footer {
-    background: #009d97;
-    padding: 5px 0;
-    width: 100%;
-    clear: both;
-    height: 35px
+  background: #009d97;
+  padding: 5px 0;
+  width: 100%;
+  clear: both;
+  height: 35px;
+}
+
+.textBlue{
+    color:#009d97;
 }
 
 ul.products li {
-    display: inline-block !important;
-    vertical-align: top;
-    margin: 0 20px;
-    float: inherit !important;
-    *display: inline;
-    *zoom: 1
+  display: inline-block !important;
+  vertical-align: top;
+  margin: 0 20px;
+  float: inherit !important;
+  *display: inline;
+  *zoom: 1;
 }
 
 .col-xs-special {
-    margin-left: 3%
+  margin-left: 3%;
 }
 
 .list li::selection {
@@ -180,13 +184,17 @@ ul.products li {
     margin-bottom: 25px
 }
 
-.profile-drop {
-    min-width: 0 !important;
-    background-color: rgba(255, 255, 255, 0.6) !important
-}
-
 .carousel-indicators {
     left: 74%
+}
+
+.customFloatLeftSearch{
+    margin-left: 45%;
+}
+
+.profile-drop{
+    min-width: 0% !important;
+    background-color: rgba(255,255,255,0.6) !important;
 }
 
 .carousel-indicators .active {
@@ -221,12 +229,11 @@ ul.products li {
     left: 0
 }
 
-.dayFont {
-    font-size: 20px
+.dayFont{
+font-size: 20px;
 }
-
-.monthFont {
-    font-size: 12px
+.monthFont{
+font-size: 12px;
 }
 
 .paddingLeft {
@@ -249,19 +256,14 @@ ul.products li {
     text-align: justify
 }
 
-.col-Left {
-    margin-left: -7%
+.col-Left{
+    margin-left: -7%;
 }
 
 @media (max-width: 1025px) {
-    .col-Left {
-        margin-left: -7%
+    .col-Left{
+        margin-left: -7%;
     }
-
-    .leftBorder {
-        border-left: 2px solid #d9d7d7
-    }
-
     h1 {
         font-size: 26px
     }
@@ -288,11 +290,11 @@ ul.products li {
     }
 
     .smallScreen {
-        margin-top: 0
+        margin-top: -5%
     }
 
     .MerckSmall {
-        margin-top: 0
+        margin-top: 0%
     }
 
     .noPadd {
@@ -302,7 +304,7 @@ ul.products li {
     .calendar-style {
         height: 60px !important;
         float: left;
-        border-left: 1px solid #d9d7d7
+        border-left: 1px solid #D9D7D7;
     }
 
     .container-fluid {
@@ -311,27 +313,24 @@ ul.products li {
     }
 
     .img-carousel-prev {
-        width: 15%;
+        width: 30%;
         margin-top: -5%
     }
 
     .img-carousel-next {
-        width: 15%;
+        width: 30%;
         margin-top: -5%
     }
-
-    .customFloatLeftSearch {
-        margin-left: 5% !important
+    .customFloatLeftSearch{
+        margin-left: 5% !important;
     }
-
-    .mySearch {
+    .mySearch{
         margin-left: 35% !important;
         margin-bottom: 7% !important;
-        padding-bottom: 0
+        padding-bottom: 0;
     }
-
     .carousel-indicators {
-        left: 73%
+        left: 73%;
     }
 }
 
@@ -342,6 +341,10 @@ ul.products li {
     color: #000
 }
 
+.flexslider-container {
+    width: 20%;
+}
+
 .add-on .input-group-btn > .btn {
     border-left-width: 0;
     left: -2px;
@@ -349,26 +352,37 @@ ul.products li {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075)
 }
 
-.repeat-item.ng-enter, .repeat-item.ng-leave {
-    -webkit-transition: .5s linear all;
-    transition: .5s linear all
+.flexslider{
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }
 
-.view-container {
-    min-height: 100%;
-    position: relative
+.repeat-item.ng-enter,
+.repeat-item.ng-leave {
+    -webkit-transition:0.5s linear all;
+    transition:0.5s linear all;
 }
 
-.repeat-item.ng-enter, .repeat-item.ng-leave.ng-leave-active {
-    opacity: 0
+.repeat-item.ng-enter,
+.repeat-item.ng-leave.ng-leave-active {
+    opacity:0;
+}
+.repeat-item.ng-leave,
+.repeat-item.ng-enter.ng-enter-active {
+    opacity:1;
 }
 
-.repeat-item.ng-leave, .repeat-item.ng-enter.ng-enter-active {
-    opacity: 1
+.well{
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
-.flexslider-container {
-    width: 20%
+.marginELearn{
+    margin-left: -3%;
+}
+
+.grey-eye{
+    color:#D9D7D7;
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -392,23 +406,39 @@ ul.products li {
         margin-left: 1% !important;
         margin-right: 1% !important
     }
-
-    .hiddenSearch {
+    .hiddenSearch{
         width: 33%;
         float: right;
-        margin-top: 1%
+        margin-top: 1%;
     }
 }
 
-.customFloatLeftSearch {
-    margin-left: 45%
+.specialGlyph{
+    position: absolute;
+    right: 0px;
+    padding: 10px 10px;
+    color: black;
+}
+
+.add-on .input-group-btn > .btn {
+    border-left-width:0px;
+    left:-2px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.view-container {
+    min-height:100%;
+    position:relative;
 }
 
 @media (max-width: 1025px) {
-    .col-Left {
-        margin-left: -7%
+    .col-Left{
+        margin-left: -7%;
     }
-
+    .leftBorder{
+        border-left: 2px solid #D9D7D7;
+    }
     h1 {
         font-size: 26px
     }
@@ -435,11 +465,11 @@ ul.products li {
     }
 
     .smallScreen {
-        margin-top: -5%
+        margin-top: 0%
     }
 
     .MerckSmall {
-        margin-top: 0
+        margin-top: 0%
     }
 
     .noPadd {
@@ -449,7 +479,7 @@ ul.products li {
     .calendar-style {
         height: 60px !important;
         float: left;
-        border-left: 1px solid #d9d7d7
+        border-left: 1px solid #D9D7D7;
     }
 
     .container-fluid {
@@ -462,54 +492,51 @@ ul.products li {
     .calendar-style {
         height: 60px !important;
         float: left;
-        border-left: 1px solid #d9d7d7
+        border-left: 1px solid #D9D7D7;
     }
 
     .img-carousel-prev {
         width: 30%;
         margin-top: -5%
     }
-
     .img-carousel-next {
         width: 30%;
         margin-top: -5%
     }
-
     .newsClass {
         float: left;
-        height: 315px !important
+        height: 315px !important;
     }
-
-    .mySearch {
+    .mySearch{
         margin-left: 36% !important;
         margin-bottom: 5%;
-        padding-bottom: 0
+        padding-bottom: 0;
+    }
+    .customFloatLeftSearch{
+        margin-left: 20% !important;
     }
 
-    .customFloatLeftSearch {
-        margin-left: 20% !important
-    }
 }
 
-.mySearch {
+.profileClass:hover{
+    background-color: transparent !important;
+    text-decoration: none !important;
+}
+
+.profileClass:focus{
+    background-color: transparent !important;
+    text-decoration: none !important;
+}
+
+.my-form-control{
+    border-radius: 0% !important;
+    height: 28px !important;
+}
+
+.mySearch{
     margin-left: 32%;
     margin-bottom: 4%;
-    padding-bottom: 0
-}
-
-.profileClass:hover {
-    background-color: transparent !important;
-    text-decoration: none !important
-}
-
-.profileClass:focus {
-    background-color: transparent !important;
-    text-decoration: none !important
-}
-
-.my-form-control {
-    border-radius: 0 !important;
-    height: 28px !important
+    padding-bottom: 0;
 }
 
 @media (max-width: 1366px) {
@@ -518,11 +545,11 @@ ul.products li {
     }
 
     .smallScreen {
-        margin-top: 0
+        margin-top: 0%
     }
 
     .MerckSmall {
-        margin-top: 0
+        margin-top: 0%
     }
 
     .my-carousel-caption {
@@ -535,60 +562,44 @@ ul.products li {
         margin-left: 6%;
         margin-right: 6%
     }
-
-    .customFloatLeftSearch {
-        margin-left: 28%
+    .customFloatLeftSearch{
+        margin-left: 28%;
     }
-
-    .mySearch {
+    .mySearch{
         margin-left: 35%;
         margin-bottom: 5%;
-        padding-bottom: 0
+        padding-bottom: 0;
     }
-
     .newsClass {
         float: left;
-        height: 310px
+        height: 310px;
     }
 }
 
-@media (min-width: 1366px) {
+@media(min-width: 1366px){
     .newsClass {
         float: left;
-        height: 310px !important
+        height: 310px !important;
     }
 }
 
-.well {
-    -webkit-box-shadow: none;
-    box-shadow: none
-}
-
-.marginELearn {
-    margin-left: -3%
-}
-
-.textBlue {
-    color: #009d97
-}
 
 @media (max-width: 768px) {
     .container-fluid {
         margin-left: -5% !important;
-        margin-right: -5% !important
+        margin-right: -5% !important;
     }
-
     .newsClass {
         float: left !important;
         height: auto !important
     }
 
-    .rightBorder {
-        border-right: 0 !important
+    .rightBorder{
+        border-right: 0px !important;
     }
 
-    .leftBorder {
-        border-left: 0 !important
+    .leftBorder{
+        border-left: 0px !important;
     }
 
     .calendar-style {
@@ -598,7 +609,6 @@ ul.products li {
     .hrNewColor {
         display: none
     }
-
     .img-carousel-prev {
         width: 30%;
         margin-top: -5%
@@ -608,41 +618,34 @@ ul.products li {
         width: 30%;
         margin-top: -5%
     }
-
     .img-carousel-center {
         width: 30%;
         margin-top: -5%
     }
-
-    .titluCarousel {
-        width: 193%;
-        font-size: 16px !important
+    .titluCarousel{
+        width:193%;
+        font-size: 16px !important;
     }
-
     .wrapping-div {
         margin-left: -20%;
         height: 150px;
         width: 145%;
         overflow: hidden;
-        margin-bottom: 25px
+        margin-bottom: 25px;
     }
-
     .carousel-caption {
-        left: 12% !important
+        left: 12% !important;
     }
-
-    .hiddenSearch {
+    .hiddenSearch{
         width: 33%;
         float: right;
-        margin-top: 1%
+        margin-top: 1%;
     }
-
-    .merckTitle {
-        font-size: 14px !important
+    .merckTitle{
+        font-size: 14px !important;
     }
-
     .carousel-indicators {
-        left: 69%
+        left: 69%;
     }
 }
 
@@ -651,38 +654,82 @@ ul.products li {
     border: hidden
 }
 
+.rightBorder{
+    border-right: 1px solid #D9D7D7;
+}
+
+.leftBorder{
+    border-left: 1px solid #D9D7D7;
+}
+
 .link-footer {
-    color: #fff !important;
-    cursor: hand
+  color: white !important;
+  cursor: hand ;
 }
 
 .calendar-style {
     height: 60px;
     float: left;
-    border-left: 1px solid #d9d7d7;
+    border-left: 1px solid #D9D7D7;
     margin-left: 15%
 }
 
 .customFloatLeft {
     float: left
 }
-
 .rightBorder {
-    border-right: 1px solid #d9d7d7
+  border-right: 1px solid #D9D7D7;
 }
-
 .leftBorder {
-    border-left: 1px solid #d9d7d7
+  border-left: 1px solid #D9D7D7;
 }
-
 .newsClass {
-    float: left;
-    height: 286px
+  float: left;
+  height: 286px;
 }
-
 .container-fluid-carousel {
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.carousel-container {
+  position: relative;
+  width: 100%;
+}
+.carousel-container .main-carousel {
+  height: 150px;
+  width: 1060px;
+  margin: 0 auto;
+  overflow: visible!important;
+}
+.carousel-container .main-carousel .unselectable-image {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+.carousel-container .carousel-controll {
+  position: absolute;
+  outline: 1px dashed red;
+  width: 100px;
+  height: 20px;
+  right: 130px;
+  bottom: 20px;
+}
+.carousel-container .carousel-controll .carousel-controll-element {
+  float: left;
+  margin: 5px;
+  width: 10px;
+  height: 10px;
+  background-color: #000060;
+  cursor: pointer;
+}
+.carousel-container .carousel-controll .carousel-controll-element:hover {
+  outline: 2px solid orange;
+}
+.carousel-container .carousel-controll .carousel-controll-element.selected {
+  background-color: red;
 }
