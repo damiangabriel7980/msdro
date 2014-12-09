@@ -101,19 +101,3 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});
     });
 }]);
-
-//angular.module('ui.bootstrap.setNgAnimate', ['ngAnimate'])
-//    .directive('setNgAnimate', ['$animate', function ($animate) {
-//        return {
-//            link: function ($scope, $element, $attrs) {
-//
-//                $scope.$watch( function() {
-//                    return $scope.$eval($attrs.setNgAnimate, $scope);
-//                }, function(valnew, valold){
-//                    $animate.enabled(!!valnew, $element);
-//                });
-//
-//
-//            }
-//        };
-//    }]);
