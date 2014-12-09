@@ -1,1 +1,22 @@
-you are home
+<div class="col-md-12 unselectable" resize style="{{carouselStyle}}">
+    <!--<div class="blurCover">-->
+    <!--</div>-->
+    <ul rn-carousel class="myCarousel" rn-carousel-auto-slide="5" rn-carousel-index="selectedIndex">
+        <div class="fixedBox" style="{{fixedBoxStyle}}">
+            <div class="carouselTitle">
+                {{carouselSlides[selectedIndex].title}}
+            </div>
+            <div class="carouselDescription">
+                {{carouselSlides[selectedIndex].description}}
+            </div>
+            <div class="carouselLearnMore">
+                Learn more <i class="fa fa-caret-right"></i>
+            </div>
+        </div>
+        <li ng-repeat="slide in carouselSlides">
+            <div class="imageGroup">
+                <img class="imageReal" ng-src="{{pathAmazonDev+slide.image_path}}" ondragstart="return false;">
+            </div>
+        </li>
+    </ul>
+</div>

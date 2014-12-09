@@ -1,11 +1,22 @@
-body {
+html {
+  height: 100%;
+}
+html body {
   padding-top: 70px;
+  height: 100%;
+}
+html body .rootView {
+  height: 100%;
 }
 .navbar-fixed-top {
   height: 70px;
   padding-top: 10px;
   background-color: #ffffff;
   border-color: #ffffff;
+}
+.navbar-fixed-top .container {
+  padding-left: 0;
+  padding-right: 0;
 }
 .navbar-fixed-top .navbar-brand {
   padding: 5px 15px;
@@ -28,10 +39,10 @@ body {
   margin: 0 10px 0 10px;
 }
 .navbar-fixed-top .navbar-nav > li > a:hover {
-  color: #009d96;
+  color: #008780;
 }
 .navbar-fixed-top .navbar-nav > .active > a {
-  color: #009d96;
+  color: #008780;
   font-weight: bold;
   background-color: #ffffff;
 }
@@ -46,6 +57,67 @@ body {
   top: 40px;
 }
 .navbar-fixed-top .navbar-nav > .active > a:hover {
-  color: #009d96;
+  color: #008780;
   background-color: #ffffff;
+}
+.fixedBox {
+  position: absolute;
+  left: 0px;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  z-index: 100;
+  padding: 15px 15px 15px 100px;
+  background-color: rgba(200, 200, 200, 0.7);
+  box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
+}
+.fixedBox .carouselTitle {
+  width: 100%;
+  white-space: normal;
+  font-size: 25px;
+  font-weight: bold;
+  color: #008780;
+}
+.fixedBox .carouselDescription {
+  width: 100%;
+  white-space: normal;
+  padding-left: 5px;
+  padding-top: 10px;
+  font-size: 15px;
+}
+.fixedBox .carouselLearnMore {
+  cursor: pointer;
+  margin-left: 5px;
+  margin-top: 15px;
+  color: #f6902e;
+  font-weight: bold;
+  font-size: 17px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+}
+.myCarousel {
+  height: 100%;
+}
+.myCarousel .imageGroup .imageReal {
+  width: 100%;
+}
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.noPadding {
+  padding: 0;
+}
+.spaceUD {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.spaceLR {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.height100 {
+  height: 100%;
 }

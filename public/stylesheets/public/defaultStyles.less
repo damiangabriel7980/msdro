@@ -2,16 +2,30 @@
 @grayDarker: #a0a0a0;
 
 @orange: #f6902e;
-@greenDark: #009d96;
+@greenDark: #008780;
 
-body {
-  padding-top: 70px;
+html{
+  height: 100%;
+  body {
+    padding-top: 70px;
+    height: 100%;
+    .rootView{
+      height: 100%;
+    }
+  }
 }
+
+//============================================================================================================== NAVBAR
+
 .navbar-fixed-top{
   height: 70px;
   padding-top: 10px;
   background-color: #ffffff;
   border-color: #ffffff;
+  .container{
+    padding-left: 0;
+    padding-right: 0;
+  }
   .navbar-brand{
     padding: 5px 15px;
   }
@@ -55,4 +69,80 @@ body {
       background-color: #ffffff;
     }
   }
+}
+
+//============================================================================================================ CAROUSEL
+
+.fixedBox{
+  position: absolute;
+  left: 0px;
+//  border: 2px solid black;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  z-index: 100;
+  padding: 15px 15px 15px 100px;
+  background-color:rgba(200, 200, 200, 0.7);
+  box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
+  .carouselTitle{
+    width: 100%;
+    white-space: normal;
+    font-size: 25px;
+    font-weight: bold;
+    color: @greenDark;
+  }
+  .carouselDescription{
+    width: 100%;
+    white-space: normal;
+    padding-left: 5px;
+    padding-top: 10px;
+    font-size: 15px;
+  }
+  .carouselLearnMore{
+    cursor: pointer;
+    margin-left: 5px;
+    margin-top: 15px;
+    color: @orange;
+    font-weight: bold;
+    font-size: 17px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+  }
+}
+.myCarousel{
+  height: 100%;
+  .imageGroup{
+    .imageReal{
+      width: 100%;
+    }
+  }
+
+}
+
+
+//======================================================================================================== USEFUL STUFF
+
+.unselectable{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.noPadding{
+  padding: 0;
+}
+
+.spaceUD{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.spaceLR{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.height100{
+  height: 100%;
 }

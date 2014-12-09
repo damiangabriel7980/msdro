@@ -1,16 +1,19 @@
-var cloudAdminApp = angular.module('publicApp',
+var publicApp = angular.module('publicApp',
     [
         'ui.router',
         'publicControllers',
-        'publicServices'
+        'publicServices',
+        'ngTouch',
+        'angular-carousel'
     ]);
 
-cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
     $stateProvider
         .state('home',{
             url: '/',
-            templateUrl: 'partials/public/home.html'
+            templateUrl: 'partials/public/home.html',
+            controller: 'HomeController'
         })
         .state('stiri', {
             abstract: true,
@@ -66,7 +69,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
 }]);
 
-cloudAdminApp.run(
+publicApp.run(
     [            '$rootScope', '$state', '$stateParams', '$modal',
         function ($rootScope,   $state,   $stateParams, $modal) {
 

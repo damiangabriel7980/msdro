@@ -21,14 +21,20 @@
     <script src="javascript/public/app.js"></script>
     <script src="javascript/public/publicControllers.js"></script>
     <script src="javascript/public/publicServices.js"></script>
+    <script src="javascript/public/publicDirectives.js"></script>
+    <script src="javascript/public/HomeController.js"></script>
 
 
     <!--Plug-ins-->
+    <script src="components/shifty/dist/shifty.min.js"></script>
+    <script src="components/angular-touch/angular-touch.min.js"></script>
+    <script src="components/angular-carousel/dist/angular-carousel.min.js"></script>
 
 
     <!--Stylesheets-->
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="components/angular-carousel/dist/angular-carousel.min.css">
     <link rel="stylesheet" href="stylesheets/public/defaultStyles.css">
 </head>
 <body>
@@ -81,7 +87,7 @@
     </div>
 </div>
 
-<div ui-view class="view-container"></div>
+<div ui-view class="view-container rootView"></div>
 
 </body>
 </html>
