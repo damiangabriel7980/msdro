@@ -40,7 +40,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 // api ======================================================================
-require('./app/api.js')(app, sessionSecret, express.Router()); // load our routes and pass in our app and session secret
+require('./app/api.js')(app, sessionSecret, express.Router()); // load our private routes and pass in our app and session secret
+require('./app/apiPublic.js')(app, express.Router()); // load our public routes and pass in our app
 
 // launch ======================================================================
 app.listen(port);

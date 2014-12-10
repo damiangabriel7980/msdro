@@ -1,0 +1,1 @@
+var publicControllers = angular.module('publicControllers', ['ui.bootstrap']);
