@@ -41,7 +41,7 @@ require('./app/routes.js')(app, passport); // load our routes and pass in our ap
 
 // api ======================================================================
 require('./app/api.js')(app, sessionSecret, express.Router()); // load our routes and pass in our app and session secret
-
+require('./app/apiConferences.js')(app, express.Router());
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);

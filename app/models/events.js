@@ -15,7 +15,8 @@ var EventsSchema		= new Schema({
     place:       String,
     privacy:   String,
     start: Date,
-    type: Number
+    type: Number,
+    listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
 });
 
-module.exports = mongoose.model('calendar-events', EventsSchema);
+module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');
