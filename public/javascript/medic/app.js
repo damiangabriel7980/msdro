@@ -168,8 +168,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
 }]);
 
 cloudAdminApp.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal',
-        function ($rootScope,   $state,   $stateParams, $modal) {
+    [            '$rootScope', '$state', '$stateParams', '$modal','$sce',
+        function ($rootScope,   $state,   $stateParams, $modal,$sce) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -177,7 +177,7 @@ cloudAdminApp.run(
             // to active whenever 'contacts.list' or one of its decendents is active.
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
-
+            $rootScope.footerBox=$sce.trustAsResourceUrl('partials/medic/widgets/_footer.html');
             //amazon service paths
             $rootScope.amazonBucket = sessionStorage.defaultAmazonBucket;
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/"+$rootScope.amazonBucket+"/";

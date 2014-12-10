@@ -119,20 +119,9 @@
         <div ng-if="events.length > multimedia.length" class="col-xs-3 noPadding MerckSmall well" ng-include="merckBoxUrl"></div>
     <div ng-if="events.length <= multimedia.length || events.length==0" class="col-xs-3 well" ng-include="merckBoxUrl"></div>
 </div>
-<div id="footer" style="">
-            <div class="col-xs-6">
-                <a href="http://www.msd.ro/">
-                    <img src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/msd_white.png" class="pull-left img-responsive" style="height:28px;margin-right:10px;">
-                </a>
+<div ng-include="footerBox">
 
-            </div>
-    <div id="notMsieDiv" class="col-xs-6 text-right">
-
-                <a ui-sref="contact" class="link-footer">Contact </a>
-                <a ng-click="showFarmaModal()" class="link-footer">Farmacovigilenta</a>
-                <a ng-click="showTermsModal()" class="link-footer">Termeni si conditii</a>
-            </div>
-    </div>
+</div>
 <script type="text/javascript">
 
 </script>
