@@ -1,0 +1,172 @@
+@gray: #bbbbbb;
+@grayDarker: #a0a0a0;
+
+@orange: #f6902e;
+@greenDark: #008780;
+
+html{
+  height: 100%;
+  body {
+    padding-top: 70px;
+    height: 100%;
+    .rootView{
+      height: 100%;
+    }
+  }
+}
+
+//============================================================================================================== NAVBAR
+
+.navbar-fixed-top{
+  height: 70px;
+  padding-top: 10px;
+  background-color: #ffffff;
+  border-color: #ffffff;
+  .container{
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .navbar-brand{
+    padding: 5px 15px;
+  }
+  .navbar-link{
+    color: #000000;
+    a{
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+  .link-divider{
+    height: 16px;
+    width: 1px;
+    margin-top: 17px;
+    background-color: #000000;
+  }
+  .navbar-nav>li>a{
+    padding: 15px 0 7px 0;
+    margin: 0 10px 0 10px;
+    &:hover{
+      color: @greenDark;
+    }
+  }
+  .navbar-nav>.active>a{
+    color: @greenDark;
+    font-weight: bold;
+    background-color: #ffffff;
+    &:after
+    {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 0px;
+      border: 3px solid @gray;
+      border-radius: 5px;
+      left:0;
+      top: 40px;
+    }
+    &:hover{
+      color: @greenDark;
+      background-color: #ffffff;
+    }
+  }
+}
+
+//============================================================================================================ CAROUSEL
+
+.fixedBox{
+  position: absolute;
+  left: 0px;
+//  border: 2px solid black;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  z-index: 100;
+  padding: 15px 15px 15px 100px;
+  background-color:rgba(200, 200, 200, 0.7);
+  box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
+  .carouselTitle{
+    width: 100%;
+    white-space: normal;
+    font-size: 25px;
+    font-weight: bold;
+    color: @greenDark;
+  }
+  .carouselDescription{
+    width: 100%;
+    white-space: normal;
+    padding-left: 5px;
+    padding-top: 10px;
+    font-size: 15px;
+  }
+  .carouselLearnMore{
+    cursor: pointer;
+    margin-left: 5px;
+    margin-top: 15px;
+    color: @orange;
+    font-weight: bold;
+    font-size: 17px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+  }
+}
+.carouselNavigation{
+  position: absolute;
+  right: 20px;
+  z-index: 101;
+  height: auto;
+  .navSlide{
+    float: right;
+    width: 60px;
+    height: 40px;
+    overflow: hidden;
+    border: 2px solid @gray;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-bottom: 0;
+    cursor: pointer;
+    &.active{
+      margin-bottom: 5px;
+      border-color: #ffffff;
+    }
+    img{
+      width: 60px;
+    }
+  }
+}
+.myCarousel{
+  height: 100%;
+  .imageGroup{
+    .imageReal{
+      width: 100%;
+    }
+  }
+
+}
+
+
+//======================================================================================================== USEFUL STUFF
+
+.unselectable{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.noPadding{
+  padding: 0;
+}
+
+.spaceUD{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.spaceLR{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.height100{
+  height: 100%;
+}

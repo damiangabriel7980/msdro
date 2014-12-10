@@ -23,7 +23,9 @@
     "passport": "latest",
     "passport-local": "latest",
     "s3": "~4.3.1",
-    "aws-sdk": "latest"
+    "aws-sdk": "latest",
+    "express-jwt": "latest",
+    "jsonwebtoken": "latest"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",

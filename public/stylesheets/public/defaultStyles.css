@@ -1,0 +1,147 @@
+html {
+  height: 100%;
+}
+html body {
+  padding-top: 70px;
+  height: 100%;
+}
+html body .rootView {
+  height: 100%;
+}
+.navbar-fixed-top {
+  height: 70px;
+  padding-top: 10px;
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+.navbar-fixed-top .container {
+  padding-left: 0;
+  padding-right: 0;
+}
+.navbar-fixed-top .navbar-brand {
+  padding: 5px 15px;
+}
+.navbar-fixed-top .navbar-link {
+  color: #000000;
+}
+.navbar-fixed-top .navbar-link a {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.navbar-fixed-top .link-divider {
+  height: 16px;
+  width: 1px;
+  margin-top: 17px;
+  background-color: #000000;
+}
+.navbar-fixed-top .navbar-nav > li > a {
+  padding: 15px 0 7px 0;
+  margin: 0 10px 0 10px;
+}
+.navbar-fixed-top .navbar-nav > li > a:hover {
+  color: #008780;
+}
+.navbar-fixed-top .navbar-nav > .active > a {
+  color: #008780;
+  font-weight: bold;
+  background-color: #ffffff;
+}
+.navbar-fixed-top .navbar-nav > .active > a:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 0px;
+  border: 3px solid #bbbbbb;
+  border-radius: 5px;
+  left: 0;
+  top: 40px;
+}
+.navbar-fixed-top .navbar-nav > .active > a:hover {
+  color: #008780;
+  background-color: #ffffff;
+}
+.fixedBox {
+  position: absolute;
+  left: 0px;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  z-index: 100;
+  padding: 15px 15px 15px 100px;
+  background-color: rgba(200, 200, 200, 0.7);
+  box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
+}
+.fixedBox .carouselTitle {
+  width: 100%;
+  white-space: normal;
+  font-size: 25px;
+  font-weight: bold;
+  color: #008780;
+}
+.fixedBox .carouselDescription {
+  width: 100%;
+  white-space: normal;
+  padding-left: 5px;
+  padding-top: 10px;
+  font-size: 15px;
+}
+.fixedBox .carouselLearnMore {
+  cursor: pointer;
+  margin-left: 5px;
+  margin-top: 15px;
+  color: #f6902e;
+  font-weight: bold;
+  font-size: 17px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+}
+.carouselNavigation {
+  position: absolute;
+  right: 20px;
+  z-index: 101;
+  height: auto;
+}
+.carouselNavigation .navSlide {
+  float: right;
+  width: 60px;
+  height: 40px;
+  overflow: hidden;
+  border: 2px solid #bbbbbb;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+.carouselNavigation .navSlide.active {
+  margin-bottom: 5px;
+  border-color: #ffffff;
+}
+.carouselNavigation .navSlide img {
+  width: 60px;
+}
+.myCarousel {
+  height: 100%;
+}
+.myCarousel .imageGroup .imageReal {
+  width: 100%;
+}
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.noPadding {
+  padding: 0;
+}
+.spaceUD {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.spaceLR {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.height100 {
+  height: 100%;
+}

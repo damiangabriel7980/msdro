@@ -2,6 +2,7 @@
  * Created by miricaandrei23 on 10.12.2014.
  */
 var mongoose = require('mongoose');
+<<<<<<< HEAD
 var Events = require('./models/events');
 var Conferences = require('./models/conferences');
 var Talks = require('./models/talks');
@@ -89,5 +90,18 @@ module.exports = function(app, router) {
             })
 
         });
+=======
+
+module.exports = function(app, router) {
+
+
+    router.route('/test')
+        .get(function(req,res){
+            res.send(200, 'Congratulations! You are authorized!');
+        });
+
+
+
+>>>>>>> origin/develop
     app.use('/apiConferences', router);
 };
