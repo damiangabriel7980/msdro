@@ -93,6 +93,30 @@ html body .rootView {
   font-size: 17px;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
 }
+.carouselNavigation {
+  position: absolute;
+  right: 20px;
+  z-index: 101;
+  height: auto;
+}
+.carouselNavigation .navSlide {
+  float: right;
+  width: 60px;
+  height: 40px;
+  overflow: hidden;
+  border: 2px solid #bbbbbb;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+.carouselNavigation .navSlide.active {
+  margin-bottom: 5px;
+  border-color: #ffffff;
+}
+.carouselNavigation .navSlide img {
+  width: 60px;
+}
 .myCarousel {
   height: 100%;
 }
