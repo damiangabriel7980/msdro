@@ -2,6 +2,10 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
 
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
     $scope.carouselSlides = [];
+    $scope.selectedIndex = 0;
+    $scope.setSlide = function(index) {
+        $scope.selectedIndex = index;
+    };
 
 
     //------------------------------------------------------------------------------------------------- get all content
@@ -12,37 +16,6 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
         $scope.selectedIndex = 1;
     });
 
-    //============================================================================================= responsive carousel
-
-    $scope.getWindowDimensions = function () {
-        return {
-            'h': window.innerHeight,
-            'w': window.innerWidth
-        };
-    };
-    $scope.$watch($scope.getWindowDimensions, function (newValue, oldValue) {
-        $scope.windowHeight = newValue.h;
-        $scope.windowWidth = newValue.w;
-
-        var carouselH = newValue.w / 3;
-
-        $scope.carouselStyle = 'height:' + carouselH + 'px;' +
-            'width:' + (newValue.w) + 'px;';
-
-        var offset_Y = newValue.h / 20;
-
-        $scope.fixedBoxStyle = 'top:' + offset_Y + 'px;' +
-            'height:' + (carouselH - (2 * offset_Y)) + 'px;' +
-            'width:' + (newValue.w / 2) + 'px;';
-
-        $scope.cNavStyle = 'bottom:' + offset_Y + 'px;' +
-            'width:' + (newValue.w / 2 - 40) + 'px;';
-    });
-
-    $scope.selectedIndex = 1;
-    $scope.setSlide = function(index) {
-        $scope.selectedIndex = index;
-    };
 
     //------------------------------------------------------------------------------------------------ useful functions
 
