@@ -7,7 +7,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'frapontillo.bootstrap-duallistbox',
         'angularFileUpload',
         'ui.tinymce',
-        'ui.select'
+        'ui.select',
+        'ja.qr'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
