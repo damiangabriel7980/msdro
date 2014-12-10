@@ -1,6 +1,7 @@
 // server.js
 
 var sessionSecret = "yours3cr3tisveryveryvvverysafew1thmee";
+var tokenSecret = "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss";
 
 // set up ======================================================================
 // get all the tools we need
@@ -34,6 +35,8 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
+require('./config/tokenAuth')(app, tokenSecret); // token authentification config
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes ======================================================================
@@ -42,6 +45,7 @@ require('./app/routes.js')(app, passport); // load our routes and pass in our ap
 // api ======================================================================
 require('./app/api.js')(app, sessionSecret, express.Router()); // load our private routes and pass in our app and session secret
 require('./app/apiPublic.js')(app, express.Router()); // load our public routes and pass in our app
+require('./app/apiConferences.js')(app, express.Router());
 
 // launch ======================================================================
 app.listen(port);
