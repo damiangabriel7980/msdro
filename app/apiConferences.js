@@ -9,7 +9,6 @@ var Speakers = require('./models/speakers');
 
 var jwt = require('jsonwebtoken');
 
-
 module.exports = function(app,email, router) {
 
     router.route('/userProfile')

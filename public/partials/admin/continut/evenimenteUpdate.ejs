@@ -1,0 +1,85 @@
+<script>
+    $(function() {
+        $( "#datepicker" ).datepicker();
+    });
+</script>
+
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <h3>Adauga eveniment</h3>
+    </div>
+    <div class="col-xs-6">
+        <label class="label label-default">Denumire:</label>
+        <input ng-model="newEvent.name" type="text" class="form-control col-xs-12">
+    </div>
+    <div class="col-xs-4">
+        <label class="label label-default">Tip:</label>
+
+        <select ng-model="newEvent.type" class="form-control">
+            <option value="1" >Eveniment</option>
+            <option value="2">Transmisie Live</option>
+        </select>
+    </div>
+    <div class="col-xs-2">
+        <input ng-model="newEvent.privacy" type="checkbox">Privat
+    </div>
+    <div class="col-xs-6">
+        <label class="label label-default">Data inceput:</label>
+        <p class="input-group">
+            <input ng-model="newEvent.start" type="text" class="form-control" ng-click="open1($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened1" min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+        </p>
+
+    </div>
+    <div class="col-xs-6">
+        <label class="label label-default">Data sfarsit:</label>
+        <p class="input-group">
+            <input ng-model="newEvent.end" type="text" ng-click="open2($event)" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened2" min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+
+        </p>
+
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="grupuri">Grupuri:</label>
+            <select ng-model="selectedGroup" ng-options="grup as grup.display_name for grup in grupuri"
+                    class="form-control" id="grupuri" style="width: 100%;" ng-change="groupWasSelected(selectedGroup)">
+            </select>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div ng-repeat="grup in grupeUser">
+            <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
+                {{grup.display_name}}&nbsp;
+                <i class="glyphicon glyphicon-remove-sign" ng-click="removeUserGroup(grup._id)" style="cursor: pointer;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="conferencesSelect">Conferinte:</label>
+            <select ng-model="selectedConference" ng-options="conf as conf.title for conf in conferences"
+                    class="form-control" id="conferencesSelect" style="width: 100%;" ng-change="ConfWasSelected(selectedConference)">
+            </select>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div ng-repeat="conf in ConfEvents">
+            <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
+                {{conf.title}}&nbsp;
+                <i class="glyphicon glyphicon-remove-sign" ng-click="removeConf(conf._id)" style="cursor: pointer;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <form method="post">
+            <label class="label label-default">Detalii:</label>
+            <textarea ui-tinymce ng-model="tinymceModel"></textarea>
+        </form>
+    </div>
+    <div class="col-xs-12">
+        <a class="btn pull-left btn-primary" ng-click="okk()">Back to Events</a>
+        <a class="btn pull-right btn-primary" ng-click="updateEvent()">Create event</a>
+    </div>
+</div>
+
+

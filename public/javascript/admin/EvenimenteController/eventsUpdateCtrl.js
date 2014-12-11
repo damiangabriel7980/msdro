@@ -4,15 +4,39 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter){
+cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state){
     EventsAdminService.getGroups.query().$promise.then(function(resp){
         $scope.grupuri=resp;
         EventsAdminService.getAllConferences.query().$promise.then(function(resp){
             $scope.conferences=resp;
-            $scope.selectedConference=$scope.conferences[0];
+            for(var i=0;i<$scope.grupuri.length;i++)
+            {
+                for(var j=0;j<$scope.newEvent.groupsID.length;j++)
+                {
+                    if($scope.grupuri[i]._id==$scope.newEvent.groupsID[j])
+                        $scope.grupeUser.push($scope.grupuri[i]);
+                }
+            }
             $scope.selectedGroup=$scope.grupuri[0];
+            for(var i=0;i<$scope.conferences.length;i++)
+            {
+                for(var j=0;j<$scope.newEvent.listconferences.length;j++)
+                {
+                    if($scope.conferences[i]._id==$scope.newEvent.listconferences[j])
+                        $scope.ConfEvents.push($scope.conferences[i]);
+                }
+            }
+            $scope.selectedConference=$scope.conferences[0];
             console.log($scope.selectedConference.title);
         });
+
+    });
+
+    EventsAdminService.deleteOrUpdateEvents.getEvent({id:$stateParams.id}).$promise.then(function(result2){
+        $scope.grupeUser=[];
+        $scope.ConfEvents=[];
+        $scope.newEvent=result2;
+        tinyMCE.activeEditor.setContent($scope.newEvent.description);
     });
 
     $scope.grupeUser=[];
@@ -90,6 +114,28 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
+    $scope.updateEvent=function() {
+        var id_groups = [];
+        for (var i = 0; i < $scope.grupeUser.length; i++)
+            id_groups.push($scope.grupeUser[i]._id);
+        var id_confs = [];
+        for (var i = 0; i < $scope.ConfEvents.length; i++)
+            id_confs.push($scope.ConfEvents[i]._id)
+        $scope.newEvent.groupsID = id_groups;
+        $scope.newEvent.listconferences = id_confs;
+        $scope.newEvent.description = tinyMCE.activeEditor.getContent();
+        console.log($scope.newEvent);
+        if ($scope.newEvent) {
+            EventsAdminService.deleteOrUpdateEvents.update({id: $stateParams.id}, $scope.newEvent);
+            $state.go('continut.evenimente');
+            tinyMCE.remove();
+        }
+    };
+
+    $scope.okk=function(){
+        $state.go('continut.evenimente');
+    };
+
     $scope.tinymceOptions = {
         selector: "textarea",
         plugins: [
