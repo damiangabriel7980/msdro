@@ -1319,7 +1319,7 @@ module.exports = function(app, sessionSecret,email,router) {
     });
     router.route('/admin/conferences/:id')
         .get(function(req,res){
-            Conferences.find({_id:req.params.id}).populate('listTalks').exec(function (err, conf) {
+            Conferences.findById(req.params.id).populate('listTalks').exec(function (err, conf) {
                 if (err)
                 {
                     res.json(err);

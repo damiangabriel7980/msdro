@@ -1,0 +1,44 @@
+<script>
+    $(function() {
+        $( "#datepicker" ).datepicker();
+    });
+</script>
+
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <h3>Adauga conferinta</h3>
+    </div>
+    <div class="col-xs-6">
+        <label class="label label-default">Titlu:</label>
+        <input ng-model="newConference.title" type="text" class="form-control col-xs-12">
+    </div>
+    <div class="col-xs-6">
+        <label class="label label-default">Data inceput:</label>
+        <p class="input-group">
+            <input ng-model="newConference.begin_date" type="text" class="form-control" ng-click="open1($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened1" min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+        </p>
+
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="talks">Talks:</label>
+            <select ng-model="selectedTalk" ng-options="talk as talk.title for talk in talks"
+                    class="form-control" id="talks" style="width: 100%;" ng-change="TalkWasSelected(selectedTalk)">
+            </select>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div ng-repeat="talk in groupTalks">
+            <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
+                {{talk.title}}&nbsp;
+                <i class="glyphicon glyphicon-remove-sign" ng-click="removeTalk(talk._id)" style="cursor: pointer;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <a class="btn pull-left btn-primary" ng-click="okk()">Back to Events</a>
+        <a class="btn pull-right btn-primary" ng-click="createConference()">Create conference</a>
+    </div>
+</div>
+
+
