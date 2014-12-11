@@ -26,6 +26,12 @@ module.exports = function (app, tokenSecret) {
         console.log("username: ", req.body.username);
         console.log("password: ", req.body.password);
 
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Allow-Credentials", false);
+        res.setHeader("Access-Control-Max-Age", '86400'); // 24 hours
+        res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
+
         //find user in database
         User.findOne({ 'username' :  { $regex: new RegExp("^" + req.body.username, "i") }}, function(err, user) {
             // if there are any errors, return error status
