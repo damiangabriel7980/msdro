@@ -8,6 +8,19 @@ module.exports = function (app, tokenSecret) {
     // We are going to protect /apiConferences routes with JWT
     app.use('/apiConferences', expressJwt({secret: tokenSecret}));
 
+    app.options('/authenticateToken', function (req, res) {
+        var headers = {};
+        // IE8 does not allow domains to be specified, just the *
+        // headers["Access-Control-Allow-Origin"] = req.headers.origin;
+        headers["Access-Control-Allow-Origin"] = "*";
+        headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
+        headers["Access-Control-Allow-Credentials"] = false;
+        headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+        headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
+        res.writeHead(200, headers);
+        res.end();
+    });
+
     app.post('/authenticateToken', function (req, res) {
         console.log("tokenAuth ============================");
         console.log("username: ", req.body.username);
