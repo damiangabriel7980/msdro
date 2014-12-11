@@ -16,7 +16,6 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
         $scope.selectedIndex = 1;
     });
 
-
     //------------------------------------------------------------------------------------------------ useful functions
 
     var htmlToPlainText = function(text) {
