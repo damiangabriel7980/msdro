@@ -8,7 +8,7 @@ var Talks = require('./models/talks');
 var Speakers = require('./models/speakers');
 
 
-module.exports = function(app, router) {
+module.exports = function(app,email, router) {
 
     router.route('/speakers')
         .get(function(req,res){
@@ -89,6 +89,5 @@ module.exports = function(app, router) {
             })
 
         });
-
     app.use('/apiConferences', router);
 };

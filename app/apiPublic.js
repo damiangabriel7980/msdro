@@ -1,7 +1,8 @@
 var PublicContent = require('./models/publicContent');
 var PublicCarousel = require('./models/publicCarousel');
+var email = require('mandrill-send')('XKp6n_7NhHB5opUWo0WWmw');
 
-module.exports = function(app, router) {
+module.exports = function(app,email, router) {
 
     router.route('/getCarouselData')
 

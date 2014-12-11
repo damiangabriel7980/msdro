@@ -1,25 +1,13 @@
-<script type="text/javascript">
-    tinymce.init({
-        selector: "textarea",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste"
-        ],
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    });
-
-</script>
 <script>
     $(function() {
         $( "#datepicker" ).datepicker();
     });
 </script>
-<div class="modal-header">
-    <div class="modal-title"><h3>Adauga eveniment</h3></div>
-</div>
-<div class="modal-body" style="height: 70%;">
-    <div class="row">
+
+    <div class="container-fluid">
+        <div class="col-xs-12">
+        <h3>Adauga eveniment</h3>
+        </div>
         <div class="col-xs-6">
             <label class="label label-default">Denumire:</label>
             <input type="text" class="form-control col-xs-12">
@@ -28,9 +16,8 @@
             <label class="label label-default">Tip:</label>
 
             <select class="form-control">
-                <option>Ceva1</option>
-                <option>Ceva2</option>
-                <option>Ceva3</option>
+                <option value="1">Eveniment</option>
+                <option value="2">Transmisie Live</option>
             </select>
         </div>
         <div class="col-xs-2">
@@ -51,20 +38,48 @@
             </p>
 
         </div>
-        <div>
-            <label class="label label-default">Acces grup:</label>
-            <ui-select multiple="true" theme="select2">
-                <ui-select-choices>
-
-                </ui-select-choices>
-            </ui-select>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="grupuri">Grupuri:</label>
+                <select ng-model="selectedGroup" ng-options="grup as grup.display_name for grup in grupuri"
+                        class="form-control" id="grupuri" style="width: 100%;" ng-change="groupWasSelected(selectedGroup)">
+                </select>
+            </div>
         </div>
-        <label class="label label-default">Detalii:</label>
-        <form method="post">
-            <textarea style="width:100%"></textarea>
-        </form>
+        <div class="col-md-12">
+            <div ng-repeat="grup in grupeUser">
+                <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
+                    {{grup.display_name}}&nbsp;
+                    <i class="glyphicon glyphicon-remove-sign" ng-click="removeUserGroup(grup._id)" style="cursor: pointer;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="conferencesSelect">Conferinte:</label>
+                <select ng-model="selectedConference" ng-options="conf as conf.title for conf in conferences"
+                        class="form-control" id="conferencesSelect" style="width: 100%;" ng-change="ConfWasSelected(selectedConference)">
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div ng-repeat="conf in ConfEvents">
+                <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
+                    {{conf.title}}&nbsp;
+                    <i class="glyphicon glyphicon-remove-sign" ng-click="removeConf(conf._id)" style="cursor: pointer;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <form method="post">
+                <label class="label label-default">Detalii:</label>
+                <textarea ui-tinymce ng-model="tinymceModel"></textarea>
+            </form>
+        </div>
+        <div class="col-xs-12">
+        <a class="btn pull-left btn-primary" ng-click="okk()">Back to Events</a>
+        <a class="btn pull-right btn-primary" ng-click="createEvent()">Create event</a>
+            </div>
     </div>
-</div>
-<div class="modal-footer">
-    <a class="btn pull-right btn-primary" ng-click="okk()">Close</a>
-</div>
+
+

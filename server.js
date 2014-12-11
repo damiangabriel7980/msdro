@@ -2,6 +2,7 @@
 
 var sessionSecret = "yours3cr3tisveryveryvvverysafew1thmee";
 var tokenSecret = "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss";
+var mandrillKey=process.env.mandrillKey;
 // set up ======================================================================
 // get all the tools we need
 var express  = require('express');
@@ -16,6 +17,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var configDB = require('./config/database.js');
+var email = require('mandrill-send')(mandrillKey);
 
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
@@ -42,9 +44,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 // api ======================================================================
-require('./app/api.js')(app, sessionSecret, express.Router()); // load our private routes and pass in our app and session secret
-require('./app/apiPublic.js')(app, express.Router()); // load our public routes and pass in our app
-require('./app/apiConferences.js')(app, express.Router());
+require('./app/api.js')(app, sessionSecret,email, express.Router()); // load our private routes and pass in our app and session secret
+require('./app/apiPublic.js')(app,email, express.Router()); // load our public routes and pass in our app
+require('./app/apiConferences.js')(app,email, express.Router());
 
 // launch ======================================================================
 app.listen(port);

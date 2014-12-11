@@ -4,9 +4,9 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state){
+cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter){
     EventsAdminService.getGroups.query().$promise.then(function(resp){
-       $scope.grupuri=resp;
+        $scope.grupuri=resp;
         EventsAdminService.getAllConferences.query().$promise.then(function(resp){
             $scope.conferences=resp;
             $scope.selectedConference=$scope.conferences[0];
@@ -14,19 +14,7 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
             console.log($scope.selectedConference.title);
         });
     });
-    $scope.newEvent={
-        description:  "",
-        enable:       "",
-        end:       "",
-        groupsID: $scope.grupeUser,
-        last_updated:  new Date(),
-        name:      "",
-        place:       "",
-        privacy:   "",
-        start: "",
-        type: "",
-        listconferences:$scope.ConfEvents
-    };
+
     $scope.grupeUser=[];
     var findInUserGroup = function (id) {
         var index = -1;
@@ -98,26 +86,6 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
         $event.stopPropagation();
 
         $scope.opened2 = true;
-    };
-    $scope.createEvent=function(){
-        var id_groups=[];
-        for(var i=0;i<$scope.grupeUser.length;i++)
-            id_groups.push($scope.grupeUser[i]._id);
-        var id_confs=[];
-        for(var i=0;i<$scope.ConfEvents.length;i++)
-            id_confs.push($scope.ConfEvents[i]._id)
-        $scope.newEvent.groupsID=id_groups;
-        $scope.newEvent.listconferences=id_confs;
-        $scope.newEvent.description=tinyMCE.activeEditor.getContent();
-        if($scope.newEvent){
-            EventsAdminService.getAll.save($scope.newEvent);
-            $scope.newEvent = {};
-            $state.go('continut.evenimente');
-            tinyMCE.remove();
-        }
-    };
-    $scope.okk=function(){
-        $state.go('continut.evenimente');
     };
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
