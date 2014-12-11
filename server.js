@@ -41,7 +41,7 @@ require('./config/tokenAuth')(app, tokenSecret); // token authentification confi
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes ======================================================================
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, email, passport); // load our routes and pass in our app and fully configured passport
 
 // api ======================================================================
 require('./app/api.js')(app, sessionSecret,email, express.Router()); // load our private routes and pass in our app and session secret

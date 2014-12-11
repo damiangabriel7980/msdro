@@ -1,7 +1,10 @@
 var User = require('./models/user');
 var Roles = require('./models/roles');
 
-module.exports = function(app, passport) {
+var crypto   = require('crypto');
+var async = require('async');
+
+module.exports = function(app, email, passport) {
 
 // normal routes ===============================================================
 
@@ -31,7 +34,121 @@ module.exports = function(app, passport) {
 		res.redirect('/');
 	});
 
-    //access merck manual
+    // RESET PASSWORD =================================================================================================
+
+    //render password reset form
+    app.get('/forgot', function(req, res) {
+        res.render('forgotPass.ejs');
+    });
+
+    //generate token for resetting user password
+    app.post('/forgot', function(req, res) {
+        async.waterfall([
+            //generate unique token
+            function(done) {
+                crypto.randomBytes(20, function(err, buf) {
+                    var token = buf.toString('hex');
+                    done(err, token);
+                });
+            },
+            function(token, done) {
+                //find user
+                User.findOne({ username: req.body.email }, function(err, user) {
+                    if (!user) {
+                        res.render('forgotPass.ejs', {message : {message: 'Nu a fost gasit un cont pentru acest e-mail.', type: 'danger'}});
+                    }else{
+                        //set token for user - expires in one hour
+                        User.update({_id: user._id.toString()}, {
+                            resetPasswordToken: token,
+                            resetPasswordExpires: Date.now() + 3600000
+                        }, function(err, data) {
+                            done(err, token, user);
+                        });
+                    }
+                });
+            },
+            function(token, user, done) {
+                //email user
+                email({from: 'adminMSD@qualitance.ro',
+                    to: [user.username],
+                    subject:'Resetare parola MSD',
+                    text: 'Ati primit acest email deoarece a fost ceruta resetarea parolei pentru contul dumneavoastra de MSD.\n\n' +
+                          'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va reseta parola:\n\n' +
+                          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                          'Link-ul este valabil maxim o ora\n'+
+                          'Daca nu ati cerut resetarea parolei, va rugam sa ignorati acest e-mail si parola va ramane neschimbata\n'
+                }, function(err){
+                    done(err, user.username);
+                });
+            }
+        ], function(err, user) {
+            if (err){
+                console.log(err);
+                res.render('forgotPass.ejs', {message : {message: 'A aparut o eroare. Va rugam verificati datele', type: 'danger'}});
+            }else{
+                res.render('forgotPass.ejs', {message : {message: 'Un email cu instructiuni a fost trimis catre ' + user + '.', type: 'info'}});
+            }
+        });
+    });
+
+    //enter new password
+    app.get('/reset/:token', function(req, res) {
+        User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+            if (!user) {
+                res.render('forgotPass.ejs', {message : {message: 'Link-ul a expirat sau este invalid. Va rugam introduceti din nou email-ul', type: 'danger'}});
+            }else{
+                res.render('resetPass.ejs');
+            }
+        });
+    });
+
+    //change user password
+    app.post('/reset/:token', function(req, res) {
+        //validate form
+        //check if new password length is valid
+        if(req.body.password.toString().length < 6 || req.body.password.toString().length > 32){
+            res.render('resetPass.ejs', {message : {message: 'Parola trebuie sa contina intre 6 si 32 de caractere', type: 'danger'}});
+        }else{
+            //check if passwords match
+            if(req.body.password !== req.body.confirm){
+                res.render('resetPass.ejs', {message : {message: 'Parolele nu corespund', type: 'danger'}});
+            }else{
+                //find user by token
+                User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+                    if (!user) {
+                        res.render('forgotPass.ejs', {message : {message: 'Link-ul a expirat sau este invalid. Va rugam introduceti din nou mail-ul', type: 'danger'}});
+                    }else{
+                        //change user pass
+                        User.update({resetPasswordToken: req.params.token}, {
+                            password: user.generateHash(req.body.password),
+                            resetPasswordToken: null,
+                            resetPasswordExpires: null
+                        }, function (err, data) {
+                            if(err){
+                                res.render('forgotPass.ejs', {message : {message: 'A aparut o eroare la actualizare. Va rugam introduceti din nou email-ul', type: 'danger'}});
+                            }else{
+                                //email user
+                                email({from: 'adminMSD@qualitance.ro',
+                                    to: [user.username],
+                                    subject:'Resetare parola MSD',
+                                    text: 'Buna ziua,\n\n\n' +
+                                          'Parola pentru contul dumneavoastra a fost modificata.\n\n\nO zi buna,\nAdmin MSD'
+                                }, function(err){
+                                    if(err){
+                                        res.render('forgotPass.ejs', {message : {message: 'Parola a fost schimbata.', type: 'success'}});
+                                    }else{
+                                        res.render('forgotPass.ejs', {message : {message: 'Parola a fost schimbata. Veti primi in scurt timp un e-mail de confirmare.', type: 'success'}});
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    });
+
+    //====================================================================================================== access merck manual
     app.get('/merckManual', isLoggedIn, function (req, res) {
         console.log("======================================================================");
         var range = req.headers.range;
