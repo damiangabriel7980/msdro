@@ -38,7 +38,7 @@ module.exports = function (app, tokenSecret) {
                                 phone: user.phone
                             };
                             // We are sending the profile inside the token
-                            var token = jwt.sign(profile, tokenSecret, { expiresInMinutes: 60*360 });
+                            var token = jwt.sign(profile, tokenSecret);
                             res.json({ token: token });
                         }
                     }
