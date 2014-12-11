@@ -25,7 +25,8 @@
     "s3": "~4.3.1",
     "aws-sdk": "latest",
     "express-jwt": "latest",
-    "jsonwebtoken": "latest"
+    "jsonwebtoken": "latest",
+    "socket.io": "latest"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",
