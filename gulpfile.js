@@ -58,37 +58,4 @@ gulp.task('watch', function() {
     });
 });
 
-//test amazon
-gulp.task('test', function () {
-//    IAM_msdAdmin
-//    Access Key ID:        AKIAIM6KJKTQ3DODHQPA
-//    Secret Access Key:    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
-
-//    export AWS_ACCESS_KEY_ID="AKIAIM6KJKTQ3DODHQPA"
-//    export AWS_SECRET_ACCESS_KEY="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"
-
-//    IAM users sign-in link:
-//    https://578381890239.signin.aws.amazon.com/console
-
-//    resource format:     arn:aws:s3:::*/*
-//    "Action":["s3:GetObject", "s3:PutObject"],
-
-    // Note that environment credentials are loaded by default,
-    // the following line is shown for clarity:
-    AWS.config.credentials = new AWS.EnvironmentCredentials('AWS');
-//    console.log(AWS.config.credentials);
-
-// Now set temporary credentials seeded from the master credentials
-//    generic:
-//    AWS.config.credentials = new AWS.TemporaryCredentials();
-
-    //for IAM user:
-    AWS.config.credentials = new AWS.TemporaryCredentials({
-        RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
-    });
-
-// subsequent requests will now use temporary credentials
-    var s3 = new AWS.S3();
-});
-
 gulp.task('default', ['sass', 'js', 'watch']);
