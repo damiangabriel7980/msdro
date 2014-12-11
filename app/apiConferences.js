@@ -7,8 +7,16 @@ var Conferences = require('./models/conferences');
 var Talks = require('./models/talks');
 var Speakers = require('./models/speakers');
 
+var jwt = require('jsonwebtoken');
+
 
 module.exports = function(app,email, router) {
+
+    router.route('/userProfile')
+        .get(function (req, res) {
+            var token = req.headers.authorization.split(' ').pop();
+            res.json(jwt.decode(token));
+        });
 
     router.route('/speakers')
         .get(function(req,res){
