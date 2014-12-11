@@ -1,9 +1,18 @@
 <div class="container-fluid">
     <div class="well">
         <div class="row">
-            <div class="col-xs-5"><h3>Gestionare Evenimente</h3></div>
+            <div class="col-xs-4"><h3>Gestionare Evenimente</h3></div>
             <div class="col-xs-2 pull-right">
-                <a ui-sref="continut.evenimente.adaugaEveniment" class="btn btn-info pull-right margintop20px" id="add-event"><i class="glyphicon glyphicon-plus-sign"></i> Adauga eveniment</a>
+                <a ui-sref="continut.adaugaEveniment" class="btn btn-info pull-right margintop20px" id="add-event"><i class="glyphicon glyphicon-plus-sign"></i> Adauga eveniment</a>
+            </div>
+            <div class="col-xs-2 pull-right">
+                <a ui-sref="continut.adaugaConferinta" class="btn btn-info pull-right margintop20px" id="add-event"><i class="glyphicon glyphicon-plus-sign"></i> Adauga conferinta</a>
+            </div>
+            <div class="col-xs-2 pull-right">
+                <a ui-sref="continut.adaugaTalk" class="btn btn-info pull-right margintop20px" id="add-event"><i class="glyphicon glyphicon-plus-sign"></i> Adauga talk</a>
+            </div>
+            <div class="col-xs-2 pull-right">
+                <a ui-sref="continut.adaugaSpeaker" class="btn btn-info pull-right margintop20px" id="add-event"><i class="glyphicon glyphicon-plus-sign"></i> Adauga speaker</a>
             </div>
         </div>
     </div>
@@ -11,14 +20,24 @@
         <tr ng-repeat="eveniment in $data">
             <td data-title="'Denumire'" filter="{ 'name': 'text' }" sortable="'name'">{{eveniment.name}}</td>
             <td data-title="'Tip'" sortable="'type'" ><i class="glyphicon glyphicon-calendar">Eveniment</i></td>
-            <td data-title="'Detalii'" filter="{ 'description': 'text' }" sortable="'description'">{{eveniment.description}}</td>
             <td data-title="'Inceput'" sortable="'start'">{{eveniment.start | asDate | date:'dd/MM/yyyy'}}</td>
             <td data-title="'Final'" sortable="'end'">{{eveniment.end | asDate|date:'dd/MM/yyyy'}}</td>
-            <td data-title="'Locatie'" sortable="'place'">{{eveniment.place}}</td>
+            <td data-title="'Conferinte'" sortable="'listconferences'">
+                <ul style="list-style: none">
+                    <li class="margintop20px" ng-repeat="conf in eveniment.listconferences | orderBy: 'title'">{{conf.title}}&nbsp;
+                            <span class="btn-group-sm pull-right"  role="group" style="display: flex">
+                                <button class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"></i></button>
+                                <button class="btn btn-info btn-sm" ui-sref="continut.updateConference({id: conf._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                            </span>
+                        <br />
+                    </li>
+                </ul>
+            </td>
+
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
                     <button class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
-                    <button class="btn btn-info"><i class="glyphicon glyphicon-cog"></i></button>
+                    <button class="btn btn-info" ui-sref="continut.updateEveniment({id: eveniment._id})"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>
         </tr>

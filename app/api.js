@@ -16,7 +16,9 @@ var Roles=require('./models/roles');
 var PublicContent = require('./models/publicContent');
 var PublicCarousel = require('./models/publicCarousel');
 var Carousel=require('./models/carousel_Medic');
-
+var Conferences = require('./models/conferences');
+var Talks = require('./models/talks');
+var Speakers = require('./models/speakers');
 var XRegExp  = require('xregexp').XRegExp;
 
 var SHA256   = require('crypto-js/sha256');
@@ -215,7 +217,7 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, router) {
+module.exports = function(app, sessionSecret,email,router) {
 
 //======================================================================================================= secure routes
 
@@ -405,6 +407,13 @@ module.exports = function(app, sessionSecret, router) {
                                     res.json(ans);
                                 }else{
                                     ans.error = false;
+                                    email({from: req.user.username,
+                                        to: ['andrei.mirica@qualitance.ro'],
+                                        subject:'proba de Mandrill',
+                                        text: "Hello, I sent this message using mandrill."
+                                    }, function(err){
+                                        if (err) console.error(err);
+                                    });
                                     ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
                                     res.json(ans);
                                 }
@@ -413,7 +422,9 @@ module.exports = function(app, sessionSecret, router) {
                     });
                 }
             }
-        });
+        }
+
+    );
 
     router.route('/admin/utilizatori/changeGroupLogo')
         .post(function (req,res) {
@@ -1110,7 +1121,7 @@ module.exports = function(app, sessionSecret, router) {
     router.route('/admin/events')
 
         .get(function(req, res) {
-            Events.find(function(err, cont) {
+            Events.find().populate('listconferences').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -1131,7 +1142,7 @@ module.exports = function(app, sessionSecret, router) {
             event.privacy=req.body.privacy;
             event.start=req.body.start;
             event.type=req.body.type;
-
+            event.listconferences=req.body.listconferences;
             event.save(function(err) {
                 if (err)
                     res.send(err);
@@ -1143,7 +1154,7 @@ module.exports = function(app, sessionSecret, router) {
     router.route('/admin/events/:id')
 
         .get(function(req, res) {
-            Events.find({_id:req.params.id}, function(err, cont) {
+            Events.find({_id:req.params.id}).populate('listconferences').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -1171,6 +1182,7 @@ module.exports = function(app, sessionSecret, router) {
                 event.privacy=req.body.privacy;
                 event.start=req.body.start;
                 event.type=req.body.type;
+                event.listconferences=req.body.listconferences;
                 event.save(function(err) {
                     if (err)
                         res.send(err);
@@ -1191,6 +1203,257 @@ module.exports = function(app, sessionSecret, router) {
             });
         });
 
+    router.route('/admin/speakers')
+        .get(function(req,res){
+            Speakers.find().populate('listTalks').exec(function (err, speakers) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(speakers);
+                    return;
+                }
+            })
+        })
+    .post(function(req, res) {
+
+        var speaker = new Speakers(); 		// create a new instance of the Bear model
+            speaker.first_name = req.body.first_name;  // set the bears name (comes from the request)
+            speaker.last_name=req.body.last_name ;
+            speaker.profession= req.body.profession     ;
+            speaker.last_updated= req.body.last_updated ;
+            speaker.workplace=req.body.workplace;
+            speaker.short_description= req.body.short_description ;
+            speaker.listTalks=req.body.listTalks;
+
+            speaker.save(function(err) {
+            if (err)
+                res.send(err);
+
+            res.json({ message: 'Speaker created!' });
+        });
+
+    });
+    router.route('/admin/speakers/:id')
+        .get(function(req,res){
+            Speakers.find({_id:req.params.id}).populate('listTalks').exec(function (err, speaker) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(speaker);
+                    return;
+                }
+            })
+        })
+    .put(function(req, res) {
+
+        Speakers.findById(req.params.id, function(err, speaker) {
+
+            if (err)
+                res.send(err);
+
+            speaker.first_name = req.body.first_name;  // set the bears name (comes from the request)
+            speaker.last_name=req.body.last_name ;
+            speaker.profession= req.body.profession     ;
+            speaker.last_updated= req.body.last_updated ;
+            speaker.workplace=req.body.workplace;
+            speaker.short_description= req.body.short_description ;
+            speaker.listTalks=req.body.listTalks;
+            speaker.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Speaker updated!' });
+            });
+
+        });
+    })
+        .delete(function(req, res) {
+            Speakers.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
+    router.route('/admin/conferences')
+        .get(function(req,res){
+            Conferences.find().populate('listTalks').exec(function (err, conf) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(conf);
+                    return;
+                }
+            })
+        })
+    .post(function(req, res) {
+
+        var conferences = new Conferences(); 		// create a new instance of the Bear model
+            conferences.title = req.body.title;  // set the bears name (comes from the request)
+            conferences.enable=req.body.enable ;
+            conferences.begin_date= req.body.begin_date     ;
+            conferences.last_updated= req.body.last_updated ;
+            conferences.listTalks=req.body.listTalks;
+
+            conferences.save(function(err) {
+            if (err)
+                res.send(err);
+
+            res.json({ message: 'Conference created!' });
+        });
+
+    });
+    router.route('/admin/conferences/:id')
+        .get(function(req,res){
+            Conferences.find({_id:req.params.id}).populate('listTalks').exec(function (err, conf) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+
+                    res.json(conf);
+                    return;
+                }
+            })
+        })
+        .put(function(req, res) {
+
+            Conferences.findById(req.params.id, function(err, conferences) {
+
+                if (err)
+                    res.send(err);
+
+                conferences.title = req.body.title;  // set the bears name (comes from the request)
+                conferences.enable=req.body.enable ;
+                conferences.begin_date= req.body.begin_date     ;
+                conferences.last_updated= req.body.last_updated ;
+                conferences.listTalks=req.body.listTalks;
+                conferences.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Conferences updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Conferences.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
+     router.route('/admin/talks')
+        .get(function(req,res){
+            Talks.find().populate('listSpeakers').exec(function (err, talks) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(talks);
+                    return;
+                }
+
+
+            })
+
+        })
+         .post(function(req, res) {
+
+             var talks = new Talks(); 		// create a new instance of the Bear model
+             talks.description = req.body.description;  // set the bears name (comes from the request)
+             talks.enable=req.body.enable ;
+             talks.hour_start= req.body.hour_start     ;
+             talks.hour_end= req.body.hour_end ;
+             talks.last_updated=req.body.last_updated;
+             talks.title=req.body.title;
+             talks.place=req.body.place;
+             talks.listSpeakers=req.body.listSpeakers;
+
+
+             talks.save(function(err) {
+                 if (err)
+                     res.send(err);
+
+                 res.json({ message: 'Talk created!' });
+             });
+
+         });
+    router.route('/admin/talks/:id')
+        .get(function(req,res){
+            Talks.find({_id:req.params.id}).populate('listSpeakers').exec(function (err, talk) {
+                if (err)
+                {
+                    console.log(err);
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    console.log(talk);
+                    res.json(talk);
+                    return;
+                }
+            })
+        })
+        .put(function(req, res) {
+
+            Talks.findById(req.params.id, function(err, talks) {
+
+                if (err)
+                    res.send(err);
+
+                talks.description = req.body.description;  // set the bears name (comes from the request)
+                talks.enable=req.body.enable ;
+                talks.hour_start= req.body.hour_start     ;
+                talks.hour_end= req.body.hour_end ;
+                talks.last_updated=req.body.last_updated;
+                talks.title=req.body.title;
+                talks.place=req.body.place;
+                talks.listSpeakers=req.body.listSpeakers;
+                talks.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Talk updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Talks.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
     router.route('/admin/multimedia')
 
         .get(function(req, res) {

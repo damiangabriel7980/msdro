@@ -124,12 +124,42 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
 }]);
 cloudAdminServices.factory('EventsAdminService', ['$resource', function($resource){
     return {
+        getGroups: $resource('api//admin/utilizatori/grupuri',{},{
+            query: { method: 'GET', isArray: true }
+        }),
         getAll: $resource('api/admin/events/', {}, {
             query: { method: 'GET', isArray: true },
             save: { method: 'POST'}
         }),
         deleteOrUpdateEvents:$resource('api/admin/events/:id', {}, {
             getEvent: {method: 'GET', isArray: false},
+            delete: { method: 'DELETE'},
+            update: { method: 'PUT'}
+        }),
+        getAllSpeakers: $resource('api/admin/speakers/', {}, {
+            query: { method: 'GET', isArray: true },
+            save: { method: 'POST'}
+        }),
+        deleteOrUpdateSpeakers:$resource('api/admin/speakers/:id', {}, {
+            getSpeaker: {method: 'GET', isArray: false},
+            delete: { method: 'DELETE'},
+            update: { method: 'PUT'}
+        }),
+        getAllConferences: $resource('api/admin/conferences/', {}, {
+            query: { method: 'GET', isArray: true },
+            save: { method: 'POST'}
+        }),
+        deleteOrUpdateConferences:$resource('api/admin/conferences/:id', {}, {
+            getConference: {method: 'GET', isArray: false},
+            delete: { method: 'DELETE'},
+            update: { method: 'PUT'}
+        }),
+        getAllTalks: $resource('api/admin/talks/', {}, {
+            query: { method: 'GET', isArray: true },
+            save: { method: 'POST'}
+        }),
+        deleteOrUpdateTalks:$resource('api/admin/talks/:id', {}, {
+            getTalk: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}
         })

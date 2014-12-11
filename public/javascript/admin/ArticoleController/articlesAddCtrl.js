@@ -68,7 +68,7 @@ cloudAdminControllers.controller('articlesAddCtrl', ['$scope','$rootScope' ,'Con
             $modalInstance.close();
         }
     };
-    $scope.renderHtml = function (htmlCode) {
+      $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
     $scope.okk = function () {
