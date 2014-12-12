@@ -5,9 +5,6 @@ var User = require('../app/models/user');
 
 module.exports = function (app, tokenSecret) {
 
-    // We are going to protect /apiConferences routes with JWT
-    app.use('/apiConferences', expressJwt({secret: tokenSecret}));
-
     app.options('/authenticateToken', function (req, res) {
         var headers = {};
         // IE8 does not allow domains to be specified, just the *

@@ -24,7 +24,8 @@ var userSchema = mongoose.Schema({
     groupsID     : Array,
     'therapeutic-areasID': Array,
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+    activationToken: String
 });
 
 // generating a hash

@@ -20,17 +20,17 @@ module.exports = function(passport) {
             // asynchronous
             process.nextTick(function() {
                 console.log(email);
-                User.findOne({ 'username' :  { $regex: new RegExp("^" + email, "i") }}, function(err, user) {
+                User.findOne({username:{$regex: new RegExp("^"+email,"i")}, enable:{$ne: false}}, function(err, user) {
                     // if there are any errors, return the error
                     if (err)
                         return done(err);
 
                     // if no user is found, return the message
                     if (!user)
-                        return done(null, false, req.flash('loginMessage', 'No user found.'));
+                        return done(null, false, req.flash('loginMessage', 'Nu s-a gasit utilizatorul, sau utilizatorul nu este activat'));
 
                     if (!user.validPassword(password))
-                        return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+                        return done(null, false, req.flash('loginMessage', 'Parola este gresita'));
 
                     // all is well, return user
                     else

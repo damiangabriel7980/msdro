@@ -1,9 +1,14 @@
 var LocalStrategy    = require('passport-local').Strategy;
+var XRegExp  = require('xregexp').XRegExp;
+var validator = require('validator');
+var crypto   = require('crypto');
 
-// load up the user model
+// load up models
 var User       = require('../app/models/user');
+var Roles = require('../app/models/roles');
 
 module.exports = function(passport) {
+    var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
     // =========================================================================
     // LOCAL SIGNUP ============================================================
     // =========================================================================
@@ -27,61 +32,86 @@ module.exports = function(passport) {
                 return null;
             }
 
-            var username = lookup(req.body, 'username') || lookup(req.query, 'username');
+            var name = lookup(req.body, 'name') || lookup(req.query, 'name');
+            var confirm = lookup(req.body, 'confirm') || lookup(req.query, 'confirm');
+            var signupFromConf = lookup(req.body, 'signupFromConf') || lookup(req.query, 'signupFromConf');
 
-            if (email)
-                email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
+            var info = {
+                email: email,
+                name: name,
+                message: null
+            };
 
             // asynchronous
             process.nextTick(function() {
                 // if the user is not already logged in:
                 if (!req.user) {
-                    User.findOne({ 'local.email' :  email }, function(err, user) {
+                    //validate email, name, password, password match
+                    if(!validator.isEmail(email)){
+                        info.message = "Adresa de e-mail nu este valida";
+                        return done(null, false, info);
+                    }
+                    if(!namePatt.test(name.replace(/ /g,''))){
+                        info.message = "Numele trebuie sa contina doar litere, minim 3";
+                        return done(null, false, info);
+                    }
+                    if(password.length < 6 || password.length > 32){
+                        info.message = "Parola trebuie sa contina intre 6 si 32 de caractere";
+                        return done(null, false, info);
+                    }
+                    if(password !== confirm){
+                        info.message = "Parolele nu corespund";
+                        return done(null, false, info);
+                    }
+
+
+                    User.findOne({ 'username' :  email }, function(err, user) {
                         // if there are any errors, return the error
                         if (err)
                             return done(err);
 
-                        // check to see if theres already a user with that email
+                        // check to see if there's already a user with that email
                         if (user) {
-                            return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                            info.message = "Acest e-mail este deja folosit";
+                            return done(null, false, info);
                         } else {
-
                             // create the user
                             var newUser            = new User();
 
-                            newUser.local.email    = email;
-                            newUser.local.username    = username;
-                            newUser.local.password = newUser.generateHash(password);
+                            //get default role
+                            Roles.findOne({'authority': 'ROLE_FARMACIST'}, function (err, role) {
+                                if(err) return done(err);
+                                newUser.rolesID = [role._id.toString()];
+                                newUser.username = email;
+                                newUser.name     = name;
+                                newUser.password = newUser.generateHash(password);
+                                newUser.password_expired = false;
+                                newUser.account_expired = false;
+                                newUser.account_locked = false;
+                                newUser.enabled = false; //enable only after email activation
+                                newUser.last_updated = Date.now();
+                                newUser.state = "ACCEPTED";
+                                //set activation token
+                                crypto.randomBytes(40, function(err, buf) {
+                                    if(err) return done(err);
 
-                            newUser.save(function(err) {
-                                if (err)
-                                    return done(err);
+                                    newUser.activationToken = buf.toString('hex');
 
-                                return done(null, newUser);
+                                    //save user
+                                    newUser.save(function(err) {
+                                        if (err)
+                                            return done(err);
+
+                                        return done(null, newUser);
+                                    });
+                                });
                             });
                         }
-
-                    });
-                    // if the user is logged in but has no local account...
-                } else if ( !req.user.local.email ) {
-                    // ...presumably they're trying to connect a local account
-                    var user            = req.user;
-                    user.local.email    = email;
-                    user.local.username    = username;
-                    user.local.password = user.generateHash(password);
-                    user.save(function(err) {
-                        if (err)
-                            return done(err);
-
-                        return done(null, user);
                     });
                 } else {
-                    // user is logged in and already has a local account. Ignore signup. (You should log out before trying to create a new account, user!)
+                    // user is logged in .Ignore signup. (You should log out before trying to create a new account, user!)
                     return done(null, req.user);
                 }
-
             });
-
         }));
-
-}
+};
