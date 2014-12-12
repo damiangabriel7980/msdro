@@ -1193,14 +1193,15 @@ module.exports = function(app, sessionSecret,email,router) {
             });
         })
         .delete(function(req, res) {
-            Events.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
+            Events.findOne({_id:req.params.id},function(err,resp){
+                resp.remove(function(err,cont) {
+                    if (err)
+                        res.send(err);
 
-                res.json({ message: 'Successfully deleted!' });
-            });
+                    res.json({ message: 'Successfully deleted!' });
+                });
+            })
+
         });
 
     router.route('/admin/speakers')
@@ -1356,14 +1357,16 @@ module.exports = function(app, sessionSecret,email,router) {
             });
         })
         .delete(function(req, res) {
-            Conferences.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
+            Conferences.findOne({_id:req.params.id},function(err,resp){
+                if(resp)
+                    resp.remove(function(err,cont) {
+                        if (err)
+                            res.send(err);
 
-                res.json({ message: 'Successfully deleted!' });
+                        res.json({ message: 'Successfully deleted!' });
+                    });
             });
+
         });
      router.route('/admin/talks')
         .get(function(req,res){
