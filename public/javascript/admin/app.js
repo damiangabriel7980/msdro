@@ -8,7 +8,9 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'angularFileUpload',
         'ui.tinymce',
         'ui.select',
-        'ja.qr'
+        'ja.qr',
+        'ui.bootstrap.datetimepicker',
+        'angular-growl'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

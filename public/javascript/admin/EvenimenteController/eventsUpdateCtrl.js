@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state){
+cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,growl){
     EventsAdminService.getGroups.query().$promise.then(function(resp){
         $scope.grupuri=resp;
         EventsAdminService.getAllConferences.query().$promise.then(function(resp){
@@ -126,8 +126,12 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
         $scope.newEvent.description = tinyMCE.activeEditor.getContent();
         console.log($scope.newEvent);
         if ($scope.newEvent) {
-            EventsAdminService.deleteOrUpdateEvents.update({id: $stateParams.id}, $scope.newEvent);
-            $state.go('continut.evenimente');
+            EventsAdminService.deleteOrUpdateEvents.update({id: $stateParams.id}, $scope.newEvent).$promise.then(function(result){
+                if(result.message)
+                    growl.addSuccessMessage(result.message);
+                else
+                    growl.addWarnMessage(result);
+            });
             tinyMCE.remove();
         }
     };

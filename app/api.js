@@ -1239,7 +1239,7 @@ module.exports = function(app, sessionSecret,email,router) {
     });
     router.route('/admin/speakers/:id')
         .get(function(req,res){
-            Speakers.find({_id:req.params.id}).populate('listTalks').exec(function (err, speaker) {
+            Speakers.findById(req.params.id).populate('listTalks').exec(function (err, speaker) {
                 if (err)
                 {
                     res.json(err);
@@ -1265,11 +1265,12 @@ module.exports = function(app, sessionSecret,email,router) {
             speaker.last_updated= req.body.last_updated ;
             speaker.workplace=req.body.workplace;
             speaker.short_description= req.body.short_description ;
-            speaker.listTalks=req.body.listTalks;
             speaker.save(function(err) {
-                if (err)
+                if (err) {
+                    console.log(err);
                     res.send(err);
-
+                    return;
+                }
                 res.json({ message: 'Speaker updated!' });
             });
 
@@ -1405,7 +1406,7 @@ module.exports = function(app, sessionSecret,email,router) {
          });
     router.route('/admin/talks/:id')
         .get(function(req,res){
-            Talks.find({_id:req.params.id}).populate('listSpeakers').exec(function (err, talk) {
+            Talks.findById(req.params.id).populate('listSpeakers').exec(function (err, talk) {
                 if (err)
                 {
                     console.log(err);

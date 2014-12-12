@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state){
+cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,growl){
     EventsAdminService.getGroups.query().$promise.then(function(resp){
        $scope.grupuri=resp;
         EventsAdminService.getAllConferences.query().$promise.then(function(resp){
@@ -111,10 +111,14 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
         $scope.newEvent.description=tinyMCE.activeEditor.getContent();
         console.log($scope.newEvent);
         if($scope.newEvent){
-            EventsAdminService.getAll.save($scope.newEvent);
+            EventsAdminService.getAll.save($scope.newEvent).$promise.then(function(result){
+                if(result.message)
+                    growl.addSuccessMessage(result.message);
+                else
+                    growl.addWarnMessage(result);
+            });
             console.log($scope.newEvent);
             $scope.newEvent = {};
-            $state.go('continut.evenimente');
             tinyMCE.remove();
         }
     };

@@ -4,27 +4,49 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state){
+cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','ngTableParams','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,ngTableParams,growl){
 
 
     EventsAdminService.getAllTalks.query().$promise.then(function(resp){
         $scope.talks=resp;
-        for(var i=0;i<$scope.talks.length;i++)
-        {
-            for(var j=0;j<$scope.newConference.listTalks.length;j++)
+        EventsAdminService.deleteOrUpdateConferences.getConference({id:$stateParams.id}).$promise.then(function(result2){
+            $scope.groupTalks=[];
+            console.log(result2);
+            $scope.newConference=result2;
+            var listtalks = $scope.newConference.listTalks;
+            $scope.tableParams = new ngTableParams({
+                page: 1,            // show first page
+                count: 10,          // count per page
+                sorting: {
+                    title: 'asc'     // initial sorting
+                },
+                filter: {
+                    title: ''       // initial filter
+                }
+            }, {
+                total: listtalks.length, // length of data
+                getData: function($defer, params) {
+
+                    var orderedData = $filter('orderBy')(($filter('filter')(listtalks, params.filter())), params.orderBy());
+
+                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                }
+            });
+            for(var i=0;i<$scope.talks.length;i++)
             {
-                if($scope.talks[i]._id==$scope.newConference.listTalks[j])
-                    $scope.groupTalks.push($scope.talks[i]);
+                for(var j=0;j<$scope.newConference.listTalks.length;j++)
+                {
+                    if($scope.talks[i]._id==$scope.newConference.listTalks[j]._id)
+                        $scope.groupTalks.push($scope.talks[i]);
+                }
             }
-        }
-        $scope.selectedTalk=$scope.talks[0];
+            $scope.selectedTalk=$scope.talks[0];
+        });
+
+
     });
 
-    EventsAdminService.deleteOrUpdateConferences.getConference({id:$stateParams.id}).$promise.then(function(result2){
-        $scope.groupTalks=[];
-        console.log(result2);
-        $scope.newConference=result2;
-    });
+
 
 
     var findTalk = function (id) {
@@ -74,8 +96,12 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
         $scope.newConference.listTalks=id_talks;
         console.log($scope.newConference);
         if($scope.newConference){
-            EventsAdminService.deleteOrUpdateConferences.update({id: $stateParams.id}, $scope.newConference);
-            $state.go('continut.evenimente');
+            EventsAdminService.deleteOrUpdateConferences.update({id: $stateParams.id}, $scope.newConference).$promise.then(function(result){
+                if(result.message)
+                    growl.addSuccessMessage(result.message);
+                else
+                    growl.addWarnMessage(result);
+            });
         }
     };
 
@@ -83,4 +109,10 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
         $state.go('continut.evenimente');
     }
 
-}]);
+}])
+    .filter("asDate", function () {
+        return function (input) {
+            return new Date(input);
+        }
+    });
+

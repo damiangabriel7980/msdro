@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state){
+cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,growl){
     EventsAdminService.getAllTalks.query().$promise.then(function(resp){
         $scope.talks=resp;
         $scope.selectedTalk=$scope.talks[0];
@@ -64,11 +64,18 @@ cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'
         $scope.newConference.listTalks=id_talks;
         console.log($scope.newConference);
         if($scope.newConference){
-            EventsAdminService.getAllConferences.save($scope.newConference);
+            EventsAdminService.getAllConferences.save($scope.newConference).$promise.then(function(result){
+                if(result.message)
+                    growl.addSuccessMessage(result.message);
+                else
+                    growl.addWarnMessage(result);
+            });
             console.log($scope.newConference);
             $scope.newConference = {};
-            $state.go('continut.evenimente');
         }
+    };
+    $scope.okk=function(){
+      $state.go('continut.evenimente');
     };
 
 }]);

@@ -46,7 +46,7 @@
     "bootstrap": "^3.2.0",
     "jquery": "~2.x",
     "fullcalendar": "~1.x",
-    "angular": "~1.2.15",
+    "angular": "~1.2.0",
     "es5-shim": ">=3.4.0",
     "angular-touch": ">=1.2.10",
     "pdfjs-dist": "1.0.833"

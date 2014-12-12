@@ -6,7 +6,7 @@
 
 <div class="container-fluid">
     <div class="col-xs-12">
-        <h3>Adauga conferinta</h3>
+        <h3>Update conferinta</h3>
     </div>
     <div class="col-xs-6">
         <label class="label label-default">Titlu:</label>
@@ -37,7 +37,25 @@
     </div>
     <div class="col-xs-12">
         <a class="btn pull-left btn-primary" ng-click="okk()">Back to Events</a>
-        <a class="btn pull-right btn-primary" ng-click="updateConference()">Create conference</a>
+        <a class="btn pull-right btn-primary" ng-click="updateConference()">Update conference</a>
+    </div>
+    <div growl class="col-xs-12">
+
+    </div>
+    <div class="col-xs-12">
+        <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+            <tr ng-repeat="talks in $data">
+                <td data-title="'Denumire'" filter="{ 'title': 'text' }" sortable="'title'">{{talks.title}}</td>
+                <td data-title="'Inceput'" sortable="'start'">{{talks.hour_start | asDate | date:'dd/MM/yyyy'}}</td>
+                <td data-title="'Final'" sortable="'end'">{{talks.hour_end | asDate|date:'dd/MM/yyyy'}}</td>
+                <td>
+                    <div class="btn-group-sm"  role="group" style="display: flex">
+                        <button class="btn btn-danger" ui-sref="continut.evenimente.deleteTalk({id: talks._id})"><i class="glyphicon glyphicon-trash"></i></button>
+                        <button class="btn btn-info" ui-sref="continut.updateTalk({id: talks._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 
