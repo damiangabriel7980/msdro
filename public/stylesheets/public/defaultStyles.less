@@ -141,6 +141,34 @@ html{
 
 }
 
+//================================================================================================================ HOME
+.myTabs{
+  display: table;
+  margin: 0 auto;
+  margin-top: 25px;
+  .myTab{
+    float: left;
+    margin: 0;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid @gray;
+    cursor: pointer;
+    &.active{
+      color: @greenDark;
+    }
+    &:hover{
+      color: @greenDark;
+    }
+  }
+  .left{
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+  }
+  .right{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+}
+
 
 //======================================================================================================== USEFUL STUFF
 

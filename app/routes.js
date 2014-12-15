@@ -414,7 +414,7 @@ function isNotLoggedIn(req, res, next) {
 //paths = {"role": "page", ...}
 //sendUserInfo = boolean
 var transportUser = function (req, res, paths, sendUserInfo) {
-    if(req.user.enabled && !req.user.account_locked &&!req.user.account_expired && req.user.state === "ACCEPTED"){
+    if(req.user.enabled && !req.user.account_locked &&!req.user.account_expired){
         Roles.find({_id: {$in: req.user.rolesID}}, function (err, roles) {
             if(err){
                 req.logout();
@@ -439,6 +439,7 @@ var transportUser = function (req, res, paths, sendUserInfo) {
         });
     }else{
         req.logout();
-        res.redirect('/');
+        req.flash('loginMessage', 'Contul nu este activat sau a expirat');
+        res.redirect('/login');
     }
 };

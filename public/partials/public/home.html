@@ -1,25 +1,35 @@
-<div class="col-md-12 unselectable" resizable style="{{carouselStyle}}">
-    <div class="fixedBox" style="{{fixedBoxStyle}}">
-        <div class="carouselTitle">
-            {{carouselSlides[selectedIndex].title}}
-        </div>
-        <div class="carouselDescription">
-            {{carouselSlides[selectedIndex].description}}
-        </div>
-        <div class="carouselLearnMore">
-            Learn more <i class="fa fa-caret-right"></i>
-        </div>
-    </div>
-    <div class="carouselNavigation" style="{{cNavStyle}}">
-        <div class="navSlide" ng-repeat="slide in carouselSlides track by $index"  ng-class="{'active':$index==selectedIndex}" ng-click="setSlide($index)">
-            <img ng-src="{{pathAmazonDev+slide.image_path}}">
-        </div>
-    </div>
-    <ul rn-carousel rn-carousel-index="selectedIndex" class="myCarousel" rn-carousel-auto-slide="5">
-        <li ng-repeat="slide in carouselSlides">
-            <div class="imageGroup">
-                <img class="imageReal" ng-src="{{pathAmazonDev+slide.image_path}}" ondragstart="return false;">
+<div class="col-md-12 unselectable noPadding" resizable>
+    <div class="carouselWrapper" style="{{carouselStyle}}">
+        <div class="fixedBox" style="{{fixedBoxStyle}}">
+            <div class="carouselTitle">
+                {{carouselSlides[selectedIndex].title}}
             </div>
-        </li>
-    </ul>
+            <div class="carouselDescription">
+                {{carouselSlides[selectedIndex].description}}
+            </div>
+            <div class="carouselLearnMore">
+                Learn more <i class="fa fa-caret-right"></i>
+            </div>
+        </div>
+        <div class="carouselNavigation" style="{{cNavStyle}}">
+            <div class="navSlide" ng-repeat="slide in carouselSlides track by $index"  ng-class="{'active':$index==selectedIndex}" ng-click="setSlide($index)">
+                <img ng-src="{{pathAmazonDev+slide.image_path}}">
+            </div>
+        </div>
+        <ul rn-carousel rn-carousel-index="selectedIndex" class="myCarousel" rn-carousel-auto-slide="5">
+            <li ng-repeat="slide in carouselSlides">
+                <div class="imageGroup">
+                    <img class="imageReal" ng-src="{{pathAmazonDev+slide.image_path}}" ondragstart="return false;">
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
+<div class="col-md-12 noPadding unselectable">
+    <div class="myTabs">
+        <div class="myTab left" ng-class="{'active': $state.includes('home.noutati')}" ui-sref="home.noutati">ULTIMELE NOUTATI</div>
+        <div class="myTab" ng-class="{'active': $state.includes('home.cmcArticole')}" ui-sref="home.cmcArticole">CELE MAI CITITE ARTICOLE</div>
+        <div class="myTab right" ng-class="{'active': $state.includes('home.downloads')}" ui-sref="home.downloads">DOWNLOADS</div>
+    </div>
+</div>
+<div class="col-md-12 noPadding" ui-view></div>

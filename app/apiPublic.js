@@ -16,6 +16,18 @@ module.exports = function(app,email, router) {
             })
         });
 
+    router.route('/contentByType/:type')
+
+        .get(function (req, res) {
+            PublicContent.find({type: req.params.type}).sort({date_added: -1}).exec(function (err, resp) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(resp);
+                }
+            })
+        });
+
 
     app.use('/apiPublic', router);
 };
