@@ -124,6 +124,32 @@ html body .rootView {
 .myCarousel .imageGroup .imageReal {
   width: 100%;
 }
+.btnGreen {
+  display: table;
+  padding: 7px 14px 7px 14px;
+  margin-top: 10px;
+  background-color: #36cfa5;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.btnGreen:hover {
+  background-color: #008780;
+}
+.pagination > .active > a {
+  background-color: #36cfa5;
+  border-color: #36cfa5;
+}
+.pagination > .active > a:hover {
+  background-color: #36cfa5;
+  border-color: #36cfa5;
+}
 .myTabs {
   display: table;
   margin: 0 auto;
@@ -152,9 +178,7 @@ html body .rootView {
   border-bottom-right-radius: 5px;
 }
 .homeNewsDisplay .largeDisplay {
-  height: 200px;
   overflow: hidden;
-  position: relative;
 }
 .homeNewsDisplay .largeDisplay .left {
   float: left;
@@ -165,12 +189,17 @@ html body .rootView {
   font-size: 20px;
   margin-bottom: 15px;
 }
-.homeNewsDisplay .largeDisplay .left:after {
+.homeNewsDisplay .largeDisplay .left .text {
+  position: relative;
+  height: 6em;
+  overflow: hidden;
+}
+.homeNewsDisplay .largeDisplay .left .text:after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 50%;
+  width: 100%;
   min-height: 4.5em;
   background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* FF3.6+ */
@@ -206,6 +235,7 @@ html body .rootView {
   float: left;
   padding: 10px;
   width: 25%;
+  margin-top: 10px;
 }
 .homeNewsDisplay .smallDisplay .contentBlock {
   width: 100%;
@@ -214,6 +244,9 @@ html body .rootView {
 }
 .homeNewsDisplay .smallDisplay .contentBlock img {
   width: 100%;
+}
+.homeNewsDisplay .smallDisplay .image {
+  overflow: hidden;
 }
 .homeNewsDisplay .smallDisplay .title {
   font-weight: bold;

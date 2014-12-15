@@ -3,6 +3,7 @@
 
 @orange: #f6902e;
 @greenDark: #008780;
+@greenLighter: #36cfa5;
 
 html{
   height: 100%;
@@ -142,7 +143,33 @@ html{
 
 }
 
+//==================================================================================================== UNIVERSAL STYLES
+
+.btnGreen{
+  display: table;
+  padding: 7px 14px 7px 14px;
+  margin-top: 10px;
+  background-color: @greenLighter;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  .unselectable;
+  &:hover{
+    background-color: @greenDark;
+  }
+}
+
+.pagination>.active>a{
+  background-color: @greenLighter;
+  border-color: @greenLighter;
+  &:hover{
+    background-color: @greenLighter;
+    border-color: @greenLighter;
+  }
+}
+
 //================================================================================================================ HOME
+
 .myTabs{
   display: table;
   margin: 0 auto;
@@ -173,9 +200,8 @@ html{
 
 .homeNewsDisplay{
   .largeDisplay{
-    height: 200px;
+//    height: 200px;
     overflow: hidden;
-    position: relative;
     .left{
       float: left;
       width: 50%;
@@ -185,16 +211,18 @@ html{
         margin-bottom: 15px;
       }
       .text{
-
-      }
-      &:after{
-        content:'';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 50%;
-        min-height: 4.5em;
-        .gradientVertical;
+        position: relative;
+        height: 6em;
+        overflow: hidden;
+        &:after{
+          content:'';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          min-height: 4.5em;
+          .gradientVertical;
+        }
       }
     }
     .right{
@@ -210,6 +238,7 @@ html{
     float: left;
     padding: 10px;
     width: 25%;
+    margin-top: 10px;
     .contentBlock{
       width: 100%;
       padding: 0 0 15px 0;
@@ -217,6 +246,9 @@ html{
       img{
         width: 100%;
       }
+    }
+    .image{
+      overflow: hidden;
     }
     .title{
       font-weight: bold;
