@@ -26,7 +26,8 @@
     "aws-sdk": "latest",
     "express-jwt": "latest",
     "jsonwebtoken": "latest",
-    "mandrill-send": "latest"
+    "mandrill-send": "latest",
+    "validator": "latest"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",

@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <title>Activare cont</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body 		{ padding-top:80px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="col-md-12">
+        <% if(typeof pending !== 'undefined'){ %>
+        <h5>Veti primi in scurt timp un e-mail de activare</h5>
+        <% }else if(typeof success !== 'undefined') {
+                if(!sucess){%>
+        <h5>Eroare la activare</h5>
+        <% }else { %>
+        <h5>Contul dumneavoastra a fost activat!</h5>
+        <% }} %>
+    </div>
+</div>
+</body>
+</html>
