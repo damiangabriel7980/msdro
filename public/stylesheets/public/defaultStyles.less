@@ -3,6 +3,7 @@
 
 @orange: #f6902e;
 @greenDark: #008780;
+@greenLighter: #36cfa5;
 
 html{
   height: 100%;
@@ -12,6 +13,7 @@ html{
     .rootView{
       height: 100%;
     }
+    line-height: 1.5em;
   }
 }
 
@@ -129,6 +131,21 @@ html{
     img{
       width: 60px;
     }
+    .tooltip{
+      margin-top: -10px;
+      margin-left: -6px;
+      .top{
+      }
+      .tooltip-inner{
+        background-color:rgba(0, 135, 128, 0.5);
+        padding: 8px 8px;
+        margin-bottom: 4px;
+      }
+      .tooltip-arrow{
+        border-width: 10px 10px 0;
+        border-top-color:rgba(0, 135, 128, 0.5);
+      }
+    }
   }
 }
 .myCarousel{
@@ -141,11 +158,38 @@ html{
 
 }
 
+//==================================================================================================== UNIVERSAL STYLES
+
+.btnGreen{
+  display: table;
+  padding: 7px 14px 7px 14px;
+  margin-top: 10px;
+  background-color: @greenLighter;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  .unselectable;
+  &:hover{
+    background-color: @greenDark;
+  }
+}
+
+.pagination>.active>a{
+  background-color: @greenLighter;
+  border-color: @greenLighter;
+  &:hover{
+    background-color: @greenLighter;
+    border-color: @greenLighter;
+  }
+}
+
 //================================================================================================================ HOME
+
 .myTabs{
   display: table;
   margin: 0 auto;
   margin-top: 25px;
+  margin-bottom: 25px;
   .myTab{
     float: left;
     margin: 0;
@@ -166,6 +210,96 @@ html{
   .right{
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+}
+
+.tezt{
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+}
+
+.homeNewsDisplay{
+  .largeDisplay{
+//    height: 200px;
+    overflow: hidden;
+    .left{
+      float: left;
+      width: 50%;
+      padding: 10px;
+      height: 100%;
+      position: relative;
+      .title{
+        font-size: 20px;
+        margin-bottom: 15px;
+      }
+      .text{
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+      }
+      .dispFooter{
+        position: absolute;
+        bottom: 0;
+        left: 10px;
+        width: 100%;
+        .upside{
+          height: 4.5em;
+          .gradientVertical;
+        }
+        .downside{
+          background-color: #ffffff;
+          height: 50px;
+          .btnGreen{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+        }
+      }
+    }
+    .right{
+      width: 50%;
+      padding: 10px;
+      overflow: hidden;
+      img{
+        width: 100%;
+      }
+    }
+  }
+  .smallDisplay{
+    float: left;
+    padding: 10px;
+    width: 25%;
+    margin-top: 10px;
+    .contentBlock{
+      width: 100%;
+      padding: 0 0 15px 0;
+      position: relative;
+      img{
+        width: 100%;
+      }
+    }
+    .image{
+      overflow: hidden;
+    }
+    .title{
+      font-weight: bold;
+    }
+    .text{
+      height: 12em;
+      overflow: hidden;
+      &:after{
+        content:'';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        min-height: 4.5em;
+        .gradientVertical;
+      }
+    }
+
   }
 }
 
@@ -197,4 +331,18 @@ html{
 
 .height100{
   height: 100%;
+}
+
+.width100{
+  width: 100%
+}
+
+.gradientVertical{
+  background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }

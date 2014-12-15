@@ -1,4 +1,4 @@
-<div class="col-md-12 unselectable noPadding" resizable>
+<div class="col-md-12 unselectable noPadding" carousel-resizable>
     <div class="carouselWrapper" style="{{carouselStyle}}">
         <div class="fixedBox" style="{{fixedBoxStyle}}">
             <div class="carouselTitle">
@@ -13,7 +13,7 @@
         </div>
         <div class="carouselNavigation" style="{{cNavStyle}}">
             <div class="navSlide" ng-repeat="slide in carouselSlides track by $index"  ng-class="{'active':$index==selectedIndex}" ng-click="setSlide($index)">
-                <img ng-src="{{pathAmazonDev+slide.image_path}}">
+                <img ng-src="{{pathAmazonDev+slide.image_path}}" tooltip-html-unsafe="{{getTooltip(slide)}}" tooltip-trigger="mouseenter">
             </div>
         </div>
         <ul rn-carousel rn-carousel-index="selectedIndex" class="myCarousel" rn-carousel-auto-slide="5">
