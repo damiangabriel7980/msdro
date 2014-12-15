@@ -190,6 +190,11 @@ html body .rootView {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
+.tezt {
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+}
 .homeNewsDisplay .largeDisplay {
   overflow: hidden;
 }
@@ -197,6 +202,8 @@ html body .rootView {
   float: left;
   width: 50%;
   padding: 10px;
+  height: 100%;
+  position: relative;
 }
 .homeNewsDisplay .largeDisplay .left .title {
   font-size: 20px;
@@ -204,16 +211,17 @@ html body .rootView {
 }
 .homeNewsDisplay .largeDisplay .left .text {
   position: relative;
-  height: 6em;
+  height: 100%;
   overflow: hidden;
 }
-.homeNewsDisplay .largeDisplay .left .text:after {
-  content: '';
+.homeNewsDisplay .largeDisplay .left .dispFooter {
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 10px;
   width: 100%;
-  min-height: 4.5em;
+}
+.homeNewsDisplay .largeDisplay .left .dispFooter .upside {
+  height: 4.5em;
   background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* FF3.6+ */
 
@@ -235,6 +243,15 @@ html body .rootView {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0);
   /* IE6-9 */
 
+}
+.homeNewsDisplay .largeDisplay .left .dispFooter .downside {
+  background-color: #ffffff;
+  height: 50px;
+}
+.homeNewsDisplay .largeDisplay .left .dispFooter .downside .btnGreen {
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 .homeNewsDisplay .largeDisplay .right {
   width: 50%;
