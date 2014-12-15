@@ -23,6 +23,10 @@ amazon:   - open /packaje.json
           - change bucket: edit "amazonBucket" environment variable
           - change root credentials (optionally): edit "AWS_ACCESS_KEY_ID" and "AWS_SECRET_ACCESS_KEY" variables
 
+mandrill: - open /packaje.json
+          - scroll down to "scripts" -> "start"
+          - edit "mandrillKey" environment variable
+
 node modules:     /package.json
 angular modules:  /bower.json
 server config:    /server.js
