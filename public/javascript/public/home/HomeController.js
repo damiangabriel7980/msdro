@@ -15,6 +15,17 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
         $scope.selectedIndex = 1;
     });
 
+    $scope.getTooltip = function (slide) {
+        var src = $rootScope.pathAmazonDev + slide.image_path;
+        var tooltipContent = '<div style="width:192px;height:54px;overflow:hidden;">'+
+                                '<img src="'+src+'" style="width:50%;">'+
+                             '</div>'+
+                             '<div style="color:#ffffff;font-weight:bold;">'+
+                                'jasfjias'+
+                             '</div>';
+        return $sce.trustAsHtml(tooltipContent);
+    };
+
     //------------------------------------------------------------------------------------------------ useful functions
 
     $scope.htmlToPlainText = function(text) {

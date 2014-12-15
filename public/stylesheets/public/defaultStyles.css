@@ -118,6 +118,19 @@ html body .rootView {
 .carouselNavigation .navSlide img {
   width: 60px;
 }
+.carouselNavigation .navSlide .tooltip {
+  margin-top: -10px;
+  margin-left: -6px;
+}
+.carouselNavigation .navSlide .tooltip .tooltip-inner {
+  background-color: rgba(0, 135, 128, 0.5);
+  padding: 8px 8px;
+  margin-bottom: 4px;
+}
+.carouselNavigation .navSlide .tooltip .tooltip-arrow {
+  border-width: 10px 10px 0;
+  border-top-color: rgba(0, 135, 128, 0.5);
+}
 .myCarousel {
   height: 100%;
 }
