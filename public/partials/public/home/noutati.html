@@ -1,10 +1,48 @@
 <div class="col-md-12">
-    <div ng-repeat="n in noutati track by $index">
+    <div ng-repeat="n in noutatiFiltered track by $index" class="homeNewsDisplay">
         <div ng-if="$index == 0">
             <!--this is the large display div-->
+            <div class="largeDisplay" resizable ratio="4">
+                <div class="left">
+                    <div class="title">
+                        {{n.title}}
+                    </div>
+                    <div class="text">
+                        {{htmlToPlainText(n.text)}}
+                    </div>
+                    <div class="dispFooter">
+                        <div class="upside"></div>
+                        <div class="downside">
+                            <div class="btnGreen">Citeste</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right">
+                    <img ng-src="{{pathAmazonDev+n.image_path}}">
+                </div>
+            </div>
         </div>
         <div ng-if="$index != 0">
             <!--this is the small display div-->
+            <div class="smallDisplay">
+                <div class="contentBlock image" resizable ratio="1.5">
+                    <img ng-src="{{pathAmazonDev+n.image_path}}">
+                </div>
+                <div class="contentBlock title">
+                    {{n.title}}
+                </div>
+                <div class="contentBlock text">
+                    {{htmlToPlainText(n.text)}}
+                </div>
+                <div class="contentBlock">
+                    <div class="btnGreen">Citeste</div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+<div class="col-md-12" style="text-align: center;">
+    <pagination total-items="totalItems" ng-model="currentPage" items-per-page="resultsPerPage" max-size="maxSize"
+                class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"
+                previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
 </div>
