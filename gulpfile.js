@@ -159,6 +159,9 @@ gulp.task('migrateDB', function () {
     //---------------------------------------------------------------- rename columns for tables below
     //                                                                 add more names in array to duplicate that column
     var renameColumns = {
+        "general_content": {
+            "last_updated": ["last_updated", "date_added"]
+        }
 //        "city": {
 //            "name": ["city-name"]
 //        },
