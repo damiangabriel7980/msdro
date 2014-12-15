@@ -17,12 +17,12 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
 
     //------------------------------------------------------------------------------------------------ useful functions
 
-    var htmlToPlainText = function(text) {
+    $scope.htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
     };
 
     $scope.createHeader = function (text,length) {
-        return htmlToPlainText(text).substring(0,length)+"...";
+        return $scope.htmlToPlainText(text).substring(0,length)+"...";
     };
 
     //merck modal

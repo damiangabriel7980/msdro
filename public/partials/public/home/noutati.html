@@ -1,10 +1,35 @@
 <div class="col-md-12">
-    <div ng-repeat="n in noutati track by $index">
+    <div ng-repeat="n in noutati track by $index" class="homeNewsDisplay">
         <div ng-if="$index == 0">
             <!--this is the large display div-->
+            <div class="largeDisplay">
+                <div class="left">
+                    <div class="title">
+                        {{n.title}}
+                    </div>
+                    <div class="text">
+                        {{htmlToPlainText(n.text)}}
+                    </div>
+                </div>
+                <div class="right">
+                    <img ng-src="{{pathAmazonDev+n.image_path}}">
+                </div>
+            </div>
         </div>
         <div ng-if="$index != 0">
             <!--this is the small display div-->
+            <div class="smallDisplay">
+                <div class="contentBlock">
+                    <img ng-src="{{pathAmazonDev+n.image_path}}">
+                </div>
+                <div class="contentBlock title">
+                    {{n.title}}
+                </div>
+                <div class="contentBlock text">
+                    {{htmlToPlainText(n.text)}}
+                </div>
+                <div class="contentBlock"></div>
+            </div>
         </div>
     </div>
 </div>

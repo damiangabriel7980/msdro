@@ -12,6 +12,7 @@ html{
     .rootView{
       height: 100%;
     }
+    line-height: 1.5em;
   }
 }
 
@@ -146,6 +147,7 @@ html{
   display: table;
   margin: 0 auto;
   margin-top: 25px;
+  margin-bottom: 25px;
   .myTab{
     float: left;
     margin: 0;
@@ -166,6 +168,73 @@ html{
   .right{
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+}
+
+.homeNewsDisplay{
+  .largeDisplay{
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    .left{
+      float: left;
+      width: 50%;
+      padding: 10px;
+      .title{
+        font-size: 20px;
+        margin-bottom: 15px;
+      }
+      .text{
+
+      }
+      &:after{
+        content:'';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50%;
+        min-height: 4.5em;
+        .gradientVertical;
+      }
+    }
+    .right{
+      width: 50%;
+      padding: 10px;
+      overflow: hidden;
+      img{
+        width: 100%;
+      }
+    }
+  }
+  .smallDisplay{
+    float: left;
+    padding: 10px;
+    width: 25%;
+    .contentBlock{
+      width: 100%;
+      padding: 0 0 15px 0;
+      position: relative;
+      img{
+        width: 100%;
+      }
+    }
+    .title{
+      font-weight: bold;
+    }
+    .text{
+      height: 12em;
+      overflow: hidden;
+      &:after{
+        content:'';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        min-height: 4.5em;
+        .gradientVertical;
+      }
+    }
+
   }
 }
 
@@ -197,4 +266,18 @@ html{
 
 .height100{
   height: 100%;
+}
+
+.width100{
+  width: 100%
+}
+
+.gradientVertical{
+  background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
