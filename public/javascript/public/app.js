@@ -8,12 +8,26 @@ var publicApp = angular.module('publicApp',
     ]);
 
 publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/");
+    $urlRouterProvider.otherwise("/home/noutati");
     $stateProvider
         .state('home',{
-            url: '/',
             templateUrl: 'partials/public/home.html',
             controller: 'HomeController'
+        })
+        .state('home.noutati',{
+            url: '/home/noutati',
+            templateUrl: 'partials/public/home/noutati.html',
+            controller: 'NoutatiController'
+        })
+        .state('home.cmcArticole',{
+            url: '/home/cmcArticole',
+            templateUrl: 'partials/public/home/cmcArticole.html',
+            controller: 'CeleMaiCititeController'
+        })
+        .state('home.downloads',{
+            url: '/home/downloads',
+            templateUrl: 'partials/public/home/downloads.html',
+            controller: 'HomeDownloadsController'
         })
         .state('stiri', {
             abstract: true,

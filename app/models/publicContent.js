@@ -11,6 +11,7 @@ var publicContentSchema		= new Schema({
     description:  String,
     text:         String,
     type:         Number,
+    date_added:   Date,
     last_updated: Date,
     enable:       Boolean,
     image_path:   String,
