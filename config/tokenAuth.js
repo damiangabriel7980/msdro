@@ -40,7 +40,7 @@ module.exports = function (app, tokenSecret) {
                     res.send(401, 'Wrong username');
                 }else{
                     //check account not expired, not locked etc
-                    if(user.account_expired || user.account_locked || !user.enabled || user.state !== "ACCEPTED"){
+                    if(user.account_expired || user.account_locked || !user.enabled){
                         res.send(401, 'Access not allowed');
                     }else{
                         //check password

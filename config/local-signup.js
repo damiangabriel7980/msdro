@@ -90,7 +90,7 @@ module.exports = function(passport) {
                                 newUser.account_locked = false;
                                 newUser.enabled = false; //enable only after email activation
                                 newUser.last_updated = Date.now();
-                                newUser.state = "ACCEPTED";
+                                newUser.state = "PENDING";
                                 //set activation token
                                 crypto.randomBytes(40, function(err, buf) {
                                     if(err) return done(err);
