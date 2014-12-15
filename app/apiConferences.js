@@ -16,7 +16,7 @@ var crypto   = require('crypto');
 var expressJwt = require('express-jwt');
 
 
-module.exports = function(app, email, tokenSecret, router) {
+module.exports = function(app, mandrill, tokenSecret, router) {
     
     //access control allow origin *
     app.all("/apiConferences/*", function(req, res, next) {
@@ -97,11 +97,7 @@ module.exports = function(app, email, tokenSecret, router) {
                                                 res.send(err);
                                             }else{
                                                 //send email
-                                                console.log("--------------");
-                                                console.log(req.headers.host);
-                                                console.log(inserted.username);
-                                                console.log(inserted.activationToken);
-                                                email({from: 'adminMSD@qualitance.ro',
+                                                mandrill({from: 'adminMSD@qualitance.ro',
                                                     to: [inserted.username],
                                                     subject:'Activare cont MSD',
                                                     text: 'Ati primit acest email deoarece v-ati inregistrat pe MSD Staywell.\n\n' +
@@ -114,10 +110,9 @@ module.exports = function(app, email, tokenSecret, router) {
                                                         console.log(errm);
                                                         res.send(errm);
                                                     }else{
-                                                        console.log("========== success");
                                                         info.error = false;
                                                         info.type = "success";
-                                                        info.message("Un email de activare a fost trimis");
+                                                        info.message = "Un email de activare a fost trimis";
                                                         res.json(info);
                                                     }
                                                 });
