@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state){
+cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,growl){
     EventsAdminService.getGroups.query().$promise.then(function(resp){
        $scope.grupuri=resp;
         EventsAdminService.getAllConferences.query().$promise.then(function(resp){
@@ -21,7 +21,7 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
         groupsID: $scope.grupeUser,
         last_updated:  new Date(),
         name:      "",
-        place:       "",
+        place:       "Here",
         privacy:   "",
         start: "",
         type: "",
@@ -109,10 +109,16 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
         $scope.newEvent.groupsID=id_groups;
         $scope.newEvent.listconferences=id_confs;
         $scope.newEvent.description=tinyMCE.activeEditor.getContent();
+        console.log($scope.newEvent);
         if($scope.newEvent){
-            EventsAdminService.getAll.save($scope.newEvent);
+            EventsAdminService.getAll.save($scope.newEvent).$promise.then(function(result){
+                if(result.message)
+                    growl.addSuccessMessage(result.message);
+                else
+                    growl.addWarnMessage(result);
+            });
+            console.log($scope.newEvent);
             $scope.newEvent = {};
-            $state.go('continut.evenimente');
             tinyMCE.remove();
         }
     };
@@ -121,14 +127,5 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
     };
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
-    };
-    $scope.tinymceOptions = {
-        selector: "textarea",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste"
-        ],
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 }]);

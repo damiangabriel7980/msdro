@@ -4,7 +4,6 @@
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
-
 var TalksSchema		= new Schema({
     description:  String,
     enable:         String,
@@ -13,7 +12,8 @@ var TalksSchema		= new Schema({
     last_updated: Date,
     title:      String,
     place:       String,
-    listSpeakers:[{type: Schema.Types.ObjectId,ref: 'speakers'}]
+    listSpeakers:[{type: Schema.Types.ObjectId,ref: 'speakers'}],
+    listRooms:[{type: Schema.Types.ObjectId,ref: 'rooms'}]
 });
 
 module.exports = mongoose.model('talks',TalksSchema,'talks');

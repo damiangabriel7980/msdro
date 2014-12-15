@@ -1,0 +1,92 @@
+<script>
+    $(function() {
+        $( "#datepicker" ).datepicker();
+    });
+</script>
+
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <h3>Update talk</h3>
+    </div>
+    <div class="col-xs-12">
+        <label class="label label-default">Titlu:</label>
+        <input ng-model="newTalk.title" type="text" class="form-control col-xs-12">
+    </div>
+    <div class="col-xs-12">
+        <label class="label label-default">Locatie:</label>
+        <input ng-model="newTalk.place" type="text" class="form-control col-xs-12">
+    </div>
+    <div class="col-xs-6">
+        <label class="label label-default">Data si ora inceput:</label>
+        <div class="dropdown">
+            <p class="input-group">
+                <input type="text" data-ng-model="newTalk.hour_start" class="dropdown-toggle form-control input-large" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="" />
+            </p>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <datetimepicker data-ng-model="newTalk.hour_start" data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+            </ul>
+        </div>
+
+    </div>
+    <div class="col-xs-6">
+        <label class="label label-default">Data si ora sfarsit:</label>
+        <div class="dropdown">
+            <p class="input-group">
+                <input type="text" data-ng-model="newTalk.hour_end" class="dropdown-toggle form-control input-large" id="dLabel2" role="button" data-toggle="dropdown" data-target="#" href="" />
+            </p>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel2">
+                <datetimepicker data-ng-model="newTalk.hour_end" data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+            </ul>
+        </div>
+
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="speakers">Speakers:</label>
+            <select ng-model="selectedSpeaker" ng-options="speaker as speaker.first_name for speaker in speakers"
+                    class="form-control" id="speakers" style="width: 100%;" ng-change="SpeakerWasSelected(selectedSpeaker)">
+            </select>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div ng-repeat="speaker in groupSpeakers">
+            <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
+                {{speaker.first_name}}&nbsp;
+                <i class="glyphicon glyphicon-remove-sign" ng-click="removeSpeaker(speaker._id)" style="cursor: pointer;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <form method="post">
+            <label class="label label-default">Descriere:</label>
+            <textarea ui-tinymce ng-model="tinymceModel"></textarea>
+        </form>
+    </div>
+    <div class="col-xs-12">
+        <a class="btn pull-left btn-primary" ng-click="okk()">Back to Events</a>
+        <a class="btn pull-right btn-primary" ng-click="updateTalk()">Update talk</a>
+    </div>
+    <div growl class="col-xs-12">
+
+    </div>
+    <div class="col-xs-12">
+        <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+            <tr ng-repeat="speakers in $data">
+                <td data-title="'Nume'" filter="{ 'last_name': 'text' }" sortable="'last_name'">{{speakers.last_name}}</td>
+                <td data-title="'Prenume'" filter="{ 'first_name': 'text' }" sortable="'first_name'">{{speakers.first_name}}</td>
+                <td data-title="'Profesie'" filter="{ 'profession': 'text' }" sortable="'profession'">{{speakers.profession}}</td>
+                <td data-title="'Workplace'" filter="{ 'workplace': 'text' }" sortable="'workplace'">{{speakers.workplace}}</td>
+                <td data-title="'Descriere'" filter="{ 'short_description': 'text' }" sortable="'short_description'">{{speakers.short_description}}</td>
+
+                <td>
+                    <div class="btn-group-sm"  role="group" style="display: flex">
+                        <button class="btn btn-danger" ui-sref="continut.evenimente.deleteSpeaker({id: speakers._id})"><i class="glyphicon glyphicon-trash"></i></button>
+                        <button class="btn btn-info" ui-sref="continut.updateSpeaker({id: speakers._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
