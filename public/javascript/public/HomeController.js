@@ -11,7 +11,6 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
     //------------------------------------------------------------------------------------------------- get all content
 
     HomeService.getCarouselData.query().$promise.then(function(resp){
-        console.log(resp);
         $scope.carouselSlides = resp;
         $scope.selectedIndex = 1;
     });

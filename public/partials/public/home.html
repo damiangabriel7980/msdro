@@ -25,3 +25,11 @@
         </ul>
     </div>
 </div>
+<div class="col-md-12 noPadding unselectable">
+    <div class="myTabs">
+        <div class="myTab left" ng-class="{'active': $state.includes('home.noutati')}" ui-sref="home.noutati">ULTIMELE NOUTATI</div>
+        <div class="myTab" ng-class="{'active': $state.includes('home.cmcArticole')}" ui-sref="home.cmcArticole">CELE MAI CITITE ARTICOLE</div>
+        <div class="myTab right" ng-class="{'active': $state.includes('home.downloads')}" ui-sref="home.downloads">DOWNLOADS</div>
+    </div>
+</div>
+<div class="col-md-12 noPadding" ui-view></div>

@@ -123,6 +123,32 @@ html body .rootView {
 .myCarousel .imageGroup .imageReal {
   width: 100%;
 }
+.myTabs {
+  display: table;
+  margin: 0 auto;
+  margin-top: 25px;
+}
+.myTabs .myTab {
+  float: left;
+  margin: 0;
+  padding: 5px 10px 5px 10px;
+  border: 1px solid #bbbbbb;
+  cursor: pointer;
+}
+.myTabs .myTab.active {
+  color: #008780;
+}
+.myTabs .myTab:hover {
+  color: #008780;
+}
+.myTabs .left {
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.myTabs .right {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
 .unselectable {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

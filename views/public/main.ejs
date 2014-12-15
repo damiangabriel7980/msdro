@@ -23,6 +23,9 @@
     <script src="javascript/public/publicServices.js"></script>
     <script src="javascript/public/publicDirectives.js"></script>
     <script src="javascript/public/HomeController.js"></script>
+    <script src="javascript/public/home/NoutatiController.js"></script>
+    <script src="javascript/public/home/CeleMaiCititeController.js"></script>
+    <script src="javascript/public/home/HomeDownloadsController.js"></script>
 
 
     <!--Plug-ins-->
@@ -56,11 +59,11 @@
             <div class="collapse navbar-collapse" collapse="navCollapsed">
 
                 <ul class="nav navbar-nav">
-                    <li ng-class="{'active': $state.includes('home')}"><a ui-sref="home" href="#/"> Home </a></li>
-                    <li ng-class="{'active': $state.includes('stiri')}"><a ui-sref="stiri.all" href="#/stiri"> Stiri </a></li>
-                    <li ng-class="{'active': $state.includes('articole')}"><a ui-sref="articole.all" href="#/articole"> Articole </a></li>
-                    <li ng-class="{'active': $state.includes('elearning')}"><a ui-sref="elearning.all" href="#/elearning"> Elearning </a></li>
-                    <li ng-class="{'active': $state.includes('downloads')}"><a ui-sref="downloads.all" href="#/downloads"> Downloads </a></li>
+                    <li ng-class="{'active': $state.includes('home')}"><a ui-sref="home.noutati"> Home </a></li>
+                    <li ng-class="{'active': $state.includes('stiri')}"><a ui-sref="stiri.all"> Stiri </a></li>
+                    <li ng-class="{'active': $state.includes('articole')}"><a ui-sref="articole.all"> Articole </a></li>
+                    <li ng-class="{'active': $state.includes('elearning')}"><a ui-sref="elearning.all"> Elearning </a></li>
+                    <li ng-class="{'active': $state.includes('downloads')}"><a ui-sref="downloads.all"> Downloads </a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
