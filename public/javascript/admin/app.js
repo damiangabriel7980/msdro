@@ -199,7 +199,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             }]
         })
         .state('continut.evenimente.deleteTalk',{
-            parent:'continut.evenimente',
+            parent:'',
             url: '/deleteTalk/:id',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
@@ -213,7 +213,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             }]
         })
         .state('continut.evenimente.deleteSpeaker',{
-            parent:'continut.evenimente',
+            parent:'',
             url: '/deleteSpeaker/:id',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({

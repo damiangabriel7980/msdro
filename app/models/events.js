@@ -19,11 +19,14 @@ var EventsSchema		= new Schema({
     listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
 });
 
+module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');
+
 EventsSchema.pre('remove', function(next) {
     // 'this' is the client being removed. Provide callbacks here if you want
     // to be notified of the calls' result.
+    //console.log(Conferences);
     Conferences.find({_id:{$in: this.listconferences}},function(err,resp){
-        console.log(resp);
+        //console.log(resp);
         for(var i=0;i<resp.length;i++)
         {
             resp[i].remove({_id: {$in: this.listconferences}},function(){
@@ -33,5 +36,3 @@ EventsSchema.pre('remove', function(next) {
         next();
     });
 });
-
-module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');

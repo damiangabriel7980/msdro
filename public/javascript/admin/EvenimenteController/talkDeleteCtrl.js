@@ -10,12 +10,12 @@ cloudAdminControllers.controller('talkDeleteCtrl', ['$scope','$rootScope' ,'Even
         return $sce.trustAsHtml(htmlCode);
     };
     $scope.okk = function () {
-        $state.go('continut.evenimente');
+        $state.go('continut.updateTalk');
         $modalInstance.close();
     };
-    $scope.stergeEveniment=function(){
-        EventsAdminService.deleteOrUpdateConferences.delete({id:$stateParams.id});
-        $state.go('continut.evenimente');
+    $scope.stergeTalk=function(){
+        EventsAdminService.deleteOrUpdateTalks.delete({id:$stateParams.id});
+        $state.go('continut.updateTalk');
         $modalInstance.close();
     }
 }]);

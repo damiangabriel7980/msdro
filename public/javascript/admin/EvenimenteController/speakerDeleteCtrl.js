@@ -13,8 +13,8 @@ cloudAdminControllers.controller('speakerDeleteCtrl', ['$scope','$rootScope' ,'E
         $state.go('continut.evenimente');
         $modalInstance.close();
     };
-    $scope.stergeEveniment=function(){
-        EventsAdminService.deleteOrUpdateConferences.delete({id:$stateParams.id});
+    $scope.stergeSpeaker=function(){
+        EventsAdminService.deleteOrUpdateSpeakers.delete({id:$stateParams.id});
         $state.go('continut.evenimente');
         $modalInstance.close();
     }

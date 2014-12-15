@@ -1278,14 +1278,15 @@ module.exports = function(app, sessionSecret,email,router) {
         });
     })
         .delete(function(req, res) {
-            Speakers.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
+            Speakers.findById(req.params.id,function(err,resp){
+                resp.remove(function(err,cont) {
+                    if (err)
+                        res.send(err);
 
-                res.json({ message: 'Successfully deleted!' });
+                    res.json({ message: 'Successfully deleted!' });
+                });
             });
+
         });
     router.route('/admin/conferences')
         .get(function(req,res){
