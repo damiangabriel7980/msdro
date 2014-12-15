@@ -6,6 +6,17 @@ var async = require('async');
 
 module.exports = function(app, email, passport) {
 
+    //access control origin
+    app.all("/*", function(req, res, next) {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Allow-Credentials", false);
+        res.setHeader("Access-Control-Max-Age", '86400'); // 24 hours
+        res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
+        next();
+        // just move on to the next route handler
+    });
+
 // normal routes ===============================================================
 
     app.get('/', function (req, res) {
@@ -46,7 +57,7 @@ module.exports = function(app, email, passport) {
         async.waterfall([
             //generate unique token
             function(done) {
-                crypto.randomBytes(20, function(err, buf) {
+                crypto.randomBytes(40, function(err, buf) {
                     var token = buf.toString('hex');
                     done(err, token);
                 });
@@ -122,7 +133,8 @@ module.exports = function(app, email, passport) {
                         User.update({resetPasswordToken: req.params.token}, {
                             password: user.generateHash(req.body.password),
                             resetPasswordToken: null,
-                            resetPasswordExpires: null
+                            resetPasswordExpires: null,
+                            enabled: true
                         }, function (err, data) {
                             if(err){
                                 res.render('forgotPass.ejs', {message : {message: 'A aparut o eroare la actualizare. Va rugam introduceti din nou email-ul', type: 'danger'}});
@@ -187,16 +199,64 @@ module.exports = function(app, email, passport) {
 
 		// SIGNUP =================================
 		// show the signup form
-		app.get('/signup', isNotLoggedIn, function(req, res) {
-			res.render('signup.ejs', { message: req.flash('signupMessage') });
+		app.get('/signup', function(req, res) {
+			res.render('signup.ejs', { info: {}});
 		});
 
 		// process the signup form
-		app.post('/signup', isNotLoggedIn, passport.authenticate('local-signup', {
-			successRedirect : '/', // redirect to the secure profile section
-			failureRedirect : '/signup', // redirect back to the signup page if there is an error
-			failureFlash : true // allow flash messages
-		}));
+		app.post('/signup', function(req, res, next) {
+            passport.authenticate('local-signup', function(err, user, info){
+                if(err) { return next(err); }
+                if(!user) { return res.render('signup.ejs', {info: info}); }
+                //email user
+                email({from: 'adminMSD@qualitance.ro',
+                    to: [user.username],
+                    subject:'Activare cont MSD',
+                    text: 'Ati primit acest email deoarece v-ati inregistrat pe MSD Staywell.\n\n' +
+                        'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va activa contul:\n\n' +
+                        'http://' + req.headers.host + '/activateAccount/' + user.activationToken + '\n\n' +
+                        'Link-ul este valabil maxim o ora\n'+
+                        'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n'
+                }, function(err){
+                    if(err) { return next(err); }
+                    res.render('accountActivation.ejs', {pending: true, success: false});
+                });
+            })(req, res, next);
+        });
+
+        //activate user account
+        app.get('/activateAccount/:token', function(req, res) {
+            User.findOne({ activationToken: req.params.token}, function(err, user) {
+                if (!user) {
+                    res.render('signup.ejs', {info: {message : 'Link-ul de activare nu este valid. Pentru a va crea un cont, folositi formularul de mai jos'}});
+                }else{
+                    user.enabled = true;
+                    user.activationToken = null;
+                    user.save(function (err, user) {
+                        if(err){
+                            res.render('accountActivation.ejs', {pending: false, success: false});
+                        }else{
+                            res.render('accountActivation.ejs', {pending: false, success: true});
+                        }
+                    });
+                }
+            });
+        });
+
+    //check if there is a user already registered wih email
+    app.post('/checkEmailExists', function (req, res) {
+        User.findOne({'username': {$regex: new RegExp("^"+req.body.email, "i")}}, function (err, user) {
+            if(err){
+                res.status(500).end();
+            }else{
+                if(!user){
+                    res.send({exists: false});
+                }else{
+                    res.send({exists: true});
+                }
+            }
+        })
+    });
 
 //	// facebook -------------------------------
 //

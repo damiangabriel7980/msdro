@@ -46,7 +46,7 @@ require('./app/routes.js')(app, email, passport); // load our routes and pass in
 // api ======================================================================
 require('./app/api.js')(app, sessionSecret,email, express.Router()); // load our private routes and pass in our app and session secret
 require('./app/apiPublic.js')(app,email, express.Router()); // load our public routes and pass in our app
-require('./app/apiConferences.js')(app,email, express.Router());
+require('./app/apiConferences.js')(app, email, tokenSecret, express.Router());
 
 // launch ======================================================================
 app.listen(port);
