@@ -10,8 +10,7 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.select',
         'ja.qr',
         'ui.bootstrap.datetimepicker',
-        'angular-growl',
-        'monospaced.qrcode'
+        'angular-growl'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

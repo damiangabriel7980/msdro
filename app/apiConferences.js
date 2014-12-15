@@ -8,7 +8,7 @@ var Talks = require('./models/talks');
 var Speakers = require('./models/speakers');
 var User = require('./models/user');
 var Roles=require('./models/roles');
-
+var Rooms=require('./models/rooms');
 var jwt = require('jsonwebtoken');
 var XRegExp  = require('xregexp').XRegExp;
 var validator = require('validator');
@@ -227,9 +227,10 @@ module.exports = function(app, mandrill, tokenSecret, router) {
                         var local=event.listconferences;
                         //console.log(local);
                         res.json(event);
-                        });
+                        return;
 
-                    return;
+                    });
+
                 }
 
             })
