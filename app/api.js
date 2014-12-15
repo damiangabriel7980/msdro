@@ -1193,14 +1193,15 @@ module.exports = function(app, sessionSecret,email,router) {
             });
         })
         .delete(function(req, res) {
-            Events.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
+            Events.findOne({_id:req.params.id},function(err,resp){
+                resp.remove(function(err,cont) {
+                    if (err)
+                        res.send(err);
 
-                res.json({ message: 'Successfully deleted!' });
-            });
+                    res.json({ message: 'Successfully deleted!' });
+                });
+            })
+
         });
 
     router.route('/admin/speakers')
@@ -1239,7 +1240,7 @@ module.exports = function(app, sessionSecret,email,router) {
     });
     router.route('/admin/speakers/:id')
         .get(function(req,res){
-            Speakers.find({_id:req.params.id}).populate('listTalks').exec(function (err, speaker) {
+            Speakers.findById(req.params.id).populate('listTalks').exec(function (err, speaker) {
                 if (err)
                 {
                     res.json(err);
@@ -1265,25 +1266,27 @@ module.exports = function(app, sessionSecret,email,router) {
             speaker.last_updated= req.body.last_updated ;
             speaker.workplace=req.body.workplace;
             speaker.short_description= req.body.short_description ;
-            speaker.listTalks=req.body.listTalks;
             speaker.save(function(err) {
-                if (err)
+                if (err) {
+                    console.log(err);
                     res.send(err);
-
+                    return;
+                }
                 res.json({ message: 'Speaker updated!' });
             });
 
         });
     })
         .delete(function(req, res) {
-            Speakers.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
+            Speakers.findById(req.params.id,function(err,resp){
+                resp.remove(function(err,cont) {
+                    if (err)
+                        res.send(err);
 
-                res.json({ message: 'Successfully deleted!' });
+                    res.json({ message: 'Successfully deleted!' });
+                });
             });
+
         });
     router.route('/admin/conferences')
         .get(function(req,res){
@@ -1319,7 +1322,7 @@ module.exports = function(app, sessionSecret,email,router) {
     });
     router.route('/admin/conferences/:id')
         .get(function(req,res){
-            Conferences.find({_id:req.params.id}).populate('listTalks').exec(function (err, conf) {
+            Conferences.findById(req.params.id).populate('listTalks').exec(function (err, conf) {
                 if (err)
                 {
                     res.json(err);
@@ -1355,14 +1358,16 @@ module.exports = function(app, sessionSecret,email,router) {
             });
         })
         .delete(function(req, res) {
-            Conferences.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
+            Conferences.findOne({_id:req.params.id},function(err,resp){
+                if(resp)
+                    resp.remove(function(err,cont) {
+                        if (err)
+                            res.send(err);
 
-                res.json({ message: 'Successfully deleted!' });
+                        res.json({ message: 'Successfully deleted!' });
+                    });
             });
+
         });
      router.route('/admin/talks')
         .get(function(req,res){
@@ -1405,7 +1410,7 @@ module.exports = function(app, sessionSecret,email,router) {
          });
     router.route('/admin/talks/:id')
         .get(function(req,res){
-            Talks.find({_id:req.params.id}).populate('listSpeakers').exec(function (err, talk) {
+            Talks.findById(req.params.id).populate('listSpeakers').exec(function (err, talk) {
                 if (err)
                 {
                     console.log(err);

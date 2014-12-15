@@ -8,7 +8,9 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'angularFileUpload',
         'ui.tinymce',
         'ui.select',
-        'ja.qr'
+        'ja.qr',
+        'ui.bootstrap.datetimepicker',
+        'angular-growl'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -168,6 +170,62 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
 
 
+        .state('continut.evenimente.deleteEveniment',{
+            parent:'continut.evenimente',
+            url: '/delete/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/deleteEveniment.ejs',
+                    backdrop: 'static',
+                    keyboard: false,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"eventsDeleteCtrl"
+                })
+            }]
+        })
+        .state('continut.evenimente.deleteConference',{
+            parent:'continut.evenimente',
+            url: '/deleteConference/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/deleteConference.ejs',
+                    backdrop: 'static',
+                    keyboard: false,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"conferencesDeleteCtrl"
+                })
+            }]
+        })
+        .state('continut.evenimente.deleteTalk',{
+            parent:'',
+            url: '/deleteTalk/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/deleteTalk.ejs',
+                    backdrop: 'static',
+                    keyboard: false,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"talkDeleteCtrl"
+                })
+            }]
+        })
+        .state('continut.evenimente.deleteSpeaker',{
+            parent:'',
+            url: '/deleteSpeaker/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/deleteSpeaker.ejs',
+                    backdrop: 'static',
+                    keyboard: false,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"speakerDeleteCtrl"
+                })
+            }]
+        })
 
         .state('continut.indexareContinut',{
             url: '/indexareContinut',

@@ -4,7 +4,6 @@
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
-
 var TalksSchema		= new Schema({
     description:  String,
     enable:         String,
