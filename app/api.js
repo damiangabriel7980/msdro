@@ -20,7 +20,7 @@ var Conferences = require('./models/conferences');
 var Talks = require('./models/talks');
 var Speakers = require('./models/speakers');
 var XRegExp  = require('xregexp').XRegExp;
-
+var Rooms = require('./models/rooms');
 var SHA256   = require('crypto-js/sha256');
 
 var mongoose = require('mongoose');
@@ -1311,7 +1311,7 @@ module.exports = function(app, sessionSecret,email,router) {
             conferences.begin_date= req.body.begin_date     ;
             conferences.last_updated= req.body.last_updated ;
             conferences.listTalks=req.body.listTalks;
-
+            conferences.qr_code=req.body.qr_code;
             conferences.save(function(err) {
             if (err)
                 res.send(err);
@@ -1348,6 +1348,7 @@ module.exports = function(app, sessionSecret,email,router) {
                 conferences.begin_date= req.body.begin_date     ;
                 conferences.last_updated= req.body.last_updated ;
                 conferences.listTalks=req.body.listTalks;
+                conferences.qr_code=req.body.qr_code;
                 conferences.save(function(err) {
                     if (err)
                         res.send(err);
@@ -1371,7 +1372,7 @@ module.exports = function(app, sessionSecret,email,router) {
         });
      router.route('/admin/talks')
         .get(function(req,res){
-            Talks.find().populate('listSpeakers').exec(function (err, talks) {
+            Talks.find().populate('listSpeakers listRooms').exec(function (err, talks) {
                 if (err)
                 {
                     res.json(err);
@@ -1398,7 +1399,7 @@ module.exports = function(app, sessionSecret,email,router) {
              talks.title=req.body.title;
              talks.place=req.body.place;
              talks.listSpeakers=req.body.listSpeakers;
-
+             talks.listRooms=req.body.listRooms;
 
              talks.save(function(err) {
                  if (err)
@@ -1410,7 +1411,7 @@ module.exports = function(app, sessionSecret,email,router) {
          });
     router.route('/admin/talks/:id')
         .get(function(req,res){
-            Talks.findById(req.params.id).populate('listSpeakers').exec(function (err, talk) {
+            Talks.findById(req.params.id).populate('listSpeakers listRooms').exec(function (err, talk) {
                 if (err)
                 {
                     console.log(err);
@@ -1440,6 +1441,7 @@ module.exports = function(app, sessionSecret,email,router) {
                 talks.title=req.body.title;
                 talks.place=req.body.place;
                 talks.listSpeakers=req.body.listSpeakers;
+                talks.listRooms=req.body.listRooms;
                 talks.save(function(err) {
                     if (err)
                         res.send(err);
@@ -1451,6 +1453,85 @@ module.exports = function(app, sessionSecret,email,router) {
         })
         .delete(function(req, res) {
             Talks.remove({
+                _id: req.params.id
+            }, function(err,cont) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Successfully deleted!' });
+            });
+        });
+    router.route('/admin/rooms')
+        .get(function(req,res){
+            Rooms.find().populate('id_talks').exec(function (err, rooms) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(rooms);
+                    return;
+                }
+
+
+            })
+
+        })
+        .post(function(req, res) {
+
+            var rooms = new Rooms(); 		// create a new instance of the Bear model
+            rooms.room_name=req.body.room_name;
+            rooms.id_talks=req.body.id_talks;
+            rooms.qr_code=req.body.qr_code;
+
+            rooms.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Room created!' });
+            });
+
+        });
+    router.route('/admin/rooms/:id')
+        .get(function(req,res){
+            Rooms.findById(req.params.id).populate('id_talks').exec(function (err, room) {
+                if (err)
+                {
+                    console.log(err);
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    console.log(room);
+                    res.json(room);
+                    return;
+                }
+            })
+        })
+        .put(function(req, res) {
+
+            Rooms.findById(req.params.id, function(err, rooms) {
+
+                if (err)
+                    res.send(err);
+
+                rooms.room_name=req.body.room_name;
+                rooms.id_talks=req.body.id_talks;
+                rooms.qr_code=req.body.qr_code;
+                rooms.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({ message: 'Room updated!' });
+                });
+
+            });
+        })
+        .delete(function(req, res) {
+            Rooms.remove({
                 _id: req.params.id
             }, function(err,cont) {
                 if (err)

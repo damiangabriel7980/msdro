@@ -104,18 +104,17 @@ module.exports = function(app,email, router) {
             })
         });
     router.route('/events/:id')
-        .get(function(req,res){
+        .get(function(req,res) {
             Events.findById(req.params.id).populate('listconferences').exec(function (err, event) {
-                if (err)
-                {
+                if (err) {
                     res.json(err);
                     return;
                 }
-                else
-                {
-                    res.json(event);
+                else {
+                   res.json(event);
                     return;
                 }
+
             })
         });
     router.route('/talks')
