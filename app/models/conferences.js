@@ -5,7 +5,7 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 //var Talks = require('./talks');
 var Events = require('./cities');
-
+var Talks=require('./talks');
 var ConferencesSchema		= new Schema({
     title:  String,
     enable:         String,

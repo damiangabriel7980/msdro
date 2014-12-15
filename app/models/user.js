@@ -1,8 +1,9 @@
 // load the things we need
 var mongoose = require('mongoose');
 var crypto   = require('crypto-js/sha256');
+var Schema			= mongoose.Schema;
 // define the schema for our user model
-var userSchema = mongoose.Schema({
+var userSchema = new Schema({
     account_expired: Boolean,
     account_locked: Boolean,
     citiesID: Array,
@@ -25,7 +26,8 @@ var userSchema = mongoose.Schema({
     'therapeutic-areasID': Array,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
-    activationToken: String
+    activationToken: String,
+    talksID:[{type: Schema.Types.ObjectId,ref: 'talks'}]
 });
 
 // generating a hash

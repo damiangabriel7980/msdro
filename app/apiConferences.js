@@ -217,7 +217,14 @@ module.exports = function(app, mandrill, tokenSecret, router) {
                     return;
                 }
                 else {
-                   res.json(event);
+                    var arrTalks=[];
+                    Conferences.find({_id:{$in: event.listconferences}}).populate('listTalks').exec(function(err,info){
+                       event.listconferences=info;
+                        var local=event.listconferences;
+                        //console.log(local);
+                        res.json(event);
+                        });
+
                     return;
                 }
 
