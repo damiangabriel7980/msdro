@@ -5,14 +5,16 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 //var Talks = require('./talks');
 var Events = require('./cities');
-
+var Talks=require('./talks');
 var ConferencesSchema		= new Schema({
     title:  String,
     enable:         String,
     begin_date:        Date,
     last_updated: Date,
     listTalks:[{type: Schema.Types.ObjectId,ref: 'talks'}],
-    qr_code: String
+    qr_code: String,
+    description: String,
+    end_date: Date
 });
 
 ConferencesSchema.pre('remove', function(next) {

@@ -17,6 +17,11 @@ var expressJwt = require('express-jwt');
 
 
 module.exports = function(app, mandrill, tokenSecret, router) {
+
+    var getUserData = function (req) {
+        var token = req.headers.authorization.split(' ').pop();
+        return jwt.decode(token);
+    };
     
     //access control allow origin *
     app.all("/apiConferences/*", function(req, res, next) {
@@ -129,8 +134,7 @@ module.exports = function(app, mandrill, tokenSecret, router) {
 
     router.route('/userProfile')
         .get(function (req, res) {
-            var token = req.headers.authorization.split(' ').pop();
-            res.json(jwt.decode(token));
+            res.json(getUserData(req));
         });
 
     router.route('/speakers')
@@ -217,7 +221,14 @@ module.exports = function(app, mandrill, tokenSecret, router) {
                     return;
                 }
                 else {
-                   res.json(event);
+                    var arrTalks=[];
+                    Conferences.find({_id:{$in: event.listconferences}}).populate('listTalks').exec(function(err,info){
+                       event.listconferences=info;
+                        var local=event.listconferences;
+                        //console.log(local);
+                        res.json(event);
+                        });
+
                     return;
                 }
 
@@ -239,7 +250,9 @@ module.exports = function(app, mandrill, tokenSecret, router) {
 
 
             })
-
+                .post(function(req,res){
+                    User.findOne()
+                })
         });
     router.route('/talks/:id')
         .get(function(req,res){
@@ -258,7 +271,24 @@ module.exports = function(app, mandrill, tokenSecret, router) {
 
             })
 
+        })
+    .put(function(req,res){
+        var userCurrent = getUserData(req);
+        User.findOne({'username':userCurrent.username}).exec(function(err,result){
+            result.talksID.push(req.params.id);
+            result.save(function(err,done){
+                if(err)
+                    res.json(err);
+                else
+                {
+                    console.log(result);
+                    res.json({'message':'Succes!'});
+                }
+            });
+
+
         });
+    });
     router.route('/rooms')
         .get(function(req,res){
             Rooms.find().populate('id_talks').exec(function (err, rooms) {

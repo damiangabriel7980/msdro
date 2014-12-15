@@ -10,9 +10,12 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
     EventsAdminService.getAllTalks.query().$promise.then(function(resp){
         $scope.talks=resp;
         EventsAdminService.deleteOrUpdateConferences.getConference({id:$stateParams.id}).$promise.then(function(result2){
+
+            $scope.newConference=result2;
+            $scope.string=$scope.newConference.qr_code;
             $scope.groupTalks=[];
             console.log(result2);
-            $scope.newConference=result2;
+
             var listtalks = $scope.newConference.listTalks;
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page

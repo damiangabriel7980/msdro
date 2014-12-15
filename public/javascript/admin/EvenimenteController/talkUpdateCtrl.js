@@ -15,6 +15,7 @@ cloudAdminControllers.controller('talkUpdateCtrl', ['$scope','$rootScope' ,'Even
             $scope.newTalk.hour_end=$filter('date')($scope.newTalk.hour_end, 'dd/MMM/yyyy HH:mm:ss');
             tinyMCE.activeEditor.setContent($scope.newTalk.description);
             var listSpeakers = $scope.newTalk.listSpeakers;
+            var listRooms = $scope.newTalk.listRooms;
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -29,6 +30,24 @@ cloudAdminControllers.controller('talkUpdateCtrl', ['$scope','$rootScope' ,'Even
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(listSpeakers, params.filter())), params.orderBy());
+
+                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                }
+            });
+            $scope.tableParams2 = new ngTableParams({
+                page: 1,            // show first page
+                count: 10,          // count per page
+                sorting: {
+                    room_name: 'asc'     // initial sorting
+                },
+                filter: {
+                    room_name: ''       // initial filter
+                }
+            }, {
+                total: listRooms.length, // length of data
+                getData: function($defer, params) {
+
+                    var orderedData = $filter('orderBy')(($filter('filter')(listRooms, params.filter())), params.orderBy());
 
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
