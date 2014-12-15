@@ -6,7 +6,7 @@ var Events = require('./models/events');
 var Conferences = require('./models/conferences');
 var Talks = require('./models/talks');
 var Speakers = require('./models/speakers');
-
+var Rooms = require('./models/rooms');
 var jwt = require('jsonwebtoken');
 
 module.exports = function(app,email, router) {
@@ -44,7 +44,7 @@ module.exports = function(app,email, router) {
         });
     router.route('/speakers/:id')
         .get(function(req,res){
-            Speakers.find({_id:req.params.id}).populate('listTalks').exec(function (err, speaker) {
+            Speakers.findById(req.params.id).populate('listTalks').exec(function (err, speaker) {
                 if (err)
                 {
                     res.json(err);
@@ -59,7 +59,68 @@ module.exports = function(app,email, router) {
         });
     router.route('/conferences')
         .get(function(req,res){
-            Conferences.find().populate('listTalks').exec(function (err, talks) {
+            Conferences.find().populate('listTalks').exec(function (err, conferences) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(conferences);
+                    return;
+                }
+            })
+        });
+    router.route('/conferences/:id')
+        .get(function(req,res){
+            Conferences.findById(req.params.id).populate('listTalks').exec(function (err, conference) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(conference);
+                    return;
+                }
+            })
+        });
+
+    router.route('/events')
+        .get(function(req,res){
+            Events.find().populate('listconferences').exec(function (err, events) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(events);
+                    return;
+                }
+            })
+        });
+    router.route('/events/:id')
+        .get(function(req,res){
+            Events.findById(req.params.id).populate('listconferences').exec(function (err, event) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(event);
+                    return;
+                }
+            })
+        });
+    router.route('/talks')
+        .get(function(req,res){
+            Talks.find().populate('listSpeakers listRooms').exec(function (err, talks) {
                 if (err)
                 {
                     res.json(err);
@@ -70,27 +131,14 @@ module.exports = function(app,email, router) {
                     res.json(talks);
                     return;
                 }
-            })
-        });
 
-    router.route('/events')
-        .get(function(req,res){
-            Events.find().populate('listconferences').exec(function (err, conferences) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(conferences);
-                    return;
-                }
+
             })
+
         });
-    router.route('/talks')
+    router.route('/talks/:id')
         .get(function(req,res){
-            Talks.find().populate('listSpeakers').exec(function (err, conferences) {
+            Talks.findById(req.params.id).populate('listSpeakers listRooms').exec(function (err, talk) {
                 if (err)
                 {
                     res.json(err);
@@ -98,7 +146,43 @@ module.exports = function(app,email, router) {
                 }
                 else
                 {
-                    res.json(conferences);
+                    res.json(talk);
+                    return;
+                }
+
+
+            })
+
+        });
+    router.route('/rooms')
+        .get(function(req,res){
+            Rooms.find().populate('id_talks').exec(function (err, rooms) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(rooms);
+                    return;
+                }
+
+
+            })
+
+        });
+    router.route('/rooms/:id')
+        .get(function(req,res){
+            Rooms.findById(req.params.id).populate('id_talks').exec(function (err, room) {
+                if (err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    res.json(room);
                     return;
                 }
 

@@ -11,7 +11,8 @@ var ConferencesSchema		= new Schema({
     enable:         String,
     begin_date:        Date,
     last_updated: Date,
-    listTalks:[{type: Schema.Types.ObjectId,ref: 'talks'}]
+    listTalks:[{type: Schema.Types.ObjectId,ref: 'talks'}],
+    qr_code: String
 });
 
 ConferencesSchema.pre('remove', function(next) {
