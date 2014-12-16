@@ -12,7 +12,7 @@ var ConferencesSchema		= new Schema({
     begin_date:        Date,
     last_updated: Date,
     listTalks:[{type: Schema.Types.ObjectId,ref: 'talks'}],
-    qr_code: String,
+    qr_code: Object,
     description: String,
     end_date: Date
 });
