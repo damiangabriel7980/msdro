@@ -8,12 +8,14 @@ var Talks = require('./models/talks');
 var Speakers = require('./models/speakers');
 var User = require('./models/user');
 var Roles=require('./models/roles');
+var Rooms = require('./models/rooms');
 
 var jwt = require('jsonwebtoken');
 var XRegExp  = require('xregexp').XRegExp;
 var validator = require('validator');
 var crypto   = require('crypto');
 var expressJwt = require('express-jwt');
+var async = require('async');
 
 
 module.exports = function(app, mandrill, tokenSecret, router) {
@@ -34,7 +36,7 @@ module.exports = function(app, mandrill, tokenSecret, router) {
     });
 
     // We are going to protect /apiConferences routes with JWT
-    app.use('/apiConferences', expressJwt({secret: tokenSecret}).unless({path: ['/apiConferences/createAccount']}));
+    app.use('/apiConferences', expressJwt({secret: tokenSecret}).unless({path: ['/apiConferences/createAccount','/apiConferences/testConferences']}));
 
     router.route('/createAccount')
         .post(function (req, res) {
@@ -325,5 +327,75 @@ module.exports = function(app, mandrill, tokenSecret, router) {
             })
 
         });
+
+    router.route('/testConferences')
+        .get(function (req, res) {
+
+            var findById = function(arr, id, callback){
+                for(var i=0; i<arr.length; i++){
+                    if(arr[i]._id == id){
+                        callback(arr[i]);
+                    }
+                }
+            };
+
+            //object that will be populated with all the data
+            var allData = {};
+
+            //entities relationships [from, via, to]
+            var mappings = [
+                ["conferences", "listTalks", "talks"],
+                ["talks", "listSpeakers", "speakers"],
+                ["talks", "listRooms", "rooms"]
+            ];
+
+            var myEntities = [Conferences, Talks, Speakers, Rooms];
+
+            //populate async
+            async.each(myEntities, function (entity, callback) {
+                entity.find({}, function (err, data) {
+                    if(err){
+                        callback(err);
+                    }else{
+                        allData[entity.modelName] = data;
+                        callback();
+                    }
+                })
+            }, function (err) {
+                if(err){
+                    res.json(err);
+                }else{
+                    console.log(allData);
+                    var conferences = allData['conferences'];
+                    async.each(mappings, function (mappingKey, callback1) {
+                        var base = mappingKey[0];
+                        var connection = mappingKey[1];
+                        var connected = mappingKey[2];
+                        async.each(allData[base], function (entity, callback2) {
+                            //console.log(entity._id+" - "+entity[connection]);
+                            var idFrom = entity._id;
+                            var arrayIdsTo = entity[connection];
+                            async.each(arrayIdsTo, function (idTo, callback3) {
+                                //console.log(base+" - "+idFrom+" - "+connected+" - "+idTo);
+                                findById(allData[base],idFrom, function (cFrom) {
+                                    findById(allData[connected],idTo.toString(), function (cTo) {
+                                        var index = cFrom[connection].indexOf(idTo);
+                                        cFrom[connection][index]= cTo;
+                                        callback3();
+                                    });
+                                });
+                            }, function (err) {
+                                callback2();
+                            });
+                        }, function (err) {
+                            callback1();
+                        });
+                    }, function (err) {
+                        res.send(allData['conferences']);
+                    });
+                }
+            });
+        });
+
     app.use('/apiConferences', router);
 };
