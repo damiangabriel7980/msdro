@@ -28,7 +28,8 @@
     "jsonwebtoken": "latest",
     "mandrill-send": "latest",
     "validator": "latest",
-    "socket.io": "latest"
+    "socket.io": "latest",
+    "socketio-jwt": "latest"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",

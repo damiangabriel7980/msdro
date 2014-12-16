@@ -51,7 +51,7 @@ require('./app/apiPublic.js')(app,email, express.Router()); // load our public r
 require('./app/apiConferences.js')(app, email, tokenSecret, express.Router());
 
 // socket comm =================================================================
-require('./app/socketComm.js')(socketServer);
+require('./app/socketComm.js')(socketServer, tokenSecret);
 
 // launch ======================================================================
 app.listen(port);
