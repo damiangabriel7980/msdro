@@ -331,12 +331,18 @@ module.exports = function(app, mandrill, tokenSecret, router) {
     router.route('/testConferences')
         .get(function (req, res) {
 
-            var findById = function(arr, id, callback){
-                for(var i=0; i<arr.length; i++){
-                    if(arr[i]._id == id){
-                        callback(arr[i]);
+            var findById = function (arr, id, callbackFinal) {
+                var retObj = null;
+                async.each(arr, function (it, callback) {
+                    if(it._id == id){
+                        retObj = it;
+                        callback(true);
+                    }else{
+                        callback();
                     }
-                }
+                }, function (whatever) {
+                    callbackFinal(retObj);
+                });
             };
 
             //object that will be populated with all the data
@@ -349,6 +355,10 @@ module.exports = function(app, mandrill, tokenSecret, router) {
                 ["talks", "listRooms", "rooms"]
             ];
 
+            //entity to return after connecting all
+            var etr = 'conferences';
+
+            //array keeping references to the entities we need to iterate through
             var myEntities = [Conferences, Talks, Speakers, Rooms];
 
             //populate async
@@ -365,8 +375,7 @@ module.exports = function(app, mandrill, tokenSecret, router) {
                 if(err){
                     res.json(err);
                 }else{
-                    console.log(allData);
-                    var conferences = allData['conferences'];
+                    //console.log(allData);
                     async.each(mappings, function (mappingKey, callback1) {
                         var base = mappingKey[0];
                         var connection = mappingKey[1];
@@ -379,19 +388,38 @@ module.exports = function(app, mandrill, tokenSecret, router) {
                                 //console.log(base+" - "+idFrom+" - "+connected+" - "+idTo);
                                 findById(allData[base],idFrom, function (cFrom) {
                                     findById(allData[connected],idTo.toString(), function (cTo) {
-                                        var index = cFrom[connection].indexOf(idTo);
-                                        cFrom[connection][index]= cTo;
-                                        callback3();
+                                        var index = cFrom[connection].indexOf(idTo); //find [id] to replace with [object with that id]
+                                        if(cFrom == null || cTo == null || index < 0){
+                                            //something went wrong
+                                            //propagate an error through all the callbacks
+                                            callback3("Error retrieving data");
+                                        }else{
+                                            cFrom[connection][index]= cTo; //replace id with object
+                                            callback3();
+                                        }
                                     });
                                 });
                             }, function (err) {
-                                callback2();
+                                if(err){
+                                    callback2(err);
+                                }else{
+                                    callback2();
+                                }
                             });
                         }, function (err) {
-                            callback1();
+                            if(err){
+                                callback1(err);
+                            }else{
+                                callback1();
+                            }
                         });
                     }, function (err) {
-                        res.send(allData['conferences']);
+                        if(err){
+                            console.log(err);
+                            res.send(err);
+                        }else{
+                            res.send(allData[etr]);
+                        }
                     });
                 }
             });
