@@ -19,10 +19,7 @@
         </p>
 
     </div>
-    <div class="col-xs-6">
-        <label class="label label-default">QR Code:</label>
-        <qr text='"Conference - click to download"' image="true"><a href="www.facebook.com"></a></qr>
-    </div>
+
     <div class="col-md-12">
         <div class="form-group">
             <label for="talks">Talks:</label>
@@ -58,6 +55,9 @@
                         <button class="btn btn-danger" ui-sref="continut.evenimente.deleteTalk({id: talks._id})"><i class="glyphicon glyphicon-trash"></i></button>
                         <button class="btn btn-info" ui-sref="continut.updateTalk({id: talks._id})"><i class="glyphicon glyphicon-cog"></i></button>
                     </div>
+                </td>
+                <td data-title="'QR-Code Conference'">
+                    <qr text='newConference.qr_code.message' size="300" image="true"></qr>
                 </td>
             </tr>
         </table>
