@@ -27,7 +27,8 @@
     "express-jwt": "latest",
     "jsonwebtoken": "latest",
     "mandrill-send": "latest",
-    "validator": "latest"
+    "validator": "latest",
+    "socket.io": "latest"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",

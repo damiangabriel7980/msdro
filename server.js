@@ -9,6 +9,7 @@ var express  = require('express');
 var path = require('path');
 var app      = express();
 var port     = process.env.PORT || 8080;
+var socketPort = process.env.SOCKET_PORT || 3000;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
@@ -18,6 +19,7 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var configDB = require('./config/database.js');
 var email = require('mandrill-send')(mandrillKey);
+var socketServer = require('http').createServer(app); //http server used for socket comm
 
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
@@ -48,6 +50,11 @@ require('./app/api.js')(app, sessionSecret,email, express.Router()); // load our
 require('./app/apiPublic.js')(app,email, express.Router()); // load our public routes and pass in our app
 require('./app/apiConferences.js')(app, email, tokenSecret, express.Router());
 
+// socket comm =================================================================
+require('./app/socketComm.js')(socketServer);
+
 // launch ======================================================================
 app.listen(port);
-console.log('The magic happens on port ' + port);
+socketServer.listen(socketPort);
+console.log('App runs on port: ' + port);
+console.log('Socket comm port: ' + socketPort);
