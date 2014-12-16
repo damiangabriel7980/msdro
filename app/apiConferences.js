@@ -36,7 +36,7 @@ module.exports = function(app, mandrill, tokenSecret, router) {
     });
 
     // We are going to protect /apiConferences routes with JWT
-    app.use('/apiConferences', expressJwt({secret: tokenSecret}).unless({path: ['/apiConferences/createAccount','/apiConferences/testConferences']}));
+    app.use('/apiConferences', expressJwt({secret: tokenSecret}).unless({path: ['/apiConferences/createAccount']}));
 
     router.route('/createAccount')
         .post(function (req, res) {
@@ -328,7 +328,7 @@ module.exports = function(app, mandrill, tokenSecret, router) {
 
         });
 
-    router.route('/testConferences')
+    router.route('/getConferencesFull')
         .get(function (req, res) {
 
             var findById = function (arr, id, callbackFinal) {
