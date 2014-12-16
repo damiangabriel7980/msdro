@@ -18,7 +18,7 @@ var expressJwt = require('express-jwt');
 var async = require('async');
 
 
-module.exports = function(app, mandrill, tokenSecret, router) {
+module.exports = function(app, mandrill, logger, tokenSecret, router) {
 
     var getUserData = function (req) {
         var token = req.headers.authorization.split(' ').pop();
@@ -114,7 +114,7 @@ module.exports = function(app, mandrill, tokenSecret, router) {
                                                         'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n'
                                                 }, function(errm){
                                                     if(errm) {
-                                                        console.log(errm);
+                                                        logger.error(errm);
                                                         res.send(errm);
                                                     }else{
                                                         info.error = false;
@@ -415,7 +415,7 @@ module.exports = function(app, mandrill, tokenSecret, router) {
                         });
                     }, function (err) {
                         if(err){
-                            console.log(err);
+                            logger.error(err);
                             res.send(err);
                         }else{
                             res.send(allData[etr]);
