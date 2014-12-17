@@ -334,16 +334,20 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
                 if (err){
                     res.json(err);
                 }else{
-                    Talks.find({listRooms: {$in: [room._id]}}).populate('listSpeakers').exec(function (err, talks) {
-                        if(err){
-                            res.json(err);
-                        }else{
-                            console.log(talks);
-                            var result = room.toObject();
-                            result.talks = talks;
-                            res.json(result);
-                        }
-                    });
+                    if(room){
+                        Talks.find({Room_id: room._id}).populate('listSpeakers').exec(function (err, talks) {
+                            if(err){
+                                res.json(err);
+                            }else{
+                                console.log(talks);
+                                var result = room.toObject();
+                                result.talks = talks;
+                                res.json(result);
+                            }
+                        });
+                    }else{
+                        res.json(null);
+                    }
                 }
             })
         });
@@ -372,7 +376,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
             var mappings = [
                 ["conferences", "listTalks", "talks"],
                 ["talks", "listSpeakers", "speakers"],
-                ["talks", "listRooms", "rooms"]
+                ["talks", "Room_id", "rooms"]
             ];
 
             //entity to return after connecting all
@@ -400,21 +404,37 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
                         var base = mappingKey[0];
                         var connection = mappingKey[1];
                         var connected = mappingKey[2];
+                        var connectionIsArray = true;
                         async.each(allData[base], function (entity, callback2) {
                             //console.log(entity._id+" - "+entity[connection]);
                             var idFrom = entity._id;
                             var arrayIdsTo = entity[connection];
+                            console.log(arrayIdsTo);
+                            if(Object.prototype.toString.call(arrayIdsTo)!=='[object Array]'){
+                                connectionIsArray = false;
+                                arrayIdsTo = [arrayIdsTo]; //transform connection in array (async.each works on arrays only)
+                            }
                             async.each(arrayIdsTo, function (idTo, callback3) {
-                                //console.log(base+" - "+idFrom+" - "+connected+" - "+idTo);
+                                console.log(base+" - "+idFrom+" - "+connected+" - "+idTo);
                                 findById(allData[base],idFrom, function (cFrom) {
                                     findById(allData[connected],idTo.toString(), function (cTo) {
-                                        var index = cFrom[connection].indexOf(idTo); //find [id] to replace with [object with that id]
+                                        console.log(cFrom);
+                                        console.log(cTo);
+                                        var index = 0;
+                                        if(connectionIsArray){
+                                            //find [id] to replace with [object with that id]
+                                            index = cFrom[connection].indexOf(idTo);
+                                        }
                                         if(cFrom == null || cTo == null || index < 0){
                                             //something went wrong
                                             //propagate an error through all the callbacks
                                             callback3("Error retrieving data");
                                         }else{
-                                            cFrom[connection][index]= cTo; //replace id with object
+                                            if(connectionIsArray){
+                                                cFrom[connection][index]= cTo; //replace id at index with object
+                                            }else{
+                                                cFrom[connection] = cTo; //replace id with object
+                                            }
                                             callback3();
                                         }
                                     });
