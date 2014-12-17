@@ -22,7 +22,7 @@ var Speakers = require('./models/speakers');
 var XRegExp  = require('xregexp').XRegExp;
 var Rooms = require('./models/rooms');
 var SHA256   = require('crypto-js/sha256');
-
+var ObjectId = require('mongoose').Types.ObjectId;
 var mongoose = require('mongoose');
 
 var AWS = require('aws-sdk');
@@ -1312,11 +1312,27 @@ module.exports = function(app, sessionSecret,email,router) {
             conferences.last_updated= req.body.last_updated ;
             conferences.listTalks=req.body.listTalks;
             conferences.qr_code=req.body.qr_code;
-            conferences.save(function(err) {
+            conferences.save(function(err,saved) {
             if (err)
                 res.send(err);
+            else
+            {
+                var conf = new Conferences();
+                conf = saved;
+                var newQR = new Object();
+                newQR.type = saved.qr_code.type;
+                newQR.message = saved.qr_code.message;
+                newQR.conference_id = saved._id;
+                conf.qr_code=newQR;
+                conf.save(function(err){
+                    if(err)
+                        res.send(err);
+                    else
+                        res.json({ message: 'Conference created!' });
+                })
 
-            res.json({ message: 'Conference created!' });
+            }
+
         });
 
     });
@@ -1399,7 +1415,7 @@ module.exports = function(app, sessionSecret,email,router) {
              talks.title=req.body.title;
              talks.place=req.body.place;
              talks.listSpeakers=req.body.listSpeakers;
-             talks.listRooms=req.body.listRooms;
+             talks.Room_id=req.body.Room_id;
 
              talks.save(function(err) {
                  if (err)
@@ -1441,7 +1457,7 @@ module.exports = function(app, sessionSecret,email,router) {
                 talks.title=req.body.title;
                 talks.place=req.body.place;
                 talks.listSpeakers=req.body.listSpeakers;
-                talks.listRooms=req.body.listRooms;
+                talks.Room_id=req.body.Room_id;
                 talks.save(function(err) {
                     if (err)
                         res.send(err);
@@ -1480,18 +1496,39 @@ module.exports = function(app, sessionSecret,email,router) {
 
         })
         .post(function(req, res) {
-
-            var rooms = new Rooms(); 		// create a new instance of the Bear model
-            rooms.room_name=req.body.room_name;
-            rooms.id_talks=req.body.id_talks;
-            rooms.qr_code=req.body.qr_code;
-
-            rooms.save(function(err) {
+            var rooms2 = new Rooms();
+            var rooms = new Rooms();
+            rooms.room_name = req.body.room_name;
+            rooms.id_talks = req.body.id_talks;
+            rooms.qr_code = req.body.qr_code;
+            var roomname = req.body.room_name;
+            rooms.save(function (err, saved) {
                 if (err)
                     res.send(err);
+                else {
+                    var newQR = new Object();
+                    newQR.type = saved.qr_code.type;
+                    newQR.message = saved.qr_code.message;
+                    rooms2 = saved;
+                    console.log(roomname);
+                    console.log(rooms2);
+                    newQR.room_id = saved._id;
+                    Conferences.findOne({listTalks: {$in: rooms.id_talks}}).exec(function (err, resp2) {
+                        newQR.conference_id = resp2._id;
+                        console.log(rooms2.qr_code.conference_id);
+                        rooms2.qr_code = newQR;
+                        console.log(rooms2);
+                        rooms2.save(function (err) {
+                            if (err)
+                                res.send(err);
+                            else
+                                res.json({message: 'Room created!'});
+                        })
+                    })
 
-                res.json({ message: 'Room created!' });
+                }
             });
+
 
         });
     router.route('/admin/rooms/:id')
@@ -1520,7 +1557,9 @@ module.exports = function(app, sessionSecret,email,router) {
 
                 rooms.room_name=req.body.room_name;
                 rooms.id_talks=req.body.id_talks;
-                rooms.qr_code=req.body.qr_code;
+                rooms.qr_code.room_id = req.body.qr_code.room_id;
+                rooms.qr_code.conference_id = req.body.qr_code.conference_id;
+                console.log(rooms.qr_code.conference_id);
                 rooms.save(function(err) {
                     if (err)
                         res.send(err);

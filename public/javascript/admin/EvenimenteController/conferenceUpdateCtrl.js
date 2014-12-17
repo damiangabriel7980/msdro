@@ -12,10 +12,10 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
         EventsAdminService.deleteOrUpdateConferences.getConference({id:$stateParams.id}).$promise.then(function(result2){
 
             $scope.newConference=result2;
-            $scope.string=$scope.newConference.qr_code;
+            $scope.string=JSON.stringify($scope.newConference.qr_code);
             $scope.groupTalks=[];
             console.log(result2);
-
+            $scope.newString=$scope.newConference.qr_code.message;
             var listtalks = $scope.newConference.listTalks;
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -48,8 +48,8 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
 
 
     });
-
-
+    $scope.newString="";
+    $scope.messageString="";
 
 
     var findTalk = function (id) {

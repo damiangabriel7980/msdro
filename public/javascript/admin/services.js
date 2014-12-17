@@ -162,6 +162,15 @@ cloudAdminServices.factory('EventsAdminService', ['$resource', function($resourc
             getTalk: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}
+        }),
+        getAllRoom: $resource('api/admin/rooms/', {}, {
+            query: { method: 'GET', isArray: true },
+            save: { method: 'POST'}
+        }),
+        deleteOrUpdateRooms:$resource('api/admin/rooms/:id', {}, {
+            getRoom: {method: 'GET', isArray: false},
+            delete: { method: 'DELETE'},
+            update: { method: 'PUT'}
         })
     }
 }]);

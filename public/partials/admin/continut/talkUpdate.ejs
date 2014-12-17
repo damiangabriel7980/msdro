@@ -56,6 +56,14 @@
             </div>
         </div>
     </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="rooms">Room:</label>
+            <select ng-model="selectedRoom" ng-options="room as room.room_name for room in rooms"
+                    class="form-control" id="rooms" style="width: 100%;">
+            </select>
+        </div>
+    </div>
     <div class="col-xs-12">
         <form method="post">
             <label class="label label-default">Descriere:</label>
@@ -89,12 +97,10 @@
         <table ng-table="tableParams2" show-filter="true" class="table table-bordered">
             <tr ng-repeat="rooms in $data">
                 <td data-title="'Room Name'" filter="{ 'room_name': 'text' }" sortable="'room_name'">{{rooms.room_name}}</td>
-                <td data-title="'QR Code'" filter="{ 'qr_code': 'text' }" sortable="'qr_code'"><qr text='rooms.qr_code.message' size="300" image="true"></qr></td>
-
                 <td>
                     <div class="btn-group-sm"  role="group" style="display: flex">
                         <button class="btn btn-danger" ui-sref=""><i class="glyphicon glyphicon-trash"></i></button>
-                        <button class="btn btn-info" ui-sref=""><i class="glyphicon glyphicon-cog"></i></button>
+                        <button class="btn btn-info" ui-sref="continut.updateRoom({id:rooms._id})"><i class="glyphicon glyphicon-cog"></i></button>
                     </div>
                 </td>
             </tr>

@@ -5,10 +5,19 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,growl){
+    EventsAdminService.deleteOrUpdateEvents.getEvent({id:$stateParams.id}).$promise.then(function(result2){
+        $scope.grupeUser=[];
+
+        $scope.newEvent=result2;
+        tinyMCE.activeEditor.setContent($scope.newEvent.description);
+    });
+
     EventsAdminService.getGroups.query().$promise.then(function(resp){
         $scope.grupuri=resp;
+
         EventsAdminService.getAllConferences.query().$promise.then(function(resp){
             $scope.conferences=resp;
+            $scope.ConfEvents=[];
             for(var i=0;i<$scope.grupuri.length;i++)
             {
                 for(var j=0;j<$scope.newEvent.groupsID.length;j++)
@@ -22,7 +31,7 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
             {
                 for(var j=0;j<$scope.newEvent.listconferences.length;j++)
                 {
-                    if($scope.conferences[i]._id==$scope.newEvent.listconferences[j])
+                    if($scope.conferences[i]._id==$scope.newEvent.listconferences[j]._id)
                         $scope.ConfEvents.push($scope.conferences[i]);
                 }
             }
@@ -32,12 +41,7 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
 
     });
 
-    EventsAdminService.deleteOrUpdateEvents.getEvent({id:$stateParams.id}).$promise.then(function(result2){
-        $scope.grupeUser=[];
-        $scope.ConfEvents=[];
-        $scope.newEvent=result2;
-        tinyMCE.activeEditor.setContent($scope.newEvent.description);
-    });
+
 
     $scope.grupeUser=[];
     var findInUserGroup = function (id) {
@@ -68,7 +72,6 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
             $scope.grupeUser.splice(index,1);
         }
     };
-    $scope.ConfEvents=[];
     var findInConf = function (id) {
         var index = -1;
         var i=0;

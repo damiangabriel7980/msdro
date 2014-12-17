@@ -237,7 +237,7 @@ module.exports = function(app, mandrill, tokenSecret, router) {
         });
     router.route('/talks')
         .get(function(req,res){
-            Talks.find().populate('listSpeakers listRooms').exec(function (err, talks) {
+            Talks.find({}).populate('listSpeakers listRooms').exec(function (err, talks) {
                 if (err)
                 {
                     res.json(err);
@@ -251,10 +251,8 @@ module.exports = function(app, mandrill, tokenSecret, router) {
 
 
             })
-                .post(function(req,res){
-                    User.findOne()
-                })
-        });
+
+        })
     router.route('/talks/:id')
         .get(function(req,res){
             Talks.findById(req.params.id).populate('listSpeakers listRooms').exec(function (err, talk) {

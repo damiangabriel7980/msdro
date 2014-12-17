@@ -37,10 +37,17 @@
         </div>
     </div>
     <div class="col-xs-12">
+        <label class="label label-default">Message QR:</label>
+        <input ng-model="newConference.qr_code.message" type="text" class="form-control col-xs-12">
+    </div>
+    <div class="col-xs-12">
         <a class="btn pull-left btn-primary" ng-click="okk()">Back to Events</a>
         <a class="btn pull-right btn-primary" ng-click="updateConference()">Update conference</a>
     </div>
-
+    <div class="col-xs-12">
+        <label class="label label-default">Message QR:</label>
+        <input ng-model="newString" type="text" class="form-control col-xs-12">
+    </div>
     <div growl class="col-xs-12">
 
     </div>
@@ -57,7 +64,7 @@
                     </div>
                 </td>
                 <td data-title="'QR-Code Conference'">
-                    <qr text='newConference.qr_code.message' size="300" image="true"></qr>
+                    <qr text='string' size="300" image="true"></qr>
                 </td>
             </tr>
         </table>

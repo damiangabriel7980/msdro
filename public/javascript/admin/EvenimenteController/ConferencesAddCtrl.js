@@ -14,8 +14,14 @@ cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'
         enable:         "",
         begin_date:        "",
         last_updated: new Date(),
-        listTalks:$scope.groupTalks
+        listTalks:$scope.groupTalks,
+        qr_code:        {
+            message:"",
+            conference_id:"",
+            type: 2
+        }
     };
+    $scope.newString="";
     $scope.groupTalks=[];
     var findTalk = function (id) {
         var index = -1;
@@ -62,6 +68,7 @@ cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'
         for(var i=0;i<$scope.groupTalks.length;i++)
             id_talks.push($scope.groupTalks[i]._id);
         $scope.newConference.listTalks=id_talks;
+        $scope.newConference.qr_code.message=$scope.newString;
         console.log($scope.newConference);
         if($scope.newConference){
             EventsAdminService.getAllConferences.save($scope.newConference).$promise.then(function(result){

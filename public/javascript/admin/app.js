@@ -133,6 +133,17 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/admin/continut/evenimenteAdd.ejs',
             controller:"eventsAddCtrl"
         })
+        .state('continut.adaugaRoom',{
+            url: '/addRoom',
+            templateUrl: 'partials/admin/continut/roomAdd.ejs',
+            controller:"roomAddCtrl"
+        })
+        .state('continut.updateRoom',{
+            url: '/updateRoom/:id',
+            templateUrl: 'partials/admin/continut/roomUpdate.ejs',
+            controller:"roomUpdateCtrl"
+        })
+
         .state('continut.adaugaConferinta',{
             url: '/addConference',
             templateUrl: 'partials/admin/continut/ConferenceAdd.ejs',
@@ -226,7 +237,20 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                 })
             }]
         })
-
+        .state('continut.deleteRoom',{
+            parent:'continut.evenimente',
+            url: '/deleteRoom/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/continut/deleteRoom.ejs',
+                    backdrop: 'static',
+                    keyboard: false,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"roomDeleteCtrl"
+                })
+            }]
+        })
         .state('continut.indexareContinut',{
             url: '/indexareContinut',
             templateUrl: 'partials/admin/continut/indexareContinut.html'

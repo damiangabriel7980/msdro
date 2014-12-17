@@ -7,7 +7,7 @@ var Schema			= mongoose.Schema;
 var RoomsSchema = new Schema({
     room_name:  String,
     id_talks:         [{type: Schema.Types.ObjectId,ref: 'talks'}],
-    qr_code:        Object
+    qr_code:       Object
 });
 
 module.exports = mongoose.model('rooms',RoomsSchema,'rooms');

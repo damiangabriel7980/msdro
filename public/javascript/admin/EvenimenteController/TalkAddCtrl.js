@@ -9,6 +9,10 @@ cloudAdminControllers.controller('TalkAddCtrl', ['$scope','$rootScope' ,'EventsA
         $scope.speakers=resp;
         $scope.selectedSpeaker=$scope.speakers[0];
     });
+    EventsAdminService.getAllRoom.query().$promise.then(function(resp){
+        $scope.rooms=resp;
+        $scope.selectedRoom=$scope.rooms[0];
+    });
     $scope.newTalk={
         description:  "",
         enable:        "enabled",
@@ -17,7 +21,8 @@ cloudAdminControllers.controller('TalkAddCtrl', ['$scope','$rootScope' ,'EventsA
         last_updated: new Date(),
         title:      "",
         place:       "",
-        listSpeakers: $scope.groupSpeakers
+        listSpeakers: $scope.groupSpeakers,
+        Room_id:""
     };
     $scope.groupSpeakers=[];
     var findSpeaker = function (id) {
@@ -61,6 +66,8 @@ cloudAdminControllers.controller('TalkAddCtrl', ['$scope','$rootScope' ,'EventsA
         $scope.newTalk.hour_start=$scope.utc1;
         $scope.newTalk.hour_end=$scope.utc2;
         $scope.newTalk.description=tinyMCE.activeEditor.getContent();
+        $scope.newTalk.Room_id=$scope.selectedRoom._id;
+        console.log($scope.newTalk);
         if($scope.newTalk){
             EventsAdminService.getAllTalks.save($scope.newTalk).$promise.then(function(result){
                 if(result.message)
