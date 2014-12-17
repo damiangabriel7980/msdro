@@ -311,21 +311,22 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         });
     router.route('/rooms/:id')
         .get(function(req,res){
-            Rooms.findById(req.params.id).populate('id_talks').exec(function (err, room) {
-                if (err)
-                {
+            Rooms.findOne({_id: req.params.id}, {id_talks: 0}, function (err, room) {
+                if (err){
                     res.json(err);
-                    return;
+                }else{
+                    Talks.find({listRooms: {$in: [room._id]}}).populate('listSpeakers').exec(function (err, talks) {
+                        if(err){
+                            res.json(err);
+                        }else{
+                            console.log(talks);
+                            var result = room.toObject();
+                            result.talks = talks;
+                            res.json(result);
+                        }
+                    });
                 }
-                else
-                {
-                    res.json(room);
-                    return;
-                }
-
-
             })
-
         });
 
     router.route('/getConferencesFull')
