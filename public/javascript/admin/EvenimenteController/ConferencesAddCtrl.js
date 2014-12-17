@@ -69,6 +69,7 @@ cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'
             id_talks.push($scope.groupTalks[i]._id);
         $scope.newConference.listTalks=id_talks;
         $scope.newConference.qr_code.message=$scope.newString;
+        $scope.newConference.description=tinyMCE.activeEditor.getContent();
         console.log($scope.newConference);
         if($scope.newConference){
             EventsAdminService.getAllConferences.save($scope.newConference).$promise.then(function(result){
@@ -80,6 +81,15 @@ cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'
             console.log($scope.newConference);
             $scope.newConference = {};
         }
+    };
+    $scope.tinymceOptions = {
+        selector: "textarea",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
     $scope.okk=function(){
       $state.go('continut.evenimente');
