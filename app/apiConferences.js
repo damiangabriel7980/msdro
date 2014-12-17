@@ -8,15 +8,17 @@ var Talks = require('./models/talks');
 var Speakers = require('./models/speakers');
 var User = require('./models/user');
 var Roles=require('./models/roles');
-var Rooms=require('./models/rooms');
+var Rooms = require('./models/rooms');
+
 var jwt = require('jsonwebtoken');
 var XRegExp  = require('xregexp').XRegExp;
 var validator = require('validator');
 var crypto   = require('crypto');
 var expressJwt = require('express-jwt');
+var async = require('async');
 
 
-module.exports = function(app, mandrill, tokenSecret, router) {
+module.exports = function(app, mandrill, logger, tokenSecret, router) {
 
     var getUserData = function (req) {
         var token = req.headers.authorization.split(' ').pop();
@@ -112,7 +114,7 @@ module.exports = function(app, mandrill, tokenSecret, router) {
                                                         'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n'
                                                 }, function(errm){
                                                     if(errm) {
-                                                        console.log(errm);
+                                                        logger.error(errm);
                                                         res.send(errm);
                                                     }else{
                                                         info.error = false;
@@ -227,10 +229,9 @@ module.exports = function(app, mandrill, tokenSecret, router) {
                         var local=event.listconferences;
                         //console.log(local);
                         res.json(event);
-                        return;
+                        });
 
-                    });
-
+                    return;
                 }
 
             })
@@ -308,21 +309,120 @@ module.exports = function(app, mandrill, tokenSecret, router) {
         });
     router.route('/rooms/:id')
         .get(function(req,res){
-            Rooms.findById(req.params.id).populate('id_talks').exec(function (err, room) {
-                if (err)
-                {
+            Rooms.findOne({_id: req.params.id}, {id_talks: 0}, function (err, room) {
+                if (err){
                     res.json(err);
-                    return;
+                }else{
+                    Talks.find({listRooms: {$in: [room._id]}}).populate('listSpeakers').exec(function (err, talks) {
+                        if(err){
+                            res.json(err);
+                        }else{
+                            console.log(talks);
+                            var result = room.toObject();
+                            result.talks = talks;
+                            res.json(result);
+                        }
+                    });
                 }
-                else
-                {
-                    res.json(room);
-                    return;
-                }
-
-
             })
-
         });
+
+    router.route('/getConferencesFull')
+        .get(function (req, res) {
+
+            var findById = function (arr, id, callbackFinal) {
+                var retObj = null;
+                async.each(arr, function (it, callback) {
+                    if(it._id == id){
+                        retObj = it;
+                        callback(true);
+                    }else{
+                        callback();
+                    }
+                }, function (whatever) {
+                    callbackFinal(retObj);
+                });
+            };
+
+            //object that will be populated with all the data
+            var allData = {};
+
+            //entities relationships [from, via, to]
+            var mappings = [
+                ["conferences", "listTalks", "talks"],
+                ["talks", "listSpeakers", "speakers"],
+                ["talks", "listRooms", "rooms"]
+            ];
+
+            //entity to return after connecting all
+            var etr = 'conferences';
+
+            //array keeping references to the entities we need to iterate through
+            var myEntities = [Conferences, Talks, Speakers, Rooms];
+
+            //populate async
+            async.each(myEntities, function (entity, callback) {
+                entity.find({}, function (err, data) {
+                    if(err){
+                        callback(err);
+                    }else{
+                        allData[entity.modelName] = data;
+                        callback();
+                    }
+                })
+            }, function (err) {
+                if(err){
+                    res.json(err);
+                }else{
+                    //console.log(allData);
+                    async.each(mappings, function (mappingKey, callback1) {
+                        var base = mappingKey[0];
+                        var connection = mappingKey[1];
+                        var connected = mappingKey[2];
+                        async.each(allData[base], function (entity, callback2) {
+                            //console.log(entity._id+" - "+entity[connection]);
+                            var idFrom = entity._id;
+                            var arrayIdsTo = entity[connection];
+                            async.each(arrayIdsTo, function (idTo, callback3) {
+                                //console.log(base+" - "+idFrom+" - "+connected+" - "+idTo);
+                                findById(allData[base],idFrom, function (cFrom) {
+                                    findById(allData[connected],idTo.toString(), function (cTo) {
+                                        var index = cFrom[connection].indexOf(idTo); //find [id] to replace with [object with that id]
+                                        if(cFrom == null || cTo == null || index < 0){
+                                            //something went wrong
+                                            //propagate an error through all the callbacks
+                                            callback3("Error retrieving data");
+                                        }else{
+                                            cFrom[connection][index]= cTo; //replace id with object
+                                            callback3();
+                                        }
+                                    });
+                                });
+                            }, function (err) {
+                                if(err){
+                                    callback2(err);
+                                }else{
+                                    callback2();
+                                }
+                            });
+                        }, function (err) {
+                            if(err){
+                                callback1(err);
+                            }else{
+                                callback1();
+                            }
+                        });
+                    }, function (err) {
+                        if(err){
+                            logger.error(err);
+                            res.send(err);
+                        }else{
+                            res.send(allData[etr]);
+                        }
+                    });
+                }
+            });
+        });
+
     app.use('/apiConferences', router);
 };

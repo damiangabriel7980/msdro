@@ -4,7 +4,7 @@ var Roles = require('./models/roles');
 var crypto   = require('crypto');
 var async = require('async');
 
-module.exports = function(app, email, passport) {
+module.exports = function(app, email, logger, passport) {
 
     //access control origin
     app.all("/*", function(req, res, next) {
@@ -94,7 +94,7 @@ module.exports = function(app, email, passport) {
             }
         ], function(err, user) {
             if (err){
-                console.log(err);
+                logger.error(err);
                 res.render('forgotPass.ejs', {message : {message: 'A aparut o eroare. Va rugam verificati datele', type: 'danger'}});
             }else{
                 res.render('forgotPass.ejs', {message : {message: 'Un email cu instructiuni a fost trimis catre ' + user + '.', type: 'info'}});

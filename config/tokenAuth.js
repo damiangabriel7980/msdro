@@ -3,7 +3,7 @@ var expressJwt = require('express-jwt');
 
 var User = require('../app/models/user');
 
-module.exports = function (app, tokenSecret) {
+module.exports = function (app, logger, tokenSecret) {
 
     app.options('/authenticateToken', function (req, res) {
         var headers = {};
@@ -19,9 +19,7 @@ module.exports = function (app, tokenSecret) {
     });
 
     app.post('/authenticateToken', function (req, res) {
-        console.log("tokenAuth ============================");
-        console.log("username: ", req.body.username);
-        console.log("password: ", req.body.password);
+        logger.info("token auth - username: ", req.body.username);
 
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");

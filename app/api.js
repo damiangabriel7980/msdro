@@ -217,7 +217,7 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret,email,router) {
+module.exports = function(app, sessionSecret, email, logger, router) {
 
 //======================================================================================================= secure routes
 
@@ -251,14 +251,14 @@ module.exports = function(app, sessionSecret,email,router) {
                 //now get user's roles
                 User.find({_id: userID}, {rolesID :1}, function (err, data) {
                     if(err){
-                        console.log(err);
+                        logger.error(err);
                         res.status(403).end();
                     }else{
                         var roles = data[0].rolesID;
                         //now get roles
                         Roles.find({_id: {$in: roles}}, function (err, data) {
                             if(err){
-                                console.log(err);
+                                logger.error(err);
                                 res.status(403).end();
                             }else{
                                 var admin = false;
@@ -278,7 +278,7 @@ module.exports = function(app, sessionSecret,email,router) {
                 res.status(403).end();
             }
         }catch(e){
-            console.log(e);
+            logger.error(e);
             res.status(403).end();
         }
 
@@ -302,7 +302,7 @@ module.exports = function(app, sessionSecret,email,router) {
         .get(function (req, res) {
             getS3Credentials(req.user.username, function(err, data){
                 if(err){
-                    console.log(err);
+                    logger.error(err);
                     res.status(404).end();
                 }else{
                     res.json(data);
@@ -315,7 +315,7 @@ module.exports = function(app, sessionSecret,email,router) {
         .get(function(req, res) {
             UserGroup.find({}, {display_name: 1, description: 1} ,function(err, cont) {
                 if(err) {
-                    console.log(err);
+                    logger.error(err);
                     res.send(err);
                 }
                 res.json(cont);
@@ -343,7 +343,7 @@ module.exports = function(app, sessionSecret,email,router) {
         .get(function(req, res) {
             User.find({}, {username: 1}).limit(0).exec(function(err, cont) {
                 if(err) {
-                    console.log(err);
+                    logger.error(err);
                     res.send(err);
                 }
                 res.json(cont);
@@ -356,7 +356,7 @@ module.exports = function(app, sessionSecret,email,router) {
             var id = req.params.id;
             User.find({groupsID: {$in:[id]}}, {username: 1}).limit(0).exec(function(err, cont) {
                 if(err) {
-                    console.log(err);
+                    logger.error(err);
                     res.send(err);
                 }
                 res.json(cont);
@@ -385,7 +385,7 @@ module.exports = function(app, sessionSecret,email,router) {
                     //add group
                     new UserGroup(data.group).save(function (err, inserted) {
                         if(err){
-                            console.log(err);
+                            logger.error(err);
                             ans.error = true;
                             ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
                             res.json(ans);
@@ -401,7 +401,7 @@ module.exports = function(app, sessionSecret,email,router) {
                             console.log(ids);
                             connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
                                 if(err){
-                                    console.log(err);
+                                    logger.error(err);
                                     ans.error = true;
                                     ans.message = "Eroare la adaugarea utilizatorilor noi in grup.";
                                     res.json(ans);
@@ -431,7 +431,7 @@ module.exports = function(app, sessionSecret,email,router) {
             var data = req.body.data;
             UserGroup.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
                 if(err){
-                    console.log("Error at usergroup change logo. Group id = "+data.id+"; Key = "+data.path);
+                    logger.error("Error at usergroup change logo. Group id = "+data.id+"; Key = "+data.path);
                     res.json({error:true});
                 }else{
                     res.json({error:false, updated:wRes});
@@ -461,7 +461,7 @@ module.exports = function(app, sessionSecret,email,router) {
                     //update group
                     UserGroup.update({_id: data.id}, data.group, function (err, Wres) {
                         if(err){
-                            console.log(err);
+                            logger.error(err);
                             ans.error = true;
                             ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
                             res.json(ans);
@@ -471,7 +471,7 @@ module.exports = function(app, sessionSecret,email,router) {
                             //first disconnect preexisting users from group, just in case this is an editGroup operation
                             disconnectAllEntitiesFromEntity(User, "groupsID", data.id, function (err, result) {
                                 if(err){
-                                    console.log(err);
+                                    logger.error(err);
                                     ans.error = true;
                                     ans.message = "Eroare la stergerea utilizatorilor vechi din grup.";
                                 }else{
@@ -484,7 +484,7 @@ module.exports = function(app, sessionSecret,email,router) {
                                     console.log(ids);
                                     connectEntitiesToEntity(ids, User, "groupsID", data.id, function (err, result) {
                                         if(err){
-                                            console.log(err);
+                                            logger.error(err);
                                             ans.error = true;
                                             ans.message = "Eroare la adaugarea utilizatorilor noi in grup.";
                                             res.json(ans);
@@ -528,7 +528,7 @@ module.exports = function(app, sessionSecret,email,router) {
                                         if(logo){
                                             s3.deleteObject({Bucket: amazonBucket, Key: logo}, function (err, data) {
                                                 if(err){
-                                                    console.log(err);
+                                                    logger.error(err);
                                                     res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea nu s-a putut sterge"});
                                                 }else{
                                                     res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea asociata grupului a fost stearsa"});
@@ -559,7 +559,7 @@ module.exports = function(app, sessionSecret,email,router) {
         .get(function(req, res) {
             PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
                 if(err) {
-                    console.log(err);
+                    logger.error(err);
                     res.send(err);
                 }
                 res.json(cont);
@@ -744,7 +744,7 @@ module.exports = function(app, sessionSecret,email,router) {
             if(ok){
                 PublicContent.update({_id:data.id}, qry, function (err, wRes) {
                     if(err){
-                        console.log("Error at content "+data.type+"_path; id = "+data.id+"; Key = "+data.path);
+                        logger.error("Error at content "+data.type+"_path; id = "+data.id+"; Key = "+data.path);
                         res.json({error:true});
                     }else{
                         res.json({error:false, updated:wRes});
@@ -758,7 +758,7 @@ module.exports = function(app, sessionSecret,email,router) {
         .get(function(req, res) {
             PublicCarousel.find({}, function(err, cont) {
                 if(err) {
-                    console.log(err);
+                    logger.error(err);
                     res.send(err);
                 }
                 res.json(cont);
@@ -770,7 +770,7 @@ module.exports = function(app, sessionSecret,email,router) {
         .get(function(req, res) {
             PublicContent.find({type: req.params.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
                 if(err) {
-                    console.log(err);
+                    logger.error(err);
                     res.send(err);
                 }
                 res.json(cont);
@@ -1027,7 +1027,7 @@ module.exports = function(app, sessionSecret,email,router) {
                     contents['content']=cont;
                     UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
                         if(err) {
-                            console.log(err);
+                            logger.error(err);
                             res.send(err);
                         }
                         contents['groups']=cont2;
@@ -1055,7 +1055,7 @@ module.exports = function(app, sessionSecret,email,router) {
             content.save(function(err,result) {
                 if (err)
                 {
-                    console.log(err);
+                    logger.error(err);
                     res.send(err);
                 }
                 else{
@@ -1268,7 +1268,7 @@ module.exports = function(app, sessionSecret,email,router) {
             speaker.short_description= req.body.short_description ;
             speaker.save(function(err) {
                 if (err) {
-                    console.log(err);
+                    logger.error(err);
                     res.send(err);
                     return;
                 }
@@ -1430,7 +1430,7 @@ module.exports = function(app, sessionSecret,email,router) {
             Talks.findById(req.params.id).populate('listSpeakers listRooms').exec(function (err, talk) {
                 if (err)
                 {
-                    console.log(err);
+                    logger.error(err);
                     res.json(err);
                     return;
                 }
@@ -1536,7 +1536,7 @@ module.exports = function(app, sessionSecret,email,router) {
             Rooms.findById(req.params.id).populate('id_talks').exec(function (err, room) {
                 if (err)
                 {
-                    console.log(err);
+                    logger.error(err);
                     res.json(err);
                     return;
                 }
@@ -2306,7 +2306,7 @@ module.exports = function(app, sessionSecret,email,router) {
         .get(function(req,res) {
             User.findOne({username: {$regex: new RegExp("^" + req.user.username, "i")}}, function (err, usr) {
                 if (err) {
-                    console.log(err);
+                    logger.error(err);
                     res.send(err)
                 }
                 else {
@@ -2405,7 +2405,7 @@ module.exports = function(app, sessionSecret,email,router) {
             Teste.find({_id: req.params.id}, function (err, testR) {
                 //console.log(req.params.id);
                 if (err) {
-                    console.log(err);
+                    logger.error(err);
                     res.send(err);
                     return;
                 }
@@ -2414,7 +2414,7 @@ module.exports = function(app, sessionSecret,email,router) {
                     qa["test"] = testR;
                     Questions.find({_id: req.params.idd}, function (err2, cont) {
                         if (err) {
-                            console.log(err);
+                            logger.error(err);
                             res.send(err);
                             return;
                         }
@@ -2454,7 +2454,7 @@ module.exports = function(app, sessionSecret,email,router) {
         //console.log(req.user.username);
         User.findOne({ username :  { $regex: new RegExp("^" + req.user.username, "i") }},function(err,usr){
             if(err) {
-                console.log(err);
+                logger.error(err);
                 res.send(err)
             }
             else {
