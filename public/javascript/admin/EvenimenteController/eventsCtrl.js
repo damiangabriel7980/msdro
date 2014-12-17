@@ -30,6 +30,28 @@ cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAd
             }
         });
     });
+    EventsAdminService.getAllRoom.query().$promise.then(function(resp){
+        $scope.rooms=resp;
+        var listRooms=$scope.rooms;
+        $scope.tableParams2 = new ngTableParams({
+            page: 1,            // show first page
+            count: 10,          // count per page
+            sorting: {
+                room_name: 'asc'     // initial sorting
+            },
+            filter: {
+                room_name: ''       // initial filter
+            }
+        }, {
+            total: listRooms.length, // length of data
+            getData: function($defer, params) {
+
+                var orderedData = $filter('orderBy')(($filter('filter')(listRooms, params.filter())), params.orderBy());
+
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
+        });
+    });
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };

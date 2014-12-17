@@ -24,7 +24,11 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         var token = req.headers.authorization.split(' ').pop();
         return jwt.decode(token);
     };
-    
+
+    var CheckArrayConferences = function(id){
+
+    };
+
     //access control allow origin *
     app.all("/apiConferences/*", function(req, res, next) {
         res.setHeader("Access-Control-Allow-Origin", "*");
@@ -171,19 +175,52 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         });
     router.route('/conferences')
         .get(function(req,res){
-            Conferences.find().populate('listTalks').exec(function (err, conferences) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(conferences);
-                    return;
-                }
-            })
+            var userCurrent = getUserData(req);
+            User.findOne({'username':userCurrent.username}).exec(function(err,result){
+                Conferences.find({_id:{$in: result.conferencesID}}).populate('listTalks').exec(function (err, conferences) {
+                    if (err)
+                    {
+                        res.json(err);
+                        return;
+                    }
+                    else
+                    {
+                        res.json(conferences);
+                        return;
+                    }
+                })
+            });
+
+        })
+    .post(function(req,res){
+            console.log("entered");
+            var id = req.body.id;
+            if(typeof id === "string")
+                id=mongoose.Types.ObjectId(id);
+
+        var userCurrent = getUserData(req);
+            console.log(userCurrent.username);
+        var check=false;
+        User.update({"username":userCurrent.username}, {$addToSet: {"conferencesID":id}},function(err,result){
+            if(err)
+            {
+                console.log(err);
+                res.send(err);
+
+            }
+            else{
+                console.log(result);
+                Conferences.findById(req.body.id).populate('listTalks').exec(function(err,result){
+                    if(err)
+                        res.send(err);
+                    else
+                        res.json(result);
+                });
+            }
+
         });
+    });
+
     router.route('/conferences/:id')
         .get(function(req,res){
             Conferences.findById(req.params.id).populate('listTalks').exec(function (err, conference) {
@@ -198,7 +235,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
                     return;
                 }
             })
-        });
+        })
 
     router.route('/events')
         .get(function(req,res){
@@ -272,23 +309,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
             })
 
         })
-    .put(function(req,res){
-        var userCurrent = getUserData(req);
-        User.findOne({'username':userCurrent.username}).exec(function(err,result){
-            result.talksID.push(req.params.id);
-            result.save(function(err,done){
-                if(err)
-                    res.json(err);
-                else
-                {
-                    console.log(result);
-                    res.json({'message':'Succes!'});
-                }
-            });
 
-
-        });
-    });
     router.route('/rooms')
         .get(function(req,res){
             Rooms.find().populate('id_talks').exec(function (err, rooms) {

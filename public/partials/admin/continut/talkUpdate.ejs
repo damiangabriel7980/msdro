@@ -94,17 +94,7 @@
                 </td>
             </tr>
         </table>
-        <table ng-table="tableParams2" show-filter="true" class="table table-bordered">
-            <tr ng-repeat="rooms in $data">
-                <td data-title="'Room Name'" filter="{ 'room_name': 'text' }" sortable="'room_name'">{{rooms.room_name}}</td>
-                <td>
-                    <div class="btn-group-sm"  role="group" style="display: flex">
-                        <button class="btn btn-danger" ui-sref=""><i class="glyphicon glyphicon-trash"></i></button>
-                        <button class="btn btn-info" ui-sref="continut.updateRoom({id:rooms._id})"><i class="glyphicon glyphicon-cog"></i></button>
-                    </div>
-                </td>
-            </tr>
-        </table>
+
     </div>
 </div>
 

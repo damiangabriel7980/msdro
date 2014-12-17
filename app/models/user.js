@@ -27,7 +27,7 @@ var userSchema = new Schema({
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     activationToken: String,
-    talksID:[{type: Schema.Types.ObjectId,ref: 'talks'}]
+    conferencesID:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
 });
 
 // generating a hash
