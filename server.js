@@ -22,6 +22,12 @@ var configDB = require('./config/database.js');
 var email = require('mandrill-send')(mandrillKey);
 var socketServer = require('http').createServer(app); //http server used for socket comm
 
+//logging ======================================================================
+//configure winston logger
+var logger = require('./config/winston');
+//override express logger
+app.use(morgan({ "stream": logger.stream }));
+
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
 
@@ -38,12 +44,6 @@ app.use(session({ secret: sessionSecret })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
-
-//logging ======================================================================
-//configure winston logger
-var logger = require('./config/winston');
-//override express logger
-app.use(morgan({ "stream": logger.stream }));
 
 //token auth ===================================================================
 require('./config/tokenAuth')(app,  logger, tokenSecret);
