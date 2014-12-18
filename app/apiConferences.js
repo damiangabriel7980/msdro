@@ -93,7 +93,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
                                     }
                                 });
                             }else{
-                                res.send(conferences);
+                                callback(null, conferences);
                             }
                         }
                     });
