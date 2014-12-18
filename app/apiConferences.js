@@ -334,20 +334,16 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
                 if (err){
                     res.json(err);
                 }else{
-                    if(room){
-                        Talks.find({Room_id: room._id}).populate('listSpeakers').exec(function (err, talks) {
-                            if(err){
-                                res.json(err);
-                            }else{
-                                console.log(talks);
-                                var result = room.toObject();
-                                result.talks = talks;
-                                res.json(result);
-                            }
-                        });
-                    }else{
-                        res.json(null);
-                    }
+                    Talks.find({listRooms: {$in: [room._id]}}).populate('listSpeakers').exec(function (err, talks) {
+                        if(err){
+                            res.json(err);
+                        }else{
+                            console.log(talks);
+                            var result = room.toObject();
+                            result.talks = talks;
+                            res.json(result);
+                        }
+                    });
                 }
             })
         });
