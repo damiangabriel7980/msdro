@@ -25,6 +25,7 @@ cloudAdminControllers.controller('TalkAddCtrl', ['$scope','$rootScope' ,'EventsA
         Room_id:""
     };
     $scope.groupSpeakers=[];
+    $scope.groupRooms=[];
     var findSpeaker = function (id) {
         var index = -1;
         var i=0;
@@ -53,6 +54,34 @@ cloudAdminControllers.controller('TalkAddCtrl', ['$scope','$rootScope' ,'EventsA
             $scope.groupSpeakers.splice(index,1);
         }
     };
+    var findRoom = function (id) {
+        var index = -1;
+        var i=0;
+        var found = false;
+        while(!found && i<$scope.groupRooms.length){
+            if($scope.groupRooms[i]._id==id){
+                found = true;
+                index = i;
+            }
+            i++;
+        }
+        return index;
+    };
+    $scope.RoomWasSelected = function (sel) {
+        if(sel._id!=0){
+
+            var index = findRoom(sel._id);
+            if(index==-1) $scope.groupRooms.push(sel);
+
+        }
+    };
+
+    $scope.removeRoom = function (id) {
+        var index = findRoom(id);
+        if(index>-1){
+            $scope.groupRooms.splice(index,1);
+        }
+    };
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
@@ -61,6 +90,10 @@ cloudAdminControllers.controller('TalkAddCtrl', ['$scope','$rootScope' ,'EventsA
         for(var i=0;i<$scope.groupSpeakers.length;i++)
             id_speakers.push($scope.groupSpeakers[i]._id);
         $scope.newTalk.listSpeakers=id_speakers;
+        var id_rooms=[];
+        for(var i=0;i<$scope.groupRooms.length;i++)
+            id_rooms.push($scope.groupRooms[i]._id);
+        $scope.newTalk.listRooms=id_rooms;
         $scope.utc1 = new Date($scope.newTalk.hour_start);
         $scope.utc2 = new Date($scope.newTalk.hour_end);
         $scope.newTalk.hour_start=$scope.utc1;

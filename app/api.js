@@ -1309,6 +1309,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             conferences.title = req.body.title;  // set the bears name (comes from the request)
             conferences.enable=req.body.enable ;
             conferences.begin_date= req.body.begin_date     ;
+            conferences.end_date= req.body.end_date     ;
             conferences.last_updated= req.body.last_updated ;
             conferences.listTalks=req.body.listTalks;
             conferences.qr_code=req.body.qr_code;
@@ -1362,6 +1363,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 conferences.title = req.body.title;  // set the bears name (comes from the request)
                 conferences.enable=req.body.enable ;
                 conferences.begin_date= req.body.begin_date     ;
+                conferences.end_date= req.body.end_date     ;
                 conferences.last_updated= req.body.last_updated ;
                 conferences.listTalks=req.body.listTalks;
                 conferences.qr_code=req.body.qr_code;
@@ -1415,7 +1417,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
              talks.title=req.body.title;
              talks.place=req.body.place;
              talks.listSpeakers=req.body.listSpeakers;
-             talks.Room_id=req.body.Room_id;
+             talks.listRooms=req.body.listRooms;
 
              talks.save(function(err) {
                  if (err)
@@ -1457,7 +1459,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 talks.title=req.body.title;
                 talks.place=req.body.place;
                 talks.listSpeakers=req.body.listSpeakers;
-                talks.Room_id=req.body.Room_id;
+                talks.listRooms=req.body.listRooms;
                 talks.save(function(err) {
                     if (err)
                         res.send(err);

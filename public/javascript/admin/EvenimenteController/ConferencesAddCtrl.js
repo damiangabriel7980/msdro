@@ -14,6 +14,7 @@ cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'
         enable:         "",
         begin_date:        "",
         last_updated: new Date(),
+        end_date:"",
         listTalks:$scope.groupTalks,
         qr_code:        {
             message:"",
@@ -58,6 +59,12 @@ cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'
         $event.stopPropagation();
 
         $scope.opened1 = true;
+    };
+    $scope.open2 = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        $scope.opened2 = true;
     };
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
