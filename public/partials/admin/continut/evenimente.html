@@ -26,7 +26,17 @@
             <td data-title="'Tip'" sortable="'type'" ><i class="glyphicon glyphicon-calendar">Eveniment</i></td>
             <td data-title="'Inceput'" sortable="'start'">{{eveniment.start | asDate | date:'dd/MM/yyyy'}}</td>
             <td data-title="'Final'" sortable="'end'">{{eveniment.end | asDate|date:'dd/MM/yyyy'}}</td>
-
+            <td data-title="'Conferinte'" sortable="'listconferences'">
+                <ul style="list-style: none">
+                    <li class="margintop20px" ng-repeat="conf in eveniment.listconferences | orderBy: 'title'">{{conf.title}}&nbsp;
+                            <span class="btn-group-sm pull-right"  role="group" style="display: flex">
+                                <button class="btn btn-danger btn-sm" ui-sref="continut.evenimente.deleteConference({id: conf._id})"><i class="glyphicon glyphicon-trash"></i></button>
+                                <button class="btn btn-info btn-sm" ui-sref="continut.updateConference({id: conf._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                            </span>
+                        <br />
+                    </li>
+                </ul>
+            </td>
 
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
@@ -40,11 +50,18 @@
     <table ng-table="tableParams2" show-filter="true" class="table table-bordered">
         <tr ng-repeat="rooms in $data">
             <td data-title="'Room Name'" filter="{ 'room_name': 'text' }" sortable="'room_name'">{{rooms.room_name}}</td>
-            <td data-title="'Conference'" filter="{ 'id_conference.title': 'text' }" sortable="'id_conference.title'">{{rooms.id_conference.title}}
-            <div ng-if="rooms.id_conference!=null" class="btn-group-sm"  role="group" style="display: flex">
-                <button class="btn btn-danger" ui-sref=""><i class="glyphicon glyphicon-trash"></i></button>
-                <button class="btn btn-info" ui-sref="continut.updateConference({id: rooms.id_conference._id})"><i class="glyphicon glyphicon-cog"></i></button>
-            </div>
+            <td data-title="'Talks'" filter="{ 'rooms.id_talks.title': 'text' }" sortable="'rooms.id_talks.title'">
+                <ul style="list-style: none">
+                <li class="margintop20px" ng-repeat="talks in rooms.id_talks | orderBy: 'title'">{{talks.title}}&nbsp;
+                            <span class="btn-group-sm pull-right"  role="group" style="display: flex">
+                                <button class="btn btn-danger btn-sm" ui-sref=""><i class="glyphicon glyphicon-trash"></i></button>
+                                <button class="btn btn-info btn-sm" ui-sref="continut.updateTalk({id: talks._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                            </span>
+                    <br />
+                    <br />
+                </li>
+
+            </ul>
             </td>
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
