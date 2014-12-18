@@ -13,7 +13,6 @@ var TalksSchema		= new Schema({
     title:      String,
     place:       String,
     listSpeakers:[{type: Schema.Types.ObjectId,ref: 'speakers'}],
-    id_room: {type: Schema.Types.ObjectId,ref: 'rooms'},
     type: Number
 });
 
