@@ -138,46 +138,46 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
             }
         });
 
-    router.route('/userProfile')
-        .get(function (req, res) {
-            res.json(getUserData(req));
-        });
+//    router.route('/userProfile')
+//        .get(function (req, res) {
+//            res.json(getUserData(req));
+//        });
 
-    router.route('/speakers')
-        .get(function(req,res){
-            Speakers.find().populate('listTalks').exec(function (err, speakers) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(speakers);
-                    return;
-                }
-        })
-        });
-    router.route('/speakers/:id')
-        .get(function(req,res){
-            Speakers.findById(req.params.id).populate('listTalks').exec(function (err, speaker) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(speaker);
-                    return;
-                }
-            })
-        });
+//    router.route('/speakers')
+//        .get(function(req,res){
+//            Speakers.find().populate('listTalks').exec(function (err, speakers) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(speakers);
+//                    return;
+//                }
+//        })
+//        });
+//    router.route('/speakers/:id')
+//        .get(function(req,res){
+//            Speakers.findById(req.params.id).populate('listTalks').exec(function (err, speaker) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(speaker);
+//                    return;
+//                }
+//            })
+//        });
     router.route('/conferences')
         .get(function(req,res){
             var userCurrent = getUserData(req);
             User.findOne({'username':userCurrent.username}).exec(function(err,result){
-                Conferences.find({_id:{$in: result.conferencesID}}).populate('listTalks').exec(function (err, conferences) {
+                Conferences.find({_id:{$in: result.conferencesID}}).exec(function (err, conferences) {
                     if (err)
                     {
                         res.json(err);
@@ -195,6 +195,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
     .post(function(req,res){
             console.log("entered");
             var id = req.body.id;
+            console.log(id);
             if(typeof id === "string")
                 id=mongoose.Types.ObjectId(id);
 
@@ -221,113 +222,113 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         });
     });
 
-    router.route('/conferences/:id')
-        .get(function(req,res){
-            Conferences.findById(req.params.id).populate('listTalks').exec(function (err, conference) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(conference);
-                    return;
-                }
-            })
-        })
+//    router.route('/conferences/:id')
+//        .get(function(req,res){
+//            Conferences.findById(req.params.id).populate('listTalks').exec(function (err, conference) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(conference);
+//                    return;
+//                }
+//            })
+//        })
 
-    router.route('/events')
-        .get(function(req,res){
-            Events.find().populate('listconferences').exec(function (err, events) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(events);
-                    return;
-                }
-            })
-        });
-    router.route('/events/:id')
-        .get(function(req,res) {
-            Events.findById(req.params.id).populate('listconferences').exec(function (err, event) {
-                if (err) {
-                    res.json(err);
-                    return;
-                }
-                else {
-                    var arrTalks=[];
-                    Conferences.find({_id:{$in: event.listconferences}}).populate('listTalks').exec(function(err,info){
-                       event.listconferences=info;
-                        var local=event.listconferences;
-                        //console.log(local);
-                        res.json(event);
-                        });
-
-                    return;
-                }
-
-            })
-        });
-    router.route('/talks')
-        .get(function(req,res){
-            Talks.find({}).populate('listSpeakers listRooms').exec(function (err, talks) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(talks);
-                    return;
-                }
-
-
-            })
-
-        })
-    router.route('/talks/:id')
-        .get(function(req,res){
-            Talks.findById(req.params.id).populate('listSpeakers listRooms').exec(function (err, talk) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(talk);
-                    return;
-                }
-
-
-            })
-
-        })
-
-    router.route('/rooms')
-        .get(function(req,res){
-            Rooms.find().populate('id_talks').exec(function (err, rooms) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(rooms);
-                    return;
-                }
-
-
-            })
-
-        });
+//    router.route('/events')
+//        .get(function(req,res){
+//            Events.find().populate('listconferences').exec(function (err, events) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(events);
+//                    return;
+//                }
+//            })
+//        });
+//    router.route('/events/:id')
+//        .get(function(req,res) {
+//            Events.findById(req.params.id).populate('listconferences').exec(function (err, event) {
+//                if (err) {
+//                    res.json(err);
+//                    return;
+//                }
+//                else {
+//                    var arrTalks=[];
+//                    Conferences.find({_id:{$in: event.listconferences}}).populate('listTalks').exec(function(err,info){
+//                       event.listconferences=info;
+//                        var local=event.listconferences;
+//                        //console.log(local);
+//                        res.json(event);
+//                        });
+//
+//                    return;
+//                }
+//
+//            })
+//        });
+//    router.route('/talks')
+//        .get(function(req,res){
+//            Talks.find({}).populate('listSpeakers listRooms').exec(function (err, talks) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(talks);
+//                    return;
+//                }
+//
+//
+//            })
+//
+//        })
+//    router.route('/talks/:id')
+//        .get(function(req,res){
+//            Talks.findById(req.params.id).populate('listSpeakers listRooms').exec(function (err, talk) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(talk);
+//                    return;
+//                }
+//
+//
+//            })
+//
+//        })
+//
+//    router.route('/rooms')
+//        .get(function(req,res){
+//            Rooms.find().populate('id_talks').exec(function (err, rooms) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(rooms);
+//                    return;
+//                }
+//
+//
+//            })
+//
+//        });
     router.route('/rooms/:id')
         .get(function(req,res){
             Rooms.findOne({_id: req.params.id}, function (err, room) {
