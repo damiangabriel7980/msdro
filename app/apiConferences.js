@@ -26,17 +26,22 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
     };
 
     var getRoomDataById = function (id, callback) {
+        //find the actual room
         Rooms.findOne({_id: id}, function (err, room) {
             if (err){
                 callback(err, null);
             }else{
                 if(room){
+                    //find all talks for this room and populate speakers
                     Talks.find({_id: {$in: room.id_talks}}).populate('listSpeakers').exec(function (err, talks) {
                         if(err){
                             callback(err, null);
                         }else{
                             if(talks){
+                                //cast room object so that we can modify it's attributes
                                 var result = room.toObject();
+                                //add talks to copied object and return the result
+                                //result will be the room, with all the talks and all speakers for each talk
                                 result.talks = talks;
                                 callback(null, result);
                             }else{
@@ -51,57 +56,92 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         })
     };
 
-    var getConferencesFull = function (callback) {
+    var getConferencesFull = function (req, callback) {
         var resp = [];
-        Conferences.find({}, function (err, conferences) {
-            if(err){
-                callback(err, null);
-            }else{
-                async.each(conferences, function (conference, callback) {
-                    getConferenceFullById(conference._id, function (err, fullConf) {
+        //get user data
+        var userData = getUserData(req);
+        if(userData.username){
+            //get user so that we can have the id's of conferences he/she can attend
+            User.findOne({username: userData.username}, function (err, user) {
+                if(err){
+                    res.send(err);
+                }else{
+                    //find conferences for our user; we are only interested in id's for now
+                    Conferences.find({_id:{$in: user.conferencesID}}, {_id: 1}, function (err, conferences) {
                         if(err){
-                            callback(err);
+                            callback(err, null);
                         }else{
-                            resp.push(fullConf);
-                            callback();
+                            if(conferences.length != 0){
+                                //for each conference id get full in-depth data async
+                                async.each(conferences, function (conference, callback) {
+                                    getConferenceFullById(conference._id, function (err, fullConf) {
+                                        if(err){
+                                            callback(err);
+                                        }else{
+                                            //push data to response array
+                                            resp.push(fullConf);
+                                            callback();
+                                        }
+                                    });
+                                }, function (err) {
+                                    if(err){
+                                        callback({hasError: true, message: "Error retrieving conferences"}, null);
+                                    }else{
+                                        callback(null, resp);
+                                    }
+                                });
+                            }else{
+                                res.send(conferences);
+                            }
                         }
                     });
-                }, function (err) {
-                    if(err){
-                        callback({hasError: true, message: "Error retrieving conferences"}, null);
-                    }else{
-                        callback(null, resp);
-                    }
-                });
-            }
-        });
+                }
+            });
+        }else{
+            res.send({hasError: true, message:"User not found"});
+        }
     };
 
     var getConferenceFullById = function (id, callback) {
+        //find the conference
         Conferences.findOne({_id: id}, function (err, conf) {
             if(err){
                 callback(err, null);
             }else{
                 if(conf){
+                    //cast the found conference to object so that we can modify it's attributes
                     var result = conf.toObject();
+                    //add 'rooms' key to our result object
                     result['rooms'] = [];
+                    //find the id's of all rooms for this conference
                     Rooms.find({id_conference: conf._id}, {_id:1},function (err, rooms) {
-                        async.each(rooms, function (item, callback) {
-                            getRoomDataById(item._id, function (err, data) {
-                                if(err){
-                                    callback(err);
-                                }else{
-                                    result['rooms'].push(data);
-                                    callback();
-                                }
-                            })
-                        }, function (err) {
-                            if(err){
-                                callback(err, null);
+                        if(err){
+                            res.send(err);
+                        }else{
+                            if(rooms){
+                                //iterate async through the room id's
+                                async.each(rooms, function (item, callback) {
+                                    //get room and all in-depth attributes for each id
+                                    getRoomDataById(item._id, function (err, data) {
+                                        if(err){
+                                            callback(err);
+                                        }else{
+                                            //add the data to our result's 'room' key
+                                            result['rooms'].push(data);
+                                            callback();
+                                        }
+                                    })
+                                }, function (err) {
+                                    if(err){
+                                        callback(err, null);
+                                    }else{
+                                        callback(null, result);
+                                    }
+                                });
                             }else{
                                 callback(null, result);
                             }
-                        })
+                        }
                     });
                 }else{
                     callback({hasError:true, message:"No conference found by id = "+id}, null);
@@ -219,10 +259,10 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
             }
         });
 
-//    router.route('/userProfile')
-//        .get(function (req, res) {
-//            res.json(getUserData(req));
-//        });
+    router.route('/userProfile')
+        .get(function (req, res) {
+            res.json(getUserData(req));
+        });
 
 //    router.route('/speakers')
 //        .get(function(req,res){
@@ -277,6 +317,8 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
             var id = req.body.id;
             if(typeof id === "string")
                 id=mongoose.Types.ObjectId(id);
+
+            console.log(id);
 
         var userCurrent = getUserData(req);
         var check=false;
@@ -423,7 +465,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
 
     router.route('/getConferencesFull')
         .get(function (req, res) {
-            getConferencesFull(function (err, resp) {
+            getConferencesFull(req, function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{
