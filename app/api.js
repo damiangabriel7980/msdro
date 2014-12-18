@@ -1206,7 +1206,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
 
     router.route('/admin/speakers')
         .get(function(req,res){
-            Speakers.find().populate('listTalks').exec(function (err, speakers) {
+            Speakers.find().exec(function (err, speakers) {
                 if (err)
                 {
                     res.json(err);
@@ -1228,7 +1228,6 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             speaker.last_updated= req.body.last_updated ;
             speaker.workplace=req.body.workplace;
             speaker.short_description= req.body.short_description ;
-            speaker.listTalks=req.body.listTalks;
 
             speaker.save(function(err) {
             if (err)
@@ -1240,7 +1239,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
     });
     router.route('/admin/speakers/:id')
         .get(function(req,res){
-            Speakers.findById(req.params.id).populate('listTalks').exec(function (err, speaker) {
+            Speakers.findById(req.params.id).exec(function (err, speaker) {
                 if (err)
                 {
                     res.json(err);
@@ -1290,7 +1289,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
         });
     router.route('/admin/conferences')
         .get(function(req,res){
-            Conferences.find().populate('listRooms').exec(function (err, conf) {
+            Conferences.find().exec(function (err, conf) {
                 if (err)
                 {
                     res.json(err);
@@ -1312,7 +1311,6 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             conferences.end_date= req.body.end_date     ;
             conferences.last_updated= req.body.last_updated ;
             conferences.description=req.body.description;
-            conferences.listRooms=req.body.listRooms;
             conferences.qr_code=req.body.qr_code;
             conferences.save(function(err,saved) {
             if (err)
@@ -1340,7 +1338,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
     });
     router.route('/admin/conferences/:id')
         .get(function(req,res){
-            Conferences.findById(req.params.id).populate('listRooms').exec(function (err, conf) {
+            Conferences.findById(req.params.id).exec(function (err, conf) {
                 if (err)
                 {
                     res.json(err);
@@ -1392,7 +1390,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
         });
      router.route('/admin/talks')
         .get(function(req,res){
-            Talks.find().populate('listSpeakers listRooms').exec(function (err, talks) {
+            Talks.find().populate('listSpeakers').exec(function (err, talks) {
                 if (err)
                 {
                     res.json(err);
@@ -1430,7 +1428,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
          });
     router.route('/admin/talks/:id')
         .get(function(req,res){
-            Talks.findById(req.params.id).populate('listSpeakers listRooms').exec(function (err, talk) {
+            Talks.findById(req.params.id).populate('listSpeakers').exec(function (err, talk) {
                 if (err)
                 {
                     logger.error(err);
@@ -1481,7 +1479,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
         });
     router.route('/admin/rooms')
         .get(function(req,res){
-            Rooms.find().populate('id_talks').exec(function (err, rooms) {
+            Rooms.find().populate('id_talks id_conference').exec(function (err, rooms) {
                 if (err)
                 {
                     res.json(err);
@@ -1532,7 +1530,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
         });
     router.route('/admin/rooms/:id')
         .get(function(req,res){
-            Rooms.findById(req.params.id).populate('id_talks').exec(function (err, room) {
+            Rooms.findById(req.params.id).populate('id_talks id_conference').exec(function (err, room) {
                 if (err)
                 {
                     logger.error(err);
