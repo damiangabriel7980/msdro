@@ -14,7 +14,8 @@ var ConferencesSchema		= new Schema({
     listTalks:[{type: Schema.Types.ObjectId,ref: 'talks'}],
     qr_code: Object,
     description: String,
-    end_date: Date
+    end_date: Date,
+    topicsID:[{type: Schema.Types.ObjectId,ref: 'topics'}]
 });
 
 ConferencesSchema.pre('remove', function(next) {

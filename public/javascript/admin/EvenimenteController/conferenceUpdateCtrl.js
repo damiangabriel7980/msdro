@@ -89,6 +89,12 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
 
         $scope.opened1 = true;
     };
+    $scope.open2 = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        $scope.opened2 = true;
+    };
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
@@ -98,6 +104,10 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
         for(var i=0;i<$scope.groupTalks.length;i++)
             id_talks.push($scope.groupTalks[i]._id);
         $scope.newConference.listTalks=id_talks;
+        $scope.utc1 = new Date($scope.newConference.begin_date);
+        $scope.utc2 = new Date($scope.newConference.end_date);
+        $scope.newConference.begin_date=$scope.utc1;
+        $scope.newConference.end_date=$scope.utc2;
         $scope.newConference.description=tinyMCE.activeEditor.getContent();
         console.log($scope.newConference);
         if($scope.newConference){
