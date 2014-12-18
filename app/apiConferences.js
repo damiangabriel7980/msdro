@@ -25,8 +25,89 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         return jwt.decode(token);
     };
 
-    var CheckArrayConferences = function(id){
+    var getRoomDataById = function (id, callback) {
+        Rooms.findOne({_id: id}, function (err, room) {
+            if (err){
+                callback(err, null);
+            }else{
+                if(room){
+                    Talks.find({_id: {$in: room.id_talks}}).populate('listSpeakers').exec(function (err, talks) {
+                        if(err){
+                            callback(err, null);
+                        }else{
+                            if(talks){
+                                var result = room.toObject();
+                                result.talks = talks;
+                                callback(null, result);
+                            }else{
+                                callback(null, room);
+                            }
+                        }
+                    });
+                }else{
+                    callback({hasError: true, message: "Room not found"}, null);
+                }
+            }
+        })
+    };
 
+    var getConferencesFull = function (callback) {
+        var resp = [];
+        Conferences.find({}, function (err, conferences) {
+            if(err){
+                callback(err, null);
+            }else{
+                async.each(conferences, function (conference, callback) {
+                    getConferenceFullById(conference._id, function (err, fullConf) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            resp.push(fullConf);
+                            callback();
+                        }
+                    });
+                }, function (err) {
+                    if(err){
+                        callback({hasError: true, message: "Error retrieving conferences"}, null);
+                    }else{
+                        callback(null, resp);
+                    }
+                });
+            }
+        });
+    };
+
+    var getConferenceFullById = function (id, callback) {
+        Conferences.findOne({_id: id}, function (err, conf) {
+            if(err){
+                callback(err, null);
+            }else{
+                if(conf){
+                    var result = conf.toObject();
+                    result['rooms'] = [];
+                    Rooms.find({id_conference: conf._id}, {_id:1},function (err, rooms) {
+                        async.each(rooms, function (item, callback) {
+                            getRoomDataById(item._id, function (err, data) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    result['rooms'].push(data);
+                                    callback();
+                                }
+                            })
+                        }, function (err) {
+                            if(err){
+                                callback(err, null);
+                            }else{
+                                callback(null, result);
+                            }
+                        })
+                    });
+                }else{
+                    callback({hasError:true, message:"No conference found by id = "+id}, null);
+                }
+            }
+        })
     };
 
     //access control allow origin *
@@ -193,14 +274,11 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
 
         })
     .post(function(req,res){
-            console.log("entered");
             var id = req.body.id;
-            console.log(id);
             if(typeof id === "string")
                 id=mongoose.Types.ObjectId(id);
 
         var userCurrent = getUserData(req);
-            console.log(userCurrent.username);
         var check=false;
         User.update({"username":userCurrent.username}, {$addToSet: {"conferencesID":id}},function(err,result){
             if(err)
@@ -210,12 +288,12 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
 
             }
             else{
-                console.log(result);
-                Conferences.findById(req.body.id).populate('listTalks').exec(function(err,result){
-                    if(err)
+                getConferenceFullById(req.body.id, function (err, data) {
+                    if(err){
                         res.send(err);
-                    else
-                        res.json(result);
+                    }else{
+                        res.send(data);
+                    }
                 });
             }
 
@@ -329,127 +407,127 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
 //            })
 //
 //        });
+
+
+
     router.route('/rooms/:id')
         .get(function(req,res){
-            Rooms.findOne({_id: req.params.id}, function (err, room) {
-                if (err){
-                    res.json(err);
+            getRoomDataById(req.params.id, function (err, data) {
+                if(err){
+                    res.send(err);
                 }else{
-                    console.log(room);
-                    if(room){
-                        Talks.find({_id: {$in: room.id_talks}}).populate('listSpeakers').exec(function (err, talks) {
-                            if(err){
-                                res.json(err);
-                            }else{
-                                console.log(talks);
-                                var result = room.toObject();
-                                result.talks = talks;
-                                res.json(result);
-                            }
-                        });
-                    }else{
-                        res.json("Room not found");
-                    }
+                    res.send(data);
                 }
-            })
+            });
         });
 
     router.route('/getConferencesFull')
         .get(function (req, res) {
-
-            var findById = function (arr, id, callbackFinal) {
-                var retObj = null;
-                async.each(arr, function (it, callback) {
-                    if(it._id == id){
-                        retObj = it;
-                        callback(true);
-                    }else{
-                        callback();
-                    }
-                }, function (whatever) {
-                    callbackFinal(retObj);
-                });
-            };
-
-            //object that will be populated with all the data
-            var allData = {};
-
-            //entities relationships [from, via, to]
-            var mappings = [
-                ["conferences", "listTalks", "talks"],
-                ["talks", "listSpeakers", "speakers"],
-                ["talks", "listRooms", "rooms"]
-            ];
-
-            //entity to return after connecting all
-            var etr = 'conferences';
-
-            //array keeping references to the entities we need to iterate through
-            var myEntities = [Conferences, Talks, Speakers, Rooms];
-
-            //populate async
-            async.each(myEntities, function (entity, callback) {
-                entity.find({}, function (err, data) {
-                    if(err){
-                        callback(err);
-                    }else{
-                        allData[entity.modelName] = data;
-                        callback();
-                    }
-                })
-            }, function (err) {
+            getConferencesFull(function (err, resp) {
                 if(err){
-                    res.json(err);
+                    res.send(err);
                 }else{
-                    //console.log(allData);
-                    async.each(mappings, function (mappingKey, callback1) {
-                        var base = mappingKey[0];
-                        var connection = mappingKey[1];
-                        var connected = mappingKey[2];
-                        async.each(allData[base], function (entity, callback2) {
-                            //console.log(entity._id+" - "+entity[connection]);
-                            var idFrom = entity._id;
-                            var arrayIdsTo = entity[connection];
-                            async.each(arrayIdsTo, function (idTo, callback3) {
-                                //console.log(base+" - "+idFrom+" - "+connected+" - "+idTo);
-                                findById(allData[base],idFrom, function (cFrom) {
-                                    findById(allData[connected],idTo.toString(), function (cTo) {
-                                        var index = cFrom[connection].indexOf(idTo); //find [id] to replace with [object with that id]
-                                        if(cFrom == null || cTo == null || index < 0){
-                                            //something went wrong
-                                            //propagate an error through all the callbacks
-                                            callback3("Error retrieving data");
-                                        }else{
-                                            cFrom[connection][index]= cTo; //replace id with object
-                                            callback3();
-                                        }
-                                    });
-                                });
-                            }, function (err) {
-                                if(err){
-                                    callback2(err);
-                                }else{
-                                    callback2();
-                                }
-                            });
-                        }, function (err) {
-                            if(err){
-                                callback1(err);
-                            }else{
-                                callback1();
-                            }
-                        });
-                    }, function (err) {
-                        if(err){
-                            logger.error(err);
-                            res.send(err);
-                        }else{
-                            res.send(allData[etr]);
-                        }
-                    });
+                    res.send(resp);
                 }
             });
         });
+
+//    router.route('/getConferencesFull')
+//        .get(function (req, res) {
+//
+//            var findById = function (arr, id, callbackFinal) {
+//                var retObj = null;
+//                async.each(arr, function (it, callback) {
+//                    if(it._id == id){
+//                        retObj = it;
+//                        callback(true);
+//                    }else{
+//                        callback();
+//                    }
+//                }, function (whatever) {
+//                    callbackFinal(retObj);
+//                });
+//            };
+//
+//            //object that will be populated with all the data
+//            var allData = {};
+//
+//            //entities relationships [from, via, to]
+//            var mappings = [
+//                ["conferences", "listTalks", "talks"],
+//                ["talks", "listSpeakers", "speakers"],
+//                ["talks", "listRooms", "rooms"]
+//            ];
+//
+//            //entity to return after connecting all
+//            var etr = 'conferences';
+//
+//            //array keeping references to the entities we need to iterate through
+//            var myEntities = [Conferences, Talks, Speakers, Rooms];
+//
+//            //populate async
+//            async.each(myEntities, function (entity, callback) {
+//                entity.find({}, function (err, data) {
+//                    if(err){
+//                        callback(err);
+//                    }else{
+//                        allData[entity.modelName] = data;
+//                        callback();
+//                    }
+//                })
+//            }, function (err) {
+//                if(err){
+//                    res.json(err);
+//                }else{
+//                    //console.log(allData);
+//                    async.each(mappings, function (mappingKey, callback1) {
+//                        var base = mappingKey[0];
+//                        var connection = mappingKey[1];
+//                        var connected = mappingKey[2];
+//                        async.each(allData[base], function (entity, callback2) {
+//                            //console.log(entity._id+" - "+entity[connection]);
+//                            var idFrom = entity._id;
+//                            var arrayIdsTo = entity[connection];
+//                            async.each(arrayIdsTo, function (idTo, callback3) {
+//                                //console.log(base+" - "+idFrom+" - "+connected+" - "+idTo);
+//                                findById(allData[base],idFrom, function (cFrom) {
+//                                    findById(allData[connected],idTo.toString(), function (cTo) {
+//                                        var index = cFrom[connection].indexOf(idTo); //find [id] to replace with [object with that id]
+//                                        if(cFrom == null || cTo == null || index < 0){
+//                                            //something went wrong
+//                                            //propagate an error through all the callbacks
+//                                            callback3("Error retrieving data");
+//                                        }else{
+//                                            cFrom[connection][index]= cTo; //replace id with object
+//                                            callback3();
+//                                        }
+//                                    });
+//                                });
+//                            }, function (err) {
+//                                if(err){
+//                                    callback2(err);
+//                                }else{
+//                                    callback2();
+//                                }
+//                            });
+//                        }, function (err) {
+//                            if(err){
+//                                callback1(err);
+//                            }else{
+//                                callback1();
+//                            }
+//                        });
+//                    }, function (err) {
+//                        if(err){
+//                            logger.error(err);
+//                            res.send(err);
+//                        }else{
+//                            res.send(allData[etr]);
+//                        }
+//                    });
+//                }
+//            });
+//        });
     router.route('/topics')
         .get(function(res,res){
             Topics.find().exec(function(err,result){

@@ -12,8 +12,7 @@ var SpeakersSchema		= new Schema({
     profession:        String,
     last_updated: Date,
     workplace:       String,
-    short_description:   String,
-    listTalks:[{type: Schema.Types.ObjectId,ref: 'talks'}]
+    short_description:   String
 });
 
 SpeakersSchema.pre('remove', function(next) {
