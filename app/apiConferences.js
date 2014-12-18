@@ -330,20 +330,25 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         });
     router.route('/rooms/:id')
         .get(function(req,res){
-            Rooms.findOne({_id: req.params.id}, {id_talks: 0}, function (err, room) {
+            Rooms.findOne({_id: req.params.id}, function (err, room) {
                 if (err){
                     res.json(err);
                 }else{
-                    Talks.find({listRooms: {$in: [room._id]}}).populate('listSpeakers').exec(function (err, talks) {
-                        if(err){
-                            res.json(err);
-                        }else{
-                            console.log(talks);
-                            var result = room.toObject();
-                            result.talks = talks;
-                            res.json(result);
-                        }
-                    });
+                    console.log(room);
+                    if(room){
+                        Talks.find({_id: {$in: room.id_talks}}).populate('listSpeakers').exec(function (err, talks) {
+                            if(err){
+                                res.json(err);
+                            }else{
+                                console.log(talks);
+                                var result = room.toObject();
+                                result.talks = talks;
+                                res.json(result);
+                            }
+                        });
+                    }else{
+                        res.json("Room not found");
+                    }
                 }
             })
         });
