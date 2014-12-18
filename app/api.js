@@ -1417,6 +1417,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
              talks.title=req.body.title;
              talks.place=req.body.place;
              talks.listSpeakers=req.body.listSpeakers;
+             talks.type=req.body.type;
 
              talks.save(function(err) {
                  if (err)
@@ -1458,6 +1459,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 talks.title=req.body.title;
                 talks.place=req.body.place;
                 talks.listSpeakers=req.body.listSpeakers;
+                talks.type=req.body.type;
                 talks.save(function(err) {
                     if (err)
                         res.send(err);
