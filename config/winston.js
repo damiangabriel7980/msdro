@@ -17,7 +17,7 @@ var logger = new winston.Logger({
             colorize: true
         })
     ],
-    exitOnError: true
+    exitOnError: false
 });
 
 module.exports = logger;
