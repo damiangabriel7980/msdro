@@ -464,6 +464,23 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
                 }
             });
         });
-
+    router.route('/topics')
+        .get(function(res,res){
+            Topics.find().exec(function(err,result){
+                if(err)
+                    res.send(err);
+                else
+                    res.json(result);
+            })
+        });
+    router.route('/topics/:id')
+        .get(function(res,res){
+            Topics.findById(req.params.id).exec(function(err,result){
+                if(err)
+                    res.send(err);
+                else
+                    res.json(result);
+            })
+        });
     app.use('/apiConferences', router);
 };

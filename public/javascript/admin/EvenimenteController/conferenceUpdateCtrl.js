@@ -7,44 +7,44 @@
 cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','ngTableParams','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,ngTableParams,growl){
 
 
-    EventsAdminService.getAllTalks.query().$promise.then(function(resp){
-        $scope.talks=resp;
+    EventsAdminService.getAllRoom.query().$promise.then(function(resp){
+        $scope.rooms=resp;
         EventsAdminService.deleteOrUpdateConferences.getConference({id:$stateParams.id}).$promise.then(function(result2){
 
             $scope.newConference=result2;
             $scope.string=JSON.stringify($scope.newConference.qr_code);
-            tinyMCE.activeEditor.setContent($scope.newConference.description);
-            $scope.groupTalks=[];
+            $scope.groupRooms=[];
+            for(var i=0;i<$scope.rooms.length;i++)
+            {
+                for(var j=0;j<$scope.newConference.listRooms.length;j++)
+                {
+                    if($scope.rooms[i]._id==$scope.newConference.listRooms[j]._id)
+                        $scope.groupRooms.push($scope.rooms[i]);
+                }
+            };
+            $scope.selectedRoom=$scope.rooms[0];
             console.log(result2);
             $scope.newString=$scope.newConference.qr_code.message;
-            var listtalks = $scope.newConference.listTalks;
+            var listRooms = $scope.newConference.listRooms;
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    title: 'asc'     // initial sorting
+                    room_name: 'asc'     // initial sorting
                 },
                 filter: {
-                    title: ''       // initial filter
+                    room_name: ''       // initial filter
                 }
             }, {
-                total: listtalks.length, // length of data
+                total: listRooms.length, // length of data
                 getData: function($defer, params) {
 
-                    var orderedData = $filter('orderBy')(($filter('filter')(listtalks, params.filter())), params.orderBy());
+                    var orderedData = $filter('orderBy')(($filter('filter')(listRooms, params.filter())), params.orderBy());
 
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
-            for(var i=0;i<$scope.talks.length;i++)
-            {
-                for(var j=0;j<$scope.newConference.listTalks.length;j++)
-                {
-                    if($scope.talks[i]._id==$scope.newConference.listTalks[j]._id)
-                        $scope.groupTalks.push($scope.talks[i]);
-                }
-            }
-            $scope.selectedTalk=$scope.talks[0];
+
         });
 
 
@@ -53,12 +53,12 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
     $scope.messageString="";
 
 
-    var findTalk = function (id) {
+    var findRoom = function (id) {
         var index = -1;
         var i=0;
         var found = false;
-        while(!found && i<$scope.groupTalks.length){
-            if($scope.groupTalks[i]._id==id){
+        while(!found && i<$scope.groupRooms.length){
+            if($scope.groupRooms[i]._id==id){
                 found = true;
                 index = i;
             }
@@ -66,19 +66,19 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
         }
         return index;
     };
-    $scope.TalkWasSelected = function (sel) {
+    $scope.RoomWasSelected = function (sel) {
         if(sel._id!=0){
 
-            var index = findTalk(sel._id);
-            if(index==-1) $scope.groupTalks.push(sel);
+            var index = findRoom(sel._id);
+            if(index==-1) $scope.groupRooms.push(sel);
 
         }
     };
 
-    $scope.removeTalk = function (id) {
-        var index = findTalk(id);
+    $scope.removeRoom = function (id) {
+        var index = findRoom(id);
         if(index>-1){
-            $scope.groupTalks.splice(index,1);
+            $scope.groupRooms.splice(index,1);
         }
     };
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
@@ -100,15 +100,14 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
     };
 
     $scope.updateConference=function(){
-        var id_talks=[];
-        for(var i=0;i<$scope.groupTalks.length;i++)
-            id_talks.push($scope.groupTalks[i]._id);
-        $scope.newConference.listTalks=id_talks;
+        var id_rooms=[];
+        for(var i=0;i<$scope.groupRooms.length;i++)
+            id_rooms.push($scope.groupRooms[i]._id);
+        $scope.newConference.listRooms=id_rooms;
         $scope.utc1 = new Date($scope.newConference.begin_date);
         $scope.utc2 = new Date($scope.newConference.end_date);
         $scope.newConference.begin_date=$scope.utc1;
         $scope.newConference.end_date=$scope.utc2;
-        $scope.newConference.description=tinyMCE.activeEditor.getContent();
         console.log($scope.newConference);
         if($scope.newConference){
             EventsAdminService.deleteOrUpdateConferences.update({id: $stateParams.id}, $scope.newConference).$promise.then(function(result){

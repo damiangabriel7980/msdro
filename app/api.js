@@ -1290,7 +1290,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
         });
     router.route('/admin/conferences')
         .get(function(req,res){
-            Conferences.find().populate('listTalks').exec(function (err, conf) {
+            Conferences.find().populate('listRooms').exec(function (err, conf) {
                 if (err)
                 {
                     res.json(err);
@@ -1311,7 +1311,8 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             conferences.begin_date= req.body.begin_date     ;
             conferences.end_date= req.body.end_date     ;
             conferences.last_updated= req.body.last_updated ;
-            conferences.listTalks=req.body.listTalks;
+            conferences.description=req.body.description;
+            conferences.listRooms=req.body.listRooms;
             conferences.qr_code=req.body.qr_code;
             conferences.save(function(err,saved) {
             if (err)
@@ -1339,7 +1340,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
     });
     router.route('/admin/conferences/:id')
         .get(function(req,res){
-            Conferences.findById(req.params.id).populate('listTalks').exec(function (err, conf) {
+            Conferences.findById(req.params.id).populate('listRooms').exec(function (err, conf) {
                 if (err)
                 {
                     res.json(err);
@@ -1365,7 +1366,8 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 conferences.begin_date= req.body.begin_date     ;
                 conferences.end_date= req.body.end_date     ;
                 conferences.last_updated= req.body.last_updated ;
-                conferences.listTalks=req.body.listTalks;
+                conferences.description=req.body.description;
+                conferences.listRooms=req.body.listRooms;
                 conferences.qr_code=req.body.qr_code;
                 conferences.save(function(err) {
                     if (err)
