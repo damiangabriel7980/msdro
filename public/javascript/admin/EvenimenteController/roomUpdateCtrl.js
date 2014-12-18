@@ -19,6 +19,11 @@ cloudAdminControllers.controller('roomUpdateCtrl', ['$scope','$rootScope' ,'Even
                 }
             }
             $scope.selectedTalk=$scope.talks[0];
+            EventsAdminService.getAllConferences.query().$promise.then(function(resp){
+                $scope.conferences=resp;
+                console.log($scope.newRoom);
+                $scope.selectedConference = findConfById($scope.conferences, $scope.newRoom.id_conference);
+            });
         });
     });
     $scope.newString="";
@@ -57,6 +62,7 @@ cloudAdminControllers.controller('roomUpdateCtrl', ['$scope','$rootScope' ,'Even
         for(var i=0;i<$scope.groupTalks.length;i++)
             id_talks.push($scope.groupTalks[i]._id);
         $scope.newRoom.id_talks=id_talks;
+        $scope.newRoom.id_conference = $scope.selectedConference._id;
         $scope.newRoom.qr_code.message=$scope.newString;
         if($scope.newRoom){
             EventsAdminService.deleteOrUpdateRooms.update({id: $stateParams.id}, $scope.newRoom).$promise.then(function(result){
@@ -67,6 +73,13 @@ cloudAdminControllers.controller('roomUpdateCtrl', ['$scope','$rootScope' ,'Even
             });
         }
     };
+
+    var findConfById = function (conf, id) {
+        for(var i=0; i<conf.length; i++){
+            if(conf[i]._id==id) return conf[i];
+        }
+    };
+
     $scope.okk=function(){
         $state.go('continut.evenimente');
     };

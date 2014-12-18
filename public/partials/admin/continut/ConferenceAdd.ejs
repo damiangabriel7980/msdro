@@ -26,30 +26,14 @@
         </p>
 
     </div>
-    <div class="col-md-12">
-        <div class="form-group">
-            <label for="rooms">Room:</label>
-            <select ng-model="selectedRoom" ng-options="room as room.room_name for room in rooms"
-                    class="form-control" id="rooms" style="width: 100%;" ng-change="RoomWasSelected(selectedRoom)">
-            </select>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <div ng-repeat="room in groupRooms">
-            <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
-                {{room.room_name}}&nbsp;
-                <i class="glyphicon glyphicon-remove-sign" ng-click="removeRoom(room._id)" style="cursor: pointer;"></i>
-            </div>
-        </div>
-    </div>
     <div class="col-xs-12">
         <label class="label label-default">Message QR:</label>
-        <input ng-model="newString" type="text" class="form-control col-xs-12">
+        <input ng-model="newConference.qr_code.message" type="text" class="form-control col-xs-12">
     </div>
     <div class="col-xs-12">
         <form method="post">
             <label class="label label-default">Descriere:</label>
-            <textarea ui-tinymce ng-model="newConference.description"></textarea>
+            <textarea ui-tinymce="tinymceOptions" ng-model="newConference.description"></textarea>
         </form>
     </div>
     <div growl class="col-xs-12">

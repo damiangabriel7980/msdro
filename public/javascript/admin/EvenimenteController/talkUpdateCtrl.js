@@ -9,40 +9,9 @@ cloudAdminControllers.controller('talkUpdateCtrl', ['$scope','$rootScope' ,'Even
         $scope.speakers=resp;
         EventsAdminService.deleteOrUpdateTalks.getTalk({id:$stateParams.id}).$promise.then(function(result2){
             $scope.groupSpeakers=[];
-            $scope.groupRooms=[];
             console.log(result2);
             $scope.newTalk=result2;
-            EventsAdminService.getAllRoom.query().$promise.then(function(resp){
-                $scope.rooms=resp;
-                var listRooms = $scope.rooms;
-                for(var i=0;i<$scope.rooms.length;i++)
-                {
-                    for(var j=0;j<$scope.newTalk.listRooms.length;j++)
-                    {
-                        if($scope.rooms[i]._id==$scope.newTalk.listRooms[j]._id)
-                            $scope.groupRooms.push($scope.rooms[i]);
-                    }
-                };
-                $scope.selectedRoom=$scope.rooms[0];
-                $scope.tableParams2 = new ngTableParams({
-                    page: 1,            // show first page
-                    count: 10,          // count per page
-                    sorting: {
-                        room_name: 'asc'     // initial sorting
-                    },
-                    filter: {
-                        room_name: ''       // initial filter
-                    }
-                }, {
-                    total: listRooms.length, // length of data
-                    getData: function($defer, params) {
 
-                        var orderedData = $filter('orderBy')(($filter('filter')(listRooms, params.filter())), params.orderBy());
-
-                        $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-                    }
-                });
-            });
             $scope.newTalk.hour_start=$filter('date')($scope.newTalk.hour_start, 'dd/MMM/yyyy HH:mm:ss');
             $scope.newTalk.hour_end=$filter('date')($scope.newTalk.hour_end, 'dd/MMM/yyyy HH:mm:ss');
             tinyMCE.activeEditor.setContent($scope.newTalk.description);
@@ -80,34 +49,6 @@ cloudAdminControllers.controller('talkUpdateCtrl', ['$scope','$rootScope' ,'Even
         });
 
     });
-    var findRoom = function (id) {
-        var index = -1;
-        var i=0;
-        var found = false;
-        while(!found && i<$scope.groupRooms.length){
-            if($scope.groupRooms[i]._id==id){
-                found = true;
-                index = i;
-            }
-            i++;
-        }
-        return index;
-    };
-    $scope.RoomWasSelected = function (sel) {
-        if(sel._id!=0){
-
-            var index = findRoom(sel._id);
-            if(index==-1) $scope.groupRooms.push(sel);
-
-        }
-    };
-
-    $scope.removeRoom = function (id) {
-        var index = findRoom(id);
-        if(index>-1){
-            $scope.groupRooms.splice(index,1);
-        }
-    };
     var findSpeaker = function (id) {
         var index = -1;
         var i=0;

@@ -11,7 +11,6 @@ var ConferencesSchema		= new Schema({
     enable:         String,
     begin_date:        Date,
     last_updated: Date,
-    listRooms:[{type: Schema.Types.ObjectId,ref: 'rooms'}],
     qr_code: Object,
     description: String,
     end_date: Date,
