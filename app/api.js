@@ -1505,6 +1505,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             rooms.room_name = req.body.room_name;
             rooms.id_talks = req.body.id_talks;
             rooms.qr_code = req.body.qr_code;
+            rooms.id_conference = req.body.id_conference;
             var roomname = req.body.room_name;
             rooms.save(function (err, saved) {
                 if (err)
@@ -1513,23 +1514,19 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                     var newQR = new Object();
                     newQR.type = saved.qr_code.type;
                     newQR.message = saved.qr_code.message;
+                    newQR.conference_id=mongoose.Types.ObjectId(req.body.id_conference);
                     rooms2 = saved;
                     console.log(roomname);
                     console.log(rooms2);
                     newQR.room_id = saved._id;
-                    Conferences.findOne({listTalks: {$in: rooms.id_talks}}).exec(function (err, resp2) {
-                        newQR.conference_id = resp2._id;
-                        console.log(rooms2.qr_code.conference_id);
-                        rooms2.qr_code = newQR;
-                        console.log(rooms2);
-                        rooms2.save(function (err) {
-                            if (err)
-                                res.send(err);
-                            else
-                                res.json({message: 'Room created!'});
-                        })
-                    })
-
+                    rooms2.qr_code = newQR;
+                    console.log(rooms2);
+                    rooms2.save(function (err) {
+                        if (err)
+                            res.send(err);
+                        else
+                            res.json({message: 'Room created!'});
+                    });
                 }
             });
 
@@ -1561,6 +1558,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
 
                 rooms.room_name=req.body.room_name;
                 rooms.id_talks=req.body.id_talks;
+                rooms.id_conference = mongoose.Types.ObjectId(req.body.id_conference);
                 rooms.qr_code.room_id = req.body.qr_code.room_id;
                 rooms.qr_code.conference_id = req.body.qr_code.conference_id;
                 console.log(rooms.qr_code.conference_id);

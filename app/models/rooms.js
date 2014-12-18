@@ -7,6 +7,7 @@ var Schema			= mongoose.Schema;
 var RoomsSchema = new Schema({
     room_name:  String,
     id_talks:         [{type: Schema.Types.ObjectId,ref: 'talks'}],
+    id_conference:    {type: Schema.Types.ObjectId, ref: 'conferences'},
     qr_code:       Object
 });
 

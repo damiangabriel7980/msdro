@@ -6,16 +6,22 @@ cloudAdminControllers.controller('roomAddCtrl', ['$scope','$rootScope' ,'EventsA
         $scope.talks=resp;
         $scope.selectedTalk=$scope.talks[0];
     });
-    $scope.newRoom={
-        room_name:  "",
-        qr_code:        {
-            message:"",
-            conference_id:"",
-            room_id:"",
-            type: 1
-        },
-        id_talks:$scope.groupTalks
-    };
+    EventsAdminService.getAllConferences.query().$promise.then(function(resp){
+        $scope.conferences=resp;
+        $scope.selectedConference=$scope.conferences[0];
+        $scope.newRoom={
+            room_name:  "",
+            qr_code:        {
+                message:"",
+                conference_id:"",
+                room_id:"",
+                type: 1
+            },
+            id_talks:$scope.groupTalks,
+            id_conference:$scope.selectedConference._id
+        };
+    });
+
     $scope.newString="";
     $scope.groupTalks=[];
     var findTalk = function (id) {
