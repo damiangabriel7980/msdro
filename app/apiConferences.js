@@ -9,7 +9,9 @@ var Speakers = require('./models/speakers');
 var User = require('./models/user');
 var Roles=require('./models/roles');
 var Rooms = require('./models/rooms');
-
+var Threads = require('./models/threads');
+var Qa_messages = require('./models/qa_messages');
+var Topics=require('./models/topics');
 var jwt = require('jsonwebtoken');
 var XRegExp  = require('xregexp').XRegExp;
 var validator = require('validator');
@@ -312,7 +314,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
 
     router.route('/rooms')
         .get(function(req,res){
-            Rooms.find().populate('id_talks').exec(function (err, rooms) {
+            Rooms.find().populate('id_talks id_threads').exec(function (err, rooms) {
                 if (err)
                 {
                     res.json(err);
@@ -462,5 +464,64 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
                     res.json(result);
             })
         });
+    router.route('/threads')
+        .get(function(res,res){
+            Threads.find({receiver:{'$ne': null }}).populate('id_messages').exec(function(err,result){
+                if(err)
+                    res.send(err);
+                else
+                    res.json(result);
+            })
+        })
+        .post(function(req,res){
+            var message = new Qa_messages()
+            var thread = new Threads();
+            var userCurrent = getUserData(req);
+            var check=false;
+            User.find({"username":userCurrent.username},function(err,result){
+                if(err)
+                {
+                    console.log(err);
+                    res.send(err);
+
+                }
+                else{
+                    var id = result._id;
+                    message.message_text= req.body.message_text;
+                    message.type= req.body.type;
+                    message.owner = id;
+                    message.save(function (err,response){
+                       if(err)
+                            res.send(err);
+                        else
+                       {
+                           thread.sender=id;
+                           thread.receiver=null;
+                           thread.blocked = false;
+                           thread.topic= req.body.topic;
+                           thread.id_messages.push(response._id);
+                           thread.save(function(err,resp){
+
+                           });
+                       }
+                    });
+
+
+
+                }
+            })
+        });
+    router.route('/threads/:id')
+        .get(function(res,res){
+            Threads.findById(req.params.id).populate('id_messages').exec(function(err,result){
+                if(err)
+                    res.send(err);
+                else
+                    res.json(result);
+            })
+        })
+        .put(function(req,res){
+
+    });
     app.use('/apiConferences', router);
 };

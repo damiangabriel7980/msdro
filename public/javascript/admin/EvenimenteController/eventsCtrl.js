@@ -53,29 +53,6 @@ cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAd
         });
     });
 
-    EventsAdminService.getAllTalks.query().$promise.then(function(resp){
-        $scope.talks=resp;
-        var listTalks = $scope.talks;
-        $scope.tableParams3 = new ngTableParams({
-            page: 1,            // show first page
-            count: 10,          // count per page
-            sorting: {
-                title: 'asc'     // initial sorting
-            },
-            filter: {
-                title: ''       // initial filter
-            }
-        }, {
-            total: listTalks.length, // length of data
-            getData: function($defer, params) {
-
-                var orderedData = $filter('orderBy')(($filter('filter')(listTalks, params.filter())), params.orderBy());
-
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            }
-        });
-    });
-
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };

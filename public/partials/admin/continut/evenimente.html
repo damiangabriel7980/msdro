@@ -71,17 +71,6 @@
             </td>
         </tr>
     </table>
-    <hr><h3>Talk-uri</h3>
-    <table ng-table="tableParams3" show-filter="true" class="table table-bordered">
-        <tr ng-repeat="talks in $data">
-            <td data-title="'Title'" filter="{ 'title': 'text' }" sortable="'title'">{{talks.title}}</td>
-            <td>
-                <div class="btn-group-sm"  role="group" style="display: flex">
-                    <button class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
-                    <button class="btn btn-info" ui-sref="continut.updateTalk({id:talks._id})"><i class="glyphicon glyphicon-cog"></i></button>
-                </div>
-            </td>
-        </tr>
-    </table>
+
 
 </div>

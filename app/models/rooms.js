@@ -8,7 +8,8 @@ var RoomsSchema = new Schema({
     room_name:  String,
     id_talks:         [{type: Schema.Types.ObjectId,ref: 'talks'}],
     id_conference:    {type: Schema.Types.ObjectId, ref: 'conferences'},
-    qr_code:       Object
+    qr_code:       Object,
+    id_threads:[{type: Schema.Types.ObjectId, ref: 'threads'}]
 });
 
 module.exports = mongoose.model('rooms',RoomsSchema,'rooms');
