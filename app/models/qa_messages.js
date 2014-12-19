@@ -4,6 +4,9 @@
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
+// type:
+// 1 = question  /  2 = answer
+
 var qa_messagesSchema		= new Schema({
     text: String,
     type: Number,

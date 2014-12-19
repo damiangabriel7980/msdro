@@ -47,6 +47,7 @@ module.exports = function (app, logger, tokenSecret) {
                             res.send(401, 'Wrong password');
                         }else{
                             var profile = {
+                                _id: user._id,
                                 username: user.username,
                                 name: user.name,
                                 image_path: user.image_path,
@@ -63,7 +64,6 @@ module.exports = function (app, logger, tokenSecret) {
                                     if(group.length != 0){
                                         profile.answerer = true;
                                     }
-                                    console.log(profile);
                                     // We are sending the profile inside the token
                                     var token = jwt.sign(profile, tokenSecret);
                                     res.json({ token: token });

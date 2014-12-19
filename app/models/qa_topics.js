@@ -8,4 +8,4 @@ var topicsSchema		= new Schema({
     name: String
 });
 
-module.exports = mongoose.model('topics', topicsSchema,'topics');
+module.exports = mongoose.model('qa_topics', topicsSchema,'qa_topics');
