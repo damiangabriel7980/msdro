@@ -5,17 +5,18 @@
 </head>
 
 <body>
-<div class="col-md-special" id="content">
+<div class="col-xs-offset-1" id="content">
     <div class="row margintop20px">
         <div class="col-md-2" >
             <h4 class="h-title">Arii terapeutice</h4>
 
-            <ul class="list-group" style="list-style: none">
+            <ul class="list-group newBlue" style="list-style: none">
+                <li  ui-sref-active="active" ui-sref="biblioteca.produse.productsByArea({id:0})"><b>Toate ariile terapeutice</b></li>
                 <li  ui-sref-active="active"   ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
-                    <span class="list-group-item" ui-sref="biblioteca.produse.productsByArea({id:area._id})">{{area.name}}</span>
+                    <span class="list-group-item no-border" ui-sref="biblioteca.produse.productsByArea({id:area._id})"><b>{{area.name}}</b></span>
                     <ul ng-if="area.has_children">
                     <li ui-sref-active="active" ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'" ui-sref="biblioteca.produse.productsByArea({id:area2._id})">
-                        <span class="list-group-item" ui-sref="biblioteca.produse.productsByArea({id:area2._id})">{{area2.name}}</span>
+                        <span class="list-group-item no-border" ui-sref="biblioteca.produse.productsByArea({id:area2._id})"><b>{{area2.name}}</b></span>
                         </li>
                 </ul>
                 </li>
@@ -23,7 +24,7 @@
             <hr class="visible-phone ">
         </div>
 
-        <div class="col-md-9" >
+        <div class="col-md-10" >
                        <ui-view></ui-view>
         </div>
 

@@ -1,10 +1,10 @@
 <div class="col-xs-11 well well-content">
     <div class="row">
-        <h3>{{selectedProduct.name}}</h3>
+        <h3 class="newBlue"><b>{{selectedProduct.name}}</b></h3>
 
         <div class="pull-left">
             <a class="thumbnail"><img src="{{amazon + selectedProduct.image_path}}" alt="{{selectedProduct.name}}" height="300" width="300"/></a>
-            <a href="{{amazon + selectedProduct.file_path}}" target="_blank" class="btn btn-warning btn-block margintop10px"><i class="icon-share icon-white"></i>&nbsp;Descarca RCP</a>
+            <a href="{{amazon + selectedProduct.file_path}}" target="_blank" class="btn btn-info btn-more-news btn-block margintop10px"><i class="icon-share icon-white"></i>&nbsp;Descarca RCP</a>
             <hr class="margintop10px marginbottom0">
         </div>
         <div class = "pull-right" ng-bind-html="ProductDetailsHTML"></div>

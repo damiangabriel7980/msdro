@@ -91,6 +91,22 @@ ul.products li {
   -webkit-transform: rotate(270deg);
   transform: rotate(270deg);
 }
+.carousel-container{
+  margin-bottom: 1%;
+}
+.btn-more-news{
+  background-color: transparent;
+  color: black;
+}
+.newBlue{
+  color: #1c9893;
+}
+.no-border{
+  border: 0px solid #ddd !important;
+}
+.customFloatLeftSearch {
+  margin-left: 45%;
+}
 .growl {
   top: auto !important;
 }
@@ -210,10 +226,10 @@ ul.products li {
     width: 5%;
     height: 6%;
     right: 23%;
-    bottom: 11%;
+    bottom: 82%;
   }
 }
-@media (max-width: 1366px) {
+@media (max-width: 1366.5px) {
   .noPadd {
     padding: 0 !important;
   }
@@ -250,7 +266,7 @@ ul.products li {
     width: 7%;
     height: 6%;
     right: 23%;
-    bottom: 11%;
+    bottom: 81%;
   }
 }
 @media (min-width: 1025px) and (max-width: 1365px) {
@@ -350,7 +366,7 @@ ul.products li {
     width: 9% !important;
     height: 6%;
     right: 23%;
-    bottom: 11%;
+    bottom: 80%;
   }
 }
 @media (min-width: 768px) and (max-width: 991px) {
@@ -387,7 +403,7 @@ ul.products li {
     width: 11% !important;
     height: 6%;
     right: 23%;
-    bottom: 11%;
+    bottom: 83%;
   }
   .newsClass {
     float: left !important;
@@ -469,9 +485,7 @@ ul.products li {
   min-height: 100%;
   position: relative;
 }
-.customFloatLeftSearch {
-  margin-left: 45%;
-}
+
 .mySearch {
   margin-left: 54%;
   top: 1%;
