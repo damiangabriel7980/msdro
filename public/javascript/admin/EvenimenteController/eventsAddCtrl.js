@@ -108,7 +108,6 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
             id_confs.push($scope.ConfEvents[i]._id)
         $scope.newEvent.groupsID=id_groups;
         $scope.newEvent.listconferences=id_confs;
-        $scope.newEvent.description=tinyMCE.activeEditor.getContent();
         console.log($scope.newEvent);
         if($scope.newEvent){
             EventsAdminService.getAll.save($scope.newEvent).$promise.then(function(result){
@@ -124,6 +123,15 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
     };
     $scope.okk=function(){
         $state.go('continut.evenimente');
+    };
+    $scope.tinymceOptions = {
+        selector: "textarea",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
