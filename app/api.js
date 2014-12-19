@@ -407,13 +407,6 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                                     res.json(ans);
                                 }else{
                                     ans.error = false;
-                                    email({from: req.user.username,
-                                        to: ['andrei.mirica@qualitance.ro'],
-                                        subject:'proba de Mandrill',
-                                        text: "Hello, I sent this message using mandrill."
-                                    }, function(err){
-                                        if (err) console.error(err);
-                                    });
                                     ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
                                     res.json(ans);
                                 }
@@ -1277,14 +1270,22 @@ module.exports = function(app, sessionSecret, email, logger, router) {
         });
     })
         .delete(function(req, res) {
-            Speakers.findById(req.params.id,function(err,resp){
-                resp.remove(function(err,cont) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Successfully deleted!' });
-                });
+            var id= req.params.id;
+            disconnectAllEntitiesFromEntity(Talks, "listSpeakers", id, function (err, result){
+                if(err)
+                    res.send(err);
+                else
+                {
+                    Speakers.remove({_id:id},function(err,cont) {
+                            if (err)
+                                res.send(err);
+                            else
+                                res.json({ message: 'Successfully deleted!' });
+                        });
+                }
             });
+
+
 
         });
     router.route('/admin/conferences')
@@ -1377,15 +1378,49 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             });
         })
         .delete(function(req, res) {
-            Conferences.findOne({_id:req.params.id},function(err,resp){
-                if(resp)
-                    resp.remove(function(err,cont) {
+            var id = req.params.id;
+            console.log(id);
+            disconnectAllEntitiesFromEntity(Events, "listconferences", id, function (err, result){
+                if(err)
+                    res.send(err);
+                else
+                {
+
+                    disconnectAllEntitiesFromEntity(User, "conferencesID", id, function (err, result) {
                         if (err)
                             res.send(err);
+                        else
+                        {
+                            Rooms.findOne({id_conference:id}).exec(function(err,resp){
+                                resp.id_conference=null;
+                                resp.save(function(err,rep){
+                                    if(err)
+                                        res.send(err);
+                                    else {
+                                        Conferences.findOne({_id: id}, function (err, resp) {
+                                            if (resp) {
+                                                resp.remove(function (err, cont) {
+                                                    if (err)
+                                                        res.send(err);
+                                                    else
+                                                        res.json({message: 'Successfully deleted!'});
+                                                });
+                                            }
+                                            else
+                                                res.send(err);
+                                        });
+                                    }
+                                })
+                            });
 
-                        res.json({ message: 'Successfully deleted!' });
-                    });
+                        }
+
+
+                    })
+
+                }
             });
+
 
         });
      router.route('/admin/talks')
@@ -1470,14 +1505,23 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             });
         })
         .delete(function(req, res) {
-            Talks.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
+            var id = req.params.id;
+            console.log(id);
+            disconnectAllEntitiesFromEntity(Rooms, "id_talks", id, function (err, result){
+                if(err)
                     res.send(err);
+                else
+                {
+                    Talks.remove({_id: id}, function(err,cont) {
+                        if (err)
+                            res.send(err);
+                        else
+                            res.json({ message: 'Successfully deleted!' });
+                    });
+                }
 
-                res.json({ message: 'Successfully deleted!' });
             });
+
         });
     router.route('/admin/rooms')
         .get(function(req,res){
@@ -1570,9 +1614,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             });
         })
         .delete(function(req, res) {
-            Rooms.remove({
-                _id: req.params.id
-            }, function(err,cont) {
+            Rooms.remove({_id: req.params.id}, function(err,cont) {
                 if (err)
                     res.send(err);
 

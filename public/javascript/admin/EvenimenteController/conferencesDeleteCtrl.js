@@ -15,7 +15,7 @@ cloudAdminControllers.controller('conferencesDeleteCtrl', ['$scope','$rootScope'
     };
     $scope.stergeConferinta=function(){
         EventsAdminService.deleteOrUpdateConferences.delete({id:$stateParams.id}).$promise.then(function(result){
-            console.log(result);
+            //console.log(result);
         });
         $state.go('continut.evenimente');
         $modalInstance.close();
