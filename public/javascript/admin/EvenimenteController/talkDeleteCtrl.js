@@ -15,7 +15,7 @@ cloudAdminControllers.controller('talkDeleteCtrl', ['$scope','$rootScope' ,'Even
     };
     $scope.stergeTalk=function(){
         EventsAdminService.deleteOrUpdateTalks.delete({id:$stateParams.id});
-        $state.go('continut.updateTalk');
+        $state.go('continut.evenimente');
         $modalInstance.close();
     }
 }]);

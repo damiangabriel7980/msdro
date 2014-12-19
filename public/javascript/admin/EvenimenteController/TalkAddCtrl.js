@@ -17,7 +17,8 @@ cloudAdminControllers.controller('TalkAddCtrl', ['$scope','$rootScope' ,'EventsA
         last_updated: new Date(),
         title:      "",
         place:       "",
-        listSpeakers: $scope.groupSpeakers
+        listSpeakers: $scope.groupSpeakers,
+        type:""
     };
     $scope.groupSpeakers=[];
     var findSpeaker = function (id) {

@@ -221,7 +221,18 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
             }
 
         });
-    });
+    })
+        .delete(function(req,res){
+            var id = req.body.id;
+            var userCurrent = getUserData(req);
+            console.log(userCurrent.username);
+            User.update({"username":userCurrent.username},{ $pull: { conferencesID: id  } },function(err,result){
+                if(err)
+                    res.send(err);
+                else
+                    res.json(result);
+            });
+        });
 
     router.route('/conferences/:id')
         .get(function(req,res){

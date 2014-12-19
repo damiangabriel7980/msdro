@@ -9,7 +9,6 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
         $scope.grupeUser=[];
 
         $scope.newEvent=result2;
-        tinyMCE.activeEditor.setContent($scope.newEvent.description);
     });
 
     EventsAdminService.getGroups.query().$promise.then(function(resp){
@@ -126,7 +125,6 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
             id_confs.push($scope.ConfEvents[i]._id)
         $scope.newEvent.groupsID = id_groups;
         $scope.newEvent.listconferences = id_confs;
-        $scope.newEvent.description = tinyMCE.activeEditor.getContent();
         console.log($scope.newEvent);
         if ($scope.newEvent) {
             EventsAdminService.deleteOrUpdateEvents.update({id: $stateParams.id}, $scope.newEvent).$promise.then(function(result){
