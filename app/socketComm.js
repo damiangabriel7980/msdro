@@ -22,6 +22,9 @@ module.exports = function (socketServer, tokenSecret) {
             var userData = socket.decoded_token;
             console.log(userData.username);
             socket
+                .on('question', function (data) {
+                    
+                })
                 .on('chatMessage', function (data) {
                     var message = data.message;
                     var room = data.room;

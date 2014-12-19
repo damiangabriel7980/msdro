@@ -6,9 +6,9 @@ var Schema			= mongoose.Schema;
 
 var threadsSchema		= new Schema({
     sender: {type: Schema.Types.ObjectId,ref: 'User'},
-    receiver: {type: Schema.Types.ObjectId,ref: 'User'},
-    blocked: Boolean,
-    topic:{type: Schema.Types.ObjectId,ref: 'topics'},
+    receivers: [{type: Schema.Types.ObjectId,ref: 'User'}],
+    locked: {type: Schema.Types.ObjectId,ref: 'User'},
+    topics:[{type: Schema.Types.ObjectId,ref: 'topics'}],
     id_messages:[{type: Schema.Types.ObjectId,ref: 'qa_messages'}]
 });
 

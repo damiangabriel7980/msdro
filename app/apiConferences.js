@@ -297,24 +297,24 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
 //            })
 //        });
     router.route('/conferences')
-        .get(function(req,res){
-            var userCurrent = getUserData(req);
-            User.findOne({'username':userCurrent.username}).exec(function(err,result){
-                Conferences.find({_id:{$in: result.conferencesID}}).exec(function (err, conferences) {
-                    if (err)
-                    {
-                        res.json(err);
-                        return;
-                    }
-                    else
-                    {
-                        res.json(conferences);
-                        return;
-                    }
-                })
-            });
-
-        })
+//        .get(function(req,res){
+//            var userCurrent = getUserData(req);
+//            User.findOne({'username':userCurrent.username}).exec(function(err,result){
+//                Conferences.find({_id:{$in: result.conferencesID}}).exec(function (err, conferences) {
+//                    if (err)
+//                    {
+//                        res.json(err);
+//                        return;
+//                    }
+//                    else
+//                    {
+//                        res.json(conferences);
+//                        return;
+//                    }
+//                })
+//            });
+//
+//        })
     .post(function(req,res){
             console.log("entered");
             var id = req.body.id;
@@ -454,61 +454,61 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
 //
 //        });
 
-    router.route('/talks')
-        .get(function(req,res){
-            Talks.find({}).populate('listSpeakers listRooms').exec(function (err, talks) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(talks);
-                    return;
-                }
-
-
-            })
-
-        })
-    router.route('/talks/:id')
-        .get(function(req,res){
-            Talks.findById(req.params.id).populate('listSpeakers listRooms').exec(function (err, talk) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(talk);
-                    return;
-                }
-
-
-            })
-
-        })
-
-    router.route('/rooms')
-        .get(function(req,res){
-            Rooms.find().populate('id_talks').exec(function (err, rooms) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(rooms);
-                    return;
-                }
-
-
-            })
-
-        });
+//    router.route('/talks')
+//        .get(function(req,res){
+//            Talks.find({}).populate('listSpeakers listRooms').exec(function (err, talks) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(talks);
+//                    return;
+//                }
+//
+//
+//            })
+//
+//        })
+//    router.route('/talks/:id')
+//        .get(function(req,res){
+//            Talks.findById(req.params.id).populate('listSpeakers listRooms').exec(function (err, talk) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(talk);
+//                    return;
+//                }
+//
+//
+//            })
+//
+//        })
+//
+//    router.route('/rooms')
+//        .get(function(req,res){
+//            Rooms.find().populate('id_talks').exec(function (err, rooms) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(rooms);
+//                    return;
+//                }
+//
+//
+//            })
+//
+//        });
     router.route('/rooms/:id')
         .get(function(req,res){
             getRoomDataById(req.params.id, function (err, data) {
@@ -627,82 +627,82 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
 //                }
 //            });
 //        });
-    router.route('/topics')
-        .get(function(res,res){
-            Topics.find().exec(function(err,result){
-                if(err)
-                    res.send(err);
-                else
-                    res.json(result);
-            })
-        });
-    router.route('/topics/:id')
-        .get(function(res,res){
-            Topics.findById(req.params.id).exec(function(err,result){
-                if(err)
-                    res.send(err);
-                else
-                    res.json(result);
-            })
-        });
-    router.route('/threads')
-        .get(function(res,res){
-            Threads.find({receiver:{'$ne': null }}).populate('id_messages').exec(function(err,result){
-                if(err)
-                    res.send(err);
-                else
-                    res.json(result);
-            })
-        })
-        .post(function(req,res){
-            var message = new Qa_messages()
-            var thread = new Threads();
-            var userCurrent = getUserData(req);
-            var check=false;
-            User.find({"username":userCurrent.username},function(err,result){
-                if(err)
-                {
-                    console.log(err);
-                    res.send(err);
-
-                }
-                else{
-                    var id = result._id;
-                    message.message_text= req.body.message_text;
-                    message.type= req.body.type;
-                    message.owner = id;
-                    message.save(function (err,response){
-                       if(err)
-                            res.send(err);
-                        else
-                       {
-                           thread.sender=id;
-                           thread.receiver=null;
-                           thread.blocked = false;
-                           thread.topic= req.body.topic;
-                           thread.id_messages.push(response._id);
-                           thread.save(function(err,resp){
-
-                           });
-                       }
-                    });
-
-
-
-                }
-            })
-        });
-    router.route('/threads/:id')
-        .get(function(res,res){
-            Threads.findById(req.params.id).populate('id_messages').exec(function(err,result){
-                if(err)
-                    res.send(err);
-                else
-                    res.json(result);
-            })
-        })
-        .put(function(req,res){
-
-    });
+//    router.route('/topics')
+//        .get(function(res,res){
+//            Topics.find().exec(function(err,result){
+//                if(err)
+//                    res.send(err);
+//                else
+//                    res.json(result);
+//            })
+//        });
+//    router.route('/topics/:id')
+//        .get(function(res,res){
+//            Topics.findById(req.params.id).exec(function(err,result){
+//                if(err)
+//                    res.send(err);
+//                else
+//                    res.json(result);
+//            })
+//        });
+//    router.route('/threads')
+//        .get(function(res,res){
+//            Threads.find({receiver:{'$ne': null }}).populate('id_messages').exec(function(err,result){
+//                if(err)
+//                    res.send(err);
+//                else
+//                    res.json(result);
+//            })
+//        })
+//        .post(function(req,res){
+//            var message = new Qa_messages()
+//            var thread = new Threads();
+//            var userCurrent = getUserData(req);
+//            var check=false;
+//            User.find({"username":userCurrent.username},function(err,result){
+//                if(err)
+//                {
+//                    console.log(err);
+//                    res.send(err);
+//
+//                }
+//                else{
+//                    var id = result._id;
+//                    message.message_text= req.body.message_text;
+//                    message.type= req.body.type;
+//                    message.owner = id;
+//                    message.save(function (err,response){
+//                       if(err)
+//                            res.send(err);
+//                        else
+//                       {
+//                           thread.sender=id;
+//                           thread.receiver=null;
+//                           thread.blocked = false;
+//                           thread.topic= req.body.topic;
+//                           thread.id_messages.push(response._id);
+//                           thread.save(function(err,resp){
+//
+//                           });
+//                       }
+//                    });
+//
+//
+//
+//                }
+//            })
+//        });
+//    router.route('/threads/:id')
+//        .get(function(res,res){
+//            Threads.findById(req.params.id).populate('id_messages').exec(function(err,result){
+//                if(err)
+//                    res.send(err);
+//                else
+//                    res.json(result);
+//            })
+//        })
+//        .put(function(req,res){
+//
+//    });
     app.use('/apiConferences', router);
 };

@@ -5,7 +5,7 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
 var topicsSchema		= new Schema({
-    topic_name: String
+    name: String
 });
 
 module.exports = mongoose.model('topics', topicsSchema,'topics');
