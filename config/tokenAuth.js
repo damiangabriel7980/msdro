@@ -2,6 +2,7 @@ var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 
 var User = require('../app/models/user');
+var UserGroup = require('../app/models/userGroup');
 
 module.exports = function (app, logger, tokenSecret) {
 
@@ -49,11 +50,25 @@ module.exports = function (app, logger, tokenSecret) {
                                 username: user.username,
                                 name: user.name,
                                 image_path: user.image_path,
-                                phone: user.phone
+                                phone: user.phone,
+                                answerer: false
                             };
-                            // We are sending the profile inside the token
-                            var token = jwt.sign(profile, tokenSecret);
-                            res.json({ token: token });
+                            //check if user is an answerer ( <=> is in group "Raspunzatori")
+                            UserGroup.find({_id: {$in: user.groupsID}, display_name: "Raspunzatori"}, function (err, group) {
+                                if(err){
+                                    logger.error(err);
+                                    res.send(err);
+                                }else{
+                                    //if the group is found, then user is an answerer
+                                    if(group.length != 0){
+                                        profile.answerer = true;
+                                    }
+                                    console.log(profile);
+                                    // We are sending the profile inside the token
+                                    var token = jwt.sign(profile, tokenSecret);
+                                    res.json({ token: token });
+                                }
+                            });
                         }
                     }
                 }
