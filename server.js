@@ -13,8 +13,7 @@ var socketPort = process.env.SOCKET_PORT || 3000;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
-var morgan   = require('morgan');
-var fs       = require('fs');
+var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
@@ -59,7 +58,7 @@ require('./app/apiPublic.js')(app, email, express.Router()); // load our public 
 require('./app/apiConferences.js')(app, email, logger, tokenSecret, express.Router());
 
 // socket comm =================================================================
-require('./app/socketComm.js')(socketServer, logger);
+require('./app/socketComm.js')(socketServer, tokenSecret);
 
 // launch ======================================================================
 app.listen(port);
