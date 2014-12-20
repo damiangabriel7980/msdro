@@ -41,107 +41,139 @@ module.exports = function (socketServer, tokenSecret, logger) {
             console.log(userData._id);
             console.log(userData.username);
             socket
-                .on('newThread', function (data) {
-                    var text = data;
-                    //parse text and get topics/medics
-                    var topics = text.match(/(#[a-z0-9][a-z0-9\-_]*)/ig);
-                    if(!topics) topics = [];
-                    var medics = text.match(/(@[a-z0-9][a-z0-9\-_]*)/ig);
-                    if(!medics) medics = [];
-                    //remove #/@ from topics/medics
-                    var cleanTopics = [];
-                    var cleanMedics = [];
-                    async.each(topics, function (topic, callback) {
-                        cleanTopics.push(topic.replace('#',''));
-                        callback();
-                    }, function () {
-                        async.each(medics, function (medic, callback) {
-                            cleanMedics.push(medic.replace('@',''));
+                .on('startThread', function (data) {
+                    //only questioners can start a thread
+                    if(!userData.answerer){
+                        var text = data;
+                        //parse text and get topics/medics
+                        var topics = text.match(/(#[a-z0-9][a-z0-9\-_]*)/ig);
+                        if(!topics) topics = [];
+                        var medics = text.match(/(@[a-z0-9][a-z0-9\-_]*)/ig);
+                        if(!medics) medics = [];
+                        //remove #/@ from topics/medics
+                        var cleanTopics = [];
+                        var cleanMedics = [];
+                        async.each(topics, function (topic, callback) {
+                            cleanTopics.push(topic.replace('#',''));
                             callback();
-                        }, function(){
-                            //remove topics and medics from text
-                            text = text.replace(/(#[a-z0-9][a-z0-9\-_]*)/ig,'');
-                            text = text.replace(/(@[a-z0-9][a-z0-9\-_]*)/ig,'');
-                            text = text.trim();
-                            var thread = new Threads({});
-                            thread.owner = userData._id;
-                            //find topics in db
-                            Topics.find({name: {$in: cleanTopics}}, function (err, topics) {
-                                if(err){
-                                    logger.log(err);
-                                    socket.emit('message',{type: 'error', text: 'Error processing topics'});
-                                }else{
-                                    //check if all topics sent by user actually exist
-                                    if(topics.length != cleanTopics.length && cleanTopics.length != 0){
-                                        socket.emit('message',{type: 'error', text: 'Not all topics are valid'});
+                        }, function () {
+                            async.each(medics, function (medic, callback) {
+                                cleanMedics.push(medic.replace('@',''));
+                                callback();
+                            }, function(){
+                                //remove topics and medics from text
+                                text = text.replace(/(#[a-z0-9][a-z0-9\-_]*)/ig,'');
+                                text = text.replace(/(@[a-z0-9][a-z0-9\-_]*)/ig,'');
+                                text = text.trim();
+                                var thread = new Threads({});
+                                thread.owner = userData._id;
+                                //find topics in db
+                                Topics.find({name: {$in: cleanTopics}}, function (err, topics) {
+                                    if(err){
+                                        logger.log(err);
+                                        socket.emit('message',{type: 'error', text: 'Error processing topics'});
                                     }else{
-                                        //get id's of topics
-                                        getIds(topics, function (topicsIds) {
-                                            console.log(topics);
-                                            thread.topics = topicsIds;
-                                            //find medics in db
-                                            AnswerGivers.find({nickname: {$in: cleanMedics}}, function (err, medics) {
-                                                if(err){
-                                                    logger.log(err);
-                                                    socket.emit('message',{type: 'error', text: 'Error processing medics'});
-                                                }else{
-                                                    //check if all medics sent by user actually exist
-                                                    if(medics.length != cleanMedics.length && cleanMedics.length != 0){
-                                                        socket.emit('message',{type: 'error', text: 'Not all medics are valid'});
+                                        //check if all topics sent by user actually exist
+                                        if(topics.length != cleanTopics.length && cleanTopics.length != 0){
+                                            socket.emit('message',{type: 'error', text: 'Not all topics are valid'});
+                                        }else{
+                                            //get id's of topics
+                                            getIds(topics, function (topicsIds) {
+                                                console.log(topics);
+                                                thread.topics = topicsIds;
+                                                //find medics in db
+                                                AnswerGivers.find({nickname: {$in: cleanMedics}}, function (err, medics) {
+                                                    if(err){
+                                                        logger.log(err);
+                                                        socket.emit('message',{type: 'error', text: 'Error processing medics'});
                                                     }else{
-                                                        //get id's of medics
-                                                        getIds(medics, function (medicsIds) {
-                                                            thread.medics = medicsIds;
-                                                            //thread is not grabbed by anyone yet and has no messages yet
-                                                            thread.locked = null;
-                                                            thread.id_messages = [];
-                                                            //add first question
-                                                            thread.question = text;
-                                                            thread.date_recorded = Date.now();
-                                                            //save thread
-                                                            console.log(thread);
-                                                            thread.save(function (err, threadSaved) {
-                                                                if(err){
-                                                                    console.log(err);
-                                                                    socket.emit('message',{type: 'error', text: 'Error saving thread'});
-                                                                }else{
-                                                                    socket.emit('message',{type: 'info', text: 'Thread saved!'});
-                                                                    socket.broadcast.emit('message', {type: 'info', text: 'New thread added'});
-                                                                }
+                                                        //check if all medics sent by user actually exist
+                                                        if(medics.length != cleanMedics.length && cleanMedics.length != 0){
+                                                            socket.emit('message',{type: 'error', text: 'Not all medics are valid'});
+                                                        }else{
+                                                            //get id's of medics
+                                                            getIds(medics, function (medicsIds) {
+                                                                thread.medics = medicsIds;
+                                                                //thread is not grabbed by anyone yet and has no messages yet
+                                                                thread.locked = null;
+                                                                thread.id_messages = [];
+                                                                //add first question
+                                                                thread.question = text;
+                                                                thread.date_recorded = Date.now();
+                                                                //save thread
+                                                                console.log(thread);
+                                                                thread.save(function (err, threadSaved) {
+                                                                    if(err){
+                                                                        console.log(err);
+                                                                        socket.emit('message',{type: 'error', text: 'Error saving thread'});
+                                                                    }else{
+                                                                        socket.emit('message',{type: 'info', text: 'Thread saved!'});
+                                                                        socket.broadcast.emit('threadAdded', threadSaved);
+                                                                    }
+                                                                });
                                                             });
-                                                        });
+                                                        }
                                                     }
-                                                }
+                                                });
                                             });
-                                        });
+                                        }
                                     }
-                                }
+                                });
                             });
                         });
-                    });
-                })
-                .on('chatMessage', function (data) {
-                    var message = data.message;
-                    var room = data.room;
-                    //TODO: check room exists
-                    if(!message || !room){
-                        //something's wrong
-                        socket.emit('feedbackMessage', {accepted: false, recorded: false, message:'No room/message present'});
                     }else{
-                        //add to db
-                        data.room = "test";
-                        data.date_written = Date.now();
-                        var toAdd = new Message(data);
-                        toAdd.save(function (err, saved) {
+                        socket.emit('message',{type:'error', text: 'Not allowed to start thread'});
+                    }
+                })
+                .on('pickupThread', function (thread_id) {
+                    //only answerers can pick up a thread
+                    if(userData.answerer){
+                        //check if thread is not already picked up
+                        Threads.find({_id: thread_id}, function (err, thread) {
                             if(err){
-                                socket.emit('feedbackMessage', {accepted: true, recorded: false, message:'Unable to record message'});
+                                socket.emit('message',{type:'error', text: 'Unable to find thread'});
                             }else{
-                                socket.emit('feedbackMessage', {accepted: true, recorded: true, message:saved});
+                                if(thread.locked){
+                                    socket.emit('message',{type:'error', text: 'Thread already picked up'});
+                                }else{
+                                    var toSave = new Threads(thread);
+                                    toSave.locked = userData._id;
+                                    toSave.save(function (err) {
+                                        if(err){
+                                            socket.emit('message',{type:'error', text: 'Could not pick up thread'});
+                                        }else{
+                                            socket.emit('message',{type:'info', text: 'Thread picked up'});
+                                        }
+                                    });
+                                }
                             }
                         });
+                    }else{
+                        socket.emit('message',{type:'error', text: 'Not allowed answer thread'});
                     }
-                    console.log(userData.username+": "+data);
                 })
+//                .on('chatMessage', function (data) {
+//                    var message = data.message;
+//                    var room = data.room;
+//                    //TODO: check room exists
+//                    if(!message || !room){
+//                        //something's wrong
+//                        socket.emit('feedbackMessage', {accepted: false, recorded: false, message:'No room/message present'});
+//                    }else{
+//                        //add to db
+//                        data.room = "test";
+//                        data.date_written = Date.now();
+//                        var toAdd = new Message(data);
+//                        toAdd.save(function (err, saved) {
+//                            if(err){
+//                                socket.emit('feedbackMessage', {accepted: true, recorded: false, message:'Unable to record message'});
+//                            }else{
+//                                socket.emit('feedbackMessage', {accepted: true, recorded: true, message:saved});
+//                            }
+//                        });
+//                    }
+//                    console.log(userData.username+": "+data);
+//                })
                 .on('disconnect', function () {
                     console.log("================================== socket disconnected");
                 });
