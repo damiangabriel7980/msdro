@@ -1221,7 +1221,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             speaker.last_updated= req.body.last_updated ;
             speaker.workplace=req.body.workplace;
             speaker.short_description= req.body.short_description ;
-
+            speaker.image_path=req.body.image_path;
             speaker.save(function(err) {
             if (err)
                 res.send(err);
@@ -1230,6 +1230,18 @@ module.exports = function(app, sessionSecret, email, logger, router) {
         });
 
     });
+    router.route('/admin/speakers/changeSpeakerLogo')
+        .post(function(req,res){
+            var data = req.body.data;
+            Speakers.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
+                if(err){
+                    logger.error("Error at speaker change logo. Speaker id = "+data.id+"; Key = "+data.path);
+                    res.json({error:true});
+                }else{
+                    res.json({error:false, updated:wRes});
+                }
+            });
+        });
     router.route('/admin/speakers/:id')
         .get(function(req,res){
             Speakers.findById(req.params.id).exec(function (err, speaker) {
@@ -1313,6 +1325,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             conferences.last_updated= req.body.last_updated ;
             conferences.description=req.body.description;
             conferences.qr_code=req.body.qr_code;
+            conferences.image_path=req.body.image_path;
             conferences.save(function(err,saved) {
             if (err)
                 res.send(err);
@@ -1371,7 +1384,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 conferences.save(function(err) {
                     if (err)
                         res.send(err);
-
+                        else
                     res.json({ message: 'Conferences updated!' });
                 });
 
@@ -1422,6 +1435,18 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             });
 
 
+        });
+    router.route('/admin/conferences/changeConferenceLogo')
+        .post(function(req,res){
+            var data = req.body.data;
+            Conferences.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
+                if(err){
+                    logger.error("Error at conference change logo. Conference id = "+data.id+"; Key = "+data.path);
+                    res.json({error:true});
+                }else{
+                    res.json({error:false, updated:wRes});
+                }
+            });
         });
      router.route('/admin/talks')
         .get(function(req,res){
@@ -2491,6 +2516,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 }
             });
         })
+
         .put(function(req, res) {
         console.log(req.body.score);
         //console.log(req.user.username);
@@ -2511,6 +2537,44 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             }
         }) ;
     });
+    router.route('admin/user')
+        .get(function(req,res){
+            User.find(function (error, result) {
+                if (error) {
+                    res.send(error);
+                    return ;
+                } else {
+                    //console.log(result);
+                    res.json(result);
+                }
+            });
+        })
+        .post(function(req,res){
+            var newuser = new User(); 		// create a new instance of the Bear model
+            therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
+            therapeutic.last_updated=req.body.last_updated ;
+            therapeutic.name= req.body.name   ;
+            therapeutic.enabled= req.body.enabled  ;
+            therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
+            therapeutic.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Area created!' });
+            });
+    });
+    router.route('admin/user/:id')
+        .get(function(req,res){
+            User.findById(req.params.id,function (error, result) {
+                if (error) {
+                    res.send(error);
+                    return ;
+                } else {
+                    //console.log(result);
+                    res.json(result);
+                }
+            });
+        })
 
     app.use('/api', router);
 };

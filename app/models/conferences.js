@@ -14,7 +14,8 @@ var ConferencesSchema		= new Schema({
     qr_code: Object,
     description: String,
     end_date: Date,
-    topicsID:[{type: Schema.Types.ObjectId,ref: 'topics'}]
+    topicsID:[{type: Schema.Types.ObjectId,ref: 'topics'}],
+    image_path:String
 });
 
 module.exports = mongoose.model('conferences',ConferencesSchema,'conferences');

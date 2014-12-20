@@ -127,6 +127,12 @@ cloudAdminServices.factory('EventsAdminService', ['$resource', function($resourc
         getGroups: $resource('api//admin/utilizatori/grupuri',{},{
             query: { method: 'GET', isArray: true }
         }),
+        changeConferenceLogo: $resource('api/admin/conferences/changeConferenceLogo/:data', {}, {
+            save: { method: 'POST'}
+        }),
+        changeSpeakerLogo: $resource('api/admin/speakers/changeSpeakerLogo/:data', {}, {
+            save: { method: 'POST'}
+        }),
         getAll: $resource('api/admin/events/', {}, {
             query: { method: 'GET', isArray: true },
             save: { method: 'POST'}

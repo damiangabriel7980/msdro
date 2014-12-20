@@ -4,7 +4,8 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,growl){
+cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','growl','AmazonService', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,growl,AmazonService){
+
     EventsAdminService.getAllConferences.query().$promise.then(function(resp){
         $scope.rooms=resp;
         $scope.selectedRoom=$scope.rooms[0];
@@ -20,9 +21,9 @@ cloudAdminControllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'
             conference_id:"",
             type: 2
         },
-        description:""
+        description:"",
+        image_path:""
     };
-
 
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];

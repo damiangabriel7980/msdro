@@ -14,7 +14,8 @@ cloudAdminControllers.controller('SpeakerAddCtrl', ['$scope','$rootScope' ,'Even
         profession:        "",
         last_updated: new Date(),
         workplace:       "",
-        short_description:   ""
+        short_description:   "",
+        image_path:""
     };
     $scope.createSpeaker=function(){
         $scope.newSpeaker.short_description=tinyMCE.activeEditor.getContent();

@@ -12,7 +12,8 @@ var SpeakersSchema		= new Schema({
     profession:        String,
     last_updated: Date,
     workplace:       String,
-    short_description:   String
+    short_description:   String,
+    image_path:String
 });
 
 SpeakersSchema.pre('remove', function(next) {
