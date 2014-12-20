@@ -71,11 +71,11 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                 Topics.find({name: {$in: cleanTopics}}, function (err, topics) {
                                     if(err){
                                         logger.log(err);
-                                        socket.emit('message',{type: 'error', text: 'Error processing topics'});
+                                        socket.emit('questionerMessage',{type: 'error', text: 'Error processing topics'});
                                     }else{
                                         //check if all topics sent by user actually exist
                                         if(topics.length != cleanTopics.length && cleanTopics.length != 0){
-                                            socket.emit('message',{type: 'error', text: 'Not all topics are valid'});
+                                            socket.emit('questionerMessage',{type: 'error', text: 'Not all topics are valid'});
                                         }else{
                                             //get id's of topics
                                             getIds(topics, function (topicsIds) {
@@ -85,11 +85,11 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                                 AnswerGivers.find({nickname: {$in: cleanMedics}}, function (err, medics) {
                                                     if(err){
                                                         logger.log(err);
-                                                        socket.emit('message',{type: 'error', text: 'Error processing medics'});
+                                                        socket.emit('questionerMessage',{type: 'error', text: 'Error processing medics'});
                                                     }else{
                                                         //check if all medics sent by user actually exist
                                                         if(medics.length != cleanMedics.length && cleanMedics.length != 0){
-                                                            socket.emit('message',{type: 'error', text: 'Not all medics are valid'});
+                                                            socket.emit('questionerMessage',{type: 'error', text: 'Not all medics are valid'});
                                                         }else{
                                                             //get id's of medics
                                                             getIds(medics, function (medicsIds) {
@@ -105,9 +105,9 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                                                 thread.save(function (err, threadSaved) {
                                                                     if(err){
                                                                         console.log(err);
-                                                                        socket.emit('message',{type: 'error', text: 'Error saving thread'});
+                                                                        socket.emit('questionerMessage',{type: 'error', text: 'Error saving thread'});
                                                                     }else{
-                                                                        socket.emit('message',{type: 'info', text: 'Thread saved!'});
+                                                                        socket.emit('questionerMessage',{type: 'info', text: 'Thread saved!'});
                                                                         socket.broadcast.emit('threadAdded', threadSaved);
                                                                     }
                                                                 });
@@ -122,7 +122,7 @@ module.exports = function (socketServer, tokenSecret, logger) {
                             });
                         });
                     }else{
-                        socket.emit('message',{type:'error', text: 'Not allowed to start thread'});
+                        socket.emit('answererMessage',{type:'error', text: 'Not allowed to start thread'});
                     }
                 })
                 .on('pickupThread', function (thread_id) {
@@ -131,25 +131,63 @@ module.exports = function (socketServer, tokenSecret, logger) {
                         //check if thread is not already picked up
                         Threads.find({_id: thread_id}, function (err, thread) {
                             if(err){
-                                socket.emit('message',{type:'error', text: 'Unable to find thread'});
+                                socket.emit('answererMessage',{type:'error', text: 'Unable to find thread'});
                             }else{
                                 if(thread.locked){
-                                    socket.emit('message',{type:'error', text: 'Thread already picked up'});
+                                    socket.emit('answererMessage',{type:'error', text: 'Thread already picked up'});
                                 }else{
-                                    var toSave = new Threads(thread);
-                                    toSave.locked = userData._id;
-                                    toSave.save(function (err) {
+                                    thread.locked = userData._id;
+                                    thread.save(function (err) {
                                         if(err){
-                                            socket.emit('message',{type:'error', text: 'Could not pick up thread'});
+                                            socket.emit('answererMessage',{type:'error', text: 'Could not pick up thread'});
                                         }else{
-                                            socket.emit('message',{type:'info', text: 'Thread picked up'});
+                                            socket.emit('answererMessage',{type:'info', text: 'Thread picked up'});
                                         }
                                     });
                                 }
                             }
                         });
                     }else{
-                        socket.emit('message',{type:'error', text: 'Not allowed answer thread'});
+                        socket.emit('questionerMessage',{type:'error', text: 'Not allowed to answer thread'});
+                    }
+                })
+                .on('dropThread', function (thread_id) {
+                    //only answerers can drop a thread
+                    if(userData.answerer){
+                        //get thread
+                        Threads.find({_id: thread_id}, function (err, thread) {
+                            if(err){
+                                socket.emit('answererMessage',{type:'error', text: 'Unable to find thread'});
+                            }else{
+                                //check if thread is started by this user
+                                if(thread.locked != userData._id){
+                                    socket.emit('answererMessage',{type:'error', text: "You cannot drop someone else's thread"});
+                                }else{
+                                    //check if thread has answers
+                                    qaMessages.find({_id: {$in: thread.id_messages}, owner: userData._id}, function (err, messages) {
+                                        if(err){
+                                            socket.emit('answererMessage',{type:'error', text: 'Error processing request'});
+                                        }else{
+                                            if(messages.length != 0){
+                                                socket.emit('answererMessage',{type:'error', text: "You cannot drop a thread once you've given answers"});
+                                            }else{
+                                                //drop thread
+                                                thread.locked = null;
+                                                thread.save(function (err) {
+                                                    if(err){
+                                                        socket.emit('answererMessage',{type:'error', text: 'Could not drop thread'});
+                                                    }else{
+                                                        socket.emit('answererMessage',{type:'info', text: 'Thread dropped'});
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }else{
+                        socket.emit('questionerMessage',{type:'error', text: 'Permission denied'});
                     }
                 })
 //                .on('chatMessage', function (data) {
