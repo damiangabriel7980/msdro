@@ -93,6 +93,9 @@ cloudAdminControllers.controller('talkUpdateCtrl', ['$scope','$rootScope' ,'Even
         $scope.newTalk.hour_end=$scope.date2;
         $scope.newTalk.last_updated=new Date();
         $scope.newTalk.description=tinyMCE.activeEditor.getContent();
+        if($scope.notificationCheck){
+            $scope.newTalk.notificationText = $scope.notificationText;
+        }
         if($scope.newTalk){
             EventsAdminService.deleteOrUpdateTalks.update({id: $stateParams.id}, $scope.newTalk).$promise.then(function(result){
                 if(result.message)

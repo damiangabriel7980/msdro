@@ -18,14 +18,19 @@ var validator = require('validator');
 var crypto   = require('crypto');
 var expressJwt = require('express-jwt');
 var async = require('async');
+var request = require('request');
 
 module.exports = function(app, mandrill, logger, tokenSecret, router) {
 
+    //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
         var token = req.headers.authorization.split(' ').pop();
         return jwt.decode(token);
     };
 
+    //================================================================================================================= functions for getting data in depth
+
+    //get room -> talks (in depth)
     var getRoomDataById = function (id, callback) {
         //find the actual room
         Rooms.findOne({_id: id}, function (err, room) {
@@ -34,7 +39,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
             }else{
                 if(room){
                     //find all talks for this room and populate speakers
-                    Talks.find({_id: {$in: room.id_talks}}).populate('listSpeakers').exec(function (err, talks) {
+                    Talks.find({_id: {$in: room.id_talks}}).sort({hour_start: 1}).populate('listSpeakers').exec(function (err, talks) {
                         if(err){
                             callback(err, null);
                         }else{
@@ -57,6 +62,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         })
     };
 
+    //get conferences -> rooms -> talks (in depth)
     var getConferencesFull = function (req, callback) {
         var resp = [];
         //get user data
@@ -103,6 +109,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         }
     };
 
+    //get one conference -> rooms -> talks (in depth)
     var getConferenceFullById = function (id, callback) {
         //find the conference
         Conferences.findOne({_id: id}, function (err, conf) {
@@ -151,6 +158,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         })
     };
 
+    //================================================================================================= access control and route protection
     //access control allow origin *
     app.all("/apiConferences/*", function(req, res, next) {
         res.setHeader("Access-Control-Allow-Origin", "*");
@@ -164,6 +172,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
     // We are going to protect /apiConferences routes with JWT
     app.use('/apiConferences', expressJwt({secret: tokenSecret}).unless({path: ['/apiConferences/createAccount']}));
 
+    //===================================================================================================================== create account
     router.route('/createAccount')
         .post(function (req, res) {
             var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
@@ -260,6 +269,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
             }
         });
 
+    //route for retrieving user's profile info
     router.route('/userProfile')
         .get(function (req, res) {
             res.json(getUserData(req));
@@ -295,6 +305,8 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
 //                }
 //            })
 //        });
+
+    //==================================================================================================================== all routes
     router.route('/conferences')
         .get(function(req,res){
             var userCurrent = getUserData(req);

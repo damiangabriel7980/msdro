@@ -24,7 +24,10 @@ var Rooms = require('./models/rooms');
 var SHA256   = require('crypto-js/sha256');
 var ObjectId = require('mongoose').Types.ObjectId;
 var mongoose = require('mongoose');
+
 var async = require('async');
+var request = require('request');
+
 var AWS = require('aws-sdk');
 //form sts object from environment variables. Used for retrieving temporary credentials to front end
 var sts = new AWS.STS();
@@ -215,21 +218,81 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
     });
 };
 
+//================================================================================ find id's of users associated to conferences, rooms, talks
 
-//==========================================get array of ids for documents function
+//receives an array of documents and returns an array with only the id's of those documents
 var getIds = function (arr, cb) {
     var ret = [];
     async.each(arr, function (item, callback) {
-        ret.push(item._id);
+        if(item._id) ret.push(item._id);
         callback();
     }, function (err) {
         cb(ret);
     });
 };
 
+// get user ids
+// return array like ["MSD"+idAsString]
+var encodeNotificationsIds = function (ids, cb) {
+    var ret = [];
+    async.each(ids, function (id, callback) {
+        ret.push("MSD"+id.toString());
+        callback();
+    }, function (err) {
+        cb(ret);
+    });
+};
+
+//this can be used for rooms as well, since every room has an id_conference
+var getUsersForConference = function (id_conference, callback) {
+    User.find({conferencesID: {$in: [id_conference]}}, function (err, users) {
+        if(err){
+            callback(err, null);
+        }else{
+            getIds(users, function (ids) {
+                callback(null, ids);
+            });
+        }
+    });
+};
+
+var getUsersForTalk = function (id_talk, callback) {
+    //find the room this talk takes place in
+    Rooms.findOne({id_talks: {$in: [id_talk]}}, function (err, room) {
+        if(err){
+            callback(err, null);
+        }else{
+            if(!room){
+                callback("Talk is not attached to any room", null);
+            }else{
+                //we have the room => id_conference
+                getUsersForConference(room.id_conference, function (err, ids) {
+                    if(err){
+                        callback(err, null);
+                    }else{
+                        callback(null, ids);
+                    }
+                });
+            }
+        }
+    });
+};
+
+var getUsersForConferences = function (conferences_ids, callback) {
+    User.find({conferencesID: {$in: conferences_ids}}, function (err, users) {
+        if(err){
+            callback(err, null);
+        }else{
+            getIds(users, function (ids) {
+                callback(null, ids);
+            });
+        }
+    });
+};
+
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, email, logger, router) {
+module.exports = function(app, sessionSecret, email, logger, pushServerAddr, router) {
 
 //======================================================================================================= secure routes
 
@@ -321,6 +384,36 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 }
             });
         });
+
+//================================================================================================= send push notifications
+
+    var sendPushNotification = function (message, arrayUsersIds, callback) {
+        encodeNotificationsIds(arrayUsersIds, function (usersToSendTo) {
+            var data = {
+                "users": usersToSendTo,
+                "android": {
+                    "collapseKey": "optional",
+                    "data": {
+                        "message": message
+                    }
+                },
+                "ios": {
+                    "badge": 0,
+                    "alert": message,
+                    "sound": "soundName"
+                }
+            };
+
+            request({
+                url: pushServerAddr+"/send",
+                method: 'POST',
+                json: true,
+                body: data
+            }, function (error, message, response) {
+                callback(error, response);
+            });
+        });
+    };
 
     router.route('/admin/utilizatori/grupuri')
 
@@ -1188,11 +1281,33 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 event.start=req.body.start;
                 event.type=req.body.type;
                 event.listconferences=req.body.listconferences;
-                event.save(function(err) {
-                    if (err)
+                event.save(function(err, eventSaved) {
+                    if (err){
                         res.send(err);
-
-                    res.json({ message: 'Event updated!' });
+                    }else{
+                        //send notification
+                        if(req.body.notificationText){
+                            getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
+                                if(err){
+                                    res.json({ message: 'Event updated! Error sending notification' });
+                                }else{
+                                    if(id_users.length != 0){
+                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
+                                            if(err){
+                                                res.json({ message: 'Event updated! Error notifying users' });
+                                            }else{
+                                                res.json({ message: 'Event updated! Notification was sent' });
+                                            }
+                                        });
+                                    }else{
+                                        res.json({ message: 'Event updated! No users found to notify' });
+                                    }
+                                }
+                            });
+                        }else{
+                            res.json({ message: 'Event updated! No notification sent' });
+                        }
+                    }
                 });
 
             });
@@ -1382,24 +1497,46 @@ module.exports = function(app, sessionSecret, email, logger, router) {
 
             Conferences.findById(req.params.id, function(err, conferences) {
 
-                if (err)
+                if (err){
                     res.send(err);
-
-                conferences.title = req.body.title;  // set the bears name (comes from the request)
-                conferences.enable=req.body.enable ;
-                conferences.begin_date= req.body.begin_date     ;
-                conferences.end_date= req.body.end_date     ;
-                conferences.last_updated= req.body.last_updated ;
-                conferences.description=req.body.description;
-                conferences.listRooms=req.body.listRooms;
-                conferences.qr_code=req.body.qr_code;
-                conferences.save(function(err) {
-                    if (err)
-                        res.send(err);
-                        else
-                    res.json({ message: 'Conferences updated!' });
-                });
-
+                }else{
+                    conferences.title = req.body.title;  // set the bears name (comes from the request)
+                    conferences.enable=req.body.enable;
+                    conferences.begin_date= req.body.begin_date;
+                    conferences.end_date= req.body.end_date;
+                    conferences.last_updated= req.body.last_updated;
+                    conferences.description=req.body.description;
+                    conferences.listRooms=req.body.listRooms;
+                    conferences.qr_code=req.body.qr_code;
+                    conferences.save(function(err, conferenceSaved) {
+                        if (err){
+                            res.send(err);
+                        }else{
+                            //send notification
+                            if(req.body.notificationText){
+                                getUsersForConference(conferenceSaved._id, function (err, users) {
+                                    if(err){
+                                        res.json({ message: 'Conference updated! Error at sending notification' });
+                                    }else{
+                                        if(users.length != 0){
+                                            sendPushNotification(req.body.notificationText, users, function (err, success) {
+                                                if(err){
+                                                    res.json({ message: 'Conference updated! Error notifying users' });
+                                                }else{
+                                                    res.json({ message: 'Conference updated! Notification was sent' });
+                                                }
+                                            });
+                                        }else{
+                                            res.json({ message: 'Conference updated! No users found to notify' });
+                                        }
+                                    }
+                                });
+                            }else{
+                                res.json({ message: 'Conference updated! No notification sent' });
+                            }
+                        }
+                    });
+                }
             });
         })
         .delete(function(req, res) {
@@ -1532,11 +1669,33 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 talks.place=req.body.place;
                 talks.listSpeakers=req.body.listSpeakers;
                 talks.type=req.body.type;
-                talks.save(function(err) {
-                    if (err)
+                talks.save(function(err, talkSaved) {
+                    if (err){
                         res.send(err);
-
-                    res.json({ message: 'Talk updated!' });
+                    }else{
+                        //send notification
+                        if(req.body.notificationText){
+                            getUsersForTalk(talkSaved._id, function (err, id_users) {
+                                if(err){
+                                    res.json({ message: 'Talk updated! Error sending notification' });
+                                }else{
+                                    if(id_users.length != 0){
+                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
+                                            if(err){
+                                                res.json({ message: 'Talk updated! Error notifying users' });
+                                            }else{
+                                                res.json({ message: 'Talk updated! Notification was sent' });
+                                            }
+                                        });
+                                    }else{
+                                        res.json({ message: 'Talk updated! No users found to notify' });
+                                    }
+                                }
+                            });
+                        }else{
+                            res.json({ message: 'Talk updated! No notification sent' });
+                        }
+                    }
                 });
 
             });
@@ -1641,11 +1800,33 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 rooms.qr_code.room_id = req.body.qr_code.room_id;
                 rooms.qr_code.conference_id = req.body.qr_code.conference_id;
                 console.log(rooms.qr_code.conference_id);
-                rooms.save(function(err) {
-                    if (err)
+                rooms.save(function(err, roomSaved) {
+                    if (err){
                         res.send(err);
-
-                    res.json({ message: 'Room updated!' });
+                    }else{
+                        //send notification
+                        if(req.body.notificationText){
+                            getUsersForConference(roomSaved.id_conference, function (err, id_users) {
+                                if(err){
+                                    res.json({ message: 'Room updated! Error sending notification' });
+                                }else{
+                                    if(id_users.length != 0){
+                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
+                                            if(err){
+                                                res.json({ message: 'Room updated! Error notifying users' });
+                                            }else{
+                                                res.json({ message: 'Room updated! Notification was sent' });
+                                            }
+                                        });
+                                    }else{
+                                        res.json({ message: 'Room updated! No users found to notify' });
+                                    }
+                                }
+                            });
+                        }else{
+                            res.json({ message: 'Room updated! No notification sent' });
+                        }
+                    }
                 });
 
             });
