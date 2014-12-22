@@ -1920,7 +1920,8 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 if(err) {
                     res.send(err);
                 }
-                res.json(groups);
+                else
+                    res.json(groups);
             });
         });
 
@@ -2437,20 +2438,26 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             var findObj = {};
             if(req.params.id!=0) findObj = {'therapeutic-areasID': {$in: [req.params.id]}};
             //find all by area
-            Multimedia.find(findObj, function (err, multimedia) {
-                if (err) {
-                    res.json(err);
-                }else{
-                    console.log(multimedia);
-                    if(multimedia.length==0)
-                    {
-                        console.log("entered");
-                        res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}])
+            if(req.user.groupsID.length==0)
+            {
+                res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}])
+            }
+            else {
+                Multimedia.find(findObj, {groupsID: {$in: req.user.groupsID}}, function (err, multimedia) {
+                    if (err) {
+                        console.log(err);
+                        res.json(err);
+                    } else {
+                        console.log(multimedia);
+                        if (multimedia.length == 0) {
+                            console.log("entered");
+                            res.json([{"message": "Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}])
+                        }
+                        else
+                            res.json(multimedia);
                     }
-                    else
-                        res.json(multimedia);
-                }
-            });
+                });
+            }
         });
 
     router.route('/slidesByMultimediaId/:multimedia_id')
