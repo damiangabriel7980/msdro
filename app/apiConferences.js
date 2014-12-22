@@ -19,7 +19,6 @@ var crypto   = require('crypto');
 var expressJwt = require('express-jwt');
 var async = require('async');
 
-
 module.exports = function(app, mandrill, logger, tokenSecret, router) {
 
     var getUserData = function (req) {

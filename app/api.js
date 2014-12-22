@@ -24,7 +24,7 @@ var Rooms = require('./models/rooms');
 var SHA256   = require('crypto-js/sha256');
 var ObjectId = require('mongoose').Types.ObjectId;
 var mongoose = require('mongoose');
-
+var async = require('async');
 var AWS = require('aws-sdk');
 //form sts object from environment variables. Used for retrieving temporary credentials to front end
 var sts = new AWS.STS();
@@ -212,6 +212,18 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
                 }
             });
         }
+    });
+};
+
+
+//==========================================get array of ids for documents function
+var getIds = function (arr, cb) {
+    var ret = [];
+    async.each(arr, function (item, callback) {
+        ret.push(item._id);
+        callback();
+    }, function (err) {
+        cb(ret);
     });
 };
 
@@ -2409,15 +2421,16 @@ module.exports = function(app, sessionSecret, email, logger, router) {
 
         });
     router.route('/multimedia')
-        .get(function(req,res){
-            Multimedia.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
+        .get(function(req,res) {
+            Multimedia.find({groupsID: {$in: req.user.groupsID}}).exec(function (err, responses) {
+                console.log(responses);
+                if (responses.length == 0)
+                    res.send([{"message": "Nu ai acces la materiale!"}]);
+                else {
+                    res.json(responses);
+
                 }
-
-                res.json(cont);
-            });
-
+            })
         });
     router.route('/multimedia/multimediaByArea/:id')
         .get(function(req,res){
@@ -2428,7 +2441,14 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 if (err) {
                     res.json(err);
                 }else{
-                    res.json(multimedia);
+                    console.log(multimedia);
+                    if(multimedia.length==0)
+                    {
+                        console.log("entered");
+                        res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}])
+                    }
+                    else
+                        res.json(multimedia);
                 }
             });
         });
@@ -2454,16 +2474,36 @@ module.exports = function(app, sessionSecret, email, logger, router) {
             }
 
         })});
+    var getQuizesIds = function (arr, cb) {
+        var ret = [];
+        async.each(arr, function (item, callback) {
+            if(item.quizesID[0])
+                ret.push(item.quizesID[0]);
+            callback();
+        }, function (err) {
+            cb(ret);
+        });
+    };
 
-    router.route('/teste')
+   router.route('/teste')
+
         .get(function(req,res){
-            Teste.find(function (error, result) {
-                if (error) {
-                    res.send(error);
-                    return ;
-                } else {
-                    //console.log(result);
-                    res.json(result);
+            var resp = [];
+            Multimedia.find({groupsID: {$in: req.user.groupsID}}).exec(function(err,responses){
+                if(responses.length==0)
+                    res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}]);
+                else {
+                    getQuizesIds(responses,function(arrayIdQuizes){
+                        console.log(arrayIdQuizes);
+                        Teste.find({_id:{$in:arrayIdQuizes}}, function (err, teste) {
+                            if(err){
+                                res.send(err);
+                            }else{
+                                console.log(teste);
+                                res.send(teste);
+                            }
+                        });
+                    });
                 }
             });
         });

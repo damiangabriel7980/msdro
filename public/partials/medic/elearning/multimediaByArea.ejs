@@ -1,6 +1,6 @@
-<ul class="articles" style="list-style: none;">
+<div class="row margintop20px" ng-if="multimedias[0].message"><h2>{{multimedias[0].message}}</h2></div>
+<ul ng-if="multimedias.length>1" class="articles" style="list-style: none;">
     <li class="col-xs-8" ng-repeat="prod in multimedias | orderBy:'title'">
-
 
             <div class="row">
                 <img ng-src="{{prod.thumbnail_path?pathAmazonDev+prod.thumbnail_path:(prod.type==1?defaultVideoImage:defaultSlideImage)}}" alt="{{prod.title}}" height="250px" width="250px"/>
