@@ -9,6 +9,8 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.string = "";
+    $scope.notificationCheck = false;
+
     var conferenceDataLoaded=false;
     EventsAdminService.getAllRoom.query().$promise.then(function(resp) {
         $scope.rooms = resp;
@@ -110,6 +112,9 @@ cloudAdminControllers.controller('conferenceUpdateCtrl', ['$scope','$rootScope' 
         $scope.utc2 = new Date($scope.newConference.end_date);
         $scope.newConference.begin_date=$scope.utc1;
         $scope.newConference.end_date=$scope.utc2;
+        if($scope.notificationCheck){
+            $scope.newConference.notificationText = $scope.notificationText;
+        }
         console.log($scope.newConference);
         if($scope.newConference){
             EventsAdminService.deleteOrUpdateConferences.update({id: $stateParams.id}, $scope.newConference).$promise.then(function(result){

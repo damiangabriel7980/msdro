@@ -64,6 +64,9 @@ cloudAdminControllers.controller('roomUpdateCtrl', ['$scope','$rootScope' ,'Even
         $scope.newRoom.id_talks=id_talks;
         $scope.newRoom.id_conference = $scope.selectedConference._id;
         $scope.newRoom.qr_code.message=$scope.newString;
+        if($scope.notificationCheck){
+            $scope.newRoom.notificationText = $scope.notificationText;
+        }
         if($scope.newRoom){
             EventsAdminService.deleteOrUpdateRooms.update({id: $stateParams.id}, $scope.newRoom).$promise.then(function(result){
                 if(result.message)
