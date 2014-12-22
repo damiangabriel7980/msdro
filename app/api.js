@@ -25,6 +25,9 @@ var SHA256   = require('crypto-js/sha256');
 var ObjectId = require('mongoose').Types.ObjectId;
 var mongoose = require('mongoose');
 
+var async = require('async');
+var request = require('request');
+
 var AWS = require('aws-sdk');
 //form sts object from environment variables. Used for retrieving temporary credentials to front end
 var sts = new AWS.STS();
@@ -287,53 +290,9 @@ var getUsersForConferences = function (conferences_ids, callback) {
     });
 };
 
-//    router.route('/someTest')
-//        .get(function (req, res) {
-//            getUsersForTalk("5493f914ac0e91ba132582ed", function(err, users){
-//                if(err){
-//                    res.send(err);
-//                }else {
-//                    sendPushNotification("push notifications working", users, function (err, success) {
-//                        res.send(err);
-//                        res.send(success);
-//                    });
-//                }
-//            });
-//        });
-
-//================================================================================================= send push notifications
-
-var sendPushNotification = function (message, arrayUsersIds, callback) {
-    encodeNotificationsIds(arrayUsersIds, function (usersToSendTo) {
-        var data = {
-            "users": usersToSendTo,
-            "android": {
-                "collapseKey": "optional",
-                "data": {
-                    "message": message
-                }
-            },
-            "ios": {
-                "badge": 0,
-                "alert": message,
-                "sound": "soundName"
-            }
-        };
-
-        request({
-            url: pushServerAddr+"/send",
-            method: 'POST',
-            json: true,
-            body: data
-        }, function (error, message, response) {
-            callback(error, response);
-        });
-    });
-};
-
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, email, logger, router) {
+module.exports = function(app, sessionSecret, email, logger, pushServerAddr, router) {
 
 //======================================================================================================= secure routes
 
@@ -425,6 +384,36 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                 }
             });
         });
+
+    //================================================================================================= send push notifications
+
+    var sendPushNotification = function (message, arrayUsersIds, callback) {
+        encodeNotificationsIds(arrayUsersIds, function (usersToSendTo) {
+            var data = {
+                "users": usersToSendTo,
+                "android": {
+                    "collapseKey": "optional",
+                    "data": {
+                        "message": message
+                    }
+                },
+                "ios": {
+                    "badge": 0,
+                    "alert": message,
+                    "sound": "soundName"
+                }
+            };
+
+            request({
+                url: pushServerAddr+"/send",
+                method: 'POST',
+                json: true,
+                body: data
+            }, function (error, message, response) {
+                callback(error, response);
+            });
+        });
+    };
 
     router.route('/admin/utilizatori/grupuri')
 
@@ -1302,7 +1291,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                                 if(err){
                                     res.json({ message: 'Event updated! Error sending notification' });
                                 }else{
-                                    if(users.length != 0){
+                                    if(id_users.length != 0){
                                         sendPushNotification(req.body.notificationText, id_users, function (err, success) {
                                             if(err){
                                                 res.json({ message: 'Event updated! Error notifying users' });
@@ -1690,7 +1679,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                                 if(err){
                                     res.json({ message: 'Talk updated! Error sending notification' });
                                 }else{
-                                    if(users.length != 0){
+                                    if(id_users.length != 0){
                                         sendPushNotification(req.body.notificationText, id_users, function (err, success) {
                                             if(err){
                                                 res.json({ message: 'Talk updated! Error notifying users' });
@@ -1821,7 +1810,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                                 if(err){
                                     res.json({ message: 'Room updated! Error sending notification' });
                                 }else{
-                                    if(users.length != 0){
+                                    if(id_users.length != 0){
                                         sendPushNotification(req.body.notificationText, id_users, function (err, success) {
                                             if(err){
                                                 res.json({ message: 'Room updated! Error notifying users' });

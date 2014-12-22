@@ -21,7 +21,7 @@ var async = require('async');
 var request = require('request');
 
 
-module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, router) {
+module.exports = function(app, mandrill, logger, tokenSecret, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
