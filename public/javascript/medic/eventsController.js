@@ -11,7 +11,7 @@ var date = new Date();
        $scope.eventsS=[];
        for(var i = 0; i < $scope.events.length; i++)
        {
-           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: new Date($scope.events[i].end),allDay: false, color: 'green',className: 'events'});
+           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: new Date($scope.events[i].end),allDay: false,className: 'events'});
        }
 
          $scope.realEvents=[$scope.eventsS];
