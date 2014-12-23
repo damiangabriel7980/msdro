@@ -404,12 +404,19 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             };
 
+            console.log(data);
+
             request({
                 url: pushServerAddr+"/send",
                 method: 'POST',
                 json: true,
                 body: data
             }, function (error, message, response) {
+                console.log(error);
+                console.log("==========================");
+                console.log(message);
+                console.log("==========================");
+                console.log(response);
                 callback(error, response);
             });
         });

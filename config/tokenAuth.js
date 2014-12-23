@@ -78,6 +78,8 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
                                     body: subscribeData
                                 }, function (error, message, response) {
                                     if(error) logger.error(error);
+                                    console.log("----auth");
+                                    console.log(error);
                                 });
                             }
 
