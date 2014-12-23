@@ -1279,60 +1279,62 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             })
         })
         .put(function(req, res) {
+            logger.warn('put event');
 
             Events.findById(req.params.id, function(err, event) {
 
-                if (err)
+                if (err){
+                    logger.warn('error at find event by id');
                     res.send(err);
-
-                event.description = req.body.description;  // set the bears name (comes from the request)
-                event.enable=req.body.enable ;
-                event.end= req.body.end     ;
-                event.groupsID= req.body.groupsID  ;
-                event.last_updated= req.body.last_updated ;
-                event.name=req.body.name;
-                event.place= req.body.place ;
-                event.privacy=req.body.privacy;
-                event.start=req.body.start;
-                event.type=req.body.type;
-                event.listconferences=req.body.listconferences;
-                logger.warn("received data");
-                logger.warn(event);
-                event.save(function(err, eventSaved) {
-                    if (err){
-                        logger.error("at save:");
-                        logger.error(err);
-                        res.send(err);
-                    }else{
-                        //send notification
-                        if(req.body.notificationText){
-                            getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
-                                if(err){
-                                    res.json({ message: 'Event updated! Error sending notification' });
-                                }else{
-                                    if(id_users.length != 0){
-                                        logger.warn("about to send notification "+req.body.notificationText+" to users "+id_users);
-                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
-                                            if(err){
-                                                console.log(err);
-                                                logger.error("at sendPushNotification");
-                                                logger.error(err);
-                                                res.json({ message: 'Event updated! Error notifying users' });
-                                            }else{
-                                                res.json({ message: 'Event updated! Notification was sent' });
-                                            }
-                                        });
-                                    }else{
-                                        res.json({ message: 'Event updated! No users found to notify' });
-                                    }
-                                }
-                            });
+                }else{
+                    event.description = req.body.description;  // set the bears name (comes from the request)
+                    event.enable=req.body.enable ;
+                    event.end= req.body.end     ;
+                    event.groupsID= req.body.groupsID  ;
+                    event.last_updated= req.body.last_updated ;
+                    event.name=req.body.name;
+                    event.place= req.body.place ;
+                    event.privacy=req.body.privacy;
+                    event.start=req.body.start;
+                    event.type=req.body.type;
+                    event.listconferences=req.body.listconferences;
+                    logger.warn("received data");
+                    logger.warn(event);
+                    event.save(function(err, eventSaved) {
+                        if (err){
+                            logger.error("at save:");
+                            logger.error(err);
+                            res.send(err);
                         }else{
-                            res.json({ message: 'Event updated! No notification sent' });
+                            //send notification
+                            if(req.body.notificationText){
+                                getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
+                                    if(err){
+                                        res.json({ message: 'Event updated! Error sending notification' });
+                                    }else{
+                                        if(id_users.length != 0){
+                                            logger.warn("about to send notification "+req.body.notificationText+" to users "+id_users);
+                                            sendPushNotification(req.body.notificationText, id_users, function (err, success) {
+                                                if(err){
+                                                    console.log(err);
+                                                    logger.error("at sendPushNotification");
+                                                    logger.error(err);
+                                                    res.json({ message: 'Event updated! Error notifying users' });
+                                                }else{
+                                                    res.json({ message: 'Event updated! Notification was sent' });
+                                                }
+                                            });
+                                        }else{
+                                            res.json({ message: 'Event updated! No users found to notify' });
+                                        }
+                                    }
+                                });
+                            }else{
+                                res.json({ message: 'Event updated! No notification sent' });
+                            }
                         }
-                    }
-                });
-
+                    });
+                }
             });
         })
         .delete(function(req, res) {
