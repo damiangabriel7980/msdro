@@ -51,6 +51,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
                             res.send(401, 'Wrong password');
                         }else{
                             var profile = {
+                                _id: user._id,
                                 username: user.username,
                                 name: user.name,
                                 image_path: user.image_path,
