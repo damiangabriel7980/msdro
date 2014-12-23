@@ -21,7 +21,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
     });
 
     app.post('/authenticateToken', function (req, res) {
-        logger.info("token auth - username: ", req.body.username);
+        logger.warn("token auth - username: ", req.body.username);
 
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
