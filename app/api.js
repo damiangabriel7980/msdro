@@ -389,6 +389,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     var sendPushNotification = function (message, arrayUsersIds, callback) {
         encodeNotificationsIds(arrayUsersIds, function (usersToSendTo) {
+            logger.warn("Encoded users: "+usersToSendTo);
             var data = {
                 "users": usersToSendTo,
                 "android": {
@@ -404,6 +405,10 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             };
 
+            logger.warn('data to send:');
+            logger.warn(data);
+            logger.warn('about to send data to '+pushServerAddr);
+
             request({
                 url: pushServerAddr+"/send",
                 method: 'POST',
@@ -411,6 +416,15 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 body: data,
                 strictSSL: false
             }, function (error, message, response) {
+                if(error) logger.error(error);
+                if(message){
+                    logger.warn('message:');
+                    logger.warn(message);
+                }
+                if(response){
+                    logger.warn('response:');
+                    logger.warn(response);
+                }
                 callback(error, response);
             });
         });
@@ -1282,8 +1296,12 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 event.start=req.body.start;
                 event.type=req.body.type;
                 event.listconferences=req.body.listconferences;
+                logger.warn("received data");
+                logger.warn(event);
                 event.save(function(err, eventSaved) {
                     if (err){
+                        logger.error("at save:");
+                        logger.error(err);
                         res.send(err);
                     }else{
                         //send notification
@@ -1293,9 +1311,11 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                     res.json({ message: 'Event updated! Error sending notification' });
                                 }else{
                                     if(id_users.length != 0){
+                                        logger.warn("about to send notification "+req.body.notificationText+" to users "+id_users);
                                         sendPushNotification(req.body.notificationText, id_users, function (err, success) {
                                             if(err){
                                                 console.log(err);
+                                                logger.error("at sendPushNotification");
                                                 logger.error(err);
                                                 res.json({ message: 'Event updated! Error notifying users' });
                                             }else{
