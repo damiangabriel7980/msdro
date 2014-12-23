@@ -404,19 +404,13 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             };
 
-            console.log(data);
-
             request({
                 url: pushServerAddr+"/send",
                 method: 'POST',
                 json: true,
-                body: data
+                body: data,
+                strictSSL: false
             }, function (error, message, response) {
-                console.log(error);
-                console.log("==========================");
-                console.log(message);
-                console.log("==========================");
-                console.log(response);
                 callback(error, response);
             });
         });
@@ -1301,6 +1295,8 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                     if(id_users.length != 0){
                                         sendPushNotification(req.body.notificationText, id_users, function (err, success) {
                                             if(err){
+                                                console.log(err);
+                                                logger.error(err);
                                                 res.json({ message: 'Event updated! Error notifying users' });
                                             }else{
                                                 res.json({ message: 'Event updated! Notification was sent' });

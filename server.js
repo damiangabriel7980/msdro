@@ -4,7 +4,7 @@ var sessionSecret = "yours3cr3tisveryveryvvverysafew1thmee";
 var tokenSecret = "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss";
 var mandrillKey = process.env.mandrillKey;
 var pushServerAddr = process.env.pushServerAddress;
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 // set up ======================================================================
 // get all the tools we need
 var express  = require('express');

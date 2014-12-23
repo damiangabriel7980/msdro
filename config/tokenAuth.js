@@ -70,16 +70,18 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
                                     "token": notificationToken
                                 };
 
-                                console.log("----------- subscribe req");
                                 request({
                                     url: pushServerAddr+"/subscribe",
                                     method: "POST",
                                     json: true,
-                                    body: subscribeData
+                                    body: subscribeData,
+                                    strictSSL: false
                                 }, function (error, message, response) {
-                                    if(error) logger.error(error);
-                                    console.log("----auth");
-                                    console.log(error);
+                                    if(error){
+                                        console.log("---- !!! push server subscribe error");
+                                        console.log(error);
+                                        logger.error(error);
+                                    }
                                 });
                             }
 
