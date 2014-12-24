@@ -5,6 +5,16 @@ var tokenSecret = "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss";
 var mandrillKey = process.env.mandrillKey;
 var pushServerAddr = process.env.pushServerAddress;
 
+//=========================================================== https certificates
+var fs = require('fs');
+var https = require('https');
+var certificateOptions = {
+    key: fs.readFileSync('/home/andrei/git/msd-new/server.key'),
+    cert: fs.readFileSync('/home/andrei/git/msd-new/server.crt'),
+    requestCert: false,
+    rejectUnauthorized: false
+};
+
 // set up ======================================================================
 // get all the tools we need
 var express  = require('express');
@@ -12,6 +22,7 @@ var path = require('path');
 var app      = express();
 var port     = process.env.PORT || 8080;
 var socketPort = process.env.SOCKET_PORT || 3000;
+var ssPort   = process.env.ssPORT || 3030;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
@@ -21,7 +32,7 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var configDB = require('./config/database.js');
 var email = require('mandrill-send')(mandrillKey);
-var socketServer = require('http').createServer(app); //http server used for socket comm
+var socketServer = https.createServer(certificateOptions, app); //https server used for socket comm
 
 //logging ======================================================================
 //configure winston logger
@@ -49,6 +60,9 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 //token auth ===================================================================
 require('./config/tokenAuth')(app,  logger, tokenSecret, pushServerAddr);
 
+//create https server ==========================================================
+var secureServer = https.createServer(certificateOptions, app);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes ======================================================================
@@ -63,7 +77,10 @@ require('./app/apiConferences.js')(app, email, logger, tokenSecret, express.Rout
 require('./app/socketComm.js')(socketServer, tokenSecret);
 
 // launch ======================================================================
+
 app.listen(port);
+secureServer.listen(ssPort);
 socketServer.listen(socketPort);
 console.log('App runs on port: ' + port);
+console.log("Secure server started on port " + ssPort);
 console.log('Socket comm port: ' + socketPort);
