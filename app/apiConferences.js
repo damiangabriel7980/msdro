@@ -236,5 +236,60 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
             }
         });
 
+    router.route('/scanConference')
+        .post(function (req, res) {
+            //add conference id to user
+            var idConf = req.body.id;
+            if(typeof idConf === "string") idConf = mongoose.Types.ObjectId(idConf);
+            var thisUser = getUserData(req);
+            addConferenceToUser(idConf, thisUser._id, function (err, resp) {
+                if(err){
+                    res.send(err);
+                }else{
+                    //return talks for the scanned conference
+                    getTalksByConference(idConf, function (err, talks) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            res.send(talks);
+                        }
+                    });
+                }
+            })
+        });
+
+    router.route('/scanRoom')
+        .post(function (req, res) {
+            var idRoom = req.body.id;
+            if(typeof idRoom === "string") idRoom = mongoose.Types.ObjectId(idRoom);
+            //get id of conference
+            Talks.findOne({room: idRoom}, function (err, room) {
+                if(err){
+                    res.send(err);
+                }else{
+                    if(room){
+                        var idConf = room.conference;
+                        var thisUser = getUserData(req);
+                        addConferenceToUser(idConf, thisUser._id, function (err, resp) {
+                            if(err){
+                                res.send(err);
+                            }else{
+                                //return talks for the scanned room
+                                getTalksByRoom(idRoom, function (err, talks) {
+                                    if(err){
+                                        res.send(err);
+                                    }else{
+                                        res.send(talks);
+                                    }
+                                });
+                            }
+                        });
+                    }else{
+                        res.send({hasError: true, message: "Room not found"});
+                    }
+                }
+            });
+        });
+
     app.use('/apiConferences', router);
 };
