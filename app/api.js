@@ -1741,28 +1741,27 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
         })
         .post(function(req, res) {
-            var rooms2 = new Rooms();
+            var data = req.body.data;
+            console.log(data);
+
             var rooms = new Rooms();
-            rooms.room_name = req.body.room_name;
-            rooms.id_talks = req.body.id_talks;
-            rooms.qr_code = req.body.qr_code;
-            rooms.id_conference = req.body.id_conference;
-            var roomname = req.body.room_name;
-            rooms.save(function (err, saved) {
+            rooms.room_name = data.room_name;
+            rooms.qr_code = {
+                message: data.qrMessage,
+                room_id: "",
+                type: 1
+            };
+            console.log(rooms);
+            rooms.save(function (err, roomSaved) {
                 if (err)
                     res.send(err);
                 else {
                     var newQR = new Object();
-                    newQR.type = saved.qr_code.type;
-                    newQR.message = saved.qr_code.message;
-                    newQR.conference_id=mongoose.Types.ObjectId(req.body.id_conference);
-                    rooms2 = saved;
-                    console.log(roomname);
-                    console.log(rooms2);
-                    newQR.room_id = saved._id;
-                    rooms2.qr_code = newQR;
-                    console.log(rooms2);
-                    rooms2.save(function (err) {
+                    newQR.type = roomSaved.qr_code.type;
+                    newQR.message = roomSaved.qr_code.message;
+                    newQR.room_id = mongoose.Types.ObjectId(roomSaved._id.toString());
+                    roomSaved.qr_code = newQR;
+                    roomSaved.save(function (err) {
                         if (err)
                             res.send(err);
                         else
@@ -1770,8 +1769,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     });
                 }
             });
-
-
         });
     router.route('/admin/rooms/:id')
         .get(function(req,res){
