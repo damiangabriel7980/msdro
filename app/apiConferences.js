@@ -305,12 +305,12 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
                             if(err){
                                 res.send(err);
                             }else{
-                                //return talks for the scanned room
-                                getTalksByRoom(idRoom, function (err, talks) {
+                                //return scanned conference
+                                getConference(idConf, function (err, conference) {
                                     if(err){
                                         res.send(err);
                                     }else{
-                                        res.send(talks);
+                                        res.send(conference);
                                     }
                                 });
                             }
