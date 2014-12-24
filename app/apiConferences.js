@@ -95,6 +95,28 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
         });
     };
 
+    var getConference = function (id_conference, callback) {
+        Conferences.findOne({_id: id_conference}, function (err, conference) {
+            if(err){
+                callback(err, null);
+            }else{
+                if(!conference){
+                    callback({hasError: true, message: "Conference not found"});
+                }else{
+                    var ret = conference.toObject();
+                    getTalksByConference(conference._id, function (err, talks) {
+                        if(err){
+                            callback(err, null);
+                        }else{
+                            ret.talks = talks;
+                            callback(null, ret);
+                        }
+                    });
+                }
+            }
+        });
+    };
+
     var addConferenceToUser = function (id_conference, id_user, callback) {
         User.update({_id: id_user}, {$addToSet: {conferencesID: id_conference}}, {multi: false}, function (err, res) {
             callback(err, res);
@@ -251,12 +273,12 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
                             if(err){
                                 res.send(err);
                             }else{
-                                //return talks for the scanned conference
-                                getTalksByConference(idConf, function (err, talks) {
+                                //return scanned conference
+                                getConference(idConf, function (err, conference) {
                                     if(err){
                                         res.send(err);
                                     }else{
-                                        res.send(talks);
+                                        res.send(conference);
                                     }
                                 });
                             }
