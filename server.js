@@ -9,8 +9,8 @@ var pushServerAddr = process.env.pushServerAddress;
 var fs = require('fs');
 var https = require('https');
 var certificateOptions = {
-    key: fs.readFileSync('/home/andrei/git/msd-new/server.key'),
-    cert: fs.readFileSync('/home/andrei/git/msd-new/server.crt'),
+    key: fs.readFileSync('./server.key'),
+    cert: fs.readFileSync('./server.crt'),
     requestCert: false,
     rejectUnauthorized: false
 };
