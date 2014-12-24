@@ -6,7 +6,7 @@ var Schema			= mongoose.Schema;
 
 var TalksSchema		= new Schema({
     description:  String,
-    enable:         String,
+    enable:         Boolean,
     hour_start: Date,
     hour_end:        Date,
     last_updated: Date,

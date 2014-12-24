@@ -14,7 +14,6 @@ cloudAdminControllers.controller('TalkAddCtrl', ['$scope','$rootScope' ,'EventsA
         $scope.selectedConference = resp[0];
     });
     EventsAdminService.getAllRoom.query().$promise.then(function (resp) {
-        console.log(resp);
         $scope.rooms = resp;
         $scope.selectedRoom = resp[0];
     });

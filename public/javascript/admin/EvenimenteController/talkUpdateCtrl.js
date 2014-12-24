@@ -5,42 +5,33 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 cloudAdminControllers.controller('talkUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','ngTableParams','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,ngTableParams,growl){
+
     EventsAdminService.getAllSpeakers.query().$promise.then(function(resp){
         $scope.speakers=resp;
-        EventsAdminService.deleteOrUpdateTalks.getTalk({id:$stateParams.id}).$promise.then(function(result2){
-            $scope.groupSpeakers=[];
-            console.log(result2);
-            $scope.newTalk=result2;
+        EventsAdminService.deleteOrUpdateTalks.getTalk({id:$stateParams.id}).$promise.then(function(respTalk){
+            console.log(respTalk);
+            $scope.newTalk=respTalk;
 
-            $scope.newTalk.hour_start=$filter('date')($scope.newTalk.hour_start, 'dd/MMM/yyyy HH:mm:ss');
-            $scope.newTalk.hour_end=$filter('date')($scope.newTalk.hour_end, 'dd/MMM/yyyy HH:mm:ss');
-            tinyMCE.activeEditor.setContent($scope.newTalk.description);
-            var listSpeakers = $scope.newTalk.listSpeakers;
-
-            $scope.tableParams = new ngTableParams({
-                page: 1,            // show first page
-                count: 10,          // count per page
-                sorting: {
-                    first_name: 'asc'     // initial sorting
-                },
-                filter: {
-                    first_name: ''       // initial filter
-                }
-            }, {
-                total: listSpeakers.length, // length of data
-                getData: function($defer, params) {
-
-                    var orderedData = $filter('orderBy')(($filter('filter')(listSpeakers, params.filter())), params.orderBy());
-
-                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-                }
+            EventsAdminService.getAllConferences.query().$promise.then(function (resp) {
+                $scope.conferences = resp;
+                $scope.selectedConference = respTalk.conference;
             });
+            EventsAdminService.getAllRoom.query().$promise.then(function (resp) {
+                $scope.rooms = resp;
+                $scope.selectedRoom = respTalk.room;
+            });
+            $scope.groupSpeakers=[];
+
+            $scope.hour_start=$filter('date')($scope.newTalk.hour_start, 'dd/MMM/yyyy HH:mm:ss');
+            $scope.hour_end=$filter('date')($scope.newTalk.hour_end, 'dd/MMM/yyyy HH:mm:ss');
+
+            var listSpeakers = $scope.newTalk.speakers;
 
             for(var i=0;i<$scope.speakers.length;i++)
             {
-                for(var j=0;j<$scope.newTalk.listSpeakers.length;j++)
+                for(var j=0;j<listSpeakers.length;j++)
                 {
-                    if($scope.speakers[i]._id==$scope.newTalk.listSpeakers[j]._id)
+                    if($scope.speakers[i]._id==listSpeakers[j]._id)
                         $scope.groupSpeakers.push($scope.speakers[i]);
                 }
             }
@@ -84,20 +75,19 @@ cloudAdminControllers.controller('talkUpdateCtrl', ['$scope','$rootScope' ,'Even
         var id_speakers=[];
         for(var i=0;i<$scope.groupSpeakers.length;i++)
             id_speakers.push($scope.groupSpeakers[i]._id);
-        $scope.newTalk.listSpeakers=id_speakers;
-        $scope.date1=new Date($scope.newTalk.hour_start);
-        $scope.date2=new Date($scope.newTalk.hour_end);
-        //$scope.utc1 = new Date($scope.date1);
-        //$scope.utc2 = new Date($scope.date2);
-        $scope.newTalk.hour_start=$scope.date1;
-        $scope.newTalk.hour_end=$scope.date2;
-        $scope.newTalk.last_updated=new Date();
-        $scope.newTalk.description=tinyMCE.activeEditor.getContent();
-        if($scope.notificationCheck){
-            $scope.newTalk.notificationText = $scope.notificationText;
-        }
+        $scope.newTalk.speakers=id_speakers;
+
+        $scope.newTalk.hour_start=new Date($scope.hour_start);
+        $scope.newTalk.hour_end=new Date($scope.hour_end);
+
+        $scope.newTalk.room = $scope.selectedRoom._id;
+        $scope.newTalk.conference = $scope.selectedConference._id;
+
         if($scope.newTalk){
-            EventsAdminService.deleteOrUpdateTalks.update({id: $stateParams.id}, $scope.newTalk).$promise.then(function(result){
+            EventsAdminService.deleteOrUpdateTalks.update(
+                {id: $stateParams.id}, //url param
+                {talk: $scope.newTalk, notification: $scope.notificationCheck?$scope.notificationText:null} //body params
+            ).$promise.then(function(result){
                 if(result.message)
                     growl.addSuccessMessage(result.message);
                 else

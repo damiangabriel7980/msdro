@@ -1622,7 +1622,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
      router.route('/admin/talks')
         .get(function(req,res){
-            Talks.find().populate('listSpeakers').exec(function (err, talks) {
+            Talks.find().populate('conference room').exec(function (err, talks) {
                 if (err)
                 {
                     res.json(err);
@@ -1640,6 +1640,8 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
          .post(function(req, res) {
              var talk = new Talks(req.body.data);
+             talk.enable = true;
+             talk.last_updated = Date.now();
              talk.save(function (err, savedTalk) {
                  if(err){
                      res.send(err);
@@ -1650,7 +1652,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
          });
     router.route('/admin/talks/:id')
         .get(function(req,res){
-            Talks.findById(req.params.id).populate('listSpeakers').exec(function (err, talk) {
+            Talks.findById(req.params.id).populate('speakers room conference').exec(function (err, talk) {
                 if (err)
                 {
                     logger.error(err);
@@ -1659,7 +1661,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
                 else
                 {
-                    console.log(talk);
                     res.json(talk);
                     return;
                 }
@@ -1667,49 +1668,36 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .put(function(req, res) {
 
-            Talks.findById(req.params.id, function(err, talks) {
+            var toUpdate = req.body.talk;
+            delete toUpdate._id;
 
-                if (err)
+            Talks.update({_id: req.params.id}, toUpdate, function (err, wRes) {
+                if(err){
                     res.send(err);
-
-                talks.description = req.body.description;  // set the bears name (comes from the request)
-                talks.enable=req.body.enable ;
-                talks.hour_start= req.body.hour_start     ;
-                talks.hour_end= req.body.hour_end ;
-                talks.last_updated=req.body.last_updated;
-                talks.title=req.body.title;
-                talks.place=req.body.place;
-                talks.listSpeakers=req.body.listSpeakers;
-                talks.type=req.body.type;
-                talks.save(function(err, talkSaved) {
-                    if (err){
-                        res.send(err);
-                    }else{
-                        //send notification
-                        if(req.body.notificationText){
-                            getUsersForTalk(talkSaved._id, function (err, id_users) {
-                                if(err){
-                                    res.json({ message: 'Talk updated! Error sending notification' });
+                }else{
+                    //send notification
+                    if(req.body.notification){
+                        getUsersForTalk(req.params.id, function (err, id_users) {
+                            if(err){
+                                res.json({ message: 'Talk updated! Error sending notification' });
+                            }else{
+                                if(id_users.length != 0){
+                                    sendPushNotification(req.body.notification, id_users, function (err, success) {
+                                        if(err){
+                                            res.json({ message: 'Talk updated! Error notifying users' });
+                                        }else{
+                                            res.json({ message: 'Talk updated! Notification was sent' });
+                                        }
+                                    });
                                 }else{
-                                    if(id_users.length != 0){
-                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
-                                            if(err){
-                                                res.json({ message: 'Talk updated! Error notifying users' });
-                                            }else{
-                                                res.json({ message: 'Talk updated! Notification was sent' });
-                                            }
-                                        });
-                                    }else{
-                                        res.json({ message: 'Talk updated! No users found to notify' });
-                                    }
+                                    res.json({ message: 'Talk updated! No users found to notify' });
                                 }
-                            });
-                        }else{
-                            res.json({ message: 'Talk updated! No notification sent' });
-                        }
+                            }
+                        });
+                    }else{
+                        res.json({ message: 'Talk updated! No notification sent' });
                     }
-                });
-
+                }
             });
         })
         .delete(function(req, res) {
@@ -1733,7 +1721,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
     router.route('/admin/rooms')
         .get(function(req,res){
-            Rooms.find().populate('id_talks id_conference').exec(function (err, rooms) {
+            Rooms.find().exec(function (err, rooms) {
                 if (err)
                 {
                     res.json(err);
@@ -1781,7 +1769,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
     router.route('/admin/rooms/:id')
         .get(function(req,res){
-            Rooms.findById(req.params.id).populate('id_talks id_conference').exec(function (err, room) {
+            Rooms.findById(req.params.id).exec(function (err, room) {
                 if (err)
                 {
                     logger.error(err);
