@@ -238,37 +238,46 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
 
     router.route('/scanConference')
         .post(function (req, res) {
-            //add conference id to user
-            var idConf = req.body.id;
-            if(typeof idConf === "string") idConf = mongoose.Types.ObjectId(idConf);
+            var idConf = mongoose.Types.ObjectId(req.body.id.toString());
             var thisUser = getUserData(req);
-            addConferenceToUser(idConf, thisUser._id, function (err, resp) {
+            //check if conference exists
+            Conferences.findOne({_id: idConf}, function (err, conference) {
                 if(err){
                     res.send(err);
                 }else{
-                    //return talks for the scanned conference
-                    getTalksByConference(idConf, function (err, talks) {
-                        if(err){
-                            res.send(err);
-                        }else{
-                            res.send(talks);
-                        }
-                    });
+                    if(conference){
+                        //add conference id to user
+                        addConferenceToUser(idConf, thisUser._id, function (err, resp) {
+                            if(err){
+                                res.send(err);
+                            }else{
+                                //return talks for the scanned conference
+                                getTalksByConference(idConf, function (err, talks) {
+                                    if(err){
+                                        res.send(err);
+                                    }else{
+                                        res.send(talks);
+                                    }
+                                });
+                            }
+                        })
+                    }else{
+                        res.send({hasError: true, message: "Conference not found"});
+                    }
                 }
-            })
+            });
         });
 
     router.route('/scanRoom')
         .post(function (req, res) {
-            var idRoom = req.body.id;
-            if(typeof idRoom === "string") idRoom = mongoose.Types.ObjectId(idRoom);
+            var idRoom = mongoose.Types.ObjectId(req.body.id.toString());
             //get id of conference
-            Talks.findOne({room: idRoom}, function (err, room) {
+            Talks.findOne({room: idRoom}, function (err, talk) {
                 if(err){
                     res.send(err);
                 }else{
-                    if(room){
-                        var idConf = room.conference;
+                    if(talk){
+                        var idConf = talk.conference;
                         var thisUser = getUserData(req);
                         addConferenceToUser(idConf, thisUser._id, function (err, resp) {
                             if(err){
