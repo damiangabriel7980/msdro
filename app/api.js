@@ -256,23 +256,43 @@ var getUsersForConference = function (id_conference, callback) {
     });
 };
 
-var getUsersForTalk = function (id_talk, callback) {
-    //find the room this talk takes place in
-    Rooms.findOne({id_talks: {$in: [id_talk]}}, function (err, room) {
+var getUsersForRoom = function (id_room, callback) {
+    //find conference for room
+    Talks.findOne({room: id_room}, function (err, talk) {
         if(err){
             callback(err, null);
         }else{
-            if(!room){
-                callback("Talk is not attached to any room", null);
-            }else{
-                //we have the room => id_conference
-                getUsersForConference(room.id_conference, function (err, ids) {
+            if(talk){
+                getUsersForConference(talk.conference, function (err, ids) {
                     if(err){
                         callback(err, null);
                     }else{
                         callback(null, ids);
                     }
                 });
+            }else{
+                callback({hasError: true, message: "No connecting room"});
+            }
+        }
+    });
+};
+
+var getUsersForTalk = function (id_talk, callback) {
+    //find talk
+    Talks.findOne({_id: id_talk}, function (err, talk) {
+        if(err){
+            callback(err, null);
+        }else{
+            if(talk){
+                getUsersForConference(talk.conference, function (err, ids) {
+                    if(err){
+                        callback(err, null);
+                    }else{
+                        callback(null, ids);
+                    }
+                });
+            }else{
+                callback({hasError: true, message: "No talk found"});
             }
         }
     });
@@ -1789,29 +1809,21 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .put(function(req, res) {
 
-            Rooms.findById(req.params.id, function(err, rooms) {
-
-                if (err)
+            var room = req.body.room;
+            console.log(room);
+            Rooms.update({_id: room._id}, room,  function (err, writeConcern) {
+                if(err){
+                    console.log(err);
                     res.send(err);
-
-                rooms.room_name=req.body.room_name;
-                rooms.id_talks=req.body.id_talks;
-                rooms.id_conference = mongoose.Types.ObjectId(req.body.id_conference);
-                rooms.qr_code.room_id = req.body.qr_code.room_id;
-                rooms.qr_code.conference_id = req.body.qr_code.conference_id;
-                console.log(rooms.qr_code.conference_id);
-                rooms.save(function(err, roomSaved) {
-                    if (err){
-                        res.send(err);
-                    }else{
-                        //send notification
-                        if(req.body.notificationText){
-                            getUsersForConference(roomSaved.id_conference, function (err, id_users) {
+                }else{
+                    //send notification
+                        if(req.body.notification){
+                            getUsersForRoom(room._id, function (err, id_users) {
                                 if(err){
                                     res.json({ message: 'Room updated! Error sending notification' });
                                 }else{
                                     if(id_users.length != 0){
-                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
+                                        sendPushNotification(req.body.notification, id_users, function (err, success) {
                                             if(err){
                                                 res.json({ message: 'Room updated! Error notifying users' });
                                             }else{
@@ -1826,9 +1838,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         }else{
                             res.json({ message: 'Room updated! No notification sent' });
                         }
-                    }
-                });
-
+                }
             });
         })
         .delete(function(req, res) {
