@@ -1639,25 +1639,14 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
         })
          .post(function(req, res) {
-
-             var talks = new Talks(); 		// create a new instance of the Bear model
-             talks.description = req.body.description;  // set the bears name (comes from the request)
-             talks.enable=req.body.enable ;
-             talks.hour_start= req.body.hour_start     ;
-             talks.hour_end= req.body.hour_end ;
-             talks.last_updated=req.body.last_updated;
-             talks.title=req.body.title;
-             talks.place=req.body.place;
-             talks.listSpeakers=req.body.listSpeakers;
-             talks.type=req.body.type;
-
-             talks.save(function(err) {
-                 if (err)
+             var talk = new Talks(req.body.data);
+             talk.save(function (err, savedTalk) {
+                 if(err){
                      res.send(err);
-
-                 res.json({ message: 'Talk created!' });
+                 }else{
+                     res.json({ message: 'Talk created!' });
+                 }
              });
-
          });
     router.route('/admin/talks/:id')
         .get(function(req,res){
