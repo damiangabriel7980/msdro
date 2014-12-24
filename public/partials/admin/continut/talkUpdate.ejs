@@ -20,10 +20,10 @@
         <label class="label label-default">Data si ora inceput:</label>
         <div class="dropdown">
             <p class="input-group">
-                <input type="text" data-ng-model="newTalk.hour_start" class="dropdown-toggle form-control input-large" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="" />
+                <input type="text" data-ng-model="hour_start" class="dropdown-toggle form-control input-large" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="" />
             </p>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <datetimepicker data-ng-model="newTalk.hour_start" data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+                <datetimepicker data-ng-model="hour_start" data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
             </ul>
         </div>
 
@@ -32,10 +32,10 @@
         <label class="label label-default">Data si ora sfarsit:</label>
         <div class="dropdown">
             <p class="input-group">
-                <input type="text" data-ng-model="newTalk.hour_end" class="dropdown-toggle form-control input-large" id="dLabel2" role="button" data-toggle="dropdown" data-target="#" href="" />
+                <input type="text" data-ng-model="hour_end" class="dropdown-toggle form-control input-large" id="dLabel2" role="button" data-toggle="dropdown" data-target="#" href="" />
             </p>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel2">
-                <datetimepicker data-ng-model="newTalk.hour_end" data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+                <datetimepicker data-ng-model="hour_end" data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
             </ul>
         </div>
 
@@ -47,6 +47,16 @@
             <option value="1" >Talk</option>
             <option value="2">Pauza</option>
         </select>
+    </div>
+    <div class="form-group col-md-12">
+        <label for="conferences">Conferinta:</label>
+        <select ng-model="selectedConference" ng-options="conference as conference.title for conference in conferences track by conference._id"
+                class="form-control" id="conferences"></select>
+    </div>
+    <div class="form-group col-md-12">
+        <label for="rooms">Camera:</label>
+        <select ng-model="selectedRoom" ng-options="room as room.room_name for room in rooms track by room._id"
+                class="form-control" id="rooms"></select>
     </div>
     <div class="col-md-12">
         <div class="form-group">
@@ -67,7 +77,7 @@
     <div class="col-xs-12">
         <form method="post">
             <label class="label label-default">Descriere:</label>
-            <textarea ui-tinymce ng-model="tinymceModel"></textarea>
+            <textarea ui-tinymce="tinymceOptions" ng-model="newTalk.description"></textarea>
         </form>
     </div>
     <div class="form-group col-md-12" style="margin-bottom: 0;">
@@ -83,25 +93,6 @@
         <a class="btn pull-right btn-primary" ng-click="updateTalk()">Update talk</a>
     </div>
     <div growl class="col-xs-12">
-
-    </div>
-    <div class="col-xs-12">
-        <table ng-table="tableParams" show-filter="true" class="table table-bordered">
-            <tr ng-repeat="speakers in $data">
-                <td data-title="'Nume'" filter="{ 'last_name': 'text' }" sortable="'last_name'">{{speakers.last_name}}</td>
-                <td data-title="'Prenume'" filter="{ 'first_name': 'text' }" sortable="'first_name'">{{speakers.first_name}}</td>
-                <td data-title="'Profesie'" filter="{ 'profession': 'text' }" sortable="'profession'">{{speakers.profession}}</td>
-                <td data-title="'Workplace'" filter="{ 'workplace': 'text' }" sortable="'workplace'">{{speakers.workplace}}</td>
-                <td data-title="'Descriere'" filter="{ 'short_description': 'text' }" sortable="'short_description'">{{speakers.short_description}}</td>
-
-                <td>
-                    <div class="btn-group-sm"  role="group" style="display: flex">
-                        <button class="btn btn-danger" ui-sref="continut.evenimente.deleteSpeaker({id: speakers._id})"><i class="glyphicon glyphicon-trash"></i></button>
-                        <button class="btn btn-info" ui-sref="continut.updateSpeaker({id: speakers._id})"><i class="glyphicon glyphicon-cog"></i></button>
-                    </div>
-                </td>
-            </tr>
-        </table>
 
     </div>
 </div>

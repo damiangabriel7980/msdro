@@ -256,23 +256,43 @@ var getUsersForConference = function (id_conference, callback) {
     });
 };
 
-var getUsersForTalk = function (id_talk, callback) {
-    //find the room this talk takes place in
-    Rooms.findOne({id_talks: {$in: [id_talk]}}, function (err, room) {
+var getUsersForRoom = function (id_room, callback) {
+    //find conference for room
+    Talks.findOne({room: id_room}, function (err, talk) {
         if(err){
             callback(err, null);
         }else{
-            if(!room){
-                callback("Talk is not attached to any room", null);
-            }else{
-                //we have the room => id_conference
-                getUsersForConference(room.id_conference, function (err, ids) {
+            if(talk){
+                getUsersForConference(talk.conference, function (err, ids) {
                     if(err){
                         callback(err, null);
                     }else{
                         callback(null, ids);
                     }
                 });
+            }else{
+                callback({hasError: true, message: "No connecting room"});
+            }
+        }
+    });
+};
+
+var getUsersForTalk = function (id_talk, callback) {
+    //find talk
+    Talks.findOne({_id: id_talk}, function (err, talk) {
+        if(err){
+            callback(err, null);
+        }else{
+            if(talk){
+                getUsersForConference(talk.conference, function (err, ids) {
+                    if(err){
+                        callback(err, null);
+                    }else{
+                        callback(null, ids);
+                    }
+                });
+            }else{
+                callback({hasError: true, message: "No talk found"});
             }
         }
     });
@@ -1602,7 +1622,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
      router.route('/admin/talks')
         .get(function(req,res){
-            Talks.find().populate('listSpeakers').exec(function (err, talks) {
+            Talks.find().populate('conference room').exec(function (err, talks) {
                 if (err)
                 {
                     res.json(err);
@@ -1619,29 +1639,20 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
         })
          .post(function(req, res) {
-
-             var talks = new Talks(); 		// create a new instance of the Bear model
-             talks.description = req.body.description;  // set the bears name (comes from the request)
-             talks.enable=req.body.enable ;
-             talks.hour_start= req.body.hour_start     ;
-             talks.hour_end= req.body.hour_end ;
-             talks.last_updated=req.body.last_updated;
-             talks.title=req.body.title;
-             talks.place=req.body.place;
-             talks.listSpeakers=req.body.listSpeakers;
-             talks.type=req.body.type;
-
-             talks.save(function(err) {
-                 if (err)
+             var talk = new Talks(req.body.data);
+             talk.enable = true;
+             talk.last_updated = Date.now();
+             talk.save(function (err, savedTalk) {
+                 if(err){
                      res.send(err);
-
-                 res.json({ message: 'Talk created!' });
+                 }else{
+                     res.json({ message: 'Talk created!' });
+                 }
              });
-
          });
     router.route('/admin/talks/:id')
         .get(function(req,res){
-            Talks.findById(req.params.id).populate('listSpeakers').exec(function (err, talk) {
+            Talks.findById(req.params.id).populate('speakers room conference').exec(function (err, talk) {
                 if (err)
                 {
                     logger.error(err);
@@ -1650,7 +1661,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
                 else
                 {
-                    console.log(talk);
                     res.json(talk);
                     return;
                 }
@@ -1658,49 +1668,36 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .put(function(req, res) {
 
-            Talks.findById(req.params.id, function(err, talks) {
+            var toUpdate = req.body.talk;
+            delete toUpdate._id;
 
-                if (err)
+            Talks.update({_id: req.params.id}, toUpdate, function (err, wRes) {
+                if(err){
                     res.send(err);
-
-                talks.description = req.body.description;  // set the bears name (comes from the request)
-                talks.enable=req.body.enable ;
-                talks.hour_start= req.body.hour_start     ;
-                talks.hour_end= req.body.hour_end ;
-                talks.last_updated=req.body.last_updated;
-                talks.title=req.body.title;
-                talks.place=req.body.place;
-                talks.listSpeakers=req.body.listSpeakers;
-                talks.type=req.body.type;
-                talks.save(function(err, talkSaved) {
-                    if (err){
-                        res.send(err);
-                    }else{
-                        //send notification
-                        if(req.body.notificationText){
-                            getUsersForTalk(talkSaved._id, function (err, id_users) {
-                                if(err){
-                                    res.json({ message: 'Talk updated! Error sending notification' });
+                }else{
+                    //send notification
+                    if(req.body.notification){
+                        getUsersForTalk(req.params.id, function (err, id_users) {
+                            if(err){
+                                res.json({ message: 'Talk updated! Error sending notification' });
+                            }else{
+                                if(id_users.length != 0){
+                                    sendPushNotification(req.body.notification, id_users, function (err, success) {
+                                        if(err){
+                                            res.json({ message: 'Talk updated! Error notifying users' });
+                                        }else{
+                                            res.json({ message: 'Talk updated! Notification was sent' });
+                                        }
+                                    });
                                 }else{
-                                    if(id_users.length != 0){
-                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
-                                            if(err){
-                                                res.json({ message: 'Talk updated! Error notifying users' });
-                                            }else{
-                                                res.json({ message: 'Talk updated! Notification was sent' });
-                                            }
-                                        });
-                                    }else{
-                                        res.json({ message: 'Talk updated! No users found to notify' });
-                                    }
+                                    res.json({ message: 'Talk updated! No users found to notify' });
                                 }
-                            });
-                        }else{
-                            res.json({ message: 'Talk updated! No notification sent' });
-                        }
+                            }
+                        });
+                    }else{
+                        res.json({ message: 'Talk updated! No notification sent' });
                     }
-                });
-
+                }
             });
         })
         .delete(function(req, res) {
@@ -1724,7 +1721,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
     router.route('/admin/rooms')
         .get(function(req,res){
-            Rooms.find().populate('id_talks id_conference').exec(function (err, rooms) {
+            Rooms.find().exec(function (err, rooms) {
                 if (err)
                 {
                     res.json(err);
@@ -1741,28 +1738,27 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
         })
         .post(function(req, res) {
-            var rooms2 = new Rooms();
+            var data = req.body.data;
+            console.log(data);
+
             var rooms = new Rooms();
-            rooms.room_name = req.body.room_name;
-            rooms.id_talks = req.body.id_talks;
-            rooms.qr_code = req.body.qr_code;
-            rooms.id_conference = req.body.id_conference;
-            var roomname = req.body.room_name;
-            rooms.save(function (err, saved) {
+            rooms.room_name = data.room_name;
+            rooms.qr_code = {
+                message: data.qrMessage,
+                room_id: "",
+                type: 1
+            };
+            console.log(rooms);
+            rooms.save(function (err, roomSaved) {
                 if (err)
                     res.send(err);
                 else {
                     var newQR = new Object();
-                    newQR.type = saved.qr_code.type;
-                    newQR.message = saved.qr_code.message;
-                    newQR.conference_id=mongoose.Types.ObjectId(req.body.id_conference);
-                    rooms2 = saved;
-                    console.log(roomname);
-                    console.log(rooms2);
-                    newQR.room_id = saved._id;
-                    rooms2.qr_code = newQR;
-                    console.log(rooms2);
-                    rooms2.save(function (err) {
+                    newQR.type = roomSaved.qr_code.type;
+                    newQR.message = roomSaved.qr_code.message;
+                    newQR.room_id = mongoose.Types.ObjectId(roomSaved._id.toString());
+                    roomSaved.qr_code = newQR;
+                    roomSaved.save(function (err) {
                         if (err)
                             res.send(err);
                         else
@@ -1770,12 +1766,10 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     });
                 }
             });
-
-
         });
     router.route('/admin/rooms/:id')
         .get(function(req,res){
-            Rooms.findById(req.params.id).populate('id_talks id_conference').exec(function (err, room) {
+            Rooms.findById(req.params.id).exec(function (err, room) {
                 if (err)
                 {
                     logger.error(err);
@@ -1792,29 +1786,21 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .put(function(req, res) {
 
-            Rooms.findById(req.params.id, function(err, rooms) {
-
-                if (err)
+            var room = req.body.room;
+            console.log(room);
+            Rooms.update({_id: room._id}, room,  function (err, writeConcern) {
+                if(err){
+                    console.log(err);
                     res.send(err);
-
-                rooms.room_name=req.body.room_name;
-                rooms.id_talks=req.body.id_talks;
-                rooms.id_conference = mongoose.Types.ObjectId(req.body.id_conference);
-                rooms.qr_code.room_id = req.body.qr_code.room_id;
-                rooms.qr_code.conference_id = req.body.qr_code.conference_id;
-                console.log(rooms.qr_code.conference_id);
-                rooms.save(function(err, roomSaved) {
-                    if (err){
-                        res.send(err);
-                    }else{
-                        //send notification
-                        if(req.body.notificationText){
-                            getUsersForConference(roomSaved.id_conference, function (err, id_users) {
+                }else{
+                    //send notification
+                        if(req.body.notification){
+                            getUsersForRoom(room._id, function (err, id_users) {
                                 if(err){
                                     res.json({ message: 'Room updated! Error sending notification' });
                                 }else{
                                     if(id_users.length != 0){
-                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
+                                        sendPushNotification(req.body.notification, id_users, function (err, success) {
                                             if(err){
                                                 res.json({ message: 'Room updated! Error notifying users' });
                                             }else{
@@ -1829,9 +1815,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         }else{
                             res.json({ message: 'Room updated! No notification sent' });
                         }
-                    }
-                });
-
+                }
             });
         })
         .delete(function(req, res) {

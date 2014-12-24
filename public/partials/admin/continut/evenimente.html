@@ -1,25 +1,19 @@
 <div class="container-fluid">
     <div class="well">
         <div class="row">
-            <div class="col-xs-2"><h3>Gestionare Evenimente</h3></div>
-            <div class="col-xs-2 pull-right">
-                <a ui-sref="continut.adaugaEveniment" class="btn btn-info pull-right margintop20px" id="add-event"><i class="glyphicon glyphicon-plus-sign"></i> Adauga eveniment</a>
+            <div class="col-xs-8"><h3>Gestionare Evenimente</h3></div>
+            <div class="col-xs-2">
+                <a ui-sref="continut.adaugaConferinta" class="btn btn-info pull-right margintop20px"><i class="glyphicon glyphicon-plus-sign"></i> Adauga conferinta</a>
             </div>
-            <div class="col-xs-2 pull-right">
-                <a ui-sref="continut.adaugaConferinta" class="btn btn-info pull-right margintop20px" id="add-event"><i class="glyphicon glyphicon-plus-sign"></i> Adauga conferinta</a>
-            </div>
-            <div class="col-xs-2 pull-right">
-                <a ui-sref="continut.adaugaTalk" class="btn btn-info pull-right margintop20px" id="add-event"><i class="glyphicon glyphicon-plus-sign"></i> Adauga talk</a>
-            </div>
-            <div class="col-xs-2 pull-right">
-                <a ui-sref="continut.adaugaSpeaker" class="btn btn-info pull-right margintop20px" id="add-event"><i class="glyphicon glyphicon-plus-sign"></i> Adauga speaker</a>
-            </div>
-            <div class="col-xs-2 pull-right">
-                <a ui-sref="continut.adaugaRoom" class="btn btn-info pull-right margintop20px" id="add-event"><i class="glyphicon glyphicon-plus-sign"></i> Adauga room</a>
+            <div class="col-xs-2">
+                <a ui-sref="continut.adaugaSpeaker" class="btn btn-info pull-right margintop20px"><i class="glyphicon glyphicon-plus-sign"></i> Adauga speaker</a>
             </div>
         </div>
     </div>
-    <h3>Evenimente</h3>
+    <div class="titleAndButton">
+        <div><h3>Evenimente</h3></div>
+        <div><a ui-sref="continut.adaugaEveniment" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
+    </div>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="eveniment in $data">
             <td data-title="'Denumire'" filter="{ 'name': 'text' }" sortable="'name'">{{eveniment.name}}</td>
@@ -46,27 +40,34 @@
             </td>
         </tr>
     </table>
-    <hr><h3>Camere</h3>
+    <div class="titleAndButton">
+        <div><h3>Camere</h3></div>
+        <div><a ui-sref="continut.adaugaRoom" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
+    </div>
     <table ng-table="tableParams2" show-filter="true" class="table table-bordered">
         <tr ng-repeat="rooms in $data">
             <td data-title="'Room Name'" filter="{ 'room_name': 'text' }" sortable="'room_name'">{{rooms.room_name}}</td>
-            <td data-title="'Talks'" filter="{ 'rooms.id_talks.title': 'text' }" sortable="'rooms.id_talks.title'">
-                <ul style="list-style: none">
-                <li class="margintop20px" ng-repeat="talks in rooms.id_talks | orderBy: 'title'">{{talks.title}}&nbsp;
-                            <span class="btn-group-sm pull-right"  role="group" style="display: flex">
-                                <button class="btn btn-danger btn-sm" ui-sref="continut.evenimente.deleteTalk({id: talks._id})"><i class="glyphicon glyphicon-trash"></i></button>
-                                <button class="btn btn-info btn-sm" ui-sref="continut.updateTalk({id: talks._id})"><i class="glyphicon glyphicon-cog"></i></button>
-                            </span>
-                    <br />
-                    <br />
-                </li>
-
-            </ul>
-            </td>
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
                     <button class="btn btn-danger" ui-sref="continut.deleteRoom({id:rooms._id})"><i class="glyphicon glyphicon-trash"></i></button>
                     <button class="btn btn-info" ui-sref="continut.updateRoom({id:rooms._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div class="titleAndButton">
+        <div><h3>Talk-uri</h3></div>
+        <div><a ui-sref="continut.adaugaTalk" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
+    </div>
+    <table ng-table="tableParamsTalks" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="talk in $data">
+            <td data-title="'Title'" filter="{ 'title': 'text' }" sortable="'title'">{{talk.title}}</td>
+            <td data-title="'Conferinta'" filter="{ 'conference.title': 'text' }" sortable="'conference.title'">{{talk.conference.title}}</td>
+            <td data-title="'Camera'" filter="{ 'room.room_name': 'text' }" sortable="'room.room_name'">{{talk.room.room_name}}</td>
+            <td>
+                <div class="btn-group-sm"  role="group" style="display: flex">
+                    <button class="btn btn-danger" ui-sref="continut.evenimente.deleteTalk({id: talk._id})"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button class="btn btn-info" ui-sref="continut.updateTalk({id: talk._id})"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>
         </tr>
