@@ -10,7 +10,6 @@
 cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,ngTableParams,$filter){
     EventsAdminService.getAll.query().$promise.then(function(result){
         var events = result;
-        console.log(result);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -47,6 +46,29 @@ cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAd
             getData: function($defer, params) {
 
                 var orderedData = $filter('orderBy')(($filter('filter')(listRooms, params.filter())), params.orderBy());
+
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
+        });
+    });
+
+    EventsAdminService.getAllTalks.query().$promise.then(function(resp){
+        console.log(resp);
+        $scope.talks=resp;
+        $scope.tableParamsTalks = new ngTableParams({
+            page: 1,            // show first page
+            count: 10,          // count per page
+            sorting: {
+                title: 'asc'     // initial sorting
+            },
+            filter: {
+                title: ''       // initial filter
+            }
+        }, {
+            total: resp.length, // length of data
+            getData: function($defer, params) {
+
+                var orderedData = $filter('orderBy')(($filter('filter')($scope.talks, params.filter())), params.orderBy());
 
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             }

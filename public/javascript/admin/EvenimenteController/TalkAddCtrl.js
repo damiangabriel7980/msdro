@@ -9,18 +9,17 @@ cloudAdminControllers.controller('TalkAddCtrl', ['$scope','$rootScope' ,'EventsA
         $scope.speakers=resp;
         $scope.selectedSpeaker=$scope.speakers[0];
     });
-    $scope.newTalk={
-        description:  "",
-        enable:        "enabled",
-        hour_start: "",
-        hour_end:        "",
-        last_updated: new Date(),
-        title:      "",
-        place:       "",
-        listSpeakers: $scope.groupSpeakers,
-        type:""
-    };
+    EventsAdminService.getAllConferences.query().$promise.then(function (resp) {
+        $scope.conferences = resp;
+        $scope.selectedConference = resp[0];
+    });
+    EventsAdminService.getAllRoom.query().$promise.then(function (resp) {
+        $scope.rooms = resp;
+        $scope.selectedRoom = resp[0];
+    });
+
     $scope.groupSpeakers=[];
+
     var findSpeaker = function (id) {
         var index = -1;
         var i=0;
@@ -57,22 +56,22 @@ cloudAdminControllers.controller('TalkAddCtrl', ['$scope','$rootScope' ,'EventsA
         var id_speakers=[];
         for(var i=0;i<$scope.groupSpeakers.length;i++)
             id_speakers.push($scope.groupSpeakers[i]._id);
-        $scope.newTalk.listSpeakers=id_speakers;
+        $scope.newTalk.speakers=id_speakers;
 
-        $scope.utc1 = new Date($scope.newTalk.hour_start);
-        $scope.utc2 = new Date($scope.newTalk.hour_end);
-        $scope.newTalk.hour_start=$scope.utc1;
-        $scope.newTalk.hour_end=$scope.utc2;
-        $scope.newTalk.description=tinyMCE.activeEditor.getContent();
+        $scope.newTalk.hour_start=new Date($scope.hour_start);
+        $scope.newTalk.hour_end=new Date($scope.hour_end);
+
+        $scope.newTalk.conference = $scope.selectedConference._id;
+        $scope.newTalk.room = $scope.selectedRoom._id;
+
         console.log($scope.newTalk);
         if($scope.newTalk){
-            EventsAdminService.getAllTalks.save($scope.newTalk).$promise.then(function(result){
+            EventsAdminService.getAllTalks.save({data: $scope.newTalk}).$promise.then(function(result){
                 if(result.message)
                     growl.addSuccessMessage(result.message);
                 else
                     growl.addWarnMessage(result);
             });
-            $scope.newTalk = {};
         }
     };
     $scope.okk=function(){

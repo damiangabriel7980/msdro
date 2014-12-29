@@ -6,13 +6,15 @@ var Schema			= mongoose.Schema;
 
 var TalksSchema		= new Schema({
     description:  String,
-    enable:         String,
+    enable:         Boolean,
     hour_start: Date,
     hour_end:        Date,
     last_updated: Date,
     title:      String,
     place:       String,
-    listSpeakers:[{type: Schema.Types.ObjectId,ref: 'speakers'}],
+    conference:    {type: Schema.Types.ObjectId, ref: 'conferences'},
+    room:    {type: Schema.Types.ObjectId, ref: 'rooms'},
+    speakers: [{type: Schema.Types.ObjectId,ref: 'speakers'}],
     type: Number
 });
 

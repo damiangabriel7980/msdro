@@ -34,7 +34,7 @@
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",
-    "start": "mandrillKey='XKp6n_7NhHB5opUWo0WWmw' AWS_ACCESS_KEY_ID='AKIAIM6KJKTQ3DODHQPA' AWS_SECRET_ACCESS_KEY='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' amazonBucket='msddev-test' node server.js"
+    "start": "pushServerAddress='https://notif.qualitance.com' mandrillKey='XKp6n_7NhHB5opUWo0WWmw' AWS_ACCESS_KEY_ID='AKIAIM6KJKTQ3DODHQPA' AWS_SECRET_ACCESS_KEY='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' amazonBucket='msddev-test' node server.js"
   },
   "devDependencies": {
     "gulp": "^3.8.8",

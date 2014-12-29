@@ -5,6 +5,8 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,growl){
+    $scope.notificationCheck = false;
+
     EventsAdminService.deleteOrUpdateEvents.getEvent({id:$stateParams.id}).$promise.then(function(result2){
         $scope.grupeUser=[];
 
@@ -125,6 +127,9 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
             id_confs.push($scope.ConfEvents[i]._id)
         $scope.newEvent.groupsID = id_groups;
         $scope.newEvent.listconferences = id_confs;
+        if($scope.notificationCheck){
+            $scope.newEvent.notificationText = $scope.notificationText;
+        }
         console.log($scope.newEvent);
         if ($scope.newEvent) {
             EventsAdminService.deleteOrUpdateEvents.update({id: $stateParams.id}, $scope.newEvent).$promise.then(function(result){
@@ -133,7 +138,6 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
                 else
                     growl.addWarnMessage(result);
             });
-            tinyMCE.remove();
         }
     };
 

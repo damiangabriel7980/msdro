@@ -2,7 +2,9 @@
 
 var sessionSecret = "yours3cr3tisveryveryvvverysafew1thmee";
 var tokenSecret = "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss";
-var mandrillKey=process.env.mandrillKey;
+var mandrillKey = process.env.mandrillKey;
+var pushServerAddr = process.env.pushServerAddress;
+
 // set up ======================================================================
 // get all the tools we need
 var express  = require('express');
@@ -45,7 +47,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 //token auth ===================================================================
-require('./config/tokenAuth')(app,  logger, tokenSecret);
+require('./config/tokenAuth')(app,  logger, tokenSecret, pushServerAddr);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -53,7 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('./app/routes.js')(app, email, logger, passport); // load our routes and pass in our app and fully configured passport
 
 // api ======================================================================
-require('./app/api.js')(app, sessionSecret, email, logger, express.Router()); // load our private routes and pass in our app and session secret
+require('./app/api.js')(app, sessionSecret, email, logger, pushServerAddr, express.Router()); // load our private routes and pass in our app and session secret
 require('./app/apiPublic.js')(app, email, express.Router()); // load our public routes and pass in our app
 require('./app/apiConferences.js')(app, email, logger, tokenSecret, express.Router());
 
