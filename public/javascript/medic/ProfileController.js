@@ -42,36 +42,26 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 //make sure a file was actually loaded
                 if($files[0]){
                     console.log($files);
+                    console.log(tmppath);
                     var extension = $files[0].name.split('.').pop();
                     var key2 = "user/"+$scope.userData._id+"/img"+$scope.userData._id+"."+extension;
+                    var reader = new FileReader();
+                    var y = reader.readAsDataURL($files[0]);
+                    // Closure to capture the file information.
+                    ProfileService.saveUserPhoto.save({data:{Body: y, extension: extension}}).$promise.then(function (message) {
+                        if(message){
+                            $scope.uploadAlert.type = message.type;
+                            $scope.uploadAlert.message = message.message;
+                            $scope.uploadAlert.newAlert = true;
+                            $scope.$apply();
 
-                    //if there already is a logo, delete it. Then upload new
-                    ProfileService.saveUserPhoto.save({data:{Body: $files[0], extension: extension}}).$promise.then(function (message) {
-                    if(message){
-                        $upload.upload({
-                            url: $rootScope.amazonBucket ,
-                            method: 'POST',
-                            data : {
-                                key: key2, // the key to store the file on S3, could be file name or customized
-                                acl: 'public-read-write', // sets the access to the uploaded file in the bucker: private or public
-                                "Content-Type": $files[0].type,
-                                filename: $files[0].name // this is needed for Flash polyfill IE8-9
-                            },
-                            file: $files[0]
-                        }).progress(function(evt) {
-                            console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ $files[0].name);
-                        }).success(function(dataNew, status, headers, config) {
-                            // file is uploaded successfully
-                            console.log('file ' + $files[0].name + 'is uploaded successfully. Response: ' + dataNew);
-                        });
-                    $scope.uploadAlert.type = message.type;
-                    $scope.uploadAlert.message = message.message;
-                    $scope.uploadAlert.newAlert = true;
-                    $scope.$apply();
+                        }
 
-                    }
+                    });
 
-                            });
+                    // Read in the image file as a data URL.
+
+
 
 
                     }

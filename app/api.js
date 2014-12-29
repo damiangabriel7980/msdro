@@ -29,7 +29,7 @@ var request = require('request');
 
 var AWS = require('aws-sdk');
 var fs = require('fs');
-
+var request = require('request');
 //form sts object from environment variables. Used for retrieving temporary credentials to front end
 var sts = new AWS.STS();
 //configure credentials for use on server only; assign credentials based on role (never use master credentials)
@@ -69,26 +69,22 @@ var deleteObjectS3 = function (key, callback) {
 };
 
 var addObjectS3 = function(key,body,callback){
-
-        var base64data =  new Buffer(body.name, body.size);
-    console.log(base64data);
-        fs.readFile(body,function(err,data1){
-           if(err)
-           {
-               console.log(err);
-               res.json(err);
-           }
-            else
-           {
-               s3.putObject({Bucket: amazonBucket,Key: key, Body:base64data, ACL:'public-read-write'}, function (err, data2) {
-                   callback(err, data2);
-               });
-           }
-        });
-
-
-
-
+    //var bodyNew = fs.createReadStream(body);
+    s3.putObject({Bucket: amazonBucket,Key: key, Body:body, ACL:'public-read-write'}, function (err, data2) {
+        callback(err, data2);
+    });
+    //console.log(base64data);
+    //    fs.readFile(body,function(err,data1){
+    //       if(err)
+    //       {
+    //           console.log(err);
+    //           res.json(err);
+    //       }
+    //        else
+    //       {
+    //
+    //       }
+    //    });
 };
 
 //================================================================================== useful db administration functions
@@ -484,16 +480,15 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                 res.json({"type":"danger","message":"Mesaj de eroare 6"});
                             else {
                                 console.log(data.Body);
-                                //addObjectS3(key, data.Body, function (err, resp2) {
-                                //    if (err)
-                                //    {
-                                //        console.log(err);
-                                //        res.json(err);
-                                //
-                                //    }
-                                //    else
-                                //        res.json({"type":"success","message":"Mesaj de succes 2!"});
-                                //});
+                                addObjectS3(key, data.Body, function (err, resp2) {
+                                    if (err)
+                                    {
+                                        console.log(err);
+                                        res.json(err);
+                                    }
+                                    else
+                                        res.json({"type":"success","message":"Mesaj de succes 2!"});
+                                });
                             }
                         })
                     }
@@ -1471,8 +1466,8 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             speaker.save(function(err) {
             if (err)
                 res.send(err);
-
-            res.json({ message: 'Speaker created!' });
+            else
+                res.json({ message: 'Speaker created!' });
         });
 
     });
@@ -1571,6 +1566,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             conferences.last_updated= req.body.last_updated ;
             conferences.description=req.body.description;
             conferences.qr_code=req.body.qr_code;
+            conferences.topicsID=req.body.topicsID;
             conferences.image_path=req.body.image_path;
             conferences.save(function(err,saved) {
             if (err)
@@ -1625,7 +1621,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     conferences.end_date= req.body.end_date;
                     conferences.last_updated= req.body.last_updated;
                     conferences.description=req.body.description;
-                    conferences.listRooms=req.body.listRooms;
+                    conferences.topicsID=req.body.topicsID;
                     conferences.qr_code=req.body.qr_code;
                     conferences.save(function(err, conferenceSaved) {
                         if (err){
@@ -1672,28 +1668,18 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             res.send(err);
                         else
                         {
-                            Rooms.findOne({id_conference:id}).exec(function(err,resp){
-                                resp.id_conference=null;
-                                resp.save(function(err,rep){
-                                    if(err)
-                                        res.send(err);
-                                    else {
-                                        Conferences.findOne({_id: id}, function (err, resp) {
-                                            if (resp) {
-                                                resp.remove(function (err, cont) {
-                                                    if (err)
-                                                        res.send(err);
-                                                    else
-                                                        res.json({message: 'Successfully deleted!'});
-                                                });
-                                            }
-                                            else
-                                                res.send(err);
-                                        });
-                                    }
-                                })
+                            Conferences.findOne({_id: id}, function (err, resp) {
+                                if (resp) {
+                                    resp.remove(function (err, cont) {
+                                        if (err)
+                                            res.send(err);
+                                        else
+                                            res.json({message: 'Successfully deleted!'});
+                                    });
+                                }
+                                else
+                                    res.send(err);
                             });
-
                         }
 
 
@@ -1718,7 +1704,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
      router.route('/admin/talks')
         .get(function(req,res){
-            Talks.find().populate('conference room').exec(function (err, talks) {
+            Talks.find().populate('conference room speakers').exec(function (err, talks) {
                 if (err)
                 {
                     res.json(err);
@@ -1799,19 +1785,11 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .delete(function(req, res) {
             var id = req.params.id;
             console.log(id);
-            disconnectAllEntitiesFromEntity(Rooms, "id_talks", id, function (err, result){
-                if(err)
+            Talks.remove({_id: id}, function(err,cont) {
+                if (err)
                     res.send(err);
                 else
-                {
-                    Talks.remove({_id: id}, function(err,cont) {
-                        if (err)
-                            res.send(err);
-                        else
-                            res.json({ message: 'Successfully deleted!' });
-                    });
-                }
-
+                    res.json({ message: 'Successfully deleted!' });
             });
 
         });
@@ -1915,12 +1893,19 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         })
         .delete(function(req, res) {
-            Rooms.remove({_id: req.params.id}, function(err,cont) {
-                if (err)
+            var id = req.params.id;
+            disconnectAllEntitiesFromEntity(Talks, "room", id, function (err, result){
+                if(err)
                     res.send(err);
+                else {
+                    Rooms.remove({_id: req.params.id}, function (err, cont) {
+                        if (err)
+                            res.send(err);
+                        else
+                            res.json({message: 'Successfully deleted!'});
+                    });
+                }});
 
-                res.json({ message: 'Successfully deleted!' });
-            });
         });
     router.route('/admin/multimedia')
 
