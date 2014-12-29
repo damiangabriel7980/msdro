@@ -42,22 +42,26 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 //make sure a file was actually loaded
                 if($files[0]){
                     console.log($files);
-                    console.log(tmppath);
                     var extension = $files[0].name.split('.').pop();
                     var key2 = "user/"+$scope.userData._id+"/img"+$scope.userData._id+"."+extension;
-                    var reader = new FileReader();
-                    var y = reader.readAsDataURL($files[0]);
                     // Closure to capture the file information.
-                    ProfileService.saveUserPhoto.save({data:{Body: y, extension: extension}}).$promise.then(function (message) {
-                        if(message){
-                            $scope.uploadAlert.type = message.type;
-                            $scope.uploadAlert.message = message.message;
-                            $scope.uploadAlert.newAlert = true;
-                            $scope.$apply();
+                    var reader = new FileReader();
 
-                        }
+                    reader.onloadend = function(event){
+                        $scope.newImage = event.target.result;
+                        var b64 = $scope.newImage.split("base64,")[1];
+                        ProfileService.saveUserPhoto.save({data:{Body: b64, extension: extension}}).$promise.then(function (message) {
+                            if(message){
+                                $scope.uploadAlert.type = message.type;
+                                $scope.uploadAlert.message = message.message;
+                                $scope.uploadAlert.newAlert = true;
 
-                    });
+
+                            }
+
+                        });
+                    };
+                    reader.readAsDataURL($files[0]);
 
                     // Read in the image file as a data URL.
 

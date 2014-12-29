@@ -37,8 +37,8 @@ require('./config/passport')(passport, logger); // pass passport for configurati
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
-app.use(bodyParser.json()); // get information from html forms
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({limit: '50mb'})); // get information from html forms
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
 app.set('view engine', 'ejs'); // set up ejs for templating
 // required for passport
 app.use(session({ secret: sessionSecret })); // session secret

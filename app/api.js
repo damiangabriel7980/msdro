@@ -69,22 +69,11 @@ var deleteObjectS3 = function (key, callback) {
 };
 
 var addObjectS3 = function(key,body,callback){
-    //var bodyNew = fs.createReadStream(body);
-    s3.putObject({Bucket: amazonBucket,Key: key, Body:body, ACL:'public-read-write'}, function (err, data2) {
+    var bodyNew = new Buffer(body,'base64');
+    s3.upload({Bucket: amazonBucket,Key: key, Body:bodyNew, ACL:'public-read-write'}, function (err, data2) {
         callback(err, data2);
     });
-    //console.log(base64data);
-    //    fs.readFile(body,function(err,data1){
-    //       if(err)
-    //       {
-    //           console.log(err);
-    //           res.json(err);
-    //       }
-    //        else
-    //       {
-    //
-    //       }
-    //    });
+
 };
 
 //================================================================================== useful db administration functions
