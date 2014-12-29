@@ -184,6 +184,34 @@ ul.products li {
 }
 .carousel-container {
   margin-bottom: 1%;
+  overflow-x: hidden;
+}
+.carousel-container .carouselSlide {
+  height: 100%;
+  position: relative;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.carousel-container .carouselSlide .cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0);
+}
+.carousel-container .carouselSlide .content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
 }
 .btn-more-news {
   background-color: transparent;
@@ -556,14 +584,6 @@ ul.products li {
   margin: 0 auto;
   overflow: visible!important;
 }
-.carousel-container .main-carousel .unselectable-image {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  user-drag: none;
-}
 .carousel-container .carousel-controll .carousel-controll-element {
   float: left;
   margin: 5px;
@@ -582,4 +602,12 @@ ul.products li {
   position: absolute;
   top: 55%;
   left: 3%;
+}
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
