@@ -38,20 +38,4 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
 
     $scope.content = ContentService.getByType.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null});
 
-    setTimeout(function(){$("#footer").css({'margin-top': 0});
-        var margin = Math.floor($(window).outerHeight() - $(".articlesStyles").outerHeight() - $('#footer').outerHeight() - 80);
-        $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});},1000);
-
-    $(document).on('ajaxComplete', function () {
-        $("#footer").css({'margin-top': 0});
-        var margin = Math.floor($(window).outerHeight() - $(".articlesStyles").outerHeight() - $('#footer').outerHeight() - 80);
-        $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});
-    });
-    $(window).on('resize', function () {
-        $scope.screenW = $(window).width();
-        $("#footer").css({'margin-top': 0});
-        var margin = Math.floor($(window).outerHeight() - $(".articlesStyles").outerHeight() - $('#footer').outerHeight() - 80);
-        $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});
-    });
-
 }]);
