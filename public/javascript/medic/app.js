@@ -189,6 +189,7 @@ cloudAdminApp.run(
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
+            $rootScope.MSDlogo = $rootScope.pathAmazonResources+"msd-logo.png";
 
             //profile modal
             $rootScope.showProfile = function(){

@@ -603,6 +603,45 @@ ul.products li {
   top: 55%;
   left: 3%;
 }
+.navbar-fixed-top {
+  height: 70px;
+  padding-top: 10px;
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+.navbar-fixed-top .navbar-brand {
+  padding: 5px 15px;
+}
+.navbar-fixed-top .specialGroupDropdown {
+  padding: 5px 15px;
+}
+.navbar-fixed-top .specialGroupDropdown img {
+  height: 35px;
+}
+.navbar-fixed-top .navbar-nav > .active > a {
+  background-color: #ffffff;
+  color: #000000;
+}
+.navbar-fixed-top .navbar-nav > .active > a:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+.navbar-fixed-top .navbar-nav > .active > a:focus {
+  background-color: #ffffff;
+  color: #000000;
+}
+.navbar-fixed-top .navbar-nav > .open > a {
+  background-color: #ffffff;
+  color: #000000;
+}
+.navbar-fixed-top .navbar-nav > .open > a:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+.navbar-fixed-top .navbar-nav > .open > a:focus {
+  background-color: #ffffff;
+  color: #000000;
+}
 .unselectable {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
