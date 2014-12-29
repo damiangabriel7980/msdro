@@ -36,7 +36,8 @@
     "angular-carousel": "~0.3.7",
     "angular-pdf": "~0.3.3",
     "angular-qr": "latest",
-    "angular-bootstrap-datetimepicker": "latest"
+    "angular-bootstrap-datetimepicker": "latest",
+    "socket.io-client": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
