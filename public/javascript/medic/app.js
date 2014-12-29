@@ -179,7 +179,6 @@ cloudAdminApp.run(
             // to active whenever 'contacts.list' or one of its decendents is active.
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
-            $rootScope.footerBox=$sce.trustAsResourceUrl('partials/medic/widgets/_footer.html');
             //amazon service paths
             $rootScope.amazonBucket = sessionStorage.defaultAmazonBucket;
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/"+$rootScope.amazonBucket+"/";
