@@ -26,6 +26,8 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var mongoose = require('mongoose');
 var async = require('async');
 var AWS = require('aws-sdk');
+var fs = require('fs');
+
 //form sts object from environment variables. Used for retrieving temporary credentials to front end
 var sts = new AWS.STS();
 //configure credentials for use on server only; assign credentials based on role (never use master credentials)
@@ -62,6 +64,29 @@ var deleteObjectS3 = function (key, callback) {
     s3.deleteObject({Bucket: amazonBucket, Key: key}, function (err, data) {
         callback(err, data);
     });
+};
+
+var addObjectS3 = function(key,body,callback){
+
+        var base64data =  new Buffer(body.name, body.size);
+    console.log(base64data);
+        fs.readFile(body,function(err,data1){
+           if(err)
+           {
+               console.log(err);
+               res.json(err);
+           }
+            else
+           {
+               s3.putObject({Bucket: amazonBucket,Key: key, Body:base64data, ACL:'public-read-write'}, function (err, data2) {
+                   callback(err, data2);
+               });
+           }
+        });
+
+
+
+
 };
 
 //================================================================================== useful db administration functions
@@ -320,6 +345,78 @@ module.exports = function(app, sessionSecret, email, logger, router) {
                     res.json(data);
                 }
             });
+        });
+
+    router.route('/user/addPhoto')
+        .post(function(req,res){
+            var data = req.body.data;
+            var key = "user/"+req.user._id+"/img"+req.user._id+"."+data.extension;
+            console.log(req.user.image_path.length);
+            if(req.user.image_path.length!=0) {
+                deleteObjectS3(req.user.image_path, function (err, resp1) {
+                    if (err) {
+                        console.log(err);
+                        res.json({"type":"danger","message":"Mesaj de eroare 1"});
+
+                    }
+                    else {
+                        User.findOne({_id: req.user._id}).exec(function (err, response) {
+                            if (err) {
+                                console.log(err);
+                                res.json({"type":"danger","message":"Mesaj de eroare 2"});
+                            }
+                            else {
+                                response.image_path = key;
+                                response.save(function (err, info) {
+                                    if (err)
+                                        res.json({"type":"danger","message":"Mesaj de eroare 3"});
+                                    else {
+                                        addObjectS3(key, data.Body, function (err, resp2) {
+                                            if (err)
+                                            {
+                                                console.log(err);
+                                                res.json({"type":"danger","message":"Mesaj de eroare 4"});
+
+                                            }
+                                            else
+                                                res.json({"type":"success","message": "Succes uploading the new file!"})
+                                        });
+                                    }
+                                })
+                            }
+                        })
+                    }
+                });
+            }
+            else
+            {
+                User.findOne({_id: req.user._id}).exec(function (err, response) {
+                    if (err) {
+                        console.log(err);
+                        res.json({"type":"danger","message":"Mesaj de eroare 5"});
+                    }
+                    else {
+                        response.image_path = key;
+                        response.save(function (err, data2) {
+                            if (err)
+                                res.json({"type":"danger","message":"Mesaj de eroare 6"});
+                            else {
+                                console.log(data.Body);
+                                //addObjectS3(key, data.Body, function (err, resp2) {
+                                //    if (err)
+                                //    {
+                                //        console.log(err);
+                                //        res.json(err);
+                                //
+                                //    }
+                                //    else
+                                //        res.json({"type":"success","message":"Mesaj de succes 2!"});
+                                //});
+                            }
+                        })
+                    }
+                });
+            }
         });
 
     router.route('/admin/utilizatori/grupuri')
@@ -1972,6 +2069,7 @@ module.exports = function(app, sessionSecret, email, logger, router) {
         .get(function(req, res) {
             var user = req.user;
             var userCopy = {};
+            userCopy['id']=user._id;
             userCopy['name'] = user.name;
             userCopy['image_path'] = user.image_path;
             userCopy['phone'] = user.phone;
@@ -2435,15 +2533,16 @@ module.exports = function(app, sessionSecret, email, logger, router) {
         });
     router.route('/multimedia/multimediaByArea/:id')
         .get(function(req,res){
-            var findObj = {};
-            if(req.params.id!=0) findObj = {'therapeutic-areasID': {$in: [req.params.id]}};
+            var findObj = {groupsID: {$in: req.user.groupsID}};
+            if(req.params.id!=0) findObj['therapeutic-areasID']= {$in: [req.params.id]};
             //find all by area
             if(req.user.groupsID.length==0)
             {
                 res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}])
             }
             else {
-                Multimedia.find(findObj, {groupsID: {$in: req.user.groupsID}}, function (err, multimedia) {
+                console.log(findObj);
+                Multimedia.find(findObj, function (err, multimedia) {
                     if (err) {
                         console.log(err);
                         res.json(err);

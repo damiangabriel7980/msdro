@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '$modalInstance', 'ProfileService', 'therapeuticAreaService' , '$sce',function($scope, $rootScope, $modalInstance, ProfileService, therapeuticAreaService, $sce){
+cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '$modalInstance', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload',function($scope, $rootScope, $modalInstance, ProfileService, therapeuticAreaService, $sce,$upload){
 
     var imagePre = $rootScope.pathAmazonDev;
 
@@ -15,14 +15,15 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
 
         $scope.userData = resp;
         console.log(resp);
-
+        $scope.statusAlert = {newAlert:false, type:"", message:""};
+        $scope.uploadAlert = {newAlert:false, type:"", message:""};
         var allNames = resp.name.split(" ");
         $scope.firstName = allNames[0];
         allNames.splice(0,1);
         $scope.lastName = allNames.join(" ");
         $scope.phone = resp.phone;
         $scope.newsletter = resp.subscription == 1;
-        $scope.image = imagePre + resp.image_path;
+        $scope.imageUser = imagePre + resp.image_path;
         $scope.userTherapeuticAreas = resp['therapeutic-areasID']?resp['therapeutic-areasID']:[];
         if(resp.job){
             $scope.job = resp.job[0];
@@ -37,7 +38,44 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 job_address: ""
             };
         }
+        $scope.fileSelected = function($files, $event){
+                //make sure a file was actually loaded
+                if($files[0]){
+                    console.log($files);
+                    var extension = $files[0].name.split('.').pop();
+                    var key2 = "user/"+$scope.userData._id+"/img"+$scope.userData._id+"."+extension;
 
+                    //if there already is a logo, delete it. Then upload new
+                    ProfileService.saveUserPhoto.save({data:{Body: $files[0], extension: extension}}).$promise.then(function (message) {
+                    if(message){
+                        $upload.upload({
+                            url: $rootScope.amazonBucket ,
+                            method: 'POST',
+                            data : {
+                                key: key2, // the key to store the file on S3, could be file name or customized
+                                acl: 'public-read-write', // sets the access to the uploaded file in the bucker: private or public
+                                "Content-Type": $files[0].type,
+                                filename: $files[0].name // this is needed for Flash polyfill IE8-9
+                            },
+                            file: $files[0]
+                        }).progress(function(evt) {
+                            console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ $files[0].name);
+                        }).success(function(dataNew, status, headers, config) {
+                            // file is uploaded successfully
+                            console.log('file ' + $files[0].name + 'is uploaded successfully. Response: ' + dataNew);
+                        });
+                    $scope.uploadAlert.type = message.type;
+                    $scope.uploadAlert.message = message.message;
+                    $scope.uploadAlert.newAlert = true;
+                    $scope.$apply();
+
+                    }
+
+                            });
+
+
+                    }
+              };
         //select user's county and city
 
         $scope.county['selected'] = {};

@@ -33,6 +33,9 @@ cloudAdminServices.factory('ProfileService', ['$resource', function($resource){
         uploadProfile: $resource('api/userProfile/:newData', {}, {
             save: { method: 'POST'}
         }),
+        saveUserPhoto: $resource('api/user/addPhoto/:data',{},{
+            save: {method:'POST'}
+        }),
         uploadJob: $resource('api/userJob/:job', {}, {
             save: { method: 'POST'}
         }),

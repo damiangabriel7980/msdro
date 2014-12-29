@@ -31,8 +31,16 @@
                                 <label for="abonat">Abonat la newsletter</label>
                                 <input type="checkbox" id="abonat" ng-model="newsletter" ng-checked="newsletter"/>
                             </div>
-                            <div class="col-md-12">
-                                <a class="btn btn-default"><i class="glyphicon glyphicon-camera"></i>&nbsp;Schimba fotografia</a>
+                            <div class="col-md-6" style="padding: 0;">
+                                <div class="col-md-12">
+                                    <img no-cache-src="{{image}}" ng-if="imageUser" style="width:100px;">
+                                </div>
+                                <div class="col-md-12">
+                                    <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o poza</button>
+                                </div>
+                                <div class="col-md-12">
+                                    <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
+                                </div>
                             </div>
                         </div>
                     </div>
