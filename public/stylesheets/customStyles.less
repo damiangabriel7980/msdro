@@ -77,16 +77,7 @@
     cursor: pointer;
   }
 }
-#footer {
-  background: #009d97;
-  padding: 5px 0;
-  width: 100%;
-  clear: both;
-  height: 35px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-}
+
 ul.products li {
   display: inline-block !important;
   vertical-align: top;
@@ -101,13 +92,6 @@ ul.products li {
 .list li::selection{
   background-color: #3ADF00;
 }
-.rotate0 {-webkit-transform: rotate(0deg); transform: rotate(0deg); }
-.rotate90 {-webkit-transform: rotate(90deg); transform: rotate(90deg); }
-.rotate180 {-webkit-transform: rotate(180deg); transform: rotate(180deg); }
-.rotate270 {-webkit-transform: rotate(270deg); transform: rotate(270deg); }
-.growl{top:auto !important;}
-.margintop20px{margin-top:20px !important; }
-.marginbottom0{margin-bottom: 0px;}
 .specialSublist{list-style: none;display: inline;}
 
 
@@ -321,13 +305,6 @@ ul.products li {
   color: black;
 }
 
-.add-on .input-group-btn > .btn {
-  border-left-width:0px;
-  left:-2px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-
 .view-container {
   min-height:100%;
   position:relative;
@@ -391,7 +368,7 @@ ul.products li {
   height: 286px;
 }
 
-//========================================================================================================== SEARCH BOX
+//============================================================================================== SEARCH BOX / USER MENU
 .userAndSearch{
   position: absolute;
   right: 30px;
@@ -463,7 +440,6 @@ ul.products li {
       }
     }
   }
-
   .carousel-controll {
     position: absolute;
     right: 17%;
@@ -485,14 +461,18 @@ ul.products li {
   }
 }
 
-//============================================================================================================== NAVBAR
+//===================================================================================================== HEADER / FOOTER
 .navbar-fixed-top {
   height: 70px;
   padding-top: 10px;
   background-color: #ffffff;
   border-color: #ffffff;
+  .container{
+    padding: 0 10px;
+    width: 100%;
+  }
   .navbar-brand{
-    padding: 5px 15px;
+    padding: 5px 10px;
   }
   .specialGroupDropdown{
     padding: 5px 15px;
@@ -524,6 +504,14 @@ ul.products li {
       color: #000000;
     }
   }
+  .navbar-collapse{
+    background-color: #ffffff;
+    margin: 0;
+    width: 100%;
+    @media (max-width: 991px) {
+      border: 1px solid #eeeeee;
+    }
+  }
   @media (min-width: 768px) and (max-width: 991px) {
     .navbar-collapse.collapse {
       display: none !important;
@@ -549,7 +537,18 @@ ul.products li {
   }
 }
 
-//======================================================================================================= USEFUL STYLES
+#footer {
+  background: #009d97;
+  padding: 5px 0;
+  width: 100%;
+  clear: both;
+  height: 35px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+//============================================================================================= USEFUL STYLES / MIX-INS
 .unselectable{
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -558,3 +557,10 @@ ul.products li {
   -ms-user-select: none;
   user-select: none;
 }
+.rotate0 {-webkit-transform: rotate(0deg); transform: rotate(0deg); }
+.rotate90 {-webkit-transform: rotate(90deg); transform: rotate(90deg); }
+.rotate180 {-webkit-transform: rotate(180deg); transform: rotate(180deg); }
+.rotate270 {-webkit-transform: rotate(270deg); transform: rotate(270deg); }
+.growl{top:auto !important;}
+.margintop20px{margin-top:20px !important; }
+.marginbottom0{margin-bottom: 0px;}
