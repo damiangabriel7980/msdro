@@ -124,9 +124,6 @@ ul.products li {
   width: 30%;
   margin-top: -5%;
 }
-.customFloatLeftSearch {
-  margin-left: 45%;
-}
 .img-carousel-prev {
   width: 30%;
   margin-top: -5%;
@@ -279,15 +276,6 @@ ul.products li {
     margin-left: 6%;
     margin-right: 6%;
   }
-  .customFloatLeftSearch {
-    margin-left: 28%;
-  }
-  .mySearch {
-    margin-left: 55%;
-    margin-bottom: 5%;
-    padding-bottom: 0;
-    position: absolute;
-  }
   .newsClass {
     float: left;
     height: 310px;
@@ -317,15 +305,6 @@ ul.products li {
   .newsClass {
     float: left;
     height: 315px !important;
-  }
-  .mySearch {
-    margin-left: 57% !important;
-    margin-bottom: 5%;
-    padding-bottom: 0;
-    position: absolute;
-  }
-  .customFloatLeftSearch {
-    margin-left: 20% !important;
   }
 }
 @media (max-width: 1025px) {
@@ -379,15 +358,6 @@ ul.products li {
   .img-carousel-next {
     width: 15%;
     margin-top: -5%;
-  }
-  .customFloatLeftSearch {
-    margin-left: 5% !important;
-  }
-  .mySearch {
-    margin-left: 58% !important;
-    margin-bottom: 7% !important;
-    padding-bottom: 0;
-    position: absolute;
   }
   .carousel-indicators {
     left: 73%;
@@ -516,20 +486,32 @@ ul.products li {
   min-height: 100%;
   position: relative;
 }
-.mySearch {
-  margin-left: 54%;
-  top: 1%;
-  margin-bottom: 14%;
-  padding-bottom: 0;
+.userAndSearch {
   position: absolute;
+  right: 30px;
+  top: 10px;
+  width: 330px;
 }
-.profileClass:hover {
-  background-color: transparent !important;
-  text-decoration: none !important;
+.userAndSearch .dropdown {
+  float: right;
+  padding-right: 10px;
 }
-.profileClass:focus {
-  background-color: transparent !important;
-  text-decoration: none !important;
+.userAndSearch .dropdown .btn {
+  border-radius: 0;
+}
+.userAndSearch .mySearch {
+  float: right;
+}
+.userAndSearch .mySearch input {
+  border-radius: 0;
+}
+.userAndSearch .mySearch .input-group-addon {
+  border-radius: 0;
+}
+@media (max-width: 991px) {
+  .userAndSearch {
+    display: none;
+  }
 }
 .my-form-control {
   border-radius: 0% !important;
