@@ -1,5 +1,6 @@
 <div class="carousel-container">
-    <ul rn-carousel rn-carousel-index="selectedIndex" class="main-carousel" rn-carousel-auto-slide="60">
+    <ul rn-carousel rn-carousel-index="selectedIndex" class="main-carousel" rn-carousel-auto-slide="60"
+        carousel-resizable style="{{carouselResponsiveStyle}}">
         <li ng-repeat="carouselItem in HomeCarousel track by $index" style="margin-left: 10px;margin-right:10px">
             <div class="carouselSlide">
                 <div ng-class='{hide:$index!=selectedIndex}' class="carousel-title"><h3>{{carouselItem.title | uppercase}}</h3></div>

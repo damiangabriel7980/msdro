@@ -386,7 +386,6 @@ ul.products li {
   position: relative;
 }
 .carousel-container .main-carousel {
-  height: 170px;
   width: 75%;
   margin: 0 auto;
   overflow: visible!important;
@@ -399,7 +398,7 @@ ul.products li {
   z-index: 1001;
   position: absolute;
   color: white;
-  top: 55%;
+  bottom: 10px;
   left: 3%;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
