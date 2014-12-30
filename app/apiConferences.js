@@ -207,7 +207,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
                                                 mandrill({from: 'adminMSD@qualitance.ro',
                                                     to: [inserted.username],
                                                     subject:'Activare cont MSD',
-                                                    text: 'Ati primit acest email deoarece v-ati inregistrat pe MSD Staywell.\n\n' +
+                                                    text: 'Ati primit acest email deoarece v-ati inregistrat pe MSD Check-in.\n\n' +
                                                         'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va activa contul:\n\n' +
                                                         'http://' + req.headers.host + '/activateAccount/' + inserted.activationToken + '\n\n' +
                                                         'Link-ul este valabil maxim o ora\n'+
