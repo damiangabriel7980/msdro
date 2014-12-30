@@ -5,9 +5,6 @@
             <div class="col-xs-2">
                 <a ui-sref="continut.adaugaConferinta" class="btn btn-info pull-right margintop20px"><i class="glyphicon glyphicon-plus-sign"></i> Adauga conferinta</a>
             </div>
-            <div class="col-xs-2">
-                <a ui-sref="continut.adaugaSpeaker" class="btn btn-info pull-right margintop20px"><i class="glyphicon glyphicon-plus-sign"></i> Adauga speaker</a>
-            </div>
         </div>
     </div>
     <div class="titleAndButton">
@@ -68,6 +65,22 @@
                 <div class="btn-group-sm"  role="group" style="display: flex">
                     <button class="btn btn-danger" ui-sref="continut.evenimente.deleteTalk({id: talk._id})"><i class="glyphicon glyphicon-trash"></i></button>
                     <button class="btn btn-info" ui-sref="continut.updateTalk({id: talk._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div class="titleAndButton">
+        <div><h3>Speakeri</h3></div>
+        <div><a ui-sref="continut.adaugaSpeaker" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
+    </div>
+    <table ng-table="tableParamsSpeakers" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="speaker in $data">
+            <td data-title="'Nume'" filter="{ 'last_name': 'text' }" sortable="'last_name'">{{speaker.last_name}}</td>
+            <td data-title="'Prenume'" filter="{ 'first_name': 'text' }" sortable="'first_name'">{{speaker.first_name}}</td>
+            <td>
+                <div class="btn-group-sm"  role="group" style="display: flex">
+                    <button class="btn btn-danger" ui-sref="continut.evenimente.deleteSpeaker({id:speaker._id})"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button class="btn btn-info" ui-sref="continut.updateSpeaker({id:speaker._id})"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>
         </tr>

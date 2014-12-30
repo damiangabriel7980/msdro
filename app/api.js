@@ -1706,17 +1706,39 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     })
         .delete(function(req, res) {
             var id= req.params.id;
-            disconnectAllEntitiesFromEntity(Talks, "listSpeakers", id, function (err, result){
-                if(err)
+            disconnectAllEntitiesFromEntity(Talks, "speakers", id, function (err, result){
+                if(err){
                     res.send(err);
-                else
-                {
-                    Speakers.remove({_id:id},function(err,cont) {
-                            if (err)
-                                res.send(err);
-                            else
-                                res.json({ message: 'Successfully deleted!' });
-                        });
+                }else{
+                    //get speaker to find out image path
+                    Speakers.findOne({_id: id}, function (err, speaker) {
+                        if(speaker){
+                            var s3Key = speaker.image_path;
+                            //delete speaker
+                            Speakers.remove({_id:id},function(err,cont) {
+                                if (err){
+                                    res.json({message:'Could not delete speaker!'});
+                                }
+                                else{
+                                    //speaker was deleted. Now delete image if there is one
+                                    if(s3Key){
+                                        s3.deleteObject({Bucket: amazonBucket, Key: s3Key}, function (err, data) {
+                                            if(err){
+                                                logger.error(err);
+                                                res.json({message: "Speaker was deleted. Image could not be deleted"});
+                                            }else{
+                                                res.json({message: "Speaker was deleted. Image was deleted"});
+                                            }
+                                        });
+                                    }else{
+                                        res.json({message:'Speaker was deleted!'});
+                                    }
+                                }
+                            });
+                        }else{
+                            res.json({message:'Speaker not found!'});
+                        }
+                    });
                 }
             });
 
