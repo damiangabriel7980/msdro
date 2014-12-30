@@ -2721,7 +2721,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     router.route('/userHomeCarousel')
         .get(function (req,res) {
-            Carousel.find({},(function (err, elements) {
+            Carousel.find({enable:true},(function (err, elements) {
                 if(err){
                     res.send(err);
                 }else{
