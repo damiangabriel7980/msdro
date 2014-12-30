@@ -96,6 +96,31 @@ cloudAdminServices.factory('CarouselPublicService', ['$resource', function($reso
         })
     }
 }]);
+cloudAdminServices.factory('CarouselMedicService', ['$resource', function($resource){
+    return {
+        getAllImages: $resource('api/admin/utilizatori/carouselMedic/getAllImages', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getContentByType: $resource('api/admin/utilizatori/carouselMedic/contentByType/:type', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        addImage: $resource('api/admin/utilizatori/carouselMedic/addImage/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        toggleImage: $resource('api/admin/utilizatori/carouselMedic/toggleImage/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        deleteImage: $resource('api/admin/utilizatori/carouselMedic/deleteImage/:id', {}, {
+            save: { method: 'POST', isArray: false}
+        }),
+        getById: $resource('api/admin/utilizatori/carouselMedic/getById/:id', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        editImage: $resource('api/admin/utilizatori/carouselMedic/editImage/:data', {}, {
+            save: { method: 'POST', isArray: false }
+        })
+    }
+}]);
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     return {
         getAll: $resource('api/admin/products/', {}, {

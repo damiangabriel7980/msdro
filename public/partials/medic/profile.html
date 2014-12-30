@@ -12,7 +12,7 @@
                 <div class="col-md-12">
                     <div class="col-md-12">
                         <div class="col-md-4">
-                            <img ng-src="{{image}}" style="width: 100%;"/>
+                            <img ng-class="hideImg" no-cache-src="{{imageUser}}" style="width:100%;">
                         </div>
                         <div class="col-md-8">
                             <div class="form-group col-md-6" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine}">
@@ -32,9 +32,7 @@
                                 <input type="checkbox" id="abonat" ng-model="newsletter" ng-checked="newsletter"/>
                             </div>
                             <div class="col-md-6" style="padding: 0;">
-                                <div class="col-md-12">
-                                    <img src="{{imageUser}}" style="width:100px;">
-                                </div>
+
                                 <div class="col-md-12">
                                     <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o poza</button>
                                 </div>
