@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '$modalInstance', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload',function($scope, $rootScope, $modalInstance, ProfileService, therapeuticAreaService, $sce,$upload){
+cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '$modalInstance', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload','$timeout',function($scope, $rootScope, $modalInstance, ProfileService, therapeuticAreaService, $sce,$upload,$timeout){
 
     var imagePre = $rootScope.pathAmazonDev;
 
@@ -24,6 +24,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.phone = resp.phone;
         $scope.newsletter = resp.subscription == 1;
         $scope.imageUser = imagePre + resp.image_path;
+        $scope.hideImg="show";
         $scope.userTherapeuticAreas = resp['therapeutic-areasID']?resp['therapeutic-areasID']:[];
         if(resp.job){
             $scope.job = resp.job[0];
@@ -55,12 +56,17 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                                 $scope.uploadAlert.type = message.type;
                                 $scope.uploadAlert.message = message.message;
                                 $scope.uploadAlert.newAlert = true;
+                                $scope.hideImg="hide";
+                                ProfileService.getUserData.query().$promise.then(function (resp) {
+                                    $scope.imageUser = imagePre + resp.image_path;
+                                    $scope.hideImg="show";
+                                });
 
 
                             }
-
                         });
                     };
+
                     reader.readAsDataURL($files[0]);
 
                     // Read in the image file as a data URL.
@@ -69,7 +75,8 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
 
 
                     }
-              };
+
+        };
         //select user's county and city
 
         $scope.county['selected'] = {};

@@ -261,7 +261,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('continut.carouselMedic',{
             url: '/carouselMedic',
-            templateUrl: 'partials/admin/continut/carouselMedic.html'
+            templateUrl: 'partials/admin/continut/carouselMedic/carouselMedic.html',
+            controller: 'CarouselMedicController'
         })
         .state('continut.carouselPublic',{
             url: '/carouselPublic',
