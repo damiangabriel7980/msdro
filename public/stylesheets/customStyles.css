@@ -107,39 +107,6 @@ ul.products li {
   list-style: none;
   display: inline;
 }
-.carousel-inner .active.left {
-  left: -33%;
-}
-.carousel-inner .next {
-  left: 33%;
-}
-.carousel-inner .prev {
-  left: -33%;
-}
-.carousel-control.left,
-.carousel-control.right {
-  background-image: none;
-}
-.img-carousel {
-  width: 30%;
-  margin-top: -5%;
-}
-.img-carousel-prev {
-  width: 30%;
-  margin-top: -5%;
-}
-.img-carousel-next {
-  width: 30%;
-  margin-top: -5%;
-}
-.img-carousel-center {
-  width: 38%;
-  margin-top: -5%;
-}
-.my-carousel-caption {
-  margin-bottom: -2% !important;
-  right: 45% !important;
-}
 .wrapping-div {
   margin-left: -20%;
   height: 150px;
@@ -150,15 +117,6 @@ ul.products li {
 .profile-drop {
   min-width: 0% !important;
   background-color: rgba(255, 255, 255, 0.6) !important;
-}
-.carousel-indicators {
-  left: 74%;
-}
-.carousel-indicators .active {
-  background-color: orange !important;
-}
-.carousel-indicators li {
-  border-radius: 0px !important;
 }
 .container-fluid {
   margin-left: 8%;
@@ -178,37 +136,6 @@ ul.products li {
   position: absolute;
   bottom: -8%;
   left: 0px;
-}
-.carousel-container {
-  margin-bottom: 1%;
-  overflow-x: hidden;
-}
-.carousel-container .carouselSlide {
-  height: 100%;
-  position: relative;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-.carousel-container .carouselSlide .cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-  background-color: rgba(0, 0, 0, 0);
-}
-.carousel-container .carouselSlide .content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
 }
 .btn-more-news {
   background-color: transparent;
@@ -249,13 +176,6 @@ ul.products li {
     float: left;
     height: 310px !important;
   }
-  .carousel-container .carousel-controll {
-    position: absolute;
-    width: 5%;
-    height: 6%;
-    right: 23%;
-    bottom: 82%;
-  }
 }
 @media (max-width: 1366.5px) {
   .noPadd {
@@ -267,11 +187,6 @@ ul.products li {
   .MerckSmall {
     margin-top: 0%;
   }
-  .my-carousel-caption {
-    margin-bottom: -2% !important;
-    right: 45% !important;
-    margin-left: 4% !important;
-  }
   .container-fluid {
     margin-left: 6%;
     margin-right: 6%;
@@ -280,27 +195,12 @@ ul.products li {
     float: left;
     height: 310px;
   }
-  .carousel-container .carousel-controll {
-    position: absolute;
-    width: 7%;
-    height: 6%;
-    right: 23%;
-    bottom: 81%;
-  }
 }
 @media (min-width: 1025px) and (max-width: 1365px) {
   .calendar-style {
     height: 60px !important;
     float: left;
     border-left: 1px solid #D9D7D7;
-  }
-  .img-carousel-prev {
-    width: 30%;
-    margin-top: -5%;
-  }
-  .img-carousel-next {
-    width: 30%;
-    margin-top: -5%;
   }
   .newsClass {
     float: left;
@@ -319,9 +219,6 @@ ul.products li {
   }
   h4 {
     font-size: 14px;
-  }
-  .carousel-caption {
-    left: 23% !important;
   }
   body {
     font-size: 11px;
@@ -351,60 +248,11 @@ ul.products li {
     margin-left: 0% !important;
     margin-right: 0% !important;
   }
-  .img-carousel-prev {
-    width: 15%;
-    margin-top: -5%;
-  }
-  .img-carousel-next {
-    width: 15%;
-    margin-top: -5%;
-  }
-  .carousel-indicators {
-    left: 73%;
-  }
-  .carousel-container .carousel-controll {
-    position: absolute;
-    width: 9% !important;
-    height: 6%;
-    right: 23%;
-    bottom: 80%;
-  }
-}
-@media (min-width: 768px) and (max-width: 991px) {
-  .navbar-collapse.collapse {
-    display: none !important;
-  }
-  .navbar-collapse.collapse.in {
-    display: block !important;
-  }
-  .navbar-header .collapse,
-  .navbar-toggle {
-    display: block !important;
-  }
-  .navbar-header {
-    float: none;
-  }
-  .container-fluid {
-    margin-left: 1% !important;
-    margin-right: 1% !important;
-  }
-  .hiddenSearch {
-    width: 33%;
-    float: right;
-    margin-top: 1%;
-  }
 }
 @media (max-width: 768px) {
   .container-fluid {
     margin-left: -5% !important;
     margin-right: -5% !important;
-  }
-  .carousel-container .carousel-controll {
-    position: absolute;
-    width: 11% !important;
-    height: 6%;
-    right: 23%;
-    bottom: 83%;
   }
   .newsClass {
     float: left !important;
@@ -422,31 +270,12 @@ ul.products li {
   .hrNewColor {
     display: none;
   }
-  .img-carousel-prev {
-    width: 30%;
-    margin-top: -5%;
-  }
-  .img-carousel-next {
-    width: 30%;
-    margin-top: -5%;
-  }
-  .img-carousel-center {
-    width: 30%;
-    margin-top: -5%;
-  }
-  .titluCarousel {
-    width: 193%;
-    font-size: 16px !important;
-  }
   .wrapping-div {
     margin-left: -20%;
     height: 150px;
     width: 145%;
     overflow: hidden;
     margin-bottom: 25px;
-  }
-  .carousel-caption {
-    left: 12% !important;
   }
   .hiddenSearch {
     width: 33%;
@@ -455,9 +284,6 @@ ul.products li {
   }
   .merckTitle {
     font-size: 14px !important;
-  }
-  .carousel-indicators {
-    left: 69%;
   }
 }
 .articleEye {
@@ -485,33 +311,6 @@ ul.products li {
 .view-container {
   min-height: 100%;
   position: relative;
-}
-.userAndSearch {
-  position: absolute;
-  right: 30px;
-  top: 10px;
-  width: 330px;
-}
-.userAndSearch .dropdown {
-  float: right;
-  padding-right: 10px;
-}
-.userAndSearch .dropdown .btn {
-  border-radius: 0;
-}
-.userAndSearch .mySearch {
-  float: right;
-}
-.userAndSearch .mySearch input {
-  border-radius: 0;
-}
-.userAndSearch .mySearch .input-group-addon {
-  border-radius: 0;
-}
-@media (max-width: 991px) {
-  .userAndSearch {
-    display: none;
-  }
 }
 .my-form-control {
   border-radius: 0% !important;
@@ -554,17 +353,83 @@ ul.products li {
   float: left;
   height: 286px;
 }
-.container-fluid-carousel {
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 0px !important;
-  padding-right: 0px !important;
+.userAndSearch {
+  position: absolute;
+  right: 30px;
+  top: 10px;
+  width: 330px;
+}
+.userAndSearch .dropdown {
+  float: right;
+  padding-right: 10px;
+}
+.userAndSearch .dropdown .btn {
+  border-radius: 0;
+}
+.userAndSearch .mySearch {
+  float: right;
+}
+.userAndSearch .mySearch input {
+  border-radius: 0;
+}
+.userAndSearch .mySearch .input-group-addon {
+  border-radius: 0;
+}
+@media (max-width: 991px) {
+  .userAndSearch {
+    display: none;
+  }
+}
+.carousel-container {
+  margin-bottom: 1%;
+  overflow-x: hidden;
+  position: relative;
 }
 .carousel-container .main-carousel {
-  height: 150px;
-  width: 55%;
+  height: 170px;
+  width: 75%;
   margin: 0 auto;
   overflow: visible!important;
+}
+.carousel-container .main-carousel .carouselSlide {
+  height: 100%;
+  position: relative;
+}
+.carousel-container .main-carousel .carouselSlide .carousel-title {
+  z-index: 1001;
+  position: absolute;
+  color: white;
+  top: 55%;
+  left: 3%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+.carousel-container .main-carousel .carouselSlide .imageCover {
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+}
+.carousel-container .main-carousel .carouselSlide .imageWrapper {
+  z-index: 999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.carousel-container .carousel-controll {
+  position: absolute;
+  right: 17%;
+  bottom: 10px;
 }
 .carousel-container .carousel-controll .carousel-controll-element {
   float: left;
@@ -580,10 +445,21 @@ ul.products li {
 .carousel-container .carousel-controll .carousel-controll-element.selected {
   background-color: orange;
 }
-.carousel-title {
-  position: absolute;
-  top: 55%;
-  left: 3%;
+.carousel-container .img-carousel-prev {
+  width: 30%;
+  margin-top: -5%;
+}
+.carousel-container .img-carousel-next {
+  width: 30%;
+  margin-top: -5%;
+}
+.carousel-container .img-carousel-center {
+  width: 38%;
+  margin-top: -5%;
+}
+.carousel-container .img-carousel {
+  width: 30%;
+  margin-top: -5%;
 }
 .navbar-fixed-top {
   height: 70px;
@@ -623,6 +499,30 @@ ul.products li {
 .navbar-fixed-top .navbar-nav > .open > a:focus {
   background-color: #ffffff;
   color: #000000;
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .navbar-fixed-top .navbar-collapse.collapse {
+    display: none !important;
+  }
+  .navbar-fixed-top .navbar-collapse.collapse.in {
+    display: block !important;
+  }
+  .navbar-fixed-top .navbar-header .collapse,
+  .navbar-fixed-top .navbar-toggle {
+    display: block !important;
+  }
+  .navbar-fixed-top .navbar-header {
+    float: none;
+  }
+  .navbar-fixed-top .container-fluid {
+    margin-left: 1% !important;
+    margin-right: 1% !important;
+  }
+  .navbar-fixed-top .hiddenSearch {
+    width: 33%;
+    float: right;
+    margin-top: 1%;
+  }
 }
 .unselectable {
   -webkit-touch-callout: none;

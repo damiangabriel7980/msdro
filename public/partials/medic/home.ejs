@@ -1,11 +1,11 @@
 <div class="carousel-container">
-    <ul rn-carousel rn-carousel-index="selectedIndex" class="image main-carousel" rn-carousel-auto-slide="60" >
+    <ul rn-carousel rn-carousel-index="selectedIndex" class="main-carousel" rn-carousel-auto-slide="60">
         <li ng-repeat="carouselItem in HomeCarousel track by $index" style="margin-left: 10px;margin-right:10px">
             <div class="carouselSlide">
-                <div class="cover"></div>
-                <div class="content">
+                <div ng-class='{hide:$index!=selectedIndex}' class="carousel-title"><h3>{{carouselItem.title | uppercase}}</h3></div>
+                <div class="imageCover"></div>
+                <div class="imageWrapper">
                     <img style="width: 98%; height: 100%;" ng-src="{{pathAmazonDev+carouselItem.image_path}}"/>
-                    <div style="color:white" ng-class='{hide:$index!=selectedIndex}' class="carousel-title"><h3>{{carouselItem.title | uppercase}}</h3></div>
                 </div>
             </div>
         </li>
