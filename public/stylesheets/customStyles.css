@@ -384,6 +384,12 @@ ul.products li {
   margin-bottom: 1%;
   overflow-x: hidden;
   position: relative;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .carousel-container .main-carousel {
   width: 75%;
@@ -400,12 +406,6 @@ ul.products li {
   color: white;
   bottom: 10px;
   left: 3%;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   cursor: pointer;
 }
 .carousel-container .main-carousel .carouselSlide .imageCover {
