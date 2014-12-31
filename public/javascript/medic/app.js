@@ -184,7 +184,7 @@ cloudAdminApp.run(
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/"+$rootScope.amazonBucket+"/";
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
 
-            $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merckManual.jpg";
+            $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merck_image_new.png";
 
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";

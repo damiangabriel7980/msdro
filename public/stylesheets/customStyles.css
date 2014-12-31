@@ -69,10 +69,6 @@ ul.products li {
 .my-img-thumbnail {
   border-radius: 5px !important;
 }
-.justified {
-  text-align: justify;
-  word-spacing: -2px;
-}
 .btn-more-news {
   background-color: transparent;
   color: black;
@@ -89,9 +85,6 @@ ul.products li {
 .hrNewColor {
   border-color: #333333;
 }
-.MerckAlign {
-  text-align: center;
-}
 .MerckContentAlign {
   text-align: justify;
 }
@@ -102,9 +95,6 @@ ul.products li {
   }
 }
 @media (max-width: 1366.5px) {
-  .MerckSmall {
-    margin-top: 0%;
-  }
   .container-fluid {
     margin-left: 6%;
     margin-right: 6%;
@@ -140,9 +130,6 @@ ul.products li {
   .paddingLeft {
     padding-left: 0px;
   }
-  .MerckSmall {
-    margin-top: 0%;
-  }
   .container-fluid {
     margin-left: 0% !important;
     margin-right: 0% !important;
@@ -177,9 +164,6 @@ ul.products li {
     width: 33%;
     float: right;
     margin-top: 1%;
-  }
-  .merckTitle {
-    font-size: 14px !important;
   }
 }
 .articleEye {
@@ -494,4 +478,7 @@ ul.products li {
 }
 .gray {
   color: #aaaaaa;
+}
+.justified {
+  text-align: justify;
 }
