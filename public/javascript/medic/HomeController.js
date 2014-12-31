@@ -28,12 +28,12 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.hideTitle=[];
 
     //------------------------------------------------------------------------------------------------ useful functions
-    var htmlToPlainText = function(text) {
+    $scope.htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
     };
 
     $scope.createHeader = function (text,length) {
-        return htmlToPlainText(text).substring(0,length)+"...";
+        return $scope.htmlToPlainText(text).substring(0,length)+"...";
     };
 
     $scope.toDate = function (ISOdate) {

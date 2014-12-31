@@ -73,14 +73,6 @@ ul.products li {
   text-align: justify;
   word-spacing: -2px;
 }
-.readMore {
-  vertical-align: bottom;
-}
-.readMoreEye {
-  position: absolute;
-  bottom: -8%;
-  left: 0px;
-}
 .btn-more-news {
   background-color: transparent;
   color: black;
@@ -228,35 +220,53 @@ ul.products li {
   height: 100%;
   padding: 0 0 50px 0;
 }
-.homeStyles .eventsDate {
+.homeStyles .eventDisplay {
+  padding: 0 0 10px 0;
+}
+.homeStyles .eventDisplay .date {
   border-right: 1px solid #aaaaaa;
 }
-.homeStyles .eventsDate .day {
+.homeStyles .eventDisplay .date .day {
   font-size: 20px;
 }
-.homeStyles .eventsDate .month {
+.homeStyles .eventDisplay .date .month {
   margin-top: -5px;
 }
-.homeStyles .midColumn {
+.homeStyles .leftColumn:after {
+  position: absolute;
+  content: '';
+  top: 0;
+  right: 0;
+  width: 0;
   height: 100%;
+  border-right: 1px solid #000000;
 }
 .homeStyles .midColumn:before {
   position: absolute;
   content: '';
   top: 0;
-  left: 0;
-  width: 0px;
+  left: -1px;
+  width: 0;
   height: 100%;
-  border: 1px solid #333333;
+  border-left: 1px solid #000000;
 }
 .homeStyles .midColumn:after {
   position: absolute;
   content: '';
   top: 0;
   right: 0;
-  width: 0px;
+  width: 0;
   height: 100%;
-  border: 1px solid #333333;
+  border-right: 1px solid #000000;
+}
+.homeStyles .rightColumn:before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: -1px;
+  width: 0;
+  height: 100%;
+  border-left: 1px solid #000000;
 }
 .userAndSearch {
   position: absolute;
