@@ -243,11 +243,12 @@ module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, ro
     //=========================================================================================== unsubscribe from push notifications
 
     router.route('/unsubscribeFromPush')
-        .get(function (req, res) {
-            var userData = getUserData(req);
-            if(userData){
+        .post(function (req, res) {
+            var token = req.body.token;
+            //var userData = getUserData(req);
+            if(token){
                 var unsubscribeData = {
-                    "user": "MSD"+userData._id.toString()
+                    "token": token
                 };
                 request({
                     url: pushServerAddr+"/unsubscribe",
@@ -262,6 +263,8 @@ module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, ro
                         res.json({hasError: false, message:"Successfully unsubscribed from push notifications"});
                     }
                 });
+            }else{
+                res.json({hasError: true, message:"No token received"});
             }
         });
 
