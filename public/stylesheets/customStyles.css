@@ -30,27 +30,6 @@
 .articlesStyles .paddingTop10 {
   padding-top: 10px;
 }
-.noPadding {
-  padding: 0;
-}
-.homeStyles .container-fluid {
-  padding: 0 15px 0 0;
-}
-.homeStyles .container-fluid .well .title {
-  font-size: 14px;
-  font-weight: bold;
-  color: #0000ff;
-}
-.homeStyles .container-fluid .well .header {
-  font-size: 14px;
-}
-.homeStyles .container-fluid .well .readMore {
-  font-size: 13px;
-  color: #0000ff;
-}
-.homeStyles .container-fluid .well .day {
-  font-size: 30px;
-}
 .therapeuticAreas li {
   cursor: pointer;
 }
@@ -88,7 +67,7 @@ ul.products li {
   margin-right: 8%;
 }
 .my-img-thumbnail {
-  border-radius: 10px !important;
+  border-radius: 5px !important;
 }
 .justified {
   text-align: justify;
@@ -106,20 +85,11 @@ ul.products li {
   background-color: transparent;
   color: black;
 }
-.dayFont {
-  font-size: 20px;
-}
 .monthFont {
   font-size: 12px;
 }
-.newBlue {
-  color: #1c9893;
-}
 .no-border {
   border: 0px solid #ddd !important;
-}
-.paddingLeft {
-  padding-left: 18px;
 }
 .margintop5px {
   margin-top: 5px;
@@ -133,9 +103,6 @@ ul.products li {
 .MerckContentAlign {
   text-align: justify;
 }
-.col-Left {
-  margin-left: -7%;
-}
 @media (min-width: 1367px) {
   .newsClass {
     float: left;
@@ -143,12 +110,6 @@ ul.products li {
   }
 }
 @media (max-width: 1366.5px) {
-  .noPadd {
-    padding: 0 !important;
-  }
-  .smallScreen {
-    margin-top: 0%;
-  }
   .MerckSmall {
     margin-top: 0%;
   }
@@ -162,22 +123,14 @@ ul.products li {
   }
 }
 @media (min-width: 1025px) and (max-width: 1365px) {
-  .calendar-style {
-    height: 60px !important;
-    float: left;
-    border-left: 1px solid #D9D7D7;
-  }
   .newsClass {
     float: left;
     height: 315px !important;
   }
 }
 @media (max-width: 1025px) {
-  .col-Left {
-    margin-left: -7%;
-  }
   .leftBorder {
-    border-left: 2px solid #D9D7D7;
+    border-left: 2px solid #d9d7d7;
   }
   h1 {
     font-size: 26px;
@@ -195,19 +148,8 @@ ul.products li {
   .paddingLeft {
     padding-left: 0px;
   }
-  .smallScreen {
-    margin-top: 0%;
-  }
   .MerckSmall {
     margin-top: 0%;
-  }
-  .noPadd {
-    padding: 0 !important;
-  }
-  .calendar-style {
-    height: 60px !important;
-    float: left;
-    border-left: 1px solid #D9D7D7;
   }
   .container-fluid {
     margin-left: 0% !important;
@@ -228,9 +170,6 @@ ul.products li {
   }
   .leftBorder {
     border-left: 0px !important;
-  }
-  .calendar-style {
-    display: none;
   }
   .hrNewColor {
     display: none;
@@ -267,50 +206,57 @@ ul.products li {
   padding: 10px 10px;
   color: black;
 }
-.view-container {
-  min-height: 100%;
-  position: relative;
-}
 .my-form-control {
   border-radius: 0% !important;
   height: 28px !important;
-}
-.well {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-.marginELearn {
-  margin-left: -3%;
-}
-.textBlue {
-  color: #009d97;
-}
-.well {
-  background-color: transparent;
-  border: hidden;
 }
 .link-footer {
   color: white !important;
   cursor: hand ;
 }
-.calendar-style {
-  height: 60px;
-  float: left;
-  border-left: 1px solid #D9D7D7;
-  margin-left: 15%;
-}
-.customFloatLeft {
-  float: left;
-}
 .rightBorder {
-  border-right: 1px solid #D9D7D7;
+  border-right: 1px solid #000000;
 }
 .leftBorder {
-  border-left: 1px solid #D9D7D7;
+  border-left: 1px solid #000000;
 }
 .newsClass {
   float: left;
   height: 286px;
+}
+.homeStyles {
+  height: 100%;
+  padding: 0 0 50px 0;
+}
+.homeStyles .eventsDate {
+  border-right: 1px solid #aaaaaa;
+}
+.homeStyles .eventsDate .day {
+  font-size: 20px;
+}
+.homeStyles .eventsDate .month {
+  margin-top: -5px;
+}
+.homeStyles .midColumn {
+  height: 100%;
+}
+.homeStyles .midColumn:before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 0px;
+  height: 100%;
+  border: 1px solid #333333;
+}
+.homeStyles .midColumn:after {
+  position: absolute;
+  content: '';
+  top: 0;
+  right: 0;
+  width: 0px;
+  height: 100%;
+  border: 1px solid #333333;
 }
 .userAndSearch {
   position: absolute;
@@ -526,4 +472,16 @@ ul.products li {
 }
 .marginbottom0 {
   margin-bottom: 0px;
+}
+.noPadding {
+  padding: 0;
+}
+.MSDgreen {
+  color: #1c9893;
+}
+.MSDgreenDarker {
+  color: #009d97;
+}
+.gray {
+  color: #aaaaaa;
 }

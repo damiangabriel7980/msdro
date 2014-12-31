@@ -1,5 +1,18 @@
+html{
+    height: 100%;
+}
 body {
+    height: 100%;
+}
+
+.main-view-container {
+    height:100%;
+    width: 100%;
+    position:absolute;
+    top: 0;
+    left: 0;
     padding-top: 70px;
+    padding-bottom: 50px;
 }
 
 /*
