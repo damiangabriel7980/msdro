@@ -20,7 +20,7 @@ var expressJwt = require('express-jwt');
 var async = require('async');
 var request = require('request');
 
-module.exports = function(app, mandrill, logger, tokenSecret, router) {
+module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
@@ -238,6 +238,31 @@ module.exports = function(app, mandrill, logger, tokenSecret, router) {
     router.route('/userProfile')
         .get(function (req, res) {
             res.json(getUserData(req));
+        });
+
+    //=========================================================================================== unsubscribe from push notifications
+
+    router.route('/unsubscribeFromPush')
+        .get(function (req, res) {
+            var userData = getUserData(req);
+            if(userData){
+                var unsubscribeData = {
+                    "user": "MSD"+userData._id.toString()
+                };
+                request({
+                    url: pushServerAddr+"/unsubscribe",
+                    method: "POST",
+                    json: true,
+                    body: unsubscribeData,
+                    strictSSL: false
+                }, function (error, message, response) {
+                    if(error){
+                        res.json({hasError: true, message:"Error unsubscibing from push notifications"});
+                    }else{
+                        res.json({hasError: false, message:"Successfully unsubscribed from push notifications"});
+                    }
+                });
+            }
         });
 
     //==================================================================================================================== all routes

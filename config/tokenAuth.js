@@ -40,7 +40,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
             }else{
                 // if no user is found, return the message
                 if (!user){
-                    res.send(401, 'Wrong username');
+                    res.send(401, 'Wrong username/password');
                 }else{
                     //check account not expired, not locked etc
                     if(user.account_expired || user.account_locked || !user.enabled){
@@ -48,7 +48,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
                     }else{
                         //check password
                         if (!user.validPassword(req.body.password)){
-                            res.send(401, 'Wrong password');
+                            res.send(401, 'Wrong username/password');
                         }else{
                             var profile = {
                                 _id: user._id,
