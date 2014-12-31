@@ -6,6 +6,26 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.merckManualImage = $rootScope.merckManualImage;
     $scope.myInterval = 60000;
     $scope.HomeCarousel = [];
+
+    //------------------------------------------------------------ special groups widgets
+
+    //add widgets in partials/medic/widgets, then associate file name and group name in object below
+    var specialGroupWidgets = {
+        "MSD Diabetes": "Glycemizer.html"
+    };
+
+    $scope.specialWidgetUrl = null;
+
+    $scope.$watch($rootScope.specialGroupSelected, function () {
+        //check if special group is selected
+        if($rootScope.specialGroupSelected){
+            //check if widget exists for selected group
+            if(specialGroupWidgets[$rootScope.specialGroupSelected.display_name]){
+                $scope.specialWidgetUrl = $sce.trustAsResourceUrl('partials/medic/widgets/'+specialGroupWidgets[$rootScope.specialGroupSelected.display_name]);
+            }
+        }
+    });
+
     //------------------------------------------------------------------------------------------------- get all content
     HomeService.getUserEvents.query().$promise.then(function (resp) {
         $scope.events = resp;
