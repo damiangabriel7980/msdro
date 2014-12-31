@@ -75,6 +75,29 @@ cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAd
         });
     });
 
+    EventsAdminService.getAllSpeakers.query().$promise.then(function(resp){
+        $scope.rooms=resp;
+        var listSpeakers=$scope.rooms;
+        $scope.tableParamsSpeakers = new ngTableParams({
+            page: 1,            // show first page
+            count: 10,          // count per page
+            sorting: {
+                last_name: 'asc'     // initial sorting
+            },
+            filter: {
+                last_name: ''       // initial filter
+            }
+        }, {
+            total: listSpeakers.length, // length of data
+            getData: function($defer, params) {
+
+                var orderedData = $filter('orderBy')(($filter('filter')(listSpeakers, params.filter())), params.orderBy());
+
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
+        });
+    });
+
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };

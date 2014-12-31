@@ -7,7 +7,7 @@ cloudAdminApp.directive('noCacheSrc', function($window) {
         priority: 99,
         link: function(scope, element, attrs) {
             attrs.$observe('noCacheSrc', function(noCacheSrc) {
-                noCacheSrc += '?' + (new Date()).getTime();
+                noCacheSrc += '#' + (new Date()).getTime();
                 attrs.$set('src', noCacheSrc);
             });
         }

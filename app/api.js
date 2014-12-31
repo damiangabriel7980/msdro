@@ -1143,6 +1143,199 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
 
 
+    //Carousel Medic
+    //===============================================================================================
+
+    router.route('/admin/utilizatori/carouselMedic/getAllImages')
+
+        .get(function(req, res) {
+            Carousel.find({}, function(err, cont) {
+                if(err) {
+                    logger.error(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/admin/utilizatori/carouselMedic/contentByType/:type')
+
+        .get(function(req, res) {
+            Content.find({type: req.params.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
+                if(err) {
+                    logger.error(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/admin/utilizatori/carouselMedic/addImage')
+
+        .post(function(req, res) {
+            var data = req.body.data.toAdd;
+            var ext = req.body.data.extension;
+            var ans = {};
+            //validate title and description
+            var patt = new XRegExp('^[a-zA-Z0-9\\s]{10,100}$');
+            if(!patt.test(data.title.toString())){
+                ans.error = true;
+                ans.message = "Titlul este obligatoriu! (minim 10 caractere)";
+                res.json(ans);
+            }else{
+                //validate type
+                if(!(typeof data.type === "number" && data.type>0 && data.type<4)){
+                    ans.error = true;
+                    ans.message = "Verificati tipul!";
+                    res.json(ans);
+                }else{
+                    //check if content_id exists
+                    if(typeof data.article_id === "string" && data.article_id.length === 24){
+                        //form object to persist
+                        data.enable = false;
+                        data.last_updated = new Date();
+                        //persist object
+                        var img = new Carousel(data);
+                        img.save(function (err, inserted) {
+                            if(err){
+                                ans.error = true;
+                                ans.message = "Eroare la salvare. Verificati campurile";
+                                res.json(ans);
+                            }else{
+                                //update image_path
+                                var imagePath = "carousel/medic/image_"+inserted._id+"."+ext;
+                                Carousel.update({_id: inserted._id}, {image_path: imagePath}, function (err, wRes) {
+                                    if(err){
+                                        ans.error = true;
+                                        ans.message = "Eroare la salvare. Verificati campurile";
+                                        res.json(ans);
+                                    }else{
+                                        ans.error = false;
+                                        ans.message = "Se incarca imaginea...";
+                                        ans.key = imagePath;
+                                        res.json(ans);
+                                    }
+                                });
+                            }
+                        });
+                    }else{
+                        ans.error = true;
+                        ans.message = "Selectati un continut";
+                        res.json(ans);
+                    }
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/carouselMedic/toggleImage')
+
+        .post(function(req, res) {
+            Carousel.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({error: false});
+                }
+            });
+        });
+
+    router.route('/admin/utilizatori/carouselMedic/deleteImage')
+
+        .post(function (req, res) {
+            var image_id = req.body.id;
+            //find image to remove from amazon
+            Carousel.find({_id: image_id}, {image_path: 1}, function (err, image) {
+                if(err){
+                    res.json({error: true, message: err});
+                }else{
+                    if(image[0]){
+                        var imageS3 = image[0].image_path;
+                        console.log(imageS3);
+                        //remove from database
+                        Carousel.remove({_id: image_id}, function (err, success) {
+                            if(err){
+                                res.json({error: true, message: "Eroare la stergerea imaginii"});
+                            }else{
+                                //remove image from amazon
+                                if(imageS3){
+                                    deleteObjectS3(imageS3, function (err, data) {
+                                        if(err){
+                                            res.json({error: true, message: "Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon"});
+                                        }else{
+                                            res.json({error: false, message: "Imaginea a fost stearsa din baza de date si de pe Amazon."});
+                                        }
+                                    });
+                                }else{
+                                    res.json({error: false, message: "Imaginea a fost stearsa din baza de date."});
+                                }
+                            }
+                        });
+                    }else{
+                        res.json({error: true, message: "Nu s-a gasit imaginea!"});
+                    }
+                }
+            });
+        });
+
+    router.route('/admin/utilizatori/carouselMedic/editImage')
+
+        .post(function(req, res) {
+            var data = req.body.data.toUpdate;
+            var id = req.body.data.id;
+            var ans = {};
+            //validate title and description
+            var patt = new XRegExp('^[a-zA-Z0-9\\s]{10,100}$');
+            if(!patt.test(data.title.toString())){
+                ans.error = true;
+                ans.message = "Titlul este obligatoriu! (minim 10 caractere)";
+                res.json(ans);
+            }else{
+                //validate type
+                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                    ans.error = true;
+                    ans.message = "Verificati tipul";
+                    res.json(ans);
+                }else{
+                    //check if content_id exists
+                    if(typeof data.article_id === "string" && data.article_id.length === 24){
+                        //refresh last_updated field
+                        data.last_updated = new Date();
+                        Carousel.update({_id: id}, data, function (err, wRes) {
+                            if(err){
+                                ans.error = true;
+                                ans.message = "Eroare la actualizare. Verificati campurile";
+                                res.json(ans);
+                            }else{
+                                ans.error = false;
+                                ans.message = "Datele au fost modificate cu succes!";
+                                res.json(ans);
+                            }
+                        });
+                    }else{
+                        ans.error = true;
+                        ans.message = "Selectati un continut";
+                        res.json(ans);
+                    }
+                }
+            }
+        });
+
+    router.route('/admin/utilizatori/carouselMedic/getById/:id')
+
+        .get(function(req, res) {
+            Carousel.find({_id: req.params.id}, function (err, cont) {
+                if(err){
+                    res.send(err);
+                }else{
+                    if(cont[0]){
+                        res.send(cont[0]);
+                    }else{
+                        res.send({message: "No image found"});
+                    }
+                }
+            })
+        });
+
     router.route('/admin/products')
         .get(function(req, res) {
             Products.find(function(err, cont) {
@@ -1513,17 +1706,39 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     })
         .delete(function(req, res) {
             var id= req.params.id;
-            disconnectAllEntitiesFromEntity(Talks, "listSpeakers", id, function (err, result){
-                if(err)
+            disconnectAllEntitiesFromEntity(Talks, "speakers", id, function (err, result){
+                if(err){
                     res.send(err);
-                else
-                {
-                    Speakers.remove({_id:id},function(err,cont) {
-                            if (err)
-                                res.send(err);
-                            else
-                                res.json({ message: 'Successfully deleted!' });
-                        });
+                }else{
+                    //get speaker to find out image path
+                    Speakers.findOne({_id: id}, function (err, speaker) {
+                        if(speaker){
+                            var s3Key = speaker.image_path;
+                            //delete speaker
+                            Speakers.remove({_id:id},function(err,cont) {
+                                if (err){
+                                    res.json({message:'Could not delete speaker!'});
+                                }
+                                else{
+                                    //speaker was deleted. Now delete image if there is one
+                                    if(s3Key){
+                                        s3.deleteObject({Bucket: amazonBucket, Key: s3Key}, function (err, data) {
+                                            if(err){
+                                                logger.error(err);
+                                                res.json({message: "Speaker was deleted. Image could not be deleted"});
+                                            }else{
+                                                res.json({message: "Speaker was deleted. Image was deleted"});
+                                            }
+                                        });
+                                    }else{
+                                        res.json({message:'Speaker was deleted!'});
+                                    }
+                                }
+                            });
+                        }else{
+                            res.json({message:'Speaker not found!'});
+                        }
+                    });
                 }
             });
 
