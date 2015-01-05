@@ -66,60 +66,65 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                 text = text.replace(/(#[a-z0-9][a-z0-9\-_]*)/ig,'');
                                 text = text.replace(/(@[a-z0-9][a-z0-9\-_]*)/ig,'');
                                 text = text.trim();
-                                var thread = new Threads({});
-                                thread.owner = userData._id;
-                                //find topics in db
-                                Topics.find({name: {$in: cleanTopics}}, function (err, topics) {
-                                    if(err){
-                                        logger.log(err);
-                                        socket.emit('feedbackMessage',{type: 'error', text: 'Error processing topics'});
-                                    }else{
-                                        //check if all topics sent by user actually exist
-                                        if(topics.length != cleanTopics.length && cleanTopics.length != 0){
-                                            socket.emit('feedbackMessage',{type: 'error', text: 'Not all topics are valid'});
+                                //validate text
+                                if(text.length < 10){
+                                    socket.emit('feedbackMessage',{type: 'error', text: 'Question has to be at least 10 characters long'});
+                                }else{
+                                    var thread = new Threads({});
+                                    thread.owner = userData._id;
+                                    //find topics in db
+                                    Topics.find({name: {$in: cleanTopics}}, function (err, topics) {
+                                        if(err){
+                                            logger.log(err);
+                                            socket.emit('feedbackMessage',{type: 'error', text: 'Error processing topics'});
                                         }else{
-                                            //get id's of topics
-                                            getIds(topics, function (topicsIds) {
-                                                console.log(topics);
-                                                thread.topics = topicsIds;
-                                                //find medics in db
-                                                AnswerGivers.find({nickname: {$in: cleanMedics}}, function (err, medics) {
-                                                    if(err){
-                                                        logger.log(err);
-                                                        socket.emit('feedbackMessage',{type: 'error', text: 'Error processing medics'});
-                                                    }else{
-                                                        //check if all medics sent by user actually exist
-                                                        if(medics.length != cleanMedics.length && cleanMedics.length != 0){
-                                                            socket.emit('feedbackMessage',{type: 'error', text: 'Not all medics are valid'});
+                                            //check if all topics sent by user actually exist
+                                            if(topics.length != cleanTopics.length && cleanTopics.length != 0){
+                                                socket.emit('feedbackMessage',{type: 'error', text: 'Not all topics are valid'});
+                                            }else{
+                                                //get id's of topics
+                                                getIds(topics, function (topicsIds) {
+                                                    console.log(topics);
+                                                    thread.topics = topicsIds;
+                                                    //find medics in db
+                                                    AnswerGivers.find({nickname: {$in: cleanMedics}}, function (err, medics) {
+                                                        if(err){
+                                                            logger.log(err);
+                                                            socket.emit('feedbackMessage',{type: 'error', text: 'Error processing medics'});
                                                         }else{
-                                                            //get id's of medics
-                                                            getIds(medics, function (medicsIds) {
-                                                                thread.medics = medicsIds;
-                                                                //thread is not grabbed by anyone yet and has no messages yet
-                                                                thread.locked = null;
-                                                                thread.messages = [];
-                                                                //add first question
-                                                                thread.question = text;
-                                                                thread.date_recorded = Date.now();
-                                                                //save thread
-                                                                console.log(thread);
-                                                                thread.save(function (err, threadSaved) {
-                                                                    if(err){
-                                                                        console.log(err);
-                                                                        socket.emit('feedbackMessage',{type: 'error', text: 'Error saving thread'});
-                                                                    }else{
-                                                                        socket.emit('feedbackMessage',{type: 'info', text: 'Thread saved!'});
-                                                                        socket.broadcast.emit('threadAdded', threadSaved);
-                                                                    }
+                                                            //check if all medics sent by user actually exist
+                                                            if(medics.length != cleanMedics.length && cleanMedics.length != 0){
+                                                                socket.emit('feedbackMessage',{type: 'error', text: 'Not all medics are valid'});
+                                                            }else{
+                                                                //get id's of medics
+                                                                getIds(medics, function (medicsIds) {
+                                                                    thread.medics = medicsIds;
+                                                                    //thread is not grabbed by anyone yet and has no messages yet
+                                                                    thread.locked = null;
+                                                                    thread.messages = [];
+                                                                    //add first question
+                                                                    thread.question = text;
+                                                                    thread.date_recorded = Date.now();
+                                                                    //save thread
+                                                                    console.log(thread);
+                                                                    thread.save(function (err, threadSaved) {
+                                                                        if(err){
+                                                                            console.log(err);
+                                                                            socket.emit('feedbackMessage',{type: 'error', text: 'Error saving thread'});
+                                                                        }else{
+                                                                            socket.emit('feedbackMessage',{type: 'info', text: 'Thread saved!'});
+                                                                            socket.broadcast.emit('threadAdded', threadSaved);
+                                                                        }
+                                                                    });
                                                                 });
-                                                            });
+                                                            }
                                                         }
-                                                    }
+                                                    });
                                                 });
-                                            });
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             });
                         });
                     }else{

@@ -3,7 +3,7 @@ var expressJwt = require('express-jwt');
 
 var User = require('../app/models/user');
 var UserGroup = require('../app/models/userGroup');
-var AnswerGivers = require('./models/qa_answerGivers');
+var AnswerGivers = require('../app/models/qa_answerGivers');
 
 module.exports = function (app, logger, tokenSecret) {
 
