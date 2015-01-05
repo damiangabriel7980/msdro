@@ -1,4 +1,4 @@
-<div class="col-md-10">
+<div class="col-md-11">
     <div class="row noPadding">
         <div class="col-md-3 noPadding" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt" style="padding: 0 15px 0 0; width: 250px;">
             <div class="col-md-12 well" style="min-height: 450px;">
@@ -15,8 +15,11 @@
             </div>
         </div>
     </div>
+    <div style="clear: both;margin:0 auto;" align="center">
+        <button class="btn btn-sm btn-info btn-more-news" ng-click="increaseLimit()">Mai multe produse</button>
+    </div>
 </div>
-<div class="col-md-2" style="text-align: center">
+<div class="col-md-1" style="text-align: center">
     <ul class="nav nav-list newBlue">
         <li class="active" ng-click="reset()">A - Z</li>
         <li class="divider"></li>
@@ -26,7 +29,4 @@
         </li>
 
     </ul>
-</div>
-<div style="clear: both;margin:0 auto;" align="center">
-    <button class="btn btn-sm btn-info btn-more-news" ng-click="increaseLimit()">Mai multe produse</button>
 </div>
