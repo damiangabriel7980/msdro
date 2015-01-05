@@ -4,9 +4,13 @@
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
+// type:
+// 1 = question  /  2 = answer
+
 var qa_messagesSchema		= new Schema({
-    message_text: String,
+    text: String,
     type: Number,
+    date_recorded: Date,
     owner: {type: Schema.Types.ObjectId,ref: 'User'}
 });
 

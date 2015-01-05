@@ -5,7 +5,7 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
 var topicsSchema		= new Schema({
-    topic_name: String
+    name: String
 });
 
-module.exports = mongoose.model('topics', topicsSchema,'topics');
+module.exports = mongoose.model('qa_topics', topicsSchema,'qa_topics');

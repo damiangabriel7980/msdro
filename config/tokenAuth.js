@@ -4,6 +4,8 @@ var expressJwt = require('express-jwt');
 var request = require('request');
 
 var User = require('../app/models/user');
+var UserGroup = require('../app/models/userGroup');
+var AnswerGivers = require('../app/models/qa_answerGivers');
 
 module.exports = function (app, logger, tokenSecret, pushServerAddr) {
 
@@ -55,38 +57,51 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
                                 username: user.username,
                                 name: user.name,
                                 image_path: user.image_path,
-                                phone: user.phone
+                                phone: user.phone,
+                                answerer: false
                             };
-                            // We are sending the profile inside the token
-                            var token = jwt.sign(profile, tokenSecret);
-
-                            console.log("----------- check subscribe req");
-                            console.log("device: "+deviceType);
-                            console.log("token: "+notificationToken);
-                            if(deviceType && notificationToken){
-                                //subscribe user for push notifications
-                                var subscribeData = {
-                                    "user": "MSD"+user._id.toString(),
-                                    "type": deviceType,
-                                    "token": notificationToken
-                                };
-
-                                request({
-                                    url: pushServerAddr+"/subscribe",
-                                    method: "POST",
-                                    json: true,
-                                    body: subscribeData,
-                                    strictSSL: false
-                                }, function (error, message, response) {
-                                    if(error){
-                                        console.log("---- !!! push server subscribe error");
-                                        console.log(error);
-                                        logger.error(error);
+                            //check if user is an answerer
+                            AnswerGivers.findOne({id_user: user._id}, function (err, data) {
+                                if(err){
+                                    logger.error(err);
+                                    res.send(err);
+                                }else{
+                                    if(data){
+                                        profile.answerer = true;
                                     }
-                                });
-                            }
+                                    // We are sending the profile inside the token
+                                    var token = jwt.sign(profile, tokenSecret);
+                                    
+                                    // if user logs in from a device, subscribe user for push notifications
+                                    console.log("----------- check subscribe req");
+                                    console.log("device: "+deviceType);
+                                    console.log("token: "+notificationToken);
+                                    if(deviceType && notificationToken){
+                                        //subscribe user for push notifications
+                                        var subscribeData = {
+                                            "user": "MSD"+user._id.toString(),
+                                            "type": deviceType,
+                                            "token": notificationToken
+                                        };
 
-                            res.json({ token: token });
+                                        request({
+                                            url: pushServerAddr+"/subscribe",
+                                            method: "POST",
+                                            json: true,
+                                            body: subscribeData,
+                                            strictSSL: false
+                                        }, function (error, message, response) {
+                                            if(error){
+                                                console.log("---- !!! push server subscribe error");
+                                                console.log(error);
+                                                logger.error(error);
+                                            }
+                                        });
+                                    }
+                                    
+                                    res.json({ token: token });
+                                }
+                            });
                         }
                     }
                 }
