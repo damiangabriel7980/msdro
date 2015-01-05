@@ -143,7 +143,8 @@ module.exports = function (socketServer, tokenSecret, logger) {
                         });
                     }else{
                         //user is an answerer; load threads that are addressed to him or to nobody
-                        Threads.find({owner: {$in: [userData._id, null]}}, function (err, threads) {
+                        console.log("load'em threads");
+                        Threads.find({locked: {$in: [userData._id, null]}}, function (err, threads) {
                             if(err){
                                 socket.emit('feedbackMessage',{type:'error', text: 'Error loading threads'});
                             }else{
@@ -156,7 +157,7 @@ module.exports = function (socketServer, tokenSecret, logger) {
                     //only answerers can pick up a thread
                     if(userData.answerer){
                         //check if thread is not already picked up
-                        Threads.find({_id: thread_id}, function (err, thread) {
+                        Threads.findOne({_id: thread_id}, function (err, thread) {
                             if(err){
                                 socket.emit('feedbackMessage',{type:'error', text: 'Unable to find thread'});
                             }else{
@@ -164,7 +165,7 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                     socket.emit('feedbackMessage',{type:'error', text: 'Thread already picked up'});
                                 }else{
                                     thread.locked = userData._id;
-                                    thread.save(function (err) {
+                                    Threads.update({_id: thread._id}, {$set: {locked: userData._id}}, function (err) {
                                         if(err){
                                             socket.emit('feedbackMessage',{type:'error', text: 'Could not pick up thread'});
                                         }else{
@@ -182,7 +183,7 @@ module.exports = function (socketServer, tokenSecret, logger) {
                     //only answerers can drop a thread
                     if(userData.answerer){
                         //get thread
-                        Threads.find({_id: thread_id}, function (err, thread) {
+                        Threads.findOne({_id: thread_id}, function (err, thread) {
                             if(err){
                                 socket.emit('feedbackMessage',{type:'error', text: 'Unable to find thread'});
                             }else{
@@ -199,8 +200,7 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                                 socket.emit('feedbackMessage',{type:'error', text: "You cannot drop a thread once you've given answers"});
                                             }else{
                                                 //drop thread
-                                                thread.locked = null;
-                                                thread.save(function (err) {
+                                                Threads.update({_id: thread._id}, {$set: {locked: null}}, function (err) {
                                                     if(err){
                                                         socket.emit('feedbackMessage',{type:'error', text: 'Could not drop thread'});
                                                     }else{
@@ -217,7 +217,65 @@ module.exports = function (socketServer, tokenSecret, logger) {
                         socket.emit('feedbackMessage',{type:'error', text: 'Permission denied'});
                     }
                 })
-                .on('addQuestionToThread', function (data) {
+                .on('answerThread', function (data) {
+                    //check if user is answerer
+                    if(userData.answerer){
+                        //find thread
+                        Threads.findOne({_id: data.thread_id}, function (err, thread) {
+                            if(err){
+                                socket.emit('feedbackMessage',{type:'error', text: 'Error finding thread'});
+                            }else{
+                                if(!thread){
+                                    socket.emit('feedbackMessage',{type:'error', text: 'Thread not found'});
+                                }else{
+                                    //check if this user locked the thread
+                                    if(thread.locked == userData._id){
+                                        //validate answer length
+                                        if(data.text.length < 10){
+                                            socket.emit('feedbackMessage',{type:'error', text: 'Answer needs to be at least 10 characters long'});
+                                        }else{
+                                            //record answer
+                                            var answer = new qaMessages({
+                                                text: data.text,
+                                                type: 2,
+                                                date_recorded: Date.now(),
+                                                owner: userData._id
+                                            });
+                                            answer.save(function (err, savedAns) {
+                                                if(err){
+                                                    socket.emit('feedbackMessage',{type:'error', text: 'Error saving answer'});
+                                                }else{
+                                                    //tie thread to answer
+                                                    Threads.update({_id: thread._id}, {$addToSet: {messages: savedAns._id}}, function (err, wRes) {
+                                                        if(err){
+                                                            logger.error(err);
+                                                            socket.emit('feedbackMessage',{type:'error', text: 'Error saving answer'});
+                                                        }else{
+                                                            if(wRes == 0){
+                                                                socket.emit('feedbackMessage',{type:'error', text: 'Error saving answer'});
+                                                            }else{
+                                                                socket.emit('feedbackMessage',{type:'success', text: 'Answer saved'});
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    }else{
+                                        if(thread.locked){
+                                            socket.emit('feedbackMessage',{type:'error', text: 'Thread was already picked up by someone else'});
+                                        }else{
+                                            socket.emit('feedbackMessage',{type:'error', text: 'Thread was not picked up'});
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }else{
+                        socket.emit('feedbackMessage',{type:'error', text: 'Permission denied'});
+                    }
+                })
+                .on('followupQuestion', function (data) {
                     
                 })
 //                .on('chatMessage', function (data) {
