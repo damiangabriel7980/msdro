@@ -12,4 +12,27 @@ cloudAdminApp.directive('noCacheSrc', function($window) {
             });
         }
     }
+}).directive('carouselResizable', function($window) {
+    return {
+        restrict: 'A',
+        link: function ($scope, $element) {
+
+            $scope.initializeWindowSize = function () {
+                $scope.elementWidth = angular.element($element)[0].offsetWidth;
+                //$scope.elementHeight = angular.element($element)[0].offsetHeight;
+
+                var carouselH = $scope.elementWidth / 4;
+
+                $scope.carouselResponsiveStyle = 'height:' + carouselH + 'px;';
+            };
+
+            angular.element($window).bind('resize', function () {
+                $scope.initializeWindowSize();
+                $scope.$apply();
+            });
+
+            // Initiate the resize function default values
+            $scope.initializeWindowSize();
+        }
+    }
 });

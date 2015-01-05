@@ -1,8 +1,14 @@
 <div class="carousel-container">
-    <ul rn-carousel rn-carousel-index="selectedIndex" class="image main-carousel" rn-carousel-auto-slide="60" >
+    <ul rn-carousel rn-carousel-index="selectedIndex" class="main-carousel" rn-carousel-auto-slide="60"
+        carousel-resizable style="{{carouselResponsiveStyle}}">
         <li ng-repeat="carouselItem in HomeCarousel track by $index" style="margin-left: 10px;margin-right:10px">
-        <img style="width: 98%; height: 100%;" ng-src="{{pathAmazonDev+carouselItem.image_path}}"/>
-            <div style="color:white" ng-class='{hide:$index!=selectedIndex}' class="carousel-title"><h3>{{carouselItem.title | uppercase}}</h3></div>
+            <div class="carouselSlide">
+                <div ng-class='{hide:$index!=selectedIndex}' class="carousel-title"><h3>{{carouselItem.title | uppercase}}</h3></div>
+                <div class="imageCover"></div>
+                <div class="imageWrapper">
+                    <img ng-src="{{pathAmazonDev+carouselItem.image_path}}"/>
+                </div>
+            </div>
         </li>
     </ul>
     <div class="carousel-controll">
@@ -12,116 +18,99 @@
              ng-click="setSlide($index)">
         </div>
     </div>
-    <div class="col-xs-4 pull-right hidden-sm hidden-xs mySearch">
-        <div class="customFloatLeftSearch">
-            <ul class="nav navbar-nav navbar-left">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle profileClass" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-user"></span>
-                    </a>
-                    <ul class="dropdown-menu profile-drop" role="menu">
-                        <li ng-repeat="group in specialGroups">
-                            <a style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}}</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a style="cursor: pointer;" ng-click="showProfile()">Profile</a></li>
-                        <li><a href="logout">Sign Out</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+    <div class="userAndSearch">
         <form class="navbar-form" role="search">
-            <div class="input-group add-on">
+            <div class="input-group mySearch">
                 <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-                <div class="input-group-btn">
-                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                </div>
+                <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
             </div>
         </form>
+        <div class="dropdown">
+            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <i class="glyphicon glyphicon-user"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a ng-click="showProfile()">Profile</a></li>
+                <li><a href="logout">Sign Out</a></li>
+            </ul>
+        </div>
     </div>
 </div>
 
-
-
-<div class="container-fluid homeStyles">
-    <div ng-class="{'col-xs-6':events.length!=0, 'col-xs-5':events.length==0}">
+<div class="col-xs-12 container homeStyles">
+    <div class="col-xs-5 leftColumn">
         <div class="col-xs-12">
             <div class="col-xs-12 noPadding">
                 <h4>ULTIMELE NOUTATI</h4>
             </div>
-            <div class="col-xs-4 well noPadding readMore newsClass" ng-repeat="n in news | limitTo: 3">
+            <div class="col-xs-4 noPadding newsClass" ng-repeat="n in news | limitTo: 3">
                 <div class="col-xs-9 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}" style="max-width: 100%; max-height: 100%;">
                     </a>
                 </div>
                 <div class="col-xs-9 noPadding">
-                    <div class="col-xs-12 title noPadding"><a class="textBlue" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title | limitTo : 30}}...</b></a></div>
-                    <div class="col-xs-12 header justified noPadding">{{createHeader(n.text,80)}}<br/>
+                    <div class="col-xs-12 title noPadding"><a class="MSDgreenDarker" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title | limitTo : 30}}...</b></a></div>
+                    <div class="col-xs-12 header justified noPadding">{{createHeader(n.text,80)}}</div>
+                    <div class="col-xs-12 noPadding">
+                        <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
                     </div>
                 </div>
-                <div class="readMoreEye"> <a  ui-sref="noutati.articol({articleType:n.type, articleId:n._id})" class="readMore" ><i class="glyphicon glyphicon-eye-open grey-eye"></i></a></div>
             </div>
         </div>
-        <hr align="center" width="75%"/>
+        <div class="col-xs-12">
+            <hr align="center" width="75%"/>
+        </div>
         <div class="col-xs-12" >
             <div class="col-xs-12 noPadding">
                 <h4>ULTIMELE NOUTATI STIINTIFICE</h4>
             </div>
-            <div class="col-xs-4 noPadding well readMore newsClass" ng-repeat="n in scientificNews | limitTo: 3">
+            <div class="col-xs-4 noPadding newsClass" ng-repeat="n in scientificNews | limitTo: 3">
                 <div class="col-xs-9 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%;">
                     </a>
                 </div>
                 <div class="col-xs-9 noPadding">
-                    <div class="col-xs-12 title noPadding"><a class="textBlue" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title | limitTo : 30}}...</b></a></div>
+                    <div class="col-xs-12 title noPadding"><a class="MSDgreenDarker" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title | limitTo : 30}}...</b></a></div>
                     <div class="col-xs-12 header justified noPadding">{{createHeader(n.text,80)}}<br/></div>
-                </div>
-                <div class="readMoreEye"><a  ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="glyphicon glyphicon-eye-open grey-eye"></i></a></div>
-            </div>
-        </div>
-    </div>
-
-    <div ng-class="{'col-xs-3':events.length!=0, 'col-xs-4':events.length==0}" class="smallScreen rightBorder leftBorder">
-        <div class="col-xs-12 noPadd">
-            <div class="col-xs-12 noPadding">
-                <h4>E-LEARNING</h4>
-            </div>
-            <div class="col-xs-12 noPadding well" ng-repeat="m in multimedia | limitTo: 3">
-                <div class="col-xs-12 noPadding marginELearn margintop20px">
-                    <div class="col-xs-12" ui-sref="elearning.multimedia.multimediaById({idd:m._id})">
-
-                        <div class="textBlue"><i class="glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i><b>&nbsp;{{m.title+"("+m.author+")"}}</b></div>
-                        <div class="paddingLeft">{{m.description}}</div>
+                    <div class="col-xs-12 noPadding">
+                        <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="col-xs-4 midColumn">
+        <div class="col-xs-12">
+            <div class="col-xs-12 noPadding">
+                <h4>E-LEARNING</h4>
+            </div>
+            <div class="col-xs-12 noPadding margintop20px" ng-repeat="m in multimedia | limitTo: 3">
+                <i class="gray glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
+                <a ui-sref="elearning.multimedia.multimediaById({idd:m._id})"><b class="MSDgreenDarker">{{m.title+"("+m.author+")"}}</b></a>
+            </div>
+        </div>
         <div class="col-xs-12"><hr/></div>
-        <div class="col-xs-12 noPadd">
+        <div class="col-xs-12">
             <div class="col-xs-12 noPadding">
                 <h4>EVENIMENTE URMATOARE:</h4>
             </div>
-            <div class="col-xs-12 noPadding well" ng-repeat="e in events | limitTo: 3">
-                <div class="col-xs-2 noPadding">
-                    <div class="day customFloatLeft textBlue"><b><span class="dayFont">{{toDate(e.start).getDate()}}</span><br/><span class="monthFont">{{monthsArray[toDate(e.start).getMonth()]}}</span></b></div>
-                    <div class="calendar-style"></div>
+            <div class="col-xs-12 eventDisplay" ng-repeat="e in events | limitTo: 3">
+                <div class="col-xs-2 noPadding date MSDgreenDarker">
+                    <div class="col-xs-12 noPadding day">{{toDate(e.start).getDate()}}</div>
+                    <div class="col-xs-12 noPadding month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
                 </div>
-                <div class="col-xs-10 noPadding col-Left">
-                    <div class="col-xs-12 title textBlue" ui-sref="calendar.calendarDetails({id:e._id})"><b>{{e.name}}</b></div>
-                    <div class="col-xs-12 header margintop5px ">{{e.description.length>20?createHeader(e.description,20):e.description}}</div>
+                <div class="col-xs-10 noPadding">
+                    <div class="col-xs-12 title MSDgreenDarker" ui-sref="calendar.calendarDetails({id:e._id})"><b>{{e.name}}</b></div>
+                    <div class="col-xs-12 header margintop5px ">{{e.description.length>20?createHeader(e.description,20):htmlToPlainText(e.description)}}</div>
                 </div>
             </div>
         </div>
-
     </div>
-        <div ng-if="events.length > multimedia.length" class="col-xs-3 noPadding MerckSmall well" ng-include="merckBoxUrl"></div>
-    <div ng-if="events.length <= multimedia.length || events.length==0" class="col-xs-3 well" ng-include="merckBoxUrl"></div>
+    <div class="col-xs-3 rightColumn">
+        <div class="col-xs-12" ng-if="specialWidgetUrl" ng-include="specialWidgetUrl"></div>
+        <div class="col-xs-12" ng-include="merckBoxUrl"></div>
+    </div>
 </div>
-<div ng-include="footerBox">
-
-</div>
-<script type="text/javascript">
-
-</script>

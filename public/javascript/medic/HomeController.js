@@ -5,6 +5,27 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
     $scope.merckManualImage = $rootScope.merckManualImage;
     $scope.myInterval = 60000;
+    $scope.HomeCarousel = [];
+
+    //------------------------------------------------------------ special groups widgets
+
+    //add widgets in partials/medic/widgets, then associate file name and group name in object below
+    var specialGroupWidgets = {
+        "MSD Diabetes": "Glycemizer.html"
+    };
+
+    $scope.specialWidgetUrl = null;
+
+    $scope.$watch($rootScope.specialGroupSelected, function () {
+        //check if special group is selected
+        if($rootScope.specialGroupSelected){
+            //check if widget exists for selected group
+            if(specialGroupWidgets[$rootScope.specialGroupSelected.display_name]){
+                $scope.specialWidgetUrl = $sce.trustAsResourceUrl('partials/medic/widgets/'+specialGroupWidgets[$rootScope.specialGroupSelected.display_name]);
+            }
+        }
+    });
+
     //------------------------------------------------------------------------------------------------- get all content
     HomeService.getUserEvents.query().$promise.then(function (resp) {
         $scope.events = resp;
@@ -27,12 +48,12 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.hideTitle=[];
 
     //------------------------------------------------------------------------------------------------ useful functions
-    var htmlToPlainText = function(text) {
+    $scope.htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
     };
 
     $scope.createHeader = function (text,length) {
-        return htmlToPlainText(text).substring(0,length)+"...";
+        return $scope.htmlToPlainText(text).substring(0,length)+"...";
     };
 
     $scope.toDate = function (ISOdate) {
@@ -80,19 +101,4 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         //$scope.hideTitle[index]='show';
     };
 
-    setTimeout(function(){$("#footer").css({'margin-top': 0});
-    var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 80);
-    $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});},1000);
-
-    $(document).on('ajaxComplete', function () {
-        $("#footer").css({'margin-top': 0});
-        var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 80);
-        $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});
-    });
-    $(window).on('resize', function () {
-        $scope.screenW = $(window).width();
-        $("#footer").css({'margin-top': 0});
-        var margin = Math.floor($(window).outerHeight() - $(".homeStyles").outerHeight() - $('#footer').outerHeight() - 80);
-        $("#footer").css({'margin-top': (margin > 20 ? margin : 20)});
-    });
 }]);

@@ -179,17 +179,17 @@ cloudAdminApp.run(
             // to active whenever 'contacts.list' or one of its decendents is active.
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
-            $rootScope.footerBox=$sce.trustAsResourceUrl('partials/medic/widgets/_footer.html');
             //amazon service paths
             $rootScope.amazonBucket = sessionStorage.defaultAmazonBucket;
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/"+$rootScope.amazonBucket+"/";
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
 
-            $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merckManual.jpg";
+            $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merck_image_new.png";
 
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
+            $rootScope.MSDlogo = $rootScope.pathAmazonResources+"msd-logo.png";
 
             //profile modal
             $rootScope.showProfile = function(){

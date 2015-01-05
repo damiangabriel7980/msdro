@@ -10,7 +10,7 @@
         <div class="col-md-2" >
             <h4 class="h-title">Arii terapeutice</h4>
 
-            <ul class="list-group newBlue" style="list-style: none">
+            <ul class="list-group MSDgreen" style="list-style: none">
                 <li  ui-sref-active="active" ui-sref="biblioteca.produse.productsByArea({id:0})"><b>Toate ariile terapeutice</b></li>
                 <li  ui-sref-active="active"   ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
                     <span class="list-group-item no-border" ui-sref="biblioteca.produse.productsByArea({id:area._id})"><b>{{area.name}}</b></span>
