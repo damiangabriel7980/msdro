@@ -9,9 +9,9 @@
 <div  ng-if="teste.length>1" class="col-xs-offset-1" id="content">
     <div class="row margintop20px">
         <div class="col-xs-2" >
-            <h4 class="h-title">Istoric teste interactive</h4>
+            <h4 class="h-title">ISTORIC TESTE INTERACTIVE</h4>
 
-            <ul class="list">
+            <ul class="list-group MSDgreen">
                 <li ng-repeat="quiz in teste">{{quiz.title}} - {{quiz.last_updated | asDate | date: "dd/MM/yyyy"}} - expira la {{quiz.expiry_date | asDate | date: "dd/MM/yyyy"}}
                     <br/>
                 </li>
@@ -25,13 +25,20 @@
                 <li class="col-xs-9" ng-repeat="quiz in teste | orderBy:'title'">
 
 
-                    <div class="row">
-                        <img ng-if="quiz.entity!='SLIDE'" src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/video.png" alt="{{quiz.title}}" height="250px" width="250px"/>
-                        <img ng-if="quiz.entity=='SLIDE'" src="https://s3-eu-west-1.amazonaws.com/msddev-test/multimedia/4/slide/multimedia_88.png" height="250px" width="250px" />
-                        <h4><a href="#"></a>{{quiz.title}}</h4>
-                        <p>{{quiz.description | htmlToPlaintext | limitTo: 190}}...
-                            <button class="button btn-info pull-right" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})">Sustine testul</button>
-                        </p>
+                    <div class="row well">
+                        <div class="col-xs-3">
+                            <img class="img-responsive img-thumbnail img-multimedia" ng-if="quiz.entity!='SLIDE'" src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/video.png" alt="{{quiz.title}}" />
+                            <img class="img-responsive img-thumbnail img-multimedia" ng-if="quiz.entity=='SLIDE'" src="https://s3-eu-west-1.amazonaws.com/msddev-test/multimedia/4/slide/multimedia_88.png"/>
+                        </div>
+                        <div class="col-xs-9">
+                            <h4><a href="#"></a>{{quiz.title}}</h4>
+                            <p>{{quiz.description | htmlToPlaintext | limitTo: 190}}...
+                            </p>
+                        </div>
+
+
+                            <button class="btn btn-info pull-right top10 btn-more-news" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})">Sustine testul</button>
+
                     </div>
 
                 </li>
