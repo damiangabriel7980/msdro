@@ -1,3 +1,11 @@
+.main-view-container {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top: 70px;
+  padding-bottom: 50px;
+}
 .articlesStyles .articleBox {
   padding: 5px 5px 5px 5px;
   margin-bottom: 15px;
@@ -209,6 +217,7 @@ ul.products li {
 }
 .homeStyles .eventDisplay .date {
   border-right: 1px solid #aaaaaa;
+  margin-top: 0;
 }
 .homeStyles .eventDisplay .date .day {
   font-size: 20px;
@@ -482,36 +491,33 @@ ul.products li {
 .justified {
   text-align: justify;
 }
-.myMenu{
+.myMenu {
   border-radius: 6px !important;
   padding-top: 0px !important;
   padding-bottom: 0px !important;
 }
-.myMenu a:hover{
+.myMenu a:hover {
   border-radius: 3px !important;
   background-color: #009d97 !important;
 }
-.myMenu a::selection{
+.myMenu a::selection {
   border-radius: 3px !important;
   background-color: #009d97 !important;
 }
-.myMenu .divider:hover{
-  background-color: #009d97 !important;
-}
-.myListItem{
+.myListItem {
   padding-left: 20px !important ;
   padding-right: 5px !important;
   padding-bottom: 10px !important;
   min-width: 180px !important;
 }
-.rightPosition{
+.rightPosition {
   float: right !important;
 }
-.myListItem2{
+.myListItem2 {
   padding-left: 20px !important ;
   padding-right: 5px !important;
 }
-.white{
+.white {
   color: white;
   top: 3px;
 }
@@ -520,7 +526,7 @@ ul.products li {
   font-weight: bold;
   background-color: #ffffff;
 }
-.navbar-fixed-top .navbar-nav > .active > a:after{
+.navbar-fixed-top .navbar-nav > .active > a:after {
   content: '';
   position: absolute;
   width: 40%;
@@ -530,18 +536,18 @@ ul.products li {
   left: 30%;
   top: 40px;
 }
-.img-multimedia{
+.img-multimedia {
   border: 5px solid #ddd;
 }
-.top10{
+.top10 {
   margin-top: 13%;
 }
-.handCursor{
+.handCursor {
   cursor: pointer;
 }
-.date{
+.date {
   margin-top: -5%;
 }
-.MSDdark{
-  color:#000000;
+.MSDdark {
+  color: #000000;
 }
