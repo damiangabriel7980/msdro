@@ -11,7 +11,7 @@ var threadsSchema		= new Schema({
     medics: [{type: Schema.Types.ObjectId,ref: 'User'}],
     topics:[{type: Schema.Types.ObjectId,ref: 'topics'}],
     locked: {type: Schema.Types.ObjectId,ref: 'User'},
-    id_messages:[{type: Schema.Types.ObjectId,ref: 'qa_messages'}]
+    messages:[{type: Schema.Types.ObjectId,ref: 'qa_messages'}]
 });
 
 module.exports = mongoose.model('qa_threads', threadsSchema,'qa_threads');

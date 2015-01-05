@@ -3,6 +3,7 @@ var expressJwt = require('express-jwt');
 
 var User = require('../app/models/user');
 var UserGroup = require('../app/models/userGroup');
+var AnswerGivers = require('./models/qa_answerGivers');
 
 module.exports = function (app, logger, tokenSecret) {
 
@@ -54,14 +55,13 @@ module.exports = function (app, logger, tokenSecret) {
                                 phone: user.phone,
                                 answerer: false
                             };
-                            //check if user is an answerer ( <=> is in group "Raspunzatori")
-                            UserGroup.find({_id: {$in: user.groupsID}, display_name: "Raspunzatori"}, function (err, group) {
+                            //check if user is an answerer
+                            AnswerGivers.findOne({id_user: user._id}, function (err, data) {
                                 if(err){
                                     logger.error(err);
                                     res.send(err);
                                 }else{
-                                    //if the group is found, then user is an answerer
-                                    if(group.length != 0){
+                                    if(data){
                                         profile.answerer = true;
                                     }
                                     // We are sending the profile inside the token
