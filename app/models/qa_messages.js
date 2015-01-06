@@ -11,7 +11,8 @@ var qa_messagesSchema		= new Schema({
     text: String,
     type: Number,
     date_recorded: Date,
-    owner: {type: Schema.Types.ObjectId,ref: 'User'}
+    owner: {type: Schema.Types.ObjectId,ref: 'User'},
+    ownerDisplay: String
 });
 
 module.exports = mongoose.model('qa_messages', qa_messagesSchema,'qa_messages');

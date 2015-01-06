@@ -18,6 +18,9 @@ module.exports = function (socketServer, tokenSecret, logger) {
     var Topics = require('./models/qa_topics');
     var AnswerGivers = require('./models/qa_answerGivers');
 
+    //exclude users' personal info
+    var userExcludes = '-state -subscription -account_expired -account_locked -enabled -last_updated -citiesID -conferencesID -jobsID -phone -points -proof_path -rolesID -show_welcome_screen -groupsID -resetPasswordToken -resetPasswordExpires -activationToken -conferencesID -password -password_expired';
+
     var getIds = function (arr, cb) {
         var ret = [];
         async.each(arr, function (item, callback) {
@@ -38,9 +41,8 @@ module.exports = function (socketServer, tokenSecret, logger) {
             //this socket is authenticated, we are good to handle more events from it
             console.log("================================== socket authenticated");
             var userData = socket.decoded_token;
-            socket.emit('userAuthenticated', userData);
-            console.log(userData._id);
             console.log(userData.username);
+            socket.emit('userAuthenticated', userData);
             socket
                 .on('startThread', function (data) {
                     //only questioners can start a thread
@@ -72,6 +74,7 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                 }else{
                                     var thread = new Threads({});
                                     thread.owner = userData._id;
+                                    thread.ownerDisplay = userData.name;
                                     //find topics in db
                                     Topics.find({name: {$in: cleanTopics}}, function (err, topics) {
                                         if(err){
@@ -86,7 +89,7 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                                 getIds(topics, function (topicsIds) {
                                                     console.log(topics);
                                                     thread.topics = topicsIds;
-                                                    //find medics in db
+                                                    //find medics aliases in db
                                                     AnswerGivers.find({nickname: {$in: cleanMedics}}, function (err, medics) {
                                                         if(err){
                                                             logger.log(err);
@@ -134,23 +137,30 @@ module.exports = function (socketServer, tokenSecret, logger) {
                 .on('loadThreads', function () {
                     if(!userData.answerer){
                         //user is a questioner; load threads with at least one answer
-                        Threads.find({answers: {$exists: true, $not: {$size: 0}}}, function (err, threads) {
-                            if(err){
-                                socket.emit('feedbackMessage',{type:'error', text: 'Error loading threads'});
-                            }else{
-                                socket.emit('threadsLoaded', threads);
-                            }
-                        });
-                    }else{
-                        //user is an answerer; load threads that are addressed to him or to nobody
                         console.log("load'em threads");
-                        Threads.find({locked: {$in: [userData._id, null]}}, function (err, threads) {
-                            if(err){
-                                socket.emit('feedbackMessage',{type:'error', text: 'Error loading threads'});
-                            }else{
-                                socket.emit('threadsLoaded', threads);
-                            }
-                        });
+                        Threads
+                            .find({answered: {$exists: true, $ne: false}})
+                            .populate('medics messages topics')
+                            .exec(function (err, threads) {
+                                if(err){
+                                    socket.emit('feedbackMessage',{type:'error', text: 'Error loading threads'});
+                                }else{
+                                    socket.emit('threadsLoaded', threads);
+                                }
+                            });
+                    }else{
+                        //user is an answerer; load threads that are addressed to it or to nobody
+                        console.log("load'em threads");
+                        Threads
+                            .find({locked: {$in: [userData._id, null]}})
+                            .populate('medics topics messages')
+                            .exec(function (err, threads) {
+                                if(err){
+                                    socket.emit('feedbackMessage',{type:'error', text: 'Error loading threads'});
+                                }else{
+                                    socket.emit('threadsLoaded', threads);
+                                }
+                            });
                     }
                 })
                 .on('pickupThread', function (thread_id) {
@@ -164,7 +174,6 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                 if(thread.locked){
                                     socket.emit('feedbackMessage',{type:'error', text: 'Thread already picked up'});
                                 }else{
-                                    thread.locked = userData._id;
                                     Threads.update({_id: thread._id}, {$set: {locked: userData._id}}, function (err) {
                                         if(err){
                                             socket.emit('feedbackMessage',{type:'error', text: 'Could not pick up thread'});
@@ -191,23 +200,12 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                 if(thread.locked != userData._id){
                                     socket.emit('feedbackMessage',{type:'error', text: "You cannot drop someone else's thread"});
                                 }else{
-                                    //check if thread has answers
-                                    qaMessages.find({_id: {$in: thread.messages}, owner: userData._id}, function (err, messages) {
+                                    //drop thread
+                                    Threads.update({_id: thread._id}, {$set: {locked: null}}, function (err) {
                                         if(err){
-                                            socket.emit('feedbackMessage',{type:'error', text: 'Error processing request'});
+                                            socket.emit('feedbackMessage',{type:'error', text: 'Could not drop thread'});
                                         }else{
-                                            if(messages.length != 0){
-                                                socket.emit('feedbackMessage',{type:'error', text: "You cannot drop a thread once you've given answers"});
-                                            }else{
-                                                //drop thread
-                                                Threads.update({_id: thread._id}, {$set: {locked: null}}, function (err) {
-                                                    if(err){
-                                                        socket.emit('feedbackMessage',{type:'error', text: 'Could not drop thread'});
-                                                    }else{
-                                                        socket.emit('feedbackMessage',{type:'info', text: 'Thread dropped'});
-                                                    }
-                                                });
-                                            }
+                                            socket.emit('feedbackMessage',{type:'info', text: 'Thread dropped'});
                                         }
                                     });
                                 }
@@ -239,14 +237,15 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                                 text: data.text,
                                                 type: 2,
                                                 date_recorded: Date.now(),
-                                                owner: userData._id
+                                                owner: userData._id,
+                                                ownerDisplay: userData.alias.nickname
                                             });
                                             answer.save(function (err, savedAns) {
                                                 if(err){
                                                     socket.emit('feedbackMessage',{type:'error', text: 'Error saving answer'});
                                                 }else{
-                                                    //tie thread to answer
-                                                    Threads.update({_id: thread._id}, {$addToSet: {messages: savedAns._id}}, function (err, wRes) {
+                                                    //tie thread to answer and mark thread as answered
+                                                    Threads.update({_id: thread._id}, {$addToSet: {messages: savedAns._id}, answered: true}, function (err, wRes) {
                                                         if(err){
                                                             logger.error(err);
                                                             socket.emit('feedbackMessage',{type:'error', text: 'Error saving answer'});
@@ -276,30 +275,8 @@ module.exports = function (socketServer, tokenSecret, logger) {
                     }
                 })
                 .on('followupQuestion', function (data) {
-                    
+
                 })
-//                .on('chatMessage', function (data) {
-//                    var message = data.message;
-//                    var room = data.room;
-//                    //TODO: check room exists
-//                    if(!message || !room){
-//                        //something's wrong
-//                        socket.emit('feedbackMessage', {accepted: false, recorded: false, message:'No room/message present'});
-//                    }else{
-//                        //add to db
-//                        data.room = "test";
-//                        data.date_written = Date.now();
-//                        var toAdd = new Message(data);
-//                        toAdd.save(function (err, saved) {
-//                            if(err){
-//                                socket.emit('feedbackMessage', {accepted: true, recorded: false, message:'Unable to record message'});
-//                            }else{
-//                                socket.emit('feedbackMessage', {accepted: true, recorded: true, message:saved});
-//                            }
-//                        });
-//                    }
-//                    console.log(userData.username+": "+data);
-//                })
                 .on('disconnect', function () {
                     console.log("================================== socket disconnected");
                 });

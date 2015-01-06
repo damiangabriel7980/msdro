@@ -68,6 +68,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
                                 }else{
                                     if(data){
                                         profile.answerer = true;
+                                        profile.alias = data;
                                     }
                                     // We are sending the profile inside the token
                                     var token = jwt.sign(profile, tokenSecret);
