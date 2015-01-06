@@ -22,6 +22,7 @@ var Speakers = require('./models/speakers');
 var Rooms = require('./models/rooms');
 var Topics = require('./models/qa_topics');
 var AnswerGivers = require('./models/qa_answerGivers');
+var Threads = require('./models/qa_threads');
 
 
 var XRegExp  = require('xregexp').XRegExp;
@@ -2377,6 +2378,99 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.send(err);
                 }else{
                     res.json(topics);
+                }
+            });
+        })
+        .post(function (req, res) {
+            var name = req.body.name;
+            //validate name
+            var namePatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            if(!namePatt.test(name)){
+                res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
+            }else{
+                //check if topic already exists
+                Topics.findOne({name: name}, function (err, topic) {
+                    if(err){
+                        res.send({message: {type: 'danger', text: 'Eroare la adaugarea topicului. Verificati numele'}});
+                    }else{
+                        if(topic){
+                            res.send({message: {type: 'danger', text: 'Topicul exista deja'}});
+                        }else{
+                            //add topic
+                            var toAdd = new Topics({name: name});
+                            toAdd.save(function (err, saved) {
+                                if(err){
+                                    res.send({message: {type: 'danger', text: 'Eroare la salvare'}});
+                                }else{
+                                    res.send({message: {type: 'success', text: 'Topicul a fost salvat'}});
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        })
+        .put(function (req, res) {
+            var id = req.body.id;
+            var name = req.body.name;
+            //validate name
+            var namePatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            if(!namePatt.test(name)){
+                res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
+            }else{
+                //check if topic already exists
+                Topics.findOne({name: name}, function (err, topic) {
+                    if(err){
+                        res.send({message: {type: 'danger', text: 'Eroare la modificarea topicului. Verificati numele'}});
+                    }else{
+                        if(topic){
+                            res.send({message: {type: 'danger', text: 'Un topic cu acest nume exista deja'}});
+                        }else{
+                            //update topic
+                            Topics.update({_id: id}, {$set: {name: name}}, function (err, wRes) {
+                                if(err || wRes == 0){
+                                    res.send({message: {type: 'danger', text: 'Eroare la actualizare. Verificati numele'}});
+                                }else{
+                                    res.send({message: {type: 'success', text: 'Topicul a fost modificat'}});
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+    router.route('/admin/applications/qa/topicById/:id')
+        .get(function (req, res) {
+            Topics.findOne({_id: req.params.id}, function (err, topic) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(topic);
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var id_topic = req.params.id;
+            id_topic = mongoose.Types.ObjectId(id_topic.toString());
+
+            //check if topic is used in threads
+            Threads.find({topics: {$in: [id_topic]}}, function (err, threads) {
+                if(err){
+                    res.send({message: {type: 'danger', text: 'Eroare la stergere'}});
+                }else{
+                    if(threads.length != 0){
+                        res.send({message: {type: 'danger', text: 'Topicul nu poate fi sters, deoarece este folosit in thread-uri'}});
+                    }else{
+                        //delete topic
+                        Topics.remove({_id: id_topic}, function (err, wRes) {
+                            if(err || wRes == 0){
+                                res.send({message: {type: 'danger', text: 'Nu s-a putut sterge'}});
+                            }else{
+                                res.send({message: {type: 'success', text: 'Topicul a fost sters'}});
+                            }
+                        });
+                    }
                 }
             });
         });

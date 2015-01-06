@@ -28,7 +28,6 @@ cloudAdminControllers.controller('qaController', ['$scope', '$rootScope', '$filt
     $scope.loadAnswerGivers = function () {
         qaService.answerGivers.query().$promise.then(function (resp) {
             var data = resp;
-            console.log(resp);
 
             $scope.tableParamsAnswerGivers = new ngTableParams({
                 page: 1,            // show first page
@@ -55,40 +54,40 @@ cloudAdminControllers.controller('qaController', ['$scope', '$rootScope', '$filt
     $scope.loadAnswerGivers();
 
     $scope.addTopic = function(){
-//        $modal.open({
-//            templateUrl: 'partials/admin/applications/qa/modalAddTopic.html',
-//            size: 'lg',
-//            windowClass: 'fade',
-//            controller: 'AddTopicController'
-//        });
+        $modal.open({
+            templateUrl: 'partials/admin/applications/qa/modalAddTopic.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'AddTopicController'
+        });
     };
-//
+
     $scope.deleteTopic = function (id) {
-//        $modal.open({
-//            templateUrl: 'partials/admin/applications/qa/modalDeleteTopic.html',
-//            size: 'sm',
-//            windowClass: 'fade',
-//            controller: 'DeleteTopicController',
-//            resolve: {
-//                idToDelete: function () {
-//                    return id;
-//                }
-//            }
-//        });
+        $modal.open({
+            templateUrl: 'partials/admin/applications/qa/modalDeleteTopic.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'DeleteTopicController',
+            resolve: {
+                idToDelete: function () {
+                    return id;
+                }
+            }
+        });
     };
-//
+
     $scope.editTopic = function (id) {
-//        $modal.open({
-//            templateUrl: 'partials/admin/applications/qa/modalEditTopic.html',
-//            size: 'lg',
-//            windowClass: 'fade',
-//            controller: 'EditTopicController',
-//            resolve: {
-//                idToEdit: function () {
-//                    return id;
-//                }
-//            }
-//        });
+        $modal.open({
+            templateUrl: 'partials/admin/applications/qa/modalEditTopic.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'EditTopicController',
+            resolve: {
+                idToEdit: function () {
+                    return id;
+                }
+            }
+        });
     };
 
 
