@@ -1,3 +1,11 @@
+.main-view-container {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top: 70px;
+  padding-bottom: 50px;
+}
 .articlesStyles .articleBox {
   padding: 5px 5px 5px 5px;
   margin-bottom: 15px;
@@ -490,7 +498,6 @@ ul.products li {
 .myMenu a:hover{
   border-radius: 3px !important;
   background-color: #009d97 !important;
-
 }
 .myMenu a::selection{
   border-radius: 3px !important;
@@ -537,7 +544,7 @@ ul.products li {
 .top10{
   margin-top: 13%;
 }
-.handCursor{
+.handCursor {
   cursor: pointer;
 }
 .date{
