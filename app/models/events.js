@@ -2,7 +2,6 @@
  * Created by miricaandrei23 on 28.10.2014.
  */
 var mongoose		= require('mongoose');
-var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
 var Conferences=require('./conferences');
 
@@ -19,7 +18,6 @@ var EventsSchema		= new Schema({
     type: Number,
     listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
 });
-EventsSchema.plugin(mongoosastic);
 module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');
 
 EventsSchema.pre('remove', function(next) {

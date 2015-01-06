@@ -1,5 +1,4 @@
 var mongoose		= require('mongoose');
-var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
 
 //type: 1 = normal
@@ -17,5 +16,4 @@ var articlesSchema		= new Schema({
     image_path:   String,
     groupsID:     Array
 });
-articlesSchema.plugin(mongoosastic);
 module.exports = mongoose.model('articles', articlesSchema);
