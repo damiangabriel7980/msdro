@@ -90,5 +90,14 @@ cloudAdminControllers.controller('qaController', ['$scope', '$rootScope', '$filt
         });
     };
 
+    $scope.addAnswerGiver = function(){
+        $modal.open({
+            templateUrl: 'partials/admin/applications/qa/modalAddAnswerGiver.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'AddAnswerGiverController'
+        });
+    };
+
 
 }]);

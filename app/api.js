@@ -2484,6 +2484,84 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.json(ag);
                 }
             });
+        })
+        .post(function (req, res) {
+            console.log(req.body);
+            if(!req.body.nickname || !req.body.id_user){
+                res.send({message: {type: 'danger', text:'Toate campurile sunt obligatorii'}});
+            }else{
+                //check if id points to an actual user
+                User.findOne({_id: req.body.id_user}, function (err, user) {
+                    if(err || !user){
+                        res.send({message: {type: 'danger', text:'Utilizator invalid'}});
+                    }else{
+                        //check if medic was already registered as answer giver
+                        AnswerGivers.findOne({id_user: mongoose.Types.ObjectId(req.body.id_user.toString())}, function (err, found) {
+                            if(err || found){
+                                res.send({message: {type: 'danger', text:'Eroare la validare. Verificati daca medicul este deja adaugat'}});
+                            }else{
+                                //check nickname format
+                                var nickPatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+                                if(!nickPatt.test(req.body.nickname.toString())){
+                                    res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
+                                }else{
+                                    //check if nickname already exists
+                                    AnswerGivers.findOne({nickname: req.body.nickname}, function (err, found) {
+                                        if(err || found){
+                                            res.send({message: {type: 'danger', text:'Nickname-ul exista deja'}});
+                                        }else{
+                                            //add answer giver
+                                            var toAdd = new AnswerGivers({
+                                                id_user: mongoose.Types.ObjectId(req.body.id_user.toString()),
+                                                nickname: req.body.nickname.toString()
+                                            });
+                                            toAdd.save(function (err, saved) {
+                                                if(err){
+                                                    res.send({message: {type: 'danger', text:'Eroare la salvare'}});
+                                                }else{
+                                                    res.send({message: {type: 'success', text:'Raspunzatorul a fost adaugat'}});
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    router.route('/admin/applications/qa/medics')
+        .get(function (req, res) {
+            //find medics already defined as answer givers
+            AnswerGivers.find(function (err, ag) {
+                if(err){
+                    res.send({message: {type: 'danger', text: 'Error finding medics'}});
+                }else{
+                    console.log(ag);
+                    //get user ids of answer givers
+                    var medicsIds = [];
+                    async.each(ag, function (item, callback) {
+                        medicsIds.push(item.id_user);
+                        callback();
+                    }, function (err) {
+                        if(err){
+                            res.send({message: {type: 'danger', text: 'Error finding medics'}});
+                        }else{
+                            console.log(medicsIds);
+                            //get all medics that are not already registered as answer givers
+                            User.find({_id: {$nin: medicsIds}}, {username: 1}).exec(function (err, medics) {
+                                if(err){
+                                    res.send({message: {type: 'danger', text: 'Error finding medics'}});
+                                }else{
+                                    res.json(medics);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         });
 
     //==================================================================================================================================== routes for user

@@ -252,7 +252,8 @@ cloudAdminServices.factory('qaService', ['$resource', function($resource){
             update: { method: 'PUT', isArray: false }
         }),
         answerGivers: $resource('api/admin/applications/qa/answerGivers', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: true },
+            save: { method: 'POST', isArray: false }
         }),
         topicById: $resource('api/admin/applications/qa/topicById/:id', {}, {
             query: { method: 'GET', isArray: false },
@@ -260,6 +261,9 @@ cloudAdminServices.factory('qaService', ['$resource', function($resource){
         }),
         answerGiverById: $resource('api/admin/applications/qa/answerGiverById/:id', {}, {
             query: { method: 'GET', isArray: false }
+        }),
+        medics: $resource('api/admin/applications/qa/medics', {}, {
+            query: { method: 'GET', isArray: true }
         })
     }
 }]);

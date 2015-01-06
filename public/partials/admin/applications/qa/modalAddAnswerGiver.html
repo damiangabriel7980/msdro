@@ -1,0 +1,30 @@
+<form>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">&times;</button>
+            <h3 class="modal-title">Adauga raspunzator</h3>
+        </div>
+        <div class="col-md-12 modal-body">
+            <div class="col-md-12" style="margin-bottom: 15px;">
+                <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="nickname">Nickname:</label>
+                <input type="text" class="form-control" id="nickname" ng-model="nickname">
+            </div>
+            <div class="form-group col-md-12">
+                <label>Medic: </label>
+                <ui-select ng-model="medic.selected" theme="select2" ng-disabled="false" style="width: 100%;">
+                    <ui-select-match placeholder="Selecteaza un medic">{{$select.selected.username}}</ui-select-match>
+                    <ui-select-choices repeat="medic in medics | propsFilter: {username: $select.search}">
+                        <div ng-bind-html="trustAsHtml((medic.username | highlight: $select.search))"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="closeModal()">Inchide</button>
+            <button type="submit" class="btn btn-primary" ng-click="addAnswerGiver()">Adauga raspunzator</button>
+        </div>
+    </div>
+</form>
