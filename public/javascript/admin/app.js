@@ -371,6 +371,16 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                 })
             }]
         })
+        .state('applications', {
+            abstract: true,
+            url: '/applications',
+            templateUrl: '/partials/admin/applications/applications.html'
+        })
+        .state('applications.qa',{
+            url: '/qa',
+            templateUrl: 'partials/admin/applications/qa/qa.html',
+            controller: 'qaController'
+        })
 }]);
 
 cloudAdminApp.run(

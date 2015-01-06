@@ -91,6 +91,7 @@
     <script src="javascript/admin/MultimediaController/multimediaAddCtrl.js"></script>
     <script src="javascript/admin/testeController/testeInteractiveCtrl.js"></script>
     <script src="javascript/admin/testeController/testeAddCtrl.js"></script>
+    <script src="javascript/admin/applicationsControllers/qaController.js"></script>
 
 
     <!--Plug-ins-->
@@ -180,6 +181,12 @@
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('ariiTerapeutice')}"><a ui-sref="ariiTerapeutice"> Arii terapeutice </a></li>
+                <li class="dropdown" ng-class="{'active': $state.includes('applications')}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Applicatii <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="applications.qa"> Q/A </a></li>
+                    </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">

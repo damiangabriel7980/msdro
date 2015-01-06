@@ -244,4 +244,14 @@ cloudAdminServices.factory('ariiAdminService', ['$resource', function($resource)
         })
     }
 }]);
+cloudAdminServices.factory('qaService', ['$resource', function($resource){
+    return {
+        topics: $resource('api/admin/applications/qa/topics', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        answerGivers: $resource('api/admin/applications/qa/answerGivers', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
 

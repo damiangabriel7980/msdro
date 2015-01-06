@@ -19,17 +19,23 @@ var Carousel=require('./models/carousel_Medic');
 var Conferences = require('./models/conferences');
 var Talks = require('./models/talks');
 var Speakers = require('./models/speakers');
-var XRegExp  = require('xregexp').XRegExp;
 var Rooms = require('./models/rooms');
+var Topics = require('./models/qa_topics');
+var AnswerGivers = require('./models/qa_answerGivers');
+
+
+var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
 var ObjectId = require('mongoose').Types.ObjectId;
 var mongoose = require('mongoose');
 var async = require('async');
 var request = require('request');
-
 var AWS = require('aws-sdk');
 var fs = require('fs');
-var request = require('request');
+
+//exclude users' personal info
+var userExcludes = '-state -subscription -account_expired -account_locked -enabled -last_updated -citiesID -conferencesID -jobsID -phone -points -proof_path -rolesID -show_welcome_screen -groupsID -resetPasswordToken -resetPasswordExpires -activationToken -conferencesID -password -password_expired';
+
 //form sts object from environment variables. Used for retrieving temporary credentials to front end
 var sts = new AWS.STS();
 //configure credentials for use on server only; assign credentials based on role (never use master credentials)
@@ -2361,6 +2367,28 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.send(err);
 
                 res.json({ message: 'Successfully deleted!' });
+            });
+        });
+
+    router.route('/admin/applications/qa/topics')
+        .get(function (req, res) {
+            Topics.find({}, function (err, topics) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.json(topics);
+                }
+            });
+        });
+
+    router.route('/admin/applications/qa/answerGivers')
+        .get(function (req, res) {
+            AnswerGivers.find({}).populate('id_user', userExcludes).exec(function (err, ag) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.json(ag);
+                }
             });
         });
 

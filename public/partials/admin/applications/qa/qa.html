@@ -1,0 +1,51 @@
+<div class = "col-md-12 well">
+    <div class="col-md-9"><h3>Gestionare topicuri si raspunzatori</h3></div>
+</div>
+<div class="col-md-12">
+    <div class="titleAndButton">
+        <div><h3>Topicuri:</h3></div>
+        <div>
+            <div class="btn btn-primary" ng-click="addTopic()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
+        </div>
+    </div>
+    <table ng-table="tableParamsTopics" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="topic in $data">
+            <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
+                {{topic.name}}
+            </td>
+            <td data-title="'Actiuni'">
+                <div class="btn-group">
+                    <div class="btn btn-default" ng-click="editTopic(topic._id)"><i class="glyphicon glyphicon-cog"></i></div>
+                    <div class="btn btn-danger" ng-click="deleteTopic(topic._id)"><i class="glyphicon glyphicon-trash"></i></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-md-12">
+    <div class="titleAndButton">
+        <div><h3>Raspunzatori:</h3></div>
+        <div>
+            <div class="btn btn-primary" ng-click="addAnswerGiver()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
+        </div>
+    </div>
+    <table ng-table="tableParamsAnswerGivers" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="medic in $data">
+            <td data-title="'Nickname'" filter="{ 'nickname': 'text' }" sortable="'nickname'">
+                {{medic.nickname}}
+            </td>
+            <td data-title="'Nume'" filter="{ 'id_user.name': 'text' }" sortable="'id_user.name'">
+                {{medic.id_user.name}}
+            </td>
+            <td data-title="'E-mail'" filter="{ 'id_user.username': 'text' }" sortable="'id_user.username'">
+                {{medic.id_user.username}}
+            </td>
+            <td data-title="'Actiuni'">
+                <div class="btn-group">
+                    <div class="btn btn-default" ng-click="editTopic(topic._id)"><i class="glyphicon glyphicon-cog"></i></div>
+                    <div class="btn btn-danger" ng-click="deleteTopic(topic._id)"><i class="glyphicon glyphicon-trash"></i></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
