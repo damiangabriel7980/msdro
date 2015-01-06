@@ -112,20 +112,20 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-globe"></span> Noutati <b class="caret"></b>
                     </a>
-                    <ul class="dropdown-menu myMenu" role="menu" >
-                        <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:1})" style=":hover{background-color:#009d97}">Stiri <i class="glyphicon glyphicon-chevron-right white rightPosition"></i></a> </li>
+                    <ul class="dropdown-menu myMenu greyBackground" role="menu" >
+                        <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:1})" style=":hover{background-color:#009d97}">Stiri <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a> </li>
 
-                        <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:2})" style=":hover{background-color:#009d97}">Stiri legislative <i class="glyphicon glyphicon-chevron-right white rightPosition"></i> </a></li>
+                        <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:2})" style=":hover{background-color:#009d97}">Stiri legislative <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i> </a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-book"></span> Biblioteca <b class="caret"></b>
                     </a>
-                    <ul class="dropdown-menu myMenu" role="menu">
-                        <li><a class="myListItem" ui-sref="biblioteca.produse.productsByArea({id:0})" href="#/produse">Produse <i class="glyphicon glyphicon-chevron-right white rightPosition"></i></a></li>
-                        <li><a class="myListItem" ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})">Articole stiintifice <i class="glyphicon glyphicon-chevron-right white rightPosition"></i></a></li>
-                        <li><a class="myListItem" ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" target="_blank">Manualul Merck <i class="glyphicon white glyphicon-chevron-right rightPosition"></i></a></li>
+                    <ul class="dropdown-menu myMenu greyBackground" role="menu">
+                        <li><a class="myListItem" ui-sref="biblioteca.produse.productsByArea({id:0})" href="#/produse">Produse <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})">Articole stiintifice <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" target="_blank">Manualul Merck <i class="glyphicon white glyphicon-chevron-right rightPosition greyColor"></i></a></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar"><span class="glyphicon glyphicon-calendar">Calendar</span></a></li>
@@ -133,18 +133,18 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-download"></span> E-learning <b class="caret"></b>
                     </a>
-                    <ul class="dropdown-menu myMenu" role="menu">
-                        <li><a class="myListItem" ui-sref="elearning.multimedia.multimediaByArea({id:0})" href="#/multimedia">Multimedia<i class="glyphicon glyphicon-chevron-right white rightPosition"></i></a></li>
-                        <li><a class="myListItem" ui-sref="elearning.transmisii" href="#/transmisii">Transmisii live<i class="glyphicon glyphicon-chevron-right white rightPosition"></i></a></li>
-                        <li><a class="myListItem" ui-sref="elearning.teste" href="#/teste">Teste interactive <i class="glyphicon glyphicon-chevron-right white rightPosition"></i></a></li>
+                    <ul class="dropdown-menu myMenu greyBackground" role="menu">
+                        <li><a class="myListItem" ui-sref="elearning.multimedia.multimediaByArea({id:0})" href="#/multimedia">Multimedia<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ui-sref="elearning.transmisii" href="#/transmisii">Transmisii live<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ui-sref="elearning.teste" href="#/teste">Teste interactive <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures')}" ng-if="groupFeatures">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-download"></span> {{specialGroupSelected?specialGroupSelected.display_name:""}} <b class="caret"></b>
                     </a>
-                    <ul class="dropdown-menu myMenu" role="menu">
-                        <li ng-repeat="feat in groupFeatures"><a class="myListItem" ui-sref="groupFeatures({feature: feat})">{{feat}}<i class="glyphicon glyphicon-chevron-right white rightPosition"></i></a></li>
+                    <ul class="dropdown-menu myMenu greyBackground" role="menu">
+                        <li ng-repeat="feat in groupFeatures"><a class="myListItem" ui-sref="groupFeatures({feature: feat})">{{feat}}<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
                     </ul>
                 </li>
             </ul>
@@ -153,9 +153,9 @@
                     <a href="#" class="dropdown-toggle specialGroupDropdown" data-toggle="dropdown">
                         <img ng-src="{{specialGroupSelected.image_path?pathAmazonDev+specialGroupSelected.image_path:MSDlogo}}">
                     </a>
-                    <ul class="dropdown-menu myMenu" role="menu">
+                    <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li ng-repeat="group in specialGroups">
-                            <a class="myListItem" style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}} <i class="glyphicon glyphicon-chevron-right white rightPosition"></i></a>
+                            <a class="myListItem" style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}} <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a>
                         </li>
                     </ul>
                 </li>

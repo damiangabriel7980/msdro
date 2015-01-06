@@ -205,10 +205,10 @@ ul.products li {
   padding: 0 0 50px 0;
 }
 .homeStyles .eventDisplay {
-  padding: 0 0 10px 0;
+  padding: 0 0 30px 0;
 }
 .homeStyles .eventDisplay .date {
-  border-right: 1px solid #aaaaaa;
+  border-right: 0px solid #aaaaaa;
 }
 .homeStyles .eventDisplay .date .day {
   font-size: 20px;
@@ -490,6 +490,7 @@ ul.products li {
 .myMenu a:hover{
   border-radius: 3px !important;
   background-color: #009d97 !important;
+
 }
 .myMenu a::selection{
   border-radius: 3px !important;
@@ -540,8 +541,20 @@ ul.products li {
   cursor: pointer;
 }
 .date{
-  margin-top: -5%;
+  margin-top: 0%;
 }
 .MSDdark{
   color:#000000;
+}
+.greyBackground{
+  background-color: #F0F0F0;
+}
+.greyColor{
+  color: #F0F0F0;
+}
+.bottomBorder{
+  border-bottom: 1px solid #009d97;
+}
+.date2 {
+  margin-top: -5%;
 }

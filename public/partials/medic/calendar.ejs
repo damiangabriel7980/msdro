@@ -13,16 +13,16 @@
 <div class="container" id="content">
     <div class="row-margintop20px">
         <div class="col-xs-3 hidden-xs">
-            <h4 style="border-bottom: 1px solid #d97c1e;">EVENIMENTE URMATOARE:</h4>
+            <h4 class="bottomBorder">EVENIMENTE URMATOARE:</h4>
              <div class="event blue" ng-repeat="eventim in events2Filtered">
                     <div class="row">
-                        <div class="col-xs-4 date">
+                        <div class="col-xs-3 date2">
                             <h2 class="MSDgreen">{{eventim.start | filter: asDate | date:'dd'}}</h2>
                             <h5 class="MSDgreen">{{eventim.start | filter: asDate | date:'MMM'}}</h5>
                           </div>
 
                         <div class="col-xs-8">
-                            <h4 class="MSDgreen" ui-sref="calendar.calendarDetails({id:eventim._id})">{{eventim['name']}}</h4>
+                            <h4 ui-sref="calendar.calendarDetails({id:eventim._id})">{{eventim['name']}}</h4>
                         </div>
                     </div>
                 </div>
