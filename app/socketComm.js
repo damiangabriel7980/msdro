@@ -245,7 +245,7 @@ module.exports = function (socketServer, tokenSecret, logger) {
                                                     socket.emit('feedbackMessage',{type:'error', text: 'Error saving answer'});
                                                 }else{
                                                     //tie thread to answer and mark thread as answered
-                                                    Threads.update({_id: thread._id}, {$addToSet: {messages: savedAns._id}, answered: true}, function (err, wRes) {
+                                                    Threads.update({_id: thread._id}, {$addToSet: {messages: savedAns._id}, $set: {answered: true}}, function (err, wRes) {
                                                         if(err){
                                                             logger.error(err);
                                                             socket.emit('feedbackMessage',{type:'error', text: 'Error saving answer'});
@@ -275,7 +275,57 @@ module.exports = function (socketServer, tokenSecret, logger) {
                     }
                 })
                 .on('followupQuestion', function (data) {
-
+                    //get thread
+                    Threads.findOne({_id: data.thread_id}, function (err, thread) {
+                        if(err){
+                            logger.error(err);
+                            socket.emit('feedbackMessage',{type:'error', text: 'Error finding thread'});
+                        }else{
+                            if(!thread){
+                                socket.emit('feedbackMessage',{type:'error', text: 'Thread not found'});
+                            }else{
+                                //check if user is questioner
+                                if(userData.answerer){
+                                    socket.emit('feedbackMessage',{type:'error', text: 'Not allowed to start thread'});
+                                }else{
+                                    //check if user started the thread
+                                    if(thread.owner != userData._id){
+                                        socket.emit('feedbackMessage',{type:'error', text: 'You can only place a follow-up question on threads started by you'});
+                                    }else{
+                                        //validate question text
+                                        if(data.text.length < 10){
+                                            socket.emit('feedbackMessage',{type:'error', text: 'Question needs to be at least 10 characters long'});
+                                        }else{
+                                            //add question to thread
+                                            var qestion = new qaMessages({
+                                                text:data.text,
+                                                type: 1,
+                                                date_recorded: Date.now(),
+                                                owner: userData._id,
+                                                ownerDisplay: userData.name
+                                            });
+                                            qestion.save(function (err, saved) {
+                                                if(err){
+                                                    socket.emit('feedbackMessage',{type:'error', text: 'Error saving question'});
+                                                }else{
+                                                    // tie question to thread
+                                                    Threads.update({_id: thread._id}, {$addToSet: {messages: saved._id}}, function (err, wRes) {
+                                                        if(err){
+                                                            socket.emit('feedbackMessage',{type:'error', text: 'Error saving question'});
+                                                        }else if(wRes == 0){
+                                                            socket.emit('feedbackMessage',{type:'error', text: 'Error saving question'});
+                                                        }else{
+                                                            socket.emit('feedbackMessage',{type:'success', text: 'Question saved'});
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
                 })
                 .on('disconnect', function () {
                     console.log("================================== socket disconnected");
