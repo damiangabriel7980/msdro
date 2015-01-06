@@ -2,13 +2,14 @@
  * Created by miricaandrei23 on 12.11.2014.
  */
 var mongoose		= require('mongoose');
+var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
 
 //type: 1 = video, 2 = slide
 
 var multimediaSchema		= new Schema({
     author : String,
-    description : String,
+    description : {type:String,es_indexed:true},
     enable : Boolean,
     file_path : String,
     groupsID : Array,
@@ -21,5 +22,5 @@ var multimediaSchema		= new Schema({
     title : String,
     type : Number
 });
-
+multimediaSchema.plugin(mongoosastic);
 module.exports = mongoose.model('multimedia', multimediaSchema,'multimedia');

@@ -5,10 +5,11 @@
  * Created by miricaandrei23 on 12.11.2014.
  */
 var mongoose		= require('mongoose');
+var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
 
 var quizSchema		= new Schema({
-    description : String,
+    description : {type:String,es_indexed:true},
     enabled : Boolean,
     entity : Number,
     expired : Boolean,
@@ -22,5 +23,5 @@ var quizSchema		= new Schema({
     title : String,
     treshhold : Number
 });
-
+quizSchema.plugin(mongoosastic);
 module.exports = mongoose.model('quizes', quizSchema,'quizes');

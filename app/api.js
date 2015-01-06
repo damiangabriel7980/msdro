@@ -2721,14 +2721,14 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     router.route('/userHomeCarousel')
         .get(function (req,res) {
-            Carousel.find({enable:true},(function (err, elements) {
-                if(err){
+            Carousel.find({enable: true}).populate('article_id').exec(function (err, elements) {
+                if (err) {
                     res.send(err);
-                }else{
+                } else {
                     res.json(elements);
                 }
             })
-        )});
+        });
 
     router.route('/userHomeEvents')
         .get(function (req,res) {

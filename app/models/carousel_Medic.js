@@ -8,7 +8,7 @@ var carouselSchema		= new Schema({
     enable:       Boolean,
     last_updated: Date,
     type: Number,
-    article_id:   String
+    article_id:   {type:String,ref:'articles'}
 });
 
 module.exports = mongoose.model('carousel_Medic', carouselSchema,'carousel_Medic');
