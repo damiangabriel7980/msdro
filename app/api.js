@@ -2559,8 +2559,9 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                         //change in messages
                                         qaMessages.update({owner: agToUpdate.id_user}, {$set: {ownerDisplay: nickname}}, {multi: true}, function (err, wRes) {
                                             if(err){
+                                                logger.warn("Modify nickname "+nickname+" for user "+agToUpdate.id_user+" in published messages:");
                                                 logger.error(err);
-                                                res.send({message: {type: 'danger', text: 'Eroare la modificarea nickname-ului in mesajele publicate'}});
+                                                res.send({message: {type: 'danger', text: 'Nickname modificat. Eroare la modificarea nickname-ului in mesajele publicate'}});
                                             }else{
                                                 res.send({message: {type: 'success', text: 'Nickname modificat. S-a actualizat in '+wRes+' mesaje publicate.'}});
                                             }
@@ -2581,6 +2582,18 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.send(err);
                 }else{
                     res.send(ag);
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var id_ag = req.params.id;
+            id_ag = mongoose.Types.ObjectId(id_ag.toString());
+
+            AnswerGivers.remove({_id: id_ag}, function (err, wRes) {
+                if(err || wRes == 0){
+                    res.send({message: {type: 'danger', text: 'Nu s-a putut sterge'}});
+                }else{
+                    res.send({message: {type: 'success', text: 'Raspunzatorul a fost sters'}});
                 }
             });
         });

@@ -261,7 +261,8 @@ cloudAdminServices.factory('qaService', ['$resource', function($resource){
             delete: { method: 'DELETE', isArray: false }
         }),
         answerGiverById: $resource('api/admin/applications/qa/answerGiverById/:id', {}, {
-            query: { method: 'GET', isArray: false }
+            query: { method: 'GET', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         }),
         medics: $resource('api/admin/applications/qa/medics', {}, {
             query: { method: 'GET', isArray: true }

@@ -113,5 +113,19 @@ cloudAdminControllers.controller('qaController', ['$scope', '$rootScope', '$filt
         });
     };
 
+    $scope.deleteAnswerGiver = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/applications/qa/modalDeleteAnswerGiver.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'DeleteAnswerGiverController',
+            resolve: {
+                idToDelete: function () {
+                    return id;
+                }
+            }
+        });
+    };
+
 
 }]);
