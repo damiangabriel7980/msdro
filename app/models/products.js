@@ -14,5 +14,5 @@ var ProductSchema		= new Schema({
     name: {type:String,es_indexed:true},
     'therapeutic-areasID': Array
 });
-ProductSchema.plugin(mongoosastic);
+//ProductSchema.plugin(mongoosastic);
 module.exports = mongoose.model('products', ProductSchema);

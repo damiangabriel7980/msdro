@@ -430,7 +430,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 {
                     console.log(err);
                     res.json(err);
-
                 }
             });
             Teste.ensureIndexes(function (err) {

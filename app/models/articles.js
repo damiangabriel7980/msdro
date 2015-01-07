@@ -17,7 +17,7 @@ var articlesSchema		= new Schema({
     image_path:   String,
     groupsID:     Array
 });
-articlesSchema.plugin(mongoosastic);
+//articlesSchema.plugin(mongoosastic);
 
 module.exports = mongoose.model('articles', articlesSchema);
 

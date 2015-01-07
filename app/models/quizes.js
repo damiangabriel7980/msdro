@@ -23,5 +23,5 @@ var quizSchema		= new Schema({
     title : {type:String,es_indexed:true},
     treshhold : Number
 });
-quizSchema.plugin(mongoosastic);
+//quizSchema.plugin(mongoosastic);
 module.exports = mongoose.model('quizes', quizSchema,'quizes');

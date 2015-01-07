@@ -20,7 +20,7 @@ var EventsSchema		= new Schema({
     type: Number,
     listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
 });
-EventsSchema.plugin(mongoosastic);
+//EventsSchema.plugin(mongoosastic);
 
 module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');
 
