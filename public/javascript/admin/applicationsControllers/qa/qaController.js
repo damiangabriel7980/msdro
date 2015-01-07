@@ -99,5 +99,19 @@ cloudAdminControllers.controller('qaController', ['$scope', '$rootScope', '$filt
         });
     };
 
+    $scope.editAnswerGiver = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/applications/qa/modalEditAnswerGiver.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'EditAnswerGiverController',
+            resolve: {
+                idToEdit: function () {
+                    return id;
+                }
+            }
+        });
+    };
+
 
 }]);

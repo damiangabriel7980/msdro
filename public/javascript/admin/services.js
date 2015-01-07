@@ -253,7 +253,8 @@ cloudAdminServices.factory('qaService', ['$resource', function($resource){
         }),
         answerGivers: $resource('api/admin/applications/qa/answerGivers', {}, {
             query: { method: 'GET', isArray: true },
-            save: { method: 'POST', isArray: false }
+            save: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false }
         }),
         topicById: $resource('api/admin/applications/qa/topicById/:id', {}, {
             query: { method: 'GET', isArray: false },

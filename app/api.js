@@ -23,6 +23,7 @@ var Rooms = require('./models/rooms');
 var Topics = require('./models/qa_topics');
 var AnswerGivers = require('./models/qa_answerGivers');
 var Threads = require('./models/qa_threads');
+var qaMessages = require('./models/qa_messages');
 
 
 var XRegExp  = require('xregexp').XRegExp;
@@ -2530,6 +2531,58 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     }
                 });
             }
+        })
+        .put(function (req, res) {
+            var nickname = req.body.nickname?req.body.nickname.toString():"";
+            //validate nickname format
+            var nickPatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            if(!nickPatt.test(nickname)){
+                res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
+            }else{
+                //check if nickname already exists
+                AnswerGivers.findOne({nickname: nickname}, function (err, ag) {
+                    if(err){
+                        res.send({message: {type: 'danger', text: 'Eroare la modificarea nickname-ului'}});
+                    }else if(ag){
+                        res.send({message: {type: 'danger', text: 'Nickname-ul exista deja'}});
+                    }else{
+                        //get the answer giver we have to update; we will need it's id_user later
+                        AnswerGivers.findOne({_id: req.body.id}, function (err, agToUpdate) {
+                            if(err || !agToUpdate){
+                                res.send({message: {type: 'danger', text: 'Eroare la modificarea nickname-ului'}});
+                            }else{
+                                //change nickname; change in posted messages as well
+                                AnswerGivers.update({_id: req.body.id}, {$set: {nickname: nickname}}, function (err, wRes) {
+                                    if(err){
+                                        res.send({message: {type: 'danger', text: 'Eroare la modificarea nickname-ului'}});
+                                    }else{
+                                        //change in messages
+                                        qaMessages.update({owner: agToUpdate.id_user}, {$set: {ownerDisplay: nickname}}, {multi: true}, function (err, wRes) {
+                                            if(err){
+                                                logger.error(err);
+                                                res.send({message: {type: 'danger', text: 'Eroare la modificarea nickname-ului in mesajele publicate'}});
+                                            }else{
+                                                res.send({message: {type: 'success', text: 'Nickname modificat. S-a actualizat in '+wRes+' mesaje publicate.'}});
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    router.route('/admin/applications/qa/answerGiverById/:id')
+        .get(function (req, res) {
+            AnswerGivers.findOne({_id: req.params.id}, function (err, ag) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(ag);
+                }
+            });
         });
 
     router.route('/admin/applications/qa/medics')
