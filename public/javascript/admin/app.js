@@ -253,7 +253,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('continut.indexareContinut',{
             url: '/indexareContinut',
-            templateUrl: 'partials/admin/continut/indexareContinut.html'
+            templateUrl: 'partials/admin/continut/indexareContinut.html',
+            controller: 'indexContentController'
         })
         .state('continut.intro',{
             url: '/intro',

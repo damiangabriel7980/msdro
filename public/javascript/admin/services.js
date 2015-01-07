@@ -71,6 +71,13 @@ cloudAdminServices.factory('ContinutPublicService', ['$resource', function($reso
         })
     }
 }]);
+cloudAdminServices.factory('IndexService', ['$resource', function($resource) {
+    return {
+        getIndex: $resource('api/admin/indexContent', {}, {
+            query: {method: 'GET', isArray: false}
+        })
+    }
+}]);
 cloudAdminServices.factory('CarouselPublicService', ['$resource', function($resource){
     return {
         getAllImages: $resource('api/admin/utilizatori/carouselPublic/getAllImages', {}, {

@@ -5,6 +5,7 @@
  * Created by miricaandrei23 on 12.11.2014.
  */
 var mongoose		= require('mongoose');
+var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
 
 var quizSchema		= new Schema({
@@ -19,7 +20,8 @@ var quizSchema		= new Schema({
     questionsID : Array,
     time : Number,
     times : Number,
-    title : String,
+    title : {type:String,es_indexed:true},
     treshhold : Number
 });
+quizSchema.plugin(mongoosastic);
 module.exports = mongoose.model('quizes', quizSchema,'quizes');

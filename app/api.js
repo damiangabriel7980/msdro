@@ -318,7 +318,9 @@ var getUsersForConferences = function (conferences_ids, callback) {
         }
     });
 };
+var IndexAllContent = function(){
 
+};
 //======================================================================================================================================= routes for admin
 
 module.exports = function(app, sessionSecret, email, logger, pushServerAddr, router) {
@@ -413,7 +415,29 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             });
         });
+    router.route('/admin/indexContent')
+        .get(function(req,res) {
+            Events.ensureIndexes(function (err) {
+                if (err)
+                    res.json(err);
+            });
+            Multimedia.ensureIndexes(function (err) {
+                if (err)
+                    res.json(err);
+            });
+            Content.ensureIndexes(function (err) {
+                if (err)
+                {
+                    console.log(err);
+                    res.json(err);
 
+                }
+            });
+            Teste.ensureIndexes(function (err) {
+                if (err)
+                    res.json(err);
+            });
+        });
     router.route('/user/addPhoto')
         .post(function(req,res){
             var data = req.body.data;

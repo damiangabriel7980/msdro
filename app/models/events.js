@@ -2,22 +2,26 @@
  * Created by miricaandrei23 on 28.10.2014.
  */
 var mongoose		= require('mongoose');
+var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
+var mongoosastic = require('mongoosastic');
 var Conferences=require('./conferences');
 
 var EventsSchema		= new Schema({
-    description:  {type:String,es_indexed:true},
+    description:  {type:String, es_indexed:true},
     enable:         String,
     end:        Date,
     groupsID: Array,
     last_updated: Date,
-    name:      String,
+    name:      {type:String,es_indexed:true},
     place:       String,
     privacy:   String,
     start: Date,
     type: Number,
     listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
 });
+EventsSchema.plugin(mongoosastic);
+
 module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');
 
 EventsSchema.pre('remove', function(next) {
