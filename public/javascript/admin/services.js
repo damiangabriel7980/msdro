@@ -251,4 +251,29 @@ cloudAdminServices.factory('ariiAdminService', ['$resource', function($resource)
         })
     }
 }]);
+cloudAdminServices.factory('qaService', ['$resource', function($resource){
+    return {
+        topics: $resource('api/admin/applications/qa/topics', {}, {
+            query: { method: 'GET', isArray: true },
+            save: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false }
+        }),
+        answerGivers: $resource('api/admin/applications/qa/answerGivers', {}, {
+            query: { method: 'GET', isArray: true },
+            save: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false }
+        }),
+        topicById: $resource('api/admin/applications/qa/topicById/:id', {}, {
+            query: { method: 'GET', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        answerGiverById: $resource('api/admin/applications/qa/answerGiverById/:id', {}, {
+            query: { method: 'GET', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        medics: $resource('api/admin/applications/qa/medics', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
 

@@ -1,0 +1,21 @@
+<form>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">&times;</button>
+            <h3 class="modal-title">Sterge topic</h3>
+        </div>
+
+        <div class="col-md-12 modal-body">
+            <div class="col-md-12" style="margin-bottom: 15px;">
+                <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
+            </div>
+            <div class="col-md-12">
+                Esti sigur ca doresti sa stergi topicul?
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="closeModal()">Inchide</button>
+            <button type="button" class="btn btn-danger" ng-click="deleteTopic()">Sterge topic</button>
+        </div>
+    </div>
+</form>

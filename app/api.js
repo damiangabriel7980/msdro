@@ -19,17 +19,25 @@ var Carousel=require('./models/carousel_Medic');
 var Conferences = require('./models/conferences');
 var Talks = require('./models/talks');
 var Speakers = require('./models/speakers');
-var XRegExp  = require('xregexp').XRegExp;
 var Rooms = require('./models/rooms');
+var Topics = require('./models/qa_topics');
+var AnswerGivers = require('./models/qa_answerGivers');
+var Threads = require('./models/qa_threads');
+var qaMessages = require('./models/qa_messages');
+
+
+var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
 var ObjectId = require('mongoose').Types.ObjectId;
 var mongoose = require('mongoose');
 var async = require('async');
 var request = require('request');
-
 var AWS = require('aws-sdk');
 var fs = require('fs');
-var request = require('request');
+
+//exclude users' personal info
+var userExcludes = '-state -subscription -account_expired -account_locked -enabled -last_updated -citiesID -conferencesID -jobsID -phone -points -proof_path -rolesID -show_welcome_screen -groupsID -resetPasswordToken -resetPasswordExpires -activationToken -conferencesID -password -password_expired';
+
 //form sts object from environment variables. Used for retrieving temporary credentials to front end
 var sts = new AWS.STS();
 //configure credentials for use on server only; assign credentials based on role (never use master credentials)
@@ -2384,6 +2392,264 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.send(err);
 
                 res.json({ message: 'Successfully deleted!' });
+            });
+        });
+
+    router.route('/admin/applications/qa/topics')
+        .get(function (req, res) {
+            Topics.find({}, function (err, topics) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.json(topics);
+                }
+            });
+        })
+        .post(function (req, res) {
+            var name = req.body.name;
+            //validate name
+            var namePatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            if(!namePatt.test(name)){
+                res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
+            }else{
+                //check if topic already exists
+                Topics.findOne({name: name}, function (err, topic) {
+                    if(err){
+                        res.send({message: {type: 'danger', text: 'Eroare la adaugarea topicului. Verificati numele'}});
+                    }else{
+                        if(topic){
+                            res.send({message: {type: 'danger', text: 'Topicul exista deja'}});
+                        }else{
+                            //add topic
+                            var toAdd = new Topics({name: name});
+                            toAdd.save(function (err, saved) {
+                                if(err){
+                                    res.send({message: {type: 'danger', text: 'Eroare la salvare'}});
+                                }else{
+                                    res.send({message: {type: 'success', text: 'Topicul a fost salvat'}});
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        })
+        .put(function (req, res) {
+            var id = req.body.id;
+            var name = req.body.name;
+            //validate name
+            var namePatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            if(!namePatt.test(name)){
+                res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
+            }else{
+                //check if topic already exists
+                Topics.findOne({name: name}, function (err, topic) {
+                    if(err){
+                        res.send({message: {type: 'danger', text: 'Eroare la modificarea topicului. Verificati numele'}});
+                    }else{
+                        if(topic){
+                            res.send({message: {type: 'danger', text: 'Un topic cu acest nume exista deja'}});
+                        }else{
+                            //update topic
+                            Topics.update({_id: id}, {$set: {name: name}}, function (err, wRes) {
+                                if(err || wRes == 0){
+                                    res.send({message: {type: 'danger', text: 'Eroare la actualizare. Verificati numele'}});
+                                }else{
+                                    res.send({message: {type: 'success', text: 'Topicul a fost modificat'}});
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+    router.route('/admin/applications/qa/topicById/:id')
+        .get(function (req, res) {
+            Topics.findOne({_id: req.params.id}, function (err, topic) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(topic);
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var id_topic = req.params.id;
+            id_topic = mongoose.Types.ObjectId(id_topic.toString());
+
+            //check if topic is used in threads
+            Threads.find({topics: {$in: [id_topic]}}, function (err, threads) {
+                if(err){
+                    res.send({message: {type: 'danger', text: 'Eroare la stergere'}});
+                }else{
+                    if(threads.length != 0){
+                        res.send({message: {type: 'danger', text: 'Topicul nu poate fi sters, deoarece este folosit in thread-uri'}});
+                    }else{
+                        //delete topic
+                        Topics.remove({_id: id_topic}, function (err, wRes) {
+                            if(err || wRes == 0){
+                                res.send({message: {type: 'danger', text: 'Nu s-a putut sterge'}});
+                            }else{
+                                res.send({message: {type: 'success', text: 'Topicul a fost sters'}});
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+    router.route('/admin/applications/qa/answerGivers')
+        .get(function (req, res) {
+            AnswerGivers.find({}).populate('id_user', userExcludes).exec(function (err, ag) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.json(ag);
+                }
+            });
+        })
+        .post(function (req, res) {
+            console.log(req.body);
+            if(!req.body.nickname || !req.body.id_user){
+                res.send({message: {type: 'danger', text:'Toate campurile sunt obligatorii'}});
+            }else{
+                //check if id points to an actual user
+                User.findOne({_id: req.body.id_user}, function (err, user) {
+                    if(err || !user){
+                        res.send({message: {type: 'danger', text:'Utilizator invalid'}});
+                    }else{
+                        //check if medic was already registered as answer giver
+                        AnswerGivers.findOne({id_user: mongoose.Types.ObjectId(req.body.id_user.toString())}, function (err, found) {
+                            if(err || found){
+                                res.send({message: {type: 'danger', text:'Eroare la validare. Verificati daca medicul este deja adaugat'}});
+                            }else{
+                                //check nickname format
+                                var nickPatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+                                if(!nickPatt.test(req.body.nickname.toString())){
+                                    res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
+                                }else{
+                                    //check if nickname already exists
+                                    AnswerGivers.findOne({nickname: req.body.nickname}, function (err, found) {
+                                        if(err || found){
+                                            res.send({message: {type: 'danger', text:'Nickname-ul exista deja'}});
+                                        }else{
+                                            //add answer giver
+                                            var toAdd = new AnswerGivers({
+                                                id_user: mongoose.Types.ObjectId(req.body.id_user.toString()),
+                                                nickname: req.body.nickname.toString()
+                                            });
+                                            toAdd.save(function (err, saved) {
+                                                if(err){
+                                                    res.send({message: {type: 'danger', text:'Eroare la salvare'}});
+                                                }else{
+                                                    res.send({message: {type: 'success', text:'Raspunzatorul a fost adaugat'}});
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        })
+        .put(function (req, res) {
+            var nickname = req.body.nickname?req.body.nickname.toString():"";
+            //validate nickname format
+            var nickPatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            if(!nickPatt.test(nickname)){
+                res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
+            }else{
+                //check if nickname already exists
+                AnswerGivers.findOne({nickname: nickname}, function (err, ag) {
+                    if(err){
+                        res.send({message: {type: 'danger', text: 'Eroare la modificarea nickname-ului'}});
+                    }else if(ag){
+                        res.send({message: {type: 'danger', text: 'Nickname-ul exista deja'}});
+                    }else{
+                        //get the answer giver we have to update; we will need it's id_user later
+                        AnswerGivers.findOne({_id: req.body.id}, function (err, agToUpdate) {
+                            if(err || !agToUpdate){
+                                res.send({message: {type: 'danger', text: 'Eroare la modificarea nickname-ului'}});
+                            }else{
+                                //change nickname; change in posted messages as well
+                                AnswerGivers.update({_id: req.body.id}, {$set: {nickname: nickname}}, function (err, wRes) {
+                                    if(err){
+                                        res.send({message: {type: 'danger', text: 'Eroare la modificarea nickname-ului'}});
+                                    }else{
+                                        //change in messages
+                                        qaMessages.update({owner: agToUpdate.id_user}, {$set: {ownerDisplay: nickname}}, {multi: true}, function (err, wRes) {
+                                            if(err){
+                                                logger.warn("Modify nickname "+nickname+" for user "+agToUpdate.id_user+" in published messages:");
+                                                logger.error(err);
+                                                res.send({message: {type: 'danger', text: 'Nickname modificat. Eroare la modificarea nickname-ului in mesajele publicate'}});
+                                            }else{
+                                                res.send({message: {type: 'success', text: 'Nickname modificat. S-a actualizat in '+wRes+' mesaje publicate.'}});
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    router.route('/admin/applications/qa/answerGiverById/:id')
+        .get(function (req, res) {
+            AnswerGivers.findOne({_id: req.params.id}, function (err, ag) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(ag);
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var id_ag = req.params.id;
+            id_ag = mongoose.Types.ObjectId(id_ag.toString());
+
+            AnswerGivers.remove({_id: id_ag}, function (err, wRes) {
+                if(err || wRes == 0){
+                    res.send({message: {type: 'danger', text: 'Nu s-a putut sterge'}});
+                }else{
+                    res.send({message: {type: 'success', text: 'Raspunzatorul a fost sters'}});
+                }
+            });
+        });
+
+    router.route('/admin/applications/qa/medics')
+        .get(function (req, res) {
+            //find medics already defined as answer givers
+            AnswerGivers.find(function (err, ag) {
+                if(err){
+                    res.send({message: {type: 'danger', text: 'Error finding medics'}});
+                }else{
+                    console.log(ag);
+                    //get user ids of answer givers
+                    var medicsIds = [];
+                    async.each(ag, function (item, callback) {
+                        medicsIds.push(item.id_user);
+                        callback();
+                    }, function (err) {
+                        if(err){
+                            res.send({message: {type: 'danger', text: 'Error finding medics'}});
+                        }else{
+                            console.log(medicsIds);
+                            //get all medics that are not already registered as answer givers
+                            User.find({_id: {$nin: medicsIds}}, {username: 1}).exec(function (err, medics) {
+                                if(err){
+                                    res.send({message: {type: 'danger', text: 'Error finding medics'}});
+                                }else{
+                                    res.json(medics);
+                                }
+                            });
+                        }
+                    });
+                }
             });
         });
 
