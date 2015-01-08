@@ -4,7 +4,8 @@ var publicApp = angular.module('publicApp',
         'publicControllers',
         'publicServices',
         'ngTouch',
-        'angular-carousel'
+        'angular-carousel',
+        'msdTimeline'
     ]);
 
 publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

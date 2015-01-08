@@ -15,6 +15,10 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
         $scope.selectedIndex = 1;
     });
 
+    HomeService.events.query().$promise.then(function (resp) {
+        $scope.events = resp;
+    });
+
     $scope.getTooltip = function (slide) {
         var src = $rootScope.pathAmazonDev + slide.image_path;
         var tooltipContent = '<div class="container noPadding" style="width: 230px;">'+
