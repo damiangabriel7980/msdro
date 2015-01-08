@@ -17,21 +17,18 @@ var articlesSchema		= new Schema({
     image_path:   String,
     groupsID:     Array
 });
-//articlesSchema.plugin(mongoosastic);
+articlesSchema.plugin(mongoosastic);
 
 module.exports = mongoose.model('articles', articlesSchema);
-
-//var Article = mongoose.model('articles', articlesSchema);
-//var stream = Article.synchronize();
-//    var count = 0;
-//console.log(stream);
-//stream.on('data', function(err, doc){
-//    console.log(doc);
-//    count++;
-//});
-//stream.on('close', function(){
-//    console.log('indexed ' + count + ' documents!');
-//});
-//stream.on('error', function(err){
-//    console.log(err);
-//});
+var Article = mongoose.model('articles', articlesSchema);
+var stream = Article.synchronize();
+    var count = 0;
+stream.on('data', function(err, doc){
+    count++;
+});
+stream.on('close', function(){
+    console.log('indexed ' + count + ' documents!');
+});
+stream.on('error', function(err){
+    console.log(err);
+});

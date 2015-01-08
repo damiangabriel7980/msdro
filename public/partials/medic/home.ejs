@@ -21,8 +21,8 @@
     <div class="userAndSearch">
         <form class="navbar-form" role="search">
             <div class="input-group mySearch">
-                <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
+                <span class="input-group-addon" ui-sref="homeSearch({data:textToSearch})"><i class="glyphicon glyphicon-search"></i></span>
             </div>
         </form>
         <div class="dropdown">

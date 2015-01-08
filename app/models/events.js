@@ -20,9 +20,21 @@ var EventsSchema		= new Schema({
     type: Number,
     listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
 });
-//EventsSchema.plugin(mongoosastic);
+EventsSchema.plugin(mongoosastic);
 
 module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');
+var Event = mongoose.model('calendar-events', EventsSchema,'calendar-events');
+var stream = Event.synchronize();
+var count = 0;
+stream.on('data', function(err, doc){
+    count++;
+});
+stream.on('close', function(){
+    console.log('indexed ' + count + ' documents!');
+});
+stream.on('error', function(err){
+    console.log(err);
+});
 
 EventsSchema.pre('remove', function(next) {
     // 'this' is the client being removed. Provide callbacks here if you want

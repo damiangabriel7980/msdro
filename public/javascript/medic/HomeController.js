@@ -13,7 +13,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     var specialGroupWidgets = {
         "MSD Diabetes": "Glycemizer.html"
     };
-
+    $scope.textToSearch="";
     $scope.specialWidgetUrl = null;
 
     $scope.$watch($rootScope.specialGroupSelected, function () {

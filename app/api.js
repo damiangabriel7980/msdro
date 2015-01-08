@@ -425,24 +425,15 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
     router.route('/admin/indexContent')
         .get(function(req,res) {
-            Events.ensureIndexes(function (err) {
-                if (err)
-                    res.json(err);
-            });
-            Multimedia.ensureIndexes(function (err) {
-                if (err)
-                    res.json(err);
-            });
-            Content.ensureIndexes(function (err) {
-                if (err)
-                {
-                    console.log(err);
-                    res.json(err);
+            Products.search({
+                query_string: {
+                    query: "comerciala"
                 }
-            });
-            Teste.ensureIndexes(function (err) {
-                if (err)
+            },{hydrate:true}, function(err, results) {
+                if(err)
                     res.json(err);
+                else
+                    res.json(results);
             });
         });
     router.route('/user/addPhoto')
@@ -1390,8 +1381,8 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             product.save(function(err) {
                 if (err)
                     res.send(err);
-
-                res.json({ message: 'Product created!' });
+                else
+                    res.json({ message: 'Product created!' });
             });
 
         });
@@ -3018,7 +3009,42 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             })
         });
+    router.route('/userHomeSearch/:data')
+        .get(function(req,res){
+            var data=req.params.data;
+            console.log(data);
+            var arr_of_items=[Products,Multimedia,Teste,Content,Events];
+            var ObjectOfResults={};
+            async.each(arr_of_items, function (item, callback) {
+                item.search({
+                    query_string: {
+                        query: data
+                    }
+                },{hydrate:true}, function(err, results) {
+                    if(err)
+                    {
+                        res.json(err);
+                        return;
+                    }
+                    else
+                    {
+                        ObjectOfResults[item.modelName]=results.hits.hits;
+                    }
 
+
+                    callback();
+                });
+            }, function (err) {
+               if(err)
+                    res.json(err);
+                else
+               {
+                   res.json(ObjectOfResults);
+               }
+
+            })
+
+        });
     router.route('/userHomeEvents')
         .get(function (req,res) {
             Events.find({groupsID: {$in: req.user.groupsID}, start: {$gte: new Date()}, enable: {$ne: false}}).sort({start: 1}).exec(function (err, events) {

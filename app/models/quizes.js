@@ -11,7 +11,7 @@ var Schema			= mongoose.Schema;
 var quizSchema		= new Schema({
     description : {type:String,es_indexed:true},
     enabled : Boolean,
-    entity : Number,
+    entity : String,
     expired : Boolean,
     expiry_date : Date,
     last_updated : Date,
@@ -23,5 +23,17 @@ var quizSchema		= new Schema({
     title : {type:String,es_indexed:true},
     treshhold : Number
 });
-//quizSchema.plugin(mongoosastic);
+quizSchema.plugin(mongoosastic);
 module.exports = mongoose.model('quizes', quizSchema,'quizes');
+var Quiz = mongoose.model('quizes', quizSchema,'quizes');
+var stream = Quiz.synchronize();
+var count = 0;
+stream.on('data', function(err, doc){
+    count++;
+});
+stream.on('close', function(){
+    console.log('indexed ' + count + ' documents!');
+});
+stream.on('error', function(err){
+    console.log(err);
+});

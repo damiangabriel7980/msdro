@@ -22,5 +22,17 @@ var multimediaSchema		= new Schema({
     title : {type:String,es_indexed:true},
     type : Number
 });
-//multimediaSchema.plugin(mongoosastic);
+multimediaSchema.plugin(mongoosastic);
 module.exports = mongoose.model('multimedia', multimediaSchema,'multimedia');
+var Multimedia = mongoose.model('multimedia', multimediaSchema,'multimedia');
+var stream = Multimedia.synchronize();
+var count = 0;
+stream.on('data', function(err, doc){
+    count++;
+});
+stream.on('close', function(){
+    console.log('indexed ' + count + ' documents!');
+});
+stream.on('error', function(err){
+    console.log(err);
+});

@@ -22,6 +22,11 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/medic/home.ejs',
             controller: 'HomeController'
         })
+        .state('homeSearch',{
+            url: '/searchResults/:data',
+            templateUrl: 'partials/medic/homeSearch.ejs',
+            controller: 'HomeSearchController'
+        })
         .state('contact',{
             parent:'home',
             url: '',
