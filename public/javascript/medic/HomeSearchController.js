@@ -22,7 +22,14 @@ cloudAdminControllers.controller('HomeSearchController', ['$scope', '$rootScope'
         else
             return "biblioteca.articoleStiintifice.articol({articleType:article.type,articleId:article._id})";
     };
+    $scope.showDetails="hide";
     $scope.defaultImageVideo= $rootScope.pathAmazonDev + "resources/video.png";
     $scope.defaultImageSlide= $rootScope.pathAmazonDev + "multimedia/4/slide/multimedia_88.png";
+    $scope.clasicPreview = function(){
+        $scope.showDetails="hide";
+    };
+    $scope.detailedPreview = function(){
+        $scope.showDetails="show";
+    };
 }])
     .filter('unsafe', function($sce) { return $sce.trustAsHtml; });

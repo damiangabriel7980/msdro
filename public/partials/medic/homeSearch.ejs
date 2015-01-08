@@ -1,64 +1,104 @@
 <div class="col-xs-6 col-xs-offset-3">
     <h4 class="margintop20px">Cautare Continut</h4>
     <div ng-if="products.length>0" ng-repeat="product in products" class="col-xs-12 searchArticle noPadding">
-        <div class="col-xs-2 noPadding">
-            <img class="img-responsive img-thumbnail" ng-src="{{amazon+product.image_path}}">
+        <div class="col-xs-2 noPadding" ng-class="showDetails">
+            <img class="img-responsive img-thumbnail"  ng-src="{{amazon+product.image_path}}">
         </div>
-        <div class="col-xs-10">
-            {{htmlToPlainText(product.description) | limitTo: 220}}&nbsp ...
+        <div ng-class="showDetails=='show' ? 'col-xs-10':'col-xs-12'">
+            <div class="col-xs-12">
+                <h4 class="MSDgreen handCursor" ui-sref="biblioteca.produse.prodById({id:product._id})">{{product.name}}
+                <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-th-large"></i>Produs</span>
+                </h4>
+            </div>
 
+
+            <div class="col-xs-12">
+                {{htmlToPlainText(product.description) | limitTo: 220}}&nbsp ...
+            </div>
         </div>
-        <div class="btn btn-info btn-sm pull-right btnSearchTop btn-more-news" ui-sref="biblioteca.produse.prodById({id:product._id})">
+        <div class="btn btn-info btn-sm pull-right btnSearchTop btn-more-news" ng-class="showDetails" ui-sref="biblioteca.produse.prodById({id:product._id})">
             Vezi detalii
         </div>
     </div>
     <div ng-if="calendarEv.length>0" ng-repeat="calendar in calendarEv" class="col-xs-12 searchArticle noPadding">
-        <div class="col-xs-12 searchLeftBorder">
+        <div ng-class="showDetails=='show'?'col-xs-12 searchLeftBorder':'col-xs-12'">
 
-            <div class="col-xs-1 date3 ">
+            <div class="col-xs-1 date3 " ng-class="showDetails">
                 <h2 class="MSDgreen">{{calendar.start | filter: asDate | date:'dd'}}</h2>
                 <h5 class="MSDgreen">{{calendar.start | filter: asDate | date:'MMM'}}</h5>
             </div>
-            <div class="col-xs-11">
-            <h4>{{calendar.name | limitTo: 100}}</h4>
-
-            <div ng-bind-html="calendar.description | limitTo: 100  | unsafe ">
-                <!--<span class="label label-info pull-right">Eveniment<i class="glyphicon glyphicon-calendar pull-right"></i></span>-->
-            </div>
+            <div ng-class="showDetails=='show' ? 'col-xs-11':'col-xs-12'">
+                <div class="col-xs-12">
+                    <h4 class="MSDgreen handCursor" ui-sref="calendar.calendarDetails({id:calendar._id})">{{calendar.name | limitTo: 100}}
+                    <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-calendar"></i>Event</span>
+                    </h4>
+                </div>
+                <div class="col-xs-12">
+                    <div ng-bind-html="calendar.description | limitTo: 100  | unsafe ">
+                    </div>
+                </div>
             </div>
 
         </div>
 
     </div>
     <div ng-if="quizes.length>0" ng-repeat="quiz in quizes" class="col-xs-12 well noPadding">
-        <div class="col-xs-2 noPadding">
+        <div class="col-xs-2 noPadding" ng-class="showDetails">
             <img class="img-responsive img-thumbnail" ng-if="quiz.entity!='SLIDE'" ng-src="{{defaultImageVideo}}">
             <img class="img-responsive img-thumbnail" ng-if="quiz.entity=='SLIDE'" ng-src="{{defaultImageSlide}}">
         </div>
-        <div class="col-xs-10">
-            <h4>{{quiz.title}}</h4>
-            {{htmlToPlainText(quiz.description) | limitTo: 220}}&nbsp ...
+        <div ng-class="showDetails=='show' ? 'col-xs-10':'col-xs-12'">
+            <div class="col-xs-12">
+                <h4 class="MSDgreen handCursor" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})">{{quiz.title}}
+                <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-list-alt"></i>Quiz</span>
+                </h4>
+            </div>
+            <div class="col-xs-12">
+                {{htmlToPlainText(quiz.description) | limitTo: 220}}&nbsp ...
+            </div>
         </div>
-        <button class="btn btn-info pull-right btnArticleSearch btn-more-news" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})">Sustine testul</button>
+        <button class="btn btn-info pull-right btnArticleSearch btn-more-news " ng-class="showDetails" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})">Sustine testul</button>
     </div>
     <div ng-if="articles.length>0" ng-repeat="article in articles" class="col-xs-12 searchArticle noPadding">
-        <div class="col-xs-2 noPadding">
+        <div class="col-xs-2 noPadding" ng-class="showDetails">
             <img class="img-responsive img-thumbnail" ng-src="{{amazon+article.image_path}}">
         </div>
-        <div class="col-xs-10" ng-bind-html=" article.text | limitTo: 260 | unsafe">
-            &nbsp ...
+
+        <div ng-class="showDetails=='show' ? 'col-xs-10':'col-xs-12'">
+            <div class="col-xs-12">
+                <h4 class="MSDgreen handCursor" ui-sref="{{sref(article.type)}}">{{article.title}}
+                <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-file"></i>Article</span>
+                </h4>
+            </div>
+            <div class="col-xs-12" ng-bind-html=" article.text | limitTo: 260 | unsafe"></div>
         </div>
-        <div class="btn btn-info pull-right btnArticleSearch btn-more-news" ui-sref="{{sref(article.type)}}">
+        <div class="btn btn-info pull-right btnArticleSearch btn-more-news" ui-sref="{{sref(article.type)}}" ng-class="showDetails">
             Vezi detalii
         </div>
     </div>
     <div ng-if="multimedia.length>0"  ng-repeat="media in multimedia" class="col-xs-12 searchArticle noPadding">
-        <div class="col-xs-2 noPadding">
+        <div class="col-xs-2 noPadding" ng-class="showDetails">
             <img class="img-responsive img-thumbnail" ng-src="{{media.thumbnail_path?amazon+media.thumbnail_path:(media.type==1?defaultVideoImage:defaultSlideImage)}}">
         </div>
-        <div class="col-xs-10" ng-bind-html="media.description | limitTo: 260 | unsafe ">
-            &nbsp ...
+        <div ng-class="showDetails=='show' ? 'col-xs-10':'col-xs-12'">
+            <div class="col-xs-12">
+                <h4 class="MSDgreen handCursor" ui-sref="elearning.multimedia.multimediaById({idd:media._id})">{{media.title}}
+                <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-film"></i>Multimedia</span>
+                </h4>
+            </div>
+            <div class="col-xs-12">
+                {{media.description | limitTo: 260}}&nbsp ...
+            </div>
         </div>
-        <button class="btn btn-info pull-right btnMultimediaSearch btn-more-news" ui-sref="elearning.multimedia.multimediaById({idd:media._id})">Vezi material</button>
+        <button class="btn btn-info  pull-right btnMultimediaSearch btn-more-news" ng-class="showDetails" ui-sref="elearning.multimedia.multimediaById({idd:media._id})">Vezi material</button>
     </div>
+</div>
+<div class="col-xs-2 homeSearchPreview">
+    <ul class="nav nav-list MSDgreen">
+        <li class="active" ng-click="clasicPreview()">Clasic</li>
+        <li class="divider"></li>
+
+        <li ng-click="detailedPreview()">Detaliat</li>
+
+    </ul>
 </div>
