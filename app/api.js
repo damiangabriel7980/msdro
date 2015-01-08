@@ -3001,11 +3001,20 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     router.route('/userHomeCarousel')
         .get(function (req,res) {
+            var carouselElements=[];
             Carousel.find({enable: true}).populate('article_id').exec(function (err, elements) {
                 if (err) {
                     res.send(err);
                 } else {
-                    res.json(elements);
+                    for(var i=0;i<elements.length;i++)
+                    {
+                        for(var j=0;j<elements[i].article_id.groupsID.length;j++)
+                        {
+                            if(req.user.groupsID.indexOf(elements[i].article_id.groupsID[j]) != -1)
+                                carouselElements.push(elements[i])
+                        }
+                    }
+                    res.json(carouselElements);
                 }
             })
         });
