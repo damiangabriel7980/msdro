@@ -13,11 +13,14 @@
   user-select: none;
 
   //comment following two lines when inside tinyscrollbar overview
-  //position: relative;
-  //overflow-x: auto;
+  position: relative;
+  overflow-x: hidden;
   min-height: 270px;
   min-width: 1200px;
   padding-top: 65px;
+
+  transform: scale(0.8);
+  transform-origin: top left;
 
   .timeBox {
     position: absolute;
@@ -81,8 +84,7 @@
       font-size: 35px;
       font-weight: bold;
       color: @textBoxHeaderColor;
-      border: 1px solid @gray-lighter;
-      width: 235px;
+      width: 65px;
       background-color: rgba(255, 255, 255, 0.9);
     }
     .luna {
@@ -108,6 +110,8 @@
       width: 170px;
       min-height: 33px;
       text-align: center;
+      border: 1px solid @gray-lighter;
+      background-color: rgba(255, 255, 255, 0.9);
     }
   }
   .timeGrid {

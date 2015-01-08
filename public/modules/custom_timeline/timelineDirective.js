@@ -1,6 +1,9 @@
 /**
  * Created by andrei on 08.01.2015.
  */
+
+//TODO: Angularize this old jQuery code
+
 var scripts = document.getElementsByTagName("script")
 var currentScriptPath = scripts[scripts.length-1].src;
 
@@ -92,7 +95,7 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
                 var lineBottom = isDown?"bottom:40px;":"bottom:-15px;";
                 style += 'margin-left:'+leftPx.toString()+'px;margin-top:'+(isDown?timeBoxTopWhenFlipped:timeBoxTop).toString()+'px;z-index:'+(999-id)+';';
                 //console.log(style);
-                var ret = '<div class="timeBox" onclick="toggleT1()" id="timeBox'+id+'" style='+style+'><div class="timeBoxLine" style="'+lineBottom+'"></div><div class="zi">'+evenimentLista.zi+'</div><div class="luna">.'+evenimentLista.luna+'</div><div class="isCollapsed">'+collapsedContent+'</div><div class="nume'+hidden+'">'+evenimentLista.nume+'</div></div>';
+                var ret = '<div class="timeBox" onclick="toggleT1(this)" id="timeBox'+id+'" style='+style+'><div class="timeBoxLine" style="'+lineBottom+'"></div><div class="zi">'+evenimentLista.zi+'</div><div class="luna">.'+evenimentLista.luna+'</div><div class="isCollapsed">'+collapsedContent+'</div><div class="nume'+hidden+'">'+evenimentLista.nume+'</div></div>';
                 return ret;
             };
 
@@ -101,7 +104,7 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
                 var lineBottom = isDown?"bottom:27px;":"bottom:-16px;";
                 style += 'margin-left:'+leftPx.toString()+'px;margin-top:'+(isDown?timeBoxTopWhenFlipped:timeBoxTop).toString()+'px;z-index:'+(999-id)+';';
                 //console.log(style);
-                var ret = '<div class="timeBox2" onclick="toggleT2()" id="timeBox'+id+'" style='+style+'><div class="timeBoxLine" style="'+lineBottom+'"></div><div class="isCollapsed"><i class="glyphicon glyphicon-chevron-down"></i></div><div class="collapsedContent hide"><div class="zi">'+evenimentLista.zi+'</div><div class="luna">.'+evenimentLista.luna+'</div><div class="nume">'+evenimentLista.nume+'</div></div></div>';
+                var ret = '<div class="timeBox2" onclick="toggleT2(this)" id="timeBox'+id+'" style='+style+'><div class="timeBoxLine" style="'+lineBottom+'"></div><div class="isCollapsed"><i class="glyphicon glyphicon-chevron-down"></i></div><div class="collapsedContent hide"><div class="zi">'+evenimentLista.zi+'</div><div class="luna">.'+evenimentLista.luna+'</div><div class="nume">'+evenimentLista.nume+'</div></div></div>';
                 return ret;
             };
 
@@ -183,36 +186,37 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
                 console.log("t2");
             };
 
-//            $('.timeBox').click(function(){
-//                var c = $(this).find('.nume');
-//                var i = $(this).find('.isCollapsed i');
-//                if(c.hasClass("hide")){
-//                    c.removeClass("hide");
-//                    i.removeClass("glyphicon-chevron-down");
-//                    i.addClass("glyphicon-chevron-right");
-//                }else{
-//                    c.addClass("hide");
-//                    i.removeClass("glyphicon-chevron-right");
-//                    i.addClass("glyphicon-chevron-down");
-//                }
-//            });
-//            $('.timeBox2').click(function(){
-//                var c = $(this).find('.collapsedContent');
-//                var i = $(this).find('.isCollapsed i');
-//                if(c.hasClass("hide")){
-//                    c.removeClass("hide");
-//                    i.removeClass("glyphicon-chevron-down");
-//                    i.addClass("glyphicon-chevron-right");
-//                }else{
-//                    c.addClass("hide");
-//                    i.removeClass("glyphicon-chevron-right");
-//                    i.addClass("glyphicon-chevron-down");
-//                }
-//            });
-
             scope.getDate = function (str) {
                 return new Date(str);
             }
         }
     };
 }]);
+
+var toggleT1 = function(elem){
+    var c = angular.element(angular.element(elem).find('div')[4]);
+    var i = angular.element(elem).find('i');
+    if(c.hasClass("hide")){
+        c.removeClass("hide");
+        i.removeClass("glyphicon-chevron-down");
+        i.addClass("glyphicon-chevron-right");
+    }else{
+        c.addClass("hide");
+        i.removeClass("glyphicon-chevron-right");
+        i.addClass("glyphicon-chevron-down");
+    }
+};
+
+var toggleT2 = function(elem){
+    var c = angular.element(angular.element(elem).find('div')[2]);
+    var i = angular.element(elem).find('i');
+    if(c.hasClass("hide")){
+        c.removeClass("hide");
+        i.removeClass("glyphicon-chevron-down");
+        i.addClass("glyphicon-chevron-right");
+    }else{
+        c.addClass("hide");
+        i.removeClass("glyphicon-chevron-right");
+        i.addClass("glyphicon-chevron-down");
+    }
+};
