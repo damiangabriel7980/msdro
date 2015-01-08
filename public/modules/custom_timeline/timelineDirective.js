@@ -130,12 +130,12 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
                     availableSpace = nextPoz - currentPoz;
 
                     if(availableSpace >= 250){
-                        eveniment = timeBox(listaE[i],i,false||allCollapsed,poz,currentPoz);
+                        eveniment = timeBox(listaE[i],i,false||allCollapsed,poz,currentPoz - 15);
                     }else{
                         if(availableSpace >= 80){
-                            eveniment = timeBox(listaE[i],i,true||allCollapsed,poz,currentPoz);
+                            eveniment = timeBox(listaE[i],i,true||allCollapsed,poz,currentPoz - 15);
                         }else{
-                            eveniment = timeBox2(listaE[i],i,true||allCollapsed,poz,currentPoz);
+                            eveniment = timeBox2(listaE[i],i,true||allCollapsed,poz,currentPoz - 15);
                         }
                     }
                     evenimente+=eveniment;
@@ -151,7 +151,7 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
                 var months = "";
                 var poz;
                 for(var i=0; i<4; i++){
-                    poz = i*465 + firstMonthPoz + 15;
+                    poz = i*465 + firstMonthPoz;
                     m = firstMonth+i;
                     if(m>11) m=m-12;
                     month = jsonM[m];
