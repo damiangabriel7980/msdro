@@ -143,14 +143,18 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
             };
 
             var alignMonths = function (listaE,jsonM) {
-                var firstMonth = parseInt(listaE[0].luna);
+                var firstMonth = new Date().getMonth() - 2;
+                if(firstMonth < 0) firstMonth = 12 + firstMonth;
                 var firstMonthPoz = listaE[0].leftPx - (parseInt(listaE[0].zi) * 15);
+                var m;
                 var month;
                 var months = "";
                 var poz;
                 for(var i=0; i<4; i++){
                     poz = i*465 + firstMonthPoz + 15;
-                    month = jsonM[firstMonth+i-1];
+                    m = firstMonth+i;
+                    if(m>11) m=m-12;
+                    month = jsonM[m];
                     month = '<div class="month" style="left:'+poz+'px;"><div class="monthLine"></div><div class="monthName">'+month+'</div></div>';
                     months+=month;
                 }
