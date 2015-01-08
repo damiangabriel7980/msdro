@@ -4,7 +4,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
     $scope.merckManualImage = $rootScope.merckManualImage;
-    $scope.myInterval = 60000;
+    $scope.myInterval = 10;
     $scope.HomeCarousel = [];
 
     //------------------------------------------------------------ special groups widgets
