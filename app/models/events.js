@@ -9,7 +9,7 @@ var Conferences=require('./conferences');
 
 var EventsSchema		= new Schema({
     description:  {type:String, es_indexed:true},
-    enable:         String,
+    enable:         Boolean,
     end:        Date,
     groupsID: Array,
     last_updated: Date,

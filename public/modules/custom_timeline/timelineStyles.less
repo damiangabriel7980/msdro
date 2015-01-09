@@ -1,0 +1,182 @@
+@timelineTodayBoxColor: #67cad3;
+@textBoxHeaderColor: #009d96;
+@gray-lighter: #eeeeee;
+
+.timelineBody {
+
+  //make everything non selectable
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  //comment following two lines when inside tinyscrollbar overview
+  position: relative;
+  overflow-x: hidden;
+  min-height: 270px;
+  min-width: 1200px;
+  padding-top: 65px;
+
+  transform: scale(0.8);
+  transform-origin: top left;
+
+  .timeBox {
+    position: absolute;
+    cursor: pointer;
+    .timeBoxLine {
+      position: absolute;
+      left: 0;
+      border: 1px solid @textBoxHeaderColor;
+      height: 20px;
+    }
+    .zi {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      float: left;
+      font-size: 35px;
+      font-weight: bold;
+      color: @textBoxHeaderColor;
+    }
+    .luna {
+      position: absolute;
+      left: 40px;
+      bottom: 6px;
+      float: left;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .isCollapsed {
+      position: absolute;
+      left: 65px;
+      bottom: 9px;
+      float: left;
+    }
+    .nume {
+      position: absolute;
+      left: 80px;
+      bottom: 9px;
+      font-size: 15px;
+      float: left;
+      width: 170px;
+      background-color: rgba(255, 255, 255, 0.9);
+      min-height: 33px;
+      border: 1px solid @gray-lighter;
+      text-align: center;
+    }
+  }
+  .timeBox2 {
+    position: absolute;
+    cursor: pointer;
+    .timeBoxLine {
+      position: absolute;
+      left: 0;
+      border: 1px solid @textBoxHeaderColor;
+      height: 33px;
+    }
+    .zi {
+      position: absolute;
+      left: 15px;
+      bottom: 0;
+      float: left;
+      font-size: 35px;
+      font-weight: bold;
+      color: @textBoxHeaderColor;
+      width: 65px;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+    .luna {
+      position: absolute;
+      left: 55px;
+      bottom: 6px;
+      float: left;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .isCollapsed {
+      position: absolute;
+      left: 0;
+      bottom: 9px;
+      float: left;
+    }
+    .nume {
+      position: absolute;
+      left: 80px;
+      bottom: 9px;
+      font-size: 15px;
+      float: left;
+      width: 170px;
+      min-height: 33px;
+      text-align: center;
+      border: 1px solid @gray-lighter;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+  }
+  .timeGrid {
+    position: absolute;
+    .gridd {
+      position: absolute;
+      width: 1200px;
+      height: 25px;
+      border-radius: 12px;
+      top: 65px;
+      background-color: @textBoxHeaderColor;
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAHCAQAAAB9jN+sAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAE0lEQVQI12P4/58BD2BiYBii0gCzTwILoELU3QAAAABJRU5ErkJggg==);
+      background-repeat: repeat-x;
+      background-position: 0px 21px;
+      overflow: hidden;
+      .month {
+        position: absolute;
+        .monthLine {
+          float: left;
+          border: 1px solid;
+          border-color: #ffffff;
+          height: 10px;
+        }
+        .monthName {
+          float: left;
+          color: #ffffff;
+          font-weight: bold;
+          padding-left: 3px;
+        }
+      }
+    }
+    .todayBox {
+      position: absolute;
+      left: 600px;
+      .dateShow {
+        background-color: @timelineTodayBoxColor;
+        min-height: 40px;
+        min-width: 60px;
+        position: absolute;
+        top: -50px;
+        left: -30px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        padding-top: 7px;
+        text-align: center;
+      }
+      .arrowDown {
+        position: absolute;
+        left: -10px;
+        top: -10px;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid @timelineTodayBoxColor;
+      }
+      .lineDown {
+        border: 1px solid;
+        border-color: rgba(103, 202, 211, 0.4);
+        height: 70px;
+        width: 0px;
+        position: absolute;
+        top: -5px;
+      }
+    }
+  }
+}

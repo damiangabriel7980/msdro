@@ -7,6 +7,9 @@ publicServices.factory('HomeService', ['$resource', function($resource){
         }),
         contentByType: $resource('apiPublic/contentByType/:type', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        events: $resource('apiPublic/events', {}, {
+            query: { method: 'GET', isArray: true }
         })
     }
 }]);

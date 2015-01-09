@@ -13,8 +13,6 @@ publicControllers.controller('NoutatiController', ['$scope', '$rootScope', 'Home
             var endSlice = beginSlice + $scope.resultsPerPage;
             $scope.noutatiFiltered = $scope.noutati.slice(beginSlice, endSlice);
         });
-
-        console.log(resp);
     });
 
 }]);

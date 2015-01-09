@@ -56,3 +56,31 @@ publicApp.directive('carouselResizable', function($window) {
         }
     }
 });
+publicApp.directive('scrollcenter', function($window) {
+    return {
+        restrict: 'A',
+        link: function ($scope, $element, attrs) {
+
+            var elem = angular.element($element);
+
+            var initializeElementSize = function () {
+                var elemWidth = elem[0].offsetWidth;
+                var scrollWidth = elem[0].scrollWidth;
+
+                if(scrollWidth > elemWidth){
+                    elem[0].scrollLeft = (scrollWidth - elemWidth) / 2;
+                }
+            };
+
+            angular.element($window).bind('resize', function () {
+                initializeElementSize();
+                $scope.$apply();
+            });
+
+            // Initiate the resize function default values
+            angular.element(document).ready(function () {
+                initializeElementSize();
+            });
+        }
+    }
+});
