@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('ToggleEnablePublicContentController', ['$scope','ContinutPublicService', '$modalInstance', 'isEnabled', 'idToToggle', '$state', function($scope, ContinutPublicService, $modalInstance, isEnabled, idToToggle, $state){
+cloudAdminControllers.controller('ToggleEnablePublicContentController', ['$scope','publicContentService', '$modalInstance', 'isEnabled', 'idToToggle', '$state', function($scope, publicContentService, $modalInstance, isEnabled, idToToggle, $state){
 
     console.log(isEnabled);
     
@@ -11,7 +11,7 @@ cloudAdminControllers.controller('ToggleEnablePublicContentController', ['$scope
     }
     
     $scope.toggleContent = function () {
-        ContinutPublicService.toggleContent.save({data: {isEnabled: isEnabled, id: idToToggle}}).$promise.then(function (resp) {
+        publicContentService.toggleContent.save({data: {isEnabled: isEnabled, id: idToToggle}}).$promise.then(function (resp) {
             console.log(resp);
             if(resp.error){
                 console.log("Eroare la update");

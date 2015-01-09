@@ -128,15 +128,15 @@ cloudAdminServices.factory('FormatService', function () {
         }
     }
 });
-cloudAdminServices.factory('testeService', ['$resource', function($resource){
+cloudAdminServices.factory('quizesService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/teste/', {}, {
+        getAll: $resource('api/quizes/', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        getByTest: $resource('api/teste/:id', {}, {
+        getByQuiz: $resource('api/quizes/:id', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        getQ: $resource('api/teste/:id/questions/:idd',{},{
+        getQuestions: $resource('api/quizes/:id/questions/:idd',{},{
             query: { method: 'GET', isArray: false }
         }),
         getMultimedia: $resource('api/multimediaBefore/:id',{},{

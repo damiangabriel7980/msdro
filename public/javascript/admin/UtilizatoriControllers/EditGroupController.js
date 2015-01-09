@@ -1,11 +1,11 @@
-cloudAdminControllers.controller('EditGroupController', ['$scope','GrupuriService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', '$rootScope', function($scope, GrupuriService, $modalInstance, $state, idToEdit, AmazonService, $rootScope){
+cloudAdminControllers.controller('EditGroupController', ['$scope','GroupsService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', '$rootScope', function($scope, GroupsService, $modalInstance, $state, idToEdit, AmazonService, $rootScope){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     
     var groupDataLoaded = false;
 
-    GrupuriService.groupDetails.query({id: idToEdit}).$promise.then(function (resp) {
+    GroupsService.groupDetails.query({id: idToEdit}).$promise.then(function (resp) {
         console.log(resp);
         $scope.nume = resp.display_name;
         $scope.descriere = resp.description;
@@ -13,9 +13,9 @@ cloudAdminControllers.controller('EditGroupController', ['$scope','GrupuriServic
         $scope.contentSpecific = resp.content_specific?resp.content_specific:false;
         $scope.logo = resp.image_path;
         $scope.idGroup = resp._id;
-        GrupuriService.getAllUsers.query().$promise.then(function (resp) {
+        GroupsService.getAllUsers.query().$promise.then(function (resp) {
             $scope.users = resp;
-            GrupuriService.getAllUsersByGroup.query({id: idToEdit}).$promise.then(function (resp) {
+            GroupsService.getAllUsersByGroup.query({id: idToEdit}).$promise.then(function (resp) {
                 $scope.selectedUsers = resp;
                 //selectedUsers is populated, but the list is not refreshed
                 console.log(resp);
@@ -33,7 +33,7 @@ cloudAdminControllers.controller('EditGroupController', ['$scope','GrupuriServic
         toSend.group.default_group = this.grupDefault?1:0;
         toSend.group.content_specific = this.contentSpecific?true:false;
         toSend.users = this.selectedUsers;
-        GrupuriService.editGroup.save({data: toSend}).$promise.then(function (resp) {
+        GroupsService.editGroup.save({data: toSend}).$promise.then(function (resp) {
             $scope.statusAlert.message = resp.message;
             if(resp.error){
                 $scope.statusAlert.type = "danger";

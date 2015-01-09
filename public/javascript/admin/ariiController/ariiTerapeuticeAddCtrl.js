@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('ariiTerapeuticeAddCtrl', ['$scope','$rootScope' ,'ariiAdminService','$stateParams','$sce','$filter','$modalInstance', function($scope,$rootScope,ariiAdminService,$stateParams,$sce,$filter,$modalInstance){
+cloudAdminControllers.controller('ariiTerapeuticeAddCtrl', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance){
 
     $scope.arie={
         has_children: false,
@@ -15,7 +15,7 @@ cloudAdminControllers.controller('ariiTerapeuticeAddCtrl', ['$scope','$rootScope
 
     $scope.addArie = function(){
         if($scope.arie){
-            ariiAdminService.getAll.save($scope.arie);
+            areasAdminService.getAll.save($scope.arie);
             $scope.arie = {};
             $modalInstance.close();
         }

@@ -89,8 +89,8 @@
 
             <form class="hidden-md hidden-lg hiddenSearch" role="search">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search" name="q">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                    <input id="upperSearch" type="text" class="form-control" placeholder="Search" name="q">
+                    <span class="input-group-addon" ng-click="getInput()" ui-sref="homeSearch({data:textToSearch})"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
             </form>
             <ul class="hidden-md hidden-lg navbar-brand pull-right" style="list-style: none;">

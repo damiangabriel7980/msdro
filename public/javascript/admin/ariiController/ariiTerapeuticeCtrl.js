@@ -1,8 +1,8 @@
 /**
  * Created by miricaandrei23 on 26.11.2014.
  */
-cloudAdminControllers.controller('ariiTerapeuticeCtrl', ['$scope','$rootScope' ,'ariiAdminService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,ariiAdminService,$stateParams,$sce,ngTableParams,$filter){
-    ariiAdminService.getAll.query().$promise.then(function(result){
+cloudAdminControllers.controller('ariiTerapeuticeCtrl', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,areasAdminService,$stateParams,$sce,ngTableParams,$filter){
+    areasAdminService.getAll.query().$promise.then(function(result){
         var arii = result;
         console.log(result);
         $scope.tableParams = new ngTableParams({

@@ -8,7 +8,7 @@ var Cities = require('./models/cities');
 var Multimedia = require('./models/multimedia');
 var User = require('./models/user');
 var Job = require('./models/jobs');
-var Teste=require('./models/quizes');
+var Quizes=require('./models/quizes');
 var Questions=require('./models/questions');
 var Answers = require('./models/answers');
 var Slides = require('./models/slides');
@@ -445,26 +445,26 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 deleteObjectS3(req.user.image_path, function (err, resp1) {
                     if (err) {
                         console.log(err);
-                        res.json({"type":"danger","message":"Mesaj de eroare 1"});
+                        res.json({"type":"danger","message":"Photo not deleted!"});
 
                     }
                     else {
                         User.findOne({_id: req.user._id}).exec(function (err, response) {
                             if (err) {
                                 console.log(err);
-                                res.json({"type":"danger","message":"Mesaj de eroare 2"});
+                                res.json({"type":"danger","message":"User not found!"});
                             }
                             else {
                                 response.image_path = key;
                                 response.save(function (err, info) {
                                     if (err)
-                                        res.json({"type":"danger","message":"Mesaj de eroare 3"});
+                                        res.json({"type":"danger","message":"Data could not be saved!"});
                                     else {
                                         addObjectS3(key, data.Body, function (err, resp2) {
                                             if (err)
                                             {
                                                 console.log(err);
-                                                res.json({"type":"danger","message":"Mesaj de eroare 4"});
+                                                res.json({"type":"danger","message":"Error while adding object to S3!"});
 
                                             }
                                             else
@@ -482,15 +482,14 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 User.findOne({_id: req.user._id}).exec(function (err, response) {
                     if (err) {
                         console.log(err);
-                        res.json({"type":"danger","message":"Mesaj de eroare 5"});
+                        res.json({"type":"danger","message":"User not found!"});
                     }
                     else {
                         response.image_path = key;
                         response.save(function (err, data2) {
                             if (err)
-                                res.json({"type":"danger","message":"Mesaj de eroare 6"});
+                                res.json({"type":"danger","message":"Couldn't save user's image_path!"});
                             else {
-                                console.log(data.Body);
                                 addObjectS3(key, data.Body, function (err, resp2) {
                                     if (err)
                                     {
@@ -498,7 +497,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                         res.json(err);
                                     }
                                     else
-                                        res.json({"type":"success","message":"Mesaj de succes 2!"});
+                                        res.json({"type":"success","message":"File upload successful!"});
                                 });
                             }
                         })
@@ -538,7 +537,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
     };
 
-    router.route('/admin/utilizatori/grupuri')
+    router.route('/admin/users/groups')
 
         .get(function(req, res) {
             UserGroup.find({}, {display_name: 1, description: 1} ,function(err, cont) {
@@ -550,7 +549,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/groupDetails/:id')
+    router.route('/admin/users/groupDetails/:id')
 
         .get(function(req, res) {
             UserGroup.find({_id: req.params.id}, function(err, cont) {
@@ -566,7 +565,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/utilizatori')
+    router.route('/admin/users/users')
 
         .get(function(req, res) {
             User.find({}, {username: 1}).limit(0).exec(function(err, cont) {
@@ -578,7 +577,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/utilizatoriDinGrup/:id')
+    router.route('/admin/users/usersFromGroup/:id')
 
         .get(function(req, res) {
             var id = req.params.id;
@@ -591,7 +590,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/addGroup')
+    router.route('/admin/users/addGroup')
         //used for both creating new groups and editing existing ones
 
         .post(function (req, res) {
@@ -631,7 +630,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                 if(err){
                                     logger.error(err);
                                     ans.error = true;
-                                    ans.message = "Eroare la adaugarea utilizatorilor noi in grup.";
+                                    ans.message = "Eroare la adaugarea userslor noi in grup.";
                                     res.json(ans);
                                 }else{
                                     ans.error = false;
@@ -647,7 +646,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     );
 
-    router.route('/admin/utilizatori/changeGroupLogo')
+    router.route('/admin/users/changeGroupLogo')
         .post(function (req,res) {
             var data = req.body.data;
             UserGroup.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
@@ -660,7 +659,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/editGroup')
+    router.route('/admin/users/editGroup')
         //used for both creating new groups and editing existing ones
 
         .post(function (req, res) {
@@ -694,7 +693,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                 if(err){
                                     logger.error(err);
                                     ans.error = true;
-                                    ans.message = "Eroare la stergerea utilizatorilor vechi din grup.";
+                                    ans.message = "Eroare la stergerea userslor vechi din grup.";
                                 }else{
                                     //update users to point to this group
                                     //extract id's from users
@@ -707,7 +706,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                         if(err){
                                             logger.error(err);
                                             ans.error = true;
-                                            ans.message = "Eroare la adaugarea utilizatorilor noi in grup.";
+                                            ans.message = "Eroare la adaugarea userslor noi in grup.";
                                             res.json(ans);
                                         }else{
                                             ans.error = false;
@@ -723,7 +722,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
-    router.route('/admin/utilizatori/deleteGroup')
+    router.route('/admin/users/deleteGroup')
 
         .post(function (req, res) {
             var group_id = req.body.id;
@@ -769,13 +768,13 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/test')
+    router.route('/admin/users/test')
 
         .post(function (req, res) {
             res.status(200).end();
         });
 
-    router.route('/admin/utilizatori/continutPublic/getAllContent')
+    router.route('/admin/users/publicContent/getAllContent')
 
         .get(function(req, res) {
             PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
@@ -787,7 +786,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/continutPublic/getById/:id')
+    router.route('/admin/users/publicContent/getById/:id')
 
         .get(function(req, res) {
             PublicContent.find({_id: req.params.id}, function (err, cont) {
@@ -803,7 +802,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             })
         });
 
-    router.route('/admin/utilizatori/continutPublic/toggleContent')
+    router.route('/admin/users/publicContent/toggleContent')
 
         .post(function(req, res) {
             PublicContent.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
@@ -815,7 +814,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/continutPublic/addContent')
+    router.route('/admin/users/publicContent/addContent')
 
         .post(function(req, res) {
             var data = req.body.data;
@@ -853,7 +852,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
-    router.route('/admin/utilizatori/continutPublic/editContent')
+    router.route('/admin/users/publicContent/editContent')
 
         .post(function(req, res) {
             var data = req.body.data.toUpdate;
@@ -889,7 +888,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
-    router.route('/admin/utilizatori/continutPublic/deleteContent')
+    router.route('/admin/users/publicContent/deleteContent')
 
         .post(function (req, res) {
             var content_id = req.body.id;
@@ -947,7 +946,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/continutPublic/changeImageOrFile')
+    router.route('/admin/users/publicContent/changeImageOrFile')
         .post(function (req,res) {
             var data = req.body.data;
             var qry = {};
@@ -974,7 +973,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
-    router.route('/admin/utilizatori/carouselPublic/getAllImages')
+    router.route('/admin/users/carouselPublic/getAllImages')
 
         .get(function(req, res) {
             PublicCarousel.find({}, function(err, cont) {
@@ -986,7 +985,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/carouselPublic/contentByType/:type')
+    router.route('/admin/users/carouselPublic/contentByType/:type')
 
         .get(function(req, res) {
             PublicContent.find({type: req.params.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
@@ -998,7 +997,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/carouselPublic/addImage')
+    router.route('/admin/users/carouselPublic/addImage')
 
         .post(function(req, res) {
             var data = req.body.data.toAdd;
@@ -1055,7 +1054,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
-    router.route('/admin/utilizatori/carouselPublic/toggleImage')
+    router.route('/admin/users/carouselPublic/toggleImage')
 
         .post(function(req, res) {
             PublicCarousel.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
@@ -1067,7 +1066,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/carouselPublic/deleteImage')
+    router.route('/admin/users/carouselPublic/deleteImage')
 
         .post(function (req, res) {
             var image_id = req.body.id;
@@ -1105,7 +1104,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/carouselPublic/editImage')
+    router.route('/admin/users/carouselPublic/editImage')
 
         .post(function(req, res) {
             var data = req.body.data.toUpdate;
@@ -1148,7 +1147,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
-    router.route('/admin/utilizatori/carouselPublic/getById/:id')
+    router.route('/admin/users/carouselPublic/getById/:id')
 
         .get(function(req, res) {
             PublicCarousel.find({_id: req.params.id}, function (err, cont) {
@@ -1168,7 +1167,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     //Carousel Medic
     //===============================================================================================
 
-    router.route('/admin/utilizatori/carouselMedic/getAllImages')
+    router.route('/admin/users/carouselMedic/getAllImages')
 
         .get(function(req, res) {
             Carousel.find({}, function(err, cont) {
@@ -1180,7 +1179,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/carouselMedic/contentByType/:type')
+    router.route('/admin/users/carouselMedic/contentByType/:type')
 
         .get(function(req, res) {
             Content.find({type: req.params.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
@@ -1192,7 +1191,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/carouselMedic/addImage')
+    router.route('/admin/users/carouselMedic/addImage')
 
         .post(function(req, res) {
             var data = req.body.data.toAdd;
@@ -1249,7 +1248,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
-    router.route('/admin/utilizatori/carouselMedic/toggleImage')
+    router.route('/admin/users/carouselMedic/toggleImage')
 
         .post(function(req, res) {
             Carousel.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
@@ -1261,7 +1260,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/carouselMedic/deleteImage')
+    router.route('/admin/users/carouselMedic/deleteImage')
 
         .post(function (req, res) {
             var image_id = req.body.id;
@@ -1299,7 +1298,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/admin/utilizatori/carouselMedic/editImage')
+    router.route('/admin/users/carouselMedic/editImage')
 
         .post(function(req, res) {
             var data = req.body.data.toUpdate;
@@ -1342,7 +1341,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
-    router.route('/admin/utilizatori/carouselMedic/getById/:id')
+    router.route('/admin/users/carouselMedic/getById/:id')
 
         .get(function(req, res) {
             Carousel.find({_id: req.params.id}, function (err, cont) {
@@ -2222,10 +2221,10 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
 
 
-    router.route('/admin/teste')
+    router.route('/admin/quizes')
 
         .get(function(req, res) {
-            Teste.find(function(err, cont) {
+            Quizes.find(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -2235,7 +2234,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .post(function(req, res) {
 
-            var test = new Teste(); 		// create a new instance of the Bear model
+            var test = new Quizes(); 		// create a new instance of the Bear model
             test.description = req.body.description;  // set the bears name (comes from the request)
             test.enabled=req.body.enabled ;
             test.entity= req.body.entity   ;
@@ -2258,10 +2257,10 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
 
         });
-    router.route('/admin/teste/:id')
+    router.route('/admin/quizes/:id')
 
         .get(function(req, res) {
-            Teste.find({_id:req.params.id}, function(err, cont) {
+            Quizes.find({_id:req.params.id}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -2274,7 +2273,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .put(function(req, res) {
 
-            Teste.findById(req.params.id, function(err, test) {
+            Quizes.findById(req.params.id, function(err, test) {
 
                 if (err)
                     res.send(err);
@@ -2302,7 +2301,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         })
         .delete(function(req, res) {
-            Teste.remove({
+            Quizes.remove({
                 _id: req.params.id
             }, function(err,cont) {
                 if (err)
@@ -2313,7 +2312,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
 
 
-    router.route('/admin/arii')
+    router.route('/admin/areas')
 
         .get(function(req, res) {
             Therapeutic_Area.find(function(err, cont) {
@@ -2340,7 +2339,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
 
         });
-    router.route('/admin/arii/:id')
+    router.route('/admin/areas/:id')
 
         .get(function(req, res) {
             Therapeutic_Area.find({_id:req.params.id}, function(err, cont) {
@@ -3022,7 +3021,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .get(function(req,res){
             var data=req.params.data;
             console.log(data);
-            var arr_of_items=[Products,Multimedia,Teste,Content,Events];
+            var arr_of_items=[Products,Multimedia,Quizes,Content,Events];
             var ObjectOfResults={};
             async.each(arr_of_items, function (item, callback) {
                 item.search({
@@ -3271,7 +3270,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
     };
 
-   router.route('/teste')
+   router.route('/quizes')
 
         .get(function(req,res){
             var resp = [];
@@ -3280,20 +3279,20 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}]);
                 else {
                     getQuizesIds(responses,function(arrayIdQuizes){
-                        Teste.find({_id:{$in:arrayIdQuizes}}, function (err, teste) {
+                        Quizes.find({_id:{$in:arrayIdQuizes}}, function (err, quizes) {
                             if(err){
                                 res.send(err);
                             }else{
-                                res.send(teste);
+                                res.send(quizes);
                             }
                         });
                     });
                 }
             });
         });
-    router.route('/teste/:id/questions/:idd')
+    router.route('/quizes/:id/questions/:idd')
         .get(function(req,res) {
-            Teste.find({_id: req.params.id}, function (err, testR) {
+            Quizes.find({_id: req.params.id}, function (err, testR) {
                 //console.log(req.params.id);
                 if (err) {
                     logger.error(err);
@@ -3327,9 +3326,9 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             })
         });
-    router.route('/teste/:id')
+    router.route('/quizes/:id')
         .get(function(req,res) {
-            Teste.find({_id: req.params.id}, function (err, testR) {
+            Quizes.find({_id: req.params.id}, function (err, testR) {
                 //console.log(req.params.id);
                 if (err) {
                     logger.error(err);
@@ -3428,7 +3427,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.json(result);
                 }
             });
-        })
+        });
 
     app.use('/api', router);
 };

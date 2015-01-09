@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('AddPublicContentController', ['$scope','ContinutPublicService','$modalInstance', '$state', 'AmazonService', function($scope, ContinutPublicService, $modalInstance, $state, AmazonService){
+cloudAdminControllers.controller('AddPublicContentController', ['$scope','publicContentService','$modalInstance', '$state', 'AmazonService', function($scope, publicContentService, $modalInstance, $state, AmazonService){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.selectedTherapeuticAreas = [];
@@ -16,7 +16,7 @@ cloudAdminControllers.controller('AddPublicContentController', ['$scope','Contin
     //----------------------------------------------------------------------------------------------- therapeutic areas
 
     //get all
-    ContinutPublicService.getTherapeuticAreas.query().$promise.then(function (resp) {
+    publicContentService.getTherapeuticAreas.query().$promise.then(function (resp) {
         var areasOrganised = [];
         areasOrganised.push({id:0, name:"Adauga arii terapeutice"});
         areasOrganised.push({id:1, name:"Toate"});
@@ -91,7 +91,7 @@ cloudAdminControllers.controller('AddPublicContentController', ['$scope','Contin
         toSend.text = this.contentText?this.contentText:"";
         //send data to server
         console.log(toSend);
-        ContinutPublicService.addContent.save({data: toSend}).$promise.then(function (resp) {
+        publicContentService.addContent.save({data: toSend}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.statusAlert.type = "danger";
             }else{

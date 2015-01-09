@@ -72,6 +72,11 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
+    $rootScope.textToSearch="";
+    $rootScope.getInput = function(){
+        var x = document.getElementById("upperSearch");
+        $rootScope.textToSearch = x.value;
+    };
     $rootScope.showFarmaModal = function(){
         $modal.open({
             templateUrl: 'partials/medic/modals/Farma.html',
