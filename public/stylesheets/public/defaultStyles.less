@@ -4,13 +4,6 @@
 //import stripped-from-variables version of bootstrap, which will use our custom variables
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 
-@gray: #bbbbbb;
-@grayDarker: #a0a0a0;
-
-@orange: #f6902e;
-@greenDark: #008780;
-@greenLighter: #36cfa5;
-
 html{
   height: 100%;
   body {
@@ -28,13 +21,13 @@ html{
 .navbar-fixed-top{
   height: 70px;
   padding-top: 10px;
-  background-color: #ffffff;
-  border-color: #ffffff;
   .navbar-collapse{
     background-color: #ffffff;
     margin: 0;
     overflow-x: hidden;
-    border: 1px solid @gray-lighter;
+    @media (max-width: @grid-float-breakpoint) {
+      border: 1px solid @gray-lighter;
+    }
   }
   .container{
     @media (max-width: @grid-float-breakpoint) {
@@ -49,7 +42,6 @@ html{
     padding: 5px 15px;
   }
   .navbar-link{
-    color: #000000;
     a{
       padding-left: 5px;
       padding-right: 5px;
@@ -64,9 +56,6 @@ html{
   .navbar-nav>li>a{
     padding: 15px 0 7px 0;
     margin: 0 10px 0 10px;
-    &:hover{
-      color: @greenDark;
-    }
   }
   .navbar-nav>.active>a{
     color: @greenDark;
@@ -84,10 +73,6 @@ html{
         left:0;
         top: 40px;
       }
-    }
-    &:hover{
-      color: @greenDark;
-      background-color: #ffffff;
     }
   }
 }
