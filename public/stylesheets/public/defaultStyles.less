@@ -1,12 +1,15 @@
+//import our customizable variables
+@import 'publicVariables';
+
+//import stripped-from-variables version of bootstrap, which will use our custom variables
+@import '../../modules/bootstrap_noVariables/less/bootstrap';
+
 @gray: #bbbbbb;
 @grayDarker: #a0a0a0;
 
 @orange: #f6902e;
 @greenDark: #008780;
 @greenLighter: #36cfa5;
-
-@navCollapsedWidth: 767px;
-@navCollapsePoint: 991px;
 
 html{
   height: 100%;
@@ -30,10 +33,17 @@ html{
   .navbar-collapse{
     background-color: #ffffff;
     margin: 0;
+    overflow-x: hidden;
+    border: 1px solid @gray-lighter;
   }
   .container{
-    padding-left: 0;
-    padding-right: 0;
+    @media (max-width: @grid-float-breakpoint) {
+      padding: 0;
+    }
+    width: 100%;
+    .navbar-header{
+      margin: 0;
+    }
   }
   .navbar-brand{
     padding: 5px 15px;
@@ -62,7 +72,7 @@ html{
     color: @greenDark;
     font-weight: bold;
     background-color: #ffffff;
-    @media (min-width: @navCollapsedWidth) {
+    @media (min-width: @grid-float-breakpoint) {
       &:after
       {
         content: '';
