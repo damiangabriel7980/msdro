@@ -1,6 +1,7 @@
 var publicApp = angular.module('publicApp',
     [
         'ui.router',
+        'ui.bootstrap',
         'publicControllers',
         'publicServices',
         'ngTouch',

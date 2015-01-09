@@ -15,6 +15,10 @@ html body .rootView {
   background-color: #ffffff;
   border-color: #ffffff;
 }
+.navbar-fixed-top .navbar-collapse {
+  background-color: #ffffff;
+  margin: 0;
+}
 .navbar-fixed-top .container {
   padding-left: 0;
   padding-right: 0;
@@ -47,15 +51,17 @@ html body .rootView {
   font-weight: bold;
   background-color: #ffffff;
 }
-.navbar-fixed-top .navbar-nav > .active > a:after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 0px;
-  border: 3px solid #bbbbbb;
-  border-radius: 5px;
-  left: 0;
-  top: 40px;
+@media (min-width: 767px) {
+  .navbar-fixed-top .navbar-nav > .active > a:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 0px;
+    border: 3px solid #bbbbbb;
+    border-radius: 5px;
+    left: 0;
+    top: 40px;
+  }
 }
 .navbar-fixed-top .navbar-nav > .active > a:hover {
   color: #008780;
@@ -155,6 +161,12 @@ html body .rootView {
 .btnGreen:hover {
   background-color: #008780;
 }
+.evenimente {
+  font-size: 18px;
+  font-weight: bold;
+  color: #008780;
+  margin-top: 20px;
+}
 .pagination > .active > a {
   background-color: #36cfa5;
   border-color: #36cfa5;
@@ -162,6 +174,27 @@ html body .rootView {
 .pagination > .active > a:hover {
   background-color: #36cfa5;
   border-color: #36cfa5;
+}
+.timelineContainer {
+  height: 200px;
+  overflow: hidden;
+}
+.timelineContainer .timelineBody {
+  transform: scale(0.8);
+  transform-origin: top left;
+}
+.footer {
+  margin-bottom: 50px;
+}
+.footer hr {
+  width: 400px;
+  margin: 15px auto;
+  height: 1px;
+  background: black;
+  background: -webkit-gradient(linear, 0 0, 100% 0, from(#ffffff), to(#ffffff), color-stop(50%, #000000));
+}
+.footer a {
+  color: #000000;
 }
 .myTabs {
   display: table;

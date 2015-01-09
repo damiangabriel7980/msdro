@@ -26,6 +26,8 @@
     <script src="javascript/public/home/NoutatiController.js"></script>
     <script src="javascript/public/home/CeleMaiCititeController.js"></script>
     <script src="javascript/public/home/HomeDownloadsController.js"></script>
+    <script src="javascript/public/footerController.js"></script>
+    <script src="javascript/public/modals/contactModalController.js"></script>
 
 
     <!--Plug-ins-->
@@ -95,6 +97,13 @@
 
 <div class="col-md-8 col-md-offset-2">
     <div ui-view class="view-container rootView"></div>
+</div>
+
+<div class="col-md-12 footer text-center">
+    <hr>
+    <a href="#">Home</a>&nbsp;|&nbsp;
+    <a href="http://www.merckmanuals.com" target="_blank">Manualul Merck</a>&nbsp;|&nbsp;
+    <a style="cursor: pointer" ng-controller="FooterController" ng-click="showContactModal()">Contact</a>
 </div>
 
 </body>
