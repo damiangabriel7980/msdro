@@ -1,9 +1,9 @@
 /**
  * Created by miricaandrei23 on 05.11.2014.
  */
-cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce','growl', function($scope,$rootScope,testeService,$stateParams,$sce,growl){
+cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'quizesService','$stateParams','$sce','growl', function($scope,$rootScope,quizesService,$stateParams,$sce,growl){
     var date = new Date();
-    testeService.getAll.query().$promise.then(function(result){
+    quizesService.getAll.query().$promise.then(function(result){
         $scope.teste = result;
         //$scope.testeFiltered = [];
         //for (var i = 0; i < $scope.teste.length; i++) {

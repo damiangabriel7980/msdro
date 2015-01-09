@@ -1,7 +1,7 @@
-cloudAdminControllers.controller('ContinutPublicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'ContinutPublicService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, ContinutPublicService){
+cloudAdminControllers.controller('ContinutPublicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'publicContentService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, publicContentService){
 
     $scope.refreshTable = function () {
-        ContinutPublicService.getAllContent.query().$promise.then(function (resp) {
+        publicContentService.getAllContent.query().$promise.then(function (resp) {
             var data = resp;
 
             $scope.tableParams = new ngTableParams({

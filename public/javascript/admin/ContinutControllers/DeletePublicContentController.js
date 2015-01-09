@@ -1,8 +1,8 @@
-cloudAdminControllers.controller('DeletePublicContentController', ['$scope','ContinutPublicService', '$modalInstance', '$state', 'idToDelete',function($scope, ContinutPublicService, $modalInstance, $state, idToDelete){
+cloudAdminControllers.controller('DeletePublicContentController', ['$scope','publicContentService', '$modalInstance', '$state', 'idToDelete',function($scope, publicContentService, $modalInstance, $state, idToDelete){
 
     $scope.deleteContent = function () {
         console.log(idToDelete);
-        ContinutPublicService.deleteContent.save({id: idToDelete}).$promise.then(function (resp) {
+        publicContentService.deleteContent.save({id: idToDelete}).$promise.then(function (resp) {
             console.log(resp);
             $state.reload();
             $modalInstance.close();

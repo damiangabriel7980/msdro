@@ -1,8 +1,8 @@
 /**
  * Created by miricaandrei23 on 05.11.2014.
  */
-cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootScope' ,'testeService','$stateParams','$sce', '$modalInstance','$location','$state','$timeout','userService','growl', function($scope,$rootScope,testeService,$stateParams,$sce,$modalInstance,$location,$state,$timeout,userService,growl) {
-    testeService.getQ.query({id:$stateParams.id,idd:$stateParams.idd}).$promise.then(function(result){
+cloudAdminControllers.controller('testeQuestionsController', ['$scope','$rootScope' ,'quizesService','$stateParams','$sce', '$modalInstance','$location','$state','$timeout','userService','growl', function($scope,$rootScope,quizesService,$stateParams,$sce,$modalInstance,$location,$state,$timeout,userService,growl) {
+    quizesService.getQuestions.query({id:$stateParams.id,idd:$stateParams.idd}).$promise.then(function(result){
         $scope.newQuestions=result["questions"];
         $scope.answersFiltered=result["answers"];
         $scope.test=result["test"];
@@ -39,11 +39,11 @@ $scope.modifyChk = function(index)
         $scope.chk[index]=true;
     else
         $scope.chk[index]=false
-}
+};
     $scope.chkFinal=[];
     $scope.ansForChk=[];
     $scope.contor=0;
-    $scope.cc=0
+    $scope.cc=0;
     $scope.clasa='hide';
     $scope.hideNext='show';
     $scope.selectedAnswers=[];
@@ -62,7 +62,7 @@ $scope.modifyChk = function(index)
             $scope.hideNext='hide';
             $scope.hideFinish='show';
         }
-            testeService.getQ.query({
+        quizesService.getQuestions.query({
                 id: $stateParams.id,
                 idd: $scope.test[0].questionsID[$scope.randomidx[$scope.cc]]
             }).$promise.then(function (result) {
@@ -72,8 +72,6 @@ $scope.modifyChk = function(index)
                     {
                          $scope.ansForChk.push($scope.answersFiltered);
                     }
-                //$scope.len = $scope.questions.length;
-
                     if($scope.chkFinal[$scope.cc])
                         $scope.chk=$scope.chkFinal[$scope.cc];
                     else
@@ -84,7 +82,7 @@ $scope.modifyChk = function(index)
                     }
 
             })
-        }
+        };
     $scope.previousQuestion= function(){
         $scope.cc-=1;
         if($scope.test[0].questionsID.length-2==$scope.cc)
@@ -93,7 +91,7 @@ $scope.modifyChk = function(index)
             $scope.hideFinish='hide';
         }
         $scope.chk=$scope.chkFinal[$scope.cc];
-        testeService.getQ.query({
+        quizesService.getQuestions.query({
             id: $stateParams.id,
             idd: $scope.test[0].questionsID[$scope.randomidx[$scope.cc]]
         }).$promise.then(function (result) {
@@ -107,11 +105,11 @@ $scope.modifyChk = function(index)
 
                     $scope.questions.splice(idx, 1);
                 }
-            })
+            });
 
         if($scope.cc==0)
             $scope.clasa='hide';
-    }
+    };
     $scope.finishJob = function(){
         if(!$scope.chkFinal[$scope.cc])
             $scope.chkFinal.push($scope.chk);
@@ -140,7 +138,7 @@ $scope.modifyChk = function(index)
             growl.addSuccessMessage("Your score is:" + $scope.score_obtained.toString());
             $modalInstance.close();
         }
-    }
+    };
     $scope.finished=function()
     {
         if(!$scope.chkFinal[$scope.cc])

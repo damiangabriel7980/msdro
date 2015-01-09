@@ -1,13 +1,13 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-cloudAdminControllers.controller('AddGroupController', ['$scope','GrupuriService', '$modalInstance', '$state',function($scope, GrupuriService, $modalInstance, $state){
+cloudAdminControllers.controller('AddGroupController', ['$scope','GroupsService', '$modalInstance', '$state',function($scope, GroupsService, $modalInstance, $state){
 
     $scope.selectedUsers = {};
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
 
-    GrupuriService.getAllUsers.query().$promise.then(function (resp) {
+    GroupsService.getAllUsers.query().$promise.then(function (resp) {
         console.log(resp);
         $scope.users = resp;
     });
@@ -20,7 +20,7 @@ cloudAdminControllers.controller('AddGroupController', ['$scope','GrupuriService
         toSend.group.default_group = this.grupDefault?1:0;
         toSend.group.content_specific = this.contentSpecific?true:false;
         toSend.users = this.selectedUsers;
-        GrupuriService.addGroup.save({data: toSend}).$promise.then(function (resp) {
+        GroupsService.addGroup.save({data: toSend}).$promise.then(function (resp) {
             $scope.statusAlert.message = resp.message;
             if(resp.error){
                 $scope.statusAlert.type = "danger";

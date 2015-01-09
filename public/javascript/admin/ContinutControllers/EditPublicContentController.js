@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$rootScope', 'ContinutPublicService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', function($scope, $rootScope, ContinutPublicService, $modalInstance, $state, idToEdit, AmazonService){
+cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$rootScope', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', function($scope, $rootScope, publicContentService, $modalInstance, $state, idToEdit, AmazonService){
 
     var contentDataLoaded = false;
 
@@ -15,7 +15,7 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
     };
 
     //get content by id
-    ContinutPublicService.getContentById.query({id: idToEdit}).$promise.then(function (resp) {
+    publicContentService.getContentById.query({id: idToEdit}).$promise.then(function (resp) {
         console.log(resp);
         $scope.titlu = resp.title;
         $scope.autor = resp.author;
@@ -30,7 +30,7 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
         var areasIds = resp['therapeutic-areasID']?resp['therapeutic-areasID']:[];
 
         //get therapeutic areas
-        ContinutPublicService.getTherapeuticAreas.query().$promise.then(function (resp) {
+        publicContentService.getTherapeuticAreas.query().$promise.then(function (resp) {
             var areasOrganised = [];
             areasOrganised.push({id:0, name:"Adauga arii terapeutice"});
             areasOrganised.push({id:1, name:"Toate"});
@@ -248,7 +248,7 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
         toUpdate.text = this.contentText?this.contentText:"";
         //send data to server
         console.log(toUpdate);
-        ContinutPublicService.editContent.save({data: {toUpdate: toUpdate, id: idToEdit}}).$promise.then(function (resp) {
+        publicContentService.editContent.save({data: {toUpdate: toUpdate, id: idToEdit}}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.statusAlert.type = "danger";
             }else{

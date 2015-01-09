@@ -1,10 +1,10 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'GrupuriService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, GrupuriService, $modal){
+cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, GroupsService, $modal){
 
     $scope.refreshTable = function () {
-        GrupuriService.getAllGroups.query().$promise.then(function (resp) {
+        GroupsService.getAllGroups.query().$promise.then(function (resp) {
             var data = resp;
 
             $scope.tableParams = new ngTableParams({
@@ -68,7 +68,7 @@ cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '
 
     $scope.test = function(){
         var toSend = {};
-        GrupuriService.testSomething.query({data: toSend}).$promise.then(function(resp){
+        GroupsService.testSomething.query({data: toSend}).$promise.then(function(resp){
             console.log(resp);
         });
     };
