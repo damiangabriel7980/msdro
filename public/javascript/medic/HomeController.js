@@ -86,6 +86,14 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
+    $rootScope.showContactModal = function(){
+        $modal.open({
+            templateUrl: 'partials/medic/contact.ejs',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'contactCtrl'
+        });
+    };
     $rootScope.showTermsModal = function(){
         $modal.open({
             templateUrl: 'partials/medic/modals/Terms.html',

@@ -7,7 +7,7 @@ cloudAdminControllers.controller('contactCtrl',['$scope','$stateParams','$modal'
         $modalInstance.close();
     };
 
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+    $scope.closeContact = function () {
+        $modalInstance.close();
     };
 }])

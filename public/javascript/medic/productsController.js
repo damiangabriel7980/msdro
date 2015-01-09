@@ -32,6 +32,7 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
         });
     });
     $scope.filterResults=function(index){
+        $scope.productsFiltered=[];
         if($scope.products.length!=$scope.productsReserve.length)
         {
             $scope.products=[];

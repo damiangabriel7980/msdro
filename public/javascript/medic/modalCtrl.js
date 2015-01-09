@@ -4,14 +4,11 @@
 cloudAdminControllers.controller('modalCtrl',['$scope','eventsService2','$stateParams','$modal','$log','$modalInstance','$state',function ($scope,eventsService2,$stateParams, $modal, $log,$modalInstance,$state) {
 
     $scope.itemsEvent= eventsService2.query({id:$stateParams.id});
-    $scope.okk = function () {
-        $state.go('calendar');
-        $modalInstance.close();
-    };
 
     $scope.cancell = function () {
-        $state.go('calendar');
+        window.history.back();
         $modalInstance.dismiss('cancel');
+        //$state.go('calendar');
     };
 }])
 .filter("asDate", function () {

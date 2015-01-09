@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('ContentArticleController', ['$scope', '$rootScope', '$stateParams', 'ContentService', 'FormatService', '$sce', function($scope, $rootScope, $stateParams, ContentService, FormatService, $sce){
+cloudAdminControllers.controller('ContentArticleController', ['$scope', '$rootScope', '$stateParams', 'ContentService', 'FormatService', '$sce','$state', function($scope, $rootScope, $stateParams, ContentService, FormatService, $sce,$state){
 
     var imagePre = $rootScope.pathAmazonDev;
 
@@ -8,6 +8,9 @@ cloudAdminControllers.controller('ContentArticleController', ['$scope', '$rootSc
         $scope.date = FormatService.formatMongoDate(resp.last_updated);
         $scope.image = imagePre + resp.image_path;
         $scope.articleContent = $sce.trustAsHtml(resp.text);
+        $scope.backToArticles=function(){
+            $state.go($rootScope.previousState,{articleType:$scope.currentArticle.type});
+        }
     });
 
 }]);
