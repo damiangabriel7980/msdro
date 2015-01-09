@@ -41,14 +41,4 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
     $scope.createHeader = function (text,length) {
         return $scope.htmlToPlainText(text).substring(0,length)+"...";
     };
-
-    //contact modal
-    $scope.showContactModal = function(){
-        $modal.open({
-            templateUrl: 'partials/public/modals/contactModal.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'ContactModalController'
-        });
-    };
 }]);
