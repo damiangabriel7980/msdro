@@ -151,6 +151,23 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/medic/elearning/teste.ejs',
             controller: 'testeController'
         })
+        .state('elearning.multimediaBeforeQuiz',{
+            parent:'elearning.teste',
+            url: '/:id',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                console.log('Open modal');
+                $modal.open({
+                    templateUrl: 'partials/medic/elearning/MultimediaBeforeQuiz.ejs',
+                    windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html',
+                    backdrop: 'static',
+                    size: 'lg',
+                    keyboard: false,
+                    mouse:false,
+                    windowClass: 'fade',
+                    controller: 'MultimediaBeforeQuizController'
+                })
+            }]
+        })
         .state('elearning.teste.quizById',{
             parent:'elearning.teste',
             url: '/:id/questions/:idd',

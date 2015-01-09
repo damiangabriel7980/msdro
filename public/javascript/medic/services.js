@@ -138,6 +138,9 @@ cloudAdminServices.factory('testeService', ['$resource', function($resource){
         }),
         getQ: $resource('api/teste/:id/questions/:idd',{},{
             query: { method: 'GET', isArray: false }
+        }),
+        getMultimedia: $resource('api/multimediaBefore/:id',{},{
+            query: { method: 'GET', isArray: false }
         })
 
     }

@@ -3280,12 +3280,10 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}]);
                 else {
                     getQuizesIds(responses,function(arrayIdQuizes){
-                        console.log(arrayIdQuizes);
                         Teste.find({_id:{$in:arrayIdQuizes}}, function (err, teste) {
                             if(err){
                                 res.send(err);
                             }else{
-                                console.log(teste);
                                 res.send(teste);
                             }
                         });
@@ -3328,8 +3326,38 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     })
                 }
             })
-        })
+        });
+    router.route('/teste/:id')
+        .get(function(req,res) {
+            Teste.find({_id: req.params.id}, function (err, testR) {
+                //console.log(req.params.id);
+                if (err) {
+                    logger.error(err);
+                    res.send(err);
+                    return;
+                }
+                else
+                    res.json(testR[0]);
+            })
+        });
+    router.route('/multimediaBefore/:id')
+        .get(function(req,res){
+            var id=[];
+            id.push(req.params.id);
+            Multimedia.find({quizesID: {$in:id}},function(err, cont) {
+                if(err) {
+                    console.log(err);
+                    res.json(err);
+                }
+                else
+                {
+                    console.log(cont);
+                    res.json(cont[0]);
+                }
 
+            });
+
+        });
     router.route('/user')
         .get(function(req,res){
             User.find(function (error, result) {
