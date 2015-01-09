@@ -12,11 +12,11 @@
             </div>
         </div>
         <div class="carouselNavigation" style="{{cNavStyle}}">
-            <div class="navSlide" ng-repeat="slide in carouselSlides track by $index"  ng-class="{'active':$index==selectedIndex}" ng-click="setSlide($index)">
+            <div class="navSlide" ng-repeat="slide in carouselSlides | repeatReverse track by $index"  ng-class="{'active':$index==selectedIndex}" ng-click="setSlide(carouselSlides.length - $index - 1)">
                 <img ng-src="{{pathAmazonDev+slide.image_path}}" tooltip-html-unsafe="{{getTooltip(slide)}}" tooltip-trigger="mouseenter">
             </div>
         </div>
-        <ul rn-carousel rn-carousel-index="selectedIndex" class="myCarousel" rn-carousel-auto-slide="5">
+        <ul rn-carousel rn-carousel-index="selectedIndex" class="myCarousel" rn-carousel-auto-slide="8">
             <li ng-repeat="slide in carouselSlides">
                 <div class="imageGroup">
                     <img class="imageReal" ng-src="{{pathAmazonDev+slide.image_path}}" ondragstart="return false;">
