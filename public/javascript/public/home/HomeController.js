@@ -41,15 +41,4 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
     $scope.createHeader = function (text,length) {
         return $scope.htmlToPlainText(text).substring(0,length)+"...";
     };
-
-    //merck modal
-    $rootScope.showMerckManual = function(){
-        $modal.open({
-            templateUrl: 'partials/medic/modals/merckManual.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'MerckManualController',
-            windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
-        });
-    };
 }]);

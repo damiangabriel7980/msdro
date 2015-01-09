@@ -5,6 +5,9 @@
 @greenDark: #008780;
 @greenLighter: #36cfa5;
 
+@navCollapsedWidth: 767px;
+@navCollapsePoint: 991px;
+
 html{
   height: 100%;
   body {
@@ -24,6 +27,10 @@ html{
   padding-top: 10px;
   background-color: #ffffff;
   border-color: #ffffff;
+  .navbar-collapse{
+    background-color: #ffffff;
+    margin: 0;
+  }
   .container{
     padding-left: 0;
     padding-right: 0;
@@ -55,16 +62,18 @@ html{
     color: @greenDark;
     font-weight: bold;
     background-color: #ffffff;
-    &:after
-    {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 0px;
-      border: 3px solid @gray;
-      border-radius: 5px;
-      left:0;
-      top: 40px;
+    @media (min-width: @navCollapsedWidth) {
+      &:after
+      {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 0px;
+        border: 3px solid @gray;
+        border-radius: 5px;
+        left:0;
+        top: 40px;
+      }
     }
     &:hover{
       color: @greenDark;
@@ -174,12 +183,42 @@ html{
   }
 }
 
+.evenimente{
+  font-size: 18px;
+  font-weight: bold;
+  color: @greenDark;
+  margin-top: 20px;
+}
+
 .pagination>.active>a{
   background-color: @greenLighter;
   border-color: @greenLighter;
   &:hover{
     background-color: @greenLighter;
     border-color: @greenLighter;
+  }
+}
+
+.timelineContainer{
+  height: 200px;
+  overflow: hidden;
+  .timelineBody{
+    transform: scale(0.8);
+    transform-origin: top left;
+  }
+}
+
+.footer{
+  margin-bottom: 50px;
+  hr {
+    width: 400px;
+    margin: 15px auto;
+    height: 1px;
+    background: black;
+    background: -webkit-gradient(linear, 0 0, 100% 0, from(white), to(white), color-stop(50%, black));
+  }
+  a{
+    color: #000000;
   }
 }
 
