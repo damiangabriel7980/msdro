@@ -4400,8 +4400,8 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > .active > span:focus {
   z-index: 2;
   color: #ffffff;
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: #36cfa5;
+  border-color: #36cfa5;
   cursor: default;
 }
 .pagination > .disabled > span,
@@ -6454,14 +6454,6 @@ html body .rootView {
   font-weight: bold;
   color: #008780;
   margin-top: 20px;
-}
-.pagination > .active > a {
-  background-color: #36cfa5;
-  border-color: #36cfa5;
-}
-.pagination > .active > a:hover {
-  background-color: #36cfa5;
-  border-color: #36cfa5;
 }
 .timelineContainer {
   height: 200px;
