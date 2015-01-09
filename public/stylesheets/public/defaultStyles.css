@@ -155,6 +155,12 @@ html body .rootView {
 .btnGreen:hover {
   background-color: #008780;
 }
+.evenimente {
+  font-size: 18px;
+  font-weight: bold;
+  color: #008780;
+  margin-top: 20px;
+}
 .pagination > .active > a {
   background-color: #36cfa5;
   border-color: #36cfa5;
