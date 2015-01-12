@@ -1,2 +1,24 @@
-<div class="timelineBody" ng-bind-html="timelineHtml">
+<div class="timelineBody">
+    <div ng-repeat="event in formatEvents track by $index" class="timeBox"
+         ng-style="{'left':event.leftPx+'px','margin-top':event.isDown?timeBoxTopWhenFlipped+'px':timeBoxTop+'px','z-index':999-$index}"
+         ng-click="event.collapsed = !event.collapsed">
+
+        <div class="timeBoxLine" ng-style="{'bottom':event.isDown?'25px':'-25px'}"></div>
+        <div class="zi">{{event.zi}}</div>
+        <div class="luna">{{event.luna}}</div>
+        <div class="isCollapsed">
+            <i class="glyphicon" ng-class="{'glyphicon-chevron-down':event.collapsed, 'glyphicon-chevron-right':!event.collapsed}"></i>
+        </div>
+        <div class="nume" ng-if="!event.collapsed">{{event.nume}}</div>
+    </div>
+    <div class="timeGrid">
+        <div class="gridd">
+            <div class="month" ng-repeat="month in months"></div>
+        </div>
+        <div class="todayBox">
+            <div class="dateShow">{{(thisDay<10?"0"+thisDay:thisDay)+"."+((thisMonth+1)<10?"0"+(thisMonth+1):thisMonth+1)}}</div>
+            <div class="arrowDown"></div>
+            <div class="lineDown"></div>
+        </div>
+    </div>
 </div>
