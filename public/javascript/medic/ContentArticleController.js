@@ -9,7 +9,10 @@ cloudAdminControllers.controller('ContentArticleController', ['$scope', '$rootSc
         $scope.image = imagePre + resp.image_path;
         $scope.articleContent = $sce.trustAsHtml(resp.text);
         $scope.backToArticles=function(){
-            $state.go($rootScope.previousState,{articleType:$scope.currentArticle.type});
+            if($scope.currentArticle.type<3)
+                $state.go('noutati.listaArticole',{articleType:$scope.currentArticle.type});
+            else
+                $state.go('biblioteca.articoleStiintifice.listaArticole',{articleType:$scope.currentArticle.type});
         }
     });
 

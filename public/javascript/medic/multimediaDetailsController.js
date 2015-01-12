@@ -25,7 +25,6 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
     };
 
     $scope.okk = function () {
-        console.log($rootScope.previousState);
         $modalInstance.close();
     };
 

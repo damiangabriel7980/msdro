@@ -91,7 +91,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             controller: 'ContentArticleController'
         })
        .state('calendar',{
-            url: '/calendar',
+            url: '/calendar/:data',
             templateUrl: 'partials/medic/calendar.ejs',
             controller: 'eventsController'
         })
@@ -106,7 +106,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             controller: 'therapeuticControllerCtrl'
         })
         .state('elearning.multimedia.multimediaByArea',{
-            url: '/multimedia/:id',
+            url: '/multimedia/:data',
             templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
             controller: 'multimediaController'
         })

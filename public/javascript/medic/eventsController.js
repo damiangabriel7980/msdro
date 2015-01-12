@@ -71,6 +71,21 @@ var date = new Date();
             }
         });
     };
+    if($stateParams.data.id)
+    {
+        $modal.open({
+            templateUrl: 'partials/medic/calendarDetails.ejs',
+            backdrop: true,
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'modalCtrl',
+            resolve:{
+                idEvent: function () {
+                    return $stateParams.data.id;
+                }
+            }
+        });
+    }
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {
