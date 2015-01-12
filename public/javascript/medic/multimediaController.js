@@ -19,8 +19,9 @@ cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' 
     });
 
     $scope.amazonPre = $rootScope.pathAmazonDev;
-//    $scope.defaultVideoImg = $rootScope.defaultVideoImage;
-//    $scope.defaultSlideImg = $rootScope.defaultSlideImage;
+    if($rootScope.previousState==='home')
+        console.log('Am fost acasa');
+    console.log($rootScope.currentState);
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {

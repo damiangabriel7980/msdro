@@ -14,7 +14,7 @@ var ProductSchema		= new Schema({
     name: {type:String,es_indexed:true},
     'therapeutic-areasID': Array
 });
-ProductSchema.plugin(mongoosastic);
+ProductSchema.plugin(mongoosastic,{host:'10.200.0.221',port:'9200'});
 module.exports = mongoose.model('products', ProductSchema);
 var Product = mongoose.model('products', ProductSchema);
 var stream = Product.synchronize();

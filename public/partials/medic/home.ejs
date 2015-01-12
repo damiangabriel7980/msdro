@@ -89,7 +89,7 @@
             </div>
             <div class="col-xs-12 noPadding margintop20px" ng-repeat="m in multimedia | limitTo: 3">
                 <i class="gray glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
-                <a ui-sref="elearning.multimedia.multimediaById({idd:m._id})"><b class="MSDgreenDarker">{{m.title+"("+m.author+")"}}</b></a>
+                <a ui-sref="elearning.multimedia.multimediaById({id:0,idd:m._id})"><b class="MSDgreenDarker">{{m.title+"("+m.author+")"}}</b></a>
                 <p>{{htmlToPlainText(m.description)}}</p>
             </div>
         </div>

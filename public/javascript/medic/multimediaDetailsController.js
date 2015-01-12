@@ -16,7 +16,8 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
             });
         }
     });
-
+    console.log($rootScope.previousState);
+    console.log($rootScope.currentState);
     $scope.amazon = $rootScope.pathAmazonDev;
 
     $scope.getVideoSrc = function(filepath){
@@ -24,12 +25,12 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
     };
 
     $scope.okk = function () {
-        $state.go('elearning.multimedia');
+        console.log($rootScope.previousState);
         $modalInstance.close();
     };
 
     $scope.cancell = function () {
-        $state.go('elearning.multimedia');
+        console.log($rootScope.previousState);
         $modalInstance.dismiss('cancel');
     };
 }]);

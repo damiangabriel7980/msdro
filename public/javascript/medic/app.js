@@ -126,7 +126,6 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             controller: 'multimediaController'
         })
         .state('elearning.multimedia.multimediaById',{
-            parent:'elearning.multimedia.multimediaByArea',
             url: '/multimedia2/:idd',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 console.log('Open modal');
@@ -224,7 +223,7 @@ cloudAdminApp.run(
                     windowClass: 'fade',
                     controller: 'ProfileController'
                 });
-            }
+            };
         }
     ]
 );
