@@ -3019,7 +3019,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
     router.route('/userImage')
         .get(function(req,res) {
-            User.findOne({username: {$regex: new RegExp("^" + req.user.username, "i")}},'image_path', function (err, usr) {
+            User.findOne({username: {$regex: new RegExp("^" + req.user.username, "i")}},'image_path name', function (err, usr) {
                 if (err) {
                     logger.error(err);
                     res.send(err)

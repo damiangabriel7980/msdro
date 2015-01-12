@@ -157,11 +157,17 @@
                     </ul>
                 </li>
             </ul>
-            <div ng-class="{'hide': $state.includes('home')}" class="input-group mySearch pull-right" style="width: 15%; top:10px">
+            <div ng-class="{'hide': $state.includes('home')}" class="handCursor pull-right col-xs-2">
+
+                <img class="img-circle" ng-click="showProfile()" width="50" height="50" ng-src={{pathAmazonDev+imageForUser}} />
+                <label class="nameMedic">{{userFullName}}</label>
+            </div>
+            <div ng-class="{'hide': $state.includes('home')}" class="input-group mySearch " style="width: 200px; top:10px; left:20%">
                 <input type="text" class="form-control ng-pristine ng-valid" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
                 <span class="input-group-addon" ui-sref="homeSearch({data:textToSearch})"><i class="glyphicon glyphicon-search"></i></span>
-                <img class="img-circle" ng-click="showProfile()" ng-src="{{imageForUser}}">
+
             </div>
+
         </div>
 
     </div>

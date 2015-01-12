@@ -5,6 +5,8 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
     $scope.widthOfWindow=$(window).innerWidth;
     $scope.increaseLimit=function(){
         $scope.lmt+=3;
+        if($scope.content.length<$scope.lmt)
+            $scope.showMore='hide';
     };
     if($stateParams.articleType==1){
         $scope.title = "STIRI";
@@ -42,6 +44,7 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
             $scope.showMore='show';
         else
             $scope.showMore='hide';
+
     });
 
 }]);

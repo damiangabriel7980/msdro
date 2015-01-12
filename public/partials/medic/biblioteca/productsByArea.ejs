@@ -16,7 +16,7 @@
         </div>
     </div>
     <div style="clear: both;margin:0 auto;" align="center">
-        <button class="btn btn-sm btn-info btn-more-news" ng-click="increaseLimit()">Mai multe produse</button>
+        <button class="btn btn-sm btn-info btn-more-news" ng-class="products.length>8 ? 'show':'hide'" ng-click="increaseLimit()">Mai multe produse</button>
     </div>
 </div>
 <div class="col-md-1" style="text-align: center">

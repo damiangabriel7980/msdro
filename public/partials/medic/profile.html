@@ -8,7 +8,7 @@
             <div class="col-md-12">
                 <alert ng-if="userProfileAlert.newAlert" type="{{userProfileAlert.type}}" close="userProfileAlert.newAlert=false">{{userProfileAlert.message}}</alert>
             </div>
-            <form name="profileForm" ng-submit="submitProfileForm(profileForm.$valid)" novalidate>
+            <form name="profileForm" novalidate>
                 <div class="col-md-12">
                     <div class="col-md-12">
                         <div class="col-md-4">
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary pull-right">Salveaza</button>
+                            <button type="submit" ng-click="submitProfileForm(profileForm.$valid)" class="btn btn-primary pull-right">Salveaza</button>
                         </div>
                     </div>
                 </div>
