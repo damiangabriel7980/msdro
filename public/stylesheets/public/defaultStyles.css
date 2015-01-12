@@ -6358,6 +6358,9 @@ html body .rootView {
 .fixedBox {
   position: absolute;
   left: 0px;
+  top: 10%;
+  height: 80%;
+  width: 50%;
   border-top-right-radius: 7px;
   border-bottom-right-radius: 7px;
   z-index: 100;
@@ -6391,6 +6394,8 @@ html body .rootView {
 .carouselNavigation {
   position: absolute;
   right: 20px;
+  bottom: 10%;
+  width: 45%;
   z-index: 101;
   height: auto;
 }
@@ -6428,7 +6433,7 @@ html body .rootView {
 .myCarousel {
   height: 100%;
 }
-.myCarousel .imageGroup .imageReal {
+.myCarousel img {
   width: 100%;
 }
 .btnGreen {
