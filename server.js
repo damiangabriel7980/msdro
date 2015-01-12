@@ -75,8 +75,9 @@ require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 
 // launch ======================================================================
 
+var devPort = process.env.devPORT || 8080;
 var ssPort   = process.env.ssPORT || 3000;
 secureServer.listen(ssPort);
-app.listen(8080);
+app.listen(devPort);
 console.log("Https server started on port " + ssPort);
-console.log("Dev server started on port 8080");
+console.log("Dev server started on port " + devPort);

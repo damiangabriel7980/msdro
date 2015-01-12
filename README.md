@@ -29,10 +29,10 @@ amazon:   - open /packaje.json
           - change bucket: edit "amazonBucket" environment variable
           - change root credentials (optionally): edit "AWS_ACCESS_KEY_ID" and "AWS_SECRET_ACCESS_KEY" variables
 
-ports:    - app: - default: 8080
-                 - change: add PORT environment variable to server start script (/package.json -> "scripts" -> "start")
-          - socketComm : - default: 3000
-                         - change: add SOCKET_PORT environment variable to server start script (/package.json -> "scripts" -> "start")
+ports:    - dev app: - default: 8080
+                     - change: add devPORT environment variable to server start script (/package.json -> "scripts" -> "start")
+          - production app (ssl): - default: 3000
+                                  - change: add ssPORT environment variable to server start script (/package.json -> "scripts" -> "start")
 
 mandrill: - open /packaje.json
           - scroll down to "scripts" -> "start"

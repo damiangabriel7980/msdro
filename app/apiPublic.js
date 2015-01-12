@@ -33,10 +33,16 @@ module.exports = function(app,email, router) {
     router.route('/events')
 
         .get(function (req, res) {
-            Events.find({enable: {$exists: true, $ne: false}}).sort({start: 1}).exec(function (err, resp) {
+            var daysToReturn = 80;
+            var startDate = new Date(new Date().setDate(new Date().getDate()-(daysToReturn/2)));
+            var endDate = new Date(new Date().setDate(new Date().getDate()+(daysToReturn/2)));
+            console.log(startDate);
+            console.log(endDate);
+            Events.find({enable: {$exists: true, $ne: false}, start: {$gt: startDate, $lt: endDate}}).sort({start: 1}).exec(function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{
+                    console.log(resp);
                     res.send(resp);
                 }
             })
