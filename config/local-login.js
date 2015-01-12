@@ -14,6 +14,7 @@ module.exports = function(passport, logger) {
             passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
         },
         function(req, email, password, done) {
+            console.log("here");
             if (email)
                 email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
@@ -27,10 +28,10 @@ module.exports = function(passport, logger) {
 
                     // if no user is found, return the message
                     if (!user)
-                        return done(null, false, req.flash('loginMessage', 'Nu s-a gasit utilizatorul, sau utilizatorul nu este activat'));
+                        return done(null, false, req.flash('loginMessage', 'Utilizator sau parola gresite'));
 
                     if (!user.validPassword(password))
-                        return done(null, false, req.flash('loginMessage', 'Parola este gresita'));
+                        return done(null, false, req.flash('loginMessage', 'Utilizator sau parola gresite'));
 
                     // all is well, return user
                     else
