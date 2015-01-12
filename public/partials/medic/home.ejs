@@ -99,11 +99,11 @@
                 <h4>EVENIMENTE URMATOARE:</h4>
             </div>
             <div class="col-xs-12 eventDisplay" ng-repeat="e in events | limitTo: 3">
-                <div class="col-xs-2 noPadding date MSDgreenDarker">
+                <div class="col-xs-1 noPadding date MSDgreenDarker">
                     <div class="col-xs-12 noPadding day">{{toDate(e.start).getDate()}}</div>
                     <div class="col-xs-12 noPadding month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
                 </div>
-                <div class="col-xs-10 noPadding leftBorder">
+                <div class="col-xs-11 noPadding leftBorder">
                     <div class="col-xs-12 title MSDgreenDarker handCursor" ui-sref="calendar.calendarDetails({id:e._id})"><b>{{e.name}}</b></div>
                     <div class="col-xs-12 header margintop5px ">{{e.description.length>50?createHeader(e.description,50):htmlToPlainText(e.description)}}</div>
                 </div>
