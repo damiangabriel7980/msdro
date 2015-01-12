@@ -4,9 +4,9 @@
 /**
  * Created by miricaandrei23 on 03.11.2014.
  */
-cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multimediaService','$stateParams','$modal','$log','$modalInstance','$rootScope','$sce','$state',function ($scope,multimediaService,$stateParams, $modal, $log,$modalInstance,$rootScope,$sce,$state) {
+cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multimediaService','$stateParams','$modal','$log','$modalInstance','$rootScope','$sce','$state','idd',function ($scope,multimediaService,$stateParams, $modal, $log,$modalInstance,$rootScope,$sce,$state,idd) {
 
-    multimediaService.getSingle.query({idd:$stateParams.idd}).$promise.then(function(result){
+    multimediaService.getSingle.query({idd:idd}).$promise.then(function(result){
         $scope.selectedMultimedia = result;
         $scope.videosrc = $sce.trustAsResourceUrl($scope.amazon + $scope.selectedMultimedia.file_path);
         if(result.type==2){

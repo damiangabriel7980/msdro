@@ -25,7 +25,7 @@ var date = new Date();
             calendar: {
                 eventSources: $scope.realEvents,
                 height: 450,
-                editable: true,
+                editable: false,
                 header: {
                     left: 'month basicWeek basicDay agendaWeek agendaDay',
                     center: 'title',
@@ -33,7 +33,18 @@ var date = new Date();
                 },
                 eventMouseover: $scope.eventRender,
                 eventClick:function(event){
-                    $state.go("calendar.calendarDetails", {"id": event.id})
+                    $modal.open({
+                        templateUrl: 'partials/medic/calendarDetails.ejs',
+                        backdrop: true,
+                        size: 'lg',
+                        windowClass: 'fade',
+                        controller: 'modalCtrl',
+                        resolve:{
+                            idEvent: function () {
+                                return event._id;
+                            }
+                        }
+                    });
                 }
 
      }}})
@@ -46,6 +57,20 @@ var date = new Date();
                 $scope.events2Filtered.push($scope.events2[i]);
         }
     });
+    $scope.goToEvent=function(eventId) {
+        $modal.open({
+            templateUrl: 'partials/medic/calendarDetails.ejs',
+            backdrop: true,
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'modalCtrl',
+            resolve:{
+                idEvent: function () {
+                    return eventId;
+                }
+            }
+        });
+    };
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {

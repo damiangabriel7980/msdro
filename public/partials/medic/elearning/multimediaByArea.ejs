@@ -7,12 +7,12 @@
                     <img class="img-responsive img-thumbnail img-multimedia" ng-src="{{prod.thumbnail_path?pathAmazonDev+prod.thumbnail_path:(prod.type==1?defaultVideoImage:defaultSlideImage)}}" alt="{{prod.title}}"/>
                 </div>
                 <div class="col-xs-9">
-                    <h4><a class="handCursor" ui-sref="elearning.multimedia.multimediaById({idd:prod._id})"></a>{{prod.title}}</h4>
+                    <h4><a class="handCursor" ng-click="openMultimedia(prod._id)"></a>{{prod.title}}</h4>
 
                     <p>{{prod.description | htmlToPlaintext | limitTo: 190}}...
                     </p>
                 </div>
-                <button class="btn btn-info pull-right top10 btn-more-news" ui-sref="elearning.multimedia.multimediaById({idd:prod._id})">Vezi material</button>
+                <button class="btn btn-info pull-right top10 btn-more-news" ng-click="openMultimedia(prod._id)">Vezi material</button>
 
             </div>
 

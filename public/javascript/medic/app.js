@@ -95,21 +95,6 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/medic/calendar.ejs',
             controller: 'eventsController'
         })
-        .state('calendar.calendarDetails',{
-            parent:'calendar',
-            url: '/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/medic/calendarDetails.ejs',
-                    backdrop: true,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller: 'modalCtrl'
-                })
-            }]
-
-        })
-
         .state('elearning', {
             abstract: true,
             url: '/elearning',
@@ -124,22 +109,6 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '/multimedia/:id',
             templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
             controller: 'multimediaController'
-        })
-        .state('elearning.multimedia.multimediaById',{
-            url: '/multimedia2/:idd',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                console.log('Open modal');
-                $modal.open({
-                    templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
-                    windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller: 'multimediaDetailsController'
-                })
-            }]
-
         })
         .state('elearning.transmisii',{
             url: '/transmisii',

@@ -1,14 +1,12 @@
 /**
  * Created by miricaandrei23 on 29.10.2014.
  */
-cloudAdminControllers.controller('modalCtrl',['$scope','eventsService2','$stateParams','$modal','$log','$modalInstance','$state',function ($scope,eventsService2,$stateParams, $modal, $log,$modalInstance,$state) {
+cloudAdminControllers.controller('modalCtrl',['$scope','eventsService2','$stateParams','$modal','$log','$modalInstance','$state','idEvent',function ($scope,eventsService2,$stateParams, $modal, $log,$modalInstance,$state,idEvent) {
 
-    $scope.itemsEvent= eventsService2.query({id:$stateParams.id});
+    $scope.itemsEvent= eventsService2.query({id:idEvent});
 
     $scope.cancell = function () {
-        window.history.back();
         $modalInstance.dismiss('cancel');
-        //$state.go('calendar');
     };
 }])
 .filter("asDate", function () {
