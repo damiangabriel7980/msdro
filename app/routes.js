@@ -192,11 +192,18 @@ module.exports = function(app, email, logger, passport) {
 		});
 
 		// process the login form
-		app.post('/login', passport.authenticate('local-login', {
-			successRedirect : '/pro', // redirect to the secure profile section
-			failureRedirect : '/login', // redirect back to the signup page if there is an error
-			failureFlash : true // allow flash messages
-		}));
+		app.post('/login', function (req, res, next) {
+            //middleware to allow flashing messages on empty user/password fields
+            if(!req.body.email || !req.body.password){
+                res.render('auth.ejs', {message: 'Campurile sunt obligatorii'});
+            }else{
+                next();
+            }
+        }, passport.authenticate('local-login', {
+            successRedirect : '/pro', // redirect to the secure profile section
+            failureRedirect : '/login', // redirect back to the signup page if there is an error
+            failureFlash : true // allow flash messages
+        }));
 
 		// SIGNUP =================================
 		// show the signup form
