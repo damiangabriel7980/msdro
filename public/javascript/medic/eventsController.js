@@ -17,7 +17,6 @@ var date = new Date();
          $scope.realEvents=[$scope.eventsS];
          $scope.eventRender = function(data, event, view){
 
-             $('.fc-event-inner').tooltip({text:''});
              $('.fc-event-inner').attr('title',data.title);
              $('.fc-event-inner').tooltip({text:data.title});
          }
