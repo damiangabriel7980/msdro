@@ -41,4 +41,8 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
     $scope.createHeader = function (text,length) {
         return $scope.htmlToPlainText(text).substring(0,length)+"...";
     };
-}]);
+}]).filter('repeatReverse', function() {
+    return function(items) {
+        return items.slice().reverse();
+    };
+});

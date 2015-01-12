@@ -68,16 +68,15 @@
 
     <link rel='stylesheet' href='components/angular-ui-select/dist/select.min.css' />
     <link rel='stylesheet' href='components/select2/select2.css' />
-    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/style.css">
-    <link rel="stylesheet" href="stylesheets/customStyles.css">
+    <link rel="stylesheet" href="stylesheets/medic/medicStyles.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 </head>
 <body>
 
 <!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top ng-scope navbar-border" role="navigation" ng-controller="SpecialGroupsMenuController">
-    <div class="container moveNavbar">
+<div class="navbar navbar-default navbar-fixed-top ng-scope" role="navigation" ng-controller="SpecialGroupsMenuController">
+    <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
                 <span class="sr-only">Toggle navigation</span>
@@ -88,7 +87,7 @@
             <a class="navbar-brand" href="#"><img ng-src="{{MSDlogo}}"></a>
 
 
-            <ul class="hidden-md hidden-lg navbar-brand pull-right" style="list-style: none;">
+            <ul class="navbar-brand pull-right userDropdown" style="list-style: none;">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-user"></span>
@@ -104,15 +103,15 @@
         <div class="collapse navbar-collapse" collapse="navCollapsed">
 
             <ul class="nav navbar-nav">
-                <li ng-class="{'active': $state.includes('home')}"><a ui-sref="home" href="#/"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li ng-class="{'active': $state.includes('home')}"><a ui-sref="home" href="#/" ng-click="navCollapsed = true"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('noutati')}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-globe"></span> Noutati <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu" >
-                        <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:1})" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-file white leftPosition iconLeft darkGrey"></i>&nbsp Stiri<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a> </li>
+                        <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:1})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-file white leftPosition iconLeft darkGrey"></i>&nbsp Stiri<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a> </li>
 
-                        <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:2})" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-folder-open white leftPosition iconLeft darkGrey"></i>&nbsp Stiri legislative <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i> </a></li>
+                        <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:2})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-folder-open white leftPosition iconLeft darkGrey"></i>&nbsp Stiri legislative <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i> </a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
@@ -120,20 +119,20 @@
                         <span class="glyphicon glyphicon-book"></span> Biblioteca <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li><a class="myListItem" ui-sref="biblioteca.produse.productsByArea({id:0})" href="#/produse"><i class="glyphicon glyphicon-th-large white leftPosition iconLeft darkGrey"></i>&nbsp Produse <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
-                        <li><a class="myListItem" ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})"><i class="glyphicon glyphicon-file white leftPosition iconLeft darkGrey"></i>&nbsp Articole stiintifice <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
-                        <li><a class="myListItem" ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" target="_blank"><i class="glyphicon glyphicon-th-large white leftPosition iconLeft darkGrey"></i>&nbsp Manualul Merck <i class="glyphicon white glyphicon-chevron-right rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ui-sref="biblioteca.produse.productsByArea({id:0})" ng-click="navCollapsed = true" href="#/produse"><i class="glyphicon glyphicon-th-large white leftPosition iconLeft darkGrey"></i>&nbsp Produse <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-file white leftPosition iconLeft darkGrey"></i>&nbsp Articole stiintifice <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" ng-click="navCollapsed = true" target="_blank"><i class="glyphicon glyphicon-th-large white leftPosition iconLeft darkGrey"></i>&nbsp Manualul Merck <i class="glyphicon white glyphicon-chevron-right rightPosition greyColor"></i></a></li>
                     </ul>
                 </li>
-                <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar"><span class="glyphicon glyphicon-calendar">Calendar</span></a></li>
+                <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar" ng-click="navCollapsed = true"><span class="glyphicon glyphicon-calendar">Calendar</span></a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('elearning')}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-download"></span> E-learning <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li><a class="myListItem" ui-sref="elearning.multimedia.multimediaByArea({id:0})" href="#/multimedia"><i class="glyphicon glyphicon-film white leftPosition iconLeft darkGrey"></i>&nbsp Multimedia<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
-                        <li><a class="myListItem" ui-sref="elearning.transmisii" href="#/transmisii"><i class="glyphicon glyphicon-facetime-video white leftPosition iconLeft darkGrey"></i>&nbsp Transmisii live<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
-                        <li><a class="myListItem" ui-sref="elearning.teste" href="#/teste"><i class="glyphicon glyphicon-question-sign white leftPosition iconLeft darkGrey"></i>&nbsp Teste interactive <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ui-sref="elearning.multimedia.multimediaByArea({id:0})" href="#/multimedia" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-film white leftPosition iconLeft darkGrey"></i>&nbsp Multimedia<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ui-sref="elearning.transmisii" href="#/transmisii" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-facetime-video white leftPosition iconLeft darkGrey"></i>&nbsp Transmisii live<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ui-sref="elearning.teste" href="#/teste" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-question-sign white leftPosition iconLeft darkGrey"></i>&nbsp Teste interactive <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures')}" ng-if="groupFeatures">
@@ -141,7 +140,7 @@
                         <span class="glyphicon glyphicon-download"></span> {{specialGroupSelected?specialGroupSelected.display_name:""}} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li ng-repeat="feat in groupFeatures"><a class="myListItem" ui-sref="groupFeatures({feature: feat})">{{feat}}<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li ng-repeat="feat in groupFeatures"><a class="myListItem" ui-sref="groupFeatures({feature: feat})" ng-click="navCollapsed = true">{{feat}}<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
                     </ul>
                 </li>
             </ul>
