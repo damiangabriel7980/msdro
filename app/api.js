@@ -3017,6 +3017,18 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             })
         });
+    router.route('/userImage')
+        .get(function(req,res) {
+            User.findOne({username: {$regex: new RegExp("^" + req.user.username, "i")}},'image_path', function (err, usr) {
+                if (err) {
+                    logger.error(err);
+                    res.send(err)
+                }
+                else {
+                    res.json(usr);
+                }
+            })
+        });
     router.route('/userHomeSearch/:data')
         .get(function(req,res){
             var data=req.params.data;

@@ -25,6 +25,9 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
             }
         }
     });
+    HomeService.getUserImage.query().$promise.then(function(resp){
+        $scope.imageForUser = $rootScope.pathAmazonDev + resp.image_path;
+    });
 
     //------------------------------------------------------------------------------------------------- get all content
     HomeService.getUserEvents.query().$promise.then(function (resp) {

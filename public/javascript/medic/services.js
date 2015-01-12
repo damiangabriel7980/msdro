@@ -67,6 +67,9 @@ cloudAdminServices.factory('HomeService', ['$resource', function($resource){
         }),
         getSearchResults: $resource('api/userHomeSearch/:data', {}, {
             query: { method: 'GET', isArray: false }
+        }),
+        getUserImage: $resource('api/userImage/', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
