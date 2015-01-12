@@ -1,6 +1,6 @@
 <div class="col-md-12 unselectable noPadding" carousel-resizable>
     <div class="carouselWrapper" style="{{carouselStyle}}">
-        <div class="fixedBox" style="{{fixedBoxStyle}}">
+        <div class="fixedBox">
             <div class="carouselTitle">
                 {{carouselSlides[selectedIndex].title}}
             </div>
@@ -11,16 +11,14 @@
                 Learn more <i class="fa fa-caret-right"></i>
             </div>
         </div>
-        <div class="carouselNavigation" style="{{cNavStyle}}">
+        <div class="carouselNavigation">
             <div class="navSlide" ng-repeat="slide in carouselSlides | repeatReverse track by $index"  ng-class="{'active':(carouselSlides.length - $index - 1) == selectedIndex}" ng-click="setSlide(carouselSlides.length - $index - 1)">
                 <img ng-src="{{pathAmazonDev+slide.image_path}}" tooltip-html-unsafe="{{getTooltip(slide)}}" tooltip-trigger="mouseenter">
             </div>
         </div>
         <ul rn-carousel rn-carousel-index="selectedIndex" class="myCarousel" rn-carousel-auto-slide="8">
             <li ng-repeat="slide in carouselSlides">
-                <div class="imageGroup">
-                    <img class="imageReal" ng-src="{{pathAmazonDev+slide.image_path}}" ondragstart="return false;">
-                </div>
+                <img ng-src="{{pathAmazonDev+slide.image_path}}" ondragstart="return false;">
             </li>
         </ul>
     </div>

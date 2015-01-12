@@ -28,31 +28,34 @@ publicApp.directive('carouselResizable', function($window) {
         restrict: 'A',
         link: function ($scope, $element) {
 
-            $scope.initializeWindowSize = function () {
-                $scope.elementWidth = angular.element($element)[0].offsetWidth;
-                $scope.elementHeight = angular.element($element)[0].offsetHeight;
+            var resizeT;
 
-                var carouselH = $scope.elementWidth / 3;
-                var offset_Y = carouselH / 10;
+            var initializeWindowSize = function () {
+                $scope.elementWidth = angular.element($element)[0].offsetWidth;
+                //$scope.elementHeight = angular.element($element)[0].offsetHeight;
+
+                var carouselH = Math.round($scope.elementWidth / 3);
 
                 $scope.carouselStyle = 'height:' + carouselH + 'px;' +
                     'width:' + ($scope.elementWidth) + 'px;';
 
-                $scope.fixedBoxStyle = 'top:' + offset_Y + 'px;' +
-                    'height:' + (carouselH - (2 * offset_Y)) + 'px;' +
-                    'width:' + ($scope.elementWidth / 2) + 'px;';
-
-                $scope.cNavStyle = 'bottom:' + offset_Y + 'px;' +
-                    'width:' + ($scope.elementWidth / 2 - 40) + 'px;';
             };
 
             angular.element($window).bind('resize', function () {
-                $scope.initializeWindowSize();
+                initializeWindowSize();
+                //wait for resizing to finish
+                clearTimeout(resizeT);
+                resizeT = setTimeout(doneResizing, 700);
                 $scope.$apply();
             });
 
+            function doneResizing(){
+                //reload state to fix carousel locking bug
+                $scope.$state.reload();
+            }
+
             // Initiate the resize function default values
-            $scope.initializeWindowSize();
+            initializeWindowSize();
         }
     }
 });
