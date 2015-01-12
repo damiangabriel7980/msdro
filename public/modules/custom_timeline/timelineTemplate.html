@@ -25,7 +25,10 @@
     </div>
     <div class="timeGrid">
         <div class="gridd">
-            <div class="month" ng-repeat="month in months"></div>
+            <div class="month" ng-repeat="month in formatMonths" ng-style="{'left':month.poz+'px'}">
+                <div class="monthLine"></div>
+                <div class="monthName">{{month.name}}</div>
+            </div>
         </div>
         <div class="todayBox">
             <div class="dateShow">{{(thisDay<10?"0"+thisDay:thisDay)+"."+((thisMonth+1)<10?"0"+(thisMonth+1):thisMonth+1)}}</div>

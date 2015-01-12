@@ -19,15 +19,15 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
             var events = null;
             var months = null;
 
-            scope.timelineHtml = $sce.trustAsHtml("");
-
-            //------------------------------------------------------------------------------------------------------- CUSTOMIZE
             scope.timeBoxTop = 40;
             scope.timeBoxTopWhenFlipped = 135;
             var gridLength = 1200;
             var daysTotal = 80;
-            var allCollapsed = true;
             var gridSize = gridLength / daysTotal;
+
+            //customize:
+            var allCollapsed = true; // all dates appear collapsed by default; if true, dates that
+                                    //  have enough available room will be expanded
 
             scope.$watch('loadEvents', function (loadedEvents) {
                 if(loadedEvents){
@@ -39,6 +39,7 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
             scope.$watch('loadMonths', function (loadedMonths) {
                 if(loadedMonths){
                     months=loadedMonths;
+                    alignMonths(loadedMonths);
                 }
             });
 
@@ -106,101 +107,28 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
                     }
                 }
 
-                console.log(ret);
                 scope.formatEvents = ret;
             };
 
-//            var timeBox = function(evenimentLista, id, collapsed, isDown, leftPx){
-//                var collapsedContent = collapsed?'<i class="glyphicon glyphicon-chevron-down"></i>':'<i class="glyphicon glyphicon-chevron-right"></i>';
-//                var hidden = collapsed?" hide":"";
-//                var style = "";
-//                var lineBottom = isDown?"bottom:40px;":"bottom:-15px;";
-//                style += 'margin-left:'+leftPx.toString()+'px;margin-top:'+(isDown?timeBoxTopWhenFlipped:timeBoxTop).toString()+'px;z-index:'+(999-id)+';';
-//                //console.log(style);
-//                var ret = '<div class="timeBox" onclick="toggleT1(this)" id="timeBox'+id+'" style='+style+'><div class="timeBoxLine" style="'+lineBottom+'"></div><div class="zi">'+evenimentLista.zi+'</div><div class="luna">.'+evenimentLista.luna+'</div><div class="isCollapsed">'+collapsedContent+'</div><div class="nume'+hidden+'">'+evenimentLista.nume+'</div></div>';
-//                return ret;
-//            };
-//
-//            var timeBox2 = function(evenimentLista, id, collapsed, isDown, leftPx){
-//                var style = "";
-//                var lineBottom = isDown?"bottom:27px;":"bottom:-16px;";
-//                style += 'margin-left:'+leftPx.toString()+'px;margin-top:'+(isDown?timeBoxTopWhenFlipped:timeBoxTop).toString()+'px;z-index:'+(999-id)+';';
-//                //console.log(style);
-//                var ret = '<div class="timeBox2" onclick="toggleT2(this)" id="timeBox'+id+'" style='+style+'><div class="timeBoxLine" style="'+lineBottom+'"></div><div class="isCollapsed"><i class="glyphicon glyphicon-chevron-down"></i></div><div class="collapsedContent hide"><div class="zi">'+evenimentLista.zi+'</div><div class="luna">.'+evenimentLista.luna+'</div><div class="nume">'+evenimentLista.nume+'</div></div></div>';
-//                return ret;
-//            };
-//
-//            var alignEvents = function(listaE){           //   for positioning all the dates
-//
-//                evenimente = "";
-//                var poz = true;
-//                var currentPoz;
-//                var nextPoz;
-//                var availableSpace;
-//                var eveniment;
-//
-//                for(var i=0; i<listaE.length; i++){
-//                    poz = !poz;
-//
-//                    currentPoz = listaE[i].leftPx;
-//                    if(i+2<listaE.length){
-//                        nextPoz = listaE[i+2].leftPx;
-//                    }else{
-//                        nextPoz = currentPoz + 300;
-//                    }
-//
-//                    availableSpace = nextPoz - currentPoz;
-//
-//                    if(availableSpace >= 250){
-//                        eveniment = timeBox(listaE[i],i,false||allCollapsed,poz,currentPoz - 15);
-//                    }else{
-//                        if(availableSpace >= 80){
-//                            eveniment = timeBox(listaE[i],i,true||allCollapsed,poz,currentPoz - 15);
-//                        }else{
-//                            eveniment = timeBox2(listaE[i],i,true||allCollapsed,poz,currentPoz - 15);
-//                        }
-//                    }
-//                    evenimente+=eveniment;
-//                }
-//            };
-//
-//            var alignMonths = function (listaE,jsonM) {
-//                var firstMonth = new Date().getMonth() - 2;
-//                if(firstMonth < 0) firstMonth = 12 + firstMonth;
-//                var firstMonthPoz = listaE[0].leftPx - (parseInt(listaE[0].zi) * 15);
-//                var m;
-//                var month;
-//                var months = "";
-//                var poz;
-//                for(var i=0; i<4; i++){
-//                    poz = i*465 + firstMonthPoz;
-//                    m = firstMonth+i;
-//                    if(m>11) m=m-12;
-//                    month = jsonM[m];
-//                    month = '<div class="month" style="left:'+poz+'px;"><div class="monthLine"></div><div class="monthName">'+month+'</div></div>';
-//                    months+=month;
-//                }
-//                return months;
-//            };
-//
-//            var timeGrid = function(listaE,jsonM){
-//                var lines;
-//                var months = alignMonths(listaE,jsonM);
-//                var todayDay = new Date().getDate().toString();
-//                var todayMonth = (new Date().getMonth()+1).toString();
-//                var todayFormat = (todayDay.length<2?"0"+todayDay:todayDay)+"."+(todayMonth.length<2?"0"+todayMonth:todayMonth);
-//                var todayBox = '<div class="todayBox"><div class="dateShow">'+todayFormat+'</div><div class="arrowDown"></div><div class="lineDown"></div></div>';
-//                var grid = '<div class="timeGrid"><div class="gridd">'+months+'</div>'+todayBox+'</div>';
-//                return grid;
-//            };
-//
-//            var renderAll = function () {
-//                listaEvenimente = creazaLista(events);
-//                gridHTML = timeGrid(listaEvenimente,months);
-//
-//                alignEvents(listaEvenimente);
-//                scope.timelineHtml = $sce.trustAsHtml(evenimente+gridHTML);
-//            };
+            var alignMonths = function (monthNames) {
+                var thisMonth = scope.thisMonth;
+                var thisMonthPoz = 600 - (scope.thisDay * 15) + 15;
+                var firstMonth = thisMonth - 2;
+                var firstMonthPoz = thisMonthPoz - (2 * 465);
+
+                var ret = [];
+                for(var i=0; i<=4; i++){
+                    var m = firstMonth+i;
+                    if(m < 0)  m = 12 + m;
+                    if(m > 11) m = m - 12;
+                    ret.push({
+                        poz: firstMonthPoz + (i*465),
+                        name: monthNames[m]
+                    });
+                }
+
+                scope.formatMonths = ret;
+            };
         }
     };
 }]);
