@@ -28,7 +28,9 @@ publicApp.directive('carouselResizable', function($window) {
         restrict: 'A',
         link: function ($scope, $element) {
 
-            $scope.initializeWindowSize = function () {
+            var resizeT;
+
+            var initializeWindowSize = function () {
                 $scope.elementWidth = angular.element($element)[0].offsetWidth;
                 //$scope.elementHeight = angular.element($element)[0].offsetHeight;
 
@@ -40,12 +42,20 @@ publicApp.directive('carouselResizable', function($window) {
             };
 
             angular.element($window).bind('resize', function () {
-                $scope.initializeWindowSize();
+                initializeWindowSize();
+                //wait for resizing to finish
+                clearTimeout(resizeT);
+                resizeT = setTimeout(doneResizing, 700);
                 $scope.$apply();
             });
 
+            function doneResizing(){
+                //reload state to fix carousel locking bug
+                $scope.$state.reload();
+            }
+
             // Initiate the resize function default values
-            $scope.initializeWindowSize();
+            initializeWindowSize();
         }
     }
 });
