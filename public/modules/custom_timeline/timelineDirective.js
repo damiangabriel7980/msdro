@@ -29,11 +29,6 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
             var allCollapsed = true;
             var gridSize = gridLength / daysTotal;
 
-//            var evenimente = "";
-//            var listaEvenimente = "";
-//            var gridHTML = "";
-
-
             scope.$watch('loadEvents', function (loadedEvents) {
                 if(loadedEvents){
                     events=loadedEvents;
