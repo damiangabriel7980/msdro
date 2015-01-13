@@ -1,16 +1,9 @@
 cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state){
 
     SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
-        console.log(resp);
         if(resp.length != 0){
             $rootScope.specialGroups = resp;
-            if(sessionStorage.specialGroupSelected){
-                console.log("gs");
-                $scope.selectSpecialGroup(angular.fromJson(sessionStorage.specialGroupSelected));
-            }else{
-                console.log("gns");
-                $scope.selectSpecialGroup(resp[0]);
-            }
+            $scope.selectSpecialGroup(resp[0]);
         }else{
             $rootScope.specialGroupSelected = null;
             sessionStorage.specialGroupSelected = null;
@@ -18,7 +11,6 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
     });
 
     $scope.selectSpecialGroup = function(group){
-        sessionStorage.specialGroupSelected = angular.toJson(group);
         $rootScope.specialGroupSelected = group;
         //load group features into array. use "DisplayFeatureController" to establish paths for them
         switch(group.display_name){
