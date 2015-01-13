@@ -156,7 +156,7 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
 }]);
 cloudAdminServices.factory('EventsAdminService', ['$resource', function($resource){
     return {
-        getGroups: $resource('api//admin/users/grupuri',{},{
+        getGroups: $resource('api/admin/users/groups',{},{
             query: { method: 'GET', isArray: true }
         }),
         changeConferenceLogo: $resource('api/admin/conferences/changeConferenceLogo/:data', {}, {
