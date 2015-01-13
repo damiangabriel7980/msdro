@@ -48,6 +48,8 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         $scope.HomeCarousel=resp;
         for(var i=0;i<$scope.HomeCarousel.length;i++)
             $scope.hideTitle[i]='hide';
+        $scope.firstIllusion=resp[$scope.HomeCarousel.length-1];
+        $scope.lastIllusion=resp[0];
     });
     $scope.hideTitle=[];
 

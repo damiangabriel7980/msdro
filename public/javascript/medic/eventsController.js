@@ -19,7 +19,7 @@ var date = new Date();
 
              $('.fc-event-inner').attr('title',data.title);
              $('.fc-event-inner').tooltip({text:data.title});
-         }
+         };
         $scope.uiConfig = {
             calendar: {
                 eventSources: $scope.realEvents,
