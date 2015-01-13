@@ -58,7 +58,8 @@
             <div class="form-group">
                 <label for="conferencesSelect">Conferinte:</label>
                 <select ng-model="selectedConference" ng-options="conf as conf.title for conf in conferences"
-                        class="form-control" id="conferencesSelect" style="width: 100%;" ng-change="ConfWasSelected(selectedConference)">
+                        class="form-control"
+                        id="conferencesSelect" style="width: 100%;" ng-change="ConfWasSelected(selectedConference)">
                 </select>
             </div>
         </div>

@@ -17,7 +17,8 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
         $scope.grupuri=resp;
 
         EventsAdminService.getAllConferences.query().$promise.then(function(resp){
-            $scope.conferences=resp;
+            $scope.conferences=[{title:"Selecteaza o conferinta:",_id:0}];
+            $scope.conferences=$scope.conferences.concat(resp);
             $scope.ConfEvents=[];
             for(var i=0;i<$scope.grupuri.length;i++)
             {

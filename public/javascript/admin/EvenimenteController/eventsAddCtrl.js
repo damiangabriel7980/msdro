@@ -8,10 +8,11 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
     EventsAdminService.getGroups.query().$promise.then(function(resp){
        $scope.grupuri=resp;
         EventsAdminService.getAllConferences.query().$promise.then(function(resp){
-            $scope.conferences=resp;
-            $scope.selectedConference=$scope.conferences[0];
+            $scope.conferences=[{title:"Selecteaza o conferinta:",_id:0}];
+            $scope.conferences=$scope.conferences.concat(resp);
             $scope.selectedGroup=$scope.grupuri[0];
-            console.log($scope.selectedConference.title);
+            console.log($scope.conference);
+            $scope.selectedConference=$scope.conferences[0];
         });
     });
     $scope.newEvent={
