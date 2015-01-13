@@ -1,7 +1,7 @@
 <div ng-repeat="cont in content | limitTo: lmt">
     <div class="col-xs-12 articleBox">
         <div class="col-xs-3 displayImage">
-            <img class="img-thumbnail img-responsive img-back" ng-src="{{imagePre+cont.image_path}}"/>
+            <img class="img-thumbnail img-responsive img-back" ng-src="{{cont.image_path?pathAmazonDev+cont.image_path:defaultArticleImage}}"/>
         </div>
         <div class="col-xs-9">
             <div class="col-xs-12 title MSDgreenDarker handCursor" ui-sref="{{sr}}">{{cont.title}}</div>

@@ -6602,7 +6602,7 @@ ul.products li {
   width: 100%;
   clear: both;
   height: 35px;
-  position: relative;
+  position: fixed;
   bottom: 0;
   left: 0;
 }
@@ -6661,11 +6661,11 @@ ul.products li {
 }
 .myMenu a:hover {
   border-radius: 3px !important;
-  background-color: #009d97 !important;
+  background-color: #006d69 !important;
 }
 .myMenu a::selection {
   border-radius: 3px !important;
-  background-color: #009d97 !important;
+  background-color: #006d69 !important;
 }
 .myListItem {
   padding-left: 20px !important ;
@@ -6730,7 +6730,10 @@ ul.products li {
   color: #ffffff;
 }
 .bottomBorder {
-  border-bottom: 1px solid #009d97;
+  border-bottom: 1px solid #006d69;
+}
+.MSDTitleDark {
+  color: #006d69;
 }
 .date2 {
   margin-top: -5%;
@@ -6815,4 +6818,10 @@ ul.products li {
 .secondIllusion {
   display: inline-block;
   -webkit-transform: translate3d(100%, 0px, 0px);
+}
+.Box300 {
+  height: 300px;
+}
+.padd10p {
+  padding-bottom: 10%;
 }
