@@ -57,7 +57,7 @@ cloudAdminControllers.controller('EditGroupController', ['$scope','GroupsService
                     $scope.$apply();
                 } else {
                     //update database as well
-                    GrupuriService.changeGroupLogo.save({data:{id:$scope.idGroup, path:key}}).$promise.then(function (resp) {
+                    GroupsService.changeGroupLogo.save({data:{id:$scope.idGroup, path:key}}).$promise.then(function (resp) {
                         if(resp.error){
                             $scope.uploadAlert.type = "danger";
                             $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
