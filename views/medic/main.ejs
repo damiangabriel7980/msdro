@@ -63,7 +63,7 @@
     <script src="components/angular-growl/build/angular-growl.js"></script>
     <script src="modules/my_slider/slider.js"></script>
     <script src="components/angular-timer/app/js/timer.js"></script>
-
+    <script src="components/bootstrap/dist/js/bootstrap.js"></script>
 <!--Stylesheets-->
 
     <link rel='stylesheet' href='components/angular-ui-select/dist/select.min.css' />
@@ -73,7 +73,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 </head>
 <body>
-
+<div class="row-fluid">
 <!-- Fixed navbar -->
 <div class="navbar navbar-default navbar-fixed-top ng-scope navbar-border padd35px" role="navigation" ng-controller="SpecialGroupsMenuController">
     <div class="container padd5pxBottom">
@@ -161,12 +161,12 @@
     </div>
 </div>
 
-
-<div ui-view class="main-view-container margintop20px autoOver"></div>
+<div ui-view class="main-view-container margintop20px autoOver">
+</div>
 
 <div id="footer">
     <div class="col-xs-6">
-        <a href="http://www.msd.ro/">
+        <a href="#">
             <img src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/msd_white.png" class="pull-left img-responsive" style="height:28px;margin-right:10px;">
         </a>
 
@@ -179,6 +179,6 @@
 
     </div>
 </div>
-
+</div>
 </body>
 </html>

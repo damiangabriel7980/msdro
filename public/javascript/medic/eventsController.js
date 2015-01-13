@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state', function($scope,eventsService,$stateParams,$modal,$state){
+cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state','$position', function($scope,eventsService,$stateParams,$modal,$state,$position){
 var date = new Date();
     $scope.realEvents=[];
     var y=$(date);
@@ -11,15 +11,23 @@ var date = new Date();
        $scope.eventsS=[];
        for(var i = 0; i < $scope.events.length; i++)
        {
-           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: new Date($scope.events[i].end),allDay: false,className: 'events',color: '#009d97'});
+           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: new Date($scope.events[i].end),allDay: false,className: 'events',color: '#66203a'});
        }
 
          $scope.realEvents=[$scope.eventsS];
          $scope.eventRender = function(data, event, view){
-
              $('.fc-event-inner').attr('title',data.title);
-             $('.fc-event-inner').tooltip({text:data.title});
-         }
+             //$('.fc-event-inner').tooltip({text:data.title});
+
+             //$('.fc-event-inner').attr("data-toggle","popover");
+             //$('.fc-event-inner').attr("data-content",data.title);
+             //$('[data-toggle="popover"]').popover({
+             //    'title':'Eveniment:',
+             //    trigger:"hover",
+             //    placement:"top"
+             //
+             //});
+         };
         $scope.uiConfig = {
             calendar: {
                 eventSources: $scope.realEvents,
