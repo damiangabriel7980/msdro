@@ -1,12 +1,11 @@
 cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state){
 
     SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
+        $rootScope.specialGroups = resp;
         if(resp.length != 0){
-            $rootScope.specialGroups = resp;
             $scope.selectSpecialGroup(resp[0]);
         }else{
             $rootScope.specialGroupSelected = null;
-            sessionStorage.specialGroupSelected = null;
         }
     });
 
@@ -22,7 +21,8 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
             $state.go('home');
         }else{
             //if he changed his group while being on another page, just reload the page
-            $state.reload();
+            console.log($state);
+            $state.reload($state.current);
         }
     };
 
