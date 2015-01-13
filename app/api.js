@@ -227,7 +227,7 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
                 if(err){
                     callback(err, null);
                 }else{
-                    console.log(arrayOfGroupsIds);
+                    //console.log(arrayOfGroupsIds);
                     callback(null, content);
                 }
             });
@@ -440,7 +440,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function(req,res){
             var data = req.body.data;
             var key = "user/"+req.user._id+"/img"+req.user._id+"."+data.extension;
-            console.log(req.user.image_path.length);
             if(req.user.image_path.length!=0) {
                 deleteObjectS3(req.user.image_path, function (err, resp1) {
                     if (err) {
@@ -617,7 +616,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
                             res.json(ans);
                         }else{
-                            console.log(inserted);
                             var idGroupInserted = inserted._id.toString();
                             //update users to point to this group
                             //extract id's from users
@@ -625,7 +623,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             for(var i=0; i<data.users.length; i++){
                                 ids.push(data.users[i]._id);
                             }
-                            console.log(ids);
                             connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
                                 if(err){
                                     logger.error(err);
@@ -686,7 +683,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
                             res.json(ans);
                         }else{
-                            console.log(Wres);
                             //now we need to add some users
                             //first disconnect preexisting users from group, just in case this is an editGroup operation
                             disconnectAllEntitiesFromEntity(User, "groupsID", data.id, function (err, result) {
@@ -701,7 +697,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                     for(var i=0; i<data.users.length; i++){
                                         ids.push(data.users[i]._id);
                                     }
-                                    console.log(ids);
                                     connectEntitiesToEntity(ids, User, "groupsID", data.id, function (err, result) {
                                         if(err){
                                             logger.error(err);
@@ -900,8 +895,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     if(content[0]){
                         var image = content[0].image_path;
                         var file = content[0].file_path;
-                        console.log(image);
-                        console.log(file);
                         //remove content
                         PublicContent.remove({_id: content_id}, function (err, success) {
                             if(err){
@@ -1077,7 +1070,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }else{
                     if(image[0]){
                         var imageS3 = image[0].image_path;
-                        console.log(imageS3);
                         //remove from database
                         PublicCarousel.remove({_id: image_id}, function (err, success) {
                             if(err){
@@ -1271,7 +1263,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }else{
                     if(image[0]){
                         var imageS3 = image[0].image_path;
-                        console.log(imageS3);
                         //remove from database
                         Carousel.remove({_id: image_id}, function (err, success) {
                             if(err){
@@ -1444,14 +1435,12 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             res.send(err);
                         }
                         contents['groups']=cont2;
-                        console.log(contents);
                         res.json(contents);
                     });
                 }
             });
         })
         .post(function(req, res) {
-            console.log(req);
             var content = new Content(); 		// create a new instance of the Bear model
             content.title = req.body.title;  // set the bears name (comes from the request)
             content.author=req.body.author ;
@@ -1463,8 +1452,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             content.enable=req.body.enable;
             content.image_path=req.body.image_path;
             content.groupsID=req.body.groupsID;
-            console.log(content.toString());
-            console.log(typeof content);
             content.save(function(err,result) {
                 if (err)
                 {
@@ -1472,7 +1459,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.send(err);
                 }
                 else{
-                    console.log(result);
                     res.json({ message: 'Content created!' });
                 }
 
@@ -1510,7 +1496,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 content.enable=req.body.enable;
                 content.image_path=req.body.image_path;
                 content.groupsID=req.body.groupsID;
-                console.log(content);
                 content.save(function(err) {
                     if (err)
                         res.send(err);
@@ -1881,7 +1866,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .delete(function(req, res) {
             var id = req.params.id;
-            console.log(id);
             disconnectAllEntitiesFromEntity(Events, "listconferences", id, function (err, result){
                 if(err)
                     res.send(err);
@@ -2009,7 +1993,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .delete(function(req, res) {
             var id = req.params.id;
-            console.log(id);
             Talks.remove({_id: id}, function(err,cont) {
                 if (err)
                     res.send(err);
@@ -2038,7 +2021,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .post(function(req, res) {
             var data = req.body.data;
-            console.log(data);
 
             var rooms = new Rooms();
             rooms.room_name = data.room_name;
@@ -2047,7 +2029,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 room_id: "",
                 type: 1
             };
-            console.log(rooms);
             rooms.save(function (err, roomSaved) {
                 if (err)
                     res.send(err);
@@ -2077,7 +2058,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
                 else
                 {
-                    console.log(room);
                     res.json(room);
                     return;
                 }
@@ -2086,7 +2066,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .put(function(req, res) {
 
             var room = req.body.room;
-            console.log(room);
             Rooms.update({_id: room._id}, room,  function (err, writeConcern) {
                 if(err){
                     console.log(err);
@@ -2500,7 +2479,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         })
         .post(function (req, res) {
-            console.log(req.body);
             if(!req.body.nickname || !req.body.id_user){
                 res.send({message: {type: 'danger', text:'Toate campurile sunt obligatorii'}});
             }else{
@@ -2618,7 +2596,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 if(err){
                     res.send({message: {type: 'danger', text: 'Error finding medics'}});
                 }else{
-                    console.log(ag);
                     //get user ids of answer givers
                     var medicsIds = [];
                     async.each(ag, function (item, callback) {
@@ -2628,7 +2605,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         if(err){
                             res.send({message: {type: 'danger', text: 'Error finding medics'}});
                         }else{
-                            console.log(medicsIds);
                             //get all medics that are not already registered as answer givers
                             User.find({_id: {$nin: medicsIds}}, {username: 1}).exec(function (err, medics) {
                                 if(err){
@@ -2803,7 +2779,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
                     res.json(ans);
                 }else{
-                    console.log(newData.therapeuticAreas);
                     var serializedAreas = [];
                     for(var i=0; i<newData.therapeuticAreas.length; i++){
                         serializedAreas.push(newData.therapeuticAreas[i].id.toString());
@@ -3005,6 +2980,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 if (err) {
                     res.send(err);
                 } else {
+                    console.log(elements);
                     for(var i=0;i<elements.length;i++)
                     {
                         for(var j=0;j<elements[i].article_id.groupsID.length;j++)
@@ -3032,7 +3008,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/userHomeSearch/:data')
         .get(function(req,res){
             var data=req.params.data;
-            console.log(data);
             var arr_of_items=[Products,Multimedia,Quizes,Content,Events];
             var ObjectOfResults={};
             async.each(arr_of_items, function (item, callback) {
@@ -3145,7 +3120,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 if(err) {
                     res.send(err);
                 }
-                 console.log(cont);
                 res.json(cont);
             })}
             else
@@ -3194,7 +3168,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 if(err) {
                     res.send(err);
                 }
-                console.log(cont);
                 res.json(cont);
             });
 
@@ -3213,7 +3186,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/multimedia')
         .get(function(req,res) {
             Multimedia.find({groupsID: {$in: req.user.groupsID}}).exec(function (err, responses) {
-                console.log(responses);
                 if (responses.length == 0)
                     res.send([{"message": "Nu ai acces la materiale!"}]);
                 else {
@@ -3232,15 +3204,11 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}])
             }
             else {
-                console.log(findObj);
                 Multimedia.find(findObj, function (err, multimedia) {
                     if (err) {
-                        console.log(err);
                         res.json(err);
                     } else {
-                        console.log(multimedia);
                         if (multimedia.length == 0) {
-                            console.log("entered");
                             res.json([{"message": "Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}])
                         }
                         else
@@ -3362,7 +3330,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
                 else
                 {
-                    console.log(cont);
                     res.json(cont[0]);
                 }
 
@@ -3383,7 +3350,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
 
         .put(function(req, res) {
-        console.log(req.body.score);
         //console.log(req.user.username);
         User.findOne({ username :  { $regex: new RegExp("^" + req.user.username, "i") }},function(err,usr){
             if(err) {
@@ -3394,7 +3360,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 //console.log(req.body.score_obtained);
                 usr.points += req.body.score;
                 req.user.points=usr.points;
-                console.log(usr);
                 usr.save(function(err){
                     if(err)
                         res.send(err);
