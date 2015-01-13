@@ -81,11 +81,13 @@ gulp.task('deleteCollections', function () {
 
 gulp.task('migrateDB', function () {
 
+    var mongoAddress = 'mongodb://10.200.0.213:27017/MSDdev';
+
     // connect to sql db
     var sql = mysql.createConnection({
         host     : 'localhost',
         user     : 'root',
-        password : '',
+        password : 'root',
         typeCast : function (field, next) {
             if (field.type == 'BIT' && field.length == 1) {
                 return (field.buffer()[0] == 1); // 1 = true, 0 = false
@@ -136,7 +138,6 @@ gulp.task('migrateDB', function () {
         ["content","user_group","content_user_group","content_id","user_group_id",false],
         ["question","answer","answer","question_id","id",false],
         ["event","user_group","event_user_group","event_id","user_group_id",false],
-        ["general_content","therapeutic_area","general_content_therapeutic_areas","general_content_id","therapeutic_area_id",false],
         ["multimedia","quiz","multimedia","id","quiz_id",false],
         ["multimedia","therapeutic_area","multimedia_therapeutic_areas","multimedia_id","therapeutic_area_id",false],
         ["multimedia","user_group","multimedia_user_group","multimedia_id","user_group_id",false],
@@ -408,7 +409,7 @@ gulp.task('migrateDB', function () {
     var mappingsSuccessful = 0;
 
     // ---------------------------------------------------------------------------------------- connect to mongo client
-    MongoClient.connect('mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test', function (err,mongoDB) {
+    MongoClient.connect(mongoAddress, function (err,mongoDB) {
         console.log("Connected to mongo server");
 
         //--------------------------------------------------------------------- iterate through SQL DB and migrate all data
