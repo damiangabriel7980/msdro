@@ -2,6 +2,10 @@
   "name": "node-authentication",
   "main": "server.js",
   "dependencies": {
+    "mongodb": "~1.4.19",
+    "passport-facebook": "~1.0.2",
+    "passport-twitter": "~1.0.2",
+    "passport-google-oauth": "~0.1.5",
     "async": "~0.9.0",
     "aws-sdk": "latest",
     "bcrypt-nodejs": "latest",
