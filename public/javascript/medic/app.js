@@ -12,6 +12,7 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'angular-carousel',
         'ui.select',
         'angularFileUpload',
+        'ui.bootstrap'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
