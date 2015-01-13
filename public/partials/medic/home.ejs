@@ -1,9 +1,9 @@
 <div class="carousel-container">
-    <ul rn-carousel rn-carousel-index="selectedIndex" class="main-carousel" rn-carousel-deep-watch rn-carousel-auto-slide="{{myInterval}}"
+    <ul rn-carousel rn-carousel-index="selectedIndex" class="main-carousel" rn-carousel-auto-slide="{{myInterval}}"
         carousel-resizable style="{{carouselResponsiveStyle}}">
         <li ng-repeat="carouselItem in HomeCarousel track by $index" style="margin-left: 10px;margin-right:10px">
             <div class="carouselSlide">
-                <div ng-class='{hide:$index!=selectedIndex}' class="carousel-title"><h3 ui-sref="noutati.articol({articleId:carouselItem.article_id._id,articleType:carouselItem.article_id.type})">{{carouselItem.title | uppercase}}</h3></div>
+                <div class="carousel-title"><h4 ui-sref="noutati.articol({articleId:carouselItem.article_id._id,articleType:carouselItem.article_id.type})">{{carouselItem.article_id.title}}</h4></div>
                 <div class="imageWrapper firstIllusion" ng-if="$index===0">
                     <img ng-src="{{pathAmazonDev+firstIllusion.image_path}}"/>
                 </div>

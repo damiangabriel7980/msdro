@@ -2976,22 +2976,24 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/userHomeCarousel')
         .get(function (req,res) {
             var carouselElements=[];
-            Carousel.find({enable: true}).populate('article_id').exec(function (err, elements) {
-                if (err) {
+            //get allowed articles for user
+            Content.find({groupsID: {$in: req.user.groupsID}}, {_id: 1}, function (err, content) {
+                if(err){
                     res.send(err);
-                } else {
-                    console.log(elements);
-                    for(var i=0;i<elements.length;i++)
-                    {
-                        for(var j=0;j<elements[i].article_id.groupsID.length;j++)
-                        {
-                            if(req.user.groupsID.indexOf(elements[i].article_id.groupsID[j]) != -1)
-                                carouselElements.push(elements[i])
-                        }
-                    }
-                    res.json(carouselElements);
+                }else{
+                    //get ids of allowed articles
+                    getIds(content, function (ids) {
+                        //get carousel content within allowed articles
+                        Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
+                            if(err){
+                                res.send(err);
+                            }else{
+                                res.send(images);
+                            }
+                        })
+                    });
                 }
-            })
+            });
         });
     router.route('/userImage')
         .get(function(req,res) {

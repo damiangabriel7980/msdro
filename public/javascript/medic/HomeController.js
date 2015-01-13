@@ -45,13 +45,13 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     });
 
     HomeService.getCarousel.query().$promise.then(function(resp){
+        console.log(resp);
         $scope.HomeCarousel=resp;
-        for(var i=0;i<$scope.HomeCarousel.length;i++)
-            $scope.hideTitle[i]='hide';
-        $scope.firstIllusion=resp[$scope.HomeCarousel.length-1];
-        $scope.lastIllusion=resp[0];
+        if($scope.HomeCarousel[0]){
+            $scope.firstIllusion=resp[$scope.HomeCarousel.length-1];
+            $scope.lastIllusion=resp[0];
+        }
     });
-    $scope.hideTitle=[];
 
     //------------------------------------------------------------------------------------------------ useful functions
     $scope.htmlToPlainText = function(text) {
@@ -111,13 +111,11 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     };
     /* --- carousel --- */
 
-    $scope.selectedIndex = 1;
+    $scope.selectedIndex = 0;
 
     $scope.setSlide = function(index)
     {
-        //$scope.hideTitle[index-1]='hide';
         $scope.selectedIndex = index;
-        //$scope.hideTitle[index]='show';
     };
 
 }]);
