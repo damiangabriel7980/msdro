@@ -1,12 +1,12 @@
 <div class="row margintop20px" ng-if="multimedias[0].message"><h2>{{multimedias[0].message}}</h2></div>
 <ul ng-if="multimedias.length>1" class="articles" style="list-style: none;">
-    <li class="col-xs-10" ng-repeat="prod in multimedias | orderBy:'title'">
+    <li class="col-md-10" ng-repeat="prod in multimedias | orderBy:'title'">
 
             <div class="row well">
-                <div class="col-xs-3">
+                <div class="col-md-3">
                     <img class="img-responsive img-thumbnail img-multimedia" ng-src="{{prod.thumbnail_path?prod.thumbnail_path:(prod.type==1?defaultVideoImage:defaultSlideImage)}}" alt="{{prod.title}}"/>
                 </div>
-                <div class="col-xs-9">
+                <div class="col-md-9">
                     <h4><a class="handCursor" ng-click="openMultimedia(prod._id)"></a>{{prod.title}}</h4>
 
                     <p>{{prod.description | htmlToPlaintext | limitTo: 190}}...

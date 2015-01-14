@@ -10,24 +10,24 @@
 
 </head>
 <body>
-<div class="col-xs-12">
+<div class="col-md-12">
     <div class="row-margintop20px">
-        <div class="col-xs-4 hidden-xs padd40px">
+        <div class="col-md-4 hidden-md padd40px">
             <h3 class="bottomBorder">EVENIMENTE URMATOARE:</h3>
              <div class="event blue" ng-repeat="eventim in events2Filtered">
-                    <div class="col-xs-12 noPadding">
-                        <div class="col-xs-2 noPadding date2">
+                    <div class="col-md-12 noPadding">
+                        <div class="col-md-2 noPadding date2">
                             <h2 class="MSDTitleDark">{{eventim.start | filter: asDate | date:'dd'}}</h2>
                             <h5 class="MSDTitleDark">{{eventim.start | filter: asDate | date:'MMM'}}</h5>
                           </div>
 
-                        <div class="noPadding col-xs-9">
+                        <div class="noPadding col-md-9">
                             <h4 class="handCursor" ng-click="goToEvent(eventim._id)">{{eventim['name']}}</h4>
                         </div>
                     </div>
                 </div>
          </div>
-<div id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="realEvents" class="well col-xs-8 well-content padd35px"></div>
+<div id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="realEvents" class="well col-md-8 well-content padd35px"></div>
         </div>
 </div>
 <ng-view></ng-view>

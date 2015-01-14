@@ -5,10 +5,10 @@
 
 </head>
 <body>
-<div class="row col-xs-offset-1 margintop20px" ng-if="teste[0].message"><h2>{{teste[0].message}}</h2></div>
+<div class="row col-md-offset-1 margintop20px" ng-if="teste[0].message"><h2>{{teste[0].message}}</h2></div>
 <div  ng-if="teste.length>1" class="padd55px" id="content">
     <div class="row margintop20px">
-        <div class="col-xs-3" >
+        <div class="col-md-3 noPadding padd5left" >
             <h4 class="h-title MSDTitleDark">ISTORIC TESTE INTERACTIVE</h4>
 
             <ul class="list-group MSDTitleDark">
@@ -20,17 +20,17 @@
             <hr class="visible-phone ">
         </div>
 
-        <div class="col-xs-9" >
+        <div class="col-md-9" >
             <ul class="articles" style="list-style: none;">
-                <li class="col-xs-12" ng-repeat="quiz in teste | orderBy:'title'">
+                <li class="col-md-12" ng-repeat="quiz in teste | orderBy:'title'">
 
 
                     <div class="row well">
-                        <div class="col-xs-3">
+                        <div class="col-md-3">
                             <img class="img-responsive img-thumbnail img-multimedia" ng-if="quiz.entity!='SLIDE'" src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/video.png" alt="{{quiz.title}}" />
                             <img class="img-responsive img-thumbnail img-multimedia" ng-if="quiz.entity=='SLIDE'" src="https://s3-eu-west-1.amazonaws.com/msddev-test/multimedia/4/slide/multimedia_88.png"/>
                         </div>
-                        <div class="col-xs-9">
+                        <div class="col-md-9">
                             <h4><a href="#"></a>{{quiz.title}}</h4>
                             <p>{{quiz.description | htmlToPlaintext | limitTo: 190}}...
                             </p>
