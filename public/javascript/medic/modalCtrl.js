@@ -10,7 +10,7 @@ cloudAdminControllers.controller('modalCtrl',['$scope','eventsService2','$stateP
     $scope.cancell = function () {
         $modalInstance.close();
     };
-    var htmlToPlainText = function(text) {
+    $scope.htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
     };
 }])
