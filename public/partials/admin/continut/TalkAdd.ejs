@@ -17,28 +17,32 @@
         <input ng-model="newTalk.place" type="text" class="form-control col-xs-12">
     </div>
     <div class="col-xs-6">
-        <label class="label label-default">Data si ora inceput:</label>
         <div class="dropdown">
-            <p class="input-group">
-            <input type="text" data-ng-model="hour_start" class="dropdown-toggle form-control input-large" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="" />
-            </p>
+            <a class="dropdown-toggle my-toggle-select" role="button" data-toggle="dropdown" data-target="#" href="">
+                <div class="input-group col-xs-12">
+                    <label>Inceput:</label>
+                    <input type="text" class="form-control" data-ng-model="hour_start">
+                </div>
+            </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <datetimepicker data-ng-model="hour_start" data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+                <datetimepicker data-ng-model="hour_start"
+                                data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
             </ul>
         </div>
-
     </div>
     <div class="col-xs-6">
-        <label class="label label-default">Data si ora sfarsit:</label>
         <div class="dropdown">
-            <p class="input-group">
-            <input type="text" data-ng-model="hour_end" class="dropdown-toggle form-control input-large" id="dLabel2" role="button" data-toggle="dropdown" data-target="#" href="" />
-            </p>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel2">
-                <datetimepicker data-ng-model="hour_end" data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+            <a class="dropdown-toggle my-toggle-select" role="button" data-toggle="dropdown" data-target="#" href="">
+                <div class="input-group col-xs-12">
+                    <label>Sfarsit:</label>
+                    <input type="text" class="form-control" data-ng-model="hour_end">
+                </div>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <datetimepicker data-ng-model="hour_end"
+                                data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
             </ul>
         </div>
-
     </div>
     <div class="col-xs-6">
         <label class="label label-default">Tip:</label>
@@ -61,7 +65,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label for="speakers">Speakers:</label>
-            <select ng-model="selectedSpeaker" ng-options="speaker as speaker.first_name for speaker in speakers"
+            <select ng-model="selectedSpeaker" ng-options="speaker as (speaker.first_name+' '+speaker.last_name) for speaker in speakers"
                     class="form-control" id="speakers" style="width: 100%;" ng-change="SpeakerWasSelected(selectedSpeaker)">
             </select>
         </div>
