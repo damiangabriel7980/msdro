@@ -3198,6 +3198,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         });
     router.route('/multimedia/multimediaByArea/:id')
         .get(function(req,res){
+            console.log(req.params.id);
             var findObj = {groupsID: {$in: req.user.groupsID}};
             if(req.params.id!=0) findObj['therapeutic-areasID']= {$in: [req.params.id]};
             //find all by area

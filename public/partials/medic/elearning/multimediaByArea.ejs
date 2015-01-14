@@ -4,7 +4,7 @@
 
             <div class="row well">
                 <div class="col-xs-3">
-                    <img class="img-responsive img-thumbnail img-multimedia" ng-src="{{prod.thumbnail_path?pathAmazonDev+prod.thumbnail_path:(prod.type==1?defaultVideoImage:defaultSlideImage)}}" alt="{{prod.title}}"/>
+                    <img class="img-responsive img-thumbnail img-multimedia" ng-src="{{prod.thumbnail_path?prod.thumbnail_path:(prod.type==1?defaultVideoImage:defaultSlideImage)}}" alt="{{prod.title}}"/>
                 </div>
                 <div class="col-xs-9">
                     <h4><a class="handCursor" ng-click="openMultimedia(prod._id)"></a>{{prod.title}}</h4>
