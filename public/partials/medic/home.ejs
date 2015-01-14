@@ -59,7 +59,7 @@
                     <div class="col-md-12 header justified margintop5px noPadding">{{createHeader(n.text,80)}}</div>
 
                 </div>
-                <div class="col-md-11 noPadding">
+                <div class="col-md-11 margintop20px noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
                 </div>
             </div>
@@ -79,14 +79,14 @@
                     <div class="col-md-12 header margintop5px justified noPadding">{{createHeader(n.text,80)}}<br/></div>
 
                 </div>
-                <div class="col-md-11 noPadding">
+                <div class="col-md-11 margintop20px noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3 midColumn rightMarginMinus">
+    <div class="col-md-3 midColumn padd0left rightMarginMinus">
         <div class="col-md-12">
             <div class="col-md-12 noPadding">
                 <h3>E-LEARNING</h3>
@@ -95,7 +95,7 @@
                 <div class="col-md-1 noPadding">
                     <i class="gray glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
                 </div>
-                <div class="col-md-10 noPadding">
+                <div class="col-md-11 noPadding">
                     <a ui-sref="elearning.multimedia.multimediaByArea({id:0,idM: m._id})"><b class="MSDTitleDark">{{m.title+"("+m.author+")"}}</b></a>
                     <p>{{htmlToPlainText(m.description)}}</p>
                 </div>
@@ -119,7 +119,7 @@
         </div>
     </div>
     <div class="col-md-3 rightColumn">
-        <div class="col-md-12" ng-if="specialWidgetUrl" ng-include="specialWidgetUrl"></div>
-        <div class="col-md-12" ng-include="merckBoxUrl"></div>
+        <div class="col-md-12 noPadding" ng-if="specialWidgetUrl" ng-include="specialWidgetUrl"></div>
+        <div class="col-md-12 noPadding" ng-include="merckBoxUrl"></div>
     </div>
 </div>

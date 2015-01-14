@@ -190,6 +190,7 @@ cloudAdminApp.run(
                 $modal.open({
                     templateUrl: 'partials/medic/profile.html',
                     size: 'lg',
+                    backdrop: true,
                     windowClass: 'fade',
                     controller: 'ProfileController'
                 });

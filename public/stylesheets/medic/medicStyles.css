@@ -6391,8 +6391,8 @@ ul.products li {
   background-color: #ddd;
 }
 .padd35px {
-  padding-left: 35px;
-  padding-right: 35px;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 .specialGlyph {
   position: absolute;
@@ -6784,11 +6784,16 @@ ul.products li {
   margin-top: 1%;
 }
 .leftMargin {
-  margin-left: 30px;
+  margin-left: 25px;
 }
 .modal-open {
   overflow-y: scroll;
   overflow-x: hidden;
+}
+body.modal-open {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  position: fixed;
 }
 .nameMedic {
   padding-top: 0.8%;
@@ -6843,9 +6848,12 @@ ul.products li {
   margin-right: 30px;
 }
 .rightMarginMinus {
-  margin-right: -30px;
+  margin-right: -27px;
 }
 .articlesPictures {
   height: auto;
   width: 100%;
+}
+.padd0left {
+  padding-left: 0px;
 }

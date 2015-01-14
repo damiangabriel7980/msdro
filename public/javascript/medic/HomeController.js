@@ -73,6 +73,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         $modal.open({
             templateUrl: 'partials/medic/modals/merckManual.html',
             size: 'lg',
+            backdrop: true,
             windowClass: 'fade',
             controller: 'MerckManualController',
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
@@ -88,6 +89,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
             templateUrl: 'partials/medic/modals/Farma.html',
             size: 'lg',
             windowClass: 'fade',
+            backdrop: true,
             controller: 'FarmacovigilentaCtrl',
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
@@ -96,6 +98,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         $modal.open({
             templateUrl: 'partials/medic/contact.ejs',
             size: 'lg',
+            backdrop: true,
             windowClass: 'fade',
             controller: 'contactCtrl'
         });
@@ -105,6 +108,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
             templateUrl: 'partials/medic/modals/Terms.html',
             size: 'lg',
             windowClass: 'fade',
+            backdrop: true,
             controller: 'TermsCtrl',
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
