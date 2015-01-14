@@ -42,84 +42,84 @@
     </div>
 </div>
 
-<div class="col-xs-12 container homeStyles">
-    <div class="col-xs-6 leftColumn">
-        <div class="col-xs-12 leftMargin padd10p">
-            <div class="col-xs-12 noPadding">
+<div class="col-md-12 container homeStyles">
+    <div class="col-md-6 leftColumn">
+        <div class="col-md-12 leftMargin padd10p">
+            <div class="col-md-12 noPadding">
                 <h3>ULTIMELE NOUTATI</h3>
             </div>
-            <div class="col-xs-4 noPadding newsClass Box300" ng-repeat="n in news | limitTo: 3">
-                <div class="col-xs-9 noPadding">
+            <div class="col-md-4 noPadding newsClass Box300" ng-repeat="n in news | limitTo: 3">
+                <div class="col-md-11 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive homePictureStyle" height="155" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div class="col-xs-9 noPadding fixedHeight">
-                    <div class="col-xs-12 title noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
-                    <div class="col-xs-12 header justified noPadding">{{createHeader(n.text,80)}}</div>
+                <div class="col-md-11 noPadding fixedHeight">
+                    <div class="col-md-12 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
+                    <div class="col-md-12 header justified margintop5px noPadding">{{createHeader(n.text,80)}}</div>
 
                 </div>
-                <div class="col-xs-9 noPadding">
+                <div class="col-md-11 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 leftMargin" >
-            <div class="col-xs-12 noPadding">
+        <div class="col-md-12 leftMargin" >
+            <div class="col-md-12 noPadding">
                 <h3>ULTIMELE NOUTATI STIINTIFICE</h3>
             </div>
-            <div class="col-xs-4 noPadding newsClass Box300" ng-repeat="n in scientificNews | limitTo: 3">
-                <div class="col-xs-9 noPadding">
+            <div class="col-md-4 noPadding newsClass Box300" ng-repeat="n in scientificNews | limitTo: 3">
+                <div class="col-md-11 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive homePictureStyle" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div class="col-xs-9 noPadding fixedHeight">
-                    <div class="col-xs-12 title noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
-                    <div class="col-xs-12 header justified noPadding">{{createHeader(n.text,80)}}<br/></div>
+                <div class="col-md-11 noPadding fixedHeight">
+                    <div class="col-md-12 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
+                    <div class="col-md-12 header margintop5px justified noPadding">{{createHeader(n.text,80)}}<br/></div>
 
                 </div>
-                <div class="col-xs-9 noPadding">
+                <div class="col-md-11 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-xs-3 midColumn">
-        <div class="col-xs-12">
-            <div class="col-xs-12 noPadding">
+    <div class="col-md-3 midColumn rightMarginMinus">
+        <div class="col-md-12">
+            <div class="col-md-12 noPadding">
                 <h3>E-LEARNING</h3>
             </div>
-            <div class="col-xs-12 noPadding margintop20px" ng-repeat="m in multimedia | limitTo: 3">
-                <div class="col-xs-1 noPadding">
+            <div class="col-md-12 noPadding margintop20px" ng-repeat="m in multimedia | limitTo: 3">
+                <div class="col-md-1 noPadding">
                     <i class="gray glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
                 </div>
-                <div class="col-xs-10 noPadding">
-                    <a ui-sref="elearning.multimedia.multimediaByArea({data:{id:0,idM: m._id}})"><b class="MSDTitleDark">{{m.title+"("+m.author+")"}}</b></a>
+                <div class="col-md-10 noPadding">
+                    <a ui-sref="elearning.multimedia.multimediaByArea({id:0,idM: m._id})"><b class="MSDTitleDark">{{m.title+"("+m.author+")"}}</b></a>
                     <p>{{htmlToPlainText(m.description)}}</p>
                 </div>
             </div>
         </div>
-        <div class="col-xs-12"><hr/></div>
-        <div class="col-xs-12">
-            <div class="col-xs-12 noPadding">
+        <div class="col-md-12"><hr/></div>
+        <div class="col-md-12">
+            <div class="col-md-12 noPadding">
                 <h3>EVENIMENTE URMATOARE:</h3>
             </div>
-            <div class="col-xs-12 eventDisplay" ng-repeat="e in events | limitTo: 3">
-                <div class="col-xs-2 noPadding date MSDTitleDark">
-                    <div class="col-xs-12 noPadding day">{{toDate(e.start).getDate()}}</div>
-                    <div class="col-xs-12 noPadding month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
+            <div class="col-md-12 eventDisplay" ng-repeat="e in events | limitTo: 3">
+                <div class="col-md-2 noPadding date MSDTitleDark">
+                    <div class="col-md-12 noPadding day">{{toDate(e.start).getDate()}}</div>
+                    <div class="col-md-12 noPadding month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
                 </div>
-                <div class="col-xs-10 noPadding leftBorder">
-                    <div class="col-xs-12 title MSDTitleDark handCursor" ui-sref="calendar({data:{id:e._id}})"><b>{{e.name}}</b></div>
-                    <div class="col-xs-12 header margintop5px ">{{e.description.length>50?createHeader(e.description,50):htmlToPlainText(e.description)}}</div>
+                <div class="col-md-10 noPadding leftBorder">
+                    <div class="col-md-12 title MSDTitleDark handCursor" ui-sref="calendar({data:{id:e._id}})"><b>{{e.name}}</b></div>
+                    <div class="col-md-12 header margintop5px ">{{e.description.length>50?createHeader(e.description,50):htmlToPlainText(e.description)}}</div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-xs-3 rightColumn">
-        <div class="col-xs-12" ng-if="specialWidgetUrl" ng-include="specialWidgetUrl"></div>
-        <div class="col-xs-12" ng-include="merckBoxUrl"></div>
+    <div class="col-md-3 rightColumn">
+        <div class="col-md-12" ng-if="specialWidgetUrl" ng-include="specialWidgetUrl"></div>
+        <div class="col-md-12" ng-include="merckBoxUrl"></div>
     </div>
 </div>

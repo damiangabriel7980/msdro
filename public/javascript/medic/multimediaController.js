@@ -14,7 +14,8 @@
 
 cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal){
 
-    multimediaService.getByArea.query({id:$stateParams.data.id}).$promise.then(function(result){
+    var obj = JSON.parse($stateParams.data);
+    multimediaService.getByArea.query({id:obj.id}).$promise.then(function(result){
         $scope.multimedias = result;
     });
 
@@ -35,7 +36,7 @@ cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' 
         });
     };
     console.log($stateParams);
-    if($stateParams.data.idM)
+    if($stateParams.idM)
     {
         var idM = $stateParams.data.idM;
         $stateParams.data.idM = null;
