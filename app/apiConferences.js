@@ -131,7 +131,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, ro
     });
 
     // We are going to protect /apiConferences routes with JWT
-    app.use('/apiConferences', expressJwt({secret: tokenSecret}).unless({path: ['/apiConferences/createAccount']}));
+    app.use('/apiConferences', expressJwt({secret: tokenSecret}).unless({path: ['/apiConferences/createAccount', '/apiConferences/resetPass']}));
 
     //===================================================================================================================== create account
     router.route('/createAccount')
@@ -228,6 +228,57 @@ module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, ro
                     }
                 });
             }
+        });
+
+    //generate token for resetting user password
+    router.route('/resetPass')
+        .post(function(req, res) {
+            async.waterfall([
+                //generate unique token
+                function(done) {
+                    crypto.randomBytes(40, function(err, buf) {
+                        var token = buf.toString('hex');
+                        done(err, token);
+                    });
+                },
+                function(token, done) {
+                    //find user
+                    User.findOne({ username: req.body.email }, function(err, user) {
+                        if (!user) {
+                            res.send({message : {hasError: true, text: 'Nu a fost gasit un cont pentru acest e-mail.'}});
+                        }else{
+                            //set token for user - expires in one hour
+                            User.update({_id: user._id.toString()}, {
+                                resetPasswordToken: token,
+                                resetPasswordExpires: Date.now() + 3600000
+                            }, function(err, data) {
+                                done(err, token, user);
+                            });
+                        }
+                    });
+                },
+                function(token, user, done) {
+                    //email user
+                    mandrill({from: 'adminMSD@qualitance.ro',
+                        to: [user.username],
+                        subject:'Resetare parola MSD',
+                        text: 'Ati primit acest email deoarece a fost ceruta resetarea parolei pentru contul dumneavoastra de MSD.\n\n' +
+                            'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va reseta parola:\n\n' +
+                            'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                            'Link-ul este valabil maxim o ora\n'+
+                            'Daca nu ati cerut resetarea parolei, va rugam sa ignorati acest e-mail si parola va ramane neschimbata\n'
+                    }, function(err){
+                        done(err, user.username);
+                    });
+                }
+            ], function(err, user) {
+                if (err){
+                    logger.error(err);
+                    res.send({message : {hasError: true, text: 'A aparut o eroare. Va rugam verificati datele'}});
+                }else{
+                    res.send({message : {hasError: false, text: 'Un email cu instructiuni a fost trimis catre ' + user + '.', type: 'info'}});
+                }
+            });
         });
 
     //route for retrieving user's profile info

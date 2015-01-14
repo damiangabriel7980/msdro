@@ -45,6 +45,6 @@
   "appPath": "app",
   "resolutions": {
     "angular": "1.2.28",
-    "jquery": "~2.x"
+    "jquery": "~2.1.3"
   }
 }
