@@ -2,9 +2,11 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
 
     SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
         $rootScope.specialGroups = resp;
+        console.log(resp);
         if (resp.length != 0) {
             $rootScope.specialGroups = resp;
-            if (JSON.parse(sessionStorage.specialGroupSelected)) {
+            if (sessionStorage.specialGroupSelected) {
+                console.log(sessionStorage.specialGroupSelected);
                 console.log("gs");
                 $scope.selectSpecialGroup(angular.fromJson(sessionStorage.specialGroupSelected));
             } else {
@@ -13,7 +15,7 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
             }
         } else {
             $rootScope.specialGroupSelected = null;
-            sessionStorage.specialGroupSelected = "";
+            sessionStorage.removeItem('specialGroupSelected');
         }
     });
 
