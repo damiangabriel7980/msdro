@@ -96,7 +96,7 @@
                     <i class="gray glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
                 </div>
                 <div class="col-xs-10 noPadding">
-                    <a ui-sref="elearning.multimedia.multimediaByArea({data:{id:0,idM: m._id}})"><b class="MSDTitleDark">{{m.title+"("+m.author+")"}}</b></a>
+                    <a ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: m._id})"><b class="MSDTitleDark">{{m.title+"("+m.author+")"}}</b></a>
                     <p>{{htmlToPlainText(m.description)}}</p>
                 </div>
             </div>
