@@ -14,8 +14,7 @@
 
 cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal){
 
-    var obj = JSON.parse($stateParams.data);
-    multimediaService.getByArea.query({id:obj.id}).$promise.then(function(result){
+    multimediaService.getByArea.query({id:$stateParams.idArea}).$promise.then(function(result){
         $scope.multimedias = result;
     });
 
@@ -35,11 +34,10 @@ cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' 
             }
         });
     };
-    console.log($stateParams);
-    if($stateParams.idM)
+    if($stateParams.idMulti)
     {
-        var idM = $stateParams.data.idM;
-        $stateParams.data.idM = null;
+        var idM = $stateParams.idMulti;
+        $stateParams.idMulti = null;
         $modal.open({
             templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html',
@@ -56,9 +54,6 @@ cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' 
         });
     }
     $scope.amazonPre = $rootScope.pathAmazonDev;
-    if($rootScope.previousState==='home')
-        console.log('Am fost acasa');
-    console.log($rootScope.currentState);
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {

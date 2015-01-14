@@ -14,7 +14,6 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     ProfileService.getUserData.query().$promise.then(function (resp) {
 
         $scope.userData = resp;
-        console.log(resp);
         $scope.statusAlert = {newAlert:false, type:"", message:""};
         $scope.uploadAlert = {newAlert:false, type:"", message:""};
         var allNames = resp.name.split(" ");
@@ -42,7 +41,6 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.fileSelected = function($files, $event){
                 //make sure a file was actually loaded
                 if($files[0]){
-                    console.log($files);
                     var extension = $files[0].name.split('.').pop();
                     var key2 = "user/"+$scope.userData._id+"/img"+$scope.userData._id+"."+extension;
                     // Closure to capture the file information.
@@ -192,7 +190,6 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
             toSend.lastName = this.lastName;
             toSend.phone = this.phone;
             toSend.newsletter = this.newsletter;
-            console.log($scope.userTherapeuticAreas);
             toSend.therapeuticAreas = $scope.userTherapeuticAreas;
             toSend.county = this.county.selected._id;
             toSend.city = this.city.selected._id;
