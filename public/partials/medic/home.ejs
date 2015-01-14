@@ -44,44 +44,44 @@
 
 <div class="col-md-12 container homeStyles">
     <div class="col-md-6 leftColumn">
-        <div class="col-md-12 leftMargin padd10p">
+        <div class="col-md-11 leftMargin">
             <div class="col-md-12 noPadding">
                 <h3>ULTIMELE NOUTATI</h3>
             </div>
-            <div class="col-md-4 noPadding newsClass Box300" ng-repeat="n in news | limitTo: 3">
-                <div class="col-md-12 noPadding">
+            <div class="col-md-4 noPadding" ng-repeat="n in news | limitTo: 3">
+                <div class="col-md-11 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
-                        <img class="my-img-thumbnail img-responsive homePictureStyle" height="155" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
+                        <img class="my-img-thumbnail img-responsive" height="155" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div class="col-md-11 noPadding fixedHeight">
-                    <div class="col-md-11 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{createHeader(n.title,60)}}</b></a></div>
-                    <div class="col-md-11 header justified margintop5px noPadding">{{createHeader(n.text,80)}}</div>
+                <div class="col-md-11 contentBlock textHome noPadding fixedHeight">
+                    <div class="col-md-11 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
+                    <div class="col-md-11 header justified margintop5px noPadding">{{htmlToPlainText(n.text)}}</div>
 
                 </div>
-                <div class="col-md-11 margintop20px noPadding">
-                    <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
+                <div class="col-md-11 noPadding">
+                    <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"> Citeste mai mult </a>
                 </div>
             </div>
         </div>
-        <div class="col-md-12 leftMargin" >
+        <div class="col-md-11 leftMargin"><hr></div>
+        <div class="col-md-11 leftMargin margintop25px" >
             <div class="col-md-12 noPadding">
                 <h3>ULTIMELE NOUTATI STIINTIFICE</h3>
             </div>
-            <div class="col-md-4 noPadding newsClass Box300" ng-repeat="n in scientificNews | limitTo: 3">
-                <div class="col-md-12 noPadding">
+            <div class="col-md-4 noPadding" ng-repeat="n in scientificNews | limitTo: 3">
+                <div class="col-md-11 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
-                        <img class="my-img-thumbnail img-responsive homePictureStyle" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}">
+                        <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div class="col-md-11 noPadding fixedHeight">
-                    <div class="col-md-11 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
-                    <div class="col-md-11 header margintop5px justified noPadding">{{createHeader(n.text,80)}}<br/></div>
-
+                <div class="col-md-11 noPadding contentBlock textHome fixedHeight">
+                    <div class="col-md-11 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{htmlToPlainText(n.title)}}</b></a></div>
+                    <div class="col-md-11 header margintop5px justified noPadding">{{htmlToPlainText(n.text)}}<br/></div>
                 </div>
-                <div class="col-md-11 margintop20px noPadding">
-                    <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
-                </div>
+                <div class="col-md-11 noPadding">
+                    <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"> Citeste mai mult</a>
+                    </div>
             </div>
         </div>
     </div>

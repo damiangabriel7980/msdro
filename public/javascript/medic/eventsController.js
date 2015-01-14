@@ -7,7 +7,6 @@ var date = new Date();
     var y=$(date);
      eventsService.query().$promise.then(function(result){
         $scope.events =result;
-         console.log($scope.events);
        $scope.eventsS=[];
        for(var i = 0; i < $scope.events.length; i++)
        {
@@ -18,7 +17,12 @@ var date = new Date();
          $scope.eventRender = function(data, event, view){
              //$('.fc-event-inner').attr('title',data.title);
              //$('.fc-event-inner').tooltip({text:data.title});
-                console.log(event);
+             var getPosition=function(){
+                 if(event.pageY<400)
+                     return "bottom";
+                 else
+                     return "top";
+             };
              angular.element('.fc-event-hori').attr("data-toggle","popover");
              angular.element('.fc-event-hori').attr("data-content",data.title);
 
@@ -26,7 +30,7 @@ var date = new Date();
                  $('[data-toggle="popover"]').popover({
                      'title':'Eveniment:',
                      trigger:"hover",
-                     placement:"top",
+                     placement:getPosition(),
                      content: data.title,
                      'append-to-body':true
                  });

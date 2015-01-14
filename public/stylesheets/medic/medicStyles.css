@@ -6875,3 +6875,48 @@ body.modal-open {
   height: 150px;
   width: 250px;
 }
+.fc-event-time {
+  display: none;
+}
+.text {
+  height: 13em;
+  overflow: hidden;
+}
+.text:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  min-height: 4.5em;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+}
+.textHome {
+  height: 13em;
+  overflow: hidden;
+}
+.textHome:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  min-height: 4.5em;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+}
+.contentBlock {
+  width: 100%;
+  padding: 0 0 15px 0;
+  position: relative;
+  text-align: justify;
+}
+.marginbottom30px {
+  margin-bottom: 30px;
+}
+.margintop25px {
+  margin-top: -25px;
+}
+hr {
+  color: #808080;
+  align-content: center;
+}
