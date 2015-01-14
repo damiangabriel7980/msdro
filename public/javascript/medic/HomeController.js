@@ -45,7 +45,6 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     });
 
     HomeService.getCarousel.query().$promise.then(function(resp){
-        console.log(resp);
         $scope.HomeCarousel=resp;
         if($scope.HomeCarousel[0]){
             $scope.firstIllusion=resp[$scope.HomeCarousel.length-1];
