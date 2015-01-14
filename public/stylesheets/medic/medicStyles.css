@@ -6304,6 +6304,7 @@ button.close {
 }
 .articlesStyles .articleBox .trimmedArticle {
   padding-bottom: 10px;
+  text-align: justify;
 }
 .articlesStyles .articleBox .author {
   font-weight: bold;
@@ -6859,4 +6860,18 @@ body.modal-open {
 }
 .padd5left {
   padding-left: 5px;
+}
+.popover {
+  z-index: 1000 ! important;
+  width: 376px !important;
+}
+.popover-title {
+  background: #006d69;
+}
+.popover-content {
+  color: black;
+}
+.articlesPagePicture {
+  height: 150px;
+  width: 250px;
 }

@@ -1,10 +1,10 @@
 cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '$stateParams', 'ContentService', function($scope, $rootScope, $stateParams, ContentService){
 
     $scope.imagePre = $rootScope.pathAmazonDev;
-    $scope.lmt=3;
+    $scope.lmt=5;
     $scope.widthOfWindow=$(window).innerWidth;
     $scope.increaseLimit=function(){
-        $scope.lmt+=3;
+        $scope.lmt+=5;
         if($scope.content.length<$scope.lmt)
             $scope.showMore='hide';
     };

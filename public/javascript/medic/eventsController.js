@@ -16,17 +16,20 @@ var date = new Date();
 
          $scope.realEvents=[$scope.eventsS];
          $scope.eventRender = function(data, event, view){
-             $('.fc-event-inner').attr('title',data.title);
+             //$('.fc-event-inner').attr('title',data.title);
              //$('.fc-event-inner').tooltip({text:data.title});
+                console.log(event);
+             angular.element('.fc-event-hori').attr("data-toggle","popover");
+             angular.element('.fc-event-hori').attr("data-content",data.title);
 
-             //$('.fc-event-inner').attr("data-toggle","popover");
-             //$('.fc-event-inner').attr("data-content",data.title);
-             //$('[data-toggle="popover"]').popover({
-             //    'title':'Eveniment:',
-             //    trigger:"hover",
-             //    placement:"top"
-             //
-             //});
+
+                 $('[data-toggle="popover"]').popover({
+                     'title':'Eveniment:',
+                     trigger:"hover",
+                     placement:"top",
+                     content: data.title,
+                     'append-to-body':true
+                 });
          };
         $scope.uiConfig = {
             calendar: {
@@ -34,7 +37,7 @@ var date = new Date();
                 height: 450,
                 editable: false,
                 header: {
-                    left: 'month basicWeek basicDay agendaWeek agendaDay',
+                    left: 'month basicWeek basicDay',
                     center: 'title',
                     right: 'today prev,next'
                 },
