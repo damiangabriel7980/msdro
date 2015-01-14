@@ -144,7 +144,7 @@
                     </ul>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-class="$state.is('home') ? 'show': 'hide'" ng-if="specialGroups.length != 0">
+            <ul class="nav navbar-nav navbar-right" ng-if="specialGroups.length!=0 && $state.is('home')">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle specialGroupDropdown" >
                         <img ng-src="{{specialGroupSelected.image_path?pathAmazonDev+specialGroupSelected.image_path:MSDlogo}}">
