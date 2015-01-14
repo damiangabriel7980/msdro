@@ -1628,7 +1628,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     router.route('/admin/speakers')
         .get(function(req,res){
-            Speakers.find().exec(function (err, speakers) {
+            Speakers.find().sort({first_name: 1}).exec(function (err, speakers) {
                 if (err)
                 {
                     res.json(err);
