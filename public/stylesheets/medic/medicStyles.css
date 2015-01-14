@@ -6832,3 +6832,10 @@ ul.products li {
 .top0px {
   margin-top: 0px;
 }
+.homePictureStyle {
+  width: 100%;
+  height: 125px;
+}
+.fixedHeight {
+  height: 190px;
+}

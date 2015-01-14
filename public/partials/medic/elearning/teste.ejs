@@ -6,12 +6,12 @@
 </head>
 <body>
 <div class="row col-xs-offset-1 margintop20px" ng-if="teste[0].message"><h2>{{teste[0].message}}</h2></div>
-<div  ng-if="teste.length>1" class="col-xs-offset-1" id="content">
+<div  ng-if="teste.length>1" class="padd55px" id="content">
     <div class="row margintop20px">
-        <div class="col-xs-2" >
-            <h4 class="h-title">ISTORIC TESTE INTERACTIVE</h4>
+        <div class="col-xs-3" >
+            <h4 class="h-title MSDTitleDark">ISTORIC TESTE INTERACTIVE</h4>
 
-            <ul class="list-group MSDgreen">
+            <ul class="list-group MSDTitleDark">
                 <li ng-repeat="quiz in teste"><h5 class="MSDdark">{{quiz.title | uppercase}}</h5>  {{quiz.last_updated | asDate | date: "dd/MM/yyyy"}} - expira la {{quiz.expiry_date | asDate | date: "dd/MM/yyyy"}}
                     <br/>
                 </li>
@@ -20,9 +20,9 @@
             <hr class="visible-phone ">
         </div>
 
-        <div class="col-xs-10" >
+        <div class="col-xs-9" >
             <ul class="articles" style="list-style: none;">
-                <li class="col-xs-10" ng-repeat="quiz in teste | orderBy:'title'">
+                <li class="col-xs-12" ng-repeat="quiz in teste | orderBy:'title'">
 
 
                     <div class="row well">

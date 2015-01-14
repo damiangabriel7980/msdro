@@ -51,15 +51,16 @@
             <div class="col-xs-4 noPadding newsClass Box300" ng-repeat="n in news | limitTo: 3">
                 <div class="col-xs-9 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
-                        <img class="my-img-thumbnail img-responsive" height="155" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}" style="max-width: 100%;height: 155px;">
+                        <img class="my-img-thumbnail img-responsive homePictureStyle" height="155" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div class="col-xs-9 noPadding">
+                <div class="col-xs-9 noPadding fixedHeight">
                     <div class="col-xs-12 title noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
                     <div class="col-xs-12 header justified noPadding">{{createHeader(n.text,80)}}</div>
-                    <div class="col-xs-12 noPadding">
-                        <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
-                    </div>
+
+                </div>
+                <div class="col-xs-9 noPadding">
+                    <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
                 </div>
             </div>
         </div>
@@ -70,15 +71,16 @@
             <div class="col-xs-4 noPadding newsClass Box300" ng-repeat="n in scientificNews | limitTo: 3">
                 <div class="col-xs-9 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
-                        <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}" style="width: 100%; height: 155px;">
+                        <img class="my-img-thumbnail img-responsive homePictureStyle" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div class="col-xs-9 noPadding">
+                <div class="col-xs-9 noPadding fixedHeight">
                     <div class="col-xs-12 title noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
                     <div class="col-xs-12 header justified noPadding">{{createHeader(n.text,80)}}<br/></div>
-                    <div class="col-xs-12 noPadding">
-                        <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
-                    </div>
+
+                </div>
+                <div class="col-xs-9 noPadding">
+                    <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><i class="gray glyphicon glyphicon-eye-open"></i></a>
                 </div>
             </div>
         </div>
