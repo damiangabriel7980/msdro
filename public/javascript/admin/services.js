@@ -151,6 +151,9 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
             getContent: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}
+        }),
+        editImage: $resource('api/admin/content/editImage/:data', {}, {
+            save: { method: 'POST', isArray: false }
         })
     }
 }]);

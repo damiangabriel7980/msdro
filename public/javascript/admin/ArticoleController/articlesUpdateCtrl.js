@@ -1,7 +1,9 @@
 /**
  * Created by miricaandrei23 on 27.11.2014.
  */
-cloudAdminControllers.controller('articlesUpdateCtrl', ['$scope','$rootScope' ,'ContentService','$stateParams','$sce','$filter','$modalInstance','$state', function($scope,$rootScope,ContentService,$stateParams,$sce,$filter,$modalInstance,$state){
+cloudAdminControllers.controller('articlesUpdateCtrl', ['$scope','$rootScope' ,'ContentService','$stateParams','$sce','$filter','$modalInstance','$state','AmazonService', function($scope,$rootScope,ContentService,$stateParams,$sce,$filter,$modalInstance,$state,AmazonService){
+    $scope.statusAlert = {newAlert:false, type:"", message:""};
+    $scope.uploadAlert = {newAlert:false, type:"", message:""};
     ContentService.getAll.query().$promise.then(function(result) {
         $scope.grupe=result['groups'];
         $scope.groupMap={};
@@ -23,7 +25,69 @@ cloudAdminControllers.controller('articlesUpdateCtrl', ['$scope','$rootScope' ,'
 
        tinyMCE.activeEditor.setContent($scope.article.text);
     });
+    var putLogoS3 = function (body) {
+        AmazonService.getClient(function (s3) {
+            var extension = body.name.split('.').pop();
+            var key = "content/"+$scope.article._id+"/article-logo/logo"+$scope.article._id+"."+extension;
+            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
+                if (err) {
+                    console.log(err);
+                    $scope.uploadAlert.type = "danger";
+                    $scope.uploadAlert.message = "Upload esuat!";
+                    $scope.uploadAlert.newAlert = true;
+                    $scope.$apply();
+                } else {
+                    //update database as well
+                    ContentService.editImage.save({data:{id:$scope.article._id, path:key}}).$promise.then(function (resp) {
+                        if(resp.error){
+                            $scope.uploadAlert.type = "danger";
+                            $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
+                            $scope.uploadAlert.newAlert = true;
+                        }else{
+                            $scope.logo = key;
+                            $scope.uploadAlert.type = "success";
+                            $scope.uploadAlert.message = "Logo updated!";
+                            $scope.uploadAlert.newAlert = true;
+                            console.log("Upload complete");
+                        }
+                    });
+                }
+            });
+            req.on('httpUploadProgress', function (evt) {
+                var progress = parseInt(100.0 * evt.loaded / evt.total);
+                $scope.$apply(function() {
+                    console.log(progress);
+                })
+            });
+        });
+    };
 
+    $scope.fileSelected = function($files, $event){
+        //make sure group data is loaded. we need to access it to form the amazon key
+            //make sure a file was actually loaded
+            if($files[0]){
+                AmazonService.getClient(function (s3) {
+                    var key;
+                    //if there already is a logo, delete it. Then upload new
+                    if($scope.article.image_path){
+                        key =$scope.article.image_path;
+                        s3.deleteObject({Bucket: $rootScope.amazonBucket, Key:key}, function (err, data) {
+                            if(err){
+                                $scope.uploadAlert.type = "danger";
+                                $scope.uploadAlert.message = "Eroare la stergerea pozei vechi!";
+                                $scope.uploadAlert.newAlert = true;
+                                $scope.$apply();
+                            }else{
+                                putLogoS3($files[0]);
+                            }
+                        });
+                    }else{
+                        putLogoS3($files[0]);
+                    }
+                });
+            }
+
+    };
 
     var findInUserGroup = function (id) {
         var index = -1;

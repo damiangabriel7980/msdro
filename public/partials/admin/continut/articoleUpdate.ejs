@@ -47,6 +47,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-12" style="padding: 0;">
+            <div class="col-md-12">
+                <img no-cache-src="{{pathAmazonDev+article.image_path}}" ng-if="article.image_path" style="width:100px;">
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
+            </div>
+            <div class="col-md-12">
+                <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
+            </div>
+        </div>
         <label class="label label-default">Text:</label>
 
         <textarea id="textArticle" ng-model="article.text" style="width:100%"></textarea>

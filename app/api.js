@@ -1515,7 +1515,18 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 res.json({ message: 'Successfully deleted!' });
             });
         });
-
+    router.route('/admin/content/editImage/:data')
+        .post(function(req,res){
+            var data = req.params.data;
+            Content.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
+                if(err){
+                    logger.error("Error at article change logo. Article id = "+data.id+"; Key = "+data.path);
+                    res.json({error:true});
+                }else{
+                    res.json({error:false, updated:wRes});
+                }
+            });
+        });
     router.route('/admin/events')
 
         .get(function(req, res) {
