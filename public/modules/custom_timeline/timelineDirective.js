@@ -26,7 +26,7 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
             var gridSize = gridLength / daysTotal;
 
             //customize:
-            var allCollapsed = true; // all dates appear collapsed by default; if true, dates that
+            var allCollapsed = false; // all dates appear collapsed by default; if true, dates that
                                     //  have enough available room will be expanded
 
             scope.$watch('loadEvents', function (loadedEvents) {
