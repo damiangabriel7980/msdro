@@ -6972,8 +6972,18 @@ hr {
 .padd11percent {
   padding-bottom: 11%;
 }
+@media (min-width: 1367px) {
+  .padd11percent {
+    padding-bottom: 14%;
+  }
+}
 .padd7percent {
-  padding-bottom: 7%;
+  padding-bottom: 9%;
+}
+@media (min-width: 1367px) {
+  .padd7percent {
+    padding-bottom: 12%;
+  }
 }
 .noPaddingLeft {
   padding-left: 0;
@@ -7003,4 +7013,7 @@ hr {
 }
 .zeroMarginLeft {
   margin-left: 0%;
+}
+.padd3Percent {
+  padding-left: 3%;
 }
