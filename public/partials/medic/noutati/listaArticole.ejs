@@ -1,20 +1,22 @@
-<div ng-repeat="cont in content | limitTo: lmt">
-    <div class="col-md-12 articleBox">
-        <div class="col-md-3 ">
-            <img class="img-thumbnail articlesPagePicture img-responsive img-back" ng-src="{{cont.image_path?pathAmazonDev+cont.image_path:defaultArticleImage}}"/>
-        </div>
-        <div class="col-md-9">
+<div class="well noBox noPadding" ng-repeat="cont in content | limitTo: lmt">
+    <div class="row articleBox">
+        <img class="img-thumbnail width20 pull-left marginPlus2Left articlesPictures img-back" ng-src="{{cont.image_path?pathAmazonDev+cont.image_path:defaultArticleImage}}"/>
+
+        <div class="col-md-9 width80 noPaddingLeft ">
             <div class="col-md-12 title MSDgreenDarker handCursor" ui-sref="{{sr}}">{{cont.title}}</div>
             <div class="col-md-12 trimmedArticle">{{createHeader(cont.text,250)}}</div>
 
                 <div class="col-md-12 author ">
                     <div class="col-md-8 noPadding">
-                        {{cont.author}}
-                        <br>
-                        {{cont.last_updated | date: 'dd/MM/yyyy'}}
+                        <div class="col-md-12 noPadding">
+                            {{cont.author}}
+                        </div>
+                        <div class="col-md-12 noPadding">
+                            {{cont.last_updated | date: 'dd/MM/yyyy'}}
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <a class="btn btn-sm btn-info pull-right btn-more-news margintop5px" ui-sref="{{sr}}">Vezi stire</a>
+                    <div class="col-md-4 noPaddingRight">
+                        <a class="btn btn-sm btn-info margintop5percent pull-right btn-more-news margintop5px" ui-sref="{{sr}}">Vezi stire</a>
                     </div>
                 </div>
 

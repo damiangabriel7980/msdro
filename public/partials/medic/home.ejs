@@ -3,7 +3,7 @@
         carousel-resizable style="{{carouselResponsiveStyle}}">
         <li ng-repeat="carouselItem in HomeCarousel track by $index" style="margin-left: 10px;margin-right:10px">
             <div class="carouselSlide">
-                <div class="carousel-title"><h4 ui-sref="noutati.articol({articleId:carouselItem.article_id._id,articleType:carouselItem.article_id.type})">{{carouselItem.article_id.title}}</h4></div>
+                <div class="carousel-title"><h3 class="newFont" ui-sref="noutati.articol({articleId:carouselItem.article_id._id,articleType:carouselItem.article_id.type})">{{trimTitle(carouselItem.article_id.title)|uppercase}}</h3></div>
                 <div class="imageWrapper firstIllusion" ng-if="$index===0">
                     <img ng-src="{{pathAmazonDev+firstIllusion.image_path}}"/>
                 </div>
@@ -49,44 +49,44 @@
                 <h3>ULTIMELE NOUTATI</h3>
             </div>
             <div class="col-md-4 noPadding" ng-repeat="n in news | limitTo: 3">
-                <div class="col-md-11 noPadding">
+                <div class="col-md-10 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive" height="155" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div class="col-md-11 contentBlock textHome noPadding fixedHeight">
-                    <div class="col-md-11 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
-                    <div class="col-md-11 header justified margintop5px noPadding">{{htmlToPlainText(n.text)}}</div>
+                <div class="col-md-10 contentBlock textHome noPadding fixedHeight">
+                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
+                    <div class="col-md-10 header justified margintop5px noPadding">{{htmlToPlainText(n.text)}}</div>
 
                 </div>
-                <div class="col-md-11 noPadding">
+                <div class="col-md-10 noPadding">
                     <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"> Citeste mai mult </a>
                 </div>
             </div>
         </div>
-        <div class="col-md-11 leftMargin"><hr></div>
+        <div class="col-md-10 leftMargin"><hr></div>
         <div class="col-md-11 leftMargin margintop25px" >
             <div class="col-md-12 noPadding">
                 <h3>ULTIMELE NOUTATI STIINTIFICE</h3>
             </div>
             <div class="col-md-4 noPadding" ng-repeat="n in scientificNews | limitTo: 3">
-                <div class="col-md-11 noPadding">
+                <div class="col-md-10 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div class="col-md-11 noPadding contentBlock textHome fixedHeight">
-                    <div class="col-md-11 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{htmlToPlainText(n.title)}}</b></a></div>
-                    <div class="col-md-11 header margintop5px justified noPadding">{{htmlToPlainText(n.text)}}<br/></div>
+                <div class="col-md-10 noPadding contentBlock textHome fixedHeight">
+                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{htmlToPlainText(n.title)}}</b></a></div>
+                    <div class="col-md-10 header margintop5px justified noPadding">{{htmlToPlainText(n.text)}}<br/></div>
                 </div>
-                <div class="col-md-11 noPadding">
+                <div class="col-md-10 noPadding">
                     <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"> Citeste mai mult</a>
                     </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3 midColumn padd0left rightMarginMinus">
+    <div class="col-md-3 midColumn margin2Left padd0left width30">
         <div class="col-md-12">
             <div class="col-md-12 noPadding">
                 <h3>E-LEARNING</h3>
@@ -95,9 +95,9 @@
                 <div class="col-md-1 noPadding">
                     <i class="gray glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
                 </div>
-                <div class="col-md-10 noPadding">
+                <div class="col-md-11 noPadding justify">
                     <a ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: m._id})"><b class="MSDTitleDark">{{m.title+"("+m.author+")"}}</b></a>
-                    <p>{{htmlToPlainText(m.description)}}</p>
+                    <p>{{m.description!=null?htmlToPlainText(m.description):''}}</p>
                 </div>
             </div>
         </div>
@@ -107,18 +107,18 @@
                 <h3>EVENIMENTE URMATOARE:</h3>
             </div>
             <div class="col-md-12 eventDisplay" ng-repeat="e in events | limitTo: 3">
-                <div class="col-md-2 noPadding date MSDTitleDark">
+                <div class="col-md-1 noPadding date MSDTitleDark">
                     <div class="col-md-12 noPadding day">{{toDate(e.start).getDate()}}</div>
                     <div class="col-md-12 noPadding month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
                 </div>
-                <div class="col-md-10 noPadding leftBorder">
-                    <div class="col-md-12 title MSDTitleDark handCursor" ui-sref="calendar({data:{id:e._id}})"><b>{{e.name}}</b></div>
-                    <div class="col-md-12 header margintop5px ">{{e.description.length>50?createHeader(e.description,50):htmlToPlainText(e.description)}}</div>
+                <div class="col-md-11 noPadding leftBorder">
+                    <div class="col-md-12 justify title MSDTitleDark handCursor" ui-sref="calendar({data:{id:e._id}})"><b>{{e.name}}</b></div>
+                    <div class="col-md-12 justify header margintop5px ">{{e.description.length>50?createHeader(e.description,50):htmlToPlainText(e.description)}}</div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3 rightColumn">
+    <div class="col-md-3 width20 padd4Left padd15Right rightColumn">
         <div class="col-md-12 noPadding" ng-if="specialWidgetUrl" ng-include="specialWidgetUrl"></div>
         <div class="col-md-12 noPadding" ng-include="merckBoxUrl"></div>
     </div>

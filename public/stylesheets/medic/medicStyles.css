@@ -6439,7 +6439,6 @@ ul.products li {
   position: absolute;
   content: '';
   top: 0;
-  right: 0;
   width: 0;
   height: 100%;
   border-right: 1px solid #000000;
@@ -6448,9 +6447,10 @@ ul.products li {
   position: absolute;
   content: '';
   top: 0;
-  left: -1px;
+  left: -16px;
   width: 0;
   height: 100%;
+  margin-left: -1%;
 }
 .homeStyles .midColumn:after {
   position: absolute;
@@ -6833,7 +6833,6 @@ body.modal-open {
 }
 .padd55px {
   padding-left: 55px;
-  padding-right: 55px;
 }
 .top0px {
   margin-top: 0px;
@@ -6852,8 +6851,13 @@ body.modal-open {
   margin-right: -27px;
 }
 .articlesPictures {
-  height: auto;
-  width: 100%;
+  height: 175px;
+  width: 110%;
+}
+@media (min-width: 1367px) {
+  .articlesPictures {
+    height: 140px;
+  }
 }
 .padd0left {
   padding-left: 0px;
@@ -6919,4 +6923,68 @@ body.modal-open {
 hr {
   color: #808080;
   align-content: center;
+}
+.titleEllipse {
+  white-space: nowrap;
+  width: 12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.width30 {
+  width: 30%;
+}
+.width70 {
+  width: 70%;
+}
+.width20 {
+  width: 20%;
+}
+.padd4Left {
+  padding-left: 2%;
+}
+.padd15Right {
+  padding-right: 15px;
+}
+.margin2Left {
+  margin-left: -2%;
+}
+.margin3Left {
+  margin-left: -3%;
+}
+.justify {
+  text-align: justify;
+}
+.newFont {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+.width81 {
+  width: 81%;
+}
+.width19 {
+  width: 19%;
+}
+.margintop11percent {
+  margin-top: 0%;
+}
+.padd11percent {
+  padding-bottom: 11%;
+}
+.padd7percent {
+  padding-bottom: 7%;
+}
+.noPaddingLeft {
+  padding-left: 0;
+}
+.noPaddingRight {
+  padding-right: 0;
+}
+.noBox {
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.marginPlus2Left {
+  margin-left: 2%;
 }

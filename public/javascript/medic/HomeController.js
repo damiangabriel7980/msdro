@@ -64,7 +64,9 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.toDate = function (ISOdate) {
         return new Date(ISOdate);
     };
-
+    $scope.trimTitle=function(str) {
+        return str.split(/\s+/).slice(0,3).join(" ");
+    };
 
 
     //merck modal
