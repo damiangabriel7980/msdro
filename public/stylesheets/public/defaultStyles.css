@@ -6387,6 +6387,37 @@ html body .rootView {
     display: none;
   }
 }
+.navbar-fixed-top .headerSearchAndLinks {
+  float: right;
+}
+@media (min-width: 992px) {
+  .navbar-fixed-top .headerSearchAndLinks {
+    display: none;
+  }
+}
+.navbar-fixed-top .headerSearchAndLinks .item {
+  float: right;
+}
+.navbar-fixed-top .headerSearchAndLinks .item ul {
+  margin: 0;
+  padding: 15px 10px 0 0;
+  list-style-type: none;
+}
+.navbar-fixed-top .headerSearchAndLinks .item ul li {
+  display: inline;
+}
+.navbar-fixed-top .headerSearchAndLinks .item ul li a {
+  color: #a0a0a0;
+  text-decoration: none;
+}
+.navbar-fixed-top .headerSearchAndLinks .item ul li a:hover {
+  color: #008780;
+}
+.navbar-fixed-top .headerSearchAndLinks .item form {
+  margin: 0;
+  padding-top: 8px;
+  width: 250px;
+}
 .fixedBox {
   position: absolute;
   left: 0px;

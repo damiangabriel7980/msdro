@@ -109,6 +109,35 @@ html{
       display: none;
     }
   }
+  .headerSearchAndLinks{
+    @media (min-width: @grid-float-breakpoint) {
+      display: none;
+    }
+    float: right;
+    .item{
+      float: right;
+      ul{
+        margin: 0;
+        padding: 15px 10px 0 0;
+        list-style-type: none;
+        li{
+          display: inline;
+          a{
+            color: @navbar-default-link-color;
+            text-decoration: none;
+            &:hover{
+              color: @navbar-default-link-hover-color;
+            }
+          }
+        }
+      }
+      form{
+        margin: 0;
+        padding-top: 8px;
+        width: 250px;
+      }
+    }
+  }
 }
 
 //============================================================================================================ CAROUSEL
