@@ -6326,6 +6326,9 @@ button.close {
 .articlesStyles .paddingTop10 {
   padding-top: 10px;
 }
+.paddingTop10 {
+  padding-top: 10px;
+}
 .therapeuticAreas li {
   cursor: pointer;
 }
@@ -6896,7 +6899,7 @@ body.modal-open {
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
 }
 .textHome {
-  height: 13em;
+  height: 12em;
   overflow: hidden;
 }
 .textHome:after {
@@ -6987,4 +6990,17 @@ hr {
 }
 .marginPlus2Left {
   margin-left: 2%;
+}
+.margin5Left {
+  margin-left: -5%;
+}
+.width80 {
+  width: 80%;
+}
+.glycemizerPadd {
+  padding-top: 45%;
+  padding-bottom: 50%;
+}
+.zeroMarginLeft {
+  margin-left: 0%;
 }

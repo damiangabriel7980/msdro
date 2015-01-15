@@ -1,6 +1,6 @@
-<div class="col-md-11">
+<div class="col-md-11 noPadding">
     <div class="row noPadding">
-        <div class="col-md-3 noPadding" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt" style="padding: 0 15px 0 0; width: 250px;">
+        <div class="col-md-3 noPadding" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt" style="padding: 0 15px 0 0;">
             <div class="col-md-12 well" style="min-height: 450px;">
                 <div class="col-md-12 noPadding">
                     <img class="img-responsive img-back img-thumbnail" src="{{amazon + prod.image_path}}" alt="{{prod.name}}" style="width: 100%;"/>
@@ -19,7 +19,7 @@
         <button class="btn btn-sm btn-info btn-more-news" ng-class="products.length>8 ? 'show':'hide'" ng-click="increaseLimit()">Mai multe produse</button>
     </div>
 </div>
-<div class="col-md-1" style="text-align: center">
+<div class="col-md-1 noPadding" style="text-align: center">
     <ul class="nav nav-list MSDgreen">
         <li class="active" ng-click="reset()">A - Z</li>
         <li class="divider"></li>

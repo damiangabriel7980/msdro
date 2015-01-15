@@ -127,7 +127,7 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
                     $scope.$apply();
                 } else {
                     //update database as well
-                    ContinutPublicService.changeImageOrFile.save({data:{id:idToEdit, path:key, type: type}}).$promise.then(function (resp) {
+                    publicContentService.changeImageOrFile.save({data:{id:idToEdit, path:key, type: type}}).$promise.then(function (resp) {
                         if(resp.error){
                             $scope.uploadAlert.type = "danger";
                             $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";

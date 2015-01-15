@@ -1,6 +1,6 @@
 <div class="well noBox noPadding" ng-repeat="cont in content | limitTo: lmt">
-    <div class="row articleBox">
-        <img class="img-thumbnail width20 pull-left marginPlus2Left articlesPictures img-back" ng-src="{{cont.image_path?pathAmazonDev+cont.image_path:defaultArticleImage}}"/>
+    <div class="row articleBox zeroMarginLeft">
+        <img class="img-thumbnail width20 pull-left marginPlus3Left articlesPictures img-back" ng-src="{{cont.image_path?pathAmazonDev+cont.image_path:defaultArticleImage}}"/>
 
         <div class="col-md-9 width80 noPaddingLeft ">
             <div class="col-md-12 title MSDgreenDarker handCursor" ui-sref="{{sr}}">{{cont.title}}</div>
@@ -15,7 +15,7 @@
                             {{cont.last_updated | date: 'dd/MM/yyyy'}}
                         </div>
                     </div>
-                    <div class="col-md-4 noPaddingRight">
+                    <div class="col-md-4">
                         <a class="btn btn-sm btn-info margintop5percent pull-right btn-more-news margintop5px" ui-sref="{{sr}}">Vezi stire</a>
                     </div>
                 </div>
