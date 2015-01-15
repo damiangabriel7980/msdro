@@ -6332,7 +6332,7 @@ html body .rootView {
   margin: 0;
   overflow-x: hidden;
 }
-@media (max-width: 992px) {
+@media (max-width: 991px) {
   .navbar-fixed-top .navbar-collapse {
     border: 1px solid #eeeeee;
   }
@@ -6340,7 +6340,7 @@ html body .rootView {
 .navbar-fixed-top .container {
   width: 100%;
 }
-@media (max-width: 992px) {
+@media (max-width: 991px) {
   .navbar-fixed-top .container {
     padding: 0;
   }
@@ -6380,6 +6380,11 @@ html body .rootView {
     border-radius: 5px;
     left: 0;
     top: 40px;
+  }
+}
+@media (max-width: 991px) {
+  .navbar-fixed-top .searchAndLinks {
+    display: none;
   }
 }
 .fixedBox {

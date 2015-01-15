@@ -54,12 +54,12 @@ html{
     background-color: #ffffff;
     margin: 0;
     overflow-x: hidden;
-    @media (max-width: @grid-float-breakpoint) {
+    @media (max-width: @grid-float-breakpoint-max) {
       border: 1px solid @gray-lighter;
     }
   }
   .container{
-    @media (max-width: @grid-float-breakpoint) {
+    @media (max-width: @grid-float-breakpoint-max) {
       padding: 0;
     }
     width: 100%;
@@ -102,6 +102,11 @@ html{
         left:0;
         top: 40px;
       }
+    }
+  }
+  .searchAndLinks{
+    @media (max-width: @grid-float-breakpoint-max) {
+      display: none;
     }
   }
 }
