@@ -4,11 +4,38 @@
 //import stripped-from-variables version of bootstrap, which will use our custom variables
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 
+
+//===================================================================================================== BASIC STRUCTURE
 html{
   height: 100%;
   body {
-    padding-top: 70px;
     height: 100%;
+    #publicHeaderWrapper{
+      left: 0;
+      top: 0;
+      width: 100%;
+      position: fixed;
+      z-index: 2000;
+      background-color: #ffffff;
+      #publicHeader{
+        width: 100%;
+        max-width: @max-content-width;
+        margin: 0 auto;
+      }
+    }
+    #publicContentWrapper{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      padding-top: 70px;
+      #publicContent{
+        width: 100%;
+        max-width: @max-content-width;
+        margin: 0 auto;
+      }
+    }
     .rootView{
       height: 100%;
     }
@@ -21,6 +48,8 @@ html{
 .navbar-fixed-top{
   height: 70px;
   padding-top: 10px;
+  position: relative;
+  margin: 0;
   .navbar-collapse{
     background-color: #ffffff;
     margin: 0;
