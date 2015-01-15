@@ -4,11 +4,38 @@
 //import stripped-from-variables version of bootstrap, which will use our custom variables
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 
+
+//===================================================================================================== BASIC STRUCTURE
 html{
   height: 100%;
   body {
-    padding-top: 70px;
     height: 100%;
+    #publicHeaderWrapper{
+      left: 0;
+      top: 0;
+      width: 100%;
+      position: fixed;
+      z-index: 2000;
+      background-color: #ffffff;
+      #publicHeader{
+        width: 100%;
+        max-width: @max-content-width;
+        margin: 0 auto;
+      }
+    }
+    #publicContentWrapper{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      padding-top: 70px;
+      #publicContent{
+        width: 100%;
+        max-width: @max-content-width;
+        margin: 0 auto;
+      }
+    }
     .rootView{
       height: 100%;
     }
@@ -21,16 +48,18 @@ html{
 .navbar-fixed-top{
   height: 70px;
   padding-top: 10px;
+  position: relative;
+  margin: 0;
   .navbar-collapse{
     background-color: #ffffff;
     margin: 0;
     overflow-x: hidden;
-    @media (max-width: @grid-float-breakpoint) {
+    @media (max-width: @grid-float-breakpoint-max) {
       border: 1px solid @gray-lighter;
     }
   }
   .container{
-    @media (max-width: @grid-float-breakpoint) {
+    @media (max-width: @grid-float-breakpoint-max) {
       padding: 0;
     }
     width: 100%;
@@ -72,6 +101,40 @@ html{
         border-radius: 5px;
         left:0;
         top: 40px;
+      }
+    }
+  }
+  .searchAndLinks{
+    @media (max-width: @grid-float-breakpoint-max) {
+      display: none;
+    }
+  }
+  .headerSearchAndLinks{
+    @media (min-width: @grid-float-breakpoint) {
+      display: none;
+    }
+    float: right;
+    .item{
+      float: right;
+      ul{
+        margin: 0;
+        padding: 15px 10px 0 0;
+        list-style-type: none;
+        li{
+          display: inline;
+          a{
+            color: @navbar-default-link-color;
+            text-decoration: none;
+            &:hover{
+              color: @navbar-default-link-hover-color;
+            }
+          }
+        }
+      }
+      form{
+        margin: 0;
+        padding-top: 8px;
+        width: 250px;
       }
     }
   }

@@ -33,7 +33,7 @@
         <div class="todayBox">
             <div class="dateShow">{{(thisDay<10?"0"+thisDay:thisDay)+"."+((thisMonth+1)<10?"0"+(thisMonth+1):thisMonth+1)}}</div>
             <div class="arrowDown"></div>
-            <div class="lineDown"></div>
+            <div class="lineDown" ng-style="{'display':hideTodayBoxLine?'none':'initial'}"></div>
         </div>
     </div>
 </div>

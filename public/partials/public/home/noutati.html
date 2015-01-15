@@ -7,8 +7,7 @@
                     <div class="title">
                         {{n.title}}
                     </div>
-                    <div class="text">
-                        {{htmlToPlainText(n.text)}}
+                    <div class="text" ng-bind-html="trustAsHtml(htmlToPlainText(n.text))">
                     </div>
                     <div class="dispFooter">
                         <div class="upside"></div>
@@ -31,8 +30,7 @@
                 <div class="contentBlock title">
                     {{n.title}}
                 </div>
-                <div class="contentBlock text">
-                    {{htmlToPlainText(n.text)}}
+                <div class="contentBlock text" ng-bind-html="trustAsHtml(htmlToPlainText(n.text))">
                 </div>
                 <div class="contentBlock">
                     <div class="btnGreen">Citeste</div>

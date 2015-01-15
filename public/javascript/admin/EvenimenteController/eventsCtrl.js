@@ -10,6 +10,7 @@
 cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,ngTableParams,$filter){
     EventsAdminService.getAll.query().$promise.then(function(result){
         var events = result;
+        console.log(events);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -106,10 +107,5 @@ cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAd
     .filter('htmlToPlaintext', function() {
         return function(text) {
             return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        }
-    })
-    .filter("asDate", function () {
-        return function (input) {
-            return new Date(input);
         }
     });
