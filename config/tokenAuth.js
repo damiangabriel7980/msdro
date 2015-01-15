@@ -100,7 +100,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
                                         });
                                     }
                                     
-                                    res.json({ token: token });
+                                    res.json({ token: token , profile: profile});
                                 }
                             });
                         }
