@@ -30,6 +30,10 @@ cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAd
             }
         });
     });
+    $scope.toDateLocal = function (ISOdate) {
+        var d = new Date(ISOdate).toLocaleDateString();
+        return d.toString('dd-MMM-yyyy');
+    };
     $scope.toggleEventEnable = function (id, enabled) {
         $modal.open({
             templateUrl: 'partials/admin/continut/eventToggle.html',

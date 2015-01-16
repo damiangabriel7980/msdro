@@ -141,7 +141,6 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
             });
         }
     };
-
     $scope.okk=function(){
         $state.go('continut.evenimente');
     };
