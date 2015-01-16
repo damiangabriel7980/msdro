@@ -5,6 +5,7 @@ cloudAdminControllers.controller('eventsController', ['$scope','eventsService','
 var date = new Date();
     $scope.realEvents=[];
     var y=$(date);
+    console.log($stateParams);
      eventsService.query().$promise.then(function(result){
         $scope.events =result;
        $scope.eventsS=[];
@@ -85,7 +86,7 @@ var date = new Date();
             }
         });
     };
-    if($stateParams.data.id)
+    if($stateParams.id)
     {
         $modal.open({
             templateUrl: 'partials/medic/calendarDetails.ejs',
@@ -95,7 +96,7 @@ var date = new Date();
             controller: 'modalCtrl',
             resolve:{
                 idEvent: function () {
-                    return $stateParams.data.id;
+                    return $stateParams.id;
                 }
             }
         });

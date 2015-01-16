@@ -112,7 +112,7 @@
                     <div class="col-md-12 noPadding month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
                 </div>
                 <div class="col-md-11 noPadding leftBorder">
-                    <div class="col-md-12 justify title MSDTitleDark handCursor" ui-sref="calendar({data:{id:e._id}})"><b>{{e.name}}</b></div>
+                    <div class="col-md-12 justify title MSDTitleDark handCursor" ui-sref="calendar({id:e._id})"><b>{{e.name}}</b></div>
                     <div class="col-md-12 justify header margintop5px ">{{e.description.length>50?createHeader(e.description,50):htmlToPlainText(e.description)}}</div>
                 </div>
             </div>

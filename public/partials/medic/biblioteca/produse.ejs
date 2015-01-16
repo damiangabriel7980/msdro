@@ -12,7 +12,7 @@
 
             <ul class="list-group MSDgreen" style="list-style: none">
                 <li  ui-sref-active="active" class="handCursor" ui-sref="biblioteca.produse.productsByArea({id:0})"><b>Toate ariile terapeutice</b></li>
-                <li  ui-sref-active="active"   ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
+                <li  ui-sref-active="active" ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
                     <span class="list-group-item no-border handCursor" ui-sref="biblioteca.produse.productsByArea({id:area._id})"><b>{{area.name}}</b></span>
                     <ul ng-if="area.has_children">
                     <li ui-sref-active="active" ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'" ui-sref="biblioteca.produse.productsByArea({id:area2._id})">

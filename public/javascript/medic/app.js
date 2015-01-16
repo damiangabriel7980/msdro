@@ -92,7 +92,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             controller: 'ContentArticleController'
         })
        .state('calendar',{
-            url: '/calendar/:data',
+            url: '/calendar/:id',
             templateUrl: 'partials/medic/calendar.ejs',
             controller: 'eventsController'
         })
