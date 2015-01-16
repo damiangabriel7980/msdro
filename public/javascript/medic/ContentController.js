@@ -10,17 +10,17 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
     };
     if($stateParams.articleType==1){
         $scope.title = "STIRI";
-        $scope.sr = "noutati.articol({articleId:cont._id})";
+        $scope.sr = "noutati.articol({articleType:cont.type, articleId:cont._id})";
         $scope.btn = "Vezi stire";
     }
     if($stateParams.articleType==2){
         $scope.title = "STIRI LEGISLATIVE";
-        $scope.sr = "noutati.articol({articleId:cont._id})";
+        $scope.sr = "noutati.articol({articleType:cont.type, articleId:cont._id})";
         $scope.btn = "Vezi stire";
     }
     if($stateParams.articleType==3){
         $scope.title = "ARTICOLE STIINTIFICE";
-        $scope.sr = "biblioteca.articoleStiintifice.articol({articleId:cont._id})";
+        $scope.sr = "biblioteca.articoleStiintifice.articol({articleType:cont.type, articleId:cont._id})";
         $scope.btn = "Vezi stire";
     }
 
