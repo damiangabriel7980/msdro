@@ -6315,7 +6315,6 @@ button.close {
   border-bottom: 1px solid lightgray;
 }
 .articlesStyles .articleDetail .articleContent img {
-  width: 300px;
   padding-right: 15px;
   padding-bottom: 15px;
 }
@@ -7057,4 +7056,9 @@ hr {
 }
 .width32 {
   width: 32%;
+}
+.articlesStyles .articleDetail .articleContent .img-special {
+  width: 300px;
+  padding-right: 15px;
+  padding-bottom: 15px;
 }
