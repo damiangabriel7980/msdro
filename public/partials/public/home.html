@@ -4,8 +4,7 @@
             <div class="carouselTitle">
                 {{carouselSlides[selectedIndex].title}}
             </div>
-            <div class="carouselDescription">
-                {{carouselSlides[selectedIndex].description}}
+            <div class="carouselDescription" ng-bind-html="trustAsHtml(carouselSlides[selectedIndex].description)">
             </div>
             <div class="carouselLearnMore">
                 Learn more <i class="fa fa-caret-right"></i>
@@ -32,6 +31,6 @@
 </div>
 <div class="col-md-12 noPadding" ui-view></div>
 <div class="col-md-12 evenimente text-center"><i class="glyphicon glyphicon-calendar"></i>&nbsp;Evenimente</div>
-<div class="col-md-12 timelineContainer" style="overflow-x: hidden;" scrollcenter>
+<div class="timelineContainer">
     <ng-msd-timeline events="events" months="monthsArray"></ng-msd-timeline>
 </div>

@@ -5,7 +5,7 @@
         <div ng-if="!event.slim">
             <div class="timeBoxLine" ng-style="{'bottom':event.isDown?'25px':'-25px'}"></div>
             <div class="zi">{{event.zi}}</div>
-            <div class="luna">{{event.luna}}</div>
+            <div class="luna">.{{event.luna}}</div>
             <div class="isCollapsed">
                 <i class="glyphicon" ng-class="{'glyphicon-chevron-down':event.collapsed, 'glyphicon-chevron-right':!event.collapsed}"></i>
             </div>
@@ -18,7 +18,7 @@
             </div>
             <div class="collapsedContent" ng-if="!event.collapsed">
                 <div class="zi">{{event.zi}}</div>
-                <div class="luna">{{event.luna}}</div>
+                <div class="luna">.{{event.luna}}</div>
                 <div class="nume">{{event.nume}}</div>
             </div>
         </div>
