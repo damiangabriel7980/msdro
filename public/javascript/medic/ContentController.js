@@ -5,7 +5,7 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
     $scope.widthOfWindow=$(window).innerWidth;
     $scope.increaseLimit=function(){
         $scope.lmt+=5;
-        if($scope.content.length<$scope.lmt)
+        if($scope.content.length<=$scope.lmt)
             $scope.showMore='hide';
     };
     if($stateParams.articleType==1){
@@ -40,7 +40,7 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
 
     ContentService.getByType.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.content = result;
-        if($scope.content.length>3)
+        if($scope.content.length>5)
             $scope.showMore='show';
         else
             $scope.showMore='hide';
