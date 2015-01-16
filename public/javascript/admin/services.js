@@ -100,7 +100,10 @@ cloudAdminServices.factory('CarouselPublicService', ['$resource', function($reso
         }),
         editImage: $resource('api/admin/users/carouselPublic/editImage/:data', {}, {
             save: { method: 'POST', isArray: false }
-        })
+        }),
+        editImagePath: $resource('api/admin/users/carouselPublic/editImagePath:data', {}, {
+        save: { method: 'POST', isArray: false }
+    })
     }
 }]);
 cloudAdminServices.factory('CarouselMedicService', ['$resource', function($resource){
@@ -125,7 +128,11 @@ cloudAdminServices.factory('CarouselMedicService', ['$resource', function($resou
         }),
         editImage: $resource('api/admin/users/carouselMedic/editImage/:data', {}, {
             save: { method: 'POST', isArray: false }
+        }),
+        editImagePath: $resource('api/admin/users/carouselMedic/editImagePath:data', {}, {
+            save: { method: 'POST', isArray: false }
         })
+
     }
 }]);
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){

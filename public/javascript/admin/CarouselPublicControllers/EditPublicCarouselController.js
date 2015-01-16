@@ -102,11 +102,13 @@ cloudAdminControllers.controller('EditPublicCarouselController', ['$scope', '$ro
                     $scope.uploadAlert.newAlert = true;
                     $scope.$apply();
                 } else {
-                    $scope.uploadAlert.type = "success";
-                    $scope.uploadAlert.message = "Upload reusit!";
-                    $scope.uploadAlert.newAlert = true;
-                    $scope.$apply();
-                    console.log("Upload complete");
+                    CarouselPublicService.editImagePath.save({data: {imagePath: key, id: idToEdit}}).$promise.then(function(resp){
+                        $scope.uploadAlert.type = "success";
+                        $scope.uploadAlert.message = "Upload reusit!";
+                        $scope.uploadAlert.newAlert = true;
+                        $scope.$apply();
+                        console.log("Upload complete");
+                    });
                 }
             });
             req.on('httpUploadProgress', function (evt) {

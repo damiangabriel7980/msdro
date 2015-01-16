@@ -49,7 +49,7 @@ cloudAdminControllers.controller('AddMedicCarouselController', ['$scope','$rootS
                     $scope.statusAlert.newAlert = true;
                     //upload image to Amazon
                     AmazonService.getClient(function (s3) {
-                        var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: resp.key, Body: fileSelected, ACL:'public-read'}, function (err, data) {
+                        var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: resp.key, Body: fileSelected, ACL:'public-read-write'}, function (err, data) {
                             if (err) {
                                 console.log(err);
                                 $scope.uploadAlert.type = "danger";

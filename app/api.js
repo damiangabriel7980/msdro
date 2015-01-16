@@ -815,7 +815,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var data = req.body.data;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            var patt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -854,7 +854,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var id = req.body.data.id;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            var patt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -997,7 +997,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var ext = req.body.data.extension;
             var ans = {};
             //validate title and description
-            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            var patt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
             if(!patt.test(data.title.toString()) || !patt.test(data.description.toString())){
                 ans.error = true;
                 ans.message = "Titlul si descrierea sunt obligatorii (minim 3 caractere)";
@@ -1104,7 +1104,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var id = req.body.data.id;
             var ans = {};
             //validate title and description
-            var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            var patt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
             console.log(data.title);
             if(!patt.test(data.title) || !patt.test(data.description)){
                 ans.error = true;
@@ -1140,7 +1140,22 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             }
         });
-
+    router.route('/admin/users/carouselPublic/editImagePath')
+        .post(function(req,res){
+            var ans={};
+            var data = req.body.data;
+            PublicCarousel.update({_id: data.id}, {image_path: data.imagePath}, function (err, wRes) {
+                if(err){
+                    ans.error = true;
+                    ans.message = "Eroare la actualizare. Verificati API-ul";
+                    res.json(ans);
+                }else{
+                    ans.error = false;
+                    ans.message = "Datele au fost modificate cu succes!";
+                    res.json(ans);
+                }
+            });
+        });
     router.route('/admin/users/carouselPublic/getById/:id')
 
         .get(function(req, res) {
@@ -1192,7 +1207,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var ext = req.body.data.extension;
             var ans = {};
             //validate title and description
-            var patt = new XRegExp('^[a-zA-Z0-9\\s]{10,100}$');
+            var patt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
             if(!patt.test(data.title.toString())){
                 ans.error = true;
                 ans.message = "Titlul este obligatoriu! (minim 10 caractere)";
@@ -1295,10 +1310,11 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
         .post(function(req, res) {
             var data = req.body.data.toUpdate;
+            console.log(data);
             var id = req.body.data.id;
             var ans = {};
             //validate title and description
-            var patt = new XRegExp('^[a-zA-Z0-9\\s]{10,100}$');
+            var patt = new XRegExp('^[a-z0-9][A-Z0-9\\s-_&;]{1,50}$','i');
             if(!patt.test(data.title.toString())){
                 ans.error = true;
                 ans.message = "Titlul este obligatoriu! (minim 10 caractere)";
@@ -1333,7 +1349,22 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             }
         });
-
+    router.route('/admin/users/carouselMedic/editImagePath')
+        .post(function(req,res){
+            var ans = {};
+            var data = req.body.data;
+            Carousel.update({_id: data.id}, {image_path: data.imagePath}, function (err, wRes) {
+                if(err){
+                    ans.error = true;
+                    ans.message = "Eroare la actualizare. Verificati API-ul";
+                    res.json(ans);
+                }else{
+                    ans.error = false;
+                    ans.message = "Datele au fost modificate cu succes!";
+                    res.json(ans);
+                }
+            });
+        });
     router.route('/admin/users/carouselMedic/getById/:id')
 
         .get(function(req, res) {
@@ -2401,7 +2432,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            var namePatt = new XRegExp('^[a-zA-Z0-9]{1}[a-zA-Z0-9\\-_]{1,50}$','i');
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{

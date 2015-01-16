@@ -94,7 +94,7 @@ cloudAdminControllers.controller('EditMedicCarouselController', ['$scope', '$roo
 
     var putFile = function (body, key) {
         AmazonService.getClient(function (s3) {
-            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
+            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read-write'}, function (err, data) {
                 if (err) {
                     console.log(err);
                     $scope.uploadAlert.type = "danger";
@@ -102,11 +102,14 @@ cloudAdminControllers.controller('EditMedicCarouselController', ['$scope', '$roo
                     $scope.uploadAlert.newAlert = true;
                     $scope.$apply();
                 } else {
-                    $scope.uploadAlert.type = "success";
-                    $scope.uploadAlert.message = "Upload reusit!";
-                    $scope.uploadAlert.newAlert = true;
-                    $scope.$apply();
-                    console.log("Upload complete");
+                    CarouselMedicService.editImagePath.save({data: {imagePath: key, id: idToEdit}}).$promise.then(function(resp){
+                        $scope.uploadAlert.type = "success";
+                        $scope.uploadAlert.message = "Upload reusit!";
+                        $scope.uploadAlert.newAlert = true;
+                        $scope.$apply();
+                        console.log("Upload complete");
+                    });
+
                 }
             });
             req.on('httpUploadProgress', function (evt) {
