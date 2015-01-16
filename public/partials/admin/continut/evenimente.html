@@ -15,8 +15,8 @@
         <tr ng-repeat="eveniment in $data">
             <td data-title="'Denumire'" filter="{ 'name': 'text' }" sortable="'name'">{{eveniment.name}}</td>
             <td data-title="'Tip'" sortable="'type'" ><i class="glyphicon glyphicon-calendar">Eveniment</i></td>
-            <td data-title="'Inceput'" sortable="'start'">{{eveniment.start | asDate | date:'dd/MM/yyyy'}}</td>
-            <td data-title="'Final'" sortable="'end'">{{eveniment.end | asDate|date:'dd/MM/yyyy'}}</td>
+            <td data-title="'Inceput'" sortable="'start'">{{eveniment.start.substr(0,10)}}</td>
+            <td data-title="'Final'" sortable="'end'">{{eveniment.end.substr(0,10)}}</td>
             <td data-title="'Conferinte'" sortable="'listconferences'">
                 <ul style="list-style: none">
                     <li class="margintop20px" ng-repeat="conf in eveniment.listconferences | orderBy: 'title'">{{conf.title}}&nbsp;
