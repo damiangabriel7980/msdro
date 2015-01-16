@@ -6310,7 +6310,6 @@ html body #publicContentWrapper {
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
   padding-top: 70px;
 }
 html body #publicContentWrapper #publicContent {
@@ -6530,12 +6529,15 @@ html body .rootView {
   margin-top: 20px;
 }
 .timelineContainer {
+  width: 100%;
   height: 200px;
   overflow: hidden;
 }
 .timelineContainer .timelineBody {
+  width: 0;
+  margin: 0 auto;
   transform: scale(0.8);
-  transform-origin: top left;
+  transform-origin: 50% 0;
 }
 .footer {
   margin-bottom: 50px;

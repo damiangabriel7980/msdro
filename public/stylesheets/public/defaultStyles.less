@@ -28,7 +28,6 @@ html{
       left: 0;
       top: 0;
       width: 100%;
-      height: 100%;
       padding-top: 70px;
       #publicContent{
         width: 100%;
@@ -254,11 +253,14 @@ html{
 }
 
 .timelineContainer{
+  width: 100%;
   height: 200px;
   overflow: hidden;
   .timelineBody{
+    width: 0;
+    margin: 0 auto;
     transform: scale(0.8);
-    transform-origin: top left;
+    transform-origin: 50% 0;
   }
 }
 
