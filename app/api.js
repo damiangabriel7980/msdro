@@ -997,12 +997,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var ext = req.body.data.extension;
             var ans = {};
             //validate title and description
-            var patt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
-            if(!patt.test(data.title.toString()) || !patt.test(data.description.toString())){
-                ans.error = true;
-                ans.message = "Titlul si descrierea sunt obligatorii (minim 3 caractere)";
-                res.json(ans);
-            }else{
                 //validate type
                 if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
                     ans.error = true;
@@ -1044,7 +1038,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         res.json(ans);
                     }
                 }
-            }
+
         });
 
     router.route('/admin/users/carouselPublic/toggleImage')
@@ -1104,13 +1098,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var id = req.body.data.id;
             var ans = {};
             //validate title and description
-            var patt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
-            console.log(data.title);
-            if(!patt.test(data.title) || !patt.test(data.description)){
-                ans.error = true;
-                ans.message = "Titlul si descrierea sunt obligatorii (minim 3 caractere)";
-                res.json(ans);
-            }else{
                 //validate type
                 if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
                     ans.error = true;
@@ -1138,7 +1125,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         res.json(ans);
                     }
                 }
-            }
+
         });
     router.route('/admin/users/carouselPublic/editImagePath')
         .post(function(req,res){
@@ -1206,13 +1193,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var data = req.body.data.toAdd;
             var ext = req.body.data.extension;
             var ans = {};
-            //validate title and description
-            var patt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
-            if(!patt.test(data.title.toString())){
-                ans.error = true;
-                ans.message = "Titlul este obligatoriu! (minim 10 caractere)";
-                res.json(ans);
-            }else{
                 //validate type
                 if(!(typeof data.type === "number" && data.type>0 && data.type<4)){
                     ans.error = true;
@@ -1254,7 +1234,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         res.json(ans);
                     }
                 }
-            }
+
         });
 
     router.route('/admin/users/carouselMedic/toggleImage')
@@ -1313,13 +1293,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             console.log(data);
             var id = req.body.data.id;
             var ans = {};
-            //validate title and description
-            var patt = new XRegExp('^[a-z0-9][A-Z0-9\\s-_&;]{1,50}$','i');
-            if(!patt.test(data.title.toString())){
-                ans.error = true;
-                ans.message = "Titlul este obligatoriu! (minim 10 caractere)";
-                res.json(ans);
-            }else{
                 //validate type
                 if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
                     ans.error = true;
@@ -1347,7 +1320,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         res.json(ans);
                     }
                 }
-            }
+
         });
     router.route('/admin/users/carouselMedic/editImagePath')
         .post(function(req,res){
