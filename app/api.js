@@ -1099,12 +1099,14 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/admin/users/carouselPublic/editImage')
 
         .post(function(req, res) {
+
             var data = req.body.data.toUpdate;
             var id = req.body.data.id;
             var ans = {};
             //validate title and description
             var patt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
-            if(!patt.test(data.title.toString()) || !patt.test(data.description.toString())){
+            console.log(data.title);
+            if(!patt.test(data.title) || !patt.test(data.description)){
                 ans.error = true;
                 ans.message = "Titlul si descrierea sunt obligatorii (minim 3 caractere)";
                 res.json(ans);

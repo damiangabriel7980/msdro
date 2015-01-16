@@ -86,12 +86,12 @@
         </div>
     </div>
 
-    <div class="col-md-3 midColumn margin2Left padd0left width30">
+    <div class="col-md-4 midColumn margin2Left padd0left width30">
         <div class="col-md-12">
-            <div class="col-md-12 noPadding">
-                <h3>E-LEARNING</h3>
+            <div class="col-md-12 noPadding ">
+                <h3 class="bottom1Percent">E-LEARNING</h3>
             </div>
-            <div class="col-md-12 noPadding margintop20px" ng-repeat="m in multimedia | limitTo: 5">
+            <div class="col-md-12 noPadding margintop20px" ng-repeat="m in multimedia | limitTo: 3">
                 <div class="col-md-1 noPadding">
                     <i class="gray glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
                 </div>
@@ -104,9 +104,9 @@
         <div class="col-md-12"><hr/></div>
         <div class="col-md-12">
             <div class="col-md-12 noPadding">
-                <h3>EVENIMENTE URMATOARE:</h3>
+                <h3 class="bottom4Percent">EVENIMENTE URMATOARE:</h3>
             </div>
-            <div class="col-md-12 eventDisplay" ng-repeat="e in events | limitTo: 5">
+            <div class="col-md-12 eventDisplay" ng-repeat="e in events | limitTo: 3">
                 <div class="col-md-1 noPadding date MSDTitleDark">
                     <div class="col-md-12 noPadding day">{{toDate(e.start).getDate()}}</div>
                     <div class="col-md-12 noPadding month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
@@ -118,7 +118,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 width20 padd4Left padd15Right rightColumn">
+    <div class="col-md-2 padd4Left rightColumn">
         <div class="col-md-12 noPadding" ng-if="specialWidgetUrl" ng-include="specialWidgetUrl"></div>
         <div class="col-md-12 noPadding" ng-include="merckBoxUrl"></div>
     </div>
