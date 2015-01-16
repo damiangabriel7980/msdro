@@ -6957,7 +6957,7 @@ hr {
   width: 20%;
 }
 .padd4Left {
-  padding-left: 5%;
+  padding-left: 2%;
 }
 .padd15Right {
   padding-right: 15px;
@@ -7054,4 +7054,7 @@ hr {
 }
 .padd10Bottom {
   padding-bottom: 10px;
+}
+.width32 {
+  width: 32%;
 }
