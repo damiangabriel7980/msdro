@@ -4,8 +4,7 @@
             <div class="carouselTitle">
                 {{carouselSlides[selectedIndex].title}}
             </div>
-            <div class="carouselDescription">
-                {{carouselSlides[selectedIndex].description}}
+            <div class="carouselDescription" ng-bind-html="trustAsHtml(carouselSlides[selectedIndex].description)">
             </div>
             <div class="carouselLearnMore">
                 Learn more <i class="fa fa-caret-right"></i>
