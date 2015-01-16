@@ -6465,7 +6465,7 @@ html body .rootView {
 .carouselNavigation .navSlide {
   float: right;
   width: 60px;
-  height: 40px;
+  height: 25px;
   overflow: hidden;
   border: 2px solid #bbbbbb;
   border-radius: 5px;
@@ -6481,13 +6481,19 @@ html body .rootView {
   width: 60px;
 }
 .carouselNavigation .navSlide .tooltip {
-  margin-top: -10px;
-  margin-left: -6px;
+  width: 150px;
+  padding-right: 25px;
 }
 .carouselNavigation .navSlide .tooltip .tooltip-inner {
   background-color: rgba(0, 135, 128, 0.5);
-  padding: 8px 8px;
   margin-bottom: 4px;
+  padding: 5px;
+  color: #ffffff;
+  font-weight: bold;
+}
+.carouselNavigation .navSlide .tooltip .tooltip-inner img {
+  width: 100%;
+  margin-bottom: 5px;
 }
 .carouselNavigation .navSlide .tooltip .tooltip-arrow {
   border-width: 10px 10px 0;
