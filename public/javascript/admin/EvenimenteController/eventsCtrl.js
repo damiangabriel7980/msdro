@@ -7,7 +7,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,ngTableParams,$filter){
+cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,ngTableParams,$filter,$modal){
     EventsAdminService.getAll.query().$promise.then(function(result){
         var events = result;
         console.log(events);
@@ -30,6 +30,22 @@ cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAd
             }
         });
     });
+    $scope.toggleEventEnable = function (id, enabled) {
+        $modal.open({
+            templateUrl: 'partials/admin/continut/eventToggle.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'eventToggleController',
+            resolve: {
+                idToToggle: function () {
+                    return id;
+                },
+                isEnabled: function () {
+                    return enabled;
+                }
+            }
+        });
+    };
     EventsAdminService.getAllRoom.query().$promise.then(function(resp){
         $scope.rooms=resp;
         var listRooms=$scope.rooms;

@@ -159,6 +159,9 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
 }]);
 cloudAdminServices.factory('EventsAdminService', ['$resource', function($resource){
     return {
+        toggleEvent: $resource('api/admin/events/toggleEvent/:data', {}, {
+            save: { method: 'POST'}
+        }),
         getGroups: $resource('api/admin/users/groups',{},{
             query: { method: 'GET', isArray: true }
         }),

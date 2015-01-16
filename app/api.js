@@ -1561,6 +1561,16 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
 
         });
+    router.route('/admin/events/toggleEvent')
+        .post(function(req, res) {
+        Events.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
+            if(err){
+                res.send({error: true});
+            }else{
+                res.send({error: false});
+            }
+        });
+    });
     router.route('/admin/events/:id')
 
         .get(function(req, res) {

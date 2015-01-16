@@ -22,7 +22,7 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
         groupsID: $scope.grupeUser,
         last_updated:  new Date(),
         name:      "",
-        place:       "Here",
+        place:       "",
         privacy:   "",
         start: "",
         type: "",
