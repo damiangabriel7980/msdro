@@ -16,13 +16,9 @@ var date = new Date();
 
          $scope.realEvents=[$scope.eventsS];
          $scope.eventRender = function(data, event, view){
-             var getContent=function(){
-                return data.title;
-             };
-
-             angular.element('.fc-event-hori').attr("data-toggle","popover");
+              angular.element('.fc-event-hori').attr("data-toggle","popover");
+             angular.element('.fc-event-hori').attr("data-content",data.title);
              var options = {
-                 content: this.getContent(),
                  'title':'Eveniment:',
                  trigger:"hover",
                  placement:'auto',
