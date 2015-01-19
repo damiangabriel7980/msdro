@@ -1,6 +1,6 @@
 // config/database.js
 module.exports = {
 
-	'url' : 'mongodb://10.200.0.213:27017/MSDdev'
+	'url' : 'mongodb://msddev:PWj4zOt_qX9oRRDH8cwiUqadb@81.196.104.4:2941/MSDdev'
 
 };
