@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate', function($scope, $rootScope, HomeService, $sce, $modal,$animate) {
+cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window) {
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
@@ -118,6 +118,22 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     $scope.selectedIndex = 0;
 
+    /* --- footer realign ---*/
+    angular.element("#footer").css({'margin-top': 0});
+    var margin = Math.floor($window.height - angular.element("#main-view-container").outerHeight - angular.element('#footer').outerHeight - 84);
+    angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 0)});
+
+    $document.on('ajaxComplete', function () {
+        angular.element("#footer").css({'margin-top': 0});
+        var margin = Math.floor($window.height - angular.element("#main-view-container").outerHeight - angular.element('#footer').outerHeight - 84);
+        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 0)});
+    });
+
+    angular.element($window).on('resize', function () {
+        angular.element("#footer").css({'margin-top': 0});
+        var margin = Math.floor($window.height - angular.element("#main-view-container").outerHeight - angular.element('#footer').outerHeight - 84);
+        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 0)});
+    });
     $scope.setSlide = function(index)
     {
         $scope.selectedIndex = index;
