@@ -42,7 +42,7 @@
         </div>
 
     </div>
-    <div ng-if="quizes.length>0" ng-repeat="quiz in quizes" class="col-md-12 well noPadding">
+    <div ng-if="quizes.length>0" ng-repeat="quiz in quizes track by $index" class="col-md-12 well noPadding">
         <div class="col-md-2 noPadding" ng-class="showDetails">
             <img class="img-responsive img-thumbnail" ng-if="quiz.entity!='SLIDE'" ng-src="{{defaultImageVideo}}">
             <img class="img-responsive img-thumbnail" ng-if="quiz.entity=='SLIDE'" ng-src="{{defaultImageSlide}}">
@@ -82,7 +82,7 @@
         </div>
         <div ng-class="showDetails=='show' ? 'col-md-10':'col-md-12'">
             <div class="col-md-12">
-                <h4 class="MSDgreen handCursor" ui-sref="elearning.multimedia.multimediaById({idd:media._id})">{{media.title}}
+                <h4 class="MSDgreen handCursor" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: media._id})">{{media.title}}
                 <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-film"></i>Multimedia</span>
                 </h4>
             </div>
@@ -90,7 +90,7 @@
                 {{media.description | limitTo: 260}}&nbsp ...
             </div>
         </div>
-        <button class="btn btn-info  pull-right btnMultimediaSearch btn-more-news" ng-class="showDetails" ui-sref="elearning.multimedia.multimediaById({idd:media._id})">Vezi material</button>
+        <button class="btn btn-info  pull-right btnMultimediaSearch btn-more-news" ng-class="showDetails" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: media._id})">Vezi material</button>
     </div>
 </div>
 <div class="col-md-2 homeSearchPreview">
