@@ -34,7 +34,6 @@
     <script src="components/shifty/dist/shifty.min.js"></script>
     <script src="components/angular-touch/angular-touch.min.js"></script>
     <script src="components/angular-carousel/dist/angular-carousel.min.js"></script>
-    <script src="components/socket.io-client/socket.io.js"></script>
     <script src="modules/custom_timeline/timelineDirective.js"></script>
     <link rel="stylesheet" href="modules/custom_timeline/timelineStyles.css">
 
@@ -125,16 +124,16 @@
 </div>
 
 <div id="publicContentWrapper">
-    <div id="publicContent">
+    <div class="container" id="publicContent">
         <div ui-view class="view-container rootView"></div>
     </div>
-</div>
 
-<div class="col-md-12 footer text-center">
-    <hr>
-    <a href="#">Home</a>&nbsp;|&nbsp;
-    <a href="http://www.merckmanuals.com" target="_blank">Manualul Merck</a>&nbsp;|&nbsp;
-    <a style="cursor: pointer" ng-controller="FooterController" ng-click="showContactModal()">Contact</a>
+    <div class="footer text-center">
+        <hr>
+        <a href="#">Home</a>&nbsp;|&nbsp;
+        <a href="http://www.merckmanuals.com" target="_blank">Manualul Merck</a>&nbsp;|&nbsp;
+        <a style="cursor: pointer" ng-controller="FooterController" ng-click="showContactModal()">Contact</a>
+    </div>
 </div>
 
 </body>

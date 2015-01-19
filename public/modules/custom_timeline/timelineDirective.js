@@ -78,8 +78,6 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
                     });
                 }
 
-                console.log(ret);
-
                 var poz = true;
                 var currentPoz;
                 var nextPoz;
