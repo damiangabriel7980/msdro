@@ -6310,7 +6310,6 @@ html body #publicContentWrapper {
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
   padding-top: 70px;
 }
 html body #publicContentWrapper #publicContent {
@@ -6465,7 +6464,7 @@ html body .rootView {
 .carouselNavigation .navSlide {
   float: right;
   width: 60px;
-  height: 40px;
+  height: 25px;
   overflow: hidden;
   border: 2px solid #bbbbbb;
   border-radius: 5px;
@@ -6481,13 +6480,19 @@ html body .rootView {
   width: 60px;
 }
 .carouselNavigation .navSlide .tooltip {
-  margin-top: -10px;
-  margin-left: -6px;
+  width: 150px;
+  padding-right: 25px;
 }
 .carouselNavigation .navSlide .tooltip .tooltip-inner {
   background-color: rgba(0, 135, 128, 0.5);
-  padding: 8px 8px;
   margin-bottom: 4px;
+  padding: 5px;
+  color: #ffffff;
+  font-weight: bold;
+}
+.carouselNavigation .navSlide .tooltip .tooltip-inner img {
+  width: 100%;
+  margin-bottom: 5px;
 }
 .carouselNavigation .navSlide .tooltip .tooltip-arrow {
   border-width: 10px 10px 0;
@@ -6524,12 +6529,18 @@ html body .rootView {
   margin-top: 20px;
 }
 .timelineContainer {
+  width: 100%;
   height: 200px;
   overflow: hidden;
+  position: relative;
 }
 .timelineContainer .timelineBody {
+  width: 0;
+  position: absolute;
+  left: 50%;
+  margin-left: -600px;
   transform: scale(0.8);
-  transform-origin: top left;
+  transform-origin: 50% 0;
 }
 .footer {
   margin-bottom: 50px;
@@ -6605,18 +6616,25 @@ html body .rootView {
   height: 4.5em;
   background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* FF3.6+ */
+
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #ffffff));
   /* Chrome,Safari4+ */
+
   background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* Chrome10+,Safari5.1+ */
+
   background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* Opera 11.10+ */
+
   background: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* IE10+ */
+
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* W3C */
+
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0);
   /* IE6-9 */
+
 }
 .homeNewsDisplay .largeDisplay .left .dispFooter .downside {
   background-color: #ffffff;
@@ -6668,18 +6686,25 @@ html body .rootView {
   min-height: 4.5em;
   background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* FF3.6+ */
+
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #ffffff));
   /* Chrome,Safari4+ */
+
   background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* Chrome10+,Safari5.1+ */
+
   background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* Opera 11.10+ */
+
   background: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* IE10+ */
+
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* W3C */
+
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0);
   /* IE6-9 */
+
 }
 .unselectable {
   -webkit-touch-callout: none;
@@ -6709,16 +6734,23 @@ html body .rootView {
 .gradientVertical {
   background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* FF3.6+ */
+
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #ffffff));
   /* Chrome,Safari4+ */
+
   background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* Chrome10+,Safari5.1+ */
+
   background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* Opera 11.10+ */
+
   background: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* IE10+ */
+
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   /* W3C */
+
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0);
   /* IE6-9 */
+
 }

@@ -65,7 +65,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label for="speakers">Speakers:</label>
-            <select ng-model="selectedSpeaker" ng-options="speaker as speaker.first_name for speaker in speakers"
+            <select ng-model="selectedSpeaker" ng-options="speaker as (speaker.first_name+' '+speaker.last_name) for speaker in speakers"
                     class="form-control" id="speakers" style="width: 100%;" ng-change="SpeakerWasSelected(selectedSpeaker)">
             </select>
         </div>
