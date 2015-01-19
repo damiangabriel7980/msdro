@@ -119,24 +119,45 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.selectedIndex = 0;
 
     /* --- footer realign ---*/
-    angular.element("#footer").css({'margin-top': 0});
-    var margin = Math.floor($window.height - angular.element("#main-view-container").outerHeight - angular.element('#footer').outerHeight - 84);
-    angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 0)});
 
-    $document.on('ajaxComplete', function () {
-        angular.element("#footer").css({'margin-top': 0});
-        var margin = Math.floor($window.height - angular.element("#main-view-container").outerHeight - angular.element('#footer').outerHeight - 84);
-        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 0)});
-    });
-
-    angular.element($window).on('resize', function () {
-        angular.element("#footer").css({'margin-top': 0});
-        var margin = Math.floor($window.height - angular.element("#main-view-container").outerHeight - angular.element('#footer').outerHeight - 84);
-        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 0)});
-    });
     $scope.setSlide = function(index)
     {
         $scope.selectedIndex = index;
     };
 
-}]);
+}])
+    .directive('resizeFooter', function($window) {
+        return {
+            restrict: 'A',
+            link:function ($scope, $element, attrs) {
+                angular.element($window).bind('resize', function () {
+                    angular.element("#footer").css({'margin-top': 0});
+                    var margin = Math.floor($window.height - angular.element("#main-view-container").outerHeight - angular.element('#footer').outerHeight - 84);
+                    angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 0)});
+                    $scope.$apply();
+                });
+            }
+        }
+    })
+.directive('firstLoad', function($window) {
+    return {
+        restrict: 'A',
+        link: function ($scope, $element, attrs) {
+            angular.element("#footer").css({'margin-top': 0});
+            var margin = Math.floor($window.height - angular.element("#main-view-container").outerHeight - angular.element('#footer').outerHeight - 84);
+            angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 0)});
+        }
+    }
+})
+    .directive('ajaxLoad', function($document) {
+        return {
+            restrict: 'A',
+            link: function ($scope, $element, attrs) {
+                $document.bind('ajaxComplete', function () {
+                    angular.element("#footer").css({'margin-top': 0});
+                    var margin = Math.floor($window.height - angular.element("#main-view-container").outerHeight - angular.element('#footer').outerHeight - 84);
+                    angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 0)});
+                });
+            }
+        }
+    });
