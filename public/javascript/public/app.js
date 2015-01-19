@@ -38,7 +38,8 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         })
         .state('stiri.all',{
             url: '/all',
-            templateUrl: 'partials/public/stiri/all.html'
+            templateUrl: 'partials/public/stiri/all.html',
+            controller: 'NewsController'
         })
         .state('stiri.detail',{
             url: '/detail',

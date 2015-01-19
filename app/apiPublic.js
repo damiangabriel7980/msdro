@@ -30,6 +30,18 @@ module.exports = function(app,email, router) {
             })
         });
 
+    router.route('/mostReadContentByType/:type')
+
+        .get(function (req, res) {
+            PublicContent.find({type: req.params.type}).sort({date_added: -1}).limit(3).exec(function (err, resp) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(resp);
+                }
+            })
+        });
+
     router.route('/events')
 
         .get(function (req, res) {
