@@ -44,7 +44,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         $scope.multimedia = resp;
     });
 
-    HomeService.getCarousel.query().$promise.then(function(resp){
+    HomeService.getCarousel.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
         $scope.HomeCarousel=resp;
         if($scope.HomeCarousel[0]){
             $scope.firstIllusion=resp[$scope.HomeCarousel.length-1];
@@ -64,8 +64,13 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.toDate = function (ISOdate) {
         return new Date(ISOdate);
     };
+
     $scope.trimTitle=function(str) {
         return str.split(/\s+/).slice(0,3).join(" ");
+    };
+
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
     };
 
 

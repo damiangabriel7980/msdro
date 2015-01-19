@@ -3007,24 +3007,33 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
-    router.route('/userHomeCarousel')
+    router.route('/userHomeCarousel/:specialGroup')
         .get(function (req,res) {
-            var carouselElements=[];
-            //get allowed articles for user
-            Content.find({groupsID: {$in: req.user.groupsID}}, {_id: 1}, function (err, content) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
                 }else{
-                    //get ids of allowed articles
-                    getIds(content, function (ids) {
-                        //get carousel content within allowed articles
-                        Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
-                            if(err){
-                                res.send(err);
-                            }else{
-                                res.send(images);
-                            }
-                        })
+                    var forGroups = nonSpecificGroupsIds;
+                    if(req.params.specialGroup){
+                        forGroups.push(req.params.specialGroup);
+                    }
+                    //get allowed articles for user
+                    Content.find({groupsID: {$in: forGroups}}, {_id: 1}, function (err, content) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            //get ids of allowed articles
+                            getIds(content, function (ids) {
+                                //get carousel content within allowed articles
+                                Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
+                                    if(err){
+                                        res.send(err);
+                                    }else{
+                                        res.send(images);
+                                    }
+                                })
+                            });
+                        }
                     });
                 }
             });
