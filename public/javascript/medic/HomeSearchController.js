@@ -5,6 +5,7 @@ cloudAdminControllers.controller('HomeSearchController', ['$scope', '$rootScope'
     $scope.htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
     };
+    angular.element("#footer").css({'position': 'relative','bottom':0});
     $scope.trustDescription = function(text){
         return $sce.trustAsHtml(text);
     };

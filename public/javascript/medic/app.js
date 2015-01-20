@@ -195,11 +195,6 @@ cloudAdminApp.run(
                     controller: 'ProfileController'
                 });
             };
-            $rootScope.$on('$viewContentLoaded',function(event, toState, toParams, fromState, fromParams,$window){
-                angular.element("#footer").css({'margin-top': 0});
-                var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-20);
-                angular.element("#footer").css({'margin-top': (margin > 0 ? margin : margin+1.6*Math.abs(margin))});
-            });
         }
     ]
 );

@@ -5,6 +5,7 @@ cloudAdminControllers.controller('eventsController', ['$scope','eventsService','
 var date = new Date();
     $scope.realEvents=[];
     var y=$(date);
+    angular.element("#footer").css({'position': 'fixed','bottom':0});
     console.log($stateParams);
      eventsService.query().$promise.then(function(result){
         $scope.events =result;

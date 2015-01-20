@@ -13,6 +13,7 @@ cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'qui
     });
     //$scope.questions = testeService.getByTest.query({id:$stateParams.id});
     $scope.amazon = $rootScope.pathAmazonDev;
+    angular.element("#footer").css({'position': 'absolute','bottom':0});
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {

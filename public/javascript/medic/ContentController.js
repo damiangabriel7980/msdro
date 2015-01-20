@@ -41,10 +41,18 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
     ContentService.getByType.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.content = result;
         if($scope.content.length>5)
+        {
             $scope.showMore='show';
+            angular.element("#footer").css({'position': 'relative','bottom':0});
+        }
+
         else
+        {
             $scope.showMore='hide';
+            angular.element("#footer").css({'position': 'fixed','bottom':0});
+        }
+        if($scope.content.length>=5)
+            angular.element("#footer").css({'position': 'relative','bottom':0});
 
     });
-
 }]);

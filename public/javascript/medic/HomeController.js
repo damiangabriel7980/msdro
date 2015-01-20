@@ -6,7 +6,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.merckManualImage = $rootScope.merckManualImage;
     $scope.myInterval = 10;
     $scope.HomeCarousel = [];
-
+    angular.element("#footer").css({'position': 'relative','bottom':0});
     //------------------------------------------------------------ special groups widgets
 
     //add widgets in partials/medic/widgets, then associate file name and group name in object below
@@ -129,28 +129,4 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     {
         $scope.selectedIndex = index;
     };
-
-
-}])
-    //.directive('resizeFooter', function($document,$window,$timeout) {
-    //    return {
-    //        restrict: 'A',
-    //        link:function ($scope, $element, attrs) {
-    //            angular.element($window).load(function () {
-    //                    angular.element("#footer").css({'margin-top': 0});
-    //                    var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-20);
-    //                    angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 20)});
-    //            });
-    //            //angular.element($window).bind('resize', function () {
-    //            //        angular.element("#footer").css({'margin-top': 0});
-    //            //        var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-20);
-    //            //        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 20)});
-    //            //});
-    //            //angular.element($document).bind('ajaxComplete', function () {
-    //            //        angular.element("#footer").css({'margin-top': 0});
-    //            //        var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-20);
-    //            //        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 20)});
-    //            //});
-    //        }
-    //    }
-    //});
+}]);

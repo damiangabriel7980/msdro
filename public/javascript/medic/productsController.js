@@ -14,6 +14,7 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     $scope.allAreas=1;
     $scope.filtProd=[];
     $scope.lmt=8;
+    angular.element("#footer").css({'position': 'relative','bottom':0});
     $scope.showMoreProd="show";
     $scope.increaseLimit=function(){
 

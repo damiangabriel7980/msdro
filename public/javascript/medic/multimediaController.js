@@ -17,7 +17,7 @@ cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' 
     multimediaService.getByArea.query({id:$stateParams.idArea}).$promise.then(function(result){
         $scope.multimedias = result;
     });
-
+    angular.element("#footer").css({'position': 'relative','bottom':0});
     $scope.openMultimedia=function(idMultimedia) {
         $modal.open({
             templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
