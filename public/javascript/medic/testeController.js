@@ -17,7 +17,7 @@ cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'qui
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {
-            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş');
         }
     })
 .filter("asDate", function () {
