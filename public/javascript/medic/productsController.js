@@ -19,13 +19,23 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     $scope.increaseLimit=function(){
 
         $scope.lmt+=8;
+        if($scope.products.length<=$scope.lmt)
+            $scope.showMoreProd='hide';
     };
     $scope.firstLetters=[];
     ProductService.getByArea.query({id:$stateParams.id}).$promise.then(function(result){
          $scope.products = result;
         $scope.productsReserve=[];
         $scope.productsFiltered=[];
-     for (var i=0;i<$scope.products.length;i++)
+        if($scope.products.length>8)
+        {
+            $scope.showMoreProd='show';
+        }
+        else
+        {
+            $scope.showMore='hide';
+        }
+                for (var i=0;i<$scope.products.length;i++)
         {$scope.productsReserve.push($scope.products[i])}
         $scope.products.forEach(function (item) {
             var firstLetter = item.name.charAt(0);
