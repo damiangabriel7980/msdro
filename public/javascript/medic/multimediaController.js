@@ -12,12 +12,19 @@
  * */
 
 
-cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal){
+cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout){
 
     multimediaService.getByArea.query({id:$stateParams.idArea}).$promise.then(function(result){
         $scope.multimedias = result;
+        $timeout(function(){
+            //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
+            //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
+            //else
+            var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
+            angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
+        },300);
     });
-    angular.element("#footer").css({'position': 'relative','bottom':0});
+
     $scope.openMultimedia=function(idMultimedia) {
         $modal.open({
             templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',

@@ -9,7 +9,7 @@
  * */
 
 
-cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce', function($scope,$rootScope,ProductService,$stateParams,$sce){
+cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout){
 
     $scope.allAreas=1;
     $scope.filtProd=[];
@@ -33,6 +33,13 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
                 $scope.firstLetters.push(firstLetter);
             }
         });
+        $timeout(function(){
+            //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
+            //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
+            //else
+            var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
+            angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
+        },300);
     });
     $scope.filterResults=function(index){
         $scope.productsFiltered=[];

@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 05.11.2014.
  */
-cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'quizesService','$stateParams','$sce','growl', function($scope,$rootScope,quizesService,$stateParams,$sce,growl){
+cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'quizesService','$stateParams','$sce','growl','$window','$timeout', function($scope,$rootScope,quizesService,$stateParams,$sce,growl,$window,$timeout){
     var date = new Date();
     quizesService.getAll.query().$promise.then(function(result){
         $scope.teste = result;
@@ -10,6 +10,13 @@ cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'qui
         //    if (new Date($scope.teste[i].expiry_date).getMonth() + 1 >= date.getMonth() + 1 && (new Date($scope.teste[i].expiry_date).getDay() >= date.getDay()))
         //        $scope.testeFiltered.push($scope.teste[i]);
         //}
+        $timeout(function(){
+            //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
+            //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
+            //else
+            var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
+            angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
+        },300);
     });
     //$scope.questions = testeService.getByTest.query({id:$stateParams.id});
     $scope.amazon = $rootScope.pathAmazonDev;

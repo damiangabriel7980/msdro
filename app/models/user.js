@@ -17,6 +17,7 @@ var userSchema = new Schema({
     points: Number,
     proof_path: String,
     rolesID: Array,
+    birthday: Date,
     show_welcome_screen: Boolean,
     state: String,
     subscription: Number,
@@ -28,7 +29,8 @@ var userSchema = new Schema({
     resetPasswordExpires: Date,
     activationToken: String,
     conferencesID:[{type: Schema.Types.ObjectId,ref: 'conferences'}],
-    topicsID:[{type: Schema.Types.ObjectId,ref: 'topics'}]
+    topicsID:[{type: Schema.Types.ObjectId,ref: 'topics'}],
+    visible: Boolean
 });
 
 // generating a hash

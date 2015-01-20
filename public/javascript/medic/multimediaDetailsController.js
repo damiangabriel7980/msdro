@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 03.11.2014.
  */
-cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multimediaService','$stateParams','$modal','$log','$modalInstance','$rootScope','$sce','$state','idd',function ($scope,multimediaService,$stateParams, $modal, $log,$modalInstance,$rootScope,$sce,$state,idd) {
+cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multimediaService','$stateParams','$modal','$log','$modalInstance','$rootScope','$sce','$state','idd','$window','$timeout',function ($scope,multimediaService,$stateParams, $modal, $log,$modalInstance,$rootScope,$sce,$state,idd,$window,$timeout) {
 
     multimediaService.getSingle.query({idd:idd}).$promise.then(function(result){
         $scope.selectedMultimedia = result;
@@ -15,6 +15,13 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
                 $scope.slidesArray = slides;
             });
         }
+        $timeout(function(){
+            //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
+            //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
+            //else
+            var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
+            angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
+        },300);
     });
     console.log($rootScope.previousState);
     console.log($rootScope.currentState);

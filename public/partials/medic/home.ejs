@@ -55,12 +55,12 @@
                     </a>
                 </div>
                 <div class="col-md-10 contentBlock textHome noPadding fixedHeight">
-                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{n.title}}</b></a></div>
+                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b>{{n.title}}</b></a></div>
                     <div class="col-md-10 header justified margintop5px noPadding" ng-bind-html="trustAsHtml(htmlToPlainText(n.text))"></div>
 
                 </div>
                 <div class="col-md-10 noPadding margintop5px">
-                    <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"> Citeste mai mult </a>
+                    <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"> Citeste mai mult </a>
                 </div>
             </div>
         </div>
@@ -76,11 +76,11 @@
                     </a>
                 </div>
                 <div class="col-md-10 noPadding contentBlock textHome fixedHeight">
-                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"><b>{{htmlToPlainText(n.title)}}</b></a></div>
+                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b>{{htmlToPlainText(n.title)}}</b></a></div>
                     <div class="col-md-10 header margintop5px justified noPadding" ng-bind-html="trustAsHtml(htmlToPlainText(n.text))"></div>
                 </div>
                 <div class="col-md-10 noPadding margintop5px">
-                    <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id})"> Citeste mai mult</a>
+                    <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"> Citeste mai mult</a>
                     </div>
             </div>
         </div>

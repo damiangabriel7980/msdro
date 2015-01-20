@@ -1,11 +1,11 @@
 /**
  * Created by miricaandrei23 on 07.01.2015.
  */
-cloudAdminControllers.controller('HomeSearchController', ['$scope', '$rootScope', 'HomeService', '$sce','$animate','$stateParams', function($scope, $rootScope, HomeService, $sce,$animate,$stateParams) {
+cloudAdminControllers.controller('HomeSearchController', ['$scope', '$rootScope', 'HomeService', '$sce','$animate','$stateParams','$window','$timeout', function($scope, $rootScope, HomeService, $sce,$animate,$stateParams,$window,$timeout) {
     $scope.htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
     };
-    angular.element("#footer").css({'position': 'relative','bottom':0});
+
     $scope.trustDescription = function(text){
         return $sce.trustAsHtml(text);
     };
@@ -49,6 +49,13 @@ cloudAdminControllers.controller('HomeSearchController', ['$scope', '$rootScope'
             if($scope.calendarEvFirstSet[i]!=null)
                 $scope.calendarEv.push($scope.calendarEvFirstSet[i]);
         }
+        $timeout(function(){
+            //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
+            //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
+            //else
+            var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
+            angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
+        },300);
     });
     $scope.sref=function(artType){
         if(artType < 3)

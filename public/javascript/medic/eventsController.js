@@ -1,12 +1,11 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state','$position', function($scope,eventsService,$stateParams,$modal,$state,$position){
+cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout){
 var date = new Date();
     $scope.realEvents=[];
     var y=$(date);
-    angular.element("#footer").css({'position': 'fixed','bottom':0});
-    console.log($stateParams);
+     console.log($stateParams);
      eventsService.query().$promise.then(function(result){
         $scope.events =result;
        $scope.eventsS=[];
@@ -54,7 +53,15 @@ var date = new Date();
                     });
                 }
 
-     }}})
+     }}
+         $timeout(function(){
+             //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
+             //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
+             //else
+             var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-5);
+             angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
+         },300);
+     })
     ;
     eventsService.query().$promise.then(function(result) {
         $scope.events2 = result;

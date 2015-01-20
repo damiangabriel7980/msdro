@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window) {
+cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout) {
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
@@ -6,8 +6,13 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.merckManualImage = $rootScope.merckManualImage;
     $scope.myInterval = 10;
     $scope.HomeCarousel = [];
-    angular.element("#footer").css({'position': 'relative','bottom':0});
-    //------------------------------------------------------------ special groups widgets
+    $timeout(function(){
+        //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
+        //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
+        //else
+        var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
+        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
+    },300);    //------------------------------------------------------------ special groups widgets
 
     //add widgets in partials/medic/widgets, then associate file name and group name in object below
     var specialGroupWidgets = {
