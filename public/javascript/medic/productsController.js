@@ -72,10 +72,14 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
             }
         }
         $scope.products=$scope.productsFiltered;
-    }
+        if($scope.products.length<=$scope.lmt)
+            $scope.showMoreProd='hide';
+        else
+            $scope.showMoreProd='show';
+    };
     $scope.reset=function(){
         $scope.products=$scope.productsReserve;
-    }
+    };
     $scope.amazon = $rootScope.pathAmazonDev;
     $scope.closeLi=$sce.trustAsHtml("ng-class='hide'<\/li>");
     $scope.showElem ='{display: list-item}';
