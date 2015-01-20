@@ -68,7 +68,7 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
   }])
     .filter('htmlToPlaintext2', function() {
         return function(text) {
-            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş');
+            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş');
         }
     })
     .filter('mySort', function() {
