@@ -3198,7 +3198,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.send(err)
                 }
                 else {
-                    Events.find({groupsID: {$in: usr.groupsID}}, function (err, cont) {
+                    Events.find({groupsID: {$in: usr.groupsID},enable: true}, function (err, cont) {
                         if (err) {
                             res.send(err);
                         }
