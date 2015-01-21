@@ -6319,6 +6319,7 @@ html body #publicContentWrapper #publicContent {
   width: 100%;
   max-width: 1380px;
   margin: 0 auto;
+  padding-bottom: 30px;
 }
 html body .rootView {
   height: 100%;
@@ -6733,6 +6734,7 @@ html body .rootView {
 }
 .contentLayout {
   margin-top: 30px;
+  padding: 0;
 }
 .contentLayout .mostRead .mainTitle {
   font-size: 22px;
@@ -6841,8 +6843,32 @@ html body .rootView {
   height: 100%;
   border-left: 1px solid #000000;
 }
-.contentLayout .articlesList .btnLoadMore {
+.contentLayout .btnGreenBorder {
   border-color: #008780;
+}
+.contentLayout .articleDetail .title {
+  padding: 0;
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid lightgray;
+}
+.contentLayout .articleDetail .articleContent {
+  padding: 30px 0 0 0;
+}
+.contentLayout .articleDetail .articleContent img {
+  width: 30%;
+  max-width: 300px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+.contentLayout .articleDetail:before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  border-left: 1px solid #000000;
 }
 .unselectable {
   -webkit-touch-callout: none;

@@ -36,6 +36,7 @@ html{
         width: 100%;
         max-width: @max-content-width;
         margin: 0 auto;
+        padding-bottom: 30px;
       }
     }
     .rootView{
@@ -410,6 +411,7 @@ html{
 
 .contentLayout{
   margin-top: 30px;
+  padding: 0;
   .mostRead{
     .mainTitle{
       font-size: 22px;
@@ -520,8 +522,34 @@ html{
       height: 100%;
       border-left: 1px solid #000000;
     }
-    .btnLoadMore{
-      border-color: @greenDark;
+  }
+  .btnGreenBorder{
+    border-color: @greenDark;
+  }
+  .articleDetail{
+    .title{
+      padding: 0;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 1px solid lightgray;
+    }
+    .articleContent{
+      padding: 30px 0 0 0;
+      img{
+        width: 30%;
+        max-width: 300px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+      }
+    }
+    &:before{
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      width: 0;
+      height: 100%;
+      border-left: 1px solid #000000;
     }
   }
 }

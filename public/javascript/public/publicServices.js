@@ -20,6 +20,9 @@ publicServices.factory('ContentService', ['$resource', function($resource){
         }),
         mostReadByType: $resource('apiPublic/mostReadContentByType/:type', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        contentById: $resource('apiPublic/contentById/:id', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

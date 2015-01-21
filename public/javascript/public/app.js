@@ -34,16 +34,17 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         .state('stiri', {
             abstract: true,
             url: '/stiri',
-            templateUrl: 'partials/public/stiri/root.html'
+            templateUrl: 'partials/public/stiri/root.html',
+            controller: 'NewsController'
         })
         .state('stiri.all',{
             url: '/all',
-            templateUrl: 'partials/public/stiri/all.html',
-            controller: 'NewsController'
+            templateUrl: 'partials/public/stiri/all.html'
         })
         .state('stiri.detail',{
-            url: '/detail',
-            templateUrl: 'partials/public/stiri/detail.html'
+            url: '/detail/:id',
+            templateUrl: 'partials/public/stiri/detail.html',
+            controller: 'NewsDetailController'
         })
         .state('articole', {
             abstract: true,

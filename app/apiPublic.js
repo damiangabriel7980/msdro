@@ -42,6 +42,18 @@ module.exports = function(app,email, router) {
             })
         });
 
+    router.route('/contentById/:id')
+
+        .get(function (req, res) {
+            PublicContent.findOne({_id: req.params.id}, function (err, resp) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(resp);
+                }
+            })
+        });
+
     router.route('/events')
 
         .get(function (req, res) {

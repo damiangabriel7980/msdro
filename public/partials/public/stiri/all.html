@@ -1,35 +1,22 @@
-<div class="col-md-12 contentLayout">
-    <div class="col-md-3 mostRead">
-        <div class="col-md-12 mainTitle">
-            CELE MAI CITITE STIRI
-        </div>
-        <div class="col-md-12 article" ng-repeat="a in mostRead track by $index">
-            <div class="col-md-12 title"><a href="#">{{a.title}}</a></div>
-            <div class="col-md-12 excerpt" ng-bind-html="trustAsHtml(createHeader(a.text, 150))"></div>
-            <div class="col-md-12 readMore"><a href="#">Citeste mai mult</a></div>
-            <div class="col-md-12 divider" ng-if="$index!=mostRead.length-1"></div>
-        </div>
-    </div>
-    <div class="col-md-9 articlesList">
-        <div class="col-md-12 article" ng-repeat="n in news | limitTo:articlesLimit track by $index">
-            <div class="col-md-3 picture">
-                <div>
-                    <img ng-src="{{pathAmazonDev+n.image_path}}">
-                </div>
+<div class="col-md-12 articlesList">
+    <div class="col-md-12 article" ng-repeat="n in news | limitTo:articlesLimit track by $index">
+        <div class="col-md-3 picture">
+            <div>
+                <img ng-src="{{pathAmazonDev+n.image_path}}">
             </div>
-            <div class="col-md-9 details">
-                <div class="col-md-12 title"><a href="#">{{n.title}}</a></div>
-                <div class="col-md-12 excerpt" ng-bind-html="trustAsHtml(createHeader(n.text, 300))"></div>
-                <div class="col-md-12 author">{{n.author}}</div>
-                <div class="col-md-12 footer">
-                    <div class="date">{{n.date_added | date:'dd/MM/yyyy'}}</div>
-                    <div class="readMore"><a href="#">Vezi stire</a></div>
-                </div>
+        </div>
+        <div class="col-md-9 details">
+            <div class="col-md-12 title"><a ui-sref="stiri.detail({id: n._id})">{{n.title}}</a></div>
+            <div class="col-md-12 excerpt" ng-bind-html="trustAsHtml(createHeader(n.text, 300))"></div>
+            <div class="col-md-12 author">{{n.author}}</div>
+            <div class="col-md-12 footer">
+                <div class="date">{{n.date_added | date:'dd/MM/yyyy'}}</div>
+                <div class="readMore"><a ui-sref="stiri.detail({id: n._id})">Vezi stire</a></div>
             </div>
-            <div class="col-md-12 divider" ng-if="$index!=articlesLimit"></div>
         </div>
-        <div class="col-md-12 text-center" ng-style="{'display':articlesLimit<news.length?'initial':'none'}">
-            <a class="btn btn-default btnLoadMore" ng-click="articlesLimit=articlesLimit+3">Mai multe stiri</a>
-        </div>
+        <div class="col-md-12 divider" ng-if="$index!=articlesLimit-1 && articlesLimit<news.length"></div>
     </div>
+</div>
+<div class="col-md-12 text-center" ng-style="{'display':articlesLimit<news.length?'initial':'none'}">
+    <a class="btn btn-default btnGreenBorder" ng-click="articlesLimit=articlesLimit+3">Mai multe stiri</a>
 </div>
