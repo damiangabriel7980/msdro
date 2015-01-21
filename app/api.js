@@ -815,7 +815,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var data = req.body.data;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            var patt = new XRegExp('^[a-zA-Z0-9\\s-]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -854,7 +854,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var id = req.body.data.id;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            var patt = new XRegExp('^[a-zA-Z0-9\\s-]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
