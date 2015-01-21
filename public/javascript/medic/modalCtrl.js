@@ -11,7 +11,7 @@ cloudAdminControllers.controller('modalCtrl',['$scope','eventsService2','$stateP
         $modalInstance.close();
     };
     $scope.htmlToPlainText = function(text) {
-        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş');
     };
 }])
 .filter("asDate", function () {

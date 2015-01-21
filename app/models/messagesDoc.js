@@ -7,7 +7,8 @@ var Schema			= mongoose.Schema;
 var MessagesDocSchema = new Schema({
     image_path:String,
     text: String,
-    type: Number
+    type: Number,
+    last_updated:Date
 });
 
 module.exports = mongoose.model('messages_doc',MessagesDocSchema,'messages_doc');

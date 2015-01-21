@@ -1,0 +1,321 @@
+/**
+ * Created by miricaandrei23 on 10.12.2014.
+ */
+var mongoose = require('mongoose');
+var User = require('./models/user');
+var jwt = require('jsonwebtoken');
+var XRegExp  = require('xregexp').XRegExp;
+var validator = require('validator');
+var crypto   = require('crypto');
+var expressJwt = require('express-jwt');
+var async = require('async');
+var request = require('request');
+var NewsPost = require('./models/newspost');
+var chatDoc= require('./models/chatDoc');
+var MessagesDoc= require('./models/messagesDoc');
+
+module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, router) {
+
+    //returns user data (parsed from token found on the request)
+    var getUserData = function (req) {
+        var token;
+        try{
+            token = req.headers.authorization.split(' ').pop();
+        }catch(ex){
+            token = null;
+        }
+        return token?jwt.decode(token):{};
+    };
+
+    //================================================================================================================= functions for getting data in depth
+
+    var getTalksByConference = function (conference_id, callback) {
+        Talks.find({conference: conference_id}).sort({hour_start: 1}).populate('room speakers').exec(function (err, talks) {
+            if(err){
+                callback(err, null);
+            }else{
+                callback(null, talks);
+            }
+        });
+    };
+
+    var getTalksByRoom = function (room_id, callback) {
+        Talks.find({room: room_id}).sort({hour_start: 1}).populate('room speakers').exec(function (err, talks) {
+            if(err){
+                callback(err, null);
+            }else{
+                callback(null, talks);
+            }
+        });
+    };
+
+    var getConferencesForUser = function (id_user, callback) {
+        var resp = [];
+        User.findOne({_id: id_user}, function (err, user) {
+            if(err){
+                callback(err, null);
+            }else{
+                //get all conferences for this user
+                Conferences.find({_id: {$in: user.conferencesID}}, function (err, conferences) {
+                    if(err){
+                        callback(err, null);
+                    }else{
+                        if(conferences.length != 0){
+                            //get all talks for each conference async
+                            async.each(conferences, function (conference, cb) {
+                                var conf = conference.toObject();
+                                getTalksByConference(conference._id, function (err, talks) {
+                                    if(err){
+                                        cb(err);
+                                    }else{
+                                        conf.talks = talks;
+                                        resp.push(conf);
+                                        cb();
+                                    }
+                                });
+                            }, function (err) {
+                                if(err){
+                                    callback(err, null);
+                                }else{
+                                    callback(null, resp);
+                                }
+                            });
+                        }else{
+                            callback(null, conferences);
+                        }
+                    }
+                });
+            }
+        });
+    };
+
+    var getConference = function (id_conference, callback) {
+        Conferences.findOne({_id: id_conference}, function (err, conference) {
+            if(err){
+                callback(err, null);
+            }else{
+                if(!conference){
+                    callback({hasError: true, message: "Conference not found"});
+                }else{
+                    var ret = conference.toObject();
+                    getTalksByConference(conference._id, function (err, talks) {
+                        if(err){
+                            callback(err, null);
+                        }else{
+                            ret.talks = talks;
+                            callback(null, ret);
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    var addConferenceToUser = function (id_conference, id_user, callback) {
+        User.update({_id: id_user}, {$addToSet: {conferencesID: id_conference}}, {multi: false}, function (err, res) {
+            callback(err, res);
+        });
+    };
+
+    //================================================================================================= access control and route protection
+    //access control allow origin *
+    app.all("/apiMSDDoc/*", function(req, res, next) {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Allow-Credentials", false);
+        res.setHeader("Access-Control-Max-Age", '86400'); // 24 hours
+        res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Authorization");
+        next();
+    });
+
+    // We are going to protect /apiConferences routes with JWT
+    app.use('/apiMSDDoc', expressJwt({secret: tokenSecret}).unless({path: ['/apiMSDDoc/createAccount', '/apiMSDDoc/resetPass']}));
+
+    //===================================================================================================================== create account
+    router.route('/createAccount')
+        .post(function (req, res) {
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+
+            var name = req.body.name?req.body.name:"";
+            var email = req.body.email?req.body.email:"";
+            var password = req.body.password?req.body.password:"";
+            var confirm = req.body.confirm?req.body.confirm:"";
+
+            var info = {error: true, type:"danger"};
+
+            //validate data
+            if(!validator.isEmail(email)){
+                info.message = "Adresa de e-mail nu este valida";
+                res.json(info);
+            }else if(!namePatt.test(name.replace(/ /g,''))){
+                info.message = "Numele trebuie sa contina doar litere, minim 3";
+                res.json(info);
+            }else if(password.length < 6 || password.length > 32){
+                info.message = "Parola trebuie sa contina intre 6 si 32 de caractere";
+                res.json(info);
+            }else if(password !== confirm){
+                info.message = "Parolele nu corespund";
+                res.json(info);
+            }else{
+                //data is valid
+                User.findOne({username: email}, function(err, user) {
+                    // if there are any errors, return the error
+                    if (err){
+                        res.json(err);
+                    }else if (user) {
+                        // check to see if there's already a user with that email
+                        info.message = "Acest e-mail este deja folosit";
+                        res.send(info);
+                    } else {
+                        // create the user
+                        var newUser = new User();
+
+                        //get default role
+                        Roles.findOne({'authority': 'ROLE_FARMACIST'}, function (err, role) {
+                            if(err){
+                                res.send(err);
+                            }else{
+                                newUser.rolesID = [role._id.toString()];
+                                newUser.username = email;
+                                newUser.name     = name;
+                                newUser.password = newUser.generateHash(password);
+                                newUser.password_expired = false;
+                                newUser.account_expired = false;
+                                newUser.account_locked = false;
+                                newUser.enabled = false; //enable only after email activation
+                                newUser.last_updated = Date.now();
+                                newUser.state = "PENDING";
+                                //set activation token
+                                crypto.randomBytes(40, function(err, buf) {
+                                    if(err){
+                                        res.send(err);
+                                    }else{
+                                        newUser.activationToken = buf.toString('hex');
+
+                                        //save user
+                                        newUser.save(function(err, inserted) {
+                                            if (err){
+                                                res.send(err);
+                                            }else{
+                                                //send email
+                                                mandrill({from: 'adminMSD@qualitance.ro',
+                                                    to: [inserted.username],
+                                                    subject:'Activare cont MSD',
+                                                    text: 'Ati primit acest email deoarece v-ati inregistrat pe MSD Check-in.\n\n' +
+                                                    'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va activa contul:\n\n' +
+                                                    'http://' + req.headers.host + '/activateAccount/' + inserted.activationToken + '\n\n' +
+                                                    'Link-ul este valabil maxim o ora\n'+
+                                                    'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n'
+                                                }, function(errm){
+                                                    if(errm) {
+                                                        logger.error(errm);
+                                                        res.send(errm);
+                                                    }else{
+                                                        info.error = false;
+                                                        info.type = "success";
+                                                        info.message = "Un email de activare a fost trimis";
+                                                        res.json(info);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    //generate token for resetting user password
+    router.route('/resetPass')
+        .post(function(req, res) {
+            async.waterfall([
+                //generate unique token
+                function(done) {
+                    crypto.randomBytes(40, function(err, buf) {
+                        var token = buf.toString('hex');
+                        done(err, token);
+                    });
+                },
+                function(token, done) {
+                    //find user
+                    User.findOne({ username: req.body.email }, function(err, user) {
+                        if (!user) {
+                            res.send({message : {hasError: true, text: 'Nu a fost gasit un cont pentru acest e-mail.'}});
+                        }else{
+                            //set token for user - expires in one hour
+                            User.update({_id: user._id.toString()}, {
+                                resetPasswordToken: token,
+                                resetPasswordExpires: Date.now() + 3600000
+                            }, function(err, data) {
+                                done(err, token, user);
+                            });
+                        }
+                    });
+                },
+                function(token, user, done) {
+                    //email user
+                    mandrill({from: 'adminMSD@qualitance.ro',
+                        to: [user.username],
+                        subject:'Resetare parola MSD',
+                        text: 'Ati primit acest email deoarece a fost ceruta resetarea parolei pentru contul dumneavoastra de MSD.\n\n' +
+                        'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va reseta parola:\n\n' +
+                        'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                        'Link-ul este valabil maxim o ora\n'+
+                        'Daca nu ati cerut resetarea parolei, va rugam sa ignorati acest e-mail si parola va ramane neschimbata\n'
+                    }, function(err){
+                        done(err, user.username);
+                    });
+                }
+            ], function(err, user) {
+                if (err){
+                    logger.error(err);
+                    res.send({message : {hasError: true, text: 'A aparut o eroare. Va rugam verificati datele'}});
+                }else{
+                    res.send({message : {hasError: false, text: 'Un email cu instructiuni a fost trimis catre ' + user + '.', type: 'info'}});
+                }
+            });
+        });
+
+    //route for retrieving user's profile info
+    router.route('/userProfile')
+        .get(function (req, res) {
+            res.json(getUserData(req));
+        });
+
+      //==================================================================================================================== all routes
+    router.route('/getNewsPost')
+        .get(function(req,res){
+            var pageNumber=req.body.pageNumber;
+            NewsPost.find({}).sort('last_updated', -1).skip((pageNumber-1)*10).limit(10)
+                .exec(function(err, result) {
+                    if(err)
+                        res.json(err);
+                    else
+                        res.json(result);
+                });
+        });
+    router.route('/getNewsPost/:id')
+        .get(function(req,res){
+           var id=req.params.id;
+            chatDoc.findOne({post_id: id}).populate('message_ids',{ sort: { 'last_updated': 1 } }).populate('post_id').populate('chat_receiver chat_sender').exec(function(err,result){
+                if(err)
+                    res.json(err);
+                else
+                    res.json(result);
+            })
+        });
+    router.route('/getMedics')
+        .get(function(req,res){
+            User.find({visible:true}).sort('last_updated', -1).skip((pageNumber-1)*10).limit(10)
+                .exec(function(err, result) {
+                    if(err)
+                        res.json(err);
+                    else
+                        res.json(result);
+                });
+        });
+    app.use('/apiMSDDoc', router);
+};

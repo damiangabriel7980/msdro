@@ -11,7 +11,10 @@ var date = new Date();
        $scope.eventsS=[];
        for(var i = 0; i < $scope.events.length; i++)
        {
-           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: new Date($scope.events[i].end),allDay: false,className: 'events',color: '#006d69'});
+           var today = new Date($scope.events[i].end);
+           var tomorrow = new Date($scope.events[i].end);
+           tomorrow.setDate(today.getDate()+1);
+           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: tomorrow ,allDay: false,className: 'events',color: '#006d69'});
        }
 
          $scope.realEvents=[$scope.eventsS];
@@ -22,7 +25,7 @@ var date = new Date();
                  'title':'Eveniment:',
                  trigger:"hover",
                  placement:'auto',
-                 'append-to-body':true,
+                 container:'body',
                  delay: 500
              };
                  $('[data-toggle="popover"]').popover(options);
@@ -87,6 +90,7 @@ var date = new Date();
     };
     if($stateParams.id)
     {
+        $timeout(function(){
         $modal.open({
             templateUrl: 'partials/medic/calendarDetails.ejs',
             backdrop: true,
@@ -99,6 +103,7 @@ var date = new Date();
                 }
             }
         });
+    },50);
     }
 }])
     .filter('htmlToPlaintext', function() {
