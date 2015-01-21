@@ -6975,6 +6975,99 @@ html body .rootView {
   height: 100%;
   border-left: 1px solid #000000;
 }
+.elearningLayout {
+  margin-top: 30px;
+  padding: 0;
+}
+.elearningLayout .categories {
+  padding: 0 15px 0 30px;
+}
+.elearningLayout .categories .mainTitle {
+  font-size: 22px;
+  margin-bottom: 15px;
+  padding: 0;
+}
+.elearningLayout .categories #customScrollbar {
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #008780;
+  width: 100%;
+}
+.elearningLayout .categories #customScrollbar .scroll-bar {
+  right: 10px;
+  top: 10px;
+}
+.elearningLayout .categories #customScrollbar .scroll-viewport {
+  height: 200px;
+  width: 90%;
+}
+.elearningLayout .categories .therapeuticArea {
+  width: 100%;
+  display: block;
+}
+.elearningLayout .categories .therapeuticArea a {
+  color: #008780;
+  font-weight: bold;
+}
+.elearningLayout .categories:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 100%;
+  border-right: 1px solid #000000;
+}
+.elearningLayout .elearningList .entry {
+  padding: 0;
+}
+.elearningLayout .elearningList .entry .picture {
+  padding: 0;
+}
+.elearningLayout .elearningList .entry .picture div {
+  border: 5px solid #eeeeee;
+  border-radius: 10px;
+}
+.elearningLayout .elearningList .entry .picture div img {
+  width: 100%;
+  border-radius: 5px;
+}
+.elearningLayout .elearningList .entry .details {
+  padding: 0 0 0 15px;
+}
+.elearningLayout .elearningList .entry .details .title {
+  padding: 0;
+  margin-bottom: 10px;
+}
+.elearningLayout .elearningList .entry .details .title a {
+  color: #008780;
+  font-size: 20px;
+  font-weight: bold;
+}
+.elearningLayout .elearningList .entry .details .author {
+  font-size: 13px;
+  font-weight: bold;
+  padding: 0;
+}
+.elearningLayout .elearningList .entry .details .date {
+  padding: 0;
+  margin-top: 20px;
+  font-size: 13px;
+}
+.elearningLayout .elearningList .entry .divider {
+  border-bottom: 1px solid #eeeeee;
+  padding: 0;
+  margin: 15px 20%;
+  width: 60%;
+}
+.elearningLayout .elearningList:before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 0;
+  height: 100%;
+  border-left: 1px solid #000000;
+}
 .btnGreenBorder {
   border-color: #008780;
 }

@@ -6,7 +6,8 @@ var publicApp = angular.module('publicApp',
         'publicServices',
         'ngTouch',
         'angular-carousel',
-        'msdTimeline'
+        'msdTimeline',
+        'ngTinyScrollbar'
     ]);
 
 publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -63,15 +64,16 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         })
         .state('elearning', {
             abstract: true,
-            url: '/elearning',
-            templateUrl: 'partials/public/elearning/root.html'
+            url: '/elearning/:area',
+            templateUrl: 'partials/public/elearning/root.html',
+            controller: 'ElearningController'
         })
         .state('elearning.all',{
             url: '/all',
             templateUrl: 'partials/public/elearning/all.html'
         })
         .state('elearning.detail',{
-            url: '/detail',
+            url: '/detail/:id',
             templateUrl: 'partials/public/elearning/detail.html'
         })
         .state('downloads', {

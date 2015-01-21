@@ -36,7 +36,8 @@
     "angular-carousel": "latest",
     "angular-pdf": "latest",
     "angular-qr": "latest",
-    "angular-bootstrap-datetimepicker": "latest"
+    "angular-bootstrap-datetimepicker": "latest",
+    "ng-tiny-scrollbar": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

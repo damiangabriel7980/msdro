@@ -664,6 +664,104 @@ html{
   }
 }
 
+//===================================================================================================== ELEARNING
+
+.elearningLayout{
+  margin-top: 30px;
+  padding: 0;
+  .categories{
+    padding: 0 15px 0 30px;
+    .mainTitle{
+      font-size: 22px;
+      margin-bottom: 15px;
+      padding: 0;
+    }
+    #customScrollbar{
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid @greenDark;
+      width: 100%;
+      .scroll-bar{
+        right: 10px;
+        top: 10px;
+      }
+      .scroll-viewport {
+        height: 200px;
+        width: 90%;
+      }
+    }
+    .therapeuticArea{
+      width: 100%;
+      display: block;
+      a{
+        color: @greenDark;
+        font-weight: bold;
+      }
+    }
+    &:after{
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 100%;
+      border-right: 1px solid #000000;
+    }
+  }
+  .elearningList{
+    .entry{
+      padding: 0;
+      .picture{
+        padding: 0;
+        div{
+          border: 5px solid @gray-lighter;
+          border-radius: 10px;
+          img{
+            width: 100%;
+            border-radius: 5px;
+          }
+        }
+      }
+      .details{
+        padding: 0 0 0 15px;
+        .title{
+          padding: 0;
+          a{
+            color: @greenDark;
+            font-size: 20px;
+            font-weight: bold;
+          }
+          margin-bottom: 10px;
+        }
+        .author{
+          font-size: 13px;
+          font-weight: bold;
+          padding: 0;
+        }
+        .date{
+          padding: 0;
+          margin-top: 20px;
+          font-size: 13px;
+        }
+      }
+      .divider{
+        border-bottom: 1px solid @gray-lighter;
+        padding: 0;
+        margin: 15px 20%;
+        width: 60%;
+      }
+    }
+    &:before{
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      height: 100%;
+      border-left: 1px solid #000000;
+    }
+  }
+}
+
 //============================================================================================================== SHARED
 
 .btnGreenBorder{
