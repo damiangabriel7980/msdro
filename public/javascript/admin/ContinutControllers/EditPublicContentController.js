@@ -57,7 +57,8 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
 
             var formattedAreas = [];
             for(var k=0; k<areasIds.length; k++){
-                formattedAreas.push(findInFormattedAreas(areasIds[k]));
+                var area = findInFormattedAreas(areasIds[k]);
+                if(area) formattedAreas.push(area);
             }
             $scope.selectedTherapeuticAreas = formattedAreas;
         });
@@ -66,17 +67,14 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
     //--------------------------------------------------------------------------------- functions for therapeutic areas
 
     var findInFormattedAreas = function (id) {
-        var index = -1;
         var i=2;
-        var found = false;
-        while(!found && i<$scope.allAreas.length){
+        while(i<$scope.allAreas.length){
             if($scope.allAreas[i].id==id){
-                found = true;
-                index = i;
+                return {id: $scope.allAreas[i].id, name: $scope.allAreas[i].name};
             }
             i++;
         }
-        return {id: $scope.allAreas[index].id, name: $scope.allAreas[index].name};
+        return null;
     };
 
     var findInUserAreas = function (id) {
