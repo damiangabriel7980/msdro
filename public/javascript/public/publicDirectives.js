@@ -30,7 +30,7 @@ publicApp.directive('carouselResizable', function($window) {
 
             var resizeT;
 
-            var initializeWindowSize = function () {
+            var initializeElementSize = function () {
                 $scope.elementWidth = angular.element($element)[0].offsetWidth;
                 //$scope.elementHeight = angular.element($element)[0].offsetHeight;
 
@@ -42,11 +42,15 @@ publicApp.directive('carouselResizable', function($window) {
             };
 
             angular.element($window).bind('resize', function () {
-                initializeWindowSize();
-                //wait for resizing to finish
-                clearTimeout(resizeT);
-                resizeT = setTimeout(doneResizing, 700);
-                $scope.$apply();
+                if($scope.$state.includes('home')){
+                    initializeElementSize();
+                    //wait for resizing to finish
+                    clearTimeout(resizeT);
+                    resizeT = setTimeout(doneResizing, 700);
+                    $scope.$apply();
+                }else{
+                    angular.element($window).unbind('resize');
+                }
             });
 
             function doneResizing(){
@@ -55,7 +59,7 @@ publicApp.directive('carouselResizable', function($window) {
             }
 
             // Initiate the resize function default values
-            initializeWindowSize();
+            initializeElementSize();
         }
     }
 });
