@@ -44,20 +44,22 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         .state('stiri.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/stiri/detail.html',
-            controller: 'NewsDetailController'
+            controller: 'ArticlesDetailController'
         })
         .state('articole', {
             abstract: true,
             url: '/articole',
-            templateUrl: 'partials/public/articole/root.html'
+            templateUrl: 'partials/public/articole/root.html',
+            controller: 'ArticlesController'
         })
         .state('articole.all',{
             url: '/all',
             templateUrl: 'partials/public/articole/all.html'
         })
         .state('articole.detail',{
-            url: '/detail',
-            templateUrl: 'partials/public/articole/detail.html'
+            url: '/detail/:id',
+            templateUrl: 'partials/public/articole/detail.html',
+            controller: 'ArticlesDetailController'
         })
         .state('elearning', {
             abstract: true,
