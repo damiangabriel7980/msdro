@@ -77,15 +77,12 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         .state('downloads', {
             abstract: true,
             url: '/downloads',
-            templateUrl: 'partials/public/downloads/root.html'
+            templateUrl: 'partials/public/downloads/root.html',
+            controller: 'DownloadsController'
         })
         .state('downloads.all',{
             url: '/all',
             templateUrl: 'partials/public/downloads/all.html'
-        })
-        .state('downloads.detail',{
-            url: '/detail',
-            templateUrl: 'partials/public/downloads/detail.html'
         })
 }]);
 

@@ -1,1 +1,23 @@
-all downloads
+<div class="col-md-12 downloadsList">
+    <div class="col-md-12 entry" ng-repeat="n in downloads | limitTo:contentLimit track by $index">
+        <div class="col-md-2 picture">
+            <div>
+                <img ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
+            </div>
+        </div>
+        <div class="col-md-10 details">
+            <div class="col-md-12 title">
+                <a ng-href="{{pathAmazonDev+n.file_path}}">{{n.title}}</a>
+            </div>
+            <div class="col-md-12 author">({{n.author}})</div>
+            <div class="col-md-12 date">Adaugat la: {{n.date_added | date:'dd/MM/yyyy'}}</div>
+            <div class="col-md-12 noPadding">
+                <a class="btn btn-default btn-sm btnGreenBorder" ng-href="{{pathAmazonDev+n.file_path}}">Descarca</a>
+            </div>
+        </div>
+        <div class="col-md-12 divider" ng-if="$index!=contentLimit-1 && $index!=downloads.length-1"></div>
+    </div>
+</div>
+<div class="col-md-12 text-center" ng-style="{'display':contentLimit<downloads.length?'initial':'none'}">
+    <a class="btn btn-default btnGreenBorder" ng-click="contentLimit=contentLimit+3">Mai multe</a>
+</div>
