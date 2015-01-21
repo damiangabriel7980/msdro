@@ -9,7 +9,7 @@
         <div class="label label-default">{{currentArticle.date_added | date:'dd/MM/yyyy'}}</div>
     </div>
     <div class="col-md-12 articleContent stretchHorizontal">
-        <img class="pull-left" ng-src="{{pathAmazonDev+(currentArticle.image_path?currentArticle.image_path:defaultArticleImage)}}"/>
+        <img class="pull-left" ng-src="{{currentArticle.image_path?pathAmazonDev+currentArticle.image_path:defaultArticleImage}}"/>
         <div ng-bind-html="trustAsHtml(currentArticle.text)"></div>
     </div>
 </div>

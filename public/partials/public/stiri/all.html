@@ -2,7 +2,7 @@
     <div class="col-md-12 article" ng-repeat="n in news | limitTo:articlesLimit track by $index">
         <div class="col-md-3 picture">
             <div>
-                <img ng-src="{{pathAmazonDev+n.image_path}}">
+                <img ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
             </div>
         </div>
         <div class="col-md-9 details">
