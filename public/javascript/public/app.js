@@ -74,7 +74,8 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         })
         .state('elearning.detail',{
             url: '/detail/:id',
-            templateUrl: 'partials/public/elearning/detail.html'
+            templateUrl: 'partials/public/elearning/detail.html',
+            controller: 'ElearningDetailController'
         })
         .state('downloads', {
             abstract: true,

@@ -7068,6 +7068,18 @@ html body .rootView {
   height: 100%;
   border-left: 1px solid #000000;
 }
+.elearningLayout .elearningDetail .title {
+  padding: 0;
+  font-size: 22px;
+  font-weight: bold;
+}
+.elearningLayout .elearningDetail .author {
+  padding: 0;
+  font-size: 15px;
+}
+.elearningLayout .elearningDetail .videoWrapper {
+  padding: 0;
+}
 .btnGreenBorder {
   border-color: #008780;
 }

@@ -12,7 +12,8 @@
             <div class="col-md-12 author">({{n.author}})</div>
             <div class="col-md-12 date">Adaugat la: {{n.date_added | date:'dd/MM/yyyy'}}</div>
             <div class="col-md-12 noPadding">
-                <a class="btn btn-default btn-sm btnGreenBorder" ng-href="{{pathAmazonDev+n.file_path}}">Vizualizeaza</a>
+                <span class="label label-danger" ng-if="!n.file_path">Continut indisponibil</span>
+                <a class="btn btn-default btn-sm btnGreenBorder" ui-sref="elearning.detail({id: n._id})" ng-if="n.file_path">Vizualizeaza</a>
             </div>
         </div>
         <div class="col-md-12 divider" ng-if="$index!=contentLimit-1 && $index!=elearning.length-1"></div>
