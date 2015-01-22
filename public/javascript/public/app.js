@@ -7,7 +7,11 @@ var publicApp = angular.module('publicApp',
         'ngTouch',
         'angular-carousel',
         'msdTimeline',
-        'ngTinyScrollbar'
+        'ngTinyScrollbar',
+        'com.2fdevs.videogular',
+        'com.2fdevs.videogular.plugins.controls',
+        'com.2fdevs.videogular.plugins.overlayplay',
+        'com.2fdevs.videogular.plugins.poster'
     ]);
 
 publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

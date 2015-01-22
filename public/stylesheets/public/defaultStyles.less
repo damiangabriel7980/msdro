@@ -771,7 +771,36 @@ html{
       font-size: 15px;
     }
     .videoWrapper{
-      padding: 0;
+      border: 3px solid @greenDark;
+      border-radius: 10px;
+      padding: 5px;
+      margin-top: 15px;
+      videogular{
+        background-color: #ffffff;
+        #controls-container{
+          background-color: #ffffff;
+          opacity: 1;
+          .iconButton{
+            color: @greenDark;
+            font-size: 25px;
+          }
+          vg-timedisplay{
+            color: @greenDark;
+            font-weight: bold;
+          }
+          vg-scrubbar{
+            div{
+              height: 10px;
+              margin-top: 20px;
+              background-color: #ccfffa;
+              vg-scrubbarcurrenttime{
+                height: 10px;
+                background-color: @greenDark;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

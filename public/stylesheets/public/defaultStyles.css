@@ -7078,7 +7078,34 @@ html body .rootView {
   font-size: 15px;
 }
 .elearningLayout .elearningDetail .videoWrapper {
-  padding: 0;
+  border: 3px solid #008780;
+  border-radius: 10px;
+  padding: 5px;
+  margin-top: 15px;
+}
+.elearningLayout .elearningDetail .videoWrapper videogular {
+  background-color: #ffffff;
+}
+.elearningLayout .elearningDetail .videoWrapper videogular #controls-container {
+  background-color: #ffffff;
+  opacity: 1;
+}
+.elearningLayout .elearningDetail .videoWrapper videogular #controls-container .iconButton {
+  color: #008780;
+  font-size: 25px;
+}
+.elearningLayout .elearningDetail .videoWrapper videogular #controls-container vg-timedisplay {
+  color: #008780;
+  font-weight: bold;
+}
+.elearningLayout .elearningDetail .videoWrapper videogular #controls-container vg-scrubbar div {
+  height: 10px;
+  margin-top: 20px;
+  background-color: #ccfffa;
+}
+.elearningLayout .elearningDetail .videoWrapper videogular #controls-container vg-scrubbar div vg-scrubbarcurrenttime {
+  height: 10px;
+  background-color: #008780;
 }
 .btnGreenBorder {
   border-color: #008780;
