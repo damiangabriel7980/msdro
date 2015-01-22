@@ -407,6 +407,43 @@ html{
   }
 }
 
+.homeDownloadsDisplay{
+  .item{
+    float: left;
+    padding: 10px;
+    width: 25%;
+    margin-top: 10px;
+    .contentBlock{
+      width: 100%;
+      padding: 0 0 15px 0;
+      position: relative;
+      img{
+        width: 100%;
+      }
+    }
+    .image{
+      overflow: hidden;
+    }
+    .text{
+      p{
+        font-weight: bold;
+      }
+      height: 12em;
+      overflow: hidden;
+      &:after{
+        content:'';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        min-height: 4.5em;
+        .gradientVertical;
+      }
+    }
+
+  }
+}
+
 //===================================================================================================== NEWS & ARTICLES
 
 .contentLayout{
@@ -658,6 +695,38 @@ html{
       position: absolute;
       left: -1px;
       top: 0;
+      height: 100%;
+      border-left: 1px solid #000000;
+    }
+  }
+  .downloadsDetail{
+    .title{
+      padding: 0;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 1px solid lightgray;
+    }
+    .content{
+      padding: 30px 0 0 0;
+      img{
+        width: 30%;
+        max-width: 300px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+      }
+      div{
+        width: 100%;
+        a{
+          margin-top: 15px;
+        }
+      }
+    }
+    &:before{
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      width: 0;
       height: 100%;
       border-left: 1px solid #000000;
     }

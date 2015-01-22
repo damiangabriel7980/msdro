@@ -1,0 +1,21 @@
+<div class="col-md-12 downloadsDetail">
+    <div class="col-md-12 title">
+        {{currentDownload.title}}
+    </div>
+    <div class="col-md-9 noPadding">
+        {{currentDownload.author}}
+    </div>
+    <div class="col-md-3 noPadding text-right">
+        <div class="label label-default">{{currentDownload.date_added | date:'dd/MM/yyyy'}}</div>
+    </div>
+    <div class="col-md-12 content">
+        <img class="pull-left" ng-src="{{currentDownload.image_path?pathAmazonDev+currentDownload.image_path:defaultArticleImage}}"/>
+        <div ng-bind-html="trustAsHtml(currentDownload.text)"></div>
+        <div>
+            <a class="btn btn-default btnGreenBorder" ng-href="{{pathAmazonDev+currentDownload.file_path}}">Descarca</a>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="padding-top: 20px;">
+    <div class="btn btn-default btnGreenBorder" ui-sref="downloads.all">Vezi toate</div>
+</div>

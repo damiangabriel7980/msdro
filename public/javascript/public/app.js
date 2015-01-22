@@ -91,6 +91,11 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
             url: '/all',
             templateUrl: 'partials/public/downloads/all.html'
         })
+        .state('downloads.detail',{
+            url: '/detail/:id',
+            templateUrl: 'partials/public/downloads/detail.html',
+            controller: 'DownloadsDetailController'
+        })
 }]);
 
 publicApp.run(

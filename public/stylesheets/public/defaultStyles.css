@@ -6732,6 +6732,59 @@ html body .rootView {
   /* IE6-9 */
 
 }
+.homeDownloadsDisplay .item {
+  float: left;
+  padding: 10px;
+  width: 25%;
+  margin-top: 10px;
+}
+.homeDownloadsDisplay .item .contentBlock {
+  width: 100%;
+  padding: 0 0 15px 0;
+  position: relative;
+}
+.homeDownloadsDisplay .item .contentBlock img {
+  width: 100%;
+}
+.homeDownloadsDisplay .item .image {
+  overflow: hidden;
+}
+.homeDownloadsDisplay .item .text {
+  height: 12em;
+  overflow: hidden;
+}
+.homeDownloadsDisplay .item .text p {
+  font-weight: bold;
+}
+.homeDownloadsDisplay .item .text:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  min-height: 4.5em;
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* FF3.6+ */
+
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #ffffff));
+  /* Chrome,Safari4+ */
+
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* Chrome10+,Safari5.1+ */
+
+  background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* Opera 11.10+ */
+
+  background: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* IE10+ */
+
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* W3C */
+
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0);
+  /* IE6-9 */
+
+}
 .contentLayout {
   margin-top: 30px;
   padding: 0;
@@ -6972,6 +7025,36 @@ html body .rootView {
   position: absolute;
   left: -1px;
   top: 0;
+  height: 100%;
+  border-left: 1px solid #000000;
+}
+.downloadsLayout .downloadsDetail .title {
+  padding: 0;
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid lightgray;
+}
+.downloadsLayout .downloadsDetail .content {
+  padding: 30px 0 0 0;
+}
+.downloadsLayout .downloadsDetail .content img {
+  width: 30%;
+  max-width: 300px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+.downloadsLayout .downloadsDetail .content div {
+  width: 100%;
+}
+.downloadsLayout .downloadsDetail .content div a {
+  margin-top: 15px;
+}
+.downloadsLayout .downloadsDetail:before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 0;
+  width: 0;
   height: 100%;
   border-left: 1px solid #000000;
 }

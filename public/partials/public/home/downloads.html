@@ -1,3 +1,21 @@
 <div class="col-md-12">
-    downloads
+    <div ng-repeat="n in downloadsFiltered track by $index" class="homeDownloadsDisplay">
+        <div>
+            <div class="item">
+                <div class="contentBlock image" resizable ratio="1.5">
+                    <img ng-src="{{pathAmazonDev+n.image_path}}">
+                </div>
+                <div class="contentBlock text" ng-bind-html="trustAsHtml('<p>'+n.title+'</p>'+htmlToPlainText(n.text))">
+                </div>
+                <div class="contentBlock">
+                    <div class="btnGreen" ui-sref="downloads.detail({id: n._id})">Detalii</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="text-align: center;">
+    <pagination total-items="totalItems" ng-model="currentPage" items-per-page="resultsPerPage" max-size="maxSize"
+                class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"
+                previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
 </div>
