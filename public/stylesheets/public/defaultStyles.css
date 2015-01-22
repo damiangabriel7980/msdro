@@ -6878,10 +6878,6 @@ html body .rootView {
 .contentLayout .articlesList .article .details .footer .readMore {
   float: right;
 }
-.contentLayout .articlesList .article .details .footer .readMore a {
-  font-size: 13px;
-  color: #008780;
-}
 .contentLayout .articlesList .article .divider {
   border-bottom: 1px solid #eeeeee;
   padding: 0;

@@ -11,7 +11,7 @@
             <div class="col-md-12 author">{{n.author}}</div>
             <div class="col-md-12 footer">
                 <div class="date">{{n.date_added | date:'dd/MM/yyyy'}}</div>
-                <div class="readMore"><a ui-sref="articole.detail({id: n._id})">Vezi articol</a></div>
+                <div class="readMore"><a class="btn btn-default btn-sm btnGreenBorder" ui-sref="articole.detail({id: n._id})">Vezi articol</a></div>
             </div>
         </div>
         <div class="col-md-12 divider" ng-if="$index!=articlesLimit-1 && $index!=news.length-1"></div>
