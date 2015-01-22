@@ -6696,12 +6696,12 @@ html body .rootView {
 .homeNewsDisplay .smallDisplay .image {
   overflow: hidden;
 }
-.homeNewsDisplay .smallDisplay .title {
-  font-weight: bold;
-}
 .homeNewsDisplay .smallDisplay .text {
   height: 12em;
   overflow: hidden;
+}
+.homeNewsDisplay .smallDisplay .text p {
+  font-weight: bold;
 }
 .homeNewsDisplay .smallDisplay .text:after {
   content: '';

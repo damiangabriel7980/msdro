@@ -27,10 +27,7 @@
                 <div class="contentBlock image" resizable ratio="1.5">
                     <img ng-src="{{pathAmazonDev+n.image_path}}">
                 </div>
-                <div class="contentBlock title">
-                    {{n.title}}
-                </div>
-                <div class="contentBlock text" ng-bind-html="trustAsHtml(htmlToPlainText(n.text))">
+                <div class="contentBlock text" ng-bind-html="trustAsHtml('<p>'+n.title+'</p>'+htmlToPlainText(n.text))">
                 </div>
                 <div class="contentBlock">
                     <div class="btnGreen" ui-sref="articole.detail({id: n._id})">Citeste</div>
