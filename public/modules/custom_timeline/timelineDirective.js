@@ -28,7 +28,10 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
             //customize:
             var allCollapsed = true; // all dates appear collapsed by default; if true, dates that
                                     //  have enough available room will be expanded
+
             scope.hideTodayBoxLine = true;
+
+            var removeExpandingBeyond = true; //remove events that expand beyond the grid width
 
             scope.$watch('loadEvents', function (loadedEvents) {
                 if(loadedEvents){
@@ -83,8 +86,13 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
                 var nextPoz;
                 var availableSpace;
 
+                var finalList = [];
+
                 for(var i=0; i<ret.length; i++){
+
+                    //alternatively place a box up or down
                     poz = !poz;
+                    ret[i].isDown = poz;
 
                     currentPoz = ret[i].leftPx;
                     if(i+2<ret.length){
@@ -93,22 +101,35 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
                         nextPoz = currentPoz + 300;
                     }
 
+                    //calculates available space on the grid in pixels
                     availableSpace = nextPoz - currentPoz;
 
-                    ret[i].isDown = poz;
+                    //grid has 1200 pixels (each day has 15 pixels)
+
                     if(availableSpace >= 250){
+                        //every expanded box has a width of 250 pixels
                         ret[i].slim = false;
                         ret[i].collapsed = false||allCollapsed;
                     }else if(availableSpace >= 80){
+                        //a normal collapsed box has a width of 80 pixels
                         ret[i].slim = false;
                         ret[i].collapsed = true||allCollapsed;
                     }else{
+                        //a slim collapsed box has a width of 15 pixels
                         ret[i].slim = true;
                         ret[i].collapsed = true||allCollapsed;
                     }
+
+                    //remove boxes that expand beyond the grid if decided so
+                    //grid = 1200px
+                    //box = 250px
+                    //1200 - 250 = 950px
+                    if(ret[i].leftPx < 950 && removeExpandingBeyond){
+                        finalList.push(ret[i]);
+                    }
                 }
 
-                scope.formatEvents = ret;
+                scope.formatEvents = finalList;
             };
 
             var alignMonths = function (monthNames) {
