@@ -28,6 +28,13 @@
     <script src="javascript/public/home/HomeDownloadsController.js"></script>
     <script src="javascript/public/footerController.js"></script>
     <script src="javascript/public/modals/contactModalController.js"></script>
+    <script src="javascript/public/news/newsController.js"></script>
+    <script src="javascript/public/articles/articlesController.js"></script>
+    <script src="javascript/public/articles/articlesDetailController.js"></script>
+    <script src="javascript/public/downloads/downloadsController.js"></script>
+    <script src="javascript/public/downloads/downloadsDetailController.js"></script>
+    <script src="javascript/public/elearning/elearningController.js"></script>
+    <script src="javascript/public/elearning/elearningDetailController.js"></script>
 
 
     <!--Plug-ins-->
@@ -36,6 +43,15 @@
     <script src="components/angular-carousel/dist/angular-carousel.min.js"></script>
     <script src="modules/custom_timeline/timelineDirective.js"></script>
     <link rel="stylesheet" href="modules/custom_timeline/timelineStyles.css">
+    <!--custom css for tiny scrollbar-->
+    <link rel="stylesheet" href="stylesheets/public/tinyScrollbarCustom.css" type="text/css"/>
+    <!--custom version of tiny scrollbar for fixing dynamic content height readjustment issue-->
+    <script src="modules/ngTinyScrollbarCustom/src/ng-tiny-scrollbar.js"></script>
+    <script src="components/videogular/videogular.js"></script>
+    <script src="components/videogular-controls/controls.js"></script>
+    <script src="components/videogular-overlay-play/overlay-play.js"></script>
+    <script src="components/videogular-poster/poster.js"></script>
+    <script src="components/videogular-buffering/buffering.js"></script>
 
 
     <!--Stylesheets-->
@@ -92,7 +108,7 @@
                         <li ng-class="{'active': $state.includes('home')}"><a ui-sref="home.noutati" ng-click="navCollapsed = true"> Home </a></li>
                         <li ng-class="{'active': $state.includes('stiri')}"><a ui-sref="stiri.all" ng-click="navCollapsed = true"> Stiri </a></li>
                         <li ng-class="{'active': $state.includes('articole')}"><a ui-sref="articole.all" ng-click="navCollapsed = true"> Articole </a></li>
-                        <li ng-class="{'active': $state.includes('elearning')}"><a ui-sref="elearning.all" ng-click="navCollapsed = true"> Elearning </a></li>
+                        <li ng-class="{'active': $state.includes('elearning')}"><a ui-sref="elearning.all({area: 0})" ng-click="navCollapsed = true"> Elearning </a></li>
                         <li ng-class="{'active': $state.includes('downloads')}"><a ui-sref="downloads.all" ng-click="navCollapsed = true"> Downloads </a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right searchAndLinks">

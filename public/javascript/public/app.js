@@ -6,7 +6,12 @@ var publicApp = angular.module('publicApp',
         'publicServices',
         'ngTouch',
         'angular-carousel',
-        'msdTimeline'
+        'msdTimeline',
+        'ngTinyScrollbar',
+        'com.2fdevs.videogular',
+        'com.2fdevs.videogular.plugins.controls',
+        'com.2fdevs.videogular.plugins.overlayplay',
+        'com.2fdevs.videogular.plugins.poster'
     ]);
 
 publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -34,54 +39,62 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         .state('stiri', {
             abstract: true,
             url: '/stiri',
-            templateUrl: 'partials/public/stiri/root.html'
+            templateUrl: 'partials/public/stiri/root.html',
+            controller: 'NewsController'
         })
         .state('stiri.all',{
             url: '/all',
             templateUrl: 'partials/public/stiri/all.html'
         })
         .state('stiri.detail',{
-            url: '/detail',
-            templateUrl: 'partials/public/stiri/detail.html'
+            url: '/detail/:id',
+            templateUrl: 'partials/public/stiri/detail.html',
+            controller: 'ArticlesDetailController'
         })
         .state('articole', {
             abstract: true,
             url: '/articole',
-            templateUrl: 'partials/public/articole/root.html'
+            templateUrl: 'partials/public/articole/root.html',
+            controller: 'ArticlesController'
         })
         .state('articole.all',{
             url: '/all',
             templateUrl: 'partials/public/articole/all.html'
         })
         .state('articole.detail',{
-            url: '/detail',
-            templateUrl: 'partials/public/articole/detail.html'
+            url: '/detail/:id',
+            templateUrl: 'partials/public/articole/detail.html',
+            controller: 'ArticlesDetailController'
         })
         .state('elearning', {
             abstract: true,
-            url: '/elearning',
-            templateUrl: 'partials/public/elearning/root.html'
+            url: '/elearning/:area',
+            templateUrl: 'partials/public/elearning/root.html',
+            controller: 'ElearningController'
         })
         .state('elearning.all',{
             url: '/all',
             templateUrl: 'partials/public/elearning/all.html'
         })
         .state('elearning.detail',{
-            url: '/detail',
-            templateUrl: 'partials/public/elearning/detail.html'
+            url: '/detail/:id',
+            templateUrl: 'partials/public/elearning/detail.html',
+            controller: 'ElearningDetailController'
         })
         .state('downloads', {
             abstract: true,
             url: '/downloads',
-            templateUrl: 'partials/public/downloads/root.html'
+            templateUrl: 'partials/public/downloads/root.html',
+            controller: 'DownloadsController'
         })
         .state('downloads.all',{
             url: '/all',
             templateUrl: 'partials/public/downloads/all.html'
         })
         .state('downloads.detail',{
-            url: '/detail',
-            templateUrl: 'partials/public/downloads/detail.html'
+            url: '/detail/:id',
+            templateUrl: 'partials/public/downloads/detail.html',
+            controller: 'DownloadsDetailController'
         })
 }]);
 

@@ -5,7 +5,7 @@
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 
 
-//===================================================================================================== BASIC STRUCTURE
+//===================================================================================================== MAIN STRUCTURE
 html{
   height: 100%;
   body {
@@ -36,6 +36,7 @@ html{
         width: 100%;
         max-width: @max-content-width;
         margin: 0 auto;
+        padding-bottom: 30px;
       }
     }
     .rootView{
@@ -190,7 +191,7 @@ html{
   .navSlide{
     float: right;
     width: 60px;
-    height: 25px;
+    height: 35px;
     overflow: hidden;
     border: 2px solid @gray;
     border-radius: 5px;
@@ -202,11 +203,11 @@ html{
       border-color: #ffffff;
     }
     img{
-      width: 60px;
+      height: 100%;
     }
     .tooltip{
       width: 150px;
-      padding-right: 25px;
+      padding-right: 50px;
       .tooltip-inner{
         background-color:rgba(0, 135, 128, 0.5);
         margin-bottom: 4px;
@@ -288,6 +289,7 @@ html{
 
 //================================================================================================================ HOME
 
+//============================= TABS
 .myTabs{
   display: table;
   margin: 0 auto;
@@ -322,6 +324,7 @@ html{
   left: 10px;
 }
 
+//============================================ NEWS and ARTICLES
 .homeNewsDisplay{
   .largeDisplay{
 //    height: 200px;
@@ -386,10 +389,10 @@ html{
     .image{
       overflow: hidden;
     }
-    .title{
-      font-weight: bold;
-    }
     .text{
+      p{
+        font-weight: bold;
+      }
       height: 12em;
       overflow: hidden;
       &:after{
@@ -406,6 +409,484 @@ html{
   }
 }
 
+//================================ DOWNLOADS
+.homeDownloadsDisplay{
+  .item{
+    float: left;
+    padding: 10px;
+    width: 25%;
+    margin-top: 10px;
+    .contentBlock{
+      width: 100%;
+      padding: 0 0 15px 0;
+      position: relative;
+      img{
+        width: 100%;
+      }
+    }
+    .image{
+      overflow: hidden;
+    }
+    .text{
+      p{
+        font-weight: bold;
+      }
+      height: 12em;
+      overflow: hidden;
+      &:after{
+        content:'';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        min-height: 4.5em;
+        .gradientVertical;
+      }
+    }
+
+  }
+}
+
+//===================================================================================================== NEWS & ARTICLES
+
+.contentLayout{
+  margin-top: 30px;
+  padding: 0;
+  .mostRead{
+    .mainTitle{
+      font-size: 22px;
+      margin-bottom: 15px;
+      padding: 0;
+    }
+    .article{
+      padding: 0;
+      .title{
+        padding: 0;
+        margin-bottom: 5px;
+        a{
+          color: @greenDark;
+          font-weight: bold;
+          font-size: 17px;
+        }
+      }
+      .excerpt{
+        padding: 0;
+        margin-bottom: 10px;
+      }
+      .readMore{
+        padding: 0;
+        a{
+          font-size: 13px;
+          color: @greenDark;
+        }
+      }
+      .divider{
+        border-bottom: 1px solid @gray-lighter;
+        padding: 0;
+        margin: 10px 20%;
+        width: 60%;
+      }
+    }
+    &:after{
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 100%;
+      border-right: 1px solid #000000;
+    }
+  }
+  .articlesList{
+    .article{
+      padding: 0;
+      .picture{
+        padding: 0;
+        div{
+          border: 5px solid @gray-lighter;
+          border-radius: 10px;
+          img{
+            width: 100%;
+            border-radius: 5px;
+          }
+        }
+      }
+      .details{
+        padding: 0 0 0 15px;
+        .title{
+          padding: 0;
+          a{
+            color: @greenDark;
+            font-size: 20px;
+            font-weight: bold;
+          }
+          margin-bottom: 10px;
+        }
+        .excerpt{
+          padding: 0;
+          margin-bottom: 15px;
+          font-size: 17px;
+        }
+        .author{
+          font-size: 13px;
+          font-weight: bold;
+          padding: 0;
+        }
+        .footer{
+          padding: 0;
+          .date{
+            font-size: 13px;
+            float: left;
+          }
+          .readMore{
+            float: right;
+          }
+        }
+      }
+      .divider{
+        border-bottom: 1px solid @gray-lighter;
+        padding: 0;
+        margin: 15px 20%;
+        width: 60%;
+      }
+    }
+    &:before{
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      height: 100%;
+      border-left: 1px solid #000000;
+    }
+  }
+  .articleDetail{
+    .title{
+      padding: 0;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 1px solid lightgray;
+    }
+    .articleContent{
+      padding: 30px 0 0 0;
+      img{
+        width: 30%;
+        max-width: 300px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+      }
+    }
+    &:before{
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      width: 0;
+      height: 100%;
+      border-left: 1px solid #000000;
+    }
+  }
+}
+
+//===================================================================================================== DOWNLOADS
+
+.downloadsLayout{
+  margin-top: 30px;
+  padding: 0;
+  .mostDownloaded{
+    padding: 0 15px 0 30px;
+    .mainTitle{
+      font-size: 22px;
+      margin-bottom: 15px;
+      padding: 0;
+    }
+    .entry{
+      padding: 0;
+      .title{
+        padding: 0;
+        margin-bottom: 5px;
+        a{
+          color: @greenDark;
+          font-weight: bold;
+          font-size: 17px;
+        }
+        &:before{
+          content: "\e025";
+          font-family: 'Glyphicons Halflings';
+          font-style: normal;
+          font-weight: normal;
+          line-height: 1;
+          color: @gray-light;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          position: absolute;
+          left: -20px;
+          width: 20px;
+          top: 3px;
+        }
+      }
+      .author{
+        padding: 0;
+        font-size: 13px;
+        font-weight: bold;
+      }
+      .divider{
+        border-bottom: 1px solid @gray-lighter;
+        padding: 0;
+        margin: 10px 20%;
+        width: 60%;
+      }
+    }
+    &:after{
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 100%;
+      border-right: 1px solid #000000;
+    }
+  }
+  .downloadsList{
+    .entry{
+      padding: 0;
+      .picture{
+        padding: 0;
+        div{
+          border: 5px solid @gray-lighter;
+          border-radius: 10px;
+          img{
+            width: 100%;
+            border-radius: 5px;
+          }
+        }
+      }
+      .details{
+        padding: 0 0 0 15px;
+        .title{
+          padding: 0;
+          a{
+            color: @greenDark;
+            font-size: 20px;
+            font-weight: bold;
+          }
+          margin-bottom: 10px;
+        }
+        .excerpt{
+          padding: 0;
+          margin-bottom: 15px;
+        }
+        .author{
+          font-size: 13px;
+          font-weight: bold;
+          padding: 0;
+        }
+        .date{
+          padding: 0;
+          font-size: 13px;
+        }
+      }
+      .divider{
+        border-bottom: 1px solid @gray-lighter;
+        padding: 0;
+        margin: 15px 20%;
+        width: 60%;
+      }
+    }
+    &:before{
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      height: 100%;
+      border-left: 1px solid #000000;
+    }
+  }
+  .downloadsDetail{
+    .title{
+      padding: 0;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 1px solid lightgray;
+    }
+    .content{
+      padding: 30px 0 0 0;
+      img{
+        width: 30%;
+        max-width: 300px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+      }
+      div{
+        width: 100%;
+        a{
+          margin-top: 15px;
+        }
+      }
+    }
+    &:before{
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      width: 0;
+      height: 100%;
+      border-left: 1px solid #000000;
+    }
+  }
+}
+
+//===================================================================================================== ELEARNING
+
+.elearningLayout{
+  margin-top: 30px;
+  padding: 0;
+  .categories{
+    padding: 0 15px 0 30px;
+    .mainTitle{
+      font-size: 22px;
+      margin-bottom: 15px;
+      padding: 0;
+    }
+    #customScrollbar{
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid @greenDark;
+      width: 100%;
+      .scroll-bar{
+        right: 10px;
+        top: 10px;
+      }
+      .scroll-viewport {
+        height: 200px;
+        width: 90%;
+      }
+    }
+    .therapeuticArea{
+      width: 100%;
+      display: block;
+      a{
+        color: @greenDark;
+        font-weight: bold;
+      }
+    }
+    &:after{
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 100%;
+      border-right: 1px solid #000000;
+    }
+  }
+  .elearningList{
+    .entry{
+      padding: 0;
+      .picture{
+        padding: 0;
+        div{
+          border: 5px solid @gray-lighter;
+          border-radius: 10px;
+          img{
+            width: 100%;
+            border-radius: 5px;
+          }
+        }
+      }
+      .details{
+        padding: 0 0 0 15px;
+        .title{
+          padding: 0;
+          a{
+            color: @greenDark;
+            font-size: 20px;
+            font-weight: bold;
+          }
+          margin-bottom: 10px;
+        }
+        .author{
+          font-size: 13px;
+          font-weight: bold;
+          padding: 0;
+        }
+        .date{
+          padding: 0;
+          margin-top: 20px;
+          font-size: 13px;
+        }
+      }
+      .divider{
+        border-bottom: 1px solid @gray-lighter;
+        padding: 0;
+        margin: 15px 20%;
+        width: 60%;
+      }
+    }
+    &:before{
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      height: 100%;
+      border-left: 1px solid #000000;
+    }
+  }
+  .elearningDetail{
+    .title{
+      padding: 0;
+      font-size: 22px;
+      font-weight: bold;
+    }
+    .author{
+      padding: 0;
+      font-size: 15px;
+    }
+    .videoWrapper{
+      border: 3px solid @greenDark;
+      border-radius: 10px;
+      padding: 5px;
+      margin-top: 15px;
+      videogular{
+        background-color: #ffffff;
+        #controls-container{
+          background-color: #ffffff;
+          opacity: 1;
+          .iconButton{
+            color: @greenDark;
+            font-size: 25px;
+          }
+          vg-timedisplay{
+            color: @greenDark;
+            font-weight: bold;
+          }
+          vg-scrubbar{
+            div{
+              height: 10px;
+              margin-top: 20px;
+              background-color: #ccfffa;
+              vg-scrubbarcurrenttime{
+                height: 10px;
+                background-color: @greenDark;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+//============================================================================================================== SHARED
+
+.btnGreenBorder{
+  border-color: @greenDark;
+  &:hover{
+    border-color: @greenDark;
+  }
+  &:focus{
+    border-color: @greenDark;
+  }
+}
 
 //======================================================================================================== USEFUL STUFF
 

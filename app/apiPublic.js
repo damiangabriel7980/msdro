@@ -1,6 +1,7 @@
 var PublicContent = require('./models/publicContent');
 var PublicCarousel = require('./models/publicCarousel');
 var Events = require('./models/events');
+var TherapeuticAreas = require('./models/therapeutic_areas');
 
 var email = require('mandrill-send')('XKp6n_7NhHB5opUWo0WWmw');
 
@@ -22,6 +23,58 @@ module.exports = function(app,email, router) {
 
         .get(function (req, res) {
             PublicContent.find({type: req.params.type}).sort({date_added: -1}).exec(function (err, resp) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(resp);
+                }
+            })
+        });
+
+    router.route('/contentByTypeAndTherapeuticArea/:type:tpa')
+
+        .get(function (req, res) {
+            var q = {type: req.params.type};
+            if(req.params.tpa != 0){
+                q["therapeutic-areasID"] = {$in: [req.params.tpa]};
+            }
+            PublicContent.find(q).sort({date_added: -1}).exec(function (err, resp) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(resp);
+                }
+            })
+        });
+
+    router.route('/therapeuticAreas')
+
+        .get(function (req, res) {
+            TherapeuticAreas.find({}).sort({name: 1}).exec(function (err, resp) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(resp);
+                }
+            })
+        });
+
+    router.route('/mostReadContentByType/:type')
+
+        .get(function (req, res) {
+            PublicContent.find({type: req.params.type}).sort({date_added: -1}).limit(3).exec(function (err, resp) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(resp);
+                }
+            })
+        });
+
+    router.route('/contentById/:id')
+
+        .get(function (req, res) {
+            PublicContent.findOne({_id: req.params.id}, function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{

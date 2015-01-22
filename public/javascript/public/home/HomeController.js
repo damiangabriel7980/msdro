@@ -1,4 +1,4 @@
-publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate', function($scope, $rootScope, HomeService, $sce, $modal,$animate) {
+publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', function($scope, $rootScope, HomeService, $sce, $state) {
 
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
     $scope.carouselSlides = [];
@@ -23,6 +23,16 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
         var src = $rootScope.pathAmazonDev + slide.image_path;
         var tooltipContent = '<img src="'+src+'">'+slide.title;
         return $sce.trustAsHtml(tooltipContent);
+    };
+
+    $scope.carouselLearnMore = function (type, id) {
+        switch(type){
+            case 1: $state.go('stiri.detail', {id: id}); break;
+            case 2: $state.go('articole.detail', {id: id}); break;
+            case 3: $state.go('elearning.detail', {id: id}); break;
+            case 4: $state.go('downloads.detail', {id: id}); break;
+            default: break;
+        }
     };
 
     //------------------------------------------------------------------------------------------------ useful functions

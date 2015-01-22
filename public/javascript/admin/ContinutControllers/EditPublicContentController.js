@@ -57,7 +57,8 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
 
             var formattedAreas = [];
             for(var k=0; k<areasIds.length; k++){
-                formattedAreas.push(findInFormattedAreas(areasIds[k]));
+                var area = findInFormattedAreas(areasIds[k]);
+                if(area) formattedAreas.push(area);
             }
             $scope.selectedTherapeuticAreas = formattedAreas;
         });
@@ -66,17 +67,14 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
     //--------------------------------------------------------------------------------- functions for therapeutic areas
 
     var findInFormattedAreas = function (id) {
-        var index = -1;
         var i=2;
-        var found = false;
-        while(!found && i<$scope.allAreas.length){
+        while(i<$scope.allAreas.length){
             if($scope.allAreas[i].id==id){
-                found = true;
-                index = i;
+                return {id: $scope.allAreas[i].id, name: $scope.allAreas[i].name};
             }
             i++;
         }
-        return {id: $scope.allAreas[index].id, name: $scope.allAreas[index].name};
+        return null;
     };
 
     var findInUserAreas = function (id) {
@@ -201,7 +199,7 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
             //make sure a file was actually loaded
             if($files[0]){
                 //check file extension
-                if(checkExtension($files[0],["pdf","doc","docx"])){
+                if(checkExtension($files[0],["pdf","doc","docx","mp4"])){
                     AmazonService.getClient(function (s3) {
                         var key;
                         //if there already is a file, delete it. Then upload new
@@ -268,6 +266,19 @@ cloudAdminControllers.controller('EditPublicContentController', ['$scope', '$roo
             case 3: return "Elearning"; break;
             case 4: return "Download"; break;
             default: return "Necunoscut"; break;
+        }
+    };
+
+    $scope.getExtension = function (str) {
+        return str.split('.').pop()
+    };
+
+    $scope.isMovie = function (str) {
+        var ext = $scope.getExtension(str);
+        if(ext == "mp4"){
+            return true;
+        }else{
+            return false;
         }
     };
 

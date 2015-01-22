@@ -6,7 +6,7 @@
             </div>
             <div class="carouselDescription" ng-bind-html="trustAsHtml(carouselSlides[selectedIndex].description)">
             </div>
-            <div class="carouselLearnMore">
+            <div class="carouselLearnMore" ng-click="carouselLearnMore(carouselSlides[selectedIndex].type, carouselSlides[selectedIndex].content_id)">
                 Learn more <i class="fa fa-caret-right"></i>
             </div>
         </div>

@@ -1,1 +1,15 @@
-<div ui-view></div>
+<div class="col-md-12 downloadsLayout">
+    <div class="col-md-3 mostDownloaded">
+        <div class="col-md-12 mainTitle">
+            CELE MAI DESCARCATE
+        </div>
+        <div class="col-md-12 entry" ng-repeat="a in mostDownloads track by $index">
+            <div class="col-md-12 title"><a ng-href="{{pathAmazonDev+a.file_path}}">{{a.title}}</a></div>
+            <div class="col-md-12 author">({{a.author}})</div>
+            <div class="col-md-12 divider" ng-if="$index!=mostRead.length-1"></div>
+        </div>
+    </div>
+    <div class="col-md-9 noPadding">
+        <div ui-view></div>
+    </div>
+</div>
