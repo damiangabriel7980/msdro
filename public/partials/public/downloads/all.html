@@ -9,6 +9,7 @@
             <div class="col-md-12 title">
                 <a ng-href="{{pathAmazonDev+n.file_path}}">{{n.title}}</a>
             </div>
+            <div class="col-md-12 excerpt" ng-bind-html="trustAsHtml(createHeader(n.text, 200))"></div>
             <div class="col-md-12 author">({{n.author}})</div>
             <div class="col-md-12 date">Adaugat la: {{n.date_added | date:'dd/MM/yyyy'}}</div>
             <div class="col-md-12 noPadding">

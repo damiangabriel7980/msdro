@@ -7004,6 +7004,10 @@ html body .rootView {
   font-size: 20px;
   font-weight: bold;
 }
+.downloadsLayout .downloadsList .entry .details .excerpt {
+  padding: 0;
+  margin-bottom: 15px;
+}
 .downloadsLayout .downloadsList .entry .details .author {
   font-size: 13px;
   font-weight: bold;
@@ -7011,7 +7015,6 @@ html body .rootView {
 }
 .downloadsLayout .downloadsList .entry .details .date {
   padding: 0;
-  margin-top: 20px;
   font-size: 13px;
 }
 .downloadsLayout .downloadsList .entry .divider {
