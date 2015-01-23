@@ -5,22 +5,35 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
         console.log(resp);
         if (resp.length != 0) {
             $rootScope.specialGroups = resp;
-            if (sessionStorage.specialGroupSelected) {
-                console.log(sessionStorage.specialGroupSelected);
-                console.log("gs");
-                $scope.selectSpecialGroup(angular.fromJson(sessionStorage.specialGroupSelected));
+            if (localStorage.specialGroupSelected) {
+                var specialGroup;
+                try{
+                    specialGroup = angular.fromJson(localStorage.specialGroupSelected);
+                }catch(ex){
+                    specialGroup = null;
+                }
+                if(checkGroupInGroups(specialGroup, resp)){
+                    console.log("special group found");
+                    console.log(specialGroup);
+                    $scope.selectSpecialGroup(specialGroup);
+                }else{
+                    console.log("special group found in storage, but not on user");
+                    $scope.selectSpecialGroup(resp[0]);
+                }
             } else {
-                console.log("gns");
+                console.log("special group not found");
                 $scope.selectSpecialGroup(resp[0]);
             }
         } else {
+            console.log("no special groups");
             $rootScope.specialGroupSelected = null;
-            sessionStorage.removeItem('specialGroupSelected');
+            localStorage.removeItem('specialGroupSelected');
         }
     });
 
     $scope.selectSpecialGroup = function(group){
         $rootScope.specialGroupSelected = group;
+        localStorage.specialGroupSelected = angular.toJson(group);
         //load group features into array. use "DisplayFeatureController" to establish paths for them
         switch(group.display_name){
             case "MSD Diabetes": $scope.groupFeatures = ["Januvia"]; break;
@@ -34,5 +47,20 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
             $state.reload();
         }
     };
+
+    var checkGroupInGroups = function (group, groups) {
+        var i=0;
+        try{
+            while(i<groups.length){
+                if(groups[i]._id == group._id){
+                    return true;
+                }
+                i++;
+            }
+            return false;
+        }catch(ex){
+            return false;
+        }
+    }
 
 }]);

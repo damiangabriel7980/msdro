@@ -36,7 +36,14 @@
     "angular-carousel": "latest",
     "angular-pdf": "latest",
     "angular-qr": "latest",
-    "angular-bootstrap-datetimepicker": "latest"
+    "angular-bootstrap-datetimepicker": "latest",
+    "ng-tiny-scrollbar": "latest",
+    "videogular": "latest",
+    "videogular-controls": "latest",
+    "videogular-buffering": "latest",
+    "videogular-overlay-play": "latest",
+    "videogular-poster": "latest",
+    "videogular-themes-default": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
