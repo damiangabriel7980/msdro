@@ -5,7 +5,7 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
 var MessagesDocSchema = new Schema({
-    image_path:String,
+    image:String,
     text: String,
     type: Number,
     last_updated:Date

@@ -20,6 +20,7 @@ var userSchema = new Schema({
     birthday: Date,
     show_welcome_screen: Boolean,
     state: String,
+    description:String,
     subscription: Number,
     password     : String,
     username     : String,

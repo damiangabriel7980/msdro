@@ -1,5 +1,6 @@
 <div class="col-md-11 noPadding">
     <div class="row noPadding">
+        <div class="row noPadding" style="text-align: center" ng-if="message!=''"><h4>{{message}}</h4></div>
         <div class="col-md-3 noPadding" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt" style="padding: 0 15px 0 0;">
             <div class="col-md-12 well" style="min-height: 450px;">
                 <div class="col-md-12 noPadding">

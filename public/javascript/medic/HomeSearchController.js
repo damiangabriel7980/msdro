@@ -17,38 +17,38 @@ cloudAdminControllers.controller('HomeSearchController', ['$scope', '$rootScope'
         $scope.multimedia=[];
         $scope.articles=[];
         $scope.calendarEv=[];
-        for(var i=0;i<$scope.productsFirstSet.length;i++)
-        {
-            if($scope.productsFirstSet[i]!=null)
-                $scope.products.push($scope.productsFirstSet[i]);
-        }
+        $scope.answer="";
+        if(!response.answer) {
+            for (var i = 0; i < $scope.productsFirstSet.length; i++) {
+                if ($scope.productsFirstSet[i] != null)
+                    $scope.products.push($scope.productsFirstSet[i]);
+            }
 
-        $scope.quizesFirstSet= response.quizes;
-        for(var i=0;i<$scope.quizesFirstSet.length;i++)
-        {
-            if($scope.quizesFirstSet[i]!=null)
-                $scope.quizes.push($scope.quizesFirstSet[i]);
-        }
+            $scope.quizesFirstSet = response.quizes;
+            for (var i = 0; i < $scope.quizesFirstSet.length; i++) {
+                if ($scope.quizesFirstSet[i] != null)
+                    $scope.quizes.push($scope.quizesFirstSet[i]);
+            }
 
-        $scope.multimediaFirstSet=response.multimedia;
-        for(var i=0;i<$scope.multimediaFirstSet.length;i++)
-        {
-            if($scope.multimediaFirstSet[i]!=null)
-                $scope.multimedia.push($scope.multimediaFirstSet[i]);
-        }
+            $scope.multimediaFirstSet = response.multimedia;
+            for (var i = 0; i < $scope.multimediaFirstSet.length; i++) {
+                if ($scope.multimediaFirstSet[i] != null)
+                    $scope.multimedia.push($scope.multimediaFirstSet[i]);
+            }
 
-        $scope.articlesFirstSet=response.articles;
-        for(var i=0;i<$scope.articlesFirstSet.length;i++)
-        {
-            if($scope.articlesFirstSet[i]!=null)
-                $scope.articles.push($scope.articlesFirstSet[i]);
+            $scope.articlesFirstSet = response.articles;
+            for (var i = 0; i < $scope.articlesFirstSet.length; i++) {
+                if ($scope.articlesFirstSet[i] != null)
+                    $scope.articles.push($scope.articlesFirstSet[i]);
+            }
+            $scope.calendarEvFirstSet = response['calendar-events'];
+            for (var i = 0; i < $scope.calendarEvFirstSet.length; i++) {
+                if ($scope.calendarEvFirstSet[i] != null)
+                    $scope.calendarEv.push($scope.calendarEvFirstSet[i]);
+            }
         }
-        $scope.calendarEvFirstSet = response['calendar-events'];
-        for(var i=0;i<$scope.calendarEvFirstSet.length;i++)
-        {
-            if($scope.calendarEvFirstSet[i]!=null)
-                $scope.calendarEv.push($scope.calendarEvFirstSet[i]);
-        }
+        else
+            $scope.answer=response.answer;
         $timeout(function(){
             //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
             //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());

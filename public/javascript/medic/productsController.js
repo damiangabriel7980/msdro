@@ -14,6 +14,7 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     $scope.allAreas=1;
     $scope.filtProd=[];
     $scope.lmt=8;
+    $scope.message="";
     angular.element("#footer").css({'position': 'relative','bottom':0});
     $scope.showMoreProd="show";
     $scope.increaseLimit=function(){
@@ -25,6 +26,10 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     $scope.firstLetters=[];
     ProductService.getByArea.query({id:$stateParams.id}).$promise.then(function(result){
          $scope.products = result;
+        if($scope.products.length===0)
+        {
+            $scope.message="Nu sunt produse disponibile!";
+        }
         $scope.productsReserve=[];
         $scope.productsFiltered=[];
         if($scope.products.length>8)
@@ -72,6 +77,10 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
             }
         }
         $scope.products=$scope.productsFiltered;
+        if($scope.products.length===0)
+        {
+            $scope.message="Nu sunt produse disponibile";
+        }
         if($scope.products.length<=$scope.lmt)
             $scope.showMoreProd='hide';
         else

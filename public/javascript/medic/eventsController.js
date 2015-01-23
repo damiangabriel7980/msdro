@@ -14,15 +14,16 @@ var date = new Date();
            var today = new Date($scope.events[i].end);
            var tomorrow = new Date($scope.events[i].end);
            tomorrow.setDate(today.getDate()+1);
-           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.events[i].name,start: new Date($scope.events[i].start), end: tomorrow ,allDay: false,className: 'events',color: '#006d69'});
+           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.trimTitle($scope.events[i].name),start: new Date($scope.events[i].start), end: tomorrow ,allDay: false,className: 'events',color: '#006d69', type: $scope.events[i].name});
        }
 
          $scope.realEvents=[$scope.eventsS];
          $scope.eventRender = function(data, event, view){
               angular.element('.fc-event-hori').attr("data-toggle","popover");
-             angular.element('.fc-event-hori').attr("data-content",data.title);
+             angular.element('.fc-event-hori').attr("data-content",data.type);
+             //console.log(data);
              var options = {
-                 'title':'Eveniment:',
+                 'title':$scope.newDate(data.start)  + " - " + $scope.newDate(data.end),
                  trigger:"hover",
                  placement:'auto',
                  container:'body',
@@ -61,7 +62,7 @@ var date = new Date();
              //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
              //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
              //else
-             var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-5);
+             var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight());
              angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
          },300);
      })
@@ -88,6 +89,21 @@ var date = new Date();
             }
         });
     };
+    angular.element('.fc-button-next').on('click',function(){
+        var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight());
+        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
+    });
+    angular.element('.fc-button-prev').on('click',function(){
+        var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight());
+        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
+    });
+    $scope.newDate=function(input){
+        var data = new Date(input);
+        return data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
+    };
+    $scope.trimTitle=function(str) {
+        return str.split(/\s+/).slice(0,3).join(" ");
+    };
     if($stateParams.id)
     {
         $timeout(function(){
@@ -103,7 +119,7 @@ var date = new Date();
                 }
             }
         });
-    },50);
+    },100);
     }
 }])
     .filter('htmlToPlaintext', function() {

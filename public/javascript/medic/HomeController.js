@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout) {
+cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state) {
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
@@ -69,7 +69,6 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.toDate = function (ISOdate) {
         return new Date(ISOdate);
     };
-
     $scope.trimTitle=function(str) {
         return str.split(/\s+/).slice(0,3).join(" ");
     };
@@ -124,6 +123,12 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
+    $scope.searchText=function(){
+        if($scope.textToSearch==="")
+            return;
+        else
+            $state.go('homeSearch',{data:$scope.textToSearch});
+    };
     /* --- carousel --- */
 
     $scope.selectedIndex = 0;
@@ -134,4 +139,18 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     {
         $scope.selectedIndex = index;
     };
-}]);
+
+}])
+    .directive('ngEnter', function () {
+        return function (scope, element, attrs) {
+            element.bind("keydown keypress", function (event) {
+                if (event.which === 13) {
+                    scope.$apply(function () {
+                        scope.$eval(attrs.ngEnter);
+                    });
+
+                    event.preventDefault();
+                }
+            });
+        };
+    });

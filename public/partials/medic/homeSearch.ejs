@@ -1,5 +1,9 @@
 <div class="col-md-6 col-md-offset-3">
+
     <h4 class="margintop20px">Cautare Continut</h4>
+    <div ng-if="answer!=''" class="col-md-12">
+        <h4>{{answer}}</h4>
+    </div>
     <div ng-if="products.length>0" ng-repeat="product in products" class="col-md-12 searchArticle noPadding">
         <div class="col-md-2 noPadding" ng-class="showDetails">
             <img class="img-responsive img-thumbnail"  ng-src="{{amazon+product.image_path}}">

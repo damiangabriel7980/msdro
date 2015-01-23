@@ -78,7 +78,7 @@ var deleteObjectS3 = function (key, callback) {
 
 var addObjectS3 = function(key,body,callback){
     var bodyNew = new Buffer(body,'base64');
-    s3.upload({Bucket: amazonBucket,Key: key, Body:bodyNew, ACL:'public-read-write'}, function (err, data2) {
+    s3.upload({Bucket: amazonBucket,Key: key, Body:bodyNew, ACL:'public-read'}, function (err, data2) {
         callback(err, data2);
     });
 
@@ -2694,7 +2694,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function(req, res) {
             var cType = req.body.content_type;
             var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, cType, specialGroupSelected, null, null, function (err, content) {
+            getUserContent(req.user, cType, specialGroupSelected, null, 'last_updated', function (err, content) {
                 if(err){
                     res.send(err);
                 }else{
@@ -3055,11 +3055,14 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var data=req.params.data;
             var arr_of_items=[Products,Multimedia,Quizes,Content,Events];
             var ObjectOfResults={};
+            var checker=0;
             async.each(arr_of_items, function (item, callback) {
                 item.search({
+
                     query_string: {
                         query: data
                     }
+
                 },{hydrate:true}, function(err, results) {
                     if(err)
                     {
@@ -3068,7 +3071,19 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     }
                     else
                     {
-                        ObjectOfResults[item.modelName]=results.hits.hits;
+                        if(results.hits.hits.length===0)
+                            checker+=1;
+                        else
+                        {
+                            //var myResults=[];
+                            //for(var i=0;i<results.hits.hits.length;i++)
+                            //{
+                            //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
+                            //        myResults.push(results.hits.hits[i]);
+                            //}
+                            ObjectOfResults[item.modelName]=myResults;
+                        }
+
                     }
 
 
@@ -3079,7 +3094,10 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.json(err);
                 else
                {
-                   res.json(ObjectOfResults);
+                    if(checker===5)
+                        res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
+                   else
+                        res.json(ObjectOfResults);
                }
 
             })
@@ -3161,20 +3179,21 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var test = new Array(req.params.id);
             if(test[0]!=0)
             {
-                Products.find({'therapeutic-areasID': {$in :test}}, function(err, cont) {
+                Products.find({'therapeutic-areasID': {$in :test},groupsID: {$in: req.user.groupsID}}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
-                res.json(cont);
+                    else
+                        res.json(cont);
             })}
             else
             {
-                Products.find(function(err, cont) {
+                Products.find({groupsID: {$in: req.user.groupsID}},function(err, cont) {
                     if(err) {
                         res.send(err);
                     }
-
-                    res.json(cont);
+                    else
+                        res.json(cont);
                 });
             }
         });
@@ -3198,12 +3217,13 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.send(err)
                 }
                 else {
-                    Events.find({groupsID: {$in: usr.groupsID},enable: true}, function (err, cont) {
+                    Events.find({groupsID: {$in: usr.groupsID},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
                         if (err) {
                             res.send(err);
                         }
-                        res.json(cont);
-                    }).limit(50);
+                        else
+                            res.json(cont);
+                    })
                 }
             })
         });
