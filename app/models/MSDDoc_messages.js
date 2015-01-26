@@ -8,7 +8,8 @@ var MessagesDocSchema = new Schema({
     image:String,
     text: String,
     type: Number,
-    last_updated:Date
+    created:Date,
+    read: Boolean
 });
 
-module.exports = mongoose.model('messages_doc',MessagesDocSchema,'messages_doc');
+module.exports = mongoose.model('MSDDoc_messages',MessagesDocSchema,'MSDDoc_messages');

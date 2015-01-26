@@ -2,24 +2,19 @@
  * Created by miricaandrei23 on 10.12.2014.
  */
 var mongoose = require('mongoose');
-var User = require('./models/user');
 var jwt = require('jsonwebtoken');
-var XRegExp  = require('xregexp').XRegExp;
-var validator = require('validator');
-var crypto   = require('crypto');
 var expressJwt = require('express-jwt');
-var async = require('async');
-var NewsPost = require('./models/newspost');
-var chatDoc= require('./models/chatDoc');
-var MessagesDoc= require('./models/messagesDoc');
-var request = require('request');
-var fs = require('fs');
-var Roles=require('./models/roles');
+var url = require('url');
+
 var Counties = require('./models/counties');
 var Job = require('./models/jobs');
 var Cities = require('./models/cities');
 var Therapeutic_Area = require('./models/therapeutic_areas');
-var url = require('url');
+
+var NewsPost = require('./models/MSDDoc_news_post');
+var Chat= require('./models/MSDDoc_chat');
+var Messages= require('./models/MSDDoc_messages');
+
 //configure credentials for use on server only; assign credentials based on role (never use master credentials)
 
 
@@ -220,7 +215,7 @@ module.exports = function(app, logger, tokenSecret, router) {
             console.log(req.query);
             if(req.query.id){
                 var id=req.query.id;
-                chatDoc.findOne({post_id: id}).populate('message_ids',{ sort: { 'last_updated': 1 } }).populate('post_id').populate('chat_receiver chat_sender').exec(function(err,result){
+                Chat.findOne({post_id: id}).populate('message_ids',{ sort: { 'last_updated': 1 } }).populate('post_id').populate('chat_receiver chat_sender').exec(function(err,result){
                     if(err)
                         res.json(err);
                     else
@@ -248,7 +243,7 @@ module.exports = function(app, logger, tokenSecret, router) {
         var MyNewsPost = new NewsPost();
         MyNewsPost.title=req.body.title;
         MyNewsPost.message=req.body.message;
-        MyNewsPost.last_updated= Date.now();
+        MyNewsPost.created= Date.now();
 //        if(req.body.imageSerialized)
 //            MyNewsPost.image_path=req.body.imageSerialized;
 //        else
