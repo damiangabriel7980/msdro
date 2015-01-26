@@ -6605,7 +6605,7 @@ ul.products li {
   width: 100%;
   clear: both;
   height: 35px;
-  position: relative;
+  position: fixed;
   bottom: 0;
   left: 0;
 }

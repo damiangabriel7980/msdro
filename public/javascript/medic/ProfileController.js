@@ -10,7 +10,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     $scope.county = {};
     $scope.city = {};
     $scope.jobTypes = ["Spital","CMI","Policlinica","Farmacie"];
-
+    $scope.selectedJob="";
     ProfileService.getUserData.query().$promise.then(function (resp) {
 
         $scope.userData = resp;
@@ -27,6 +27,13 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.userTherapeuticAreas = resp['therapeutic-areasID']?resp['therapeutic-areasID']:[];
         if(resp.job){
             $scope.job = resp.job[0];
+            switch($scope.job.job_type){
+                case 1: $scope.selectedJob="Spital"; break;
+                case 2: $scope.selectedJob="CMI"; break;
+                case 3: $scope.selectedJob="Policlinica"; break;
+                case 4: $scope.selectedJob="Farmacie"; break;
+                default: $scope.selectedJob=null; break;
+            }
         }else{
             $scope.job = {
                 _id: 0,
@@ -133,6 +140,12 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 }
             }
         }
+        if($scope.userTherapeuticAreas.length!=0) {
+            for (var i = 0; i < $scope.userTherapeuticAreas.length; i++) {
+                $scope.userTherapeuticAreas[i] = resp[resp.indexOf($scope.userTherapeuticAreas[i])];
+            }
+        }
+        console.log($scope.userTherapeuticAreas);
         $scope.allAreas = areasOrganised;
         $scope.selectedArea = $scope.allAreas[0];
 
@@ -184,6 +197,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     //user profile
     $scope.userProfileAlert = {newAlert:false, type:"", message:""};
     $scope.submitProfileForm = function (isValid) {
+        console.log(isValid);
         if(isValid){
             var toSend = {};
             toSend.firstName = this.firstName;
