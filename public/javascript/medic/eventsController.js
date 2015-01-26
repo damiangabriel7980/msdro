@@ -112,7 +112,7 @@ var date = new Date();
                 }
             }
         });
-    },100);
+    },150);
     }
 }])
     .filter('htmlToPlaintext', function() {

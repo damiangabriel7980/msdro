@@ -25,6 +25,20 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.imageUser = imagePre + resp.image_path;
         $scope.hideImg="show";
         $scope.userTherapeuticAreas = resp['therapeutic-areasID']?resp['therapeutic-areasID']:[];
+        if($scope.userTherapeuticAreas.length!=0) {
+            for (var i = 0; i < $scope.allAreas.length; i++) {
+                for (var j=0;j<$scope.userTherapeuticAreas.length;j++){
+                    if($scope.allAreas[i].id===$scope.userTherapeuticAreas[j])
+                    {
+                        $scope.userTherapeuticAreas[j] = $scope.allAreas[i];
+                        continue;
+                    }
+
+                }
+
+            }
+            console.log($scope.userTherapeuticAreas);
+        }
         if(resp.job){
             $scope.job = resp.job[0];
             switch($scope.job.job_type){
@@ -118,10 +132,12 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     });
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
-
+    $scope.allAreas=[];
     //get all
+    var therap=[];
     therapeuticAreaService.query().$promise.then(function (resp) {
         var areasOrganised = [];
+        therap=resp;
         areasOrganised.push({id:0, name:"Adauga arii terapeutice"});
         areasOrganised.push({id:1, name:"Toate"});
         for(var i=0; i<resp.length; i++){
@@ -140,12 +156,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 }
             }
         }
-        if($scope.userTherapeuticAreas.length!=0) {
-            for (var i = 0; i < $scope.userTherapeuticAreas.length; i++) {
-                $scope.userTherapeuticAreas[i] = resp[resp.indexOf($scope.userTherapeuticAreas[i])];
-            }
-        }
-        console.log($scope.userTherapeuticAreas);
+
         $scope.allAreas = areasOrganised;
         $scope.selectedArea = $scope.allAreas[0];
 
