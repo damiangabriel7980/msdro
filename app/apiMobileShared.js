@@ -186,6 +186,8 @@ module.exports = function(app, logger, tokenSecret, mandrill, router) {
             });
         });
 
+    /*
+
     //=============================================================================================================== change password
 
     router.route('/changePassword')
@@ -401,7 +403,7 @@ module.exports = function(app, logger, tokenSecret, mandrill, router) {
             });
         });
 
-    //================================================================================================================ update user profile
+    */
 
 //========================================================================================================== route for retrieving user's profile info
     router.route('/userProfile')
