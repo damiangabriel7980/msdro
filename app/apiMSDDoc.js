@@ -19,6 +19,7 @@ var Counties = require('./models/counties');
 var Job = require('./models/jobs');
 var Cities = require('./models/cities');
 var Therapeutic_Area = require('./models/therapeutic_areas');
+var url = require('url');
 //configure credentials for use on server only; assign credentials based on role (never use master credentials)
 
 
@@ -214,44 +215,54 @@ module.exports = function(app, logger, tokenSecret, router) {
 
 
     //========get News by Different Parameters=======//
-    router.route('/getNewsPost/:pageSize')
+    router.route('/newsPost')
         .get(function(req,res){
-            var pageSize=req.params.pageSize;
-            NewsPost.find({}).sort({'last_updated' : -1}).skip(pageSize).limit(20)
-                .exec(function(err, result) {
+            console.log(req.query);
+            if(req.query.id){
+                var id=req.query.id;
+                chatDoc.findOne({post_id: id}).populate('message_ids',{ sort: { 'last_updated': 1 } }).populate('post_id').populate('chat_receiver chat_sender').exec(function(err,result){
                     if(err)
                         res.json(err);
                     else
                         res.json(result);
-                });
-        });
-    router.route('/getNewsPostByTimestamp/:timestamp')
-        .get(function(req,res){
-            if(req.params.timestamp!=undefined)
-                var timestamp=new Date(req.params.timestamp);
+                })
+            }else if(req.query.pageSize){
+                var pageSize=req.query.pageSize;
+                var timestamp = req.query.timestamp;
+                var q = {};
+                if(timestamp){
+                    q['last_updated'] = {$lt: new Date(timestamp)};
+                }
+                NewsPost.find(q).sort({'last_updated' : -1}).limit(pageSize)
+                    .exec(function(err, result) {
+                        if(err)
+                            res.json(err);
+                        else
+                            res.json(result);
+                    });
+            } else {
+                res.send({hasError: true, text: "Invalid params"});
+            }
+        })
+    .post(function(req,res){
+        var MyNewsPost = new NewsPost();
+        MyNewsPost.title=req.body.title;
+        MyNewsPost.message=req.body.message;
+        MyNewsPost.last_updated= Date.now();
+//        if(req.body.imageSerialized)
+//            MyNewsPost.image_path=req.body.imageSerialized;
+//        else
+//            MyNewsPost.image_path="";
+        MyNewsPost.save(function(err,saved){
+            if(err)
+                res.json(err);
             else
-                var timestamp = new Date();
-            console.log(timestamp);
-            NewsPost.find({last_updated: {$lt: timestamp}}).sort({'last_updated' : -1}).limit(20)
-                .exec(function(err, result) {
-                    if(err)
-                        res.json(err);
-                    else
-                        res.json(result);
-                });
-        });
-    router.route('/getNewsPost/:id')
-        .get(function(req,res){
-           var id=req.params.id;
-            chatDoc.findOne({post_id: id}).populate('message_ids',{ sort: { 'last_updated': 1 } }).populate('post_id').populate('chat_receiver chat_sender').exec(function(err,result){
-                if(err)
-                    res.json(err);
-                else
-                    res.json(result);
-            })
-        });
+            {
+                res.send({status:200, saved: saved});
 
-
+            }
+        })
+    });
 
     //========get Medics paginated=======//
 
@@ -833,32 +844,6 @@ module.exports = function(app, logger, tokenSecret, router) {
             })
         });
 
-
-
-
-    //===============Post on News Feed================//
-    router.route('/postQuestionNonExistingChat')
-        .post(function(req,res){
-            var MyNewsPost = new NewsPost();
-            MyNewsPost.title=req.body.title;
-            MyNewsPost.short_description = req.body.short_description;
-            MyNewsPost.last_updated= new Date();
-            MyNewsPost.owner_post=req.user._id;
-            MyNewsPost.chat_id=[];
-            if(req.body.imageSerialized)
-                MyNewsPost.image_path=req.body.imageSerialized;
-            else
-                MyNewsPost.image_path="";
-            MyNewsPost.save(function(err,result){
-                if(err)
-                    res.json(err);
-                else
-                {
-                        res.send({status:200,idPost: result._id});
-
-                }
-            })
-        });
 
     app.use('/apiMSDDoc', router);
 };
