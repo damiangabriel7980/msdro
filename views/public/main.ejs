@@ -26,7 +26,6 @@
     <script src="javascript/public/home/NoutatiController.js"></script>
     <script src="javascript/public/home/CeleMaiCititeController.js"></script>
     <script src="javascript/public/home/HomeDownloadsController.js"></script>
-    <script src="javascript/public/footerController.js"></script>
     <script src="javascript/public/modals/contactModalController.js"></script>
     <script src="javascript/public/news/newsController.js"></script>
     <script src="javascript/public/articles/articlesController.js"></script>
@@ -81,7 +80,7 @@
                                 </li>
                                 <li>|</li>
                                 <li>
-                                    <a href="#">Contact</a>
+                                    <a style="cursor: pointer" ng-click="showContactModal()">Contact</a>
                                 </li>
                                 <li>|</li>
                                 <li>
@@ -126,7 +125,7 @@
                         </li>
                         <li class="link-divider"></li>
                         <li class="navbar-link">
-                            <a href="#">Contact</a>
+                            <a style="cursor: pointer" ng-click="showContactModal()">Contact</a>
                         </li>
                         <li class="link-divider"></li>
                         <li class="navbar-link">
@@ -148,7 +147,7 @@
         <hr>
         <a href="#">Home</a>&nbsp;|&nbsp;
         <a href="http://www.merckmanuals.com" target="_blank">Manualul Merck</a>&nbsp;|&nbsp;
-        <a style="cursor: pointer" ng-controller="FooterController" ng-click="showContactModal()">Contact</a>
+        <a style="cursor: pointer" ng-click="showContactModal()">Contact</a>
     </div>
 </div>
 
