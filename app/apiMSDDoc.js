@@ -206,11 +206,6 @@ module.exports = function(app, logger, tokenSecret, router) {
                 keepGoing = false;
             }
 
-            var q = {participants: {$in: [toSave.receiver, toSave.sender]}};
-            if(type == "postBased"){
-                q['post'] = post._id;
-            }
-
             if(keepGoing){
                 Chat.findOne(q, function (err, found) {
                     if(err){
