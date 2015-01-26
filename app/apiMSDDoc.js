@@ -209,7 +209,7 @@ module.exports = function(app, logger, tokenSecret, router) {
       //==================================================================================================================== all routes
 
 
-    //========get News by Different Parameters=======//
+    //========    NEWS POST    =======//
     router.route('/newsPost')
         .get(function(req,res){
             console.log(req.query);
@@ -223,10 +223,10 @@ module.exports = function(app, logger, tokenSecret, router) {
                 })
             }else if(req.query.pageSize){
                 var pageSize=req.query.pageSize;
-                var timestamp = req.query.timestamp;
+                var created = req.query.created;
                 var q = {};
-                if(timestamp){
-                    q['last_updated'] = {$lt: new Date(timestamp)};
+                if(created){
+                    q['last_updated'] = {$lt: new Date(created)};
                 }
                 NewsPost.find(q).sort({'last_updated' : -1}).limit(pageSize)
                     .exec(function(err, result) {
@@ -630,215 +630,104 @@ module.exports = function(app, logger, tokenSecret, router) {
     //========Get messages by topic/conversations=======//
 
 
-    router.route('/getMessagesByTopics')
-        .get(function(req,res){
-            var id = req.user._id;
-            chatDoc.find({post_id: {'$ne': null },chat_sender: id}).populate('post_id').exec(function(err, result) {
-                if(err)
-                    res.json(err);
-                else
-                    res.json(result);
-            });
-        });
+//    router.route('/getMessagesByTopics')
+//        .get(function(req,res){
+//            var id = req.user._id;
+//            chatDoc.find({post_id: {'$ne': null },chat_sender: id}).populate('post_id').exec(function(err, result) {
+//                if(err)
+//                    res.json(err);
+//                else
+//                    res.json(result);
+//            });
+//        });
+//
+//    router.route('/getMessagesByTopicsForPost/:created/:pageSize/:postID')
+//        .get(function(req,res){
+//            var id = req.user._id;
+//            var created=req.params.created;
+//            var pagesize=req.params.pageSize;
+//            var postID= req.params.postID;
+//            chatDoc.find({post_id: postID}).populate({path:'message_ids',options:{ sort: { 'last_updated': -1 },last_updated: {$lt: created},limit: pagesize }}).populate('post_id').exec(function(err, result) {
+//                if(err)
+//                    res.json(err);
+//                else
+//                    res.json(result);
+//            });
+//        });
 
-    router.route('/getMessagesByTopicsForPost/:timestamp/:pageSize/:postID')
-        .get(function(req,res){
-            var id = req.user._id;
-            var timestamp=req.params.timestamp;
-            var pagesize=req.params.pageSize;
-            var postID= req.params.postID;
-            chatDoc.find({post_id: postID}).populate({path:'message_ids',options:{ sort: { 'last_updated': -1 },last_updated: {$lt: timestamp},limit: pagesize }}).populate('post_id').exec(function(err, result) {
-                if(err)
-                    res.json(err);
-                else
-                    res.json(result);
-            });
-        });
 
-
-    router.route('/getGeneralMessages/:timestamp/:pageSize')
+    router.route('/chats')
         .get(function(req,res){
-            var id = req.user._id;
-            var timestamp=req.params.timestamp;
-            var pagesize=req.params.pageSize;
-            chatDoc.find({post_id: null,chat_sender: req.user._id}).populate({path: "message_ids", options: {sort: { 'last_updated': -1 },last_updated: {"$lt": timestamp},limit: pagesize} }).exec(function(err, result) {
-                if(err)
-                {
+            var user = getUserData(req);
+            var created=req.query.created;
+            var pageSize=req.query.pageSize;
+            var type=req.query.type;
+            var q = {$or: [{sender: user._id}, {receiver: user._id}]};
+            if(type==="topic"){
+                q['post'] = {$exists: true, $ne: null};
+            }else{
+                q['post'] = null;
+            }
+            if(created){
+                q['created'] = {"$lt": created};
+            }
+            Chat.find(q).populate("messages").sort({'created': -1}).limit(pageSize).exec(function(err, result) {
+                if(err){
                     console.log(err);
                     res.json(err);
-                }
-                else
+                }else{
                     res.json(result);
+                }
             });
-        });
+        })
+        .post(function (req, res) {
+            var userData = getUserData(req);
 
+            var type = req.query.type;
+            var user = req.body.user;
+            var post = req.body.post;
 
+            var toSave = new Chat({
+                sender: userData._id,
+                created: Date.now()
+            });
 
+            var keepGoing = true;
 
+            if(type==="userBased"){
+                toSave['post'] = null;
+                toSave['receiver'] = user._id;
+            }else if(type==="postBased"){
+                toSave['post'] = post._id;
+                toSave['receiver'] = post.owner;
+            }else{
+                res.send({hasError: true, message: "invalid query params"});
+                keepGoing = false;
+            }
 
-    router.route('/sendMessageToDoctor')
-        .post(function(req,res){
-            //var data= req.body.data;
-            chatDoc.find({chat_receiver: req.body.receiver_id,chat_sender: req.user._id,post_id:null}).populate('message_ids').exec(function(err,resp){
-                if(err)
-                    res.json(err);
-                else
-                {
-                    if(resp.length==0)
-                    {
-                        var message = new MessagesDoc();
-                        message.type=req.body.type;
-                        message.last_updated=new Date();
-                        message.text=req.body.text;
-                        if(req.body.imagePath)
-                            message.image_path=req.body.imagePath;
-                        else
-                            message.image_path="";
-                        message.save(function(err,result){
-                            if(err)
-                                res.json(err);
-                            else
-                                var myMessage=result;
-                            var Chat = new chatDoc();
-                            Chat.message_ids.push(myMessage._id);
-                            Chat.post_id=null;
-                            Chat.chat_receiver=req.body.receiver_id;
-                            Chat.chat_sender=req.user._id;
-                            Chat.last_updated=new Date();
-                            Chat.save(function(err,response){
-                                if(err)
-                                    res.json(err);
-                                else
-                                    res.json(response);
-                            });
-                        })
-                    }
-                    else
-                    {
-                        var message = new MessagesDoc();
-                        message.type=req.body.type;
-                        message.last_updated=new Date();
-                        message.text=req.body.text;
-                        if(req.body.imagePath)
-                            message.image_path=req.body.imagePath;
-                        else
-                            message.image_path="";
-                        message.save(function(err,result){
-                            if(err)
-                                res.json(err);
-                            else
-                            {
-                                var Chat = resp[0];
-                                Chat.message_ids.push(result._id);
-                                Chat.last_updated=new Date();
-                                Chat.save(function(err,success){
-                                    if(err)
-                                        res.json(err);
-                                    else
-                                        res.json(success);
-                                })
+            var q = {participants: {$in: [toSave.receiver, toSave.sender]}};
+            if(type == "postBased"){
+                q['post'] = post._id;
+            }
+
+            if(keepGoing){
+                Chat.findOne(q, function (err, found) {
+                    if(err){
+                        res.send(err);
+                    }else if(found){
+                        res.send(found);
+                    }else{
+                        toSave.save(function (err, saved) {
+                            if(err){
+                                res.send(err);
+                            }else{
+                                res.send(saved);
                             }
-                        })
+                        });
                     }
-                }
-            })
+                });
+            }
         });
-
-
-
-
-    router.route('/answerQuestion')
-        .post(function(req,res){
-            //var data= req.body.data;
-            chatDoc.find({post_id:req.body.idPost,chat_receiver:req.body.ownerPost,chat_sender:req.user._id}).populate('message_ids').exec(function(err,resp){
-                if(err)
-                    res.json(err);
-                else
-                {
-                    if(resp.length==0)
-                    {
-                        var message = new MessagesDoc();
-                        message.type=req.body.type;
-                        message.last_updated=new Date();
-                        message.text=req.body.text;
-                        if(req.body.imagePath)
-                            message.image_path=req.body.imagePath;
-                        else
-                            message.image_path="";
-                        message.save(function(err,result){
-                            if(err)
-                                res.json(err);
-                            else
-                            {
-
-                                var Chat = new chatDoc();
-                                Chat.message_ids.push(result._id);
-                                Chat.last_updated=new Date();
-                                Chat.chat_sender=req.user._id;
-                                Chat.chat_receiver=req.body.ownerPost;
-                                Chat.post_id=req.body.idPost;
-                                Chat.save(function(err,success){
-                                    if(err)
-                                        res.json(err);
-                                    else
-                                    {
-                                        var MyChat = success;
-                                        NewsPost.findOne({_id:req.body.idPost}).exec(function(err,MyPost){
-                                           if(err)
-                                                res.send(err);
-                                            else
-                                           {
-                                               var newPost=MyPost;
-                                               newPost.chat_id.push(MyChat._id);
-                                               newPost.save(function(err,resultPost){
-                                                   if(err)
-                                                       res.send(err);
-                                                   else
-                                                       res.send(resultPost);
-                                               })
-                                           }
-                                        });
-                                    }
-                                })
-
-                            }
-                        })
-                    }
-                    else
-                    {
-                        var message = new MessagesDoc();
-                        message.type=req.body.type;
-                        message.last_updated=new Date();
-                        message.text=req.body.text;
-                        if(req.body.imagePath)
-                            message.image_path=req.body.imagePath;
-                        else
-                            message.image_path="";
-                        message.save(function(err,result){
-                            if(err)
-                                res.json(err);
-                            else
-                            {
-
-                                    var Chat = resp[0];
-                                    Chat.message_ids.push(result._id);
-                                    Chat.last_updated=new Date();
-                                    Chat.save(function(err,success){
-                                        if(err)
-                                            res.json(err);
-                                        else
-                                            res.json(success);
-                                    })
-
-                            }
-
-
-                        })
-                    }
-                }
-            })
-        });
-
 
     app.use('/apiMSDDoc', router);
 };
