@@ -1,0 +1,8 @@
+.myMultipleSelect {
+  width: 100%;
+  height: 300px;
+  overflow: scroll;
+}
+.myMultipleSelect .item {
+  width: 100%;
+}

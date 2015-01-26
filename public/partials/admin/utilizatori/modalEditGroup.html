@@ -44,8 +44,7 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <select ng-model="selectedUsers" ng-options="u as u.username for u in users" multiple bs-duallistbox move-on-select="false">
-                </select>
+                <my-multiple-select all-objects="users" selected-objects="selectedUsers" track-by="_id" display-by="username"></my-multiple-select>
             </div>
         </div>
         <div class="modal-footer">

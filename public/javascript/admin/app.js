@@ -4,13 +4,13 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'cloudAdminControllers',
         'cloudAdminServices',
         'ngTable',
-        'frapontillo.bootstrap-duallistbox',
         'angularFileUpload',
         'ui.tinymce',
         'ui.select',
         'ja.qr',
         'ui.bootstrap.datetimepicker',
-        'angular-growl'
+        'angular-growl',
+        'myMultipleSelect'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

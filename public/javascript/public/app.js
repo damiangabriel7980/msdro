@@ -120,6 +120,15 @@ publicApp.run(
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
 
+            //contact modal
+            $rootScope.showContactModal = function(){
+                $modal.open({
+                    templateUrl: 'partials/public/modals/contactModal.html',
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'ContactModalController'
+                });
+            };
         }
     ]
 );
