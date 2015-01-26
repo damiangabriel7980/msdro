@@ -58,6 +58,23 @@ var date = new Date();
                 }
 
      }}
+         if($stateParams.id)
+         {
+             $timeout(function(){
+                 $modal.open({
+                     templateUrl: 'partials/medic/calendarDetails.ejs',
+                     backdrop: true,
+                     size: 'lg',
+                     windowClass: 'fade',
+                     controller: 'modalCtrl',
+                     resolve:{
+                         idEvent: function () {
+                             return $stateParams.id;
+                         }
+                     }
+                 });
+             },150);
+         }
      })
     ;
     eventsService.query().$promise.then(function(result) {
@@ -97,23 +114,7 @@ var date = new Date();
     $scope.trimTitle=function(str) {
         return str.split(/\s+/).slice(0,3).join(" ");
     };
-    if($stateParams.id)
-    {
-        $timeout(function(){
-        $modal.open({
-            templateUrl: 'partials/medic/calendarDetails.ejs',
-            backdrop: true,
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'modalCtrl',
-            resolve:{
-                idEvent: function () {
-                    return $stateParams.id;
-                }
-            }
-        });
-    },150);
-    }
+
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {

@@ -7069,3 +7069,15 @@ hr {
   vertical-align: middle;
   text-align: center;
 }
+.no-text-decoration {
+  text-decoration: none !important;
+}
+.no-text-decoration a:hover {
+  text-decoration: none !important;
+}
+.no-text-decoration a:active {
+  text-decoration: none !important;
+}
+.no-text-decoration a:focus {
+  text-decoration: none !important;
+}

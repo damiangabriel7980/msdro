@@ -3,8 +3,8 @@
 </div>
 <div class="modal-body">
     <accordion close-others="true">
-        <accordion-group is-open="openFirst">
-            <accordion-heading><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Profilul meu</accordion-heading>
+        <accordion-group class="no-text-decoration" is-open="openFirst">
+            <accordion-heading class="no-text-decoration" ><p class="no-text-decoration"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Profilul meu</p></accordion-heading>
             <div class="col-md-12">
                 <alert ng-if="userProfileAlert.newAlert" type="{{userProfileAlert.type}}" close="userProfileAlert.newAlert=false">{{userProfileAlert.message}}</alert>
             </div>
@@ -16,16 +16,19 @@
                         </div>
                         <div class="col-md-8">
                             <div class="form-group col-md-6" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine}">
-                                <label for="nume">Nume:</label>
+                                <label for="nume">Nume<sup>*</sup>:</label>
                                 <input type="text" class="form-control" id="nume" name="nume" ng-model="firstName" ng-pattern="/^[a-zA-Z\s]{3,30}$/" required>
+                                <p class="help-block" ng-show="profileForm.nume.$invalid && !profileForm.nume.$pristine ">Numele nu este valid!</p>
                             </div>
                             <div class="form-group col-md-6" ng-class="{'has-error': profileForm.prenume.$invalid && !profileForm.prenume.$pristine}">
-                                <label for="prenume">Prenume:</label>
+                                <label for="prenume">Prenume<sup>*</sup>:</label>
                                 <input type="text" class="form-control" id="prenume" name="prenume" ng-model="lastName" ng-pattern="/^[a-zA-Z\s]{3,30}$/" required>
+                                <p class="help-block" ng-show="profileForm.prenume.$invalid && !profileForm.prenume.$pristine ">Prenumele nu este valid!</p>
                             </div>
                             <div class="form-group col-md-12" ng-class="{'has-error': profileForm.telefon.$invalid && !profileForm.telefon.$pristine}">
-                                <label for="telefon">Telefon:</label>
+                                <label for="telefon">Telefon<sup>*</sup>:</label>
                                 <input type="text" class="form-control" id="telefon" name="telefon" ng-model="phone" ng-pattern="/^[0-9]{10,20}$/" required>
+                                <p class="help-block" ng-show="profileForm.telefon.$invalid && !profileForm.telefon.$pristine ">Numar de telefon invalid!</p>
                             </div>
                             <div class="col-md-12">
                                 <label for="abonat">Abonat la newsletter</label>
@@ -47,24 +50,26 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Judet: </label>
-                                <ui-select ng-model="county.selected" theme="select2" ng-disabled="false" style="width: 100%;" id="county" required>
+                                <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county" required>
                                     <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
                                     <ui-select-choices repeat="county in counties | propsFilter: {name: $select.search}">
                                         <div ng-bind-html="trustAsHtml((county.name | highlight: $select.search))"></div>
                                     </ui-select-choices>
                                 </ui-select>
+                                <p class="help-block" ng-show="profileForm.judet.$invalid && !profileForm.judet.$pristine ">Judetul nu este valid!</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Oras: </label>
-                                <ui-select ng-model="city.selected" theme="select2" ng-disabled="false" style="width: 100%;" id="city" required>
+                                <ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" required>
                                     <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
                                     <ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">
                                         <div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
+                            <p class="help-block" ng-show="profileForm.oras.$invalid && !profileForm.oras.$pristine ">Orasul nu este valid!</p>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -89,8 +94,8 @@
                 </div>
             </form>
         </accordion-group>
-        <accordion-group>
-            <accordion-heading><i class="glyphicon glyphicon-lock"></i>&nbsp;&nbsp;Loc de munca</accordion-heading>
+        <accordion-group class="no-text-decoration">
+            <accordion-heading class="no-text-decoration"><p class="no-text-decoration"><i class="glyphicon glyphicon-lock"></i>&nbsp;&nbsp;Loc de munca</p></accordion-heading>
             <div class="col-md-12">
                 <alert ng-if="userJobAlert.newAlert" type="{{userJobAlert.type}}" close="userJobAlert.newAlert=false">{{userJobAlert.message}}</alert>
             </div>
@@ -98,27 +103,35 @@
                 <div class="col-md-12">
                     <div class="form-group col-md-6">
                         <label for="tipLoc">Tip loc de munca<sup>*</sup>:</label>
-                        <select ng-model="selectedJob" ng-options="jobS for jobS in jobTypes" class="form-control" id="tipLoc" style="width: 100%;">
+                        <select ng-model="selectedJob" name="tip_munca" ng-options="jobS for jobS in jobTypes" class="form-control" id="tipLoc" style="width: 100%;">
                             <option value="">Selecteaza o optiune</option>
                         </select>
+                        <p class="help-block" ng-show="jobForm.tip_munca.$invalid && !jobForm.tip_munca.$pristine ">Tipul locului de munca este invalid!</p>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="locMunca">Loc de munca<sup>*</sup>:</label>
-                        <input type="text" class="form-control" id="locMunca" ng-model="job.job_name">
+                        <input type="text" class="form-control" id="locMunca" name="locMunca" ng-model="job.job_name" required>
+                        <p class="help-block" ng-show="jobForm.locMunca.$invalid && !jobForm.locMunca.$pristine ">Introduceti un loc de munca!</p>
+
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group col-md-4">
                         <label for="numeStrada">Numele strazii<sup>*</sup>:</label>
-                        <input type="text" class="form-control" id="numeStrada" ng-model="job.street_name">
+                        <input type="text" class="form-control" name="numeStrada" id="numeStrada" ng-model="job.street_name" required>
+                        <p class="help-block" ng-show="jobForm.numeStrada.$invalid && !jobForm.numeStrada.$pristine ">Introduceti o strada!</p>
+
                     </div>
                     <div class="form-group col-md-4">
                         <label for="numarStrada">Numarul strazii<sup>*</sup>:</label>
-                        <input type="text" class="form-control" id="numarStrada" ng-model="job.street_number">
+                        <input type="text" class="form-control" id="numarStrada" name="numarStrada" ng-pattern="/^[0-9]/" ng-model="job.street_number" required>
+                        <p class="help-block" ng-show="jobForm.numarStrada.$invalid && !jobForm.numarStrada.$pristine ">Introduceti un numar al strazii!</p>
+
                     </div>
                     <div class="form-group col-md-4">
                         <label for="codPostal">Cod postal:</label>
-                        <input type="text" class="form-control" id="codPostal" ng-model="job.postal_code">
+                        <input type="text" class="form-control" id="codPostal" name="codPostal" ng-model="job.postal_code" ng-pattern="/^[0-9]/" required >
+                        <p class="help-block" ng-show="jobForm.codPostal.$invalid && !jobForm.codPostal.$pristine ">Introduceti un cod postal format numai din cifre!</p>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -132,8 +145,8 @@
                 </div>
             </form>
         </accordion-group>
-        <accordion-group>
-            <accordion-heading><i class="glyphicon glyphicon-tags"></i>&nbsp;&nbsp;Contul meu</accordion-heading>
+        <accordion-group class="no-text-decoration">
+            <accordion-heading class="no-text-decoration"><p class="no-text-decoration"><i class="glyphicon glyphicon-tags"></i>&nbsp;&nbsp;Contul meu</p></accordion-heading>
             <div class="col-md-12">
                 <h4>Schimba e-mail</h4>
                 <hr/>
@@ -145,11 +158,15 @@
                 <div class="col-md-12">
                     <div class="form-group col-md-6">
                         <label for="emailNew"><sup>*</sup>Adresa de e-mail:</label>
-                        <input type="text" class="form-control" id="emailNew" ng-model="changeMail">
+                        <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="username" required >
+                        <p class="help-block">Atentie! Daca va schimbati e-mail-ul, atunci acesta va deveni noul username pentru autentificare</p>
+                        <p class="help-block" ng-show="emailForm.emailNew.$invalid && !emailForm.emailNew.$pristine ">Introduceti un email valid!</p>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="changeEmailPass"><sup>*</sup>Parola:</label>
-                        <input type="password" class="form-control" id="changeEmailPass" ng-model="changePass">
+                        <input type="password" class="form-control" id="changeEmailPass" name="changeEmailPass" ng-model="changePass" required>
+                        <p class="help-block">Parola este necesara pentru a confirma schimbarea e-mail-ului!</p>
+                        <p class="help-block" ng-show="emailForm.changeEmailPass.$invalid && !emailForm.changeEmailPass.$pristine ">Introduceti parola corecta!</p>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -167,17 +184,20 @@
                 <div class="col-md-12">
                     <div class="form-group col-md-12">
                         <label for="oldPass"><sup>*</sup>Parola:</label>
-                        <input type="password" class="form-control" id="oldPass" ng-model="oldPass">
+                        <input type="password" class="form-control" id="oldPass" name="oldPass" ng-model="oldPass" required>
+                        <p class="help-block" ng-show="changePassForm.oldPass.$invalid && !changePassForm.oldPass.$pristine ">Introduceti parola corecta!</p>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group col-md-6">
                         <label for="newPass"><sup>*</sup>Parola noua:</label>
-                        <input type="password" class="form-control" id="newPass" ng-model="newPass">
+                        <input type="password" class="form-control" id="newPass" name="newPass" ng-model="newPass" required>
+                        <p class="help-block" ng-show="changePassForm.newPass.$invalid && !changePassForm.newPass.$pristine ">Introduceti o parola noua valida!</p>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="confirmPass"><sup>*</sup>Repeta parola:</label>
-                        <input type="password" class="form-control" id="confirmPass" ng-model="confirmPass">
+                        <input type="password" class="form-control" id="confirmPass" name="confirmPass" ng-model="confirmPass" required>
+                        <p class="help-block" ng-show="changePassForm.confirmPass.$invalid && !changePassForm.confirmPass.$pristine ">Introduceti din nou noua parola!</p>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -185,8 +205,8 @@
                 </div>
             </form>
         </accordion-group>
-        <accordion-group>
-            <accordion-heading><i class="glyphicon glyphicon-briefcase"></i>&nbsp;&nbsp;Punctele mele</accordion-heading>
+        <accordion-group class="no-text-decoration">
+            <accordion-heading class="no-text-decoration"><p class="no-text-decoration"><i class="glyphicon glyphicon-briefcase"></i>&nbsp;&nbsp;Punctele mele</p></accordion-heading>
             <div class="col-md-12">
                 <h4>Total puncte: {{pointsTotal}}</h4>
                 <hr/>

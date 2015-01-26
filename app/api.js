@@ -2975,33 +2975,41 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             //check if password is correct
             if(SHA256(userData.oldPass).toString() !== req.user.password){
                 ans.error = true;
-                ans.message = "Parola nu este corecta";
+                ans.message = "Parola nu este corecta!";
                 res.json(ans);
             }else{
-                //check if new password length is valid
-                if(userData.newPass.toString().length < 6 || userData.newPass.toString.length > 32){
+                if(SHA256(userData.newPass).toString() === req.user.password)
+                {
                     ans.error = true;
-                    ans.message = "Parola noua trebuie sa contina intre 6 si 32 de caractere";
+                    ans.message = "Nu aveti voie sa introduceti vechea parola!";
                     res.json(ans);
-                }else{
-                    //check if passwords match
-                    if(userData.newPass !== userData.confirmPass){
+                }
+                else
+                {
+                    if(userData.newPass.toString().length < 6 || userData.newPass.toString.length > 32){
                         ans.error = true;
-                        ans.message = "Parolele nu corespund";
+                        ans.message = "Parola noua trebuie sa contina intre 6 si 32 de caractere";
                         res.json(ans);
                     }else{
-                        //change password
-                        var upd = User.update({_id:req.user._id}, {password: SHA256(userData.newPass).toString()}, function () {
-                            if(!upd._castError){
-                                ans.error = false;
-                                ans.message = "Parola a fost schimbata";
-                                res.json(ans);
-                            }else{
-                                ans.error = true;
-                                ans.message = "Eroare la schimbarea parolei";
-                                res.json(ans);
-                            }
-                        });
+                        //check if passwords match
+                        if(userData.newPass !== userData.confirmPass){
+                            ans.error = true;
+                            ans.message = "Parolele nu corespund";
+                            res.json(ans);
+                        }else{
+                            //change password
+                            var upd = User.update({_id:req.user._id}, {password: SHA256(userData.newPass).toString()}, function () {
+                                if(!upd._castError){
+                                    ans.error = false;
+                                    ans.message = "Parola a fost schimbata";
+                                    res.json(ans);
+                                }else{
+                                    ans.error = true;
+                                    ans.message = "Eroare la schimbarea parolei";
+                                    res.json(ans);
+                                }
+                            });
+                        }
                     }
                 }
             }

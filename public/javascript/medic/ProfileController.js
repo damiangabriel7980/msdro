@@ -12,7 +12,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     $scope.jobTypes = ["Spital","CMI","Policlinica","Farmacie"];
     $scope.selectedJob="";
     ProfileService.getUserData.query().$promise.then(function (resp) {
-
+        $scope.username=resp.username;
         $scope.userData = resp;
         $scope.statusAlert = {newAlert:false, type:"", message:""};
         $scope.uploadAlert = {newAlert:false, type:"", message:""};
@@ -208,7 +208,6 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     //user profile
     $scope.userProfileAlert = {newAlert:false, type:"", message:""};
     $scope.submitProfileForm = function (isValid) {
-        console.log(isValid);
         if(isValid){
             var toSend = {};
             toSend.firstName = this.firstName;
@@ -228,11 +227,17 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 $scope.userProfileAlert.newAlert = true;
             });
         }
+        else
+        {
+            $scope.userProfileAlert.message = "Nu ati completat toate campurile! Verificati formularul inca o data!";
+            $scope.userProfileAlert.type = "danger";
+        }
     };
 
     //user job
     $scope.userJobAlert = {newAlert:false, type:"", message:""};
     $scope.submitJobForm = function (isValid) {
+        console.log(isValid);
         if(isValid){
             switch(this.selectedJob){
                 case("Spital"): this.job['job_type']=1; break;
@@ -251,6 +256,11 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 $scope.userJobAlert.newAlert = true;
             });
         }
+        else
+        {
+            $scope.userJobAlert.message = "Nu ati completat toate campurile! Verificati formularul inca o data!";
+            $scope.userJobAlert.type = "danger";
+        }
     };
 
     //user change email
@@ -258,7 +268,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     $scope.submitEmailForm = function (isValid) {
         if(isValid){
             var toSend = {};
-            toSend.mail = this.changeMail;
+            toSend.mail = $scope.username;
             toSend.pass = this.changePass;
             ProfileService.changeEmail.save({userData: toSend}).$promise.then(function (resp) {
                 $scope.userChangeMailAlert.message = resp.message;
@@ -269,6 +279,11 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 }
                 $scope.userChangeMailAlert.newAlert = true;
             });
+        }
+        else
+        {
+            $scope.userChangeMailAlert.message = "Nu ati completat toate campurile! Verificati formularul inca o data!";
+            $scope.userChangeMailAlert.type = "danger";
         }
     };
 
@@ -289,6 +304,11 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                 }
                 $scope.userChangePassAlert.newAlert = true;
             });
+        }
+        else
+        {
+            $scope.userChangePassAlert.message = "Nu ati completat toate campurile! Verificati formularul inca o data!";
+            $scope.userChangePassAlert.type = "danger";
         }
     };
 
