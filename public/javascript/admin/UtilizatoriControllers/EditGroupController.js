@@ -6,7 +6,6 @@ cloudAdminControllers.controller('EditGroupController', ['$scope','GroupsService
     var groupDataLoaded = false;
 
     GroupsService.groupDetails.query({id: idToEdit}).$promise.then(function (resp) {
-        console.log(resp);
         $scope.nume = resp.display_name;
         $scope.descriere = resp.description;
         $scope.grupDefault = resp.default_group?(resp.default_group==1):false;
@@ -17,8 +16,6 @@ cloudAdminControllers.controller('EditGroupController', ['$scope','GroupsService
             $scope.users = resp;
             GroupsService.getAllUsersByGroup.query({id: idToEdit}).$promise.then(function (resp) {
                 $scope.selectedUsers = resp;
-                //selectedUsers is populated, but the list is not refreshed
-                console.log(resp);
                 groupDataLoaded = true;
             });
         });
@@ -26,6 +23,7 @@ cloudAdminControllers.controller('EditGroupController', ['$scope','GroupsService
 
     $scope.editGroup = function () {
         console.log(this);
+        console.log($scope.selectedUsers);
         var toSend = {group:{},users:{}, edit: true};
         toSend.id = idToEdit;
         toSend.group.display_name = this.nume;
