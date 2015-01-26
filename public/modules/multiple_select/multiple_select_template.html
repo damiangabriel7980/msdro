@@ -1,0 +1,5 @@
+<div class="myMultipleSelect">
+    <div class="item" ng-repeat="obj in allObjects">
+        <input type="checkbox" ng-model="obj.selected" ng-change="refreshSelected()"> {{obj[displayBy]}}
+    </div>
+</div>
