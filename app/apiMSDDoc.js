@@ -48,7 +48,7 @@ module.exports = function(app, logger, tokenSecret, router) {
             console.log(req.query);
             if(req.query.id){
                 var id=req.query.id;
-                Chat.findOne({post_id: id}).populate('message_ids',{ sort: { 'last_updated': 1 } }).populate('post_id').populate('chat_receiver chat_sender').exec(function(err,result){
+                Chat.findOne({post_id: id}).populate('messages',{ sort: { 'last_updated': 1 } }).populate('post').populate('participants').exec(function(err,result){
                     if(err)
                         res.json(err);
                     else
@@ -90,41 +90,41 @@ module.exports = function(app, logger, tokenSecret, router) {
 
     //========get Medics paginated=======//
 
-    router.route('/getMedics/:pageSize')
-        .get(function(req,res){
-            var pageSize = req.params.pageSize;
-            User.find({visible:true},'name username birthday phone description').sort({'last_updated': -1}).limit(pageSize)
-                .exec(function(err, result) {
-                    if(err)
-                        res.json(err);
-                    else
-                        res.json(result);
-                });
-        });
-    router.route('/getMedicsPaginated/:pageSize/:skip')
-        .get(function(req,res){
-            var pageSize = req.params.pageSize;
-            var skipMedics = req.params.skip;
-            console.log(pageSize);
-            console.log(skipMedics);
-            User.find({visible:true},'name username birthday phone description').sort({'last_updated': -1}).skip(skipMedics).limit(pageSize)
-                .exec(function(err, result) {
-                    if(err)
-                        res.json(err);
-                    else
-                        res.json(result);
-                });
-        });
-    router.route('/getMedics/:id')
-        .get(function(req,res){
-            var id = req.params.id;
-            User.findOne({_id: id},'name username birthday phone description').populate('jobsID').exec(function(err, result) {
-                    if(err)
-                        res.json(err);
-                    else
-                        res.json(result);
-                });
-        });
+//    router.route('/getMedics/:pageSize')
+//        .get(function(req,res){
+//            var pageSize = req.params.pageSize;
+//            User.find({visible:true},'name username birthday phone description').sort({'last_updated': -1}).limit(pageSize)
+//                .exec(function(err, result) {
+//                    if(err)
+//                        res.json(err);
+//                    else
+//                        res.json(result);
+//                });
+//        });
+//    router.route('/getMedicsPaginated/:pageSize/:skip')
+//        .get(function(req,res){
+//            var pageSize = req.params.pageSize;
+//            var skipMedics = req.params.skip;
+//            console.log(pageSize);
+//            console.log(skipMedics);
+//            User.find({visible:true},'name username birthday phone description').sort({'last_updated': -1}).skip(skipMedics).limit(pageSize)
+//                .exec(function(err, result) {
+//                    if(err)
+//                        res.json(err);
+//                    else
+//                        res.json(result);
+//                });
+//        });
+//    router.route('/getMedics/:id')
+//        .get(function(req,res){
+//            var id = req.params.id;
+//            User.findOne({_id: id},'name username birthday phone description').populate('jobsID').exec(function(err, result) {
+//                    if(err)
+//                        res.json(err);
+//                    else
+//                        res.json(result);
+//                });
+//        });
 
     //========Get messages by topic/conversations=======//
 
