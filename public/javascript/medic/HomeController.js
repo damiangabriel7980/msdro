@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state) {
+cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state','$anchorScroll', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state,$anchorScroll) {
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
@@ -6,13 +6,6 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.merckManualImage = $rootScope.merckManualImage;
     $scope.myInterval = 10;
     $scope.HomeCarousel = [];
-    $timeout(function(){
-        //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
-        //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
-        //else
-        var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
-        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
-    },300);    //------------------------------------------------------------ special groups widgets
 
     //add widgets in partials/medic/widgets, then associate file name and group name in object below
     var specialGroupWidgets = {
@@ -139,7 +132,6 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     {
         $scope.selectedIndex = index;
     };
-
 }])
     .directive('ngEnter', function () {
         return function (scope, element, attrs) {
@@ -153,4 +145,30 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
                 }
             });
         };
-    });
+    })
+    .directive('thereIsMore', function($timeout,$document,$window) {
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+            var footer = angular.element('#footer');
+            var check = function () {
+                if ($(document).height() <= ($(window).height() + $(window).scrollTop()))
+                    footer.show();
+                else
+                    footer.hide();
+                console.log(scope);
+            };
+            var appliedCheck = function () {
+                scope.$apply(check);
+            };
+            angular.element($window).scroll(function () {
+                appliedCheck();
+            });
+            check();
+            $timeout(check, 250);
+            angular.element($window).resize(function () {
+                appliedCheck();
+            });
+        } // end of link
+    }
+});

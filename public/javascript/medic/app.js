@@ -185,6 +185,8 @@ cloudAdminApp.run(
                 $rootScope.previousState = from.name;
                 $rootScope.currentState = to.name;
             });
+            $rootScope.bottom= {showFooter:true};
+
             //profile modal
             $rootScope.showProfile = function(){
                 $modal.open({

@@ -58,13 +58,6 @@ var date = new Date();
                 }
 
      }}
-         $timeout(function(){
-             //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
-             //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
-             //else
-             var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight());
-             angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
-         },300);
      })
     ;
     eventsService.query().$promise.then(function(result) {
@@ -119,7 +112,7 @@ var date = new Date();
                 }
             }
         });
-    },100);
+    },150);
     }
 }])
     .filter('htmlToPlaintext', function() {

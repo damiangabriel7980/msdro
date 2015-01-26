@@ -41,25 +41,16 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
     ContentService.getByType.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.content = result;
         console.log($stateParams);
-        $timeout(function(){
-            //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
-            //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
-            //else
-            var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
-            angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
-        },300);
         if($scope.content.length>5)
         {
             $scope.showMore='show';
-            angular.element("#footer").css({'position': 'relative','bottom':0});
         }
         else
         {
             $scope.showMore='hide';
-            angular.element("#footer").css({'position': 'relative','bottom':0});
         }
         if($scope.content.length>=5)
-            angular.element("#footer").css({'position': 'relative','bottom':0});
+            angular.element("#footer").css({'position': 'fixed','bottom':0});
 
     });
 }]);

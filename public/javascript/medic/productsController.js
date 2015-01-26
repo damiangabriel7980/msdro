@@ -15,7 +15,6 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     $scope.filtProd=[];
     $scope.lmt=8;
     $scope.message="";
-    angular.element("#footer").css({'position': 'relative','bottom':0});
     $scope.showMoreProd="show";
     $scope.increaseLimit=function(){
 
@@ -48,13 +47,6 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
                 $scope.firstLetters.push(firstLetter);
             }
         });
-        $timeout(function(){
-            //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
-            //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
-            //else
-            var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
-            angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
-        },300);
     });
     $scope.filterResults=function(index){
         $scope.productsFiltered=[];

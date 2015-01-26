@@ -2,13 +2,6 @@ cloudAdminControllers.controller('ContentArticleController', ['$scope', '$rootSc
     var imagePre = $rootScope.pathAmazonDev;
     ContentService.getById.query({content_id: $stateParams.articleId}).$promise.then(function (resp) {
         console.log(resp)
-        $timeout(function(){
-            //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
-            //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
-            //else
-            var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
-            angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
-        },300);;
         $scope.currentArticle = resp;
         $scope.date = FormatService.formatMongoDate(resp.last_updated);
         $scope.image = imagePre + resp.image_path;

@@ -49,13 +49,6 @@ cloudAdminControllers.controller('HomeSearchController', ['$scope', '$rootScope'
         }
         else
             $scope.answer=response.answer;
-        $timeout(function(){
-            //if(angular.element(".main-view-container").outerHeight()>angular.element($window).height())
-            //    var margin = Math.floor(angular.element(".main-view-container").outerHeight() - angular.element($window).height() - angular.element('#footer').outerHeight());
-            //else
-            var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight()-15);
-            angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
-        },300);
     });
     $scope.sref=function(artType){
         if(artType < 3)
