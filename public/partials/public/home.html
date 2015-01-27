@@ -1,8 +1,7 @@
 <div class="col-md-12 unselectable noPadding" style="overflow: hidden" carousel-resizable>
     <div class="carouselWrapper" style="{{carouselStyle}}">
         <div class="fixedBox">
-            <div class="carouselTitle">
-                {{carouselSlides[selectedIndex].title}}
+            <div class="carouselTitle" ng-bind-html="trustAsHtml(carouselSlides[selectedIndex].title)">
             </div>
             <div class="carouselDescription" ng-bind-html="trustAsHtml(carouselSlides[selectedIndex].description)">
             </div>
