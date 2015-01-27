@@ -1359,8 +1359,19 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 if(err) {
                     res.send(err);
                 }
+                else{
+                    var products={};
+                    products['productList']=cont;
+                    UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
+                        if(err) {
+                            logger.error(err);
+                            res.send(err);
+                        }
+                        products['groups']=cont2;
+                        res.json(products);
+                    });
+                }
 
-                res.json(cont);
             });
         })
         .post(function(req, res) {
@@ -1372,7 +1383,12 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             product.file_path= req.body.file_path  ;
             product.image_path= req.body.image_path ;
             product.last_updated=req.body.last_updated;
-            product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
+            var serializedAreas = [];
+            for(var i=0; i<req.body['therapeutic-areasID'].length; i++){
+                serializedAreas.push(req.body['therapeutic-areasID'][i].id.toString());
+            }
+            product['therapeutic-areasID']= serializedAreas ;
+            product.groupsID= req.body.groupsID;
             product.save(function(err) {
                 if (err)
                     res.send(err);
@@ -1403,6 +1419,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 product.image_path= req.body.image_path ;
                 product.last_updated=req.body.last_updated;
                 product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
+                product.groupsID= req.body.groupsID;
                 // save the bear
                 product.save(function(err) {
                     if (err)
@@ -2325,8 +2342,8 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 if(err) {
                     res.send(err);
                 }
-
-                res.json(cont);
+                else
+                    res.json(cont);
             });
         })
         .post(function(req, res) {
@@ -3215,7 +3232,16 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 res.json(cont);
             });
         });
+    router.route('/admin/therapeutic_areas')
 
+        .get(function(req, res) {
+            Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
     router.route('/calendar')
         .get(function(req,res) {
             User.findOne({username: {$regex: new RegExp("^" + req.user.username, "i")}}, function (err, usr) {

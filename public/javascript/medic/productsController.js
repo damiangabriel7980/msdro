@@ -27,6 +27,7 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
          $scope.products = result;
         if($scope.products.length===0)
         {
+            $scope.showMoreProd='hide';
             $scope.message="Nu sunt produse disponibile!";
         }
         $scope.productsReserve=[];
@@ -71,6 +72,7 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
         $scope.products=$scope.productsFiltered;
         if($scope.products.length===0)
         {
+            $scope.showMoreProd='hide';
             $scope.message="Nu sunt produse disponibile";
         }
         if($scope.products.length<=$scope.lmt)

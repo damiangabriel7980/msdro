@@ -71,6 +71,13 @@ cloudAdminServices.factory('publicContentService', ['$resource', function($resou
         })
     }
 }]);
+
+cloudAdminServices.factory('therapeuticAreaService', ['$resource', function($resource){
+    return $resource('api/admin/therapeutic_areas', {}, {
+        query: { method: 'GET', isArray: true }
+    });
+}]);
+
 cloudAdminServices.factory('IndexService', ['$resource', function($resource) {
     return {
         getIndex: $resource('api/admin/indexContent', {}, {
@@ -138,7 +145,7 @@ cloudAdminServices.factory('CarouselMedicService', ['$resource', function($resou
 cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     return {
         getAll: $resource('api/admin/products/', {}, {
-            query: { method: 'GET', isArray: true },
+            query: { method: 'GET', isArray: false },
             save: { method: 'POST'}
         }),
         deleteOrUpdateProduct:$resource('api/admin/products/:id', {}, {
