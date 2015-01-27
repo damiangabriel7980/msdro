@@ -7,7 +7,6 @@ var Schema			= mongoose.Schema;
 var MessagesDocSchema = new Schema({
     image:String,
     text: String,
-    type: Number,
     created:Date,
     read: Boolean,
     chat:{type: Schema.Types.ObjectId,ref:'MSDDoc_chat'}

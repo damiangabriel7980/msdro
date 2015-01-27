@@ -162,6 +162,22 @@ module.exports = function(app, logger, tokenSecret, router) {
                 else
                     res.json(result);
             });
+        })
+        .post(function (req, res) {
+            var chatId = mongoose.Types.ObjectId(req.body.chatId);
+            var text = req.body.text;
+            var toSave = new Messages({
+                chat: chatId,
+                text: text,
+                created: Date.now()
+            });
+            toSave.save(function (err, saved) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(saved);
+                }
+            });
         });
 
 
@@ -195,29 +211,44 @@ module.exports = function(app, logger, tokenSecret, router) {
             console.log(req.body);
             var userData = getUserData(req);
 
+            var keepGoing = true;
+
+            //params
             var type = req.query.type;
-            var user = req.body.user;
-            var post = req.body.post;
+            var userId = mongoose.Types.ObjectId(req.body.userId);
+            var postId = mongoose.Types.ObjectId(req.body.postId);
+            var postOwner = mongoose.Types.ObjectId(req.body.postOwner);
+
+            //init sender and receiver
+            var sender = mongoose.Types.ObjectId(userData._id);
+            var receiver;
 
             var toSave = new Chat({
-                sender: userData._id,
                 created: Date.now()
             });
 
-            var keepGoing = true;
-
             if(type==="userBased"){
                 toSave['post'] = null;
-                toSave['receiver'] = user._id;
+                receiver = userId;
             }else if(type==="postBased"){
-                toSave['post'] = post._id;
-                toSave['receiver'] = post.owner;
+                toSave['post'] = postId;
+                receiver = postOwner;
             }else{
-                res.send({hasError: true, message: "invalid query params"});
                 keepGoing = false;
+                res.statusCode = 400;
+                res.send({hasError: true, message: "invalid query params"});
             }
 
             if(keepGoing){
+                toSave['participants'] = [sender, receiver];
+
+                //forms query object to be used later
+                var q = {participants: {$in: toSave['participants']}};
+                if(type == "postBased"){
+                    q['post'] = postId;
+                }
+
+                //check if a chat involving sender / receiver / post combination already exists
                 Chat.findOne(q, function (err, found) {
                     if(err){
                         res.send(err);
