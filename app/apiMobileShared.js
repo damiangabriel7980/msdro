@@ -1,6 +1,12 @@
 var mongoose = require('mongoose');
+var User = require('./models/user');
+var Roles=require('./models/roles');
 var jwt = require('jsonwebtoken');
+var XRegExp  = require('xregexp').XRegExp;
+var validator = require('validator');
+var crypto   = require('crypto');
 var expressJwt = require('express-jwt');
+var async = require('async');
 
 var Cities = require('./models/cities');
 var Therapeutic_Area = require('./models/therapeutic_areas');
@@ -8,7 +14,7 @@ var Counties = require('./models/counties');
 var Job = require('./models/jobs');
 
 
-module.exports = function(app, logger, tokenSecret, mandrill, router) {
+module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
@@ -31,7 +37,7 @@ module.exports = function(app, logger, tokenSecret, mandrill, router) {
         next();
     });
 
-    // We are going to protect /apiConferences routes with JWT
+    // We are going to protect /apiMobileShared routes with JWT
     app.use('/apiMobileShared', expressJwt({secret: tokenSecret}).unless({path: ['/apiMobileShared/createAccount', '/apiMobileShared/resetPass']}));
 
 //===================================================================================================================== create account
@@ -108,7 +114,7 @@ module.exports = function(app, logger, tokenSecret, mandrill, router) {
                                                 mandrill({from: 'adminMSD@qualitance.ro',
                                                     to: [inserted.username],
                                                     subject:'Activare cont MSD',
-                                                    text: 'Ati primit acest email deoarece v-ati inregistrat pe MSD Check-in.\n\n' +
+                                                    text: 'Ati primit acest email deoarece v-ati inregistrat pe MSD.\n\n' +
                                                         'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va activa contul:\n\n' +
                                                         'http://' + req.headers.host + '/activateAccount/' + inserted.activationToken + '\n\n' +
                                                         'Link-ul este valabil maxim o ora\n'+
