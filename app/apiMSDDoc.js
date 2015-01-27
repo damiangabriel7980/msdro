@@ -10,6 +10,11 @@ var url = require('url');
 var NewsPost = require('./models/MSDDoc_news_post');
 var Chat= require('./models/MSDDoc_chat');
 var Messages= require('./models/MSDDoc_messages');
+var User = require('./models/user');
+
+
+//CONSTANTS
+const defaultPageSize = 10;
 
 
 module.exports = function(app, logger, tokenSecret, router) {
@@ -48,7 +53,7 @@ module.exports = function(app, logger, tokenSecret, router) {
             console.log(req.query);
             if(req.query.id){
                 var id=req.query.id;
-                Chat.findOne({post_id: id}).populate('messages',{ sort: { 'last_updated': 1 } }).populate('post').populate('participants').exec(function(err,result){
+                NewsPost.findOne({_id: id}).populate('owner').exec(function(err,result){
                     if(err)
                         res.json(err);
                     else
@@ -59,7 +64,7 @@ module.exports = function(app, logger, tokenSecret, router) {
                 var created = req.query.created;
                 var q = {};
                 if(created){
-                    q['last_updated'] = {$lt: new Date(created)};
+                    q['created'] = {$lt: new Date(created)};
                 }
                 NewsPost.find(q).sort({'last_updated' : -1}).limit(pageSize)
                     .exec(function(err, result) {
@@ -82,77 +87,75 @@ module.exports = function(app, logger, tokenSecret, router) {
                 res.json(err);
             else
             {
-                res.send({status:200, saved: saved});
-
+                res.statusCode = 201;
+                res.send(saved);
             }
         })
     });
 
-    //========get Medics paginated=======//
 
-//    router.route('/getMedics/:pageSize')
-//        .get(function(req,res){
-//            var pageSize = req.params.pageSize;
-//            User.find({visible:true},'name username birthday phone description').sort({'last_updated': -1}).limit(pageSize)
-//                .exec(function(err, result) {
-//                    if(err)
-//                        res.json(err);
-//                    else
-//                        res.json(result);
-//                });
-//        });
-//    router.route('/getMedicsPaginated/:pageSize/:skip')
-//        .get(function(req,res){
-//            var pageSize = req.params.pageSize;
-//            var skipMedics = req.params.skip;
-//            console.log(pageSize);
-//            console.log(skipMedics);
-//            User.find({visible:true},'name username birthday phone description').sort({'last_updated': -1}).skip(skipMedics).limit(pageSize)
-//                .exec(function(err, result) {
-//                    if(err)
-//                        res.json(err);
-//                    else
-//                        res.json(result);
-//                });
-//        });
-//    router.route('/getMedics/:id')
-//        .get(function(req,res){
-//            var id = req.params.id;
-//            User.findOne({_id: id},'name username birthday phone description').populate('jobsID').exec(function(err, result) {
-//                    if(err)
-//                        res.json(err);
-//                    else
-//                        res.json(result);
-//                });
-//        });
+    //========  MEDICS  =======//
 
-    //========Get messages by topic/conversations=======//
+    router.route('/medics')
+        .get(function(req,res){
+            var id = req.query.id;
+            if(id){
+                User.findOne({_id: id, visible:true}, 'name username birthday phone description').exec(function (err, user) {
+                    if(err){
+                        res.send(err);
+                    }else if(user){
+                        res.send(user);
+                    }else{
+                        res.statusCode = 404;
+                        res.end();
+                    }
+                });
+            }else{
+                var pageSize=req.query.pageSize || defaultPageSize;
+                var skip = req.query.skip;
+                var q = {visible:true};
+                var cursor = User.aggregate([
+                    { "$match": {"visible": true} },
+                    { "$project": {
+                        "name": 1,
+                        "username": 1,
+                        "birthday": 1,
+                        "phone": 1,
+                        "description": 1,
+                        "nameInsensitive": { "$toLower": "$name" }
+                    }},
+                    { "$sort": { "nameInsensitive": 1 } },
+                    { "$skip": skip?parseInt(skip):0 },
+                    { "$limit": parseInt(pageSize) }
+                ]);
+                cursor.exec(function(err, result) {
+                    if(err)
+                        res.json(err);
+                    else
+                        res.json(result);
+                });
+            }
+        });
 
 
-//    router.route('/getMessagesByTopics')
-//        .get(function(req,res){
-//            var id = req.user._id;
-//            chatDoc.find({post_id: {'$ne': null },chat_sender: id}).populate('post_id').exec(function(err, result) {
-//                if(err)
-//                    res.json(err);
-//                else
-//                    res.json(result);
-//            });
-//        });
-//
-//    router.route('/getMessagesByTopicsForPost/:created/:pageSize/:postID')
-//        .get(function(req,res){
-//            var id = req.user._id;
-//            var created=req.params.created;
-//            var pagesize=req.params.pageSize;
-//            var postID= req.params.postID;
-//            chatDoc.find({post_id: postID}).populate({path:'message_ids',options:{ sort: { 'last_updated': -1 },last_updated: {$lt: created},limit: pagesize }}).populate('post_id').exec(function(err, result) {
-//                if(err)
-//                    res.json(err);
-//                else
-//                    res.json(result);
-//            });
-//        });
+    //========   MESSAGES   =======//
+
+    router.route('/messages')
+        .get(function(req,res){
+            var chatId = req.query.chatId;
+            var pageSize=req.query.pageSize;
+            var created = req.query.created;
+            var q = {chat: chatId};
+            if(created){
+                q['created'] = {$lt: new Date(created)};
+            }
+            Messages.find(q).sort({created: -1}).limit(pageSize).exec(function(err, result) {
+                if(err)
+                    res.json(err);
+                else
+                    res.json(result);
+            });
+        });
 
 
     //========    CHAT    =======//
@@ -172,7 +175,7 @@ module.exports = function(app, logger, tokenSecret, router) {
             if(created){
                 q['created'] = {"$lt": created};
             }
-            Chat.find(q).populate("messages").sort({'created': -1}).limit(pageSize).exec(function(err, result) {
+            Chat.find(q).sort({'created': -1}).limit(pageSize).exec(function(err, result) {
                 if(err){
                     console.log(err);
                     res.json(err);
@@ -182,6 +185,7 @@ module.exports = function(app, logger, tokenSecret, router) {
             });
         })
         .post(function (req, res) {
+            console.log(req.body);
             var userData = getUserData(req);
 
             var type = req.query.type;

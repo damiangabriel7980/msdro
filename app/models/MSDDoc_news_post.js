@@ -10,7 +10,7 @@ var NewsPostSchema = new Schema({
     created:Date,
     image: String,
     owner: {type: Schema.Types.ObjectId,ref: 'User'},
-    chats: [{type: Schema.Types.ObjectId,ref: 'chat_doc'}]
+    chats: [{type: Schema.Types.ObjectId,ref: 'MSDDoc_chat'}]
 });
 
 module.exports = mongoose.model('MSDDoc_news_post',NewsPostSchema,'MSDDoc_news_post');
