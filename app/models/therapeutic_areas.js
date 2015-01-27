@@ -15,4 +15,4 @@ var therapeuticAreaSchema		= new Schema({
     "therapeutic-areasID": Array
 });
 
-module.exports = mongoose.model('therapeutic-areas', therapeuticAreaSchema);
+module.exports = mongoose.model('therapeutic-areas', therapeuticAreaSchema,'therapeutic-areas');

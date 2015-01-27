@@ -12,7 +12,7 @@ var ProductSchema		= new Schema({
     image_path:  String,
     last_updated: Date,
     name: {type:String,es_indexed:true},
-    'therapeutic-areasID': Array
+    'therapeutic-areasID': [{type: Schema.Types.ObjectId,ref: 'therapeutic-areas'}]
 });
 ProductSchema.plugin(mongoosastic,{host:'10.200.0.221',port:'9200'});
 module.exports = mongoose.model('products', ProductSchema);

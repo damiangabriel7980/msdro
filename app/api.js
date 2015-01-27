@@ -1355,13 +1355,14 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     router.route('/admin/products')
         .get(function(req, res) {
-            Products.find(function(err, cont) {
+            Products.find({}).populate("therapeutic-areasID").exec(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
                 else{
                     var products={};
                     products['productList']=cont;
+                    console.log(products['productList'][0]);
                     UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
                         if(err) {
                             logger.error(err);
