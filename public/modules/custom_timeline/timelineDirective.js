@@ -51,15 +51,20 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
             scope.thisDay = new Date().getDate();
 
             var creazaLista = function(resp){
+                console.log(resp);
                 var ret = [];
                 var prevMonth = resp[0]['start'].substr(5,2);
                 var thisMonth;
                 var idxLuna = 0;
                 var leftPx;
 
-                var d = new Date();                   //
-                d.setDate(d.getDate()-daysTotal/2);  //  This finds the first day on the grid. I is used as an offset
-                d = d.getDate();                    //   for positioning all the dates
+                var firstDate = new Date();
+                firstDate.setDate(firstDate.getDate()-daysTotal/2);  //  This finds the first date on the grid
+
+                idxLuna = new Date(resp[0]['start']).getMonth() - firstDate.getMonth(); // Gets the difference in months between the first month
+                if(idxLuna < 0) idxLuna = 12 + idxLuna;                                // on the grid and the first month in our response
+
+                var dayOffset = firstDate.getDate();
 
                 for(var i=0; i<resp.length; i++){
                     thisMonth = resp[i]['start'].substr(5,2);
@@ -68,7 +73,7 @@ angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($
                         idxLuna++;
                     }
 
-                    leftPx = ((idxLuna*31)+(parseInt(resp[i]['start'].substr(8,2))-d))*gridSize;
+                    leftPx = ((idxLuna*31)+(parseInt(resp[i]['start'].substr(8,2))-dayOffset))*gridSize;
 
                     ret.push({
                         nume: resp[i]['name'],
