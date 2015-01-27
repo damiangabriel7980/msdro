@@ -111,6 +111,9 @@ module.exports = function(app, logger, tokenSecret, router) {
                 var pageSize=req.query.pageSize || defaultPageSize;
                 var skip = req.query.skip;
                 var q = {visible:true};
+                //mongoose cannot sort strings case insensitive (in our case we need to sort by "name")
+                //so we will use aggregate to project a lower case string of the "name", sort by it,
+                //then at the end remove it from our projection
                 var cursor = User.aggregate([
                     { "$match": {"visible": true} },
                     { "$project": {
@@ -123,7 +126,14 @@ module.exports = function(app, logger, tokenSecret, router) {
                     }},
                     { "$sort": { "nameInsensitive": 1 } },
                     { "$skip": skip?parseInt(skip):0 },
-                    { "$limit": parseInt(pageSize) }
+                    { "$limit": parseInt(pageSize) },
+                    { "$project": {
+                        "name": 1,
+                        "username": 1,
+                        "birthday": 1,
+                        "phone": 1,
+                        "description": 1
+                    } }
                 ]);
                 cursor.exec(function(err, result) {
                     if(err)
