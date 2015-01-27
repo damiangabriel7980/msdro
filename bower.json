@@ -42,7 +42,8 @@
     "videogular-buffering": "latest",
     "videogular-overlay-play": "latest",
     "videogular-poster": "latest",
-    "videogular-themes-default": "latest"
+    "videogular-themes-default": "latest",
+    "he":"latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

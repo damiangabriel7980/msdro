@@ -24,7 +24,6 @@ var Topics = require('./models/qa_topics');
 var AnswerGivers = require('./models/qa_answerGivers');
 var Threads = require('./models/qa_threads');
 var qaMessages = require('./models/qa_messages');
-var he=require('he');
 
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
