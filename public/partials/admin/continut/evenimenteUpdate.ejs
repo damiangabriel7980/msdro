@@ -24,19 +24,32 @@
         <input ng-model="newEvent.privacy" type="checkbox">Privat
     </div>
     <div class="col-xs-6">
-        <label class="label label-default">Data inceput:</label>
-        <p class="input-group">
-            <input ng-model="newEvent.start" type="text" class="form-control" ng-click="open1($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened1" min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
-        </p>
-
+        <div class="dropdown">
+            <a class="dropdown-toggle my-toggle-select" role="button" data-toggle="dropdown" data-target="#" href="">
+                <div class="input-group col-xs-12">
+                    <label>Inceput:</label>
+                    <input type="text" class="form-control" data-ng-model="newEvent.start">
+                </div>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <datetimepicker data-ng-model="newEvent.start"
+                                data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+            </ul>
+        </div>
     </div>
     <div class="col-xs-6">
-        <label class="label label-default">Data sfarsit:</label>
-        <p class="input-group">
-            <input ng-model="newEvent.end" type="text" ng-click="open2($event)" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened2" min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
-
-        </p>
-
+        <div class="dropdown">
+            <a class="dropdown-toggle my-toggle-select" role="button" data-toggle="dropdown" data-target="#" href="">
+                <div class="input-group col-xs-12">
+                    <label>Sfarsit:</label>
+                    <input type="text" class="form-control" data-ng-model="newEvent.end">
+                </div>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <datetimepicker data-ng-model="newEvent.end"
+                                data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+            </ul>
+        </div>
     </div>
     <div class="col-md-12">
         <div class="form-group">
