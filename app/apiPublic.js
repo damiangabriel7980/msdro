@@ -2,6 +2,7 @@ var PublicContent = require('./models/publicContent');
 var PublicCarousel = require('./models/publicCarousel');
 var Events = require('./models/events');
 var TherapeuticAreas = require('./models/therapeutic_areas');
+var UserGroup = require('./models/userGroup');
 
 var email = require('mandrill-send')('XKp6n_7NhHB5opUWo0WWmw');
 
@@ -89,16 +90,21 @@ module.exports = function(app,email, router) {
             var daysToReturn = 80;
             var startDate = new Date(new Date().setDate(new Date().getDate()-(daysToReturn/2)));
             var endDate = new Date(new Date().setDate(new Date().getDate()+(daysToReturn/2)));
-            console.log(startDate);
-            console.log(endDate);
-            Events.find({enable: {$exists: true, $ne: false}, start: {$gt: startDate, $lt: endDate}}).sort({start: 1}).exec(function (err, resp) {
+            UserGroup.findOne({"display_name":"Pacienti"}, function (err, group) {
                 if(err){
                     res.send(err);
+                }else if(!group){
+                    res.send([]);
                 }else{
-                    console.log(resp);
-                    res.send(resp);
+                    Events.find({enable: {$exists: true, $ne: false}, start: {$gt: startDate, $lt: endDate}, groupsID: {$in: [group._id.toString()]}}).sort({start: 1}).exec(function (err, resp) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            res.send(resp);
+                        }
+                    })
                 }
-            })
+            });
         });
 
 
