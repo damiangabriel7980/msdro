@@ -156,18 +156,18 @@
             </div>
             <form name="emailForm" ng-submit="submitEmailForm(true)">
                 <div class="col-md-12">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-12">
                         <label for="emailNew"><sup>*</sup>Adresa de e-mail:</label>
-                        <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="username" required >
+                        <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="username" required disabled>
                         <p class="help-block">Atentie! Daca va schimbati e-mail-ul, atunci acesta va deveni noul username pentru autentificare</p>
                         <p class="help-block" ng-show="emailForm.emailNew.$invalid && !emailForm.emailNew.$pristine ">Introduceti un email valid!</p>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="changeEmailPass"><sup>*</sup>Parola:</label>
-                        <input type="password" class="form-control" id="changeEmailPass" name="changeEmailPass" ng-model="changePass" required>
-                        <p class="help-block">Parola este necesara pentru a confirma schimbarea e-mail-ului!</p>
-                        <p class="help-block" ng-show="emailForm.changeEmailPass.$invalid && !emailForm.changeEmailPass.$pristine ">Introduceti parola corecta!</p>
-                    </div>
+                    <!--<div class="form-group col-md-6">-->
+                        <!--<label for="changeEmailPass"><sup>*</sup>Parola:</label>-->
+                        <!--<input type="password" class="form-control" id="changeEmailPass" name="changeEmailPass" ng-model="changePass" required>-->
+                        <!--<p class="help-block">Parola este necesara pentru a confirma schimbarea e-mail-ului!</p>-->
+                        <!--<p class="help-block" ng-show="emailForm.changeEmailPass.$invalid && !emailForm.changeEmailPass.$pristine ">Introduceti parola corecta!</p>-->
+                    <!--</div>-->
                 </div>
                 <div class="col-md-12">
                     <button type="submit" class="btn btn-danger pull-right">Schimba e-mail</button>
