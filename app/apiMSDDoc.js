@@ -50,7 +50,6 @@ module.exports = function(app, logger, tokenSecret, router) {
     //========    NEWS POST    =======//
     router.route('/newsPost')
         .get(function(req,res){
-            console.log(req.query);
             if(req.query.id){
                 var id=req.query.id;
                 NewsPost.findOne({_id: id}).populate('owner').exec(function(err,result){
@@ -59,8 +58,8 @@ module.exports = function(app, logger, tokenSecret, router) {
                     else
                         res.json(result);
                 })
-            }else if(req.query.pageSize){
-                var pageSize=req.query.pageSize;
+            }else{
+                var pageSize=req.query.pageSize || defaultPageSize;
                 var created = req.query.created;
                 var q = {};
                 if(created){
@@ -73,8 +72,6 @@ module.exports = function(app, logger, tokenSecret, router) {
                         else
                             res.json(result);
                     });
-            } else {
-                res.send({hasError: true, text: "Invalid params"});
             }
         })
     .post(function(req,res){
@@ -143,7 +140,7 @@ module.exports = function(app, logger, tokenSecret, router) {
     router.route('/messages')
         .get(function(req,res){
             var chatId = req.query.chatId;
-            var pageSize=req.query.pageSize;
+            var pageSize=req.query.pageSize || defaultPageSize;
             var created = req.query.created;
             var q = {chat: chatId};
             if(created){
@@ -164,7 +161,7 @@ module.exports = function(app, logger, tokenSecret, router) {
         .get(function(req,res){
             var user = getUserData(req);
             var created=req.query.created;
-            var pageSize=req.query.pageSize;
+            var pageSize=req.query.pageSize || defaultPageSize;
             var type=req.query.type;
             var q = {$or: [{sender: user._id}, {receiver: user._id}]};
             if(type==="topic"){
