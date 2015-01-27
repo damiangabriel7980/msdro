@@ -3089,7 +3089,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
                             //        myResults.push(results.hits.hits[i]);
                             //}
-                            ObjectOfResults[item.modelName]=myResults;
+                            ObjectOfResults[item.modelName]=results.hits.hits;
                         }
 
                     }
