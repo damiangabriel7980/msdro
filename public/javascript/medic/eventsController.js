@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout){
+cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document){
 var date = new Date();
     $scope.realEvents=[];
     var y=$(date);
@@ -58,10 +58,10 @@ var date = new Date();
                     });
                 }
 
-     }}
+     }};
          if($stateParams.id)
          {
-             $scope.$on('$viewContentLoaded',function(){
+             angular.element($document).ready(function(){
                  $modal.open({
                      templateUrl: 'partials/medic/calendarDetails.ejs',
                      backdrop: true,

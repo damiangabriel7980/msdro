@@ -66,10 +66,13 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                     var key2 = "user/"+$scope.userData._id+"/img"+$scope.userData._id+"."+extension;
                     // Closure to capture the file information.
                     var reader = new FileReader();
-
+                    $scope.uploadAlert.newAlert = true;
+                    $scope.uploadAlert.type = "success";
+                    $scope.uploadAlert.message = "The photo is uploading...";
                     reader.onloadend = function(event){
                         $scope.newImage = event.target.result;
                         var b64 = $scope.newImage.split("base64,")[1];
+
                         ProfileService.saveUserPhoto.save({data:{Body: b64, extension: extension}}).$promise.then(function (message) {
                             if(message){
                                 $scope.uploadAlert.type = message.type;
