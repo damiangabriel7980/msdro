@@ -17,7 +17,7 @@ var User = require('./models/user');
 const defaultPageSize = 10;
 
 
-module.exports = function(app, logger, tokenSecret, router) {
+module.exports = function(app, logger, tokenSecret, socketServer, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
@@ -265,6 +265,33 @@ module.exports = function(app, logger, tokenSecret, router) {
                     }
                 });
             }
+        });
+
+    //============================================================================================================= SOCKET COMM
+
+    var io = require('socket.io')(socketServer);
+    var socketioJwt = require("socketio-jwt");
+
+    // set namespace and authorization for socket.io
+    var sockets = io.of('/doc');
+    sockets
+        .on('authenticate', function (data) {
+            console.log(data);
+        })
+        .on('connection', socketioJwt.authorize({
+            secret: tokenSecret,
+            timeout: 15000 // 15 seconds to send the authentication message
+        }))
+        .on('authenticated', function(socket) {
+            //this socket is authenticated, we are good to handle more events from it
+            console.log("================================== socket connected");
+            var userData = socket.decoded_token;
+            console.log(userData.username);
+            socket.emit('userAuthenticated', userData);
+            socket
+                .on('disconnect', function () {
+                    console.log("================================== socket disconnected");
+                });
         });
 
     app.use('/apiMSDDoc', router);

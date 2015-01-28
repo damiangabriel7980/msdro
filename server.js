@@ -19,6 +19,7 @@ var certificateOptions = {
 var express  = require('express');
 var path = require('path');
 var app      = express();
+var http = require('http');
 var https = require('https');
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -29,7 +30,6 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var configDB = require('./config/database.js');
 var email = require('mandrill-send')(mandrillKey);
-var socketServer = https.createServer(certificateOptions, app); //https server used for socket comm
 
 //logging ======================================================================
 //configure winston logger
@@ -64,21 +64,22 @@ require('./app/routes.js')(app, email, logger, passport); // load our routes and
 
 //create https server ==========================================================
 var secureServer = https.createServer(certificateOptions, app);
+var devServer = http.createServer(app);
 
 // api ======================================================================
 require('./app/api.js')(app, sessionSecret, email, logger, pushServerAddr, express.Router()); // load our private routes and pass in our app and session secret
 require('./app/apiPublic.js')(app, email, express.Router()); // load our public routes and pass in our app
 require('./app/apiMobileShared.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
 require('./app/apiConferences.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
-require('./app/apiMSDDoc.js')(app, logger, tokenSecret, express.Router());
-// socket comm =================================================================
-require('./app/socketComm.js')(secureServer, tokenSecret, logger);
+require('./app/apiMSDDoc.js')(app, logger, tokenSecret, secureServer, express.Router());
+// socket comm test =================================================================
+// require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 
 // launch ======================================================================
 
 var devPort = process.env.devPORT || 8080;
 var ssPort   = process.env.ssPORT || 3000;
 secureServer.listen(ssPort);
-app.listen(devPort);
+devServer.listen(devPort);
 console.log("Https server started on port " + ssPort);
 console.log("Dev server started on port " + devPort);
