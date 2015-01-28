@@ -31,7 +31,8 @@ var userSchema = new Schema({
     activationToken: String,
     conferencesID:[{type: Schema.Types.ObjectId,ref: 'conferences'}],
     topicsID:[{type: Schema.Types.ObjectId,ref: 'topics'}],
-    visible: Boolean
+    visible: Boolean,
+    connectedToDOC: Boolean
 });
 
 // generating a hash

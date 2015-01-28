@@ -4,6 +4,7 @@
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
+var jsonwebtoken = require('jsonwebtoken');
 var url = require('url');
 
 
@@ -17,7 +18,7 @@ var User = require('./models/user');
 const defaultPageSize = 10;
 
 
-module.exports = function(app, logger, tokenSecret, router) {
+module.exports = function(app, logger, tokenSecret, socketServer, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
@@ -75,9 +76,11 @@ module.exports = function(app, logger, tokenSecret, router) {
             }
         })
     .post(function(req,res){
+        var userData = getUserData(req);
         var MyNewsPost = new NewsPost();
         MyNewsPost.title=req.body.title;
         MyNewsPost.message=req.body.message;
+        MyNewsPost.owner=userData._id;
         MyNewsPost.created= Date.now();
         MyNewsPost.save(function(err,saved){
             if(err)
@@ -110,7 +113,6 @@ module.exports = function(app, logger, tokenSecret, router) {
             }else{
                 var pageSize=req.query.pageSize || defaultPageSize;
                 var skip = req.query.skip;
-                var q = {visible:true};
                 //mongoose cannot sort strings case insensitive (in our case we need to sort by "name")
                 //so we will use aggregate to project a lower case string of the "name", sort by it,
                 //then at the end remove it from our projection
@@ -242,10 +244,12 @@ module.exports = function(app, logger, tokenSecret, router) {
             if(keepGoing){
                 toSave['participants'] = [sender, receiver];
 
-                //forms query object to be used later
-                var q = {participants: {$in: toSave['participants']}};
-                if(type == "postBased"){
-                    q['post'] = postId;
+                //form query object to be used later
+                var q;
+                if(type === "postBased"){
+                    q = {participants: {$in: toSave['participants']}, post: postId};
+                }else{
+                    q = {participants: {$in: toSave['participants'], $size: 2}, post: null}
                 }
 
                 //check if a chat involving sender / receiver / post combination already exists
@@ -265,6 +269,161 @@ module.exports = function(app, logger, tokenSecret, router) {
                     }
                 });
             }
+        })
+        .put(function (req, res) {
+            var keepGoing = true;
+
+            var userData = getUserData(req);
+
+            var chatId = mongoose.Types.ObjectId(req.query.chatId);
+            var subscribe = req.query.subscribe;
+
+            //set update type
+            var upd;
+            if(subscribe === "true"){
+                upd = {$addToSet: {subscribers: userData._id}};
+            }else if(subscribe === "false"){
+                upd = {$pull: {subscribers: userData._id}};
+            }else{
+                keepGoing = false;
+                res.send({hasError: true, message: "Invalid params"});
+            }
+            if(keepGoing){
+                Chat.update({_id: chatId}, upd, function (err, wres) {
+                    if(err){
+                        res.send(err);
+                    }else{
+                        res.send({hasError: false, message: "Update succeeded"});
+                    }
+                });
+            }
+        });
+
+    //============================================================================================================= SOCKET COMM
+
+    var io = require('socket.io')(socketServer);
+
+    var isAuth = function (socket) {
+        if(socket.auth){
+            return true;
+        }else{
+            socket.disconnect('unauthorized');
+            return false;
+        }
+    };
+
+    var rooms = {};
+
+    // set namespace for socket.io
+    var sockets = io.of('/doc');
+    sockets
+        .on('connection', function(socket){
+            socket.auth = false;
+            socket
+                .on('authenticate', function(data){
+                    //check the auth data sent by the client
+                    jsonwebtoken.verify(data.token, tokenSecret, function(err, decoded) {
+                        if (!err && decoded){
+                            socket.userData = decoded;
+                            console.log("================================== socket authenticated");
+                            console.log("Socket: ", socket.id);
+                            console.log("User: ", socket.userData.username);
+                            User.update({_id:decoded._id}, {$set: {connectedToDoc: true}}, function (err, wres) {
+                                if(err){
+                                    socket.emit('apiMessage', {error: err, success: null});
+                                }else{
+                                    socket.auth = true;
+                                    socket.emit('authenticated', {});
+                                }
+                            });
+                        }else{
+                            socket.disconnect('unauthorized');
+                        }
+                    });
+                })
+                .on('joinChat', function (chat_id) {
+                    if(isAuth(socket)){
+                        socket.join(chat_id, function(err){
+                            if(err){
+                                socket.emit('apiMessage', {error: err, success: null});
+                            }else{
+                                socket.emit('apiMessage', {error: null, success: "Joined chat "+chat_id});
+                            }
+                        });
+                    }
+                })
+                .on('leaveChat', function (chat_id) {
+                    if(isAuth(socket)){
+                        socket.leave(chat_id, function(err){
+                            if(err){
+                                socket.emit('apiMessage', {error: err, success: null});
+                            }else{
+                                socket.emit('apiMessage', {error: null, success: "Left chat "+chat_id});
+                            }
+                        });
+                    }
+                })
+                .on('message', function (data) {
+                    if(isAuth(socket)){
+                        var chat_id = mongoose.Types.ObjectId(data.id);
+                        var text = data.text;
+                        socket.join(chat_id, function(err){
+                            if(err){
+                                socket.emit('apiMessage', {error: err, success: null});
+                            }else{
+                                var newMessage = new Messages({
+                                    chat: chat_id,
+                                    text: text,
+                                    owner: socket.userData._id,
+                                    created: Date.now()
+                                });
+                                newMessage.save(function (err, saved) {
+                                    if(err){
+                                        socket.emit('apiMessage', {error: err, success: null});
+                                    }else{
+                                        Chat.update({_id: chat_id}, {$addToSet: {participants: socket.userData._id}}, function (err, wres) {
+                                            if(err){
+                                                socket.emit('apiMessage', {error: err, success: null});
+                                            }else{
+                                                socket.to(chat_id).emit('newMessage', {error: null, success: saved});
+                                                //send push notifications
+                                                Chat.findOne({_id: chat_id}, function (err, chat) {
+                                                    if(err){
+                                                        console.log(err);
+                                                    }else{
+                                                        User.find({_id: {$in: chat.subscribers}, connectedToDOC: {$exists: true, $ne: false}}, function (err, users) {
+                                                            if(err){
+                                                                console.log(err);
+                                                            }else{
+                                                                console.log("!!! === TODO: Send push notifications to users:");
+                                                                console.log(users);
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                })
+                .on('test', function (data) {
+                    if(isAuth(socket)){
+                        socket.join('myRoom');
+                        console.log(sockets.connected);
+                    }
+                })
+                .on('disconnect', function () {
+                    User.update({_id: socket.userData._id}, {$set: {connectedToDOC: false}}, function (err, wres) {
+                        if(err){
+                            console.log(err);
+                        }else{
+                            console.log("================================== socket disconnected");
+                        }
+                    });
+                });
         });
 
     app.use('/apiMSDDoc', router);
