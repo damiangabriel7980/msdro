@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '$stateParams', 'ContentService','$timeout','$window', function($scope, $rootScope, $stateParams, ContentService,$timeout,$window){
+cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '$stateParams', 'ContentService','$timeout','$window','$document', function($scope, $rootScope, $stateParams, ContentService,$timeout,$window,$document){
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.lmt=5;
@@ -41,6 +41,23 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
     ContentService.getByType.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.content = result;
         console.log($stateParams);
+        $timeout(function(){
+            var footer = angular.element('#footer');
+            var check = function () {
+                //if(angular.element($window).scrollTop()===0&&angular.element($document).height() >= (angular.element($window).height() + angular.element($window).scrollTop()))
+                //    f.hide();
+                if (angular.element($document).height() <= (angular.element($window).height() + angular.element($window).scrollTop()))
+                    footer.show();
+                else
+                    footer.hide();
+            };
+            var appliedCheck = function () {
+                $scope.$apply(check);
+            };
+            appliedCheck();
+        },50);
+        //if(angular.element($window).scrollTop()===0&&angular.element($document).height() >= (angular.element($window).height() + angular.element($window).scrollTop()))
+        //    angular.element('#footer').hide();
         if($scope.content.length>5)
         {
             $scope.showMore='show';
@@ -49,8 +66,12 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
         {
             $scope.showMore='hide';
         }
-        if($scope.content.length>=5)
-            angular.element("#footer").css({'position': 'fixed','bottom':0});
+        if($scope.content.length===0){
+            if($stateParams.articleType<3)
+                $scope.message="Nu exista stiri!";
+            else
+                $scope.message="Nu exista articole stiintifice!";
+        }
 
     });
 }]);

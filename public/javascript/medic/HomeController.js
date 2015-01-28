@@ -132,6 +132,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     {
         $scope.selectedIndex = index;
     };
+
 }])
     .directive('ngEnter', function () {
         return function (scope, element, attrs) {
@@ -152,11 +153,12 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         link: function (scope, element) {
             var footer = angular.element('#footer');
             var check = function () {
-                if ($(document).height() <= ($(window).height() + $(window).scrollTop()))
+                //if(angular.element($window).scrollTop()===0&&angular.element($document).height() >= (angular.element($window).height() + angular.element($window).scrollTop()))
+                //    f.hide();
+                if (angular.element($document).height() <= (angular.element($window).height() + angular.element($window).scrollTop()))
                     footer.show();
                 else
                     footer.hide();
-                console.log(scope);
             };
             var appliedCheck = function () {
                 scope.$apply(check);
@@ -165,10 +167,13 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
                 appliedCheck();
             });
             check();
-            $timeout(check, 250);
+            $timeout(check, 200);
             angular.element($window).resize(function () {
                 appliedCheck();
             });
+            angular.element($document).ready(function(){
+                appliedCheck();
+            })
         } // end of link
     }
 });

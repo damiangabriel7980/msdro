@@ -1,3 +1,4 @@
+<div class="row noPadding" style="text-align: center" ng-if="message!=''"><h4>{{message}}</h4></div>
 <div class="well noBox noPadding" ng-repeat="cont in content | limitTo: lmt">
     <div class="row articleBox zeroMarginLeft">
         <img class="img-thumbnail width20 pull-left marginPlus3Left articlesPictures img-back" ng-src="{{cont.image_path?pathAmazonDev+cont.image_path:defaultArticleImage}}"/>

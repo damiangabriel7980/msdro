@@ -3206,15 +3206,18 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/products/productsByArea/:id')
 
         .get(function(req, res) {
-            var test = new Array(req.params.id);
-            if(test[0]!=0)
+            var test = req.params.id.toString();
+            if(test!=0)
             {
-                Products.find({'therapeutic-areasID': {$in :test},groupsID: {$in: req.user.groupsID}}, function(err, cont) {
+                Products.find({"therapeutic-areasID": {$in :[test]},groupsID: {$in: req.user.groupsID}}, function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
                     else
-                        res.json(cont);
+                {
+                    console.log(cont);
+                    res.json(cont);
+                }
             })}
             else
             {

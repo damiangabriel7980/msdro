@@ -21,20 +21,21 @@ var date = new Date();
          $scope.eventRender = function(data, event, view){
               angular.element('.fc-event-hori').attr("data-toggle","popover");
              angular.element('.fc-event-hori').attr("data-content",data.type);
-             //console.log(data);
+             angular.element('.fc-event-hori').attr("data-original-title",newDate(data.start)  + " - " + newDate(data.end));
+
              var options = {
-                 'title':$scope.newDate(data.start)  + " - " + $scope.newDate(data.end),
                  trigger:"hover",
                  placement:'auto',
                  container:'body',
                  delay: 500
              };
+             //options.title=newDate(data.start)  + " - " + newDate(data.end);
                  $('[data-toggle="popover"]').popover(options);
          };
         $scope.uiConfig = {
             calendar: {
                 eventSources: $scope.realEvents,
-                height: 450,
+                height: 400,
                 editable: false,
                 header: {
                     left: 'month basicWeek basicDay',
@@ -60,7 +61,7 @@ var date = new Date();
      }}
          if($stateParams.id)
          {
-             $timeout(function(){
+             $scope.$on('$viewContentLoaded',function(){
                  $modal.open({
                      templateUrl: 'partials/medic/calendarDetails.ejs',
                      backdrop: true,
@@ -73,7 +74,7 @@ var date = new Date();
                          }
                      }
                  });
-             },150);
+             });
          }
      })
     ;
@@ -99,15 +100,7 @@ var date = new Date();
             }
         });
     };
-    angular.element('.fc-button-next').on('click',function(){
-        var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight());
-        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
-    });
-    angular.element('.fc-button-prev').on('click',function(){
-        var margin = Math.floor(angular.element($window).height() - angular.element(".main-view-container").outerHeight() - angular.element('#footer').outerHeight());
-        angular.element("#footer").css({'margin-top': (margin > 0 ? margin : 10)});
-    });
-    $scope.newDate=function(input){
+    var newDate=function(input){
         var data = new Date(input);
         return data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
     };

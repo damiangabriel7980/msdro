@@ -6575,7 +6575,7 @@ ul.products li {
   width: 100%;
 }
 .navbar-fixed-top .navbar-brand {
-  padding: 5px 35px;
+  padding: 0px 35px;
 }
 .navbar-fixed-top .specialGroupDropdown {
   padding: 5px 15px;
@@ -6801,6 +6801,9 @@ ul.products li {
 }
 .padd5pxBottom {
   padding-bottom: 8px !important;
+}
+.padd5pxLeft {
+  padding-left: 5px;
 }
 .iconLeft {
   margin-left: -10px;
@@ -7071,4 +7074,8 @@ hr {
 }
 .no-text-decoration a:focus {
   text-decoration: none !important;
+}
+.activeArea {
+  background-color: #006d69;
+  color: white;
 }

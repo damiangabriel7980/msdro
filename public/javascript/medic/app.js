@@ -180,7 +180,7 @@ cloudAdminApp.run(
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
-            $rootScope.MSDlogo = $rootScope.pathAmazonResources+"msd-logo.png";
+            $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.jpg";
             $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
                 $rootScope.previousState = from.name;
                 $rootScope.currentState = to.name;

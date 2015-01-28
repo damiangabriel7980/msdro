@@ -12,7 +12,7 @@
  * */
 
 
-cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout){
+cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document){
 
     multimediaService.getByArea.query({id:$stateParams.idArea}).$promise.then(function(result){
         $scope.multimedias = result;
@@ -54,6 +54,7 @@ cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' 
         });
     }
     $scope.amazonPre = $rootScope.pathAmazonDev;
+
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {
