@@ -18,13 +18,11 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
     $scope.newEvent={
         description:  "",
         enable:       "",
-        end:       "",
         groupsID: $scope.grupeUser,
         last_updated:  new Date(),
         name:      "",
         place:       "",
         privacy:   "",
-        start: "",
         type: "",
         listconferences:$scope.ConfEvents
     };
@@ -86,20 +84,6 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
             $scope.ConfEvents.splice(index,1);
         }
     };
-    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    $scope.format = $scope.formats[0];
-    $scope.open1 = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        $scope.opened1 = true;
-    };
-    $scope.open2 = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        $scope.opened2 = true;
-    };
     $scope.createEvent=function(){
         var id_groups=[];
         for(var i=0;i<$scope.grupeUser.length;i++)
@@ -119,7 +103,6 @@ cloudAdminControllers.controller('eventsAddCtrl', ['$scope','$rootScope' ,'Event
             });
             console.log($scope.newEvent);
             $scope.newEvent = {};
-            tinyMCE.remove();
         }
     };
     $scope.okk=function(){

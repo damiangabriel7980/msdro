@@ -102,20 +102,6 @@ cloudAdminControllers.controller('eventsUpdateCtrl', ['$scope','$rootScope' ,'Ev
             $scope.ConfEvents.splice(index,1);
         }
     };
-    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    $scope.format = $scope.formats[0];
-    $scope.open1 = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        $scope.opened1 = true;
-    };
-    $scope.open2 = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        $scope.opened2 = true;
-    };
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };

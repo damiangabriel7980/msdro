@@ -1,0 +1,4 @@
+.modal-open{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
