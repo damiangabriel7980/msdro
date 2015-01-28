@@ -439,6 +439,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function(req,res){
             var data = req.body.data;
             var key = "user/"+req.user._id+"/img"+req.user._id+"."+data.extension;
+            console.log(req.user.image_path);
             if(req.user.image_path.length!=0) {
                 deleteObjectS3(req.user.image_path, function (err, resp1) {
                     if (err) {
@@ -447,14 +448,15 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
                     }
                     else {
+
                         User.findOne({_id: req.user._id}).exec(function (err, response) {
                             if (err) {
                                 console.log(err);
                                 res.json({"type":"danger","message":"User not found!"});
                             }
                             else {
-                                response.image_path = key;
-                                response.save(function (err, info) {
+                                console.log(req.user._id);
+                              User.update({_id:req.user._id},{image_path: key },function (err, info) {
                                     if (err)
                                         res.json({"type":"danger","message":"Data could not be saved!"});
                                     else {
@@ -483,8 +485,10 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         res.json({"type":"danger","message":"User not found!"});
                     }
                     else {
-                        response.image_path = key;
-                        response.save(function (err, data2) {
+                        console.log(req.user._id);
+                        User.update({_id:req.user._id},{ image_path: key },function (err, data2) {
+                            console.log(data2);
+                            console.log(err);
                             if (err)
                                 res.json({"type":"danger","message":"Couldn't save user's image_path!"});
                             else {
@@ -2724,6 +2728,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
         .get(function(req, res) {
             var user = req.user;
+            console.log(user);
             var userCopy = {};
             userCopy['id']=user._id;
             userCopy['name'] = user.name;
