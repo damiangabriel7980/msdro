@@ -76,9 +76,11 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             }
         })
     .post(function(req,res){
+        var userData = getUserData(req);
         var MyNewsPost = new NewsPost();
         MyNewsPost.title=req.body.title;
         MyNewsPost.message=req.body.message;
+        MyNewsPost.owner=userData._id;
         MyNewsPost.created= Date.now();
         MyNewsPost.save(function(err,saved){
             if(err)
@@ -111,7 +113,6 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             }else{
                 var pageSize=req.query.pageSize || defaultPageSize;
                 var skip = req.query.skip;
-                var q = {visible:true};
                 //mongoose cannot sort strings case insensitive (in our case we need to sort by "name")
                 //so we will use aggregate to project a lower case string of the "name", sort by it,
                 //then at the end remove it from our projection
@@ -268,6 +269,34 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                     }
                 });
             }
+        })
+        .put(function (req, res) {
+            var keepGoing = true;
+
+            var userData = getUserData(req);
+
+            var chatId = mongoose.Types.ObjectId(req.query.chatId);
+            var subscribe = req.query.subscribe;
+
+            //set update type
+            var upd;
+            if(subscribe === "true"){
+                upd = {$addToSet: {subscribers: userData._id}};
+            }else if(subscribe === "false"){
+                upd = {$pull: {subscribers: userData._id}};
+            }else{
+                keepGoing = false;
+                res.send({hasError: true, message: "Invalid params"});
+            }
+            if(keepGoing){
+                Chat.update({_id: chatId}, upd, function (err, wres) {
+                    if(err){
+                        res.send(err);
+                    }else{
+                        res.send({hasError: false, message: "Update succeeded"});
+                    }
+                });
+            }
         });
 
     //============================================================================================================= SOCKET COMM
@@ -362,7 +391,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                                                     if(err){
                                                         console.log(err);
                                                     }else{
-                                                        User.find({_id: {$in: chat.participants}, connectedToDOC: {$exists: true, $ne: false}}, function (err, users) {
+                                                        User.find({_id: {$in: chat.subscribers}, connectedToDOC: {$exists: true, $ne: false}}, function (err, users) {
                                                             if(err){
                                                                 console.log(err);
                                                             }else{
