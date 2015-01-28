@@ -4,6 +4,7 @@
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
+var jsonwebtoken = require('jsonwebtoken');
 var url = require('url');
 
 
@@ -242,10 +243,12 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             if(keepGoing){
                 toSave['participants'] = [sender, receiver];
 
-                //forms query object to be used later
-                var q = {participants: {$in: toSave['participants']}};
-                if(type == "postBased"){
-                    q['post'] = postId;
+                //form query object to be used later
+                var q;
+                if(type === "postBased"){
+                    q = {participants: {$in: toSave['participants']}, post: postId};
+                }else{
+                    q = {participants: {$in: toSave['participants'], $size: 2}, post: null}
                 }
 
                 //check if a chat involving sender / receiver / post combination already exists
@@ -270,27 +273,127 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
     //============================================================================================================= SOCKET COMM
 
     var io = require('socket.io')(socketServer);
-    var socketioJwt = require("socketio-jwt");
 
-    // set namespace and authorization for socket.io
+    var isAuth = function (socket) {
+        if(socket.auth){
+            return true;
+        }else{
+            socket.disconnect('unauthorized');
+            return false;
+        }
+    };
+
+    var rooms = {};
+
+    // set namespace for socket.io
     var sockets = io.of('/doc');
     sockets
-        .on('authenticate', function (data) {
-            console.log(data);
-        })
-        .on('connection', socketioJwt.authorize({
-            secret: tokenSecret,
-            timeout: 15000 // 15 seconds to send the authentication message
-        }))
-        .on('authenticated', function(socket) {
-            //this socket is authenticated, we are good to handle more events from it
-            console.log("================================== socket connected");
-            var userData = socket.decoded_token;
-            console.log(userData.username);
-            socket.emit('userAuthenticated', userData);
+        .on('connection', function(socket){
+            socket.auth = false;
             socket
+                .on('authenticate', function(data){
+                    //check the auth data sent by the client
+                    jsonwebtoken.verify(data.token, tokenSecret, function(err, decoded) {
+                        if (!err && decoded){
+                            socket.userData = decoded;
+                            console.log("================================== socket authenticated");
+                            console.log("Socket: ", socket.id);
+                            console.log("User: ", socket.userData.username);
+                            User.update({_id:decoded._id}, {$set: {connectedToDoc: true}}, function (err, wres) {
+                                if(err){
+                                    socket.emit('apiMessage', {error: err, success: null});
+                                }else{
+                                    socket.auth = true;
+                                    socket.emit('authenticated', {});
+                                }
+                            });
+                        }else{
+                            socket.disconnect('unauthorized');
+                        }
+                    });
+                })
+                .on('joinChat', function (chat_id) {
+                    if(isAuth(socket)){
+                        socket.join(chat_id, function(err){
+                            if(err){
+                                socket.emit('apiMessage', {error: err, success: null});
+                            }else{
+                                socket.emit('apiMessage', {error: null, success: "Joined chat "+chat_id});
+                            }
+                        });
+                    }
+                })
+                .on('leaveChat', function (chat_id) {
+                    if(isAuth(socket)){
+                        socket.leave(chat_id, function(err){
+                            if(err){
+                                socket.emit('apiMessage', {error: err, success: null});
+                            }else{
+                                socket.emit('apiMessage', {error: null, success: "Left chat "+chat_id});
+                            }
+                        });
+                    }
+                })
+                .on('message', function (data) {
+                    if(isAuth(socket)){
+                        var chat_id = mongoose.Types.ObjectId(data.id);
+                        var text = data.text;
+                        socket.join(chat_id, function(err){
+                            if(err){
+                                socket.emit('apiMessage', {error: err, success: null});
+                            }else{
+                                var newMessage = new Messages({
+                                    chat: chat_id,
+                                    text: text,
+                                    owner: socket.userData._id,
+                                    created: Date.now()
+                                });
+                                newMessage.save(function (err, saved) {
+                                    if(err){
+                                        socket.emit('apiMessage', {error: err, success: null});
+                                    }else{
+                                        Chat.update({_id: chat_id}, {$addToSet: {participants: socket.userData._id}}, function (err, wres) {
+                                            if(err){
+                                                socket.emit('apiMessage', {error: err, success: null});
+                                            }else{
+                                                socket.to(chat_id).emit('newMessage', {error: null, success: saved});
+                                                //send push notifications
+                                                Chat.findOne({_id: chat_id}, function (err, chat) {
+                                                    if(err){
+                                                        console.log(err);
+                                                    }else{
+                                                        User.find({_id: {$in: chat.participants}, connectedToDOC: {$exists: true, $ne: false}}, function (err, users) {
+                                                            if(err){
+                                                                console.log(err);
+                                                            }else{
+                                                                console.log("!!! === TODO: Send push notifications to users:");
+                                                                console.log(users);
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                })
+                .on('test', function (data) {
+                    if(isAuth(socket)){
+                        socket.join('myRoom');
+                        console.log(sockets.connected);
+                    }
+                })
                 .on('disconnect', function () {
-                    console.log("================================== socket disconnected");
+                    User.update({_id: socket.userData._id}, {$set: {connectedToDOC: false}}, function (err, wres) {
+                        if(err){
+                            console.log(err);
+                        }else{
+                            console.log("================================== socket disconnected");
+                        }
+                    });
                 });
         });
 
