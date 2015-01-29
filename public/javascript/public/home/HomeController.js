@@ -42,7 +42,12 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
     };
 
     $scope.createHeader = function (text,length) {
-        return $scope.htmlToPlainText(text).substring(0,length)+"...";
+        var textLength = text?text.length:0;
+        if(textLength > length){
+            return $scope.htmlToPlainText(text).substring(0,length)+"...";
+        }else{
+            return $scope.htmlToPlainText(text);
+        }
     };
 
     $scope.trustAsHtml = function (data) {
