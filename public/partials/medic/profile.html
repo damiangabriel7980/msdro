@@ -148,16 +148,12 @@
         <accordion-group class="no-text-decoration">
             <accordion-heading class="no-text-decoration"><p class="no-text-decoration"><i class="glyphicon glyphicon-tags"></i>&nbsp;&nbsp;Contul meu</p></accordion-heading>
             <div class="col-md-12">
-                <h4>Schimba e-mail</h4>
-                <hr/>
-            </div>
-            <div class="col-md-12">
                 <alert ng-if="userChangeMailAlert.newAlert" type="{{userChangeMailAlert.type}}" close="userChangeMailAlert.newAlert=false">{{userChangeMailAlert.message}}</alert>
             </div>
             <form name="emailForm" ng-submit="submitEmailForm(true)">
                 <div class="col-md-12">
                     <div class="form-group col-md-12">
-                        <label for="emailNew"><sup>*</sup>Adresa de e-mail:</label>
+                        <label for="emailNew">Adresa de e-mail:</label>
                         <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="username" required disabled>
                         <p class="help-block" ng-show="emailForm.emailNew.$invalid && !emailForm.emailNew.$pristine ">Introduceti un email valid!</p>
                     </div>
@@ -167,9 +163,6 @@
                         <!--<p class="help-block">Parola este necesara pentru a confirma schimbarea e-mail-ului!</p>-->
                         <!--<p class="help-block" ng-show="emailForm.changeEmailPass.$invalid && !emailForm.changeEmailPass.$pristine ">Introduceti parola corecta!</p>-->
                     <!--</div>-->
-                </div>
-                <div class="col-md-12">
-                    <button type="submit" class="btn btn-danger pull-right">Schimba e-mail</button>
                 </div>
             </form>
             <div class="col-md-12">

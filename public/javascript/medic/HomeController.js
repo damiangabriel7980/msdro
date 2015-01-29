@@ -172,7 +172,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
                 appliedCheck();
             });
             angular.element($document).ready(function(){
-                appliedCheck();
+                check();
             })
         } // end of link
     }
