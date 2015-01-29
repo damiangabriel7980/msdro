@@ -17,7 +17,6 @@ var User = require('./models/user');
 //CONSTANTS
 const defaultPageSize = 10;
 
-
 module.exports = function(app, logger, tokenSecret, socketServer, router) {
 
     //returns user data (parsed from token found on the request)
@@ -66,7 +65,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 if(created){
                     q['created'] = {$lt: new Date(created)};
                 }
-                NewsPost.find(q).sort({'last_updated' : -1}).limit(pageSize)
+                NewsPost.find(q).sort({'created' : -1}).limit(pageSize).populate('owner')
                     .exec(function(err, result) {
                         if(err)
                             res.json(err);
@@ -391,7 +390,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                                                     if(err){
                                                         console.log(err);
                                                     }else{
-                                                        User.find({_id: {$in: chat.subscribers}, connectedToDOC: {$exists: true, $ne: false}}, function (err, users) {
+                                                        User.find({_id: {$in: chat.subscribers}, connectedToDOC: {$exists: true, $ne: false}}, {_id: 1}, function (err, users) {
                                                             if(err){
                                                                 console.log(err);
                                                             }else{

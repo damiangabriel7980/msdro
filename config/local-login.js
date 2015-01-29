@@ -21,7 +21,8 @@ module.exports = function(passport, logger) {
             // asynchronous
             process.nextTick(function() {
                 logger.warn("local auth - email: ", email);
-                User.findOne({username:{$regex: new RegExp("^"+email,"i")}, enabled:{$ne: false}}, function(err, user) {
+                User.findOne({username:{$regex: new RegExp("^"+email,"i")}, enabled:{$ne: false}}).select("+enabled +password +account_locked +account_expired").exec(function(err, user) {
+
                     // if there are any errors, return the error
                     if (err)
                         return done(err);
@@ -29,6 +30,9 @@ module.exports = function(passport, logger) {
                     // if no user is found, return the message
                     if (!user)
                         return done(null, false, req.flash('loginMessage', 'Utilizator sau parola gresite'));
+
+                    if(!user.enabled || user.account_locked || user.account_expired)
+                        return done(null, false, req.flash('loginMessage', 'Contul nu este activat sau a expirat'));
 
                     if (!user.validPassword(password))
                         return done(null, false, req.flash('loginMessage', 'Utilizator sau parola gresite'));

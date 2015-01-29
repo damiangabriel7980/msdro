@@ -422,32 +422,26 @@ function isNotLoggedIn(req, res, next) {
 //paths = {"role": "page", ...}
 //sendUserInfo = boolean
 var transportUser = function (req, res, paths, sendUserInfo) {
-    if(req.user.enabled && !req.user.account_locked &&!req.user.account_expired){
-        Roles.find({_id: {$in: req.user.rolesID}}, function (err, roles) {
-            if(err){
-                req.logout();
-                res.redirect('/');
-            }else{
-                if(roles[0]){
-                    if(paths[roles[0].authority]){
-                        if(sendUserInfo){
-                            res.render(paths[roles[0].authority], {user: req.user, amazonBucket: process.env.amazonBucket});
-                        }else{
-                            res.render(paths[roles[0].authority]);
-                        }
+    Roles.find({_id: {$in: req.user.rolesID}}, function (err, roles) {
+        if(err){
+            req.logout();
+            res.redirect('/');
+        }else{
+            if(roles[0]){
+                if(paths[roles[0].authority]){
+                    if(sendUserInfo){
+                        res.render(paths[roles[0].authority], {user: req.user, amazonBucket: process.env.amazonBucket});
                     }else{
-                        req.logout();
-                        res.redirect('/');
+                        res.render(paths[roles[0].authority]);
                     }
                 }else{
                     req.logout();
                     res.redirect('/');
                 }
+            }else{
+                req.logout();
+                res.redirect('/');
             }
-        });
-    }else{
-        req.logout();
-        req.flash('loginMessage', 'Contul nu este activat sau a expirat');
-        res.redirect('/login');
-    }
+        }
+    });
 };
