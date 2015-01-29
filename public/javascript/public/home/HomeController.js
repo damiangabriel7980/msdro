@@ -21,7 +21,7 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
 
     $scope.getTooltip = function (slide) {
         var src = $rootScope.pathAmazonDev + slide.image_path;
-        var tooltipContent = '<img src="'+src+'">'+slide.title;
+        var tooltipContent = '<img src="'+src+'">'+$scope.createHeader(slide.title, 40);
         return $sce.trustAsHtml(tooltipContent);
     };
 
