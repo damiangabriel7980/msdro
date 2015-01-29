@@ -35,7 +35,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
         var notificationToken = req.body.notificationToken;
 
         //find user in database
-        User.findOne({ 'username' :  { $regex: new RegExp("^" + req.body.username, "i") }}, function(err, user) {
+        User.findOne({ 'username' :  { $regex: new RegExp("^" + req.body.username, "i") }}).select("+account_expired +account_locked +enabled +password").exec(function(err, user) {
             // if there are any errors, return error status
             if (err){
                 res.status(403).end();
@@ -57,7 +57,6 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
                                 username: user.username,
                                 name: user.name,
                                 image_path: user.image_path,
-                                phone: user.phone,
                                 answerer: false
                             };
                             //check if user is an answerer

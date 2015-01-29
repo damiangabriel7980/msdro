@@ -34,9 +34,6 @@ var request = require('request');
 var AWS = require('aws-sdk');
 var fs = require('fs');
 
-//exclude users' personal info
-var userExcludes = '-state -subscription -account_expired -account_locked -enabled -last_updated -citiesID -conferencesID -jobsID -phone -points -proof_path -rolesID -show_welcome_screen -groupsID -resetPasswordToken -resetPasswordExpires -activationToken -conferencesID -password -password_expired';
-
 //form sts object from environment variables. Used for retrieving temporary credentials to front end
 var sts = new AWS.STS();
 //configure credentials for use on server only; assign credentials based on role (never use master credentials)
@@ -325,9 +322,7 @@ var getUsersForConferences = function (conferences_ids, callback) {
         }
     });
 };
-var IndexAllContent = function(){
 
-};
 //======================================================================================================================================= routes for admin
 
 module.exports = function(app, sessionSecret, email, logger, pushServerAddr, router) {
@@ -2518,7 +2513,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     router.route('/admin/applications/qa/answerGivers')
         .get(function (req, res) {
-            AnswerGivers.find({}).populate('id_user', userExcludes).exec(function (err, ag) {
+            AnswerGivers.find({}).populate('id_user').exec(function (err, ag) {
                 if(err){
                     res.send(err);
                 }else{
@@ -2942,98 +2937,106 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
-    router.route('/changeEmail')
-        .post(function (req, res) {
-            var ans = {error: true, message:"Server error"};
-            var userData = req.body.userData;
-            //check if mail is valid
-            var mailPatt = new XRegExp('^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$', 'i');
-            if(!mailPatt.test(userData.mail.toString())){
-                ans.error = true;
-                ans.message = "E-mail invalid";
-                res.json(ans);
-            }else{
-                //check if mail already exists
-                User.find({username: userData.mail}, function(err, result){
-                    if(err){
-                        ans.error = true;
-                        ans.message = "Eroare la schimbarea adresei de e-mail";
-                        res.json(ans);
-                    }else{
-                        if(result.length == 0){
-                            //check password
-                            if(SHA256(userData.pass).toString() === req.user.password){
-                                var upd = User.update({_id:req.user._id}, {username: userData.mail}, function () {
-                                    if(!upd._castError){
-                                        ans.error = false;
-                                        ans.message = "Adresa de e-mail a fost modificata";
-                                        res.json(ans);
-                                    }else{
-                                        ans.error = true;
-                                        ans.message = "Eroare la schimbarea adresei de e-mail";
-                                        res.json(ans);
-                                    }
-                                });
-                            }else{
-                                ans.error = true;
-                                ans.message = "Parola incorecta";
-                                res.json(ans);
-                            }
-                        }else{
-                            ans.error = true;
-                            ans.message = "Acest e-mail este deja folosit";
-                            res.json(ans);
-                        }
-                    }
-                });
-            }
-        });
+//    router.route('/changeEmail')
+//        .post(function (req, res) {
+//            var ans = {error: true, message:"Server error"};
+//            var userData = req.body.userData;
+//            //check if mail is valid
+//            var mailPatt = new XRegExp('^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$', 'i');
+//            if(!mailPatt.test(userData.mail.toString())){
+//                ans.error = true;
+//                ans.message = "E-mail invalid";
+//                res.json(ans);
+//            }else{
+//                //check if mail already exists
+//                User.find({username: userData.mail}, function(err, result){
+//                    if(err){
+//                        ans.error = true;
+//                        ans.message = "Eroare la schimbarea adresei de e-mail";
+//                        res.json(ans);
+//                    }else{
+//                        if(result.length == 0){
+//                            //check password
+//                            if(SHA256(userData.pass).toString() === req.user.password){
+//                                var upd = User.update({_id:req.user._id}, {username: userData.mail}, function () {
+//                                    if(!upd._castError){
+//                                        ans.error = false;
+//                                        ans.message = "Adresa de e-mail a fost modificata";
+//                                        res.json(ans);
+//                                    }else{
+//                                        ans.error = true;
+//                                        ans.message = "Eroare la schimbarea adresei de e-mail";
+//                                        res.json(ans);
+//                                    }
+//                                });
+//                            }else{
+//                                ans.error = true;
+//                                ans.message = "Parola incorecta";
+//                                res.json(ans);
+//                            }
+//                        }else{
+//                            ans.error = true;
+//                            ans.message = "Acest e-mail este deja folosit";
+//                            res.json(ans);
+//                        }
+//                    }
+//                });
+//            }
+//        });
 
     router.route('/changePassword')
         .post(function (req, res) {
             var ans = {error: true, message:"Server error"};
             var userData = req.body.userData;
-            //check if password is correct
-            if(SHA256(userData.oldPass).toString() !== req.user.password){
-                ans.error = true;
-                ans.message = "Parola nu este corecta!";
-                res.json(ans);
-            }else{
-                if(SHA256(userData.newPass).toString() === req.user.password)
-                {
+            User.findOne({_id: req.user._id}).select("+password").exec(function (err, user) {
+                if(err || !user){
                     ans.error = true;
-                    ans.message = "Nu aveti voie sa introduceti vechea parola!";
+                    ans.message = "Utilizatorul nu a fost gasit!";
                     res.json(ans);
-                }
-                else
-                {
-                    if(userData.newPass.toString().length < 6 || userData.newPass.toString.length > 32){
+                }else{
+                    //check if password is correct
+                    if(SHA256(userData.oldPass).toString() !== user.password){
                         ans.error = true;
-                        ans.message = "Parola noua trebuie sa contina intre 6 si 32 de caractere";
+                        ans.message = "Parola nu este corecta!";
                         res.json(ans);
                     }else{
-                        //check if passwords match
-                        if(userData.newPass !== userData.confirmPass){
+                        if(SHA256(userData.newPass).toString() === user.password)
+                        {
                             ans.error = true;
-                            ans.message = "Parolele nu corespund";
+                            ans.message = "Introduceti o parola diferita fata de cea veche!";
                             res.json(ans);
-                        }else{
-                            //change password
-                            var upd = User.update({_id:req.user._id}, {password: SHA256(userData.newPass).toString()}, function () {
-                                if(!upd._castError){
-                                    ans.error = false;
-                                    ans.message = "Parola a fost schimbata";
+                        }
+                        else
+                        {
+                            if(userData.newPass.toString().length < 6 || userData.newPass.toString.length > 32){
+                                ans.error = true;
+                                ans.message = "Parola noua trebuie sa contina intre 6 si 32 de caractere";
+                                res.json(ans);
+                            }else{
+                                //check if passwords match
+                                if(userData.newPass !== userData.confirmPass){
+                                    ans.error = true;
+                                    ans.message = "Parolele nu corespund";
                                     res.json(ans);
                                 }else{
-                                    ans.error = true;
-                                    ans.message = "Eroare la schimbarea parolei";
-                                    res.json(ans);
+                                    //change password
+                                    var upd = User.update({_id: user._id}, {password: SHA256(userData.newPass).toString()}, function (err, wres) {
+                                        if(!err){
+                                            ans.error = false;
+                                            ans.message = "Parola a fost schimbata";
+                                            res.json(ans);
+                                        }else{
+                                            ans.error = true;
+                                            ans.message = "Eroare la schimbarea parolei";
+                                            res.json(ans);
+                                        }
+                                    });
                                 }
-                            });
+                            }
                         }
                     }
                 }
-            }
+            });
         });
 
     router.route('/userHomeCarousel/:specialGroup')

@@ -18,9 +18,6 @@ module.exports = function (socketServer, tokenSecret, logger) {
     var Topics = require('./models/qa_topics');
     var AnswerGivers = require('./models/qa_answerGivers');
 
-    //exclude users' personal info
-    var userExcludes = '-state -subscription -account_expired -account_locked -enabled -last_updated -citiesID -conferencesID -jobsID -phone -points -proof_path -rolesID -show_welcome_screen -groupsID -resetPasswordToken -resetPasswordExpires -activationToken -conferencesID -password -password_expired';
-
     var getIds = function (arr, cb) {
         var ret = [];
         async.each(arr, function (item, callback) {
