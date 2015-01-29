@@ -2989,7 +2989,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {error: true, message:"Server error"};
             var userData = req.body.userData;
-            User.findOne({_id: req.user._id}, function (err, user) {
+            User.findOne({_id: req.user._id}).select("+password").exec(function (err, user) {
                 if(err || !user){
                     ans.error = true;
                     ans.message = "Utilizatorul nu a fost gasit!";
