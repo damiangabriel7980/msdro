@@ -16,9 +16,6 @@ var User = require('./models/user');
 
 //CONSTANTS
 const defaultPageSize = 10;
-//exclude users' personal info
-const userExcludes = '-state -subscription -account_expired -account_locked -enabled -last_updated -citiesID -conferencesID -jobsID -phone -points -proof_path -rolesID -show_welcome_screen -groupsID -resetPasswordToken -resetPasswordExpires -activationToken -conferencesID -password -password_expired';
-
 
 module.exports = function(app, logger, tokenSecret, socketServer, router) {
 
@@ -55,7 +52,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
         .get(function(req,res){
             if(req.query.id){
                 var id=req.query.id;
-                NewsPost.findOne({_id: id}).populate('owner', userExcludes).exec(function(err,result){
+                NewsPost.findOne({_id: id}).populate('owner').exec(function(err,result){
                     if(err)
                         res.json(err);
                     else
@@ -68,7 +65,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 if(created){
                     q['created'] = {$lt: new Date(created)};
                 }
-                NewsPost.find(q).sort({'created' : -1}).limit(pageSize).populate('owner', userExcludes)
+                NewsPost.find(q).sort({'created' : -1}).limit(pageSize).populate('owner')
                     .exec(function(err, result) {
                         if(err)
                             res.json(err);
@@ -393,7 +390,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                                                     if(err){
                                                         console.log(err);
                                                     }else{
-                                                        User.find({_id: {$in: chat.subscribers}, connectedToDOC: {$exists: true, $ne: false}}, function (err, users) {
+                                                        User.find({_id: {$in: chat.subscribers}, connectedToDOC: {$exists: true, $ne: false}}, {_id: 1}, function (err, users) {
                                                             if(err){
                                                                 console.log(err);
                                                             }else{
