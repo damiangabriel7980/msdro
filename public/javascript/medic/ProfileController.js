@@ -68,20 +68,21 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
                     var reader = new FileReader();
                     $scope.uploadAlert.newAlert = true;
                     $scope.uploadAlert.type = "success";
-                    $scope.uploadAlert.message = "The photo is uploading...";
+                    $scope.uploadAlert.message = "Fotografia se incarca...";
                     reader.onloadend = function(event){
                         $scope.newImage = event.target.result;
                         var b64 = $scope.newImage.split("base64,")[1];
-
+                        $scope.imageUser="";
                         ProfileService.saveUserPhoto.save({data:{Body: b64, extension: extension}}).$promise.then(function (message) {
                             if(message){
                                 $scope.uploadAlert.type = message.type;
                                 $scope.uploadAlert.message = message.message;
                                 $scope.uploadAlert.newAlert = true;
-                                $scope.hideImg="hide";
                                 ProfileService.getUserData.query().$promise.then(function (resp) {
                                     $scope.imageUser = imagePre + resp.image_path;
-                                    $scope.hideImg="show";
+                                    $timeout(function() {
+                                        $scope.$apply($scope);
+                                    },100);
                                 });
 
 

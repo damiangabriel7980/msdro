@@ -6739,7 +6739,7 @@ ul.products li {
   color: #006d69;
 }
 .date2 {
-  margin-top: -5%;
+  margin-top: -25px;
 }
 .date3 {
   margin-top: -2%;
@@ -6965,6 +6965,9 @@ hr {
 .justify {
   text-align: justify;
 }
+.center {
+  text-align: center;
+}
 .newFont {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   color: white;
@@ -7078,4 +7081,7 @@ hr {
 .activeArea {
   background-color: #006d69;
   color: white;
+}
+.top2percent {
+  margin-top: -10px;
 }

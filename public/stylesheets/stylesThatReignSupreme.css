@@ -1,4 +1,6 @@
-.modal-open{
-    overflow-y: scroll;
-    overflow-x: hidden;
+body.modal-open
+{
+    overflow:inherit;
+    padding-right:inherit !important;
+    position: fixed;
 }

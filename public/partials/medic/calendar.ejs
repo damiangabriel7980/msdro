@@ -18,7 +18,7 @@
                             <h5 class="MSDTitleDark noMarginTop">{{eventim.start | filter: asDate | date:'MMM'}}</h5>
                           </div>
 
-                        <div class="noPadding col-md-9">
+                        <div class="noPadding col-md-9 top2percent margin2Left">
                             <h4 class="handCursor" ng-click="goToEvent(eventim._id)">{{eventim['name']}}</h4>
                         </div>
                     </div>
@@ -26,6 +26,6 @@
          </div>
 <div id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="realEvents" class="well col-md-8 well-content padd35px"></div>
         </div>
-</div>
+</divhydrateOption
 <ng-view></ng-view>
 </body>

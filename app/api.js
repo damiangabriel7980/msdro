@@ -444,7 +444,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 deleteObjectS3(req.user.image_path, function (err, resp1) {
                     if (err) {
                         console.log(err);
-                        res.json({"type":"danger","message":"Photo not deleted!"});
+                        res.json({"type":"danger","message":"Fotografia nu a fost stearsa!"});
 
                     }
                     else {
@@ -452,23 +452,23 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         User.findOne({_id: req.user._id}).exec(function (err, response) {
                             if (err) {
                                 console.log(err);
-                                res.json({"type":"danger","message":"User not found!"});
+                                res.json({"type":"danger","message":"Nu a fost gasit utilizatorul!"});
                             }
                             else {
                                 console.log(req.user._id);
                               User.update({_id:req.user._id},{image_path: key },function (err, info) {
                                     if (err)
-                                        res.json({"type":"danger","message":"Data could not be saved!"});
+                                        res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
                                     else {
                                         addObjectS3(key, data.Body, function (err, resp2) {
                                             if (err)
                                             {
                                                 console.log(err);
-                                                res.json({"type":"danger","message":"Error while adding object to S3!"});
+                                                res.json({"type":"danger","message":"Fotografia nu a fost adaugata pe server!"});
 
                                             }
                                             else
-                                                res.json({"type":"success","message": "Succes uploading the new file!"})
+                                                res.json({"type":"success","message": "Fotografia a fost actualizata cu succes!"})
                                         });
                                     }
                                 })
@@ -482,7 +482,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 User.findOne({_id: req.user._id}).exec(function (err, response) {
                     if (err) {
                         console.log(err);
-                        res.json({"type":"danger","message":"User not found!"});
+                        res.json({"type":"danger","message":"Nu a fost gasit utilizatorul!"});
                     }
                     else {
                         console.log(req.user._id);
@@ -490,16 +490,15 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             console.log(data2);
                             console.log(err);
                             if (err)
-                                res.json({"type":"danger","message":"Couldn't save user's image_path!"});
+                                res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
                             else {
                                 addObjectS3(key, data.Body, function (err, resp2) {
                                     if (err)
                                     {
                                         console.log(err);
-                                        res.json(err);
-                                    }
+                                        res.json({"type":"danger","message":"Fotografia nu a fost adaugata pe server!"});                                    }
                                     else
-                                        res.json({"type":"success","message":"File upload successful!"});
+                                        res.json({"type":"success","message":"Fotografia a fost actualizata cu succes!"});
                                 });
                             }
                         })
@@ -3091,9 +3090,10 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
                     query_string: {
                         query: data
+
                     }
 
-                },{hydrate:true}, function(err, results) {
+                },{hydrate: true,groupsID: {$in: req.user.groupsID}}, function(err, results) {
                     if(err)
                     {
                         res.json(err);
@@ -3126,8 +3126,11 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                {
                     if(checker===5)
                         res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
-                   else
+                   else{
+                        console.log(ObjectOfResults);
                         res.json(ObjectOfResults);
+                    }
+
                }
 
             })

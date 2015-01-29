@@ -21,7 +21,10 @@ var date = new Date();
          $scope.eventRender = function(data, event, view){
               angular.element('.fc-event-hori').attr("data-toggle","popover");
              angular.element('.fc-event-hori').attr("data-content",data.type);
-             angular.element('.fc-event-hori').attr("data-original-title",newDate(data.start)  + " - " + newDate(data.end));
+             var today = new Date(data.end);
+             var tomorrow = new Date(data.end);
+             tomorrow.setDate(today.getDate()-1);
+             angular.element('.fc-event-hori').attr("data-original-title",newDate(data.start)  + " - " + newDate(tomorrow));
 
              var options = {
                  trigger:"hover",
@@ -82,7 +85,7 @@ var date = new Date();
         $scope.events2 = result;
         $scope.events2Filtered = [];
         for (var i = 0; i < $scope.events2.length; i++) {
-            if (new Date($scope.events2[i].start).getMonth() + 1 >= date.getMonth() + 1 && (new Date($scope.events2[i].start).getFullYear() == date.getFullYear()))
+            if (new Date($scope.events2[i].end) > date)
                 $scope.events2Filtered.push($scope.events2[i]);
         }
     });
