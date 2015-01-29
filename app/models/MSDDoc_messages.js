@@ -9,7 +9,8 @@ var MessagesDocSchema = new Schema({
     text: String,
     created:Date,
     read: Boolean,
-    chat:{type: Schema.Types.ObjectId,ref:'MSDDoc_chat'}
+    chat:{type: Schema.Types.ObjectId,ref:'MSDDoc_chat'},
+    owner: {type: Schema.Types.ObjectId,ref:'User'}
 });
 
 module.exports = mongoose.model('MSDDoc_messages',MessagesDocSchema,'MSDDoc_messages');
