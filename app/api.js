@@ -2721,64 +2721,69 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/userdata')
 
         .get(function(req, res) {
-            var user = req.user;
-            console.log(user);
-            var userCopy = {};
-            userCopy['id']=user._id;
-            userCopy['name'] = user.name;
-            userCopy['image_path'] = user.image_path;
-            userCopy['phone'] = user.phone;
-            userCopy['points'] = user.points;
-            userCopy['subscription'] = user.subscription;
-            userCopy['username'] = user.username;
-            userCopy['therapeutic-areasID'] = user['therapeutic-areasID'];
-            userCopy['citiesID'] = user.citiesID;
-            async.parallel([
-                function (callback) {
-                    if(user['jobsID']){
-                        if(user['jobsID'][0]){
-                            var jobId = user.jobsID[0];
-                            Job.find({_id:jobId}, function (err, job) {
-                                if(err){
-                                    callback(err, null);
-                                }else{
-                                    userCopy.job = job;
-                                }
-                            });
-                        }
-                    }
-                    callback(null, null);
-                },
-                function (callback) {
-                    Cities.find({_id:user.citiesID[0]}, function (err, city) {
-                        if (err) {
-                            callback(err, null);
-                        }
-                        if (city[0]) {
-                            Counties.find({citiesID: {$in: [city[0]._id.toString()]}}, function (err, county) {
-                                if(err){
-                                    callback(err, null);
-                                }
-                                if(county[0]){
-                                    userCopy['city_id'] = city[0]._id;
-                                    userCopy['city_name'] = city[0].name;
-                                    userCopy['county_id'] = county[0]._id;
-                                    userCopy['county_name'] = county[0].name;
-                                }
-                                callback(null, null);
-                            });
-                        }else{
-                            callback(null, null);
-                        }
-                    });
-                }
-            ], function (err, results) {
+            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID").exec(function (err, user) {
                 if(err){
-                    console.log(err);
                     res.send(err);
                 }else{
-                    console.log(userCopy);
-                    res.json(userCopy);
+                    console.log(user);
+                    var userCopy = {};
+                    userCopy['id']=user._id;
+                    userCopy['name'] = user.name;
+                    userCopy['image_path'] = user.image_path;
+                    userCopy['phone'] = user.phone;
+                    userCopy['points'] = user.points;
+                    userCopy['subscription'] = user.subscription;
+                    userCopy['username'] = user.username;
+                    userCopy['therapeutic-areasID'] = user['therapeutic-areasID'];
+                    userCopy['citiesID'] = user.citiesID;
+                    async.parallel([
+                        function (callback) {
+                            if(user['jobsID']){
+                                if(user['jobsID'][0]){
+                                    var jobId = user.jobsID[0];
+                                    Job.find({_id:jobId}, function (err, job) {
+                                        if(err){
+                                            callback(err, null);
+                                        }else{
+                                            userCopy.job = job;
+                                        }
+                                    });
+                                }
+                            }
+                            callback(null, null);
+                        },
+                        function (callback) {
+                            Cities.find({_id:user.citiesID[0]}, function (err, city) {
+                                if (err) {
+                                    callback(err, null);
+                                }
+                                if (city[0]) {
+                                    Counties.find({citiesID: {$in: [city[0]._id.toString()]}}, function (err, county) {
+                                        if(err){
+                                            callback(err, null);
+                                        }
+                                        if(county[0]){
+                                            userCopy['city_id'] = city[0]._id;
+                                            userCopy['city_name'] = city[0].name;
+                                            userCopy['county_id'] = county[0]._id;
+                                            userCopy['county_name'] = county[0].name;
+                                        }
+                                        callback(null, null);
+                                    });
+                                }else{
+                                    callback(null, null);
+                                }
+                            });
+                        }
+                    ], function (err, results) {
+                        if(err){
+                            console.log(err);
+                            res.send(err);
+                        }else{
+                            console.log(userCopy);
+                            res.json(userCopy);
+                        }
+                    });
                 }
             });
         });
