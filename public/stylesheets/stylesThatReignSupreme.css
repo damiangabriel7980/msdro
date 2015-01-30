@@ -2,5 +2,5 @@ body.modal-open
 {
     overflow:inherit;
     padding-right:inherit !important;
-    position: fixed;
+    position: absolute;
 }
