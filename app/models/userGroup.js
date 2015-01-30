@@ -10,7 +10,8 @@ var UserGroupSchema		= new Schema({
     description:  String,
     image_path:   String,
     default_group: Number,
-    content_specific: Boolean
+    content_specific: Boolean,
+    profession: {type: Schema.Types.ObjectId,ref: 'professions'}
 });
 
 module.exports = mongoose.model('UserGroup', UserGroupSchema, 'groups');

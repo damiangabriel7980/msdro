@@ -11,6 +11,7 @@ var gulp = require('gulp'),
     ObjectID = require('mongodb').ObjectID,
     assert = require('assert'),
     mysql = require('mysql');
+    async = require('async');
 
 // sass task
 gulp.task('sass', function () {
@@ -81,7 +82,7 @@ gulp.task('deleteCollections', function () {
 
 gulp.task('migrateDB', function () {
 
-    var mongoAddress = 'mongodb://10.200.0.213:27017/MSDdev';
+    var mongoAddress = 'mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test';
 
     // connect to sql db
     var sql = mysql.createConnection({
@@ -97,7 +98,7 @@ gulp.task('migrateDB', function () {
     });
 
     //------------------------------------------------------------------------------------------------------- constants
-    const schema = "msd";
+    const schema = "msd_prod";
     const limit = 0; //used for testing; for no limit, set limit = 0
 
 //    var dnm = ["content_user_group","databasechangelog","DATABASECHANGELOG","databasechangeloglock","DATABASECHANGELOGLOCK","event_user_group",
@@ -510,6 +511,251 @@ gulp.task('migrateDB', function () {
         var checkForCompletion = setInterval(postExecution, 500);
 
     });
+});
+
+gulp.task('breakGroups', function () {
+
+    var toProfessions = ["Medic", "Farmacist"];
+
+    var mongoAddress = 'mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test';
+
+    //connect to mongo
+    MongoClient.connect(mongoAddress, function (err, db) {
+
+        //======================================================= FUNCTIONS
+
+        var copyGroups = function (masterCallback) {
+            db.collection('groups').find({}).toArray(function (err, groups) {
+                if(err){
+                    console.log(err);
+                }else{
+                    var associationsOldGroups = {};
+                    for(var i=0; i<groups.length; i++){
+                        associationsOldGroups[groups[i]._id.toString()] = groups[i];
+                    }
+                    masterCallback(groups, associationsOldGroups);
+                }
+            });
+        };
+
+        var getGroupById = function (groupsArray, id) {
+            for(var i=0; i<groupsArray.length; i++){
+                if(groupsArray[i]._id.toString() == id.toString()){
+                    return groupsArray[i];
+                }
+            }
+            return null;
+        };
+
+        var createProfessions = function (masterCallback) {
+            var newProfessions = [];
+            //create the professions and store a correspondence of id -> name for them
+            async.each(toProfessions, function (profession, callback) {
+                db.collection('professions').insert({display_name: profession}, function (err, inserted) {
+                    if(err){
+                        console.log(err);
+                    }else{
+                        newProfessions.push(inserted[0]);
+                        callback();
+                    }
+                });
+            }, function (err) {
+                if(err){
+                    console.log(err);
+                }else{
+                    masterCallback(newProfessions);
+                }
+            });
+        };
+
+        var separateGroups = function (arrayOfGroups, masterCallback) {
+            var separatedProfessions = [];
+            var separatedGroups = [];
+            for(var i=0; i<arrayOfGroups.length; i++){
+                var name = arrayOfGroups[i].display_name;
+                if(toProfessions.indexOf(name) > -1){
+                    separatedProfessions.push(arrayOfGroups[i]);
+                }else{
+                    separatedGroups.push(arrayOfGroups[i]);
+                }
+            }
+            masterCallback(separatedGroups, separatedProfessions);
+        };
+
+        var createNewGroups = function(newGroupsName, newProfessions, separatedGroups, masterCallback) {
+            //add defaults
+            separatedGroups.push({
+                display_name: "Default"
+            });
+
+            var newProAssignations = {};
+
+            async.each(newProfessions, function (profession, cbProfessions) {
+                async.each(separatedGroups, function (group, cbGroups) {
+                    db.collection(newGroupsName).insert({
+                        display_name: group.display_name,
+                        description: group.description,
+                        image_path: group.image_path,
+                        profession: profession._id
+                    }, function (err, inserted) {
+                        if(err){
+                            cbGroups(err);
+                        }else{
+                            if(profession._id.toString() == inserted[0].profession.toString()){
+                                if(!newProAssignations[profession.display_name]) newProAssignations[profession.display_name] = [];
+                                newProAssignations[profession.display_name].push(inserted[0]);
+                                cbGroups();
+                            }else{
+                                cbGroups("Eroare la asignare profesie - grup");
+                            }
+                        }
+                    })
+                }, function (err) {
+                    if(err){
+                        cbProfessions(err);
+                    }else{
+                        cbProfessions();
+                    }
+                })
+            }, function (err) {
+                if(err){
+                    console.log(err);
+                }else{
+                    masterCallback(newProAssignations);
+                }
+            })
+        };
+
+        var findDocumentByDisplayName = function(arr, name){
+            for(var i=0; i<arr.length; i++){
+                if(arr[i].display_name == name) return arr[i];
+            }
+            return null;
+        };
+
+        var refactorConnections = function (associationsOldGroups, newProAssignations, callbackMaster) {
+            var arrayConnected = ["articles", "calendar-events", "multimedia", "users"];
+            async.each(arrayConnected, function (connected, callbackConnectedAll) {
+                db.collection(connected).find({}).toArray(function (err, documents) {
+                    if(err){
+                        callbackConnectedAll(err);
+                    }else{
+                        async.each(documents, function (document, callbackEachDocument) {
+                            var oldConnections = document['groupsID'];
+                            if(!oldConnections) {
+                                callbackEachDocument();
+                            }else if(oldConnections.length == 0){
+                                callbackEachDocument();
+                            }else{
+                                var populatedGroupsID = [];
+                                //populate groupsID with old groups
+                                for(var i=0; i<oldConnections.length; i++){
+                                    populatedGroupsID.push(associationsOldGroups[oldConnections[i].toString()]);
+                                }
+
+                                //will replace the old connections in groupsID with the new connections
+                                var newConnections = [];
+                                var foundProfessions = [];
+                                separateGroups(populatedGroupsID, function (separatedGroups, separatedProfessions) {
+                                    for(var i=0; i<separatedProfessions.length; i++){
+                                        foundProfessions.push(separatedProfessions[i].display_name);
+                                        //var possibleAdditions = newProAssignations[profession.display_name];
+                                        console.log(foundProfessions);
+                                    }
+                                    callbackEachDocument();
+                                });
+                            }
+                        }, function (err) {
+                            if(err){
+                                callbackConnectedAll(err);
+                            }else{
+                                callbackConnectedAll();
+                            }
+                        })
+                    }
+                });
+            }, function (err) {
+                if(err){
+                    console.log(err);
+                }else{
+                    callbackMaster();
+                }
+            })
+        };
+
+        //====================================================== START
+
+        var newGroupsName = 'new_groups';
+
+        //make a copy of the old groups collection in memory
+        copyGroups(function (copyOfGroups, associationsOldGroups) {
+
+            //TODO: remove everything from groups; for testing, use another collection
+
+            //create professions and get the correspondence of id -> name
+            createProfessions(function (newProfessions) {
+                separateGroups(copyOfGroups, function (separatedGroups) {
+                    createNewGroups(newGroupsName, newProfessions, separatedGroups, function (newProAssignations) {
+                        refactorConnections(associationsOldGroups, newProAssignations, function () {
+                            db.close();
+                        });
+                    })
+                });
+            });
+        });
+
+//            var breakFrom = ["articles", "calendar-events", "multimedia", "users"];
+//            async.each(breakFrom, function (collectionName, callback) {
+//                var collection = db.collection(collectionName);
+//                var cursor = collection.find({});
+//                cursor.toArray(function (err, doc) {
+//                    if(err){
+//                        callback(err);
+//                    }else{
+//                        console.log(doc);
+//                        callback();
+//                    }
+//                });
+//            }, function (err) {
+//                if(err){
+//                    console.log(err);
+//                    db.close();
+//                }
+//            });
+
+    });
+
+//    var initialize = function (db, masterCallback) {
+//        //create a correspondence of id -> name for groups to break
+//        db.collection('groups').find({display_name: {$in: toProfessions}}).toArray(function (err, groups) {
+//            for(var i=0; i<groups.length; i++){
+//                var group = groups[i];
+//                idGroups[group._id] = group.display_name;
+//            }
+//            console.log("Old groups:");
+//            console.log(idGroups);
+//            //create the professions and store a correspondence of id -> name for them
+//            async.each(toProfessions, function (profession, callback) {
+//                db.collection('professions').insert({display_name: profession}, function (err, inserted) {
+//                    if(err){
+//                        callback(err);
+//                    }else{
+//                        idProfessions[inserted[0]._id] = inserted[0].display_name;
+//                        callback();
+//                    }
+//                });
+//            }, function (err) {
+//                if(err){
+//                    console.log(err);
+//                }else{
+//                    console.log("New professions:");
+//                    console.log(idProfessions);
+//                    masterCallback()
+//                }
+//            });
+//        });
+//    };
+
 });
 
 gulp.task('testA', function () {
