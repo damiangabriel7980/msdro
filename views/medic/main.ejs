@@ -144,7 +144,7 @@
                     </ul>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-if="specialGroups.length!=0 && $state.is('home')">
+            <ul class="nav navbar-nav navbar-right" ng-if="specialGroups.length!=0">
                 <li class="dropdown">
                     <a class="dropdown-toggle specialGroupDropdown noPaddingRight" data-toggle="dropdown">
                         <img ng-src="{{specialGroupSelected.image_path?pathAmazonDev+specialGroupSelected.image_path:MSDlogo}}">
@@ -165,18 +165,9 @@
                     <li><a href="logout">Sign Out</a></li>
                 </ul>
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-if="$state.is('home')">
+            <ul class="nav navbar-nav navbar-right">
                 <form class="navbar-form" role="search">
                     <div class="input-group expandSearch">
-                        <input type="text" class="form-control popSearch" ng-enter="searchText()" placeholder="Search" name="srch-term" id="srch-term" ng-model="$parent.textToSearch">
-                        <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
-                    </div>
-                </form>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right" ng-if="!$state.is('home')">
-                <form class="navbar-form" role="search">
-                    <div class="input-group expandSearchOther">
                         <input type="text" class="form-control popSearch" ng-enter="searchText()" placeholder="Search" name="srch-term" id="srch-term" ng-model="$parent.textToSearch">
                         <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
                     </div>
