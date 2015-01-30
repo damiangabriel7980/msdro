@@ -12,7 +12,14 @@
                 <div class="col-md-12">
                     <div class="col-md-12">
                         <div class="col-md-4">
-                            <img ng-class="hideImg" no-cache-src="{{imageUser}}" style="width:100%;">
+                            <img ng-class="hideImg" class="img-responsive img-thumbnail imgFix" no-cache-src="{{imageUser}}" style="width:100%;">
+                            <div class="col-md-12 noPadding ">
+
+                                <div class="col-md-12 noPadding margintop5px">
+                                    <button class="btn btn-default " type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o poza</button>
+                                </div>
+
+                            </div>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group col-md-6" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">
@@ -34,14 +41,8 @@
                                 <label for="abonat">Abonat la newsletter</label>
                                 <input type="checkbox" id="abonat" ng-model="newsletter" ng-checked="newsletter"/>
                             </div>
-                            <div class="col-md-12" style="padding: 0;">
-
-                                <div class="col-md-12">
-                                    <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o poza</button>
-                                </div>
-                                <div class="col-md-12">
-                                    <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
-                                </div>
+                            <div class="col-md-12 margintop30px">
+                                <div class="btn col-md-12" ng-click="uploadAlert.newAlert=false" ng-class="uploadAlert.type==='danger'?'btn-danger':'btn-success'" ng-if="uploadAlert.newAlert"><span class="pull-left">{{uploadAlert.message}}&nbsp; &nbsp; &nbsp;</span> <i ng-click="uploadAlert.newAlert=false" class="glyphicon pull-right glyphicon-remove-circle"></i></div>
                             </div>
                         </div>
                     </div>
@@ -128,7 +129,7 @@
 
                     </div>
                     <div class="form-group col-md-4" ng-class="{'has-error':jobForm.codPostal.$invalid && !jobForm.codPostal.$pristine || showerror && jobForm.codPostal.$invalid }">
-                        <label for="codPostal">Cod postal:</label>
+                        <label for="codPostal">Cod postal<sup>*</sup>:</label>
                         <input type="text" class="form-control" id="codPostal" name="codPostal" ng-model="job.postal_code" ng-pattern="/^[0-9]/" ng-required="true">
                         <p class="" ng-show="jobForm.codPostal.$invalid && !jobForm.codPostal.$pristine || showerror && jobForm.codPostal.$invalid">Introduceti un cod postal format numai din cifre!</p>
                     </div>

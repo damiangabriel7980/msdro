@@ -11,7 +11,6 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     var specialGroupWidgets = {
         "MSD Diabetes": "Glycemizer.html"
     };
-    $scope.textToSearch="";
     $scope.specialWidgetUrl = null;
 
     $scope.$watch($rootScope.specialGroupSelected, function () {
@@ -116,11 +115,9 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
-    $scope.searchText=function(){
-        if($scope.textToSearch==="")
-            return;
-        else
-            $state.go('homeSearch',{data:$scope.textToSearch});
+
+    $scope.animateInput=function(){
+       angular.element('.form-control').removeClass('popSearch');
     };
     /* --- carousel --- */
 

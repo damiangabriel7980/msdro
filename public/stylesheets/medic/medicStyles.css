@@ -6575,13 +6575,16 @@ ul.products li {
   width: 100%;
 }
 .navbar-fixed-top .navbar-brand {
-  padding: 0px 35px;
+  padding-top: 0px;
+  padding-left: 35px;
+  padding-bottom: 0px;
+  padding-right: 0px;
 }
 .navbar-fixed-top .specialGroupDropdown {
   padding: 5px 15px;
 }
 .navbar-fixed-top .specialGroupDropdown img {
-  height: 35px;
+  width: 180px;
 }
 .navbar-fixed-top .navbar-collapse {
   background-color: #ffffff;
@@ -7002,7 +7005,7 @@ hr {
   padding-left: 0;
 }
 .noPaddingRight {
-  padding-right: 0;
+  padding-right: 0px !important;
 }
 .noBox {
   background-color: transparent;
@@ -7084,4 +7087,44 @@ hr {
 }
 .top2percent {
   margin-top: -10px;
+}
+.imgFix {
+  height: 200px !important;
+}
+.margintop8px {
+  margin-top: 8px;
+}
+.margintop30px {
+  margin-top: 30px;
+}
+.height20 {
+  height: 20px;
+}
+.myProfile {
+  right: auto;
+  margin-top: 5px;
+  left: 0 !important;
+}
+.popSearch {
+  height: 34px;
+  width: 0px !important;
+  padding: 0px;
+  border: 0px solid #cccccc;
+  -webkit-transition: width 1s ease;
+  /* Safari */
+  transition: width 1s ease;
+}
+.btnSearchBefore {
+  border-left: 1px solid !important;
+  border-radius: 4px !important;
+  height: 34px;
+}
+.expandSearch {
+  position: absolute;
+  right: 250px;
+}
+.expandSearch .newWidthPopSearch {
+  width: 330px !important;
+  padding: 6px 12px;
+  border: 1px solid #cccccc;
 }

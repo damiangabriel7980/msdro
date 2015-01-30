@@ -14,7 +14,7 @@ var date = new Date();
            var today = new Date($scope.events[i].end);
            var tomorrow = new Date($scope.events[i].end);
            tomorrow.setDate(today.getDate()+1);
-           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.trimTitle($scope.events[i].name),start: new Date($scope.events[i].start), end: tomorrow ,allDay: false,className: 'events',color: '#006d69', type: $scope.events[i].name});
+           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.trimTitle($scope.events[i].name),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: $scope.events[i].name});
        }
 
          $scope.realEvents=[$scope.eventsS];
@@ -24,7 +24,11 @@ var date = new Date();
              var today = new Date(data.end);
              var tomorrow = new Date(data.end);
              tomorrow.setDate(today.getDate()-1);
-             angular.element('.fc-event-hori').attr("data-original-title",newDate(data.start)  + " - " + newDate(tomorrow));
+             if(today.getHours()===0)
+                var endDate=tomorrow;
+             else
+                 var endDate=today;
+             angular.element('.fc-event-hori').attr("data-original-title",newDate(data.start)  + " - " +  newDate(endDate));
 
              var options = {
                  trigger:"hover",
@@ -104,7 +108,7 @@ var date = new Date();
         });
     };
     var newDate=function(input){
-        var data = new Date(input);
+        var data = input;
         return data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
     };
     $scope.trimTitle=function(str) {

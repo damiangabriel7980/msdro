@@ -174,7 +174,7 @@ cloudAdminApp.run(
             $rootScope.amazonBucket = sessionStorage.defaultAmazonBucket;
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/"+$rootScope.amazonBucket+"/";
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
-
+            $rootScope.textToSearch="";
             $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merck_image_new.png";
 
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
@@ -186,7 +186,17 @@ cloudAdminApp.run(
                 $rootScope.currentState = to.name;
             });
             $rootScope.bottom= {showFooter:true};
-
+            $rootScope.searchText=function(){
+                if($rootScope.textToSearch==="")
+                    return;
+                else
+                    $state.go('homeSearch',{data:$rootScope.textToSearch});
+            };
+            $rootScope.showInput=false;
+                $rootScope.animateInput=function(){
+                        angular.element('.popSearch').toggleClass('newWidthPopSearch');
+                    angular.element('.input-group-addon').toggleClass('btnSearchBefore');
+            };
             //profile modal
             $rootScope.showProfile = function(){
                 $modal.open({

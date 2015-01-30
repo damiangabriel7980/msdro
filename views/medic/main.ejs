@@ -104,10 +104,9 @@
         <div class="collapse navbar-collapse" collapse="navCollapsed">
 
             <ul class="nav navbar-nav">
-                <li ng-class="{'active': $state.includes('home')}"><a ui-sref="home" href="#/" ng-click="navCollapsed = true"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('noutati')}">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-globe"></span> Noutati <b class="caret"></b>
+                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                       Noutati <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu" >
                         <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:1})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-file white leftPosition iconLeft darkGrey"></i>&nbsp Stiri<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a> </li>
@@ -116,8 +115,8 @@
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-book"></span> Biblioteca <b class="caret"></b>
+                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                        Biblioteca <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li><a class="myListItem" ui-sref="biblioteca.produse.productsByArea({id:0})" ng-click="navCollapsed = true" href="#/produse"><i class="glyphicon glyphicon-th-large white leftPosition iconLeft darkGrey"></i>&nbsp Produse <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
@@ -125,10 +124,10 @@
                         <li><a class="myListItem" ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" ng-click="navCollapsed = true" target="_blank"><i class="glyphicon glyphicon-th-large white leftPosition iconLeft darkGrey"></i>&nbsp Manualul Merck <i class="glyphicon white glyphicon-chevron-right rightPosition greyColor"></i></a></li>
                     </ul>
                 </li>
-                <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar" ng-click="navCollapsed = true"><span class="glyphicon glyphicon-calendar">Calendar</span></a></li>
+                <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" class="noPaddingRight href="#/calendar" ng-click="navCollapsed = true">Calendar</a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('elearning')}">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-download"></span> E-learning <b class="caret"></b>
+                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                        E-learning <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li><a class="myListItem" ng-click="navCollapsed = true; $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><i class="glyphicon glyphicon-film white leftPosition iconLeft darkGrey"></i>&nbsp Multimedia<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
@@ -137,8 +136,8 @@
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures')}" ng-if="groupFeatures">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-download"></span> {{specialGroupSelected?specialGroupSelected.display_name:""}} <b class="caret"></b>
+                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                        {{specialGroupSelected?specialGroupSelected.display_name:""}} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li ng-repeat="feat in groupFeatures"><a class="myListItem" ui-sref="groupFeatures({feature: feat})" ng-click="navCollapsed = true">{{feat}}<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
@@ -147,7 +146,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-if="specialGroups.length!=0 && $state.is('home')">
                 <li class="dropdown">
-                    <a class="dropdown-toggle specialGroupDropdown" data-toggle="dropdown">
+                    <a class="dropdown-toggle specialGroupDropdown noPaddingRight" data-toggle="dropdown">
                         <img ng-src="{{specialGroupSelected.image_path?pathAmazonDev+specialGroupSelected.image_path:MSDlogo}}">
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
@@ -157,6 +156,25 @@
                     </ul>
                 </li>
             </ul>
+            <ul class="nav navbar-nav navbar-right  dropdown margintop8px">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-user"></i>
+                </a>
+                <ul class="dropdown-menu myProfile myMenu greyBackground">
+                    <li><a ng-click="showProfile()">Profile</a></li>
+                    <li><a href="logout">Sign Out</a></li>
+                </ul>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <form class="navbar-form" role="search">
+                    <div class="input-group expandSearch">
+                        <input type="text" class="form-control popSearch" ng-enter="searchText()" placeholder="Search" name="srch-term" id="srch-term" ng-model="$parent.textToSearch">
+                        <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
+                    </div>
+                </form>
+
+            </ul>
+
         </div>
 
     </div>

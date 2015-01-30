@@ -3,7 +3,7 @@
         carousel-resizable style="{{carouselResponsiveStyle}}">
         <li ng-repeat="carouselItem in HomeCarousel track by $index" style="margin-left: 10px;margin-right:10px">
             <div class="carouselSlide">
-                <div class="carousel-title"><h3 class="newFont" ui-sref="noutati.articol({articleId:carouselItem.article_id._id,articleType:carouselItem.article_id.type})">{{trimTitle(carouselItem.article_id.title)|uppercase}}</h3></div>
+                <div class="carousel-title"><h3 class="newFont" ui-sref="noutati.articol({articleId:carouselItem.article_id._id,articleType:carouselItem.article_id.type})">{{trimTitle(carouselItem.title)|uppercase}}</h3></div>
                 <div class="imageWrapper firstIllusion" ng-if="$index===0">
                     <img ng-src="{{pathAmazonDev+firstIllusion.image_path}}"/>
                 </div>
@@ -23,23 +23,23 @@
              ng-click="setSlide($index)">
         </div>
     </div>
-    <div class="userAndSearch">
-        <form class="navbar-form" role="search">
-            <div class="input-group mySearch">
-                <input type="text" class="form-control" ng-enter="searchText()" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
-                <span class="input-group-addon" ng-click="searchText()"><i class="glyphicon glyphicon-search"></i></span>
-            </div>
-        </form>
-        <div class="dropdown">
-            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <i class="glyphicon glyphicon-user"></i>
-            </a>
-            <ul class="dropdown-menu myMenu greyBackground">
-                <li><a ng-click="showProfile()">Profile</a></li>
-                <li><a href="logout">Sign Out</a></li>
-            </ul>
-        </div>
-    </div>
+    <!--<div class="userAndSearch">-->
+        <!--<form class="navbar-form" role="search">-->
+            <!--<div class="input-group mySearch">-->
+                <!--<input type="text" class="form-control" ng-enter="searchText()" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">-->
+                <!--<span class="input-group-addon" ng-click="searchText()"><i class="glyphicon glyphicon-search"></i></span>-->
+            <!--</div>-->
+        <!--</form>-->
+        <!--<div class="dropdown">-->
+            <!--<a class="btn btn-default dropdown-toggle" data-toggle="dropdown">-->
+                <!--<i class="glyphicon glyphicon-user"></i>-->
+            <!--</a>-->
+            <!--<ul class="dropdown-menu myMenu greyBackground">-->
+                <!--<li><a ng-click="showProfile()">Profile</a></li>-->
+                <!--<li><a href="logout">Sign Out</a></li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>
 
 <div class="col-md-12 container homeStyles" >

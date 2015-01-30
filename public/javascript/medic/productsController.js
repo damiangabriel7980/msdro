@@ -10,7 +10,7 @@
 
 
 cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout){
-
+    window.scrollTo(0,0);
     $scope.allAreas=1;
     $scope.filtProd=[];
     $scope.lmt=8;
