@@ -1,6 +1,11 @@
-body.modal-open
-{
-    overflow:inherit;
-    padding-right:inherit !important;
-    position: absolute;
+/*body.modal-open*/
+/*{*/
+    /*overflow-y:inherit;*/
+    /*padding-right:inherit !important;*/
+    /*position: relative;*/
+    /*margin: 0 auto*/
+/*}*/
+html{
+    overflow-y:scroll;
+    position: relative;
 }
