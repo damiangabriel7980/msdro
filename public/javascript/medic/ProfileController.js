@@ -166,7 +166,20 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
 
         $scope.allAreas = areasOrganised;
         $scope.selectedArea = $scope.allAreas[0];
+        if($scope.userTherapeuticAreas!=undefined) {
+            for (var i = 0; i < $scope.allAreas.length; i++) {
+                for (var j=0;j<$scope.userTherapeuticAreas.length;j++){
+                    if($scope.allAreas[i].id===$scope.userTherapeuticAreas[j])
+                    {
+                        $scope.userTherapeuticAreas[j] = $scope.allAreas[i];
+                        continue;
+                    }
 
+                }
+
+            }
+            console.log($scope.userTherapeuticAreas);
+        }
     });
 
     var findInUserAreas = function (id) {
