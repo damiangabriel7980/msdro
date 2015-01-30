@@ -165,9 +165,18 @@
                     <li><a href="logout">Sign Out</a></li>
                 </ul>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" ng-if="$state.is('home')">
                 <form class="navbar-form" role="search">
                     <div class="input-group expandSearch">
+                        <input type="text" class="form-control popSearch" ng-enter="searchText()" placeholder="Search" name="srch-term" id="srch-term" ng-model="$parent.textToSearch">
+                        <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
+                    </div>
+                </form>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right" ng-if="!$state.is('home')">
+                <form class="navbar-form" role="search">
+                    <div class="input-group expandSearchOther">
                         <input type="text" class="form-control popSearch" ng-enter="searchText()" placeholder="Search" name="srch-term" id="srch-term" ng-model="$parent.textToSearch">
                         <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
                     </div>
