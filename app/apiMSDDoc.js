@@ -347,6 +347,28 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                                 }else{
                                     socket.auth = true;
                                     socket.emit('authenticated', {});
+                                    //join rooms
+                                    Chat.find({participants: {$in: [socket.userData._id]}}).exec(function (err, chats) {
+                                        if(err){
+                                            socket.emit('apiMessage', {error: err, success: null});
+                                        }else{
+                                            async.each(chats, function (chat, callback) {
+                                                socket.join(chat._id.toString(), function (err) {
+                                                    if(err){
+                                                        callback(err);
+                                                    }else{
+                                                        callback();
+                                                    }
+                                                });
+                                            }, function (err) {
+                                                if(err){
+                                                    socket.emit('apiMessage', {error: err, success: null});
+                                                }else{
+                                                    socket.emit('apiMessage', {error: null, success: "Joined all rooms"});
+                                                }
+                                            })
+                                        }
+                                    });
                                 }
                             });
                         }else{
