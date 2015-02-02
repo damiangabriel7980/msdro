@@ -111,7 +111,7 @@
                     </div>
                     <div class="form-group col-md-6" ng-class="{'has-error':jobForm.locMunca.$invalid && jobForm.locMunca.$dirty || showerror && jobForm.locMunca.$invalid}">
                         <label for="locMunca">Loc de munca<sup>*</sup>:</label>
-                        <input type="text" class="form-control" id="locMunca" name="locMunca" ng-model="job.job_name" ng-pattern="/^[a-zA-Z\s]{3,30}$/" ng-required="true">
+                        <input type="text" class="form-control" id="locMunca" name="locMunca" ng-model="job.job_name" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\s]{3,30}$/" ng-required="true">
                         <p class="" ng-show="jobForm.locMunca.$invalid && jobForm.locMunca.$dirty || showerror && jobForm.locMunca.$invalid">Introduceti un loc de munca!</p>
 
                     </div>
@@ -119,7 +119,7 @@
                 <div class="col-md-12">
                     <div class="form-group col-md-4" ng-class="{'has-error':jobForm.numeStrada.$invalid && !jobForm.numeStrada.$pristine || showerror && jobForm.numeStrada.$invalid}">
                         <label for="numeStrada">Numele strazii<sup>*</sup>:</label>
-                        <input type="text" class="form-control" name="numeStrada" id="numeStrada" ng-model="job.street_name" ng-pattern="/^[a-zA-Z0-9\s]{3,30}$/" ng-required="true">
+                        <input type="text" class="form-control" name="numeStrada" id="numeStrada" ng-model="job.street_name" ng-pattern="/^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\s]{3,30}$/" ng-required="true">
                         <p class="" ng-show="jobForm.numeStrada.$invalid && !jobForm.numeStrada.$pristine || showerror && jobForm.numeStrada.$invalid">Introduceti numele strazii ( minim 3 caractere )!</p>
                     </div>
                     <div class="form-group col-md-4" ng-class="{'has-error':jobForm.numarStrada.$invalid && !jobForm.numarStrada.$pristine || showerror && jobForm.numarStrada.$invalid}">

@@ -243,6 +243,15 @@ var getIds = function (arr, cb) {
         cb(ret);
     });
 };
+var getStringIds = function (arr, cb) {
+    var ret = [];
+    async.each(arr, function (item, callback) {
+        if(item._id) ret.push(item._id.toString());
+        callback();
+    }, function (err) {
+        cb(ret);
+    });
+};
 
 // get user ids
 // return array like ["MSD"+idAsString]
@@ -592,7 +601,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-Z\\s\\-&;:#\\]{3,100}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             //check if name exists
             if(!data.group.display_name){
                 ans.error = true;
@@ -659,7 +668,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-Z\\s\\-&;:#\\]{3,100}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
             //check if name exists
             if(!data.group.display_name){
                 ans.error = true;
@@ -812,7 +821,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var data = req.body.data;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z0-9\\s\\-&;:#\\]{3,100}$');
+            var patt = new XRegExp('^[a-zA-Z0-9\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -851,7 +860,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var id = req.body.data.id;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z0-9\\s\\-&;:#\\]{3,100}$');
+            var patt = new XRegExp('^[a-zA-Z0-9\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -2420,7 +2429,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-zA-Z0-9\\-&;:#\\]{1}[a-zA-Z0-9\\-_\\-&;:#\\]{1,50}$','i');
+            var namePatt = new XRegExp('^[a-zA-Z0-9]{1}[a-zA-Z0-9\\-_]{1,50}$','i');
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2450,7 +2459,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var id = req.body.id;
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-z0-9\\-&;:#\\]{1}[a-z0-9\\-_\\-&;:#\\]{1,50}$','i');
+            var namePatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2536,7 +2545,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                 res.send({message: {type: 'danger', text:'Eroare la validare. Verificati daca medicul este deja adaugat'}});
                             }else{
                                 //check nickname format
-                                var nickPatt = new XRegExp('^[a-z0-9\\-&;:#\\]{1}[a-z0-9\\-_\\-&;:#\\]{1,50}$','i');
+                                var nickPatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
                                 if(!nickPatt.test(req.body.nickname.toString())){
                                     res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
                                 }else{
@@ -2569,7 +2578,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .put(function (req, res) {
             var nickname = req.body.nickname?req.body.nickname.toString():"";
             //validate nickname format
-            var nickPatt = new XRegExp('^[a-z0-9\\-&;:#\\]{1}[a-z0-9\\-_\\-&;:#\\]{1,50}$','i');
+            var nickPatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
             if(!nickPatt.test(nickname)){
                 res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2863,7 +2872,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {error:false};
             var job = req.body.job;
-            var namePatt = new XRegExp('^[a-zA-Z\\s\\-&;:#\\]{3,30}$');
+            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
             var numberPatt = new XRegExp('^[0-9]{1,5}$');
             if(!numberPatt.test(job.street_number.toString())) {
                 ans.error = true;
@@ -3233,17 +3242,45 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         }
                         console.log(req.body.specialGroup);
                         console.log(test);
-                        //get allowed articles for user
-                        Products.find({"therapeutic-areasID": {$in :[test]},groupsID: {$in: forGroups}}, function(err, cont) {
-                            if(err) {
-                                res.send(err);
+                        Therapeutic_Area.find({_id:test}).exec(function(err,response){
+                            var TArea= response[0];
+                            if(TArea.has_children==true)
+                            {
+                                Therapeutic_Area.find({"therapeutic-areasID": {$in :[test]}}).exec(function(err,response){
+                                    var children=response;
+                                    getStringIds(children, function(ids){
+                                    console.log(ids);
+                                    console.log(forGroups);
+                                    Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
+                                        if(err) {
+                                            res.send(err);
+                                        }
+                                        else
+                                        {
+                                            console.log(cont);
+                                            res.json(cont);
+                                        }
+                                    })
+                                })
+                                });
+
                             }
                             else
                             {
-                                console.log(cont);
-                                res.json(cont);
+                                Products.find({"therapeutic-areasID": {$in :[test]},groupsID: {$in: forGroups}}, function(err, cont) {
+                                    if(err) {
+                                        res.send(err);
+                                    }
+                                    else
+                                    {
+                                        console.log(cont);
+                                        res.json(cont);
+                                    }
+                                })
                             }
-                        })
+                        });
+                        //get allowed articles for user
+
                     }});
             }
             else
@@ -3371,20 +3408,72 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         }
                         findObj['groupsID']={$in:forGroups};
                         console.log(findObj);
-                        //get allowed articles for user
-                        Multimedia.find(findObj, function (err, multimedia) {
-                            if (err) {
-                                console.log(err);
-                                res.json(err);
-                            } else {
-                                console.log(multimedia);
-                                if (multimedia.length == 0) {
-                                    res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
+                        if(req.body.id==0)
+                        {
+                            Multimedia.find(findObj, function (err, multimedia) {
+                                if (err) {
+                                    console.log(err);
+                                    res.json(err);
+                                } else {
+                                    console.log(multimedia);
+                                    if (multimedia.length == 0) {
+                                        res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
+                                    }
+                                    else
+                                        res.json(multimedia);
+                                }
+                            });
+                        }
+                        else
+                        {
+                            Therapeutic_Area.find({_id:req.body.id}).exec(function(err,response){
+                                var TArea=response[0];
+                                if(TArea.has_children==true)
+                                {
+                                    Therapeutic_Area.find({"therapeutic-areasID": {$in :[req.body.id]}}).exec(function(err,response){
+                                        var children=response;
+                                        getStringIds(children, function(ids){
+                                            console.log(ids);
+                                            console.log(forGroups);
+                                            findObj['therapeutic-areasID'] = {$in: ids};
+                                            Multimedia.find(findObj, function (err, multimedia) {
+                                                if (err) {
+                                                    console.log(err);
+                                                    res.json(err);
+                                                } else {
+                                                    console.log(multimedia);
+                                                    if (multimedia.length == 0) {
+                                                        res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
+                                                    }
+                                                    else
+                                                        res.json(multimedia);
+                                                }
+                                            });
+                                        })
+                                    });
+
                                 }
                                 else
-                                    res.json(multimedia);
-                            }
-                        });
+                                {
+                                    Multimedia.find(findObj, function (err, multimedia) {
+                                        if (err) {
+                                            console.log(err);
+                                            res.json(err);
+                                        } else {
+                                            console.log(multimedia);
+                                            if (multimedia.length == 0) {
+                                                res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
+                                            }
+                                            else
+                                                res.json(multimedia);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+
+                        //get allowed articles for user
+
 
                     }})
 
