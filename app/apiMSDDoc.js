@@ -86,8 +86,14 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 res.json(err);
             else
             {
-                res.statusCode = 201;
-                res.send(saved);
+                NewsPost.findOne({_id: saved._id}).populate('owner').exec(function (err, toReturn) {
+                    if(err){
+                        res.json(err);
+                    }else{
+                        res.statusCode = 201;
+                        res.send(toReturn);
+                    }
+                });
             }
         })
     });
@@ -199,7 +205,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             if(created){
                 q['created'] = {"$lt": created};
             }
-            Chat.find(q).sort({'created': -1}).limit(pageSize).exec(function(err, result) {
+            Chat.find(q).sort({'created': -1}).limit(pageSize).populate('participants').exec(function(err, result) {
                 if(err){
                     console.log(err);
                     res.json(err);
@@ -209,7 +215,6 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             });
         })
         .post(function (req, res) {
-            console.log(req.body);
             var userData = getUserData(req);
 
             var keepGoing = true;
@@ -231,13 +236,13 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             if(type==="userBased"){
                 toSave['post'] = null;
                 receiver = userId;
+                if(!userId) keepGoing = false;
             }else if(type==="postBased"){
                 toSave['post'] = postId;
                 receiver = postOwner;
+                if(!postId || !postOwner) keepGoing = false;
             }else{
                 keepGoing = false;
-                res.statusCode = 400;
-                res.send({hasError: true, message: "invalid query params"});
             }
 
             if(keepGoing){
@@ -252,7 +257,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 }
 
                 //check if a chat involving sender / receiver / post combination already exists
-                Chat.findOne(q, function (err, found) {
+                Chat.findOne(q).populate('participants').exec(function (err, found) {
                     if(err){
                         res.send(err);
                     }else if(found){
@@ -262,11 +267,20 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                             if(err){
                                 res.send(err);
                             }else{
-                                res.send(saved);
+                                Chat.findOne({_id: saved._id}).populate('participants').exec(function (err, toReturn) {
+                                    if(err){
+                                        res.send(err);
+                                    }else{
+                                        res.send(toReturn);
+                                    }
+                                });
                             }
                         });
                     }
                 });
+            }else{
+                res.statusCode = 400;
+                res.send({hasError: true, message: "invalid query params"});
             }
         })
         .put(function (req, res) {
@@ -333,6 +347,28 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                                 }else{
                                     socket.auth = true;
                                     socket.emit('authenticated', {});
+                                    //join rooms
+                                    Chat.find({participants: {$in: [socket.userData._id]}}).exec(function (err, chats) {
+                                        if(err){
+                                            socket.emit('apiMessage', {error: err, success: null});
+                                        }else{
+                                            async.each(chats, function (chat, callback) {
+                                                socket.join(chat._id.toString(), function (err) {
+                                                    if(err){
+                                                        callback(err);
+                                                    }else{
+                                                        callback();
+                                                    }
+                                                });
+                                            }, function (err) {
+                                                if(err){
+                                                    socket.emit('apiMessage', {error: err, success: null});
+                                                }else{
+                                                    socket.emit('apiMessage', {error: null, success: "Joined all rooms"});
+                                                }
+                                            })
+                                        }
+                                    });
                                 }
                             });
                         }else{
@@ -342,7 +378,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 })
                 .on('joinChat', function (chat_id) {
                     if(isAuth(socket)){
-                        socket.join(chat_id, function(err){
+                        socket.join(chat_id.toString(), function(err){
                             if(err){
                                 socket.emit('apiMessage', {error: err, success: null});
                             }else{
@@ -353,7 +389,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 })
                 .on('leaveChat', function (chat_id) {
                     if(isAuth(socket)){
-                        socket.leave(chat_id, function(err){
+                        socket.leave(chat_id.toString(), function(err){
                             if(err){
                                 socket.emit('apiMessage', {error: err, success: null});
                             }else{
@@ -370,6 +406,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                             if(err){
                                 socket.emit('apiMessage', {error: err, success: null});
                             }else{
+                                socket.emit('apiMessage', {error: null, success: "Joined chat "+chat_id});
                                 var newMessage = new Messages({
                                     chat: chat_id,
                                     text: text,
@@ -384,7 +421,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                                             if(err){
                                                 socket.emit('apiMessage', {error: err, success: null});
                                             }else{
-                                                socket.to(chat_id).emit('newMessage', {error: null, success: saved});
+                                                sockets.to(chat_id.toString()).emit('newMessage', {error: null, success: saved});
                                                 //send push notifications
                                                 Chat.findOne({_id: chat_id}, function (err, chat) {
                                                     if(err){
