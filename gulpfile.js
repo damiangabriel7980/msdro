@@ -515,7 +515,13 @@ gulp.task('migrateDB', function () {
 
 gulp.task('breakGroups', function () {
 
-    var toProfessions = ["Medic", "Farmacist"];
+    var newGroupsName = 'new_groups'; //use another collection for testing
+
+    var toProfessions = ["Medic", "Farmacist"]; //this CANNOT be customised yet
+
+    var ignoreGroups = ["Grup predefinit"];
+
+    var usersToUpdate = [];
 
     var mongoAddress = 'mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test';
 
@@ -592,24 +598,28 @@ gulp.task('breakGroups', function () {
 
             async.each(newProfessions, function (profession, cbProfessions) {
                 async.each(separatedGroups, function (group, cbGroups) {
-                    db.collection(newGroupsName).insert({
-                        display_name: group.display_name,
-                        description: group.description,
-                        image_path: group.image_path,
-                        profession: profession._id
-                    }, function (err, inserted) {
-                        if(err){
-                            cbGroups(err);
-                        }else{
-                            if(profession._id.toString() == inserted[0].profession.toString()){
-                                if(!newProAssignations[profession.display_name]) newProAssignations[profession.display_name] = [];
-                                newProAssignations[profession.display_name].push(inserted[0]);
-                                cbGroups();
+                    if(ignoreGroups.indexOf(group.display_name) > -1){
+                        cbGroups();
+                    }else{
+                        db.collection(newGroupsName).insert({
+                            display_name: group.display_name,
+                            description: group.description,
+                            image_path: group.image_path,
+                            profession: profession._id
+                        }, function (err, inserted) {
+                            if(err){
+                                cbGroups(err);
                             }else{
-                                cbGroups("Eroare la asignare profesie - grup");
+                                if(profession._id.toString() == inserted[0].profession.toString()){
+                                    if(!newProAssignations[profession.display_name]) newProAssignations[profession.display_name] = [];
+                                    newProAssignations[profession.display_name].push(inserted[0]);
+                                    cbGroups();
+                                }else{
+                                    cbGroups("Eroare la asignare profesie - grup");
+                                }
                             }
-                        }
-                    })
+                        });
+                    }
                 }, function (err) {
                     if(err){
                         cbProfessions(err);
@@ -647,21 +657,63 @@ gulp.task('breakGroups', function () {
                             }else if(oldConnections.length == 0){
                                 callbackEachDocument();
                             }else{
+                                console.log("========================== START ENTRY");
+                                console.log("Collection: "+connected);
+                                console.log("Document id: "+document._id);
                                 var populatedGroupsID = [];
                                 //populate groupsID with old groups
                                 for(var i=0; i<oldConnections.length; i++){
                                     populatedGroupsID.push(associationsOldGroups[oldConnections[i].toString()]);
                                 }
 
+                                console.log("groupsID:");
+                                console.log(populatedGroupsID);
+                                console.log("==========================");
+
                                 //will replace the old connections in groupsID with the new connections
                                 var newConnections = [];
-                                var foundProfessions = [];
+
                                 separateGroups(populatedGroupsID, function (separatedGroups, separatedProfessions) {
+                                    var foundProfessions = [];
+                                    var chosenProfession;
                                     for(var i=0; i<separatedProfessions.length; i++){
                                         foundProfessions.push(separatedProfessions[i].display_name);
-                                        //var possibleAdditions = newProAssignations[profession.display_name];
-                                        console.log(foundProfessions);
                                     }
+                                    if(foundProfessions.length > 1){
+                                        chosenProfession = "Medic";
+                                    }else if(foundProfessions.length == 0){
+                                        chosenProfession = "Farmacist";
+                                    }else{
+                                        chosenProfession = "Medic";
+                                    }
+                                    console.log("Profession decided:");
+                                    console.log(chosenProfession);
+
+                                    if(connected == "users"){
+                                        var idPro = newProAssignations[chosenProfession][0].profession;
+                                        usersToUpdate.push({id_user: document._id, id_profession: idPro});
+                                    }
+
+                                    var toIgnore = toProfessions.concat(ignoreGroups);
+                                    console.log("Ignore:");
+                                    console.log(toIgnore);
+
+                                    var toAdd;
+
+                                    //add default group
+                                    toAdd = findDocumentByDisplayName(newProAssignations[chosenProfession], "Default");
+                                    newConnections.push(toAdd);
+
+                                    for(var j=0; j<populatedGroupsID.length; j++){
+                                        if(toIgnore.indexOf(populatedGroupsID[j].display_name) == -1){
+                                            console.log("+ "+populatedGroupsID[j].display_name);
+                                            toAdd = findDocumentByDisplayName(newProAssignations[chosenProfession], populatedGroupsID[j].display_name);
+                                            newConnections.push(toAdd);
+                                        }
+                                    }
+                                    console.log("New groupsID:");
+                                    console.log(newConnections);
+                                    console.log("========================== END ENTRY");
                                     callbackEachDocument();
                                 });
                             }
@@ -685,105 +737,60 @@ gulp.task('breakGroups', function () {
 
         //====================================================== START
 
-        var newGroupsName = 'new_groups';
-
         //make a copy of the old groups collection in memory
         copyGroups(function (copyOfGroups, associationsOldGroups) {
+            console.log("Copy of old groups: ");
+            console.log(copyOfGroups);
+            db.collection(newGroupsName).remove({}, {justOne: false}, function (err, wRes) {
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log("Removed "+wRes+" groups");
 
-            //TODO: remove everything from groups; for testing, use another collection
-
-            //create professions and get the correspondence of id -> name
-            createProfessions(function (newProfessions) {
-                separateGroups(copyOfGroups, function (separatedGroups) {
-                    createNewGroups(newGroupsName, newProfessions, separatedGroups, function (newProAssignations) {
-                        refactorConnections(associationsOldGroups, newProAssignations, function () {
-                            db.close();
+                    //create professions and get the correspondence of id -> name
+                    createProfessions(function (newProfessions) {
+                        separateGroups(copyOfGroups, function (separatedGroups) {
+                            createNewGroups(newGroupsName, newProfessions, separatedGroups, function (newProAssignations) {
+                                refactorConnections(associationsOldGroups, newProAssignations, function () {
+                                    //TODO: Update users
+                                    //console.log(usersToUpdate);
+                                    db.close();
+                                });
+                            })
                         });
-                    })
-                });
+                    });
+                }
             });
         });
-
-//            var breakFrom = ["articles", "calendar-events", "multimedia", "users"];
-//            async.each(breakFrom, function (collectionName, callback) {
-//                var collection = db.collection(collectionName);
-//                var cursor = collection.find({});
-//                cursor.toArray(function (err, doc) {
-//                    if(err){
-//                        callback(err);
-//                    }else{
-//                        console.log(doc);
-//                        callback();
-//                    }
-//                });
-//            }, function (err) {
-//                if(err){
-//                    console.log(err);
-//                    db.close();
-//                }
-//            });
-
     });
-
-//    var initialize = function (db, masterCallback) {
-//        //create a correspondence of id -> name for groups to break
-//        db.collection('groups').find({display_name: {$in: toProfessions}}).toArray(function (err, groups) {
-//            for(var i=0; i<groups.length; i++){
-//                var group = groups[i];
-//                idGroups[group._id] = group.display_name;
-//            }
-//            console.log("Old groups:");
-//            console.log(idGroups);
-//            //create the professions and store a correspondence of id -> name for them
-//            async.each(toProfessions, function (profession, callback) {
-//                db.collection('professions').insert({display_name: profession}, function (err, inserted) {
-//                    if(err){
-//                        callback(err);
-//                    }else{
-//                        idProfessions[inserted[0]._id] = inserted[0].display_name;
-//                        callback();
-//                    }
-//                });
-//            }, function (err) {
-//                if(err){
-//                    console.log(err);
-//                }else{
-//                    console.log("New professions:");
-//                    console.log(idProfessions);
-//                    masterCallback()
-//                }
-//            });
-//        });
-//    };
-
 });
 
-gulp.task('testA', function () {
-    MongoClient.connect('mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test', function (err,db) {
-
-        // Get the documents collection
-        var collection = db.collection('test');
-        // Insert some documents
-
-//        collection.find({"_id":ObjectID("54626d54e8c919e9beef56db")}).toArray(function(err,docs) {
-//            console.log(docs);
+//gulp.task('testA', function () {
+//    MongoClient.connect('mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test', function (err,db) {
 //
+//        // Get the documents collection
+//        var collection = db.collection('test');
+//        // Insert some documents
+//
+////        collection.find({"_id":ObjectID("54626d54e8c919e9beef56db")}).toArray(function(err,docs) {
+////            console.log(docs);
+////
+////            });
+//
+//        var arr = {};
+//        arr['arr'] = [1,1,1];
+//        collection.update({ "_id":ObjectID("54626d54e8c919e9beef56db") }
+//            , { $set: arr }, function(err, result) {
+//                if(err){
+//                    console.log("error");
+//                    console.log(result);
+//                }
+//                db.close();
 //            });
-
-        var arr = {};
-        arr['arr'] = [1,1,1];
-        collection.update({ "_id":ObjectID("54626d54e8c919e9beef56db") }
-            , { $set: arr }, function(err, result) {
-                if(err){
-                    console.log("error");
-                    console.log(result);
-                }
-                db.close();
-            });
-
-
-    });
-
-});
+//
+//
+//    });
+//
+//});
 
 gulp.task('default', ['sass', 'js', 'watch']);
