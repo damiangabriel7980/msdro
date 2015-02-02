@@ -7137,3 +7137,6 @@ hr {
   padding: 6px 12px;
   border: 1px solid #cccccc;
 }
+.padd25pxRight{
+    padding-right: 25px;
+}

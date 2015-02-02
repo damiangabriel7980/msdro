@@ -79,8 +79,8 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
         getAll: $resource('api/products/', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        getByArea: $resource('api/products/productsByArea/:id', {}, {
-            query: { method: 'GET', isArray: true }
+        getByArea: $resource('api/products/productsByArea', {}, {
+            query: { method: 'POST', isArray: true }
         }),
         getSingle: $resource('api/products/:id', {}, {
             query: { method: 'GET', isArray: false }
@@ -96,8 +96,8 @@ cloudAdminServices.factory('therapeuticAreaService', ['$resource', function($res
 
 cloudAdminServices.factory('multimediaService', ['$resource', function($resource){
     return {
-        getByArea: $resource('api/multimedia/multimediaByArea/:id', {}, {
-            query: { method: 'GET', isArray: true }
+        getByArea: $resource('api/multimedia/multimediaByArea', {}, {
+            query: { method: 'POST', isArray: true }
         }),
         getSingle: $resource('api/multimedia2/:idd', {}, {
             query: { method: 'GET', isArray: false }
@@ -109,7 +109,7 @@ cloudAdminServices.factory('multimediaService', ['$resource', function($resource
 }]);
 
 cloudAdminServices.factory('eventsService', ['$resource', function($resource){
-    return $resource('api/calendar/', {}, {
+    return $resource('api/calendar/getEvents/:specialGroup', {}, {
         query: { method: 'GET', isArray: true }
     });
 }]);

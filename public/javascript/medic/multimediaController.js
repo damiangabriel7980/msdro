@@ -14,7 +14,7 @@
 
 cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document){
     window.scrollTo(0,0);
-    multimediaService.getByArea.query({id:$stateParams.idArea}).$promise.then(function(result){
+    multimediaService.getByArea.query({id:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.multimedias = result;
     });
 

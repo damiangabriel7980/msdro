@@ -33,7 +33,7 @@
             </div>
             <div ng-class="showDetails=='show' ? 'col-md-11':'col-md-12'">
                 <div class="col-md-12">
-                    <h4 class="MSDgreen handCursor" ui-sref="calendar.calendarDetails({id:calendar._id})">{{calendar.name | limitTo: 100}}
+                    <h4 class="MSDgreen handCursor" ui-sref="calendar({id:calendar._id})">{{calendar.name | limitTo: 100}}
                     <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-calendar"></i>Event</span>
                     </h4>
                 </div>

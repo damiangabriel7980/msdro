@@ -1,12 +1,12 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document){
+cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope){
 var date = new Date();
     $scope.realEvents=[];
     var y=$(date);
      console.log($stateParams);
-     eventsService.query().$promise.then(function(result){
+     eventsService.query({specialGroup: $rootScope.specialGroupSelected._id}).$promise.then(function(result){
         $scope.events =result;
        $scope.eventsS=[];
        for(var i = 0; i < $scope.events.length; i++)
@@ -85,13 +85,14 @@ var date = new Date();
          }
      })
     ;
-    eventsService.query().$promise.then(function(result) {
+    eventsService.query({specialGroup: $rootScope.specialGroupSelected._id}).$promise.then(function(result) {
         $scope.events2 = result;
         $scope.events2Filtered = [];
         for (var i = 0; i < $scope.events2.length; i++) {
             if (new Date($scope.events2[i].end) > date)
                 $scope.events2Filtered.push($scope.events2[i]);
         }
+        console.log($scope.events2Filtered);
     });
     $scope.goToEvent=function(eventId) {
         $modal.open({

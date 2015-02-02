@@ -107,7 +107,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             controller: 'therapeuticControllerCtrl'
         })
         .state('elearning.multimedia.multimediaByArea',{
-            url: '/multimedia/:idArea:idMulti',
+            url: '/multimedia/:idArea',
             templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
             controller: 'multimediaController'
         })

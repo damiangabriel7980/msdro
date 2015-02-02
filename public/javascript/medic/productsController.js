@@ -23,7 +23,7 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
             $scope.showMoreProd='hide';
     };
     $scope.firstLetters=[];
-    ProductService.getByArea.query({id:$stateParams.id}).$promise.then(function(result){
+    ProductService.getByArea.query({id:$stateParams.id, specialGroup: $rootScope.specialGroupSelected._id?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
          $scope.products = result;
         if($scope.products.length===0)
         {

@@ -14,11 +14,11 @@ cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therap
    therapeuticAreaService.query().$promise.then(function(correctResults){
        $scope.therapeuticAreas = correctResults;
     });
-
-    $scope.toggleActive = function(){
-        $('.list-group li').removeClass('active');
-        $(this).addClass('active');
-    }
+    //
+    //$scope.toggleActive = function(){
+    //    $('.list-group li').removeClass('active');
+    //    $(this).addClass('active');
+    //}
 
  }]);
 
