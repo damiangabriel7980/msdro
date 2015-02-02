@@ -69,10 +69,15 @@ gulp.task('deleteCollections', function () {
         "counties","calendar-events","public-articles","multimedia",
         "parameters","presentations","products","questions","quizes",
         "slides","tags","jobs","groups","users","roles","therapeutic-areas"];
+    toDelete.concat("carousel_Medic","chat-messages","conferences","new_groups","professions",
+                    "public-carousel","public-content","qa_answerGivers","qa_messages",
+                    "qa_threads","qa_topics","rooms","speakers");
     MongoClient.connect('mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test', function (err,db) {
         for(var c in toDelete){
             var collection = db.collection(toDelete[c]);
-            collection.drop();
+            try{
+                collection.drop();
+            }catch (ex){}
         }
         db.close();
     });
@@ -526,7 +531,7 @@ gulp.task('breakGroups', function () {
 
     var usersToUpdate = {};
 
-    var mongoAddress = 'mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test';
+    var mongoAddress = 'mongodb://localhost:27017/MSDdev';
 
     //connect to mongo
     MongoClient.connect(mongoAddress, function (err, db) {
@@ -591,7 +596,7 @@ gulp.task('breakGroups', function () {
             masterCallback(separatedGroups, separatedProfessions);
         };
 
-        var createNewGroups = function(newGroupsName, newProfessions, separatedGroups, masterCallback) {
+        var createNewGroups = function(newProfessions, separatedGroups, masterCallback) {
             //add defaults
             separatedGroups.push({
                 display_name: "Default"
@@ -666,7 +671,9 @@ gulp.task('breakGroups', function () {
                                 var populatedGroupsID = [];
                                 //populate groupsID with old groups
                                 for(var i=0; i<oldConnections.length; i++){
-                                    populatedGroupsID.push(associationsOldGroups[oldConnections[i].toString()]);
+                                    if(associationsOldGroups[oldConnections[i]]){
+                                        populatedGroupsID.push(associationsOldGroups[oldConnections[i].toString()]);
+                                    }
                                 }
 
                                 console.log("groupsID:");
@@ -799,7 +806,8 @@ gulp.task('breakGroups', function () {
                         console.log("New professions:");
                         console.log(newProfessions);
                         separateGroups(copyOfGroups, function (separatedGroups) {
-                            createNewGroups(newGroupsName, newProfessions, separatedGroups, function (newProAssignations) {
+                            createNewGroups(newProfessions, separatedGroups, function (newProAssignations) {
+                                console.log(newProAssignations);
                                 refactorConnections(associationsOldGroups, newProAssignations, function () {
                                     var usersUpdated = 0;
                                     console.log("Profession id to array of users assignment:");
@@ -807,6 +815,7 @@ gulp.task('breakGroups', function () {
                                     async.each(newProfessions, function (profession, callback) {
                                         var professionId = profession._id.toString();
                                         var usersArray = usersToUpdate[professionId];
+                                        if(!usersArray) usersArray = [];
                                         db.collection('users').update({_id: {$in: usersArray}}, {$set: {profession: ObjectID(professionId)}}, {multi: true}, function (err, wRes) {
                                             if(err){
                                                 callback(err);
