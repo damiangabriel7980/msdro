@@ -237,13 +237,13 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             if(type==="userBased"){
                 toSave['post'] = null;
                 receiver = userId;
+                if(!userId) keepGoing = false;
             }else if(type==="postBased"){
                 toSave['post'] = postId;
                 receiver = postOwner;
+                if(!postId || !postOwner) keepGoing = false;
             }else{
                 keepGoing = false;
-                res.statusCode = 400;
-                res.send({hasError: true, message: "invalid query params"});
             }
 
             if(keepGoing){
@@ -279,6 +279,9 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                         });
                     }
                 });
+            }else{
+                res.statusCode = 400;
+                res.send({hasError: true, message: "invalid query params"});
             }
         })
         .put(function (req, res) {
