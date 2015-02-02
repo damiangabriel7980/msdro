@@ -515,13 +515,16 @@ gulp.task('migrateDB', function () {
 
 gulp.task('breakGroups', function () {
 
-    var newGroupsName = 'new_groups'; //use another collection for testing
+    var newGroupsName = 'groups'; //use another collection for testing
 
     var toProfessions = ["Medic", "Farmacist"]; //this CANNOT be customised yet
 
     var ignoreGroups = ["Grup predefinit"];
 
-    var usersToUpdate = [];
+    var noProfessionAssignUsers = "Farmacist";
+    var noProfessionAssignOthers = "Medic";
+
+    var usersToUpdate = {};
 
     var mongoAddress = 'mongodb://msd:mstest@ds051960.mongolab.com:51960/msd_test';
 
@@ -675,46 +678,90 @@ gulp.task('breakGroups', function () {
 
                                 separateGroups(populatedGroupsID, function (separatedGroups, separatedProfessions) {
                                     var foundProfessions = [];
-                                    var chosenProfession;
-                                    for(var i=0; i<separatedProfessions.length; i++){
-                                        foundProfessions.push(separatedProfessions[i].display_name);
+                                    var toAdd;
+                                    var toIgnore;
+                                    var k;
+
+                                    for(k=0; k<separatedProfessions.length; k++){
+                                        foundProfessions.push(separatedProfessions[k].display_name);
                                     }
-                                    if(foundProfessions.length > 1){
-                                        chosenProfession = "Medic";
-                                    }else if(foundProfessions.length == 0){
-                                        chosenProfession = "Farmacist";
-                                    }else{
-                                        chosenProfession = "Medic";
-                                    }
-                                    console.log("Profession decided:");
-                                    console.log(chosenProfession);
 
                                     if(connected == "users"){
-                                        var idPro = newProAssignations[chosenProfession][0].profession;
-                                        usersToUpdate.push({id_user: document._id, id_profession: idPro});
-                                    }
-
-                                    var toIgnore = toProfessions.concat(ignoreGroups);
-                                    console.log("Ignore:");
-                                    console.log(toIgnore);
-
-                                    var toAdd;
-
-                                    //add default group
-                                    toAdd = findDocumentByDisplayName(newProAssignations[chosenProfession], "Default");
-                                    newConnections.push(toAdd);
-
-                                    for(var j=0; j<populatedGroupsID.length; j++){
-                                        if(toIgnore.indexOf(populatedGroupsID[j].display_name) == -1){
-                                            console.log("+ "+populatedGroupsID[j].display_name);
-                                            toAdd = findDocumentByDisplayName(newProAssignations[chosenProfession], populatedGroupsID[j].display_name);
-                                            newConnections.push(toAdd);
+                                        if(document.accepted)
+                                        var chosenProfession; //choose only one profession for users
+                                        if(foundProfessions.length > 1){
+                                            chosenProfession = "Medic";
+                                        }else if(foundProfessions.length == 0){
+                                            chosenProfession = noProfessionAssignUsers;
+                                        }else{
+                                            chosenProfession = foundProfessions[0];
                                         }
+                                        console.log("Profession decided:");
+                                        console.log(chosenProfession);
+
+                                        //record profession id and user id associations for updating users at the end
+                                        var idPro = newProAssignations[chosenProfession][0].profession.toString();
+                                        if(!usersToUpdate[idPro]) usersToUpdate[idPro] = [];
+                                        usersToUpdate[idPro].push(document._id);
+
+                                        //add default group
+                                        toAdd = findDocumentByDisplayName(newProAssignations[chosenProfession], "Default");
+                                        newConnections.push(toAdd);
+
+                                        //ignore professions and everything on the ignore list
+                                        toIgnore = toProfessions.concat(ignoreGroups);
+                                        console.log("Ignore:");
+                                        console.log(toIgnore);
+
+                                        for(k=0; k<populatedGroupsID.length; k++){
+                                            if(toIgnore.indexOf(populatedGroupsID[k].display_name) == -1){
+                                                toAdd = findDocumentByDisplayName(newProAssignations[chosenProfession], populatedGroupsID[k].display_name);
+                                                newConnections.push(toAdd);
+                                            }
+                                        }
+                                        console.log("New groupsID:");
+                                        console.log(newConnections);
+                                        console.log("========================== END ENTRY");
+                                        callbackEachDocument();
+                                    }else{
+                                        //if there is no profession assigned to an article, assign default
+                                        if(foundProfessions.length == 0){
+                                            foundProfessions = [noProfessionAssignOthers];
+                                        }
+                                        console.log("Professions decided:");
+                                        console.log(foundProfessions);
+                                        //ignore everything on the ignore list
+                                        toIgnore = ignoreGroups;
+                                        console.log("Ignore:");
+                                        console.log(toIgnore);
+
+                                        for(k=0; k<populatedGroupsID.length; k++){
+                                            if(toIgnore.indexOf(populatedGroupsID[k].display_name) == -1){
+                                                if(populatedGroupsID[k].display_name == "Medic"){
+                                                    toAdd = findDocumentByDisplayName(newProAssignations["Medic"], "Default");
+                                                    newConnections.push(toAdd);
+                                                }else if(populatedGroupsID[k].display_name == "Farmacist"){
+                                                    toAdd = findDocumentByDisplayName(newProAssignations["Farmacist"], "Default");
+                                                    newConnections.push(toAdd);
+                                                }else{
+                                                    if(foundProfessions.indexOf("Medic")!=-1){
+                                                        toAdd = findDocumentByDisplayName(newProAssignations["Medic"], populatedGroupsID[k].display_name);
+                                                        newConnections.push(toAdd);
+                                                    }
+                                                    if(foundProfessions.indexOf("Farmacist")!=-1){
+                                                        toAdd = findDocumentByDisplayName(newProAssignations["Farmacist"], populatedGroupsID[k].display_name);
+                                                        newConnections.push(toAdd);
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                        console.log("New groupsID:");
+                                        console.log(newConnections);
+                                        console.log("========================== END ENTRY");
+                                        callbackEachDocument();
                                     }
-                                    console.log("New groupsID:");
-                                    console.log(newConnections);
-                                    console.log("========================== END ENTRY");
-                                    callbackEachDocument();
+
                                 });
                             }
                         }, function (err) {
@@ -749,12 +796,33 @@ gulp.task('breakGroups', function () {
 
                     //create professions and get the correspondence of id -> name
                     createProfessions(function (newProfessions) {
+                        console.log("New professions:");
+                        console.log(newProfessions);
                         separateGroups(copyOfGroups, function (separatedGroups) {
                             createNewGroups(newGroupsName, newProfessions, separatedGroups, function (newProAssignations) {
                                 refactorConnections(associationsOldGroups, newProAssignations, function () {
-                                    //TODO: Update users
-                                    //console.log(usersToUpdate);
-                                    db.close();
+                                    var usersUpdated = 0;
+                                    console.log("Profession id to array of users assignment:");
+                                    console.log(usersToUpdate);
+                                    async.each(newProfessions, function (profession, callback) {
+                                        var professionId = profession._id.toString();
+                                        var usersArray = usersToUpdate[professionId];
+                                        db.collection('users').update({_id: {$in: usersArray}}, {$set: {profession: ObjectID(professionId)}}, {multi: true}, function (err, wRes) {
+                                            if(err){
+                                                callback(err);
+                                            }else{
+                                                usersUpdated+=wRes;
+                                                callback();
+                                            }
+                                        });
+                                    }, function (err) {
+                                        if(err){
+                                            console.log(err);
+                                        }else{
+                                            console.log("Updated "+usersUpdated+" users");
+                                        }
+                                        db.close();
+                                    });
                                 });
                             })
                         });
