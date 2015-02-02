@@ -215,7 +215,6 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             });
         })
         .post(function (req, res) {
-            console.log(req.body);
             var userData = getUserData(req);
 
             var keepGoing = true;
@@ -258,7 +257,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 }
 
                 //check if a chat involving sender / receiver / post combination already exists
-                Chat.findOne(q, function (err, found) {
+                Chat.findOne(q).populate('participants').exec(function (err, found) {
                     if(err){
                         res.send(err);
                     }else if(found){
@@ -357,7 +356,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 })
                 .on('joinChat', function (chat_id) {
                     if(isAuth(socket)){
-                        socket.join(chat_id, function(err){
+                        socket.join(chat_id.toString(), function(err){
                             if(err){
                                 socket.emit('apiMessage', {error: err, success: null});
                             }else{
@@ -368,7 +367,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 })
                 .on('leaveChat', function (chat_id) {
                     if(isAuth(socket)){
-                        socket.leave(chat_id, function(err){
+                        socket.leave(chat_id.toString(), function(err){
                             if(err){
                                 socket.emit('apiMessage', {error: err, success: null});
                             }else{
@@ -385,6 +384,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                             if(err){
                                 socket.emit('apiMessage', {error: err, success: null});
                             }else{
+                                socket.emit('apiMessage', {error: null, success: "Joined chat "+chat_id});
                                 var newMessage = new Messages({
                                     chat: chat_id,
                                     text: text,
@@ -399,7 +399,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                                             if(err){
                                                 socket.emit('apiMessage', {error: err, success: null});
                                             }else{
-                                                socket.to(chat_id).emit('newMessage', {error: null, success: saved});
+                                                sockets.to(chat_id.toString()).emit('newMessage', {error: null, success: saved});
                                                 //send push notifications
                                                 Chat.findOne({_id: chat_id}, function (err, chat) {
                                                     if(err){
