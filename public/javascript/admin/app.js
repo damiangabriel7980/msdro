@@ -81,20 +81,6 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/admin/continut/articole.html',
             controller:'articlesCtrl'
         })
-        .state('continut.articole.adaugaArticol',{
-            parent:'continut.articole',
-            url: '',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/articoleAdd.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"articlesAddCtrl"
-                })
-            }]
-        })
         .state('continut.articole.stergeArticol',{
             parent:'continut.articole',
             url: '/delete/:id',

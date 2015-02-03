@@ -1481,7 +1481,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 else {
                     var contents={};
                     contents['content']=cont;
-                    UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
+                    UserGroup.find({}, {display_name: 1, profession: 1}).populate('profession').exec(function(err, cont2) {
                         if(err) {
                             logger.error(err);
                             res.send(err);
@@ -1493,29 +1493,17 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         })
         .post(function(req, res) {
-            var content = new Content(); 		// create a new instance of the Bear model
-            content.title = req.body.title;  // set the bears name (comes from the request)
-            content.author=req.body.author ;
-            content.description= req.body.description     ;
-            content.text= req.body.text  ;
-            content.type= req.body.type ;
-            content.last_updated=req.body.last_updated;
-            content.version= req.body.version ;
-            content.enable=req.body.enable;
-            content.image_path=req.body.image_path;
-            content.groupsID=req.body.groupsID;
-            content.save(function(err,result) {
-                if (err)
-                {
+            var content = new Content(req.body);
+            content.enable = false;
+            content.last_updated = Date.now();
+            content.save(function(err,saved) {
+                if (err){
                     logger.error(err);
                     res.send(err);
+                }else{
+                    res.json({ message: 'Content created!' , saved: saved});
                 }
-                else{
-                    res.json({ message: 'Content created!' });
-                }
-
             });
-
         });
     router.route('/admin/content/:id')
 

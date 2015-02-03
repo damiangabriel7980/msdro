@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('articlesCtrl', ['$scope','$rootScope' ,'ContentService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,ContentService,$stateParams,$sce,ngTableParams,$filter){
+cloudAdminControllers.controller('articlesCtrl', ['$scope','$rootScope' ,'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', function($scope,$rootScope,ContentService,$stateParams,$sce,ngTableParams,$filter,$modal){
     ContentService.getAll.query().$promise.then(function(result){
         var contents = result['content'];
         $scope.grupe=result['groups'];
@@ -33,6 +33,17 @@ cloudAdminControllers.controller('articlesCtrl', ['$scope','$rootScope' ,'Conten
     });
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
+    };
+
+    $scope.addArticle = function () {
+        $modal.open({
+            templateUrl: 'partials/admin/continut/articoleAdd.ejs',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            windowClass: 'fade',
+            controller:"articlesAddCtrl"
+        });
     };
 
     $scope.enableArticle=function(article,id_article){
