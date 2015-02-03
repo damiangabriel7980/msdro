@@ -3227,8 +3227,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/products/productsByArea')
 
         .post(function(req, res) {
-            console.log(req.body.id);
-            console.log(req.body.specialGroup);
+
             var test = req.body.id.toString();
             if(test!=0)
             {
@@ -3240,24 +3239,18 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         if (req.body.specialGroup) {
                             forGroups.push(req.body.specialGroup);
                         }
-                        console.log(req.body.specialGroup);
-                        console.log(test);
                         Therapeutic_Area.find({_id:test}).exec(function(err,response){
                             var TArea= response[0];
                             if(TArea.has_children==true)
                             {
-                                Therapeutic_Area.find({"therapeutic-areasID": {$in :[test]}}).exec(function(err,response){
-                                    var children=response;
-                                    getStringIds(children, function(ids){
-                                    console.log(ids);
-                                    console.log(forGroups);
+                                Therapeutic_Area.find({$or: [{_id:req.body.id},{"therapeutic-areasID": {$in :[test]}}]}).exec(function(err,response){
+                                    getStringIds(response, function(ids){
                                     Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
                                         if(err) {
                                             res.send(err);
                                         }
                                         else
                                         {
-                                            console.log(cont);
                                             res.json(cont);
                                         }
                                     })
@@ -3273,7 +3266,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                     }
                                     else
                                     {
-                                        console.log(cont);
                                         res.json(cont);
                                     }
                                 })
@@ -3293,8 +3285,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         if (req.body.specialGroup) {
                             forGroups.push(req.body.specialGroup);
                         }
-                        console.log(req.body.specialGroup.toString());
-                        console.log(forGroups);
                         //get allowed articles for user
                         Products.find({groupsID: {$in: forGroups}}, function(err, cont) {
                             if(err) {
@@ -3302,7 +3292,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             }
                             else
                             {
-                                console.log(cont);
                                 res.json(cont);
                             }
                         })
