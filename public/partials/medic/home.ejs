@@ -3,7 +3,7 @@
         carousel-resizable style="{{carouselResponsiveStyle}}">
         <li ng-repeat="carouselItem in HomeCarousel track by $index" style="margin-left: 10px;margin-right:10px">
             <div class="carouselSlide">
-                <div class="carousel-title"><h3 class="newFont" ui-sref="noutati.articol({articleId:carouselItem.article_id._id,articleType:carouselItem.article_id.type})">{{trimTitle(carouselItem.title)|uppercase}}</h3></div>
+                <div class="carousel-title"><h3 class="newFont" ui-sref="noutati.articol({articleId:carouselItem.article_id._id,articleType:carouselItem.article_id.type})" convert-special conver="carouselItem.title" ng-bind-html="convertAndTrustAsHtmlTrimmed(carouselItem.title)"></h3></div>
                 <div class="imageWrapper firstIllusion" ng-if="$index===0">
                     <img ng-src="{{pathAmazonDev+firstIllusion.image_path}}"/>
                 </div>
@@ -55,8 +55,8 @@
                     </a>
                 </div>
                 <div class="col-md-10 contentBlock textHome noPadding fixedHeight">
-                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b>{{n.title}}</b></a></div>
-                    <div class="col-md-10 header justified margintop5px noPadding" ng-bind-html="trustAsHtml(htmlToPlainText(n.text))"></div>
+                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b convert-special conver="n.title" ng-bind-html="trustAsHtml(n.title)"></b></a></div>
+                    <div class="col-md-10 header justified margintop5px noPadding" convert-special conver="n.text" ng-bind-html="convertAndTrustAsHtml(n.text,0)"></div>
 
                 </div>
                 <div class="col-md-10 noPadding margintop5px">
@@ -76,8 +76,8 @@
                     </a>
                 </div>
                 <div class="col-md-10 noPadding contentBlock textHome fixedHeight">
-                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b>{{htmlToPlainText(n.title)}}</b></a></div>
-                    <div class="col-md-10 header margintop5px justified noPadding" ng-bind-html="trustAsHtml(htmlToPlainText(n.text))"></div>
+                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b convert-special conver="n.title" ng-bind-html="convertAndTrustAsHtml(n.title,0)"></b></a></div>
+                    <div class="col-md-10 header margintop5px justified noPadding" convert-special conver="n.text" ng-bind-html="convertAndTrustAsHtml(n.text,0)"></div>
                 </div>
                 <div class="col-md-10 noPadding margintop5px">
                     <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"> Citeste mai mult</a>
@@ -96,8 +96,8 @@
                     <i class="gray glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
                 </div>
                 <div class="col-md-11 noPadding justify">
-                    <a ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: m._id})"><b class="MSDTitleDark">{{m.title+"("+m.author+")"}}</b></a>
-                    <p ng-if="m.description != null" ng-bind-html="trustAsHtml(htmlToPlainText(m.description))"></p>
+                    <a ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: m._id})"><b class="MSDTitleDark" convert-special conver="m.title" ng-bind-html="trustAsHtml(m.title)"></b><b>&nbsp;(</b><b class="MSDTitleDark" convert-special conver="m.author" ng-bind-html="trustAsHtml(m.author)"></b><b>)</b></a>
+                    <p ng-if="m.description != null" convert-special conver="m.description" ng-bind-html="convertAndTrustAsHtml(m.description,0)"></p>
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@
                 </div>
                 <div class="col-md-11 noPadding leftBorder">
                     <div class="col-md-12 justify title MSDTitleDark handCursor" ui-sref="calendar({id:e._id})"><b>{{e.name}}</b></div>
-                    <div class="col-md-12 justify header margintop5px" ng-bind-html="trustAsHtml(e.description.length>50?createHeader(e.description,50):htmlToPlainText(e.description))"></div>
+                    <div class="col-md-12 justify header margintop5px" convert-special conver="e.description" ng-bind-html="convertAndTrustAsHtml(e.description,50)"></div>
                 </div>
             </div>
         </div>

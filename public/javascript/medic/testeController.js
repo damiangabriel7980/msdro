@@ -14,6 +14,13 @@ cloudAdminControllers.controller('testeController', ['$scope','$rootScope' ,'qui
     //$scope.questions = testeService.getByTest.query({id:$stateParams.id});
     $scope.amazon = $rootScope.pathAmazonDev;
     angular.element("#footer").css({'position': 'absolute','bottom':0});
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtml=function (data) {
+        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
 }])
     .filter('htmlToPlaintext', function() {
         return function(text) {

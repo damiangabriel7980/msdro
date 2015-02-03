@@ -34,6 +34,16 @@ cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' 
             }
         });
     };
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtml=function (data,limit) {
+        if(limit!=0)
+            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').substring(0,limit) + '...';
+        else
+            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
     if($stateParams.idMulti)
     {
         var idM = $stateParams.idMulti;
