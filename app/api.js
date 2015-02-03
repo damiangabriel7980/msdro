@@ -3113,7 +3113,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
                     }
 
-                },{hydrate: true,groupsID: {$in: req.user.groupsID}}, function(err, results) {
+                },{hydrate: true,groupsID: {$in: req.user.groupsID},enable: true}, function(err, results) {
                     if(err)
                     {
                         res.json(err);
