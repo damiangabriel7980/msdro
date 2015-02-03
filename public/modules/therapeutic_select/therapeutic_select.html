@@ -1,0 +1,18 @@
+<div class="therapeutic-select">
+    <div class="col-md-12 noPadding">
+        <div class="form-group">
+            <label for="areas">Arii terapeutice:</label>
+            <select ng-model="selectedArea" ng-options="area as (area.indent?'&nbsp;&nbsp;&nbsp;&nbsp;':'')+area.name for area in areasOrganised"
+                    class="form-control" id="areas" style="width: 100%;" ng-change="selectArea()">
+            </select>
+        </div>
+    </div>
+    <div class="col-md-12 noPadding">
+        <div ng-repeat="area in selectedAreas">
+            <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
+                {{area.name}}
+                <i class="glyphicon glyphicon-remove-sign" ng-click="removeArea(area)" style="cursor: pointer;"></i>
+            </div>
+        </div>
+    </div>
+</div>
