@@ -96,7 +96,7 @@
                     <i class="gray glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
                 </div>
                 <div class="col-md-11 noPadding justify">
-                    <a ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: m._id})"><b class="MSDTitleDark" convert-special conver="m.title" ng-bind-html="trustAsHtml(m.title)"></b><b>&nbsp;(</b><b class="MSDTitleDark" convert-special conver="m.author" ng-bind-html="trustAsHtml(m.author)"></b><b>)</b></a>
+                    <a ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: m._id})"><b class="MSDTitleDark" convert-special conver="m.title" ng-bind-html="trustAsHtml(m.title)"></b><b class="MSDTitleDark">&nbsp;(</b><b class="MSDTitleDark" convert-special conver="m.author" ng-bind-html="trustAsHtml(m.author)"></b><b class="MSDTitleDark">)</b></a>
                     <p ng-if="m.description != null" convert-special conver="m.description" ng-bind-html="convertAndTrustAsHtml(m.description,0)"></p>
                 </div>
             </div>
