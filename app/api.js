@@ -1602,23 +1602,31 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .post(function(req, res) {
 
-            var event = new Events(); 		// create a new instance of the Bear model
-            event.description = req.body.description;  // set the bears name (comes from the request)
-            event.enable=req.body.enable ;
-            event.end= req.body.end     ;
-            event.groupsID= req.body.groupsID  ;
-            event.last_updated= req.body.last_updated ;
-            event.name=req.body.name;
-            event.place= req.body.place ;
-            event.privacy=req.body.privacy;
-            event.start=req.body.start;
-            event.type=req.body.type;
-            event.listconferences=req.body.listconferences;
-            event.save(function(err) {
-                if (err)
-                    res.send(err);
+            var event = new Events();
 
-                res.json({ message: 'Event created!' });
+            if(req.body.description) event.description = req.body.description;
+            if(typeof req.body.enable === "boolean"){
+                event.enable = req.body.enable;
+            }else{
+                event.enable = false;
+            }
+            if(req.body.end) event.end= req.body.end;
+            if(req.body.name) event.name=req.body.name;
+            if(req.body.place) event.place= req.body.place;
+            if(req.body.start) event.start=req.body.start;
+            if(req.body.type) event.type=req.body.type;
+
+            if(req.body.listconferences) event.listconferences = req.body.listconferences;
+            if(req.body.groupsID) event.groupsID= req.body.groupsID;
+
+            event.last_updated= req.body.last_updated ;
+
+            event.save(function(err, saved) {
+                if (err){
+                    res.send(err);
+                }else{
+                    res.json({ message: 'Event created!' , saved: saved});
+                }
             });
 
         });
