@@ -10,7 +10,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ja.qr',
         'ui.bootstrap.datetimepicker',
         'angular-growl',
-        'myMultipleSelect'
+        'myMultipleSelect',
+        'therapeuticSelect'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -47,20 +48,6 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '/produse',
             templateUrl: 'partials/admin/continut/produse.html',
             controller:'productsCtrl'
-        })
-        .state('continut.produse.adaugaProdus',{
-            parent:'continut.produse',
-            url: '',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/productsAdd.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"productsAddCtrl"
-                })
-            }]
         })
         .state('continut.produse.editProdus',{
             parent:'continut.produse',

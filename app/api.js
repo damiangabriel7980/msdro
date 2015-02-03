@@ -1392,7 +1392,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     var products={};
                     products['productList']=cont;
                     console.log(products['productList'][0]);
-                    UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
+                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
                         if(err) {
                             logger.error(err);
                             res.send(err);
@@ -1406,24 +1406,23 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .post(function(req, res) {
 
-            var product = new Products(); 		// create a new instance of the Bear model
-            product.name = req.body.name;  // set the bears name (comes from the request)
-            product.description=req.body.description ;
-            product.enable= req.body.enable     ;
-            product.file_path= req.body.file_path  ;
-            product.image_path= req.body.image_path ;
-            product.last_updated=req.body.last_updated;
-            var serializedAreas = [];
-            for(var i=0; i<req.body['therapeutic-areasID'].length; i++){
-                serializedAreas.push(req.body['therapeutic-areasID'][i].id.toString());
-            }
-            product['therapeutic-areasID']= serializedAreas ;
-            product.groupsID= req.body.groupsID;
-            product.save(function(err) {
+            var product = new Products();
+
+            if(req.body.name) product.name = req.body.name;
+            if(req.body.description) product.description=req.body.description;
+            if(req.body.enable) product.enable= req.body.enable;
+            if(req.body.file_path) product.file_path= req.body.file_path;
+            if(req.body.image_path) product.image_path= req.body.image_path;
+            if(req.body['therapeutic-areasID']) product['therapeutic-areasID']= req.body['therapeutic-areasID'];
+            if(req.body.groupsID) product.groupsID= req.body.groupsID;
+
+            product.last_updated=Date.now();
+
+            product.save(function(err, saved) {
                 if (err)
                     res.send(err);
                 else
-                    res.json({ message: 'Product created!' });
+                    res.json({ message: 'Product created!' , saved: saved});
             });
 
         });
