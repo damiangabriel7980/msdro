@@ -46,6 +46,22 @@ cloudAdminControllers.controller('articlesCtrl', ['$scope','$rootScope' ,'Conten
         });
     };
 
+    $scope.deleteArticle = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/continut/articoleDelete.ejs',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'sm',
+            windowClass: 'fade',
+            controller:"articlesDeleteCtrl",
+            resolve: {
+                idToDelete: function () {
+                    return id;
+                }
+            }
+        })
+    };
+
     $scope.enableArticle=function(article,id_article){
         if(article.enable==true)
             article.enable=false;

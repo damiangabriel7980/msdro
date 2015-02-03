@@ -30,8 +30,8 @@ cloudAdminControllers.controller('articlesAddCtrl', ['$scope', 'ContentService',
 
         ContentService.getAll.save($scope.articolNou).$promise.then(function (resp) {
             console.log(resp);
-            $modalInstance.close();
             $state.reload();
+            $modalInstance.close();
         });
     };
 
