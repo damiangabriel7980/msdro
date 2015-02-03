@@ -24,6 +24,7 @@ var Topics = require('./models/qa_topics');
 var AnswerGivers = require('./models/qa_answerGivers');
 var Threads = require('./models/qa_threads');
 var qaMessages = require('./models/qa_messages');
+var Professions = require('./models/professions');
 
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
@@ -545,7 +546,19 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/admin/users/groups')
 
         .get(function(req, res) {
-            UserGroup.find({}, {display_name: 1, description: 1} ,function(err, cont) {
+            UserGroup.find({}, {display_name: 1, description: 1, profession: 1}).populate('profession').exec(function(err, cont) {
+                if(err) {
+                    logger.error(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/admin/users/professions')
+
+        .get(function(req, res) {
+            Professions.find({}, function(err, cont) {
                 if(err) {
                     logger.error(err);
                     res.send(err);
@@ -557,7 +570,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/admin/users/groupDetails/:id')
 
         .get(function(req, res) {
-            UserGroup.find({_id: req.params.id}, function(err, cont) {
+            UserGroup.find({_id: req.params.id}).populate('profession').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }else{
@@ -614,35 +627,44 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     ans.message = "Numele trebuie sa aiba doar caractere, minim 3";
                     res.json(ans);
                 }else{
-                    //add group
-                    new UserGroup(data.group).save(function (err, inserted) {
-                        if(err){
-                            logger.error(err);
-                            ans.error = true;
-                            ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
-                            res.json(ans);
-                        }else{
-                            var idGroupInserted = inserted._id.toString();
-                            //update users to point to this group
-                            //extract id's from users
-                            var ids = [];
-                            for(var i=0; i<data.users.length; i++){
-                                ids.push(data.users[i]._id);
-                            }
-                            connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
-                                if(err){
-                                    logger.error(err);
-                                    ans.error = true;
-                                    ans.message = "Eroare la adaugarea userslor noi in grup.";
-                                    res.json(ans);
-                                }else{
-                                    ans.error = false;
-                                    ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
-                                    res.json(ans);
+                    //validate profession
+                    var profession = (data.group.profession||"").toString();
+                    if(profession.length == 24){
+                        data.group.profession = mongoose.Types.ObjectId(profession);
+                        //add group
+                        new UserGroup(data.group).save(function (err, inserted) {
+                            if(err){
+                                logger.error(err);
+                                ans.error = true;
+                                ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
+                                res.json(ans);
+                            }else{
+                                var idGroupInserted = inserted._id.toString();
+                                //update users to point to this group
+                                //extract id's from users
+                                var ids = [];
+                                for(var i=0; i<data.users.length; i++){
+                                    ids.push(data.users[i]._id);
                                 }
-                            })
-                        }
-                    });
+                                connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
+                                    if(err){
+                                        logger.error(err);
+                                        ans.error = true;
+                                        ans.message = "Eroare la adaugarea userslor noi in grup.";
+                                        res.json(ans);
+                                    }else{
+                                        ans.error = false;
+                                        ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
+                                        res.json(ans);
+                                    }
+                                })
+                            }
+                        });
+                    }else{
+                        ans.error = true;
+                        ans.message = "Selectati o profesie";
+                        res.json(ans);
+                    }
                 }
             }
         }

@@ -9,24 +9,33 @@
                 <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
             </div>
             <div class="col-md-12" style="margin-bottom: 15px;">
-                <div class="col-md-6 noPadding">
-                    <div class="form-group col-md-12" style="padding-left: 0;">
+                <div class="col-md-12 noPadding">
+                    <div class="form-group col-md-6" style="padding-left: 0;">
                         <label for="nume">Nume:</label>
                         <input type="text" class="form-control" id="nume" ng-model="nume">
                     </div>
-                    <div class="form-group col-md-12" style="padding-left: 0;">
+                    <div class="col-md-6 noPadding">
+                        <div class="col-md-12">
+                            <label for="grupDefault">Group default</label>
+                            <input type="checkbox" id="grupDefault" ng-model="grupDefault">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="contentSpecific">Content specific</label>
+                            <input type="checkbox" id="contentSpecific" ng-model="contentSpecific">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 noPadding">
+                    <div class="form-group col-md-6" style="padding-left: 0;">
                         <label for="descriere">Descriere:</label>
                         <input type="text" class="form-control" id="descriere" ng-model="descriere">
                     </div>
-                </div>
-                <div class="col-md-6 noPadding">
-                    <div class="col-md-12">
-                        <label for="grupDefault">Group default</label>
-                        <input type="checkbox" id="grupDefault" ng-model="grupDefault">
-                    </div>
-                    <div class="col-md-12">
-                        <label for="contentSpecific">Content specific</label>
-                        <input type="checkbox" id="contentSpecific" ng-model="contentSpecific">
+                    <div class="form-group col-md-6">
+                        <label for="profesie">Profesie:</label>
+                        <select id="profesie" class="form-control"
+                                ng-model="selectedProfession"
+                                ng-options="profession as profession.display_name for profession in professions">
+                        </select>
                     </div>
                 </div>
             </div>

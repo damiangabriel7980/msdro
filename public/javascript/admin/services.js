@@ -17,6 +17,9 @@ cloudAdminServices.factory('GroupsService', ['$resource', function($resource){
         getAllGroups: $resource('api/admin/users/groups', {}, {
             query: { method: 'GET', isArray: true }
         }),
+        getProfessions: $resource('api/admin/users/professions', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
         getAllUsers: $resource('api/admin/users/users', {}, {
             query: { method: 'GET', isArray: true }
         }),
