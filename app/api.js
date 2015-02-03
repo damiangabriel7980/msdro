@@ -1384,21 +1384,21 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     router.route('/admin/products')
         .get(function(req, res) {
-            Products.find({}).populate("therapeutic-areasID").exec(function(err, cont) {
+            Products.find({}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
                 else{
                     var products={};
                     products['productList']=cont;
-                    console.log(products['productList'][0]);
                     UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
                         if(err) {
                             logger.error(err);
                             res.send(err);
+                        }else{
+                            products['groups']=cont2;
+                            res.json(products);
                         }
-                        products['groups']=cont2;
-                        res.json(products);
                     });
                 }
 
@@ -1426,47 +1426,53 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
 
         });
+
     router.route('/admin/products/:id')
         .get(function(req, res) {
-            Products.findById(req.params.id, function(err, product) {
-                if (err)
+            console.log("asasa");
+            Products.findOne({_id: req.params.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                if (err){
                     res.send(err);
-                res.json(product);
+                }else{
+                    res.json(product);
+                }
             });
         })
         .put(function(req, res) {
 
             Products.findById(req.params.id, function(err, product) {
-
-                if (err)
+                if (err){
                     res.send(err);
+                }else{
+                    if(req.body.name) product.name = req.body.name;
+                    if(req.body.description) product.description = req.body.description;
+                    if(typeof req.body.enable === "boolean") product.enable = req.body.enable;
+                    if(req.body.file_path) product.file_path = req.body.file_path;
+                    if(req.body.image_path) product.image_path = req.body.image_path;
+                    if(req.body['therapeutic-areasID']) product['therapeutic-areasID'] = req.body['therapeutic-areasID'];
+                    if(req.body.groupsID) product.groupsID = req.body.groupsID;
 
-                product.name = req.body.name;  // set the bears name (comes from the request)
-                product.description=req.body.description ;
-                product.enable= req.body.enable     ;
-                product.file_path= req.body.file_path  ;
-                product.image_path= req.body.image_path ;
-                product.last_updated=req.body.last_updated;
-                product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
-                product.groupsID= req.body.groupsID;
-                // save the bear
-                product.save(function(err) {
-                    if (err)
-                        res.send(err);
+                    product.last_updated = Date.now();
 
-                    res.json({ message: 'Product updated!' });
-                });
-
+                    product.save(function(err, saved) {
+                        if (err){
+                            res.send(err);
+                        }else{
+                            res.json({ message: 'Product updated!' , saved: saved});
+                        }
+                    });
+                }
             });
         })
         .delete(function(req, res) {
             Products.remove({
                 _id: req.params.id
             }, function(err,prod) {
-                if (err)
+                if (err){
                     res.send(err);
-
-                res.json({ message: 'Successfully deleted' });
+                }else{
+                    res.json({ message: 'Successfully deleted' });
+                }
             });
         });
 

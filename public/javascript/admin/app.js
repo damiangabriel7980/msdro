@@ -49,20 +49,6 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/admin/continut/produse.html',
             controller:'productsCtrl'
         })
-        .state('continut.produse.editProdus',{
-            parent:'continut.produse',
-            url: '/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/productsEdit.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"productsEditCtrl"
-                })
-            }]
-        })
         .state('continut.articole',{
             url: '/articole',
             templateUrl: 'partials/admin/continut/articole.html',

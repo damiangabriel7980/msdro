@@ -4,11 +4,10 @@
 <div class="col-md-12 modal-body">
     <div class="col-md-12">
         <label>Nume produs:</label>
-        <input type="text" ng-model="newProduct.name" class="form-control col-xs-12">
+        <input type="text" ng-model="newProduct.name" class="form-control">
     </div>
     <div class="col-md-12 noPadding">
         <therapeutic-select all-areas="areas" selected-areas="selectedAreas" returned-areas="returnedAreas"></therapeutic-select>
-    </div>
     </div>
     <div class="col-md-12">
         <div class="form-group col-md-12">
@@ -22,6 +21,8 @@
     </div>
 </div>
 <div class="modal-footer">
-    <a class="btn pull-left btn-primary" ng-click="closeModal()">Inchide</a>
-    <a class="btn pull-right btn-danger" ng-click="createProduct()">Adauga</a>
+    <div class="col-md-12">
+        <a class="btn pull-left btn-primary" ng-click="closeModal()">Inchide</a>
+        <a class="btn pull-right btn-danger" ng-click="createProduct()">Adauga</a>
+    </div>
 </div>

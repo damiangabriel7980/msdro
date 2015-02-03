@@ -35,6 +35,22 @@ cloudAdminControllers.controller('productsCtrl', ['$scope' ,'ProductService','$s
         })
     };
 
+    $scope.editProduct = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/continut/productsEdit.ejs',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            windowClass: 'fade',
+            controller:"productsEditCtrl",
+            resolve: {
+                idToEdit: function () {
+                    return id;
+                }
+            }
+        })
+    };
+
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
