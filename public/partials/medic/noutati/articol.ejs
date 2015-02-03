@@ -3,8 +3,7 @@
         {{currentArticle.title}}
     </div>
     <div class="col-md-12 stretchHorizontal paddingTop10">
-        <div class="col-md-9 stretchHorizontal author">
-            {{currentArticle.author}}
+        <div class="col-md-9 stretchHorizontal author" convert-special conver="currentArticle.author" ng-bind-html="trustAsHtml(currentArticle.author)">
         </div>
         <div class="col-md-3 stretchHorizontal text-right date">
             <div class="label label-default">{{date}}</div>
@@ -12,7 +11,7 @@
     </div>
     <div class="col-md-12 articleContent stretchHorizontal paddingTop10">
         <img class="pull-left img-special" ng-src="{{image}}"/>
-        <div ng-bind-html="articleContent"></div>
+        <div convert-special conver="currentArticle.text" ng-bind-html="trustAsHtml(currentArticle.text)"></div>
     </div>
     <div class="btn btn-sm btn-more-news btn-info margintop20px" ng-click="backToArticles()"> Inapoi la articole </div>
     <div class="col-md-12"></div>

@@ -9,15 +9,21 @@
             <img class="img-responsive img-thumbnail"  ng-src="{{amazon+product.image_path}}">
         </div>
         <div ng-class="showDetails=='show' ? 'col-md-10':'col-md-12'">
-            <div class="col-md-12">
-                <h4 class="MSDgreen handCursor" ui-sref="biblioteca.produse.prodById({id:product._id})">{{product.name}}
-                <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-th-large"></i>Produs</span>
-                </h4>
+            <div class="col-md-12 noPaddingLeft">
+                <div class="col-md-11">
+                    <h4 class="MSDgreen handCursor" ui-sref="biblioteca.produse.prodById({id:product._id})" convert-special conver="product.name" ng-bind-html="trustAsHtml(product.name)">
+
+                    </h4>
+                </div>
+                <div class="col-md-1">
+                    <span ng-if="showDetails=='hide'" class="margintop10px label label-warning pull-right"><i class="glyphicon glyphicon-th-large"></i>Produs</span>
+
+                </div>
+
             </div>
 
 
-            <div class="col-md-12">
-                {{htmlToPlainText(product.description) | limitTo: 220}}&nbsp ...
+            <div class="col-md-12" convert-special conver="product.description" ng-bind-html="convertAndTrustAsHtml(product.description,220)">
             </div>
         </div>
         <div class="btn btn-info btn-sm pull-right btnSearchTop btn-more-news" ng-class="showDetails" ui-sref="biblioteca.produse.prodById({id:product._id})">
@@ -32,13 +38,20 @@
                 <h5 class="MSDgreen">{{calendar.start | filter: asDate | date:'MMM'}}</h5>
             </div>
             <div ng-class="showDetails=='show' ? 'col-md-11':'col-md-12'">
-                <div class="col-md-12">
-                    <h4 class="MSDgreen handCursor" ui-sref="calendar({id:calendar._id})">{{calendar.name | limitTo: 100}}
-                    <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-calendar"></i>Event</span>
-                    </h4>
+                <div class="col-md-12 noPaddingLeft">
+                    <div class="col-md-11">
+                        <h4 class="MSDgreen handCursor" ui-sref="calendar({id:calendar._id})" convert-special conver="calendar.name" ng-bind-html="convertAndTrustAsHtml(calendar.name,100)">
+                        </h4>
+                    </div>
+                    <div class="col-md-1">
+                        <span ng-if="showDetails=='hide'" class="margintop10px label label-warning pull-right"><i class="glyphicon glyphicon-calendar"></i>Event</span>
+
+                    </div>
+
+
                 </div>
                 <div class="col-md-12">
-                    <div ng-bind-html="calendar.description | limitTo: 100  | unsafe ">
+                    <div convert-special conver="calendar.description" ng-bind-html="convertAndTrustAsHtml(calendar.description,100)">
                     </div>
                 </div>
             </div>
@@ -52,13 +65,18 @@
             <img class="img-responsive img-thumbnail" ng-if="quiz.entity=='SLIDE'" ng-src="{{defaultImageSlide}}">
         </div>
         <div ng-class="showDetails=='show' ? 'col-md-10':'col-md-12'">
-            <div class="col-md-12">
-                <h4 class="MSDgreen handCursor" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})">{{quiz.title}}
-                <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-list-alt"></i>Quiz</span>
-                </h4>
+            <div class="col-md-12 noPaddingLeft">
+                <div class="col-md-11">
+                    <h4 class="MSDgreen handCursor" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})" convert-special conver="quiz.title" ng-bind-html="trustAsHtml(quiz.title)">
+                    </h4>
+                </div>
+                <div class="col-md-1">
+                    <span ng-if="showDetails=='hide'" class="margintop10px label label-warning pull-right"><i class="glyphicon glyphicon-list-alt"></i>Quiz</span>
+                </div>
+
+
             </div>
-            <div class="col-md-12">
-                {{htmlToPlainText(quiz.description) | limitTo: 220}}&nbsp ...
+            <div class="col-md-12" convert-special conver="quiz.description" ng-bind-html="convertAndTrustAsHtml(quiz.description,220)">
             </div>
         </div>
         <button class="btn btn-info pull-right btnArticleSearch btn-more-news " ng-class="showDetails" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})">Sustine testul</button>
@@ -69,12 +87,18 @@
         </div>
 
         <div ng-class="showDetails=='show' ? 'col-md-10':'col-md-12'">
-            <div class="col-md-12">
-                <h4 class="MSDgreen handCursor" ui-sref="{{sref(article.type)}}">{{article.title}}
-                <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-file"></i>Article</span>
-                </h4>
+            <div class="col-md-12 noPaddingLeft">
+                <div class="col-md-11">
+                    <h4 class="MSDgreen handCursor" ui-sref="{{sref(article.type)}}" convert-special conver="article.title" ng-bind-html="trustAsHtml(article.title)">
+                    </h4>
+                </div>
+                <div class="col-md-1">
+                    <span ng-if="showDetails=='hide'" class="margintop10px label label-warning pull-right"><i class="glyphicon glyphicon-file"></i>Article</span>
+                </div>
+
+
             </div>
-            <div class="col-md-12" ng-bind-html=" article.text | limitTo: 260 | unsafe"></div>
+            <div class="col-md-12" convert-special conver="article.text" ng-bind-html="convertAndTrustAsHtml(article.text,260)"></div>
         </div>
         <div class="btn btn-info pull-right btnArticleSearch btn-more-news" ui-sref="{{sref(article.type)}}" ng-class="showDetails">
             Vezi detalii
@@ -85,13 +109,19 @@
             <img class="img-responsive img-thumbnail" ng-src="{{media.thumbnail_path?amazon+media.thumbnail_path:(media.type==1?defaultVideoImage:defaultSlideImage)}}">
         </div>
         <div ng-class="showDetails=='show' ? 'col-md-10':'col-md-12'">
-            <div class="col-md-12">
-                <h4 class="MSDgreen handCursor" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: media._id})">{{media.title}}
-                <span ng-if="showDetails=='hide'" class="label label-warning pull-right"><i class="glyphicon glyphicon-film"></i>Multimedia</span>
-                </h4>
+            <div class="col-md-12 noPaddingLeft">
+                <div class="col-md-11">
+                    <h4 class="MSDgreen handCursor" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: media._id})" convert-special conver="media.title" ng-bind-html="trustAsHtml(media.title)">
+                    </h4>
+                </div>
+                <div class="col-md-1">
+                    <span ng-if="showDetails=='hide'" class="margintop10px label label-warning pull-right"><i class="glyphicon glyphicon-film"></i>Multimedia</span>
+                </div>
+
+
             </div>
-            <div class="col-md-12">
-                {{media.description | limitTo: 260}}&nbsp ...
+            <div class="col-md-12" convert-special conver="media.description" ng-bind-html="convertAndTrustAsHtml(media.description,260)">
+               &nbsp ...
             </div>
         </div>
         <button class="btn btn-info  pull-right btnMultimediaSearch btn-more-news" ng-class="showDetails" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: media._id})">Vezi material</button>

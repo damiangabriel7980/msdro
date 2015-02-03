@@ -9,6 +9,13 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
 
     $scope.county = {};
     $scope.city = {};
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtml=function (data) {
+        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
     $scope.showerror=false;
     $scope.showerrorProf=false;
     $scope.showerrorPass=false;

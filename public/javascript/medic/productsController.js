@@ -97,10 +97,17 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     $scope.hideElem = function(){
         $scope.showElem='{display: none}';
     }
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtml=function (data) {
+        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
   }])
     .filter('htmlToPlaintext2', function() {
         return function(text) {
-            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');
+            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
         }
     })
     .filter('mySort', function() {
