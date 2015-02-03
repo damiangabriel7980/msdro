@@ -1619,7 +1619,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             if(req.body.listconferences) event.listconferences = req.body.listconferences;
             if(req.body.groupsID) event.groupsID= req.body.groupsID;
 
-            event.last_updated= req.body.last_updated ;
+            event.last_updated = Date.now();
 
             event.save(function(err, saved) {
                 if (err){
@@ -1643,14 +1643,11 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/admin/events/:id')
 
         .get(function(req, res) {
-            Events.find({_id:req.params.id}).populate('listconferences').exec(function(err, cont) {
+            Events.findOne({_id:req.params.id}).populate('listconferences').populate('groupsID').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
                 }else{
-                    res.json(null);
+                    res.json(cont);
                 }
             })
         })
@@ -1658,51 +1655,57 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
             Events.findById(req.params.id, function(err, event) {
 
-                if (err)
+                if (err){
                     res.send(err);
-
-                event.description = req.body.description;  // set the bears name (comes from the request)
-                event.enable=req.body.enable ;
-                event.end= req.body.end     ;
-                event.groupsID= req.body.groupsID  ;
-                event.last_updated= req.body.last_updated ;
-                event.name=req.body.name;
-                event.place= req.body.place ;
-                event.privacy=req.body.privacy;
-                event.start=req.body.start;
-                event.type=req.body.type;
-                event.listconferences=req.body.listconferences;
-                event.save(function(err, eventSaved) {
-                    if (err){
-                        res.send(err);
+                }else{
+                    if(req.body.description) event.description = req.body.description;
+                    if(typeof req.body.enable === "boolean"){
+                        event.enable = req.body.enable;
                     }else{
-                        //send notification
-                        if(req.body.notificationText){
-                            getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
-                                if(err){
-                                    res.json({ message: 'Event updated! Error sending notification' });
-                                }else{
-                                    if(id_users.length != 0){
-                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
-                                            if(err){
-                                                console.log(err);
-                                                logger.error(err);
-                                                res.json({ message: 'Event updated! Error notifying users' });
-                                            }else{
-                                                res.json({ message: 'Event updated! Notification was sent' });
-                                            }
-                                        });
-                                    }else{
-                                        res.json({ message: 'Event updated! No users found to notify' });
-                                    }
-                                }
-                            });
-                        }else{
-                            res.json({ message: 'Event updated! No notification sent' });
-                        }
+                        event.enable = false;
                     }
-                });
+                    if(req.body.end) event.end= req.body.end;
+                    if(req.body.name) event.name=req.body.name;
+                    if(req.body.place) event.place= req.body.place;
+                    if(req.body.start) event.start=req.body.start;
+                    if(req.body.type) event.type=req.body.type;
 
+                    if(req.body.listconferences) event.listconferences = req.body.listconferences;
+                    if(req.body.groupsID) event.groupsID= req.body.groupsID;
+
+                    event.last_updated= Date.now();
+
+                    event.save(function(err, eventSaved) {
+                        if (err){
+                            res.send(err);
+                        }else{
+                            //send notification
+                            if(req.body.notificationText){
+                                getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
+                                    if(err){
+                                        res.json({ message: 'Event updated! Error sending notification' });
+                                    }else{
+                                        if(id_users.length != 0){
+                                            sendPushNotification(req.body.notificationText, id_users, function (err, success) {
+                                                if(err){
+                                                    console.log(err);
+                                                    logger.error(err);
+                                                    res.json({ message: 'Event updated! Error notifying users' });
+                                                }else{
+                                                    res.json({ message: 'Event updated! Notification was sent' });
+                                                }
+                                            });
+                                        }else{
+                                            res.json({ message: 'Event updated! No users found to notify' });
+                                        }
+                                    }
+                                });
+                            }else{
+                                res.json({ message: 'Event updated! No notification sent' });
+                            }
+                        }
+                    });
+                }
             });
         })
         .delete(function(req, res) {
