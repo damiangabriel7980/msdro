@@ -613,6 +613,7 @@ gulp.task('breakGroups', function () {
                             display_name: group.display_name,
                             description: group.description,
                             image_path: group.image_path,
+                            content_specific: group.display_name!="Default"?group.content_specific:false,
                             profession: profession._id
                         }, function (err, inserted) {
                             if(err){
@@ -651,8 +652,16 @@ gulp.task('breakGroups', function () {
             return null;
         };
 
+        var getIdsToAdd = function (documents) {
+            var ret = [];
+            for(var i=0; i<documents.length; i++){
+                ret.push(documents[i]._id.toString());
+            }
+            return ret;
+        };
+
         var refactorConnections = function (associationsOldGroups, newProAssignations, callbackMaster) {
-            var arrayConnected = ["articles", "calendar-events", "multimedia", "users"];
+            var arrayConnected = ["articles", "calendar-events", "multimedia", "users","products"];
             async.each(arrayConnected, function (connected, callbackConnectedAll) {
                 db.collection(connected).find({}).toArray(function (err, documents) {
                     if(err){
@@ -729,7 +738,6 @@ gulp.task('breakGroups', function () {
                                         console.log("New groupsID:");
                                         console.log(newConnections);
                                         console.log("========================== END ENTRY");
-                                        callbackEachDocument();
                                     }else{
                                         //if there is no profession assigned to an article, assign default
                                         if(foundProfessions.length == 0){
@@ -766,8 +774,16 @@ gulp.task('breakGroups', function () {
                                         console.log("New groupsID:");
                                         console.log(newConnections);
                                         console.log("========================== END ENTRY");
-                                        callbackEachDocument();
                                     }
+
+                                    //update with new ids
+                                    db.collection(connected).update({_id: document._id}, {$set: {groupsID: getIdsToAdd(newConnections)}}, function (err) {
+                                        if(err){
+                                            callbackEachDocument(err);
+                                        }else{
+                                            callbackEachDocument();
+                                        }
+                                    });
 
                                 });
                             }

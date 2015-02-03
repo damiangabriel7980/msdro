@@ -10,7 +10,6 @@
 cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,ngTableParams,$filter,$modal){
     EventsAdminService.getAll.query().$promise.then(function(result){
         var events = result;
-        console.log(events);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -74,7 +73,6 @@ cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAd
     });
 
     EventsAdminService.getAllTalks.query().$promise.then(function(resp){
-        console.log(resp);
         $scope.talks=resp;
         $scope.tableParamsTalks = new ngTableParams({
             page: 1,            // show first page

@@ -17,6 +17,9 @@ cloudAdminServices.factory('GroupsService', ['$resource', function($resource){
         getAllGroups: $resource('api/admin/users/groups', {}, {
             query: { method: 'GET', isArray: true }
         }),
+        getProfessions: $resource('api/admin/users/professions', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
         getAllUsers: $resource('api/admin/users/users', {}, {
             query: { method: 'GET', isArray: true }
         }),
@@ -160,6 +163,9 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
         getAll: $resource('api/admin/content', {}, {
             query: { method: 'GET', isArray: false },
             save: { method: 'POST'}
+        }),
+        getAll: $resource('api/admin/groupsByIds', {}, {
+            query: { method: 'POST', isArray: true }
         }),
         deleteOrUpdateContent:$resource('api/admin/content/:id', {id: "@id"}, {
             getContent: {method: 'GET', isArray: false},

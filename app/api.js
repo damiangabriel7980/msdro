@@ -24,6 +24,7 @@ var Topics = require('./models/qa_topics');
 var AnswerGivers = require('./models/qa_answerGivers');
 var Threads = require('./models/qa_threads');
 var qaMessages = require('./models/qa_messages');
+var Professions = require('./models/professions');
 
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
@@ -545,7 +546,19 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/admin/users/groups')
 
         .get(function(req, res) {
-            UserGroup.find({}, {display_name: 1, description: 1} ,function(err, cont) {
+            UserGroup.find({}, {display_name: 1, description: 1, profession: 1}).populate('profession').exec(function(err, cont) {
+                if(err) {
+                    logger.error(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/admin/users/professions')
+
+        .get(function(req, res) {
+            Professions.find({}, function(err, cont) {
                 if(err) {
                     logger.error(err);
                     res.send(err);
@@ -557,7 +570,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/admin/users/groupDetails/:id')
 
         .get(function(req, res) {
-            UserGroup.find({_id: req.params.id}, function(err, cont) {
+            UserGroup.find({_id: req.params.id}).populate('profession').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }else{
@@ -614,35 +627,44 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     ans.message = "Numele trebuie sa aiba doar caractere, minim 3";
                     res.json(ans);
                 }else{
-                    //add group
-                    new UserGroup(data.group).save(function (err, inserted) {
-                        if(err){
-                            logger.error(err);
-                            ans.error = true;
-                            ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
-                            res.json(ans);
-                        }else{
-                            var idGroupInserted = inserted._id.toString();
-                            //update users to point to this group
-                            //extract id's from users
-                            var ids = [];
-                            for(var i=0; i<data.users.length; i++){
-                                ids.push(data.users[i]._id);
-                            }
-                            connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
-                                if(err){
-                                    logger.error(err);
-                                    ans.error = true;
-                                    ans.message = "Eroare la adaugarea userslor noi in grup.";
-                                    res.json(ans);
-                                }else{
-                                    ans.error = false;
-                                    ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
-                                    res.json(ans);
+                    //validate profession
+                    var profession = (data.group.profession||"").toString();
+                    if(profession.length == 24){
+                        data.group.profession = mongoose.Types.ObjectId(profession);
+                        //add group
+                        new UserGroup(data.group).save(function (err, inserted) {
+                            if(err){
+                                logger.error(err);
+                                ans.error = true;
+                                ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
+                                res.json(ans);
+                            }else{
+                                var idGroupInserted = inserted._id.toString();
+                                //update users to point to this group
+                                //extract id's from users
+                                var ids = [];
+                                for(var i=0; i<data.users.length; i++){
+                                    ids.push(data.users[i]._id);
                                 }
-                            })
-                        }
-                    });
+                                connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
+                                    if(err){
+                                        logger.error(err);
+                                        ans.error = true;
+                                        ans.message = "Eroare la adaugarea userslor noi in grup.";
+                                        res.json(ans);
+                                    }else{
+                                        ans.error = false;
+                                        ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
+                                        res.json(ans);
+                                    }
+                                })
+                            }
+                        });
+                    }else{
+                        ans.error = true;
+                        ans.message = "Selectati o profesie";
+                        res.json(ans);
+                    }
                 }
             }
         }
@@ -1362,21 +1384,21 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     router.route('/admin/products')
         .get(function(req, res) {
-            Products.find({}).populate("therapeutic-areasID").exec(function(err, cont) {
+            Products.find({}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
                 else{
                     var products={};
                     products['productList']=cont;
-                    console.log(products['productList'][0]);
-                    UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
+                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
                         if(err) {
                             logger.error(err);
                             res.send(err);
+                        }else{
+                            products['groups']=cont2;
+                            res.json(products);
                         }
-                        products['groups']=cont2;
-                        res.json(products);
                     });
                 }
 
@@ -1384,68 +1406,73 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .post(function(req, res) {
 
-            var product = new Products(); 		// create a new instance of the Bear model
-            product.name = req.body.name;  // set the bears name (comes from the request)
-            product.description=req.body.description ;
-            product.enable= req.body.enable     ;
-            product.file_path= req.body.file_path  ;
-            product.image_path= req.body.image_path ;
-            product.last_updated=req.body.last_updated;
-            var serializedAreas = [];
-            for(var i=0; i<req.body['therapeutic-areasID'].length; i++){
-                serializedAreas.push(req.body['therapeutic-areasID'][i].id.toString());
-            }
-            product['therapeutic-areasID']= serializedAreas ;
-            product.groupsID= req.body.groupsID;
-            product.save(function(err) {
+            var product = new Products();
+
+            if(req.body.name) product.name = req.body.name;
+            if(req.body.description) product.description=req.body.description;
+            if(req.body.enable) product.enable= req.body.enable;
+            if(req.body.file_path) product.file_path= req.body.file_path;
+            if(req.body.image_path) product.image_path= req.body.image_path;
+            if(req.body['therapeutic-areasID']) product['therapeutic-areasID']= req.body['therapeutic-areasID'];
+            if(req.body.groupsID) product.groupsID= req.body.groupsID;
+
+            product.last_updated=Date.now();
+
+            product.save(function(err, saved) {
                 if (err)
                     res.send(err);
                 else
-                    res.json({ message: 'Product created!' });
+                    res.json({ message: 'Product created!' , saved: saved});
             });
 
         });
+
     router.route('/admin/products/:id')
         .get(function(req, res) {
-            Products.findById(req.params.id, function(err, product) {
-                if (err)
+            console.log("asasa");
+            Products.findOne({_id: req.params.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                if (err){
                     res.send(err);
-                res.json(product);
+                }else{
+                    res.json(product);
+                }
             });
         })
         .put(function(req, res) {
 
             Products.findById(req.params.id, function(err, product) {
-
-                if (err)
+                if (err){
                     res.send(err);
+                }else{
+                    if(req.body.name) product.name = req.body.name;
+                    if(req.body.description) product.description = req.body.description;
+                    if(typeof req.body.enable === "boolean") product.enable = req.body.enable;
+                    if(req.body.file_path) product.file_path = req.body.file_path;
+                    if(req.body.image_path) product.image_path = req.body.image_path;
+                    if(req.body['therapeutic-areasID']) product['therapeutic-areasID'] = req.body['therapeutic-areasID'];
+                    if(req.body.groupsID) product.groupsID = req.body.groupsID;
 
-                product.name = req.body.name;  // set the bears name (comes from the request)
-                product.description=req.body.description ;
-                product.enable= req.body.enable     ;
-                product.file_path= req.body.file_path  ;
-                product.image_path= req.body.image_path ;
-                product.last_updated=req.body.last_updated;
-                product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
-                product.groupsID= req.body.groupsID;
-                // save the bear
-                product.save(function(err) {
-                    if (err)
-                        res.send(err);
+                    product.last_updated = Date.now();
 
-                    res.json({ message: 'Product updated!' });
-                });
-
+                    product.save(function(err, saved) {
+                        if (err){
+                            res.send(err);
+                        }else{
+                            res.json({ message: 'Product updated!' , saved: saved});
+                        }
+                    });
+                }
             });
         })
         .delete(function(req, res) {
             Products.remove({
                 _id: req.params.id
             }, function(err,prod) {
-                if (err)
+                if (err){
                     res.send(err);
-
-                res.json({ message: 'Successfully deleted' });
+                }else{
+                    res.json({ message: 'Successfully deleted' });
+                }
             });
         });
 
@@ -1459,7 +1486,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 else {
                     var contents={};
                     contents['content']=cont;
-                    UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
+                    UserGroup.find({}, {display_name: 1, profession: 1}).populate('profession').exec(function(err, cont2) {
                         if(err) {
                             logger.error(err);
                             res.send(err);
@@ -1471,30 +1498,33 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         })
         .post(function(req, res) {
-            var content = new Content(); 		// create a new instance of the Bear model
-            content.title = req.body.title;  // set the bears name (comes from the request)
-            content.author=req.body.author ;
-            content.description= req.body.description     ;
-            content.text= req.body.text  ;
-            content.type= req.body.type ;
-            content.last_updated=req.body.last_updated;
-            content.version= req.body.version ;
-            content.enable=req.body.enable;
-            content.image_path=req.body.image_path;
-            content.groupsID=req.body.groupsID;
-            content.save(function(err,result) {
-                if (err)
-                {
+            var content = new Content(req.body);
+            content.enable = false;
+            content.last_updated = Date.now();
+            content.save(function(err,saved) {
+                if (err){
                     logger.error(err);
                     res.send(err);
+                }else{
+                    res.json({ message: 'Content created!' , saved: saved});
                 }
-                else{
-                    res.json({ message: 'Content created!' });
-                }
-
             });
-
         });
+
+    router.route('/admin/content/groupsByIds')
+        .post(function (req, res) {
+            var ids = req.body.ids || [];
+            UserGroup.find({_id: {$in: ids}}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    res.statusCode = 400;
+                    res.end();
+                }else{
+                    console.log(groups);
+                    res.send(groups);
+                }
+            });
+        });
+
     router.route('/admin/content/:id')
 
         .get(function(req, res) {
@@ -1515,24 +1545,25 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
                 if (err) {
                     res.send(err);
+                }else{
+                    if(req.body.title) content.title = req.body.title;
+                    if(req.body.author) content.author = req.body.author;
+                    if(req.body.description) content.description = req.body.description;
+                    if(req.body.text) content.text = req.body.text;
+                    if(req.body.type) content.type = req.body.type;
+                    if(req.body.groupsID) content.groupsID = req.body.groupsID;
+                    if(typeof req.body.enable === "boolean") content.enable = req.body.enable;
+
+                    content.last_updated = Date.now();
+
+                    content.save(function(err, saved) {
+                        if (err){
+                            res.send(err);
+                        }else{
+                            res.json({ message: 'Content updated!' , newContent: saved});
+                        }
+                    });
                 }
-                content.title = req.body.title;  // set the bears name (comes from the request)
-                content.author=req.body.author ;
-                content.description= req.body.description     ;
-                content.text= req.body.text  ;
-                content.type= req.body.type ;
-                content.last_updated=req.body.last_updated;
-                content.version= req.body.version ;
-                content.enable=req.body.enable;
-                content.image_path=req.body.image_path;
-                content.groupsID=req.body.groupsID;
-                content.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Content updated!' });
-                });
-
             });
         })
         .delete(function(req, res) {
@@ -1571,23 +1602,31 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .post(function(req, res) {
 
-            var event = new Events(); 		// create a new instance of the Bear model
-            event.description = req.body.description;  // set the bears name (comes from the request)
-            event.enable=req.body.enable ;
-            event.end= req.body.end     ;
-            event.groupsID= req.body.groupsID  ;
-            event.last_updated= req.body.last_updated ;
-            event.name=req.body.name;
-            event.place= req.body.place ;
-            event.privacy=req.body.privacy;
-            event.start=req.body.start;
-            event.type=req.body.type;
-            event.listconferences=req.body.listconferences;
-            event.save(function(err) {
-                if (err)
-                    res.send(err);
+            var event = new Events();
 
-                res.json({ message: 'Event created!' });
+            if(req.body.description) event.description = req.body.description;
+            if(typeof req.body.enable === "boolean"){
+                event.enable = req.body.enable;
+            }else{
+                event.enable = false;
+            }
+            if(req.body.end) event.end= req.body.end;
+            if(req.body.name) event.name=req.body.name;
+            if(req.body.place) event.place= req.body.place;
+            if(req.body.start) event.start=req.body.start;
+            if(req.body.type) event.type=req.body.type;
+
+            if(req.body.listconferences) event.listconferences = req.body.listconferences;
+            if(req.body.groupsID) event.groupsID= req.body.groupsID;
+
+            event.last_updated = Date.now();
+
+            event.save(function(err, saved) {
+                if (err){
+                    res.send(err);
+                }else{
+                    res.json({ message: 'Event created!' , saved: saved});
+                }
             });
 
         });
@@ -1604,14 +1643,11 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/admin/events/:id')
 
         .get(function(req, res) {
-            Events.find({_id:req.params.id}).populate('listconferences').exec(function(err, cont) {
+            Events.findOne({_id:req.params.id}).populate('listconferences').populate('groupsID').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
                 }else{
-                    res.json(null);
+                    res.json(cont);
                 }
             })
         })
@@ -1619,51 +1655,57 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
             Events.findById(req.params.id, function(err, event) {
 
-                if (err)
+                if (err){
                     res.send(err);
-
-                event.description = req.body.description;  // set the bears name (comes from the request)
-                event.enable=req.body.enable ;
-                event.end= req.body.end     ;
-                event.groupsID= req.body.groupsID  ;
-                event.last_updated= req.body.last_updated ;
-                event.name=req.body.name;
-                event.place= req.body.place ;
-                event.privacy=req.body.privacy;
-                event.start=req.body.start;
-                event.type=req.body.type;
-                event.listconferences=req.body.listconferences;
-                event.save(function(err, eventSaved) {
-                    if (err){
-                        res.send(err);
+                }else{
+                    if(req.body.description) event.description = req.body.description;
+                    if(typeof req.body.enable === "boolean"){
+                        event.enable = req.body.enable;
                     }else{
-                        //send notification
-                        if(req.body.notificationText){
-                            getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
-                                if(err){
-                                    res.json({ message: 'Event updated! Error sending notification' });
-                                }else{
-                                    if(id_users.length != 0){
-                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
-                                            if(err){
-                                                console.log(err);
-                                                logger.error(err);
-                                                res.json({ message: 'Event updated! Error notifying users' });
-                                            }else{
-                                                res.json({ message: 'Event updated! Notification was sent' });
-                                            }
-                                        });
-                                    }else{
-                                        res.json({ message: 'Event updated! No users found to notify' });
-                                    }
-                                }
-                            });
-                        }else{
-                            res.json({ message: 'Event updated! No notification sent' });
-                        }
+                        event.enable = false;
                     }
-                });
+                    if(req.body.end) event.end= req.body.end;
+                    if(req.body.name) event.name=req.body.name;
+                    if(req.body.place) event.place= req.body.place;
+                    if(req.body.start) event.start=req.body.start;
+                    if(req.body.type) event.type=req.body.type;
 
+                    if(req.body.listconferences) event.listconferences = req.body.listconferences;
+                    if(req.body.groupsID) event.groupsID= req.body.groupsID;
+
+                    event.last_updated= Date.now();
+
+                    event.save(function(err, eventSaved) {
+                        if (err){
+                            res.send(err);
+                        }else{
+                            //send notification
+                            if(req.body.notificationText){
+                                getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
+                                    if(err){
+                                        res.json({ message: 'Event updated! Error sending notification' });
+                                    }else{
+                                        if(id_users.length != 0){
+                                            sendPushNotification(req.body.notificationText, id_users, function (err, success) {
+                                                if(err){
+                                                    console.log(err);
+                                                    logger.error(err);
+                                                    res.json({ message: 'Event updated! Error notifying users' });
+                                                }else{
+                                                    res.json({ message: 'Event updated! Notification was sent' });
+                                                }
+                                            });
+                                        }else{
+                                            res.json({ message: 'Event updated! No users found to notify' });
+                                        }
+                                    }
+                                });
+                            }else{
+                                res.json({ message: 'Event updated! No notification sent' });
+                            }
+                        }
+                    });
+                }
             });
         })
         .delete(function(req, res) {
@@ -3229,8 +3271,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/products/productsByArea')
 
         .post(function(req, res) {
-            console.log(req.body.id);
-            console.log(req.body.specialGroup);
+
             var test = req.body.id.toString();
             if(test!=0)
             {
@@ -3242,24 +3283,18 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         if (req.body.specialGroup) {
                             forGroups.push(req.body.specialGroup);
                         }
-                        console.log(req.body.specialGroup);
-                        console.log(test);
                         Therapeutic_Area.find({_id:test}).exec(function(err,response){
                             var TArea= response[0];
                             if(TArea.has_children==true)
                             {
-                                Therapeutic_Area.find({"therapeutic-areasID": {$in :[test]}}).exec(function(err,response){
-                                    var children=response;
-                                    getStringIds(children, function(ids){
-                                    console.log(ids);
-                                    console.log(forGroups);
+                                Therapeutic_Area.find({$or: [{_id:req.body.id},{"therapeutic-areasID": {$in :[test]}}]}).exec(function(err,response){
+                                    getStringIds(response, function(ids){
                                     Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
                                         if(err) {
                                             res.send(err);
                                         }
                                         else
                                         {
-                                            console.log(cont);
                                             res.json(cont);
                                         }
                                     })
@@ -3275,7 +3310,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                     }
                                     else
                                     {
-                                        console.log(cont);
                                         res.json(cont);
                                     }
                                 })
@@ -3295,8 +3329,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         if (req.body.specialGroup) {
                             forGroups.push(req.body.specialGroup);
                         }
-                        console.log(req.body.specialGroup.toString());
-                        console.log(forGroups);
                         //get allowed articles for user
                         Products.find({groupsID: {$in: forGroups}}, function(err, cont) {
                             if(err) {
@@ -3304,7 +3336,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             }
                             else
                             {
-                                console.log(cont);
                                 res.json(cont);
                             }
                         })

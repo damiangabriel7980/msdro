@@ -12,6 +12,7 @@ cloudAdminControllers.controller('EditGroupController', ['$scope','GroupsService
         $scope.contentSpecific = resp.content_specific?resp.content_specific:false;
         $scope.logo = resp.image_path;
         $scope.idGroup = resp._id;
+        $scope.profession = resp.profession.display_name;
         GroupsService.getAllUsers.query().$promise.then(function (resp) {
             $scope.users = resp;
             GroupsService.getAllUsersByGroup.query({id: idToEdit}).$promise.then(function (resp) {
