@@ -17,6 +17,8 @@ angular.module('myMultipleSelect', []).directive('myMultipleSelect', function() 
 
             var trackBy = attrs.trackBy;
             scope.displayBy = attrs.displayBy;
+            var splitBy = attrs.splitBy;
+            scope.split = splitBy?true:false;
 
             scope.$watch('allObjects', function () {
                 initialize();
@@ -25,6 +27,14 @@ angular.module('myMultipleSelect', []).directive('myMultipleSelect', function() 
             scope.$watch('selectedObjects', function () {
                 initialize();
             });
+
+            var getValueFromKeyChain = function (obj, chain) {
+                for(var i=0; i<chain.length; i++){
+                    obj=obj[chain[i]];
+                    if(!obj) return null;
+                }
+                return obj;
+            };
             
             var initialize = function () {
                 if(scope.allObjects && scope.selectedObjects && !initialized){
@@ -35,6 +45,23 @@ angular.module('myMultipleSelect', []).directive('myMultipleSelect', function() 
                         }else{
                             scope.allObjects[i]['selected'] = false;
                         }
+                    }
+                    if(splitBy){
+                        var tree = {};
+                        var branches = [];
+                        var keyChain = splitBy.split('.');
+                        for(var j=0; j<scope.allObjects.length; j++){
+                            var category = getValueFromKeyChain(scope.allObjects[j], keyChain);
+                            if(category){
+                                if(!tree[category]){
+                                    tree[category] = [];
+                                    branches.push(category);
+                                }
+                                tree[category].push(scope.allObjects[j]);
+                            }
+                        }
+                        scope.branches = branches;
+                        scope.tree = tree;
                     }
                 }
             };
