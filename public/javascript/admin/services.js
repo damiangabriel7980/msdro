@@ -167,7 +167,7 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
         getGroupsByIds: $resource('api/admin/content/groupsByIds', {}, {
             query: { method: 'POST', isArray: true }
         }),
-        deleteOrUpdateContent:$resource('api/admin/content/:id', {id: "@id"}, {
+        deleteOrUpdateContent:$resource('api/admin/content/:id', {}, {
             getContent: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}

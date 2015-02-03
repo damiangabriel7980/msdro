@@ -22,8 +22,10 @@
             </td>
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
-                    <button ng-if="cont.enable==false" ng-click="enableArticle(cont,cont._id)" class="btn btn-danger"><i class="glyphicon glyphicon-lock"></i></button>
-                    <button ng-if="cont.enable==true" ng-click="enableArticle(cont,cont._id)" class="btn btn-warning"><i class="glyphicon glyphicon-lock"></i></button>
+                    <button ng-click="toggleArticle(cont._id,cont.enable)"
+                            class="btn" ng-class="{'btn-danger':cont.enable, 'btn-default':!cont.enable}">
+                        <i class="glyphicon glyphicon-lock"></i>
+                    </button>
                     <button ng-click="deleteArticle(cont._id)" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
                     <button ng-click="updateArticle(cont._id)" class="btn btn-info"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>

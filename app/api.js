@@ -1541,13 +1541,16 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 if (err) {
                     res.send(err);
                 }else{
-                    content.title = req.body.title;
-                    content.author = req.body.author;
-                    content.description = req.body.description;
-                    content.text = req.body.text;
-                    content.type = req.body.type;
+                    if(req.body.title) content.title = req.body.title;
+                    if(req.body.author) content.author = req.body.author;
+                    if(req.body.description) content.description = req.body.description;
+                    if(req.body.text) content.text = req.body.text;
+                    if(req.body.type) content.type = req.body.type;
+                    if(req.body.groupsID) content.groupsID = req.body.groupsID;
+                    if(typeof req.body.enable === "boolean") content.enable = req.body.enable;
+
                     content.last_updated = Date.now();
-                    content.groupsID=req.body.groupsID;
+
                     content.save(function(err, saved) {
                         if (err){
                             res.send(err);

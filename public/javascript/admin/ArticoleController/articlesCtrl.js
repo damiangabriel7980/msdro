@@ -77,12 +77,23 @@ cloudAdminControllers.controller('articlesCtrl', ['$scope','$rootScope' ,'Conten
         })
     };
 
-    $scope.enableArticle=function(article,id_article){
-        if(article.enable==true)
-            article.enable=false;
-        else
-            article.enable=true;
-        ContentService.deleteOrUpdateContent.update({id:id_article},article);
+    $scope.toggleArticle = function(id, isEnabled){
+        $modal.open({
+            templateUrl: 'partials/admin/continut/toggleArticleEnabled.html',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            windowClass: 'fade',
+            controller:"ToggleArticleEnabledController",
+            resolve: {
+                idToToggle: function () {
+                    return id;
+                },
+                isEnabled: function () {
+                    return isEnabled;
+                }
+            }
+        });
     }
 
 }])
