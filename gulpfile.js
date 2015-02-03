@@ -661,7 +661,7 @@ gulp.task('breakGroups', function () {
         };
 
         var refactorConnections = function (associationsOldGroups, newProAssignations, callbackMaster) {
-            var arrayConnected = ["articles", "calendar-events", "multimedia", "users"];
+            var arrayConnected = ["articles", "calendar-events", "multimedia", "users","products"];
             async.each(arrayConnected, function (connected, callbackConnectedAll) {
                 db.collection(connected).find({}).toArray(function (err, documents) {
                     if(err){
