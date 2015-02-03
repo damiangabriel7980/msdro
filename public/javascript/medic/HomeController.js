@@ -48,7 +48,21 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
             $scope.lastIllusion=resp[0];
         }
     });
-
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtmlTrimmed=function (data) {
+        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        var newText = convertedText.split(/\s+/).slice(0,3).join(" ");
+        return $sce.trustAsHtml(newText);
+    };
+    $scope.convertAndTrustAsHtml=function (data,limit) {
+        if(limit!=0)
+            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').substring(0,limit) + '...';
+        else
+            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
     //------------------------------------------------------------------------------------------------ useful functions
     $scope.htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');
@@ -61,10 +75,6 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.toDate = function (ISOdate) {
         return new Date(ISOdate);
     };
-    $scope.trimTitle=function(str) {
-        return str.split(/\s+/).slice(0,3).join(" ");
-    };
-
     $scope.trustAsHtml = function (data) {
         return $sce.trustAsHtml(data);
     };

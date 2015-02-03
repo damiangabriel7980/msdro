@@ -7,8 +7,8 @@
                     <img class="img-responsive img-back img-thumbnail" src="{{amazon + prod.image_path}}" alt="{{prod.name}}" style="width: 100%;"/>
                 </div>
                 <div class="col-md-12 noPadding contentBlock textProduct" style="min-height: 250px;">
-                    <div class="col-md-12 noPadding MSDgreen"><h4><b>{{prod.name}}</b></h4></div>
-                    <div class="col-md-12 noPadding ">{{prod.description | htmlToPlaintext2}}...</div>
+                    <div class="col-md-12 noPadding MSDgreen"><h4><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
+                    <div class="col-md-12 noPadding " convert-special conver="prod.description" ng-bind-html="convertAndTrustAsHtml(prod.description)"></div>
                 </div>
                 <div class="col-md-12 noPadding">
                     <button class="btn btn-sm btn-info pull-right btn-more-news" ui-sref="biblioteca.produse.prodById({id:prod._id})">Detalii produs</button>

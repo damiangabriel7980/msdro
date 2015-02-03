@@ -12,6 +12,7 @@ var ProductSchema		= new Schema({
     image_path:  String,
     last_updated: Date,
     name: {type:String,es_indexed:true},
+    groupsID: Array,
     'therapeutic-areasID': Array
 });
 ProductSchema.plugin(mongoosastic,{host:'10.200.0.221',port:'9200'});
