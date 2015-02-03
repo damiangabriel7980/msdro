@@ -11,7 +11,6 @@ cloudAdminControllers.controller('articlesCtrl', ['$scope','$rootScope' ,'Conten
         $scope.groupMap={};
         for(var i =0;i<$scope.grupe.length;i++)
             $scope.groupMap[$scope.grupe[i]._id]=$scope.grupe[i].display_name;
-        console.log(result);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -56,6 +55,22 @@ cloudAdminControllers.controller('articlesCtrl', ['$scope','$rootScope' ,'Conten
             controller:"articlesDeleteCtrl",
             resolve: {
                 idToDelete: function () {
+                    return id;
+                }
+            }
+        })
+    };
+
+    $scope.updateArticle = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/continut/articoleUpdate.ejs',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            windowClass: 'fade',
+            controller:"articlesUpdateCtrl",
+            resolve: {
+                idToEdit: function () {
                     return id;
                 }
             }

@@ -1505,6 +1505,21 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             });
         });
+
+    router.route('/admin/content/groupsByIds')
+        .post(function (req, res) {
+            var ids = req.body.ids || [];
+            UserGroup.find({_id: {$in: ids}}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    res.statusCode = 400;
+                    res.end();
+                }else{
+                    console.log(groups);
+                    res.send(groups);
+                }
+            });
+        });
+
     router.route('/admin/content/:id')
 
         .get(function(req, res) {
@@ -1525,24 +1540,22 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
                 if (err) {
                     res.send(err);
+                }else{
+                    content.title = req.body.title;
+                    content.author = req.body.author;
+                    content.description = req.body.description;
+                    content.text = req.body.text;
+                    content.type = req.body.type;
+                    content.last_updated = Date.now();
+                    content.groupsID=req.body.groupsID;
+                    content.save(function(err, saved) {
+                        if (err){
+                            res.send(err);
+                        }else{
+                            res.json({ message: 'Content updated!' , newContent: saved});
+                        }
+                    });
                 }
-                content.title = req.body.title;  // set the bears name (comes from the request)
-                content.author=req.body.author ;
-                content.description= req.body.description     ;
-                content.text= req.body.text  ;
-                content.type= req.body.type ;
-                content.last_updated=req.body.last_updated;
-                content.version= req.body.version ;
-                content.enable=req.body.enable;
-                content.image_path=req.body.image_path;
-                content.groupsID=req.body.groupsID;
-                content.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Content updated!' });
-                });
-
             });
         })
         .delete(function(req, res) {
