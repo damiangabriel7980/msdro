@@ -62,8 +62,8 @@ cloudAdminServices.factory('HomeService', ['$resource', function($resource){
         getUserMultimedia: $resource('api/userHomeMultimedia/', {}, {
             query: { method: 'POST', isArray: true }
         }),
-        getCarousel: $resource('api/userHomeCarousel/:specialGroup', {}, {
-            query: { method: 'GET', isArray: true }
+        getCarousel: $resource('api/userHomeCarousel/', {}, {
+            query: { method: 'POST', isArray: true }
         }),
         getSearchResults: $resource('api/userHomeSearch/', {}, {
             query: { method: 'POST', isArray: false }

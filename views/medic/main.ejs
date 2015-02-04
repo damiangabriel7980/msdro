@@ -156,15 +156,15 @@
                     </ul>
                 </li>
             </ul>
-            <!--<ul class="nav navbar-nav navbar-right" ng-if="specialGroups.length==0">-->
-                <!--<form class="navbar-form" role="search">-->
-                    <!--<div class="input-group expandSearchNoSpecial">-->
-                        <!--<input type="text" class="form-control popSearch" ng-enter="searchText()" placeholder="Search" name="srch-term" id="srch-term" ng-model="$parent.textToSearch">-->
-                        <!--<span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>-->
-                    <!--</div>-->
-                <!--</form>-->
+            <ul class="nav navbar-nav navbar-right" ng-if="specialGroups.length==0">
+                <form class="navbar-form" role="search">
+                    <div class="input-group expandSearchNoSpecial">
+                        <input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
+                        <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
+                    </div>
+                </form>
 
-            <!--</ul>-->
+            </ul>
             <ul class="nav navbar-nav navbar-right  dropdown margintop8px" ng-if="specialGroups.length!=0">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>

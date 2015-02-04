@@ -41,7 +41,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         $scope.multimedia = resp;
     });
 
-    HomeService.getCarousel.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
+    HomeService.getCarousel.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
         $scope.HomeCarousel=resp;
         if($scope.HomeCarousel[0]){
             $scope.firstIllusion=resp[$scope.HomeCarousel.length-1];

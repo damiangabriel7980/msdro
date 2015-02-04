@@ -3095,15 +3095,14 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/userHomeCarousel/:specialGroup')
-        .get(function (req,res) {
+    router.route('/userHomeCarousel/')
+        .post(function (req,res) {
             getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
                 }else{
                     var forGroups = nonSpecificGroupsIds;
-                    console.log(forGroups);
-                    if(req.params.specialGroup){
+                    if(req.body.specialGroup){
                         forGroups.push(req.params.specialGroup);
                     }
                     //get allowed articles for user
@@ -3119,6 +3118,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                     if(err){
                                         res.send(err);
                                     }else{
+                                        console.log(images);
                                         res.send(images);
                                     }
                                 })
