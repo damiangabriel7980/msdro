@@ -7131,6 +7131,15 @@ hr {
   padding: 6px 12px;
   border: 1px solid #cccccc;
 }
+.expandSearchNoSpecial {
+  position: absolute;
+  right: 85px;
+}
+.expandSearchNoSpecial .newWidthPopSearch {
+  width: 330px !important;
+  padding: 6px 12px;
+  border: 1px solid #cccccc;
+}
 .expandSearchOther {
   position: absolute;
   right: 60px;
@@ -7143,6 +7152,6 @@ hr {
 .margintop10px {
   margin-top: 10px;
 }
-.margintop35px {
-  margin-top: 35px;
+.paddLeft45px {
+  padding-left: 45px;
 }
