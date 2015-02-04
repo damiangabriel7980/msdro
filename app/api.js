@@ -2873,8 +2873,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var newData = req.body.newData;
             var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
-            console.log(newData.firstName);
-            console.log(escapeHtmlEntities(newData.firstName));
             //check name
             if((!namePatt.test(newData.firstName.toString())) || (!namePatt.test(newData.lastName.toString()))){
                 ans.error = true;
