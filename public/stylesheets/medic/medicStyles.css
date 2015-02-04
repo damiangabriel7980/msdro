@@ -7108,6 +7108,11 @@ hr {
   margin-top: 5px;
   left: 0 !important;
 }
+.myProfileNoSpecial {
+  right: 0 !important;
+  margin-top: 5px;
+  left: auto;
+}
 .popSearch {
   height: 34px;
   width: 0px !important;

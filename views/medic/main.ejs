@@ -165,11 +165,20 @@
                 </form>
 
             </ul>
-            <ul class="nav navbar-nav navbar-right  dropdown margintop8px">
+            <ul class="nav navbar-nav navbar-right  dropdown margintop8px" ng-if="specialGroups.length!=0">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>
                 </a>
                 <ul class="dropdown-menu myProfile myMenu greyBackground">
+                    <li><a ng-click="showProfile()">Profile</a></li>
+                    <li><a href="logout">Sign Out</a></li>
+                </ul>
+            </ul>
+            <ul class="nav navbar-nav navbar-right  dropdown margintop8px" ng-if="specialGroups.length==0">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-user"></i>
+                </a>
+                <ul class="dropdown-menu myProfileNoSpecial myMenu greyBackground">
                     <li><a ng-click="showProfile()">Profile</a></li>
                     <li><a href="logout">Sign Out</a></li>
                 </ul>
