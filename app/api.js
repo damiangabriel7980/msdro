@@ -3142,83 +3142,114 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             })
         });
-    router.route('/userHomeSearch/:data')
-        .get(function(req,res){
-            var data=req.params.data;
+    router.route('/userHomeSearch')
+        .post(function(req,res){
+            var data=req.body.data;
             var arr_of_items=[Products,Multimedia,Quizes,Content,Events];
             var ObjectOfResults={};
             var checker=0;
-            async.each(arr_of_items, function (item, callback) {
-                item.search({
-
-                    query_string: {
-                        query: data
-
-                    }
-
-                },{hydrate: true,groupsID: {$in: req.user.groupsID},enable: true}, function(err, results) {
-                    if(err)
-                    {
-                        res.json(err);
-                        return;
-                    }
-                    else
-                    {
-                        if(results.hits.hits.length===0)
-                            checker+=1;
-                        else
-                        {
-                            //var myResults=[];
-                            //for(var i=0;i<results.hits.hits.length;i++)
-                            //{
-                            //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
-                            //        myResults.push(results.hits.hits[i]);
-                            //}
-                            ObjectOfResults[item.modelName]=results.hits.hits;
-                        }
-
-                    }
-
-
-                    callback();
-                });
-            }, function (err) {
-               if(err)
-                    res.json(err);
-                else
-               {
-                    if(checker===5)
-                        res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
-                   else{
-                        console.log(ObjectOfResults);
-                        res.json(ObjectOfResults);
-                    }
-
-               }
-
-            })
-
-        });
-    router.route('/userHomeEvents')
-        .get(function (req,res) {
-            Events.find({groupsID: {$in: req.user.groupsID}, start: {$gte: new Date()}, enable: {$ne: false}}).sort({start: 1}).exec(function (err, events) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
-                }else{
-                    res.json(events);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected);
+                    }
+                    async.each(arr_of_items, function (item, callback) {
+                        item.search({
+
+                            query_string: {
+                                query: data
+
+                            }
+
+                        },{hydrate: true,groupsID: {$in: forGroups},enable: true}, function(err, results) {
+                            if(err)
+                            {
+                                res.json(err);
+                                return;
+                            }
+                            else
+                            {
+                                if(results.hits.hits.length===0)
+                                    checker+=1;
+                                else
+                                {
+                                    //var myResults=[];
+                                    //for(var i=0;i<results.hits.hits.length;i++)
+                                    //{
+                                    //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
+                                    //        myResults.push(results.hits.hits[i]);
+                                    //}
+                                    ObjectOfResults[item.modelName]=results.hits.hits;
+                                }
+
+                            }
+
+
+                            callback();
+                        });
+                    }, function (err) {
+                        if(err)
+                            res.json(err);
+                        else
+                        {
+                            if(checker===5)
+                                res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
+                            else{
+                                console.log(ObjectOfResults);
+                                res.json(ObjectOfResults);
+                            }
+
+                        }
+
+                    })
                 }
             });
+        });
+    router.route('/userHomeEvents')
+        .post(function (req,res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
+                if(err){
+                    res.send(err);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected);
+                    }
+                    Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: {$ne: false}}).sort({start: 1}).exec(function (err, events) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            res.json(events);
+                        }
+                    });
+                }
+            });
+
         });
 
     router.route('/userHomeMultimedia')
-        .get(function (req,res) {
-            Multimedia.find({groupsID: {$in: req.user.groupsID}, enable: {$ne: false}}, function (err, multimedia) {
+        .post(function (req,res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
-                }else{
-                    res.json(multimedia);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected);
+                    }
+                    Multimedia.find({groupsID: {$in: forGroups}, enable: {$ne: false}}, function (err, multimedia) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            res.json(multimedia);
+                        }
+                    });
                 }
             });
+
         });
 
     router.route('/userHomeNews')

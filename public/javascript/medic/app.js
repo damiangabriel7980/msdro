@@ -190,7 +190,7 @@ cloudAdminApp.run(
                 if($rootScope.textToSearch==="")
                     return;
                 else
-                    $state.go('homeSearch',{data:$rootScope.textToSearch});
+                    $state.go('homeSearch',{data:$rootScope.textToSearch,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null});
             };
             $rootScope.showInput=false;
                 $rootScope.animateInput=function(){

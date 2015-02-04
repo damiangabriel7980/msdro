@@ -51,7 +51,7 @@ cloudAdminServices.factory('ProfileService', ['$resource', function($resource){
 cloudAdminServices.factory('HomeService', ['$resource', function($resource){
     return {
         getUserEvents: $resource('api/userHomeEvents/', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'POST', isArray: true }
         }),
         getUserNews: $resource('api/userHomeNews', {}, {
             query: { method: 'POST', isArray: true }
@@ -60,13 +60,13 @@ cloudAdminServices.factory('HomeService', ['$resource', function($resource){
             query: { method: 'POST', isArray: true }
         }),
         getUserMultimedia: $resource('api/userHomeMultimedia/', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'POST', isArray: true }
         }),
         getCarousel: $resource('api/userHomeCarousel/:specialGroup', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        getSearchResults: $resource('api/userHomeSearch/:data', {}, {
-            query: { method: 'GET', isArray: false }
+        getSearchResults: $resource('api/userHomeSearch/', {}, {
+            query: { method: 'POST', isArray: false }
         }),
         getUserImage: $resource('api/userImage/', {}, {
             query: { method: 'GET', isArray: false }
