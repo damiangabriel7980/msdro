@@ -213,7 +213,6 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
             //if we have specific content group id, add it to our array
             if(specific_content_group_id) arrayOfGroupsIds.push(specific_content_group_id.toString());
             //now get user content for our array of groups
-            arrayOfGroupsIds.push(user.profession.toString());
             var myCursor = Content.find({groupsID: {$in: arrayOfGroupsIds}, enable: {$ne: false}, type: content_type});
             if(sortDescendingByAttribute){
                 var attr = {};
@@ -225,7 +224,7 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
                 if(err){
                     callback(err, null);
                 }else{
-                    console.log(arrayOfGroupsIds);
+                    //console.log(arrayOfGroupsIds);
                     callback(null, content);
                 }
             });
@@ -3109,7 +3108,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     if(req.params.specialGroup){
                         forGroups.push(req.params.specialGroup);
                     }
-                    forGroups.push(req.user.profession.toString());
                     //get allowed articles for user
                     Content.find({groupsID: {$in: forGroups}}, {_id: 1}, function (err, content) {
                         if(err){
@@ -3286,7 +3284,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         if (req.body.specialGroup) {
                             forGroups.push(req.body.specialGroup);
                         }
-                        forGroups.push(req.user.profession.toString());
                         Therapeutic_Area.find({_id:test}).exec(function(err,response){
                             var TArea= response[0];
                             if(TArea.has_children==true)
@@ -3333,7 +3330,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         if (req.body.specialGroup) {
                             forGroups.push(req.body.specialGroup);
                         }
-                        forGroups.push(req.user.profession.toString());
                         //get allowed articles for user
                         Products.find({groupsID: {$in: forGroups}}, function(err, cont) {
                             if(err) {
@@ -3378,7 +3374,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     if(req.params.specialGroup){
                         forGroups.push(req.params.specialGroup);
                     }
-                    forGroups.push(req.user.profession.toString());
                     console.log(req.params.specialGroup.toString());
                     console.log(forGroups);
                     //get allowed articles for user
@@ -3445,7 +3440,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         if (req.body.specialGroupSelected) {
                             forGroups.push(req.body.specialGroupSelected);
                         }
-                        forGroups.push(req.user.profession.toString());
                         findObj['groupsID']={$in:forGroups};
                         console.log(findObj);
                         if(req.body.id==0)
