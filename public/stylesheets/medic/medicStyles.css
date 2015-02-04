@@ -6802,6 +6802,9 @@ ul.products li {
 .padd21px {
   padding-left: 21px;
 }
+.padd25pxRight {
+  padding-right: 25px;
+}
 .padd5pxBottom {
   padding-bottom: 8px !important;
 }
@@ -7137,9 +7140,9 @@ hr {
   padding: 6px 12px;
   border: 1px solid #cccccc;
 }
-.padd25pxRight{
-    padding-right: 25px;
+.margintop10px {
+  margin-top: 10px;
 }
-.margintop10px{
-    margin-top: 10px;
+.margintop35px {
+  margin-top: 35px;
 }

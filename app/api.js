@@ -3142,7 +3142,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             })
         });
-    router.route('/userHomeSearch')
+    router.route('/userHomeSearch/')
         .post(function(req,res){
             var data=req.body.data;
             var arr_of_items=[Products,Multimedia,Quizes,Content,Events];
@@ -3156,6 +3156,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     if (req.body.specialGroupSelected) {
                         forGroups.push(req.body.specialGroupSelected);
                     }
+                    console.log(forGroups);
                     async.each(arr_of_items, function (item, callback) {
                         item.search({
 
@@ -3164,7 +3165,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
                             }
 
-                        },{hydrate: true,groupsID: {$in: forGroups},enable: true}, function(err, results) {
+                        },{hydrate: true,hydrateOptions:{find: {groupsID:{$in:forGroups},enable:true}}}, function(err, results) {
                             if(err)
                             {
                                 res.json(err);
@@ -3198,7 +3199,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             if(checker===5)
                                 res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
                             else{
-                                console.log(ObjectOfResults);
                                 res.json(ObjectOfResults);
                             }
 

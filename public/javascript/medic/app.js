@@ -24,7 +24,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             controller: 'HomeController'
         })
         .state('homeSearch',{
-            url: '/searchResults/:data',
+            url: '/searchResults',
             templateUrl: 'partials/medic/homeSearch.ejs',
             controller: 'HomeSearchController'
         })
@@ -190,7 +190,7 @@ cloudAdminApp.run(
                 if($rootScope.textToSearch==="")
                     return;
                 else
-                    $state.go('homeSearch',{data:$rootScope.textToSearch,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null});
+                    $state.go('homeSearch');
             };
             $rootScope.showInput=false;
                 $rootScope.animateInput=function(){
