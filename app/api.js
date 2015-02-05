@@ -3158,7 +3158,10 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         item.search({
 
                             query_string: {
-                                query: data
+                                query: data + '~5',
+                                default_operator: 'AND',
+                                boost: '1.2',
+                                analyze_wildcard: true
 
                             }
 

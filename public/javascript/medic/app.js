@@ -194,7 +194,7 @@ cloudAdminApp.run(
                 if($rootScope.textToSearch==="")
                     return;
                 else
-                    $state.go('homeSearch');
+                    $state.go('homeSearch',{},{reload: true});
             };
             $rootScope.showInput=false;
                 $rootScope.animateInput=function(){
