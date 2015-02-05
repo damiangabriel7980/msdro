@@ -2773,6 +2773,38 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         });
 
+    router.route('/proof/image')
+        .post(function(req,res){
+            User.findOne({_id: req.user._id}).select('+proof_path').exec(function (err, user) {
+
+                var encodedImage = req.body.encodedImage;
+                var key = "user/"+user._id+"/proof."+req.body.extension;
+
+                if(err || !user){
+                    res.json({"type":"danger","message":"Utilizatorul nu a fost gasit"});
+                }else{
+                    if(user.proof_path){
+                        res.json({"type":"success","message":"Dovada a fost deja incarcata. Va rugam asteptati primirea mail-ului de activare pe adresa "+req.user.username+". Va rugam veriicati si folder-ul de spam"});
+                    }else{
+                        addObjectS3(key, encodedImage, function (err) {
+                            if (err){
+                                console.log(err);
+                                res.json({"type":"danger","message":"Fotografia nu a putut fi salvata pe server"});
+                            }else{
+                                User.update({_id: user._id},{$set: {proof_path: key}},function (err) {
+                                    if (err){
+                                        res.json({"type":"danger","message":"Fotografia nu a putut fi salvata in baza de date"});
+                                    }else{
+                                        res.json({"type":"success","message":"Fotografia a fost salvata cu succes. In maxim 48 de ore veti primi un e-mail pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam."});
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
     router.route('/groups/specialGroups')
 
         .get(function(req, res) {
@@ -3742,6 +3774,17 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         }) ;
     });
+
+    router.route('/proof/professions')
+        .get(function (req, res) {
+            Professions.find({}).exec(function (err, professions) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(professions);
+                }
+            });
+        });
 
 
     app.use('/api', router);

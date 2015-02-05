@@ -427,7 +427,7 @@ var transportUser = function (req, res, paths, sendUserInfo) {
                 }
             });
         }else if(user.state === "PENDING"){
-            console.log("incarca dovada");
+            res.render("proof.ejs", {user: req.user});
         }
     });
 };
