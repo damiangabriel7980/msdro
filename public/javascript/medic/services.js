@@ -109,8 +109,8 @@ cloudAdminServices.factory('multimediaService', ['$resource', function($resource
 }]);
 
 cloudAdminServices.factory('eventsService', ['$resource', function($resource){
-    return $resource('api/calendar/getEvents/:specialGroup', {}, {
-        query: { method: 'GET', isArray: true }
+    return $resource('api/calendar/getEvents/', {}, {
+        query: { method: 'POST', isArray: true }
     });
 }]);
 cloudAdminServices.factory('eventsService2', ['$resource', function($resource){

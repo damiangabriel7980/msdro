@@ -105,7 +105,7 @@
 
             <ul class="nav navbar-nav">
                 <li class="dropdown" ng-class="{'active': $state.includes('noutati')}">
-                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                    <a class="dropdown-toggle " data-toggle="dropdown">
                        Noutati <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu" >
@@ -115,7 +115,7 @@
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
-                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
                         Biblioteca <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
@@ -124,9 +124,9 @@
                         <li><a class="myListItem" ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" ng-click="navCollapsed = true" target="_blank"><i class="glyphicon glyphicon-th-large white leftPosition iconLeft darkGrey"></i>&nbsp Manualul Merck <i class="glyphicon white glyphicon-chevron-right rightPosition greyColor"></i></a></li>
                     </ul>
                 </li>
-                <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" class="noPaddingRight" href="#/calendar" ng-click="navCollapsed = true">Calendar</a></li>
+                <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar" ng-click="navCollapsed = true">Calendar</a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('elearning')}">
-                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                    <a class="dropdown-toggle " data-toggle="dropdown">
                         E-learning <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
@@ -136,7 +136,7 @@
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures')}" ng-if="groupFeatures">
-                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                    <a class="dropdown-toggle " data-toggle="dropdown">
                         {{specialGroupSelected?specialGroupSelected.display_name:""}} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
@@ -146,7 +146,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-if="specialGroups.length!=0">
                 <li class="dropdown">
-                    <a class="dropdown-toggle specialGroupDropdown noPaddingRight" data-toggle="dropdown">
+                    <a class="dropdown-toggle specialGroupDropdown " data-toggle="dropdown">
                         <img ng-src="{{specialGroupSelected.image_path?pathAmazonDev+specialGroupSelected.image_path:MSDlogo}}">
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">

@@ -7129,7 +7129,7 @@ hr {
 }
 .expandSearch {
   position: absolute;
-  right: 250px;
+  right: 270px;
 }
 .expandSearch .newWidthPopSearch {
   width: 330px !important;
@@ -7147,7 +7147,7 @@ hr {
 }
 .expandSearchOther {
   position: absolute;
-  right: 60px;
+  right: 80px;
 }
 .expandSearchOther .newWidthPopSearch {
   width: 330px !important;
@@ -7165,4 +7165,7 @@ hr {
 }
 .marginMinus15 {
   margin-right: -15px;
+}
+.paddingTop5 {
+  padding-top: 5px;
 }

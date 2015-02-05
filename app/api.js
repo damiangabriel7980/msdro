@@ -2914,8 +2914,8 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {error:false};
             var job = req.body.job;
-            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$');
-            var numberPatt = new XRegExp('^[0-9]{1,5}$');
+            var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$');
+            var numberPatt = new XRegExp('^[a-zA-Z0-9\\s]{1,5}$');
             if(!numberPatt.test(job.street_number.toString())) {
                 ans.error = true;
                 ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
@@ -3395,18 +3395,17 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 res.json(cont);
             });
         });
-    router.route('/calendar/getEvents/:specialGroup')
-        .get(function(req,res) {
+    router.route('/calendar/getEvents/')
+        .post(function(req,res) {
             getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
                 }else{
                     var forGroups = nonSpecificGroupsIds;
-                    if(req.params.specialGroup){
-                        forGroups.push(req.params.specialGroup);
+                    if(req.body.specialGroup){
+                        forGroups.push(req.body.specialGroup);
                     }
-                    console.log(req.params.specialGroup.toString());
-                    console.log(forGroups);
+                   console.log(forGroups);
                     //get allowed articles for user
                     Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
                         if (err) {

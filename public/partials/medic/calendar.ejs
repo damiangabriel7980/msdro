@@ -10,12 +10,12 @@
 <div class="col-md-12">
     <div class="row-margintop20px">
         <div class="col-md-4 hidden-md padd40px">
-            <h3 class="bottomBorder">EVENIMENTE URMATOARE:</h3>
+            <h3 class="bottomBorder">EVENIMENTE URMATOARE</h3>
             <div class="col-md-12" ng-if="!events2Filtered">
                 <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
             </div>
              <div class="event blue" ng-repeat="eventim in events2Filtered">
-                    <div class="col-md-12 noPadding">
+                    <div class="col-md-12 noPadding" ng-class="$index==0?'paddingTop5':''">
                         <div class="col-md-2 noPadding padd10Bottom date2">
                             <h2 class="MSDTitleDark noMarginBottom">{{eventim.start | filter: asDate | date:'dd'}}</h2>
                             <h5 class="MSDTitleDark noMarginTop">{{eventim.start | filter: asDate | date:'MMM'}}</h5>
