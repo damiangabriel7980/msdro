@@ -24,7 +24,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             controller: 'HomeController'
         })
         .state('homeSearch',{
-            url: '/searchResults/:data',
+            url: '/searchResults',
             templateUrl: 'partials/medic/homeSearch.ejs',
             controller: 'HomeSearchController'
         })
@@ -174,7 +174,10 @@ cloudAdminApp.run(
             $rootScope.amazonBucket = sessionStorage.defaultAmazonBucket;
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/"+$rootScope.amazonBucket+"/";
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
+
             $rootScope.textToSearch="";
+
+
             $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merck_image_new.png";
 
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
@@ -186,11 +189,12 @@ cloudAdminApp.run(
                 $rootScope.currentState = to.name;
             });
             $rootScope.bottom= {showFooter:true};
-            $rootScope.searchText=function(){
+            $rootScope.searchText=function(data){
+                $rootScope.textToSearch=data;
                 if($rootScope.textToSearch==="")
                     return;
                 else
-                    $state.go('homeSearch',{data:$rootScope.textToSearch});
+                    $state.go('homeSearch',{},{reload: true});
             };
             $rootScope.showInput=false;
                 $rootScope.animateInput=function(){

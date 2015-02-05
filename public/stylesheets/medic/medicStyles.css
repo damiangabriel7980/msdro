@@ -6802,6 +6802,9 @@ ul.products li {
 .padd21px {
   padding-left: 21px;
 }
+.padd25pxRight {
+  padding-right: 25px;
+}
 .padd5pxBottom {
   padding-bottom: 8px !important;
 }
@@ -7105,6 +7108,11 @@ hr {
   margin-top: 5px;
   left: 0 !important;
 }
+.myProfileNoSpecial {
+  right: 0 !important;
+  margin-top: 5px;
+  left: auto;
+}
 .popSearch {
   height: 34px;
   width: 0px !important;
@@ -7112,7 +7120,6 @@ hr {
   border: 0px solid #cccccc;
   -webkit-transition: width 1s ease;
   /* Safari */
-
   transition: width 1s ease;
 }
 .btnSearchBefore {
@@ -7122,25 +7129,43 @@ hr {
 }
 .expandSearch {
   position: absolute;
-  right: 250px;
+  right: 270px;
 }
 .expandSearch .newWidthPopSearch {
   width: 330px !important;
   padding: 6px 12px;
   border: 1px solid #cccccc;
 }
+.expandSearchNoSpecial {
+  position: absolute;
+  right: 85px;
+}
+.expandSearchNoSpecial .newWidthPopSearch {
+  width: 330px !important;
+  padding: 6px 12px;
+  border: 1px solid #cccccc;
+}
 .expandSearchOther {
   position: absolute;
-  right: 60px;
+  right: 80px;
 }
 .expandSearchOther .newWidthPopSearch {
   width: 330px !important;
   padding: 6px 12px;
   border: 1px solid #cccccc;
 }
-.padd25pxRight{
-    padding-right: 25px;
+.margintop10px {
+  margin-top: 10px;
 }
-.margintop10px{
-    margin-top: 10px;
+.paddLeft45px {
+  padding-left: 45px;
+}
+.marginMinus25 {
+  margin-right: -25px;
+}
+.marginMinus15 {
+  margin-right: -15px;
+}
+.paddingTop5 {
+  padding-top: 5px;
 }

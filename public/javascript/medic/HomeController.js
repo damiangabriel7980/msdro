@@ -28,7 +28,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     });
 
     //------------------------------------------------------------------------------------------------- get all content
-    HomeService.getUserEvents.query().$promise.then(function (resp) {
+    HomeService.getUserEvents.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         $scope.events = resp;
     });
     HomeService.getUserNews.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
@@ -37,11 +37,11 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     HomeService.getUserScientificNews.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         $scope.scientificNews = resp;
     });
-    HomeService.getUserMultimedia.query().$promise.then(function (resp) {
+    HomeService.getUserMultimedia.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         $scope.multimedia = resp;
     });
 
-    HomeService.getCarousel.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
+    HomeService.getCarousel.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
         $scope.HomeCarousel=resp;
         if($scope.HomeCarousel[0]){
             $scope.firstIllusion=resp[$scope.HomeCarousel.length-1];

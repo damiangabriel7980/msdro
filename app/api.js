@@ -614,7 +614,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\s]{3,100}$');
+            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             //check if name exists
             if(!data.group.display_name){
                 ans.error = true;
@@ -690,7 +690,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\s]{3,100}$');
+            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             //check if name exists
             if(!data.group.display_name){
                 ans.error = true;
@@ -843,7 +843,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var data = req.body.data;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,100}$');
+            var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -882,7 +882,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var id = req.body.data.id;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,100}$');
+            var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -2471,7 +2471,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ]{1}[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\-_]{1,50}$','i');
+            var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2501,7 +2501,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var id = req.body.id;
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\-_]{1,50}$','i');
+            var namePatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2587,7 +2587,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                 res.send({message: {type: 'danger', text:'Eroare la validare. Verificati daca medicul este deja adaugat'}});
                             }else{
                                 //check nickname format
-                                var nickPatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\-_]{1,50}$','i');
+                                var nickPatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
                                 if(!nickPatt.test(req.body.nickname.toString())){
                                     res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
                                 }else{
@@ -2620,7 +2620,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .put(function (req, res) {
             var nickname = req.body.nickname?req.body.nickname.toString():"";
             //validate nickname format
-            var nickPatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\-_]{1,50}$','i');
+            var nickPatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
             if(!nickPatt.test(nickname)){
                 res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2873,8 +2873,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var newData = req.body.newData;
             var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
-            console.log(newData.firstName);
-            console.log(escapeHtmlEntities(newData.firstName));
             //check name
             if((!namePatt.test(newData.firstName.toString())) || (!namePatt.test(newData.lastName.toString()))){
                 ans.error = true;
@@ -2916,8 +2914,8 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {error:false};
             var job = req.body.job;
-            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$');
-            var numberPatt = new XRegExp('^[0-9]{1,5}$');
+            var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$');
+            var numberPatt = new XRegExp('^[a-zA-Z0-9\\s]{1,5}$');
             if(!numberPatt.test(job.street_number.toString())) {
                 ans.error = true;
                 ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
@@ -3097,22 +3095,22 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/userHomeCarousel/:specialGroup')
-        .get(function (req,res) {
+    router.route('/userHomeCarousel/')
+        .post(function (req,res) {
             getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
                 }else{
                     var forGroups = nonSpecificGroupsIds;
-                    if(req.params.specialGroup){
-                        forGroups.push(req.params.specialGroup);
+                    if(req.body.specialGroupSelected){
+                        forGroups.push(req.body.specialGroupSelected.toString());
                     }
+                    console.log(forGroups);
                     //get allowed articles for user
                     Content.find({groupsID: {$in: forGroups}}, {_id: 1}, function (err, content) {
                         if(err){
                             res.send(err);
                         }else{
-                            console.log(content);
                             //get ids of allowed articles
                             getIds(content, function (ids) {
                                 //get carousel content within allowed articles
@@ -3141,83 +3139,117 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             })
         });
-    router.route('/userHomeSearch/:data')
-        .get(function(req,res){
-            var data=req.params.data;
+    router.route('/userHomeSearch/')
+        .post(function(req,res){
+            var data=req.body.data;
             var arr_of_items=[Products,Multimedia,Quizes,Content,Events];
             var ObjectOfResults={};
             var checker=0;
-            async.each(arr_of_items, function (item, callback) {
-                item.search({
-
-                    query_string: {
-                        query: data
-
-                    }
-
-                },{hydrate: true,groupsID: {$in: req.user.groupsID},enable: true}, function(err, results) {
-                    if(err)
-                    {
-                        res.json(err);
-                        return;
-                    }
-                    else
-                    {
-                        if(results.hits.hits.length===0)
-                            checker+=1;
-                        else
-                        {
-                            //var myResults=[];
-                            //for(var i=0;i<results.hits.hits.length;i++)
-                            //{
-                            //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
-                            //        myResults.push(results.hits.hits[i]);
-                            //}
-                            ObjectOfResults[item.modelName]=results.hits.hits;
-                        }
-
-                    }
-
-
-                    callback();
-                });
-            }, function (err) {
-               if(err)
-                    res.json(err);
-                else
-               {
-                    if(checker===5)
-                        res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
-                   else{
-                        console.log(ObjectOfResults);
-                        res.json(ObjectOfResults);
-                    }
-
-               }
-
-            })
-
-        });
-    router.route('/userHomeEvents')
-        .get(function (req,res) {
-            Events.find({groupsID: {$in: req.user.groupsID}, start: {$gte: new Date()}, enable: {$ne: false}}).sort({start: 1}).exec(function (err, events) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
-                }else{
-                    res.json(events);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected);
+                    }
+                    console.log(forGroups);
+                    async.each(arr_of_items, function (item, callback) {
+                        item.search({
+
+                            query_string: {
+                                query: data + '~5',
+                                default_operator: 'AND',
+                                boost: '1.2',
+                                analyze_wildcard: true
+
+                            }
+
+                        },{hydrate: true,hydrateOptions:{find: {groupsID:{$in:forGroups},enable:true}}}, function(err, results) {
+                            if(err)
+                            {
+                                res.json(err);
+                                return;
+                            }
+                            else
+                            {
+                                if(results.hits.hits.length===0)
+                                    checker+=1;
+                                else
+                                {
+                                    //var myResults=[];
+                                    //for(var i=0;i<results.hits.hits.length;i++)
+                                    //{
+                                    //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
+                                    //        myResults.push(results.hits.hits[i]);
+                                    //}
+                                    ObjectOfResults[item.modelName]=results.hits.hits;
+                                }
+
+                            }
+
+
+                            callback();
+                        });
+                    }, function (err) {
+                        if(err)
+                            res.json(err);
+                        else
+                        {
+                            if(checker===5)
+                                res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
+                            else{
+                                res.json(ObjectOfResults);
+                            }
+
+                        }
+
+                    })
                 }
             });
+        });
+    router.route('/userHomeEvents')
+        .post(function (req,res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
+                if(err){
+                    res.send(err);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected);
+                    }
+                    Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: {$ne: false}}).sort({start: 1}).exec(function (err, events) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            res.json(events);
+                        }
+                    });
+                }
+            });
+
         });
 
     router.route('/userHomeMultimedia')
-        .get(function (req,res) {
-            Multimedia.find({groupsID: {$in: req.user.groupsID}, enable: {$ne: false}}, function (err, multimedia) {
+        .post(function (req,res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
-                }else{
-                    res.json(multimedia);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected);
+                    }
+                    Multimedia.find({groupsID: {$in: forGroups}, enable: {$ne: false}}, function (err, multimedia) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            res.json(multimedia);
+                        }
+                    });
                 }
             });
+
         });
 
     router.route('/userHomeNews')
@@ -3363,18 +3395,17 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 res.json(cont);
             });
         });
-    router.route('/calendar/getEvents/:specialGroup')
-        .get(function(req,res) {
+    router.route('/calendar/getEvents/')
+        .post(function(req,res) {
             getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
                 }else{
                     var forGroups = nonSpecificGroupsIds;
-                    if(req.params.specialGroup){
-                        forGroups.push(req.params.specialGroup);
+                    if(req.body.specialGroup){
+                        forGroups.push(req.body.specialGroup);
                     }
-                    console.log(req.params.specialGroup.toString());
-                    console.log(forGroups);
+                   console.log(forGroups);
                     //get allowed articles for user
                     Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
                         if (err) {
