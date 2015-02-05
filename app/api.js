@@ -266,7 +266,6 @@ var encodeNotificationsIds = function (ids, cb) {
     });
 };
 
-//this can be used for rooms as well, since every room has an id_conference
 var getUsersForConference = function (id_conference, callback) {
     User.find({conferencesID: {$in: [id_conference]}}, function (err, users) {
         if(err){
@@ -330,6 +329,37 @@ var getUsersForConferences = function (conferences_ids, callback) {
                 callback(null, ids);
             });
         }
+    });
+};
+
+//================================================================================================= send push notifications
+
+var sendPushNotification = function (message, arrayUsersIds, callback) {
+    encodeNotificationsIds(arrayUsersIds, function (usersToSendTo) {
+        var data = {
+            "users": usersToSendTo,
+            "android": {
+                "collapseKey": "optional",
+                "data": {
+                    "message": message
+                }
+            },
+            "ios": {
+                "badge": 0,
+                "alert": message,
+                "sound": "soundName"
+            }
+        };
+
+        request({
+            url: pushServerAddr+"/send",
+            method: 'POST',
+            json: true,
+            body: data,
+            strictSSL: false
+        }, function (error, message, response) {
+            callback(error, response);
+        });
     });
 };
 
@@ -414,7 +444,9 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         // just move on to the next route handler
     });
 
-//========================================== get temporary credentials for S3
+    //================================================================================================================= ADMIN ROUTES
+
+    //===== get temporary credentials for S3
     router.route('/admin/s3tc')
 
         .get(function (req, res) {
@@ -427,6 +459,10 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             });
         });
+
+    //======================================
+
+
     router.route('/admin/indexContent')
         .get(function(req,res) {
             Products.search({
@@ -440,108 +476,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.json(results);
             });
         });
-    router.route('/user/addPhoto')
-        .post(function(req,res){
-            var data = req.body.data;
-            var key = "user/"+req.user._id+"/img"+req.user._id+"."+data.extension;
-            console.log(req.user.image_path);
-            if(req.user.image_path.length!=0) {
-                deleteObjectS3(req.user.image_path, function (err, resp1) {
-                    if (err) {
-                        console.log(err);
-                        res.json({"type":"danger","message":"Fotografia nu a fost stearsa!"});
 
-                    }
-                    else {
-
-                        User.findOne({_id: req.user._id}).exec(function (err, response) {
-                            if (err) {
-                                console.log(err);
-                                res.json({"type":"danger","message":"Nu a fost gasit utilizatorul!"});
-                            }
-                            else {
-                                console.log(req.user._id);
-                              User.update({_id:req.user._id},{image_path: key },function (err, info) {
-                                    if (err)
-                                        res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
-                                    else {
-                                        addObjectS3(key, data.Body, function (err, resp2) {
-                                            if (err)
-                                            {
-                                                console.log(err);
-                                                res.json({"type":"danger","message":"Fotografia nu a fost adaugata pe server!"});
-
-                                            }
-                                            else
-                                                res.json({"type":"success","message": "Fotografia a fost actualizata cu succes!"})
-                                        });
-                                    }
-                                })
-                            }
-                        })
-                    }
-                });
-            }
-            else
-            {
-                User.findOne({_id: req.user._id}).exec(function (err, response) {
-                    if (err) {
-                        console.log(err);
-                        res.json({"type":"danger","message":"Nu a fost gasit utilizatorul!"});
-                    }
-                    else {
-                        console.log(req.user._id);
-                        User.update({_id:req.user._id},{ image_path: key },function (err, data2) {
-                            console.log(data2);
-                            console.log(err);
-                            if (err)
-                                res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
-                            else {
-                                addObjectS3(key, data.Body, function (err, resp2) {
-                                    if (err)
-                                    {
-                                        console.log(err);
-                                        res.json({"type":"danger","message":"Fotografia nu a fost adaugata pe server!"});                                    }
-                                    else
-                                        res.json({"type":"success","message":"Fotografia a fost actualizata cu succes!"});
-                                });
-                            }
-                        })
-                    }
-                });
-            }
-        });
-
-//================================================================================================= send push notifications
-
-    var sendPushNotification = function (message, arrayUsersIds, callback) {
-        encodeNotificationsIds(arrayUsersIds, function (usersToSendTo) {
-            var data = {
-                "users": usersToSendTo,
-                "android": {
-                    "collapseKey": "optional",
-                    "data": {
-                        "message": message
-                    }
-                },
-                "ios": {
-                    "badge": 0,
-                    "alert": message,
-                    "sound": "soundName"
-                }
-            };
-
-            request({
-                url: pushServerAddr+"/send",
-                method: 'POST',
-                json: true,
-                body: data,
-                strictSSL: false
-            }, function (error, message, response) {
-                callback(error, response);
-            });
-        });
-    };
 
     router.route('/admin/users/groups')
 
@@ -2458,6 +2393,18 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
+    router.route('/admin/therapeutic_areas')
+
+        .get(function(req, res) {
+            Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
+                if(err) {
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+
     router.route('/admin/applications/qa/topics')
         .get(function (req, res) {
             Topics.find({}, function (err, topics) {
@@ -2713,7 +2660,79 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    //==================================================================================================================================== routes for user
+    //==================================================================================================================================== USER ROUTES
+
+    router.route('/user/addPhoto')
+        .post(function(req,res){
+            var data = req.body.data;
+            var key = "user/"+req.user._id+"/img"+req.user._id+"."+data.extension;
+            console.log(req.user.image_path);
+            if(req.user.image_path.length!=0) {
+                deleteObjectS3(req.user.image_path, function (err, resp1) {
+                    if (err) {
+                        console.log(err);
+                        res.json({"type":"danger","message":"Fotografia nu a fost stearsa!"});
+
+                    }
+                    else {
+
+                        User.findOne({_id: req.user._id}).exec(function (err, response) {
+                            if (err) {
+                                console.log(err);
+                                res.json({"type":"danger","message":"Nu a fost gasit utilizatorul!"});
+                            }
+                            else {
+                                console.log(req.user._id);
+                                User.update({_id:req.user._id},{image_path: key },function (err, info) {
+                                    if (err)
+                                        res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
+                                    else {
+                                        addObjectS3(key, data.Body, function (err, resp2) {
+                                            if (err)
+                                            {
+                                                console.log(err);
+                                                res.json({"type":"danger","message":"Fotografia nu a fost adaugata pe server!"});
+
+                                            }
+                                            else
+                                                res.json({"type":"success","message": "Fotografia a fost actualizata cu succes!"})
+                                        });
+                                    }
+                                })
+                            }
+                        })
+                    }
+                });
+            }
+            else
+            {
+                User.findOne({_id: req.user._id}).exec(function (err, response) {
+                    if (err) {
+                        console.log(err);
+                        res.json({"type":"danger","message":"Nu a fost gasit utilizatorul!"});
+                    }
+                    else {
+                        console.log(req.user._id);
+                        User.update({_id:req.user._id},{ image_path: key },function (err, data2) {
+                            console.log(data2);
+                            console.log(err);
+                            if (err)
+                                res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
+                            else {
+                                addObjectS3(key, data.Body, function (err, resp2) {
+                                    if (err)
+                                    {
+                                        console.log(err);
+                                        res.json({"type":"danger","message":"Fotografia nu a fost adaugata pe server!"});                                    }
+                                    else
+                                        res.json({"type":"success","message":"Fotografia a fost actualizata cu succes!"});
+                                });
+                            }
+                        })
+                    }
+                });
+            }
+        });
 
     router.route('/groups/specialGroups')
 
@@ -3385,16 +3404,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 res.json(cont);
             });
         });
-    router.route('/admin/therapeutic_areas')
 
-        .get(function(req, res) {
-            Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
     router.route('/calendar/getEvents/')
         .post(function(req,res) {
             getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
