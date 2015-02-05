@@ -3107,7 +3107,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     }
                     console.log(forGroups);
                     //get allowed articles for user
-                    Content.find({groupsID: {$in: forGroups}}, {_id: 1}, function (err, content) {
+                    Content.find({groupsID: {$in: forGroups},enable:true}, {_id: 1}, function (err, content) {
                         if(err){
                             res.send(err);
                         }else{
@@ -3405,15 +3405,28 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     if(req.body.specialGroup){
                         forGroups.push(req.body.specialGroup);
                     }
-                   console.log(forGroups);
                     //get allowed articles for user
-                    Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
-                        if (err) {
-                            res.send(err);
-                        }
-                        else
-                            res.json(cont);
-                    })
+                    if(forGroups.length==1)
+                    {
+                        Events.find({groupsID: {$in: forGroups},groupsID:{$size: 1},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
+                            if (err) {
+                                res.send(err);
+                            }
+                            else
+                                res.json(cont);
+                        })
+                    }
+                    else
+                    {
+                        Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
+                            if (err) {
+                                res.send(err);
+                            }
+                            else
+                                res.json(cont);
+                        })
+                    }
+
                 }
             })
         });
