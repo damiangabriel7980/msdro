@@ -367,7 +367,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 //now get user id
                 var userID = ssi['passport']['user'];
                 //now get user's roles
-                User.find({_id: userID}, {rolesID :1}, function (err, data) {
+                User.find({_id: userID}, {rolesID :1}).select("+rolesID").exec(function (err, data) {
                     if(err){
                         logger.error(err);
                         res.status(403).end();
