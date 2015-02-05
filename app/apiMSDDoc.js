@@ -86,8 +86,14 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 res.json(err);
             else
             {
-                res.statusCode = 201;
-                res.send(saved);
+                NewsPost.findOne({_id: saved._id}).populate('owner').exec(function (err, toReturn) {
+                    if(err){
+                        res.json(err);
+                    }else{
+                        res.statusCode = 201;
+                        res.send(toReturn);
+                    }
+                });
             }
         })
     });
@@ -199,7 +205,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             if(created){
                 q['created'] = {"$lt": created};
             }
-            Chat.find(q).sort({'created': -1}).limit(pageSize).exec(function(err, result) {
+            Chat.find(q).sort({'created': -1}).limit(pageSize).populate('participants').exec(function(err, result) {
                 if(err){
                     console.log(err);
                     res.json(err);
@@ -262,7 +268,13 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                             if(err){
                                 res.send(err);
                             }else{
-                                res.send(saved);
+                                Chat.findOne({_id: saved._id}).populate('participants').exec(function (err, toReturn) {
+                                    if(err){
+                                        res.send(err);
+                                    }else{
+                                        res.send(toReturn);
+                                    }
+                                });
                             }
                         });
                     }
