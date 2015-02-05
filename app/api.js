@@ -2660,6 +2660,45 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
+    router.route('admin/user')
+        .get(function(req,res){
+            User.find(function (error, result) {
+                if (error) {
+                    res.send(error);
+                    return ;
+                } else {
+                    //console.log(result);
+                    res.json(result);
+                }
+            });
+        })
+        .post(function(req,res){
+            var newuser = new User(); 		// create a new instance of the Bear model
+            therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
+            therapeutic.last_updated=req.body.last_updated ;
+            therapeutic.name= req.body.name   ;
+            therapeutic.enabled= req.body.enabled  ;
+            therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
+            therapeutic.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Area created!' });
+            });
+        });
+    router.route('admin/user/:id')
+        .get(function(req,res){
+            User.findById(req.params.id,function (error, result) {
+                if (error) {
+                    res.send(error);
+                    return ;
+                } else {
+                    //console.log(result);
+                    res.json(result);
+                }
+            });
+        });
+
     //==================================================================================================================================== USER ROUTES
 
     router.route('/user/addPhoto')
@@ -3703,44 +3742,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             }
         }) ;
     });
-    router.route('admin/user')
-        .get(function(req,res){
-            User.find(function (error, result) {
-                if (error) {
-                    res.send(error);
-                    return ;
-                } else {
-                    //console.log(result);
-                    res.json(result);
-                }
-            });
-        })
-        .post(function(req,res){
-            var newuser = new User(); 		// create a new instance of the Bear model
-            therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
-            therapeutic.last_updated=req.body.last_updated ;
-            therapeutic.name= req.body.name   ;
-            therapeutic.enabled= req.body.enabled  ;
-            therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
-            therapeutic.save(function(err) {
-                if (err)
-                    res.send(err);
 
-                res.json({ message: 'Area created!' });
-            });
-    });
-    router.route('admin/user/:id')
-        .get(function(req,res){
-            User.findById(req.params.id,function (error, result) {
-                if (error) {
-                    res.send(error);
-                    return ;
-                } else {
-                    //console.log(result);
-                    res.json(result);
-                }
-            });
-        });
 
     app.use('/api', router);
 };
