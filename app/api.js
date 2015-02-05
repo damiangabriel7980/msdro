@@ -3102,15 +3102,15 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.send(err);
                 }else{
                     var forGroups = nonSpecificGroupsIds;
-                    if(req.body.specialGroup){
-                        forGroups.push(req.params.specialGroup);
+                    if(req.body.specialGroupSelected){
+                        forGroups.push(req.body.specialGroupSelected.toString());
                     }
+                    console.log(forGroups);
                     //get allowed articles for user
                     Content.find({groupsID: {$in: forGroups}}, {_id: 1}, function (err, content) {
                         if(err){
                             res.send(err);
                         }else{
-                            console.log(content);
                             //get ids of allowed articles
                             getIds(content, function (ids) {
                                 //get carousel content within allowed articles
@@ -3118,7 +3118,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                     if(err){
                                         res.send(err);
                                     }else{
-                                        console.log(images);
                                         res.send(images);
                                     }
                                 })
