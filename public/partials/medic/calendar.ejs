@@ -11,6 +11,9 @@
     <div class="row-margintop20px">
         <div class="col-md-4 hidden-md padd40px">
             <h3 class="bottomBorder">EVENIMENTE URMATOARE:</h3>
+            <div class="col-md-12" ng-if="!events2Filtered">
+                <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
+            </div>
              <div class="event blue" ng-repeat="eventim in events2Filtered">
                     <div class="col-md-12 noPadding">
                         <div class="col-md-2 noPadding padd10Bottom date2">
@@ -24,6 +27,7 @@
                     </div>
                 </div>
          </div>
+        </div>
 <div id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="realEvents" class="well col-md-8 well-content padd35px"></div>
         </div>
 </divhydrateOption
