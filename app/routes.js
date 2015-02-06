@@ -404,7 +404,7 @@ function isLoggedIn(req, res, next) {
 //paths = {"role": "page", ...}
 //sendUserInfo = boolean
 var transportUser = function (req, res, paths, sendUserInfo) {
-    User.findOne({_id: req.user._id}).select("+rolesID +state").exec(function (err, user) {
+    User.findOne({_id: req.user._id}).select("+rolesID +state +proof_path").exec(function (err, user) {
         if(user.state === "ACCEPTED"){
             Roles.find({_id: {$in: user.rolesID}}, function (err, roles) {
                 if(err){
@@ -427,7 +427,11 @@ var transportUser = function (req, res, paths, sendUserInfo) {
                 }
             });
         }else if(user.state === "PENDING"){
-            res.render("proof.ejs", {user: req.user});
+            if(user.proof_path){
+                res.render("auth.ejs", {message: "Contul dumneavoastra nu a fost inca activat"});
+            }else{
+                res.render("medic/proof.ejs", {user: req.user});
+            }
         }
     });
 };

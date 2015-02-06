@@ -20,10 +20,10 @@
 
         <div class="col-md-12">
             <div class="col-md-12 well margintop20px">
-                Va multumim pentru inscrierea pe portalul medical www.staywell.ro.<br>
+                Va multumim pentru inscrierea pe portalul medical www.staywell.ro.<br><br>
                 Deoarece statul roman, prin legea 95/2006 cu HCS nr 27_11.10.2013 reglementeaza publicitatea
                 medicamentelor doar catre specialisti in domeniul sanatatii, va rugam sa atasati o copie a
-                diplomei de licenta care sa ateste, astfel, calitatea dvs de profesionist in domeniul sanatatii (medic/farmacist)
+                diplomei de licenta care sa ateste, astfel, calitatea dvs de profesionist in domeniul sanatatii (medic/farmacist).
             </div>
         </div>
 
@@ -34,18 +34,19 @@
         <div class="col-md-12 noPadding">
             <div class="form-group col-md-6">
                 <label for="profession">Profesie:</label>
-                <select ng-model="selectedProfession" class="form-control" ng-change="selectProfession()"
+                <select ng-model="selectedProfession" class="form-control" ng-change="selectProfession()" ng-disabled="saveSuccess"
                         ng-options="profession as profession.display_name for profession in professions" id="profession"></select>
             </div>
             <div class="form-group col-md-6">
                 <label for="proof">Dovada:</label>&nbsp;&nbsp;<span>{{fileName}}</span>
                 <br>
                 <button class="btn btn-default form-control" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" id="proof"
-                        multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o fotografie</button>
+                        multiple="false" accept="image/*" ng-disabled="saveSuccess"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o fotografie</button>
             </div>
         </div>
         <div class="col-md-12">
-            <button class="btn btn-primary" ng-click="saveAll()">Salveaza</button>
+            <button class="btn btn-primary" ng-click="saveAll()" ng-disabled="saveSuccess">Salveaza</button>
+            <a class="btn btn-warning" ng-if="saveSuccess" href="logout">Inapoi</a>
         </div>
     </div>
 </div>

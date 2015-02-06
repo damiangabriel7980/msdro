@@ -6,6 +6,8 @@ proofApp.controller('ProofController', ['$scope', 'ProofService', '$sce', functi
         message: ""
     };
 
+    $scope.saveSuccess = false;
+
     var profession;
     var proofFile;
 
@@ -54,6 +56,9 @@ proofApp.controller('ProofController', ['$scope', 'ProofService', '$sce', functi
                     $scope.myAlert.type = message.type;
                     $scope.myAlert.message = message.message;
                     $scope.myAlert.newAlert = true;
+                    if(message.success){
+                        $scope.saveSuccess = true;
+                    }
                 });
             };
 

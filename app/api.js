@@ -2795,7 +2795,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                     if (err){
                                         res.json({"type":"danger","message":"Eroare la salvarea datelor"});
                                     }else{
-                                        res.json({"type":"success","message":"Datele au fost salvata cu succes. In maxim 48 de ore veti primi un e-mail pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam."});
+                                        res.json({"type":"success","message":"Datele au fost salvata cu succes. In maxim 48 de ore veti primi un e-mail pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam.", success: true});
                                     }
                                 });
                             }
