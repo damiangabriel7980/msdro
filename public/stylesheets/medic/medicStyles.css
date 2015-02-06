@@ -7146,6 +7146,12 @@ hr {
   position: absolute;
   right: 85px;
 }
+@media (max-width: 1050px) {
+  .expandSearchNoSpecial {
+    right: 130px;
+    margin-top: -19px;
+  }
+}
 .expandSearchNoSpecial .newWidthPopSearch {
   width: 330px !important;
   padding: 6px 12px;
@@ -7191,4 +7197,7 @@ hr {
 .mySpecialMenuMobile {
   right: 70px !important;
   margin-top: -10px;
+}
+.headerProfileNoSpecial {
+  right: 25px;
 }
