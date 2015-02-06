@@ -7,7 +7,7 @@
         </div>
         <div class="col-md-10 details">
             <div class="col-md-12 title">
-                <a href="#">{{n.title}}</a>
+                <a ui-sref="elearning.detail({id: n._id})">{{n.title}}</a>
             </div>
             <div class="col-md-12 author">({{n.author}})</div>
             <div class="col-md-12 date">Adaugat la: {{n.date_added | date:'dd/MM/yyyy'}}</div>
