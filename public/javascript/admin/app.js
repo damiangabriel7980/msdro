@@ -28,7 +28,23 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('utilizatori.conturiNoi',{
             url: '/conturiNoi',
-            templateUrl: 'partials/admin/utilizatori/conturiNoi.html'
+            templateUrl: 'partials/admin/utilizatori/conturiNoi/root.html',
+            controller: 'NewAccountsController'
+        })
+        .state('utilizatori.conturiNoi.accepted',{
+            url: '/accepted',
+            templateUrl: 'partials/admin/utilizatori/conturiNoi/accepted.html',
+            controller: 'UsersAcceptedController'
+        })
+        .state('utilizatori.conturiNoi.rejected',{
+            url: '/rejected',
+            templateUrl: 'partials/admin/utilizatori/conturiNoi/rejected.html',
+            controller: 'UsersRejectedController'
+        })
+        .state('utilizatori.conturiNoi.pending',{
+            url: '/pending',
+            templateUrl: 'partials/admin/utilizatori/conturiNoi/pending.html',
+            controller: 'UsersPendingController'
         })
         .state('utilizatori.grupuri',{
             url: '/grupuri',

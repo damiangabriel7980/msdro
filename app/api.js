@@ -2699,6 +2699,44 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
+    router.route('/admin/users/newAccounts/state/:type')
+        .get(function (req, res) {
+            User.find({state: req.params.type}).select('+state +proof_path').populate('profession').exec(function (err, users) {
+                if(err){
+                    console.log(err);
+                    res.send(err);
+                }else{
+                    res.send(users);
+                }
+            })
+        })
+        .put(function (req, res) {
+            if(req.params.type && req.body.id){
+                User.update({_id: req.body.id}, {$set: {state: req.params.type}}, function (err, wres) {
+                    if(err){
+                        res.send(err);
+                    }else{
+                        res.send({message: "Updated "+wres+" user"});
+                    }
+                });
+            }else{
+                res.send({message: "Invalid params"});
+            }
+        });
+
+    router.route('/admin/users/newAccounts/count')
+        .get(function (req, res) {
+            User.aggregate([
+                {$group: {_id: "$state", total: {$sum: 1}}}
+            ], function (err, result) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(result);
+                }
+            });
+        });
+
     //==================================================================================================================================== USER ROUTES
 
     router.route('/user/addPhoto')

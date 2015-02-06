@@ -12,3 +12,22 @@
 .titleAndButton div .btn {
   margin-top: 16px;
 }
+.noPadding {
+  padding: 0;
+}
+.newAccountsTabs {
+  width: 100%;
+  float: left;
+}
+.newAccountsTabs .tab {
+  cursor: pointer;
+  float: left;
+  padding: 5px;
+}
+.newAccountsTabs .tab.active {
+  border-left: 1px solid darkgray;
+  border-top: 1px solid darkgray;
+  border-right: 1px solid darkgray;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
