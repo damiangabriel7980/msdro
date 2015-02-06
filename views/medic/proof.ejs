@@ -1,0 +1,59 @@
+<!doctype html>
+<html ng-app="proofApp">
+<head>
+    <title>Completare profil</title>
+
+    <script src="components/angular/angular.js"></script>
+    <script src="components/angular-resource/angular-resource.js"></script>
+    <script src="components/ng-file-upload/angular-file-upload.min.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script type="application/javascript" src="javascript/medic/proof/proofApp.js"></script>
+    <script type="application/javascript" src="javascript/medic/proof/proofController.js"></script>
+
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/medic/proof/styles.css">
+
+</head>
+<body ng-controller="ProofController">
+<div class="container noPadding">
+    <div class="col-md-8 col-md-offset-2 noPadding">
+
+        <div class="col-md-12">
+            <div class="col-md-12 well margintop20px">
+                Va multumim pentru inscrierea pe portalul medical www.staywell.ro.<br><br>
+                Deoarece statul roman, prin legea 95/2006 cu HCS nr 27_11.10.2013 reglementeaza publicitatea
+                medicamentelor doar catre specialisti in domeniul sanatatii, va rugam sa atasati o copie a
+                diplomei de licenta care sa ateste, astfel, calitatea dvs de profesionist in domeniul sanatatii (medic/farmacist).
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <alert ng-if="myAlert.newAlert" type="{{myAlert.type}}" close="myAlert.newAlert=false">{{myAlert.message}}</alert>
+        </div>
+
+        <div class="col-md-12 noPadding">
+            <div class="form-group col-md-6">
+                <label for="profession">Profesie:</label>
+                <select ng-model="selectedProfession" class="form-control" ng-change="selectProfession()" ng-disabled="saveSuccess"
+                        ng-options="profession as profession.display_name for profession in professions" id="profession"></select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="group">Grup preferat:</label>
+                <select ng-model="selectedSpecialGroup" class="form-control" ng-change="selectSpecial()" ng-disabled="saveSuccess"
+                        ng-options="group as group.display_name for group in groups" id="group"></select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="proof">Dovada:</label>&nbsp;&nbsp;<span>{{fileName}}</span>
+                <br>
+                <button class="btn btn-default form-control" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" id="proof"
+                        multiple="false" accept="image/*" ng-disabled="saveSuccess"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o fotografie</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button class="btn btn-primary" ng-click="saveAll()" ng-disabled="saveSuccess">Salveaza</button>
+            <a class="btn btn-warning" ng-if="saveSuccess" href="logout">Inapoi</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -32,7 +32,7 @@ module.exports = function(passport) {
                 return null;
             }
 
-            var name = lookup(req.body, 'name') || lookup(req.query, 'name');
+            var name = lookup(req.body, 'name') || lookup(req.query, 'name') || "";
             var confirm = lookup(req.body, 'confirm') || lookup(req.query, 'confirm');
             var signupFromConf = lookup(req.body, 'signupFromConf') || lookup(req.query, 'signupFromConf');
 
@@ -51,6 +51,7 @@ module.exports = function(passport) {
                         info.message = "Adresa de e-mail nu este valida";
                         return done(null, false, info);
                     }
+                    console.log("name test");
                     if(!namePatt.test(name.replace(/ /g,''))){
                         info.message = "Numele trebuie sa contina doar litere, minim 3";
                         return done(null, false, info);

@@ -1,0 +1,15 @@
+<form>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="negative()">&times;</button>
+            <h3 class="modal-title">{{modal.title}}</h3>
+        </div>
+        <div class="col-md-12 modal-body">
+            {{modal.message}}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="negative()">{{modal.negative}}</button>
+            <button type="button" class="btn btn-danger" ng-click="affirmative()">{{modal.affirmative}}</button>
+        </div>
+    </div>
+</form>

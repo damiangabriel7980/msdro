@@ -35,7 +35,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
         var notificationToken = req.body.notificationToken;
 
         //find user in database
-        User.findOne({ 'username' :  { $regex: new RegExp("^" + req.body.username, "i") }}).select("+account_expired +account_locked +enabled +password").exec(function(err, user) {
+        User.findOne({ 'username' :  { $regex: new RegExp("^" + req.body.username, "i") }}).select("+account_expired +account_locked +enabled +password +state").exec(function(err, user) {
             // if there are any errors, return error status
             if (err){
                 res.status(403).end();
@@ -45,7 +45,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
                     res.send(401, 'Wrong username/password');
                 }else{
                     //check account not expired, not locked etc
-                    if(user.account_expired || user.account_locked || !user.enabled){
+                    if(user.account_expired || user.account_locked || !user.enabled || user.state === "REJECTED"){
                         res.send(401, 'Access not allowed');
                     }else{
                         //check password

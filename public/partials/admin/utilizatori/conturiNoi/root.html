@@ -1,0 +1,19 @@
+<div class="col-md-12">
+    <div class="col-md-12 well">
+        <h3>Gestionare Utilizatori</h3>
+    </div>
+    <div class="newAccountsTabs">
+        <div class="tab" ng-class="{'active': $state.includes('utilizatori.conturiNoi.pending')}" ui-sref="utilizatori.conturiNoi.pending">
+            In asteptare&nbsp;<span class="label label-warning">{{count.PENDING}}</span>
+        </div>
+        <div class="tab" ng-class="{'active': $state.includes('utilizatori.conturiNoi.accepted')}" ui-sref="utilizatori.conturiNoi.accepted">
+            Acceptati&nbsp;<span class="label label-success">{{count.ACCEPTED}}</span>
+        </div>
+        <div class="tab" ng-class="{'active': $state.includes('utilizatori.conturiNoi.rejected')}" ui-sref="utilizatori.conturiNoi.rejected">
+            Respinsi&nbsp;<span class="label label-danger">{{count.REJECTED}}</span>
+        </div>
+    </div>
+    <div class="col-md-12 noPadding">
+        <ui-view></ui-view>
+    </div>
+</div>

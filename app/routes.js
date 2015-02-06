@@ -25,18 +25,7 @@ module.exports = function(app, email, logger, passport) {
 
 	// show the home page (will also have our login links)
 	app.get('/pro', isLoggedIn, function(req, res) {
-        transportUser(req, res, {
-            "ROLE_FARMACIST": "medic/main.ejs",
-            "ROLE_ADMIN": "admin/main.ejs"
-        }, true);
-	});
-
-	// PROFILE SECTION =========================
-	app.get('/profile', isLoggedIn, function(req, res) {
-        transportUser(req, res, {
-            "ROLE_FARMACIST": "medic/profile.ejs",
-            "ROLE_ADMIN": "admin/profile.ejs"
-        }, true);
+        transportUser(req, res);
 	});
 
 	// LOGOUT ==============================
@@ -410,37 +399,38 @@ function isLoggedIn(req, res, next) {
 	res.redirect('/login');
 }
 
-function isNotLoggedIn(req, res, next) {
-    if (!req.isAuthenticated())
-        return next();
-
-    res.redirect('/');
-}
-
 //validates user and transports it to a page taking it's role into account
 //args:
 //paths = {"role": "page", ...}
 //sendUserInfo = boolean
 var transportUser = function (req, res, paths, sendUserInfo) {
-    Roles.find({_id: {$in: req.user.rolesID}}, function (err, roles) {
-        if(err){
-            req.logout();
-            res.redirect('/');
-        }else{
-            if(roles[0]){
-                if(paths[roles[0].authority]){
-                    if(sendUserInfo){
-                        res.render(paths[roles[0].authority], {user: req.user, amazonBucket: process.env.amazonBucket});
-                    }else{
-                        res.render(paths[roles[0].authority]);
-                    }
-                }else{
+    User.findOne({_id: req.user._id}).select("+rolesID +state +proof_path").exec(function (err, user) {
+        if(user.state === "ACCEPTED"){
+            Roles.find({_id: {$in: user.rolesID}}, function (err, roles) {
+                if(err){
                     req.logout();
                     res.redirect('/');
+                }else{
+                    if(roles[0]){
+                        if(roles[0].authority === "ROLE_FARMACIST"){
+                            res.render("medic/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
+                        }else if(roles[0].authority === "ROLE_ADMIN"){
+                            res.render("admin/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
+                        }else {
+                            req.logout();
+                            res.redirect('/');
+                        }
+                    }else{
+                        req.logout();
+                        res.redirect('/');
+                    }
                 }
+            });
+        }else if(user.state === "PENDING"){
+            if(user.proof_path){
+                res.render("auth.ejs", {message: "Contul dumneavoastra nu a fost inca activat"});
             }else{
-                req.logout();
-                res.redirect('/');
+                res.render("medic/proof.ejs", {user: req.user});
             }
         }
     });
