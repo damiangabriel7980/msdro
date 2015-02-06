@@ -7131,6 +7131,12 @@ hr {
   position: absolute;
   right: 270px;
 }
+@media (max-width: 1050px) {
+  .expandSearch {
+    right: 310px;
+    margin-top: -19px;
+  }
+}
 .expandSearch .newWidthPopSearch {
   width: 330px !important;
   padding: 6px 12px;
@@ -7168,4 +7174,21 @@ hr {
 }
 .paddingTop5 {
   padding-top: 5px;
+}
+.marginRight10px {
+  margin-right: 10px;
+}
+@media (max-width: 1049px) {
+  .disableSpecial {
+    display: none;
+  }
+}
+@media (min-width: 1050px) {
+  .disableDesktop {
+    display: none;
+  }
+}
+.mySpecialMenuMobile {
+  right: 70px !important;
+  margin-top: -10px;
 }
