@@ -3,7 +3,7 @@
         <div class="col-md-12 mainTitle">
             CATEGORII
         </div>
-        <div class="col-md-12" id="customScrollbar" scrollbar>
+        <div class="col-md-12 noPadding">
             <div class="therapeuticArea" ng-repeat="area in tpa">
                 {{area.parent?'':'&nbsp;&nbsp;&nbsp;&nbsp;'}}<a class="area" ui-sref="elearning.all({area: area.id})">{{area.name}}</a>
             </div>
