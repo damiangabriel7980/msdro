@@ -7,6 +7,9 @@ proofApp.factory('ProofService', ['$resource', function($resource){
         }),
         proofImage: $resource('api/proof/image', {}, {
             save: {method:'POST'}
+        }),
+        specialGroups: $resource('api/proof/specialGroups/:profession', {}, {
+            query: { method: 'GET', isArray: true }
         })
     }
 }]);

@@ -10,15 +10,17 @@ proofApp.controller('ProofController', ['$scope', 'ProofService', '$sce', functi
 
     var profession;
     var proofFile;
+    var group;
 
     ProofService.professions.query().$promise.then(function (response) {
         $scope.professions = response;
-        console.log(response);
     });
 
     $scope.selectProfession = function () {
         profession = $scope.selectedProfession;
-        console.log(profession);
+        ProofService.specialGroups.query({profession: profession._id}).$promise.then(function (response) {
+            $scope.groups = response;
+        });
     };
 
     $scope.fileSelected = function($files, $event){
@@ -27,6 +29,11 @@ proofApp.controller('ProofController', ['$scope', 'ProofService', '$sce', functi
             proofFile = $files[0];
             $scope.fileName = $files[0].name;
         }
+    };
+
+    $scope.selectSpecial = function () {
+        group = $scope.selectedSpecialGroup;
+        console.log(group);
     };
 
     $scope.saveAll = function () {
@@ -52,7 +59,7 @@ proofApp.controller('ProofController', ['$scope', 'ProofService', '$sce', functi
                 var image = event.target.result;
                 var b64 = image.split("base64,")[1];
 
-                ProofService.proofImage.save({encodedImage: b64, extension: extension, professionId: profession._id}).$promise.then(function (message) {
+                ProofService.proofImage.save({encodedImage: b64, extension: extension, professionId: profession._id, groupId: group?group._id:null}).$promise.then(function (message) {
                     $scope.myAlert.type = message.type;
                     $scope.myAlert.message = message.message;
                     $scope.myAlert.newAlert = true;

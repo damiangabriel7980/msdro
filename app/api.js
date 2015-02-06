@@ -2854,11 +2854,23 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                 console.log(err);
                                 res.json({"type":"danger","message":"Fotografia nu a putut fi salvata pe server"});
                             }else{
-                                User.update({_id: user._id},{$set: {proof_path: key, profession: req.body.professionId}},function (err) {
-                                    if (err){
+                                //establish default user group
+                                var profession = req.body.professionId;
+                                UserGroup.findOne({profession: profession, display_name: "Default"}, function (err, group) {
+                                    if(err || !group){
                                         res.json({"type":"danger","message":"Eroare la salvarea datelor"});
                                     }else{
-                                        res.json({"type":"success","message":"Datele au fost salvata cu succes. In maxim 48 de ore veti primi un e-mail pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam.", success: true});
+                                        var groupsToAdd = [group._id.toString()];
+                                        if(req.body.groupId){
+                                            groupsToAdd.push(req.body.groupId.toString());
+                                        }
+                                        User.update({_id: user._id},{$set: {proof_path: key, profession: profession, groupsID: groupsToAdd}},function (err) {
+                                            if (err){
+                                                res.json({"type":"danger","message":"Eroare la salvarea datelor"});
+                                            }else{
+                                                res.json({"type":"success","message":"Datele au fost salvata cu succes. In maxim 48 de ore veti primi un e-mail pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam.", success: true});
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -3847,6 +3859,23 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send(professions);
                 }
             });
+        });
+
+    router.route('/proof/specialGroups/:profession')
+        .get(function (req, res) {
+            var profession = req.params.profession;
+            if(profession){
+                profession = mongoose.Types.ObjectId(profession.toString());
+                UserGroup.find({content_specific: true, profession: profession}).exec(function (err, groups) {
+                    if(err){
+                        res.send(err);
+                    }else{
+                        res.send(groups);
+                    }
+                });
+            }else{
+                res.send([]);
+            }
         });
 
 
