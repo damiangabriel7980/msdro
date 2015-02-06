@@ -2784,18 +2784,18 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     res.json({"type":"danger","message":"Utilizatorul nu a fost gasit"});
                 }else{
                     if(user.proof_path){
-                        res.json({"type":"success","message":"Dovada a fost deja incarcata. Va rugam asteptati primirea mail-ului de activare pe adresa "+req.user.username+". Va rugam veriicati si folder-ul de spam"});
+                        res.json({"type":"success","message":"Dovada a fost deja incarcata. Va rugam asteptati primirea mail-ului de activare pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam."});
                     }else{
                         addObjectS3(key, encodedImage, function (err) {
                             if (err){
                                 console.log(err);
                                 res.json({"type":"danger","message":"Fotografia nu a putut fi salvata pe server"});
                             }else{
-                                User.update({_id: user._id},{$set: {proof_path: key}},function (err) {
+                                User.update({_id: user._id},{$set: {proof_path: key, profession: req.body.professionId}},function (err) {
                                     if (err){
-                                        res.json({"type":"danger","message":"Fotografia nu a putut fi salvata in baza de date"});
+                                        res.json({"type":"danger","message":"Eroare la salvarea datelor"});
                                     }else{
-                                        res.json({"type":"success","message":"Fotografia a fost salvata cu succes. In maxim 48 de ore veti primi un e-mail pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam."});
+                                        res.json({"type":"success","message":"Datele au fost salvata cu succes. In maxim 48 de ore veti primi un e-mail pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam."});
                                     }
                                 });
                             }

@@ -6,15 +6,38 @@ proofApp.controller('ProofController', ['$scope', 'ProofService', '$sce', functi
         message: ""
     };
 
+    var profession;
+    var proofFile;
+
     ProofService.professions.query().$promise.then(function (response) {
         $scope.professions = response;
         console.log(response);
     });
 
+    $scope.selectProfession = function () {
+        profession = $scope.selectedProfession;
+        console.log(profession);
+    };
+
     $scope.fileSelected = function($files, $event){
         //make sure a file was actually loaded
         if($files[0]){
-            var extension = $files[0].name.split('.').pop();
+            proofFile = $files[0];
+            $scope.fileName = $files[0].name;
+        }
+    };
+
+    $scope.saveAll = function () {
+        if(!profession){
+            $scope.myAlert.newAlert = true;
+            $scope.myAlert.type = "danger";
+            $scope.myAlert.message = "Va rugam selectati o profesie aferenta dovezii";
+        }else if(!proofFile){
+            $scope.myAlert.newAlert = true;
+            $scope.myAlert.type = "danger";
+            $scope.myAlert.message = "Va rugam incarcati o fotografie care sa dovedeasca statutul de "+profession.display_name;
+        }else{
+            var extension = proofFile.name.split('.').pop();
 
             var reader = new FileReader();
 
@@ -27,14 +50,14 @@ proofApp.controller('ProofController', ['$scope', 'ProofService', '$sce', functi
                 var image = event.target.result;
                 var b64 = image.split("base64,")[1];
 
-                ProofService.proofImage.save({encodedImage: b64, extension: extension}).$promise.then(function (message) {
+                ProofService.proofImage.save({encodedImage: b64, extension: extension, professionId: profession._id}).$promise.then(function (message) {
                     $scope.myAlert.type = message.type;
                     $scope.myAlert.message = message.message;
                     $scope.myAlert.newAlert = true;
                 });
             };
 
-            reader.readAsDataURL($files[0]);
+            reader.readAsDataURL(proofFile);
 
             // Read in the image file as a data URL.
         }
