@@ -76,6 +76,14 @@ var date = new Date();
          if($stateParams.id)
          {
              angular.element($document).ready(function(){
+                 var $body = $(document.body);
+                 var oldWidth = $body.innerWidth();
+                 var navbarOld= angular.element('.navbar').width();
+                 var footerOld=angular.element('#footer').width();
+                 $body.css("overflow-y", "hidden");
+                 $body.width(oldWidth);
+                 angular.element('.navbar').width(navbarOld);
+                 angular.element('#footer').width(footerOld);
                  $modal.open({
                      templateUrl: 'partials/medic/calendarDetails.ejs',
                      backdrop: true,

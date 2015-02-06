@@ -82,10 +82,19 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     //merck modal
     $rootScope.showMerckManual = function(){
+        var $body = $(document.body);
+        var oldWidth = $body.innerWidth();
+        var navbarOld= angular.element('.navbar').width();
+        var footerOld=angular.element('#footer').width();
+        $body.css("overflow-y", "hidden");
+        $body.width(oldWidth);
+        angular.element('.navbar').width(navbarOld);
+        angular.element('#footer').width(footerOld);
         $modal.open({
             templateUrl: 'partials/medic/modals/merckManual.html',
             size: 'lg',
-            backdrop: true,
+            keyboard: false,
+            backdrop: 'static',
             windowClass: 'fade',
             controller: 'MerckManualController',
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
@@ -96,32 +105,60 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         var x = document.getElementById("upperSearch");
         $rootScope.textToSearch = x.value;
     };
-    $rootScope.showFarmaModal = function(){
-        $modal.open({
+    $rootScope.showFarmaModal = function() {
+        var $body = $(document.body);
+        var oldWidth = $body.innerWidth();
+        var navbarOld= angular.element('.navbar').width();
+        var footerOld=angular.element('#footer').width();
+        $body.css("overflow-y", "hidden");
+        $body.width(oldWidth);
+        angular.element('.navbar').width(navbarOld);
+        angular.element('#footer').width(footerOld);
+
+        var modalInstance = $modal.open({
             templateUrl: 'partials/medic/modals/Farma.html',
+            keyboard: false,
             size: 'lg',
             windowClass: 'fade',
-            backdrop: true,
+            backdrop: 'static',
             controller: 'FarmacovigilentaCtrl',
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
     $rootScope.showContactModal = function(){
+        var $body = $(document.body);
+        var oldWidth = $body.innerWidth();
+        var navbarOld= angular.element('.navbar').width();
+        var footerOld=angular.element('#footer').width();
+        $body.css("overflow-y", "hidden");
+        $body.width(oldWidth);
+        angular.element('.navbar').width(navbarOld);
+        angular.element('#footer').width(footerOld);
         $modal.open({
             templateUrl: 'partials/medic/contact.ejs',
             size: 'lg',
-            backdrop: true,
+            backdrop: 'static',
+            keyboard: false,
             windowClass: 'fade',
             controller: 'contactCtrl'
         });
     };
     $rootScope.showTermsModal = function(){
+        var $body = angular.element(document.body);
+        var oldWidth = $body.innerWidth();
+        var navbarOld= angular.element('.navbar').width();
+        var footerOld=angular.element('#footer').width();
+        $body.css("overflow-y", "hidden");
+        $body.width(oldWidth);
+        angular.element('.navbar').width(navbarOld);
+        angular.element('#footer').width(footerOld);
         $modal.open({
             templateUrl: 'partials/medic/modals/Terms.html',
             size: 'lg',
             windowClass: 'fade',
-            backdrop: true,
+            backdrop: 'static',
             controller: 'TermsCtrl',
+            keyboard: false,
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };

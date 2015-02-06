@@ -19,6 +19,14 @@ cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' 
     });
 
     $scope.openMultimedia=function(idMultimedia) {
+        var $body = angular.element(document.body);
+        var oldWidth = $body.innerWidth();
+        var navbarOld= angular.element('.navbar').width();
+        var footerOld=angular.element('#footer').width();
+        $body.css("overflow-y", "hidden");
+        $body.width(oldWidth);
+        angular.element('.navbar').width(navbarOld);
+        angular.element('#footer').width(footerOld);
         $modal.open({
             templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
             windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html',
