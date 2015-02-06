@@ -2383,14 +2383,33 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         })
         .delete(function(req, res) {
-            Therapeutic_Area.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted!' });
+            var data = req.params.id;
+            var connEntities=[Products,Multimedia];
+            async.each(connEntities,function(item,callback){
+                disconnectAllEntitiesFromEntity(item,'therapeutic-areasID',data,function(err,result){
+                    if(err)
+                        res.json({ message: 'Eroare la stergerea ariei din entitatile conectate!' });
+                    else
+                        callback();
+                });
+            },function(err){
+                if(err){
+                    res.json({ message: 'Nu s-a putut efectua stergerea asincrona!' });
+                }
+                else
+                {
+                    Therapeutic_Area.remove({
+                        _id: data
+                    }, function(err,cont) {
+                        if (err)
+                            res.send(err);
+                        else
+                            res.json({ message: 'Aria a fost stearsa cu succes!' });
+                    });
+                }
             });
+
+
         });
 
     router.route('/admin/therapeutic_areas')

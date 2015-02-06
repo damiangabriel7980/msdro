@@ -14,7 +14,7 @@
                 <ul style="list-style: none">
                     <li class="margintop20px" ng-repeat="cont2 in $data | filter : { 'therapeutic-areasID' : cont._id } | orderBy: 'name'">{{cont2.name}}&nbsp;
                             <span class="btn-group-sm pull-right"  role="group" style="display: flex">
-                                <button class="btn btn-danger btn-sm" disabled="disabled"><i class="glyphicon glyphicon-trash"></i></button>
+                                <button class="btn btn-danger btn-sm" ui-sref="ariiTerapeutice.deleteArie({id: cont2._id})"><i class="glyphicon glyphicon-trash"></i></button>
                                 <button class="btn btn-info btn-sm" ui-sref="ariiTerapeutice.editArie({id: cont2._id})"><i class="glyphicon glyphicon-cog"></i></button>
                             </span>
                         <br />
@@ -23,7 +23,7 @@
             </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group-sm"  role="group" style="display: flex">
-                    <button class="btn btn-danger" disabled="disabled"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button class="btn btn-danger" ui-sref="ariiTerapeutice.deleteArie({id: cont._id})"><i class="glyphicon glyphicon-trash"></i></button>
                     <button class="btn btn-info" ui-sref="ariiTerapeutice.editArie({id: cont._id})"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>
