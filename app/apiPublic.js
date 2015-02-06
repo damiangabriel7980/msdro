@@ -107,6 +107,11 @@ module.exports = function(app,email, router) {
             });
         });
 
+    router.route('/termsAndConditions')
+        .get(function (req, res) {
+            res.sendFile('/private_storage/termsAndConditions.html', {root: __dirname});
+        });
+
 
     app.use('/apiPublic', router);
 };
