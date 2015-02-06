@@ -46,6 +46,19 @@ cloudAdminServices.factory('GroupsService', ['$resource', function($resource){
         })
     }
 }]);
+
+cloudAdminServices.factory('NewAccountsService', ['$resource', function($resource){
+    return {
+        state: $resource('api/admin/users/newAccounts/state/:type', {}, {
+            query: { method: 'GET', isArray: true },
+            save: { method: 'PUT', isArray: false }
+        }),
+        count: $resource('api/admin/users/newAccounts/count', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
+
 cloudAdminServices.factory('publicContentService', ['$resource', function($resource){
     return {
         getAllContent: $resource('api/admin/users/publicContent/getAllContent', {}, {

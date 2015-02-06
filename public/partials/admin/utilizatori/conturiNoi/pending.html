@@ -1,0 +1,22 @@
+<table ng-table="tableParams" show-filter="true" class="table table-bordered">
+    <tr ng-repeat="user in $data">
+        <td data-title="'Username'" filter="{ 'username': 'text' }" sortable="'username'">
+            {{user.username}}
+        </td>
+        <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
+            {{user.name}}
+        </td>
+        <td data-title="'Profesie'" sortable="'profession.display_name'">
+            {{user.profession.display_name}}
+        </td>
+        <td data-title="'Dovada'" sortable="'proof_path'">
+            <a ng-if="user.proof_path" ng-href="{{pathAmazonDev+user.proof_path}}">Descarca</a>
+        </td>
+        <td data-title="'Actiuni'">
+            <div class="btn-group">
+                <div class="btn btn-success" ng-click="accept(user._id)"><i class="glyphicon glyphicon-ok"></i></div>
+                <div class="btn btn-danger" ng-click="reject(user._id)"><i class="glyphicon glyphicon-remove"></i></div>
+            </div>
+        </td>
+    </tr>
+</table>
