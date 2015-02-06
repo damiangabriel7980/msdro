@@ -7098,20 +7098,6 @@ html body .rootView {
   margin-bottom: 15px;
   padding: 0;
 }
-.elearningLayout .categories #customScrollbar {
-  padding: 15px;
-  border-radius: 8px;
-  border: 1px solid #008780;
-  width: 100%;
-}
-.elearningLayout .categories #customScrollbar .scroll-bar {
-  right: 10px;
-  top: 10px;
-}
-.elearningLayout .categories #customScrollbar .scroll-viewport {
-  height: 200px;
-  width: 90%;
-}
 .elearningLayout .categories .therapeuticArea {
   width: 100%;
   display: block;
