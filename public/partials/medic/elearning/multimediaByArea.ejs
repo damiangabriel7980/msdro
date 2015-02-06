@@ -1,4 +1,4 @@
-<div class="row margintop20px" style="text-align: center" ng-if="multimedias[0].message"><h2>{{multimedias[0].message}}</h2></div>
+<div class="row margintop20px paddLeft45px" style="text-align: center" ng-if="multimedias[0].message"><h2>{{multimedias[0].message}}</h2></div>
 <ul ng-if="multimedias.length>=1&&!multimedias[0].message" class="articles" style="list-style: none;">
     <li class="col-md-12" ng-repeat="prod in multimedias | orderBy:'title'">
 
@@ -10,14 +10,14 @@
                     <div class="col-md-12">
                         <h4><a class="handCursor" ng-click="openMultimedia(prod._id)"></a>{{prod.title}}</h4>
 
-                        <p ng-if="prod.description!=null" class="padd7percent">{{prod.description | htmlToPlaintext | limitTo: 190}}...
+                        <p ng-if="prod.description!=null" class="padd7percent" convert-special conver="prod.description" ng-bind-html="convertAndTrustAsHtml(prod.description,190)">
                         </p>
                         <p ng-if="prod.description==null" class="padd11percent"></p>
 
                     </div>
 
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-12">
                 <a class="btn btn-info btn-sm pull-right margintop11percent btn-more-news" ng-click="openMultimedia(prod._id)">Vezi material</a>
                     </div>
             </div>

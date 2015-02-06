@@ -1,8 +1,16 @@
 .myMultipleSelect {
   width: 100%;
-  height: 300px;
+  max-height: 200px;
   overflow: scroll;
 }
 .myMultipleSelect .item {
   width: 100%;
+}
+.myMultipleSelect .branch {
+  float: left;
+  padding-right: 30px;
+}
+.myMultipleSelect .branch .title {
+  width: 100%;
+  font-weight: bold;
 }

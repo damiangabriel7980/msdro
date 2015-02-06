@@ -16,8 +16,6 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
             });
         }
     });
-    console.log($rootScope.previousState);
-    console.log($rootScope.currentState);
     $scope.amazon = $rootScope.pathAmazonDev;
 
     $scope.getVideoSrc = function(filepath){
@@ -27,7 +25,13 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
     $scope.okk = function () {
         $modalInstance.close();
     };
-
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtml=function (data) {
+        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
     $scope.cancell = function () {
         console.log($rootScope.previousState);
         $modalInstance.dismiss('cancel');

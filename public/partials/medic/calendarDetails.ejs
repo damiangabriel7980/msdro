@@ -4,9 +4,9 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-md-8"><p class="medium-lineheight"><strong>Location: {{itemsEvent.place}}</strong></p></div>
+                <div class="col-md-8"><p class="medium-lineheight"><strong>Locatie: </strong><strong convert-special conver="itemsEvent.place" ng-bind-html="trustAsHtml(itemsEvent.place)"></strong></p></div>
                 <div class="col-md-4"><span class="label label-info pull-right"><i class="icon-facetime-video icon-white"></i>{{itemsEvent.start | asDate | date: 'dd/MM/yyyy'}} - {{itemsEvent.end | asDate | date: 'dd/MM/yyyy'}}</span></div>
-                <div class="col-xs-12">{{htmlToPlainText(itemsEvent.description)}}</div>
+                <div class="col-xs-12" convert-special conver="itemsEvent.description" ng-bind-html="trustAsHtml(itemsEvent.description)"></div>
             </div>
 
         </div>

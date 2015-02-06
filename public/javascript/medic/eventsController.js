@@ -1,12 +1,19 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope){
+cloudAdminControllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce){
 var date = new Date();
     $scope.realEvents=[];
     var y=$(date);
-     console.log($stateParams);
-     eventsService.query({specialGroup: $rootScope.specialGroupSelected._id}).$promise.then(function(result){
+    $scope.trustAsHtml = function (data) {
+        var newName=$sce.trustAsHtml(data);
+        return newName;
+    };
+    $scope.convertAndTrustAsHtml=function (data) {
+        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
+    eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString:null}).$promise.then(function(result){
         $scope.events =result;
        $scope.eventsS=[];
        for(var i = 0; i < $scope.events.length; i++)
@@ -14,7 +21,7 @@ var date = new Date();
            var today = new Date($scope.events[i].end);
            var tomorrow = new Date($scope.events[i].end);
            tomorrow.setDate(today.getDate()+1);
-           $scope.eventsS.push({id:$scope.events[i]._id, title: $scope.trimTitle($scope.events[i].name),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: $scope.events[i].name});
+           $scope.eventsS.push({id:$scope.events[i]._id, title:trimTitle($scope.events[i].name),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: popOverTitle($scope.events[i].name)});
        }
 
          $scope.realEvents=[$scope.eventsS];
@@ -85,7 +92,7 @@ var date = new Date();
          }
      })
     ;
-    eventsService.query({specialGroup: $rootScope.specialGroupSelected._id}).$promise.then(function(result) {
+    eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result) {
         $scope.events2 = result;
         $scope.events2Filtered = [];
         for (var i = 0; i < $scope.events2.length; i++) {
@@ -112,8 +119,42 @@ var date = new Date();
         var data = input;
         return data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
     };
-    $scope.trimTitle=function(str) {
-        return str.split(/\s+/).slice(0,3).join(" ");
+    var trimTitle=function(str) {
+        var newEventName=String(str)
+            .replace('Ă','A')
+            .replace('ă','a')
+            .replace('Â','A')
+            .replace('â','a')
+            .replace('Î','I')
+            .replace('î','i')
+            .replace('Ș','S')
+            .replace('ș','s')
+            .replace('Ş','S')
+            .replace('ş','s')
+            .replace('Ț','T')
+            .replace('ț','t')
+            .replace('Ţ','T')
+            .replace('ţ','t');
+        newEventName=newEventName.split(/\s+/).slice(0,3).join(" ");
+        return newEventName;
+    };
+    var popOverTitle=function(str) {
+        var newEventName=String(str)
+            .replace('Ă','A')
+            .replace('ă','a')
+            .replace('Â','A')
+            .replace('â','a')
+            .replace('Î','I')
+            .replace('î','i')
+            .replace('Ș','S')
+            .replace('ș','s')
+            .replace('Ş','S')
+            .replace('ş','s')
+            .replace('Ț','T')
+            .replace('ț','t')
+            .replace('Ţ','T')
+            .replace('ţ','t');
+        return newEventName;
     };
 
 }])

@@ -13,7 +13,7 @@ cloudAdminControllers.controller('ariiTerapeuticeEditCtrl', ['$scope','$rootScop
         if($scope.arie){
             areasAdminService.deleteOrUpdateareas.update({id:$stateParams.id},$scope.arie);
             $scope.arie = {};
-            $state.go('ariiTerapeutice');
+            $state.go('ariiTerapeutice',{},{reload: true});
             $modalInstance.close();
         }
     };
@@ -23,7 +23,7 @@ cloudAdminControllers.controller('ariiTerapeuticeEditCtrl', ['$scope','$rootScop
         return $sce.trustAsHtml(htmlCode);
     };
     $scope.okk = function () {
-        $state.go('ariiTerapeutice');
+        $state.go('ariiTerapeutice',{},{reload: true});
         $modalInstance.close();
     };
 }]);

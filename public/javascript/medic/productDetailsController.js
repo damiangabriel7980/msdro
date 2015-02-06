@@ -9,6 +9,13 @@ cloudAdminControllers.controller('productDetailsController', ['$scope','$rootSco
          $scope.selectedProduct = result;
          $scope.ProductDetailsHTML = $sce.trustAsHtml(result.description);
      });
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtml=function (data) {
+        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
 
     $scope.amazon = $rootScope.pathAmazonDev;
 }]);

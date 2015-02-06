@@ -1,0 +1,6123 @@
+[22:10:15] Using gulpfile ~/git/msd-new/gulpfile.js
+[22:10:15] Starting 'breakGroups'...
+[22:10:15] Finished 'breakGroups' after 6.67 ms
+Copy of old groups: 
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' },
+  { _id: 54c7505de44732c413fca0a2,
+    display_name: 'Pacienti',
+    default_group: 0,
+    content_specific: false,
+    __v: 0 } ]
+Removed 6 groups
+New professions:
+[ { display_name: 'Medic', _id: 54d12b2968a61a964a33523b },
+  { display_name: 'Farmacist', _id: 54d12b2968a61a964a33523c } ]
+{ Medic: 
+   [ { display_name: 'DeGardaPentruViata',
+       description: null,
+       image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+       content_specific: true,
+       profession: 54d12b2968a61a964a33523b,
+       _id: 54d12b2968a61a964a33523d },
+     { display_name: 'MSD Diabetes',
+       description: null,
+       image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+       content_specific: true,
+       profession: 54d12b2968a61a964a33523b,
+       _id: 54d12b2968a61a964a33523e },
+     { display_name: 'Immunology',
+       description: 'Grup de imunologie',
+       image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+       content_specific: true,
+       profession: 54d12b2968a61a964a33523b,
+       _id: 54d12b2968a61a964a33523f },
+     { display_name: 'Pacienti',
+       description: undefined,
+       image_path: undefined,
+       content_specific: false,
+       profession: 54d12b2968a61a964a33523b,
+       _id: 54d12b2968a61a964a335240 },
+     { display_name: 'Default',
+       description: undefined,
+       image_path: undefined,
+       content_specific: false,
+       profession: 54d12b2968a61a964a33523b,
+       _id: 54d12b2968a61a964a335241 } ],
+  Farmacist: 
+   [ { display_name: 'DeGardaPentruViata',
+       description: null,
+       image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+       content_specific: true,
+       profession: 54d12b2968a61a964a33523c,
+       _id: 54d12b2968a61a964a335242 },
+     { display_name: 'MSD Diabetes',
+       description: null,
+       image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+       content_specific: true,
+       profession: 54d12b2968a61a964a33523c,
+       _id: 54d12b2968a61a964a335243 },
+     { display_name: 'Immunology',
+       description: 'Grup de imunologie',
+       image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+       content_specific: true,
+       profession: 54d12b2968a61a964a33523c,
+       _id: 54d12b2968a61a964a335244 },
+     { display_name: 'Pacienti',
+       description: undefined,
+       image_path: undefined,
+       content_specific: false,
+       profession: 54d12b2968a61a964a33523c,
+       _id: 54d12b2968a61a964a335245 },
+     { display_name: 'Default',
+       description: undefined,
+       image_path: undefined,
+       content_specific: false,
+       profession: 54d12b2968a61a964a33523c,
+       _id: 54d12b2968a61a964a335246 } ] }
+========================== START ENTRY
+Collection: multimedia
+Document id: 54b51b0829bd3613483ce67e
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: multimedia
+Document id: 54b51b0829bd3613483ce682
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: multimedia
+Document id: 54b51b0829bd3613483ce683
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: multimedia
+Document id: 54b51b0829bd3613483ce681
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: multimedia
+Document id: 54b51b0829bd3613483ce684
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: multimedia
+Document id: 54b51b0829bd3613483ce685
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: multimedia
+Document id: 54b51b0829bd3613483ce686
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce66e
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce66f
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce670
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce671
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce672
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce673
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce674
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce676
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54c7505de44732c413fca0a2,
+    display_name: 'Pacienti',
+    default_group: 0,
+    content_specific: false,
+    __v: 0 } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e },
+  { display_name: 'Pacienti',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335240 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54c8e05fa65c270e00954a30
+groupsID:
+[ { _id: 54c7505de44732c413fca0a2,
+    display_name: 'Pacienti',
+    default_group: 0,
+    content_specific: false,
+    __v: 0 } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Pacienti',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335240 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce675
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce677
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce678
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce679
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce67a
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce67b
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b51b0829bd3613483ce67c
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b690cee4ba29753e081a9c
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335243 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b80fe8abffa9e5368d1959
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' },
+  { _id: 54c7505de44732c413fca0a2,
+    display_name: 'Pacienti',
+    default_group: 0,
+    content_specific: false,
+    __v: 0 } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f },
+  { display_name: 'Pacienti',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335240 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54b81104abffa9e5368d195a
+groupsID:
+[ { _id: 54c7505de44732c413fca0a2,
+    display_name: 'Pacienti',
+    default_group: 0,
+    content_specific: false,
+    __v: 0 } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Pacienti',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335240 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54c7b3fcbea4426645c42022
+groupsID:
+[ { _id: 54c7505de44732c413fca0a2,
+    display_name: 'Pacienti',
+    default_group: 0,
+    content_specific: false,
+    __v: 0 } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Pacienti',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335240 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54cba803ab84f10d0052fd95
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: calendar-events
+Document id: 54d0e67a7a4c9f0d00f4ad5c
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: users
+Document id: 54b51d021f8c7236327cfa7f
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Profession decided:
+Medic
+Ignore:
+[ 'Medic', 'Farmacist', 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: users
+Document id: 54b64d8720d353241b69133c
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Profession decided:
+Medic
+Ignore:
+[ 'Medic', 'Farmacist', 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: users
+Document id: 54b6578320d353241b69133d
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Profession decided:
+Medic
+Ignore:
+[ 'Medic', 'Farmacist', 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: users
+Document id: 54b657bc20d353241b69133e
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Profession decided:
+Medic
+Ignore:
+[ 'Medic', 'Farmacist', 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: users
+Document id: 54b6580c20d353241b69133f
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Profession decided:
+Medic
+Ignore:
+[ 'Medic', 'Farmacist', 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: users
+Document id: 54b69121e3dc12ab3a516c49
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Profession decided:
+Medic
+Ignore:
+[ 'Medic', 'Farmacist', 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: users
+Document id: 54c261342a790b331d300877
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Profession decided:
+Medic
+Ignore:
+[ 'Medic', 'Farmacist', 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: users
+Document id: 54b51d8d0d7a81c246f1c42c
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Profession decided:
+Medic
+Ignore:
+[ 'Medic', 'Farmacist', 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce697
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce698
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce699
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce69a
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce69b
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce69c
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce69d
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce69e
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce69f
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6a0
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6a1
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6a2
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6a3
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6a4
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6a5
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6a6
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6a7
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6a8
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6a9
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6aa
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6ab
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6ac
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6ad
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6ae
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6af
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6b0
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6b1
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6b2
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6b3
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6b4
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6b5
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6b6
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6b7
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6b8
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6b9
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6ba
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6bb
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6bc
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6bd
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6be
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6bf
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6c0
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6c1
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6c2
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6c3
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6c4
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6c5
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6c6
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6c7
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6c8
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6c9
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6ca
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6cb
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6cc
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6cd
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6ce
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6cf
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6d0
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6d1
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6d2
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6d3
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6d4
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: products
+Document id: 54b51b0829bd3613483ce6d5
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335243 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce5f4
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce607
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce609
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54c749a61c30865e1bd4f57d
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54cf6374ab84f10d0052fdcc
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce5f1
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce5f2
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce5fa
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce5fb
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce601
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce602
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce600
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce604
+groupsID:
+[ { _id: 54c7505de44732c413fca0a2,
+    display_name: 'Pacienti',
+    default_group: 0,
+    content_specific: false,
+    __v: 0 } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Pacienti',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335240 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce605
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce606
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce608
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce60a
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce60b
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce60c
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87c,
+    display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523d },
+  { display_name: 'DeGardaPentruViata',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87c/image-logo/logo54b51b0929bd3613483ce87c.jpg',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335242 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce60d
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce60e
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce60f
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce610
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce611
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce612
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce613
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce614
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce615
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce616
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce617
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce618
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce619
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce61a
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce61b
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce61c
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce61d
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce61e
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce61f
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce620
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce621
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce622
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce623
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce624
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce625
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce626
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce627
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce628
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce629
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce62a
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce62b
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce62d
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce62e
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce62f
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce630
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce631
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce632
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce633
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce634
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce635
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce637
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce638
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce639
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce63a
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce63b
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335243 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce63c
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335243 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce642
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce63d
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Farmacist', 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335243 } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce63e
+groupsID:
+[ { _id: 54b901d8fcc71c130068b0e1,
+    display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    default_group: 0,
+    content_specific: true,
+    __v: 0,
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png' } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Immunology',
+    description: 'Grup de imunologie',
+    image_path: 'userGroup/54b901d8fcc71c130068b0e1/image-logo/logo54b901d8fcc71c130068b0e1.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523f } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce63f
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true } ]
+==========================
+Professions decided:
+[ 'Medic' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e } ]
+========================== END ENTRY
+========================== START ENTRY
+Collection: articles
+Document id: 54b51b0829bd3613483ce640
+groupsID:
+[ { _id: 54b51b0929bd3613483ce87b,
+    display_name: 'Medic',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false },
+  { _id: 54b51b0929bd3613483ce87e,
+    display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    default_group: 0,
+    content_specific: true },
+  { _id: 54b51b0929bd3613483ce87a,
+    display_name: 'Farmacist',
+    description: null,
+    image_path: null,
+    default_group: 1,
+    content_specific: false } ]
+==========================
+Professions decided:
+[ 'Medic', 'Farmacist' ]
+Ignore:
+[ 'Grup predefinit' ]
+New groupsID:
+[ { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a335241 },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523b,
+    _id: 54d12b2968a61a964a33523e },
+  { display_name: 'MSD Diabetes',
+    description: null,
+    image_path: 'userGroup/54b51b0929bd3613483ce87e/image-logo/logo54b51b0929bd3613483ce87e.png',
+    content_specific: true,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335243 },
+  { display_name: 'Default',
+    description: undefined,
+    image_path: undefined,
+    content_specific: false,
+    profession: 54d12b2968a61a964a33523c,
+    _id: 54d12b2968a61a964a335246 } ]
+========================== END ENTRY
+Profession id to array of users assignment:
+{ '54d12b2968a61a964a33523b': 
+   [ 54b51d021f8c7236327cfa7f,
+     54b64d8720d353241b69133c,
+     54b6578320d353241b69133d,
+     54b657bc20d353241b69133e,
+     54b6580c20d353241b69133f,
+     54b69121e3dc12ab3a516c49,
+     54c261342a790b331d300877,
+     54b51d8d0d7a81c246f1c42c ] }
+Updated 8 users

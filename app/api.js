@@ -24,6 +24,7 @@ var Topics = require('./models/qa_topics');
 var AnswerGivers = require('./models/qa_answerGivers');
 var Threads = require('./models/qa_threads');
 var qaMessages = require('./models/qa_messages');
+var Professions = require('./models/professions');
 
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
@@ -545,7 +546,19 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/admin/users/groups')
 
         .get(function(req, res) {
-            UserGroup.find({}, {display_name: 1, description: 1} ,function(err, cont) {
+            UserGroup.find({}, {display_name: 1, description: 1, profession: 1}).populate('profession').exec(function(err, cont) {
+                if(err) {
+                    logger.error(err);
+                    res.send(err);
+                }
+                res.json(cont);
+            });
+        });
+
+    router.route('/admin/users/professions')
+
+        .get(function(req, res) {
+            Professions.find({}, function(err, cont) {
                 if(err) {
                     logger.error(err);
                     res.send(err);
@@ -557,7 +570,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/admin/users/groupDetails/:id')
 
         .get(function(req, res) {
-            UserGroup.find({_id: req.params.id}, function(err, cont) {
+            UserGroup.find({_id: req.params.id}).populate('profession').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }else{
@@ -601,7 +614,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             //check if name exists
             if(!data.group.display_name){
                 ans.error = true;
@@ -614,35 +627,44 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                     ans.message = "Numele trebuie sa aiba doar caractere, minim 3";
                     res.json(ans);
                 }else{
-                    //add group
-                    new UserGroup(data.group).save(function (err, inserted) {
-                        if(err){
-                            logger.error(err);
-                            ans.error = true;
-                            ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
-                            res.json(ans);
-                        }else{
-                            var idGroupInserted = inserted._id.toString();
-                            //update users to point to this group
-                            //extract id's from users
-                            var ids = [];
-                            for(var i=0; i<data.users.length; i++){
-                                ids.push(data.users[i]._id);
-                            }
-                            connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
-                                if(err){
-                                    logger.error(err);
-                                    ans.error = true;
-                                    ans.message = "Eroare la adaugarea userslor noi in grup.";
-                                    res.json(ans);
-                                }else{
-                                    ans.error = false;
-                                    ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
-                                    res.json(ans);
+                    //validate profession
+                    var profession = (data.group.profession||"").toString();
+                    if(profession.length == 24){
+                        data.group.profession = mongoose.Types.ObjectId(profession);
+                        //add group
+                        new UserGroup(data.group).save(function (err, inserted) {
+                            if(err){
+                                logger.error(err);
+                                ans.error = true;
+                                ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
+                                res.json(ans);
+                            }else{
+                                var idGroupInserted = inserted._id.toString();
+                                //update users to point to this group
+                                //extract id's from users
+                                var ids = [];
+                                for(var i=0; i<data.users.length; i++){
+                                    ids.push(data.users[i]._id);
                                 }
-                            })
-                        }
-                    });
+                                connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
+                                    if(err){
+                                        logger.error(err);
+                                        ans.error = true;
+                                        ans.message = "Eroare la adaugarea userslor noi in grup.";
+                                        res.json(ans);
+                                    }else{
+                                        ans.error = false;
+                                        ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
+                                        res.json(ans);
+                                    }
+                                })
+                            }
+                        });
+                    }else{
+                        ans.error = true;
+                        ans.message = "Selectati o profesie";
+                        res.json(ans);
+                    }
                 }
             }
         }
@@ -668,7 +690,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {};
             var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             //check if name exists
             if(!data.group.display_name){
                 ans.error = true;
@@ -821,7 +843,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var data = req.body.data;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z0-9\\s]{3,100}$');
+            var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -860,7 +882,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var id = req.body.data.id;
             var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z0-9\\s]{3,100}$');
+            var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 ans.error = true;
                 ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
@@ -1362,21 +1384,21 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
     router.route('/admin/products')
         .get(function(req, res) {
-            Products.find({}).populate("therapeutic-areasID").exec(function(err, cont) {
+            Products.find({}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
                 else{
                     var products={};
                     products['productList']=cont;
-                    console.log(products['productList'][0]);
-                    UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
+                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
                         if(err) {
                             logger.error(err);
                             res.send(err);
+                        }else{
+                            products['groups']=cont2;
+                            res.json(products);
                         }
-                        products['groups']=cont2;
-                        res.json(products);
                     });
                 }
 
@@ -1384,68 +1406,73 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .post(function(req, res) {
 
-            var product = new Products(); 		// create a new instance of the Bear model
-            product.name = req.body.name;  // set the bears name (comes from the request)
-            product.description=req.body.description ;
-            product.enable= req.body.enable     ;
-            product.file_path= req.body.file_path  ;
-            product.image_path= req.body.image_path ;
-            product.last_updated=req.body.last_updated;
-            var serializedAreas = [];
-            for(var i=0; i<req.body['therapeutic-areasID'].length; i++){
-                serializedAreas.push(req.body['therapeutic-areasID'][i].id.toString());
-            }
-            product['therapeutic-areasID']= serializedAreas ;
-            product.groupsID= req.body.groupsID;
-            product.save(function(err) {
+            var product = new Products();
+
+            if(req.body.name) product.name = req.body.name;
+            if(req.body.description) product.description=req.body.description;
+            if(req.body.enable) product.enable= req.body.enable;
+            if(req.body.file_path) product.file_path= req.body.file_path;
+            if(req.body.image_path) product.image_path= req.body.image_path;
+            if(req.body['therapeutic-areasID']) product['therapeutic-areasID']= req.body['therapeutic-areasID'];
+            if(req.body.groupsID) product.groupsID= req.body.groupsID;
+
+            product.last_updated=Date.now();
+
+            product.save(function(err, saved) {
                 if (err)
                     res.send(err);
                 else
-                    res.json({ message: 'Product created!' });
+                    res.json({ message: 'Product created!' , saved: saved});
             });
 
         });
+
     router.route('/admin/products/:id')
         .get(function(req, res) {
-            Products.findById(req.params.id, function(err, product) {
-                if (err)
+            console.log("asasa");
+            Products.findOne({_id: req.params.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                if (err){
                     res.send(err);
-                res.json(product);
+                }else{
+                    res.json(product);
+                }
             });
         })
         .put(function(req, res) {
 
             Products.findById(req.params.id, function(err, product) {
-
-                if (err)
+                if (err){
                     res.send(err);
+                }else{
+                    if(req.body.name) product.name = req.body.name;
+                    if(req.body.description) product.description = req.body.description;
+                    if(typeof req.body.enable === "boolean") product.enable = req.body.enable;
+                    if(req.body.file_path) product.file_path = req.body.file_path;
+                    if(req.body.image_path) product.image_path = req.body.image_path;
+                    if(req.body['therapeutic-areasID']) product['therapeutic-areasID'] = req.body['therapeutic-areasID'];
+                    if(req.body.groupsID) product.groupsID = req.body.groupsID;
 
-                product.name = req.body.name;  // set the bears name (comes from the request)
-                product.description=req.body.description ;
-                product.enable= req.body.enable     ;
-                product.file_path= req.body.file_path  ;
-                product.image_path= req.body.image_path ;
-                product.last_updated=req.body.last_updated;
-                product['therapeutic-areasID']= req.body['therapeutic-areasID'] ;
-                product.groupsID= req.body.groupsID;
-                // save the bear
-                product.save(function(err) {
-                    if (err)
-                        res.send(err);
+                    product.last_updated = Date.now();
 
-                    res.json({ message: 'Product updated!' });
-                });
-
+                    product.save(function(err, saved) {
+                        if (err){
+                            res.send(err);
+                        }else{
+                            res.json({ message: 'Product updated!' , saved: saved});
+                        }
+                    });
+                }
             });
         })
         .delete(function(req, res) {
             Products.remove({
                 _id: req.params.id
             }, function(err,prod) {
-                if (err)
+                if (err){
                     res.send(err);
-
-                res.json({ message: 'Successfully deleted' });
+                }else{
+                    res.json({ message: 'Successfully deleted' });
+                }
             });
         });
 
@@ -1459,7 +1486,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 else {
                     var contents={};
                     contents['content']=cont;
-                    UserGroup.find({}, {display_name: 1} ,function(err, cont2) {
+                    UserGroup.find({}, {display_name: 1, profession: 1}).populate('profession').exec(function(err, cont2) {
                         if(err) {
                             logger.error(err);
                             res.send(err);
@@ -1471,30 +1498,33 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         })
         .post(function(req, res) {
-            var content = new Content(); 		// create a new instance of the Bear model
-            content.title = req.body.title;  // set the bears name (comes from the request)
-            content.author=req.body.author ;
-            content.description= req.body.description     ;
-            content.text= req.body.text  ;
-            content.type= req.body.type ;
-            content.last_updated=req.body.last_updated;
-            content.version= req.body.version ;
-            content.enable=req.body.enable;
-            content.image_path=req.body.image_path;
-            content.groupsID=req.body.groupsID;
-            content.save(function(err,result) {
-                if (err)
-                {
+            var content = new Content(req.body);
+            content.enable = false;
+            content.last_updated = Date.now();
+            content.save(function(err,saved) {
+                if (err){
                     logger.error(err);
                     res.send(err);
+                }else{
+                    res.json({ message: 'Content created!' , saved: saved});
                 }
-                else{
-                    res.json({ message: 'Content created!' });
-                }
-
             });
-
         });
+
+    router.route('/admin/content/groupsByIds')
+        .post(function (req, res) {
+            var ids = req.body.ids || [];
+            UserGroup.find({_id: {$in: ids}}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    res.statusCode = 400;
+                    res.end();
+                }else{
+                    console.log(groups);
+                    res.send(groups);
+                }
+            });
+        });
+
     router.route('/admin/content/:id')
 
         .get(function(req, res) {
@@ -1515,24 +1545,25 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
                 if (err) {
                     res.send(err);
+                }else{
+                    if(req.body.title) content.title = req.body.title;
+                    if(req.body.author) content.author = req.body.author;
+                    if(req.body.description) content.description = req.body.description;
+                    if(req.body.text) content.text = req.body.text;
+                    if(req.body.type) content.type = req.body.type;
+                    if(req.body.groupsID) content.groupsID = req.body.groupsID;
+                    if(typeof req.body.enable === "boolean") content.enable = req.body.enable;
+
+                    content.last_updated = Date.now();
+
+                    content.save(function(err, saved) {
+                        if (err){
+                            res.send(err);
+                        }else{
+                            res.json({ message: 'Content updated!' , newContent: saved});
+                        }
+                    });
                 }
-                content.title = req.body.title;  // set the bears name (comes from the request)
-                content.author=req.body.author ;
-                content.description= req.body.description     ;
-                content.text= req.body.text  ;
-                content.type= req.body.type ;
-                content.last_updated=req.body.last_updated;
-                content.version= req.body.version ;
-                content.enable=req.body.enable;
-                content.image_path=req.body.image_path;
-                content.groupsID=req.body.groupsID;
-                content.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Content updated!' });
-                });
-
             });
         })
         .delete(function(req, res) {
@@ -1571,23 +1602,31 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         })
         .post(function(req, res) {
 
-            var event = new Events(); 		// create a new instance of the Bear model
-            event.description = req.body.description;  // set the bears name (comes from the request)
-            event.enable=req.body.enable ;
-            event.end= req.body.end     ;
-            event.groupsID= req.body.groupsID  ;
-            event.last_updated= req.body.last_updated ;
-            event.name=req.body.name;
-            event.place= req.body.place ;
-            event.privacy=req.body.privacy;
-            event.start=req.body.start;
-            event.type=req.body.type;
-            event.listconferences=req.body.listconferences;
-            event.save(function(err) {
-                if (err)
-                    res.send(err);
+            var event = new Events();
 
-                res.json({ message: 'Event created!' });
+            if(req.body.description) event.description = req.body.description;
+            if(typeof req.body.enable === "boolean"){
+                event.enable = req.body.enable;
+            }else{
+                event.enable = false;
+            }
+            if(req.body.end) event.end= req.body.end;
+            if(req.body.name) event.name=req.body.name;
+            if(req.body.place) event.place= req.body.place;
+            if(req.body.start) event.start=req.body.start;
+            if(req.body.type) event.type=req.body.type;
+
+            if(req.body.listconferences) event.listconferences = req.body.listconferences;
+            if(req.body.groupsID) event.groupsID= req.body.groupsID;
+
+            event.last_updated = Date.now();
+
+            event.save(function(err, saved) {
+                if (err){
+                    res.send(err);
+                }else{
+                    res.json({ message: 'Event created!' , saved: saved});
+                }
             });
 
         });
@@ -1604,14 +1643,11 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/admin/events/:id')
 
         .get(function(req, res) {
-            Events.find({_id:req.params.id}).populate('listconferences').exec(function(err, cont) {
+            Events.findOne({_id:req.params.id}).populate('listconferences').populate('groupsID').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
                 }else{
-                    res.json(null);
+                    res.json(cont);
                 }
             })
         })
@@ -1619,51 +1655,57 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
 
             Events.findById(req.params.id, function(err, event) {
 
-                if (err)
+                if (err){
                     res.send(err);
-
-                event.description = req.body.description;  // set the bears name (comes from the request)
-                event.enable=req.body.enable ;
-                event.end= req.body.end     ;
-                event.groupsID= req.body.groupsID  ;
-                event.last_updated= req.body.last_updated ;
-                event.name=req.body.name;
-                event.place= req.body.place ;
-                event.privacy=req.body.privacy;
-                event.start=req.body.start;
-                event.type=req.body.type;
-                event.listconferences=req.body.listconferences;
-                event.save(function(err, eventSaved) {
-                    if (err){
-                        res.send(err);
+                }else{
+                    if(req.body.description) event.description = req.body.description;
+                    if(typeof req.body.enable === "boolean"){
+                        event.enable = req.body.enable;
                     }else{
-                        //send notification
-                        if(req.body.notificationText){
-                            getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
-                                if(err){
-                                    res.json({ message: 'Event updated! Error sending notification' });
-                                }else{
-                                    if(id_users.length != 0){
-                                        sendPushNotification(req.body.notificationText, id_users, function (err, success) {
-                                            if(err){
-                                                console.log(err);
-                                                logger.error(err);
-                                                res.json({ message: 'Event updated! Error notifying users' });
-                                            }else{
-                                                res.json({ message: 'Event updated! Notification was sent' });
-                                            }
-                                        });
-                                    }else{
-                                        res.json({ message: 'Event updated! No users found to notify' });
-                                    }
-                                }
-                            });
-                        }else{
-                            res.json({ message: 'Event updated! No notification sent' });
-                        }
+                        event.enable = false;
                     }
-                });
+                    if(req.body.end) event.end= req.body.end;
+                    if(req.body.name) event.name=req.body.name;
+                    if(req.body.place) event.place= req.body.place;
+                    if(req.body.start) event.start=req.body.start;
+                    if(req.body.type) event.type=req.body.type;
 
+                    if(req.body.listconferences) event.listconferences = req.body.listconferences;
+                    if(req.body.groupsID) event.groupsID= req.body.groupsID;
+
+                    event.last_updated= Date.now();
+
+                    event.save(function(err, eventSaved) {
+                        if (err){
+                            res.send(err);
+                        }else{
+                            //send notification
+                            if(req.body.notificationText){
+                                getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
+                                    if(err){
+                                        res.json({ message: 'Event updated! Error sending notification' });
+                                    }else{
+                                        if(id_users.length != 0){
+                                            sendPushNotification(req.body.notificationText, id_users, function (err, success) {
+                                                if(err){
+                                                    console.log(err);
+                                                    logger.error(err);
+                                                    res.json({ message: 'Event updated! Error notifying users' });
+                                                }else{
+                                                    res.json({ message: 'Event updated! Notification was sent' });
+                                                }
+                                            });
+                                        }else{
+                                            res.json({ message: 'Event updated! No users found to notify' });
+                                        }
+                                    }
+                                });
+                            }else{
+                                res.json({ message: 'Event updated! No notification sent' });
+                            }
+                        }
+                    });
+                }
             });
         })
         .delete(function(req, res) {
@@ -2429,7 +2471,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-zA-Z0-9]{1}[a-zA-Z0-9\\-_]{1,50}$','i');
+            var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2459,7 +2501,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             var id = req.body.id;
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            var namePatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2545,7 +2587,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                 res.send({message: {type: 'danger', text:'Eroare la validare. Verificati daca medicul este deja adaugat'}});
                             }else{
                                 //check nickname format
-                                var nickPatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+                                var nickPatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
                                 if(!nickPatt.test(req.body.nickname.toString())){
                                     res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
                                 }else{
@@ -2578,7 +2620,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .put(function (req, res) {
             var nickname = req.body.nickname?req.body.nickname.toString():"";
             //validate nickname format
-            var nickPatt = new XRegExp('^[a-z0-9]{1}[a-z0-9\\-_]{1,50}$','i');
+            var nickPatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
             if(!nickPatt.test(nickname)){
                 res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2829,7 +2871,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {};
             var newData = req.body.newData;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
             //check name
             if((!namePatt.test(newData.firstName.toString())) || (!namePatt.test(newData.lastName.toString()))){
@@ -2872,8 +2914,8 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
         .post(function (req, res) {
             var ans = {error:false};
             var job = req.body.job;
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,30}$');
-            var numberPatt = new XRegExp('^[0-9]{1,5}$');
+            var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$');
+            var numberPatt = new XRegExp('^[a-zA-Z0-9\\s]{1,5}$');
             if(!numberPatt.test(job.street_number.toString())) {
                 ans.error = true;
                 ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
@@ -3053,22 +3095,22 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
             });
         });
 
-    router.route('/userHomeCarousel/:specialGroup')
-        .get(function (req,res) {
+    router.route('/userHomeCarousel/')
+        .post(function (req,res) {
             getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
                 }else{
                     var forGroups = nonSpecificGroupsIds;
-                    if(req.params.specialGroup){
-                        forGroups.push(req.params.specialGroup);
+                    if(req.body.specialGroupSelected){
+                        forGroups.push(req.body.specialGroupSelected.toString());
                     }
+                    console.log(forGroups);
                     //get allowed articles for user
-                    Content.find({groupsID: {$in: forGroups}}, {_id: 1}, function (err, content) {
+                    Content.find({groupsID: {$in: forGroups},enable:true}, {_id: 1}, function (err, content) {
                         if(err){
                             res.send(err);
                         }else{
-                            console.log(content);
                             //get ids of allowed articles
                             getIds(content, function (ids) {
                                 //get carousel content within allowed articles
@@ -3097,83 +3139,117 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 }
             })
         });
-    router.route('/userHomeSearch/:data')
-        .get(function(req,res){
-            var data=req.params.data;
+    router.route('/userHomeSearch/')
+        .post(function(req,res){
+            var data=req.body.data;
             var arr_of_items=[Products,Multimedia,Quizes,Content,Events];
             var ObjectOfResults={};
             var checker=0;
-            async.each(arr_of_items, function (item, callback) {
-                item.search({
-
-                    query_string: {
-                        query: data
-
-                    }
-
-                },{hydrate: true,groupsID: {$in: req.user.groupsID}}, function(err, results) {
-                    if(err)
-                    {
-                        res.json(err);
-                        return;
-                    }
-                    else
-                    {
-                        if(results.hits.hits.length===0)
-                            checker+=1;
-                        else
-                        {
-                            //var myResults=[];
-                            //for(var i=0;i<results.hits.hits.length;i++)
-                            //{
-                            //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
-                            //        myResults.push(results.hits.hits[i]);
-                            //}
-                            ObjectOfResults[item.modelName]=results.hits.hits;
-                        }
-
-                    }
-
-
-                    callback();
-                });
-            }, function (err) {
-               if(err)
-                    res.json(err);
-                else
-               {
-                    if(checker===5)
-                        res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
-                   else{
-                        console.log(ObjectOfResults);
-                        res.json(ObjectOfResults);
-                    }
-
-               }
-
-            })
-
-        });
-    router.route('/userHomeEvents')
-        .get(function (req,res) {
-            Events.find({groupsID: {$in: req.user.groupsID}, start: {$gte: new Date()}, enable: {$ne: false}}).sort({start: 1}).exec(function (err, events) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
-                }else{
-                    res.json(events);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected);
+                    }
+                    console.log(forGroups);
+                    async.each(arr_of_items, function (item, callback) {
+                        item.search({
+
+                            query_string: {
+                                query: data + '~5',
+                                default_operator: 'AND',
+                                boost: '1.2',
+                                analyze_wildcard: true
+
+                            }
+
+                        },{hydrate: true,hydrateOptions:{find: {groupsID:{$in:forGroups},enable:true}}}, function(err, results) {
+                            if(err)
+                            {
+                                res.json(err);
+                                return;
+                            }
+                            else
+                            {
+                                if(results.hits.hits.length===0)
+                                    checker+=1;
+                                else
+                                {
+                                    //var myResults=[];
+                                    //for(var i=0;i<results.hits.hits.length;i++)
+                                    //{
+                                    //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
+                                    //        myResults.push(results.hits.hits[i]);
+                                    //}
+                                    ObjectOfResults[item.modelName]=results.hits.hits;
+                                }
+
+                            }
+
+
+                            callback();
+                        });
+                    }, function (err) {
+                        if(err)
+                            res.json(err);
+                        else
+                        {
+                            if(checker===5)
+                                res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
+                            else{
+                                res.json(ObjectOfResults);
+                            }
+
+                        }
+
+                    })
                 }
             });
+        });
+    router.route('/userHomeEvents')
+        .post(function (req,res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
+                if(err){
+                    res.send(err);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected);
+                    }
+                    Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: {$ne: false}}).sort({start: 1}).exec(function (err, events) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            res.json(events);
+                        }
+                    });
+                }
+            });
+
         });
 
     router.route('/userHomeMultimedia')
-        .get(function (req,res) {
-            Multimedia.find({groupsID: {$in: req.user.groupsID}, enable: {$ne: false}}, function (err, multimedia) {
+        .post(function (req,res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
-                }else{
-                    res.json(multimedia);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected);
+                    }
+                    Multimedia.find({groupsID: {$in: forGroups}, enable: {$ne: false}}, function (err, multimedia) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            res.json(multimedia);
+                        }
+                    });
                 }
             });
+
         });
 
     router.route('/userHomeNews')
@@ -3227,8 +3303,7 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
     router.route('/products/productsByArea')
 
         .post(function(req, res) {
-            console.log(req.body.id);
-            console.log(req.body.specialGroup);
+
             var test = req.body.id.toString();
             if(test!=0)
             {
@@ -3240,24 +3315,18 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         if (req.body.specialGroup) {
                             forGroups.push(req.body.specialGroup);
                         }
-                        console.log(req.body.specialGroup);
-                        console.log(test);
                         Therapeutic_Area.find({_id:test}).exec(function(err,response){
                             var TArea= response[0];
                             if(TArea.has_children==true)
                             {
-                                Therapeutic_Area.find({"therapeutic-areasID": {$in :[test]}}).exec(function(err,response){
-                                    var children=response;
-                                    getStringIds(children, function(ids){
-                                    console.log(ids);
-                                    console.log(forGroups);
+                                Therapeutic_Area.find({$or: [{_id:req.body.id},{"therapeutic-areasID": {$in :[test]}}]}).exec(function(err,response){
+                                    getStringIds(response, function(ids){
                                     Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
                                         if(err) {
                                             res.send(err);
                                         }
                                         else
                                         {
-                                            console.log(cont);
                                             res.json(cont);
                                         }
                                     })
@@ -3273,7 +3342,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                                     }
                                     else
                                     {
-                                        console.log(cont);
                                         res.json(cont);
                                     }
                                 })
@@ -3293,8 +3361,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                         if (req.body.specialGroup) {
                             forGroups.push(req.body.specialGroup);
                         }
-                        console.log(req.body.specialGroup.toString());
-                        console.log(forGroups);
                         //get allowed articles for user
                         Products.find({groupsID: {$in: forGroups}}, function(err, cont) {
                             if(err) {
@@ -3302,7 +3368,6 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                             }
                             else
                             {
-                                console.log(cont);
                                 res.json(cont);
                             }
                         })
@@ -3330,26 +3395,38 @@ module.exports = function(app, sessionSecret, email, logger, pushServerAddr, rou
                 res.json(cont);
             });
         });
-    router.route('/calendar/getEvents/:specialGroup')
-        .get(function(req,res) {
+    router.route('/calendar/getEvents/')
+        .post(function(req,res) {
             getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                 if(err){
                     res.send(err);
                 }else{
                     var forGroups = nonSpecificGroupsIds;
-                    if(req.params.specialGroup){
-                        forGroups.push(req.params.specialGroup);
+                    if(req.body.specialGroup){
+                        forGroups.push(req.body.specialGroup);
                     }
-                    console.log(req.params.specialGroup.toString());
-                    console.log(forGroups);
                     //get allowed articles for user
-                    Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
-                        if (err) {
-                            res.send(err);
-                        }
-                        else
-                            res.json(cont);
-                    })
+                    if(forGroups.length==1)
+                    {
+                        Events.find({groupsID: {$in: forGroups},groupsID:{$size: 1},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
+                            if (err) {
+                                res.send(err);
+                            }
+                            else
+                                res.json(cont);
+                        })
+                    }
+                    else
+                    {
+                        Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
+                            if (err) {
+                                res.send(err);
+                            }
+                            else
+                                res.json(cont);
+                        })
+                    }
+
                 }
             })
         });

@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '$stateParams', 'ContentService','$timeout','$window','$document', function($scope, $rootScope, $stateParams, ContentService,$timeout,$window,$document){
+cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '$stateParams', 'ContentService','$timeout','$window','$document','$sce', function($scope, $rootScope, $stateParams, ContentService,$timeout,$window,$document,$sce){
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.lmt=5;
@@ -37,7 +37,16 @@ cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '
     $(window).on('resize', function () {
         $scope.screenW = $(window).width();
     });
-
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtml=function (data,limit) {
+        if(limit!=0)
+            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').substring(0,limit) + '...';
+        else
+            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
     ContentService.getByType.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.content = result;
         console.log($stateParams);

@@ -9,8 +9,18 @@ cloudAdminControllers.controller('HomeSearchController', ['$scope', '$rootScope'
     $scope.trustDescription = function(text){
         return $sce.trustAsHtml(text);
     };
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtml=function (data,limit) {
+        if(limit!=0)
+            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').substring(0,limit) + '...';
+        else
+            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
     $scope.amazon = $rootScope.pathAmazonDev;
-    HomeService.getSearchResults.query({data:$stateParams.data}).$promise.then(function(response){
+    HomeService.getSearchResults.query({data:$rootScope.textToSearch.toString(),specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(response){
        $scope.productsFirstSet = response.products;
         $scope.products=[];
         $scope.quizes=[];

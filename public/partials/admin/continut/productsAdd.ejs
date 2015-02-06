@@ -1,53 +1,28 @@
 <div class="modal-header">
     <div class="modal-title"><h3>Adauga produs</h3></div>
 </div>
-<div class="modal-body" style="height: 70%;">
-<div class="row">
-    <div class="col-xs-6">
-<label class="label label-default">Nume produs:</label>
-        <input type="text" ng-model="newProduct.name" class="form-control col-xs-12">
+<div class="col-md-12 modal-body">
+    <div class="col-md-12">
+        <label>Nume produs:</label>
+        <input type="text" ng-model="newProduct.name" class="form-control">
+    </div>
+    <div class="col-md-12 noPadding">
+        <therapeutic-select all-areas="areas" selected-areas="selectedAreas" returned-areas="returnedAreas"></therapeutic-select>
     </div>
     <div class="col-md-12">
-        <div class="form-group">
-            <label for="areas">Arii terapeutice:</label>
-            <select ng-model="selectedArea" ng-options="area as area.name.replace('0','&nbsp;&nbsp;&nbsp;&nbsp;') for area in allAreas"
-                    class="form-control" id="areas" style="width: 100%;" ng-change="areaWasSelected(selectedArea)">
-            </select>
+        <div class="form-group col-md-12">
+            <label>Grupuri:</label>
+            <my-multiple-select all-objects="groups" selected-objects="selectedGroups" track-by="_id" display-by="display_name" split-by="profession.display_name"></my-multiple-select>
         </div>
     </div>
     <div class="col-md-12">
-        <div ng-repeat="userArea in productsTherapeuticAreas">
-            <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
-                {{userArea.name.replace('0','')}}&nbsp;
-                <i class="glyphicon glyphicon-remove-sign" ng-click="removeProductArea(userArea.id)" style="cursor: pointer;"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <div class="form-group">
-            <label for="grupuri">Grupuri:</label>
-            <select ng-model="selectedGroup" ng-options="grup as grup.display_name for grup in grupe"
-                    class="form-control" id="grupuri" style="width: 100%;" ng-change="groupWasSelected(selectedGroup)">
-            </select>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <div ng-repeat="grup in groupsProduct">
-            <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
-                {{grup.display_name}}&nbsp;
-                <i class="glyphicon glyphicon-remove-sign" ng-click="removeUserGroup(grup._id)" style="cursor: pointer;"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12">
-    <form method="post">
-        <label class="label label-default">Descriere:</label>
+        <label>Descriere:</label>
         <textarea ui-tinymce="tinymceOptions" ng-model="newProduct.description"></textarea>
-    </form>
-    </div>
     </div>
 </div>
 <div class="modal-footer">
-    <a class="btn pull-left btn-primary" ng-click="okk()">Back to Main Page</a>
-    <a class="btn pull-right btn-primary" ng-click="createProduct()">Create Product</a>
+    <div class="col-md-12">
+        <a class="btn pull-left btn-primary" ng-click="closeModal()">Inchide</a>
+        <a class="btn pull-right btn-danger" ng-click="createProduct()">Adauga</a>
+    </div>
 </div>

@@ -23,32 +23,34 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
             $scope.showMoreProd='hide';
     };
     $scope.firstLetters=[];
-    ProductService.getByArea.query({id:$stateParams.id, specialGroup: $rootScope.specialGroupSelected._id?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-         $scope.products = result;
-        if($scope.products.length===0)
-        {
-            $scope.showMoreProd='hide';
-            $scope.message="Nu sunt produse disponibile!";
-        }
-        $scope.productsReserve=[];
-        $scope.productsFiltered=[];
-        if($scope.products.length>8)
-        {
-            $scope.showMoreProd='show';
-        }
-        else
-        {
-            $scope.showMoreProd='hide';
-        }
-                for (var i=0;i<$scope.products.length;i++)
-        {$scope.productsReserve.push($scope.products[i])}
-        $scope.products.forEach(function (item) {
-            var firstLetter = item.name.charAt(0);
-            if ($scope.firstLetters.indexOf(firstLetter) === -1) {
-                $scope.firstLetters.push(firstLetter);
+        ProductService.getByArea.query({id:$stateParams.id, specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
+            $scope.products = result;
+            if($scope.products.length===0)
+            {
+                $scope.showMoreProd='hide';
+                $scope.message="Nu sunt produse disponibile!";
             }
+            $scope.productsReserve=[];
+            $scope.productsFiltered=[];
+            if($scope.products.length>8)
+            {
+                $scope.showMoreProd='show';
+            }
+            else
+            {
+                $scope.showMoreProd='hide';
+            }
+            for (var i=0;i<$scope.products.length;i++)
+            {$scope.productsReserve.push($scope.products[i])}
+            $scope.products.forEach(function (item) {
+                var firstLetter = item.name.charAt(0);
+                if ($scope.firstLetters.indexOf(firstLetter) === -1) {
+                    $scope.firstLetters.push(firstLetter);
+                }
+            });
         });
-    });
+
+
     $scope.filterResults=function(index){
         $scope.productsFiltered=[];
         if($scope.products.length!=$scope.productsReserve.length)
@@ -97,10 +99,17 @@ cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'
     $scope.hideElem = function(){
         $scope.showElem='{display: none}';
     }
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtml=function (data) {
+        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
   }])
     .filter('htmlToPlaintext2', function() {
         return function(text) {
-            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');
+            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
         }
     })
     .filter('mySort', function() {

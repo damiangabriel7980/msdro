@@ -10,7 +10,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ja.qr',
         'ui.bootstrap.datetimepicker',
         'angular-growl',
-        'myMultipleSelect'
+        'myMultipleSelect',
+        'therapeuticSelect'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -48,80 +49,10 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/admin/continut/produse.html',
             controller:'productsCtrl'
         })
-        .state('continut.produse.adaugaProdus',{
-            parent:'continut.produse',
-            url: '',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/productsAdd.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"productsAddCtrl"
-                })
-            }]
-        })
-        .state('continut.produse.editProdus',{
-            parent:'continut.produse',
-            url: '/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/productsEdit.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"productsEditCtrl"
-                })
-            }]
-        })
         .state('continut.articole',{
             url: '/articole',
             templateUrl: 'partials/admin/continut/articole.html',
             controller:'articlesCtrl'
-        })
-        .state('continut.articole.adaugaArticol',{
-            parent:'continut.articole',
-            url: '',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/articoleAdd.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"articlesAddCtrl"
-                })
-            }]
-        })
-        .state('continut.articole.stergeArticol',{
-            parent:'continut.articole',
-            url: '/delete/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/articoleDelete.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"articlesDeleteCtrl"
-                })
-            }]
-        })
-        .state('continut.articole.updateArticol',{
-            parent:'continut.articole',
-            url: '/update/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/articoleUpdate.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"articlesUpdateCtrl"
-                })
-            }]
         })
         .state('continut.evenimente',{
             url: '/evenimente',

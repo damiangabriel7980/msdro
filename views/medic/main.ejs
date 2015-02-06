@@ -79,33 +79,71 @@
 <div class="navbar navbar-default navbar-fixed-top ng-scope navbar-border padd35px" role="navigation" ng-controller="SpecialGroupsMenuController">
     <div class="container padd5pxBottom">
         <div class="navbar-header">
+
+
             <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><img ng-src="{{MSDlogo}}"></a>
-
-
-            <ul class="navbar-brand pull-right userDropdown" style="list-style: none;">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" >
-                        <span class="glyphicon glyphicon-user"></span>
+            <ul class="nav navbar-nav pull-right disableDesktop" style="margin-right: -12px; margin-top: 4px" ng-if="specialGroups.length!=0">
+                    <a class="dropdown-toggle specialGroupDropdown " data-toggle="dropdown">
+                        <img ng-src="{{specialGroupSelected.image_path?pathAmazonDev+specialGroupSelected.image_path:MSDlogo}}">
                     </a>
-                    <ul class="dropdown-menu profile-drop" role="menu">
-                        <li><a style="cursor: pointer;" ng-click="showProfile()">Profile</a></li>
-                        <li><a href="logout">Sign Out</a></li>
+                    <ul class="dropdown-menu myMenu greyBackground mySpecialMenuMobile" role="menu">
+                        <li ng-repeat="group in specialGroups">
+                            <a class="myListItem" style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}} <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a>
+                        </li>
                     </ul>
-                </li>
             </ul>
+            <ul class="nav navbar-nav pull-right disableDesktop dropdown margintop8px marginRight10px" ng-if="specialGroups.length!=0">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-user"></i>
+                </a>
+                <ul class="dropdown-menu myProfile myMenu greyBackground">
+                    <li><a ng-click="showProfile()">Profile</a></li>
+                    <li><a href="logout">Sign Out</a></li>
+                </ul>
+            </ul>
+            <ul class="nav navbar-nav pull-right disableDesktop dropdown margintop8px headerProfileNoSpecial" ng-if="specialGroups.length==0">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-user"></i>
+                </a>
+                <ul class="dropdown-menu myProfileNoSpecial myMenu greyBackground">
+                    <li><a ng-click="showProfile()">Profile</a></li>
+                    <li><a href="logout">Sign Out</a></li>
+                </ul>
+            </ul>
+
+            <ul class="nav navbar-nav pull-right disableDesktop" ng-if="specialGroups.length==0">
+                <form class="navbar-form" role="search">
+                    <div class="input-group expandSearchNoSpecial">
+                        <input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
+                        <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
+                    </div>
+                </form>
+
+            </ul>
+
+            <ul class="nav navbar-nav pull-right disableDesktop" ng-if="specialGroups.length!=0">
+                <form class="navbar-form" role="search">
+                    <div class="input-group expandSearch">
+                        <input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
+                        <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
+                    </div>
+                </form>
+
+            </ul>
+
+            <a class="navbar-brand logoBottom" href="#"><img ng-src="{{MSDlogo}}"></a>
         </div>
 
         <div class="collapse navbar-collapse" collapse="navCollapsed">
 
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav menuPadding">
                 <li class="dropdown" ng-class="{'active': $state.includes('noutati')}">
-                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                    <a class="dropdown-toggle " data-toggle="dropdown">
                        Noutati <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu" >
@@ -115,7 +153,7 @@
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
-                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
                         Biblioteca <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
@@ -124,9 +162,9 @@
                         <li><a class="myListItem" ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" ng-click="navCollapsed = true" target="_blank"><i class="glyphicon glyphicon-th-large white leftPosition iconLeft darkGrey"></i>&nbsp Manualul Merck <i class="glyphicon white glyphicon-chevron-right rightPosition greyColor"></i></a></li>
                     </ul>
                 </li>
-                <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" class="noPaddingRight href="#/calendar" ng-click="navCollapsed = true">Calendar</a></li>
+                <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar" ng-click="navCollapsed = true">Calendar</a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('elearning')}">
-                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                    <a class="dropdown-toggle " data-toggle="dropdown">
                         E-learning <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
@@ -136,7 +174,7 @@
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures')}" ng-if="groupFeatures">
-                    <a class="dropdown-toggle noPaddingRight" data-toggle="dropdown">
+                    <a class="dropdown-toggle " data-toggle="dropdown">
                         {{specialGroupSelected?specialGroupSelected.display_name:""}} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
@@ -144,9 +182,9 @@
                     </ul>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-if="specialGroups.length!=0">
+            <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="specialGroups.length!=0">
                 <li class="dropdown">
-                    <a class="dropdown-toggle specialGroupDropdown noPaddingRight" data-toggle="dropdown">
+                    <a class="dropdown-toggle specialGroupDropdown " data-toggle="dropdown">
                         <img ng-src="{{specialGroupSelected.image_path?pathAmazonDev+specialGroupSelected.image_path:MSDlogo}}">
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
@@ -156,7 +194,16 @@
                     </ul>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right  dropdown margintop8px">
+            <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="specialGroups.length==0">
+                <form class="navbar-form" role="search">
+                    <div class="input-group expandSearchNoSpecial">
+                        <input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
+                        <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
+                    </div>
+                </form>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right disableSpecial dropdown margintop8px" ng-if="specialGroups.length!=0">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>
                 </a>
@@ -165,10 +212,19 @@
                     <li><a href="logout">Sign Out</a></li>
                 </ul>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right disableSpecial dropdown margintop8px" ng-if="specialGroups.length==0">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-user"></i>
+                </a>
+                <ul class="dropdown-menu myProfileNoSpecial myMenu greyBackground">
+                    <li><a ng-click="showProfile()">Profile</a></li>
+                    <li><a href="logout">Sign Out</a></li>
+                </ul>
+            </ul>
+            <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="specialGroups.length!=0">
                 <form class="navbar-form" role="search">
                     <div class="input-group expandSearch">
-                        <input type="text" class="form-control popSearch" ng-enter="searchText()" placeholder="Search" name="srch-term" id="srch-term" ng-model="$parent.textToSearch">
+                        <input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
                         <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
                     </div>
                 </form>

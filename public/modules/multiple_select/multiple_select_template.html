@@ -1,5 +1,15 @@
-<div class="myMultipleSelect">
-    <div class="item" ng-repeat="obj in allObjects">
-        <input type="checkbox" ng-model="obj.selected" ng-change="refreshSelected()"> {{obj[displayBy]}}
+<div>
+    <div class="myMultipleSelect" ng-if="!split">
+        <div class="item" ng-repeat="obj in allObjects">
+            <input type="checkbox" ng-model="obj.selected" ng-change="refreshSelected()"> {{obj[displayBy]}}
+        </div>
+    </div>
+    <div class="myMultipleSelect" ng-if="split">
+        <div ng-repeat="branch in branches" class="branch">
+            <div class="title">{{branch}}:</div>
+            <div ng-repeat="obj in tree[branch]" class="item">
+                <input type="checkbox" ng-model="obj.selected" ng-change="refreshSelected()"> {{obj[displayBy]}}
+            </div>
+        </div>
     </div>
 </div>

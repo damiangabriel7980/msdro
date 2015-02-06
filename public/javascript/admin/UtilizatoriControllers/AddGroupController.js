@@ -12,6 +12,10 @@ cloudAdminControllers.controller('AddGroupController', ['$scope','GroupsService'
         $scope.users = resp;
     });
 
+    GroupsService.getProfessions.query().$promise.then(function (resp) {
+        $scope.professions = resp;
+    });
+
     $scope.addGroup = function () {
         console.log(this);
         var toSend = {group:{},users:{}};
@@ -19,6 +23,7 @@ cloudAdminControllers.controller('AddGroupController', ['$scope','GroupsService'
         toSend.group.description = this.descriere;
         toSend.group.default_group = this.grupDefault?1:0;
         toSend.group.content_specific = this.contentSpecific?true:false;
+        toSend.group.profession = this.selectedProfession?this.selectedProfession._id:null;
         toSend.users = this.selectedUsers;
         GroupsService.addGroup.save({data: toSend}).$promise.then(function (resp) {
             $scope.statusAlert.message = resp.message;

@@ -9,11 +9,18 @@
  * */
 
 
-cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therapeuticAreaService', function($scope, therapeuticAreaService){
+cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therapeuticAreaService','$sce', function($scope, therapeuticAreaService,$sce){
 
    therapeuticAreaService.query().$promise.then(function(correctResults){
        $scope.therapeuticAreas = correctResults;
     });
+    $scope.trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    $scope.convertAndTrustAsHtml=function (data) {
+        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+        return $sce.trustAsHtml(convertedText);
+    };
     //
     //$scope.toggleActive = function(){
     //    $('.list-group li').removeClass('active');

@@ -8,15 +8,15 @@
 <div class="padd55px" id="content">
     <div class="row">
         <div class="col-md-2 noPadding hidden-sm" >
-            <h3 class="h-title top0px">ARII TERAPEUTICE</h3>
+            <h3 class="h-title top0px specialTitleProductsMobile">ARII TERAPEUTICE</h3>
 
             <ul class="list-group MSDgreen" style="list-style: none">
                 <li  ui-sref-active="activeArea" class="list-group-item no-border handCursor padd5pxLeft" ui-sref="biblioteca.produse.productsByArea({id:0})"><b>Toate ariile terapeutice</b></li>
                 <li  ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
-                    <span ui-sref-active="activeArea" class="list-group-item no-border handCursor" ui-sref="biblioteca.produse.productsByArea({id:area._id})"><b>{{area.name}}</b></span>
+                    <span ui-sref-active="activeArea" class="list-group-item no-border handCursor" ui-sref="biblioteca.produse.productsByArea({id:area._id})"><b convert-special conver="area.name" ng-bind-html="trustAsHtml(area.name)"></b></span>
                     <ul ng-if="area.has_children">
                     <li ui-sref-active="active" ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'" ui-sref="biblioteca.produse.productsByArea({id:area2._id})">
-                        <span ui-sref-active="activeArea" class="list-group-item no-border handCursor" ui-sref="biblioteca.produse.productsByArea({id:area2._id})"><b>{{area2.name}}</b></span>
+                        <span ui-sref-active="activeArea" class="list-group-item no-border handCursor" ui-sref="biblioteca.produse.productsByArea({id:area2._id})"><b convert-special conver="area2.name" ng-bind-html="trustAsHtml(area2.name)"></b></span>
                         </li>
                 </ul>
                 </li>

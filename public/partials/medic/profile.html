@@ -24,7 +24,7 @@
                         <div class="col-md-8">
                             <div class="form-group col-md-6" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">
                                 <label for="nume">Nume<sup>*</sup>:</label>
-                                <input type="text" class="form-control" id="nume" name="nume" ng-model="firstName" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\s]{3,30}$/" ng-required="true">
+                                <input type="text" class="form-control" id="nume" name="nume" ng-model="firstName" ng-pattern="/^[a-zA-ZA-zĂăÂâÎîȘșŞşȚțŢţ\s]{3,30}$/" ng-required="true">
                                 <p class="" ng-show="profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid">Numele nu este valid!</p>
                             </div>
                             <div class="form-group col-md-6" ng-class="{'has-error': profileForm.prenume.$invalid && !profileForm.prenume.$pristine || showerrorProf && profileForm.prenume.$invalid}">
@@ -124,13 +124,13 @@
                     </div>
                     <div class="form-group col-md-4" ng-class="{'has-error':jobForm.numarStrada.$invalid && !jobForm.numarStrada.$pristine || showerror && jobForm.numarStrada.$invalid}">
                         <label for="numarStrada">Numarul strazii<sup>*</sup>:</label>
-                        <input type="text" class="form-control" id="numarStrada" name="numarStrada" ng-pattern="/^[0-9]/" ng-model="job.street_number" ng-required="true">
+                        <input type="text" class="form-control" id="numarStrada" name="numarStrada" ng-pattern="/^[a-zA-Z0-9\s]{1,30}$/" ng-model="job.street_number" ng-required="true">
                         <p class="" ng-show="jobForm.numarStrada.$invalid && !jobForm.numarStrada.$pristine || showerror && jobForm.numarStrada.$invalid">Introduceti un numar al strazii!</p>
 
                     </div>
                     <div class="form-group col-md-4" ng-class="{'has-error':jobForm.codPostal.$invalid && !jobForm.codPostal.$pristine || showerror && jobForm.codPostal.$invalid }">
                         <label for="codPostal">Cod postal<sup>*</sup>:</label>
-                        <input type="text" class="form-control" id="codPostal" name="codPostal" ng-model="job.postal_code" ng-pattern="/^[0-9]/" ng-required="true">
+                        <input type="text" class="form-control" id="codPostal" name="codPostal" ng-model="job.postal_code" ng-pattern="/^\d+$/" ng-required="true">
                         <p class="" ng-show="jobForm.codPostal.$invalid && !jobForm.codPostal.$pristine || showerror && jobForm.codPostal.$invalid">Introduceti un cod postal format numai din cifre!</p>
                     </div>
                 </div>
