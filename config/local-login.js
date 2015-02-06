@@ -21,7 +21,7 @@ module.exports = function(passport, logger) {
             // asynchronous
             process.nextTick(function() {
                 logger.warn("local auth - email: ", email);
-                User.findOne({username:{$regex: new RegExp("^"+email,"i")}, enabled:{$ne: false}}).select("+enabled +password +account_locked +account_expired +state").exec(function(err, user) {
+                User.findOne({username:{$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}, enabled: true}).select("+enabled +password +account_locked +account_expired +state").exec(function(err, user) {
 
                     // if there are any errors, return the error
                     if (err)
