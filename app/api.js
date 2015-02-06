@@ -2716,28 +2716,32 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     if(err){
                         res.send(err);
                     }else{
-                        //email user
-                        User.findOne({_id: req.body.id}, function (err, user) {
-                            if(err){
-                                res.send(err);
-                            }else{
-                                mandrill({from: 'adminMSD@qualitance.ro',
-                                    to: [user.username],
-                                    subject:'Activare cont MSD',
-                                    text: 'Draga '+user.name+',\n\n\n'+
-                                          'Contul dumneavoastra pentru portalul MSD este activat si il puteti accesa la aceasta adresa:\n\n'+
-                                          req.headers.host+'/login\n\n\n'+
-                                          'Succes!\n\nEchipa MSD'
-                                }, function(err){
-                                    if(err) {
-                                        logger.error(err);
-                                        res.send(err);
-                                    }else{
-                                        res.send({message: "Updated "+wres+" user. Email sent"});
-                                    }
-                                });
-                            }
-                        });
+                        if(req.params.type == "ACCEPTED" && wres==1){
+                            //email user
+                            User.findOne({_id: req.body.id}, function (err, user) {
+                                if(err){
+                                    res.send(err);
+                                }else{
+                                    mandrill({from: 'adminMSD@qualitance.ro',
+                                        to: [user.username],
+                                        subject:'Activare cont MSD',
+                                        text: 'Draga '+user.name+',\n\n\n'+
+                                            'Contul dumneavoastra pentru portalul MSD este activat si il puteti accesa la aceasta adresa:\n\n'+
+                                            req.headers.host+'/login\n\n\n'+
+                                            'Succes!\n\nEchipa MSD'
+                                    }, function(err){
+                                        if(err) {
+                                            logger.error(err);
+                                            res.send(err);
+                                        }else{
+                                            res.send({message: "Updated "+wres+" user. Email sent"});
+                                        }
+                                    });
+                                }
+                            });
+                        }else{
+                            res.send({message: "Updated "+wres+" user. Email not sent"});
+                        }
                     }
                 });
             }else{
