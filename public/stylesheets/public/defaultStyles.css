@@ -6933,8 +6933,8 @@ html body .rootView {
 .contentLayout .articleDetail .articleContent img {
   width: 30%;
   max-width: 300px;
-  padding-right: 15px;
-  padding-bottom: 15px;
+  padding-right: 30px;
+  padding-bottom: 30px;
 }
 .contentLayout .articleDetail:before {
   content: '';
