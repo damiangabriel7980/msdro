@@ -201,6 +201,14 @@ cloudAdminApp.run(
                         angular.element('.popSearch').toggleClass('newWidthPopSearch');
                     angular.element('.input-group-addon').toggleClass('btnSearchBefore');
             };
+            angular.element(document).click(function (event) {
+                var clickover = angular.element(event.target);
+                var $navbar = angular.element(".navbar-collapse");
+                var _opened = $navbar.hasClass("in");
+                if (_opened === true && !clickover.hasClass("navbar-toggle")) {
+                    $navbar.collapse('hide');
+                }
+            });
             //profile modal
             $rootScope.showProfile = function(){
                 var $body = $(document.body);

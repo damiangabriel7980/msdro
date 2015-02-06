@@ -9,6 +9,7 @@ cloudAdminControllers.controller('articlesUpdateCtrl', ['$scope','$rootScope' ,'
             "searchreplace visualblocks code fullscreen",
             "insertdatetime media table contextmenu paste charmap"
         ],
+        image_advtab: true,
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 
