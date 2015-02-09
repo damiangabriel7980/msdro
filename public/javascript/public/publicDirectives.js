@@ -97,20 +97,20 @@ publicApp.directive('scrollcenter', function($window) {
 
             var convertStr = function (val) {
                 return String(val || "")
-                    .replace('Ă','&#258;')
-                    .replace('ă','&#259;')
-                    .replace('Â','&Acirc;')
-                    .replace('â','&acirc;')
-                    .replace('Î','&Icirc;')
-                    .replace('î','&icirc;')
-                    .replace('Ș','&#x218;')
-                    .replace('ș','&#x219;')
-                    .replace('Ş','&#350;')
-                    .replace('ş','&#351;')
-                    .replace('Ț','&#538;')
-                    .replace('ț','&#539;')
-                    .replace('Ţ','&#354;')
-                    .replace('ţ','&#355;');
+                    .replace(/Ă/g,'&#258;')
+                    .replace(/ă/g,'&#259;')
+                    .replace(/Â/g,'&Acirc;')
+                    .replace(/â/g,'&acirc;')
+                    .replace(/Î/g,'&Icirc;')
+                    .replace(/î/g,'&icirc;')
+                    .replace(/Ș/g,'&#x218;')
+                    .replace(/ș/g,'&#x219;')
+                    .replace(/Ş/g,'&#350;')
+                    .replace(/ş/g,'&#351;')
+                    .replace(/Ț/g,'&#538;')
+                    .replace(/ț/g,'&#539;')
+                    .replace(/Ţ/g,'&#354;')
+                    .replace(/ţ/g,'&#355;');
             };
 
             attrs.$observe('convertSpecial', function () {
