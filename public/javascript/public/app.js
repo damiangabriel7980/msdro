@@ -127,7 +127,12 @@ publicApp.run(
             $rootScope.createHeader = function (text,length) {
                 var textLength = text?text.length:0;
                 if(textLength > length){
-                    return $rootScope.htmlToPlainText(text).substring(0,length)+"...";
+                    var trimmed = $rootScope.htmlToPlainText(text).substring(0,length);
+                    var i = trimmed.length;
+                    while(trimmed[i]!=' ' && i>0) i--;
+                    trimmed = trimmed.substr(0, i);
+                    if(trimmed.length > 0) trimmed = trimmed+"...";
+                    return trimmed;
                 }else{
                     return $rootScope.htmlToPlainText(text);
                 }
