@@ -3,9 +3,11 @@
         <div>
             <div class="item">
                 <div class="contentBlock image" resizable ratio="1.5">
-                    <img ng-src="{{pathAmazonDev+n.image_path}}">
+                    <img ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
                 </div>
-                <div class="contentBlock text" ng-bind-html="trustAsHtml('<p>'+n.title+'</p>'+htmlToPlainText(n.text))">
+                <div class="contentBlock excerpt">
+                    <p class="title" convert-special to-convert="n.title" ng-bind-html="trustAsHtml(n.title)"></p>
+                    <p class="text" convert-special to-convert="n.text" ng-bind-html="trustAsHtml(n.text)"></p>
                 </div>
                 <div class="contentBlock">
                     <div class="btnGreen" ui-sref="downloads.detail({id: n._id})">Detalii</div>

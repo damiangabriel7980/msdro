@@ -6725,14 +6725,14 @@ html body .rootView {
 .homeNewsDisplay .smallDisplay .image {
   overflow: hidden;
 }
-.homeNewsDisplay .smallDisplay .text {
+.homeNewsDisplay .smallDisplay .excerpt {
   height: 12em;
   overflow: hidden;
 }
-.homeNewsDisplay .smallDisplay .text p {
+.homeNewsDisplay .smallDisplay .excerpt .title {
   font-weight: bold;
 }
-.homeNewsDisplay .smallDisplay .text:after {
+.homeNewsDisplay .smallDisplay .excerpt:after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -6778,14 +6778,14 @@ html body .rootView {
 .homeDownloadsDisplay .item .image {
   overflow: hidden;
 }
-.homeDownloadsDisplay .item .text {
+.homeDownloadsDisplay .item .excerpt {
   height: 12em;
   overflow: hidden;
 }
-.homeDownloadsDisplay .item .text p {
+.homeDownloadsDisplay .item .excerpt .title {
   font-weight: bold;
 }
-.homeDownloadsDisplay .item .text:after {
+.homeDownloadsDisplay .item .excerpt:after {
   content: '';
   position: absolute;
   bottom: 0;

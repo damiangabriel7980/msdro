@@ -2,9 +2,9 @@
     <div class="carouselWrapper" style="{{carouselStyle}}">
         <div class="fixedBox">
             <div class="textWrapper">
-                <p class="carouselTitle" ng-bind-html="trustAsHtml(createHeader(carouselSlides[selectedIndex].title, 40))">
+                <p class="carouselTitle" convert-special to-convert="carouselSlides[selectedIndex].title" ng-bind-html="trustAsHtml(createHeader(carouselSlides[selectedIndex].title, 40))">
                 </p>
-                <p class="carouselDescription" ng-bind-html="trustAsHtml(carouselSlides[selectedIndex].description)">
+                <p class="carouselDescription" convert-special to-convert="carouselSlides[selectedIndex].description" ng-bind-html="trustAsHtml(carouselSlides[selectedIndex].description)">
                 </p>
             </div>
             <div class="carouselLearnMore" ng-click="carouselLearnMore(carouselSlides[selectedIndex].type, carouselSlides[selectedIndex].content_id)">

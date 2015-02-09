@@ -90,4 +90,33 @@ publicApp.directive('scrollcenter', function($window) {
             });
         }
     }
+}).directive('convertSpecial', function() {
+    return {
+        scope: {toConvert: '='},
+        link: function(scope, element, attrs) {
+
+            var convertStr = function (val) {
+                return String(val || "")
+                    .replace('Ă','&#258;')
+                    .replace('ă','&#259;')
+                    .replace('Â','&Acirc;')
+                    .replace('â','&acirc;')
+                    .replace('Î','&Icirc;')
+                    .replace('î','&icirc;')
+                    .replace('Ș','&#x218;')
+                    .replace('ș','&#x219;')
+                    .replace('Ş','&#350;')
+                    .replace('ş','&#351;')
+                    .replace('Ț','&#538;')
+                    .replace('ț','&#539;')
+                    .replace('Ţ','&#354;')
+                    .replace('ţ','&#355;');
+            };
+
+            attrs.$observe('convertSpecial', function () {
+                scope.toConvert = convertStr(scope.toConvert);
+                return scope.toConvert;
+            });
+        }
+    }
 });
