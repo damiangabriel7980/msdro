@@ -58,6 +58,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.convertAndTrustAsHtmlTrimmed=function (data) {
         var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
         var newText = convertedText.split(/\s+/).slice(0,3).join(" ");
+        newText += '...';
         return $sce.trustAsHtml(newText);
     };
     $scope.convertAndTrustAsHtml=function (data,limit) {

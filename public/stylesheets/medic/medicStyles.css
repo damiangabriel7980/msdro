@@ -6978,6 +6978,8 @@ hr {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   color: white;
   text-shadow: black 0.1em 0.1em 0.2em;
+  font-size: 35px;
+  font-weight: bolder;
 }
 .width81 {
   width: 81%;
@@ -7120,7 +7122,6 @@ hr {
   border: 0px solid #cccccc;
   -webkit-transition: width 1s ease;
   /* Safari */
-
   transition: width 1s ease;
 }
 .btnSearchBefore {

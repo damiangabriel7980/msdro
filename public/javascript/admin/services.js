@@ -168,6 +168,12 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
             getProduct: {method: 'GET', isArray: false},
             delete: { method: 'DELETE'},
             update: { method: 'PUT'}
+        }),
+        editImage: $resource('api/admin/products/editImage/:data', {}, {
+            save: { method: 'POST' }
+        }),
+        editRPC: $resource('api/admin/products/editRPC/:data', {}, {
+            save: { method: 'POST' }
         })
     }
 }]);

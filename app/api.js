@@ -1442,7 +1442,30 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         });
-
+    router.route('/admin/products/editImage')
+        .post(function(req,res) {
+            var data = req.body.data;
+            Products.update({_id: data.id}, {image_path: data.path}, function (err, wRes) {
+                if (err) {
+                    logger.error("Error at product change logo. Product id = " + data.id + "; Key = " + data.path);
+                    res.json({error: true});
+                } else {
+                    res.json({error: false, updated: wRes});
+                }
+            });
+        });
+    router.route('/admin/products/editRPC')
+        .post(function(req,res){
+            var data = req.body.data;
+            Products.update({_id:data.id}, {file_path: data.path}, function (err, wRes) {
+                if(err){
+                    logger.error("Error at product change RCP. Product id = "+data.id+"; Key = "+data.path);
+                    res.json({error:true});
+                }else{
+                    res.json({error:false, updated:wRes});
+                }
+            });
+        });
     router.route('/admin/content')
 
         .get(function(req, res) {
@@ -1534,13 +1557,34 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         })
         .delete(function(req, res) {
-            Content.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted!' });
+            var id =req.params.id;
+            Content.findOne({_id: id}, function (err, content) {
+                if(content){
+                    var s3Key = content.image_path;
+                    //delete speaker
+                    Content.remove({_id:id},function(err,cont) {
+                        if (err){
+                            res.json({message:'Could not delete article!'});
+                        }
+                        else{
+                            //speaker was deleted. Now delete image if there is one
+                            if(s3Key){
+                                s3.deleteObject({Bucket: amazonBucket, Key: s3Key}, function (err, data) {
+                                    if(err){
+                                        logger.error(err);
+                                        res.json({message: "Article was deleted. Image could not be deleted"});
+                                    }else{
+                                        res.json({message: "Article was deleted. Image was deleted"});
+                                    }
+                                });
+                            }else{
+                                res.json({message:'Article was deleted!'});
+                            }
+                        }
+                    });
+                }else{
+                    res.json({message:'Article not found!'});
+                }
             });
         });
     router.route('/admin/content/editImage')

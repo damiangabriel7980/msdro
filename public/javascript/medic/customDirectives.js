@@ -39,7 +39,6 @@ cloudAdminApp.directive('noCacheSrc', function($window) {
     return {
         scope: {conver: '='},
         link: function(scope, element, attrs) {
-        console.log(scope);
             attrs.$observe('convertSpecial', function() {
                 scope.conver = String(scope.conver)
                     .replace('Ă','&#258;')
