@@ -5,7 +5,8 @@
         </div>
         <div class="col-md-12 noPadding">
             <div class="therapeuticArea" ng-repeat="area in tpa">
-                {{area.parent?'':'&nbsp;&nbsp;&nbsp;&nbsp;'}}<a class="area" ui-sref="elearning.all({area: area.id})">{{area.name}}</a>
+                {{area.parent?'':'&nbsp;&nbsp;&nbsp;&nbsp;'}}<a class="area" ui-sref="elearning.all({area: area.id})"
+                                                                convert-special to-convert="area.name" ng-bind-html="trustAsHtml(area.name)"></a>
             </div>
         </div>
     </div>
