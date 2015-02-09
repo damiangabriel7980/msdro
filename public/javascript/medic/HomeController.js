@@ -6,7 +6,11 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     $scope.merckManualImage = $rootScope.merckManualImage;
     $scope.myInterval = 10;
     $scope.HomeCarousel = [];
-
+    $scope.selectedIndexCarousel = 0;
+    $scope.setSlideCarousel = function(index)
+    {
+        $scope.selectedIndexCarousel = index;
+    };
     //add widgets in partials/medic/widgets, then associate file name and group name in object below
     var specialGroupWidgets = {
         "MSD Diabetes": "Glycemizer.html"
@@ -168,14 +172,11 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
     };
     /* --- carousel --- */
 
-    $scope.selectedIndex = 0;
+
 
     /* --- footer realign ---*/
 
-    $scope.setSlide = function(index)
-    {
-        $scope.selectedIndex = index;
-    };
+
 
 }])
     .directive('ngEnter', function () {
