@@ -34,6 +34,7 @@ module.exports = function(passport) {
 
             var name = lookup(req.body, 'name') || lookup(req.query, 'name') || "";
             var confirm = lookup(req.body, 'confirm') || lookup(req.query, 'confirm');
+            var terms = lookup(req.body, 'terms') || lookup(req.query, 'terms');
             var signupFromConf = lookup(req.body, 'signupFromConf') || lookup(req.query, 'signupFromConf');
 
             var info = {
@@ -62,6 +63,10 @@ module.exports = function(passport) {
                     }
                     if(password !== confirm){
                         info.message = "Parolele nu corespund";
+                        return done(null, false, info);
+                    }
+                    if(!terms){
+                        info.message = "Trebuie sa acceptati termenii si conditiile inainte de a continua";
                         return done(null, false, info);
                     }
 

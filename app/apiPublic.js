@@ -11,7 +11,7 @@ module.exports = function(app,email, router) {
     router.route('/getCarouselData')
 
         .get(function (req, res) {
-            PublicCarousel.find({}).sort({order_index: 1}).exec(function (err, resp) {
+            PublicCarousel.find({enable: true}).sort({order_index: 1}).exec(function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{
@@ -23,7 +23,7 @@ module.exports = function(app,email, router) {
     router.route('/contentByType/:type')
 
         .get(function (req, res) {
-            PublicContent.find({type: req.params.type}).sort({date_added: -1}).exec(function (err, resp) {
+            PublicContent.find({type: req.params.type, enable: true}).sort({date_added: -1}).exec(function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{
@@ -35,7 +35,7 @@ module.exports = function(app,email, router) {
     router.route('/contentByTypeAndTherapeuticArea/:type:tpa')
 
         .get(function (req, res) {
-            var q = {type: req.params.type};
+            var q = {type: req.params.type, enable: true};
             if(req.params.tpa != 0){
                 q["therapeutic-areasID"] = {$in: [req.params.tpa]};
             }
@@ -51,7 +51,7 @@ module.exports = function(app,email, router) {
     router.route('/therapeuticAreas')
 
         .get(function (req, res) {
-            TherapeuticAreas.find({}).sort({name: 1}).exec(function (err, resp) {
+            TherapeuticAreas.find({enabled: true}).sort({name: 1}).exec(function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{
@@ -63,7 +63,7 @@ module.exports = function(app,email, router) {
     router.route('/mostReadContentByType/:type')
 
         .get(function (req, res) {
-            PublicContent.find({type: req.params.type}).sort({date_added: -1}).limit(3).exec(function (err, resp) {
+            PublicContent.find({type: req.params.type, enable: true}).sort({date_added: -1}).limit(3).exec(function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{
@@ -75,7 +75,7 @@ module.exports = function(app,email, router) {
     router.route('/contentById/:id')
 
         .get(function (req, res) {
-            PublicContent.findOne({_id: req.params.id}, function (err, resp) {
+            PublicContent.findOne({_id: req.params.id, enable: true}, function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{
@@ -105,6 +105,11 @@ module.exports = function(app,email, router) {
                     })
                 }
             });
+        });
+
+    router.route('/termsAndConditions')
+        .get(function (req, res) {
+            res.sendFile('/private_storage/termsAndConditions.html', {root: __dirname});
         });
 
 

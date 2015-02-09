@@ -792,7 +792,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }else{
                     //form object to persist
                     data.enable = false;
-                    data.last_updated = new Date();
+                    data.date_added = Date.now();
+                    data.last_updated = Date.now();
                     //persist object
                     var content = new PublicContent(data);
                     content.save(function (err, inserted) {
