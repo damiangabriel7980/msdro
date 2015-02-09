@@ -321,7 +321,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('ariiTerapeutice.deleteArie',{
             parent:'ariiTerapeutice',
-            url: '/:id',
+            url: '/deleteArea/:id',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
                     templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeDelete.html',
