@@ -4,9 +4,9 @@
             CATEGORII
         </div>
         <div class="col-md-12 noPadding">
-            <div class="therapeuticArea" ng-repeat="area in tpa">
-                {{area.parent?'':'&nbsp;&nbsp;&nbsp;&nbsp;'}}<a class="area" ui-sref="elearning.all({area: area.id})"
-                                                                convert-special to-convert="area.name" ng-bind-html="trustAsHtml(area.name)"></a>
+            <div class="therapeuticArea" ng-repeat="area in tpa track by $index">
+                {{area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;':''}}
+                <a class="area" ui-sref="elearning.all({area: $index})" convert-special to-convert="area.name" ng-bind-html="trustAsHtml(area.name)"></a>
             </div>
         </div>
     </div>
