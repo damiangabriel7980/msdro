@@ -50,6 +50,21 @@ cloudAdminControllers.controller('productsCtrl', ['$scope' ,'ProductService','$s
             }
         })
     };
+    $scope.deleteProduct = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/continut/productsDelete.html',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            windowClass: 'fade',
+            controller:"productsDeleteCtrl",
+            resolve: {
+                idToEdit: function () {
+                    return id;
+                }
+            }
+        })
+    };
 
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);

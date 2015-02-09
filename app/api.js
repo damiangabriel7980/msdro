@@ -1400,13 +1400,44 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         })
         .delete(function(req, res) {
-            Products.remove({
-                _id: req.params.id
-            }, function(err,prod) {
-                if (err){
-                    res.send(err);
+            var id = req.params.id;
+            Products.findOne({_id: id}, function (err, product) {
+                if(product){
+                    var s3Image = product.image_path;
+                    var s3File = product.file_path;
+                    //delete product
+                    Products.remove({_id:id},function(err,cont) {
+                        if (err){
+                            res.json({message:'Could not delete product!'});
+                        }
+                        else{
+                            //product was deleted. Now delete image and file if there is one
+                            if(s3Image || s3File){
+                                s3.deleteObject({Bucket: amazonBucket, Key: s3Image}, function (err, data) {
+                                    if(err){
+                                        logger.error(err);
+                                        res.json({message: "Product was deleted. Image could not be deleted"});
+                                    }else{
+                                        s3.deleteObject({Bucket: amazonBucket, Key: s3File}, function (err, data) {
+                                            if(err) {
+                                                logger.error(err);
+                                                res.json({message: "Product was deleted. RPC could not be deleted!"});
+                                            }
+                                            else
+                                            {
+                                                res.json({message: "Product was deleted. All files and images associated with were also deleted!"});
+                                            }
+                                        })
+
+                                    }
+                                });
+                            }else{
+                                res.json({message:'Product was deleted!'});
+                            }
+                        }
+                    });
                 }else{
-                    res.json({ message: 'Successfully deleted' });
+                    res.json({message:'Product not found!'});
                 }
             });
         });
