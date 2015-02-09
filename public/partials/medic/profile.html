@@ -1,7 +1,7 @@
 <div class="modal-header">
     <div class="modal-title"><h3>{{userData.name}}</h3></div>
 </div>
-<div class="modal-body">
+<div class="modal-body noPaddingBottom">
     <accordion close-others="true">
         <accordion-group class="no-text-decoration" is-open="openFirst">
             <accordion-heading class="no-text-decoration" ><p class="no-text-decoration"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Profilul meu</p></accordion-heading>
@@ -218,6 +218,6 @@
         </accordion-group>
     </accordion>
 </div>
-<div class="modal-footer">
-    <a class="btn btn-default" ng-click="closeModal()">Inchide</a>
+<div class="modal-footer noPaddingTop noPaddingBottom">
+    <a class="btn btn-default btnCloseProfile" ng-click="closeModal()">Inchide</a>
 </div>
