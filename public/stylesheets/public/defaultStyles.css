@@ -6876,7 +6876,7 @@ html body .rootView {
   border-radius: 5px;
 }
 .contentLayout .articlesList .article .details {
-  padding: 0 0 0 15px;
+  padding: 5px 0 0 15px;
 }
 .contentLayout .articlesList .article .details .title {
   padding: 0;
@@ -7018,7 +7018,7 @@ html body .rootView {
   border-radius: 5px;
 }
 .downloadsLayout .downloadsList .entry .details {
-  padding: 0 0 0 15px;
+  padding: 5px 0 0 15px;
 }
 .downloadsLayout .downloadsList .entry .details .title {
   padding: 0;
@@ -7031,16 +7031,22 @@ html body .rootView {
 }
 .downloadsLayout .downloadsList .entry .details .excerpt {
   padding: 0;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 .downloadsLayout .downloadsList .entry .details .author {
   font-size: 13px;
   font-weight: bold;
   padding: 0;
 }
-.downloadsLayout .downloadsList .entry .details .date {
+.downloadsLayout .downloadsList .entry .details .footer {
   padding: 0;
+}
+.downloadsLayout .downloadsList .entry .details .footer .date {
   font-size: 13px;
+  float: left;
+}
+.downloadsLayout .downloadsList .entry .details .footer .readMore {
+  float: right;
 }
 .downloadsLayout .downloadsList .entry .divider {
   border-bottom: 1px solid #eeeeee;
@@ -7130,7 +7136,7 @@ html body .rootView {
   border-radius: 5px;
 }
 .elearningLayout .elearningList .entry .details {
-  padding: 0 0 0 15px;
+  padding: 5px 0 0 15px;
 }
 .elearningLayout .elearningList .entry .details .title {
   padding: 0;
@@ -7141,15 +7147,24 @@ html body .rootView {
   font-size: 20px;
   font-weight: bold;
 }
+.elearningLayout .elearningList .entry .details .description {
+  padding: 0;
+  margin-bottom: 20px;
+}
 .elearningLayout .elearningList .entry .details .author {
   font-size: 13px;
   font-weight: bold;
   padding: 0;
 }
-.elearningLayout .elearningList .entry .details .date {
+.elearningLayout .elearningList .entry .details .footer {
   padding: 0;
-  margin-top: 20px;
+}
+.elearningLayout .elearningList .entry .details .footer .date {
   font-size: 13px;
+  float: left;
+}
+.elearningLayout .elearningList .entry .details .footer .readMore {
+  float: right;
 }
 .elearningLayout .elearningList .entry .divider {
   border-bottom: 1px solid #eeeeee;
