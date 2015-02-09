@@ -99,8 +99,8 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
 }]);
 
 publicApp.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal',
-        function ($rootScope,   $state,   $stateParams, $modal) {
+    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce',
+        function ($rootScope,   $state,   $stateParams, $modal, $sce) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -119,6 +119,22 @@ publicApp.run(
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
+
+            //global functions
+            $rootScope.htmlToPlainText = function(text) {
+                return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+            };
+            $rootScope.createHeader = function (text,length) {
+                var textLength = text?text.length:0;
+                if(textLength > length){
+                    return $rootScope.htmlToPlainText(text).substring(0,length)+"...";
+                }else{
+                    return $rootScope.htmlToPlainText(text);
+                }
+            };
+            $rootScope.trustAsHtml = function (data) {
+                return $sce.trustAsHtml(data);
+            };
 
             //contact modal
             $rootScope.showContactModal = function(){

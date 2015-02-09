@@ -4,10 +4,4 @@ publicControllers.controller('DownloadsDetailController', ['$scope', '$rootScope
         $scope.currentDownload = resp;
     });
 
-    //------------------------------------------------------------------------------------------------ useful functions
-
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-
 }]);
