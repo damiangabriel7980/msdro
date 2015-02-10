@@ -6578,7 +6578,8 @@ html body .rootView {
 }
 .footer {
   width: 100%;
-  margin-bottom: 50px;
+  margin-top: 20px;
+  margin-bottom: 30px;
 }
 .footer hr {
   width: 400px;

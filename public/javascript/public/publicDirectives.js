@@ -59,7 +59,11 @@ publicApp.directive('carouselResizable', function($window) {
             }
 
             // Initiate the resize function default values
-            initializeElementSize();
+            angular.element(document).ready(function () {
+                initializeElementSize();
+                $scope.$apply();
+            });
+
         }
     }
 });
@@ -116,6 +120,51 @@ publicApp.directive('scrollcenter', function($window) {
             attrs.$observe('convertSpecial', function () {
                 scope.toConvert = convertStr(scope.toConvert);
                 return scope.toConvert;
+            });
+        }
+    }
+});
+publicApp.directive('footerBottom', function($window, $rootScope, $timeout, $state) {
+    return {
+        restrict: 'A',
+        link: function ($scope, $element, attrs) {
+
+            //var footerHeight = 88;
+            //var headerHeight = 70;
+            var fixedOffset = 180;
+
+            var content = angular.element($element);
+            var container = angular.element(content[0].children[0])[0];
+            var footer = angular.element(content[0].children[1]);
+
+            var containerHeight;
+            var windowHeight;
+            var lastHeight = 0;
+            var padding;
+
+            var initialize = function () {
+                containerHeight = container.offsetHeight;
+                if(containerHeight != lastHeight){
+                    lastHeight = containerHeight;
+                    windowHeight = angular.element($window)[0].innerHeight;
+                    padding = windowHeight - containerHeight - fixedOffset;
+                    if(padding>0){
+                        footer.css('padding-top',padding+'px');
+                    }else{
+                        footer.css('padding-top','0px');
+                    }
+                }
+                $timeout(initialize, 300);
+            };
+
+            angular.element($window).bind('resize', function () {
+                initialize();
+                $scope.$apply();
+            });
+
+            angular.element(document).ready(function () {
+                initialize();
+                $scope.$apply();
             });
         }
     }
