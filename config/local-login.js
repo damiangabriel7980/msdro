@@ -29,16 +29,13 @@ module.exports = function(passport, logger) {
 
                     // if no user is found, return the message
                     if (!user)
-                        return done(null, false, req.flash('loginMessage', 'Utilizator sau parola gresite'));
+                        return done(null, false, {error: true, message: 'Utilizator sau parola gresite'});
 
                     if (!user.validPassword(password))
-                        return done(null, false, req.flash('loginMessage', 'Utilizator sau parola gresite'));
+                        return done(null, false, {error: true, message: 'Utilizator sau parola gresite'});
 
-                    if(!user.enabled || user.account_locked || user.account_expired)
-                        return done(null, false, req.flash('loginMessage', 'Contul nu este activat sau a expirat'));
-
-                    if(user.state === "REJECTED")
-                        return done(null, false, req.flash('loginMessage', 'Contul nu este activat sau a expirat'));
+                    if(!user.enabled || user.account_locked || user.account_expired || user.state === "REJECTED")
+                        return done(null, false, {error: true, message: 'Contul nu este activat sau a expirat'});
 
                     // all is well, return user
                     else

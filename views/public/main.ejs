@@ -34,6 +34,7 @@
     <script src="javascript/public/downloads/downloadsDetailController.js"></script>
     <script src="javascript/public/elearning/elearningController.js"></script>
     <script src="javascript/public/elearning/elearningDetailController.js"></script>
+    <script src="javascript/public/auth/AuthModalController.js"></script>
 
 
     <!--Plug-ins-->
@@ -86,7 +87,7 @@
                                 </li>
                                 <li>|</li>
                                 <li>
-                                    <a href="/login">Log in</a>
+                                    <a ng-click="showAuthModal('login')">Log in</a>
                                 </li>
                             </ul>
                         </div>
@@ -131,7 +132,7 @@
                         </li>
                         <li class="link-divider"></li>
                         <li class="navbar-link">
-                            <a href="/login">Log in</a>
+                            <a ng-click="showAuthModal('login')">Log in</a>
                         </li>
                     </ul>
                 </div>

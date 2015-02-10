@@ -176,23 +176,36 @@ module.exports = function(app, email, logger, passport) {
 	// locally --------------------------------
 		// LOGIN ===============================
 		// show the login form
-		app.get('/login', function(req, res) {
-			res.render('auth.ejs', { message: req.flash('loginMessage') });
-		});
+//		app.get('/login', function(req, res) {
+//			res.render('auth.ejs', { message: req.flash('loginMessage') });
+//		});
 
 		// process the login form
 		app.post('/login', function (req, res, next) {
             //middleware to allow flashing messages on empty user/password fields
             if(!req.body.email || !req.body.password){
-                res.render('auth.ejs', {message: 'Campurile sunt obligatorii'});
+                return res.send({error: true, message: 'Campurile sunt obligatorii'});
             }else{
-                next();
+                passport.authenticate('local-login', function (err, user, info) {
+                    console.log(err);
+                    console.log(info);
+                    if(err){
+                        logger.log(err);
+                        return res.send({error: true, message: "A aparut o eroare pe server"});
+                    }else if(!user){
+                        return res.send(info);
+                    }else{
+                        req.logIn(user, function (err) {
+                            if(err){
+                                return res.send({error: true, message: "A aparut o eroare pe server"});
+                            }else{
+                                return res.send({error: false});
+                            }
+                        })
+                    }
+                })(req, res, next);
             }
-        }, passport.authenticate('local-login', {
-            successRedirect : '/pro', // redirect to the secure profile section
-            failureRedirect : '/login', // redirect back to the signup page if there is an error
-            failureFlash : true // allow flash messages
-        }));
+        });
 
 		// SIGNUP =================================
 		// show the signup form
@@ -396,14 +409,15 @@ function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated())
 		return next();
 
-	res.redirect('/login');
+	res.redirect('/');
 }
 
 //validates user and transports it to a page taking it's role into account
 //args:
 //paths = {"role": "page", ...}
 //sendUserInfo = boolean
-var transportUser = function (req, res, paths, sendUserInfo) {
+var transportUser = function (req, res) {
+    console.log("transport");
     User.findOne({_id: req.user._id}).select("+rolesID +state +proof_path").exec(function (err, user) {
         if(user.state === "ACCEPTED"){
             Roles.find({_id: {$in: user.rolesID}}, function (err, roles) {
@@ -413,6 +427,7 @@ var transportUser = function (req, res, paths, sendUserInfo) {
                 }else{
                     if(roles[0]){
                         if(roles[0].authority === "ROLE_FARMACIST"){
+                            console.log("medic");
                             res.render("medic/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
                         }else if(roles[0].authority === "ROLE_ADMIN"){
                             res.render("admin/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});

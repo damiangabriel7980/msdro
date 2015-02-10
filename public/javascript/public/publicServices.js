@@ -32,3 +32,10 @@ publicServices.factory('ContentService', ['$resource', function($resource){
         })
     }
 }]);
+publicServices.factory('AuthService', ['$resource', function($resource){
+    return {
+        login: $resource('/login', {}, {
+            query: { method: 'POST', isArray: false }
+        })
+    }
+}]);

@@ -1,0 +1,20 @@
+<form ng-submit="login()">
+    <div class="modal-header">
+        <div class="modal-title"><h3><span class="fa fa-sign-in"></span>&nbsp;Login</h3></div>
+    </div>
+    <div class="modal-body">
+        <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="text" class="form-control" ng-model="email">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" ng-model="password">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
+        <button class="btn btn-warning pull-right" type="submit">Login</button>
+    </div>
+</form>

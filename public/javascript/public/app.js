@@ -150,6 +150,21 @@ publicApp.run(
                     controller: 'ContactModalController'
                 });
             };
+
+            //auth modal
+            $rootScope.showAuthModal = function(intent){
+                $modal.open({
+                    templateUrl: 'partials/public/auth/baseModal.html',
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'AuthModalController',
+                    resolve:{
+                        intent: function () {
+                            return intent;
+                        }
+                    }
+                });
+            };
         }
     ]
 );
