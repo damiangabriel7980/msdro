@@ -59,7 +59,11 @@ publicApp.directive('carouselResizable', function($window) {
             }
 
             // Initiate the resize function default values
-            initializeElementSize();
+            angular.element(document).ready(function () {
+                initializeElementSize();
+                $scope.$apply();
+            });
+
         }
     }
 });
@@ -87,6 +91,80 @@ publicApp.directive('scrollcenter', function($window) {
             // Initiate the resize function default values
             angular.element(document).ready(function () {
                 initializeElementSize();
+            });
+        }
+    }
+}).directive('convertSpecial', function() {
+    return {
+        scope: {toConvert: '='},
+        link: function(scope, element, attrs) {
+
+            var convertStr = function (val) {
+                return String(val || "")
+                    .replace(/Ă/g,'&#258;')
+                    .replace(/ă/g,'&#259;')
+                    .replace(/Â/g,'&Acirc;')
+                    .replace(/â/g,'&acirc;')
+                    .replace(/Î/g,'&Icirc;')
+                    .replace(/î/g,'&icirc;')
+                    .replace(/Ș/g,'&#x218;')
+                    .replace(/ș/g,'&#x219;')
+                    .replace(/Ş/g,'&#350;')
+                    .replace(/ş/g,'&#351;')
+                    .replace(/Ț/g,'&#538;')
+                    .replace(/ț/g,'&#539;')
+                    .replace(/Ţ/g,'&#354;')
+                    .replace(/ţ/g,'&#355;');
+            };
+
+            attrs.$observe('convertSpecial', function () {
+                scope.toConvert = convertStr(scope.toConvert);
+                return scope.toConvert;
+            });
+        }
+    }
+});
+publicApp.directive('footerBottom', function($window, $rootScope, $timeout, $state) {
+    return {
+        restrict: 'A',
+        link: function ($scope, $element, attrs) {
+
+            //var footerHeight = 88;
+            //var headerHeight = 70;
+            var fixedOffset = 180;
+
+            var content = angular.element($element);
+            var container = angular.element(content[0].children[0])[0];
+            var footer = angular.element(content[0].children[1]);
+
+            var containerHeight;
+            var windowHeight;
+            var lastHeight = 0;
+            var padding;
+
+            var initialize = function () {
+                containerHeight = container.offsetHeight;
+                if(containerHeight != lastHeight){
+                    lastHeight = containerHeight;
+                    windowHeight = angular.element($window)[0].innerHeight;
+                    padding = windowHeight - containerHeight - fixedOffset;
+                    if(padding>0){
+                        footer.css('padding-top',padding+'px');
+                    }else{
+                        footer.css('padding-top','0px');
+                    }
+                }
+                $timeout(initialize, 300);
+            };
+
+            angular.element($window).bind('resize', function () {
+                initialize();
+                $scope.$apply();
+            });
+
+            angular.element(document).ready(function () {
+                initialize();
+                $scope.$apply();
             });
         }
     }

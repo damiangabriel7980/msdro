@@ -4,10 +4,4 @@ publicControllers.controller('ArticlesDetailController', ['$scope', '$rootScope'
         $scope.currentArticle = resp;
     });
 
-    //------------------------------------------------------------------------------------------------ useful functions
-
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-
 }]);

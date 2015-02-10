@@ -1,6 +1,6 @@
 <div class="col-md-12 elearningDetail">
-    <div class="col-md-12 title">{{elearning.title}}</div>
-    <div class="col-md-12 author">({{elearning.author}})</div>
+    <div class="col-md-12 title" convert-special to-convert="elearning.title" ng-bind-html="trustAsHtml(elearning.title)"></div>
+    <div class="col-md-12 author" convert-special to-convert="elearning.author" ng-bind-html='trustAsHtml("("+elearning.author+")")'></div>
     <div class="col-md-12 videoWrapper">
         <videogular vg-theme="videoConfig.theme">
             <vg-video vg-src="videoConfig.sources"></vg-video>

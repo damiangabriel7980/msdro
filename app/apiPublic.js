@@ -6,6 +6,14 @@ var UserGroup = require('./models/userGroup');
 
 var email = require('mandrill-send')('XKp6n_7NhHB5opUWo0WWmw');
 
+var getIds = function (documentsArray) {
+    var ret = [];
+    for(var i=0; i<documentsArray.length; i++){
+        ret.push(documentsArray[i]._id.toString());
+    }
+    return ret;
+};
+
 module.exports = function(app,email, router) {
 
     router.route('/getCarouselData')
@@ -32,20 +40,53 @@ module.exports = function(app,email, router) {
             })
         });
 
-    router.route('/contentByTypeAndTherapeuticArea/:type:tpa')
+    router.route('/contentByTypeAndTherapeuticArea')
 
-        .get(function (req, res) {
-            var q = {type: req.params.type, enable: true};
-            if(req.params.tpa != 0){
-                q["therapeutic-areasID"] = {$in: [req.params.tpa]};
-            }
-            PublicContent.find(q).sort({date_added: -1}).exec(function (err, resp) {
-                if(err){
-                    res.send(err);
-                }else{
-                    res.send(resp);
+        .post(function (req, res) {
+
+            var requestData = req.body;
+
+            //get documents once we know their therapeutic areas
+            var getDocuments = function (areasIds) {
+                var q = {type: requestData.type, enable: true};
+                if(areasIds){
+                    q['therapeutic-areasID'] = {$in: areasIds};
                 }
-            })
+                PublicContent.find(q).sort({date_added: -1}).exec(function (err, content) {
+                    if(err){
+                        res.send(err);
+                    }else{
+                        res.send(content);
+                    }
+                });
+            };
+
+
+            if(requestData.area && requestData.type){
+                var area = requestData.area;
+                if(area._id != 0){
+                    if(area.has_children){
+                        //form an array of parent's id and all it's children id's
+                        TherapeuticAreas.find({$or: [{_id: area._id}, {'therapeutic-areasID': {$in: [area._id.toString()]}}]}, function (err, areas) {
+                            if(err){
+                                res.send(err);
+                            }else{
+                                var areasIds = getIds(areas);
+                                getDocuments(areasIds);
+                            }
+                        })
+                    }else{
+                        //we only need the parent's id
+                        getDocuments([area._id.toString()]);
+                    }
+                }else{
+                    //we need all documents
+                    getDocuments();
+                }
+            }else{
+                res.statusCode = 400;
+                res.end();
+            }
         });
 
     router.route('/therapeuticAreas')

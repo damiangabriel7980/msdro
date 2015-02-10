@@ -6,9 +6,11 @@
             </div>
         </div>
         <div class="col-md-9 details">
-            <div class="col-md-12 title"><a ui-sref="stiri.detail({id: n._id})">{{n.title}}</a></div>
-            <div class="col-md-12 excerpt" ng-bind-html="trustAsHtml(createHeader(n.text, 300))"></div>
-            <div class="col-md-12 author">{{n.author}}</div>
+            <div class="col-md-12 title"><a ui-sref="stiri.detail({id: n._id})" convert-special to-convert="n.title"
+                                          ng-bind-html="trustAsHtml(n.title)"></a></div>
+            <div class="col-md-12 excerpt" convert-special to-convert="n.text" ng-bind-html="trustAsHtml(createHeader(n.text, 300))"></div>
+            <div class="col-md-12 author" convert-special to-convert="n.author"
+                                          ng-bind-html="trustAsHtml(n.author)"></div>
             <div class="col-md-12 footer">
                 <div class="date">{{n.date_added | date:'dd/MM/yyyy'}}</div>
                 <div class="readMore"><a class="btn btn-default btn-sm btnGreenBorder" ui-sref="stiri.detail({id: n._id})">Vezi stire</a></div>

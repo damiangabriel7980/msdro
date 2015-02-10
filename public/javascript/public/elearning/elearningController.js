@@ -4,44 +4,36 @@ publicControllers.controller('ElearningController', ['$scope', '$rootScope', 'Co
 
     //------------------------------------------------------------------------------------------------- get all content
 
-    ContentService.contentByTypeAndTherapeuticArea.query({type: 3, tpa: $stateParams.area}).$promise.then(function (resp) {
-        $scope.elearning = resp;
-    });
-
     ContentService.therapeuticAreas.query().$promise.then(function (resp) {
         var areasOrganised = [];
-        areasOrganised.push({id:0, name:"Toate", parent:true});
+        areasOrganised.push({_id:0, name:"Toate", has_children:false});
         for(var i=0; i<resp.length; i++){
             var thisArea = resp[i];
             if(thisArea['therapeutic-areasID'].length == 0){
                 //it's a parent. Add it
-                areasOrganised.push({id: thisArea._id, name:thisArea.name, parent:true});
+                areasOrganised.push(thisArea);
                 if(thisArea.has_children){
                     //find all it's children
                     for(var j=0; j < resp.length; j++){
                         if(resp[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
                             //found one children. Add it
-                            areasOrganised.push({id: resp[j]._id, name:resp[j].name, parent:false});
+                            resp[j]['ident']=true;
+                            areasOrganised.push(resp[j]);
                         }
                     }
                 }
             }
         }
         $scope.tpa = areasOrganised;
+
+        $scope.$watch('$stateParams', function (val) {
+            var area = $scope.tpa[val.area];
+            console.log(area);
+            ContentService.contentByTypeAndTherapeuticArea.query({type: 3, area: area}).$promise.then(function (resp) {
+                $scope.elearning = resp;
+            });
+        });
+
     });
-
-    //------------------------------------------------------------------------------------------------ useful functions
-
-    $scope.htmlToPlainText = function(text) {
-        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-    };
-
-    $scope.createHeader = function (text,length) {
-        return $scope.htmlToPlainText(text).substring(0,length)+"...";
-    };
-
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
 
 }]);
