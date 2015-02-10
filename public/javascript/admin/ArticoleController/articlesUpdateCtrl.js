@@ -110,7 +110,7 @@ cloudAdminControllers.controller('articlesUpdateCtrl', ['$scope','$rootScope' ,'
                     s3.deleteObject({Bucket: $rootScope.amazonBucket, Key:key}, function (err, data) {
                         if(err){
                             $scope.uploadAlert.type = "danger";
-                            $scope.uploadAlert.message = "Eroare la stergerea imaginii vechi!";
+                            $scope.uploadAlert.message = "Eroare la stergerea elementului multimedia vechi!";
                             $scope.uploadAlert.newAlert = true;
                             $scope.$apply();
                         }else{
@@ -122,7 +122,7 @@ cloudAdminControllers.controller('articlesUpdateCtrl', ['$scope','$rootScope' ,'
                                 }else{
                                     $scope.logo = key;
                                     $scope.uploadAlertImages.type = "success";
-                                    $scope.uploadAlertImages.message = "Images updated!";
+                                    $scope.uploadAlertImages.message = "Multimedia for articles updated!";
                                     $scope.uploadAlertImages.newAlert = true;
                                     console.log("Upload complete");
                                 }
@@ -169,7 +169,7 @@ cloudAdminControllers.controller('articlesUpdateCtrl', ['$scope','$rootScope' ,'
                             }else{
                                 $scope.logo = key;
                                 $scope.uploadAlertImages.type = "success";
-                                $scope.uploadAlertImages.message = "Images updated!";
+                                $scope.uploadAlertImages.message = "Multimedia for articles updated!";
                                 $scope.uploadAlertImages.newAlert = true;
                                 console.log("Upload complete");
                             }
@@ -203,7 +203,7 @@ cloudAdminControllers.controller('articlesUpdateCtrl', ['$scope','$rootScope' ,'
                             }else{
                                 $scope.logo = key;
                                 $scope.uploadAlertImages.type = "success";
-                                $scope.uploadAlertImages.message = "Images updated!";
+                                $scope.uploadAlertImages.message = "Multimedia for articles updated!";
                                 $scope.uploadAlertImages.newAlert = true;
                                 console.log("Upload complete");
                             }
