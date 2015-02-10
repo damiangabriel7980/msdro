@@ -21,7 +21,7 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
 
     $scope.getTooltip = function (slide) {
         var src = $rootScope.pathAmazonDev + slide.image_path;
-        var tooltipContent = '<img src="'+src+'">'+$scope.createHeader(slide.title, 40);
+        var tooltipContent = '<img src="'+src+'">'+$rootScope.createHeader(slide.title, 40);
         return $sce.trustAsHtml(tooltipContent);
     };
 
@@ -34,25 +34,6 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
             default: break;
         }
     };
-
-    //------------------------------------------------------------------------------------------------ useful functions
-
-    $scope.htmlToPlainText = function(text) {
-        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-    };
-
-    $scope.createHeader = function (text,length) {
-        var textLength = text?text.length:0;
-        if(textLength > length){
-            return $scope.htmlToPlainText(text).substring(0,length)+"...";
-        }else{
-            return $scope.htmlToPlainText(text);
-        }
-    };
-
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    }
 
 }]).filter('repeatReverse', function() {
     return function(items) {

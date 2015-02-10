@@ -24,8 +24,8 @@ publicServices.factory('ContentService', ['$resource', function($resource){
         contentById: $resource('apiPublic/contentById/:id', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        contentByTypeAndTherapeuticArea: $resource('apiPublic/contentByTypeAndTherapeuticArea/:type:tpa', {}, {
-            query: { method: 'GET', isArray: true }
+        contentByTypeAndTherapeuticArea: $resource('apiPublic/contentByTypeAndTherapeuticArea', {}, {
+            query: { method: 'POST', isArray: true }
         }),
         therapeuticAreas: $resource('apiPublic/therapeuticAreas/', {}, {
             query: { method: 'GET', isArray: true }

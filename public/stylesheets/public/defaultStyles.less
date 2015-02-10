@@ -297,7 +297,8 @@ html{
 
 .footer{
   width: 100%;
-  margin-bottom: 50px;
+  margin-top: 20px;
+  margin-bottom: 30px;
   hr {
     width: 400px;
     margin: 15px auto;
@@ -412,12 +413,13 @@ html{
     .image{
       overflow: hidden;
     }
-    .text{
-      p{
-        font-weight: bold;
-      }
+    .excerpt{
       height: 12em;
       overflow: hidden;
+      .title{
+        font-weight: bold;
+      }
+      .text{}
       &:after{
         content:'';
         position: absolute;
@@ -450,12 +452,13 @@ html{
     .image{
       overflow: hidden;
     }
-    .text{
-      p{
-        font-weight: bold;
-      }
+    .excerpt{
       height: 12em;
       overflow: hidden;
+      .title{
+        font-weight: bold;
+      }
+      .text{}
       &:after{
         content:'';
         position: absolute;
@@ -466,7 +469,6 @@ html{
         .gradientVertical;
       }
     }
-
   }
 }
 
@@ -535,7 +537,7 @@ html{
         }
       }
       .details{
-        padding: 0 0 0 15px;
+        padding: 5px 0 0 15px;
         .title{
           padding: 0;
           a{
@@ -684,7 +686,7 @@ html{
         }
       }
       .details{
-        padding: 0 0 0 15px;
+        padding: 5px 0 0 15px;
         .title{
           padding: 0;
           a{
@@ -696,16 +698,22 @@ html{
         }
         .excerpt{
           padding: 0;
-          margin-bottom: 15px;
+          margin-bottom: 20px;
         }
         .author{
           font-size: 13px;
           font-weight: bold;
           padding: 0;
         }
-        .date{
+        .footer{
           padding: 0;
-          font-size: 13px;
+          .date{
+            font-size: 13px;
+            float: left;
+          }
+          .readMore{
+            float: right;
+          }
         }
       }
       .divider{
@@ -803,7 +811,7 @@ html{
         }
       }
       .details{
-        padding: 0 0 0 15px;
+        padding: 5px 0 0 15px;
         .title{
           padding: 0;
           a{
@@ -813,15 +821,24 @@ html{
           }
           margin-bottom: 10px;
         }
+        .description{
+          padding: 0;
+          margin-bottom: 20px;
+        }
         .author{
           font-size: 13px;
           font-weight: bold;
           padding: 0;
         }
-        .date{
+        .footer{
           padding: 0;
-          margin-top: 20px;
-          font-size: 13px;
+          .date{
+            font-size: 13px;
+            float: left;
+          }
+          .readMore{
+            float: right;
+          }
         }
       }
       .divider{

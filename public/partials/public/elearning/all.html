@@ -1,19 +1,19 @@
 <div class="col-md-12 elearningList">
-    <div class="col-md-12 entry" ng-repeat="n in elearning | limitTo:contentLimit track by $index">
+    <div class="col-md-12 entry" ng-repeat="n in elearning | limitTo:contentLimit track by $index" ng-if="n.file_path">
         <div class="col-md-2 picture">
             <div>
-                <img ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
+                <img ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultSlideImage}}">
             </div>
         </div>
         <div class="col-md-10 details">
             <div class="col-md-12 title">
-                <a ui-sref="elearning.detail({id: n._id})">{{n.title}}</a>
+                <a ui-sref="elearning.detail({id: n._id})" convert-special to-convert="n.title" ng-bind-html="trustAsHtml(n.title)"></a>
             </div>
-            <div class="col-md-12 author">({{n.author}})</div>
-            <div class="col-md-12 date">Adaugat la: {{n.date_added | date:'dd/MM/yyyy'}}</div>
-            <div class="col-md-12 noPadding">
-                <span class="label label-danger" ng-if="!n.file_path">Continut indisponibil</span>
-                <a class="btn btn-default btn-sm btnGreenBorder" ui-sref="elearning.detail({id: n._id})" ng-if="n.file_path">Vizualizeaza</a>
+            <div class="col-md-12 description" convert-special to-convert="n.description" ng-bind-html="trustAsHtml(n.description)"></div>
+            <div class="col-md-12 author" convert-special to-convert="n.author" ng-bind-html='trustAsHtml(n.author)'></div>
+            <div class="col-md-12 footer">
+                <div class="date">{{n.date_added | date:'dd/MM/yyyy'}}</div>
+                <div class="readMore"><a class="btn btn-default btn-sm btnGreenBorder" ui-sref="elearning.detail({id: n._id})">Vizualizeaza</a></div>
             </div>
         </div>
         <div class="col-md-12 divider" ng-if="$index!=contentLimit-1 && $index!=elearning.length-1"></div>

@@ -11,18 +11,4 @@ publicControllers.controller('DownloadsController', ['$scope', '$rootScope', 'Co
         $scope.mostDownloads = resp;
     });
 
-    //------------------------------------------------------------------------------------------------ useful functions
-
-    $scope.htmlToPlainText = function(text) {
-        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-    };
-
-    $scope.createHeader = function (text,length) {
-        return $scope.htmlToPlainText(text).substring(0,length)+"...";
-    };
-
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-
 }]);
