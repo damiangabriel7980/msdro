@@ -2841,6 +2841,29 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                     });
                                 }
                             });
+                        }else if(req.params.type == "REJECTED" && wres==1){
+                            //email user
+                            User.findOne({_id: req.body.id}, function (err, user) {
+                                if(err){
+                                    res.send(err);
+                                }else{
+                                    mandrill({from: 'adminMSD@qualitance.ro',
+                                        to: [user.username],
+                                        subject:'Activare cont MSD',
+                                        text: 'Draga '+user.name+',\n\n\n'+
+                                            'Din pacate, nu am putut valida dovada identitatii dumneavoastra pe baza pozei trimise.\n\n'+
+                                            'Pentru a solicita un review sau a obtine mai multe informatii, va rugam sa raspundeti la acest mail printr-un reply.\n\n\n'+
+                                            'O zi buna,\nAdmin MSD'
+                                    }, function(err){
+                                        if(err) {
+                                            logger.error(err);
+                                            res.send(err);
+                                        }else{
+                                            res.send({message: "Updated "+wres+" user. Email sent"});
+                                        }
+                                    });
+                                }
+                            });
                         }else{
                             res.send({message: "Updated "+wres+" user. Email not sent"});
                         }
