@@ -1,5 +1,5 @@
 <div class="carousel-container" ng-if="HomeCarousel.length!=0">
-    <ul rn-carousel rn-carousel-index='selectedIndexCarousel' class="main-carousel" rn-carousel-auto-slide="{{myInterval}}"
+    <ul rn-carousel rn-carousel-index='$parent.selectedIndexCarousel' class="main-carousel" rn-carousel-auto-slide="{{myInterval}}"
         carousel-resizable style="{{carouselResponsiveStyle}}">
         <li ng-repeat="carouselItem in HomeCarousel track by $index" style="margin-left: 10px;margin-right:10px">
             <div class="carouselSlide">

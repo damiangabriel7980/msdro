@@ -27,6 +27,7 @@ var flash    = require('connect-flash');
 var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
+var socketio = require('socket.io');
 var session      = require('express-session');
 var configDB = require('./config/database.js');
 var email = require('mandrill-send')(mandrillKey);

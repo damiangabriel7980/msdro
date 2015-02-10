@@ -26,6 +26,13 @@ var Threads = require('./models/qa_threads');
 var qaMessages = require('./models/qa_messages');
 var Professions = require('./models/professions');
 
+//live Streaming
+var socketio = require('socket.io'),
+    uuid = require('node-uuid'),
+    rooms = {},
+    userIds = {};
+
+
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
 var ObjectId = require('mongoose').Types.ObjectId;

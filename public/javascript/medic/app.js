@@ -207,6 +207,7 @@ cloudAdminApp.run(
                 var _opened = $navbar.hasClass("in");
                 if (_opened === true && !clickover.hasClass("navbar-toggle")) {
                     $navbar.collapse('hide');
+                    $navbar.height(0);
                 }
             });
             //profile modal
