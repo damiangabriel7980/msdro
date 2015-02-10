@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var jsonwebtoken = require('jsonwebtoken');
 var url = require('url');
+var async = require('async');
 
 
 var NewsPost = require('./models/MSDDoc_news_post');
