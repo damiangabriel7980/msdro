@@ -101,7 +101,7 @@ cloudAdminControllers.controller('productsEditCtrl', ['$scope','ProductService',
         AmazonService.getClient(function (s3) {
             var extension = body.name.split('.').pop();
             var key = "produse/"+$scope.product._id+"/rpc/rpc"+$scope.product._id+"."+extension;
-            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
+            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read',ContentType: body.type}, function (err, data) {
                 if (err) {
                     console.log(err);
                     $scope.uploadAlertRPC.type = "danger";

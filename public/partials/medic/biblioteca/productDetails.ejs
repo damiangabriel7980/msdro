@@ -7,7 +7,7 @@
             </div>
             <div class="col-md-3">
                 <a class="thumbnail"><img src="{{amazon + selectedProduct.image_path}}" alt="{{selectedProduct.name}}" height="300" width="300"/></a>
-                <a href="{{amazon + selectedProduct.file_path}}" target="_blank" class="btn btn-info btn-more-news btn-block margintop10px"><i class="icon-share icon-white"></i>&nbsp;Descarca RCP</a>
+                <a ng-href="{{amazon + selectedProduct.file_path}}" target="_blank" class="btn btn-info btn-more-news btn-block margintop10px"><i class="icon-share icon-white"></i>&nbsp;Descarca RCP</a>
                 <hr class="margintop10px marginbottom0">
             </div>
             <div class="col-md-9" convert-special conver="selectedProduct.description" ng-bind-html="trustAsHtml(selectedProduct.description)">
