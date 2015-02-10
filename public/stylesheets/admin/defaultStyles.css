@@ -31,3 +31,9 @@
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
+.marginTop5px {
+  margin-top: 5px;
+}
+.pointer {
+  cursor: pointer;
+}

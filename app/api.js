@@ -1607,6 +1607,19 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         });
+    router.route('/admin/content/editAssociatedImages')
+        .post(function(req,res){
+            console.log(req.body.data);
+            var data = req.body.data;
+            Content.update({_id:data.id}, {associated_images: data.associated_images}, function (err, wRes) {
+                if(err){
+                    logger.error("Error at article change photo array. Article id = "+data.id+"; Key = "+data.associated_images);
+                    res.json({error:true});
+                }else{
+                    res.json({error:false, updated:wRes});
+                }
+            });
+        });
     router.route('/admin/events')
 
         .get(function(req, res) {

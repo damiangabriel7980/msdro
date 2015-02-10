@@ -193,6 +193,9 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
         }),
         editImage: $resource('api/admin/content/editImage/:data', {}, {
             save: { method: 'POST' }
+        }),
+        editAssociatedImages: $resource('api/admin/content/editAssociatedImages/:data', {}, {
+            save: { method: 'POST' }
         })
     }
 }]);

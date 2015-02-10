@@ -15,7 +15,8 @@ var articlesSchema		= new Schema({
     version:      Number,
     enable:       Boolean,
     image_path:   String,
-    groupsID:     Array
+    groupsID:     Array,
+    associated_images: Array
 });
 articlesSchema.plugin(mongoosastic,{host:'10.200.0.221',port:'9200'});
 
