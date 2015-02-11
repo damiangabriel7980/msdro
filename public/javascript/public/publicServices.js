@@ -39,6 +39,9 @@ publicServices.factory('AuthService', ['$resource', function($resource){
         }),
         signup: $resource('/apiGloballyShared/createAccount', {}, {
             query: { method: 'POST', isArray: false }
+        }),
+        reset: $resource('/apiGloballyShared/requestPasswordReset', {}, {
+            query: { method: 'POST', isArray: false }
         })
     }
 }]);

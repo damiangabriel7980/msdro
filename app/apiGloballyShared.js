@@ -133,7 +133,7 @@ module.exports = function(app, mandrill, logger, router) {
         });
 
 //============================================================================================= generate token for resetting user password
-    router.route('/resetPass')
+    router.route('/requestPasswordReset')
         .post(function(req, res) {
             async.waterfall([
                 //generate unique token

@@ -49,7 +49,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, ro
     //generate token for resetting user password
     router.route('/resetPass')
         .post(function(req, res) {
-            res.redirect(307, '/apiGloballyShared/resetPass');
+            res.redirect(307, '/apiGloballyShared/requestPasswordReset');
         });
 
     //========================================================================================== ACTIVATE ACCOUNT

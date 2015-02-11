@@ -62,7 +62,14 @@ publicControllers.controller('AuthModalController', ['$scope', '$modalInstance',
     };
 
     $scope.reset = function () {
-        console.log(this);
+        AuthService.reset.query({email: this.email}).$promise.then(function (resp) {
+            var message = resp.message;
+            if(message.hasError){
+                resetAlert("danger",message.text);
+            }else{
+                resetAlert("success",message.text);
+            }
+        });
     };
 
 }]);
