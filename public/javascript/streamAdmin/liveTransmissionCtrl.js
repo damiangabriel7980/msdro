@@ -19,9 +19,9 @@ cloudStreamAdminControllers.controller('liveTransmissionCtrl', ['$scope', '$root
     attributes.name = "simpleBroadcaster3";
     attributes.align = "middle";
     var swfVersionStr = "11.2.0";
-    var xiSwfUrlStr = "javascript/flash/playerProductInstall.swf";
+    var xiSwfUrlStr = "javascript/streamAdmin/flash/playerProductInstall.swf";
     $(function () {
-        swfobject.embedSWF("components/flash/simpleBroadcaster3.swf", "myContent", "100%", "100%",
+        swfobject.embedSWF("javascript/streamAdmin/flash/simpleBroadcaster3.swf", "myContent", "100%", "100%",
             swfVersionStr, xiSwfUrlStr, flashvars, params, attributes);
 
         swfobject.createCSS("#myContent", "display:block;text-align:left;");
