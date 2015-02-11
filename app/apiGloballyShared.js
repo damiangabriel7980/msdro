@@ -28,6 +28,7 @@ module.exports = function(app, mandrill, logger, router) {
             var email = req.body.email?req.body.email:"";
             var password = req.body.password?req.body.password:"";
             var confirm = req.body.confirm?req.body.confirm:"";
+            var createdFromStaywell = req.body.createdFromStaywell?true:false;
 
             var info = {error: true, type:"danger"};
 
@@ -89,15 +90,25 @@ module.exports = function(app, mandrill, logger, router) {
                                             if (err){
                                                 res.send(err);
                                             }else{
-                                                //send email
+                                                //we need to email the user
+                                                //first, create an activation link
+                                                var activationLink;
+                                                //if the account was created from Staywell site, create a special link
+                                                if(createdFromStaywell){
+                                                    activationLink = 'http://' + req.headers.host + '/activateAccountStaywell/' + inserted.activationToken;
+                                                }else{
+                                                    activationLink = 'http://' + req.headers.host + '/activateAccount/' + inserted.activationToken;
+                                                }
                                                 mandrill({from: 'adminMSD@qualitance.ro',
                                                     to: [inserted.username],
                                                     subject:'Activare cont MSD',
-                                                    text: 'Ati primit acest email deoarece v-ati inregistrat pe MSD.\n\n' +
+                                                    text:
+                                                        'Draga '+inserted.name+',\n\n\n'+
+                                                        'Ati primit acest email deoarece v-ati inregistrat pe Staywell.\n\n' +
                                                         'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va activa contul:\n\n' +
-                                                        'http://' + req.headers.host + '/activateAccount/' + inserted.activationToken + '\n\n' +
-                                                        'Link-ul este valabil maxim o ora\n'+
-                                                        'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n'
+                                                        activationLink + '\n\n' +
+                                                        'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n\n\n'+
+                                                        'Toate cele bune,\nAdmin MSD'
                                                 }, function(errm){
                                                     if(errm) {
                                                         logger.error(errm);
@@ -106,6 +117,7 @@ module.exports = function(app, mandrill, logger, router) {
                                                         info.error = false;
                                                         info.type = "success";
                                                         info.message = "Un email de activare a fost trimis";
+                                                        info.user = email;
                                                         res.json(info);
                                                     }
                                                 });

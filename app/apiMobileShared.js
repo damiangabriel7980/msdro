@@ -38,7 +38,8 @@ module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, ro
     });
 
     // We are going to protect /apiMobileShared routes with JWT
-    app.use('/apiMobileShared', expressJwt({secret: tokenSecret}).unless({path: ['/apiMobileShared/createAccount', '/apiMobileShared/resetPass']}));
+    app.use('/apiMobileShared', expressJwt({secret: tokenSecret}).unless({path: ['/apiMobileShared/createAccount',
+                                                                                 '/apiMobileShared/resetPass',/\/apiMobileShared\/activateAccount\/w*/i]}));
 
     router.route('/createAccount')
         .post(function (req, res) {
@@ -49,6 +50,26 @@ module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, ro
     router.route('/resetPass')
         .post(function(req, res) {
             res.redirect(307, '/apiGloballyShared/resetPass');
+        });
+
+    //========================================================================================== ACTIVATE ACCOUNT
+    router.route('/activateAccount/:token')
+        .get(function (req, res) {
+            User.findOne({ activationToken: req.params.token}, function(err, user) {
+                if (!user) {
+                    res.render('mobile/accountActivation.ejs', {success: false});
+                }else{
+                    user.enabled = true;
+                    user.activationToken = null;
+                    user.save(function (err, user) {
+                        if(err){
+                            res.render('mobile/accountActivation.ejs', {success: false});
+                        }else{
+                            res.render('mobile/accountActivation.ejs', {success: true});
+                        }
+                    });
+                }
+            });
         });
 
 //========================================================================================================== route for retrieving user's profile info

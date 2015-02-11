@@ -20,7 +20,17 @@ module.exports = function(app, email, logger, passport) {
 // normal routes ===============================================================
 
     app.get('/', function (req, res) {
-        res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket});
+        if(req.session.requestedActivation){
+            delete req.session.requestedActivation;
+            if(req.session.accountActivated){
+                delete req.session.accountActivated;
+                res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation:1, accountActivated: 1});
+            }else{
+                res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation:1, accountActivated: 0});
+            }
+        }else{
+            res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation: 0, accountActivated: 0});
+        }
     });
 
 	// show the home page (will also have our login links)
@@ -121,12 +131,7 @@ module.exports = function(app, email, logger, passport) {
 // =============================================================================
 
 	// locally --------------------------------
-		// LOGIN ===============================
-		// show the login form
-//		app.get('/login', function(req, res) {
-//			res.render('auth.ejs', { message: req.flash('loginMessage') });
-//		});
-
+		// LOGIN =============================== passport login - used by staywell core
 		// process the login form
 		app.post('/login', function (req, res, next) {
             //middleware to allow flashing messages on empty user/password fields
@@ -154,46 +159,38 @@ module.exports = function(app, email, logger, passport) {
             }
         });
 
-		// process the signup form
-		app.post('/signup', function(req, res, next) {
-            passport.authenticate('local-signup', function(err, user, info){
-                if(err) { return next(err); }
-                if(!user) { return res.render('signup.ejs', {info: info}); }
-                //email user
-                email({from: 'adminMSD@qualitance.ro',
-                    to: [user.username],
-                    subject:'Activare cont MSD',
-                    text: 'Ati primit acest email deoarece v-ati inregistrat pe MSD Staywell.\n\n' +
-                        'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va activa contul:\n\n' +
-                        'http://' + req.headers.host + '/activateAccount/' + user.activationToken + '\n\n' +
-                        'Link-ul este valabil maxim o ora\n'+
-                        'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n'
-                }, function(err){
-                    if(err) { return next(err); }
-                    res.render('accountActivation.ejs', {pending: true, success: false});
-                });
-            })(req, res, next);
-        });
+    //activate user account
+    // ! used by mobile apps
+    app.get('/activateAccount/:token', function(req, res) {
+        res.redirect(307, '/apiMobileShared/activateAccount/'+req.params.token);
+    });
 
-        //activate user account
-        // ! used by multiple apps
-        app.get('/activateAccount/:token', function(req, res) {
-            User.findOne({ activationToken: req.params.token}, function(err, user) {
-                if (!user) {
-                    res.render('signup.ejs', {info: {message : 'Link-ul de activare nu este valid. Pentru a va crea un cont, folositi formularul de mai jos'}});
-                }else{
-                    user.enabled = true;
-                    user.activationToken = null;
-                    user.save(function (err, user) {
-                        if(err){
-                            res.render('accountActivation.ejs', {pending: false, success: false});
-                        }else{
-                            res.render('accountActivation.ejs', {pending: false, success: true});
-                        }
-                    });
-                }
-            });
+    //activate user account
+    // ! used by Staywell Core
+    app.get('/activateAccountStaywell/:token', function (req, res) {
+        //put a requestedActivation variable on this session
+        //this is used for marking that an info modal needs
+        //to be displayed after redirecting to the home page
+        req.session.requestedActivation = true;
+        User.findOne({ activationToken: req.params.token}, function(err, user) {
+            if (!user) {
+                logger.error(err);
+                res.redirect('/');
+            }else{
+                user.enabled = true;
+                user.activationToken = null;
+                user.save(function (err, user) {
+                    if(err){
+                        logger.error(err);
+                    }else{
+                        //user was successfully activated
+                        req.session.accountActivated = true;
+                    }
+                    res.redirect('/');
+                });
+            }
         });
+    });
 
     //check if there is a user already registered wih email
     app.post('/checkEmailExists', function (req, res) {
@@ -209,141 +206,6 @@ module.exports = function(app, email, logger, passport) {
             }
         })
     });
-
-//	// facebook -------------------------------
-//
-//		// send to facebook to do the authentication
-//		app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
-//
-//		// handle the callback after facebook has authenticated the user
-//		app.get('/auth/facebook/callback',
-//			passport.authenticate('facebook', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-//
-//	// twitter --------------------------------
-//
-//		// send to twitter to do the authentication
-//		app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
-//
-//		// handle the callback after twitter has authenticated the user
-//		app.get('/auth/twitter/callback',
-//			passport.authenticate('twitter', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-//
-//
-//	// google ---------------------------------
-//
-//		// send to google to do the authentication
-//		app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-//
-//		// the callback after google has authenticated the user
-//		app.get('/auth/google/callback',
-//			passport.authenticate('google', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-
-// =============================================================================
-// AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
-// =============================================================================
-
-//	// locally --------------------------------
-//		app.get('/connect/local', function(req, res) {
-//			res.render('connect-local.ejs', { message: req.flash('loginMessage') });
-//		});
-//		app.post('/connect/local', passport.authenticate('local-signup', {
-//			successRedirect : '/', // redirect to the secure profile section
-//			failureRedirect : '/connect/local', // redirect back to the signup page if there is an error
-//			failureFlash : true // allow flash messages
-//		}));
-//
-//	// facebook -------------------------------
-//
-//		// send to facebook to do the authentication
-//		app.get('/connect/facebook', passport.authorize('facebook', { scope : 'email' }));
-//
-//		// handle the callback after facebook has authorized the user
-//		app.get('/connect/facebook/callback',
-//			passport.authorize('facebook', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-//
-//	// twitter --------------------------------
-//
-//		// send to twitter to do the authentication
-//		app.get('/connect/twitter', passport.authorize('twitter', { scope : 'email' }));
-//
-//		// handle the callback after twitter has authorized the user
-//		app.get('/connect/twitter/callback',
-//			passport.authorize('twitter', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-//
-//
-//	// google ---------------------------------
-//
-//		// send to google to do the authentication
-//		app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email'] }));
-//
-//		// the callback after google has authorized the user
-//		app.get('/connect/google/callback',
-//			passport.authorize('google', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-
-// =============================================================================
-// UNLINK ACCOUNTS =============================================================
-// =============================================================================
-// used to unlink accounts. for social accounts, just remove the token
-// for local account, remove email and password
-// user account will stay active in case they want to reconnect in the future
-
-//	// local -----------------------------------
-//	app.get('/unlink/local', isLoggedIn, function(req, res) {
-//		var user            = req.user;
-//		user.local.email    = undefined;
-//		user.local.password = undefined;
-//		user.save(function(err) {
-//			res.redirect('/');
-//		});
-//	});
-//
-//	// facebook -------------------------------
-//	app.get('/unlink/facebook', isLoggedIn, function(req, res) {
-//		var user            = req.user;
-//		user.facebook.token = undefined;
-//		user.save(function(err) {
-//			res.redirect('/');
-//		});
-//	});
-//
-//	// twitter --------------------------------
-//	app.get('/unlink/twitter', isLoggedIn, function(req, res) {
-//		var user           = req.user;
-//		user.twitter.token = undefined;
-//		user.save(function(err) {
-//			res.redirect('/');
-//		});
-//	});
-//
-//	// google ---------------------------------
-//	app.get('/unlink/google', isLoggedIn, function(req, res) {
-//		var user          = req.user;
-//		user.google.token = undefined;
-//		user.save(function(err) {
-//			res.redirect('/');
-//		});
-//	});
-//
-//
-//
 };
 
 // route middleware to ensure user is logged in
