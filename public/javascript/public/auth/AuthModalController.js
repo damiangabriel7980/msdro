@@ -8,13 +8,20 @@ publicControllers.controller('AuthModalController', ['$scope', '$modalInstance',
         }
     };
 
-    resetAlert();
-
     $scope.$watch('intent', function () {
-        if(intent === "login"){
-            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/public/auth/login.html');
-        }
+        $scope.renderView(intent);
     });
+
+    $scope.renderView = function (view) {
+        resetAlert();
+        if(view === "login"){
+            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/public/auth/login.html');
+        }else if(view === "signup"){
+            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/public/auth/signup.html');
+        }else if(view === "reset"){
+            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/public/auth/reset.html');
+        }
+    };
 
     $scope.closeModal = function(){
         $modalInstance.close();
@@ -31,4 +38,13 @@ publicControllers.controller('AuthModalController', ['$scope', '$modalInstance',
             }
         })
     };
+
+    $scope.signup = function () {
+        console.log(this);
+    };
+
+    $scope.reset = function () {
+        console.log(this);
+    };
+
 }]);

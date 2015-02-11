@@ -12,6 +12,12 @@
             <label>Password</label>
             <input type="password" class="form-control" ng-model="password">
         </div>
+        <div>
+            <ul class="pointerLinks">
+                <li>Ai uitat parola? <a ng-click="renderView('reset')">Cere resetarea parolei</a></li>
+                <li>Nu ai cont? <a ng-click="renderView('signup')">Creaza cont nou</a></li>
+            </ul>
+        </div>
     </div>
     <div class="modal-footer">
         <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
