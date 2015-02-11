@@ -1,6 +1,6 @@
 cloudAdminControllers.controller('liveTransmissionCtrl', ['$scope', '$rootScope', '$stateParams', '$sce','$state','$window','$timeout', function($scope, $rootScope, $stateParams,$sce,$state,$window,$timeout){
     var swfVersionStr = "11.2.0";
-    var xiSwfUrlStr = "components/flash/playerProductInstall.swf";
+    var xiSwfUrlStr = "javascript/flash/playerProductInstall.swf";
     var flashvars = {};
     flashvars.inputUrl = "rtmp://qualitance.srfms.com:2111/live";
     flashvars.inputWidth = "480";
@@ -19,7 +19,7 @@ cloudAdminControllers.controller('liveTransmissionCtrl', ['$scope', '$rootScope'
     attributes.name = "simpleSubscriber3";
     attributes.align = "middle";
     $(function () {
-        swfobject.embedSWF("components/flash/simpleSubscriber3.swf", "myContent", "100%", "100%", swfVersionStr, xiSwfUrlStr, flashvars, params, attributes);
+        swfobject.embedSWF("javascript/flash/simpleSubscriber3.swf", "myContent", "100%", "100%", swfVersionStr, xiSwfUrlStr, flashvars, params, attributes);
         swfobject.createCSS("#myContent", "display:block;text-align:left;width: 100%;height: 100%");
 
         /* if($.fullscreen.isNativelySupported()) {
