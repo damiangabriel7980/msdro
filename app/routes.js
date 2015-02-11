@@ -36,62 +36,8 @@ module.exports = function(app, email, logger, passport) {
 
     // RESET PASSWORD =================================================================================================
 
-    //render password reset form
-    app.get('/forgot', function(req, res) {
-        res.render('forgotPass.ejs');
-    });
-
-    //generate token for resetting user password
-    app.post('/forgot', function(req, res) {
-        async.waterfall([
-            //generate unique token
-            function(done) {
-                crypto.randomBytes(40, function(err, buf) {
-                    var token = buf.toString('hex');
-                    done(err, token);
-                });
-            },
-            function(token, done) {
-                //find user
-                User.findOne({ username: req.body.email }, function(err, user) {
-                    if (!user) {
-                        res.render('forgotPass.ejs', {message : {message: 'Nu a fost gasit un cont pentru acest e-mail.', type: 'danger'}});
-                    }else{
-                        //set token for user - expires in one hour
-                        User.update({_id: user._id.toString()}, {
-                            resetPasswordToken: token,
-                            resetPasswordExpires: Date.now() + 3600000
-                        }, function(err, data) {
-                            done(err, token, user);
-                        });
-                    }
-                });
-            },
-            function(token, user, done) {
-                //email user
-                email({from: 'adminMSD@qualitance.ro',
-                    to: [user.username],
-                    subject:'Resetare parola MSD',
-                    text: 'Ati primit acest email deoarece a fost ceruta resetarea parolei pentru contul dumneavoastra de MSD.\n\n' +
-                          'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va reseta parola:\n\n' +
-                          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-                          'Link-ul este valabil maxim o ora\n'+
-                          'Daca nu ati cerut resetarea parolei, va rugam sa ignorati acest e-mail si parola va ramane neschimbata\n'
-                }, function(err){
-                    done(err, user.username);
-                });
-            }
-        ], function(err, user) {
-            if (err){
-                logger.error(err);
-                res.render('forgotPass.ejs', {message : {message: 'A aparut o eroare. Va rugam verificati datele', type: 'danger'}});
-            }else{
-                res.render('forgotPass.ejs', {message : {message: 'Un email cu instructiuni a fost trimis catre ' + user + '.', type: 'info'}});
-            }
-        });
-    });
-
     //enter new password
+    // ! used by multiple apps
     app.get('/reset/:token', function(req, res) {
         User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
             if (!user) {
@@ -103,6 +49,7 @@ module.exports = function(app, email, logger, passport) {
     });
 
     //change user password
+    // ! used by multiple apps
     app.post('/reset/:token', function(req, res) {
         //validate form
         //check if new password length is valid
@@ -207,12 +154,6 @@ module.exports = function(app, email, logger, passport) {
             }
         });
 
-		// SIGNUP =================================
-		// show the signup form
-		app.get('/signup', function(req, res) {
-			res.render('signup.ejs', { info: {}});
-		});
-
 		// process the signup form
 		app.post('/signup', function(req, res, next) {
             passport.authenticate('local-signup', function(err, user, info){
@@ -235,6 +176,7 @@ module.exports = function(app, email, logger, passport) {
         });
 
         //activate user account
+        // ! used by multiple apps
         app.get('/activateAccount/:token', function(req, res) {
             User.findOne({ activationToken: req.params.token}, function(err, user) {
                 if (!user) {
@@ -412,10 +354,7 @@ function isLoggedIn(req, res, next) {
 	res.redirect('/');
 }
 
-//validates user and transports it to a page taking it's role into account
-//args:
-//paths = {"role": "page", ...}
-//sendUserInfo = boolean
+//validates user and transports it to a page taking it's role and/or state into account
 var transportUser = function (req, res) {
     console.log("transport");
     User.findOne({_id: req.user._id}).select("+rolesID +state +proof_path").exec(function (err, user) {
