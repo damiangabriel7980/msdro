@@ -25,7 +25,6 @@ var AnswerGivers = require('./models/qa_answerGivers');
 var Threads = require('./models/qa_threads');
 var qaMessages = require('./models/qa_messages');
 var Professions = require('./models/professions');
-
 //live Streaming
 var socketio = require('socket.io'),
     uuid = require('node-uuid'),
@@ -495,6 +494,12 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
                 res.json(cont);
             });
+        });
+
+    router.route('/admin/transmisiiLive')
+        .get(function(req,res){
+
+
         });
 
     router.route('/admin/users/professions')
@@ -3434,43 +3439,53 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         forGroups.push(req.body.specialGroupSelected);
                     }
                     console.log(forGroups);
+                    var date = new Date();
+
                     async.each(arr_of_items, function (item, callback) {
-                        item.search({
+                        if(item==Events)
+                            var hydrateOp = {find: {groupsID:{$in:forGroups},enable:true,start:{$gt: date}}};
+                        else
+                            var hydrateOp = {find: {groupsID:{$in:forGroups},enable:true}};
 
-                            query_string: {
-                                query: data,
-                                default_operator: 'AND',
-                                boost: '1.2',
-                                analyze_wildcard: true
+                            item.search({
 
-                            }
+                                query_string: {
+                                    query: data,
+                                    default_operator: 'OR',
+                                    lowercase_expanded_terms: true
+                                    //phrase_slop: 50,
+                                    //analyze_wildcard: true
 
-                        },{hydrate: true,hydrateOptions:{find: {groupsID:{$in:forGroups},enable:true}}}, function(err, results) {
-                            if(err)
-                            {
-                                res.json(err);
-                                return;
-                            }
-                            else
-                            {
-                                if(results.hits.hits.length===0)
-                                    checker+=1;
-                                else
-                                {
-                                    //var myResults=[];
-                                    //for(var i=0;i<results.hits.hits.length;i++)
-                                    //{
-                                    //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
-                                    //        myResults.push(results.hits.hits[i]);
-                                    //}
-                                    ObjectOfResults[item.modelName]=results.hits.hits;
                                 }
 
-                            }
+                            },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
+                                if(err)
+                                {
+                                    res.json(err);
+                                    return;
+                                }
+                                else
+                                {
+                                    console.log(results.hits.hits);
+                                    if(results.hits.hits.length===0)
+                                        checker+=1;
+                                    else
+                                    {
+                                        //var myResults=[];
+                                        //for(var i=0;i<results.hits.hits.length;i++)
+                                        //{
+                                        //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
+                                        //        myResults.push(results.hits.hits[i]);
+                                        //}
+                                        ObjectOfResults[item.modelName]=results.hits.hits;
+                                    }
+
+                                }
 
 
-                            callback();
-                        });
+                                callback();
+                            });
+
                     }, function (err) {
                         if(err)
                             res.json(err);

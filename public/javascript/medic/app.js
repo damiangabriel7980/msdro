@@ -113,7 +113,8 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
         .state('elearning.transmisii',{
             url: '/transmisii',
-            templateUrl: 'partials/medic/elearning/transmisii.ejs'
+            templateUrl: 'partials/medic/elearning/transmisii.ejs',
+            controller: 'liveTransmissionCtrl'
         })
         .state('elearning.teste',{
             url: '/teste',

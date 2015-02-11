@@ -416,6 +416,8 @@ var transportUser = function (req, res, paths, sendUserInfo) {
                             res.render("medic/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
                         }else if(roles[0].authority === "ROLE_ADMIN"){
                             res.render("admin/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
+                        }else if(roles[0].authority === "ROLE_STREAM_ADMIN") {
+                            res.render("streamAdmin/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
                         }else {
                             req.logout();
                             res.redirect('/');
