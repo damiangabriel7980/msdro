@@ -25,10 +25,12 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
     $scope.okk = function () {
         $modalInstance.close();
         var $body = angular.element(document.body);
-        $body.css("overflow-y", "auto");
-        $body.width("100%");
-        angular.element('.navbar').width("50%");
-        angular.element('#footer').width("100%");
+        //$body.width("100%");
+        //angular.element('.navbar').width("50%");
+        //angular.element('#footer').width("100%");
+        $timeout(function(){
+            $body.css("overflow-y", "auto");
+        },100);
     };
     $scope.trustAsHtml = function (data) {
         return $sce.trustAsHtml(data);

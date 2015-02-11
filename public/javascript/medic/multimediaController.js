@@ -54,6 +54,14 @@ cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' 
     };
     if($stateParams.idMulti)
     {
+        var $body = angular.element(document.body);
+        var oldWidth = $body.innerWidth();
+        var navbarOld= angular.element('.navbar').width();
+        var footerOld=angular.element('#footer').width();
+        $body.css("overflow-y", "hidden");
+        $body.width(oldWidth);
+        angular.element('.navbar').width(navbarOld);
+        angular.element('#footer').width(footerOld);
         var idM = $stateParams.idMulti;
         $stateParams.idMulti = null;
         $modal.open({

@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 29.10.2014.
  */
-cloudAdminControllers.controller('modalCtrl',['$scope','eventsService2','$stateParams','$modal','$log','$modalInstance','$state','idEvent','$sce',function ($scope,eventsService2,$stateParams, $modal, $log,$modalInstance,$state,idEvent,$sce) {
+cloudAdminControllers.controller('modalCtrl',['$scope','eventsService2','$stateParams','$modal','$log','$modalInstance','$state','idEvent','$sce','$timeout',function ($scope,eventsService2,$stateParams, $modal, $log,$modalInstance,$state,idEvent,$sce,$timeout) {
 
    eventsService2.query({id:idEvent}).$promise.then(function(resp){
        $scope.itemsEvent=resp;
@@ -9,10 +9,13 @@ cloudAdminControllers.controller('modalCtrl',['$scope','eventsService2','$stateP
 
     $scope.cancell = function () {
         var $body = angular.element(document.body);
-        $body.css("overflow", "auto");
-        $body.width("100%");
-        angular.element('.navbar').width("50%");
-        angular.element('#footer').width("100%");
+        //$body.css("overflow", "auto");
+        //$body.width("100%");
+        //angular.element('.navbar').width("50%");
+        //angular.element('#footer').width("100%");
+        $timeout(function(){
+            $body.css("overflow-y", "auto");
+        },100);
         $modalInstance.close();
     };
     $scope.htmlToPlainText = function(text) {
