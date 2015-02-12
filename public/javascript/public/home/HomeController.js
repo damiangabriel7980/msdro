@@ -1,7 +1,13 @@
 publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', function($scope, $rootScope, HomeService, $sce, $state) {
 
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
-    $scope.carouselSlides = [];
+    $scope.carouselSlides = [{
+        title: "",
+        description: "",
+        type: "",
+        content_id: "",
+        image_path: ""
+    }];
     $scope.selectedIndex = 0;
     $scope.setSlide = function(index) {
         $scope.selectedIndex = index;
