@@ -45,3 +45,16 @@ publicServices.factory('AuthService', ['$resource', function($resource){
         })
     }
 }]);
+publicServices.factory('ProofService', ['$resource', function($resource){
+    return {
+        professions: $resource('api/proof/professions', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        proofImage: $resource('api/proof/image', {}, {
+            save: {method:'POST'}
+        }),
+        specialGroups: $resource('api/proof/specialGroups/:profession', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);

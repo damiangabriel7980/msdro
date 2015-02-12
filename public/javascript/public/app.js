@@ -11,7 +11,8 @@ var publicApp = angular.module('publicApp',
         'com.2fdevs.videogular',
         'com.2fdevs.videogular.plugins.controls',
         'com.2fdevs.videogular.plugins.overlayplay',
-        'com.2fdevs.videogular.plugins.poster'
+        'com.2fdevs.videogular.plugins.poster',
+        'angularFileUpload'
     ]);
 
 publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

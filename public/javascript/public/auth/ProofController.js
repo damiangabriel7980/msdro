@@ -1,4 +1,4 @@
-proofApp.controller('ProofController', ['$scope', 'ProofService', '$sce', function($scope, ProofService, $sce) {
+publicApp.controller('ProofController', ['$scope', 'ProofService', '$sce', function($scope, ProofService, $sce) {
 
     $scope.myAlert = {
         newAlert: false,
@@ -36,7 +36,7 @@ proofApp.controller('ProofController', ['$scope', 'ProofService', '$sce', functi
         console.log(group);
     };
 
-    $scope.saveAll = function () {
+    $scope.saveProofForm = function () {
         if(!profession){
             $scope.myAlert.newAlert = true;
             $scope.myAlert.type = "danger";

@@ -151,7 +151,14 @@ module.exports = function(app, email, logger, passport) {
                             if(err){
                                 return res.send({error: true, message: "A aparut o eroare pe server"});
                             }else{
-                                return res.send({error: false});
+                                if(user.state === "ACCEPTED"){
+                                    return res.send({error: false, proof: true});
+                                }else if(user.state === "PENDING"){
+                                    return res.send({error: false, proof: false});
+                                }else{
+                                    //this final else should never be reached
+                                    req.logout();
+                                }
                             }
                         })
                     }
@@ -242,12 +249,9 @@ var transportUser = function (req, res) {
                     }
                 }
             });
-        }else if(user.state === "PENDING"){
-            if(user.proof_path){
-                res.render("auth.ejs", {message: "Contul dumneavoastra nu a fost inca activat"});
-            }else{
-                res.render("medic/proof.ejs", {user: req.user});
-            }
+        }else{
+            req.logout();
+            res.redirect('/');
         }
     });
 };

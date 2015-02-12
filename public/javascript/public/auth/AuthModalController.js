@@ -26,6 +26,8 @@ publicControllers.controller('AuthModalController', ['$scope', '$modalInstance',
             $scope.modalTemplate = $sce.trustAsResourceUrl('partials/public/auth/activationSuccess.html');
         }else if(view === "activationFailed"){
             $scope.modalTemplate = $sce.trustAsResourceUrl('partials/public/auth/activationFailed.html');
+        }else if(view === "loadProof"){
+            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/public/auth/loadProof.html');
         }
     };
 
@@ -39,8 +41,12 @@ publicControllers.controller('AuthModalController', ['$scope', '$modalInstance',
             if(resp.error){
                 resetAlert("danger", resp.message);
             }else{
-                //redirect to pro area
-                $window.location.href = "pro";
+                //redirect to pro area or proof loading
+                if(resp.proof){
+                    $window.location.href = "pro";
+                }else{
+                    $scope.renderView("loadProof");
+                }
             }
         })
     };

@@ -21,7 +21,7 @@ module.exports = function(passport, logger) {
             // asynchronous
             process.nextTick(function() {
                 logger.warn("local auth - email: ", email);
-                User.findOne({username:{$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}).select("+enabled +password +account_locked +account_expired +state").exec(function(err, user) {
+                User.findOne({username:{$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}).select("+enabled +password +account_locked +account_expired +state +proof_path").exec(function(err, user) {
 
                     // if there are any errors, return the error
                     if (err)
@@ -36,6 +36,10 @@ module.exports = function(passport, logger) {
 
                     if(!user.enabled || user.account_locked || user.account_expired || user.state === "REJECTED")
                         return done(null, false, {error: true, message: 'Contul nu este activat sau a expirat'});
+
+                    if(user.state === "PENDING" && user.proof_path){
+                        return done(null, false, {error: true, message: 'Contul nu este activat'});
+                    }
 
                     // all is well, return user
                     else
