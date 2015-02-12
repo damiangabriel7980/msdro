@@ -20,7 +20,17 @@ module.exports = function(app, email, logger, passport) {
 // normal routes ===============================================================
 
     app.get('/', function (req, res) {
-        res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket});
+        if(req.session.requestedActivation){
+            delete req.session.requestedActivation;
+            if(req.session.accountActivated){
+                delete req.session.accountActivated;
+                res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation:1, accountActivated: 1});
+            }else{
+                res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation:1, accountActivated: 0});
+            }
+        }else{
+            res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation: 0, accountActivated: 0});
+        }
     });
 
 	// show the home page (will also have our login links)
@@ -36,62 +46,8 @@ module.exports = function(app, email, logger, passport) {
 
     // RESET PASSWORD =================================================================================================
 
-    //render password reset form
-    app.get('/forgot', function(req, res) {
-        res.render('forgotPass.ejs');
-    });
-
-    //generate token for resetting user password
-    app.post('/forgot', function(req, res) {
-        async.waterfall([
-            //generate unique token
-            function(done) {
-                crypto.randomBytes(40, function(err, buf) {
-                    var token = buf.toString('hex');
-                    done(err, token);
-                });
-            },
-            function(token, done) {
-                //find user
-                User.findOne({ username: req.body.email }, function(err, user) {
-                    if (!user) {
-                        res.render('forgotPass.ejs', {message : {message: 'Nu a fost gasit un cont pentru acest e-mail.', type: 'danger'}});
-                    }else{
-                        //set token for user - expires in one hour
-                        User.update({_id: user._id.toString()}, {
-                            resetPasswordToken: token,
-                            resetPasswordExpires: Date.now() + 3600000
-                        }, function(err, data) {
-                            done(err, token, user);
-                        });
-                    }
-                });
-            },
-            function(token, user, done) {
-                //email user
-                email({from: 'adminMSD@qualitance.ro',
-                    to: [user.username],
-                    subject:'Resetare parola MSD',
-                    text: 'Ati primit acest email deoarece a fost ceruta resetarea parolei pentru contul dumneavoastra de MSD.\n\n' +
-                          'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va reseta parola:\n\n' +
-                          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-                          'Link-ul este valabil maxim o ora\n'+
-                          'Daca nu ati cerut resetarea parolei, va rugam sa ignorati acest e-mail si parola va ramane neschimbata\n'
-                }, function(err){
-                    done(err, user.username);
-                });
-            }
-        ], function(err, user) {
-            if (err){
-                logger.error(err);
-                res.render('forgotPass.ejs', {message : {message: 'A aparut o eroare. Va rugam verificati datele', type: 'danger'}});
-            }else{
-                res.render('forgotPass.ejs', {message : {message: 'Un email cu instructiuni a fost trimis catre ' + user + '.', type: 'info'}});
-            }
-        });
-    });
-
     //enter new password
+    // ! used by multiple apps
     app.get('/reset/:token', function(req, res) {
         User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
             if (!user) {
@@ -103,6 +59,7 @@ module.exports = function(app, email, logger, passport) {
     });
 
     //change user password
+    // ! used by multiple apps
     app.post('/reset/:token', function(req, res) {
         //validate form
         //check if new password length is valid
@@ -174,71 +131,73 @@ module.exports = function(app, email, logger, passport) {
 // =============================================================================
 
 	// locally --------------------------------
-		// LOGIN ===============================
-		// show the login form
-		app.get('/login', function(req, res) {
-			res.render('auth.ejs', { message: req.flash('loginMessage') });
-		});
-
+		// LOGIN =============================== passport login - used by staywell core
 		// process the login form
 		app.post('/login', function (req, res, next) {
             //middleware to allow flashing messages on empty user/password fields
             if(!req.body.email || !req.body.password){
-                res.render('auth.ejs', {message: 'Campurile sunt obligatorii'});
+                return res.send({error: true, message: 'Campurile sunt obligatorii'});
             }else{
-                next();
+                passport.authenticate('local-login', function (err, user, info) {
+                    console.log(err);
+                    console.log(info);
+                    if(err){
+                        logger.log(err);
+                        return res.send({error: true, message: "A aparut o eroare pe server"});
+                    }else if(!user){
+                        return res.send(info);
+                    }else{
+                        req.logIn(user, function (err) {
+                            if(err){
+                                return res.send({error: true, message: "A aparut o eroare pe server"});
+                            }else{
+                                if(user.state === "ACCEPTED"){
+                                    return res.send({error: false, proof: true});
+                                }else if(user.state === "PENDING"){
+                                    return res.send({error: false, proof: false});
+                                }else{
+                                    //this final else should never be reached
+                                    req.logout();
+                                }
+                            }
+                        })
+                    }
+                })(req, res, next);
             }
-        }, passport.authenticate('local-login', {
-            successRedirect : '/pro', // redirect to the secure profile section
-            failureRedirect : '/login', // redirect back to the signup page if there is an error
-            failureFlash : true // allow flash messages
-        }));
+        });
 
-		// SIGNUP =================================
-		// show the signup form
-		app.get('/signup', function(req, res) {
-			res.render('signup.ejs', { info: {}});
-		});
+    //activate user account
+    // ! used by mobile apps
+    app.get('/activateAccount/:token', function(req, res) {
+        res.redirect(307, '/apiMobileShared/activateAccount/'+req.params.token);
+    });
 
-		// process the signup form
-		app.post('/signup', function(req, res, next) {
-            passport.authenticate('local-signup', function(err, user, info){
-                if(err) { return next(err); }
-                if(!user) { return res.render('signup.ejs', {info: info}); }
-                //email user
-                email({from: 'adminMSD@qualitance.ro',
-                    to: [user.username],
-                    subject:'Activare cont MSD',
-                    text: 'Ati primit acest email deoarece v-ati inregistrat pe MSD Staywell.\n\n' +
-                        'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va activa contul:\n\n' +
-                        'http://' + req.headers.host + '/activateAccount/' + user.activationToken + '\n\n' +
-                        'Link-ul este valabil maxim o ora\n'+
-                        'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n'
-                }, function(err){
-                    if(err) { return next(err); }
-                    res.render('accountActivation.ejs', {pending: true, success: false});
+    //activate user account
+    // ! used by Staywell Core
+    app.get('/activateAccountStaywell/:token', function (req, res) {
+        //put a requestedActivation variable on this session
+        //this is used for marking that an info modal needs
+        //to be displayed after redirecting to the home page
+        req.session.requestedActivation = true;
+        User.findOne({ activationToken: req.params.token}, function(err, user) {
+            if (!user) {
+                logger.error(err);
+                res.redirect('/');
+            }else{
+                user.enabled = true;
+                user.activationToken = null;
+                user.save(function (err, user) {
+                    if(err){
+                        logger.error(err);
+                    }else{
+                        //user was successfully activated
+                        req.session.accountActivated = true;
+                    }
+                    res.redirect('/');
                 });
-            })(req, res, next);
+            }
         });
-
-        //activate user account
-        app.get('/activateAccount/:token', function(req, res) {
-            User.findOne({ activationToken: req.params.token}, function(err, user) {
-                if (!user) {
-                    res.render('signup.ejs', {info: {message : 'Link-ul de activare nu este valid. Pentru a va crea un cont, folositi formularul de mai jos'}});
-                }else{
-                    user.enabled = true;
-                    user.activationToken = null;
-                    user.save(function (err, user) {
-                        if(err){
-                            res.render('accountActivation.ejs', {pending: false, success: false});
-                        }else{
-                            res.render('accountActivation.ejs', {pending: false, success: true});
-                        }
-                    });
-                }
-            });
-        });
+    });
 
     //check if there is a user already registered wih email
     app.post('/checkEmailExists', function (req, res) {
@@ -254,141 +213,6 @@ module.exports = function(app, email, logger, passport) {
             }
         })
     });
-
-//	// facebook -------------------------------
-//
-//		// send to facebook to do the authentication
-//		app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
-//
-//		// handle the callback after facebook has authenticated the user
-//		app.get('/auth/facebook/callback',
-//			passport.authenticate('facebook', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-//
-//	// twitter --------------------------------
-//
-//		// send to twitter to do the authentication
-//		app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
-//
-//		// handle the callback after twitter has authenticated the user
-//		app.get('/auth/twitter/callback',
-//			passport.authenticate('twitter', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-//
-//
-//	// google ---------------------------------
-//
-//		// send to google to do the authentication
-//		app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-//
-//		// the callback after google has authenticated the user
-//		app.get('/auth/google/callback',
-//			passport.authenticate('google', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-
-// =============================================================================
-// AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
-// =============================================================================
-
-//	// locally --------------------------------
-//		app.get('/connect/local', function(req, res) {
-//			res.render('connect-local.ejs', { message: req.flash('loginMessage') });
-//		});
-//		app.post('/connect/local', passport.authenticate('local-signup', {
-//			successRedirect : '/', // redirect to the secure profile section
-//			failureRedirect : '/connect/local', // redirect back to the signup page if there is an error
-//			failureFlash : true // allow flash messages
-//		}));
-//
-//	// facebook -------------------------------
-//
-//		// send to facebook to do the authentication
-//		app.get('/connect/facebook', passport.authorize('facebook', { scope : 'email' }));
-//
-//		// handle the callback after facebook has authorized the user
-//		app.get('/connect/facebook/callback',
-//			passport.authorize('facebook', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-//
-//	// twitter --------------------------------
-//
-//		// send to twitter to do the authentication
-//		app.get('/connect/twitter', passport.authorize('twitter', { scope : 'email' }));
-//
-//		// handle the callback after twitter has authorized the user
-//		app.get('/connect/twitter/callback',
-//			passport.authorize('twitter', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-//
-//
-//	// google ---------------------------------
-//
-//		// send to google to do the authentication
-//		app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email'] }));
-//
-//		// the callback after google has authorized the user
-//		app.get('/connect/google/callback',
-//			passport.authorize('google', {
-//				successRedirect : '/',
-//				failureRedirect : '/'
-//			}));
-
-// =============================================================================
-// UNLINK ACCOUNTS =============================================================
-// =============================================================================
-// used to unlink accounts. for social accounts, just remove the token
-// for local account, remove email and password
-// user account will stay active in case they want to reconnect in the future
-
-//	// local -----------------------------------
-//	app.get('/unlink/local', isLoggedIn, function(req, res) {
-//		var user            = req.user;
-//		user.local.email    = undefined;
-//		user.local.password = undefined;
-//		user.save(function(err) {
-//			res.redirect('/');
-//		});
-//	});
-//
-//	// facebook -------------------------------
-//	app.get('/unlink/facebook', isLoggedIn, function(req, res) {
-//		var user            = req.user;
-//		user.facebook.token = undefined;
-//		user.save(function(err) {
-//			res.redirect('/');
-//		});
-//	});
-//
-//	// twitter --------------------------------
-//	app.get('/unlink/twitter', isLoggedIn, function(req, res) {
-//		var user           = req.user;
-//		user.twitter.token = undefined;
-//		user.save(function(err) {
-//			res.redirect('/');
-//		});
-//	});
-//
-//	// google ---------------------------------
-//	app.get('/unlink/google', isLoggedIn, function(req, res) {
-//		var user          = req.user;
-//		user.google.token = undefined;
-//		user.save(function(err) {
-//			res.redirect('/');
-//		});
-//	});
-//
-//
-//
 };
 
 // route middleware to ensure user is logged in
@@ -396,14 +220,12 @@ function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated())
 		return next();
 
-	res.redirect('/login');
+	res.redirect('/');
 }
 
-//validates user and transports it to a page taking it's role into account
-//args:
-//paths = {"role": "page", ...}
-//sendUserInfo = boolean
-var transportUser = function (req, res, paths, sendUserInfo) {
+//validates user and transports it to a page taking it's role and/or state into account
+var transportUser = function (req, res) {
+    console.log("transport");
     User.findOne({_id: req.user._id}).select("+rolesID +state +proof_path").exec(function (err, user) {
         if(user.state === "ACCEPTED"){
             Roles.find({_id: {$in: user.rolesID}}, function (err, roles) {
@@ -413,6 +235,7 @@ var transportUser = function (req, res, paths, sendUserInfo) {
                 }else{
                     if(roles[0]){
                         if(roles[0].authority === "ROLE_FARMACIST"){
+                            console.log("medic");
                             res.render("medic/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
                         }else if(roles[0].authority === "ROLE_ADMIN"){
                             res.render("admin/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
@@ -428,12 +251,9 @@ var transportUser = function (req, res, paths, sendUserInfo) {
                     }
                 }
             });
-        }else if(user.state === "PENDING"){
-            if(user.proof_path){
-                res.render("auth.ejs", {message: "Contul dumneavoastra nu a fost inca activat"});
-            }else{
-                res.render("medic/proof.ejs", {user: req.user});
-            }
+        }else{
+            req.logout();
+            res.redirect('/');
         }
     });
 };

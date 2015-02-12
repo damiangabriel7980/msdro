@@ -42,7 +42,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
     });
 
     // We are going to protect /apiConferences routes with JWT
-    app.use('/apiMSDDoc', expressJwt({secret: tokenSecret}).unless({path: ['/apiMSDDoc/createAccount', '/apiMSDDoc/resetPass']}));
+    app.use('/apiMSDDoc', expressJwt({secret: tokenSecret}));
 
 
     //========================================================================================================================================== all routes

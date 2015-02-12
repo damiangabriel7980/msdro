@@ -11,7 +11,8 @@ var publicApp = angular.module('publicApp',
         'com.2fdevs.videogular',
         'com.2fdevs.videogular.plugins.controls',
         'com.2fdevs.videogular.plugins.overlayplay',
-        'com.2fdevs.videogular.plugins.poster'
+        'com.2fdevs.videogular.plugins.poster',
+        'angularFileUpload'
     ]);
 
 publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -148,6 +149,21 @@ publicApp.run(
                     size: 'lg',
                     windowClass: 'fade',
                     controller: 'ContactModalController'
+                });
+            };
+
+            //auth modal
+            $rootScope.showAuthModal = function(intent){
+                $modal.open({
+                    templateUrl: 'partials/public/auth/baseModal.html',
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'AuthModalController',
+                    resolve:{
+                        intent: function () {
+                            return intent;
+                        }
+                    }
                 });
             };
         }

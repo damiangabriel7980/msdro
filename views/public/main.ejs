@@ -6,6 +6,8 @@
     <!--Get amazon bucket-->
     <script>
         sessionStorage.defaultAmazonBucket = "<%=amazonBucket%>";
+        sessionStorage.requestedStaywellActivation = "<%=requestedActivation%>";
+        sessionStorage.activatedStaywellAccount = "<%=accountActivated%>";
     </script>
 
     <!--Core-modules-->
@@ -34,6 +36,8 @@
     <script src="javascript/public/downloads/downloadsDetailController.js"></script>
     <script src="javascript/public/elearning/elearningController.js"></script>
     <script src="javascript/public/elearning/elearningDetailController.js"></script>
+    <script src="javascript/public/auth/AuthModalController.js"></script>
+    <script src="javascript/public/auth/ProofController.js"></script>
 
 
     <!--Plug-ins-->
@@ -51,6 +55,7 @@
     <script src="components/videogular-overlay-play/overlay-play.js"></script>
     <script src="components/videogular-poster/poster.js"></script>
     <script src="components/videogular-buffering/buffering.js"></script>
+    <script src="components/ng-file-upload/angular-file-upload.min.js"></script>
 
 
     <!--Stylesheets-->
@@ -86,7 +91,7 @@
                                 </li>
                                 <li>|</li>
                                 <li>
-                                    <a href="/login">Log in</a>
+                                    <a ng-click="showAuthModal('login')">Log in</a>
                                 </li>
                             </ul>
                         </div>
@@ -131,7 +136,7 @@
                         </li>
                         <li class="link-divider"></li>
                         <li class="navbar-link">
-                            <a href="/login">Log in</a>
+                            <a ng-click="showAuthModal('login')">Log in</a>
                         </li>
                     </ul>
                 </div>

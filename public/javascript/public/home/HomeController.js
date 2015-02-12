@@ -35,6 +35,20 @@ publicControllers.controller('HomeController', ['$scope', '$rootScope', 'HomeSer
         }
     };
 
+    //if user accesses the home page from an e-mail activation link,
+    //show a custom modal
+    var showActivationModal = sessionStorage.requestedStaywellActivation;
+    var activationSuccess = sessionStorage.activatedStaywellAccount;
+    delete sessionStorage.requestedStaywellActivation;
+    delete sessionStorage.activatedStaywellAccount;
+    if(showActivationModal == 1){
+        if(activationSuccess == 1){
+            $rootScope.showAuthModal("activationSuccess");
+        }else{
+            $rootScope.showAuthModal("activationFailed");
+        }
+    }
+
 }]).filter('repeatReverse', function() {
     return function(items) {
         return items.slice().reverse();
