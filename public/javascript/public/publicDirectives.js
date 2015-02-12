@@ -154,7 +154,6 @@ publicApp.directive('footerBottom', function($window, $rootScope, $timeout, $sta
                         footer.css('padding-top','0px');
                     }
                 }
-                $timeout(initialize, 300);
             };
 
             angular.element($window).bind('resize', function () {
@@ -166,6 +165,16 @@ publicApp.directive('footerBottom', function($window, $rootScope, $timeout, $sta
                 initialize();
                 $scope.$apply();
             });
+
+            $rootScope.$on('$stateChangeStart',
+                function(){
+                    footer.css('padding-top','0px');
+                });
+
+            $rootScope.$on('$viewContentLoaded',
+                function(){
+                    $timeout(initialize, 300);
+                });
         }
     }
 });
