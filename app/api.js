@@ -4001,7 +4001,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
         .put(function(req, res) {
         //console.log(req.user.username);
-        User.findOne({ username :  { $regex: new RegExp("^" + req.user.username, "i") }},function(err,usr){
+        User.findOne({ username :  {$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}},function(err,usr){
             if(err) {
                 logger.error(err);
                 res.send(err)

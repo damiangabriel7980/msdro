@@ -201,7 +201,7 @@ module.exports = function(app, email, logger, passport) {
 
     //check if there is a user already registered wih email
     app.post('/checkEmailExists', function (req, res) {
-        User.findOne({'username': {$regex: new RegExp("^"+req.body.email, "i")}}, function (err, user) {
+        User.findOne({'username': {$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}, function (err, user) {
             if(err){
                 res.status(500).end();
             }else{
