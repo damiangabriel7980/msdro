@@ -36,7 +36,6 @@
     "angular-pdf": "latest",
     "angular-qr": "latest",
     "angular-bootstrap-datetimepicker": "latest",
-    "ng-tiny-scrollbar": "latest",
     "videogular": "~0.7.2",
     "videogular-controls": "~0.7.2",
     "videogular-buffering": "~0.7.2",
