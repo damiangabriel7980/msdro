@@ -352,14 +352,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     $scope.openFirst = true;
 
     $scope.closeModal = function(){
-        var $body = angular.element(document.body);
         $modalInstance.close();
-        $body.width("100%");
-        angular.element('.navbar').width("50%");
-        angular.element('#footer').width("100%");
-        //$timeout(function(){
-            $body.css("overflow-y", "auto");
-        //},100);
     };
 
     $scope.trustAsHtml = function (val) {

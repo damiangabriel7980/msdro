@@ -87,22 +87,13 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     //merck modal
     $rootScope.showMerckManual = function(){
-        var $body = $(document.body);
-        var oldWidth = $body.innerWidth();
-        var navbarOld= angular.element('.navbar').width();
-        var footerOld=angular.element('#footer').width();
-        $body.css("overflow-y", "hidden");
-        $body.width(oldWidth);
-        angular.element('.navbar').width(navbarOld);
-        angular.element('#footer').width(footerOld);
         $modal.open({
             templateUrl: 'partials/medic/modals/merckManual.html',
             size: 'lg',
             keyboard: false,
             backdrop: 'static',
             windowClass: 'fade',
-            controller: 'MerckManualController',
-            windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
+            controller: 'MerckManualController'
         });
     };
     $rootScope.textToSearch="";
@@ -111,34 +102,19 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         $rootScope.textToSearch = x.value;
     };
     $rootScope.showFarmaModal = function() {
-        var $body = $(document.body);
-        var oldWidth = $body.innerWidth();
-        var navbarOld= angular.element('.navbar').width();
-        var footerOld=angular.element('#footer').width();
-        $body.css("overflow-y", "hidden");
-        $body.width(oldWidth);
-        angular.element('.navbar').width(navbarOld);
-        angular.element('#footer').width(footerOld);
-
         var modalInstance = $modal.open({
             templateUrl: 'partials/medic/modals/Farma.html',
             keyboard: false,
+            controller: 'FarmacovigilentaCtrl',
             size: 'lg',
             windowClass: 'fade',
-            backdrop: 'static',
-            controller: 'FarmacovigilentaCtrl',
-            windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
+            backdrop: 'static'
+            //windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
+
+
     $rootScope.showContactModal = function(){
-        var $body = $(document.body);
-        var oldWidth = $body.innerWidth();
-        var navbarOld= angular.element('.navbar').width();
-        var footerOld=angular.element('#footer').width();
-        $body.css("overflow-y", "hidden");
-        $body.width(oldWidth);
-        angular.element('.navbar').width(navbarOld);
-        angular.element('#footer').width(footerOld);
         $modal.open({
             templateUrl: 'partials/medic/contact.ejs',
             size: 'lg',
@@ -149,22 +125,14 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
         });
     };
     $rootScope.showTermsModal = function(){
-        var $body = angular.element(document.body);
-        var oldWidth = $body.innerWidth();
-        var navbarOld= angular.element('.navbar').width();
-        var footerOld=angular.element('#footer').width();
-        $body.css("overflow-y", "hidden");
-        $body.width(oldWidth);
-        angular.element('.navbar').width(navbarOld);
-        angular.element('#footer').width(footerOld);
         $modal.open({
             templateUrl: 'partials/medic/modals/Terms.html',
             size: 'lg',
             windowClass: 'fade',
             backdrop: 'static',
             controller: 'TermsCtrl',
-            keyboard: false,
-            windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
+            keyboard: false
+            //windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
 

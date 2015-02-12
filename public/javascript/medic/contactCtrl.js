@@ -5,12 +5,12 @@ cloudAdminControllers.controller('contactCtrl',['$scope','$stateParams','$modal'
 
     $scope.closeContact = function () {
         $modalInstance.close();
-        var $body = angular.element(document.body);
-        $body.width("100%");
-        angular.element('.navbar').width("50%");
-        angular.element('#footer').width("100%");
+        //var $body = angular.element(document.body);
+        //$body.width("100%");
+        //angular.element('.navbar').width("50%");
+        //angular.element('#footer').width("100%");
         //$timeout(function(){
-            $body.css("overflow-y", "auto");
+        //    $body.css("overflow-y", "auto");
         //},100);
 
     };

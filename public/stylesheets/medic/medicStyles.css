@@ -6781,10 +6781,6 @@ ul.products li {
 .leftPosition {
   float: left !important;
 }
-.autoOver {
-  overflow: auto;
-  overflow-x: hidden;
-}
 .hiddenSearch {
   width: 33%;
   float: right;

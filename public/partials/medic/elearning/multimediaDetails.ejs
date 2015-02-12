@@ -1,8 +1,8 @@
 <div class="modal-header">
     <div class="modal-title"><h3>{{selectedMultimedia.title}}</h3></div>
 </div>
-<div class="modal-body" style="height: 70%;">
-    <div class="col-md-12 noPadding" ng-if="selectedMultimedia.type==1" style="height: 100%;">
+<div class="modal-body col-md-12">
+    <div class="col-md-12 noPadding" ng-if="selectedMultimedia.type==1">
         <div class="col-md-12" convert-special conver="selectedMultimedia.description" ng-bind-html="trustAsHtml(selectedMultimedia.description)"></div>
         <div class="col-md-12" style="height: 80%;">
             <video class="video-js vjs-default-skin vjs-big-play-centered"

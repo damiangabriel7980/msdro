@@ -175,7 +175,7 @@ cloudAdminApp.run(
             $rootScope.amazonBucket = sessionStorage.defaultAmazonBucket;
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/"+$rootScope.amazonBucket+"/";
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
-
+            $rootScope.pathGlycemizer = $rootScope.pathAmazonDev + "glycemizer/Glycemizer.exe";
             $rootScope.textToSearch="";
 
 
@@ -214,14 +214,14 @@ cloudAdminApp.run(
             });
             //profile modal
             $rootScope.showProfile = function(){
-                var $body = $(document.body);
-                var oldWidth = $body.innerWidth();
-                var navbarOld= angular.element('.navbar').width();
-                var footerOld=angular.element('#footer').width();
-                $body.css("overflow-y", "hidden");
-                $body.width(oldWidth);
-                angular.element('.navbar').width(navbarOld);
-                angular.element('#footer').width(footerOld);
+                //var $body = $(document.body);
+                //var oldWidth = $body.innerWidth();
+                //var navbarOld= angular.element('.navbar').width();
+                //var footerOld=angular.element('#footer').width();
+                //$body.css("overflow-y", "hidden");
+                //$body.width(oldWidth);
+                //angular.element('.navbar').width(navbarOld);
+                //angular.element('#footer').width(footerOld);
                 $modal.open({
                     templateUrl: 'partials/medic/profile.html',
                     size: 'lg',

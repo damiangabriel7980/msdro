@@ -24,13 +24,6 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
 
     $scope.okk = function () {
         $modalInstance.close();
-        var $body = angular.element(document.body);
-        $body.width("100%");
-        angular.element('.navbar').width("50%");
-        angular.element('#footer').width("100%");
-        //$timeout(function(){
-            $body.css("overflow-y", "auto");
-        //},100);
     };
     $scope.trustAsHtml = function (data) {
         return $sce.trustAsHtml(data);
@@ -41,11 +34,5 @@ cloudAdminControllers.controller('multimediaDetailsController', ['$scope','multi
     };
     $scope.cancell = function () {
         $modalInstance.dismiss('cancel');
-        var $body = angular.element(document.body);
-        $body.css("overflow", "auto");
-        $body.width("100%");
-        angular.element('.navbar').width("50%");
-        angular.element('#footer').width("100%");
-        console.log($rootScope.previousState);
     };
 }]);

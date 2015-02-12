@@ -1,7 +1,9 @@
-body.modal-open
-{
-    overflow-y:auto;
-}
-.modal-open .modal {
-    overflow-y: scroll;
-}
+/*body.modal-open*/
+/*{*/
+    /*overflow-y:auto;*/
+    /*margin: 0;*/
+    /*padding:0;*/
+/*}*/
+/*.modal-open {*/
+    /*overflow-y: hidden;*/
+/*}*/
