@@ -32,10 +32,13 @@ cloudAdminControllers.controller('articlesAddCtrl', ['$scope', 'ContentService',
             console.log(resp);
             $state.reload();
             $modalInstance.close();
+            $state.go('continut.articole',{},{reload: true});
+
         });
     };
 
     $scope.closeModal = function () {
         $modalInstance.close();
+        $state.go('continut.articole',{},{reload: true});
     };
 }]);

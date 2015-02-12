@@ -163,6 +163,7 @@ cloudAdminControllers.controller('productsEditCtrl', ['$scope','ProductService',
     };
     $scope.closeModal = function () {
         $modalInstance.close();
+        $state.reload();
     };
 
     $scope.tinymceOptions = {

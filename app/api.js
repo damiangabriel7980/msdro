@@ -1694,7 +1694,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 if (err){
                     res.send(err);
                 }else{
-                    if(req.body.description) event.description = req.body.description;
+                    event.description = req.body.description;
                     if(typeof req.body.enable === "boolean"){
                         event.enable = req.body.enable;
                     }else{

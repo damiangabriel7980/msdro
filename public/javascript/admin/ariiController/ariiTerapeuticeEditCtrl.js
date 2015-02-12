@@ -25,5 +25,6 @@ cloudAdminControllers.controller('ariiTerapeuticeEditCtrl', ['$scope','$rootScop
     $scope.okk = function () {
         $state.go('ariiTerapeutice',{},{reload: true});
         $modalInstance.close();
+        $state.go('ariiTerapeutice',{},{reload: true});
     };
 }]);

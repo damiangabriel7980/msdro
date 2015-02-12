@@ -125,7 +125,7 @@
                     <div class="form-group col-md-4" ng-class="{'has-error':jobForm.numarStrada.$invalid && !jobForm.numarStrada.$pristine || showerror && jobForm.numarStrada.$invalid}">
                         <label for="numarStrada">Numarul strazii<sup>*</sup>:</label>
                         <input type="text" class="form-control" id="numarStrada" name="numarStrada" ng-pattern="/^[a-zA-Z0-9\s]{1,30}$/" ng-model="job.street_number" ng-required="true">
-                        <p class="" ng-show="jobForm.numarStrada.$invalid && !jobForm.numarStrada.$pristine || showerror && jobForm.numarStrada.$invalid">Introduceti un numar al strazii!</p>
+                        <p class="" ng-show="jobForm.numarStrada.$invalid && !jobForm.numarStrada.$pristine || showerror && jobForm.numarStrada.$invalid">Introduceti un numar al strazii!Acesta trebuie sa contina intre 1 si 5 cifre</p>
 
                     </div>
                     <div class="form-group col-md-4" ng-class="{'has-error':jobForm.codPostal.$invalid && !jobForm.codPostal.$pristine || showerror && jobForm.codPostal.$invalid }">
