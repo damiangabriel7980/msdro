@@ -4,8 +4,4 @@ module.exports = function(passport, logger) {
     require('./local-login')(passport, logger);
     require('./local-signup')(passport);
 
-//    require('./facebook-login')(passport);
-//    require('./twitter-login')(passport);
-//    require('./google-login')(passport);
-
 };
