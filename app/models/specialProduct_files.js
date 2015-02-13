@@ -13,6 +13,6 @@ var specialProductFilesSchema		= new Schema({
     type: String,
     description: String,
     file_path:String,
-    id_product:{type: Schema.Types.ObjectId,ref: 'specialProducts'}
+    product:{type: Schema.Types.ObjectId,ref: 'specialProducts'}
 });
 module.exports = mongoose.model('specialProducts_files', specialProductFilesSchema,'specialProducts_files');
