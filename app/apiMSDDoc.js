@@ -197,7 +197,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             var created=req.query.created;
             var pageSize=req.query.pageSize || defaultPageSize;
             var type=req.query.type;
-            var q = {$or: [{sender: user._id}, {receiver: user._id}]};
+            var q = {participants: {$in: [mongoose.Types.ObjectId(user._id.toString())]}};
             if(type==="topic"){
                 q['post'] = {$exists: true, $ne: null};
             }else{
