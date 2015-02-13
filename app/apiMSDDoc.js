@@ -206,7 +206,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             if(created){
                 q['created'] = {"$lt": created};
             }
-            Chat.find(q).sort({'created': -1}).limit(pageSize).populate('participants').exec(function(err, result) {
+            Chat.find(q).sort({'created': -1}).limit(pageSize).deepPopulate('participants last_message post.owner').exec(function(err, result) {
                 if(err){
                     console.log(err);
                     res.json(err);
@@ -421,7 +421,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                                 if(err){
                                     socket.emit('apiMessage', {error: err, success: null});
                                 }else{
-                                    Chat.update({_id: chat_id}, {$addToSet: {participants: socket.userData._id}}, function (err, wres) {
+                                    Chat.update({_id: chat_id}, {$addToSet: {participants: socket.userData._id}, last_message: saved._id}, function (err, wres) {
                                         if(err){
                                             socket.emit('apiMessage', {error: err, success: null});
                                         }else{
