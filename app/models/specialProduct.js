@@ -8,6 +8,7 @@ var specialProductSchema		= new Schema({
     prescription: String,
     default_description: String,
     image_thumbnail:String,
-    product_name: String
+    product_name: String,
+    groupsID: [{type: Schema.Types.ObjectId,ref: 'UserGroup'}]
 });
 module.exports = mongoose.model('specialProducts', specialProductSchema,'specialProducts');

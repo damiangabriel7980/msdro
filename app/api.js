@@ -25,12 +25,19 @@ var AnswerGivers = require('./models/qa_answerGivers');
 var Threads = require('./models/qa_threads');
 var qaMessages = require('./models/qa_messages');
 var Professions = require('./models/professions');
+
 //live Streaming
 var socketio = require('socket.io'),
     uuid = require('node-uuid'),
     rooms = {},
     userIds = {};
 
+//special Products
+var specialProduct = require('./models/specialProduct');
+var specialProductDetails = require('./models/specialProduct_Details');
+var specialProductGlossary = require('./models/specialProduct_glossary');
+var specialProductFiles = require('./models/specialProduct_files');
+var specialProductQa = require('./models/specialProduct_qa');
 
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
