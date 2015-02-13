@@ -47,6 +47,17 @@ cloudAdminServices.factory('GroupsService', ['$resource', function($resource){
     }
 }]);
 
+cloudAdminServices.factory('SpecialProductsService', ['$resource', function($resource){
+    return {
+        products: $resource('api/admin/content/specialProducts/products', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        groups: $resource('api/admin/content/specialProducts/groups', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
+
 cloudAdminServices.factory('NewAccountsService', ['$resource', function($resource){
     return {
         state: $resource('api/admin/users/newAccounts/state/:type', {}, {

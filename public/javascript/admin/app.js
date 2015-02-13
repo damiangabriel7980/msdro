@@ -65,6 +65,11 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/admin/continut/produse.html',
             controller:'productsCtrl'
         })
+        .state('continut.specialProducts',{
+            url: '/specialProducts',
+            templateUrl: 'partials/admin/continut/specialProducts/viewAll.html',
+            controller:'SpecialProductsController'
+        })
         .state('continut.articole',{
             url: '/articole',
             templateUrl: 'partials/admin/continut/articole.html',

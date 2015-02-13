@@ -1632,6 +1632,29 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         });
+
+    router.route('/admin/content/specialProducts/products')
+        .get(function (req, res) {
+            specialProduct.find({}).populate('groups').exec(function (err, products) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(products);
+                }
+            })
+        });
+
+    router.route('/admin/content/specialProducts/groups')
+        .get(function (req, res) {
+            UserGroup.find({}, {display_name: 1, profession: 1}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(groups);
+                }
+            })
+        });
+
     router.route('/admin/events')
 
         .get(function(req, res) {
