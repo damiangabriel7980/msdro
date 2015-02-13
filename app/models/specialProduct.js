@@ -10,6 +10,7 @@ var specialProductSchema		= new Schema({
     image_thumbnail:String,
     product_name: String,
     general_description:String,
-    group: {type: Schema.Types.ObjectId,ref: 'UserGroup'}
+    groups: [{type: Schema.Types.ObjectId,ref: 'UserGroup'}],
+    enabled: Boolean
 });
 module.exports = mongoose.model('specialProducts', specialProductSchema,'specialProducts');
