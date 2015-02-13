@@ -34,12 +34,20 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
     $scope.refreshTable();
 
     $scope.addSpecialProduct = function(){
-//        $modal.open({
-//            templateUrl: 'partials/admin/utilizatori/modalAddGroup.html',
-//            size: 'lg',
-//            windowClass: 'fade',
-//            controller: 'AddGroupController'
-//        });
+        $modal.open({
+            templateUrl: 'partials/admin/continut/specialProducts/baseModalView.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'SpecialProductModalController',
+            resolve: {
+                intent: function () {
+                    return "specialProductAdd"
+                },
+                sessionData: function () {
+                    return "test";
+                }
+            }
+        });
     };
 
     $scope.deleteSpecialProduct = function (id) {
