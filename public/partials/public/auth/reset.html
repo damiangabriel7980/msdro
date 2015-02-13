@@ -1,0 +1,16 @@
+<form ng-submit="reset()">
+    <div class="modal-header">
+        <div class="modal-title"><h3>Reseteaza parola</h3></div>
+    </div>
+    <div class="modal-body">
+        <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
+        <div class="form-group">
+            <label for="email">Email: </label>
+            <input type="text" class="form-control" id="email" ng-model="email">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
+        <button class="btn btn-warning pull-right" type="submit">Reseteaza parola</button>
+    </div>
+</form>

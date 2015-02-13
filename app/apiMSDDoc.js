@@ -42,7 +42,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
     });
 
     // We are going to protect /apiConferences routes with JWT
-    app.use('/apiMSDDoc', expressJwt({secret: tokenSecret}).unless({path: ['/apiMSDDoc/createAccount', '/apiMSDDoc/resetPass']}));
+    app.use('/apiMSDDoc', expressJwt({secret: tokenSecret}));
 
 
     //========================================================================================================================================== all routes
@@ -247,7 +247,11 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             }
 
             if(keepGoing){
-                toSave['participants'] = [sender, receiver];
+                if(sender.toString() == receiver.toString()){
+                    toSave['participants'] = [sender];
+                }else{
+                    toSave['participants'] = [sender, receiver];
+                }
 
                 //form query object to be used later
                 var q;
@@ -377,9 +381,10 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                         }
                     });
                 })
-                .on('joinChat', function (chat_id) {
+                .on('joinChat', function (data) {
+                    var chat_id = data.chat_id;
                     if(isAuth(socket)){
-                        socket.join(chat_id.toString(), function(err){
+                        socket.join(chat_id, function(err){
                             if(err){
                                 socket.emit('apiMessage', {error: err, success: null});
                             }else{
@@ -388,9 +393,10 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                         });
                     }
                 })
-                .on('leaveChat', function (chat_id) {
+                .on('leaveChat', function (data) {
+                    var chat_id = data.chat_id;
                     if(isAuth(socket)){
-                        socket.leave(chat_id.toString(), function(err){
+                        socket.leave(chat_id, function(err){
                             if(err){
                                 socket.emit('apiMessage', {error: err, success: null});
                             }else{
@@ -403,47 +409,45 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                     if(isAuth(socket)){
                         var chat_id = mongoose.Types.ObjectId(data.id);
                         var text = data.text;
-                        socket.join(chat_id, function(err){
-                            if(err){
-                                socket.emit('apiMessage', {error: err, success: null});
-                            }else{
-                                socket.emit('apiMessage', {error: null, success: "Joined chat "+chat_id});
-                                var newMessage = new Messages({
-                                    chat: chat_id,
-                                    text: text,
-                                    owner: socket.userData._id,
-                                    created: Date.now()
-                                });
-                                newMessage.save(function (err, saved) {
-                                    if(err){
-                                        socket.emit('apiMessage', {error: err, success: null});
-                                    }else{
-                                        Chat.update({_id: chat_id}, {$addToSet: {participants: socket.userData._id}}, function (err, wres) {
-                                            if(err){
-                                                socket.emit('apiMessage', {error: err, success: null});
-                                            }else{
-                                                sockets.to(chat_id.toString()).emit('newMessage', {error: null, success: saved});
-                                                //send push notifications
-                                                Chat.findOne({_id: chat_id}, function (err, chat) {
-                                                    if(err){
-                                                        console.log(err);
-                                                    }else{
-                                                        User.find({_id: {$in: chat.subscribers}, connectedToDOC: {$exists: true, $ne: false}}, {_id: 1}, function (err, users) {
-                                                            if(err){
-                                                                console.log(err);
-                                                            }else{
-                                                                console.log("!!! === TODO: Send push notifications to users:");
-                                                                console.log(users);
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
+                        //check if socket is in this room
+                        if(socket.rooms.indexOf(chat_id.toString()) > -1){
+                            var newMessage = new Messages({
+                                chat: chat_id,
+                                text: text,
+                                owner: socket.userData._id,
+                                created: Date.now()
+                            });
+                            newMessage.save(function (err, saved) {
+                                if(err){
+                                    socket.emit('apiMessage', {error: err, success: null});
+                                }else{
+                                    Chat.update({_id: chat_id}, {$addToSet: {participants: socket.userData._id}}, function (err, wres) {
+                                        if(err){
+                                            socket.emit('apiMessage', {error: err, success: null});
+                                        }else{
+                                            sockets.to(chat_id.toString()).emit('newMessage', {error: null, success: saved});
+                                            //send push notifications
+                                            Chat.findOne({_id: chat_id}, function (err, chat) {
+                                                if(err){
+                                                    console.log(err);
+                                                }else{
+                                                    User.find({_id: {$in: chat.subscribers}, connectedToDOC: {$exists: true, $ne: false}}, {_id: 1}, function (err, users) {
+                                                        if(err){
+                                                            console.log(err);
+                                                        }else{
+                                                            console.log("!!! === TODO: Send push notifications to users:");
+                                                            console.log(users);
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }else{
+                            socket.emit('apiMessage', {error: "Not in room "+chat_id.toString(), success: null});
+                        }
                     }
                 })
                 .on('test', function (data) {

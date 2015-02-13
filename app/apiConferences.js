@@ -136,13 +136,13 @@ module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, ro
     //===================================================================================================================== create account
     router.route('/createAccount')
         .post(function (req, res) {
-            res.redirect(307, '/apiMobileShared/createAccount');
+            res.redirect(307, '/apiGloballyShared/createAccount');
         });
 
     //generate token for resetting user password
     router.route('/resetPass')
         .post(function(req, res) {
-            res.redirect(307, '/apiMobileShared/resetPass');
+            res.redirect(307, '/apiGloballyShared/resetPass');
         });
 
     //route for retrieving user's profile info

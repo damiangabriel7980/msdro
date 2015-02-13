@@ -32,3 +32,29 @@ publicServices.factory('ContentService', ['$resource', function($resource){
         })
     }
 }]);
+publicServices.factory('AuthService', ['$resource', function($resource){
+    return {
+        login: $resource('/login', {}, {
+            query: { method: 'POST', isArray: false }
+        }),
+        signup: $resource('/apiGloballyShared/createAccount', {}, {
+            query: { method: 'POST', isArray: false }
+        }),
+        reset: $resource('/apiGloballyShared/requestPasswordReset', {}, {
+            query: { method: 'POST', isArray: false }
+        })
+    }
+}]);
+publicServices.factory('ProofService', ['$resource', function($resource){
+    return {
+        professions: $resource('api/proof/professions', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        proofImage: $resource('api/proof/image', {}, {
+            save: {method:'POST'}
+        }),
+        specialGroups: $resource('api/proof/specialGroups/:profession', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);

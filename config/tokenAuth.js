@@ -35,7 +35,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
         var notificationToken = req.body.notificationToken;
 
         //find user in database
-        User.findOne({ 'username' :  { $regex: new RegExp("^" + req.body.username, "i") }}).select("+account_expired +account_locked +enabled +password +state").exec(function(err, user) {
+        User.findOne({ 'username' :  {$regex: "^"+req.body.username.replace(/\+/g,"\\+")+"$", $options: "i"}}).select("+account_expired +account_locked +enabled +password +state").exec(function(err, user) {
             // if there are any errors, return error status
             if (err){
                 res.status(403).end();
