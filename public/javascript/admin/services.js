@@ -1,13 +1,34 @@
 var cloudAdminServices = angular.module('cloudAdminServices', ['ngResource']);
-cloudAdminServices.factory('AmazonService', ['$resource', function($resource){
+cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function($resource, $rootScope){
     var getCredentialsFromServer = $resource('api/admin/s3tc', {}, {
         query: { method: 'GET', isArray: false }
     });
+    var getClient = function (callback) {
+        getCredentialsFromServer.query().$promise.then(function (resp) {
+            AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
+            callback(new AWS.S3());
+        });
+    };
     return {
         getClient: function (callback) {
             getCredentialsFromServer.query().$promise.then(function (resp) {
                 AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
                 callback(new AWS.S3());
+            });
+        },
+        uploadFile: function (fileBody, key, callback) {
+            getClient(function (s3) {
+                var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: fileBody, ACL:'public-read', ContentType: fileBody.type}, function (err, data) {
+                    if (err) {
+                        callback(err, null);
+                    } else {
+                        callback(null, true);
+                    }
+                });
+//                req.on('httpUploadProgress', function (evt) {
+//                    var progress = parseInt(100.0 * evt.loaded / evt.total);
+//                    console.log(progress);
+//                });
             });
         }
     }
@@ -50,9 +71,14 @@ cloudAdminServices.factory('GroupsService', ['$resource', function($resource){
 cloudAdminServices.factory('SpecialProductsService', ['$resource', function($resource){
     return {
         products: $resource('api/admin/content/specialProducts/products', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: true },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false }
         }),
         groups: $resource('api/admin/content/specialProducts/groups', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        groupsAvailable: $resource('api/admin/content/specialProducts/groupsAvailable', {}, {
             query: { method: 'GET', isArray: true }
         })
     }

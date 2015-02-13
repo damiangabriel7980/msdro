@@ -2,7 +2,6 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
 
     $scope.refreshTable = function () {
         SpecialProductsService.products.query().$promise.then(function (resp) {
-            console.log(resp);
             var data = resp;
 
             $scope.tableParams = new ngTableParams({
@@ -28,7 +27,6 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
 
     SpecialProductsService.groups.query().$promise.then(function (resp) {
         $scope.groups = resp;
-        console.log(resp);
     });
 
     $scope.refreshTable();
@@ -36,6 +34,7 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
     $scope.addSpecialProduct = function(){
         $modal.open({
             templateUrl: 'partials/admin/continut/specialProducts/baseModalView.html',
+            windowTemplateUrl: 'partials/admin/continut/specialProducts/modalTemplate.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'SpecialProductModalController',

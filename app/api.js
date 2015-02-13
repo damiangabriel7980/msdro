@@ -1642,6 +1642,29 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send(products);
                 }
             })
+        })
+        .post(function (req, res) {
+            var toCreate = new specialProduct(req.body.toCreate);
+            toCreate.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    logger.error(err);
+                    res.send({error: err, message: "A aparut o eroare pe server"});
+                }else{
+                    res.send({error: false, message: "Datele au fost salvate", justSaved: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            console.log(req.query);
+            console.log(req.body);
+            specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
+                if(err){
+                    res.send({error: err, message: "A aparut o eroare pe server"});
+                }else{
+                    res.send({error: false, message: "Datele au fost actualizate"});
+                }
+            });
         });
 
     router.route('/admin/content/specialProducts/groups')
@@ -1653,6 +1676,23 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send(groups);
                 }
             })
+        });
+
+    router.route('/admin/content/specialProducts/groupsAvailable')
+        .get(function (req, res) {
+            specialProduct.distinct("groups", function (err, groups) {
+                if(err){
+                    res.send(err);
+                }else{
+                    UserGroup.find({_id: {$nin: groups}}).populate('profession').exec(function (err, groups) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            res.send(groups);
+                        }
+                    })
+                }
+            });
         });
 
     router.route('/admin/events')
