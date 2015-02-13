@@ -34,7 +34,7 @@ var socketio = require('socket.io'),
 
 //special Products
 var specialProduct = require('./models/specialProduct');
-var specialProductDetails = require('./models/specialProduct_Details');
+var specialProductMenu = require('./models/specialProduct_Menu');
 var specialProductGlossary = require('./models/specialProduct_glossary');
 var specialProductFiles = require('./models/specialProduct_files');
 var specialProductQa = require('./models/specialProduct_qa');
