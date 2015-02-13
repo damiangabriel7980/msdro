@@ -14,7 +14,7 @@ var ChatDocSchema = new Schema({
 });
 
 ChatDocSchema.plugin(deepPopulate, {
-    whitelist: ['post.owner']
+    whitelist: ['post.owner','participants','last_message']
 });
 
 module.exports = mongoose.model('MSDDoc_chat',ChatDocSchema,'MSDDoc_chat');
