@@ -1639,11 +1639,11 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             if(req.query.id){
                 q._id = req.query.id;
             }
-            specialProduct.find(q).populate('groups').exec(function (err, products) {
+            specialProduct.find(q).deepPopulate('groups.profession').exec(function (err, products) {
                 if(err){
                     res.send(err);
                 }else{
-                    res.send(products);
+                    res.json(products);
                 }
             })
         })
