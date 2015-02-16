@@ -47,7 +47,7 @@ cloudAdminControllers.controller('SpecialProductAddController', ['$scope', 'Spec
                     extension = $scope.headerImageBody.name.split(".").pop();
                     var headerKey = "productPages/"+idSaved+"/header."+extension;
                     toUpload.push({fileBody: $scope.headerImageBody, key: headerKey});
-                    toUpdate.logo_path = headerKey;
+                    toUpdate.header_image = headerKey;
                 }
                 //upload files
                 if(toUpload.length > 0){
