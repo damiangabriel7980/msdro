@@ -31,9 +31,8 @@ cloudAdminControllers.controller('SpecialProductEditController', ['$scope', 'Spe
         }
     };
 
-    $scope.addPage = function () {
+    $scope.addPage = function (redirectToMenu) {
         $scope.resetAlert("warning", "Va rugam asteptati...");
-        console.log(this);
         SpecialProductsService.products.update({id: $scope.newProductPage._id}, $scope.newProductPage).$promise.then(function (resp) {
             if(resp.error){
                 $scope.resetAlert("danger", error.message);
@@ -52,7 +51,7 @@ cloudAdminControllers.controller('SpecialProductEditController', ['$scope', 'Spe
                     extension = $scope.headerImageBody.name.split(".").pop();
                     var headerKey = "productPages/"+$scope.newProductPage._id+"/header."+extension;
                     toUpload.push({fileBody: $scope.headerImageBody, key: headerKey});
-                    toUpdate.logo_path = headerKey;
+                    toUpdate.header_image = headerKey;
                 }
                 //upload files
                 if(toUpload.length > 0){
@@ -66,13 +65,22 @@ cloudAdminControllers.controller('SpecialProductEditController', ['$scope', 'Spe
                                 if(resp.error){
                                     $scope.resetAlert("danger", "Datele au fost salvate, dar a aparut o eroare la salvarea imaginilor in baza de date");
                                 }else{
-                                    $scope.resetAlert("success", "Datele au fost salvate. Imaginile au fost salvate");
+                                    console.log(resp);
+                                    if(redirectToMenu){
+                                        $scope.renderView("editProductMenu");
+                                    }else{
+                                        $scope.closeModal(true);
+                                    }
                                 }
                             })
                         }
                     });
                 }else{
-                    $scope.resetAlert("success", "Datele au fost salvate. Nu au fost incarcate imagini");
+                    if(redirectToMenu){
+                        $scope.renderView("editProductMenu");
+                    }else{
+                        $scope.closeModal(true);
+                    }
                 }
             }
         });

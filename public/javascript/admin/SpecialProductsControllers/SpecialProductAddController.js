@@ -27,7 +27,6 @@ cloudAdminControllers.controller('SpecialProductAddController', ['$scope', 'Spec
 
     $scope.addPage = function () {
         $scope.resetAlert("warning", "Va rugam asteptati...");
-        console.log(this);
         SpecialProductsService.products.create({toCreate: $scope.newProductPage}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.resetAlert("danger", error.message);
@@ -61,13 +60,15 @@ cloudAdminControllers.controller('SpecialProductAddController', ['$scope', 'Spec
                                 if(resp.error){
                                     $scope.resetAlert("danger", "Datele au fost salvate, dar a aparut o eroare la salvarea imaginilor in baza de date");
                                 }else{
-                                    $scope.resetAlert("success", "Datele au fost salvate. Imaginile au fost salvate");
+                                    $scope.setSessionData({idToEdit: idSaved});
+                                    $scope.renderView('specialProductEdit');
                                 }
                             })
                         }
                     });
                 }else{
-                    $scope.resetAlert("success", "Datele au fost salvate. Nu au fost incarcate imagini");
+                    $scope.setSessionData({idToEdit: idSaved});
+                    $scope.renderView('specialProductEdit');
                 }
             }
         });

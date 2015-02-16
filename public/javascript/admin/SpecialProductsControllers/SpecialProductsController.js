@@ -49,20 +49,6 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
         });
     };
 
-    $scope.deleteSpecialProduct = function (id) {
-        $modal.open({
-            templateUrl: 'partials/admin/continut/specialProducts/toggleOrDelete.html',
-            size: 'sm',
-            windowClass: 'fade',
-            controller: 'SpecialProductDeleteController',
-            resolve: {
-                idToDelete: function () {
-                    return id;
-                }
-            }
-        });
-    };
-
     $scope.editSpecialProduct = function (id) {
         $modal.open({
             templateUrl: 'partials/admin/continut/specialProducts/baseModalView.html',
@@ -76,6 +62,20 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
                 },
                 sessionData: function () {
                     return {idToEdit: id};
+                }
+            }
+        });
+    };
+
+    $scope.deleteSpecialProduct = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/continut/specialProducts/toggleOrDelete.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'SpecialProductDeleteController',
+            resolve: {
+                idToDelete: function () {
+                    return id;
                 }
             }
         });
