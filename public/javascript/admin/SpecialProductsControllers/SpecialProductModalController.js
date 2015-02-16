@@ -20,6 +20,8 @@ cloudAdminControllers.controller('SpecialProductModalController', ['$scope', '$m
         $scope.resetAlert();
         if(view === "specialProductAdd"){
             $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/specialProductAdd.html');
+        }else if(view === "specialProductEdit"){
+            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/specialProductEdit.html');
         }
     };
 

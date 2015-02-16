@@ -64,17 +64,21 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
     };
 
     $scope.editSpecialProduct = function (id) {
-//        $modal.open({
-//            templateUrl: 'partials/admin/utilizatori/modalEditGroup.html',
-//            size: 'lg',
-//            windowClass: 'fade',
-//            controller: 'EditGroupController',
-//            resolve: {
-//                idToEdit: function () {
-//                    return id;
-//                }
-//            }
-//        });
+        $modal.open({
+            templateUrl: 'partials/admin/continut/specialProducts/baseModalView.html',
+            windowTemplateUrl: 'partials/admin/continut/specialProducts/modalTemplate.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'SpecialProductModalController',
+            resolve: {
+                intent: function () {
+                    return "specialProductEdit"
+                },
+                sessionData: function () {
+                    return {idToEdit: id};
+                }
+            }
+        });
     };
     
     $scope.toggleSpecialProduct = function (id, enabled) {
