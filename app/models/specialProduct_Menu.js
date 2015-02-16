@@ -5,6 +5,8 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
 var specialProductMenuSchema		= new Schema({
+    header_image: String,
+    header_title: String,
     title: String,
     description: String,
     images: Array,
