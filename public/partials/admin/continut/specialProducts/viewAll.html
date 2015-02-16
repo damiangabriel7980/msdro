@@ -11,7 +11,7 @@
             <td data-title="'Grupuri atasate'">
                 <ul>
                     <li ng-repeat="productGroup in product.groups">
-                        <span ng-repeat="group in groups" ng-if="group._id == productGroup._id">{{group.display_name}}&nbsp;({{group.profession.display_name}})</span>
+                        {{productGroup.display_name}}&nbsp;({{productGroup.profession.display_name}})
                     </li>
                 </ul>
             </td>
