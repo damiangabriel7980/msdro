@@ -127,6 +127,9 @@ cloudAdminServices.factory('SpecialProductsService', ['$resource', function($res
             update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
         }),
+        menu: $resource('api/admin/content/specialProducts/menu', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
         groups: $resource('api/admin/content/specialProducts/groups', {}, {
             query: { method: 'GET', isArray: true }
         }),

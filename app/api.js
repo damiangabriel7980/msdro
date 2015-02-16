@@ -1689,6 +1689,26 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             })
         });
 
+    router.route('/admin/content/specialProducts/menu')
+        .get(function (req, res) {
+            //find all children
+            specialProductMenu.distinct("children_ids", function (err, children_ids) {
+                if(err){
+                    res.send(err);
+                }else{
+                    //get all menu items that are not children
+                    specialProductMenu.find({product: req.query.product_id, _id: {$nin: children_ids}}).populate("children_ids").exec(function (err, menuItems) {
+                        if(err){
+                            console.log(err);
+                            res.send(err);
+                        }else{
+                            res.send(menuItems);
+                        }
+                    });
+                }
+            });
+        });
+
     router.route('/admin/content/specialProducts/groupsAvailable')
         .get(function (req, res) {
             specialProduct.distinct("groups", function (err, groups) {
