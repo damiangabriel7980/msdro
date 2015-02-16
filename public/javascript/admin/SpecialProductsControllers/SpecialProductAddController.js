@@ -32,26 +32,32 @@ cloudAdminControllers.controller('SpecialProductAddController', ['$scope', 'Spec
             if(resp.error){
                 $scope.resetAlert("danger", error.message);
             }else{
-                if(!$scope.logoImageBody){
-                    $scope.resetAlert("success", "S-au salvat datele. Nu a fost incarcata o imagine");
-                }else{
-                    var idSaved = resp.justSaved._id;
-                    //generate Amazon keys and extensions for logo and header image
-                    var extension = $scope.logoImageBody.name.split(".").pop();
+                var idSaved = resp.justSaved._id;
+                //generate Amazon keys and extensions for logo and header image
+                var extension;
+                var toUpload = [];
+                var toUpdate = {};
+                if($scope.logoImageBody){
+                    extension = $scope.logoImageBody.name.split(".").pop();
                     var logoKey = "productPages/"+idSaved+"/logo."+extension;
+                    toUpload.push({fileBody: $scope.logoImageBody, key: logoKey});
+                    toUpdate.logo_path = logoKey;
+                }
+                if($scope.headerImageBody){
                     extension = $scope.headerImageBody.name.split(".").pop();
                     var headerKey = "productPages/"+idSaved+"/header."+extension;
-                    //upload file
+                    toUpload.push({fileBody: $scope.headerImageBody, key: headerKey});
+                    toUpdate.logo_path = headerKey;
+                }
+                //upload files
+                if(toUpload.length > 0){
                     $scope.resetAlert("warning", "Se incarca imaginile...");
-                    AmazonService.uploadFiles([
-                        {fileBody: $scope.logoImageBody, key: logoKey},
-                        {fileBody: $scope.headerImageBody, key: headerKey}
-                    ], function (err, success) {
+                    AmazonService.uploadFiles(toUpload, function (err, success) {
                         if(err){
                             $scope.resetAlert("danger", "Datele au fost salvate, dar a aparut o eroare la incarcarea imaginilor");
                         }else{
                             //update database
-                            SpecialProductsService.products.update({id: idSaved}, {logo_path: logoKey, header_image: headerKey}).$promise.then(function (resp) {
+                            SpecialProductsService.products.update({id: idSaved}, toUpdate).$promise.then(function (resp) {
                                 if(resp.error){
                                     $scope.resetAlert("danger", "Datele au fost salvate, dar a aparut o eroare la salvarea imaginilor in baza de date");
                                 }else{
@@ -60,6 +66,8 @@ cloudAdminControllers.controller('SpecialProductAddController', ['$scope', 'Spec
                             })
                         }
                     });
+                }else{
+                    $scope.resetAlert("success", "Datele au fost salvate. Nu au fost incarcate imagini");
                 }
             }
         });

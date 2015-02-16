@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <div class="modal-title"><h3>{{modal.title}}</h3></div>
+</div>
+<div class="modal-body">
+    <alert type="{{modal.alert.type}}" ng-if="modal.alert.show">{{modal.alert.text}}</alert>
+    {{modal.message}}
+</div>
+<div class="modal-footer">
+    <a class="btn pull-left btn-primary" ng-click="closeModal()">Inchide</a>
+    <a class="btn pull-right btn-danger" ng-click="modalAction()">{{modal.action}}</a>
+</div>

@@ -50,17 +50,17 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
     };
 
     $scope.deleteSpecialProduct = function (id) {
-//        $modal.open({
-//            templateUrl: 'partials/admin/utilizatori/modalDeleteGroup.html',
-//            size: 'sm',
-//            windowClass: 'fade',
-//            controller: 'DeleteGroupController',
-//            resolve: {
-//                idToDelete: function () {
-//                    return id;
-//                }
-//            }
-//        });
+        $modal.open({
+            templateUrl: 'partials/admin/continut/specialProducts/toggleOrDelete.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'SpecialProductDeleteController',
+            resolve: {
+                idToDelete: function () {
+                    return id;
+                }
+            }
+        });
     };
 
     $scope.editSpecialProduct = function (id) {

@@ -41,8 +41,8 @@ var specialProductQa = require('./models/specialProduct_qa');
 
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
-var ObjectId = require('mongoose').Types.ObjectId;
 var mongoose = require('mongoose');
+var ObjectId = mongoose.Types.ObjectId;
 var async = require('async');
 var request = require('request');
 var AWS = require('aws-sdk');
@@ -1635,7 +1635,11 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/content/specialProducts/products')
         .get(function (req, res) {
-            specialProduct.find({}).populate('groups').exec(function (err, products) {
+            var q = {};
+            if(req.query.id){
+                q._id = req.query.id;
+            }
+            specialProduct.find(q).populate('groups').exec(function (err, products) {
                 if(err){
                     res.send(err);
                 }else{
@@ -1656,13 +1660,20 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         })
         .put(function (req, res) {
-            console.log(req.query);
-            console.log(req.body);
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
                     res.send({error: err, message: "A aparut o eroare pe server"});
                 }else{
                     res.send({error: false, message: "Datele au fost actualizate"});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            specialProduct.remove({_id: req.query.id}, function (err, wRes) {
+                if(err){
+                    res.send({error: err});
+                }else{
+                    res.send({error: false});
                 }
             });
         });
