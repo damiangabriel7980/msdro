@@ -10,11 +10,18 @@ cloudAdminControllers.controller('SpecialProductAddController', ['$scope', 'Spec
 
     $scope.selectedGroups = [];
 
-    $scope.fileBody = null;
+    $scope.logoImageBody = null;
+    $scope.headerImageBody = null;
 
-    $scope.fileSelected = function ($files, $event) {
+    $scope.logoSelected = function ($files, $event) {
         if($files[0]){
-            $scope.fileBody = $files[0];
+            $scope.logoImageBody = $files[0];
+        }
+    };
+
+    $scope.headerSelected = function ($files, $event) {
+        if($files[0]){
+            $scope.headerImageBody = $files[0];
         }
     };
 
@@ -25,28 +32,34 @@ cloudAdminControllers.controller('SpecialProductAddController', ['$scope', 'Spec
             if(resp.error){
                 $scope.resetAlert("danger", error.message);
             }else{
-                if(!$scope.fileBody){
+                if(!$scope.logoImageBody){
                     $scope.resetAlert("success", "S-au salvat datele. Nu a fost incarcata o imagine");
                 }else{
-                    //generate Amazon key
                     var idSaved = resp.justSaved._id;
-                    var extension = $scope.fileBody.name.split(".").pop();
-                    var key = "productPages/"+idSaved+"/logo/logo."+extension;
+                    //generate Amazon keys and extensions for logo and header image
+                    var extension = $scope.logoImageBody.name.split(".").pop();
+                    var logoKey = "productPages/"+idSaved+"/logo."+extension;
+                    extension = $scope.headerImageBody.name.split(".").pop();
+                    var headerKey = "productPages/"+idSaved+"/header."+extension;
                     //upload file
-                    AmazonService.uploadFile($scope.fileBody, key, function (err, success) {
+                    $scope.resetAlert("warning", "Se incarca imaginile...");
+                    AmazonService.uploadFiles([
+                        {fileBody: $scope.logoImageBody, key: logoKey},
+                        {fileBody: $scope.headerImageBody, key: headerKey}
+                    ], function (err, success) {
                         if(err){
-                            $scope.resetAlert("danger", "Datele au fost salvate, dar imaginea nu s-a putut incarca");
+                            $scope.resetAlert("danger", "Datele au fost salvate, dar a aparut o eroare la incarcarea imaginilor");
                         }else{
                             //update database
-                            SpecialProductsService.products.update({id: idSaved}, {logo_path: key}).$promise.then(function (resp) {
+                            SpecialProductsService.products.update({id: idSaved}, {logo_path: logoKey, header_image: headerKey}).$promise.then(function (resp) {
                                 if(resp.error){
-                                    $scope.resetAlert("danger", "Datele au fost salvate, dar imaginea nu s-a putut salva in baza de date");
+                                    $scope.resetAlert("danger", "Datele au fost salvate, dar a aparut o eroare la salvarea imaginilor in baza de date");
                                 }else{
-                                    $scope.resetAlert("success", "Datele au fost salvate. Imaginea a fost salvata");
+                                    $scope.resetAlert("success", "Datele au fost salvate. Imaginile au fost salvate");
                                 }
                             })
                         }
-                    })
+                    });
                 }
             }
         });

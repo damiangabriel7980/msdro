@@ -31,10 +31,21 @@
                 <label>Safety info:</label>
                 <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.safety_information"></textarea>
             </div>
-            <div class="col-md-12">
-                <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false"
+            <div class="col-md-6">
+                <button class="btn btn-default" type="file" ng-file-select ng-file-change="logoSelected($files, $event)" multiple="false"
                         accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca logo</button>
-                <span ng-if="fileBody">{{fileBody.name}}</span>
+                <span ng-if="logoImageBody">{{logoImageBody.name}}</span>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12 noPadding">
+                    <button class="btn btn-default" type="file" ng-file-select ng-file-change="headerSelected($files, $event)" multiple="false"
+                            accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca header</button>
+                    <span ng-if="headerImageBody">{{headerImageBody.name}}</span>
+                </div>
+                <div class="form-group col-md-12 noPadding">
+                    <label>Header title:</label>
+                    <input type="text" class="form-control" ng-model="newProductPage.header_title">
+                </div>
             </div>
         </div>
     </div>
