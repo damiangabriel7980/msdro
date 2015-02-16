@@ -30,6 +30,26 @@ cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function
 //                    console.log(progress);
 //                });
             });
+        },
+        //receives an array of form [{fileBody: yourFileBody, key: yourKey}, ...]
+        uploadFiles: function (inputArray, callback) {
+            getClient(function (s3) {
+                async.each(inputArray, function (input, cb) {
+                    s3.putObject({Bucket: $rootScope.amazonBucket, Key: input.key, Body: input.fileBody, ACL:'public-read', ContentType: input.fileBody.type}, function (err, data) {
+                        if (err) {
+                            cb(err);
+                        } else {
+                            cb();
+                        }
+                    });
+                }, function (err) {
+                    if(err){
+                        callback(err, null);
+                    }else{
+                        callback(null, true);
+                    }
+                });
+            });
         }
     }
 }]);
