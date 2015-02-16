@@ -50,6 +50,37 @@ cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function
                     }
                 });
             });
+        },
+        //receives an array of keys [key1, key2, ...]
+        deleteFiles: function (inputArray, callback) {
+            getClient(function (s3) {
+                async.each(inputArray, function (key, cb) {
+                    s3.deleteObject({Bucket: $rootScope.amazonBucket, Key: key}, function (err, data) {
+                        if (err) {
+                            cb(err);
+                        } else {
+                            cb();
+                        }
+                    });
+                }, function (err) {
+                    if(err){
+                        callback(err, null);
+                    }else{
+                        callback(null, true);
+                    }
+                });
+            });
+        },
+        deleteFile: function (key, callback) {
+            getClient(function (s3) {
+                s3.deleteObject({Bucket: $rootScope.amazonBucket, Key: key}, function (err, data) {
+                    if (err) {
+                        callback(err, null);
+                    } else {
+                        callback(null, true);
+                    }
+                });
+            });
         }
     }
 }]);
@@ -93,7 +124,8 @@ cloudAdminServices.factory('SpecialProductsService', ['$resource', function($res
         products: $resource('api/admin/content/specialProducts/products', {}, {
             query: { method: 'GET', isArray: true },
             create: { method: 'POST', isArray: false },
-            update: { method: 'PUT', isArray: false }
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         }),
         groups: $resource('api/admin/content/specialProducts/groups', {}, {
             query: { method: 'GET', isArray: true }
