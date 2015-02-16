@@ -262,7 +262,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 }
 
                 //check if a chat involving sender / receiver / post combination already exists
-                Chat.findOne(q).populate('participants').exec(function (err, found) {
+                Chat.findOne(q).deepPopulate('participants last_message post.owner').exec(function (err, found) {
                     if(err){
                         res.send(err);
                     }else if(found){
@@ -272,7 +272,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                             if(err){
                                 res.send(err);
                             }else{
-                                Chat.findOne({_id: saved._id}).populate('participants').exec(function (err, toReturn) {
+                                Chat.findOne({_id: saved._id}).deepPopulate('participants last_message post.owner').exec(function (err, toReturn) {
                                     if(err){
                                         res.send(err);
                                     }else{
