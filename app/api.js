@@ -34,7 +34,7 @@ var socketio = require('socket.io'),
 
 //special Products
 var specialProduct = require('./models/specialProduct');
-var specialProductDetails = require('./models/specialProduct_Details');
+var specialProductMenu = require('./models/specialProduct_Menu');
 var specialProductGlossary = require('./models/specialProduct_glossary');
 var specialProductFiles = require('./models/specialProduct_files');
 var specialProductQa = require('./models/specialProduct_qa');
@@ -3043,7 +3043,106 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.json(groups);
             });
         });
+    router.route('/groupSpecialProducts')
 
+        .post(function(req, res) {
+            var data = [mongoose.Types.ObjectId(req.body.specialGroup.toString())];
+            console.log(data);
+            specialProduct.find({groups: {$in: data}, enabled: true}, function(err, product) {
+                if(err) {
+                    res.send(err);
+                }
+                else
+                {
+                    res.json(product[0]);
+                }
+            });
+        });
+    router.route('/specialProduct')
+
+        .post(function(req, res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
+                if(err){
+                    res.send(err);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected.toString());
+                    }
+                    console.log(forGroups);
+                    specialProduct.find({groups: {$in: forGroups}, enabled: true}, function(err, product) {
+                        if(err) {
+                            res.send(err);
+                        }
+                        else
+                        {
+                            res.json(product[0]);
+                        }
+                    });
+                    //get allowed articles for user;
+                }});
+        });
+    router.route('/specialProductMenu')
+        .post(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.body.id.toString());
+            console.log(id);
+                    specialProductMenu.find({product: id}).populate('children_ids').exec(function(err, details) {
+                        if(err) {
+                            res.send(err);
+                        }
+                        else
+                        {
+                            res.json(details);
+                        }
+                    });
+                    //get allowed articles for user;
+        });
+    router.route('/specialProductDescription/:id')
+        .get(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.params.id.toString());
+            console.log(id);
+            specialProductMenu.findOne({_id: id}).exec(function(err, details) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                else
+                {
+                    console.log(details);
+                    res.json(details);
+                }
+            });
+        });
+    router.route('/specialProductFiles')
+        .post(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.body.id.toString());
+            console.log(id);
+            specialProductFiles.find({product: id}).exec(function(err, details) {
+                if(err) {
+                    res.send(err);
+                }
+                else
+                {
+                    res.json(details);
+                }
+            });
+            //get allowed articles for user;
+        });
+    router.route('/specialProductGlossary')
+        .post(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.body.id.toString());
+            console.log(id);
+            specialProductGlossary.find({product: id}).exec(function(err, details) {
+                if(err) {
+                    res.send(err);
+                }
+                else
+                {
+                    res.json(details);
+                }
+            });
+            //get allowed articles for user;
+        });
     router.route('/content')
 
         .get(function(req, res) {

@@ -1,0 +1,18 @@
+<div class="col-xs-12 well well-lg">
+    <div class="col-xs-12">
+        <img class="col-xs-12  noPadding "  no-cache-src="{{pathAmazonDev+specialProduct.header_image}}" />
+    </div>
+    <div class="col-xs-12 paddTopBottomSpecialProduct">
+            <span>
+                <i class="glyphicon glyphicon-print pull-right handCursor" ng-click="printPage()">&nbsp;Print&nbsp;</i>
+            </span>
+            <span>
+                <i class="glyphicon glyphicon-th-list pull-right handCursor" ui-sref="groupSpecialProduct.glossary">&nbsp;Glosar&nbsp;</i>
+            </span>
+    </div>
+    <div class="col-xs-12 justify" convert-special conver="specialProduct.prescription" ng-bind-html="trustAsHtml(specialProduct.prescription)">
+    </div>
+    <div class="col-xs-12 justify marginBottom50"
+         convert-special conver="specialProduct.safety_information" ng-bind-html="trustAsHtml(specialProduct.safety_information)">
+    </div>
+</div>

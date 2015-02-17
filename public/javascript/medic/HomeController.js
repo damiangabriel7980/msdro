@@ -160,34 +160,5 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
                 }
             });
         };
-    })
-    .directive('thereIsMore', function($timeout,$document,$window) {
-    return {
-        restrict: 'A',
-        link: function (scope, element) {
-            var footer = angular.element('#footer');
-            var check = function () {
-                //if(angular.element($window).scrollTop()===0&&angular.element($document).height() >= (angular.element($window).height() + angular.element($window).scrollTop()))
-                //    f.hide();
-                if (angular.element($document).height() <= (angular.element($window).height() + angular.element($window).scrollTop()))
-                    footer.show();
-                else
-                    footer.hide();
-            };
-            var appliedCheck = function () {
-                scope.$apply(check);
-            };
-            angular.element($window).scroll(function () {
-                appliedCheck();
-            });
-            check();
-            $timeout(check, 200);
-            angular.element($window).resize(function () {
-                appliedCheck();
-            });
-            angular.element($document).ready(function(){
-                check();
-            })
-        } // end of link
-    }
-});
+    });
+

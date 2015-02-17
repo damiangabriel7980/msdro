@@ -1,0 +1,63 @@
+<div class="row-fluid margintop20px col-xs-offset-0">
+    <div class="col-xs-2 col-md-2 marginLeft30px" id="menuDiv">
+    <accordion close-others="oneAtATime">
+          <accordion-group class="no-text-decoration noPaddingBottom noMarginTopPermanent" ng-class="{'noBorderTop':$index!=0}" ng-repeat="menuItem in specialProductMenu" ng-if="menuItem.has_children==true&&menuItem.children_ids.length!=0">
+              <accordion-heading  >
+                  <a ng-click="checkHasChildren(menuItem)" class="MSDgreenDarker smallFontSize no-text-decoration">
+                      {{menuItem.title}}
+                  </a>
+              </accordion-heading>
+              <ul class="noPaddingLeft noListStyle" ng-if="menuItem.children_ids.length!=0">
+                  <li class="MSDgreenDarker no-text-decoration handCursor borderRadiusSpecial smallFontSize" ui-sref-active="activeArea" ui-sref="groupSpecialProduct.description({id: subItem._id})" ng-repeat="subItem in menuItem.children_ids">
+                      &nbsp;{{subItem.title}}
+                  </li>
+              </ul>
+          </accordion-group>
+        <accordion-group class="no-text-decoration noPaddingBottom noMarginTopPermanent" is-open="status.isFirstOpen" ng-class="{'noBorderTop':$index!=0}" ng-repeat="menuItem in specialProductMenu" ng-if="menuItem.has_children==true&&menuItem.children_ids.length==0">
+            <accordion-heading   >
+                <a class="MSDgreenDarker no-text-decoration smallFontSize"  ui-sref="groupSpecialProduct.description({id: menuItem._id})">{{menuItem.title}}</a>
+            </accordion-heading>
+        </accordion-group>
+        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent noBorderTop">
+            <accordion-heading >
+                <a class="MSDgreenDarker no-text-decoration smallFontSize" ui-sref="groupSpecialProduct.files">Resources Library</a>
+            </accordion-heading>
+        </accordion-group>
+        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent noBorderTop">
+            <accordion-heading >
+                <a class="MSDgreenDarker no-text-decoration smallFontSize" ui-sref="groupSpecialProduct.prescription">Prescription Assistance</a>
+            </accordion-heading>
+        </accordion-group>
+        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent noBorderTop">
+            <accordion-heading >
+                <a class="MSDgreenDarker no-text-decoration smallFontSize" ui-sref="groupSpecialProduct.sitemap">Site Map</a>
+            </accordion-heading>
+        </accordion-group>
+    </accordion>
+        <img class="img-responsive img-thumbnail handCursor col-xs-12" ui-sref="groupSpecialProduct({product_id: $stateParams.product_id})" no-cache-src="{{pathAmazonDev+specialProductPage.logo_path}}" />
+</div>
+    <div class="col-xs-9 well width81 noPadding marginRightMinus30" id="initialDescriptionDiv" ng-class="{'hide' :$state.includes('groupSpecialProduct.description') || $state.includes('groupSpecialProduct.files') || $state.includes('groupSpecialProduct.prescription') || $state.includes('groupSpecialProduct.glossary') || $state.includes('groupSpecialProduct.sitemap')}">
+        <div class="col-xs-12">
+            <img class="col-xs-12  noPadding "  no-cache-src="{{pathAmazonDev+specialProductPage.header_image}}" />
+        </div>
+        <div class="col-xs-12 paddTopBottomSpecialProduct">
+            <span>
+                <i class="glyphicon glyphicon-print pull-right handCursor" ng-click="printPage()">&nbsp;Print&nbsp;</i>
+            </span>
+            <span>
+                <i class="glyphicon glyphicon-th-list pull-right handCursor" ui-sref="groupSpecialProduct.glossary">&nbsp;Glosar&nbsp;</i>
+            </span>
+        </div>
+        <div class="col-xs-12" convert-special conver="specialProductPage.general_description" ng-bind-html="trustAsHtml(specialProductPage.general_description)">
+        </div>
+        <div class="col-xs-12 marginBottom50" convert-special conver="specialProductPage.safety_information" ng-bind-html="trustAsHtml(specialProductPage.safety_information)">
+        </div>
+    </div>
+
+<div class="col-xs-9 marginRightMinus30 width81" id="descriptionDiv">
+    <ui-view>
+
+    </ui-view>
+</div>
+
+</div>

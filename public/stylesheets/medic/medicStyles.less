@@ -874,6 +874,10 @@ border: 1px solid transparent;
 .noMarginTop{
   margin-top: 0px;
 }
+.noMarginTopPermanent{
+   margin-top: 0px !important;
+ }
+
 .padd10Bottom{
   padding-bottom: 10px;
 }
@@ -899,6 +903,15 @@ border: 1px solid transparent;
   text-decoration: none !important;
 }
 .no-text-decoration a:focus{
+  text-decoration: none !important;
+}
+.no-text-decoration:hover{
+  text-decoration: none !important;
+}
+.no-text-decoration:active{
+  text-decoration: none !important;
+}
+.no-text-decoration:focus{
   text-decoration: none !important;
 }
 .activeArea{
@@ -1041,4 +1054,65 @@ border: 1px solid transparent;
 .btnCloseProfile{
   margin-top: 13px;
   margin-bottom: 13px;
+}
+.text-muted{
+  color: @MSDgreenDarker;
+}
+.marginLeft30px{
+  margin-left: 30px;
+}
+.smallFontSize{
+  font-size: smaller;
+}
+.fixedHeightSpecialProduct{
+  height: 200px;
+  overflow: hidden;
+}
+.paddTopBottomSpecialProduct{
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.boldTitle{
+  font-weight: bold;
+}
+.noListStyle{
+  list-style: none;
+}
+.borderRadiusSpecial{
+  border-radius: 4px;
+}
+@media print{
+  #menuDiv{
+    display: none;
+  }
+  #descriptionDiv{
+    width: 100%;
+  }
+  #initialDescriptionDiv{
+    width: 100%;
+  }
+  #siteMapDiv{
+    width: 100%;
+  }
+  #footer{
+    display: none !important;
+  }
+  a:link:after, a:visited:after {
+    content: "";
+  }
+}
+.noBorderTop{
+  border-top: 0px;
+}
+.borderBottomRadius{
+  border-top-right-radius: 300px;
+}
+.marginRightMinus30{
+  margin-right: -30px;
+}
+.marginBottom50{
+  margin-bottom: 50px;
+}
+.overflowX{
+  overflow-x: hidden;
 }

@@ -1,0 +1,40 @@
+<div class="col-xs-12 well well-lg" id="siteMapDiv">
+    <div class="col-xs-12">
+        <img class="col-xs-12  noPadding "  no-cache-src="{{pathAmazonDev+specialProduct.header_image}}" />
+    </div>
+    <div class="col-xs-12 paddTopBottomSpecialProduct">
+            <span>
+                <i class="glyphicon glyphicon-print pull-right handCursor" ng-click="printPage()">&nbsp;Print&nbsp;</i>
+            </span>
+            <span>
+                <i class="glyphicon glyphicon-th-list pull-right handCursor" ui-sref="groupSpecialProduct.glossary">&nbsp;Glosar&nbsp;</i>
+            </span>
+    </div>
+    <div class="col-xs-12">
+        <ul class="MSDgreenDarker no-text-decoration handCursor">
+            <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct({product_id: $stateParams.product_id})">Home</li>
+            <li ng-repeat="menuItem in specialProductMenu" ng-if="menuItem.children_ids.length!=0">
+                <span class="MSDgreenDarker handCursor no-text-decoration">
+                    {{menuItem.title}}
+                </span>
+                <ul ng-if="menuItem.children_ids.length!=0">
+                    <li ng-repeat="subItem in menuItem.children_ids" class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.description({id: subItem._id})">
+                        &nbsp;&nbsp;{{subItem.title}}
+                    </li>
+                </ul>
+            </li>
+            <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.files">
+                Resources Library
+            </li>
+            <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.prescription">
+                Prescription Assistance
+            </li>
+            <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.sitemap">
+                Site Map
+            </li>
+        </ul>
+    </div>
+    <div class="col-xs-12 justify marginBottom50"
+         convert-special conver="specialProduct.safety_information" ng-bind-html="trustAsHtml(specialProduct.safety_information)">
+    </div>
+</div>
