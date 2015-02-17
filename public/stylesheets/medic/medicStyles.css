@@ -6551,7 +6551,7 @@ ul.products li {
 .carousel-container .carousel-controll {
   position: absolute;
   right: 17%;
-  bottom: 10px;
+  bottom: 20px;
 }
 .carousel-container .carousel-controll .carousel-controll-element {
   float: left;
@@ -7299,4 +7299,10 @@ hr {
 }
 .overflowX {
   overflow-x: hidden;
+}
+.mediumFont {
+  font-size: medium;
+}
+.verySmallFont {
+  font-size: small;
 }
