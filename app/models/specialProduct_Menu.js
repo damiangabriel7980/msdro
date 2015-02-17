@@ -9,7 +9,6 @@ var specialProductMenuSchema		= new Schema({
     header_title: String,
     title: String,
     description: String,
-    images: Array,
     has_children: Boolean,
     image_title: String,
     children_ids: [{type: Schema.Types.ObjectId,ref: 'specialProducts_Menu'}],
