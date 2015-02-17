@@ -1745,6 +1745,39 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: false});
                 }
             })
+        })
+        .delete(function (req, res) {
+            var deleteCount = 0;
+            var idToDelete = ObjectId(req.query.id);
+            specialProductMenu.findOne({_id: idToDelete}, function (err, item) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    var arrayIdsToDelete = [idToDelete];
+                    if(item.children_ids){
+                        arrayIdsToDelete = arrayIdsToDelete.concat(item.children_ids);
+                        console.log(arrayIdsToDelete);
+                    }
+                    specialProductMenu.remove({_id: {$in: arrayIdsToDelete}}, function (err, wRes) {
+                        if(err){
+                            console.log(err);
+                            res.send({error: true});
+                        }else{
+                            deleteCount = wRes;
+                            //disconnect from parent
+                            specialProductMenu.update({}, {$pull: {children_ids: idToDelete}}, function (err, wRes) {
+                                if(err){
+                                    console.log(err);
+                                    res.send({error: true});
+                                }else{
+                                    res.send({error: false, message: "S-au sters "+deleteCount+" documente. S-au updatat "+wRes+" documente"});
+                                }
+                            });
+                        }
+                    })
+                }
+            });
         });
 
     router.route('/admin/content/specialProducts/addMenuChild')

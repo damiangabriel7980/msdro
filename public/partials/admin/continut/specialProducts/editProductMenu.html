@@ -11,12 +11,12 @@
             <div ng-repeat="item in menuItems" class="col-md-12 noPadding">
                 <div class="col-md-12 menuBlock">
                     <div class="item parent" ng-click="editItem(item._id)">{{item.title}}</div>
-                    <div class="item" ng-click="removeItem(item._id)"><i class="glyphicon glyphicon-remove"></i></div>
+                    <div class="item" ng-click="removeItem(item)"><i class="glyphicon glyphicon-remove"></i></div>
                     <div class="item" ng-click="addChild(item._id)"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;&nbsp;Adauga copil</div>
                 </div>
                 <div class="col-md-12 menuBlock" ng-repeat="it in item.children_ids">
                     <div class="item child" ng-click="editItem(it._id)">{{it.title}}</div>
-                    <div class="item" ng-click="removeItem(it._id)"><i class="glyphicon glyphicon-remove"></i></div>
+                    <div class="item" ng-click="removeItem(it)"><i class="glyphicon glyphicon-remove"></i></div>
                 </div>
             </div>
         </div>

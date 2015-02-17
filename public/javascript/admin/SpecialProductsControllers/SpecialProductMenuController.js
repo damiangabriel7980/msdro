@@ -3,10 +3,14 @@ cloudAdminControllers.controller('SpecialProductMenuController', ['$scope', 'Spe
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
-    SpecialProductsService.menu.query({product_id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
-        console.log(resp);
-        $scope.menuItems = resp.menuItems;
-    });
+    var refreshMenuItems = function () {
+        SpecialProductsService.menu.query({product_id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
+            console.log(resp);
+            $scope.menuItems = resp.menuItems;
+        });
+    };
+
+    refreshMenuItems();
 
     $scope.addParent = function () {
         $scope.sessionData.parentId = null;
@@ -24,8 +28,48 @@ cloudAdminControllers.controller('SpecialProductMenuController', ['$scope', 'Spe
         $scope.renderView("editMenuItem");
     };
 
-    $scope.removeItem = function (id) {
-        console.log(id);
+    var removeFilesForItem = function (item, callback) {
+        //remove all associated images
+        AmazonService.deleteFilesAtPath("productPages/"+item.product+"/menu/"+item._id, function (err, count) {
+            if(err){
+                callback(item._id, null);
+            }else{
+                callback(null, count);
+            }
+        });
+    };
+
+    $scope.removeItem = function (item) {
+        $scope.resetAlert("warning", "Va rugam asteptati...");
+        $scope.menuItems = [];
+        var filesCount = 0;
+        var forRemoval = item.children_ids || [];
+        forRemoval.push(item);
+        //remove all files
+        async.each(forRemoval, function (it, callback) {
+            removeFilesForItem(it, function (err, count) {
+                if(err){
+                    callback(err);
+                }else{
+                    filesCount += count;
+                    callback();
+                }
+            })
+        }, function (err) {
+            if(err){
+                $scope.resetAlert("Eroare la steregerea imaginilor pentru item-ul cu id "+err);
+            }else{
+                //remove menu item
+                SpecialProductsService.menu.delete({id: item._id}).$promise.then(function (resp) {
+                    if(resp.error){
+                        $scope.resetAlert("danger", "Au fost sterse "+filesCount+" imagini, insa a aparut o eroare la stergerea din baza de date");
+                    }else{
+                        $scope.resetAlert("success", "Au fost sterse "+filesCount+" imagini. "+resp.message);
+                        refreshMenuItems();
+                    }
+                });
+            }
+        })
     };
 
     $scope.tinymceOptions = {
