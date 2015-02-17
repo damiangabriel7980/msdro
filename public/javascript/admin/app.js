@@ -11,7 +11,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.bootstrap.datetimepicker',
         'angular-growl',
         'myMultipleSelect',
-        'therapeuticSelect'
+        'therapeuticSelect',
+        's3UploadManager'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

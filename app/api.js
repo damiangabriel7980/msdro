@@ -1691,22 +1691,72 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/content/specialProducts/menu')
         .get(function (req, res) {
-            //find all children
-            specialProductMenu.distinct("children_ids", function (err, children_ids) {
+            if(req.query.id){
+                //find one by id
+                specialProductMenu.findOne({_id: req.query.id}, function (err, menuItem) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({error: false, menuItem: menuItem});
+                    }
+                });
+            }else if(req.query.product_id){
+                //get full menu
+                //first, find all children
+                specialProductMenu.distinct("children_ids", function (err, children_ids) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        //next, get all menu items that are not children; populate their children_ids attribute
+                        specialProductMenu.find({product: req.query.product_id, _id: {$nin: children_ids}}).populate("children_ids").exec(function (err, menuItems) {
+                            if(err){
+                                console.log(err);
+                                res.send({error: true});
+                            }else{
+                                //now you got the full menu nicely organised
+                                res.send({menuItems: menuItems});
+                            }
+                        });
+                    }
+                });
+            }else{
+                res.send({error: true, message: "Invalid params"});
+            }
+        })
+        .post(function (req, res) {
+            var menu = new specialProductMenu(req.body);
+            menu.save(function (err, saved) {
                 if(err){
-                    res.send(err);
+                    console.log(err);
+                    res.send({error: true});
                 }else{
-                    //get all menu items that are not children
-                    specialProductMenu.find({product: req.query.product_id, _id: {$nin: children_ids}}).populate("children_ids").exec(function (err, menuItems) {
-                        if(err){
-                            console.log(err);
-                            res.send(err);
-                        }else{
-                            res.send(menuItems);
-                        }
-                    });
+                    res.send({error: false, saved: saved});
                 }
-            });
+            })
+        })
+        .put(function (req, res) {
+            specialProductMenu.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false});
+                }
+            })
+        });
+
+    router.route('/admin/content/specialProducts/addMenuChild')
+        .put(function (req, res) {
+            specialProductMenu.update({_id: req.query.id}, {$addToSet: {children_ids: req.body.child_id}}, function (err, wRes) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false});
+                }
+            })
         });
 
     router.route('/admin/content/specialProducts/groupsAvailable')

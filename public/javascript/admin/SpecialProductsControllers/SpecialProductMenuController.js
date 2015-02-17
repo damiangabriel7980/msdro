@@ -5,15 +5,23 @@ cloudAdminControllers.controller('SpecialProductMenuController', ['$scope', 'Spe
 
     SpecialProductsService.menu.query({product_id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
         console.log(resp);
-        $scope.menuItems = resp;
+        $scope.menuItems = resp.menuItems;
     });
 
-    $scope.addItem = function () {
-        console.log("add item");
+    $scope.addParent = function () {
+        $scope.sessionData.parentId = null;
+        $scope.renderView("addMenuItem");
+    };
+
+    $scope.addChild = function (parentId) {
+        $scope.sessionData.parentId = parentId;
+        $scope.renderView("addMenuItem");
     };
 
     $scope.editItem = function (id) {
         console.log(id);
+        $scope.sessionData.editMenuId = id;
+        $scope.renderView("editMenuItem");
     };
 
     $scope.removeItem = function (id) {
