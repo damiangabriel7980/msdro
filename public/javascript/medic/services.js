@@ -105,8 +105,8 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
         getByArea: $resource('api/products/productsByArea', {}, {
             query: { method: 'POST', isArray: true }
         }),
-        getSingle: $resource('api/products/:id', {}, {
-            query: { method: 'GET', isArray: false }
+        getSingle: $resource('api/productsDetails', {}, {
+            query: { method: 'POST', isArray: false }
         })
     }
 }]);

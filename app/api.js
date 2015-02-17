@@ -3714,16 +3714,26 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
     });
 
-    router.route('/products/:id')
+    router.route('/productsDetails')
 
-        .get(function(req, res) {
-            Products.findById(req.params.id, function(err, cont) {
-                if(err) {
+        .post(function(req, res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
+                if(err){
                     res.send(err);
-                }
-                else
-                    res.json(cont);
-            })
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroup) {
+                        forGroups.push(req.body.specialGroup);
+                    }
+                    Products.find({_id:req.body.id,groupsID: {$in: forGroups}}, function(err, cont) {
+                        if(err) {
+                            res.send(err);
+                        }
+                        else
+                            res.json(cont[0]);
+                    })
+                }});
+
         });
 
     router.route('/products/productsByArea')
