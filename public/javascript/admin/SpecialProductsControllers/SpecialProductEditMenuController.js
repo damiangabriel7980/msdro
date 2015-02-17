@@ -28,11 +28,7 @@ cloudAdminControllers.controller('SpecialProductEditMenuController', ['$scope', 
                     //remove old image
                     AmazonService.deleteFile(toAdd.header_image, function (err, success) {
                         if(err){
-                            if(!toAdd.header_image){
-                                //ignore error
-                            }else{
-                                callback("Eroare la stergerea imaginii vechi");
-                            }
+                            callback("Eroare la stergerea imaginii vechi");
                         }
                         //upload new image
                         AmazonService.uploadFile($scope.headerImageBody, key, function (err, success) {
