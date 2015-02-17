@@ -45,7 +45,12 @@ publicApp.controller('ProofController', ['$scope', 'ProofService', '$sce', funct
             $scope.myAlert.newAlert = true;
             $scope.myAlert.type = "danger";
             $scope.myAlert.message = "Va rugam incarcati o fotografie care sa dovedeasca statutul de "+profession.display_name;
-        }else{
+        }else if(proofFile.type!="application/pdf" && proofFile.type!="image/jpeg" && proofFile.type!="image/png"){
+            $scope.myAlert.newAlert = true;
+            $scope.myAlert.type = "danger";
+            $scope.myAlert.message = "Va rugam incarcati o fotografie sau un document PDF care sa dovedeasca statutul de "+profession.display_name;
+        }
+        else{
             var extension = proofFile.name.split('.').pop();
 
             var reader = new FileReader();

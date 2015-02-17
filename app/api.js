@@ -3019,8 +3019,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                                 res.json({"type":"danger","message":"Eroare la salvarea datelor"});
                                             }else{
                                                 //we're done with this user, so log out
-                                                req.logout();
                                                 res.json({"type":"success","message":"Datele au fost salvate cu succes. In maxim 48 de ore veti primi un e-mail pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam.", success: true});
+                                                req.logout();
                                             }
                                         });
                                     }
