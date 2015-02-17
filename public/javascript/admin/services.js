@@ -78,15 +78,19 @@ cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function
             });
         },
         deleteFile: function (key, callback) {
-            getClient(function (s3) {
-                s3.deleteObject({Bucket: $rootScope.amazonBucket, Key: key}, function (err, data) {
-                    if (err) {
-                        callback(err, null);
-                    } else {
-                        callback(null, true);
-                    }
+            if(!key){
+                callback(null, "No key was specified");
+            }else{
+                getClient(function (s3) {
+                    s3.deleteObject({Bucket: $rootScope.amazonBucket, Key: key}, function (err, data) {
+                        if (err) {
+                            callback(err, null);
+                        } else {
+                            callback(null, true);
+                        }
+                    });
                 });
-            });
+            }
         },
         getContentsAtPath: function (path, callback) {
             console.log(path);
