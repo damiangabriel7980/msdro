@@ -10,6 +10,12 @@ cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function
         });
     };
     return {
+        getBucketName: function () {
+            return $rootScope.amazonBucket;
+        },
+        getBucketUrl: function () {
+            return $rootScope.pathAmazonDev;
+        },
         getClient: function (callback) {
             getCredentialsFromServer.query().$promise.then(function (resp) {
                 AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
@@ -80,6 +86,47 @@ cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function
                         callback(null, true);
                     }
                 });
+            });
+        },
+        getContentsAtPath: function (path, callback) {
+            console.log(path);
+            getClient(function (s3) {
+                s3.listObjects({Bucket: $rootScope.amazonBucket, Prefix: path, Marker: path}, function (err, data) {
+                    if(err){
+                        console.log("S3 getContentsAtPath error");
+                        console.log(err);
+                        callback(err, null);
+                    }else{
+                        callback(null, data.Contents);
+                    }
+                })
+            });
+        },
+        deleteFilesAtPath: function (path, callback) {
+            console.log(path);
+            getClient(function (s3) {
+                s3.listObjects({Bucket: $rootScope.amazonBucket, Prefix: path, Marker: path}, function (err, data) {
+                    if(err){
+                        console.log(err);
+                        callback(err, null);
+                    }else{
+                        async.each(data.Contents, function (content, cb) {
+                            s3.deleteObject({Bucket: $rootScope.amazonBucket, Key: content.Key}, function (err, data) {
+                                if (err) {
+                                    cb(err);
+                                } else {
+                                    cb();
+                                }
+                            });
+                        }, function (err) {
+                            if(err){
+                                callback(err, null);
+                            }else{
+                                callback(null, true);
+                            }
+                        });
+                    }
+                })
             });
         }
     }
