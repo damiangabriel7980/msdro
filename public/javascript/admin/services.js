@@ -107,6 +107,7 @@ cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function
             });
         },
         deleteFilesAtPath: function (path, callback) {
+            var count = 0;
             console.log(path);
             getClient(function (s3) {
                 s3.listObjects({Bucket: $rootScope.amazonBucket, Prefix: path, Marker: path}, function (err, data) {
@@ -119,6 +120,7 @@ cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function
                                 if (err) {
                                     cb(err);
                                 } else {
+                                    count ++;
                                     cb();
                                 }
                             });
@@ -126,7 +128,7 @@ cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function
                             if(err){
                                 callback(err, null);
                             }else{
-                                callback(null, true);
+                                callback(null, count);
                             }
                         });
                     }
@@ -181,7 +183,8 @@ cloudAdminServices.factory('SpecialProductsService', ['$resource', function($res
         menu: $resource('api/admin/content/specialProducts/menu', {}, {
             query: { method: 'GET', isArray: false },
             create: { method: 'POST', isArray: false },
-            update: { method: 'PUT', isArray: false }
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         }),
         addMenuChild: $resource('api/admin/content/specialProducts/addMenuChild', {}, {
             update: { method: 'PUT', isArray: false }
