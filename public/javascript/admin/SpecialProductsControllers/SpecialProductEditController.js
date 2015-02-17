@@ -35,7 +35,7 @@ cloudAdminControllers.controller('SpecialProductEditController', ['$scope', 'Spe
         $scope.resetAlert("warning", "Va rugam asteptati...");
         SpecialProductsService.products.update({id: $scope.newProductPage._id}, $scope.newProductPage).$promise.then(function (resp) {
             if(resp.error){
-                $scope.resetAlert("danger", error.message);
+                $scope.resetAlert("danger", resp.message);
             }else{
                 //generate Amazon keys and extensions for logo and header image
                 var extension;

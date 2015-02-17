@@ -48,7 +48,8 @@ cloudAdminControllers.controller('SpecialProductAddMenuController', ['$scope', '
                 //upload image and update database
                 if($scope.headerImageBody){
                     $scope.resetAlert("warning", "Se incarca imaginea...");
-                    var key = "productPages/"+$scope.sessionData.idToEdit+"/menu/"+menu_id+"/header/"+$scope.headerImageBody.name;
+                    var extension = $scope.headerImageBody.name.split('.').pop();
+                    var key = "productPages/"+$scope.sessionData.idToEdit+"/menu/"+menu_id+"/header."+extension;
                     AmazonService.uploadFile($scope.headerImageBody, key, function (err, success) {
                         if(err){
                             console.log(err);
@@ -79,6 +80,11 @@ cloudAdminControllers.controller('SpecialProductAddMenuController', ['$scope', '
                 //redirect to edit menu item
                 $scope.sessionData.editMenuId = menu_id;
                 $scope.renderView("editMenuItem");
+                try{
+                    $scope.$apply();
+                }catch(ex){
+                    //the render view doesn't automatically apply when no image is loaded. No idea why...
+                }
             }
         });
 
