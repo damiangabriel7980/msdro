@@ -1917,6 +1917,16 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 });
             };
+        })
+        .delete(function (req, res) {
+            specialProductFiles.remove({_id: req.query.id}, function (err, wres) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true, message: "Eroare la stergere"});
+                }else{
+                    res.send({error: false, message: "Removed "+wres+" documents"});
+                }
+            });
         });
 
     router.route('/admin/events')

@@ -48,7 +48,6 @@ cloudAdminControllers.controller('SpecialProductGlossaryController', ['$scope', 
             if(resp.error){
                 $scope.resetAlert("danger", resp.message);
             }else{
-                console.log("refresh");
                 refreshGlossaryTable();
             }
         });

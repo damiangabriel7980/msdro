@@ -1,9 +1,9 @@
-cloudAdminControllers.controller('SpecialProductResourcesController', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', function($scope, SpecialProductsService, ngTableParams, $filter) {
+cloudAdminControllers.controller('SpecialProductResourcesController', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', 'AmazonService', function($scope, SpecialProductsService, ngTableParams, $filter, AmazonService) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
-    $scope.refreshTable = function () {
+    var refreshTable = function () {
         SpecialProductsService.resources.query({product: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.resetAlert("danger", "Eroare la gasire glosar");
@@ -32,7 +32,7 @@ cloudAdminControllers.controller('SpecialProductResourcesController', ['$scope',
         });
     };
 
-    $scope.refreshTable();
+    refreshTable();
 
     $scope.addResource = function () {
         $scope.renderView("addResource");
@@ -43,8 +43,25 @@ cloudAdminControllers.controller('SpecialProductResourcesController', ['$scope',
         $scope.renderView("editResource");
     };
 
-    $scope.deleteResource = function (id) {
-        //TODO: delete Resource
+    $scope.deleteResource = function (item) {
+        $scope.resetAlert("warning", "Se sterge fisierul...");
+        //first, delete image
+        AmazonService.deleteFile(item.file_path, function (err, success) {
+            if(err){
+                $scope.resetAlert("danger", "Eroare la stergerea fisierului asociat");
+            }else{
+                //now remove collection
+                $scope.resetAlert("warning", "Se sterge din baza de date...");
+                SpecialProductsService.resources.delete({id: item._id}).$promise.then(function (resp) {
+                    if(resp.error){
+                        $scope.resetAlert("danger", resp.message);
+                    }else{
+                        $scope.resetAlert();
+                        refreshTable();
+                    }
+                });
+            }
+        })
     };
 
 }]);

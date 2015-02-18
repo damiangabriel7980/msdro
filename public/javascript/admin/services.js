@@ -206,7 +206,8 @@ cloudAdminServices.factory('SpecialProductsService', ['$resource', function($res
         resources: $resource('api/admin/content/specialProducts/resources', {}, {
             query: { method: 'GET', isArray: false },
             create: { method: 'POST', isArray: false },
-            update: { method: 'PUT', isArray: false }
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         })
     }
 }]);
