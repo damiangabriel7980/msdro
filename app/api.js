@@ -1834,6 +1834,17 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: false, glossary: glossary});
                 }
             })
+        })
+        .post(function (req, res) {
+            var toAdd = new specialProductGlossary(req.body);
+            toAdd.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false, saved: saved});
+                }
+            });
         });
 
     router.route('/admin/content/specialProducts/resources')

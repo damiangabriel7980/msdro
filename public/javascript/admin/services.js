@@ -196,7 +196,8 @@ cloudAdminServices.factory('SpecialProductsService', ['$resource', function($res
             query: { method: 'GET', isArray: true }
         }),
         glossary: $resource('api/admin/content/specialProducts/glossary', {}, {
-            query: { method: 'GET', isArray: false }
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false }
         }),
         resources: $resource('api/admin/content/specialProducts/resources', {}, {
             query: { method: 'GET', isArray: false }
