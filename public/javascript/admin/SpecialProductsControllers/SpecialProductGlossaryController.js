@@ -35,13 +35,13 @@ cloudAdminControllers.controller('SpecialProductGlossaryController', ['$scope', 
     $scope.refreshTable();
 
     $scope.addTerm = function () {
-        $scope.sessionData.glossaryId = null;
+        $scope.sessionData.glossaryToEdit = null;
         $scope.renderView('addGlossaryTerm');
     };
 
-    $scope.editTerm = function (id) {
-        $scope.sessionData.glossaryId = id;
-        //TODO: edit term
+    $scope.editTerm = function (term) {
+        $scope.sessionData.glossaryToEdit = term;
+        $scope.renderView('editGlossaryTerm');
     };
 
     $scope.deleteTerm = function (id) {

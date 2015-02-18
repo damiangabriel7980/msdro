@@ -1845,6 +1845,21 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: false, saved: saved});
                 }
             });
+        })
+        .put(function (req, res) {
+            var idToUpdate = req.query.id;
+            if(!idToUpdate){
+                res.send({error: true, message:"Invalid query params"});
+            }else{
+                specialProductGlossary.update({_id: idToUpdate}, {$set: req.body}, function (err, wRes) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({error: false, message: "Updated "+wRes+" documents"});
+                    }
+                });
+            }
         });
 
     router.route('/admin/content/specialProducts/resources')

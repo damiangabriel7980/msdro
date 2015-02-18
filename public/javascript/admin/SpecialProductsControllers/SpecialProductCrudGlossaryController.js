@@ -3,9 +3,14 @@ cloudAdminControllers.controller('SpecialProductCrudGlossaryController', ['$scop
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
-    //initialize the new item to add
+    //initialize the item to add / edit
     $scope.newItem = {};
-    //attach current product
+    if($scope.sessionData.glossaryToEdit){
+        $scope.currentItem = $scope.sessionData.glossaryToEdit;
+    }else{
+        $scope.currentItem = {};
+    }
+    //attach current product to new item
     $scope.newItem.product = $scope.sessionData.idToEdit;
 
     $scope.addGlossaryTerm = function () {
@@ -17,6 +22,21 @@ cloudAdminControllers.controller('SpecialProductCrudGlossaryController', ['$scop
                 $scope.renderView("editGlossary");
             }
         });
-    }
+    };
+
+    $scope.editGlossaryTerm = function () {
+        var id = $scope.currentItem._id;
+        if(!id){
+            $scope.resetAlert("Nu a fost gasit termenul");
+        }else{
+            SpecialProductsService.glossary.update({id: id}, $scope.currentItem).$promise.then(function (resp) {
+                if(resp.error){
+                    $scope.resetAlert("danger", resp.error);
+                }else{
+                    $scope.renderView("editGlossary");
+                }
+            });
+        }
+    };
 
 }]);
