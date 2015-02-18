@@ -7,7 +7,6 @@ var Schema			= mongoose.Schema;
 var specialProductDetailsSchema		= new Schema({
     title: String,
     description: String,
-    images: Array,
     has_children: Boolean,
     image_title: String,
     image_title_text:String,
