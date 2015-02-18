@@ -1820,6 +1820,38 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
+    router.route('/admin/content/specialProducts/glossary')
+        .get(function (req, res) {
+            var q = {};
+            if(req.query){
+                q = req.query;
+            }
+            specialProductGlossary.find(q, function (err, glossary) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false, glossary: glossary});
+                }
+            })
+        });
+
+    router.route('/admin/content/specialProducts/resources')
+        .get(function (req, res) {
+            var q = {};
+            if(req.query){
+                q = req.query;
+            }
+            specialProductFiles.find(q, function (err, resources) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false, resources: resources});
+                }
+            })
+        });
+
     router.route('/admin/events')
 
         .get(function(req, res) {

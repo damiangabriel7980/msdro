@@ -24,6 +24,10 @@ cloudAdminControllers.controller('SpecialProductModalController', ['$scope', '$m
             $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/addMenuItem.html');
         }else if(view === "editMenuItem"){
             $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/editMenuItem.html');
+        }else if(view === "editGlossary"){
+            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/editGlossary.html');
+        }else if(view === "editResources"){
+            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/editResources.html');
         }
     };
 
