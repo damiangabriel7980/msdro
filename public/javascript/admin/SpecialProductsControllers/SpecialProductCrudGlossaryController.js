@@ -19,7 +19,7 @@ cloudAdminControllers.controller('SpecialProductCrudGlossaryController', ['$scop
             if(resp.error){
                 $scope.resetAlert("danger", resp.error);
             }else{
-                $scope.renderView("editGlossary");
+                $scope.renderView("viewGlossary");
             }
         });
     };
@@ -33,7 +33,7 @@ cloudAdminControllers.controller('SpecialProductCrudGlossaryController', ['$scop
                 if(resp.error){
                     $scope.resetAlert("danger", resp.error);
                 }else{
-                    $scope.renderView("editGlossary");
+                    $scope.renderView("viewGlossary");
                 }
             });
         }
