@@ -15,6 +15,29 @@ cloudAdminServices.factory('SpecialFeaturesService', ['$resource', function($res
     return {
         getSpecialGroups: $resource('api/groups/specialGroups', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        getSpecialProducts: $resource('api/groupSpecialProducts', {}, {
+            query: { method: 'POST', isArray: false }
+        })
+    }
+}]);
+
+cloudAdminServices.factory('specialProductService', ['$resource', function($resource){
+    return {
+        getSpecialProduct: $resource('api/specialProduct/', {}, {
+            query: { method: 'POST', isArray: false }
+        }),
+        getSpecialProductMenu: $resource('api/specialProductMenu/', {}, {
+            query: { method: 'POST', isArray: true }
+        }),
+        getSpecialProductDescription: $resource('api/specialProductDescription/:id', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        getSpecialProductFiles: $resource('api/specialProductFiles/', {}, {
+            query: { method: 'POST', isArray: true }
+        }),
+        getSpecialProductGlossary: $resource('api/specialProductGlossary/', {}, {
+            query: { method: 'POST', isArray: true }
         })
     }
 }]);
@@ -82,8 +105,8 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
         getByArea: $resource('api/products/productsByArea', {}, {
             query: { method: 'POST', isArray: true }
         }),
-        getSingle: $resource('api/products/:id', {}, {
-            query: { method: 'GET', isArray: false }
+        getSingle: $resource('api/productsDetails', {}, {
+            query: { method: 'POST', isArray: false }
         })
     }
 }]);

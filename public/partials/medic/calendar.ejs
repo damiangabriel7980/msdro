@@ -22,7 +22,13 @@
                           </div>
 
                         <div class="noPadding col-md-9 top2percent margin2Left">
-                            <h4 class="handCursor" ng-click="goToEvent(eventim._id)" convert-special conver="eventim.name" ng-bind-html="trustAsHtml(eventim.name)"></h4>
+
+                            <h4 class="handCursor" ng-if="eventim.type==1" ng-click="goToEvent(eventim._id)" convert-special conver="eventim.name" ng-bind-html="trustAsHtml(eventim.name)">
+
+                            </h4>
+                            <h4 class="handCursor" ng-if="eventim.type==2" ng-click="goToEvent(eventim._id)" convert-special conver="eventim.name" ng-bind-html="trustAsHtml(eventIcon+eventim.name)">
+
+                            </h4>
                         </div>
                     </div>
                 </div>

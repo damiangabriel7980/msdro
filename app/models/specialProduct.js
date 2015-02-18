@@ -7,7 +7,8 @@ var Schema			= mongoose.Schema;
 var specialProductSchema		= new Schema({
     prescription: String,
     safety_information: String,
-    image_thumbnail:String,
+    logo_path:String,
+    header_image:String,
     product_name: String,
     general_description:String,
     groups: [{type: Schema.Types.ObjectId,ref: 'UserGroup'}],

@@ -59,4 +59,52 @@ cloudAdminApp.directive('noCacheSrc', function($window) {
             });
         }
     }
+}).directive('thereIsMore', function($timeout,$document,$window) {
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+            var footer = angular.element('#footer');
+            var check = function () {
+                //if(angular.element($window).scrollTop()===0&&angular.element($document).height() >= (angular.element($window).height() + angular.element($window).scrollTop()))
+                //    f.hide();
+                if (angular.element($document).height() <= (angular.element($window).height() + angular.element($window).scrollTop()))
+                    footer.show();
+                else
+                    footer.hide();
+            };
+            var appliedCheck = function () {
+                scope.$apply(check);
+            };
+            angular.element($window).scroll(function () {
+                //appliedCheck();
+                check();
+            });
+            check();
+            $timeout(function(){
+                check();
+            }, 1000);
+            angular.element($window).resize(function () {
+                //appliedCheck();
+                check();
+            });
+            angular.element(document).ready(function(){
+                //appliedCheck();
+                check();
+            });
+            angular.element(document).ajaxComplete(function(){
+                //appliedCheck();
+                check();
+            });
+            scope.$on('$viewContentLoaded',
+                function(event){
+                    $timeout(function(){
+                        check();
+                    }, 500)
+                });
+            //scope.$on('$stateChangeSuccess',
+            //    function(event){
+            //        check();
+            //    });
+        } // end of link
+    }
 });

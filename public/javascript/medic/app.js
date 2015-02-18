@@ -159,6 +159,36 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
             controller: 'DisplayFeaturesController'
         })
+        .state('groupSpecialProduct', {
+            url: '/groupSpecialProduct/:product_id',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
+            controller: 'specialProductCtrl'
+        })
+        .state('groupSpecialProduct.description', {
+            url: '/selectedMenuItem/:id',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_Description.html',
+            controller: 'specialProductDescriptionCtrl'
+        })
+        .state('groupSpecialProduct.files', {
+            url: '/selectedMenuFiles',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_files.html',
+            controller: 'specialProductFilesCtrl'
+        })
+        .state('groupSpecialProduct.prescription', {
+            url: '/selectedMenuPrescription',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_prescription.html',
+            controller: 'specialProductPrescriptionCtrl'
+        })
+        .state('groupSpecialProduct.glossary', {
+            url: '/selectedGlossary',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_glossary.html',
+            controller: 'specialProductGlossaryCtrl'
+        })
+        .state('groupSpecialProduct.sitemap', {
+            url: '/sitemap',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html',
+            controller: 'specialProductMapCtrl'
+        })
 }]);
 
 cloudAdminApp.run(

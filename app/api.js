@@ -34,7 +34,7 @@ var socketio = require('socket.io'),
 
 //special Products
 var specialProduct = require('./models/specialProduct');
-var specialProductDetails = require('./models/specialProduct_Details');
+var specialProductMenu = require('./models/specialProduct_Menu');
 var specialProductGlossary = require('./models/specialProduct_glossary');
 var specialProductFiles = require('./models/specialProduct_files');
 var specialProductQa = require('./models/specialProduct_qa');
@@ -2853,7 +2853,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                         to: [user.username],
                                         subject:'Activare cont MSD',
                                         text: 'Draga '+user.name+',\n\n\n'+
-                                            'Contul dumneavoastra pentru portalul MSD este activat si il puteti accesa la aceasta adresa:\n\n'+
+                                            'Ati primit acest email deoarece v-ati inregistrat pe MSD.Contul dumneavoastra a fost activat si il puteti accesa la aceasta adresa:\n\n'+
                                             req.headers.host+'/login\n\n\n'+
                                             'Succes!\n\nEchipa MSD'
                                     }, function(err){
@@ -3019,8 +3019,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                                 res.json({"type":"danger","message":"Eroare la salvarea datelor"});
                                             }else{
                                                 //we're done with this user, so log out
-                                                req.logout();
                                                 res.json({"type":"success","message":"Datele au fost salvate cu succes. In maxim 48 de ore veti primi un e-mail pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam.", success: true});
+                                                req.logout();
                                             }
                                         });
                                     }
@@ -3043,7 +3043,106 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.json(groups);
             });
         });
+    router.route('/groupSpecialProducts')
 
+        .post(function(req, res) {
+            var data = [mongoose.Types.ObjectId(req.body.specialGroup.toString())];
+            console.log(data);
+            specialProduct.find({groups: {$in: data}, enabled: true}, function(err, product) {
+                if(err) {
+                    res.send(err);
+                }
+                else
+                {
+                    res.json(product[0]);
+                }
+            });
+        });
+    router.route('/specialProduct')
+
+        .post(function(req, res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
+                if(err){
+                    res.send(err);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroupSelected) {
+                        forGroups.push(req.body.specialGroupSelected.toString());
+                    }
+                    console.log(forGroups);
+                    specialProduct.find({groups: {$in: forGroups}, enabled: true}, function(err, product) {
+                        if(err) {
+                            res.send(err);
+                        }
+                        else
+                        {
+                            res.json(product[0]);
+                        }
+                    });
+                    //get allowed articles for user;
+                }});
+        });
+    router.route('/specialProductMenu')
+        .post(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.body.id.toString());
+            console.log(id);
+                    specialProductMenu.find({product: id}).populate('children_ids').exec(function(err, details) {
+                        if(err) {
+                            res.send(err);
+                        }
+                        else
+                        {
+                            res.json(details);
+                        }
+                    });
+                    //get allowed articles for user;
+        });
+    router.route('/specialProductDescription/:id')
+        .get(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.params.id.toString());
+            console.log(id);
+            specialProductMenu.findOne({_id: id}).exec(function(err, details) {
+                if(err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                else
+                {
+                    console.log(details);
+                    res.json(details);
+                }
+            });
+        });
+    router.route('/specialProductFiles')
+        .post(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.body.id.toString());
+            console.log(id);
+            specialProductFiles.find({product: id}).exec(function(err, details) {
+                if(err) {
+                    res.send(err);
+                }
+                else
+                {
+                    res.json(details);
+                }
+            });
+            //get allowed articles for user;
+        });
+    router.route('/specialProductGlossary')
+        .post(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.body.id.toString());
+            console.log(id);
+            specialProductGlossary.find({product: id}).exec(function(err, details) {
+                if(err) {
+                    res.send(err);
+                }
+                else
+                {
+                    res.json(details);
+                }
+            });
+            //get allowed articles for user;
+        });
     router.route('/content')
 
         .get(function(req, res) {
@@ -3615,16 +3714,26 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
     });
 
-    router.route('/products/:id')
+    router.route('/productsDetails')
 
-        .get(function(req, res) {
-            Products.findById(req.params.id, function(err, cont) {
-                if(err) {
+        .post(function(req, res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
+                if(err){
                     res.send(err);
-                }
-                else
-                    res.json(cont);
-            })
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroup) {
+                        forGroups.push(req.body.specialGroup);
+                    }
+                    Products.find({_id:req.body.id,groupsID: {$in: forGroups}}, function(err, cont) {
+                        if(err) {
+                            res.send(err);
+                        }
+                        else
+                            res.json(cont[0]);
+                    })
+                }});
+
         });
 
     router.route('/products/productsByArea')

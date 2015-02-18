@@ -38,12 +38,17 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
         return $sce.trustAsHtml(convertedText);
     };
     $scope.selectSpecialGroup = function(group){
+        SpecialFeaturesService.getSpecialProducts.query({specialGroup: group._id}).$promise.then(function(result){
+            $scope.groupProduct = result;
+        });
         $rootScope.specialGroupSelected = group;
         localStorage.specialGroupSelected = angular.toJson(group);
         //load group features into array. use "DisplayFeatureController" to establish paths for them
         switch(group.display_name){
-            case "MSD Diabetes": $scope.groupFeatures = ["Januvia"]; break;
-            default: $scope.groupFeatures = null; break;
+            case "MSD Diabetes": $scope.groupFeatures = ["Januvia"];
+                break;
+            default: $scope.groupFeatures = null;
+                break;
         }
         if($state.includes('groupFeatures')){
             //if user changed his group while being on a feature page, redirect him to home

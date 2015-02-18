@@ -9,6 +9,9 @@ var date = new Date();
         var newName=$sce.trustAsHtml(data);
         return newName;
     };
+    $scope.eventIcon='<i class="glyphicon glyphicon-facetime-video verySmallFont" ng-if="eventim.type==2"></i>&nbsp;';
+    $scope.eventIconCalendar='<i class="glyphicon glyphicon-facetime-video verySmallFont"></i>&nbsp;';
+
     $scope.convertAndTrustAsHtml=function (data) {
         var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
         return $sce.trustAsHtml(convertedText);
