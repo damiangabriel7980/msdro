@@ -1670,19 +1670,29 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
-            //remove attached menu items
-            specialProductMenu.remove({product: idToDelete}, function (err, menuCount) {
+            var attachedCount = 0;
+            //remove documents attached to this product async
+            async.each([specialProductMenu, specialProductFiles, specialProductGlossary], function (collection, callback) {
+                collection.remove({product: idToDelete}, function (err, count) {
+                    if(err){
+                        callback(err);
+                    }else{
+                        attachedCount += count;
+                        callback();
+                    }
+                })
+            }, function (err) {
                 if(err){
                     console.log(err);
-                    res.send({error: true, message:"Eroare la stergerea meniurilor atasate"})
+                    res.send({error: true, message: "Eroare la stergerea entitatilor atasate produsului"});
                 }else{
-                    //now remove the product
-                    specialProduct.remove({_id: idToDelete}, function (err, productCount) {
+                    //remove product
+                    specialProduct.remove({_id: idToDelete}, function (err, count) {
                         if(err){
                             console.log(err);
                             res.send({error: true, message: "Eroare la stergerea produsului"});
                         }else{
-                            res.send({error: false, message: "S-au sters "+productCount+" produse si "+menuCount+" meniuri. "});
+                            res.send({error: false, message: "S-au sters "+count+" produse si "+attachedCount+" documente atasate. "});
                         }
                     });
                 }
@@ -1816,6 +1826,115 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             res.send(groups);
                         }
                     })
+                }
+            });
+        });
+
+    router.route('/admin/content/specialProducts/glossary')
+        .get(function (req, res) {
+            var q = {};
+            if(req.query){
+                q = req.query;
+            }
+            specialProductGlossary.find(q, function (err, glossary) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false, glossary: glossary});
+                }
+            })
+        })
+        .post(function (req, res) {
+            var toAdd = new specialProductGlossary(req.body);
+            toAdd.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false, saved: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToUpdate = req.query.id;
+            if(!idToUpdate){
+                res.send({error: true, message:"Invalid query params"});
+            }else{
+                specialProductGlossary.update({_id: idToUpdate}, {$set: req.body}, function (err, wRes) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true, message: "A aparut o eroare pe server"});
+                    }else{
+                        res.send({error: false, message: "Updated "+wRes+" documents"});
+                    }
+                });
+            }
+        })
+        .delete(function (req, res) {
+            var idToDelete = req.query.id;
+            if(!idToDelete){
+                res.send({error: true, message: "Invalid params"});
+            }else{
+                specialProductGlossary.remove({_id: idToDelete}, function (err, wRes) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({error: false, message: "Removed "+wRes+" documents"});
+                    }
+                });
+            }
+        });
+
+    router.route('/admin/content/specialProducts/resources')
+        .get(function (req, res) {
+            var q = {};
+            if(req.query){
+                q = req.query;
+            }
+            specialProductFiles.find(q, function (err, resources) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false, resources: resources});
+                }
+            })
+        })
+        .post(function (req, res) {
+            var toAdd = new specialProductFiles(req.body);
+            toAdd.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true, message: "Eroare la salvare"});
+                }else{
+                    res.send({error: false, saved: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            if(!idToUpdate){
+                res.send({error: true, message: "Invalid params"});
+            }else{
+                specialProductFiles.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true, message: "Eroare la update"});
+                    }else{
+                        res.send({error: false, message: "S-au actualizat "+wres+" documente"});
+                    }
+                });
+            }
+        })
+        .delete(function (req, res) {
+            specialProductFiles.remove({_id: req.query.id}, function (err, wres) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true, message: "Eroare la stergere"});
+                }else{
+                    res.send({error: false, message: "Removed "+wres+" documents"});
                 }
             });
         });

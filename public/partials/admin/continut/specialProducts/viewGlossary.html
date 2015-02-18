@@ -1,0 +1,33 @@
+<div ng-controller="SpecialProductGlossaryController">
+    <div class="modal-header">
+        <div class="modal-title"><h3>Editeaza glosar</h3></div>
+    </div>
+    <div class="modal-body container" style="margin: 0; width: 100%">
+        <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
+        <div class="col-md-12 noPadding">
+            <button class="btn btn-default" ng-click="addTerm()">Adauga cuvant cheie</button>
+        </div>
+        <div class="col-md-12 noPadding">
+            <table ng-table="glossaryTableParams" show-filter="true" class="table table-bordered">
+                <tr ng-repeat="g in $data">
+                    <td data-title="'Cuvant cheie'" filter="{ 'keyword': 'text' }" sortable="'keyword'">
+                        {{g.keyword}}
+                    </td>
+                    <td data-title="'Descriere'">
+                        {{g.description}}
+                    </td>
+                    <td data-title="'Actiuni'">
+                        <div class="btn-group">
+                            <div class="btn btn-default" ng-click="editTerm(g)"><i class="glyphicon glyphicon-cog"></i></div>
+                            <div class="btn btn-danger" ng-click="deleteTerm(g._id)"><i class="glyphicon glyphicon-trash"></i></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
+        <a class="btn btn-warning pull-right" ng-click="renderView('specialProductEdit')">Inapoi</a>
+    </div>
+</div>

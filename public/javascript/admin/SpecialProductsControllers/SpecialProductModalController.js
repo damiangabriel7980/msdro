@@ -8,23 +8,15 @@ cloudAdminControllers.controller('SpecialProductModalController', ['$scope', '$m
         }
     };
 
+    $scope.baseModal = {};
+
     $scope.setSessionData = function (newVal) {
         $scope.sessionData = newVal;
     };
 
     $scope.renderView = function (view) {
         $scope.resetAlert();
-        if(view === "specialProductAdd"){
-            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/specialProductAdd.html');
-        }else if(view === "specialProductEdit"){
-            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/specialProductEdit.html');
-        }else if(view === "editProductMenu"){
-            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/editProductMenu.html');
-        }else if(view === "addMenuItem"){
-            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/addMenuItem.html');
-        }else if(view === "editMenuItem"){
-            $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/editMenuItem.html');
-        }
+        $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/'+view+'.html');
     };
 
     //init view

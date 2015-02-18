@@ -26,7 +26,7 @@
     "video-js": "latest",
     "angular-growl": "latest",
     "aws-sdk": "latest",
-    "ng-table": "latest",
+    "ng-table": "0.4.2",
     "tinymce": "latest",
     "ng-file-upload": "latest",
     "ng-file-upload-shim": "latest",
