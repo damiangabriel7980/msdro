@@ -70,7 +70,7 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
     $scope.deleteSpecialProduct = function (id) {
         $modal.open({
             templateUrl: 'partials/admin/continut/specialProducts/toggleOrDelete.html',
-            size: 'sm',
+            size: 'md',
             windowClass: 'fade',
             controller: 'SpecialProductDeleteController',
             resolve: {
