@@ -38,8 +38,12 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
         return $sce.trustAsHtml(convertedText);
     };
     $scope.selectSpecialGroup = function(group){
+        console.log(group._id);
         SpecialFeaturesService.getSpecialProducts.query({specialGroup: group._id}).$promise.then(function(result){
-            $scope.groupProduct = result;
+            if(result._id)
+                $scope.groupProduct = result;
+            else
+                $scope.groupProduct=null;
         });
         $rootScope.specialGroupSelected = group;
         localStorage.specialGroupSelected = angular.toJson(group);
@@ -47,6 +51,8 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
         switch(group.display_name){
             case "MSD Diabetes": $scope.groupFeatures = ["Januvia"];
                 break;
+            //case "Immunology": $scope.groupFeatures = [];
+            //    break;
             default: $scope.groupFeatures = null;
                 break;
         }
