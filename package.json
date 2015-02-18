@@ -21,6 +21,7 @@
     "mongodb": "~1.4.19",
     "mongoosastic": "^2.0.6",
     "mongoose": "latest",
+    "mongoose-deep-populate": "latest",
     "morgan": "~1.0.0",
     "mysql": "~2.5.2",
     "node-uuid": "^1.4.2",

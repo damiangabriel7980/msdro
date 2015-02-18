@@ -1,13 +1,138 @@
 var cloudAdminServices = angular.module('cloudAdminServices', ['ngResource']);
-cloudAdminServices.factory('AmazonService', ['$resource', function($resource){
+cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function($resource, $rootScope){
     var getCredentialsFromServer = $resource('api/admin/s3tc', {}, {
         query: { method: 'GET', isArray: false }
     });
+    var getClient = function (callback) {
+        getCredentialsFromServer.query().$promise.then(function (resp) {
+            AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
+            callback(new AWS.S3());
+        });
+    };
     return {
+        getBucketName: function () {
+            return $rootScope.amazonBucket;
+        },
+        getBucketUrl: function () {
+            return $rootScope.pathAmazonDev;
+        },
         getClient: function (callback) {
             getCredentialsFromServer.query().$promise.then(function (resp) {
                 AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
                 callback(new AWS.S3());
+            });
+        },
+        uploadFile: function (fileBody, key, callback) {
+            getClient(function (s3) {
+                var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: fileBody, ACL:'public-read', ContentType: fileBody.type}, function (err, data) {
+                    if (err) {
+                        callback(err, null);
+                    } else {
+                        callback(null, true);
+                    }
+                });
+//                req.on('httpUploadProgress', function (evt) {
+//                    var progress = parseInt(100.0 * evt.loaded / evt.total);
+//                    console.log(progress);
+//                });
+            });
+        },
+        //receives an array of form [{fileBody: yourFileBody, key: yourKey}, ...]
+        uploadFiles: function (inputArray, callback) {
+            getClient(function (s3) {
+                async.each(inputArray, function (input, cb) {
+                    s3.putObject({Bucket: $rootScope.amazonBucket, Key: input.key, Body: input.fileBody, ACL:'public-read', ContentType: input.fileBody.type}, function (err, data) {
+                        if (err) {
+                            cb(err);
+                        } else {
+                            cb();
+                        }
+                    });
+                }, function (err) {
+                    if(err){
+                        callback(err, null);
+                    }else{
+                        callback(null, true);
+                    }
+                });
+            });
+        },
+        //receives an array of keys [key1, key2, ...]
+        deleteFiles: function (inputArray, callback) {
+            getClient(function (s3) {
+                async.each(inputArray, function (key, cb) {
+                    s3.deleteObject({Bucket: $rootScope.amazonBucket, Key: key}, function (err, data) {
+                        if (err) {
+                            cb(err);
+                        } else {
+                            cb();
+                        }
+                    });
+                }, function (err) {
+                    if(err){
+                        callback(err, null);
+                    }else{
+                        callback(null, true);
+                    }
+                });
+            });
+        },
+        deleteFile: function (key, callback) {
+            if(!key){
+                callback(null, "No key was specified");
+            }else{
+                getClient(function (s3) {
+                    s3.deleteObject({Bucket: $rootScope.amazonBucket, Key: key}, function (err, data) {
+                        if (err) {
+                            callback(err, null);
+                        } else {
+                            callback(null, true);
+                        }
+                    });
+                });
+            }
+        },
+        getContentsAtPath: function (path, callback) {
+            console.log(path);
+            getClient(function (s3) {
+                s3.listObjects({Bucket: $rootScope.amazonBucket, Prefix: path, Marker: path}, function (err, data) {
+                    if(err){
+                        console.log("S3 getContentsAtPath error");
+                        console.log(err);
+                        callback(err, null);
+                    }else{
+                        callback(null, data.Contents);
+                    }
+                })
+            });
+        },
+        deleteFilesAtPath: function (path, callback) {
+            var count = 0;
+            console.log(path);
+            getClient(function (s3) {
+                s3.listObjects({Bucket: $rootScope.amazonBucket, Prefix: path, Marker: path}, function (err, data) {
+                    if(err){
+                        console.log(err);
+                        callback(err, null);
+                    }else{
+                        async.each(data.Contents, function (content, cb) {
+                            s3.deleteObject({Bucket: $rootScope.amazonBucket, Key: content.Key}, function (err, data) {
+                                if (err) {
+                                    cb(err);
+                                } else {
+                                    count ++;
+                                    cb();
+                                }
+                            });
+                        }, function (err) {
+                            if(err){
+                                callback(err, null);
+                            }else{
+                                callback(null, count);
+                            }
+                        });
+                    }
+                })
             });
         }
     }
@@ -43,6 +168,32 @@ cloudAdminServices.factory('GroupsService', ['$resource', function($resource){
         }),
         testSomething: $resource('api/admin/users/test/:data', {}, {
             query: { method: 'POST'}
+        })
+    }
+}]);
+
+cloudAdminServices.factory('SpecialProductsService', ['$resource', function($resource){
+    return {
+        products: $resource('api/admin/content/specialProducts/products', {}, {
+            query: { method: 'GET', isArray: true },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        menu: $resource('api/admin/content/specialProducts/menu', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        addMenuChild: $resource('api/admin/content/specialProducts/addMenuChild', {}, {
+            update: { method: 'PUT', isArray: false }
+        }),
+        groups: $resource('api/admin/content/specialProducts/groups', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        groupsAvailable: $resource('api/admin/content/specialProducts/groupsAvailable', {}, {
+            query: { method: 'GET', isArray: true }
         })
     }
 }]);

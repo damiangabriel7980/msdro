@@ -197,7 +197,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             var created=req.query.created;
             var pageSize=req.query.pageSize || defaultPageSize;
             var type=req.query.type;
-            var q = {$or: [{sender: user._id}, {receiver: user._id}]};
+            var q = {participants: {$in: [mongoose.Types.ObjectId(user._id.toString())]}};
             if(type==="topic"){
                 q['post'] = {$exists: true, $ne: null};
             }else{
@@ -206,7 +206,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             if(created){
                 q['created'] = {"$lt": created};
             }
-            Chat.find(q).sort({'created': -1}).limit(pageSize).populate('participants').exec(function(err, result) {
+            Chat.find(q).sort({'created': -1}).limit(pageSize).deepPopulate('participants last_message post.owner').exec(function(err, result) {
                 if(err){
                     console.log(err);
                     res.json(err);
@@ -262,7 +262,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 }
 
                 //check if a chat involving sender / receiver / post combination already exists
-                Chat.findOne(q).populate('participants').exec(function (err, found) {
+                Chat.findOne(q).deepPopulate('participants last_message post.owner').exec(function (err, found) {
                     if(err){
                         res.send(err);
                     }else if(found){
@@ -272,7 +272,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                             if(err){
                                 res.send(err);
                             }else{
-                                Chat.findOne({_id: saved._id}).populate('participants').exec(function (err, toReturn) {
+                                Chat.findOne({_id: saved._id}).deepPopulate('participants last_message post.owner').exec(function (err, toReturn) {
                                     if(err){
                                         res.send(err);
                                     }else{
@@ -421,7 +421,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                                 if(err){
                                     socket.emit('apiMessage', {error: err, success: null});
                                 }else{
-                                    Chat.update({_id: chat_id}, {$addToSet: {participants: socket.userData._id}}, function (err, wres) {
+                                    Chat.update({_id: chat_id}, {$addToSet: {participants: socket.userData._id}, last_message: saved._id}, function (err, wres) {
                                         if(err){
                                             socket.emit('apiMessage', {error: err, success: null});
                                         }else{
