@@ -56,7 +56,7 @@ cloudAdminControllers.controller('SpecialGroupsMenuController', ['$scope', '$roo
             default: $scope.groupFeatures = null;
                 break;
         }
-        if($state.includes('groupFeatures')){
+        if($state.includes('groupFeatures')||$state.includes('groupSpecialProduct')){
             //if user changed his group while being on a feature page, redirect him to home
             $state.go('home');
         }else{

@@ -3262,8 +3262,13 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/specialProductMenu')
         .post(function(req, res) {
             var id = mongoose.Types.ObjectId(req.body.id.toString());
-            console.log(id);
-                    specialProductMenu.find({product: id}).populate('children_ids').exec(function(err, details) {
+            specialProductMenu.distinct('children_ids', function (err,allChildren) {
+                if(err)
+                {
+                    res.send(err);
+                }
+                else{
+                    specialProductMenu.find({product: id,_id:{$nin:allChildren}}).populate('children_ids').exec(function(err, details) {
                         if(err) {
                             res.send(err);
                         }
@@ -3272,6 +3277,10 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             res.json(details);
                         }
                     });
+                }
+
+            });
+
                     //get allowed articles for user;
         });
     router.route('/specialProductDescription/:id')

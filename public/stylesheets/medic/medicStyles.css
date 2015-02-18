@@ -7306,3 +7306,6 @@ hr {
 .verySmallFont {
   font-size: small;
 }
+.centerText {
+  text-align: center;
+}

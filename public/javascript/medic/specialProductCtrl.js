@@ -3,13 +3,15 @@ cloudAdminControllers.controller('specialProductCtrl', ['$scope', '$rootScope', 
     specialProductService.getSpecialProduct.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         console.log(result);
         if(result._id)
+        {
             $scope.specialProductPage=result;
+            specialProductService.getSpecialProductMenu.query({id:$scope.specialProductPage._id}).$promise.then(function(resp){
+                console.log($stateParams.product_id);
+                $scope.specialProductMenu = resp;
+            });
+        }
         else
             $state.go('home');
-    });
-    console.log($stateParams);
-    specialProductService.getSpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
-       $scope.specialProductMenu = resp;
     });
     $scope.checkHasChildren = function(item){
           if(item.children_ids.length==0)

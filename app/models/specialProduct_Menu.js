@@ -7,9 +7,8 @@ var Schema			= mongoose.Schema;
 var specialProductDetailsSchema		= new Schema({
     title: String,
     description: String,
-    has_children: Boolean,
-    image_title: String,
-    image_title_text:String,
+    header_title: String,
+    header_image:String,
     children_ids:[{type: Schema.Types.ObjectId,ref: 'specialProducts_Menu'}],
     product:{type: Schema.Types.ObjectId,ref: 'specialProducts'}
 });
