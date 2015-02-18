@@ -9,7 +9,8 @@
             replace: true,
             scope: {
                 allObjects: '=',
-                selectedObjects: '='
+                selectedObjects: '=',
+                output: '='
             },
             link: function(scope, element, attrs) {
 
@@ -47,6 +48,7 @@
                                 scope.allObjects[i]['selected'] = false;
                             }
                         }
+                        scope.refreshSelected();
                         if(splitBy){
                             var tree = {};
                             var branches = [];
@@ -69,12 +71,14 @@
 
                 scope.refreshSelected = function () {
                     scope.selectedObjects = [];
+                    scope.output = [];
                     for(var i=0; i<scope.allObjects.length; i++){
                         if(scope.allObjects[i]['selected']){
                             scope.selectedObjects.push(scope.allObjects[i]);
+                            scope.output.push(scope.allObjects[i][trackBy]);
                         }
                     }
-                    console.log(scope.selectedObjects);
+                    console.log(scope.output);
                 };
 
                 var findInList = function (toFind, list) {

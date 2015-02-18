@@ -34,15 +34,15 @@ var socketio = require('socket.io'),
 
 //special Products
 var specialProduct = require('./models/specialProduct');
-var specialProductDetails = require('./models/specialProduct_Details');
+var specialProductMenu = require('./models/specialProduct_Menu');
 var specialProductGlossary = require('./models/specialProduct_glossary');
 var specialProductFiles = require('./models/specialProduct_files');
 var specialProductQa = require('./models/specialProduct_qa');
 
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
-var ObjectId = require('mongoose').Types.ObjectId;
 var mongoose = require('mongoose');
+var ObjectId = mongoose.Types.ObjectId;
 var async = require('async');
 var request = require('request');
 var AWS = require('aws-sdk');
@@ -1632,6 +1632,183 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         });
+
+    router.route('/admin/content/specialProducts/products')
+        .get(function (req, res) {
+            var q = {};
+            if(req.query.id){
+                q._id = req.query.id;
+            }
+            specialProduct.find(q).deepPopulate('groups.profession').exec(function (err, products) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.json(products);
+                }
+            })
+        })
+        .post(function (req, res) {
+            var toCreate = new specialProduct(req.body.toCreate);
+            toCreate.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    logger.error(err);
+                    res.send({error: err, message: "A aparut o eroare pe server"});
+                }else{
+                    res.send({error: false, message: "Datele au fost salvate", justSaved: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
+                if(err){
+                    res.send({error: err, message: "A aparut o eroare pe server"});
+                }else{
+                    res.send({error: false, message: "Datele au fost actualizate"});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            specialProduct.remove({_id: req.query.id}, function (err, wRes) {
+                if(err){
+                    res.send({error: err});
+                }else{
+                    res.send({error: false});
+                }
+            });
+        });
+
+    router.route('/admin/content/specialProducts/groups')
+        .get(function (req, res) {
+            UserGroup.find({}, {display_name: 1, profession: 1}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(groups);
+                }
+            })
+        });
+
+    router.route('/admin/content/specialProducts/menu')
+        .get(function (req, res) {
+            if(req.query.id){
+                //find one by id
+                specialProductMenu.findOne({_id: req.query.id}, function (err, menuItem) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({error: false, menuItem: menuItem});
+                    }
+                });
+            }else if(req.query.product_id){
+                //get full menu
+                //first, find all children
+                specialProductMenu.distinct("children_ids", function (err, children_ids) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        //next, get all menu items that are not children; populate their children_ids attribute
+                        specialProductMenu.find({product: req.query.product_id, _id: {$nin: children_ids}}).populate("children_ids").exec(function (err, menuItems) {
+                            if(err){
+                                console.log(err);
+                                res.send({error: true});
+                            }else{
+                                //now you got the full menu nicely organised
+                                res.send({menuItems: menuItems});
+                            }
+                        });
+                    }
+                });
+            }else{
+                res.send({error: true, message: "Invalid params"});
+            }
+        })
+        .post(function (req, res) {
+            var menu = new specialProductMenu(req.body);
+            menu.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false, saved: saved});
+                }
+            })
+        })
+        .put(function (req, res) {
+            specialProductMenu.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false});
+                }
+            })
+        })
+        .delete(function (req, res) {
+            var deleteCount = 0;
+            var idToDelete = ObjectId(req.query.id);
+            specialProductMenu.findOne({_id: idToDelete}, function (err, item) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    var arrayIdsToDelete = [idToDelete];
+                    if(item.children_ids){
+                        arrayIdsToDelete = arrayIdsToDelete.concat(item.children_ids);
+                        console.log(arrayIdsToDelete);
+                    }
+                    specialProductMenu.remove({_id: {$in: arrayIdsToDelete}}, function (err, wRes) {
+                        if(err){
+                            console.log(err);
+                            res.send({error: true});
+                        }else{
+                            deleteCount = wRes;
+                            //disconnect from parent
+                            specialProductMenu.update({}, {$pull: {children_ids: idToDelete}}, function (err, wRes) {
+                                if(err){
+                                    console.log(err);
+                                    res.send({error: true});
+                                }else{
+                                    res.send({error: false, message: "S-au sters "+deleteCount+" documente. S-au updatat "+wRes+" documente"});
+                                }
+                            });
+                        }
+                    })
+                }
+            });
+        });
+
+    router.route('/admin/content/specialProducts/addMenuChild')
+        .put(function (req, res) {
+            specialProductMenu.update({_id: req.query.id}, {$addToSet: {children_ids: req.body.child_id}}, function (err, wRes) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({error: false});
+                }
+            })
+        });
+
+    router.route('/admin/content/specialProducts/groupsAvailable')
+        .get(function (req, res) {
+            specialProduct.distinct("groups", function (err, groups) {
+                if(err){
+                    res.send(err);
+                }else{
+                    UserGroup.find({_id: {$nin: groups}}).populate('profession').exec(function (err, groups) {
+                        if(err){
+                            res.send(err);
+                        }else{
+                            res.send(groups);
+                        }
+                    })
+                }
+            });
+        });
+
     router.route('/admin/events')
 
         .get(function(req, res) {

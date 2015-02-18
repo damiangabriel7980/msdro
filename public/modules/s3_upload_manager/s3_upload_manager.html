@@ -1,0 +1,19 @@
+<div class="col-md-12 noPadding">
+    <div class="col-md-12 noPadding"><label>File upload manager</label></div>
+    <div class="col-md-12 noPadding">
+        <alert type="{{s3Alert.type}}" ng-if="s3Alert.show">{{s3Alert.text}}</alert>
+    </div>
+    <div class="col-md-12 noPadding" ng-if="showManager">
+        <div class="col-md-12 noPadding">
+            <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false"
+                    accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
+        </div>
+        <div class="col-md-12 noPadding" style="border:1px solid #f5f5f5" ng-repeat="key in keys track by $index">
+            <div class="col-md-1 noPadding">
+                <img style="width: 100%" ng-src="{{bucketUrl+key}}">
+            </div>
+            <div class="col-md-10">{{bucketUrl+key}}</div>
+            <div class="col-md-1"><button class="btn btn-default pull-right" ng-click="removeKey($index)"><i class="glyphicon glyphicon-remove-sign"></i></button></div>
+        </div>
+    </div>
+</div>

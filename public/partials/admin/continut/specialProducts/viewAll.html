@@ -1,0 +1,30 @@
+<div class = "col-md-12 well">
+    <div class="col-md-9"><h3>Gestionare pagini de produse speciale</h3></div>
+    <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addSpecialProduct()">Adauga pagina produs</div></div>
+</div>
+<div class="col-md-12">
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="product in $data">
+            <td data-title="'Nume produs'" filter="{ 'product_name': 'text' }" sortable="'product_name'">
+                {{product.product_name}}
+            </td>
+            <td data-title="'Grupuri atasate'">
+                <ul>
+                    <li ng-repeat="productGroup in product.groups">
+                        {{productGroup.display_name}}&nbsp;({{productGroup.profession.display_name}})
+                    </li>
+                </ul>
+            </td>
+            <td data-title="'Actiuni'">
+                <div class="btn-group">
+                    <button ng-click="toggleSpecialProduct(product._id,product.enabled)"
+                            class="btn" ng-class="{'btn-danger':product.enabled, 'btn-default':!product.enabled}">
+                        <i class="glyphicon glyphicon-lock"></i>
+                    </button>
+                    <div class="btn btn-default" ng-click="editSpecialProduct(product._id)"><i class="glyphicon glyphicon-cog"></i></div>
+                    <div class="btn btn-danger" ng-click="deleteSpecialProduct(product._id)"><i class="glyphicon glyphicon-trash"></i></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

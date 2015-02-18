@@ -11,7 +11,8 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.bootstrap.datetimepicker',
         'angular-growl',
         'myMultipleSelect',
-        'therapeuticSelect'
+        'therapeuticSelect',
+        's3UploadManager'
     ]);
 
 cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -64,6 +65,11 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             url: '/produse',
             templateUrl: 'partials/admin/continut/produse.html',
             controller:'productsCtrl'
+        })
+        .state('continut.specialProducts',{
+            url: '/specialProducts',
+            templateUrl: 'partials/admin/continut/specialProducts/viewAll.html',
+            controller:'SpecialProductsController'
         })
         .state('continut.articole',{
             url: '/articole',
