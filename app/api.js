@@ -1669,11 +1669,22 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         })
         .delete(function (req, res) {
-            specialProduct.remove({_id: req.query.id}, function (err, wRes) {
+            var idToDelete = ObjectId(req.query.id);
+            //remove attached menu items
+            specialProductMenu.remove({product: idToDelete}, function (err, menuCount) {
                 if(err){
-                    res.send({error: err});
+                    console.log(err);
+                    res.send({error: true, message:"Eroare la stergerea meniurilor atasate"})
                 }else{
-                    res.send({error: false});
+                    //now remove the product
+                    specialProduct.remove({_id: idToDelete}, function (err, productCount) {
+                        if(err){
+                            console.log(err);
+                            res.send({error: true, message: "Eroare la stergerea produsului"});
+                        }else{
+                            res.send({error: false, message: "S-au sters "+productCount+" produse si "+menuCount+" meniuri. "});
+                        }
+                    });
                 }
             });
         });

@@ -70,7 +70,7 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
     $scope.deleteSpecialProduct = function (id) {
         $modal.open({
             templateUrl: 'partials/admin/continut/specialProducts/toggleOrDelete.html',
-            size: 'sm',
+            size: 'md',
             windowClass: 'fade',
             controller: 'SpecialProductDeleteController',
             resolve: {
@@ -82,7 +82,20 @@ cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootS
     };
     
     $scope.toggleSpecialProduct = function (id, enabled) {
-        
+        $modal.open({
+            templateUrl: 'partials/admin/continut/specialProducts/toggleOrDelete.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'SpecialProductEnableController',
+            resolve: {
+                idToToggle: function () {
+                    return id;
+                },
+                isEnabled: function () {
+                    return enabled;
+                }
+            }
+        });
     }
 
 }]);
