@@ -35,11 +35,12 @@ cloudAdminControllers.controller('SpecialProductResourcesController', ['$scope',
     $scope.refreshTable();
 
     $scope.addResource = function () {
-        //TODO: add Resource
+        $scope.renderView("addResource");
     };
 
-    $scope.editResource = function (id) {
-        //TODO: edit Resource
+    $scope.editResource = function (item) {
+        $scope.sessionData.resourceToEdit = item;
+        $scope.renderView("editResource");
     };
 
     $scope.deleteResource = function (id) {

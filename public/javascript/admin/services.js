@@ -24,6 +24,8 @@ cloudAdminServices.factory('AmazonService', ['$resource', '$rootScope', function
         },
         uploadFile: function (fileBody, key, callback) {
             getClient(function (s3) {
+                console.log(fileBody);
+                console.log(key);
                 var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: fileBody, ACL:'public-read', ContentType: fileBody.type}, function (err, data) {
                     if (err) {
                         callback(err, null);
@@ -202,7 +204,9 @@ cloudAdminServices.factory('SpecialProductsService', ['$resource', function($res
             delete: { method: 'DELETE', isArray: false }
         }),
         resources: $resource('api/admin/content/specialProducts/resources', {}, {
-            query: { method: 'GET', isArray: false }
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false }
         })
     }
 }]);

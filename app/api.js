@@ -1891,6 +1891,32 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: false, resources: resources});
                 }
             })
+        })
+        .post(function (req, res) {
+            var toAdd = new specialProductFiles(req.body);
+            toAdd.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true, message: "Eroare la salvare"});
+                }else{
+                    res.send({error: false, saved: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            if(!idToUpdate){
+                res.send({error: true, message: "Invalid params"});
+            }else{
+                specialProductFiles.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true, message: "Eroare la update"});
+                    }else{
+                        res.send({error: false, message: "S-au actualizat "+wres+" documente"});
+                    }
+                });
+            };
         });
 
     router.route('/admin/events')
