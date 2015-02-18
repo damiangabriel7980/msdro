@@ -3,12 +3,11 @@ cloudAdminControllers.controller('SpecialProductGlossaryController', ['$scope', 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
-    $scope.refreshTable = function () {
+    var refreshGlossaryTable = function () {
         SpecialProductsService.glossary.query({product: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.resetAlert("danger", "Eroare la gasire glosar");
             }else{
-                console.log(resp);
                 var data = resp.glossary;
                 $scope.glossaryTableParams = new ngTableParams({
                     page: 1,            // show first page
@@ -32,7 +31,7 @@ cloudAdminControllers.controller('SpecialProductGlossaryController', ['$scope', 
         });
     };
 
-    $scope.refreshTable();
+    refreshGlossaryTable();
 
     $scope.addTerm = function () {
         $scope.sessionData.glossaryToEdit = null;
@@ -45,7 +44,14 @@ cloudAdminControllers.controller('SpecialProductGlossaryController', ['$scope', 
     };
 
     $scope.deleteTerm = function (id) {
-        //TODO: delete term
+        SpecialProductsService.glossary.delete({id: id}).$promise.then(function (resp) {
+            if(resp.error){
+                $scope.resetAlert("danger", resp.message);
+            }else{
+                console.log("refresh");
+                refreshGlossaryTable();
+            }
+        });
     };
 
 }]);

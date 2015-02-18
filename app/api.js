@@ -1854,9 +1854,24 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 specialProductGlossary.update({_id: idToUpdate}, {$set: req.body}, function (err, wRes) {
                     if(err){
                         console.log(err);
-                        res.send({error: true});
+                        res.send({error: true, message: "A aparut o eroare pe server"});
                     }else{
                         res.send({error: false, message: "Updated "+wRes+" documents"});
+                    }
+                });
+            }
+        })
+        .delete(function (req, res) {
+            var idToDelete = req.query.id;
+            if(!idToDelete){
+                res.send({error: true, message: "Invalid params"});
+            }else{
+                specialProductGlossary.remove({_id: idToDelete}, function (err, wRes) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({error: false, message: "Romoved "+wRes+" documents"});
                     }
                 });
             }
