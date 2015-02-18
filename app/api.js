@@ -1670,19 +1670,29 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
-            //remove attached menu items
-            specialProductMenu.remove({product: idToDelete}, function (err, menuCount) {
+            var attachedCount = 0;
+            //remove documents attached to this product async
+            async.each([specialProductMenu, specialProductFiles, specialProductGlossary], function (collection, callback) {
+                collection.remove({product: idToDelete}, function (err, count) {
+                    if(err){
+                        callback(err);
+                    }else{
+                        attachedCount += count;
+                        callback();
+                    }
+                })
+            }, function (err) {
                 if(err){
                     console.log(err);
-                    res.send({error: true, message:"Eroare la stergerea meniurilor atasate"})
+                    res.send({error: true, message: "Eroare la stergerea entitatilor atasate produsului"});
                 }else{
-                    //now remove the product
-                    specialProduct.remove({_id: idToDelete}, function (err, productCount) {
+                    //remove product
+                    specialProduct.remove({_id: idToDelete}, function (err, count) {
                         if(err){
                             console.log(err);
                             res.send({error: true, message: "Eroare la stergerea produsului"});
                         }else{
-                            res.send({error: false, message: "S-au sters "+productCount+" produse si "+menuCount+" meniuri. "});
+                            res.send({error: false, message: "S-au sters "+count+" produse si "+attachedCount+" documente atasate. "});
                         }
                     });
                 }
@@ -1871,7 +1881,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         console.log(err);
                         res.send({error: true});
                     }else{
-                        res.send({error: false, message: "Romoved "+wRes+" documents"});
+                        res.send({error: false, message: "Removed "+wRes+" documents"});
                     }
                 });
             }
@@ -1916,7 +1926,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         res.send({error: false, message: "S-au actualizat "+wres+" documente"});
                     }
                 });
-            };
+            }
         })
         .delete(function (req, res) {
             specialProductFiles.remove({_id: req.query.id}, function (err, wres) {
