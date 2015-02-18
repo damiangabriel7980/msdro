@@ -7,6 +7,8 @@ cloudAdminControllers.controller('SpecialProductDeleteController', ['$scope', 'S
         alert: {}
     };
 
+    $scope.actionCompleted = false;
+
     var resetAlert = function (type, text) {
         $scope.modal.alert = {
             type: type?type:"danger",
@@ -16,33 +18,20 @@ cloudAdminControllers.controller('SpecialProductDeleteController', ['$scope', 'S
     };
 
     $scope.modalAction = function () {
-        //delete images
-        resetAlert("warning", "Va rugam asteptati...");
-        SpecialProductsService.products.query({id: idToDelete}).$promise.then(function (resp) {
-            if(!resp[0]){
-                resetAlert("danger", "Nu s-a gasit produsul")
+        //delete all images at path
+        resetAlert("warning","Se sterg fisierele atasate...");
+        AmazonService.deleteFilesAtPath("productPages/"+idToDelete, function (err, imageDeleteCount) {
+            if(err){
+                resetAlert("danger", "Eroare la stergerea fiserelor atasate");
             }else{
-                var header_key = resp[0].header_image;
-                var logo_key = resp[0].logo_path;
-                var toDelete = [];
-                if(header_key) toDelete.push(header_key);
-                if(logo_key) toDelete.push(logo_key);
+                //delete product and every menu items attached to it
                 resetAlert("warning", "Se sterge produsul...");
                 SpecialProductsService.products.delete({id: idToDelete}).$promise.then(function (resp) {
                     if(resp.error){
-                        resetAlert("danger", "Eroare la stergerea produsului");
+                        resetAlert("danger", resp.message);
                     }else{
-                        resetAlert("warning", "Se sterg imaginile...");
-                        AmazonService.deleteFiles(toDelete, function (err, success) {
-                            if(err){
-                                console.log(err);
-                                resetAlert("danger", "Eroare la stergerea imaginilor");
-                            }else{
-                                //success. close modal and refresh table by reloading state
-                                $state.reload();
-                                $modalInstance.close();
-                            }
-                        });
+                        $scope.actionCompleted = true;
+                        resetAlert("success", resp.message+"S-au sters "+imageDeleteCount+" imagini");
                     }
                 });
             }
@@ -50,6 +39,7 @@ cloudAdminControllers.controller('SpecialProductDeleteController', ['$scope', 'S
     };
 
     $scope.closeModal = function(){
+        if($scope.actionCompleted) $state.reload();
         $modalInstance.close();
     }
 

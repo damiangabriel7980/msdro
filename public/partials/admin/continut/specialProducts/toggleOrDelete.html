@@ -7,5 +7,5 @@
 </div>
 <div class="modal-footer">
     <a class="btn pull-left btn-primary" ng-click="closeModal()">Inchide</a>
-    <a class="btn pull-right btn-danger" ng-click="modalAction()">{{modal.action}}</a>
+    <a class="btn pull-right btn-danger" ng-if="!actionCompleted" ng-click="modalAction()">{{modal.action}}</a>
 </div>
