@@ -53,7 +53,9 @@ publicControllers.controller('AuthModalController', ['$scope', '$modalInstance',
 
     $scope.signup = function () {
         console.log(this);
-        if(!this.terms) {
+        if(!(this.email && this.name && this.password && this.confirm)){
+            resetAlert("danger", "Toate campurile sunt obligatorii");
+        }else if(!this.terms) {
             resetAlert("danger", "Trebuie sa acceptati termenii si conditiile pentru a continua");
         }else if(this.password != this.confirm) {
             resetAlert("danger", "Parolele nu corespund");

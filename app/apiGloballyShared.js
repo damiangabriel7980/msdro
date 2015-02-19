@@ -22,7 +22,7 @@ module.exports = function(app, mandrill, logger, router) {
 //===================================================================================================================== create account
     router.route('/createAccount')
         .post(function (req, res) {
-            var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
+            var namePatt = new XRegExp('^[a-zA-Z]{3,100}$');
 
             var name = req.body.name?req.body.name:"";
             var email = req.body.email?req.body.email:"";
@@ -31,12 +31,13 @@ module.exports = function(app, mandrill, logger, router) {
 
             var info = {error: true, type:"danger"};
 
+            console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
             //validate data
             if(!validator.isEmail(email)){
                 info.message = "Adresa de e-mail nu este valida";
                 res.json(info);
-            }else if(!namePatt.test(name.replace(/ /g,''))){
-                info.message = "Numele trebuie sa contina doar litere, minim 3";
+            }else if(!namePatt.test(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''))){
+                info.message = "Numele trebuie sa contina minim 3 litere si doar caracterele speciale '-', '.'";
                 res.json(info);
             }else if(password.length < 6 || password.length > 32){
                 info.message = "Parola trebuie sa contina intre 6 si 32 de caractere";
