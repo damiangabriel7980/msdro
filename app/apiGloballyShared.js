@@ -27,7 +27,6 @@ module.exports = function(app, mandrill, logger, router) {
             var name = req.body.name?req.body.name:"";
             var email = req.body.email?req.body.email:"";
             var password = req.body.password?req.body.password:"";
-            var confirm = req.body.confirm?req.body.confirm:"";
             var createdFromStaywell = req.body.createdFromStaywell?true:false;
 
             var info = {error: true, type:"danger"};
@@ -41,9 +40,6 @@ module.exports = function(app, mandrill, logger, router) {
                 res.json(info);
             }else if(password.length < 6 || password.length > 32){
                 info.message = "Parola trebuie sa contina intre 6 si 32 de caractere";
-                res.json(info);
-            }else if(password !== confirm){
-                info.message = "Parolele nu corespund";
                 res.json(info);
             }else{
                 //data is valid

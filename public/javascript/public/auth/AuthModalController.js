@@ -53,8 +53,12 @@ publicControllers.controller('AuthModalController', ['$scope', '$modalInstance',
 
     $scope.signup = function () {
         console.log(this);
-        if(this.terms){
-            AuthService.signup.query({name: this.name, email: this.email, password: this.password, confirm: this.confirm, createdFromStaywell: true}).$promise.then(function (resp) {
+        if(!this.terms) {
+            resetAlert("danger", "Trebuie sa acceptati termenii si conditiile pentru a continua");
+        }else if(this.password != this.confirm) {
+            resetAlert("danger", "Parolele nu corespund");
+        }else{
+            AuthService.signup.query({name: this.name, email: this.email, password: this.password, createdFromStaywell: true}).$promise.then(function (resp) {
                 if(resp.error){
                     resetAlert("danger", resp.message);
                 }else{
@@ -62,8 +66,6 @@ publicControllers.controller('AuthModalController', ['$scope', '$modalInstance',
                     $scope.renderView("created");
                 }
             })
-        }else{
-            resetAlert("danger", "Trebuie sa acceptati termenii si conditiile pentru a continua");
         }
     };
 
