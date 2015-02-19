@@ -53,16 +53,10 @@ publicControllers.controller('AuthModalController', ['$scope', '$modalInstance',
 
     $scope.signup = function () {
         console.log(this);
-        var pass = this.password;
-        var conf = this.confirm;
-        this.password="";
-        this.confirm="";
         if(this.terms){
-            AuthService.signup.query({first_name: this.first_name,last_name: this.last_name, email: this.email, password: pass, confirm: conf, createdFromStaywell: true}).$promise.then(function (resp) {
+            AuthService.signup.query({name: this.name, email: this.email, password: this.password, confirm: this.confirm, createdFromStaywell: true}).$promise.then(function (resp) {
                 if(resp.error){
                     resetAlert("danger", resp.message);
-                    console.log($scope);
-                    $scope.$apply();
                 }else{
                     $scope.registeredAddress = resp.user;
                     $scope.renderView("created");

@@ -32,20 +32,16 @@ module.exports = function(passport) {
                 return null;
             }
 
-            var first_name = lookup(req.body, 'first_name') || lookup(req.query, 'first_name') || "";
-            var last_name = lookup(req.body, 'last_name') || lookup(req.query, 'last_name') || "";
+            var name = lookup(req.body, 'name') || lookup(req.query, 'name') || "";
             var confirm = lookup(req.body, 'confirm') || lookup(req.query, 'confirm');
             var terms = lookup(req.body, 'terms') || lookup(req.query, 'terms');
             var signupFromConf = lookup(req.body, 'signupFromConf') || lookup(req.query, 'signupFromConf');
 
             var info = {
                 email: email,
-                first_name: first_name,
-                last_name: last_name,
+                name: name,
                 message: null
             };
-            console.log(first_name);
-            console.log(last_name);
 
             // asynchronous
             process.nextTick(function() {
@@ -57,11 +53,7 @@ module.exports = function(passport) {
                         return done(null, false, info);
                     }
                     console.log("name test");
-                    if(!namePatt.test(first_name.replace(/ /g,''))){
-                        info.message = "Prenumele trebuie sa contina doar litere, minim 3";
-                        return done(null, false, info);
-                    }
-                    if(!namePatt.test(last_name.replace(/ /g,''))){
+                    if(!namePatt.test(name.replace(/ /g,''))){
                         info.message = "Numele trebuie sa contina doar litere, minim 3";
                         return done(null, false, info);
                     }
@@ -97,7 +89,7 @@ module.exports = function(passport) {
                                 if(err) return done(err);
                                 newUser.rolesID = [role._id.toString()];
                                 newUser.username = email;
-                                newUser.name     = first_name + " " + last_name;
+                                newUser.name     = name;
                                 newUser.password = newUser.generateHash(password);
                                 newUser.password_expired = false;
                                 newUser.account_expired = false;

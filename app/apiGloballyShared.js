@@ -24,28 +24,22 @@ module.exports = function(app, mandrill, logger, router) {
         .post(function (req, res) {
             var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
 
-            var first_name = req.body.first_name?req.body.first_name:"";
-            var last_name = req.body.last_name?req.body.last_name:"";
+            var name = req.body.name?req.body.name:"";
             var email = req.body.email?req.body.email:"";
             var password = req.body.password?req.body.password:"";
             var confirm = req.body.confirm?req.body.confirm:"";
             var createdFromStaywell = req.body.createdFromStaywell?true:false;
 
             var info = {error: true, type:"danger"};
-            console.log(first_name);
-            console.log(last_name);
+
             //validate data
             if(!validator.isEmail(email)){
                 info.message = "Adresa de e-mail nu este valida";
                 res.json(info);
-            }else if(!namePatt.test(first_name.replace(/ /g,''))){
-                info.message = "Prenumele trebuie sa contina doar litere, minim 3";
-                res.json(info);
-            }else if(!namePatt.test(last_name.replace(/ /g,''))){
+            }else if(!namePatt.test(name.replace(/ /g,''))){
                 info.message = "Numele trebuie sa contina doar litere, minim 3";
                 res.json(info);
-            }
-            else if(password.length < 6 || password.length > 32){
+            }else if(password.length < 6 || password.length > 32){
                 info.message = "Parola trebuie sa contina intre 6 si 32 de caractere";
                 res.json(info);
             }else if(password !== confirm){
@@ -72,7 +66,7 @@ module.exports = function(app, mandrill, logger, router) {
                             }else{
                                 newUser.rolesID = [role._id.toString()];
                                 newUser.username = email;
-                                newUser.name     = last_name + " " + first_name;
+                                newUser.name     = name;
                                 newUser.password = newUser.generateHash(password);
                                 newUser.password_expired = false;
                                 newUser.account_expired = false;
