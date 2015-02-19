@@ -614,6 +614,7 @@ gulp.task('breakGroups', function () {
                             description: group.description,
                             image_path: group.image_path,
                             content_specific: group.display_name!="Default"?group.content_specific:false,
+                            restrict_CRUD: group.display_name=="Default",
                             profession: profession._id
                         }, function (err, inserted) {
                             if(err){
