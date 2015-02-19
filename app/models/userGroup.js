@@ -11,6 +11,7 @@ var UserGroupSchema		= new Schema({
     image_path:   String,
     default_group: Number,
     content_specific: Boolean,
+    restrict_CRUD: Boolean,
     profession: {type: Schema.Types.ObjectId,ref: 'professions'}
 });
 
