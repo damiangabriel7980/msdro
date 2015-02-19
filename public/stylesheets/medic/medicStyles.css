@@ -7329,6 +7329,7 @@ hr {
   background-color: #ffffff;
 }
 #menuDiv .panel-group {
+  box-shadow: 0px 3px 1px #dddddd;
   border: 1px solid #dddddd;
   border-top: 0px;
 }
@@ -7341,6 +7342,9 @@ hr {
 }
 #menuDiv .parentBorderTop {
   border-top: 1px solid #dddddd !important;
+}
+.shadowSpecialProduct {
+  box-shadow: 0px 3px 1px #dddddd;
 }
 .noBorderBottom {
   border-bottom: 0px;

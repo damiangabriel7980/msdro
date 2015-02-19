@@ -14,6 +14,11 @@ cloudAdminControllers.controller('specialProductCtrl', ['$scope', '$rootScope', 
         else
             $state.go('home');
     });
+    $scope.activeItem=null;
+    $scope.changeItem=function(id){
+        //if($scope.activeItem==id)
+        $scope.activeItem=id;
+    };
     $scope.openMenu=false;
     $scope.CloseChevron="glyphicon glyphicon-chevron-right smallFontSize";
     $scope.OpenChevron="glyphicon glyphicon-chevron-right rotateChevron smallFontSize";

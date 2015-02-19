@@ -1,7 +1,7 @@
 <div class="row-fluid margintop20px col-xs-offset-0">
     <div class="col-xs-2 col-md-2 marginLeft30px" id="menuDiv">
     <accordion close-others="oneAtATime">
-        <accordion-group is-open="mystatus.open" class="no-text-decoration noPaddingBottom parentBorderTop" ng-repeat="parent in specialProductMenu">
+        <accordion-group is-open="mystatus.open" class="no-text-decoration noPaddingBottom parentBorderTop" ng-click="changeItem(parent._id)" ng-class="{'activeArea':activeItem==parent._id&&parent.children_ids.length==0}" ng-repeat="parent in specialProductMenu">
             <accordion-heading >
                 <span class="MSDgreenDarker smallFontSize no-text-decoration " ng-click="parent.children_ids.length==0?$state.go('groupSpecialProduct.description',{id: parent._id}):null">
                     <i ng-class="{'glyphicon glyphicon-chevron-down': mystatus.open&&parent.children_ids.length!=0,
@@ -32,19 +32,19 @@
                 <!--&lt;!&ndash;<span class="MSDgreenDarker no-text-decoration smallFontSize"  ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;{{menuItem2.title}}</span>&ndash;&gt;-->
             <!--&lt;!&ndash;</accordion-heading>&ndash;&gt;-->
         <!--&lt;!&ndash;</accordion-group>&ndash;&gt;-->
-        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop " ng-class="{'activeArea':$state.includes('groupSpecialProduct.files')}"  ui-sref="groupSpecialProduct.files">
+        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop " ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.files')}"  ui-sref="groupSpecialProduct.files">
             <accordion-heading >
-                <span class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Resources Library</span>
+                <div class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Resources Library</div>
             </accordion-heading>
         </accordion-group>
-        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop" ng-class="{'activeArea':$state.includes('groupSpecialProduct.prescription')}" ui-sref="groupSpecialProduct.prescription">
+        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop" ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.prescription')}" ui-sref="groupSpecialProduct.prescription">
             <accordion-heading >
-                <span class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Prescription Assistance</span>
+                <div class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Prescription Assistance</div>
             </accordion-heading>
         </accordion-group>
-        <accordion-group is-open="status.isFirstOpen" ui-sref="groupSpecialProduct.sitemap"  ng-class="{'activeArea':$state.includes('groupSpecialProduct.sitemap')}" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop" >
+        <accordion-group is-open="status.isFirstOpen" ui-sref="groupSpecialProduct.sitemap" ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.sitemap')}" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop" >
             <accordion-heading>
-                <span class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Site Map</span>
+                <div class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Site Map</div>
             </accordion-heading>
         </accordion-group>
     </accordion>
