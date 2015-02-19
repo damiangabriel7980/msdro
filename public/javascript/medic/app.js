@@ -160,9 +160,14 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             controller: 'DisplayFeaturesController'
         })
         .state('groupSpecialProduct', {
-            url: '/groupSpecialProduct/:product_id',
+            url: '/groupSpecialProduct',
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
             controller: 'specialProductCtrl'
+        })
+        .state('groupSpecialProduct.productInfo', {
+        url: '/groupSpecialProduct/:product_id/productInfo',
+        templateUrl: 'partials/medic/groupFeatures/specialProductInfo.html',
+        controller: 'specialProductInfoCtrl'
         })
         .state('groupSpecialProduct.description', {
             url: '/selectedMenuItem/:id',

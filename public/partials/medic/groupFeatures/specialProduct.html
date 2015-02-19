@@ -14,24 +14,6 @@
                  </div>
             </div>
         </accordion-group>
-
-          <!--<accordion-group is-open="mystatus.open" class="no-text-decoration noPaddingBottom noMarginTopPermanent" ng-class="{'noBorderTop':$index!=0}" ng-repeat="menuItem in specialProductMenu">-->
-              <!--<accordion-heading >-->
-                  <!--<span class="MSDgreenDarker smallFontSize no-text-decoration">-->
-                      <!--<i ng-class="{'glyphicon glyphicon-chevron-down': mystatus.open, 'glyphicon glyphicon-chevron-right': !mystatus.open}"></i>&nbsp;&nbsp;{{menuItem.title}}-->
-                  <!--</span>-->
-              <!--</accordion-heading>-->
-              <!--<div class="noPaddingLeft list-group noListStyle" ng-if="menuItem.children_ids.length!=0">-->
-                  <!--<div class="MSDgreenDarker  list-group-item no-text-decoration handCursor borderRadiusSpecial smallFontSize" ng-class="{'noBorderBottom':$index==menuItem.children_ids.length-1}" ui-sref-active="activeArea" ui-sref="groupSpecialProduct.description({id: subItem._id})" ng-repeat="subItem in menuItem.children_ids">-->
-                      <!--&nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right smallFontSize"></i>&nbsp;&nbsp;{{subItem.title}}-->
-                  <!--</div>-->
-              <!--</div>-->
-          <!--</accordion-group>-->
-        <!--&lt;!&ndash;<accordion-group class="no-text-decoration noPaddingBottom noMarginTopPermanent" is-open="status.isFirstOpen" ng-repeat="menuItem2 in specialProductMenu" ng-if="menuItem2.children_ids.length==0" ui-sref="groupSpecialProduct.description({id: menuItem2._id})" ng-class="{'noBorderTop':$index!=0,'activeArea':$state.includes('groupSpecialProduct.description')}">&ndash;&gt;-->
-            <!--&lt;!&ndash;<accordion-heading>&ndash;&gt;-->
-                <!--&lt;!&ndash;<span class="MSDgreenDarker no-text-decoration smallFontSize"  ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;{{menuItem2.title}}</span>&ndash;&gt;-->
-            <!--&lt;!&ndash;</accordion-heading>&ndash;&gt;-->
-        <!--&lt;!&ndash;</accordion-group>&ndash;&gt;-->
         <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop " ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.files')}"  ui-sref="groupSpecialProduct.files">
             <accordion-heading >
                 <div class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Resources Library</div>
@@ -50,31 +32,7 @@
     </accordion>
         <img class="img-responsive img-thumbnail handCursor col-xs-12" ui-sref="groupSpecialProduct({product_id: $stateParams.product_id})" no-cache-src="{{pathAmazonDev+specialProductPage.logo_path}}" />
 </div>
-    <div class="col-xs-9 well width80 noPadding marginRightMinus30" id="initialDescriptionDiv" ng-class="{'hide' :$state.includes('groupSpecialProduct.description') || $state.includes('groupSpecialProduct.files') || $state.includes('groupSpecialProduct.prescription') || $state.includes('groupSpecialProduct.glossary') || $state.includes('groupSpecialProduct.sitemap')}">
-
-        <div class="col-xs-12">
-            <img class="col-xs-12  noPadding " ng-if="specialProductPage.header_image" no-cache-src="{{pathAmazonDev+specialProductPage.header_image}}" />
-        </div>
-        <div class="col-xs-12 paddTopBottomSpecialProduct">
-            <span>
-                <i class="glyphicon glyphicon-print pull-right handCursor" ng-click="printPage()">&nbsp;Print&nbsp;</i>
-            </span>
-            <span>
-                <i class="glyphicon glyphicon-th-list pull-right handCursor" ui-sref="groupSpecialProduct.glossary">&nbsp;Glosar&nbsp;</i>
-            </span>
-        </div>
-        <div class="col-xs-12">
-            <h3 convert-special conver="specialProductPage.header_title" ng-bind-html="trustAsHtml(specialProductPage.header_title)">
-
-            </h3>
-        </div>
-        <div class="col-xs-12" convert-special conver="specialProductPage.general_description" ng-bind-html="trustAsHtml(specialProductPage.general_description)">
-        </div>
-        <div class="col-xs-12 marginBottom50" convert-special conver="specialProductPage.safety_information" ng-bind-html="trustAsHtml(specialProductPage.safety_information)">
-        </div>
-    </div>
-
-<div class="col-xs-9 marginRightMinus30 width80" id="descriptionDiv">
+<div class="col-xs-9 marginRightMinus30 width81" id="descriptionDiv">
     <ui-view>
 
     </ui-view>
