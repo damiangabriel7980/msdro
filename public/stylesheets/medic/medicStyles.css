@@ -7358,3 +7358,12 @@ hr {
 .rotateChevron {
   transform: rotate(90deg);
 }
+.margin1pxTop {
+  margin-top: 1px;
+}
+.margin1pxBottom {
+  margin-bottom: 1px;
+}
+.borderRadiusMenu {
+  border-radius: 4px !important;
+}
