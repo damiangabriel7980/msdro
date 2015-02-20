@@ -43,7 +43,7 @@ controllers.controller('CarouselMedicController', ['$scope', '$state', '$rootSco
             templateUrl: 'partials/admin/continut/carouselMedic/modalAddMedicCarousel.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'AddMedicCarouselController'
+            controller: 'AddCarouselMedic'
         });
     };
 
@@ -75,7 +75,7 @@ controllers.controller('CarouselMedicController', ['$scope', '$state', '$rootSco
             templateUrl: 'partials/admin/continut/carouselMedic/modalEditMedicCarousel.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'EditMedicCarouselController',
+            controller: 'EditCarouselMedic',
             resolve: {
                 idToEdit: function () {
                     return id;
