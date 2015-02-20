@@ -114,7 +114,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.transmisii',{
             url: '/transmisii',
             templateUrl: 'partials/medic/elearning/transmisii.ejs',
-            controller: 'liveTransmissionCtrl'
+            controller: 'LiveTransmission'
         })
         .state('elearning.teste',{
             url: '/teste',

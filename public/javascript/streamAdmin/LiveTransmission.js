@@ -1,4 +1,4 @@
-cloudStreamAdminControllers.controller('liveTransmissionCtrl', ['$scope', '$rootScope', '$stateParams', '$sce','$state','$window','$timeout', function($scope, $rootScope, $stateParams,$sce,$state,$window,$timeout){
+cloudStreamAdminControllers.controller('LiveTransmission', ['$scope', '$rootScope', '$stateParams', '$sce','$state','$window','$timeout', function($scope, $rootScope, $stateParams,$sce,$state,$window,$timeout){
     var flashvars = {};
     flashvars.inputUrl = "rtmp://qualitance.srfms.com:2111/live";
     flashvars.inputWidth = "480";

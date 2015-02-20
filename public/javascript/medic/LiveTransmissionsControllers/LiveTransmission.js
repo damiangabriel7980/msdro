@@ -1,4 +1,4 @@
-controllers.controller('liveTransmissionCtrl', ['$scope', '$rootScope', '$stateParams', '$sce','$state','$window','$timeout', function($scope, $rootScope, $stateParams,$sce,$state,$window,$timeout){
+controllers.controller('LiveTransmission', ['$scope', '$rootScope', '$stateParams', '$sce','$state','$window','$timeout', function($scope, $rootScope, $stateParams,$sce,$state,$window,$timeout){
     var swfVersionStr = "11.2.0";
     var xiSwfUrlStr = "javascript/medic/flash/playerProductInstall.swf";
     var flashvars = {};
