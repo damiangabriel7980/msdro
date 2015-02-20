@@ -18,3 +18,34 @@ services.factory('InfoModal', ['$modal', function($modal){
         }
     }
 }]);
+services.factory('ActionModal', ['$modal', function($modal){
+    return {
+        //actionName defaults to "Ok"
+        //reloadState defaults to true
+        show: function (title, message, action, actionName, reloadState) {
+            $modal.open({
+                templateUrl: 'partials/shared/actionModal.html',
+                size: 'md',
+                windowClass: 'fade',
+                controller: 'ActionModal',
+                resolve:{
+                    title: function () {
+                        return title;
+                    },
+                    message: function () {
+                        return message;
+                    },
+                    action: function () {
+                        return action;
+                    },
+                    actionName: function () {
+                        return actionName;
+                    },
+                    reloadState: function () {
+                        return reloadState;
+                    }
+                }
+            });
+        }
+    }
+}]);

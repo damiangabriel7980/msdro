@@ -1,0 +1,12 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="modal-title"><h3>{{actionModal.title}}</h3></div>
+    </div>
+    <div class="modal-body">
+        {{actionModal.message}}
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-default pull-left" ng-click="closeActionModal()">Inchide</a>
+        <a class="btn btn-danger pull-right" ng-click="completeActionModal()">{{actionModal.actionName}}</a>
+    </div>
+</div>
