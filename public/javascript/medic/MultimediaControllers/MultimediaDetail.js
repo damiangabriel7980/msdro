@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 03.11.2014.
  */
-controllers.controller('multimediaDetailsController', ['$scope','multimediaService','$stateParams','$modal','$log','$modalInstance','$rootScope','$sce','$state','idd','$window','$timeout',function ($scope,multimediaService,$stateParams, $modal, $log,$modalInstance,$rootScope,$sce,$state,idd,$window,$timeout) {
+controllers.controller('MultimediaDetail', ['$scope','multimediaService','$stateParams','$modal','$log','$modalInstance','$rootScope','$sce','$state','idd','$window','$timeout',function ($scope,multimediaService,$stateParams, $modal, $log,$modalInstance,$rootScope,$sce,$state,idd,$window,$timeout) {
 
     multimediaService.getSingle.query({idd:idd}).$promise.then(function(result){
         $scope.selectedMultimedia = result;

@@ -12,7 +12,7 @@
  * */
 
 
-controllers.controller('multimediaController', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document){
+controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document){
     window.scrollTo(0,0);
     multimediaService.getByArea.query({id:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.multimedias = result;
@@ -26,7 +26,7 @@ controllers.controller('multimediaController', ['$scope','$rootScope' ,'multimed
             keyboard: false,
             size: 'lg',
             windowClass: 'fade',
-            controller: 'multimediaDetailsController',
+            controller: 'MultimediaDetail',
             resolve:{
                 idd: function () {
                     return idMultimedia;
@@ -55,7 +55,7 @@ controllers.controller('multimediaController', ['$scope','$rootScope' ,'multimed
             keyboard: false,
             size: 'lg',
             windowClass: 'fade',
-            controller: 'multimediaDetailsController',
+            controller: 'MultimediaDetail',
             resolve:{
                 idd: function () {
                     return idM;

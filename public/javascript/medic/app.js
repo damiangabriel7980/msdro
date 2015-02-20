@@ -109,7 +109,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.multimedia.multimediaByArea',{
             url: '/multimedia/:idArea:idMulti',
             templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
-            controller: 'multimediaController'
+            controller: 'MultimediaView'
         })
         .state('elearning.transmisii',{
             url: '/transmisii',
