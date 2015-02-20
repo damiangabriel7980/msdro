@@ -46,7 +46,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             //abstract: true,
             url: '/noutati/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
-            controller: 'ContentController'
+            controller: 'ArticlesView'
         })
         .state('noutati.listaArticole',{
             url: '/listaArticole',
@@ -55,7 +55,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('noutati.articol',{
             url: '/articol/:articleId',
             templateUrl: 'partials/medic/noutati/articol.ejs',
-            controller: 'ContentArticleController'
+            controller: 'ArticleDetail'
         })
         .state('biblioteca', {
             abstract: true,
@@ -80,7 +80,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
-            controller: 'ContentController'
+            controller: 'ArticlesView'
         })
         .state('biblioteca.articoleStiintifice.listaArticole',{
             url: '/listaArticole',
@@ -89,7 +89,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('biblioteca.articoleStiintifice.articol',{
             url: '/articol/:articleId',
             templateUrl: 'partials/medic/noutati/articol.ejs',
-            controller: 'ContentArticleController'
+            controller: 'ArticleDetail'
         })
        .state('calendar',{
             url: '/calendar/:id',
