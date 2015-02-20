@@ -135,6 +135,15 @@ controllers.controller('eventsCtrl', ['$scope','$rootScope', '$state', 'EventsAd
         }, "Sterge");
     };
 
+    $scope.deleteTalk = function (id) {
+        ActionModal.show("Stergere talk", "Sunteti sigur ca doriti sa stergeti acest talk?", function () {
+            EventsAdminService.deleteOrUpdateTalks.delete({id: id}).$promise.then(function (resp) {
+                console.log(resp);
+                $state.reload();
+            });
+        }, "Sterge");
+    };
+
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };

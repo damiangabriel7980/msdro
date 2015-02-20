@@ -64,7 +64,7 @@
             <td data-title="'Camera'" filter="{ 'room.room_name': 'text' }" sortable="'room.room_name'">{{talk.room.room_name}}</td>
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
-                    <button class="btn btn-danger" ui-sref="continut.evenimente.deleteTalk({id: talk._id})"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button class="btn btn-danger" ng-click="deleteTalk(talk._id)"><i class="glyphicon glyphicon-trash"></i></button>
                     <button class="btn btn-info" ui-sref="continut.updateTalk({id: talk._id})"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>
