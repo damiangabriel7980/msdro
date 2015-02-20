@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('productsCtrl', ['$scope' ,'ProductService','$sce','ngTableParams','$filter', '$modal', function($scope,ProductService,$sce,ngTableParams,$filter,$modal){
+controllers.controller('productsCtrl', ['$scope' ,'ProductService','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope,ProductService,$sce,ngTableParams,$filter,$modal,ActionModal){
     ProductService.getAll.query().$promise.then(function(result){
         var products = result['productList'];
         $scope.tableParams = new ngTableParams({
@@ -51,19 +51,11 @@ controllers.controller('productsCtrl', ['$scope' ,'ProductService','$sce','ngTab
         })
     };
     $scope.deleteProduct = function (id) {
-        $modal.open({
-            templateUrl: 'partials/admin/continut/productsDelete.html',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            windowClass: 'fade',
-            controller:"productsDeleteCtrl",
-            resolve: {
-                idToEdit: function () {
-                    return id;
-                }
-            }
-        })
+        ActionModal.show("Stergere produs", "Sunteti sigur ca doriti sa stergeti acest produs?", function () {
+            ProductService.deleteOrUpdateProduct.delete({id: id}).$promise.then(function(result){
+                console.log(result);
+            });
+        }, "Sterge");
     };
 
     $scope.renderHtml = function (htmlCode) {
