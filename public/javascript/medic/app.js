@@ -70,12 +70,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('biblioteca.produse.productsByArea',{
             url: '/productsByArea/:id',
             templateUrl: 'partials/medic/biblioteca/productsByArea.ejs',
-            controller: 'productsController'
+            controller: 'ProductsView'
         })
         .state('biblioteca.produse.prodById',{
             url: '/produse/:id',
             templateUrl: 'partials/medic/biblioteca/productDetails.ejs',
-            controller: 'productDetailsController'
+            controller: 'ProductDetail'
         })
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice/:articleType',

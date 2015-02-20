@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 03.11.2014.
  */
-controllers.controller('productDetailsController', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout','$state', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout,$state) {
+controllers.controller('ProductDetail', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout','$state', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout,$state) {
 
     window.scrollTo(0,0);
 
