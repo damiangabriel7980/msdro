@@ -3352,20 +3352,31 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
-    router.route('/content/:content_id')
+    router.route('/content/articleDetails')
 
-        .get(function(req, res) {
-            var userGr = req.user.groupsID;
-            Content.find({_id:req.params.content_id, groupsID: { $in: userGr}}, function(err, cont) {
-                if(err) {
+        .post(function(req, res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
+                if(err){
                     res.send(err);
-                }
-                if(cont[0]){
-                    res.json(cont[0]);
-                }else{
-                    res.json(null);
-                }
-            })
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    if (req.body.specialGroup) {
+                        forGroups.push(req.body.specialGroup.toString());
+                    }
+                    console.log(req.body);
+                    Content.find({_id:req.body.content_id, groupsID: { $in: forGroups}}, function(err, cont) {
+                        if(err) {
+                            res.send(err);
+                        }
+                        if(cont[0]){
+                            res.json(cont[0]);
+                        }else{
+                            res.json(null);
+                        }
+                    })
+                }});
+
+
         });
 
     router.route('/content/type')
@@ -3487,9 +3498,9 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
             //check name
-            if((!namePatt.test(newData.firstName.toString())) || (!namePatt.test(newData.lastName.toString()))){
+            if((!namePatt.test(newData.fullname.toString()))){
                 ans.error = true;
-                ans.message = "Numele si prenumele trebuie sa contina doar caractere, minim 3";
+                ans.message = "Numele trebuie sa contina doar caractere, minim 3";
                 res.json(ans);
             }else{
                 //check phone number
@@ -3503,7 +3514,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         serializedAreas.push(newData.therapeuticAreas[i].id.toString());
                     }
                     var upd = User.update({_id:req.user._id}, {
-                        name: newData.firstName+" "+newData.lastName,
+                        name: newData.fullname,
                         phone: newData.phone,
                         subscription: newData.newsletter?1:0,
                         "therapeutic-areasID": serializedAreas,

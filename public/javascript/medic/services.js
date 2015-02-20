@@ -2,8 +2,8 @@ var cloudAdminServices = angular.module('cloudAdminServices', ['ngResource']);
 
 cloudAdminServices.factory('ContentService', ['$resource', function($resource){
     return {
-        getById: $resource('api/content/:content_id', {}, {
-            query: { method: 'GET', isArray: false }
+        getById: $resource('api/content/articleDetails', {}, {
+            query: { method: 'POST', isArray: false }
         }),
         getByType: $resource('api/content/type', {}, {
             query: { method: 'POST', isArray: true }
