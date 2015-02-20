@@ -162,32 +162,32 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('groupSpecialProduct', {
             url: '/groupSpecialProduct/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
-            controller: 'specialProductCtrl'
+            controller: 'ProductPage'
         })
         .state('groupSpecialProduct.description', {
             url: '/selectedMenuItem/:id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Description.html',
-            controller: 'specialProductDescriptionCtrl'
+            controller: 'ProductPageDescription'
         })
         .state('groupSpecialProduct.files', {
             url: '/selectedMenuFiles',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_files.html',
-            controller: 'specialProductFilesCtrl'
+            controller: 'ProductPageDownloads'
         })
         .state('groupSpecialProduct.prescription', {
             url: '/selectedMenuPrescription',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_prescription.html',
-            controller: 'specialProductPrescriptionCtrl'
+            controller: 'ProductPagePrescription'
         })
         .state('groupSpecialProduct.glossary', {
             url: '/selectedGlossary',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_glossary.html',
-            controller: 'specialProductGlossaryCtrl'
+            controller: 'ProductPageGlossary'
         })
         .state('groupSpecialProduct.sitemap', {
             url: '/sitemap',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html',
-            controller: 'specialProductMapCtrl'
+            controller: 'ProductPageMap'
         })
 }]);
 
