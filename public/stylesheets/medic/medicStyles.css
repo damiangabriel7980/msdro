@@ -7271,6 +7271,9 @@ hr {
 .borderRadiusSpecial {
   border-radius: 4px;
 }
+.whiteBackground {
+  background-color: #ffffff;
+}
 @media print {
   #menuDiv {
     display: none;
