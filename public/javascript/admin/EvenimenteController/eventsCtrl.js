@@ -7,7 +7,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,ngTableParams,$filter,$modal){
+controllers.controller('eventsCtrl', ['$scope','$rootScope', '$state', 'EventsAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', 'ActionModal', function($scope,$rootScope,$state,EventsAdminService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
     EventsAdminService.getAll.query().$promise.then(function(result){
         var events = result;
         $scope.tableParams = new ngTableParams({
@@ -116,6 +116,16 @@ controllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAdminService
             }
         });
     });
+
+    $scope.deleteEvent = function (id) {
+        console.log('adasdads');
+        ActionModal.show("Stergere eveniment", "Sunteti sigur ca doriti sa stergeti acest eveniment?", function () {
+            EventsAdminService.deleteOrUpdateEvents.delete({id: id}).$promise.then(function (resp) {
+                console.log(resp);
+                $state.reload();
+            });
+        }, "Sterge", false);
+    };
 
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);

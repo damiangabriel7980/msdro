@@ -132,22 +132,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/continut/speakerUpdate.ejs',
             controller:"speakerUpdateCtrl"
         })
-
-
-        .state('continut.evenimente.deleteEveniment',{
-            parent:'continut.evenimente',
-            url: '/delete/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/deleteEveniment.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"eventsDeleteCtrl"
-                })
-            }]
-        })
         .state('continut.evenimente.deleteConference',{
             parent:'continut.evenimente',
             url: '/deleteConference/:id',
