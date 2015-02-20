@@ -1,4 +1,4 @@
-controllers.controller('NewAccountsController', ['$scope', 'NewAccountsService', function($scope, NewAccountsService){
+controllers.controller('NewAccounts', ['$scope', 'NewAccountsService', function($scope, NewAccountsService){
 
     $scope.count = {
         ACCEPTED: 0,

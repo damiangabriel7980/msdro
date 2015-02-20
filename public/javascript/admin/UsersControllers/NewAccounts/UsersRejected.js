@@ -1,6 +1,6 @@
-controllers.controller('UsersAcceptedController', ['$scope', '$rootScope', '$filter', 'ngTableParams', '$modal', 'NewAccountsService', function($scope, $rootScope, $filter, ngTableParams, $modal, NewAccountsService){
+controllers.controller('UsersRejected', ['$scope', '$rootScope', '$filter', 'ngTableParams', '$modal', 'NewAccountsService', function($scope, $rootScope, $filter, ngTableParams, $modal, NewAccountsService){
 
-    NewAccountsService.state.query({type: "ACCEPTED"}).$promise.then(function (data) {
+    NewAccountsService.state.query({type: "REJECTED"}).$promise.then(function (data) {
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -20,5 +20,19 @@ controllers.controller('UsersAcceptedController', ['$scope', '$rootScope', '$fil
             }
         });
     });
+
+    $scope.accept = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/utilizatori/conturiNoi/modalAreYouSure.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'AcceptUser',
+            resolve: {
+                idToAccept: function () {
+                    return id;
+                }
+            }
+        });
+    };
 
 }]);

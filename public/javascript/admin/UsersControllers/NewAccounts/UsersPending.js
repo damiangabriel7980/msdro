@@ -1,4 +1,4 @@
-controllers.controller('UsersPendingController', ['$scope', '$rootScope', '$filter', 'ngTableParams', '$modal', 'NewAccountsService', function($scope, $rootScope, $filter, ngTableParams, $modal, NewAccountsService){
+controllers.controller('UsersPending', ['$scope', '$rootScope', '$filter', 'ngTableParams', '$modal', 'NewAccountsService', function($scope, $rootScope, $filter, ngTableParams, $modal, NewAccountsService){
 
     NewAccountsService.state.query({type: "PENDING"}).$promise.then(function (data) {
         $scope.tableParams = new ngTableParams({
@@ -26,7 +26,7 @@ controllers.controller('UsersPendingController', ['$scope', '$rootScope', '$filt
             templateUrl: 'partials/admin/utilizatori/conturiNoi/modalAreYouSure.html',
             size: 'sm',
             windowClass: 'fade',
-            controller: 'AcceptUserController',
+            controller: 'AcceptUser',
             resolve: {
                 idToAccept: function () {
                     return id;
@@ -40,7 +40,7 @@ controllers.controller('UsersPendingController', ['$scope', '$rootScope', '$filt
             templateUrl: 'partials/admin/utilizatori/conturiNoi/modalAreYouSure.html',
             size: 'sm',
             windowClass: 'fade',
-            controller: 'RejectUserController',
+            controller: 'RejectUser',
             resolve: {
                 idToReject: function () {
                     return id;

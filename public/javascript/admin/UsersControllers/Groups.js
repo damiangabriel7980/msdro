@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-controllers.controller('GrupuriController', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', 'InfoModal', 'ActionModal', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, GroupsService, $modal, InfoModal, ActionModal){
+controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', 'InfoModal', 'ActionModal', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, GroupsService, $modal, InfoModal, ActionModal){
 
     $scope.refreshTable = function () {
         GroupsService.getAllGroups.query().$promise.then(function (resp) {
@@ -35,7 +35,7 @@ controllers.controller('GrupuriController', ['$scope', '$rootScope', '$state', '
             templateUrl: 'partials/admin/utilizatori/modalAddGroup.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'AddGroupController'
+            controller: 'AddGroup'
         });
     };
 
@@ -57,7 +57,7 @@ controllers.controller('GrupuriController', ['$scope', '$rootScope', '$state', '
             templateUrl: 'partials/admin/utilizatori/modalEditGroup.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'EditGroupController',
+            controller: 'EditGroup',
             resolve: {
                 idToEdit: function () {
                     return id;

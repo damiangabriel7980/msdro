@@ -1,4 +1,4 @@
-controllers.controller('EditGroupController', ['$scope','GroupsService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', '$rootScope', function($scope, GroupsService, $modalInstance, $state, idToEdit, AmazonService, $rootScope){
+controllers.controller('EditGroup', ['$scope','GroupsService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', '$rootScope', function($scope, GroupsService, $modalInstance, $state, idToEdit, AmazonService, $rootScope){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
