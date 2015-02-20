@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('productsCtrl', ['$scope', '$state', 'ProductService','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope, $state, ProductService,$sce,ngTableParams,$filter,$modal,ActionModal){
+controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope, $state, ProductService,$sce,ngTableParams,$filter,$modal,ActionModal){
     ProductService.getAll.query().$promise.then(function(result){
         var products = result['productList'];
         $scope.tableParams = new ngTableParams({
@@ -31,7 +31,7 @@ controllers.controller('productsCtrl', ['$scope', '$state', 'ProductService','$s
             keyboard: false,
             size: 'lg',
             windowClass: 'fade',
-            controller:"productsAddCtrl"
+            controller:"AddProduct"
         })
     };
 
@@ -42,7 +42,7 @@ controllers.controller('productsCtrl', ['$scope', '$state', 'ProductService','$s
             keyboard: false,
             size: 'lg',
             windowClass: 'fade',
-            controller:"productsEditCtrl",
+            controller:"EditProduct",
             resolve: {
                 idToEdit: function () {
                     return id;

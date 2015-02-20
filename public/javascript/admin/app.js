@@ -64,7 +64,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('continut.produse',{
             url: '/produse',
             templateUrl: 'partials/admin/continut/produse.html',
-            controller:'productsCtrl'
+            controller:'Products'
         })
         .state('continut.specialProducts',{
             url: '/specialProducts',
