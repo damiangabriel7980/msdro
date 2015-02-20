@@ -144,7 +144,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('continut.carouselMedic',{
             url: '/carouselMedic',
             templateUrl: 'partials/admin/continut/carouselMedic/carouselMedic.html',
-            controller: 'CarouselMedicController'
+            controller: 'CarouselMedic'
         })
         .state('continut.carouselPublic',{
             url: '/carouselPublic',
