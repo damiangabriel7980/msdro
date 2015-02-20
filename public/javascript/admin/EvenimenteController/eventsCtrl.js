@@ -153,6 +153,15 @@ controllers.controller('eventsCtrl', ['$scope','$rootScope', '$state', 'EventsAd
         }, "Sterge");
     };
 
+    $scope.deleteRoom = function (id) {
+        ActionModal.show("Stergere room", "Sunteti sigur ca doriti sa stergeti acest room?", function () {
+            EventsAdminService.deleteOrUpdateRooms.delete({id: id}).$promise.then(function (resp) {
+                console.log(resp);
+                $state.reload();
+            });
+        }, "Sterge");
+    };
+
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
