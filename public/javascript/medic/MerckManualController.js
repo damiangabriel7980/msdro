@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('MerckManualController', ['$scope', '$rootScope', '$sce', '$modalInstance', '$resource','$timeout', function($scope, $rootScope, $sce, $modalInstance, $resource,$timeout) {
+controllers.controller('MerckManualController', ['$scope', '$rootScope', '$sce', '$modalInstance', '$resource','$timeout', function($scope, $rootScope, $sce, $modalInstance, $resource,$timeout) {
     $scope.pdfUrl="/merckManual";
 
     $scope.closeModal = function(){

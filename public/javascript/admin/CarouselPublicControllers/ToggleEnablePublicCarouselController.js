@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('ToggleEnablePublicCarouselController', ['$scope','CarouselPublicService', '$modalInstance', 'isEnabled', 'idToToggle', '$state', function($scope, CarouselPublicService, $modalInstance, isEnabled, idToToggle, $state){
+controllers.controller('ToggleEnablePublicCarouselController', ['$scope','CarouselPublicService', '$modalInstance', 'isEnabled', 'idToToggle', '$state', function($scope, CarouselPublicService, $modalInstance, isEnabled, idToToggle, $state){
 
     console.log(isEnabled);
 

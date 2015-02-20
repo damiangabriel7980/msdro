@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('ContinutPublicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'publicContentService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, publicContentService){
+controllers.controller('ContinutPublicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'publicContentService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, publicContentService){
 
     $scope.refreshTable = function () {
         publicContentService.getAllContent.query().$promise.then(function (resp) {

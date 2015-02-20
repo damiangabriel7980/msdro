@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('CarouselPublicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'CarouselPublicService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, CarouselPublicService){
+controllers.controller('CarouselPublicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'CarouselPublicService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, CarouselPublicService){
 
     $scope.refreshTable = function () {
         CarouselPublicService.getAllImages.query().$promise.then(function (resp) {

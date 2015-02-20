@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('AddAnswerGiverController', ['$scope','qaService', '$modalInstance', '$state', '$sce',function($scope, qaService, $modalInstance, $state, $sce){
+controllers.controller('AddAnswerGiverController', ['$scope','qaService', '$modalInstance', '$state', '$sce',function($scope, qaService, $modalInstance, $state, $sce){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
 

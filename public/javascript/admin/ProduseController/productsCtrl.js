@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('productsCtrl', ['$scope' ,'ProductService','$sce','ngTableParams','$filter', '$modal', function($scope,ProductService,$sce,ngTableParams,$filter,$modal){
+controllers.controller('productsCtrl', ['$scope' ,'ProductService','$sce','ngTableParams','$filter', '$modal', function($scope,ProductService,$sce,ngTableParams,$filter,$modal){
     ProductService.getAll.query().$promise.then(function(result){
         var products = result['productList'];
         $scope.tableParams = new ngTableParams({

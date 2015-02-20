@@ -3,7 +3,7 @@
  */
 /**
  * @ngdoc controller
- * @name cloudAdminControllers.controller:science_articlesCtrl
+ * @name controllers.controller:science_articlesCtrl
  *
  * @description
  * _Please update the description and dependencies._
@@ -12,7 +12,7 @@
  * */
 
 
-cloudAdminControllers.controller('multimediaController', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document){
+controllers.controller('multimediaController', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document){
     window.scrollTo(0,0);
     multimediaService.getByArea.query({id:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.multimedias = result;

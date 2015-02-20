@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 09.02.2015.
  */
-cloudAdminControllers.controller('productsDeleteCtrl', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService', function($scope,ProductService,idToEdit,$modalInstance,$state,therapeuticAreaService){
+controllers.controller('productsDeleteCtrl', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService', function($scope,ProductService,idToEdit,$modalInstance,$state,therapeuticAreaService){
     $scope.deleteProduct = function(){
         ProductService.deleteOrUpdateProduct.delete({id:idToEdit}).$promise.then(function(result){
             $scope.statusAlert.newAlert=true;

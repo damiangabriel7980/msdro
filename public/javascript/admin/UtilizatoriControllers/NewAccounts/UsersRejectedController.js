@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('UsersRejectedController', ['$scope', '$rootScope', '$filter', 'ngTableParams', '$modal', 'NewAccountsService', function($scope, $rootScope, $filter, ngTableParams, $modal, NewAccountsService){
+controllers.controller('UsersRejectedController', ['$scope', '$rootScope', '$filter', 'ngTableParams', '$modal', 'NewAccountsService', function($scope, $rootScope, $filter, ngTableParams, $modal, NewAccountsService){
 
     NewAccountsService.state.query({type: "REJECTED"}).$promise.then(function (data) {
         $scope.tableParams = new ngTableParams({

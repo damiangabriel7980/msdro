@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('UsersAcceptedController', ['$scope', '$rootScope', '$filter', 'ngTableParams', '$modal', 'NewAccountsService', function($scope, $rootScope, $filter, ngTableParams, $modal, NewAccountsService){
+controllers.controller('UsersAcceptedController', ['$scope', '$rootScope', '$filter', 'ngTableParams', '$modal', 'NewAccountsService', function($scope, $rootScope, $filter, ngTableParams, $modal, NewAccountsService){
 
     NewAccountsService.state.query({type: "ACCEPTED"}).$promise.then(function (data) {
         $scope.tableParams = new ngTableParams({

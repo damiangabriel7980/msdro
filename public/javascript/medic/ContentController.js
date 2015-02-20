@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('ContentController', ['$scope', '$rootScope', '$stateParams', 'ContentService','$timeout','$window','$document','$sce', function($scope, $rootScope, $stateParams, ContentService,$timeout,$window,$document,$sce){
+controllers.controller('ContentController', ['$scope', '$rootScope', '$stateParams', 'ContentService','$timeout','$window','$document','$sce', function($scope, $rootScope, $stateParams, ContentService,$timeout,$window,$document,$sce){
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.lmt=5;

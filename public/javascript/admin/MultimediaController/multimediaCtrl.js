@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 26.11.2014.
  */
-cloudAdminControllers.controller('multimediaCtrl', ['$scope','$rootScope' ,'MultimediaAdminService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,MultimediaAdminService,$stateParams,$sce,ngTableParams,$filter){
+controllers.controller('multimediaCtrl', ['$scope','$rootScope' ,'MultimediaAdminService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,MultimediaAdminService,$stateParams,$sce,ngTableParams,$filter){
     MultimediaAdminService.getAll.query().$promise.then(function(result){
         var multimedias = result;
         console.log(result);

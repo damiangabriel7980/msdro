@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '$modalInstance', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload','$timeout',function($scope, $rootScope, $modalInstance, ProfileService, therapeuticAreaService, $sce,$upload,$timeout){
+controllers.controller('ProfileController', ['$scope', '$rootScope', '$modalInstance', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload','$timeout',function($scope, $rootScope, $modalInstance, ProfileService, therapeuticAreaService, $sce,$upload,$timeout){
 
     var imagePre = $rootScope.pathAmazonDev;
 

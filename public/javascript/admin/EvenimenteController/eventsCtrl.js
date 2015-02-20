@@ -7,7 +7,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,ngTableParams,$filter,$modal){
+controllers.controller('eventsCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,ngTableParams,$filter,$modal){
     EventsAdminService.getAll.query().$promise.then(function(result){
         var events = result;
         $scope.tableParams = new ngTableParams({

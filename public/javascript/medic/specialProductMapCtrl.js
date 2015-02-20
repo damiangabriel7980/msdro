@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 17.02.2015.
  */
-cloudAdminControllers.controller('specialProductMapCtrl', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window){
+controllers.controller('specialProductMapCtrl', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window){
     specialProductService.getSpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
         $scope.specialProductMenu = resp;
     });

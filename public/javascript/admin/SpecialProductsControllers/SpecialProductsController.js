@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('SpecialProductsController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal){
+controllers.controller('SpecialProductsController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal){
 
     $scope.refreshTable = function () {
         SpecialProductsService.products.query().$promise.then(function (resp) {

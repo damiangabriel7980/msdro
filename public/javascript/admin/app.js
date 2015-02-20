@@ -1,8 +1,8 @@
-var cloudAdminApp = angular.module('cloudAdminApp',
+var app = angular.module('app',
     [
         'ui.router',
-        'cloudAdminControllers',
-        'cloudAdminServices',
+        'controllers',
+        'services',
         'ngTable',
         'angularFileUpload',
         'ui.tinymce',
@@ -15,7 +15,7 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         's3UploadManager'
     ]);
 
-cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/utilizatori/gestionareConturi");
     $stateProvider
         .state('utilizatori', {
@@ -351,7 +351,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
 }]);
 
-cloudAdminApp.run(
+app.run(
     [            '$rootScope', '$state', '$stateParams', '$modal',
         function ($rootScope,   $state,   $stateParams, $modal) {
 

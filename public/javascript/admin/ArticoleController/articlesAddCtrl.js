@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('articlesAddCtrl', ['$scope', 'ContentService', '$modalInstance', '$state', function($scope, ContentService, $modalInstance, $state){
+controllers.controller('articlesAddCtrl', ['$scope', 'ContentService', '$modalInstance', '$state', function($scope, ContentService, $modalInstance, $state){
 
     $scope.tinymceOptions = {
         plugins: [

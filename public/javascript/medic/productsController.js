@@ -1,6 +1,6 @@
 /**
  * @ngdoc controller
- * @name cloudAdminControllers.controller:science_articlesCtrl
+ * @name controllers.controller:science_articlesCtrl
  *
  * @description
  * _Please update the description and dependencies._
@@ -9,7 +9,7 @@
  * */
 
 
-cloudAdminControllers.controller('productsController', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout){
+controllers.controller('productsController', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout){
     window.scrollTo(0,0);
     $scope.allAreas=1;
     $scope.filtProd=[];

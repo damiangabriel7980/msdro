@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-cloudAdminControllers.controller('GrupuriController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, GroupsService, $modal){
+controllers.controller('GrupuriController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, GroupsService, $modal){
 
     $scope.refreshTable = function () {
         GroupsService.getAllGroups.query().$promise.then(function (resp) {

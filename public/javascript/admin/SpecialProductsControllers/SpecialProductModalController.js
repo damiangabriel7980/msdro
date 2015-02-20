@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('SpecialProductModalController', ['$scope', '$modalInstance', 'intent', 'sessionData', '$sce', '$state', function($scope, $modalInstance, intent, sessionData, $sce, $state) {
+controllers.controller('SpecialProductModalController', ['$scope', '$modalInstance', 'intent', 'sessionData', '$sce', '$state', function($scope, $modalInstance, intent, sessionData, $sce, $state) {
 
     $scope.resetAlert = function (type, text) {
         $scope.alert = {

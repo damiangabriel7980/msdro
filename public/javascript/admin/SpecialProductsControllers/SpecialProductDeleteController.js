@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('SpecialProductDeleteController', ['$scope', 'SpecialProductsService', 'AmazonService', '$modalInstance', 'idToDelete', '$state', function($scope, SpecialProductsService, AmazonService, $modalInstance, idToDelete, $state){
+controllers.controller('SpecialProductDeleteController', ['$scope', 'SpecialProductsService', 'AmazonService', '$modalInstance', 'idToDelete', '$state', function($scope, SpecialProductsService, AmazonService, $modalInstance, idToDelete, $state){
 
     $scope.modal = {
         title: "Sterge pagina produs",

@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('RejectUserController', ['$scope','NewAccountsService', '$modalInstance', 'idToReject', '$state', function($scope, NewAccountsService, $modalInstance, idToReject, $state){
+controllers.controller('RejectUserController', ['$scope','NewAccountsService', '$modalInstance', 'idToReject', '$state', function($scope, NewAccountsService, $modalInstance, idToReject, $state){
 
     $scope.modal = {
         title: "Respinge utilizator",

@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('SpecialProductGlossaryController', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', function($scope, SpecialProductsService, ngTableParams, $filter) {
+controllers.controller('SpecialProductGlossaryController', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', function($scope, SpecialProductsService, ngTableParams, $filter) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");

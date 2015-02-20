@@ -1,8 +1,8 @@
-var cloudAdminApp = angular.module('cloudAdminApp',
+var app = angular.module('app',
     [
         'ui.router',
-        'cloudAdminControllers',
-        'cloudAdminServices',
+        'controllers',
+        'services',
         'ui.calendar',
         'ui.select',
         'pdf',
@@ -15,7 +15,7 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.bootstrap'
     ]);
 
-cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
     $stateProvider
         .state('home',{
@@ -191,7 +191,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
 }]);
 
-cloudAdminApp.run(
+app.run(
     [            '$rootScope', '$state', '$stateParams', '$modal','$sce',
         function ($rootScope,   $state,   $stateParams, $modal,$sce) {
 

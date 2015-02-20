@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('eventToggleController', ['$scope','EventsAdminService', '$modalInstance', 'isEnabled', 'idToToggle', '$state', function($scope, EventsAdminService, $modalInstance, isEnabled, idToToggle, $state){
+controllers.controller('eventToggleController', ['$scope','EventsAdminService', '$modalInstance', 'isEnabled', 'idToToggle', '$state', function($scope, EventsAdminService, $modalInstance, isEnabled, idToToggle, $state){
 
     console.log(isEnabled);
 

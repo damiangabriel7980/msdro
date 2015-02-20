@@ -1,6 +1,6 @@
-var publicServices = angular.module('publicServices', ['ngResource']);
+var services = angular.module('services', ['ngResource']);
 
-publicServices.factory('HomeService', ['$resource', function($resource){
+services.factory('HomeService', ['$resource', function($resource){
     return {
         getCarouselData: $resource('apiPublic/getCarouselData/', {}, {
             query: { method: 'GET', isArray: true }
@@ -13,7 +13,7 @@ publicServices.factory('HomeService', ['$resource', function($resource){
         })
     }
 }]);
-publicServices.factory('ContentService', ['$resource', function($resource){
+services.factory('ContentService', ['$resource', function($resource){
     return {
         contentByType: $resource('apiPublic/contentByType/:type', {}, {
             query: { method: 'GET', isArray: true }
@@ -32,7 +32,7 @@ publicServices.factory('ContentService', ['$resource', function($resource){
         })
     }
 }]);
-publicServices.factory('AuthService', ['$resource', function($resource){
+services.factory('AuthService', ['$resource', function($resource){
     return {
         login: $resource('/login', {}, {
             query: { method: 'POST', isArray: false }
@@ -45,7 +45,7 @@ publicServices.factory('AuthService', ['$resource', function($resource){
         })
     }
 }]);
-publicServices.factory('ProofService', ['$resource', function($resource){
+services.factory('ProofService', ['$resource', function($resource){
     return {
         professions: $resource('api/proof/professions', {}, {
             query: { method: 'GET', isArray: true }

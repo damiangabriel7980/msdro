@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('AcceptUserController', ['$scope','NewAccountsService', '$modalInstance', 'idToAccept', '$state', function($scope, NewAccountsService, $modalInstance, idToAccept, $state){
+controllers.controller('AcceptUserController', ['$scope','NewAccountsService', '$modalInstance', 'idToAccept', '$state', function($scope, NewAccountsService, $modalInstance, idToAccept, $state){
 
     $scope.modal = {
         title: "Accepta utilizator",

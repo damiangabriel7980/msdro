@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 03.11.2014.
  */
-cloudAdminControllers.controller('productDetailsController', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout','$state', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout,$state) {
+controllers.controller('productDetailsController', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout','$state', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout,$state) {
 
     window.scrollTo(0,0);
 

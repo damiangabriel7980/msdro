@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('SpecialProductResourcesController', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', 'AmazonService', function($scope, SpecialProductsService, ngTableParams, $filter, AmazonService) {
+controllers.controller('SpecialProductResourcesController', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', 'AmazonService', function($scope, SpecialProductsService, ngTableParams, $filter, AmazonService) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");

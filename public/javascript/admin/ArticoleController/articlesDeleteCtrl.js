@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('articlesDeleteCtrl', ['$scope' ,'ContentService','$modalInstance','$state', 'idToDelete', function($scope,ContentService,$modalInstance,$state,idToDelete){
+controllers.controller('articlesDeleteCtrl', ['$scope' ,'ContentService','$modalInstance','$state', 'idToDelete', function($scope,ContentService,$modalInstance,$state,idToDelete){
 
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);

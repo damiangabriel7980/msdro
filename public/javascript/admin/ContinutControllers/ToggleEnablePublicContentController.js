@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('ToggleEnablePublicContentController', ['$scope','publicContentService', '$modalInstance', 'isEnabled', 'idToToggle', '$state', function($scope, publicContentService, $modalInstance, isEnabled, idToToggle, $state){
+controllers.controller('ToggleEnablePublicContentController', ['$scope','publicContentService', '$modalInstance', 'isEnabled', 'idToToggle', '$state', function($scope, publicContentService, $modalInstance, isEnabled, idToToggle, $state){
 
     console.log(isEnabled);
     

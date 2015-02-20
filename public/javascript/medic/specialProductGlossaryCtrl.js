@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('specialProductGlossaryCtrl', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window){
+controllers.controller('specialProductGlossaryCtrl', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window){
     specialProductService.getSpecialProductGlossary.query({id:$stateParams.product_id}).$promise.then(function(result){
             $scope.specialProductGlossary=result;
     });

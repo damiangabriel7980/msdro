@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('ToggleEnableMedicCarouselController', ['$scope','CarouselMedicService', '$modalInstance', 'isEnabled', 'idToToggle', '$state', function($scope, CarouselMedicService, $modalInstance, isEnabled, idToToggle, $state){
+controllers.controller('ToggleEnableMedicCarouselController', ['$scope','CarouselMedicService', '$modalInstance', 'isEnabled', 'idToToggle', '$state', function($scope, CarouselMedicService, $modalInstance, isEnabled, idToToggle, $state){
 
     console.log(isEnabled);
 

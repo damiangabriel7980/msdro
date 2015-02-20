@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('CarouselMedicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'CarouselMedicService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, CarouselMedicService){
+controllers.controller('CarouselMedicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'CarouselMedicService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, CarouselMedicService){
 
     $scope.refreshTable = function () {
         CarouselMedicService.getAllImages.query().$promise.then(function (resp) {

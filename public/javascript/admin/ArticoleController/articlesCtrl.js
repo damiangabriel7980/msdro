@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-cloudAdminControllers.controller('articlesCtrl', ['$scope','$rootScope' ,'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', function($scope,$rootScope,ContentService,$stateParams,$sce,ngTableParams,$filter,$modal){
+controllers.controller('articlesCtrl', ['$scope','$rootScope' ,'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', function($scope,$rootScope,ContentService,$stateParams,$sce,ngTableParams,$filter,$modal){
     ContentService.getAll.query().$promise.then(function(result){
         var contents = result['content'];
         $scope.grupe=result['groups'];

@@ -1,4 +1,4 @@
-publicControllers.controller('AuthModalController', ['$scope', '$modalInstance', 'intent', '$sce', 'AuthService', '$window', function($scope, $modalInstance, intent, $sce, AuthService, $window) {
+controllers.controller('AuthModalController', ['$scope', '$modalInstance', 'intent', '$sce', 'AuthService', '$window', function($scope, $modalInstance, intent, $sce, AuthService, $window) {
 
     var resetAlert = function (type, text) {
         $scope.alert = {

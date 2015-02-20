@@ -1,6 +1,6 @@
 /**
  * @ngdoc controller
- * @name cloudAdminControllers.controller:therapeuticControllerCtrl
+ * @name controllers.controller:therapeuticControllerCtrl
  *
  * @description
  * _Please update the description and dependencies._
@@ -9,7 +9,7 @@
  * */
 
 
-cloudAdminControllers.controller('therapeuticControllerCtrl', ['$scope', 'therapeuticAreaService','$sce', function($scope, therapeuticAreaService,$sce){
+controllers.controller('therapeuticControllerCtrl', ['$scope', 'therapeuticAreaService','$sce', function($scope, therapeuticAreaService,$sce){
 
    therapeuticAreaService.query().$promise.then(function(correctResults){
        $scope.therapeuticAreas = correctResults;

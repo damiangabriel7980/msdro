@@ -1,4 +1,4 @@
-publicControllers.controller('HomeDownloadsController', ['$scope', '$rootScope', 'HomeService', '$sce', function($scope, $rootScope, HomeService, $sce) {
+controllers.controller('HomeDownloadsController', ['$scope', '$rootScope', 'HomeService', '$sce', function($scope, $rootScope, HomeService, $sce) {
 
     HomeService.contentByType.query({type: 4}).$promise.then(function (resp) {
         $scope.downloads = resp;

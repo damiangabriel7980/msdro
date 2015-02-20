@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('DeleteGroupController', ['$scope','GroupsService', '$modalInstance', 'idToDelete', '$state', function($scope, GroupsService, $modalInstance, idToDelete, $state){
+controllers.controller('DeleteGroupController', ['$scope','GroupsService', '$modalInstance', 'idToDelete', '$state', function($scope, GroupsService, $modalInstance, idToDelete, $state){
 
     $scope.deleteGroup = function () {
 

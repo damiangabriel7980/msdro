@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('AddMedicCarouselController', ['$scope','$rootScope','$sce','CarouselMedicService','$modalInstance', '$state', 'AmazonService', function($scope, $rootScope, $sce, CarouselMedicService, $modalInstance, $state, AmazonService){
+controllers.controller('AddMedicCarouselController', ['$scope','$rootScope','$sce','CarouselMedicService','$modalInstance', '$state', 'AmazonService', function($scope, $rootScope, $sce, CarouselMedicService, $modalInstance, $state, AmazonService){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};

@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('SpecialProductEditMenuController', ['$scope', 'SpecialProductsService', 'AmazonService', function($scope, SpecialProductsService, AmazonService) {
+controllers.controller('SpecialProductEditMenuController', ['$scope', 'SpecialProductsService', 'AmazonService', function($scope, SpecialProductsService, AmazonService) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");

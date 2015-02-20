@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('DeleteMedicCarouselController', ['$scope','CarouselMedicService', '$modalInstance', '$state', 'idToDelete',function($scope, CarouselMedicService, $modalInstance, $state, idToDelete){
+controllers.controller('DeleteMedicCarouselController', ['$scope','CarouselMedicService', '$modalInstance', '$state', 'idToDelete',function($scope, CarouselMedicService, $modalInstance, $state, idToDelete){
 
     $scope.deleteImage = function () {
         console.log(idToDelete);

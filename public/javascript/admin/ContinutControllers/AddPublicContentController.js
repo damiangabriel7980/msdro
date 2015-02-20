@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('AddPublicContentController', ['$scope','publicContentService','$modalInstance', '$state', 'AmazonService', function($scope, publicContentService, $modalInstance, $state, AmazonService){
+controllers.controller('AddPublicContentController', ['$scope','publicContentService','$modalInstance', '$state', 'AmazonService', function($scope, publicContentService, $modalInstance, $state, AmazonService){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.selectedTherapeuticAreas = [];

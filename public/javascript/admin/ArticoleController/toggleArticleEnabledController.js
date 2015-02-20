@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('ToggleArticleEnabledController', ['$scope' ,'ContentService','$modalInstance','$state', 'idToToggle', 'isEnabled', function($scope,ContentService,$modalInstance,$state,idToToggle,isEnabled){
+controllers.controller('ToggleArticleEnabledController', ['$scope' ,'ContentService','$modalInstance','$state', 'idToToggle', 'isEnabled', function($scope,ContentService,$modalInstance,$state,idToToggle,isEnabled){
 
     if(isEnabled){
         $scope.title = "Dezactiveaza articol";

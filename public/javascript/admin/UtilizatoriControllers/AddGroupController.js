@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-cloudAdminControllers.controller('AddGroupController', ['$scope','GroupsService', '$modalInstance', '$state',function($scope, GroupsService, $modalInstance, $state){
+controllers.controller('AddGroupController', ['$scope','GroupsService', '$modalInstance', '$state',function($scope, GroupsService, $modalInstance, $state){
 
     $scope.selectedUsers = {};
 

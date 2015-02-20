@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('SpecialProductAddResourceController', ['$scope', 'SpecialProductsService', function($scope, SpecialProductsService) {
+controllers.controller('SpecialProductAddResourceController', ['$scope', 'SpecialProductsService', function($scope, SpecialProductsService) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
