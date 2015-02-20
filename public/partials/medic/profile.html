@@ -171,14 +171,14 @@
             <form name="changePassForm" novalidate>
                 <div class="col-md-12">
                     <div class="form-group col-md-12" ng-class="{'has-error': changePassForm.oldPass.$invalid && !changePassForm.oldPass.$pristine || showerrorPass && changePassForm.oldPass.$invalid}">
-                        <label for="oldPass"><sup>*</sup>Parola:</label>
+                        <label for="oldPass">Parola<sup>*</sup>:</label>
                         <input type="password" class="form-control" id="oldPass" name="oldPass" ng-model="oldPass" ng-required="true">
                         <p class="" ng-show="changePassForm.oldPass.$invalid && !changePassForm.oldPass.$pristine || showerrorPass && changePassForm.oldPass.$invalid">Introduceti parola corecta!</p>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group col-md-6" ng-class="{'has-error':changePassForm.newPass.$invalid && !changePassForm.newPass.$pristine || showerrorPass && changePassForm.newPass.$invalid}">
-                        <label for="newPass"><sup>*</sup>Parola noua:</label>
+                        <label for="newPass">Parola noua<sup>*</sup>:</label>
                         <input type="password" class="form-control" id="newPass" name="newPass" ng-model="newPass" ng-required="true">
                         <p class="" ng-show="changePassForm.newPass.$invalid && !changePassForm.newPass.$pristine || showerrorPass && changePassForm.newPass.$invalid">Introduceti o parola noua valida!</p>
                     </div>

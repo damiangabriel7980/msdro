@@ -96,6 +96,11 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
             templateUrl: 'partials/public/downloads/detail.html',
             controller: 'DownloadsDetailController'
         })
+        .state('publicSearch',{
+            url: '/publicSearchResults',
+            templateUrl: 'partials/public/publicSearch.html',
+            controller: 'publicSearchController'
+        })
 }]);
 
 publicApp.run(
@@ -108,6 +113,7 @@ publicApp.run(
             // to active whenever 'contacts.list' or one of its decendents is active.
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
+            $rootScope.textToSearch="";
 
             //amazon service paths
             $rootScope.amazonBucket = sessionStorage.defaultAmazonBucket;
@@ -119,7 +125,13 @@ publicApp.run(
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
-
+            $rootScope.searchText=function(data){
+                $rootScope.textToSearch=data;
+                if($rootScope.textToSearch==="")
+                    return;
+                else
+                    $state.go('publicSearch',{},{reload: true});
+            };
             //global functions
             $rootScope.htmlToPlainText = function(text) {
                 return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');

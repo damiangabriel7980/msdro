@@ -112,7 +112,7 @@
                     <div class="col-md-12 noPadding month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
                 </div>
                 <div class="col-md-11 noPadding leftBorder">
-                    <div class="col-md-12 justify title MSDTitleDark handCursor" ng-if="e.type==2" ui-sref="calendar({id:e._id})"><b convert-special conver="e.name" ng-bind-html="trustAsHtml(iconLive+ e.name)"></b></div>
+                    <div class="col-md-12 justify title MSDTitleDark handCursor" ng-if="e.type==2" ui-sref="calendar({id:e._id})"><b convert-special conver="e.name" ng-bind-html="trustAsHtml(iconLive + e.name)"></b></div>
                     <div class="col-md-12 justify title MSDTitleDark handCursor" ng-if="e.type==1 || e.type==null" ui-sref="calendar({id:e._id})"><b convert-special conver="e.name" ng-bind-html="trustAsHtml(e.name)"></b></div>
                     <div class="col-md-12 justify header margintop5px" ng-if="e.description!='undefined'" convert-special conver="e.description" ng-bind-html="convertAndTrustAsHtml(e.description,50)"></div>
                     <div class="col-md-12 justify header margintop5px" ng-if="e.description=='undefined'" convert-special conver="e.description">&nbsp;</div>

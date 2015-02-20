@@ -8,6 +8,9 @@ publicServices.factory('HomeService', ['$resource', function($resource){
         contentByType: $resource('apiPublic/contentByType/:type', {}, {
             query: { method: 'GET', isArray: true }
         }),
+        getSearchResults: $resource('apiPublic/publicSearchResults/', {}, {
+            query: { method: 'POST', isArray: true }
+        }),
         events: $resource('apiPublic/events', {}, {
             query: { method: 'GET', isArray: true }
         })

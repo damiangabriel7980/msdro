@@ -22,8 +22,25 @@ cloudAdminControllers.controller('productsCtrl', ['$scope' ,'ProductService','$s
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             }
         });
-    });
+        $scope.theraptableParams = new ngTableParams({
+            page: 1,            // show first page
+            count: 10,          // count per page
+            sorting: {
+                name: 'asc'     // initial sorting
+            },
+            filter: {
+                name: ''       // initial filter
+            }
+        }, {
+            total: products.length, // length of data
+            getData: function($defer, params) {
 
+                var orderedData = $filter('orderBy')(($filter('filter')(products, params.filter())), params.orderBy());
+
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
+        });
+    });
     $scope.addProduct = function () {
         $modal.open({
             templateUrl: 'partials/admin/continut/productsAdd.ejs',

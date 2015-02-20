@@ -1,0 +1,31 @@
+    <div class="col-md-12 searchResults">
+
+        <h4 class="margintop20px">Rezultate Cautare</h4>
+        <div ng-if="answer!=''" class="col-md-12">
+            <h4>{{answer}}</h4>
+        </div>
+        <div ng-if="searchResults.length>0" ng-repeat="item in searchResults" class="col-md-12 article">
+            <div class="col-md-2 picture">
+                <div>
+                    <img ng-src="{{item.image_path?pathAmazonDev+item.image_path:defaultArticleImage}}">
+                </div>
+            </div>
+            <div class="col-md-10 details">
+                <div class="col-md-12 title"><a ng-click="sref(item.type,item._id)" convert-special to-convert="item.title"
+                                                ng-bind-html="trustAsHtml(item.title)"></a></div>
+                <div class="col-md-12 excerpt" convert-special to-convert="item.text" ng-bind-html="trustAsHtml(createHeader(item.text, 300))"></div>
+                <div class="col-md-12 author" convert-special to-convert="item.author"
+                     ng-bind-html="trustAsHtml(item.author)"></div>
+                <div class="col-md-12 author">Categorie: {{getCategory(item.type)}}</div>
+                <div class="col-md-12 footer">
+                    <div class="date">{{item.date_added | date:'dd/MM/yyyy'}}</div>
+                    <div class="readMore"><a class="btn btn-default btn-sm btnGreenBorder" ng-click="sref(item.type,item._id)">Vizualizeaza</a></div>
+                </div>
+            </div>
+            <div class="col-md-12 divider" ng-if="$index!=articlesLimit-1 && $index!=searchResults.length-1"></div>
+        </div>
+
+    </div>
+    <div class="col-md-12 text-center" ng-style="{'display':articlesLimit<searchResults.length?'initial':'none'}">
+        <a class="btn btn-default btnGreenBorder" ng-click="articlesLimit=articlesLimit+3">Mai multe</a>
+    </div>
