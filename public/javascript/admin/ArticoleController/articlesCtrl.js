@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('articlesCtrl', ['$scope','$rootScope', '$state', 'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope, $state, $rootScope,ContentService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
+controllers.controller('articlesCtrl', ['$scope','$rootScope', '$state', 'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope, $rootScope, $state, ContentService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
     ContentService.getAll.query().$promise.then(function(result){
         var contents = result['content'];
         $scope.grupe=result['groups'];
@@ -71,22 +71,17 @@ controllers.controller('articlesCtrl', ['$scope','$rootScope', '$state', 'Conten
     };
 
     $scope.toggleArticle = function(id, isEnabled){
-        $modal.open({
-            templateUrl: 'partials/admin/continut/toggleArticleEnabled.html',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            windowClass: 'fade',
-            controller:"ToggleArticleEnabledController",
-            resolve: {
-                idToToggle: function () {
-                    return id;
-                },
-                isEnabled: function () {
-                    return isEnabled;
-                }
-            }
-        });
+        ActionModal.show(
+            isEnabled?"Dezactiveaza articol":"Activeaza articol",
+            isEnabled?"Sunteti sigur ca doriti sa dezactivati articolul?":"Sunteti sigur ca doriti sa activati articolul?",
+            function () {
+                ContentService.deleteOrUpdateContent.update({id: id}, {enable: !isEnabled}).$promise.then(function (resp) {
+                    console.log(resp);
+                    $state.reload();
+                });
+            },
+            "Da"
+        );
     }
 
 }])
