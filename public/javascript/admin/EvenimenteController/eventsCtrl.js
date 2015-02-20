@@ -34,20 +34,16 @@ controllers.controller('eventsCtrl', ['$scope','$rootScope', '$state', 'EventsAd
         return d.toString('dd-MMM-yyyy');
     };
     $scope.toggleEventEnable = function (id, enabled) {
-        $modal.open({
-            templateUrl: 'partials/admin/continut/eventToggle.html',
-            size: 'sm',
-            windowClass: 'fade',
-            controller: 'eventToggleController',
-            resolve: {
-                idToToggle: function () {
-                    return id;
-                },
-                isEnabled: function () {
-                    return enabled;
-                }
+        ActionModal.show(
+            enabled?"Dezactiveaza eveniment":"Activeaza eveniment",
+            enabled?"Sunteti sigur ca doriti sa dezactivati evenimentul?":"Sunteti sigur ca doriti sa activati evenimentul?",
+            function () {
+                EventsAdminService.toggleEvent.save({data: {isEnabled: enabled, id: id}}).$promise.then(function (resp) {
+                    console.log(resp);
+                    $state.reload();
+                });
             }
-        });
+        );
     };
     EventsAdminService.getAllRoom.query().$promise.then(function(resp){
         $scope.rooms=resp;
