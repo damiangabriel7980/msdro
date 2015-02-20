@@ -56,20 +56,17 @@ controllers.controller('ContinutPublicController', ['$scope', '$rootScope', '$st
     };
 
     $scope.toogleContentEnable = function (id, enabled) {
-        $modal.open({
-            templateUrl: 'partials/admin/continut/continutPublic/modalToogleEnablePublicContent.html',
-            size: 'sm',
-            windowClass: 'fade',
-            controller: 'ToggleEnablePublicContentController',
-            resolve: {
-                idToToggle: function () {
-                    return id;
-                },
-                isEnabled: function () {
-                    return enabled;
-                }
-            }
-        });
+        ActionModal.show(
+            enabled?"Dezactiveaza continut":"Activeaza continut",
+            enabled?"Sunteti sigur ca doriti sa dezactivati continutul?":"Sunteti sigur ca doriti sa activati continutul?",
+            function () {
+                publicContentService.toggleContent.save({data: {isEnabled: enabled, id: id}}).$promise.then(function (resp) {
+                    console.log(resp);
+                    $state.reload();
+                });
+            },
+            "Da"
+        );
     };
 
     $scope.editContent = function (id) {
