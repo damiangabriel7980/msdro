@@ -1,4 +1,4 @@
-controllers.controller('CarouselPublicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'CarouselPublicService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, CarouselPublicService){
+controllers.controller('CarouselPublicController', ['$scope', '$state', '$rootScope','$filter', 'ngTableParams', '$modal', 'ActionModal', 'CarouselPublicService' ,function($scope, $state, $rootScope, $filter, ngTableParams, $modal, ActionModal, CarouselPublicService){
 
     $scope.refreshTable = function () {
         CarouselPublicService.getAllImages.query().$promise.then(function (resp) {
@@ -48,17 +48,12 @@ controllers.controller('CarouselPublicController', ['$scope', '$rootScope','$fil
     };
 
     $scope.deleteImage = function (id) {
-        $modal.open({
-            templateUrl: 'partials/admin/continut/carouselPublic/modalDeletePublicCarousel.html',
-            size: 'sm',
-            windowClass: 'fade',
-            controller: 'DeletePublicCarouselController',
-            resolve: {
-                idToDelete: function () {
-                    return id;
-                }
-            }
-        });
+        ActionModal.show("Sterge imagine", "Sunteti sigur ca doriti sa stergeti imaginea?", function () {
+            CarouselPublicService.deleteImage.save({id: id}).$promise.then(function (resp) {
+                console.log(resp);
+                $state.reload();
+            });
+        }, "Sterge");
     };
 
     $scope.toggleImageEnable = function (id, enabled) {
