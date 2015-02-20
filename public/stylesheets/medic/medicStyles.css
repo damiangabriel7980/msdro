@@ -7316,6 +7316,9 @@ hr {
 .verySmallFont {
   font-size: small;
 }
+.borderRadiusSpecial {
+  border-radius: 0px;
+}
 .centerText {
   text-align: center;
 }
