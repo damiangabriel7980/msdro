@@ -74,7 +74,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('continut.articole',{
             url: '/articole',
             templateUrl: 'partials/admin/continut/articole.html',
-            controller:'articlesCtrl'
+            controller:'Articles'
         })
         .state('continut.evenimente',{
             url: '/evenimente',

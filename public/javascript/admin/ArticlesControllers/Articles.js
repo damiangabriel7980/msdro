@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('articlesCtrl', ['$scope','$rootScope', '$state', 'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope, $rootScope, $state, ContentService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
+controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope, $rootScope, $state, ContentService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
     ContentService.getAll.query().$promise.then(function(result){
         var contents = result['content'];
         $scope.grupe=result['groups'];
@@ -41,7 +41,7 @@ controllers.controller('articlesCtrl', ['$scope','$rootScope', '$state', 'Conten
             keyboard: false,
             size: 'lg',
             windowClass: 'fade',
-            controller:"articlesAddCtrl"
+            controller:"AddArticles"
         });
     };
 
@@ -61,7 +61,7 @@ controllers.controller('articlesCtrl', ['$scope','$rootScope', '$state', 'Conten
             keyboard: false,
             size: 'lg',
             windowClass: 'fade',
-            controller:"articlesUpdateCtrl",
+            controller:"EditArticles",
             resolve: {
                 idToEdit: function () {
                     return id;

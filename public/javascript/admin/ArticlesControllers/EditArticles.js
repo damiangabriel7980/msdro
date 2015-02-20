@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 27.11.2014.
  */
-controllers.controller('articlesUpdateCtrl', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit){
+controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit){
 
     $scope.tinymceOptions = {
         plugins: [
