@@ -21,12 +21,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('home',{
             url: '/',
             templateUrl: 'partials/medic/home.ejs',
-            controller: 'HomeController'
+            controller: 'Home'
         })
         .state('homeSearch',{
             url: '/searchResults',
             templateUrl: 'partials/medic/homeSearch.ejs',
-            controller: 'HomeSearchController'
+            controller: 'Search'
         })
         .state('contact',{
             parent:'home',
