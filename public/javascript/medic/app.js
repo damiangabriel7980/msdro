@@ -37,7 +37,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                     backdrop: true,
                     size: 'lg',
                     windowClass: 'fade',
-                    controller: 'contactCtrl'
+                    controller: 'Contact'
                 })
             }]
 

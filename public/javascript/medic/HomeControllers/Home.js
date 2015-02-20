@@ -93,7 +93,7 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
             keyboard: false,
             backdrop: 'static',
             windowClass: 'fade',
-            controller: 'MerckManualController'
+            controller: 'MerckManual'
         });
     };
     $rootScope.textToSearch="";
@@ -105,7 +105,7 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
         var modalInstance = $modal.open({
             templateUrl: 'partials/medic/modals/Farma.html',
             keyboard: false,
-            controller: 'FarmacovigilentaCtrl',
+            controller: 'Pharmacovigilance',
             size: 'lg',
             windowClass: 'fade',
             backdrop: 'static'
@@ -121,7 +121,7 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
             backdrop: 'static',
             keyboard: false,
             windowClass: 'fade',
-            controller: 'contactCtrl'
+            controller: 'Contact'
         });
     };
     $rootScope.showTermsModal = function(){
@@ -130,7 +130,7 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
             size: 'lg',
             windowClass: 'fade',
             backdrop: 'static',
-            controller: 'TermsCtrl',
+            controller: 'Terms',
             keyboard: false
             //windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
