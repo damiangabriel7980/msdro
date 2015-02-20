@@ -3,7 +3,7 @@
  */
 controllers.controller('AddGroupController', ['$scope','GroupsService', '$modalInstance', '$state',function($scope, GroupsService, $modalInstance, $state){
 
-    $scope.selectedUsers = {};
+    $scope.selectedUsers = [];
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
 
@@ -24,7 +24,7 @@ controllers.controller('AddGroupController', ['$scope','GroupsService', '$modalI
         toSend.group.default_group = this.grupDefault?1:0;
         toSend.group.content_specific = this.contentSpecific?true:false;
         toSend.group.profession = this.selectedProfession?this.selectedProfession._id:null;
-        toSend.users = this.selectedUsers;
+        toSend.users = this.arrayUsers || [];
         GroupsService.addGroup.save({data: toSend}).$promise.then(function (resp) {
             $scope.statusAlert.message = resp.message;
             if(resp.error){
