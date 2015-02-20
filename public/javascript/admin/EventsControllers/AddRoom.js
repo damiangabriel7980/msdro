@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 16.12.2014.
  */
-controllers.controller('roomAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','ngTableParams','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,ngTableParams,growl){
+controllers.controller('AddRoom', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','ngTableParams','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,ngTableParams,growl){
 
     $scope.createRoom=function(){
         EventsAdminService.getAllRoom.save({data: $scope.newRoom}).$promise.then(function(result){

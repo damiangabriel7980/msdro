@@ -7,7 +7,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('eventsCtrl', ['$scope','$rootScope', '$state', 'EventsAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', 'ActionModal', function($scope,$rootScope,$state,EventsAdminService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
+controllers.controller('Events', ['$scope','$rootScope', '$state', 'EventsAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', 'ActionModal', function($scope,$rootScope,$state,EventsAdminService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
     EventsAdminService.getAll.query().$promise.then(function(result){
         var events = result;
         $scope.tableParams = new ngTableParams({

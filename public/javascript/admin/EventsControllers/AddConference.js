@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('ConferencesAddCtrl', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','growl','AmazonService', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,growl,AmazonService){
+controllers.controller('AddConference', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','growl','AmazonService', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,growl,AmazonService){
 
     EventsAdminService.getAllConferences.query().$promise.then(function(resp){
         $scope.rooms=resp;

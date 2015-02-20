@@ -79,58 +79,58 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('continut.evenimente',{
             url: '/evenimente',
             templateUrl: 'partials/admin/continut/evenimente.html',
-            controller:'eventsCtrl'
+            controller:'Events'
         })
         .state('continut.adaugaEveniment',{
             url: '/addEvent',
             templateUrl: 'partials/admin/continut/evenimenteAdd.ejs',
-            controller:"eventsAddCtrl"
+            controller:"AddEvent"
         })
         .state('continut.adaugaRoom',{
             url: '/addRoom',
             templateUrl: 'partials/admin/continut/roomAdd.ejs',
-            controller:"roomAddCtrl"
+            controller:"AddRoom"
         })
         .state('continut.updateRoom',{
             url: '/updateRoom/:id',
             templateUrl: 'partials/admin/continut/roomUpdate.ejs',
-            controller:"roomUpdateCtrl"
+            controller:"EditRoom"
         })
 
         .state('continut.adaugaConferinta',{
             url: '/addConference',
             templateUrl: 'partials/admin/continut/ConferenceAdd.ejs',
-            controller:"ConferencesAddCtrl"
+            controller:"AddConference"
         })
         .state('continut.adaugaTalk',{
             url: '/addTalk',
             templateUrl: 'partials/admin/continut/TalkAdd.ejs',
-            controller:"TalkAddCtrl"
+            controller:"AddTalk"
         })
         .state('continut.adaugaSpeaker',{
             url: '/addSpeaker',
             templateUrl: 'partials/admin/continut/SpeakerAdd.ejs',
-            controller:"SpeakerAddCtrl"
+            controller:"AddSpeaker"
         })
         .state('continut.updateEveniment',{
             url: '/updateEvent/:id',
             templateUrl: 'partials/admin/continut/evenimenteUpdate.ejs',
-            controller:"eventsUpdateCtrl"
+            controller:"EditEvent"
         })
         .state('continut.updateConference',{
             url: '/updateConference/:id',
             templateUrl: 'partials/admin/continut/conferenceUpdate.ejs',
-            controller:"conferenceUpdateCtrl"
+            controller:"EditConference"
         })
         .state('continut.updateTalk',{
             url: '/updateTalk/:id',
             templateUrl: 'partials/admin/continut/talkUpdate.ejs',
-            controller:"talkUpdateCtrl"
+            controller:"EditTalk"
         })
         .state('continut.updateSpeaker',{
             url: '/updateSpeaker/:id',
             templateUrl: 'partials/admin/continut/speakerUpdate.ejs',
-            controller:"speakerUpdateCtrl"
+            controller:"EditSpeaker"
         })
         .state('continut.intro',{
             url: '/intro',
