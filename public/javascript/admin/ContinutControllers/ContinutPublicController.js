@@ -1,4 +1,4 @@
-controllers.controller('ContinutPublicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'publicContentService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, publicContentService){
+controllers.controller('ContinutPublicController', ['$scope', '$rootScope', '$state', '$filter', 'ngTableParams', '$modal', 'ActionModal', 'publicContentService' ,function($scope, $rootScope, $state, $filter, ngTableParams, $modal, ActionModal, publicContentService){
 
     $scope.refreshTable = function () {
         publicContentService.getAllContent.query().$promise.then(function (resp) {
@@ -47,17 +47,12 @@ controllers.controller('ContinutPublicController', ['$scope', '$rootScope','$fil
     };
 
     $scope.deleteContent = function (id) {
-        $modal.open({
-            templateUrl: 'partials/admin/continut/continutPublic/modalDeletePublicContent.html',
-            size: 'sm',
-            windowClass: 'fade',
-            controller: 'DeletePublicContentController',
-            resolve: {
-                idToDelete: function () {
-                    return id;
-                }
-            }
-        });
+        ActionModal.show("Stergere continut", "Sunteti sigur ca doriti sa stergeti continutul?", function () {
+            publicContentService.deleteContent.save({id: id}).$promise.then(function (resp) {
+                console.log(resp);
+                $state.reload();
+            });
+        }, "Sterge");
     };
 
     $scope.toogleContentEnable = function (id, enabled) {
