@@ -176,7 +176,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.multimedia',{
             url: '/multimedia',
             templateUrl: 'partials/admin/elearning/multimedia.html',
-            controller: 'multimediaCtrl'
+            controller: 'Multimedia'
         })
         .state('elearning.multimedia.adaugaMultimedia',{
             parent:'elearning.multimedia',
@@ -188,7 +188,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                     keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
-                    controller:"multimediaAddCtrl"
+                    controller:"AddMultimedia"
                 })
             }]
         })
