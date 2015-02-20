@@ -16,9 +16,6 @@ controllers.controller('ActionModal', ['$scope','$modalInstance', '$state', 'tit
         actionName: actionName || "Ok"
     };
 
-    //reloadState defaults to true
-    if(typeof reloadState == "undefined") reloadState = true;
-
     $scope.closeActionModal = function () {
         $modalInstance.close();
     };

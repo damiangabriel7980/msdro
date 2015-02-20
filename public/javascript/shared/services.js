@@ -21,7 +21,7 @@ services.factory('InfoModal', ['$modal', function($modal){
 services.factory('ActionModal', ['$modal', function($modal){
     return {
         //actionName defaults to "Ok"
-        //reloadState defaults to true
+        //reloadState defaults to false
         show: function (title, message, action, actionName, reloadState) {
             $modal.open({
                 templateUrl: 'partials/shared/actionModal.html',

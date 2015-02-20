@@ -124,7 +124,7 @@ controllers.controller('eventsCtrl', ['$scope','$rootScope', '$state', 'EventsAd
                 console.log(resp);
                 $state.reload();
             });
-        }, "Sterge", false);
+        }, "Sterge");
     };
 
     $scope.renderHtml = function (htmlCode) {

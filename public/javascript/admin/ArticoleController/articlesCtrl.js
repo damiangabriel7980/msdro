@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('articlesCtrl', ['$scope','$rootScope' ,'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope,$rootScope,ContentService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
+controllers.controller('articlesCtrl', ['$scope','$rootScope', '$state', 'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope, $state, $rootScope,ContentService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
     ContentService.getAll.query().$promise.then(function(result){
         var contents = result['content'];
         $scope.grupe=result['groups'];
@@ -49,6 +49,7 @@ controllers.controller('articlesCtrl', ['$scope','$rootScope' ,'ContentService',
         ActionModal.show("Stergere articol", "Sunteti sigur ca doriti sa stergeti articolul?", function () {
             ContentService.deleteOrUpdateContent.delete({id: id}).$promise.then(function (resp) {
                 console.log(resp);
+                $state.reload();
             });
         }, "Sterge");
     };

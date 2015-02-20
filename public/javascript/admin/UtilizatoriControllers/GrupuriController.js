@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-controllers.controller('GrupuriController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', 'InfoModal', 'ActionModal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, GroupsService, $modal, InfoModal, ActionModal){
+controllers.controller('GrupuriController', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', 'InfoModal', 'ActionModal', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, GroupsService, $modal, InfoModal, ActionModal){
 
     $scope.refreshTable = function () {
         GroupsService.getAllGroups.query().$promise.then(function (resp) {
@@ -47,6 +47,7 @@ controllers.controller('GrupuriController', ['$scope', '$rootScope', '$statePara
             ActionModal.show("Stergere grup", "Sunteti sigur ca doriti sa stergeti acest grup?", function () {
                 GroupsService.deleteGroup.save({id: group._id}).$promise.then(function (resp) {
                     console.log(resp);
+                    $state.reload();
                 });
             }, "Sterge");
         }
