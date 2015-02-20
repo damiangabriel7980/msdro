@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 26.11.2014.
  */
-controllers.controller('ariiTerapeuticeCtrl', ['$scope','$rootScope', '$state', 'areasAdminService','$stateParams','$sce','ngTableParams','$filter', 'ActionModal', function($scope,$rootScope, $state, areasAdminService,$stateParams,$sce,ngTableParams,$filter, ActionModal){
+controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'areasAdminService','$stateParams','$sce','ngTableParams','$filter', 'ActionModal', function($scope,$rootScope, $state, areasAdminService,$stateParams,$sce,ngTableParams,$filter, ActionModal){
     areasAdminService.getAll.query().$promise.then(function(result){
         var arii = result;
         console.log(result);

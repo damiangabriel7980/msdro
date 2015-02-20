@@ -223,7 +223,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('ariiTerapeutice',{
             url: '/ariiTerapeutice',
             templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeutice.html',
-            controller: 'ariiTerapeuticeCtrl'
+            controller: 'TherapeuticAreas'
         })
         .state('ariiTerapeutice.adaugaArie',{
             parent:'ariiTerapeutice',
@@ -235,7 +235,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                     keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
-                    controller:"ariiTerapeuticeAddCtrl"
+                    controller:"AddTherapeuticAreas"
                 })
             }]
         })
@@ -249,7 +249,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                     keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
-                    controller:"ariiTerapeuticeEditCtrl"
+                    controller:"EditTherapeuticAreas"
                 })
             }]
         })

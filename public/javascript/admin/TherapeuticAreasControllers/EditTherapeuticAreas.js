@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('ariiTerapeuticeEditCtrl', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state){
+controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state){
 
     $scope.arie = areasAdminService.deleteOrUpdateareas.getArea({id:$stateParams.id});
 
