@@ -1,4 +1,4 @@
-controllers.controller('CarouselMedicController', ['$scope', '$rootScope','$filter', 'ngTableParams', '$modal', 'CarouselMedicService' ,function($scope, $rootScope, $filter, ngTableParams, $modal, CarouselMedicService){
+controllers.controller('CarouselMedicController', ['$scope', '$state', '$rootScope','$filter', 'ngTableParams', '$modal', 'ActionModal', 'CarouselMedicService' ,function($scope, $state, $rootScope, $filter, ngTableParams, $modal, ActionModal, CarouselMedicService){
 
     $scope.refreshTable = function () {
         CarouselMedicService.getAllImages.query().$promise.then(function (resp) {
@@ -48,17 +48,12 @@ controllers.controller('CarouselMedicController', ['$scope', '$rootScope','$filt
     };
 
     $scope.deleteImage = function (id) {
-        $modal.open({
-            templateUrl: 'partials/admin/continut/carouselMedic/modalDeleteMedicCarousel.html',
-            size: 'sm',
-            windowClass: 'fade',
-            controller: 'DeleteMedicCarouselController',
-            resolve: {
-                idToDelete: function () {
-                    return id;
-                }
-            }
-        });
+        ActionModal.show("Stergere imagine", "Sunteti sigur ca doriti sa stergeti imaginea?", function () {
+            CarouselMedicService.deleteImage.save({id: id}).$promise.then(function (resp) {
+                console.log(resp);
+                $state.reload();
+            });
+        }, "Sterge");
     };
 
     $scope.toggleImageEnable = function (id, enabled) {
