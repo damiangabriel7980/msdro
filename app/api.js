@@ -475,26 +475,10 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     //======================================
 
-
-    router.route('/admin/indexContent')
-        .get(function(req,res) {
-            Products.search({
-                query_string: {
-                    query: "comerciala"
-                }
-            },{hydrate:true}, function(err, results) {
-                if(err)
-                    res.json(err);
-                else
-                    res.json(results);
-            });
-        });
-
-
     router.route('/admin/users/groups')
 
         .get(function(req, res) {
-            UserGroup.find({}, {display_name: 1, description: 1, profession: 1}).populate('profession').exec(function(err, cont) {
+            UserGroup.find({}, {display_name: 1, description: 1, profession: 1, restrict_CRUD: 1}).populate('profession').exec(function(err, cont) {
                 if(err) {
                     logger.error(err);
                     res.send(err);
@@ -599,12 +583,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         }else{
                             var idGroupInserted = inserted._id.toString();
                             //update users to point to this group
-                            //extract id's from users
-                            var ids = [];
-                            for(var i=0; i<data.users.length; i++){
-                                ids.push(data.users[i]._id);
-                            }
-                            connectEntitiesToEntity(ids, User, "groupsID", idGroupInserted, function (err, result) {
+                            connectEntitiesToEntity(data.users, User, "groupsID", idGroupInserted, function (err, result) {
                                 if(err){
                                     logger.error(err);
                                     ans.error = true;

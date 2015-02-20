@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="cloudAdminApp">
+<html lang="en" ng-app="app">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
@@ -31,41 +31,40 @@
 
 
 <!--Controllers-->
-    <script src="javascript/medic/swfobject.js"></script>
-    <script src="javascript/medic/controllers.js"></script>
-    <script src="javascript/medic/eventsController.js"></script>
-    <script src="javascript/medic/modalCtrl.js"></script>
-    <script src="javascript/medic/MerckManualController.js"></script>
-    <script src="javascript/medic/productsController.js"></script>
-    <script src="javascript/medic/productDetailsController.js"></script>
-    <script src="javascript/medic/multimediaController.js"></script>
-    <script src="javascript/medic/multimediaDetailsController.js"></script>
     <script src="javascript/medic/app.js"></script>
-    <script src="javascript/medic/customDirectives.js"></script>
-    <script src="javascript/medic/HomeController.js"></script>
-    <script src="javascript/medic/HomeSearchController.js"></script>
-    <script src="javascript/medic/therapeuticControllerCtrl.js"></script>
-    <script src="javascript/medic/ContentController.js"></script>
-    <script src="javascript/medic/contactCtrl.js"></script>
-    <script src="javascript/medic/ContentArticleController.js"></script>
+    <script src="javascript/medic/controllers.js"></script>
     <script src="javascript/medic/services.js"></script>
-    <script src="javascript/medic/require.js"></script>
-    <script src="javascript/medic/FarmacovigilentaCtrl.js"></script>
-    <script src="javascript/medic/TermsCtrl.js"></script>
-    <script src="javascript/medic/ProfileController.js"></script>
-    <script src="javascript/medic/testeController.js"></script>
-    <script src="javascript/medic/testeQuestionsController.js"></script>
-    <script src="javascript/medic/DisplayFeaturesController.js"></script>
-    <script src="javascript/medic/SpecialGroupsMenuController.js"></script>
-    <script src="javascript/medic/MultimediaBeforeQuizController.js"></script>
-    <script src="javascript/medic/liveTransmissionCtrl.js"></script>
-    <script src="javascript/medic/specialProductCtrl.js"></script>
-    <script src="javascript/medic/specialProductDescriptionCtrl.js"></script>
-    <script src="javascript/medic/specialProductFilesCtrl.js"></script>
-    <script src="javascript/medic/specialProductPrescriptionCtrl.js"></script>
-    <script src="javascript/medic/specialProductGlossaryCtrl.js"></script>
-    <script src="javascript/medic/specialProductMapCtrl.js"></script>
-    <script src="javascript/medic/specialProductInfoCtrl.js"></script>
+    <script src="javascript/medic/customDirectives.js"></script>
+    <script src="javascript/medic/LiveTransmissionsControllers/swfobject.js"></script>
+    <script src="javascript/medic/LiveTransmissionsControllers/require.js"></script>
+    <script src="javascript/medic/LiveTransmissionsControllers/LiveTransmission.js"></script>
+    <script src="javascript/medic/EventsControllers/Events.js"></script>
+    <script src="javascript/medic/EventsControllers/EventModal.js"></script>
+    <script src="javascript/medic/ModalControllers/MerckManual.js"></script>
+    <script src="javascript/medic/ModalControllers/Contact.js"></script>
+    <script src="javascript/medic/ModalControllers/Pharmacovigilance.js"></script>
+    <script src="javascript/medic/ModalControllers/Terms.js"></script>
+    <script src="javascript/medic/ProductsControllers/ProductsView.js"></script>
+    <script src="javascript/medic/ProductsControllers/ProductDetail.js"></script>
+    <script src="javascript/medic/MultimediaControllers/MultimediaView.js"></script>
+    <script src="javascript/medic/MultimediaControllers/MultimediaDetail.js"></script>
+    <script src="javascript/medic/HomeControllers/Home.js"></script>
+    <script src="javascript/medic/HomeControllers/Search.js"></script>
+    <script src="javascript/medic/TherapeuticAreasControllers/TherapeuticAreas.js"></script>
+    <script src="javascript/medic/ArticlesControllers/ArticlesView.js"></script>
+    <script src="javascript/medic/ArticlesControllers/ArticleDetail.js"></script>
+    <script src="javascript/medic/ProfileControllers/Profile.js"></script>
+    <script src="javascript/medic/QuizControllers/QuizesView.js"></script>
+    <script src="javascript/medic/QuizControllers/QuizQuestions.js"></script>
+    <script src="javascript/medic/QuizControllers/MultimediaBeforeQuiz.js"></script>
+    <script src="javascript/medic/SpecialGroupsControllers/DisplayFeatures.js"></script>
+    <script src="javascript/medic/SpecialGroupsControllers/SpecialGroupsMenu.js"></script>
+    <script src="javascript/medic/ProductPageControllers/ProductPage.js"></script>
+    <script src="javascript/medic/ProductPageControllers/ProductPageDescription.js"></script>
+    <script src="javascript/medic/ProductPageControllers/ProductPageDownloads.js"></script>
+    <script src="javascript/medic/ProductPageControllers/ProductPagePrescription.js"></script>
+    <script src="javascript/medic/ProductPageControllers/ProductPageGlossary.js"></script>
+    <script src="javascript/medic/ProductPageControllers/ProductPageMap.js"></script>
 
 <!--Plug-ins-->
     <script src="components/angular-ui-calendar/src/calendar.js"></script>
@@ -85,7 +84,7 @@
 </head>
 <body >
 <!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top ng-scope navbar-border padd35px" role="navigation" ng-controller="SpecialGroupsMenuController">
+<div class="navbar navbar-default navbar-fixed-top ng-scope navbar-border padd35px" role="navigation" ng-controller="SpecialGroupsMenu">
     <div class="container padd5pxBottom">
         <div class="navbar-header">
 

@@ -1,8 +1,8 @@
-var cloudAdminApp = angular.module('cloudAdminApp',
+var app = angular.module('app',
     [
         'ui.router',
-        'cloudAdminControllers',
-        'cloudAdminServices',
+        'controllers',
+        'services',
         'ngTable',
         'angularFileUpload',
         'ui.tinymce',
@@ -15,7 +15,7 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         's3UploadManager'
     ]);
 
-cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/utilizatori/gestionareConturi");
     $stateProvider
         .state('utilizatori', {
@@ -30,27 +30,27 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('utilizatori.conturiNoi',{
             url: '/conturiNoi',
             templateUrl: 'partials/admin/utilizatori/conturiNoi/root.html',
-            controller: 'NewAccountsController'
+            controller: 'NewAccounts'
         })
         .state('utilizatori.conturiNoi.accepted',{
             url: '/accepted',
             templateUrl: 'partials/admin/utilizatori/conturiNoi/accepted.html',
-            controller: 'UsersAcceptedController'
+            controller: 'UsersAccepted'
         })
         .state('utilizatori.conturiNoi.rejected',{
             url: '/rejected',
             templateUrl: 'partials/admin/utilizatori/conturiNoi/rejected.html',
-            controller: 'UsersRejectedController'
+            controller: 'UsersRejected'
         })
         .state('utilizatori.conturiNoi.pending',{
             url: '/pending',
             templateUrl: 'partials/admin/utilizatori/conturiNoi/pending.html',
-            controller: 'UsersPendingController'
+            controller: 'UsersPending'
         })
         .state('utilizatori.grupuri',{
             url: '/grupuri',
             templateUrl: 'partials/admin/utilizatori/grupuri.html',
-            controller: 'GrupuriController'
+            controller: 'Groups'
         })
         .state('utilizatori.importUsers',{
             url: '/importUsers',
@@ -64,150 +64,73 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('continut.produse',{
             url: '/produse',
             templateUrl: 'partials/admin/continut/produse.html',
-            controller:'productsCtrl'
+            controller:'Products'
         })
         .state('continut.specialProducts',{
             url: '/specialProducts',
             templateUrl: 'partials/admin/continut/specialProducts/viewAll.html',
-            controller:'SpecialProductsController'
+            controller:'ProductPage'
         })
         .state('continut.articole',{
             url: '/articole',
             templateUrl: 'partials/admin/continut/articole.html',
-            controller:'articlesCtrl'
+            controller:'Articles'
         })
         .state('continut.evenimente',{
             url: '/evenimente',
             templateUrl: 'partials/admin/continut/evenimente.html',
-            controller:'eventsCtrl'
+            controller:'Events'
         })
         .state('continut.adaugaEveniment',{
             url: '/addEvent',
             templateUrl: 'partials/admin/continut/evenimenteAdd.ejs',
-            controller:"eventsAddCtrl"
+            controller:"AddEvent"
         })
         .state('continut.adaugaRoom',{
             url: '/addRoom',
             templateUrl: 'partials/admin/continut/roomAdd.ejs',
-            controller:"roomAddCtrl"
+            controller:"AddRoom"
         })
         .state('continut.updateRoom',{
             url: '/updateRoom/:id',
             templateUrl: 'partials/admin/continut/roomUpdate.ejs',
-            controller:"roomUpdateCtrl"
+            controller:"EditRoom"
         })
 
         .state('continut.adaugaConferinta',{
             url: '/addConference',
             templateUrl: 'partials/admin/continut/ConferenceAdd.ejs',
-            controller:"ConferencesAddCtrl"
+            controller:"AddConference"
         })
         .state('continut.adaugaTalk',{
             url: '/addTalk',
             templateUrl: 'partials/admin/continut/TalkAdd.ejs',
-            controller:"TalkAddCtrl"
+            controller:"AddTalk"
         })
         .state('continut.adaugaSpeaker',{
             url: '/addSpeaker',
             templateUrl: 'partials/admin/continut/SpeakerAdd.ejs',
-            controller:"SpeakerAddCtrl"
+            controller:"AddSpeaker"
         })
         .state('continut.updateEveniment',{
             url: '/updateEvent/:id',
             templateUrl: 'partials/admin/continut/evenimenteUpdate.ejs',
-            controller:"eventsUpdateCtrl"
+            controller:"EditEvent"
         })
         .state('continut.updateConference',{
             url: '/updateConference/:id',
             templateUrl: 'partials/admin/continut/conferenceUpdate.ejs',
-            controller:"conferenceUpdateCtrl"
+            controller:"EditConference"
         })
         .state('continut.updateTalk',{
             url: '/updateTalk/:id',
             templateUrl: 'partials/admin/continut/talkUpdate.ejs',
-            controller:"talkUpdateCtrl"
+            controller:"EditTalk"
         })
         .state('continut.updateSpeaker',{
             url: '/updateSpeaker/:id',
             templateUrl: 'partials/admin/continut/speakerUpdate.ejs',
-            controller:"speakerUpdateCtrl"
-        })
-
-
-        .state('continut.evenimente.deleteEveniment',{
-            parent:'continut.evenimente',
-            url: '/delete/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/deleteEveniment.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"eventsDeleteCtrl"
-                })
-            }]
-        })
-        .state('continut.evenimente.deleteConference',{
-            parent:'continut.evenimente',
-            url: '/deleteConference/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/deleteConference.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"conferencesDeleteCtrl"
-                })
-            }]
-        })
-        .state('continut.evenimente.deleteTalk',{
-            parent:'',
-            url: '/deleteTalk/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/deleteTalk.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"talkDeleteCtrl"
-                })
-            }]
-        })
-        .state('continut.evenimente.deleteSpeaker',{
-            parent:'',
-            url: '/deleteSpeaker/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/deleteSpeaker.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"speakerDeleteCtrl"
-                })
-            }]
-        })
-        .state('continut.deleteRoom',{
-            parent:'continut.evenimente',
-            url: '/deleteRoom/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/continut/deleteRoom.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"roomDeleteCtrl"
-                })
-            }]
-        })
-        .state('continut.indexareContinut',{
-            url: '/indexareContinut',
-            templateUrl: 'partials/admin/continut/indexareContinut.html',
-            controller: 'indexContentController'
+            controller:"EditSpeaker"
         })
         .state('continut.intro',{
             url: '/intro',
@@ -216,17 +139,17 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('continut.carouselMedic',{
             url: '/carouselMedic',
             templateUrl: 'partials/admin/continut/carouselMedic/carouselMedic.html',
-            controller: 'CarouselMedicController'
+            controller: 'CarouselMedic'
         })
         .state('continut.carouselPublic',{
             url: '/carouselPublic',
             templateUrl: 'partials/admin/continut/carouselPublic/carouselPublic.html',
-            controller: 'CarouselPublicController'
+            controller: 'CarouselPublic'
         })
         .state('continut.continutPublic',{
             url: '/continutPublic',
             templateUrl: 'partials/admin/continut/continutPublic/continutPublic.html',
-            controller: 'ContinutPublicController'
+            controller: 'PublicContent'
         })
         .state('newsletter', {
             abstract: true,
@@ -253,7 +176,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('elearning.multimedia',{
             url: '/multimedia',
             templateUrl: 'partials/admin/elearning/multimedia.html',
-            controller: 'multimediaCtrl'
+            controller: 'Multimedia'
         })
         .state('elearning.multimedia.adaugaMultimedia',{
             parent:'elearning.multimedia',
@@ -265,7 +188,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                     keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
-                    controller:"multimediaAddCtrl"
+                    controller:"AddMultimedia"
                 })
             }]
         })
@@ -295,7 +218,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('ariiTerapeutice',{
             url: '/ariiTerapeutice',
             templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeutice.html',
-            controller: 'ariiTerapeuticeCtrl'
+            controller: 'TherapeuticAreas'
         })
         .state('ariiTerapeutice.adaugaArie',{
             parent:'ariiTerapeutice',
@@ -307,7 +230,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                     keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
-                    controller:"ariiTerapeuticeAddCtrl"
+                    controller:"AddTherapeuticAreas"
                 })
             }]
         })
@@ -321,7 +244,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                     keyboard: false,
                     size: 'lg',
                     windowClass: 'fade',
-                    controller:"ariiTerapeuticeEditCtrl"
+                    controller:"EditTherapeuticAreas"
                 })
             }]
         })
@@ -351,7 +274,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         })
 }]);
 
-cloudAdminApp.run(
+app.run(
     [            '$rootScope', '$state', '$stateParams', '$modal',
         function ($rootScope,   $state,   $stateParams, $modal) {
 

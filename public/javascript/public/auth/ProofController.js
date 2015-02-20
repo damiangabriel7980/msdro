@@ -1,4 +1,4 @@
-publicApp.controller('ProofController', ['$scope', 'ProofService', '$sce', function($scope, ProofService, $sce) {
+app.controller('ProofController', ['$scope', 'ProofService', '$sce', function($scope, ProofService, $sce) {
 
     $scope.myAlert = {
         newAlert: false,

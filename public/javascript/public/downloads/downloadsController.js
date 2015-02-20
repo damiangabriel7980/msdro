@@ -1,4 +1,4 @@
-publicControllers.controller('DownloadsController', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
+controllers.controller('DownloadsController', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
 
     $scope.contentLimit = 3;
 

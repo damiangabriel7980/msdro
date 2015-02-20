@@ -1,4 +1,4 @@
-publicControllers.controller('CeleMaiCititeController', ['$scope', '$rootScope', 'HomeService', '$sce', function($scope, $rootScope, HomeService, $sce) {
+controllers.controller('CeleMaiCititeController', ['$scope', '$rootScope', 'HomeService', '$sce', function($scope, $rootScope, HomeService, $sce) {
 
     HomeService.contentByType.query({type: 2}).$promise.then(function (resp) {
         $scope.articole = resp;

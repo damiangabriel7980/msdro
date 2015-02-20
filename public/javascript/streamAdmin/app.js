@@ -11,7 +11,7 @@ cloudStreamAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($s
         .state('transmisiiLive',{
             url: '/transmisiiLive',
             templateUrl: 'partials/streamAdmin/elearning/transmisiiLive.html',
-            controller: 'liveTransmissionCtrl'
+            controller: 'LiveTransmission'
         })
 }]);
 cloudStreamAdminApp.run(

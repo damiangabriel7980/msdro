@@ -1,9 +1,9 @@
-var publicApp = angular.module('publicApp',
+var app = angular.module('app',
     [
         'ui.router',
         'ui.bootstrap',
-        'publicControllers',
-        'publicServices',
+        'controllers',
+        'services',
         'ngTouch',
         'angular-carousel',
         'msdTimeline',
@@ -14,7 +14,7 @@ var publicApp = angular.module('publicApp',
         'angularFileUpload'
     ]);
 
-publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/home/noutati");
     $stateProvider
         .state('home',{
@@ -103,7 +103,7 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         })
 }]);
 
-publicApp.run(
+app.run(
     [            '$rootScope', '$state', '$stateParams', '$modal', '$sce',
         function ($rootScope,   $state,   $stateParams, $modal, $sce) {
 

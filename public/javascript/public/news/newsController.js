@@ -1,4 +1,4 @@
-publicControllers.controller('NewsController', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
+controllers.controller('NewsController', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
 
     $scope.articlesLimit = 3;
 

@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('qaController', ['$scope', '$rootScope', '$filter', 'ngTableParams' ,'qaService', '$modal', function($scope, $rootScope, $filter, ngTableParams, qaService, $modal){
+controllers.controller('qaController', ['$scope', '$rootScope', '$filter', 'ngTableParams' ,'qaService', '$modal', function($scope, $rootScope, $filter, ngTableParams, qaService, $modal){
 
     $scope.loadTopics = function () {
         qaService.topics.query().$promise.then(function (resp) {
