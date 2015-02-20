@@ -1,4 +1,4 @@
-controllers.controller('EditPublicContentController', ['$scope', '$rootScope', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', function($scope, $rootScope, publicContentService, $modalInstance, $state, idToEdit, AmazonService){
+controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', function($scope, $rootScope, publicContentService, $modalInstance, $state, idToEdit, AmazonService){
 
     var contentDataLoaded = false;
 

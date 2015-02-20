@@ -132,11 +132,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/continut/speakerUpdate.ejs',
             controller:"speakerUpdateCtrl"
         })
-        .state('continut.indexareContinut',{
-            url: '/indexareContinut',
-            templateUrl: 'partials/admin/continut/indexareContinut.html',
-            controller: 'indexContentController'
-        })
         .state('continut.intro',{
             url: '/intro',
             templateUrl: 'partials/admin/continut/intro.html'
@@ -154,7 +149,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('continut.continutPublic',{
             url: '/continutPublic',
             templateUrl: 'partials/admin/continut/continutPublic/continutPublic.html',
-            controller: 'ContinutPublicController'
+            controller: 'PublicContent'
         })
         .state('newsletter', {
             abstract: true,

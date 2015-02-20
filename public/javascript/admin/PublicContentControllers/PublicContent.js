@@ -1,4 +1,4 @@
-controllers.controller('ContinutPublicController', ['$scope', '$rootScope', '$state', '$filter', 'ngTableParams', '$modal', 'ActionModal', 'publicContentService' ,function($scope, $rootScope, $state, $filter, ngTableParams, $modal, ActionModal, publicContentService){
+controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$filter', 'ngTableParams', '$modal', 'ActionModal', 'publicContentService' ,function($scope, $rootScope, $state, $filter, ngTableParams, $modal, ActionModal, publicContentService){
 
     $scope.refreshTable = function () {
         publicContentService.getAllContent.query().$promise.then(function (resp) {
@@ -42,7 +42,7 @@ controllers.controller('ContinutPublicController', ['$scope', '$rootScope', '$st
             templateUrl: 'partials/admin/continut/continutPublic/modalAddPublicContent.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'AddPublicContentController'
+            controller: 'AddPublicContent'
         });
     };
 
@@ -74,7 +74,7 @@ controllers.controller('ContinutPublicController', ['$scope', '$rootScope', '$st
             templateUrl: 'partials/admin/continut/continutPublic/modalEditPublicContent.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'EditPublicContentController',
+            controller: 'EditPublicContent',
             resolve: {
                 idToEdit: function () {
                     return id;

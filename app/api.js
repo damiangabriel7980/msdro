@@ -475,22 +475,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     //======================================
 
-
-    router.route('/admin/indexContent')
-        .get(function(req,res) {
-            Products.search({
-                query_string: {
-                    query: "comerciala"
-                }
-            },{hydrate:true}, function(err, results) {
-                if(err)
-                    res.json(err);
-                else
-                    res.json(results);
-            });
-        });
-
-
     router.route('/admin/users/groups')
 
         .get(function(req, res) {

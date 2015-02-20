@@ -259,13 +259,6 @@ services.factory('therapeuticAreaService', ['$resource', function($resource){
     });
 }]);
 
-services.factory('IndexService', ['$resource', function($resource) {
-    return {
-        getIndex: $resource('api/admin/indexContent', {}, {
-            query: {method: 'GET', isArray: false}
-        })
-    }
-}]);
 services.factory('CarouselPublicService', ['$resource', function($resource){
     return {
         getAllImages: $resource('api/admin/users/carouselPublic/getAllImages', {}, {
