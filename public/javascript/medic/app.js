@@ -65,7 +65,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('biblioteca.produse',{
             url: '/produse',
             templateUrl: 'partials/medic/biblioteca/produse.ejs',
-            controller: 'therapeuticControllerCtrl'
+            controller: 'TherapeuticAreas'
         })
         .state('biblioteca.produse.productsByArea',{
             url: '/productsByArea/:id',
@@ -104,7 +104,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.multimedia',{
             url: '/multimedia',
             templateUrl: 'partials/medic/elearning/multimedia.ejs' ,
-            controller: 'therapeuticControllerCtrl'
+            controller: 'TherapeuticAreas'
         })
         .state('elearning.multimedia.multimediaByArea',{
             url: '/multimedia/:idArea:idMulti',
@@ -119,7 +119,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.teste',{
             url: '/teste',
             templateUrl: 'partials/medic/elearning/teste.ejs',
-            controller: 'testeController'
+            controller: 'QuizesView'
         })
         .state('elearning.multimediaBeforeQuiz',{
             parent:'elearning.teste',
@@ -134,7 +134,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                     keyboard: false,
                     mouse:false,
                     windowClass: 'fade',
-                    controller: 'MultimediaBeforeQuizController'
+                    controller: 'MultimediaBeforeQuiz'
                 })
             }]
         })
@@ -150,14 +150,14 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                     keyboard: false,
                     mouse:false,
                     windowClass: 'fade',
-                    controller: 'testeQuestionsController'
+                    controller: 'QuizQuestions'
                 })
             }]
         })
         .state('groupFeatures', {
             url: '/groupFeatures/:feature',
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
-            controller: 'DisplayFeaturesController'
+            controller: 'DisplayFeatures'
         })
         .state('groupSpecialProduct', {
             url: '/groupSpecialProduct/:product_id',
@@ -258,7 +258,7 @@ app.run(
                     backdrop: 'static',
                     keyboard: false,
                     windowClass: 'fade',
-                    controller: 'ProfileController'
+                    controller: 'Profile'
                 });
             };
         }

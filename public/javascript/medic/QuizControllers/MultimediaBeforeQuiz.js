@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 09.01.2015.
  */
-controllers.controller('MultimediaBeforeQuizController', ['$scope','$rootScope' ,'quizesService','$stateParams','$sce', '$modalInstance','$location','$state','$timeout','multimediaService','growl', function($scope,$rootScope,quizesService,$stateParams,$sce,$modalInstance,$location,$state,$timeout,multimediaService,growl) {
+controllers.controller('MultimediaBeforeQuiz', ['$scope','$rootScope' ,'quizesService','$stateParams','$sce', '$modalInstance','$location','$state','$timeout','multimediaService','growl', function($scope,$rootScope,quizesService,$stateParams,$sce,$modalInstance,$location,$state,$timeout,multimediaService,growl) {
 
     quizesService.getMultimedia.query({id:$stateParams.id}).$promise.then(function(result){
         $scope.selectedMultimedia = result;

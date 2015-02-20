@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 05.11.2014.
  */
-controllers.controller('testeController', ['$scope','$rootScope' ,'quizesService','$stateParams','$sce','growl','$window','$timeout', function($scope,$rootScope,quizesService,$stateParams,$sce,growl,$window,$timeout){
+controllers.controller('QuizesView', ['$scope','$rootScope' ,'quizesService','$stateParams','$sce','growl','$window','$timeout', function($scope,$rootScope,quizesService,$stateParams,$sce,growl,$window,$timeout){
     var date = new Date();
     quizesService.getAll.query().$promise.then(function(result){
         $scope.teste = result;

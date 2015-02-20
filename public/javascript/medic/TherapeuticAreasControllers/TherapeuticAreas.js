@@ -9,7 +9,7 @@
  * */
 
 
-controllers.controller('therapeuticControllerCtrl', ['$scope', 'therapeuticAreaService','$sce', function($scope, therapeuticAreaService,$sce){
+controllers.controller('TherapeuticAreas', ['$scope', 'therapeuticAreaService','$sce', function($scope, therapeuticAreaService,$sce){
 
    therapeuticAreaService.query().$promise.then(function(correctResults){
        $scope.therapeuticAreas = correctResults;
