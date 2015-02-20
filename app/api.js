@@ -3312,6 +3312,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
     router.route('/specialProductFiles')
         .post(function(req, res) {
+            console.log(req.body);
             var id = mongoose.Types.ObjectId(req.body.id.toString());
             console.log(id);
             specialProductFiles.find({product: id}).exec(function(err, details) {

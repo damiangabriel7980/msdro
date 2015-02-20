@@ -14,17 +14,17 @@
                  </div>
             </div>
         </accordion-group>
-        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop " ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.files')}"  ui-sref="groupSpecialProduct.files">
+        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop " ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.files')}"  ui-sref="groupSpecialProduct.files({product_id: specialProductPage._id})">
             <accordion-heading >
                 <div class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Resources Library</div>
             </accordion-heading>
         </accordion-group>
-        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop" ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.prescription')}" ui-sref="groupSpecialProduct.prescription">
+        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop" ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.prescription')}" ui-sref="groupSpecialProduct.prescription({product_id: specialProductPage._id})">
             <accordion-heading >
                 <div class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Prescription Assistance</div>
             </accordion-heading>
         </accordion-group>
-        <accordion-group is-open="status.isFirstOpen" ui-sref="groupSpecialProduct.sitemap" ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.sitemap')}" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop" >
+        <accordion-group is-open="status.isFirstOpen" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id})" ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.sitemap')}" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop" >
             <accordion-heading>
                 <div class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Site Map</div>
             </accordion-heading>
