@@ -1,4 +1,4 @@
-controllers.controller('EditPublicCarouselController', ['$scope', '$rootScope', '$sce', 'CarouselPublicService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', function($scope, $rootScope, $sce, CarouselPublicService, $modalInstance, $state, idToEdit, AmazonService){
+controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'CarouselPublicService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', function($scope, $rootScope, $sce, CarouselPublicService, $modalInstance, $state, idToEdit, AmazonService){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};

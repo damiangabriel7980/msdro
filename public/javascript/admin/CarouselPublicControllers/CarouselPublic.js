@@ -1,4 +1,4 @@
-controllers.controller('CarouselPublicController', ['$scope', '$state', '$rootScope','$filter', 'ngTableParams', '$modal', 'ActionModal', 'CarouselPublicService' ,function($scope, $state, $rootScope, $filter, ngTableParams, $modal, ActionModal, CarouselPublicService){
+controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$filter', 'ngTableParams', '$modal', 'ActionModal', 'CarouselPublicService' ,function($scope, $state, $rootScope, $filter, ngTableParams, $modal, ActionModal, CarouselPublicService){
 
     $scope.refreshTable = function () {
         CarouselPublicService.getAllImages.query().$promise.then(function (resp) {
@@ -43,7 +43,7 @@ controllers.controller('CarouselPublicController', ['$scope', '$state', '$rootSc
             templateUrl: 'partials/admin/continut/carouselPublic/modalAddPublicCarousel.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'AddPublicCarouselController'
+            controller: 'AddCarouselPublic'
         });
     };
 
@@ -75,7 +75,7 @@ controllers.controller('CarouselPublicController', ['$scope', '$state', '$rootSc
             templateUrl: 'partials/admin/continut/carouselPublic/modalEditPublicCarousel.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'EditPublicCarouselController',
+            controller: 'EditCarouselPublic',
             resolve: {
                 idToEdit: function () {
                     return id;

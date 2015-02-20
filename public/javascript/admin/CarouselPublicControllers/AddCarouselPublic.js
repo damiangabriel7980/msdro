@@ -1,4 +1,4 @@
-controllers.controller('AddPublicCarouselController', ['$scope','$rootScope','$sce','CarouselPublicService','$modalInstance', '$state', 'AmazonService', function($scope, $rootScope, $sce, CarouselPublicService, $modalInstance, $state, AmazonService){
+controllers.controller('AddCarouselPublic', ['$scope','$rootScope','$sce','CarouselPublicService','$modalInstance', '$state', 'AmazonService', function($scope, $rootScope, $sce, CarouselPublicService, $modalInstance, $state, AmazonService){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};

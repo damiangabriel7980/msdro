@@ -149,7 +149,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('continut.carouselPublic',{
             url: '/carouselPublic',
             templateUrl: 'partials/admin/continut/carouselPublic/carouselPublic.html',
-            controller: 'CarouselPublicController'
+            controller: 'CarouselPublic'
         })
         .state('continut.continutPublic',{
             url: '/continutPublic',
