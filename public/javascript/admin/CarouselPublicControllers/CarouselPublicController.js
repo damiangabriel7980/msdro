@@ -57,20 +57,17 @@ controllers.controller('CarouselPublicController', ['$scope', '$state', '$rootSc
     };
 
     $scope.toggleImageEnable = function (id, enabled) {
-        $modal.open({
-            templateUrl: 'partials/admin/continut/carouselPublic/modalToggleEnablePublicCarousel.html',
-            size: 'sm',
-            windowClass: 'fade',
-            controller: 'ToggleEnablePublicCarouselController',
-            resolve: {
-                idToToggle: function () {
-                    return id;
-                },
-                isEnabled: function () {
-                    return enabled;
-                }
-            }
-        });
+        ActionModal.show(
+            enabled?"Dezactiveaza imagine":"Activeaza imagine",
+            enabled?"Sunteti sigur ca doriti sa dezactivati imaginea?":"Sunteti sigur ca doriti sa activati imaginea?",
+            function () {
+                CarouselPublicService.toggleImage.save({data: {isEnabled: enabled, id: id}}).$promise.then(function (resp) {
+                    console.log(resp);
+                    $state.reload();
+                });
+            },
+            "Da"
+        );
     };
 
     $scope.editImage = function (id) {
