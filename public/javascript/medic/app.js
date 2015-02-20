@@ -94,7 +94,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
        .state('calendar',{
             url: '/calendar/:id',
             templateUrl: 'partials/medic/calendar.ejs',
-            controller: 'eventsController'
+            controller: 'Events'
         })
         .state('elearning', {
             abstract: true,

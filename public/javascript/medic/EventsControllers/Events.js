@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-controllers.controller('eventsController', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce){
+controllers.controller('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce){
 var date = new Date();
     $scope.realEvents=[];
     var y=$(date);
@@ -66,7 +66,7 @@ var date = new Date();
                         backdrop: true,
                         size: 'lg',
                         windowClass: 'fade',
-                        controller: 'modalCtrl',
+                        controller: 'EventModal',
                         resolve:{
                             idEvent: function () {
                                 return event._id;
@@ -84,7 +84,7 @@ var date = new Date();
                      backdrop: true,
                      size: 'lg',
                      windowClass: 'fade',
-                     controller: 'modalCtrl',
+                     controller: 'EventModal',
                      resolve:{
                          idEvent: function () {
                              return $stateParams.id;
@@ -110,7 +110,7 @@ var date = new Date();
             backdrop: true,
             size: 'lg',
             windowClass: 'fade',
-            controller: 'modalCtrl',
+            controller: 'EventModal',
             resolve:{
                 idEvent: function () {
                     return eventId;
