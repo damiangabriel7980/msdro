@@ -118,10 +118,18 @@ controllers.controller('eventsCtrl', ['$scope','$rootScope', '$state', 'EventsAd
     });
 
     $scope.deleteEvent = function (id) {
-        console.log('adasdads');
         ActionModal.show("Stergere eveniment", "Sunteti sigur ca doriti sa stergeti acest eveniment?", function () {
             EventsAdminService.deleteOrUpdateEvents.delete({id: id}).$promise.then(function (resp) {
                 console.log(resp);
+                $state.reload();
+            });
+        }, "Sterge");
+    };
+
+    $scope.deleteConference = function (id) {
+        ActionModal.show("Stergere conferinta", "Sunteti sigur ca doriti sa stergeti aceasta conferinta?", function () {
+            EventsAdminService.deleteOrUpdateConferences.delete({id: id}).$promise.then(function(result){
+                console.log(result);
                 $state.reload();
             });
         }, "Sterge");
