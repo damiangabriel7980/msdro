@@ -12,9 +12,9 @@
     </div>
     <div class="col-xs-12">
         <ul class="MSDgreenDarker no-text-decoration handCursor">
-            <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct({product_id: $stateParams.product_id})">Home</li>
-            <li ng-repeat="menuItem in specialProductMenu" ng-if="menuItem.children_ids.length!=0">
-                <span class="MSDgreenDarker handCursor no-text-decoration">
+            <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.productInfo({product_id: $stateParams.product_id})">Home</li>
+            <li ng-repeat="menuItem in specialProductMenu">
+                <span class="MSDgreenDarker handCursor no-text-decoration" ng-click="menuItem.children_ids.length==0?$state.go('groupSpecialProduct.description',{id: menuItem._id}):null">
                     {{menuItem.title}}
                 </span>
                 <ul ng-if="menuItem.children_ids.length!=0">
