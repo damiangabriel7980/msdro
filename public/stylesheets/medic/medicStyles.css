@@ -7095,7 +7095,14 @@ hr {
 }
 .activeArea {
   background-color: #006d69;
-  color: white;
+  color: white !important;
+}
+.activeArea .panel-heading {
+  background-color: #006d69 !important;
+  color: white !important;
+}
+.activeArea .panel-heading .MSDgreenDarker {
+  color: #ffffff !important;
 }
 .top2percent {
   margin-top: -10px;
@@ -7264,6 +7271,9 @@ hr {
 .borderRadiusSpecial {
   border-radius: 4px;
 }
+.whiteBackground {
+  background-color: #ffffff;
+}
 @media print {
   #menuDiv {
     display: none;
@@ -7306,6 +7316,60 @@ hr {
 .verySmallFont {
   font-size: small;
 }
+.borderRadiusSpecial {
+  border-radius: 0px;
+}
 .centerText {
   text-align: center;
+}
+#menuDiv .panel-body {
+  padding: 0;
+}
+#menuDiv .list-group {
+  margin-bottom: 0px;
+}
+#menuDiv .borderRadiusSpecial {
+  border-radius: 0px;
+}
+#menuDiv .panel-heading {
+  background-color: #ffffff;
+}
+#menuDiv .panel-group {
+  box-shadow: 0px 3px 1px #dddddd;
+  border: 1px solid #dddddd;
+  border-top: 0px;
+}
+#menuDiv .panel-group .panel {
+  margin-top: 0px;
+}
+#menuDiv .panel-group div {
+  border: 0;
+  border-radius: 0px;
+}
+#menuDiv .parentBorderTop {
+  border-top: 1px solid #dddddd !important;
+}
+.shadowSpecialProduct {
+  box-shadow: 0px 3px 1px #dddddd;
+}
+.noBorderBottom {
+  border-bottom: 0px;
+}
+.lightGrey {
+  color: #d3d3d3;
+}
+.activeAreaIcon {
+  color: white !important;
+}
+.rotateChevron {
+  transform: rotate(90deg);
+}
+.margin1pxTop {
+  margin-top: 1px;
+}
+.margin1pxBottom {
+  margin-bottom: 1px;
+}
+.borderRadiusMenu {
+  border-radius: 4px !important;
 }

@@ -255,7 +255,24 @@ html{
     width: 100%;
   }
 }
-
+.searchArticle {
+  border-radius: 4px;
+  position: relative;
+  margin-bottom: 20px;
+  padding: 5px;
+  background: #f9f9f9;
+  border: 1px solid rgba(51,51,51,0.2);
+  -webkit-box-shadow: 2px 2px 10px rgba(55,66,74,0.2);
+  -moz-box-shadow: 2px 2px 10px rgba(55,66,74,0.2);
+  box-shadow: 2px 2px 10px rgba(55,66,74,0.2);
+  -webkit-transition: all .3s ease-in-out;
+  -moz-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+.margin35px{
+  margin-top: 35px;
+}
 //==================================================================================================== UNIVERSAL STYLES
 
 .btnGreen{
@@ -471,6 +488,63 @@ html{
     }
   }
 }
+
+//======================================================================================================= SEARCH
+.searchResults{
+  .article{
+    padding: 0;
+    .picture{
+      padding: 0;
+      div{
+        border: 5px solid @gray-lighter;
+        border-radius: 10px;
+        img{
+          width: 100%;
+          border-radius: 5px;
+        }
+      }
+    }
+    .details{
+      padding: 5px 0 0 15px;
+      .title{
+        padding: 0;
+        a{
+          color: @greenDark;
+          font-size: 20px;
+          font-weight: bold;
+        }
+        margin-bottom: 10px;
+      }
+      .excerpt{
+        padding: 0;
+        margin-bottom: 15px;
+        font-size: 15px;
+      }
+      .author{
+        font-size: 13px;
+        font-weight: bold;
+        padding: 0;
+      }
+      .footer{
+        padding: 0;
+        .date{
+          font-size: 13px;
+          float: left;
+        }
+        .readMore{
+          float: right;
+        }
+      }
+    }
+    .divider{
+      border-bottom: 1px solid @gray-lighter;
+      padding: 0;
+      margin: 15px 20%;
+      width: 60%;
+    }
+  }
+}
+
 
 //===================================================================================================== NEWS & ARTICLES
 

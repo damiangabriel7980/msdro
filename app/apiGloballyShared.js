@@ -101,7 +101,7 @@ module.exports = function(app, mandrill, logger, router) {
                                                     subject:'Activare cont MSD',
                                                     text:
                                                         'Draga '+inserted.name+',\n\n\n'+
-                                                        'Ati primit acest email deoarece v-ati inregistrat pe Staywell.\n\n' +
+                                                        'Ati primit acest email deoarece v-ati inregistrat pe MSD.\n\n' +
                                                         'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va activa contul:\n\n' +
                                                         activationLink + '\n\n' +
                                                         'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n\n\n'+

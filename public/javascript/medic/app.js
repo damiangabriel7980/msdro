@@ -160,9 +160,14 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             controller: 'DisplayFeaturesController'
         })
         .state('groupSpecialProduct', {
-            url: '/groupSpecialProduct/:product_id',
+            url: '/groupSpecialProduct',
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
             controller: 'specialProductCtrl'
+        })
+        .state('groupSpecialProduct.productInfo', {
+        url: '/groupSpecialProduct/:product_id/productInfo',
+        templateUrl: 'partials/medic/groupFeatures/specialProductInfo.html',
+        controller: 'specialProductInfoCtrl'
         })
         .state('groupSpecialProduct.description', {
             url: '/selectedMenuItem/:id',
@@ -170,22 +175,22 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             controller: 'specialProductDescriptionCtrl'
         })
         .state('groupSpecialProduct.files', {
-            url: '/selectedMenuFiles',
+            url: '/selectedMenuFiles/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_files.html',
             controller: 'specialProductFilesCtrl'
         })
         .state('groupSpecialProduct.prescription', {
-            url: '/selectedMenuPrescription',
+            url: '/selectedMenuPrescription/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_prescription.html',
             controller: 'specialProductPrescriptionCtrl'
         })
         .state('groupSpecialProduct.glossary', {
-            url: '/selectedGlossary',
+            url: '/selectedGlossary/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_glossary.html',
             controller: 'specialProductGlossaryCtrl'
         })
         .state('groupSpecialProduct.sitemap', {
-            url: '/sitemap',
+            url: '/sitemap/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html',
             controller: 'specialProductMapCtrl'
         })

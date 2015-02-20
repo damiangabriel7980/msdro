@@ -10,12 +10,13 @@ cloudAdminControllers.controller('eventsDeleteCtrl', ['$scope','$rootScope' ,'Ev
         return $sce.trustAsHtml(htmlCode);
     };
     $scope.okk = function () {
-        $state.go('continut.evenimente');
         $modalInstance.close();
+        $state.go('continut.evenimente');
     };
     $scope.stergeEveniment=function(){
-        EventsAdminService.deleteOrUpdateEvents.delete({id:$stateParams.id});
-        $state.go('continut.evenimente');
-        $modalInstance.close();
+        EventsAdminService.deleteOrUpdateEvents.delete({id:$stateParams.id}).$promise.then(function(resp){
+            $modalInstance.close();
+            $state.go('continut.evenimente',{},{reload: true});
+        });
     }
 }]);

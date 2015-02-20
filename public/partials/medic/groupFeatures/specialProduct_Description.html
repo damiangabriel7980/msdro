@@ -1,4 +1,4 @@
-<div class="col-xs-12 well well-lg" id="descriptionDiv">
+<div class="col-xs-12 well well-lg whiteBackground borderRadiusSpecial" id="descriptionDiv">
     <div class="col-xs-12">
         <img class="col-xs-12  noPadding" style="clip-path: ellipse(60px 40px at 75px 30px);" ng-if="specialProductDescription.header_image" no-cache-src="{{pathAmazonDev+specialProductDescription.header_image}}" />
     </div>
@@ -7,7 +7,7 @@
                 <i class="glyphicon glyphicon-print pull-right handCursor" ng-click="printPage()">&nbsp;Print&nbsp;</i>
             </span>
             <span>
-                <i class="glyphicon glyphicon-th-list pull-right handCursor" ui-sref="groupSpecialProduct.glossary">&nbsp;Glosar&nbsp;</i>
+                <i class="glyphicon glyphicon-th-list pull-right handCursor" ui-sref="groupSpecialProduct.glossary({product_id: specialProduct._id})">&nbsp;Glosar&nbsp;</i>
             </span>
     </div>
     <div class="col-xs-12">

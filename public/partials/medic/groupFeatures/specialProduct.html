@@ -1,66 +1,38 @@
 <div class="row-fluid margintop20px col-xs-offset-0">
     <div class="col-xs-2 col-md-2 marginLeft30px" id="menuDiv">
     <accordion close-others="oneAtATime">
-          <accordion-group class="no-text-decoration noPaddingBottom noMarginTopPermanent" ng-class="{'noBorderTop':$index!=0}" ng-repeat="menuItem in specialProductMenu" ng-if="menuItem.children_ids.length!=0">
-              <accordion-heading  >
-                  <a ng-click="checkHasChildren(menuItem)" class="MSDgreenDarker smallFontSize no-text-decoration">
-                      {{menuItem.title}}
-                  </a>
-              </accordion-heading>
-              <ul class="noPaddingLeft noListStyle" ng-if="menuItem.children_ids.length!=0">
-                  <li class="MSDgreenDarker no-text-decoration handCursor borderRadiusSpecial smallFontSize" ui-sref-active="activeArea" ui-sref="groupSpecialProduct.description({id: subItem._id})" ng-repeat="subItem in menuItem.children_ids">
-                      &nbsp;{{subItem.title}}
-                  </li>
-              </ul>
-          </accordion-group>
-        <accordion-group class="no-text-decoration noPaddingBottom noMarginTopPermanent" is-open="status.isFirstOpen" ng-class="{'noBorderTop':$index!=0}" ng-repeat="menuItem2 in specialProductMenu" ng-if="menuItem2.children_ids.length==0">
-            <accordion-heading   >
-                <a class="MSDgreenDarker no-text-decoration smallFontSize"  ui-sref="groupSpecialProduct.description({id: menuItem2._id})">{{menuItem2.title}}</a>
+        <accordion-group is-open="mystatus.open" class="no-text-decoration noPaddingBottom parentBorderTop" ng-click="changeItem(parent._id)" ng-class="{'activeArea':activeItem==parent._id&&parent.children_ids.length==0}" ng-repeat="parent in specialProductMenu">
+            <accordion-heading >
+                <span class="MSDgreenDarker smallFontSize no-text-decoration " ng-click="parent.children_ids.length==0?$state.go('groupSpecialProduct.description',{id: parent._id}):null">
+                    <i ng-class="{'glyphicon glyphicon-chevron-down': mystatus.open&&parent.children_ids.length!=0,
+                                  'glyphicon glyphicon-chevron-right': !mystatus.open||parent.children_ids.length==0}"></i>&nbsp;&nbsp;{{parent.title}}
+                </span>
+            </accordion-heading>
+            <div class="noPaddingLeft list-group noListStyle">
+                <div class="MSDgreenDarker  list-group-item no-text-decoration handCursor smallFontSize" ui-sref-active="activeArea" ui-sref="groupSpecialProduct.description({id: subItem._id})" ng-repeat="subItem in parent.children_ids">
+                     &nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right smallFontSize"></i>&nbsp;&nbsp;{{subItem.title}}
+                 </div>
+            </div>
+        </accordion-group>
+        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop " ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.files')}"  ui-sref="groupSpecialProduct.files({product_id: specialProductPage._id})">
+            <accordion-heading >
+                <div class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Resources Library</div>
             </accordion-heading>
         </accordion-group>
-        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent noBorderTop">
+        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop" ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.prescription')}" ui-sref="groupSpecialProduct.prescription({product_id: specialProductPage._id})">
             <accordion-heading >
-                <a class="MSDgreenDarker no-text-decoration smallFontSize" ui-sref="groupSpecialProduct.files">Resources Library</a>
+                <div class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Prescription Assistance</div>
             </accordion-heading>
         </accordion-group>
-        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent noBorderTop">
-            <accordion-heading >
-                <a class="MSDgreenDarker no-text-decoration smallFontSize" ui-sref="groupSpecialProduct.prescription">Prescription Assistance</a>
-            </accordion-heading>
-        </accordion-group>
-        <accordion-group is-open="status.isFirstOpen" class="no-text-decoration noPaddingBottom noMarginTopPermanent noBorderTop">
-            <accordion-heading >
-                <a class="MSDgreenDarker no-text-decoration smallFontSize" ui-sref="groupSpecialProduct.sitemap">Site Map</a>
+        <accordion-group is-open="status.isFirstOpen" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id})" ng-click="changeItem(null)" ng-class="{'activeArea':$state.includes('groupSpecialProduct.sitemap')}" class="no-text-decoration noPaddingBottom noMarginTopPermanent parentBorderTop" >
+            <accordion-heading>
+                <div class="MSDgreenDarker no-text-decoration smallFontSize" ><i class="glyphicon smallFontSize glyphicon-chevron-right"></i>&nbsp;&nbsp;Site Map</div>
             </accordion-heading>
         </accordion-group>
     </accordion>
-        <img class="img-responsive img-thumbnail handCursor col-xs-12" ui-sref="groupSpecialProduct({product_id: $stateParams.product_id})" no-cache-src="{{pathAmazonDev+specialProductPage.logo_path}}" />
+        <img class="img-responsive img-thumbnail handCursor col-xs-12" ui-sref="groupSpecialProduct.productInfo({product_id: $stateParams.product_id})" no-cache-src="{{pathAmazonDev+specialProductPage.logo_path}}" />
 </div>
-    <div class="col-xs-9 well width80 noPadding marginRightMinus30" id="initialDescriptionDiv" ng-class="{'hide' :$state.includes('groupSpecialProduct.description') || $state.includes('groupSpecialProduct.files') || $state.includes('groupSpecialProduct.prescription') || $state.includes('groupSpecialProduct.glossary') || $state.includes('groupSpecialProduct.sitemap')}">
-
-        <div class="col-xs-12">
-            <img class="col-xs-12  noPadding " ng-if="specialProductPage.header_image" no-cache-src="{{pathAmazonDev+specialProductPage.header_image}}" />
-        </div>
-        <div class="col-xs-12 paddTopBottomSpecialProduct">
-            <span>
-                <i class="glyphicon glyphicon-print pull-right handCursor" ng-click="printPage()">&nbsp;Print&nbsp;</i>
-            </span>
-            <span>
-                <i class="glyphicon glyphicon-th-list pull-right handCursor" ui-sref="groupSpecialProduct.glossary">&nbsp;Glosar&nbsp;</i>
-            </span>
-        </div>
-        <div class="col-xs-12">
-            <h3 convert-special conver="specialProductPage.header_title" ng-bind-html="trustAsHtml(specialProductPage.header_title)">
-
-            </h3>
-        </div>
-        <div class="col-xs-12" convert-special conver="specialProductPage.general_description" ng-bind-html="trustAsHtml(specialProductPage.general_description)">
-        </div>
-        <div class="col-xs-12 marginBottom50" convert-special conver="specialProductPage.safety_information" ng-bind-html="trustAsHtml(specialProductPage.safety_information)">
-        </div>
-    </div>
-
-<div class="col-xs-9 marginRightMinus30 width80" id="descriptionDiv">
+<div class="col-xs-9 marginRightMinus30 width81" id="descriptionDiv">
     <ui-view>
 
     </ui-view>

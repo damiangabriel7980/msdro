@@ -1,5 +1,6 @@
 cloudAdminControllers.controller('specialProductCtrl', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window){
     $scope.oneAtATime = true;
+    $scope.activeItem = null;
     specialProductService.getSpecialProduct.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         console.log(result);
         if(result._id)
@@ -13,14 +14,10 @@ cloudAdminControllers.controller('specialProductCtrl', ['$scope', '$rootScope', 
         else
             $state.go('home');
     });
-    $scope.checkHasChildren = function(item){
-          if(item.children_ids.length==0)
-            $scope.statusMainMenu.isFirstOpen=false;
-        else
-              $scope.statusMainMenu.isFirstOpen=true;
-    };
-    $scope.removePanelBody = function(){
-            $('.panel-collapse').collapse("hide");
+    $scope.activeItem=null;
+    $scope.changeItem=function(id){
+        //if($scope.activeItem==id)
+        $scope.activeItem=id;
     };
     $scope.trustAsHtml = function (data) {
         return $sce.trustAsHtml(data);
@@ -32,7 +29,7 @@ cloudAdminControllers.controller('specialProductCtrl', ['$scope', '$rootScope', 
         isFirstOpen: false
     };
     $scope.status = {
-        isFirstOpen: false,
-        isFirstDisabled: false
+        isFirstOpen: false
+        //open: false
     };
 }]);

@@ -65,6 +65,7 @@
     <script src="javascript/medic/specialProductPrescriptionCtrl.js"></script>
     <script src="javascript/medic/specialProductGlossaryCtrl.js"></script>
     <script src="javascript/medic/specialProductMapCtrl.js"></script>
+    <script src="javascript/medic/specialProductInfoCtrl.js"></script>
 
 <!--Plug-ins-->
     <script src="components/angular-ui-calendar/src/calendar.js"></script>
@@ -187,7 +188,7 @@
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li ng-repeat="feat in groupFeatures"><a class="myListItem" ui-sref="groupFeatures({feature: feat})" ng-click="navCollapsed = true">{{feat}}<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
-                        <li><a class="myListItem" ng-if="groupProduct" ui-sref="groupSpecialProduct({product_id: groupProduct._id})" ng-click="navCollapsed = true">{{groupProduct.product_name}}<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a class="myListItem" ng-if="groupProduct" ui-sref="groupSpecialProduct.productInfo({product_id: groupProduct._id})" ng-click="navCollapsed = true">{{groupProduct.product_name}}<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
 
                     </ul>
                 </li>

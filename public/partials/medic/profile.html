@@ -22,16 +22,12 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <div class="form-group col-md-6" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">
+                            <div class="form-group col-md-12" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">
                                 <label for="nume">Nume<sup>*</sup>:</label>
-                                <input type="text" class="form-control" id="nume" name="nume" ng-model="firstName" ng-pattern="/^[a-zA-ZA-zĂăÂâÎîȘșŞşȚțŢţ\s]{3,30}$/" ng-required="true">
+                                <input type="text" class="form-control" id="nume" name="nume" ng-model="fullname" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\s]{3,30}$/" ng-required="true">
                                 <p class="" ng-show="profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid">Numele nu este valid!</p>
                             </div>
-                            <div class="form-group col-md-6" ng-class="{'has-error': profileForm.prenume.$invalid && !profileForm.prenume.$pristine || showerrorProf && profileForm.prenume.$invalid}">
-                                <label for="prenume">Prenume<sup>*</sup>:</label>
-                                <input type="text" class="form-control" id="prenume" name="prenume" ng-model="lastName" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\s]{3,30}$/" ng-required="true">
-                                <p class="" ng-show="profileForm.prenume.$invalid && !profileForm.prenume.$pristine || showerrorProf && profileForm.prenume.$invalid">Prenumele nu este valid!</p>
-                            </div>
+
                             <div class="form-group col-md-12" ng-class="{'has-error': profileForm.telefon.$invalid && !profileForm.telefon.$pristine || showerrorProf && profileForm.telefon.$invalid}">
                                 <label for="telefon">Telefon<sup>*</sup>:</label>
                                 <input type="text" class="form-control" id="telefon" name="telefon" ng-model="phone" ng-pattern="/^[0-9]{10,20}$/" ng-required="true">
@@ -175,14 +171,14 @@
             <form name="changePassForm" novalidate>
                 <div class="col-md-12">
                     <div class="form-group col-md-12" ng-class="{'has-error': changePassForm.oldPass.$invalid && !changePassForm.oldPass.$pristine || showerrorPass && changePassForm.oldPass.$invalid}">
-                        <label for="oldPass"><sup>*</sup>Parola:</label>
+                        <label for="oldPass">Parola<sup>*</sup>:</label>
                         <input type="password" class="form-control" id="oldPass" name="oldPass" ng-model="oldPass" ng-required="true">
                         <p class="" ng-show="changePassForm.oldPass.$invalid && !changePassForm.oldPass.$pristine || showerrorPass && changePassForm.oldPass.$invalid">Introduceti parola corecta!</p>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group col-md-6" ng-class="{'has-error':changePassForm.newPass.$invalid && !changePassForm.newPass.$pristine || showerrorPass && changePassForm.newPass.$invalid}">
-                        <label for="newPass"><sup>*</sup>Parola noua:</label>
+                        <label for="newPass">Parola noua<sup>*</sup>:</label>
                         <input type="password" class="form-control" id="newPass" name="newPass" ng-model="newPass" ng-required="true">
                         <p class="" ng-show="changePassForm.newPass.$invalid && !changePassForm.newPass.$pristine || showerrorPass && changePassForm.newPass.$invalid">Introduceti o parola noua valida!</p>
                     </div>

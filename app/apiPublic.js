@@ -40,6 +40,47 @@ module.exports = function(app,email, router) {
             })
         });
 
+    router.route('/publicSearchResults')
+        .post(function(req,res){
+            var checker=0;
+            var data=req.body.data;
+            PublicContent.search({
+
+                query_string: {
+                    query: data,
+                    default_operator: 'OR',
+                    lowercase_expanded_terms: true
+                }
+
+            },{hydrate: true}, function(err, results) {
+                if(err)
+                {
+                    res.json(err);
+                    return;
+                }
+                else
+                {
+                    console.log(results.hits.hits);
+                    if(results.hits.hits.length===0)
+                    {
+                        checker+=1;
+                        res.json([{answer:"Cautarea nu a returnat nici un rezultat!"}]);
+                    }
+                    else
+                    {
+                        //var myResults=[];
+                        //for(var i=0;i<results.hits.hits.length;i++)
+                        //{
+                        //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
+                        //        myResults.push(results.hits.hits[i]);
+                        //}
+                        res.json(results.hits.hits);
+                    }
+
+                }
+            });
+        });
+
     router.route('/contentByTypeAndTherapeuticArea')
 
         .post(function (req, res) {

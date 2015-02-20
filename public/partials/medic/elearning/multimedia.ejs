@@ -12,10 +12,10 @@
             <h3 class="h-title top0px">ARII TERAPEUTICE</h3>
 
             <ul class="list-group MSDgreen" style="list-style: none">
-                <li  ui-sref-active="activeArea" class="list-group-item no-border handCursor padd5pxLeft" ui-sref="elearning.multimedia.multimediaByArea({idArea:0})"><b>Toate ariile terapeutice</b></li>
+                <li  ui-sref-active="activeArea" class="list-group-item no-border handCursor padd5pxLeft margin1pxBottom borderRadiusMenu" ui-sref="elearning.multimedia.multimediaByArea({idArea:0})"><b>Toate ariile terapeutice</b></li>
                 <li  ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
-                    <span ui-sref-active="activeArea" class="list-group-item no-border handCursor" ui-sref="elearning.multimedia.multimediaByArea({idArea:area._id})"><b convert-special conver="area.name" ng-bind-html="trustAsHtml(area.name)"></b></span>
-                    <ul ng-if="area.has_children">
+                    <span ui-sref-active="activeArea" class="list-group-item no-border handCursor borderRadiusMenu" ui-sref="elearning.multimedia.multimediaByArea({idArea:area._id})"><b convert-special conver="area.name" ng-bind-html="trustAsHtml(area.name)"></b></span>
+                    <ul ng-if="area.has_children" class="margin1pxTop ">
                         <li ui-sref-active="active" ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'">
                             <span ui-sref-active="activeArea" class="list-group-item no-border handCursor" ui-sref="elearning.multimedia.multimediaByArea({idArea:area2._id})"><b convert-special conver="area2.name" ng-bind-html="trustAsHtml(area2.name)"></b></span>
                         </li>

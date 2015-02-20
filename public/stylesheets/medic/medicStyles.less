@@ -916,7 +916,14 @@ border: 1px solid transparent;
 }
 .activeArea{
   background-color: @MSDTitle;
-  color: white;
+  color: white !important;
+  .panel-heading{
+    background-color: @MSDTitle !important;
+    color: white !important;
+    .MSDgreenDarker{
+      color: #ffffff !important;
+    }
+  }
 }
 .top2percent{
   margin-top: -10px;
@@ -1081,6 +1088,9 @@ border: 1px solid transparent;
 .borderRadiusSpecial{
   border-radius: 4px;
 }
+.whiteBackground{
+  background-color: #ffffff;
+}
 @media print{
   #menuDiv{
     display: none;
@@ -1122,6 +1132,64 @@ border: 1px solid transparent;
 .verySmallFont{
   font-size: small;
 }
+.borderRadiusSpecial{
+  border-radius: 0px;
+}
 .centerText{
   text-align: center;
+}
+#menuDiv{
+  .panel-body{
+    padding: 0;
+  }
+  .list-group{
+    margin-bottom: 0px;
+  }
+  .borderRadiusSpecial{
+    border-radius: 0px;
+  }
+  .panel-heading{
+    background-color: #ffffff;
+  }
+  .panel-group{
+    box-shadow: 0px 3px 1px #dddddd;
+    .panel{
+      margin-top: 0px;
+    }
+    border: 1px solid #dddddd;
+    border-top: 0px;
+    div{
+      border: 0;
+      border-radius: 0px;
+    }
+  }
+  .parentBorderTop{
+    border-top: 1px solid #dddddd !important;
+  }
+}
+.shadowSpecialProduct{
+  box-shadow: 0px 3px 1px #dddddd;
+}
+.noBorderBottom{
+  border-bottom: 0px;
+}
+.lightGrey{
+  color: #d3d3d3;
+}
+.activeAreaIcon{
+  color: white !important;
+}
+.rotateChevron{
+  transform: rotate(90deg);
+}
+.margin1pxTop{
+  margin-top: 1px;
+
+}
+.margin1pxBottom{
+  margin-bottom: 1px;
+
+}
+.borderRadiusMenu{
+  border-radius: 4px !important;
 }

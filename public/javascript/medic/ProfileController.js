@@ -26,10 +26,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.userData = resp;
         $scope.statusAlert = {newAlert:false, type:"", message:""};
         $scope.uploadAlert = {newAlert:false, type:"", message:""};
-        var allNames = resp.name.split(" ");
-        $scope.firstName = allNames[0];
-        allNames.splice(0,1);
-        $scope.lastName = allNames.join(" ");
+        $scope.fullname = resp.name;
         $scope.phone = resp.phone;
         $scope.newsletter = resp.subscription == 1;
         $scope.imageUser = imagePre + resp.image_path;
@@ -238,8 +235,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         $scope.showerrorProf=true;
         if(isValid){
             var toSend = {};
-            toSend.firstName = this.firstName;
-            toSend.lastName = this.lastName;
+            toSend.fullname = this.fullname;
             toSend.phone = this.phone;
             toSend.newsletter = this.newsletter;
             toSend.therapeuticAreas = $scope.userTherapeuticAreas;
