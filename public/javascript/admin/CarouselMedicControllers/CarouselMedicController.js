@@ -57,20 +57,17 @@ controllers.controller('CarouselMedicController', ['$scope', '$state', '$rootSco
     };
 
     $scope.toggleImageEnable = function (id, enabled) {
-        $modal.open({
-            templateUrl: 'partials/admin/continut/carouselMedic/modalToggleEnableMedicCarousel.html',
-            size: 'sm',
-            windowClass: 'fade',
-            controller: 'ToggleEnableMedicCarouselController',
-            resolve: {
-                idToToggle: function () {
-                    return id;
-                },
-                isEnabled: function () {
-                    return enabled;
-                }
-            }
-        });
+        ActionModal.show(
+            enabled?"Dezactiveaza imagine":"Activeaza imagine",
+            enabled?"Sunteti sigur ca doriti sa dezactivati imaginea?":"Sunteti sigur ca doriti sa activati imaginea?",
+            function () {
+                CarouselMedicService.toggleImage.save({data: {isEnabled: enabled, id: id}}).$promise.then(function (resp) {
+                    console.log(resp);
+                    $state.reload();
+                });
+            },
+            "Da"
+        );
     };
 
     $scope.editImage = function (id) {
