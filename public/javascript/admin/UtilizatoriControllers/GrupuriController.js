@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-controllers.controller('GrupuriController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', 'InfoModal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, GroupsService, $modal, InfoModal){
+controllers.controller('GrupuriController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', 'InfoModal', 'ActionModal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, GroupsService, $modal, InfoModal, ActionModal){
 
     $scope.refreshTable = function () {
         GroupsService.getAllGroups.query().$promise.then(function (resp) {
@@ -44,17 +44,11 @@ controllers.controller('GrupuriController', ['$scope', '$rootScope', '$statePara
         if(group.restrict_CRUD){
             InfoModal.show("Operatie nepermisa", "Nu aveti voie sa stergeti acest grup");
         }else{
-            $modal.open({
-                templateUrl: 'partials/admin/utilizatori/modalDeleteGroup.html',
-                size: 'sm',
-                windowClass: 'fade',
-                controller: 'DeleteGroupController',
-                resolve: {
-                    idToDelete: function () {
-                        return group._id;
-                    }
-                }
-            });
+            ActionModal.show("Stergere grup", "Sunteti sigur ca doriti sa stergeti acest grup?", function () {
+                GroupsService.deleteGroup.save({id: group._id}).$promise.then(function (resp) {
+                    console.log(resp);
+                });
+            }, "Sterge");
         }
     };
     $scope.editGroup = function (id) {
