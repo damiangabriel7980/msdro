@@ -1,20 +1,14 @@
-controllers.controller('SpecialProductEditController', ['$scope', 'SpecialProductsService', 'AmazonService', function($scope, SpecialProductsService, AmazonService) {
+controllers.controller('AddProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', function($scope, SpecialProductsService, AmazonService) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
-    SpecialProductsService.products.query({id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
-        $scope.newProductPage = resp[0];
-        $scope.selectedGroups = resp[0].groups;
-        //get available groups (a group can have only one special product)
-        SpecialProductsService.groupsAvailable.query().$promise.then(function (resp) {
-            var groupsAvailable = resp;
-            for(var i=0; i<$scope.selectedGroups.length; i++){
-                groupsAvailable.push($scope.selectedGroups[i]);
-            }
-            $scope.groupsAvailable = groupsAvailable;
-        });
+    //get available groups (a group can have only one special product)
+    SpecialProductsService.groupsAvailable.query().$promise.then(function (resp) {
+        $scope.groupsAvailable = resp;
     });
+
+    $scope.selectedGroups = [];
 
     $scope.logoImageBody = null;
     $scope.headerImageBody = null;
@@ -31,25 +25,26 @@ controllers.controller('SpecialProductEditController', ['$scope', 'SpecialProduc
         }
     };
 
-    $scope.addPage = function (redirectToMenu) {
+    $scope.addPage = function () {
         $scope.resetAlert("warning", "Va rugam asteptati...");
-        SpecialProductsService.products.update({id: $scope.newProductPage._id}, $scope.newProductPage).$promise.then(function (resp) {
+        SpecialProductsService.products.create({toCreate: $scope.newProductPage}).$promise.then(function (resp) {
             if(resp.error){
-                $scope.resetAlert("danger", resp.message);
+                $scope.resetAlert("danger", error.message);
             }else{
+                var idSaved = resp.justSaved._id;
                 //generate Amazon keys and extensions for logo and header image
                 var extension;
                 var toUpload = [];
                 var toUpdate = {};
                 if($scope.logoImageBody){
                     extension = $scope.logoImageBody.name.split(".").pop();
-                    var logoKey = "productPages/"+$scope.newProductPage._id+"/logo."+extension;
+                    var logoKey = "productPages/"+idSaved+"/logo."+extension;
                     toUpload.push({fileBody: $scope.logoImageBody, key: logoKey});
                     toUpdate.logo_path = logoKey;
                 }
                 if($scope.headerImageBody){
                     extension = $scope.headerImageBody.name.split(".").pop();
-                    var headerKey = "productPages/"+$scope.newProductPage._id+"/header."+extension;
+                    var headerKey = "productPages/"+idSaved+"/header."+extension;
                     toUpload.push({fileBody: $scope.headerImageBody, key: headerKey});
                     toUpdate.header_image = headerKey;
                 }
@@ -61,26 +56,19 @@ controllers.controller('SpecialProductEditController', ['$scope', 'SpecialProduc
                             $scope.resetAlert("danger", "Datele au fost salvate, dar a aparut o eroare la incarcarea imaginilor");
                         }else{
                             //update database
-                            SpecialProductsService.products.update({id: $scope.newProductPage._id}, toUpdate).$promise.then(function (resp) {
+                            SpecialProductsService.products.update({id: idSaved}, toUpdate).$promise.then(function (resp) {
                                 if(resp.error){
                                     $scope.resetAlert("danger", "Datele au fost salvate, dar a aparut o eroare la salvarea imaginilor in baza de date");
                                 }else{
-                                    console.log(resp);
-                                    if(redirectToMenu){
-                                        $scope.renderView("editProductMenu");
-                                    }else{
-                                        $scope.closeModal(true);
-                                    }
+                                    $scope.setSessionData({idToEdit: idSaved});
+                                    $scope.renderView('specialProductEdit');
                                 }
                             })
                         }
                     });
                 }else{
-                    if(redirectToMenu){
-                        $scope.renderView("editProductMenu");
-                    }else{
-                        $scope.closeModal(true);
-                    }
+                    $scope.setSessionData({idToEdit: idSaved});
+                    $scope.renderView('specialProductEdit');
                 }
             }
         });

@@ -1,4 +1,4 @@
-controllers.controller('SpecialProductsController', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal){
+controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal){
 
     $scope.refreshTable = function () {
         SpecialProductsService.products.query().$promise.then(function (resp) {
@@ -37,7 +37,7 @@ controllers.controller('SpecialProductsController', ['$scope', '$rootScope', '$s
             windowTemplateUrl: 'partials/admin/continut/specialProducts/modalTemplate.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'SpecialProductModalController',
+            controller: 'ProductPageModal',
             resolve: {
                 intent: function () {
                     return "specialProductAdd"
@@ -55,7 +55,7 @@ controllers.controller('SpecialProductsController', ['$scope', '$rootScope', '$s
             windowTemplateUrl: 'partials/admin/continut/specialProducts/modalTemplate.html',
             size: 'lg',
             windowClass: 'fade',
-            controller: 'SpecialProductModalController',
+            controller: 'ProductPageModal',
             resolve: {
                 intent: function () {
                     return "specialProductEdit"
@@ -72,7 +72,7 @@ controllers.controller('SpecialProductsController', ['$scope', '$rootScope', '$s
             templateUrl: 'partials/admin/continut/specialProducts/toggleOrDelete.html',
             size: 'md',
             windowClass: 'fade',
-            controller: 'SpecialProductDeleteController',
+            controller: 'DeleteProductPage',
             resolve: {
                 idToDelete: function () {
                     return id;
@@ -86,7 +86,7 @@ controllers.controller('SpecialProductsController', ['$scope', '$rootScope', '$s
             templateUrl: 'partials/admin/continut/specialProducts/toggleOrDelete.html',
             size: 'sm',
             windowClass: 'fade',
-            controller: 'SpecialProductEnableController',
+            controller: 'EnableProductPage',
             resolve: {
                 idToToggle: function () {
                     return id;

@@ -1,4 +1,4 @@
-controllers.controller('SpecialProductCrudGlossaryController', ['$scope', 'SpecialProductsService', function($scope, SpecialProductsService) {
+controllers.controller('CrudProductPageGlossary', ['$scope', 'SpecialProductsService', function($scope, SpecialProductsService) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");

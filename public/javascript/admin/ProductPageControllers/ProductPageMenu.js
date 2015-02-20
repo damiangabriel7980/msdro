@@ -1,4 +1,4 @@
-controllers.controller('SpecialProductMenuController', ['$scope', 'SpecialProductsService', 'AmazonService', function($scope, SpecialProductsService, AmazonService) {
+controllers.controller('ProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', function($scope, SpecialProductsService, AmazonService) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");

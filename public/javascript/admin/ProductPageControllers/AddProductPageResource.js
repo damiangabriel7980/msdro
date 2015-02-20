@@ -1,4 +1,4 @@
-controllers.controller('SpecialProductAddResourceController', ['$scope', 'SpecialProductsService', function($scope, SpecialProductsService) {
+controllers.controller('AddProductPageResource', ['$scope', 'SpecialProductsService', function($scope, SpecialProductsService) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");

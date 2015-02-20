@@ -1,4 +1,4 @@
-controllers.controller('SpecialProductEnableController', ['$scope', 'SpecialProductsService', '$modalInstance', 'idToToggle', 'isEnabled', '$state', function($scope, SpecialProductsService, $modalInstance, idToToggle, isEnabled, $state){
+controllers.controller('EnableProductPage', ['$scope', 'SpecialProductsService', '$modalInstance', 'idToToggle', 'isEnabled', '$state', function($scope, SpecialProductsService, $modalInstance, idToToggle, isEnabled, $state){
 
     $scope.modal = {
         title: isEnabled?"Ascunde pagina produs":"Publica pagina produs",
