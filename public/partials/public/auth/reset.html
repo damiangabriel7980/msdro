@@ -3,10 +3,10 @@
         <div class="modal-title"><h3>Reseteaza parola</h3></div>
     </div>
     <div class="modal-body">
-        <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
+        <alert type="{{alert.type}}" ng-if="alert.show" close="alert.show=false">{{alert.text}}</alert>
         <div class="form-group">
             <label for="email">Email: </label>
-            <input type="text" class="form-control" id="email" ng-model="email">
+            <input type="text" class="form-control" name="emailInput" id="email" ng-model="email">
         </div>
     </div>
     <div class="modal-footer">
