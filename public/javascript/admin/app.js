@@ -56,99 +56,99 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/importUsers',
             templateUrl: 'partials/admin/users/importUsers.html'
         })
-        .state('continut', {
+        .state('content', {
             abstract: true,
-            url: '/continut',
-            templateUrl: '/partials/admin/continut/continut.html'
+            url: '/content',
+            templateUrl: '/partials/admin/content/root.html'
         })
-        .state('continut.produse',{
+        .state('content.produse',{
             url: '/produse',
-            templateUrl: 'partials/admin/continut/produse.html',
+            templateUrl: 'partials/admin/content/products/root.html',
             controller:'Products'
         })
-        .state('continut.specialProducts',{
+        .state('content.specialProducts',{
             url: '/specialProducts',
-            templateUrl: 'partials/admin/continut/specialProducts/viewAll.html',
+            templateUrl: 'partials/admin/content/specialProducts/viewAll.html',
             controller:'ProductPage'
         })
-        .state('continut.articole',{
-            url: '/articole',
-            templateUrl: 'partials/admin/continut/articole.html',
+        .state('content.articles',{
+            url: '/articles',
+            templateUrl: 'partials/admin/content/articles/root.html',
             controller:'Articles'
         })
-        .state('continut.evenimente',{
+        .state('content.evenimente',{
             url: '/evenimente',
-            templateUrl: 'partials/admin/continut/evenimente.html',
+            templateUrl: 'partials/admin/content/events/root.html',
             controller:'Events'
         })
-        .state('continut.adaugaEveniment',{
+        .state('content.adaugaEveniment',{
             url: '/addEvent',
-            templateUrl: 'partials/admin/continut/evenimenteAdd.ejs',
+            templateUrl: 'partials/admin/content/events/evenimenteAdd.ejs',
             controller:"AddEvent"
         })
-        .state('continut.adaugaRoom',{
+        .state('content.adaugaRoom',{
             url: '/addRoom',
-            templateUrl: 'partials/admin/continut/roomAdd.ejs',
+            templateUrl: 'partials/admin/content/events/roomAdd.ejs',
             controller:"AddRoom"
         })
-        .state('continut.updateRoom',{
+        .state('content.updateRoom',{
             url: '/updateRoom/:id',
-            templateUrl: 'partials/admin/continut/roomUpdate.ejs',
+            templateUrl: 'partials/admin/content/events/roomUpdate.ejs',
             controller:"EditRoom"
         })
 
-        .state('continut.adaugaConferinta',{
+        .state('content.adaugaConferinta',{
             url: '/addConference',
-            templateUrl: 'partials/admin/continut/ConferenceAdd.ejs',
+            templateUrl: 'partials/admin/content/events/ConferenceAdd.ejs',
             controller:"AddConference"
         })
-        .state('continut.adaugaTalk',{
+        .state('content.adaugaTalk',{
             url: '/addTalk',
-            templateUrl: 'partials/admin/continut/TalkAdd.ejs',
+            templateUrl: 'partials/admin/content/events/TalkAdd.ejs',
             controller:"AddTalk"
         })
-        .state('continut.adaugaSpeaker',{
+        .state('content.adaugaSpeaker',{
             url: '/addSpeaker',
-            templateUrl: 'partials/admin/continut/SpeakerAdd.ejs',
+            templateUrl: 'partials/admin/content/events/SpeakerAdd.ejs',
             controller:"AddSpeaker"
         })
-        .state('continut.updateEveniment',{
+        .state('content.updateEveniment',{
             url: '/updateEvent/:id',
-            templateUrl: 'partials/admin/continut/evenimenteUpdate.ejs',
+            templateUrl: 'partials/admin/content/events/evenimenteUpdate.ejs',
             controller:"EditEvent"
         })
-        .state('continut.updateConference',{
+        .state('content.updateConference',{
             url: '/updateConference/:id',
-            templateUrl: 'partials/admin/continut/conferenceUpdate.ejs',
+            templateUrl: 'partials/admin/content/events/conferenceUpdate.ejs',
             controller:"EditConference"
         })
-        .state('continut.updateTalk',{
+        .state('content.updateTalk',{
             url: '/updateTalk/:id',
-            templateUrl: 'partials/admin/continut/talkUpdate.ejs',
+            templateUrl: 'partials/admin/content/events/talkUpdate.ejs',
             controller:"EditTalk"
         })
-        .state('continut.updateSpeaker',{
+        .state('content.updateSpeaker',{
             url: '/updateSpeaker/:id',
-            templateUrl: 'partials/admin/continut/speakerUpdate.ejs',
+            templateUrl: 'partials/admin/content/events/speakerUpdate.ejs',
             controller:"EditSpeaker"
         })
-        .state('continut.intro',{
+        .state('content.intro',{
             url: '/intro',
-            templateUrl: 'partials/admin/continut/intro.html'
+            templateUrl: 'partials/admin/content/intro.html'
         })
-        .state('continut.carouselMedic',{
+        .state('content.carouselMedic',{
             url: '/carouselMedic',
-            templateUrl: 'partials/admin/continut/carouselMedic/carouselMedic.html',
+            templateUrl: 'partials/admin/content/carouselMedic/carouselMedic.html',
             controller: 'CarouselMedic'
         })
-        .state('continut.carouselPublic',{
+        .state('content.carouselPublic',{
             url: '/carouselPublic',
-            templateUrl: 'partials/admin/continut/carouselPublic/carouselPublic.html',
+            templateUrl: 'partials/admin/content/carouselPublic/carouselPublic.html',
             controller: 'CarouselPublic'
         })
-        .state('continut.continutPublic',{
-            url: '/continutPublic',
-            templateUrl: 'partials/admin/continut/continutPublic/continutPublic.html',
+        .state('content.publicContent',{
+            url: '/publicContent',
+            templateUrl: 'partials/admin/content/publicContent/publicContent.html',
             controller: 'PublicContent'
         })
         .state('newsletter', {

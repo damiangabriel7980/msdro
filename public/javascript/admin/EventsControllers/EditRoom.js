@@ -28,7 +28,7 @@ controllers.controller('EditRoom', ['$scope','$rootScope' ,'EventsAdminService',
     };
 
     $scope.okk=function(){
-        $state.go('continut.evenimente');
+        $state.go('content.evenimente');
     };
 
 }]);

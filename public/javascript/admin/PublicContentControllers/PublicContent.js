@@ -39,7 +39,7 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
 
     $scope.addContent = function(){
         $modal.open({
-            templateUrl: 'partials/admin/continut/continutPublic/modalAddPublicContent.html',
+            templateUrl: 'partials/admin/content/publicContent/modalAddPublicContent.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'AddPublicContent'
@@ -71,7 +71,7 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
 
     $scope.editContent = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/continut/continutPublic/modalEditPublicContent.html',
+            templateUrl: 'partials/admin/content/publicContent/modalEditPublicContent.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'EditPublicContent',

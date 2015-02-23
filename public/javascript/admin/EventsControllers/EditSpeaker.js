@@ -92,7 +92,7 @@ controllers.controller('EditSpeaker', ['$scope','$rootScope' ,'EventsAdminServic
 
     };
     $scope.okk=function(){
-        $state.go('continut.evenimente');
+        $state.go('content.evenimente');
     };
     $scope.tinymceOptions = {
         selector: "textarea",

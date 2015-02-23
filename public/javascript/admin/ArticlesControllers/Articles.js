@@ -36,7 +36,7 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
 
     $scope.addArticle = function () {
         $modal.open({
-            templateUrl: 'partials/admin/continut/articoleAdd.ejs',
+            templateUrl: 'partials/admin/content/articles/articlesAdd.ejs',
             backdrop: 'static',
             keyboard: false,
             size: 'lg',
@@ -56,7 +56,7 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
 
     $scope.updateArticle = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/continut/articoleUpdate.ejs',
+            templateUrl: 'partials/admin/content/articles/articlesUpdate.ejs',
             backdrop: 'static',
             keyboard: false,
             size: 'lg',

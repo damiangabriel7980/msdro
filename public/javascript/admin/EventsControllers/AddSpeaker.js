@@ -28,7 +28,7 @@ controllers.controller('AddSpeaker', ['$scope','$rootScope' ,'EventsAdminService
         $scope.newSpeaker = {};
     };
     $scope.okk=function(){
-        $state.go('continut.evenimente');
+        $state.go('content.evenimente');
     };
     $scope.tinymceOptions = {
         selector: "textarea",

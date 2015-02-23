@@ -43,7 +43,7 @@ controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce',
     });
     $scope.addProduct = function () {
         $modal.open({
-            templateUrl: 'partials/admin/continut/productsAdd.ejs',
+            templateUrl: 'partials/admin/content/products/productsAdd.ejs',
             backdrop: 'static',
             keyboard: false,
             size: 'lg',
@@ -54,7 +54,7 @@ controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce',
 
     $scope.editProduct = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/continut/productsEdit.ejs',
+            templateUrl: 'partials/admin/content/products/productsEdit.ejs',
             backdrop: 'static',
             keyboard: false,
             size: 'lg',

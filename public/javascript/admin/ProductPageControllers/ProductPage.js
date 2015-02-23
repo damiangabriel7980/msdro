@@ -33,8 +33,8 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
 
     $scope.addSpecialProduct = function(){
         $modal.open({
-            templateUrl: 'partials/admin/continut/specialProducts/baseModalView.html',
-            windowTemplateUrl: 'partials/admin/continut/specialProducts/modalTemplate.html',
+            templateUrl: 'partials/admin/content/specialProducts/baseModalView.html',
+            windowTemplateUrl: 'partials/admin/content/specialProducts/modalTemplate.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'ProductPageModal',
@@ -51,8 +51,8 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
 
     $scope.editSpecialProduct = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/continut/specialProducts/baseModalView.html',
-            windowTemplateUrl: 'partials/admin/continut/specialProducts/modalTemplate.html',
+            templateUrl: 'partials/admin/content/specialProducts/baseModalView.html',
+            windowTemplateUrl: 'partials/admin/content/specialProducts/modalTemplate.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'ProductPageModal',
@@ -69,7 +69,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
 
     $scope.deleteSpecialProduct = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/continut/specialProducts/toggleOrDelete.html',
+            templateUrl: 'partials/admin/content/specialProducts/toggleOrDelete.html',
             size: 'md',
             windowClass: 'fade',
             controller: 'DeleteProductPage',
@@ -83,7 +83,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
     
     $scope.toggleSpecialProduct = function (id, enabled) {
         $modal.open({
-            templateUrl: 'partials/admin/continut/specialProducts/toggleOrDelete.html',
+            templateUrl: 'partials/admin/content/specialProducts/toggleOrDelete.html',
             size: 'sm',
             windowClass: 'fade',
             controller: 'EnableProductPage',

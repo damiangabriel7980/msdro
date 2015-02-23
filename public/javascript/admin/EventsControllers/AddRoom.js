@@ -14,6 +14,6 @@ controllers.controller('AddRoom', ['$scope','$rootScope' ,'EventsAdminService','
         $scope.newRoom = {};
     };
     $scope.okk=function(){
-        $state.go('continut.evenimente');
+        $state.go('content.evenimente');
     };
 }]);

@@ -3,13 +3,13 @@
         <div class="row">
             <div class="col-xs-8"><h3>Gestionare Evenimente</h3></div>
             <div class="col-xs-2">
-                <a ui-sref="continut.adaugaConferinta" class="btn btn-info pull-right margintop20px"><i class="glyphicon glyphicon-plus-sign"></i> Adauga conferinta</a>
+                <a ui-sref="content.adaugaConferinta" class="btn btn-info pull-right margintop20px"><i class="glyphicon glyphicon-plus-sign"></i> Adauga conferinta</a>
             </div>
         </div>
     </div>
     <div class="titleAndButton">
         <div><h3>Evenimente</h3></div>
-        <div><a ui-sref="continut.adaugaEveniment" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
+        <div><a ui-sref="content.adaugaEveniment" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
     </div>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="eveniment in $data">
@@ -22,7 +22,7 @@
                     <li class="margintop20px" ng-repeat="conf in eveniment.listconferences | orderBy: 'title'">{{conf.title}}&nbsp;
                             <span class="btn-group-sm pull-right"  role="group" style="display: flex">
                                 <button class="btn btn-danger btn-sm" ng-click="deleteConference(conf._id)"><i class="glyphicon glyphicon-trash"></i></button>
-                                <button class="btn btn-info btn-sm" ui-sref="continut.updateConference({id: conf._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                                <button class="btn btn-info btn-sm" ui-sref="content.updateConference({id: conf._id})"><i class="glyphicon glyphicon-cog"></i></button>
                             </span>
                         <br />
                     </li>
@@ -32,7 +32,7 @@
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
                     <button class="btn btn-danger" ng-click="deleteEvent(eveniment._id)"><i class="glyphicon glyphicon-trash"></i></button>
-                    <button class="btn btn-info" ui-sref="continut.updateEveniment({id: eveniment._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                    <button class="btn btn-info" ui-sref="content.updateEveniment({id: eveniment._id})"><i class="glyphicon glyphicon-cog"></i></button>
                     <div class="btn btn-warning" ng-class="{'btn-primary':eveniment.enable===false,'btn-danger':eveniment.enable===true}" ng-click="toggleEventEnable(eveniment._id, eveniment.enable)"><i class="glyphicon" ng-class="{'glyphicon-lock':eveniment.enable===true,'glyphicon-share':eveniment.enable===false}"></i></div>
                 </div>
             </td>
@@ -40,7 +40,7 @@
     </table>
     <div class="titleAndButton">
         <div><h3>Camere</h3></div>
-        <div><a ui-sref="continut.adaugaRoom" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
+        <div><a ui-sref="content.adaugaRoom" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
     </div>
     <table ng-table="tableParams2" show-filter="true" class="table table-bordered">
         <tr ng-repeat="rooms in $data">
@@ -48,14 +48,14 @@
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
                     <button class="btn btn-danger" ng-click="deleteRoom(rooms._id)"><i class="glyphicon glyphicon-trash"></i></button>
-                    <button class="btn btn-info" ui-sref="continut.updateRoom({id:rooms._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                    <button class="btn btn-info" ui-sref="content.updateRoom({id:rooms._id})"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>
         </tr>
     </table>
     <div class="titleAndButton">
         <div><h3>Talk-uri</h3></div>
-        <div><a ui-sref="continut.adaugaTalk" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
+        <div><a ui-sref="content.adaugaTalk" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
     </div>
     <table ng-table="tableParamsTalks" show-filter="true" class="table table-bordered">
         <tr ng-repeat="talk in $data">
@@ -65,14 +65,14 @@
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
                     <button class="btn btn-danger" ng-click="deleteTalk(talk._id)"><i class="glyphicon glyphicon-trash"></i></button>
-                    <button class="btn btn-info" ui-sref="continut.updateTalk({id: talk._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                    <button class="btn btn-info" ui-sref="content.updateTalk({id: talk._id})"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>
         </tr>
     </table>
     <div class="titleAndButton">
         <div><h3>Speakeri</h3></div>
-        <div><a ui-sref="continut.adaugaSpeaker" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
+        <div><a ui-sref="content.adaugaSpeaker" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i> Adauga</a></div>
     </div>
     <table ng-table="tableParamsSpeakers" show-filter="true" class="table table-bordered">
         <tr ng-repeat="speaker in $data">
@@ -81,7 +81,7 @@
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
                     <button class="btn btn-danger" ng-click="deleteSpeaker(speaker._id)"><i class="glyphicon glyphicon-trash"></i></button>
-                    <button class="btn btn-info" ui-sref="continut.updateSpeaker({id:speaker._id})"><i class="glyphicon glyphicon-cog"></i></button>
+                    <button class="btn btn-info" ui-sref="content.updateSpeaker({id:speaker._id})"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>
         </tr>

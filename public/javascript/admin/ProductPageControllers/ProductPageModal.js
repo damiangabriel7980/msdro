@@ -16,7 +16,7 @@ controllers.controller('ProductPageModal', ['$scope', '$modalInstance', 'intent'
 
     $scope.renderView = function (view) {
         $scope.resetAlert();
-        $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/continut/specialProducts/'+view+'.html');
+        $scope.modalTemplate = $sce.trustAsResourceUrl('partials/admin/content/specialProducts/'+view+'.html');
     };
 
     //init view

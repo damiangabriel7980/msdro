@@ -127,7 +127,7 @@ controllers.controller('EditConference', ['$scope','$rootScope' ,'EventsAdminSer
     };
 
     $scope.okk=function(){
-        $state.go('continut.evenimente');
+        $state.go('content.evenimente');
     };
     $scope.tinymceOptions = {
         selector: "textarea",

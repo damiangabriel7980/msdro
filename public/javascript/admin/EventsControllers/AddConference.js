@@ -66,7 +66,7 @@ controllers.controller('AddConference', ['$scope','$rootScope' ,'EventsAdminServ
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
     $scope.okk=function(){
-      $state.go('continut.evenimente');
+      $state.go('content.evenimente');
     };
 
 }]);

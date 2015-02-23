@@ -40,7 +40,7 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
 
     $scope.addImage = function(){
         $modal.open({
-            templateUrl: 'partials/admin/continut/carouselMedic/modalAddMedicCarousel.html',
+            templateUrl: 'partials/admin/content/carouselMedic/modalAddMedicCarousel.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'AddCarouselMedic'
@@ -72,7 +72,7 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
 
     $scope.editImage = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/continut/carouselMedic/modalEditMedicCarousel.html',
+            templateUrl: 'partials/admin/content/carouselMedic/modalEditMedicCarousel.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'EditCarouselMedic',

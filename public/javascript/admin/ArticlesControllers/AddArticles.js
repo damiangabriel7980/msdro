@@ -32,13 +32,13 @@ controllers.controller('AddArticles', ['$scope', 'ContentService', '$modalInstan
             console.log(resp);
             $state.reload();
             $modalInstance.close();
-            $state.go('continut.articole',{},{reload: true});
+            $state.go('content.articles',{},{reload: true});
 
         });
     };
 
     $scope.closeModal = function () {
         $modalInstance.close();
-        $state.go('continut.articole',{},{reload: true});
+        $state.go('content.articles',{},{reload: true});
     };
 }]);

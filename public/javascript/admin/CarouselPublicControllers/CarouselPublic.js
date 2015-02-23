@@ -40,7 +40,7 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
 
     $scope.addImage = function(){
         $modal.open({
-            templateUrl: 'partials/admin/continut/carouselPublic/modalAddPublicCarousel.html',
+            templateUrl: 'partials/admin/content/carouselPublic/modalAddPublicCarousel.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'AddCarouselPublic'
@@ -72,7 +72,7 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
 
     $scope.editImage = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/continut/carouselPublic/modalEditPublicCarousel.html',
+            templateUrl: 'partials/admin/content/carouselPublic/modalEditPublicCarousel.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'EditCarouselPublic',
