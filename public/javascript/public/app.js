@@ -85,7 +85,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/downloads',
             templateUrl: 'partials/public/downloads/root.html',
-            controller: 'DownloadsController'
+            controller: 'DownloadsView'
         })
         .state('downloads.all',{
             url: '/all',
@@ -94,7 +94,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('downloads.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/downloads/detail.html',
-            controller: 'DownloadsDetailController'
+            controller: 'DownloadsDetail'
         })
         .state('publicSearch',{
             url: '/publicSearchResults',
