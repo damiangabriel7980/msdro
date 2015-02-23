@@ -49,13 +49,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('stiri.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/stiri/detail.html',
-            controller: 'ArticlesDetailController'
+            controller: 'ArticlesDetail'
         })
         .state('articole', {
             abstract: true,
             url: '/articole',
             templateUrl: 'partials/public/articole/root.html',
-            controller: 'ArticlesController'
+            controller: 'ArticlesView'
         })
         .state('articole.all',{
             url: '/all',
@@ -64,7 +64,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('articole.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/articole/detail.html',
-            controller: 'ArticlesDetailController'
+            controller: 'ArticlesDetail'
         })
         .state('elearning', {
             abstract: true,

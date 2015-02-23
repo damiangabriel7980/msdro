@@ -1,4 +1,4 @@
-controllers.controller('ArticlesController', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
+controllers.controller('ArticlesView', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
 
     $scope.articlesLimit = 3;
 
