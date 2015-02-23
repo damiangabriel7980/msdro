@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 20.02.2015.
  */
-controllers.controller('publicSearchController', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', function($scope, $rootScope, HomeService, $sce, $state) {
+controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', function($scope, $rootScope, HomeService, $sce, $state) {
     $scope.trustDescription = function(text){
         return $sce.trustAsHtml(text);
     };

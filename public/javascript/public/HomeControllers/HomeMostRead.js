@@ -1,7 +1,7 @@
-controllers.controller('NoutatiController', ['$scope', '$rootScope', 'HomeService', '$sce', function($scope, $rootScope, HomeService, $sce) {
+controllers.controller('HomeMostRead', ['$scope', '$rootScope', 'HomeService', '$sce', function($scope, $rootScope, HomeService, $sce) {
 
-    HomeService.contentByType.query({type: 1}).$promise.then(function (resp) {
-        $scope.noutati = resp;
+    HomeService.contentByType.query({type: 2}).$promise.then(function (resp) {
+        $scope.articole = resp;
 
         //pagination
         $scope.maxSize = 3;
@@ -11,7 +11,7 @@ controllers.controller('NoutatiController', ['$scope', '$rootScope', 'HomeServic
         $scope.$watch('currentPage', function () {
             var beginSlice = (($scope.currentPage - 1) * $scope.resultsPerPage);
             var endSlice = beginSlice + $scope.resultsPerPage;
-            $scope.noutatiFiltered = $scope.noutati.slice(beginSlice, endSlice);
+            $scope.articoleFiltered = $scope.articole.slice(beginSlice, endSlice);
         });
     });
 

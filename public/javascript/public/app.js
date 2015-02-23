@@ -19,22 +19,22 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
     $stateProvider
         .state('home',{
             templateUrl: 'partials/public/home.html',
-            controller: 'HomeController'
+            controller: 'HomeView'
         })
         .state('home.noutati',{
             url: '/home/noutati',
             templateUrl: 'partials/public/home/noutati.html',
-            controller: 'NoutatiController'
+            controller: 'HomeNews'
         })
         .state('home.cmcArticole',{
             url: '/home/cmcArticole',
             templateUrl: 'partials/public/home/cmcArticole.html',
-            controller: 'CeleMaiCititeController'
+            controller: 'HomeMostRead'
         })
         .state('home.downloads',{
             url: '/home/downloads',
             templateUrl: 'partials/public/home/downloads.html',
-            controller: 'HomeDownloadsController'
+            controller: 'HomeDownloads'
         })
         .state('stiri', {
             abstract: true,
@@ -99,7 +99,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('publicSearch',{
             url: '/publicSearchResults',
             templateUrl: 'partials/public/publicSearch.html',
-            controller: 'publicSearchController'
+            controller: 'Search'
         })
 }]);
 
