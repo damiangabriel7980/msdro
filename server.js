@@ -74,6 +74,7 @@ require('./app/apiGloballyShared.js')(app, email, logger, express.Router());
 require('./app/apiMobileShared.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
 require('./app/apiConferences.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
 require('./app/apiMSDDoc.js')(app, logger, tokenSecret, secureServer, express.Router());
+require('./app/apiCourses.js')(app, logger, tokenSecret, express.Router());
 // socket comm test =================================================================
 // require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 

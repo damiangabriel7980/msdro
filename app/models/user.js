@@ -16,7 +16,7 @@ var userSchema = new Schema({
     phone: {type: String, select: false},
     points: {type: Number, select: false},
     proof_path: {type: String, select: false},
-    rolesID: {type: Array, select: false},
+    rolesID: {type: [{type: String, ref: 'Role'}], select: false},
     birthday: {type: Date, select: false},
     show_welcome_screen: Boolean,
     state: {type: String, select: false},
