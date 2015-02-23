@@ -607,8 +607,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
         .get(function(req, res) {
             if(req.query.group){
-                var id = req.query.group;
-                User.find({groupsID: {$in:[id]}}, {username: 1}).limit(0).exec(function(err, cont) {
+                var id = ObjectId(req.query.group);
+                User.find({groupsID: {$in:[id, id.toString()]}}, {username: 1}).limit(0).exec(function(err, cont) {
                     if(err) {
                         logger.error(err);
                         res.send({error: "Error finding users by group"});
