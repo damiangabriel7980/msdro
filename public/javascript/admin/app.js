@@ -171,11 +171,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning', {
             abstract: true,
             url: '/elearning',
-            templateUrl: '/partials/admin/elearning/elearning.html'
+            templateUrl: '/partials/admin/elearning/root.html'
         })
         .state('elearning.multimedia',{
             url: '/multimedia',
-            templateUrl: 'partials/admin/elearning/multimedia.html',
+            templateUrl: 'partials/admin/elearning/multimedia/root.html',
             controller: 'Multimedia'
         })
         .state('elearning.multimedia.adaugaMultimedia',{
@@ -183,7 +183,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
                 $modal.open({
-                    templateUrl: 'partials/admin/elearning/multimediaAdd.ejs',
+                    templateUrl: 'partials/admin/elearning/multimedia/multimediaAdd.ejs',
                     backdrop: 'static',
                     keyboard: false,
                     size: 'lg',
@@ -191,10 +191,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                     controller:"AddMultimedia"
                 })
             }]
-        })
-        .state('elearning.transmisiiLive',{
-            url: '/transmisiiLive',
-            templateUrl: 'partials/admin/elearning/transmisiiLive.html'
         })
         .state('elearning.testeInteractive',{
             url: '/testeInteractive',
