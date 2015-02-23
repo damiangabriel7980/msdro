@@ -40,7 +40,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/stiri',
             templateUrl: 'partials/public/stiri/root.html',
-            controller: 'NewsController'
+            controller: 'NewsView'
         })
         .state('stiri.all',{
             url: '/all',
@@ -159,7 +159,7 @@ app.run(
                     templateUrl: 'partials/public/modals/contactModal.html',
                     size: 'lg',
                     windowClass: 'fade',
-                    controller: 'ContactModalController'
+                    controller: 'ContactModal'
                 });
             };
 
