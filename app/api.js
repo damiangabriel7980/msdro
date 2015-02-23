@@ -478,19 +478,117 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/admin/users/groups')
 
         .get(function(req, res) {
-            UserGroup.find({}, {display_name: 1, description: 1, profession: 1, restrict_CRUD: 1}).populate('profession').exec(function(err, cont) {
-                if(err) {
+            if(req.query.id){
+                UserGroup.findOne({_id: req.query.id}).populate('profession').exec(function(err, cont) {
+                    if(err || !cont) {
+                        logger.error(err);
+                        res.send({error: "Error finding group"});
+                    }else{
+                        res.send({success: cont});
+                    }
+                });
+            }else{
+                UserGroup.find({}, {display_name: 1, description: 1, profession: 1, restrict_CRUD: 1}).populate('profession').exec(function(err, cont) {
+                    if(err) {
+                        logger.error(err);
+                        res.send({error: "Error finding groups"});
+                    }else{
+                        res.send({success: cont});
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var toCreate = req.body.toCreate;
+            var users = req.body.users || [];
+            toCreate = new UserGroup(toCreate);
+            console.log(users);
+            toCreate.save(function (err, saved) {
+                if(err){
                     logger.error(err);
-                    res.send(err);
+                    res.send({error: "Error at saving group"});
+                }else{
+                    User.update({_id: {$in: users}}, {$addToSet: {groupsID: saved._id}}, {multi: true}, function (err, wRes) {
+                        if(err){
+                            logger.error(err);
+                            res.send({error: "Error at adding users"});
+                        }else{
+                            res.send({success: {created: saved, updated: wRes}});
+                        }
+                    });
                 }
-                res.json(cont);
             });
-        });
-
-    router.route('/admin/transmisiiLive')
-        .get(function(req,res){
-
-
+        })
+        .put(function (req, res) {
+            UserGroup.findOne({_id: req.query.id}, function (err, oldGroup) {
+                if(err || !oldGroup){
+                    logger.error(err);
+                    res.send({error: "Error finding group"});
+                }else{
+                    var dataToUpdate = req.body.toUpdate;
+                    console.log(dataToUpdate);
+                    if(dataToUpdate.profession) delete dataToUpdate.profession; //do not allow changing group profession
+                    if(oldGroup.restrict_CRUD){
+                        if(dataToUpdate.display_name) delete dataToUpdate.display_name; //do not allow changing group name
+                    }
+                    console.log(dataToUpdate);
+                    var users = req.body.users || [];
+                    UserGroup.update({_id: req.query.id}, {$set: dataToUpdate}, function (err, wRes) {
+                        if(err){
+                            logger.error(err);
+                            res.send({error: "Error at update"});
+                        }else if(users.length != 0){
+                            //disconnect previous users
+                            User.update({}, {$pull: {groupsID: req.query.id}}, {multi: true}, function (err, wres) {
+                                if(err){
+                                    logger.error(err);
+                                    res.send({error: "Error at disconnecting old users"});
+                                }else{
+                                    //connect new users
+                                    User.update({_id: {$in: users}}, {$addToSet: {groupsID: req.query.id}}, {multi: true}, function (err, wres) {
+                                        if(err){
+                                            logger.error(err);
+                                            res.send({error: "Error adding new users"});
+                                        }else{
+                                            res.send({success: {connectedUsers: wres}});
+                                        }
+                                    });
+                                }
+                            });
+                        }else{
+                            res.send({success: {connectedUsers: 0}});
+                        }
+                    });
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            UserGroup.findOne({_id: idToDelete}, function (err, group) {
+                if(err || !group){
+                    res.send({error: "Error finding group"});
+                }else if(group.restrict_CRUD){
+                    res.send({error: "Not allowed to delete this group"});
+                }else{
+                    //disconnect users from group
+                    User.update({}, {$pull: {groupsID: idToDelete}}, {multi: true}, function (err, wres) {
+                        if(err){
+                            logger.error(err);
+                            res.send({error: "Error disconnecting users from group"});
+                        }else{
+                            //remove group
+                            UserGroup.remove({_id: idToDelete}, function (err, wres) {
+                                if(err){
+                                    logger.error(err);
+                                    res.send({error: "Error deleting group"});
+                                }else{
+                                    res.send({success: "Group was deleted."});
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         });
 
     router.route('/admin/users/professions')
@@ -499,253 +597,35 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             Professions.find({}, function(err, cont) {
                 if(err) {
                     logger.error(err);
-                    res.send(err);
+                    res.send({error: "Error finding professions"});
                 }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/groupDetails/:id')
-
-        .get(function(req, res) {
-            UserGroup.find({_id: req.params.id}).populate('profession').exec(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }else{
-                    if(cont[0]){
-                        res.json(cont[0]);
-                    }else{
-                        res.json({error: true, message:"Nu s-a gasit grupul"});
-                    }
-                }
+                res.json({success: cont});
             });
         });
 
     router.route('/admin/users/users')
 
         .get(function(req, res) {
-            User.find({}, {username: 1}).limit(0).exec(function(err, cont) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/usersFromGroup/:id')
-
-        .get(function(req, res) {
-            var id = req.params.id;
-            User.find({groupsID: {$in:[id]}}, {username: 1}).limit(0).exec(function(err, cont) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/addGroup')
-        //used for both creating new groups and editing existing ones
-
-        .post(function (req, res) {
-            var ans = {};
-            var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
-            //check if name exists
-            if(!data.group.display_name){
-                ans.error = true;
-                ans.message = "Numele este obligatoriu";
-                res.json(ans);
-            }else if(data.group.display_name == "Default"){
-                //restricted name
-                ans.error = true;
-                ans.message = "Numele Default este rezervat";
-                res.json(ans);
-            }else if(!namePatt.test(data.group.display_name.toString())){
-                //validate name format
-                ans.error = true;
-                ans.message = "Numele trebuie sa aiba doar caractere, minim 3";
-                res.json(ans);
-            }else{
-                //validate profession
-                var profession = (data.group.profession||"").toString();
-                if(profession.length == 24){
-                    data.group.profession = mongoose.Types.ObjectId(profession);
-                    //add group
-                    new UserGroup(data.group).save(function (err, inserted) {
-                        if(err){
-                            logger.error(err);
-                            ans.error = true;
-                            ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
-                            res.json(ans);
-                        }else{
-                            var idGroupInserted = inserted._id.toString();
-                            //update users to point to this group
-                            connectEntitiesToEntity(data.users, User, "groupsID", idGroupInserted, function (err, result) {
-                                if(err){
-                                    logger.error(err);
-                                    ans.error = true;
-                                    ans.message = "Eroare la adaugarea userslor noi in grup.";
-                                    res.json(ans);
-                                }else{
-                                    ans.error = false;
-                                    ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
-                                    res.json(ans);
-                                }
-                            })
-                        }
-                    });
-                }else{
-                    ans.error = true;
-                    ans.message = "Selectati o profesie";
-                    res.json(ans);
-                }
-            }
-        }
-
-    );
-
-    router.route('/admin/users/changeGroupLogo')
-        .post(function (req,res) {
-            var data = req.body.data;
-            UserGroup.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
-                if(err){
-                    logger.error("Error at usergroup change logo. Group id = "+data.id+"; Key = "+data.path);
-                    res.json({error:true});
-                }else{
-                    res.json({error:false, updated:wRes});
-                }
-            });
-        });
-
-    router.route('/admin/users/editGroup')
-        //used for both creating new groups and editing existing ones
-
-        .post(function (req, res) {
-            var ans = {};
-            var data = req.body.data;
-            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
-            //check if name exists
-            if(!data.group.display_name){
-                ans.error = true;
-                ans.message = "Numele este obligatoriu";
-                res.json(ans);
-            }else{
-                //validate name
-                if(!namePatt.test(data.group.display_name.toString())){
-                    ans.error = true;
-                    ans.message = "Numele trebuie sa aiba doar caractere, minim 3";
-                    res.json(ans);
-                }else{
-                    //update group
-                    UserGroup.findOne({_id: data.id}, function (err, group) {
-                        if(err || !group){
-                            logger.error(err);
-                            ans.error = true;
-                            ans.message = "Eroare la identificarea grupului. Va rugam verificati campurile";
-                            res.json(ans);
-                        }else{
-                            //Some groups cannot be renamed
-                            if(group.restrict_CRUD){
-                                delete data.group.display_name;
-                            }
-                            UserGroup.update({_id: data.id}, {$set: data.group}, function (err, Wres) {
-                                if(err){
-                                    logger.error(err);
-                                    ans.error = true;
-                                    ans.message = "Eroare la salvarea grupului. Va rugam verificati campurile";
-                                    res.json(ans);
-                                }else{
-                                    //now we need to add some users
-                                    //first disconnect preexisting users from group, just in case this is an editGroup operation
-                                    disconnectAllEntitiesFromEntity(User, "groupsID", data.id, function (err, result) {
-                                        if(err){
-                                            logger.error(err);
-                                            ans.error = true;
-                                            ans.message = "Eroare la stergerea userslor vechi din grup.";
-                                        }else{
-                                            //update users to point to this group
-                                            //extract id's from users
-                                            var ids = [];
-                                            for(var i=0; i<data.users.length; i++){
-                                                ids.push(data.users[i]._id);
-                                            }
-                                            connectEntitiesToEntity(ids, User, "groupsID", data.id, function (err, result) {
-                                                if(err){
-                                                    logger.error(err);
-                                                    ans.error = true;
-                                                    ans.message = "Eroare la adaugarea userslor noi in grup.";
-                                                    res.json(ans);
-                                                }else{
-                                                    ans.error = false;
-                                                    ans.message = "S-a salvat grupul. S-au adaugat "+result+" utlizatori";
-                                                    res.json(ans);
-                                                }
-                                            })
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-        });
-
-    router.route('/admin/users/deleteGroup')
-
-        .post(function (req, res) {
-            var group_id = req.body.id;
-            var logo;
-
-            UserGroup.findOne({_id: req.body.id}, {image_path: 1, restrict_CRUD: 1}, function (err, group) {
-                if(err || !group){
-                    console.log(err);
-                    res.json({error: true, message: "Eroare la gasirea grupului"});
-                }else{
-                    //never remove restricted groups!
-                    if(group.restrict_CRUD){
-                        res.json({error: true, message: "Stergerea acestui grup este interzisa"});
+            if(req.query.group){
+                var id = req.query.group;
+                User.find({groupsID: {$in:[id]}}, {username: 1}).limit(0).exec(function(err, cont) {
+                    if(err) {
+                        logger.error(err);
+                        res.send({error: "Error finding users by group"});
                     }else{
-                        logo = group.image_path;
-                        //disconnect users from group first
-                        disconnectAllEntitiesFromEntity(User, "groupsID", group_id, function (err, resp1) {
-                            if(err){
-                                res.json({error: true, message: err});
-                            }else{
-                                //now remove the group itself
-                                UserGroup.remove({_id: group_id}, function (err, resp2) {
-                                    if(err){
-                                        res.json({error: true, message: "Eroare la stergerea grupului"});
-                                    }else{
-                                        //remove image from amazon
-                                        if(logo){
-                                            s3.deleteObject({Bucket: amazonBucket, Key: logo}, function (err, data) {
-                                                if(err){
-                                                    logger.error(err);
-                                                    res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea nu s-a putut sterge"});
-                                                }else{
-                                                    res.json({error: false, message: "Grupul a fost sters. "+resp1+". Imaginea asociata grupului a fost stearsa"});
-                                                }
-                                            });
-                                        }else{
-                                            res.json({error: false, message: "Grupul a fost sters. "+resp1});
-                                        }
-                                    }
-                                });
-                            }
-                        })
+                        res.send({success: cont});
                     }
-                }
-            });
-        });
-
-    router.route('/admin/users/test')
-
-        .post(function (req, res) {
-            res.status(200).end();
+                });
+            }else{
+                User.find({}, {username: 1}).limit(0).exec(function(err, cont) {
+                    if(err) {
+                        logger.error(err);
+                        res.send({error: "Error finding users"});
+                    }else{
+                        res.send({success: cont});
+                    }
+                });
+            }
         });
 
     router.route('/admin/users/publicContent/getAllContent')

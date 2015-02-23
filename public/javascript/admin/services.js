@@ -141,35 +141,17 @@ services.factory('AmazonService', ['$resource', '$rootScope', function($resource
 }]);
 services.factory('GroupsService', ['$resource', function($resource){
     return {
-        getAllGroups: $resource('api/admin/users/groups', {}, {
-            query: { method: 'GET', isArray: true }
+        groups: $resource('api/admin/users/groups', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         }),
-        getProfessions: $resource('api/admin/users/professions', {}, {
-            query: { method: 'GET', isArray: true }
+        professions: $resource('api/admin/users/professions', {}, {
+            query: { method: 'GET', isArray: false }
         }),
-        getAllUsers: $resource('api/admin/users/users', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        getAllUsersByGroup: $resource('api/admin/users/usersFromGroup/:id', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        addGroup: $resource('api/admin/users/addGroup/:data', {}, {
-            save: { method: 'POST'}
-        }),
-        editGroup: $resource('api/admin/users/editGroup/:data', {}, {
-            save: { method: 'POST'}
-        }),
-        changeGroupLogo: $resource('api/admin/users/changeGroupLogo/:data', {}, {
-            save: { method: 'POST'}
-        }),
-        deleteGroup: $resource('api/admin/users/deleteGroup/:id', {}, {
-            save: { method: 'POST', isArray: false}
-        }),
-        groupDetails: $resource('api/admin/users/groupDetails/:id', {}, {
-            query: { method: 'GET', isArray: false}
-        }),
-        testSomething: $resource('api/admin/users/test/:data', {}, {
-            query: { method: 'POST'}
+        users: $resource('api/admin/users/users', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

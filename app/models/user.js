@@ -24,7 +24,7 @@ var userSchema = new Schema({
     subscription: Number,
     password     : {type: String, select: false},
     username     : String,
-    groupsID     : Array,
+    groupsID     : [{type: Schema.Types.ObjectId, ref: 'UserGroup'}],
     profession: {type: Schema.Types.ObjectId,ref: 'professions'},
     'therapeutic-areasID': Array,
     resetPasswordToken: {type: String, select: false},

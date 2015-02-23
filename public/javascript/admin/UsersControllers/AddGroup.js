@@ -1,39 +1,85 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-controllers.controller('AddGroup', ['$scope','GroupsService', '$modalInstance', '$state',function($scope, GroupsService, $modalInstance, $state){
+controllers.controller('AddGroup', ['$scope','GroupsService', '$modalInstance', '$state', 'AmazonService', function($scope, GroupsService, $modalInstance, $state, AmazonService){
 
     $scope.selectedUsers = [];
 
-    $scope.statusAlert = {newAlert:false, type:"", message:""};
+    $scope.fileBody = null;
 
-    GroupsService.getAllUsers.query().$promise.then(function (resp) {
+    var resetAlert = function (type, message) {
+        $scope.statusAlert = {
+            newAlert:message?true:false,
+            type:type,
+            message:message
+        };
+    };
+
+    GroupsService.users.query().$promise.then(function (resp) {
         console.log(resp);
-        $scope.users = resp;
+        $scope.users = resp.success;
     });
 
-    GroupsService.getProfessions.query().$promise.then(function (resp) {
-        $scope.professions = resp;
+    GroupsService.professions.query().$promise.then(function (resp) {
+        $scope.professions = resp.success;
     });
+
+    $scope.fileSelected = function ($files) {
+        if($files[0]){
+            $scope.fileBody = $files[0];
+        }
+    };
 
     $scope.addGroup = function () {
+        var thiz = this;
         console.log(this);
-        var toSend = {group:{},users:{}};
-        toSend.group.display_name = this.nume;
-        toSend.group.description = this.descriere;
-        toSend.group.default_group = this.grupDefault?1:0;
-        toSend.group.content_specific = this.contentSpecific?true:false;
-        toSend.group.profession = this.selectedProfession?this.selectedProfession._id:null;
-        toSend.users = this.arrayUsers || [];
-        GroupsService.addGroup.save({data: toSend}).$promise.then(function (resp) {
-            $scope.statusAlert.message = resp.message;
-            if(resp.error){
-                $scope.statusAlert.type = "danger";
-            }else{
-                $scope.statusAlert.type = "success";
+        async.waterfall([
+            function (callback) {
+                //add group
+                resetAlert("warning", "Se creaza grupul...");
+                GroupsService.groups.create({toCreate: thiz.newGroup, users: thiz.arrayUsers}).$promise.then(function (resp) {
+                    if(resp.success){
+                        console.log(resp.success);
+                        var idAdded = resp.success.created._id;
+                        callback(null, idAdded);
+                    }else{
+                        callback("Eroare la adaugare");
+                    }
+                });
+            },
+            function (idAdded, callback) {
+                //add file to Amazon
+                if(thiz.fileBody){
+                    resetAlert("warning", "Se incarca imaginea...");
+                    var extension = thiz.fileBody.name.split('.').pop();
+                    var key = "userGroup/"+idAdded+"/logo."+extension;
+                    AmazonService.uploadFile(thiz.fileBody, key, function (err, success) {
+                        if(err){
+                            callback("Eroare la salvarea fisierului");
+                        }else{
+                            //update database
+                            GroupsService.groups.update({id: idAdded}, {toUpdate: {image_path: key}}).$promise.then(function (resp) {
+                                if(resp.error){
+                                    callback("Eroare la update baza de date dupa salvarea imaginii");
+                                }else{
+                                    callback();
+                                }
+                            });
+                        }
+                    });
+                }else{
+                    callback();
+                }
             }
-            $scope.statusAlert.newAlert = true;
+        ], function (err) {
+            if(err){
+                resetAlert("danger", err);
+            }else{
+                $state.reload();
+                $modalInstance.close();
+            }
         });
+
     };
 
     $scope.closeModal = function(){

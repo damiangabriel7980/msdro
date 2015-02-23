@@ -12,28 +12,26 @@
                 <div class="col-md-12 noPadding">
                     <div class="form-group col-md-6" style="padding-left: 0;">
                         <label for="nume">Nume:</label>
-                        <input type="text" class="form-control" id="nume" ng-model="nume" ng-disabled="nume=='Default'">
+                        <input type="text" class="form-control" id="nume" ng-model="toUpdate.display_name" ng-disabled="nume=='Default'">
                     </div>
                     <div class="col-md-6 noPadding">
-                        <div class="col-md-6" style="padding: 0;">
+                        <div class="col-md-6 noPadding">
                             <div class="col-md-12">
-                                <img no-cache-src="{{pathAmazonDev+logo}}" ng-if="logo" style="width:100px;">
+                                <img no-cache-src="{{pathAmazonDev+toUpdate.image_path}}" ng-if="toUpdate.image_path && !fileBody" style="width:100px;">
+                                <span ng-if="fileBody">{{fileBody.name}}</span>
                             </div>
                             <div class="col-md-12">
                                 <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
-                            </div>
-                            <div class="col-md-12">
-                                <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
                             </div>
                         </div>
                         <div class="col-md-6" style="padding: 0; text-align: right;">
                             <div class="col-md-12">
                                 <label for="grupDefault">Group default</label>
-                                <input type="checkbox" id="grupDefault" ng-model="grupDefault">
+                                <input type="checkbox" id="grupDefault" ng-model="toUpdate.default_group">
                             </div>
                             <div class="col-md-12">
                                 <label for="contentSpecific">Content specific</label>
-                                <input type="checkbox" id="contentSpecific" ng-model="contentSpecific">
+                                <input type="checkbox" id="contentSpecific" ng-model="toUpdate.content_specific">
                             </div>
                         </div>
                     </div>
@@ -41,16 +39,16 @@
                 <div class="col-md-12 noPadding">
                     <div class="form-group col-md-6" style="padding-left: 0;">
                         <label for="descriere">Descriere:</label>
-                        <input type="text" class="form-control" id="descriere" ng-model="descriere">
+                        <input type="text" class="form-control" id="descriere" ng-model="toUpdate.description">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="profesie">Profesie:</label>
-                        <input id="profesie" class="form-control" type="text" ng-model="profession" disabled="disabled">
+                        <input id="profesie" class="form-control" type="text" ng-model="toUpdate.profession.display_name" disabled="disabled">
                     </div>
                 </div>
             </div>
             <div class="col-md-12">
-                <my-multiple-select all-objects="users" selected-objects="selectedUsers" track-by="_id" display-by="username"></my-multiple-select>
+                <my-multiple-select all-objects="users" selected-objects="selectedUsers" track-by="_id" display-by="username" output="newUsers"></my-multiple-select>
             </div>
         </div>
         <div class="modal-footer">

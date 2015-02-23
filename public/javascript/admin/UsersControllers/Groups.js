@@ -1,11 +1,11 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', 'InfoModal', 'ActionModal', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, GroupsService, $modal, InfoModal, ActionModal){
+controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', 'InfoModal', 'ActionModal', 'AmazonService', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, GroupsService, $modal, InfoModal, ActionModal, AmazonService){
 
     $scope.refreshTable = function () {
-        GroupsService.getAllGroups.query().$promise.then(function (resp) {
-            var data = resp;
+        GroupsService.groups.query().$promise.then(function (resp) {
+            var data = resp.success;
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -45,9 +45,15 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
             InfoModal.show("Operatie nepermisa", "Nu aveti voie sa stergeti acest grup");
         }else{
             ActionModal.show("Stergere grup", "Sunteti sigur ca doriti sa stergeti acest grup?", function () {
-                GroupsService.deleteGroup.save({id: group._id}).$promise.then(function (resp) {
-                    console.log(resp);
-                    $state.reload();
+                AmazonService.deleteFile(group.image_path, function (err, succes) {
+                    if(err){
+                        console.log(err);
+                    }else{
+                        GroupsService.groups.delete({id: group._id}).$promise.then(function (resp) {
+                            console.log(resp);
+                            $state.reload();
+                        });
+                    }
                 });
             }, "Sterge");
         }
@@ -65,13 +71,5 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
             }
         });
     };
-
-    $scope.test = function(){
-        var toSend = {};
-        GroupsService.testSomething.query({data: toSend}).$promise.then(function(resp){
-            console.log(resp);
-        });
-    };
-
 
 }]);
