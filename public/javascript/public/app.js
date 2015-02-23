@@ -70,7 +70,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/elearning/:area',
             templateUrl: 'partials/public/elearning/root.html',
-            controller: 'ElearningController'
+            controller: 'ElearningView'
         })
         .state('elearning.all',{
             url: '/all',
@@ -79,7 +79,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/elearning/detail.html',
-            controller: 'ElearningDetailController'
+            controller: 'ElearningDetail'
         })
         .state('downloads', {
             abstract: true,

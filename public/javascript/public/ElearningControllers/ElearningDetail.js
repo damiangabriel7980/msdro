@@ -1,4 +1,4 @@
-controllers.controller('ElearningDetailController', ['$scope', '$rootScope', 'ContentService', '$stateParams', '$sce', function($scope, $rootScope, ContentService, $stateParams, $sce) {
+controllers.controller('ElearningDetail', ['$scope', '$rootScope', 'ContentService', '$stateParams', '$sce', function($scope, $rootScope, ContentService, $stateParams, $sce) {
 
     ContentService.contentById.query({id: $stateParams.id}).$promise.then(function (resp) {
         $scope.elearning = resp;
