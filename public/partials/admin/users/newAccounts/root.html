@@ -3,13 +3,13 @@
         <h3>Gestionare Utilizatori</h3>
     </div>
     <div class="newAccountsTabs">
-        <div class="tab" ng-class="{'active': $state.includes('utilizatori.conturiNoi.pending')}" ui-sref="utilizatori.conturiNoi.pending">
+        <div class="tab" ng-class="{'active': $state.includes('users.newAccounts.pending')}" ui-sref="users.newAccounts.pending">
             In asteptare&nbsp;<span class="label label-warning">{{count.PENDING}}</span>
         </div>
-        <div class="tab" ng-class="{'active': $state.includes('utilizatori.conturiNoi.accepted')}" ui-sref="utilizatori.conturiNoi.accepted">
+        <div class="tab" ng-class="{'active': $state.includes('users.newAccounts.accepted')}" ui-sref="users.newAccounts.accepted">
             Acceptati&nbsp;<span class="label label-success">{{count.ACCEPTED}}</span>
         </div>
-        <div class="tab" ng-class="{'active': $state.includes('utilizatori.conturiNoi.rejected')}" ui-sref="utilizatori.conturiNoi.rejected">
+        <div class="tab" ng-class="{'active': $state.includes('users.newAccounts.rejected')}" ui-sref="users.newAccounts.rejected">
             Respinsi&nbsp;<span class="label label-danger">{{count.REJECTED}}</span>
         </div>
     </div>

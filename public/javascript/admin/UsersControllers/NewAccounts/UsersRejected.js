@@ -23,7 +23,7 @@ controllers.controller('UsersRejected', ['$scope', '$rootScope', '$filter', 'ngT
 
     $scope.accept = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/utilizatori/conturiNoi/modalAreYouSure.html',
+            templateUrl: 'partials/admin/users/newAccounts/modalAreYouSure.html',
             size: 'sm',
             windowClass: 'fade',
             controller: 'AcceptUser',

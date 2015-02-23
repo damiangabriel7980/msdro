@@ -23,7 +23,7 @@ controllers.controller('UsersPending', ['$scope', '$rootScope', '$filter', 'ngTa
 
     $scope.accept = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/utilizatori/conturiNoi/modalAreYouSure.html',
+            templateUrl: 'partials/admin/users/newAccounts/modalAreYouSure.html',
             size: 'sm',
             windowClass: 'fade',
             controller: 'AcceptUser',
@@ -37,7 +37,7 @@ controllers.controller('UsersPending', ['$scope', '$rootScope', '$filter', 'ngTa
 
     $scope.reject = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/utilizatori/conturiNoi/modalAreYouSure.html',
+            templateUrl: 'partials/admin/users/newAccounts/modalAreYouSure.html',
             size: 'sm',
             windowClass: 'fade',
             controller: 'RejectUser',

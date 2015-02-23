@@ -32,7 +32,7 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
 
     $scope.addGroup = function(){
         $modal.open({
-            templateUrl: 'partials/admin/utilizatori/modalAddGroup.html',
+            templateUrl: 'partials/admin/users/groups/modalAddGroup.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'AddGroup'
@@ -54,7 +54,7 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
     };
     $scope.editGroup = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/utilizatori/modalEditGroup.html',
+            templateUrl: 'partials/admin/users/groups/modalEditGroup.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'EditGroup',

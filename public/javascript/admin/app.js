@@ -16,45 +16,45 @@ var app = angular.module('app',
     ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/utilizatori/gestionareConturi");
+    $urlRouterProvider.otherwise("/users/manageAccounts");
     $stateProvider
-        .state('utilizatori', {
+        .state('users', {
             abstract: true,
-            url: '/utilizatori',
-            templateUrl: 'partials/admin/utilizatori/utilizatori.html'
+            url: '/users',
+            templateUrl: 'partials/admin/users/root.html'
         })
-        .state('utilizatori.gestionareConturi',{
-            url: '/gestionareConturi',
-            templateUrl: 'partials/admin/utilizatori/gestionareConturi.html'
+        .state('users.manageAccounts',{
+            url: '/manageAccounts',
+            templateUrl: 'partials/admin/users/manageAccounts.html'
         })
-        .state('utilizatori.conturiNoi',{
-            url: '/conturiNoi',
-            templateUrl: 'partials/admin/utilizatori/conturiNoi/root.html',
+        .state('users.newAccounts',{
+            url: '/newAccounts',
+            templateUrl: 'partials/admin/users/newAccounts/root.html',
             controller: 'NewAccounts'
         })
-        .state('utilizatori.conturiNoi.accepted',{
+        .state('users.newAccounts.accepted',{
             url: '/accepted',
-            templateUrl: 'partials/admin/utilizatori/conturiNoi/accepted.html',
+            templateUrl: 'partials/admin/users/newAccounts/accepted.html',
             controller: 'UsersAccepted'
         })
-        .state('utilizatori.conturiNoi.rejected',{
+        .state('users.newAccounts.rejected',{
             url: '/rejected',
-            templateUrl: 'partials/admin/utilizatori/conturiNoi/rejected.html',
+            templateUrl: 'partials/admin/users/newAccounts/rejected.html',
             controller: 'UsersRejected'
         })
-        .state('utilizatori.conturiNoi.pending',{
+        .state('users.newAccounts.pending',{
             url: '/pending',
-            templateUrl: 'partials/admin/utilizatori/conturiNoi/pending.html',
+            templateUrl: 'partials/admin/users/newAccounts/pending.html',
             controller: 'UsersPending'
         })
-        .state('utilizatori.grupuri',{
-            url: '/grupuri',
-            templateUrl: 'partials/admin/utilizatori/grupuri.html',
+        .state('users.groups',{
+            url: '/groups',
+            templateUrl: 'partials/admin/users/groups/root.html',
             controller: 'Groups'
         })
-        .state('utilizatori.importUsers',{
+        .state('users.importUsers',{
             url: '/importUsers',
-            templateUrl: 'partials/admin/utilizatori/importUsers.html'
+            templateUrl: 'partials/admin/users/importUsers.html'
         })
         .state('continut', {
             abstract: true,

@@ -148,16 +148,16 @@
         <div class="collapse navbar-collapse" collapse="navCollapsed">
 
             <ul class="nav navbar-nav">
-                <li class="dropdown" ng-class="{'active': $state.includes('utilizatori')}">
+                <li class="dropdown" ng-class="{'active': $state.includes('users')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Utilizatori <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="utilizatori.gestionareConturi"> Gestionare conturi </a></li>
+                        <li><a ui-sref="users.manageAccounts"> Gestionare conturi </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="utilizatori.conturiNoi.pending"> Conturi noi </a></li>
+                        <li><a ui-sref="users.newAccounts.pending"> Conturi noi </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="utilizatori.grupuri"> Grupuri utilizatori </a></li>
+                        <li><a ui-sref="users.groups"> Grupuri utilizatori </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="utilizatori.importUsers"> Import Users </a></li>
+                        <li><a ui-sref="users.importUsers"> Import Users </a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('continut')}">
