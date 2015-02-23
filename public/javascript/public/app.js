@@ -169,7 +169,7 @@ app.run(
                     templateUrl: 'partials/public/auth/baseModal.html',
                     size: 'lg',
                     windowClass: 'fade',
-                    controller: 'AuthModalController',
+                    controller: 'AuthModal',
                     resolve:{
                         intent: function () {
                             return intent;
