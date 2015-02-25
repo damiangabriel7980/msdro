@@ -1,0 +1,30 @@
+<div ng-controller="EditProductPageResource">
+    <div class="modal-header">
+        <div class="modal-title"><h3>Modifica fisier resursa</h3></div>
+    </div>
+    <div class="modal-body container" style="margin: 0; width: 100%">
+        <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
+        <div class="col-md-12 noPadding">
+            <div class="form-group">
+                <label>Nume</label>
+                <input type="text" class="form-control" ng-model="currentItem.filename">
+            </div>
+            <div class="form-group">
+                <label>Descriere</label>
+                <input type="text" class="form-control" ng-model="currentItem.description">
+            </div>
+            <div class="col-md-12 noPadding">
+                <button class="btn btn-default" type="file" ng-file-select ng-file-change="resourceFileSelected($files, $event)" multiple="false"
+                        accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca resursa</button>
+                <span ng-if="resourceFileBody">{{resourceFileBody.name}}</span>
+                <span ng-if="!resourceFileBody">{{currentItem.file_path}}</span>
+                <span ng-if="currentItem.file_path">&nbsp;({{currentItem.size}},&nbsp;{{currentItem.type}})</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
+        <a class="btn btn-warning pull-right" ng-click="editResource()">Modifica</a>
+        <a class="btn btn-warning pull-right" ng-click="renderView('viewResources')">Inapoi</a>
+    </div>
+</div>

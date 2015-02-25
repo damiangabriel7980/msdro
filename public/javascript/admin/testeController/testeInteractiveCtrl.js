@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 26.11.2014.
  */
-cloudAdminControllers.controller('testeInteractiveCtrl', ['$scope','$rootScope' ,'quizesAdminService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,quizesAdminService,$stateParams,$sce,ngTableParams,$filter){
+controllers.controller('testeInteractiveCtrl', ['$scope','$rootScope' ,'quizesAdminService','$stateParams','$sce','ngTableParams','$filter', function($scope,$rootScope,quizesAdminService,$stateParams,$sce,ngTableParams,$filter){
     quizesAdminService.getAll.query().$promise.then(function(result){
         var teste = result;
         console.log(result);

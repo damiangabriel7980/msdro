@@ -1,6 +1,6 @@
-var cloudAdminServices = angular.module('cloudAdminServices', ['ngResource']);
+var services = angular.module('services', ['ngResource']);
 
-cloudAdminServices.factory('ContentService', ['$resource', function($resource){
+services.factory('ContentService', ['$resource', function($resource){
     return {
         getById: $resource('api/content/articleDetails', {}, {
             query: { method: 'POST', isArray: false }
@@ -11,7 +11,7 @@ cloudAdminServices.factory('ContentService', ['$resource', function($resource){
     }
 }]);
 
-cloudAdminServices.factory('SpecialFeaturesService', ['$resource', function($resource){
+services.factory('SpecialFeaturesService', ['$resource', function($resource){
     return {
         getSpecialGroups: $resource('api/groups/specialGroups', {}, {
             query: { method: 'GET', isArray: true }
@@ -22,7 +22,7 @@ cloudAdminServices.factory('SpecialFeaturesService', ['$resource', function($res
     }
 }]);
 
-cloudAdminServices.factory('specialProductService', ['$resource', function($resource){
+services.factory('specialProductService', ['$resource', function($resource){
     return {
         getSpecialProduct: $resource('api/specialProduct/', {}, {
             query: { method: 'POST', isArray: false }
@@ -42,7 +42,7 @@ cloudAdminServices.factory('specialProductService', ['$resource', function($reso
     }
 }]);
 
-cloudAdminServices.factory('ProfileService', ['$resource', function($resource){
+services.factory('ProfileService', ['$resource', function($resource){
     return {
         getUserData: $resource('api/userdata/', {}, {
             query: { method: 'GET', isArray: false }
@@ -71,7 +71,7 @@ cloudAdminServices.factory('ProfileService', ['$resource', function($resource){
     }
 }]);
 
-cloudAdminServices.factory('HomeService', ['$resource', function($resource){
+services.factory('HomeService', ['$resource', function($resource){
     return {
         getUserEvents: $resource('api/userHomeEvents/', {}, {
             query: { method: 'POST', isArray: true }
@@ -97,7 +97,7 @@ cloudAdminServices.factory('HomeService', ['$resource', function($resource){
     }
 }]);
 
-cloudAdminServices.factory('ProductService', ['$resource', function($resource){
+services.factory('ProductService', ['$resource', function($resource){
     return {
         getAll: $resource('api/products/', {}, {
             query: { method: 'GET', isArray: true }
@@ -111,13 +111,13 @@ cloudAdminServices.factory('ProductService', ['$resource', function($resource){
     }
 }]);
 
-cloudAdminServices.factory('therapeuticAreaService', ['$resource', function($resource){
+services.factory('therapeuticAreaService', ['$resource', function($resource){
     return $resource('api/therapeutic_areas', {}, {
         query: { method: 'GET', isArray: true }
     });
 }]);
 
-cloudAdminServices.factory('multimediaService', ['$resource', function($resource){
+services.factory('multimediaService', ['$resource', function($resource){
     return {
         getByArea: $resource('api/multimedia/multimediaByArea', {}, {
             query: { method: 'POST', isArray: true }
@@ -131,18 +131,18 @@ cloudAdminServices.factory('multimediaService', ['$resource', function($resource
     }
 }]);
 
-cloudAdminServices.factory('eventsService', ['$resource', function($resource){
+services.factory('eventsService', ['$resource', function($resource){
     return $resource('api/calendar/getEvents/', {}, {
         query: { method: 'POST', isArray: true }
     });
 }]);
-cloudAdminServices.factory('eventsService2', ['$resource', function($resource){
+services.factory('eventsService2', ['$resource', function($resource){
     return $resource('api/calendar/:id', {}, {
         query: { method: 'GET', isArray: false }
     });
 }]);
 
-cloudAdminServices.factory('FormatService', function () {
+services.factory('FormatService', function () {
     return {
         formatMongoDate: function (date) {
             var d = date.substring(0,10).split('-');
@@ -154,7 +154,7 @@ cloudAdminServices.factory('FormatService', function () {
         }
     }
 });
-cloudAdminServices.factory('quizesService', ['$resource', function($resource){
+services.factory('quizesService', ['$resource', function($resource){
     return {
         getAll: $resource('api/quizes/', {}, {
             query: { method: 'GET', isArray: true }
@@ -171,7 +171,7 @@ cloudAdminServices.factory('quizesService', ['$resource', function($resource){
 
     }
 }]);
-cloudAdminServices.factory('userService', ['$resource', function($resource){
+services.factory('userService', ['$resource', function($resource){
     return {
         postTest: $resource('api/user',{},{
                 save:{method:'PUT'}

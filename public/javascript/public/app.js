@@ -1,9 +1,9 @@
-var publicApp = angular.module('publicApp',
+var app = angular.module('app',
     [
         'ui.router',
         'ui.bootstrap',
-        'publicControllers',
-        'publicServices',
+        'controllers',
+        'services',
         'ngTouch',
         'angular-carousel',
         'msdTimeline',
@@ -14,33 +14,33 @@ var publicApp = angular.module('publicApp',
         'angularFileUpload'
     ]);
 
-publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/home/noutati");
     $stateProvider
         .state('home',{
             templateUrl: 'partials/public/home.html',
-            controller: 'HomeController'
+            controller: 'HomeView'
         })
         .state('home.noutati',{
             url: '/home/noutati',
             templateUrl: 'partials/public/home/noutati.html',
-            controller: 'NoutatiController'
+            controller: 'HomeNews'
         })
         .state('home.cmcArticole',{
             url: '/home/cmcArticole',
             templateUrl: 'partials/public/home/cmcArticole.html',
-            controller: 'CeleMaiCititeController'
+            controller: 'HomeMostRead'
         })
         .state('home.downloads',{
             url: '/home/downloads',
             templateUrl: 'partials/public/home/downloads.html',
-            controller: 'HomeDownloadsController'
+            controller: 'HomeDownloads'
         })
         .state('stiri', {
             abstract: true,
             url: '/stiri',
             templateUrl: 'partials/public/stiri/root.html',
-            controller: 'NewsController'
+            controller: 'NewsView'
         })
         .state('stiri.all',{
             url: '/all',
@@ -49,13 +49,13 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         .state('stiri.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/stiri/detail.html',
-            controller: 'ArticlesDetailController'
+            controller: 'ArticlesDetail'
         })
         .state('articole', {
             abstract: true,
             url: '/articole',
             templateUrl: 'partials/public/articole/root.html',
-            controller: 'ArticlesController'
+            controller: 'ArticlesView'
         })
         .state('articole.all',{
             url: '/all',
@@ -64,13 +64,13 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         .state('articole.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/articole/detail.html',
-            controller: 'ArticlesDetailController'
+            controller: 'ArticlesDetail'
         })
         .state('elearning', {
             abstract: true,
             url: '/elearning/:area',
             templateUrl: 'partials/public/elearning/root.html',
-            controller: 'ElearningController'
+            controller: 'ElearningView'
         })
         .state('elearning.all',{
             url: '/all',
@@ -79,13 +79,13 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         .state('elearning.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/elearning/detail.html',
-            controller: 'ElearningDetailController'
+            controller: 'ElearningDetail'
         })
         .state('downloads', {
             abstract: true,
             url: '/downloads',
             templateUrl: 'partials/public/downloads/root.html',
-            controller: 'DownloadsController'
+            controller: 'DownloadsView'
         })
         .state('downloads.all',{
             url: '/all',
@@ -94,16 +94,16 @@ publicApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
         .state('downloads.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/downloads/detail.html',
-            controller: 'DownloadsDetailController'
+            controller: 'DownloadsDetail'
         })
         .state('publicSearch',{
             url: '/publicSearchResults',
             templateUrl: 'partials/public/publicSearch.html',
-            controller: 'publicSearchController'
+            controller: 'Search'
         })
 }]);
 
-publicApp.run(
+app.run(
     [            '$rootScope', '$state', '$stateParams', '$modal', '$sce',
         function ($rootScope,   $state,   $stateParams, $modal, $sce) {
 
@@ -159,7 +159,7 @@ publicApp.run(
                     templateUrl: 'partials/public/modals/contactModal.html',
                     size: 'lg',
                     windowClass: 'fade',
-                    controller: 'ContactModalController'
+                    controller: 'ContactModal'
                 });
             };
 
@@ -169,7 +169,7 @@ publicApp.run(
                     templateUrl: 'partials/public/auth/baseModal.html',
                     size: 'lg',
                     windowClass: 'fade',
-                    controller: 'AuthModalController',
+                    controller: 'AuthModal',
                     resolve:{
                         intent: function () {
                             return intent;

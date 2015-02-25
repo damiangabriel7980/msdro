@@ -1,4 +1,4 @@
-publicApp.directive('resizable', function($window) {
+app.directive('resizable', function($window) {
     return {
         restrict: 'A',
         link: function ($scope, $element, attrs) {
@@ -23,7 +23,7 @@ publicApp.directive('resizable', function($window) {
         }
     }
 });
-publicApp.directive('carouselResizable', function($window) {
+app.directive('carouselResizable', function($window) {
     return {
         restrict: 'A',
         link: function ($scope, $element) {
@@ -67,7 +67,7 @@ publicApp.directive('carouselResizable', function($window) {
         }
     }
 });
-publicApp.directive('scrollcenter', function($window) {
+app.directive('scrollcenter', function($window) {
     return {
         restrict: 'A',
         link: function ($scope, $element, attrs) {
@@ -124,7 +124,7 @@ publicApp.directive('scrollcenter', function($window) {
         }
     }
 });
-publicApp.directive('footerBottom', function($window, $rootScope, $timeout, $state) {
+app.directive('footerBottom', function($window, $rootScope, $timeout, $state) {
     return {
         restrict: 'A',
         link: function ($scope, $element, attrs) {

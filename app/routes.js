@@ -20,16 +20,20 @@ module.exports = function(app, email, logger, passport) {
 // normal routes ===============================================================
 
     app.get('/', function (req, res) {
-        if(req.session.requestedActivation){
-            delete req.session.requestedActivation;
-            if(req.session.accountActivated){
-                delete req.session.accountActivated;
-                res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation:1, accountActivated: 1});
-            }else{
-                res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation:1, accountActivated: 0});
-            }
+        if(req.isAuthenticated()){
+            res.redirect('/pro');
         }else{
-            res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation: 0, accountActivated: 0});
+            if(req.session.requestedActivation){
+                delete req.session.requestedActivation;
+                if(req.session.accountActivated){
+                    delete req.session.accountActivated;
+                    res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation:1, accountActivated: 1});
+                }else{
+                    res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation:1, accountActivated: 0});
+                }
+            }else{
+                res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation: 0, accountActivated: 0});
+            }
         }
     });
 

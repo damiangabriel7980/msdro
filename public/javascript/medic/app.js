@@ -1,8 +1,8 @@
-var cloudAdminApp = angular.module('cloudAdminApp',
+var app = angular.module('app',
     [
         'ui.router',
-        'cloudAdminControllers',
-        'cloudAdminServices',
+        'controllers',
+        'services',
         'ui.calendar',
         'ui.select',
         'pdf',
@@ -15,18 +15,18 @@ var cloudAdminApp = angular.module('cloudAdminApp',
         'ui.bootstrap'
     ]);
 
-cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
     $stateProvider
         .state('home',{
             url: '/',
             templateUrl: 'partials/medic/home.ejs',
-            controller: 'HomeController'
+            controller: 'Home'
         })
         .state('homeSearch',{
             url: '/searchResults',
             templateUrl: 'partials/medic/homeSearch.ejs',
-            controller: 'HomeSearchController'
+            controller: 'Search'
         })
         .state('contact',{
             parent:'home',
@@ -37,7 +37,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                     backdrop: true,
                     size: 'lg',
                     windowClass: 'fade',
-                    controller: 'contactCtrl'
+                    controller: 'Contact'
                 })
             }]
 
@@ -46,7 +46,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
             //abstract: true,
             url: '/noutati/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
-            controller: 'ContentController'
+            controller: 'ArticlesView'
         })
         .state('noutati.listaArticole',{
             url: '/listaArticole',
@@ -55,7 +55,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('noutati.articol',{
             url: '/articol/:articleId',
             templateUrl: 'partials/medic/noutati/articol.ejs',
-            controller: 'ContentArticleController'
+            controller: 'ArticleDetail'
         })
         .state('biblioteca', {
             abstract: true,
@@ -65,22 +65,22 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('biblioteca.produse',{
             url: '/produse',
             templateUrl: 'partials/medic/biblioteca/produse.ejs',
-            controller: 'therapeuticControllerCtrl'
+            controller: 'TherapeuticAreas'
         })
         .state('biblioteca.produse.productsByArea',{
             url: '/productsByArea/:id',
             templateUrl: 'partials/medic/biblioteca/productsByArea.ejs',
-            controller: 'productsController'
+            controller: 'ProductsView'
         })
         .state('biblioteca.produse.prodById',{
             url: '/produse/:id',
             templateUrl: 'partials/medic/biblioteca/productDetails.ejs',
-            controller: 'productDetailsController'
+            controller: 'ProductDetail'
         })
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
-            controller: 'ContentController'
+            controller: 'ArticlesView'
         })
         .state('biblioteca.articoleStiintifice.listaArticole',{
             url: '/listaArticole',
@@ -89,12 +89,12 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('biblioteca.articoleStiintifice.articol',{
             url: '/articol/:articleId',
             templateUrl: 'partials/medic/noutati/articol.ejs',
-            controller: 'ContentArticleController'
+            controller: 'ArticleDetail'
         })
        .state('calendar',{
             url: '/calendar/:id',
             templateUrl: 'partials/medic/calendar.ejs',
-            controller: 'eventsController'
+            controller: 'Events'
         })
         .state('elearning', {
             abstract: true,
@@ -104,22 +104,22 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         .state('elearning.multimedia',{
             url: '/multimedia',
             templateUrl: 'partials/medic/elearning/multimedia.ejs' ,
-            controller: 'therapeuticControllerCtrl'
+            controller: 'TherapeuticAreas'
         })
         .state('elearning.multimedia.multimediaByArea',{
             url: '/multimedia/:idArea:idMulti',
             templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
-            controller: 'multimediaController'
+            controller: 'MultimediaView'
         })
         .state('elearning.transmisii',{
             url: '/transmisii',
             templateUrl: 'partials/medic/elearning/transmisii.ejs',
-            controller: 'liveTransmissionCtrl'
+            controller: 'LiveTransmission'
         })
         .state('elearning.teste',{
             url: '/teste',
             templateUrl: 'partials/medic/elearning/teste.ejs',
-            controller: 'testeController'
+            controller: 'QuizesView'
         })
         .state('elearning.multimediaBeforeQuiz',{
             parent:'elearning.teste',
@@ -134,7 +134,7 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                     keyboard: false,
                     mouse:false,
                     windowClass: 'fade',
-                    controller: 'MultimediaBeforeQuizController'
+                    controller: 'MultimediaBeforeQuiz'
                 })
             }]
         })
@@ -150,53 +150,53 @@ cloudAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($statePr
                     keyboard: false,
                     mouse:false,
                     windowClass: 'fade',
-                    controller: 'testeQuestionsController'
+                    controller: 'QuizQuestions'
                 })
             }]
         })
         .state('groupFeatures', {
             url: '/groupFeatures/:feature',
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
-            controller: 'DisplayFeaturesController'
+            controller: 'DisplayFeatures'
         })
         .state('groupSpecialProduct', {
             url: '/groupSpecialProduct',
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
-            controller: 'specialProductCtrl'
+            controller: 'ProductPage'
         })
         .state('groupSpecialProduct.productInfo', {
         url: '/groupSpecialProduct/:product_id/productInfo',
         templateUrl: 'partials/medic/groupFeatures/specialProductInfo.html',
-        controller: 'specialProductInfoCtrl'
+        controller: 'ProductPageInfo'
         })
         .state('groupSpecialProduct.description', {
             url: '/selectedMenuItem/:id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Description.html',
-            controller: 'specialProductDescriptionCtrl'
+            controller: 'ProductPageDescription'
         })
         .state('groupSpecialProduct.files', {
             url: '/selectedMenuFiles/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_files.html',
-            controller: 'specialProductFilesCtrl'
+            controller: 'ProductPageDownloads'
         })
         .state('groupSpecialProduct.prescription', {
             url: '/selectedMenuPrescription/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_prescription.html',
-            controller: 'specialProductPrescriptionCtrl'
+            controller: 'ProductPagePrescription'
         })
         .state('groupSpecialProduct.glossary', {
             url: '/selectedGlossary/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_glossary.html',
-            controller: 'specialProductGlossaryCtrl'
+            controller: 'ProductPageGlossary'
         })
         .state('groupSpecialProduct.sitemap', {
             url: '/sitemap/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html',
-            controller: 'specialProductMapCtrl'
+            controller: 'ProductPageMap'
         })
 }]);
 
-cloudAdminApp.run(
+app.run(
     [            '$rootScope', '$state', '$stateParams', '$modal','$sce',
         function ($rootScope,   $state,   $stateParams, $modal,$sce) {
 
@@ -263,7 +263,7 @@ cloudAdminApp.run(
                     backdrop: 'static',
                     keyboard: false,
                     windowClass: 'fade',
-                    controller: 'ProfileController'
+                    controller: 'Profile'
                 });
             };
         }

@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('DeleteTopicController', ['$scope','qaService', '$modalInstance', '$state', 'idToDelete',function($scope, qaService, $modalInstance, $state, idToDelete){
+controllers.controller('DeleteTopicController', ['$scope','qaService', '$modalInstance', '$state', 'idToDelete',function($scope, qaService, $modalInstance, $state, idToDelete){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
 

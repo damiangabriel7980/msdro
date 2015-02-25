@@ -1,4 +1,4 @@
-cloudAdminControllers.controller('AddTopicController', ['$scope','qaService', '$modalInstance', '$state',function($scope, qaService, $modalInstance, $state){
+controllers.controller('AddTopicController', ['$scope','qaService', '$modalInstance', '$state',function($scope, qaService, $modalInstance, $state){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
 

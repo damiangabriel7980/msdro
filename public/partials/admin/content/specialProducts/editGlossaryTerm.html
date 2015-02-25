@@ -1,0 +1,22 @@
+<div ng-controller="CrudProductPageGlossary">
+    <div class="modal-header">
+        <div class="modal-title"><h3>Modifica glosar</h3></div>
+    </div>
+    <div class="modal-body container" style="margin: 0; width: 100%">
+        <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
+        <div class="col-md-12 noPadding">
+            <div class="form-group">
+                <label>Cuvant cheie</label>
+                <input type="text" class="form-control" ng-model="currentItem.keyword">
+            </div>
+            <div class="form-group">
+                <label>Descriere</label>
+                <input type="text" class="form-control" ng-model="currentItem.description">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
+        <a class="btn btn-warning pull-right" ng-click="editGlossaryTerm()">Modifica</a>
+    </div>
+</div>

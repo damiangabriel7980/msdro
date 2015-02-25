@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="cloudAdminApp">
+<html lang="en" ng-app="app">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
@@ -37,83 +37,66 @@
     <script src="javascript/admin/app.js"></script>
     <script src="javascript/admin/controllers.js"></script>
     <script src="javascript/admin/services.js"></script>
+    <script src="javascript/shared/controllers.js"></script>
+    <script src="javascript/shared/services.js"></script>
     <script src="javascript/admin/customDirectives.js"></script>
-    <script src="javascript/admin/UtilizatoriControllers/GrupuriController.js"></script>
-    <script src="javascript/admin/UtilizatoriControllers/AddGroupController.js"></script>
-    <script src="javascript/admin/UtilizatoriControllers/DeleteGroupController.js"></script>
-    <script src="javascript/admin/UtilizatoriControllers/EditGroupController.js"></script>
-    <script src="javascript/admin/UtilizatoriControllers/NewAccounts/newAccountsController.js"></script>
-    <script src="javascript/admin/UtilizatoriControllers/NewAccounts/UsersAcceptedController.js"></script>
-    <script src="javascript/admin/UtilizatoriControllers/NewAccounts/UsersRejectedController.js"></script>
-    <script src="javascript/admin/UtilizatoriControllers/NewAccounts/UsersPendingController.js"></script>
-    <script src="javascript/admin/UtilizatoriControllers/NewAccounts/AcceptUserController.js"></script>
-    <script src="javascript/admin/UtilizatoriControllers/NewAccounts/RejectUserController.js"></script>
-    <script src="javascript/admin/ContinutControllers/ContinutPublicController.js"></script>
-    <script src="javascript/admin/ContinutControllers/AddPublicContentController.js"></script>
-    <script src="javascript/admin/ContinutControllers/DeletePublicContentController.js"></script>
-    <script src="javascript/admin/ContinutControllers/EditPublicContentController.js"></script>
-    <script src="javascript/admin/ContinutControllers/indexContentController.js"></script>
-    <script src="javascript/admin/ContinutControllers/ToggleEnablePublicContentController.js"></script>
-    <script src="javascript/admin/CarouselPublicControllers/CarouselPublicController.js"></script>
-    <script src="javascript/admin/CarouselPublicControllers/AddPublicCarouselController.js"></script>
-    <script src="javascript/admin/CarouselPublicControllers/ToggleEnablePublicCarouselController.js"></script>
-    <script src="javascript/admin/CarouselPublicControllers/DeletePublicCarouselController.js"></script>
-    <script src="javascript/admin/CarouselPublicControllers/EditPublicCarouselController.js"></script>
+    <script src="javascript/admin/UsersControllers/Groups.js"></script>
+    <script src="javascript/admin/UsersControllers/AddGroup.js"></script>
+    <script src="javascript/admin/UsersControllers/EditGroup.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/NewAccounts.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/UsersAccepted.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/UsersRejected.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/UsersPending.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/AcceptUser.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/RejectUser.js"></script>
+    <script src="javascript/admin/PublicContentControllers/PublicContent.js"></script>
+    <script src="javascript/admin/PublicContentControllers/AddPublicContent.js"></script>
+    <script src="javascript/admin/PublicContentControllers/EditPublicContent.js"></script>
+    <script src="javascript/admin/CarouselPublicControllers/CarouselPublic.js"></script>
+    <script src="javascript/admin/CarouselPublicControllers/AddCarouselPublic.js"></script>
+    <script src="javascript/admin/CarouselPublicControllers/EditCarouselPublic.js"></script>
+    <script src="javascript/admin/CarouselMedicControllers/CarouselMedic.js"></script>
+    <script src="javascript/admin/CarouselMedicControllers/AddCarouselMedic.js"></script>
+    <script src="javascript/admin/CarouselMedicControllers/EditCarouselMedic.js"></script>
 
-        <script src="javascript/admin/CarouselMedicControllers/CarouselMedicController.js"></script>
-    <script src="javascript/admin/CarouselMedicControllers/AddMedicCarouselController.js"></script>
-    <script src="javascript/admin/CarouselMedicControllers/ToggleEnableMedicCarouselController.js"></script>
-    <script src="javascript/admin/CarouselMedicControllers/DeleteMedicCarouselController.js"></script>
-    <script src="javascript/admin/CarouselMedicControllers/EditMedicCarouselController.js"></script>
+    <script src="javascript/admin/ProductsControllers/Products.js"></script>
+    <script src="javascript/admin/ProductsControllers/AddProduct.js"></script>
+    <script src="javascript/admin/ProductsControllers/EditProduct.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPage.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPageModal.js"></script>
+    <script src="javascript/admin/ProductPageControllers/AddProductPage.js"></script>
+    <script src="javascript/admin/ProductPageControllers/DeleteProductPage.js"></script>
+    <script src="javascript/admin/ProductPageControllers/EnableProductPage.js"></script>
+    <script src="javascript/admin/ProductPageControllers/EditProductPage.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPageMenu.js"></script>
+    <script src="javascript/admin/ProductPageControllers/AddProductPageMenu.js"></script>
+    <script src="javascript/admin/ProductPageControllers/EditProductPageMenu.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPageResources.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPageGlossary.js"></script>
+    <script src="javascript/admin/ProductPageControllers/CrudProductPageGlossary.js"></script>
+    <script src="javascript/admin/ProductPageControllers/AddProductPageResource.js"></script>
+    <script src="javascript/admin/ProductPageControllers/EditProductPageResource.js"></script>
+    <script src="javascript/admin/ArticlesControllers/Articles.js"></script>
+    <script src="javascript/admin/ArticlesControllers/AddArticles.js"></script>
+    <script src="javascript/admin/ArticlesControllers/EditArticles.js"></script>
+    <script src="javascript/admin/EventsControllers/AddRoom.js"></script>
+    <script src="javascript/admin/EventsControllers/EditRoom.js"></script>
+    <script src="javascript/admin/EventsControllers/Events.js"></script>
+    <script src="javascript/admin/EventsControllers/AddEvent.js"></script>
+    <script src="javascript/admin/EventsControllers/AddConference.js"></script>
+    <script src="javascript/admin/EventsControllers/EditConference.js"></script>
+    <script src="javascript/admin/EventsControllers/EditEvent.js"></script>
+    <script src="javascript/admin/EventsControllers/AddSpeaker.js"></script>
+    <script src="javascript/admin/EventsControllers/EditSpeaker.js"></script>
+    <script src="javascript/admin/EventsControllers/AddTalk.js"></script>
+    <script src="javascript/admin/EventsControllers/EditTalk.js"></script>
 
-    <script src="javascript/admin/ProduseController/productsCtrl.js"></script>
-    <script src="javascript/admin/ProduseController/productsAddCtrl.js"></script>
-    <script src="javascript/admin/ProduseController/productsEditCtrl.js"></script>
-    <script src="javascript/admin/ProduseController/productsDeleteCtrl.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductsController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductModalController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductAddController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductDeleteController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductEnableController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductEditController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductMenuController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductAddMenuController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductEditMenuController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductResourcesController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductGlossaryController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductCrudGlossaryController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductAddResourceController.js"></script>
-    <script src="javascript/admin/SpecialProductsControllers/SpecialProductEditResourceController.js"></script>
-    <script src="javascript/admin/ArticoleController/articlesCtrl.js"></script>
-    <script src="javascript/admin/ArticoleController/articlesAddCtrl.js"></script>
-    <script src="javascript/admin/ArticoleController/articlesDeleteCtrl.js"></script>
-    <script src="javascript/admin/ArticoleController/articlesUpdateCtrl.js"></script>
-    <script src="javascript/admin/ArticoleController/toggleArticleEnabledController.js"></script>
-    <script src="javascript/admin/EvenimenteController/roomAddCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/roomUpdateCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/roomDeleteCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/eventToggleCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/eventsCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/eventsDeleteCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/conferencesDeleteCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/speakerDeleteCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/talkDeleteCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/eventsAddCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/ConferencesAddCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/conferenceUpdateCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/eventsUpdateCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/SpeakerAddCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/speakerUpdateCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/TalkAddCtrl.js"></script>
-    <script src="javascript/admin/EvenimenteController/talkUpdateCtrl.js"></script>
+    <script src="javascript/admin/TherapeuticAreasControllers/TherapeuticAreas.js"></script>
+    <script src="javascript/admin/TherapeuticAreasControllers/AddTherapeuticAreas.js"></script>
+    <script src="javascript/admin/TherapeuticAreasControllers/EditTherapeuticAreas.js"></script>
 
-    <script src="javascript/admin/ariiController/ariiTerapeuticeCtrl.js"></script>
-    <script src="javascript/admin/ariiController/ariiTerapeuticeAddCtrl.js"></script>
-    <script src="javascript/admin/ariiController/ariiTerapeuticeEditCtrl.js"></script>
-    <script src="javascript/admin/ariiController/ariiTerapeuticeDeleteCtrl.js"></script>
-
-    <script src="javascript/admin/MultimediaController/multimediaCtrl.js"></script>
-    <script src="javascript/admin/MultimediaController/multimediaAddCtrl.js"></script>
+    <script src="javascript/admin/MultimediaControllers/Multimedia.js"></script>
+    <script src="javascript/admin/MultimediaControllers/AddMultimedia.js"></script>
     <script src="javascript/admin/testeController/testeInteractiveCtrl.js"></script>
     <script src="javascript/admin/testeController/testeAddCtrl.js"></script>
     <script src="javascript/admin/applicationsControllers/qa/qaController.js"></script>
@@ -165,36 +148,36 @@
         <div class="collapse navbar-collapse" collapse="navCollapsed">
 
             <ul class="nav navbar-nav">
-                <li class="dropdown" ng-class="{'active': $state.includes('utilizatori')}">
+                <li class="dropdown" ng-class="{'active': $state.includes('users')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Utilizatori <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="utilizatori.gestionareConturi"> Gestionare conturi </a></li>
+                        <li><a ui-sref="users.manageAccounts"> Gestionare conturi </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="utilizatori.conturiNoi.pending"> Conturi noi </a></li>
+                        <li><a ui-sref="users.newAccounts.pending"> Conturi noi </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="utilizatori.grupuri"> Grupuri utilizatori </a></li>
+                        <li><a ui-sref="users.groups"> Grupuri utilizatori </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="utilizatori.importUsers"> Import Users </a></li>
+                        <li><a ui-sref="users.importUsers"> Import Users </a></li>
                     </ul>
                 </li>
-                <li class="dropdown" ng-class="{'active': $state.includes('continut')}">
+                <li class="dropdown" ng-class="{'active': $state.includes('content')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Continut <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="continut.produse"> Produse </a></li>
+                        <li><a ui-sref="content.produse"> Produse </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="continut.specialProducts"> Produs special </a></li>
+                        <li><a ui-sref="content.specialProducts"> Produs special </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="continut.articole"> Articole </a></li>
+                        <li><a ui-sref="content.articles"> Articole </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="continut.evenimente"> Evenimente </a></li>
+                        <li><a ui-sref="content.evenimente"> Evenimente </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="continut.intro"> Intro </a></li>
+                        <li><a ui-sref="content.intro"> Intro </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="continut.carouselMedic"> Carousel Medic </a></li>
+                        <li><a ui-sref="content.carouselMedic"> Carousel Medic </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="continut.carouselPublic"> Carousel Public </a></li>
+                        <li><a ui-sref="content.carouselPublic"> Carousel Public </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="continut.continutPublic"> Continut Public </a></li>
+                        <li><a ui-sref="content.publicContent"> Continut Public </a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('newsletter')}">
@@ -212,10 +195,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="elearning.multimedia"> Multimedia </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="elearning.transmisiiLive"> Transmisii live </a></li>
-                        <li class="divider"></li>
                         <li><a ui-sref="elearning.testeInteractive"> Teste Interactive </a></li>
-                        <li class="divider"></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('ariiTerapeutice')}"><a ui-sref="ariiTerapeutice"> Arii terapeutice </a></li>
