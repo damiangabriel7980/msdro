@@ -339,64 +339,15 @@ services.factory('ContentService', ['$resource', function($resource){
         })
     }
 }]);
-services.factory('EventsAdminService', ['$resource', function($resource){
+services.factory('EventsService', ['$resource', function($resource){
     return {
-        toggleEvent: $resource('api/admin/events/toggleEvent/:data', {}, {
-            save: { method: 'POST'}
+        events: $resource('api/admin/events/events', {}, {
+            query: { method: 'GET', isArray: false }
         }),
-        getGroups: $resource('api/admin/users/groups',{},{
-            query: { method: 'GET', isArray: true }
-        }),
-        changeConferenceLogo: $resource('api/admin/conferences/changeConferenceLogo/:data', {}, {
-            save: { method: 'POST'}
-        }),
-        changeSpeakerLogo: $resource('api/admin/speakers/changeSpeakerLogo/:data', {}, {
-            save: { method: 'POST'}
-        }),
-        getAll: $resource('api/admin/events/', {}, {
-            query: { method: 'GET', isArray: true },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateEvents:$resource('api/admin/events/:id', {}, {
-            getEvent: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
-        }),
-        getAllSpeakers: $resource('api/admin/speakers/', {}, {
-            query: { method: 'GET', isArray: true },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateSpeakers:$resource('api/admin/speakers/:id', {}, {
-            getSpeaker: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
-        }),
-        getAllConferences: $resource('api/admin/conferences/', {}, {
-            query: { method: 'GET', isArray: true },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateConferences:$resource('api/admin/conferences/:id', {}, {
-            getConference: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
-        }),
-        getAllTalks: $resource('api/admin/talks/', {}, {
-            query: { method: 'GET', isArray: true },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateTalks:$resource('api/admin/talks/:id', {}, {
-            getTalk: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
-        }),
-        getAllRoom: $resource('api/admin/rooms/', {}, {
-            query: { method: 'GET', isArray: true },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateRooms:$resource('api/admin/rooms/:id', {}, {
-            getRoom: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
+        speakers: $resource('api/admin/events/speakers', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false }
         })
     }
 }]);

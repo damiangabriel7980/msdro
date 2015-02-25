@@ -76,61 +76,23 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/content/articles/root.html',
             controller:'Articles'
         })
-        .state('content.evenimente',{
-            url: '/evenimente',
-            templateUrl: 'partials/admin/content/events/root.html',
-            controller:'Events'
+        .state('content.events',{
+            url: '/events',
+            templateUrl: 'partials/admin/content/events/root.html'
         })
-        .state('content.adaugaEveniment',{
-            url: '/addEvent',
-            templateUrl: 'partials/admin/content/events/evenimenteAdd.ejs',
-            controller:"AddEvent"
+        .state('content.events.viewAll',{
+            url: '/viewAll',
+            templateUrl: 'partials/admin/content/events/filter.html'
         })
-        .state('content.adaugaRoom',{
-            url: '/addRoom',
-            templateUrl: 'partials/admin/content/events/roomAdd.ejs',
-            controller:"AddRoom"
+        .state('content.events.viewAll.events',{
+            url: '/events',
+            templateUrl: 'partials/admin/content/events/viewEvents.html',
+            controller: "ViewEvents"
         })
-        .state('content.updateRoom',{
-            url: '/updateRoom/:id',
-            templateUrl: 'partials/admin/content/events/roomUpdate.ejs',
-            controller:"EditRoom"
-        })
-
-        .state('content.adaugaConferinta',{
-            url: '/addConference',
-            templateUrl: 'partials/admin/content/events/ConferenceAdd.ejs',
-            controller:"AddConference"
-        })
-        .state('content.adaugaTalk',{
-            url: '/addTalk',
-            templateUrl: 'partials/admin/content/events/TalkAdd.ejs',
-            controller:"AddTalk"
-        })
-        .state('content.adaugaSpeaker',{
-            url: '/addSpeaker',
-            templateUrl: 'partials/admin/content/events/SpeakerAdd.ejs',
-            controller:"AddSpeaker"
-        })
-        .state('content.updateEveniment',{
-            url: '/updateEvent/:id',
-            templateUrl: 'partials/admin/content/events/evenimenteUpdate.ejs',
-            controller:"EditEvent"
-        })
-        .state('content.updateConference',{
-            url: '/updateConference/:id',
-            templateUrl: 'partials/admin/content/events/conferenceUpdate.ejs',
-            controller:"EditConference"
-        })
-        .state('content.updateTalk',{
-            url: '/updateTalk/:id',
-            templateUrl: 'partials/admin/content/events/talkUpdate.ejs',
-            controller:"EditTalk"
-        })
-        .state('content.updateSpeaker',{
-            url: '/updateSpeaker/:id',
-            templateUrl: 'partials/admin/content/events/speakerUpdate.ejs',
-            controller:"EditSpeaker"
+        .state('content.events.viewAll.speakers',{
+            url: '/speakers',
+            templateUrl: 'partials/admin/content/events/viewSpeakers.html',
+            controller: "ViewSpeakers"
         })
         .state('content.intro',{
             url: '/intro',

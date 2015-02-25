@@ -1,0 +1,20 @@
+<div class="col-md-12 noPadding">
+    <div class="col-md-8 noPadding"><h3>Gestionare Speakeri</h3></div>
+    <div class="col-md-4 noPadding">
+        <a class="btn btn-info pull-right margintop20px" ng-click="add()"><i class="glyphicon glyphicon-plus-sign"></i> Adauga speaker</a>
+    </div>
+</div>
+<div class="col-md-12 noPadding">
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="speaker in $data">
+            <td data-title="'Prenume'" filter="{ 'first_name': 'text' }" sortable="'first_name'">{{speaker.first_name}}</td>
+            <td data-title="'Nume'" filter="{ 'last_name': 'text' }" sortable="'last_name'">{{speaker.last_name}}</td>
+            <td>
+                <div class="btn-group-sm">
+                    <button class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button class="btn btn-info"><i class="glyphicon glyphicon-cog"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
