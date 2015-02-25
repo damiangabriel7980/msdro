@@ -20,7 +20,7 @@ controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce',
         return $sce.trustAsHtml(convertedText);
     };
     $scope.amazon = $rootScope.pathAmazonDev;
-    HomeService.getSearchResults.query({data:$rootScope.textToSearch.toString(),specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(response){
+    HomeService.getSearchResults.query({data:$stateParams.textToSearch.toString(),specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(response){
        $scope.productsFirstSet = response.products;
         $scope.products=[];
         $scope.quizes=[];

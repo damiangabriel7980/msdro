@@ -85,60 +85,6 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
     };
 
 
-    //merck modal
-    $rootScope.showMerckManual = function(){
-        $modal.open({
-            templateUrl: 'partials/medic/modals/merckManual.html',
-            size: 'lg',
-            keyboard: false,
-            backdrop: 'static',
-            windowClass: 'fade',
-            controller: 'MerckManual'
-        });
-    };
-    $rootScope.textToSearch="";
-    $rootScope.getInput = function(){
-        var x = document.getElementById("upperSearch");
-        $rootScope.textToSearch = x.value;
-    };
-    $rootScope.showFarmaModal = function() {
-        var modalInstance = $modal.open({
-            templateUrl: 'partials/medic/modals/Farma.html',
-            keyboard: false,
-            controller: 'Pharmacovigilance',
-            size: 'lg',
-            windowClass: 'fade',
-            backdrop: 'static'
-            //windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
-        });
-    };
-
-
-    $rootScope.showContactModal = function(){
-        $modal.open({
-            templateUrl: 'partials/medic/contact.ejs',
-            size: 'lg',
-            backdrop: 'static',
-            keyboard: false,
-            windowClass: 'fade',
-            controller: 'Contact'
-        });
-    };
-    $rootScope.showTermsModal = function(){
-        $modal.open({
-            templateUrl: 'partials/medic/modals/Terms.html',
-            size: 'lg',
-            windowClass: 'fade',
-            backdrop: 'static',
-            controller: 'Terms',
-            keyboard: false
-            //windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
-        });
-    };
-
-    $scope.animateInput=function(){
-       angular.element('.form-control').removeClass('popSearch');
-    };
     /* --- carousel --- */
 
 
