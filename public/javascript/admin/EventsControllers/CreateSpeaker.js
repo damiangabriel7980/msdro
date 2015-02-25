@@ -1,4 +1,4 @@
-controllers.controller('AddSpeaker', ['$scope','$rootScope' ,'EventsService', '$state', '$modalInstance', 'AmazonService', function($scope, $rootScope, EventsService, $state, $modalInstance, AmazonService){
+controllers.controller('CreateSpeaker', ['$scope','$rootScope' ,'EventsService', '$state', '$modalInstance', 'AmazonService', function($scope, $rootScope, EventsService, $state, $modalInstance, AmazonService){
 
     $scope.modal = {
         title: "Adauga speaker",

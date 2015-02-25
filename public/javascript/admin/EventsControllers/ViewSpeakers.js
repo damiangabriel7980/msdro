@@ -31,4 +31,18 @@ controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ng
         });
     };
 
+    $scope.update = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/content/events/modalEditSpeaker.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'UpdateSpeaker',
+            resolve: {
+                idToUpdate: function () {
+                    return id;
+                }
+            }
+        });
+    };
+
 }]);

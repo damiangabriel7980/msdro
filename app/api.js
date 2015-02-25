@@ -1829,13 +1829,23 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/events/speakers')
         .get(function (req, res) {
-            Speakers.find({}, function (err, speakers) {
-                if(err){
-                    res.send({error: "Could not find speakers"});
-                }else{
-                    res.send({success: speakers});
-                }
-            });
+            if(req.query.id){
+                Speakers.findOne({_id: req.query.id}, function (err, speaker) {
+                    if(err){
+                        res.send({error: "Could not find speakers"});
+                    }else{
+                        res.send({success: speaker});
+                    }
+                });
+            }else{
+                Speakers.find({}, function (err, speakers) {
+                    if(err){
+                        res.send({error: "Could not find speakers"});
+                    }else{
+                        res.send({success: speakers});
+                    }
+                });
+            }
         })
         .post(function (req, res) {
             var toCreate = new Speakers(req.body);

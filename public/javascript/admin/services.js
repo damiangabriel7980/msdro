@@ -24,8 +24,10 @@ services.factory('AmazonService', ['$resource', '$rootScope', function($resource
         },
         uploadFile: function (fileBody, key, callback) {
             getClient(function (s3) {
-                console.log(fileBody);
+                console.log("upload file");
+                console.log($rootScope.amazonBucket);
                 console.log(key);
+                console.log(fileBody);
                 var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: fileBody, ACL:'public-read', ContentType: fileBody.type}, function (err, data) {
                     if (err) {
                         callback(err, null);
@@ -84,8 +86,12 @@ services.factory('AmazonService', ['$resource', '$rootScope', function($resource
                 callback(null, "No key was specified");
             }else{
                 getClient(function (s3) {
+                    console.log("delete file");
+                    console.log($rootScope.amazonBucket);
+                    console.log(key);
                     s3.deleteObject({Bucket: $rootScope.amazonBucket, Key: key}, function (err, data) {
                         if (err) {
+                            console.log(err);
                             callback(err, null);
                         } else {
                             callback(null, true);
