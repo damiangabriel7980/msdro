@@ -11,7 +11,7 @@
             <td data-title="'Nume'" filter="{ 'last_name': 'text' }" sortable="'last_name'">{{speaker.last_name}}</td>
             <td>
                 <div class="btn-group-sm">
-                    <button class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button class="btn btn-danger" ng-click="deleteSpeaker(speaker)"><i class="glyphicon glyphicon-trash"></i></button>
                     <button class="btn btn-info" ng-click="update(speaker._id)"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>

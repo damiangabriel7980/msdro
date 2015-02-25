@@ -353,7 +353,8 @@ services.factory('EventsService', ['$resource', function($resource){
         speakers: $resource('api/admin/events/speakers', {}, {
             query: { method: 'GET', isArray: false },
             create: { method: 'POST', isArray: false },
-            update: { method: 'PUT', isArray: false }
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         })
     }
 }]);

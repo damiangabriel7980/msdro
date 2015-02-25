@@ -1866,6 +1866,16 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({success: "Updated "+wres+" speakers"});
                 }
             });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Speakers.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    res.send({error: "Error removing speaker"});
+                }else{
+                    res.send({success: "Removed "+wres+" speakers."});
+                }
+            });
         });
 
 //    router.route('/admin/events')
