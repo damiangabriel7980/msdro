@@ -1,18 +1,23 @@
 controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal){
 
-    var refreshEvents = function () {
+    var refreshEvents = function (sortByDate) {
         EventsService.events.query().$promise.then(function(resp){
             var events = resp.success;
-            $scope.tableParams = new ngTableParams({
+            var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page
+                //initalSorting
                 sorting: {
                     name: 'asc'     // initial sorting
                 },
                 filter: {
                     name: ''       // initial filter
                 }
-            }, {
+            };
+            if(sortByDate){
+                params.sorting = {last_updated: 'desc'};
+            }
+            $scope.tableParams = new ngTableParams(params, {
                 total: events.length, // length of data
                 getData: function($defer, params) {
 
@@ -26,7 +31,13 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
     refreshEvents();
 
     $scope.addEvent = function () {
-        console.log("Add event");
+        EventsService.events.create({
+            name: "untitled",
+            start: Date.now(),
+            end: Date.now()
+        }).$promise.then(function (resp) {
+                if(resp.success) refreshEvents(true);
+            });
     };
 
     $scope.toggleEventEnable = function (id, enable) {

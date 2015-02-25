@@ -1826,6 +1826,18 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         })
+        .post(function (req, res) {
+            var toCreate = new Events(req.body);
+            toCreate.last_updated = Date.now();
+            toCreate.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: saved});
+                }
+            });
+        })
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             Events.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {

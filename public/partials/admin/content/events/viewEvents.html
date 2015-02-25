@@ -11,11 +11,12 @@
             <td data-title="'Tip'" sortable="'type'" ><i class="glyphicon glyphicon-calendar">{{event.type}}</i></td>
             <td data-title="'Inceput'" sortable="'start'">{{event.start.substr(0,10)}}</td>
             <td data-title="'Final'" sortable="'end'">{{event.end.substr(0,10)}}</td>
+            <td data-title="'Ultima actualizare'" sortable="'last_updated'">{{event.last_updated.substr(0,10)}}</td>
             <td>
                 <div class="btn-group-sm">
                     <button class="btn btn-danger" ng-click="deleteEvent(event._id)"><i class="glyphicon glyphicon-trash"></i></button>
                     <button class="btn btn-info" ui-sref="content.events.editEvent({id: event._id})"><i class="glyphicon glyphicon-cog"></i></button>
-                    <div class="btn btn-warning" ng-class="{'btn-primary':event.enable===false,'btn-danger':event.enable===true}" ng-click="toggleEventEnable(event._id, event.enable)"><i class="glyphicon" ng-class="{'glyphicon-lock':event.enable===true,'glyphicon-share':event.enable===false}"></i></div>
+                    <div class="btn btn-warning" ng-class="{'btn-primary':event.enable,'btn-danger':!event.enable}" ng-click="toggleEventEnable(event._id, event.enable)"><i class="glyphicon" ng-class="{'glyphicon-lock':event.enable,'glyphicon-share':!event.enable}"></i></div>
                 </div>
             </td>
         </tr>
