@@ -45,7 +45,7 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
                     res.send(401, 'Wrong username/password');
                 }else{
                     //check account not expired, not locked etc
-                    if(user.account_expired || user.account_locked || !user.enabled || user.state === "REJECTED"){
+                    if(user.account_expired || user.account_locked || !user.enabled){
                         res.send(401, 'Access not allowed');
                     }else{
                         //check password
