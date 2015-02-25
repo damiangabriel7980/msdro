@@ -14,7 +14,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal', function
 
     $scope.showContactModal = function(){
         $modal.open({
-            templateUrl: 'partials/medic/contact.ejs',
+            templateUrl: 'partials/medic/modals/contact.html',
             size: 'lg',
             windowClass: 'fade',
             controller: 'Contact'
