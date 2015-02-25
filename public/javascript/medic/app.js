@@ -24,7 +24,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'Home'
         })
         .state('homeSearch',{
-            url: '/searchResults',
+            url: '/searchResults/:textToSearch',
             templateUrl: 'partials/medic/homeSearch.ejs',
             controller: 'Search'
         })
@@ -219,53 +219,13 @@ app.run(
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
+
             $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.jpg";
+
             $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
                 $rootScope.previousState = from.name;
                 $rootScope.currentState = to.name;
             });
-            $rootScope.bottom= {showFooter:true};
-            $rootScope.searchText=function(data){
-                $rootScope.textToSearch=data;
-                if($rootScope.textToSearch==="")
-                    return;
-                else
-                    $state.go('homeSearch',{},{reload: true});
-            };
-            $rootScope.showInput=false;
-                $rootScope.animateInput=function(){
-                        angular.element('.popSearch').toggleClass('newWidthPopSearch');
-                    angular.element('.input-group-addon').toggleClass('btnSearchBefore');
-            };
-            angular.element(document).click(function (event) {
-                var clickover = angular.element(event.target);
-                var $navbar = angular.element(".navbar-collapse");
-                var _opened = $navbar.hasClass("in");
-                if (_opened === true && !clickover.hasClass("navbar-toggle")) {
-                    //$navbar.collapse('hide');
-                    //$navbar.height(0);
-                    angular.element("button.navbar-toggle").click();
-                }
-            });
-            //profile modal
-            $rootScope.showProfile = function(){
-                //var $body = $(document.body);
-                //var oldWidth = $body.innerWidth();
-                //var navbarOld= angular.element('.navbar').width();
-                //var footerOld=angular.element('#footer').width();
-                //$body.css("overflow-y", "hidden");
-                //$body.width(oldWidth);
-                //angular.element('.navbar').width(navbarOld);
-                //angular.element('#footer').width(footerOld);
-                $modal.open({
-                    templateUrl: 'partials/medic/profile.html',
-                    size: 'lg',
-                    backdrop: 'static',
-                    keyboard: false,
-                    windowClass: 'fade',
-                    controller: 'Profile'
-                });
-            };
         }
     ]
 );
