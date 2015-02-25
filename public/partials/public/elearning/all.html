@@ -1,5 +1,5 @@
 <div class="col-md-12 elearningList">
-    <div class="col-md-12 entry" ng-repeat="n in elearning | limitTo:contentLimit track by $index" ng-if="n.file_path">
+    <div class="col-md-12 entry" ng-repeat="n in elearning | limitTo:contentLimit track by $index">
         <div class="col-md-2 picture">
             <div>
                 <img ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultSlideImage}}">

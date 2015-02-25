@@ -6819,10 +6819,14 @@ ul.products li {
 .firstIllusion {
   display: inline-block;
   -webkit-transform: translate3d(-100%, 0px, 0px);
+  -moz-transform: translate3d(-100%, 0px, 0px);
+  transform: translate3d(-100%, 0px, 0px);
 }
 .secondIllusion {
   display: inline-block;
   -webkit-transform: translate3d(100%, 0px, 0px);
+  -moz-transform: translate3d(100%, 0px, 0px);
+  transform: translate3d(100%, 0px, 0px);
 }
 .Box300 {
   height: 300px;
@@ -7136,7 +7140,6 @@ hr {
   border: 0px solid #cccccc;
   -webkit-transition: width 1s ease;
   /* Safari */
-
   transition: width 1s ease;
 }
 .btnSearchBefore {

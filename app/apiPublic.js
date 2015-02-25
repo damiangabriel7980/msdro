@@ -31,7 +31,10 @@ module.exports = function(app,email, router) {
     router.route('/contentByType/:type')
 
         .get(function (req, res) {
-            PublicContent.find({type: req.params.type, enable: true}).sort({date_added: -1}).exec(function (err, resp) {
+            var paramsObject = {type: req.params.type, enable: true};
+                if(req.params.type==4 || req.params.type==3)
+                    paramsObject = {$and : [paramsObject,{file_path:{$exists: true,$nin:[null,""]}}]};
+            PublicContent.find(paramsObject).sort({date_added: -1}).exec(function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{
@@ -93,6 +96,8 @@ module.exports = function(app,email, router) {
                 if(areasIds){
                     q['therapeutic-areasID'] = {$in: areasIds};
                 }
+                if(requestData.type==3)
+                    q = {$and : [q,{file_path:{$exists: true,$nin:[null,""]}}]};
                 PublicContent.find(q).sort({date_added: -1}).exec(function (err, content) {
                     if(err){
                         res.send(err);

@@ -140,6 +140,7 @@ module.exports = function(app, email, logger, passport) {
 		// LOGIN =============================== passport login - used by staywell core
 		// process the login form
 		app.post('/login', function (req, res, next) {
+            console.log(req.body);
             //middleware to allow flashing messages on empty user/password fields
             if(!req.body.email || !req.body.password){
                 return res.send({error: true, message: 'Campurile sunt obligatorii'});
@@ -147,6 +148,7 @@ module.exports = function(app, email, logger, passport) {
                 passport.authenticate('local-login', function (err, user, info) {
                     console.log(err);
                     console.log(info);
+
                     if(err){
                         logger.log(err);
                         return res.send({error: true, message: "A aparut o eroare pe server"});
@@ -158,6 +160,11 @@ module.exports = function(app, email, logger, passport) {
                                 return res.send({error: true, message: "A aparut o eroare pe server"});
                             }else{
                                 if(user.state === "ACCEPTED"){
+                                    if (req.body.remember===true) {
+                                        req.session.cookie.maxAge = 3600000*24; // 24 hours
+                                    } else {
+                                        req.session.cookie.expires = false;
+                                    }
                                     return res.send({error: false, proof: true});
                                 }else if(user.state === "PENDING"){
                                     return res.send({error: false, proof: false});

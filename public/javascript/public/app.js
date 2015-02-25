@@ -153,6 +153,16 @@ app.run(
                 return $sce.trustAsHtml(data);
             };
 
+            angular.element(document).click(function (event) {
+                var clickover = angular.element(event.target);
+                var $navbar = angular.element(".navbar-collapse");
+                var _opened = $navbar.hasClass("in");
+                if (_opened === true && !clickover.hasClass("navbar-toggle")) {
+                    //$navbar.collapse('hide');
+                    //$navbar.height(0);
+                    angular.element("button.navbar-toggle").click();
+                }
+            });
             //contact modal
             $rootScope.showContactModal = function(){
                 $modal.open({

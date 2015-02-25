@@ -24,6 +24,7 @@
     "qtip2": "latest",
     "perfect-tooltip": "latest",
     "video-js": "latest",
+    "requestAnimationFrame": "latest",
     "angular-growl": "latest",
     "aws-sdk": "latest",
     "ng-table": "0.4.2",

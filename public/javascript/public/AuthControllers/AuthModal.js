@@ -37,7 +37,7 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
 
     $scope.login = function () {
         console.log(this);
-        AuthService.login.query({email: this.email, password: this.password}).$promise.then(function (resp) {
+        AuthService.login.query({email: this.email, password: this.password,remember: this.remember}).$promise.then(function (resp) {
             if(resp.error){
                 resetAlert("danger", resp.message);
             }else{

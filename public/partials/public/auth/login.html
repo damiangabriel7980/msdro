@@ -14,8 +14,16 @@
         </div>
         <div>
             <ul class="pointerLinks">
-                <li>Ai uitat parola? <a ng-click="renderView('reset')">Cere resetarea parolei</a></li>
+                <li>Ai uitat parola? <a ng-click="renderView('reset')">Cere resetarea parolei</a>
+
+                </li>
                 <li>Nu ai cont? <a ng-click="renderView('signup')">Creaza cont nou</a></li>
+                <li class="noListStyle">
+                    <label class="checkbox">
+                        <input type="checkbox"name="remember" ng-model="remember">
+                        Tine-ma minte
+                    </label>
+                </li>
             </ul>
         </div>
     </div>
