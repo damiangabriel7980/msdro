@@ -348,7 +348,10 @@ services.factory('ContentService', ['$resource', function($resource){
 services.factory('EventsService', ['$resource', function($resource){
     return {
         events: $resource('api/admin/events/events', {}, {
-            query: { method: 'GET', isArray: false }
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         }),
         speakers: $resource('api/admin/events/speakers', {}, {
             query: { method: 'GET', isArray: false },

@@ -1825,6 +1825,16 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({success: events});
                 }
             });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            Events.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" events"});
+                }
+            });
         });
 
     router.route('/admin/events/speakers')

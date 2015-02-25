@@ -1,7 +1,7 @@
 <div class="col-md-12 noPadding">
     <div class="col-md-8 noPadding"><h3>Gestionare Evenimente</h3></div>
     <div class="col-md-4 noPadding">
-        <a ui-sref="content.events.addEvent" class="btn btn-info pull-right margintop20px"><i class="glyphicon glyphicon-plus-sign"></i> Adauga eveniment</a>
+        <a ng-click="addEvent()" class="btn btn-info pull-right margintop20px"><i class="glyphicon glyphicon-plus-sign"></i> Adauga eveniment</a>
     </div>
 </div>
 <div class="col-md-12 noPadding">
@@ -11,18 +11,6 @@
             <td data-title="'Tip'" sortable="'type'" ><i class="glyphicon glyphicon-calendar">{{event.type}}</i></td>
             <td data-title="'Inceput'" sortable="'start'">{{event.start.substr(0,10)}}</td>
             <td data-title="'Final'" sortable="'end'">{{event.end.substr(0,10)}}</td>
-            <td data-title="'Conferinte'" sortable="'listconferences'">
-                <div class="row" ng-repeat="conference in event.listconferences | orderBy: 'title'" style="margin-bottom: 5px">
-                    <div class="col-md-8">
-                        {{conference.title}}
-                    </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-danger btn-sm" ng-click="deleteConference(conf._id)"><i class="glyphicon glyphicon-trash"></i></button>
-                        <button class="btn btn-info btn-sm" ui-sref="content.updateConference({id: conf._id})"><i class="glyphicon glyphicon-cog"></i></button>
-                    </div>
-                </div>
-            </td>
-
             <td>
                 <div class="btn-group-sm">
                     <button class="btn btn-danger" ng-click="deleteEvent(event._id)"><i class="glyphicon glyphicon-trash"></i></button>
