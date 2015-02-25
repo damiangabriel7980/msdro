@@ -145,7 +145,7 @@ cloudAdminControllers.controller('HomeController', ['$scope', '$rootScope', 'Hom
 
     /* --- footer realign ---*/
 
-    $scope.iconLive='&nbsp;<i class="glyphicon glyphicon-facetime-video smallFontSize" ng-if="e.type==2"></i>';
+    $scope.iconLive='<i class="glyphicon glyphicon-facetime-video smallFontSize" ng-if="e.type==2"></i>&nbsp;';
 
 }])
     .directive('ngEnter', function () {

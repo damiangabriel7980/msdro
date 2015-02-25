@@ -3179,7 +3179,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                         subject:'Activare cont MSD',
                                         text: 'Draga '+user.name+',\n\n\n'+
                                             'Ati primit acest email deoarece v-ati inregistrat pe MSD.Contul dumneavoastra a fost activat si il puteti accesa la aceasta adresa:\n\n'+
-                                            req.headers.host+'/login\n\n\n'+
+                                            req.headers.host+'\n\n\n'+
                                             'Succes!\n\nEchipa MSD'
                                     }, function(err){
                                         if(err) {
@@ -3633,7 +3633,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         .post(function (req, res) {
             var ans = {};
             var newData = req.body.newData;
-            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\s]{3,100}$');
+            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
             //check name
             if((!namePatt.test(newData.fullname.toString()))){
@@ -3677,19 +3677,19 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             var ans = {error:false};
             var job = req.body.job;
             var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$');
-            var numberPatt = new XRegExp('^[a-zA-Z0-9\\s]{1,5}$');
-            if(!numberPatt.test(job.street_number.toString())) {
-                ans.error = true;
-                ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
-            }
-            if(!namePatt.test(job.street_name.toString())) {
-                ans.error = true;
-                ans.message = "Numele strazii trebuie sa contina doar litere, minim 3";
-            }
-            if(!namePatt.test(job.job_name.toString())) {
-                ans.error = true;
-                ans.message = "Locul de munca trebuie sa contina doar litere, minim 3";
-            }
+            var numberPatt = new XRegExp('^[a-zA-Z0-9-\\s]{1,5}$');
+            //if(!numberPatt.test(job.street_number.toString())) {
+            //    ans.error = true;
+            //    ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
+            //}
+            //if(!namePatt.test(job.street_name.toString())) {
+            //    ans.error = true;
+            //    ans.message = "Numele strazii trebuie sa contina doar litere, minim 3";
+            //}
+            //if(!namePatt.test(job.job_name.toString())) {
+            //    ans.error = true;
+            //    ans.message = "Locul de munca trebuie sa contina doar litere, minim 3";
+            //}
             if(!isNaN(parseInt(job.job_type))){
                 if(parseInt(job.job_type)<1 || parseInt(job.job_type>4)){
                     ans.error = true;
@@ -3715,7 +3715,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     newJob.save(function (err, inserted) {
                         if(err){
                             ans.error = true;
-                            ans.message = "Eroare la crearea locului de munca. Va rugam verificati campurile";
+                            ans.message = "Eroare la crearea locului de munca. Va rugam verificati campurile!";
                             res.json(ans);
                         }else{
                             //update user to point to new job
@@ -3726,7 +3726,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                     ans.message = "Locul de munca a fost salvat";
                                 }else{
                                     ans.error = true;
-                                    ans.message = "Eroare la adaugarea locului de munca. Va rugam sa verificati datele";
+                                    ans.message = "Eroare la adaugarea locului de munca. Va rugam sa verificati datele!";
                                 }
                                 res.json(ans);
                             });
@@ -3922,7 +3922,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         if(item==Events)
                             var hydrateOp = {find: {groupsID:{$in:forGroups},enable:true,start:{$gt: date}}};
                         else
-                            var hydrateOp = {find: {groupsID:{$in:forGroups},enable:true}};
+                            var hydrateOp = {find: { $and: [ { groupsID: { $in: forGroups } }, { enable:true } ] } };
 
                             item.search({
 
@@ -3943,17 +3943,10 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                 }
                                 else
                                 {
-                                    console.log(results.hits.hits);
                                     if(results.hits.hits.length===0)
                                         checker+=1;
                                     else
                                     {
-                                        //var myResults=[];
-                                        //for(var i=0;i<results.hits.hits.length;i++)
-                                        //{
-                                        //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
-                                        //        myResults.push(results.hits.hits[i]);
-                                        //}
                                         ObjectOfResults[item.modelName]=results.hits.hits;
                                     }
 

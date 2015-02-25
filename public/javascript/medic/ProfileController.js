@@ -232,7 +232,6 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     //user profile
     $scope.userProfileAlert = {newAlert:false, type:"", message:""};
     $scope.submitProfileForm = function (isValid) {
-        $scope.showerrorProf=true;
         if(isValid){
             var toSend = {};
             toSend.fullname = this.fullname;
@@ -254,7 +253,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         else
         {
             $scope.userProfileAlert.newAlert = true;
-            $scope.userProfileAlert.message = "Nu ati completat toate campurile! Verificati formularul inca o data!";
+            $scope.userProfileAlert.message = "Exista campuri goale/ce contin caractere invalide! Verificati formularul inca o data!";
             $scope.userProfileAlert.type = "danger";
         }
     };
@@ -262,8 +261,6 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
     //user job
     $scope.userJobAlert = {newAlert:false, type:"", message:""};
     $scope.submitJobForm = function (isValid) {
-        $scope.showerror=true;
-        console.log(isValid);
         if(isValid){
             switch(this.selectedJob){
                 case("Spital"): this.job['job_type']=1; break;
@@ -285,7 +282,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         else
         {
             $scope.userJobAlert.newAlert = true;
-            $scope.userJobAlert.message = "Nu ati completat toate campurile! Verificati formularul inca o data!";
+            $scope.userJobAlert.message = "Exista campuri goale/ce contin caractere invalide! Verificati formularul inca o data!";
             $scope.userJobAlert.type = "danger";
         }
     };
@@ -337,7 +334,7 @@ cloudAdminControllers.controller('ProfileController', ['$scope', '$rootScope', '
         else
         {
             $scope.userChangePassAlert.newAlert = true;
-            $scope.userChangePassAlert.message = "Nu ati completat toate campurile! Verificati formularul inca o data!";
+            $scope.userChangePassAlert.message = "Exista campuri goale! Verificati formularul inca o data!";
             $scope.userChangePassAlert.type = "danger";
         }
     };

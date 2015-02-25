@@ -40,7 +40,9 @@ module.exports = function(app, email, logger, passport) {
 
 	// LOGOUT ==============================
 	app.get('/logout', function(req, res) {
+
 		req.logout();
+        //encrypt sid using session secret
 		res.redirect('/');
 	});
 
