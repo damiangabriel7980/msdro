@@ -72,14 +72,22 @@ publicControllers.controller('AuthModalController', ['$scope', '$modalInstance',
     };
 
     $scope.reset = function () {
-        AuthService.reset.query({email: this.email}).$promise.then(function (resp) {
-            var message = resp.message;
-            if(message.hasError){
-                resetAlert("danger",message.text);
-            }else{
-                resetAlert("success",message.text);
-            }
-        });
+        console.log(this.email);
+        if(this.email==undefined)
+        {
+            resetAlert("danger","Email-ul este obligatoriu!");
+        }
+        else{
+            AuthService.reset.query({email: this.email}).$promise.then(function (resp) {
+                var message = resp.message;
+                if(message.hasError){
+                    resetAlert("danger",message.text);
+                }else{
+                    resetAlert("success",message.text);
+                }
+            });
+        }
+
     };
 
 }]);
