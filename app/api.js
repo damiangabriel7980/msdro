@@ -1983,22 +1983,31 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
-            Conferences.remove({_id: idToDelete}, function (err, wres) {
+            //remove talks for this conference
+            Talks.remove({conference: idToDelete}, function (err, wres) {
                 if(err){
                     logger.error(err);
                     res.send({error: true});
                 }else{
-                    //disconnect from events
-                    Events.update({}, {$pull: {listconferences: idToDelete}}, {multi: true}, function (err, wres) {
+                    //remove conference
+                    Conferences.remove({_id: idToDelete}, function (err, wres) {
                         if(err){
                             logger.error(err);
                             res.send({error: true});
                         }else{
-                            res.send({success: true});
+                            //disconnect from events
+                            Events.update({}, {$pull: {listconferences: idToDelete}}, {multi: true}, function (err, wres) {
+                                if(err){
+                                    logger.error(err);
+                                    res.send({error: true});
+                                }else{
+                                    res.send({success: true});
+                                }
+                            })
                         }
                     })
                 }
-            })
+            });
         });
 
     router.route('/admin/events/talks')
