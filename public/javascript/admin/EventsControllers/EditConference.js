@@ -1,8 +1,9 @@
-controllers.controller('EditConference', ['$scope', '$state', '$stateParams', 'EventsService', '$modal', 'InfoModal', 'ActionModal', function ($scope, $state, $stateParams, EventsService, $modal, InfoModal, ActionModal) {
+controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$stateParams', 'EventsService', 'AmazonService', '$modal', 'InfoModal', 'ActionModal', function ($scope, $rootScope, $state, $stateParams, EventsService, AmazonService, $modal, InfoModal, ActionModal) {
 
     //get conference
     EventsService.conferences.query({id: $stateParams.idConference}).$promise.then(function (resp) {
         $scope.conference = resp.success;
+        if(resp.success.image_path) setImage(resp.success.image_path);
     });
 
     //=============================================== functions and variables for date pop-ups
@@ -49,12 +50,37 @@ controllers.controller('EditConference', ['$scope', '$state', '$stateParams', 'E
         };
     };
 
+    //set image with disabled cache
+    var setImage = function (key) {
+        $scope.conferenceImage = $rootScope.pathAmazonDev + key + '?' + new Date().getTime();
+    };
+
     //file selected function
     $scope.fileSelected = function ($files) {
         //TODO: upload image
         if($files[0]){
             var file = $files[0];
             uploadAlert("warning", "Se incarca imaginea...");
+            var extension = file.name.split(".").pop();
+            var key = "conferences/"+$scope.conference._id+"/logo."+extension;
+            AmazonService.uploadFile(file, key, function (err, success) {
+                if(err){
+                    uploadAlert("danger", "Eroare la incarcarea fisierului");
+                }else{
+                    //update database
+                    EventsService.conferences.update({id: $scope.conference._id}, {image_path: key}).$promise.then(function (resp) {
+                        if(resp.error){
+                            uploadAlert("danger", "Eroare la actualizarea imaginii in baza de date");
+                        }else{
+                            //update model
+                            $scope.conference.image_path = key;
+                            //update view
+                            setImage(key);
+                            uploadAlert("success", "Imaginea a fost salvata");
+                        }
+                    });
+                }
+            });
         }
     };
 
@@ -62,6 +88,8 @@ controllers.controller('EditConference', ['$scope', '$state', '$stateParams', 'E
 
     $scope.updateConference = function () {
         var conference = this.conference;
+        //make sure we don't record an older image path
+        if(conference.image_path) delete conference.image_path;
         console.log(conference);
         var notification = this.notification || {};
     }

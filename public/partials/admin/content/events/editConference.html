@@ -44,11 +44,11 @@
                         multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
             </div>
             <div class="col-md-12">
-                <alert ng-if="uploadAlert.show" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.text}}</alert>
+                <alert ng-if="uploadAlert.show" type="{{uploadAlert.type}}" close="uploadAlert.show=false">{{uploadAlert.text}}</alert>
             </div>
         </div>
         <div class="col-md-3">
-            <img no-cache-src="{{pathAmazonDev+conference.image_path}}" style="width:100%">
+            <img ng-src="{{conferenceImage}}" style="width:100%">
         </div>
     </div>
     <div class="col-md-12">
