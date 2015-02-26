@@ -2001,6 +2001,44 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             })
         });
 
+    router.route('/admin/events/talks')
+        .get(function (req, res) {
+            if(req.query.conference){
+                var idConference = ObjectId(req.query.conference);
+                Talks.find({conference: idConference}).exec(function (err, talks) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: talks});
+                    }
+                });
+            }else if(req.query.id){
+                var idTalk = ObjectId(req.query.id);
+                Talks.findOne({_id: idTalk}).exec(function (err, talk) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: talk});
+                    }
+                });
+            }else{
+                res.send({error: "Missing query params"});
+            }
+        })
+        .post(function (req, res) {
+            var toCreate = new Talks(req.body);
+            toCreate.save(function (err, saved) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: saved});
+                }
+            });
+        });
+
     router.route('/admin/events/conferenceToEvent')
         .post(function (req, res) {
             var eventToUpdate = ObjectId(req.query.idEvent);

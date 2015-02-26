@@ -6,6 +6,14 @@ controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$st
         if(resp.success.image_path) setImage(resp.success.image_path);
     });
 
+    //get talks
+    var refreshTalks = function () {
+        EventsService.talks.query({conference: $stateParams.idConference}).$promise.then(function (resp) {
+            $scope.talks = resp.success;
+        });
+    };
+    refreshTalks();
+
     //=============================================== functions and variables for date pop-ups
     $scope.dateFormat = 'dd.MM.yyyy';
 
@@ -101,6 +109,22 @@ controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$st
                 }else{
                     InfoModal.show("Conferinta actualizata", "Conferinta a fost actualizata cu succes");
                 }
+            }
+        });
+    };
+
+    //============================================== manage talks
+    $scope.addTalk = function () {
+        EventsService.talks.create({
+            title: "untitled",
+            hour_start: Date.now(),
+            hour_end: Date.now(),
+            conference: $stateParams.idConference
+        }).$promise.then(function (resp) {
+            if(resp.error){
+                InfoModal.show("Creare esuata", "A aparut o eroare la crearea talk-ului");
+            }else{
+                refreshTalks();
             }
         });
     }

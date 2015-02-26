@@ -365,6 +365,10 @@ services.factory('EventsService', ['$resource', function($resource){
             update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
         }),
+        talks: $resource('api/admin/events/talks', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false }
+        }),
         conferenceToEvent: $resource('api/admin/events/conferenceToEvent', {}, {
             create: { method: 'POST', isArray: false }
         })
