@@ -127,6 +127,16 @@ controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$st
                 refreshTalks();
             }
         });
+    };
+
+    $scope.removeTalk = function (id) {
+        EventsService.talks.delete({id: id}).$promise.then(function (resp) {
+            if(resp.error){
+                InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea talk-ului");
+            }else{
+                refreshTalks();
+            }
+        });
     }
 
 }]);

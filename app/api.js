@@ -2037,6 +2037,17 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({success: saved});
                 }
             });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Talks.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Removed "+wres+" talks"});
+                }
+            });
         });
 
     router.route('/admin/events/conferenceToEvent')
