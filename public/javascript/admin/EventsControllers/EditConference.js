@@ -92,6 +92,17 @@ controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$st
         if(conference.image_path) delete conference.image_path;
         console.log(conference);
         var notification = this.notification || {};
+        EventsService.conferences.update({id: conference._id}, conference).$promise.then(function (resp) {
+            if(resp.error){
+                InfoModal.show("Update esuat", "A aparut o eroare la update");
+            }else{
+                if(notification.send){
+                    //TODO: send notification.text
+                }else{
+                    InfoModal.show("Conferinta actualizata", "Conferinta a fost actualizata cu succes");
+                }
+            }
+        });
     }
 
 }]);
