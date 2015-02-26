@@ -1818,13 +1818,24 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/events/events')
         .get(function (req, res) {
-            Events.find({}).populate('listconferences').exec(function (err, events) {
-                if(err){
-                    res.send({error: "Could not find events"});
-                }else{
-                    res.send({success: events});
-                }
-            });
+            if(req.query.id){
+                Events.findOne({_id: req.query.id}).populate('groupsID').populate('listconferences').exec(function (err, event) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: event});
+                    }
+                });
+            }else{
+                Events.find({}).populate('listconferences').exec(function (err, events) {
+                    if(err){
+                        res.send({error: "Could not find events"});
+                    }else{
+                        res.send({success: events});
+                    }
+                });
+            }
         })
         .post(function (req, res) {
             var toCreate = new Events(req.body);

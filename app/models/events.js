@@ -14,7 +14,7 @@ var EventsSchema		= new Schema({
     last_updated: Date,
     name:      {type:String,es_indexed:true},
     place:       String,
-    public:   Boolean,
+    isPublic:   Boolean,
     start: Date,
     type: Number,
     listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
