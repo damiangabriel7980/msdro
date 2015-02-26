@@ -1819,7 +1819,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/admin/events/events')
         .get(function (req, res) {
             if(req.query.id){
-                Events.findOne({_id: req.query.id}).populate('groupsID').populate('listconferences').exec(function (err, event) {
+                Events.findOne({_id: req.query.id}).select('-listconferences').populate('groupsID').exec(function (err, event) {
                     if(err){
                         logger.error(err);
                         res.send({error: true});
@@ -1853,6 +1853,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             var idToUpdate = ObjectId(req.query.id);
             Events.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                 if(err){
+                    logger.error(err);
                     res.send({error: true});
                 }else{
                     res.send({success: "Updated "+wres+" events"});
@@ -1907,6 +1908,91 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: "Error removing speaker"});
                 }else{
                     res.send({success: "Removed "+wres+" speakers."});
+                }
+            });
+        });
+
+    router.route('/admin/events/conferences')
+        .get(function (req, res) {
+            if(req.query.event){
+                Events.findOne({_id: req.query.event}).populate('listconferences').exec(function (err, event) {
+                    if(err || !event){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: event.listconferences || []});
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var toCreate = new Conferences(req.body);
+            toCreate.last_updated = Date.now();
+            toCreate.save(function (err, saved) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    //create qr_code
+                    saved.qr_code = {
+                        conference_id: saved._id,
+                        message: "untitled",
+                        type: 2
+                    };
+                    saved.save(function (err, saved) {
+                        if(err){
+                            logger.error(err);
+                            res.send({error: true});
+                        }else{
+                            res.send({success: saved});
+                        }
+                    });
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            var dataToUpdate = req.body;
+            dataToUpdate.last_updated = Date.now();
+            Conferences.update({_id: idToUpdate}, {$set: dataToUpdate}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" conferences"});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Conferences.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    //disconnect from events
+                    Events.update({}, {$pull: {listconferences: idToDelete}}, {multi: true}, function (err, wres) {
+                        if(err){
+                            logger.error(err);
+                            res.send({error: true});
+                        }else{
+                            res.send({success: true});
+                        }
+                    })
+                }
+            })
+        });
+
+    router.route('/admin/events/conferenceToEvent')
+        .post(function (req, res) {
+            var eventToUpdate = ObjectId(req.query.idEvent);
+            var conferenceToAdd = ObjectId(req.body.idConference);
+            Events.update({_id: eventToUpdate}, {$addToSet: {listconferences: conferenceToAdd}}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" events"});
                 }
             });
         });

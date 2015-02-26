@@ -1,8 +1,15 @@
-controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'EventsService', 'GroupsService', function ($scope, $state, $stateParams, EventsService, GroupsService) {
+controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'EventsService', 'GroupsService', 'InfoModal', 'ActionModal', function ($scope, $state, $stateParams, EventsService, GroupsService, InfoModal, ActionModal) {
+
+    var refreshConferences = function () {
+        EventsService.conferences.query({event: $scope.event._id}).$promise.then(function (resp) {
+            $scope.conferences = resp.success;
+            console.log($scope.conferences);
+        });
+    };
 
     EventsService.events.query({id: $stateParams.id}).$promise.then(function (resp) {
         $scope.event = resp.success;
-        $scope.conferences = resp.success.listconferences;
+        refreshConferences();
     });
 
     GroupsService.groups.query().$promise.then(function (resp) {
@@ -11,8 +18,21 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
 
     $scope.updateEvent = function () {
         var event = this.event;
-        event.groupsID = this.selectedGroups;
+        if(event.listconferences) delete event.listconferences;
         console.log(event);
+        var notification = this.notification || {};
+        event.groupsID = this.selectedGroups;
+        EventsService.events.update({id: event._id}, event).$promise.then(function (resp) {
+            if(resp.error){
+                InfoModal.show("Update esuat", "A aparut o eroare la update");
+            }else{
+                if(notification.send){
+                    //TODO: send notification.text
+                }else{
+                    InfoModal.show("Eveniment actualizat", "Evenimentul a fost actualizat cu succes");
+                }
+            }
+        });
     };
 
     $scope.editConference = function (id) {
@@ -20,10 +40,25 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
     };
 
     $scope.removeConference = function (id) {
-        //TODO: remove conf
+        EventsService.conferences.delete({id: id}).$promise.then(function () {
+            refreshConferences();
+        });
     };
 
     $scope.addConference = function () {
-        //TODO: add conference
+        EventsService.conferences.create({title: 'untitled', begin_date: Date.now(), end_date: Date.now()}).$promise.then(function (createdResponse) {
+            if(createdResponse.error){
+                InfoModal.show("Creare esuata", "A aparut o eroare la crearea conferintei");
+            }else{
+                //update event
+                EventsService.conferenceToEvent.create({idEvent: $scope.event._id}, {idConference: createdResponse.success._id}).$promise.then(function (resp) {
+                    if(resp.error){
+                        InfoModal.show("Creare esuata", "A aparut o eroare la crearea conferintei");
+                    }else{
+                        refreshConferences();
+                    }
+                });
+            }
+        })
     }
 }]);
