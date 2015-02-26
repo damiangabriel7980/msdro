@@ -7,7 +7,7 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
         });
     };
 
-    EventsService.events.query({id: $stateParams.id}).$promise.then(function (resp) {
+    EventsService.events.query({id: $stateParams.idEvent}).$promise.then(function (resp) {
         $scope.event = resp.success;
         refreshConferences();
     });
