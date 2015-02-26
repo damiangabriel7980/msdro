@@ -36,7 +36,7 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
     };
 
     $scope.editConference = function (id) {
-        //TODO: edit conf
+        $state.go('content.events.editConference', {idEvent: $stateParams.idEvent, idConference: id});
     };
 
     $scope.removeConference = function (id) {

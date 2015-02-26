@@ -85,6 +85,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/content/events/editEvent.html',
             controller: "EditEvent"
         })
+        .state('content.events.editConference',{
+            url: '/editConference/:idEvent/:idConference',
+            templateUrl: 'partials/admin/content/events/editConference.html',
+            controller: "EditConference"
+        })
         .state('content.events.viewAll',{
             url: '/viewAll',
             templateUrl: 'partials/admin/content/events/filter.html'

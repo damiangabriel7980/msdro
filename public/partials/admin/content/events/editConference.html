@@ -1,0 +1,69 @@
+<div class="col-md-12">
+    <div class="col-md-12">
+        <h3>Update conferinta</h3>
+    </div>
+    <div class="form-group col-md-12">
+        <label>Titlu:</label>
+        <input ng-model="conference.title" type="text" class="form-control">
+    </div>
+    <div class="col-md-6">
+        <label>Data de inceput:</label>
+        <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup="{{dateFormat}}" ng-model="conference.begin_date"
+                   current-text="Astazi" clear-text="Reseteaza" close-text="Inchide" is-open="isOpenedStart"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open_start($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+        </p>
+    </div>
+    <div class="col-md-6">
+        <label>Data de sfarsit:</label>
+        <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup="{{dateFormat}}" ng-model="conference.end_date"
+                   current-text="Astazi" clear-text="Reseteaza" close-text="Inchide" is-open="isOpenedEnd"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open_end($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+        </p>
+    </div>
+    <div class="col-md-6 noPadding">
+        <div class="form-group col-md-8">
+            <label>Mesaj QR:</label>
+            <input ng-model="conference.qr_code.message" type="text" class="form-control">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Scaneaza QR</label>
+            <button class="btn btn-default form-control" ng-click="scanQr()">Scaneaza</button>
+        </div>
+    </div>
+    <div class="col-md-6 noPadding">
+        <div class="col-md-9 noPadding">
+            <div class="form-group col-md-12">
+                <label>Modifica poza</label>
+                <button class="btn btn-default form-control" type="file" ng-file-select ng-file-change="fileSelected($files, $event)"
+                        multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
+            </div>
+            <div class="col-md-12">
+                <alert ng-if="uploadAlert.show" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.text}}</alert>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <img no-cache-src="{{pathAmazonDev+conference.image_path}}" style="width:100%">
+        </div>
+    </div>
+    <div class="col-md-12">
+        <label>Descriere:</label>
+        <textarea ui-tinymce ng-model="conference.description"></textarea>
+    </div>
+    <div class="col-md-12 noPadding">
+        <div class="form-group col-md-6" style="margin-bottom: 0;">
+            <label for="notificationCheck">Trimite notificare&nbsp;</label>
+            <input type="checkbox" id="notificationCheck" ng-model="notification.send">
+            <input type="text" ng-model="notification.text" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-12" style="margin: 10px 0">
+        <a class="btn pull-left btn-default" ng-click="backToEvent()">Inapoi la eveniment</a>
+        <a class="btn pull-right btn-primary" ng-click="updateConference()">Salveaza modificarile</a>
+    </div>
+</div>
