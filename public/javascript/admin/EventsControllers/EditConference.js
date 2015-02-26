@@ -1,4 +1,9 @@
-controllers.controller('EditConference', ['$scope', '$state', '$stateParams', 'EventsService', 'InfoModal', 'ActionModal', function ($scope, $state, $stateParams, EventsService, InfoModal, ActionModal) {
+controllers.controller('EditConference', ['$scope', '$state', '$stateParams', 'EventsService', '$modal', 'InfoModal', 'ActionModal', function ($scope, $state, $stateParams, EventsService, $modal, InfoModal, ActionModal) {
+
+    //get conference
+    EventsService.conferences.query({id: $stateParams.idConference}).$promise.then(function (resp) {
+        $scope.conference = resp.success;
+    });
 
     //=============================================== functions and variables for date pop-ups
     $scope.dateFormat = 'dd.MM.yyyy';
@@ -19,8 +24,18 @@ controllers.controller('EditConference', ['$scope', '$state', '$stateParams', 'E
     //=========
 
     //============================================== QR functions
-    $scope.scanQr = function () {
-        //TODO: open modal
+    $scope.scanQr = function (qr_code) {
+        $modal.open({
+            templateUrl: 'partials/admin/content/events/modalGenerateQR.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'ModalGenerateQR',
+            resolve: {
+                qrObject: function () {
+                    return qr_code;
+                }
+            }
+        });
     };
 
     //============================================== Image upload function

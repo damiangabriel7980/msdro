@@ -1923,6 +1923,24 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         res.send({success: event.listconferences || []});
                     }
                 });
+            }else if(req.query.id){
+                Conferences.findOne({_id: req.query.id}).exec(function (err, conference) {
+                    if(err || !conference){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: conference});
+                    }
+                });
+            }else{
+                Conferences.find({}, function (err, conferences) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: conferences});
+                    }
+                });
             }
         })
         .post(function (req, res) {
