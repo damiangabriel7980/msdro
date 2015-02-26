@@ -46,7 +46,7 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
     };
 
     $scope.addConference = function () {
-        EventsService.conferences.create({title: 'untitled', begin_date: Date.now(), end_date: Date.now()}).$promise.then(function (createdResponse) {
+        EventsService.conferences.create({title: 'untitled', begin_date: $scope.event.start, end_date: $scope.event.end}).$promise.then(function (createdResponse) {
             if(createdResponse.error){
                 InfoModal.show("Creare esuata", "A aparut o eroare la crearea conferintei");
             }else{
