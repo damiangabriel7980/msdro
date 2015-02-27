@@ -117,8 +117,6 @@ controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$st
     $scope.addTalk = function () {
         EventsService.talks.create({
             title: "untitled",
-            hour_start: $scope.conference.begin_date,
-            hour_end: $scope.conference.end_date,
             conference: $stateParams.idConference
         }).$promise.then(function (resp) {
             if(resp.error){
