@@ -68,6 +68,11 @@ controllers.controller('EditTalk', ['$scope', '$rootScope', '$state', '$statePar
     $scope.removeSpeaker = function (speaker) {
         var index = findSpeaker($scope.selectedSpeakers, speaker);
         $scope.selectedSpeakers.splice(index, 1);
+    };
+
+    //==== go back
+    $scope.backToConference = function () {
+        $state.go('content.events.editConference', {idEvent: $stateParams.idEvent, idConference: $stateParams.idConference});
     }
 
 }]);

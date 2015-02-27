@@ -39,4 +39,8 @@ controllers.controller('EditRoom', ['$scope', '$rootScope', '$state', '$statePar
         });
     };
 
+    $scope.backToEvent = function () {
+        $state.go('content.events.editEvent', {idEvent: $stateParams.idEvent});
+    }
+
 }]);
