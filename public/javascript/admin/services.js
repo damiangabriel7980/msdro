@@ -206,6 +206,29 @@ services.factory('NewAccountsService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('ManageAccountsService', ['$resource', function($resource){
+    return {
+        getAllUsers: $resource('api/admin/users/ManageAccounts/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getOneUser: $resource('api/admin/users/ManageAccounts/getAccount', {}, {
+            query: { method: 'POST', isArray: false }
+        }),
+        toggleUser: $resource('api/admin/users/ManageAccounts/toggle', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        professions: $resource('api/admin/professions', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        saveUser: $resource('api/admin/saveUser', {}, {
+            save: {method:'POST'}
+        }),
+        specialGroups: $resource('api/admin/specialGroups/:profession', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
+
 services.factory('publicContentService', ['$resource', function($resource){
     return {
         getAllContent: $resource('api/admin/users/publicContent/getAllContent', {}, {

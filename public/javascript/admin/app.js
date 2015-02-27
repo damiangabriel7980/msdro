@@ -25,7 +25,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('users.manageAccounts',{
             url: '/manageAccounts',
-            templateUrl: 'partials/admin/users/manageAccounts.html'
+            templateUrl: 'partials/admin/users/manageAccounts.html',
+            controller: 'ManageAccounts'
         })
         .state('users.newAccounts',{
             url: '/newAccounts',
