@@ -2111,6 +2111,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         })
         .post(function (req, res) {
             var toCreate = new Talks(req.body);
+            toCreate.last_updated = Date.now();
             toCreate.save(function (err, saved) {
                 if(err){
                     logger.error(err);
