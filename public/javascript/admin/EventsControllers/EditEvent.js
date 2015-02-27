@@ -52,7 +52,7 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
     };
 
     $scope.editRoom = function (id) {
-        //TODO: edit room
+        $state.go('content.events.editRoom', {idEvent: $stateParams.idEvent, idRoom: id});
     };
 
     $scope.deleteRoom = function (id) {

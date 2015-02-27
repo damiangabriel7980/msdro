@@ -2059,6 +2059,18 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            var dataToUpdate = req.body;
+            Rooms.update({_id: idToUpdate}, {$set: dataToUpdate}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" rooms"});
+                }
+            });
+        })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             Rooms.remove({_id: idToDelete}, function (err, wres) {

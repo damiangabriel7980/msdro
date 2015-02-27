@@ -74,7 +74,7 @@
         <div class="btn btn-default" ng-click="addRoom()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
         <div class="manageItems">
             <div class="item full" ng-repeat="room in rooms">
-                <div class="title">{{room.title}}</div>
+                <div class="title">{{room.room_name}}</div>
                 <div class="action"><a ng-click="editRoom(room._id)">Modifica</a></div>
                 <div class="action"><a ng-click="deleteRoom(room._id)">Sterge</a></div>
             </div>
