@@ -2010,6 +2010,67 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
+    router.route('/admin/events/rooms')
+        .get(function (req, res) {
+            if(req.query.event){
+                var idEvent = ObjectId(req.query.event);
+                Rooms.find({event: idEvent}).exec(function (err, rooms) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: rooms});
+                    }
+                });
+            }else if(req.query.id){
+                Rooms.findOne({_id: req.query.id}).exec(function (err, room) {
+                    if(err || !room){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: room});
+                    }
+                });
+            }else{
+                res.send({error: "Invalid query params"});
+            }
+        })
+        .post(function (req, res) {
+            var toCreate = new Rooms(req.body);
+            toCreate.save(function (err, saved) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    //create qr_code
+                    saved.qr_code = {
+                        room_id: saved._id,
+                        message: "untitled",
+                        type: 1
+                    };
+                    saved.save(function (err, saved) {
+                        if(err){
+                            logger.error(err);
+                            res.send({error: true});
+                        }else{
+                            res.send({success: saved});
+                        }
+                    });
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Rooms.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Removed "+wres+" rooms"});
+                }
+            });
+        });
+
     router.route('/admin/events/talks')
         .get(function (req, res) {
             if(req.query.conference){

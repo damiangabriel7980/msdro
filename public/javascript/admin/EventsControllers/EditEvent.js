@@ -1,15 +1,21 @@
 controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'EventsService', 'GroupsService', 'InfoModal', 'ActionModal', function ($scope, $state, $stateParams, EventsService, GroupsService, InfoModal, ActionModal) {
 
     var refreshConferences = function () {
-        EventsService.conferences.query({event: $scope.event._id}).$promise.then(function (resp) {
+        EventsService.conferences.query({event: $stateParams.idEvent}).$promise.then(function (resp) {
             $scope.conferences = resp.success;
-            console.log($scope.conferences);
         });
     };
+    refreshConferences();
+
+    var refreshRooms = function () {
+        EventsService.rooms.query({event: $stateParams.idEvent}).$promise.then(function (resp) {
+            $scope.rooms = resp.success;
+        });
+    };
+    refreshRooms();
 
     EventsService.events.query({id: $stateParams.idEvent}).$promise.then(function (resp) {
         $scope.event = resp.success;
-        refreshConferences();
     });
 
     GroupsService.groups.query().$promise.then(function (resp) {
@@ -45,6 +51,19 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
         });
     };
 
+    $scope.editRoom = function (id) {
+        //TODO: edit room
+    };
+
+    $scope.deleteRoom = function (id) {
+        EventsService.rooms.delete({id: id}).$promise.then(function (resp) {
+            if(resp.error){
+                InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea camerei");
+            }
+            refreshRooms();
+        });
+    };
+
     $scope.addConference = function () {
         EventsService.conferences.create({title: 'untitled', begin_date: $scope.event.start, end_date: $scope.event.end}).$promise.then(function (createdResponse) {
             if(createdResponse.error){
@@ -60,5 +79,16 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
                 });
             }
         })
-    }
+    };
+
+    $scope.addRoom = function () {
+        EventsService.rooms.create({room_name: 'untitled', event: $scope.event._id}).$promise.then(function (createdResponse) {
+            if(createdResponse.error){
+                InfoModal.show("Creare esuata", "A aparut o eroare la crearea camerei");
+            }else{
+                refreshRooms();
+            }
+        })
+    };
+
 }]);
