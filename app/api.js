@@ -1907,7 +1907,14 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 if(err){
                     res.send({error: "Error removing speaker"});
                 }else{
-                    res.send({success: "Removed "+wres+" speakers."});
+                    //remove speaker from talks
+                    Talks.update({}, {$pull: {speakers: idToDelete}}, function (err, wres) {
+                        if(err){
+                            res.send({error: true});
+                        }else{
+                            res.send({success: "Removed speaker."});
+                        }
+                    });
                 }
             });
         });
