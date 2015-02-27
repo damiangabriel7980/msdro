@@ -1991,28 +1991,41 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             //remove talks for this conference
-            Talks.remove({conference: idToDelete}, function (err, wres) {
-                if(err){
-                    logger.error(err);
-                    res.send({error: true});
-                }else{
-                    //remove conference
-                    Conferences.remove({_id: idToDelete}, function (err, wres) {
+            //remove conference
+            //disconnect conference from events
+            async.parallel([
+                function (callback) {
+                    Events.update({}, {$pull: {listconferences: idToDelete}}, {multi: true}, function (err, wres) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            callback(err);
                         }else{
-                            //disconnect from events
-                            Events.update({}, {$pull: {listconferences: idToDelete}}, {multi: true}, function (err, wres) {
-                                if(err){
-                                    logger.error(err);
-                                    res.send({error: true});
-                                }else{
-                                    res.send({success: true});
-                                }
-                            })
+                            callback();
                         }
                     })
+                },
+                function (callback) {
+                    Conferences.remove({_id: idToDelete}, function (err, wres) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    })
+                },
+                function (callback) {
+                    Talks.remove({conference: idToDelete}, function (err, wres) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    });
+                }
+            ], function (err) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({success: true});
                 }
             });
         });
@@ -2080,14 +2093,34 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
-            Rooms.remove({_id: idToDelete}, function (err, wres) {
+            //remove room; remove from and talks as well
+            async.parallel([
+                function (callback) {
+                    Rooms.remove({_id: idToDelete}, function (err, wres) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    });
+                },
+                function (callback) {
+                    Talks.update({room: idToDelete}, {$set: {room: null}}, {multi: true}, function (err, wres) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    });
+                }
+            ], function (err) {
                 if(err){
-                    logger.error(err);
                     res.send({error: true});
                 }else{
-                    res.send({success: "Removed "+wres+" rooms"});
+                    res.send({success: true});
                 }
             });
+
         });
 
     router.route('/admin/events/talks')
