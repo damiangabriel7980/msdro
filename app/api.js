@@ -1872,7 +1872,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 });
             }else{
-                Speakers.find({}, function (err, speakers) {
+                Speakers.find({}).sort({last_name: 1, first_name: 1}).exec(function (err, speakers) {
                     if(err){
                         res.send({error: "Could not find speakers"});
                     }else{
@@ -2097,7 +2097,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 });
             }else if(req.query.id){
                 var idTalk = ObjectId(req.query.id);
-                Talks.findOne({_id: idTalk}).exec(function (err, talk) {
+                Talks.findOne({_id: idTalk}).populate('speakers').exec(function (err, talk) {
                     if(err){
                         logger.error(err);
                         res.send({error: true});
@@ -2118,6 +2118,19 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: true});
                 }else{
                     res.send({success: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            var dataToUpdate = req.body;
+            dataToUpdate.last_updated = Date.now();
+            Talks.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" talks"});
                 }
             });
         })

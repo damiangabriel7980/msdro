@@ -77,6 +77,9 @@ a {
 .manageItems .item.full {
   width: 98%;
 }
+.manageItems .item.half {
+  width: 23%;
+}
 .manageItems .title {
   float: left;
 }

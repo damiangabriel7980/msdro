@@ -51,12 +51,12 @@
             <img ng-src="{{conferenceImage}}" style="width:100%">
         </div>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-6">
         <label>Talk-uri:</label>
         <div class="btn btn-default" ng-click="addTalk()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
         <div class="manageItems">
-            <div class="item" ng-repeat="talk in talks | orderBy:hour_start:false">
-                <div class="title">{{talk.hour_start.substr(11,5)+" - "+talk.hour_end.substr(11,5)+" : "+talk.title}}</div>
+            <div class="item full" ng-repeat="talk in talks | orderBy:'hour_start':false">
+                <div class="title">{{getLocalTime(talk.hour_start)+" - "+getLocalTime(talk.hour_end)+" : "+talk.title}}</div>
                 <div class="action"><a ng-click="editTalk(talk._id)">Modifica</a></div>
                 <div class="action"><a ng-click="removeTalk(talk._id)">Sterge</a></div>
             </div>
