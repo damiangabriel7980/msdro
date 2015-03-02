@@ -177,19 +177,11 @@ module.exports = function(app,email, router) {
             var daysToReturn = 80;
             var startDate = new Date(new Date().setDate(new Date().getDate()-(daysToReturn/2)));
             var endDate = new Date(new Date().setDate(new Date().getDate()+(daysToReturn/2)));
-            UserGroup.findOne({"display_name":"Pacienti"}, function (err, group) {
+            Events.find({enable: {$exists: true, $ne: false}, start: {$gt: startDate, $lt: endDate}, isPublic: true}).sort({start: 1}).exec(function (err, resp) {
                 if(err){
                     res.send(err);
-                }else if(!group){
-                    res.send([]);
                 }else{
-                    Events.find({enable: {$exists: true, $ne: false}, start: {$gt: startDate, $lt: endDate}, groupsID: {$in: [group._id.toString()]}}).sort({start: 1}).exec(function (err, resp) {
-                        if(err){
-                            res.send(err);
-                        }else{
-                            res.send(resp);
-                        }
-                    })
+                    res.send(resp);
                 }
             });
         });
