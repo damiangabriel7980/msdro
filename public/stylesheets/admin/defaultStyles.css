@@ -1,3 +1,6 @@
+a {
+  cursor: pointer;
+}
 .main-view-container {
   width: 100%;
   position: absolute;
@@ -56,6 +59,33 @@
 }
 .specialProductsMenu .item:hover {
   background-color: white;
+}
+.manageItems {
+  display: block;
+  width: 100%;
+}
+.manageItems .item {
+  display: block;
+  width: 48%;
+  float: left;
+  background-color: #f5f5f5;
+  margin: 5px 1%;
+  padding: 5px;
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+}
+.manageItems .item.full {
+  width: 98%;
+}
+.manageItems .item.half {
+  width: 23%;
+}
+.manageItems .title {
+  float: left;
+}
+.manageItems .action {
+  float: right;
+  padding-left: 5px;
 }
 .unselectable {
   -webkit-touch-callout: none;

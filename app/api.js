@@ -1817,622 +1817,1051 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
-    router.route('/admin/events')
-
-        .get(function(req, res) {
-            Events.find().populate('listconferences').exec(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        })
-        .post(function(req, res) {
-
-            var event = new Events();
-
-            if(req.body.description) event.description = req.body.description;
-            if(typeof req.body.enable === "boolean"){
-                event.enable = req.body.enable;
-            }else{
-                event.enable = false;
-            }
-            if(req.body.end) event.end= req.body.end;
-            if(req.body.name) event.name=req.body.name;
-            if(req.body.place) event.place= req.body.place;
-            if(req.body.start) event.start=req.body.start;
-            if(req.body.type) event.type=req.body.type;
-
-            if(req.body.listconferences) event.listconferences = req.body.listconferences;
-            if(req.body.groupsID) event.groupsID= req.body.groupsID;
-
-            event.last_updated = Date.now();
-
-            event.save(function(err, saved) {
-                if (err){
-                    res.send(err);
-                }else{
-                    res.json({ message: 'Event created!' , saved: saved});
-                }
-            });
-
-        });
-    router.route('/admin/events/toggleEvent')
-        .post(function(req, res) {
-        Events.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
-            if(err){
-                res.send({error: true});
-            }else{
-                res.send({error: false});
-            }
-        });
-    });
-    router.route('/admin/events/:id')
-
-        .get(function(req, res) {
-            Events.findOne({_id:req.params.id}).populate('listconferences').populate('groupsID').exec(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }else{
-                    res.json(cont);
-                }
-            })
-        })
-        .put(function(req, res) {
-
-            Events.findById(req.params.id, function(err, event) {
-
-                if (err){
-                    res.send(err);
-                }else{
-                    event.description = req.body.description;
-                    if(typeof req.body.enable === "boolean"){
-                        event.enable = req.body.enable;
+    router.route('/admin/events/events')
+        .get(function (req, res) {
+            if(req.query.id){
+                Events.findOne({_id: req.query.id}).select('-listconferences').populate('groupsID').exec(function (err, event) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
                     }else{
-                        event.enable = false;
+                        res.send({success: event});
                     }
-                    if(req.body.end) event.end= req.body.end;
-                    if(req.body.name) event.name=req.body.name;
-                    if(req.body.place) event.place= req.body.place;
-                    if(req.body.start) event.start=req.body.start;
-                    if(req.body.type) event.type=req.body.type;
-
-                    if(req.body.listconferences) event.listconferences = req.body.listconferences;
-                    if(req.body.groupsID) event.groupsID= req.body.groupsID;
-
-                    event.last_updated= Date.now();
-
-                    event.save(function(err, eventSaved) {
-                        if (err){
-                            res.send(err);
-                        }else{
-                            //send notification
-                            if(req.body.notificationText){
-                                getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
-                                    if(err){
-                                        res.json({ message: 'Event updated! Error sending notification' });
-                                    }else{
-                                        if(id_users.length != 0){
-                                            sendPushNotification(req.body.notificationText, id_users, function (err, success) {
-                                                if(err){
-                                                    console.log(err);
-                                                    logger.error(err);
-                                                    res.json({ message: 'Event updated! Error notifying users' });
-                                                }else{
-                                                    res.json({ message: 'Event updated! Notification was sent' });
-                                                }
-                                            });
-                                        }else{
-                                            res.json({ message: 'Event updated! No users found to notify' });
-                                        }
-                                    }
-                                });
-                            }else{
-                                res.json({ message: 'Event updated! No notification sent' });
-                            }
-                        }
-                    });
-                }
-            });
-        })
-        .delete(function(req, res) {
-            Events.findOne({_id:req.params.id},function(err,resp){
-                resp.remove(function(err,cont) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Successfully deleted!' });
                 });
-            })
-
-        });
-
-    router.route('/admin/speakers')
-        .get(function(req,res){
-            Speakers.find().sort({first_name: 1}).exec(function (err, speakers) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(speakers);
-                    return;
-                }
-            })
-        })
-    .post(function(req, res) {
-
-        var speaker = new Speakers(); 		// create a new instance of the Bear model
-            speaker.first_name = req.body.first_name;  // set the bears name (comes from the request)
-            speaker.last_name=req.body.last_name ;
-            speaker.profession= req.body.profession     ;
-            speaker.last_updated= req.body.last_updated ;
-            speaker.workplace=req.body.workplace;
-            speaker.short_description= req.body.short_description ;
-            speaker.image_path=req.body.image_path;
-            speaker.save(function(err) {
-            if (err)
-                res.send(err);
-            else
-                res.json({ message: 'Speaker created!' });
-        });
-
-    });
-    router.route('/admin/speakers/changeSpeakerLogo')
-        .post(function(req,res){
-            var data = req.body.data;
-            Speakers.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
-                if(err){
-                    logger.error("Error at speaker change logo. Speaker id = "+data.id+"; Key = "+data.path);
-                    res.json({error:true});
-                }else{
-                    res.json({error:false, updated:wRes});
-                }
-            });
-        });
-    router.route('/admin/speakers/:id')
-        .get(function(req,res){
-            Speakers.findById(req.params.id).exec(function (err, speaker) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(speaker);
-                    return;
-                }
-            })
-        })
-    .put(function(req, res) {
-
-        Speakers.findById(req.params.id, function(err, speaker) {
-
-            if (err)
-                res.send(err);
-
-            speaker.first_name = req.body.first_name;  // set the bears name (comes from the request)
-            speaker.last_name=req.body.last_name ;
-            speaker.profession= req.body.profession     ;
-            speaker.last_updated= req.body.last_updated ;
-            speaker.workplace=req.body.workplace;
-            speaker.short_description= req.body.short_description ;
-            speaker.save(function(err) {
-                if (err) {
-                    logger.error(err);
-                    res.send(err);
-                    return;
-                }
-                res.json({ message: 'Speaker updated!' });
-            });
-
-        });
-    })
-        .delete(function(req, res) {
-            var id= req.params.id;
-            disconnectAllEntitiesFromEntity(Talks, "speakers", id, function (err, result){
-                if(err){
-                    res.send(err);
-                }else{
-                    //get speaker to find out image path
-                    Speakers.findOne({_id: id}, function (err, speaker) {
-                        if(speaker){
-                            var s3Key = speaker.image_path;
-                            //delete speaker
-                            Speakers.remove({_id:id},function(err,cont) {
-                                if (err){
-                                    res.json({message:'Could not delete speaker!'});
-                                }
-                                else{
-                                    //speaker was deleted. Now delete image if there is one
-                                    if(s3Key){
-                                        s3.deleteObject({Bucket: amazonBucket, Key: s3Key}, function (err, data) {
-                                            if(err){
-                                                logger.error(err);
-                                                res.json({message: "Speaker was deleted. Image could not be deleted"});
-                                            }else{
-                                                res.json({message: "Speaker was deleted. Image was deleted"});
-                                            }
-                                        });
-                                    }else{
-                                        res.json({message:'Speaker was deleted!'});
-                                    }
-                                }
-                            });
-                        }else{
-                            res.json({message:'Speaker not found!'});
-                        }
-                    });
-                }
-            });
-
-
-
-        });
-    router.route('/admin/conferences')
-        .get(function(req,res){
-            Conferences.find().exec(function (err, conf) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(conf);
-                    return;
-                }
-            })
-        })
-    .post(function(req, res) {
-
-        var conferences = new Conferences(); 		// create a new instance of the Bear model
-            conferences.title = req.body.title;  // set the bears name (comes from the request)
-            conferences.enable=req.body.enable ;
-            conferences.begin_date= req.body.begin_date     ;
-            conferences.end_date= req.body.end_date     ;
-            conferences.last_updated= req.body.last_updated ;
-            conferences.description=req.body.description;
-            conferences.qr_code=req.body.qr_code;
-            conferences.topicsID=req.body.topicsID;
-            conferences.image_path=req.body.image_path;
-            conferences.save(function(err,saved) {
-            if (err)
-                res.send(err);
-            else
-            {
-                var conf = new Conferences();
-                conf = saved;
-                var newQR = new Object();
-                newQR.type = 2;
-                newQR.message = saved.qr_code.message;
-                newQR.conference_id = saved._id;
-                conf.qr_code=newQR;
-                conf.save(function(err){
-                    if(err)
-                        res.send(err);
-                    else
-                        res.json({ message: 'Conference created!' });
-                })
-
-            }
-
-        });
-
-    });
-    router.route('/admin/conferences/:id')
-        .get(function(req,res){
-            Conferences.findById(req.params.id).exec(function (err, conf) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-
-                    res.json(conf);
-                    return;
-                }
-            })
-        })
-        .put(function(req, res) {
-
-            Conferences.findById(req.params.id, function(err, conferences) {
-
-                if (err){
-                    res.send(err);
-                }else{
-                    conferences.title = req.body.title;  // set the bears name (comes from the request)
-                    conferences.enable=req.body.enable;
-                    conferences.begin_date= req.body.begin_date;
-                    conferences.end_date= req.body.end_date;
-                    conferences.last_updated= req.body.last_updated;
-                    conferences.description=req.body.description;
-                    conferences.topicsID=req.body.topicsID;
-                    conferences.qr_code=req.body.qr_code;
-                    conferences.save(function(err, conferenceSaved) {
-                        if (err){
-                            res.send(err);
-                        }else{
-                            //send notification
-                            if(req.body.notificationText){
-                                getUsersForConference(conferenceSaved._id, function (err, users) {
-                                    if(err){
-                                        res.json({ message: 'Conference updated! Error at sending notification' });
-                                    }else{
-                                        if(users.length != 0){
-                                            sendPushNotification(req.body.notificationText, users, function (err, success) {
-                                                if(err){
-                                                    res.json({ message: 'Conference updated! Error notifying users' });
-                                                }else{
-                                                    res.json({ message: 'Conference updated! Notification was sent' });
-                                                }
-                                            });
-                                        }else{
-                                            res.json({ message: 'Conference updated! No users found to notify' });
-                                        }
-                                    }
-                                });
-                            }else{
-                                res.json({ message: 'Conference updated! No notification sent' });
-                            }
-                        }
-                    });
-                }
-            });
-        })
-        .delete(function(req, res) {
-            var id = req.params.id;
-            disconnectAllEntitiesFromEntity(Events, "listconferences", id, function (err, result){
-                if(err)
-                    res.send(err);
-                else
-                {
-
-                    disconnectAllEntitiesFromEntity(User, "conferencesID", id, function (err, result) {
-                        if (err)
-                            res.send(err);
-                        else
-                        {
-                            Conferences.findOne({_id: id}, function (err, resp) {
-                                if (resp) {
-                                    resp.remove(function (err, cont) {
-                                        if (err)
-                                            res.send(err);
-                                        else
-                                            res.json({message: 'Successfully deleted!'});
-                                    });
-                                }
-                                else
-                                    res.send(err);
-                            });
-                        }
-
-
-                    })
-
-                }
-            });
-
-
-        });
-    router.route('/admin/conferences/changeConferenceLogo')
-        .post(function(req,res){
-            var data = req.body.data;
-            Conferences.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
-                if(err){
-                    logger.error("Error at conference change logo. Conference id = "+data.id+"; Key = "+data.path);
-                    res.json({error:true});
-                }else{
-                    res.json({error:false, updated:wRes});
-                }
-            });
-        });
-     router.route('/admin/talks')
-        .get(function(req,res){
-            Talks.find().populate('conference room speakers').exec(function (err, talks) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(talks);
-                    return;
-                }
-
-
-            })
-
-        })
-         .post(function(req, res) {
-             var talk = new Talks(req.body.data);
-             talk.enable = true;
-             talk.last_updated = Date.now();
-             talk.save(function (err, savedTalk) {
-                 if(err){
-                     res.send(err);
-                 }else{
-                     res.json({ message: 'Talk created!' });
-                 }
-             });
-         });
-    router.route('/admin/talks/:id')
-        .get(function(req,res){
-            Talks.findById(req.params.id).populate('speakers room conference').exec(function (err, talk) {
-                if (err)
-                {
-                    logger.error(err);
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(talk);
-                    return;
-                }
-            })
-        })
-        .put(function(req, res) {
-
-            var toUpdate = req.body.talk;
-            delete toUpdate._id;
-
-            Talks.update({_id: req.params.id}, toUpdate, function (err, wRes) {
-                if(err){
-                    res.send(err);
-                }else{
-                    //send notification
-                    if(req.body.notification){
-                        getUsersForTalk(req.params.id, function (err, id_users) {
-                            if(err){
-                                res.json({ message: 'Talk updated! Error sending notification' });
-                            }else{
-                                if(id_users.length != 0){
-                                    sendPushNotification(req.body.notification, id_users, function (err, success) {
-                                        if(err){
-                                            res.json({ message: 'Talk updated! Error notifying users' });
-                                        }else{
-                                            res.json({ message: 'Talk updated! Notification was sent' });
-                                        }
-                                    });
-                                }else{
-                                    res.json({ message: 'Talk updated! No users found to notify' });
-                                }
-                            }
-                        });
+            }else{
+                Events.find({}, function (err, events) {
+                    if(err){
+                        res.send({error: "Could not find events"});
                     }else{
-                        res.json({ message: 'Talk updated! No notification sent' });
+                        res.send({success: events});
                     }
-                }
-            });
+                });
+            }
         })
-        .delete(function(req, res) {
-            var id = req.params.id;
-            Talks.remove({_id: id}, function(err,cont) {
-                if (err)
-                    res.send(err);
-                else
-                    res.json({ message: 'Successfully deleted!' });
-            });
-
-        });
-    router.route('/admin/rooms')
-        .get(function(req,res){
-            Rooms.find().exec(function (err, rooms) {
-                if (err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(rooms);
-                    return;
-                }
-
-
-            })
-
-        })
-        .post(function(req, res) {
-            var data = req.body.data;
-
-            var rooms = new Rooms();
-            rooms.room_name = data.room_name;
-            rooms.qr_code = {
-                message: data.qrMessage,
-                room_id: "",
-                type: 1
-            };
-            rooms.save(function (err, roomSaved) {
-                if (err)
-                    res.send(err);
-                else {
-                    var newQR = new Object();
-                    newQR.type = roomSaved.qr_code.type;
-                    newQR.message = roomSaved.qr_code.message;
-                    newQR.room_id = mongoose.Types.ObjectId(roomSaved._id.toString());
-                    roomSaved.qr_code = newQR;
-                    roomSaved.save(function (err) {
-                        if (err)
-                            res.send(err);
-                        else
-                            res.json({message: 'Room created!'});
-                    });
-                }
-            });
-        });
-    router.route('/admin/rooms/:id')
-        .get(function(req,res){
-            Rooms.findById(req.params.id).exec(function (err, room) {
-                if (err)
-                {
-                    logger.error(err);
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    res.json(room);
-                    return;
-                }
-            })
-        })
-        .put(function(req, res) {
-
-            var room = req.body.room;
-            Rooms.update({_id: room._id}, room,  function (err, writeConcern) {
+        .post(function (req, res) {
+            var toCreate = new Events(req.body);
+            toCreate.last_updated = Date.now();
+            toCreate.save(function (err, saved) {
                 if(err){
                     console.log(err);
-                    res.send(err);
+                    res.send({error: true});
                 }else{
-                    //send notification
-                        if(req.body.notification){
-                            getUsersForRoom(room._id, function (err, id_users) {
-                                if(err){
-                                    res.json({ message: 'Room updated! Error sending notification' });
-                                }else{
-                                    if(id_users.length != 0){
-                                        sendPushNotification(req.body.notification, id_users, function (err, success) {
-                                            if(err){
-                                                res.json({ message: 'Room updated! Error notifying users' });
-                                            }else{
-                                                res.json({ message: 'Room updated! Notification was sent' });
-                                            }
-                                        });
-                                    }else{
-                                        res.json({ message: 'Room updated! No users found to notify' });
-                                    }
-                                }
-                            });
-                        }else{
-                            res.json({ message: 'Room updated! No notification sent' });
-                        }
+                    res.send({success: saved});
                 }
             });
         })
-        .delete(function(req, res) {
-            var id = req.params.id;
-            disconnectAllEntitiesFromEntity(Talks, "room", id, function (err, result){
-                if(err)
-                    res.send(err);
-                else {
-                    Rooms.remove({_id: req.params.id}, function (err, cont) {
-                        if (err)
-                            res.send(err);
-                        else
-                            res.json({message: 'Successfully deleted!'});
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            Events.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" events"});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            //get event details
+            Events.findOne({_id: req.query.id}, function (err, event) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    var conferencesIds = event.listconferences || [];
+                    //delete conferences for this event
+                    //delete rooms for this event
+                    //delete talks for all conferences of this event
+                    //remove event itself
+                    async.parallel([
+                        function (callback) {
+                            Conferences.remove({_id: {$in: conferencesIds}}, function (err, wres) {
+                                callback(err?err:null);
+                            });
+                        },
+                        function (callback) {
+                            Rooms.remove({event: event._id}, function (err, wres) {
+                                callback(err?err:null);
+                            });
+                        },
+                        function (callback) {
+                            Talks.remove({conference: {$in: conferencesIds}}, function (err, wres) {
+                                callback(err?err:null);
+                            });
+                        },
+                        function (callback) {
+                            Events.remove({_id: event._id}, function (err, wres) {
+                                callback(err?err:null);
+                            });
+                        }
+                    ], function (err) {
+                        if(err) {
+                            logger.error(err);
+                            res.send({error: true});
+                        }else{
+                            res.send({success: true});
+                        }
                     });
-                }});
+                }
+            });
+        });
+
+    router.route('/admin/events/speakers')
+        .get(function (req, res) {
+            if(req.query.id){
+                Speakers.findOne({_id: req.query.id}, function (err, speaker) {
+                    if(err){
+                        res.send({error: "Could not find speakers"});
+                    }else{
+                        res.send({success: speaker});
+                    }
+                });
+            }else{
+                Speakers.find({}).sort({last_name: 1, first_name: 1}).exec(function (err, speakers) {
+                    if(err){
+                        res.send({error: "Could not find speakers"});
+                    }else{
+                        res.send({success: speakers});
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var toCreate = new Speakers(req.body);
+            toCreate.save(function (err, saved) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({success: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToEdit = ObjectId(req.query.id);
+            Speakers.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" speakers"});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Speakers.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    res.send({error: "Error removing speaker"});
+                }else{
+                    //remove speaker from talks
+                    Talks.update({}, {$pull: {speakers: idToDelete}}, function (err, wres) {
+                        if(err){
+                            res.send({error: true});
+                        }else{
+                            res.send({success: "Removed speaker."});
+                        }
+                    });
+                }
+            });
+        });
+
+    router.route('/admin/events/conferences')
+        .get(function (req, res) {
+            if(req.query.event){
+                Events.findOne({_id: req.query.event}).populate('listconferences').exec(function (err, event) {
+                    if(err || !event){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: event.listconferences || []});
+                    }
+                });
+            }else if(req.query.id){
+                Conferences.findOne({_id: req.query.id}).exec(function (err, conference) {
+                    if(err || !conference){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: conference});
+                    }
+                });
+            }else{
+                Conferences.find({}, function (err, conferences) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: conferences});
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var toCreate = new Conferences(req.body);
+            toCreate.last_updated = Date.now();
+            toCreate.save(function (err, saved) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    //create qr_code
+                    saved.qr_code = {
+                        conference_id: saved._id,
+                        message: "untitled",
+                        type: 2
+                    };
+                    saved.save(function (err, saved) {
+                        if(err){
+                            logger.error(err);
+                            res.send({error: true});
+                        }else{
+                            res.send({success: saved});
+                        }
+                    });
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            var dataToUpdate = req.body;
+            dataToUpdate.last_updated = Date.now();
+            Conferences.update({_id: idToUpdate}, {$set: dataToUpdate}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" conferences"});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            //remove talks for this conference
+            //remove conference
+            //disconnect conference from events
+            async.parallel([
+                function (callback) {
+                    Events.update({}, {$pull: {listconferences: idToDelete}}, {multi: true}, function (err, wres) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    })
+                },
+                function (callback) {
+                    Conferences.remove({_id: idToDelete}, function (err, wres) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    })
+                },
+                function (callback) {
+                    Talks.remove({conference: idToDelete}, function (err, wres) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    });
+                }
+            ], function (err) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({success: true});
+                }
+            });
+        });
+
+    router.route('/admin/events/rooms')
+        .get(function (req, res) {
+            if(req.query.event){
+                var idEvent = ObjectId(req.query.event);
+                Rooms.find({event: idEvent}).exec(function (err, rooms) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: rooms});
+                    }
+                });
+            }else if(req.query.id){
+                Rooms.findOne({_id: req.query.id}).exec(function (err, room) {
+                    if(err || !room){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: room});
+                    }
+                });
+            }else{
+                res.send({error: "Invalid query params"});
+            }
+        })
+        .post(function (req, res) {
+            var toCreate = new Rooms(req.body);
+            toCreate.save(function (err, saved) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    //create qr_code
+                    saved.qr_code = {
+                        room_id: saved._id,
+                        message: "untitled",
+                        type: 1
+                    };
+                    saved.save(function (err, saved) {
+                        if(err){
+                            logger.error(err);
+                            res.send({error: true});
+                        }else{
+                            res.send({success: saved});
+                        }
+                    });
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            var dataToUpdate = req.body;
+            Rooms.update({_id: idToUpdate}, {$set: dataToUpdate}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" rooms"});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            //remove room; remove from and talks as well
+            async.parallel([
+                function (callback) {
+                    Rooms.remove({_id: idToDelete}, function (err, wres) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    });
+                },
+                function (callback) {
+                    Talks.update({room: idToDelete}, {$set: {room: null}}, {multi: true}, function (err, wres) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    });
+                }
+            ], function (err) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({success: true});
+                }
+            });
 
         });
+
+    router.route('/admin/events/talks')
+        .get(function (req, res) {
+            if(req.query.conference){
+                var idConference = ObjectId(req.query.conference);
+                Talks.find({conference: idConference}).exec(function (err, talks) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: talks});
+                    }
+                });
+            }else if(req.query.id){
+                var idTalk = ObjectId(req.query.id);
+                Talks.findOne({_id: idTalk}).populate('speakers').exec(function (err, talk) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: talk});
+                    }
+                });
+            }else{
+                res.send({error: "Missing query params"});
+            }
+        })
+        .post(function (req, res) {
+            var toCreate = new Talks(req.body);
+            toCreate.last_updated = Date.now();
+            toCreate.save(function (err, saved) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            var dataToUpdate = req.body;
+            dataToUpdate.last_updated = Date.now();
+            Talks.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" talks"});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Talks.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Removed "+wres+" talks"});
+                }
+            });
+        });
+
+    router.route('/admin/events/conferenceToEvent')
+        .post(function (req, res) {
+            var eventToUpdate = ObjectId(req.query.idEvent);
+            var conferenceToAdd = ObjectId(req.body.idConference);
+            Events.update({_id: eventToUpdate}, {$addToSet: {listconferences: conferenceToAdd}}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: "Updated "+wres+" events"});
+                }
+            });
+        });
+
+//    router.route('/admin/events')
+//
+//        .get(function(req, res) {
+//            Events.find().populate('listconferences').exec(function(err, cont) {
+//                if(err) {
+//                    res.send(err);
+//                }
+//
+//                res.json(cont);
+//            });
+//        })
+//        .post(function(req, res) {
+//
+//            var event = new Events();
+//
+//            if(req.body.description) event.description = req.body.description;
+//            if(typeof req.body.enable === "boolean"){
+//                event.enable = req.body.enable;
+//            }else{
+//                event.enable = false;
+//            }
+//            if(req.body.end) event.end= req.body.end;
+//            if(req.body.name) event.name=req.body.name;
+//            if(req.body.place) event.place= req.body.place;
+//            if(req.body.start) event.start=req.body.start;
+//            if(req.body.type) event.type=req.body.type;
+//
+//            if(req.body.listconferences) event.listconferences = req.body.listconferences;
+//            if(req.body.groupsID) event.groupsID= req.body.groupsID;
+//
+//            event.last_updated = Date.now();
+//
+//            event.save(function(err, saved) {
+//                if (err){
+//                    res.send(err);
+//                }else{
+//                    res.json({ message: 'Event created!' , saved: saved});
+//                }
+//            });
+//
+//        });
+//    router.route('/admin/events/toggleEvent')
+//        .post(function(req, res) {
+//        Events.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
+//            if(err){
+//                res.send({error: true});
+//            }else{
+//                res.send({error: false});
+//            }
+//        });
+//    });
+//    router.route('/admin/events/:id')
+//
+//        .get(function(req, res) {
+//            Events.findOne({_id:req.params.id}).populate('listconferences').populate('groupsID').exec(function(err, cont) {
+//                if(err) {
+//                    res.send(err);
+//                }else{
+//                    res.json(cont);
+//                }
+//            })
+//        })
+//        .put(function(req, res) {
+//
+//            Events.findById(req.params.id, function(err, event) {
+//
+//                if (err){
+//                    res.send(err);
+//                }else{
+//                    event.description = req.body.description;
+//                    if(typeof req.body.enable === "boolean"){
+//                        event.enable = req.body.enable;
+//                    }else{
+//                        event.enable = false;
+//                    }
+//                    if(req.body.end) event.end= req.body.end;
+//                    if(req.body.name) event.name=req.body.name;
+//                    if(req.body.place) event.place= req.body.place;
+//                    if(req.body.start) event.start=req.body.start;
+//                    if(req.body.type) event.type=req.body.type;
+//
+//                    if(req.body.listconferences) event.listconferences = req.body.listconferences;
+//                    if(req.body.groupsID) event.groupsID= req.body.groupsID;
+//
+//                    event.last_updated= Date.now();
+//
+//                    event.save(function(err, eventSaved) {
+//                        if (err){
+//                            res.send(err);
+//                        }else{
+//                            //send notification
+//                            if(req.body.notificationText){
+//                                getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
+//                                    if(err){
+//                                        res.json({ message: 'Event updated! Error sending notification' });
+//                                    }else{
+//                                        if(id_users.length != 0){
+//                                            sendPushNotification(req.body.notificationText, id_users, function (err, success) {
+//                                                if(err){
+//                                                    console.log(err);
+//                                                    logger.error(err);
+//                                                    res.json({ message: 'Event updated! Error notifying users' });
+//                                                }else{
+//                                                    res.json({ message: 'Event updated! Notification was sent' });
+//                                                }
+//                                            });
+//                                        }else{
+//                                            res.json({ message: 'Event updated! No users found to notify' });
+//                                        }
+//                                    }
+//                                });
+//                            }else{
+//                                res.json({ message: 'Event updated! No notification sent' });
+//                            }
+//                        }
+//                    });
+//                }
+//            });
+//        })
+//        .delete(function(req, res) {
+//            Events.findOne({_id:req.params.id},function(err,resp){
+//                resp.remove(function(err,cont) {
+//                    if (err)
+//                        res.send(err);
+//
+//                    res.json({ message: 'Successfully deleted!' });
+//                });
+//            })
+//
+//        });
+//
+//    router.route('/admin/speakers')
+//        .get(function(req,res){
+//            Speakers.find().sort({first_name: 1}).exec(function (err, speakers) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(speakers);
+//                    return;
+//                }
+//            })
+//        })
+//    .post(function(req, res) {
+//
+//        var speaker = new Speakers(); 		// create a new instance of the Bear model
+//            speaker.first_name = req.body.first_name;  // set the bears name (comes from the request)
+//            speaker.last_name=req.body.last_name ;
+//            speaker.profession= req.body.profession     ;
+//            speaker.last_updated= req.body.last_updated ;
+//            speaker.workplace=req.body.workplace;
+//            speaker.short_description= req.body.short_description ;
+//            speaker.image_path=req.body.image_path;
+//            speaker.save(function(err) {
+//            if (err)
+//                res.send(err);
+//            else
+//                res.json({ message: 'Speaker created!' });
+//        });
+//
+//    });
+//    router.route('/admin/speakers/changeSpeakerLogo')
+//        .post(function(req,res){
+//            var data = req.body.data;
+//            Speakers.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
+//                if(err){
+//                    logger.error("Error at speaker change logo. Speaker id = "+data.id+"; Key = "+data.path);
+//                    res.json({error:true});
+//                }else{
+//                    res.json({error:false, updated:wRes});
+//                }
+//            });
+//        });
+//    router.route('/admin/speakers/:id')
+//        .get(function(req,res){
+//            Speakers.findById(req.params.id).exec(function (err, speaker) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(speaker);
+//                    return;
+//                }
+//            })
+//        })
+//    .put(function(req, res) {
+//
+//        Speakers.findById(req.params.id, function(err, speaker) {
+//
+//            if (err)
+//                res.send(err);
+//
+//            speaker.first_name = req.body.first_name;  // set the bears name (comes from the request)
+//            speaker.last_name=req.body.last_name ;
+//            speaker.profession= req.body.profession     ;
+//            speaker.last_updated= req.body.last_updated ;
+//            speaker.workplace=req.body.workplace;
+//            speaker.short_description= req.body.short_description ;
+//            speaker.save(function(err) {
+//                if (err) {
+//                    logger.error(err);
+//                    res.send(err);
+//                    return;
+//                }
+//                res.json({ message: 'Speaker updated!' });
+//            });
+//
+//        });
+//    })
+//        .delete(function(req, res) {
+//            var id= req.params.id;
+//            disconnectAllEntitiesFromEntity(Talks, "speakers", id, function (err, result){
+//                if(err){
+//                    res.send(err);
+//                }else{
+//                    //get speaker to find out image path
+//                    Speakers.findOne({_id: id}, function (err, speaker) {
+//                        if(speaker){
+//                            var s3Key = speaker.image_path;
+//                            //delete speaker
+//                            Speakers.remove({_id:id},function(err,cont) {
+//                                if (err){
+//                                    res.json({message:'Could not delete speaker!'});
+//                                }
+//                                else{
+//                                    //speaker was deleted. Now delete image if there is one
+//                                    if(s3Key){
+//                                        s3.deleteObject({Bucket: amazonBucket, Key: s3Key}, function (err, data) {
+//                                            if(err){
+//                                                logger.error(err);
+//                                                res.json({message: "Speaker was deleted. Image could not be deleted"});
+//                                            }else{
+//                                                res.json({message: "Speaker was deleted. Image was deleted"});
+//                                            }
+//                                        });
+//                                    }else{
+//                                        res.json({message:'Speaker was deleted!'});
+//                                    }
+//                                }
+//                            });
+//                        }else{
+//                            res.json({message:'Speaker not found!'});
+//                        }
+//                    });
+//                }
+//            });
+//
+//
+//
+//        });
+//    router.route('/admin/conferences')
+//        .get(function(req,res){
+//            Conferences.find().exec(function (err, conf) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(conf);
+//                    return;
+//                }
+//            })
+//        })
+//    .post(function(req, res) {
+//
+//        var conferences = new Conferences(); 		// create a new instance of the Bear model
+//            conferences.title = req.body.title;  // set the bears name (comes from the request)
+//            conferences.enable=req.body.enable ;
+//            conferences.begin_date= req.body.begin_date     ;
+//            conferences.end_date= req.body.end_date     ;
+//            conferences.last_updated= req.body.last_updated ;
+//            conferences.description=req.body.description;
+//            conferences.qr_code=req.body.qr_code;
+//            conferences.topicsID=req.body.topicsID;
+//            conferences.image_path=req.body.image_path;
+//            conferences.save(function(err,saved) {
+//            if (err)
+//                res.send(err);
+//            else
+//            {
+//                var conf = new Conferences();
+//                conf = saved;
+//                var newQR = new Object();
+//                newQR.type = 2;
+//                newQR.message = saved.qr_code.message;
+//                newQR.conference_id = saved._id;
+//                conf.qr_code=newQR;
+//                conf.save(function(err){
+//                    if(err)
+//                        res.send(err);
+//                    else
+//                        res.json({ message: 'Conference created!' });
+//                })
+//
+//            }
+//
+//        });
+//
+//    });
+//    router.route('/admin/conferences/:id')
+//        .get(function(req,res){
+//            Conferences.findById(req.params.id).exec(function (err, conf) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//
+//                    res.json(conf);
+//                    return;
+//                }
+//            })
+//        })
+//        .put(function(req, res) {
+//
+//            Conferences.findById(req.params.id, function(err, conferences) {
+//
+//                if (err){
+//                    res.send(err);
+//                }else{
+//                    conferences.title = req.body.title;  // set the bears name (comes from the request)
+//                    conferences.enable=req.body.enable;
+//                    conferences.begin_date= req.body.begin_date;
+//                    conferences.end_date= req.body.end_date;
+//                    conferences.last_updated= req.body.last_updated;
+//                    conferences.description=req.body.description;
+//                    conferences.topicsID=req.body.topicsID;
+//                    conferences.qr_code=req.body.qr_code;
+//                    conferences.save(function(err, conferenceSaved) {
+//                        if (err){
+//                            res.send(err);
+//                        }else{
+//                            //send notification
+//                            if(req.body.notificationText){
+//                                getUsersForConference(conferenceSaved._id, function (err, users) {
+//                                    if(err){
+//                                        res.json({ message: 'Conference updated! Error at sending notification' });
+//                                    }else{
+//                                        if(users.length != 0){
+//                                            sendPushNotification(req.body.notificationText, users, function (err, success) {
+//                                                if(err){
+//                                                    res.json({ message: 'Conference updated! Error notifying users' });
+//                                                }else{
+//                                                    res.json({ message: 'Conference updated! Notification was sent' });
+//                                                }
+//                                            });
+//                                        }else{
+//                                            res.json({ message: 'Conference updated! No users found to notify' });
+//                                        }
+//                                    }
+//                                });
+//                            }else{
+//                                res.json({ message: 'Conference updated! No notification sent' });
+//                            }
+//                        }
+//                    });
+//                }
+//            });
+//        })
+//        .delete(function(req, res) {
+//            var id = req.params.id;
+//            disconnectAllEntitiesFromEntity(Events, "listconferences", id, function (err, result){
+//                if(err)
+//                    res.send(err);
+//                else
+//                {
+//
+//                    disconnectAllEntitiesFromEntity(User, "conferencesID", id, function (err, result) {
+//                        if (err)
+//                            res.send(err);
+//                        else
+//                        {
+//                            Conferences.findOne({_id: id}, function (err, resp) {
+//                                if (resp) {
+//                                    resp.remove(function (err, cont) {
+//                                        if (err)
+//                                            res.send(err);
+//                                        else
+//                                            res.json({message: 'Successfully deleted!'});
+//                                    });
+//                                }
+//                                else
+//                                    res.send(err);
+//                            });
+//                        }
+//
+//
+//                    })
+//
+//                }
+//            });
+//
+//
+//        });
+//    router.route('/admin/conferences/changeConferenceLogo')
+//        .post(function(req,res){
+//            var data = req.body.data;
+//            Conferences.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
+//                if(err){
+//                    logger.error("Error at conference change logo. Conference id = "+data.id+"; Key = "+data.path);
+//                    res.json({error:true});
+//                }else{
+//                    res.json({error:false, updated:wRes});
+//                }
+//            });
+//        });
+//     router.route('/admin/talks')
+//        .get(function(req,res){
+//            Talks.find().populate('conference room speakers').exec(function (err, talks) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(talks);
+//                    return;
+//                }
+//
+//
+//            })
+//
+//        })
+//         .post(function(req, res) {
+//             var talk = new Talks(req.body.data);
+//             talk.enable = true;
+//             talk.last_updated = Date.now();
+//             talk.save(function (err, savedTalk) {
+//                 if(err){
+//                     res.send(err);
+//                 }else{
+//                     res.json({ message: 'Talk created!' });
+//                 }
+//             });
+//         });
+//    router.route('/admin/talks/:id')
+//        .get(function(req,res){
+//            Talks.findById(req.params.id).populate('speakers room conference').exec(function (err, talk) {
+//                if (err)
+//                {
+//                    logger.error(err);
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(talk);
+//                    return;
+//                }
+//            })
+//        })
+//        .put(function(req, res) {
+//
+//            var toUpdate = req.body.talk;
+//            delete toUpdate._id;
+//
+//            Talks.update({_id: req.params.id}, toUpdate, function (err, wRes) {
+//                if(err){
+//                    res.send(err);
+//                }else{
+//                    //send notification
+//                    if(req.body.notification){
+//                        getUsersForTalk(req.params.id, function (err, id_users) {
+//                            if(err){
+//                                res.json({ message: 'Talk updated! Error sending notification' });
+//                            }else{
+//                                if(id_users.length != 0){
+//                                    sendPushNotification(req.body.notification, id_users, function (err, success) {
+//                                        if(err){
+//                                            res.json({ message: 'Talk updated! Error notifying users' });
+//                                        }else{
+//                                            res.json({ message: 'Talk updated! Notification was sent' });
+//                                        }
+//                                    });
+//                                }else{
+//                                    res.json({ message: 'Talk updated! No users found to notify' });
+//                                }
+//                            }
+//                        });
+//                    }else{
+//                        res.json({ message: 'Talk updated! No notification sent' });
+//                    }
+//                }
+//            });
+//        })
+//        .delete(function(req, res) {
+//            var id = req.params.id;
+//            Talks.remove({_id: id}, function(err,cont) {
+//                if (err)
+//                    res.send(err);
+//                else
+//                    res.json({ message: 'Successfully deleted!' });
+//            });
+//
+//        });
+//    router.route('/admin/rooms')
+//        .get(function(req,res){
+//            Rooms.find().exec(function (err, rooms) {
+//                if (err)
+//                {
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(rooms);
+//                    return;
+//                }
+//
+//
+//            })
+//
+//        })
+//        .post(function(req, res) {
+//            var data = req.body.data;
+//
+//            var rooms = new Rooms();
+//            rooms.room_name = data.room_name;
+//            rooms.qr_code = {
+//                message: data.qrMessage,
+//                room_id: "",
+//                type: 1
+//            };
+//            rooms.save(function (err, roomSaved) {
+//                if (err)
+//                    res.send(err);
+//                else {
+//                    var newQR = new Object();
+//                    newQR.type = roomSaved.qr_code.type;
+//                    newQR.message = roomSaved.qr_code.message;
+//                    newQR.room_id = mongoose.Types.ObjectId(roomSaved._id.toString());
+//                    roomSaved.qr_code = newQR;
+//                    roomSaved.save(function (err) {
+//                        if (err)
+//                            res.send(err);
+//                        else
+//                            res.json({message: 'Room created!'});
+//                    });
+//                }
+//            });
+//        });
+//    router.route('/admin/rooms/:id')
+//        .get(function(req,res){
+//            Rooms.findById(req.params.id).exec(function (err, room) {
+//                if (err)
+//                {
+//                    logger.error(err);
+//                    res.json(err);
+//                    return;
+//                }
+//                else
+//                {
+//                    res.json(room);
+//                    return;
+//                }
+//            })
+//        })
+//        .put(function(req, res) {
+//
+//            var room = req.body.room;
+//            Rooms.update({_id: room._id}, room,  function (err, writeConcern) {
+//                if(err){
+//                    console.log(err);
+//                    res.send(err);
+//                }else{
+//                    //send notification
+//                        if(req.body.notification){
+//                            getUsersForRoom(room._id, function (err, id_users) {
+//                                if(err){
+//                                    res.json({ message: 'Room updated! Error sending notification' });
+//                                }else{
+//                                    if(id_users.length != 0){
+//                                        sendPushNotification(req.body.notification, id_users, function (err, success) {
+//                                            if(err){
+//                                                res.json({ message: 'Room updated! Error notifying users' });
+//                                            }else{
+//                                                res.json({ message: 'Room updated! Notification was sent' });
+//                                            }
+//                                        });
+//                                    }else{
+//                                        res.json({ message: 'Room updated! No users found to notify' });
+//                                    }
+//                                }
+//                            });
+//                        }else{
+//                            res.json({ message: 'Room updated! No notification sent' });
+//                        }
+//                }
+//            });
+//        })
+//        .delete(function(req, res) {
+//            var id = req.params.id;
+//            disconnectAllEntitiesFromEntity(Talks, "room", id, function (err, result){
+//                if(err)
+//                    res.send(err);
+//                else {
+//                    Rooms.remove({_id: req.params.id}, function (err, cont) {
+//                        if (err)
+//                            res.send(err);
+//                        else
+//                            res.json({message: 'Successfully deleted!'});
+//                    });
+//                }});
+//
+//        });
+
     router.route('/admin/multimedia')
 
         .get(function(req, res) {

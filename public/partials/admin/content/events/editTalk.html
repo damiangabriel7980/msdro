@@ -1,0 +1,78 @@
+<div class="col-md-12">
+    <div class="col-md-12">
+        <h3>Update talk</h3>
+    </div>
+    <div class="form-group col-md-12">
+        <label>Titlu:</label>
+        <input ng-model="talk.title" type="text" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
+        <label>Locatie:</label>
+        <input ng-model="talk.place" type="text" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
+        <label>Tip:</label>
+        <select ng-model="talk.type" ng-options="type.number as type.name for type in types" class="form-control"></select>
+    </div>
+    <div class="col-md-6">
+        <div class="dropdown">
+            <a class="dropdown-toggle my-toggle-select" role="button" data-toggle="dropdown" data-target="#" href="">
+                <div class="input-group col-md-12">
+                    <label>Inceput:</label>
+                    <input type="text" class="form-control" data-ng-model="talk.hour_start">
+                </div>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <datetimepicker data-ng-model="talk.hour_start"
+                                data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="dropdown">
+            <a class="dropdown-toggle my-toggle-select" role="button" data-toggle="dropdown" data-target="#" href="">
+                <div class="input-group col-md-12">
+                    <label>Sfarsit:</label>
+                    <input type="text" class="form-control" data-ng-model="talk.hour_end">
+                </div>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <datetimepicker data-ng-model="talk.hour_end"
+                                data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <label>Camera:</label>
+        <select ng-model="talk.room" ng-options="room._id as room.room_name for room in rooms"
+                class="form-control" style="width: 100%;">
+        </select>
+    </div>
+    <div class="col-md-12">
+        <label>Speakeri:</label>
+        <select ng-model="selectedSpeaker" ng-options="speaker as speaker.last_name+'&nbsp;'+speaker.first_name for speaker in speakers"
+                class="form-control" style="width: 100%;" ng-change="selectSpeaker()">
+        </select>
+    </div>
+    <div class="manageItems">
+        <div class="item half" ng-repeat="speaker in selectedSpeakers">
+            <div class="title">{{speaker.last_name+" "+speaker.first_name}}</div>
+            <div class="action"><a ng-click="removeSpeaker(speaker)">Sterge</a></div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <label>Descriere:</label>
+        <textarea ui-tinymce ng-model="talk.description"></textarea>
+    </div>
+    <div class="col-md-12 noPadding">
+        <div class="form-group col-md-6" style="margin-bottom: 0;">
+            <label for="notificationCheck">Trimite notificare&nbsp;</label>
+            <input type="checkbox" id="notificationCheck" ng-model="notification.send">
+            <input type="text" ng-model="notification.text" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-12" style="margin: 10px 0">
+        <a class="btn pull-left btn-default" ng-click="backToConference()">Inapoi la conferinta</a>
+        <a class="btn pull-right btn-primary" ng-click="updateTalk()">Salveaza modificarile</a>
+    </div>
+</div>

@@ -8,7 +8,6 @@ var Events = require('./cities');
 var Talks=require('./talks');
 var ConferencesSchema		= new Schema({
     title:  String,
-    enable:         String,
     begin_date:        Date,
     last_updated: Date,
     qr_code: Object,

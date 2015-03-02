@@ -1,34 +1,46 @@
-/**
- * Created by miricaandrei23 on 16.12.2014.
- */
-controllers.controller('EditRoom', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','ngTableParams','growl', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,ngTableParams,growl){
+controllers.controller('EditRoom', ['$scope', '$rootScope', '$state', '$stateParams', 'EventsService', '$modal', 'InfoModal', 'ActionModal', function ($scope, $rootScope, $state, $stateParams, EventsService, $modal, InfoModal, ActionModal) {
 
-    $scope.roomQr="";
-
-    EventsAdminService.deleteOrUpdateRooms.getRoom({id:$stateParams.id}).$promise.then(function(result){
-        $scope.newRoom=result;
-        $scope.roomQr=JSON.stringify($scope.newRoom.qr_code);
+    //get room
+    EventsService.rooms.query({id: $stateParams.idRoom}).$promise.then(function (resp) {
+        $scope.room = resp.success;
     });
 
-    $scope.updateRoom=function(){
-        if($scope.notificationCheck){
-            $scope.newRoom.notificationText = $scope.notificationText;
-        }
-        if($scope.newRoom){
-            EventsAdminService.deleteOrUpdateRooms.update(
-                {id: $stateParams.id}, //url params
-                {room: $scope.newRoom, notification: $scope.notificationCheck?$scope.notificationText:null} //body params
-            ).$promise.then(function(result){
-                if(result.message)
-                    growl.addSuccessMessage(result.message);
-                else
-                    growl.addWarnMessage(result);
-            });
-        }
+    //============================================== QR functions
+    $scope.scanQr = function (qr_code) {
+        $modal.open({
+            templateUrl: 'partials/admin/content/events/modalGenerateQR.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'ModalGenerateQR',
+            resolve: {
+                qrObject: function () {
+                    return qr_code;
+                }
+            }
+        });
     };
 
-    $scope.okk=function(){
-        $state.go('content.evenimente');
+    //=============================================== update room
+
+    $scope.updateRoom = function () {
+        var room = this.room;
+        console.log(room);
+        var notification = this.notification || {};
+        EventsService.rooms.update({id: room._id}, room).$promise.then(function (resp) {
+            if(resp.error){
+                InfoModal.show("Update esuat", "A aparut o eroare la update");
+            }else{
+                if(notification.send){
+                    //TODO: send notification.text
+                }else{
+                    InfoModal.show("Camera actualizata", "Camera a fost actualizata cu succes");
+                }
+            }
+        });
     };
+
+    $scope.backToEvent = function () {
+        $state.go('content.events.editEvent', {idEvent: $stateParams.idEvent});
+    }
 
 }]);

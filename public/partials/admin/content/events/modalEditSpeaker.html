@@ -1,0 +1,47 @@
+<form>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">&times;</button>
+            <h3 class="modal-title">{{modal.title}}</h3>
+        </div>
+        <div class="col-md-12 modal-body">
+            <div class="col-md-12" style="margin-bottom: 15px;">
+                <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
+            </div>
+            <div class="col-md-12">
+                <label>Prenume:</label>
+                <input ng-model="speaker.first_name" type="text" class="form-control">
+            </div>
+            <div class="col-md-12">
+                <label>Nume:</label>
+                <input ng-model="speaker.last_name" type="text" class="form-control">
+            </div>
+            <div class="col-md-12">
+                <label>Profesie:</label>
+                <input ng-model="speaker.profession" type="text" class="form-control">
+            </div>
+            <div class="col-md-12">
+                <label>Loc de munca:</label>
+                <input ng-model="speaker.workplace" type="text" class="form-control">
+            </div>
+            <div class="col-md-12" style="margin: 10px 0">
+                <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false"
+                        accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
+                <span ng-if="fileBody">{{fileBody.name}}</span>
+                <span ng-if="speaker.image_path && !fileBody">{{speaker.image_path}}</span>
+            </div>
+            <div class="col-md-12">
+                <form method="post">
+                    <label>Descriere:</label>
+                    <textarea ui-tinymce ng-model="speaker.short_description"></textarea>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Anuleaza</button>
+                <button type="button" class="btn btn-primary pull-right" ng-click="finalize()">{{modal.action}}</button>
+            </div>
+        </div>
+    </div>
+</form>

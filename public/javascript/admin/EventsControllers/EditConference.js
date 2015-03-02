@@ -1,148 +1,159 @@
-/**
- * Created by miricaandrei23 on 26.11.2014.
- */
-/**
- * Created by miricaandrei23 on 25.11.2014.
- */
-controllers.controller('EditConference', ['$scope','$rootScope' ,'EventsAdminService','$stateParams','$sce','$filter','$state','ngTableParams','growl','AmazonService', function($scope,$rootScope,EventsAdminService,$stateParams,$sce,$filter,$state,ngTableParams,growl,AmazonService){
+controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$stateParams', 'EventsService', 'AmazonService', '$modal', 'InfoModal', 'ActionModal', function ($scope, $rootScope, $state, $stateParams, EventsService, AmazonService, $modal, InfoModal, ActionModal) {
 
-    $scope.statusAlert = {newAlert:false, type:"", message:""};
-    $scope.uploadAlert = {newAlert:false, type:"", message:""};
-    $scope.string = "";
-    $scope.notificationCheck = false;
-
-    var conferenceDataLoaded=false;
-    EventsAdminService.getAllRoom.query().$promise.then(function(resp) {
-        $scope.rooms = resp;
-        EventsAdminService.deleteOrUpdateConferences.getConference({id: $stateParams.id}).$promise.then(function (result2) {
-
-            $scope.newConference = result2;
-            $scope.string = JSON.stringify($scope.newConference.qr_code);
-            conferenceDataLoaded=true;
-            console.log(result2);
-        });
+    //get conference
+    EventsService.conferences.query({id: $stateParams.idConference}).$promise.then(function (resp) {
+        $scope.conference = resp.success;
+        if(resp.success.image_path) setImage(resp.success.image_path);
     });
-    $scope.messageString="";
 
-    var putLogoS3 = function (body) {
-        AmazonService.getClient(function (s3) {
-            var extension = body.name.split('.').pop();
-            var key = "conferences/"+$scope.newConference._id+"/conference-logo/logo"+$scope.newConference._id+"."+extension;
-            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
-                if (err) {
-                    console.log(err);
-                    $scope.uploadAlert.type = "danger";
-                    $scope.uploadAlert.message = "Upload esuat!";
-                    $scope.uploadAlert.newAlert = true;
-                    $scope.$apply();
-                } else {
-                    //update database as well
-                    EventsAdminService.changeConferenceLogo.save({data:{id:$scope.newConference._id, path:key}}).$promise.then(function (resp) {
+    //get talks
+    var refreshTalks = function () {
+        EventsService.talks.query({conference: $stateParams.idConference}).$promise.then(function (resp) {
+            $scope.talks = resp.success;
+        });
+    };
+    refreshTalks();
+
+    //=============================================== functions and variables for date pop-ups
+    $scope.dateFormat = 'dd.MM.yyyy';
+
+    $scope.isOpenedStart = false;
+    $scope.isOpenedEnd = false;
+
+    $scope.open_start = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.isOpenedStart = true;
+    };
+    $scope.open_end = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.isOpenedEnd = true;
+    };
+    //=========
+
+    //============================================== QR functions
+    $scope.scanQr = function (qr_code) {
+        $modal.open({
+            templateUrl: 'partials/admin/content/events/modalGenerateQR.html',
+            size: 'sm',
+            windowClass: 'fade',
+            controller: 'ModalGenerateQR',
+            resolve: {
+                qrObject: function () {
+                    return qr_code;
+                }
+            }
+        });
+    };
+
+    //============================================== Image upload function
+
+    //upload alert
+    var uploadAlert = function (type, text) {
+        $scope.uploadAlert = {
+            type: type?type:"danger",
+            text: text?text:"Unknown error",
+            show: text?true:false
+        };
+    };
+
+    //set image with disabled cache
+    var setImage = function (key) {
+        $scope.conferenceImage = $rootScope.pathAmazonDev + key + '?' + new Date().getTime();
+    };
+
+    //file selected function
+    $scope.fileSelected = function ($files) {
+        //TODO: upload image
+        if($files[0]){
+            var file = $files[0];
+            uploadAlert("warning", "Se incarca imaginea...");
+            var extension = file.name.split(".").pop();
+            var key = "conferences/"+$scope.conference._id+"/logo."+extension;
+            AmazonService.uploadFile(file, key, function (err, success) {
+                if(err){
+                    uploadAlert("danger", "Eroare la incarcarea fisierului");
+                }else{
+                    //update database
+                    EventsService.conferences.update({id: $scope.conference._id}, {image_path: key}).$promise.then(function (resp) {
                         if(resp.error){
-                            $scope.uploadAlert.type = "danger";
-                            $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
-                            $scope.uploadAlert.newAlert = true;
+                            uploadAlert("danger", "Eroare la actualizarea imaginii in baza de date");
                         }else{
-                            $scope.logo = key;
-                            $scope.uploadAlert.type = "success";
-                            $scope.uploadAlert.message = "Logo updated!";
-                            $scope.uploadAlert.newAlert = true;
-                            console.log("Upload complete");
+                            //update model
+                            $scope.conference.image_path = key;
+                            //update view
+                            setImage(key);
+                            uploadAlert("success", "Imaginea a fost salvata");
                         }
                     });
                 }
             });
-            req.on('httpUploadProgress', function (evt) {
-                var progress = parseInt(100.0 * evt.loaded / evt.total);
-                $scope.$apply(function() {
-                    console.log(progress);
-                })
-            });
+        }
+    };
+
+    //=============================================== update conference
+
+    $scope.updateConference = function () {
+        var conference = this.conference;
+        //make sure we don't record an older image path
+        if(conference.image_path) delete conference.image_path;
+        console.log(conference);
+        var notification = this.notification || {};
+        EventsService.conferences.update({id: conference._id}, conference).$promise.then(function (resp) {
+            if(resp.error){
+                InfoModal.show("Update esuat", "A aparut o eroare la update");
+            }else{
+                if(notification.send){
+                    //TODO: send notification.text
+                }else{
+                    InfoModal.show("Conferinta actualizata", "Conferinta a fost actualizata cu succes");
+                }
+            }
         });
     };
 
-    $scope.fileSelected = function($files, $event){
-        //make sure group data is loaded. we need to access it to form the amazon key
-        if(conferenceDataLoaded){
-            //make sure a file was actually loaded
-            if($files[0]){
-                AmazonService.getClient(function (s3) {
-                    var key;
-                    //if there already is a logo, delete it. Then upload new
-                    if($scope.newConference.image_path){
-                        key =$scope.newConference.image_path;
-                        s3.deleteObject({Bucket: $rootScope.amazonBucket, Key:key}, function (err, data) {
-                            if(err){
-                                $scope.uploadAlert.type = "danger";
-                                $scope.uploadAlert.message = "Eroare la stergerea logo-ului vechi!";
-                                $scope.uploadAlert.newAlert = true;
-                                $scope.$apply();
-                            }else{
-                                putLogoS3($files[0]);
-                            }
-                        });
-                    }else{
-                        putLogoS3($files[0]);
-                    }
-                });
+    //============================================== manage talks
+    $scope.addTalk = function () {
+        EventsService.talks.create({
+            title: "untitled",
+            conference: $stateParams.idConference
+        }).$promise.then(function (resp) {
+            if(resp.error){
+                InfoModal.show("Creare esuata", "A aparut o eroare la crearea talk-ului");
+            }else{
+                refreshTalks();
             }
-        }
+        });
     };
 
-    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    $scope.format = $scope.formats[0];
-    $scope.open1 = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        $scope.opened1 = true;
-    };
-    $scope.open2 = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        $scope.opened2 = true;
-    };
-    $scope.renderHtml = function (htmlCode) {
-        return $sce.trustAsHtml(htmlCode);
-    };
-
-    $scope.updateConference=function(){
-        $scope.utc1 = new Date($scope.newConference.begin_date);
-        $scope.utc2 = new Date($scope.newConference.end_date);
-        $scope.newConference.begin_date=$scope.utc1;
-        $scope.newConference.end_date=$scope.utc2;
-        if($scope.notificationCheck){
-            $scope.newConference.notificationText = $scope.notificationText;
-        }
-        console.log($scope.newConference);
-        if($scope.newConference){
-            EventsAdminService.deleteOrUpdateConferences.update({id: $stateParams.id}, $scope.newConference).$promise.then(function(result){
-                if(result.message)
-                    growl.addSuccessMessage(result.message);
-                else
-                    growl.addWarnMessage(result);
+    $scope.removeTalk = function (id) {
+        ActionModal.show("Stergere talk", "Sunteti sigur ca doriti sa stergeti talk-ul?", function () {
+            EventsService.talks.delete({id: id}).$promise.then(function (resp) {
+                if(resp.error){
+                    InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea talk-ului");
+                }else{
+                    refreshTalks();
+                }
             });
-        }
+        }, "Da");
     };
 
-    $scope.okk=function(){
-        $state.go('content.evenimente');
-    };
-    $scope.tinymceOptions = {
-        selector: "textarea",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    $scope.editTalk = function (id) {
+        $state.go('content.events.editTalk', {idEvent: $stateParams.idEvent, idConference: $stateParams.idConference, idTalk: id});
     };
 
-}])
-    .filter("asDate", function () {
-        return function (input) {
-            return new Date(input);
-        }
-    });
+    $scope.getLocalTime = function (dateStr) {
+        var date = new Date(dateStr);
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        if(hours < 10) hours = "0"+hours;
+        if(minutes < 10) minutes = "0"+minutes;
+        return hours+":"+minutes;
+    };
 
+    $scope.backToEvent = function () {
+        $state.go('content.events.editEvent', {idEvent: $stateParams.idEvent});
+    };
+
+}]);
