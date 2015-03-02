@@ -128,13 +128,15 @@ controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$st
     };
 
     $scope.removeTalk = function (id) {
-        EventsService.talks.delete({id: id}).$promise.then(function (resp) {
-            if(resp.error){
-                InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea talk-ului");
-            }else{
-                refreshTalks();
-            }
-        });
+        ActionModal.show("Stergere talk", "Sunteti sigur ca doriti sa stergeti talk-ul?", function () {
+            EventsService.talks.delete({id: id}).$promise.then(function (resp) {
+                if(resp.error){
+                    InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea talk-ului");
+                }else{
+                    refreshTalks();
+                }
+            });
+        }, "Da");
     };
 
     $scope.editTalk = function (id) {

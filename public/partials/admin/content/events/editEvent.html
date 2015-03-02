@@ -65,7 +65,7 @@
             <div class="item full" ng-repeat="conference in conferences | orderBy:last_updated.substr(0,10):true">
                 <div class="title">{{conference.title}}</div>
                 <div class="action"><a ng-click="editConference(conference._id)">Modifica</a></div>
-                <div class="action"><a ng-click="removeConference(conference._id)">Sterge</a></div>
+                <div class="action"><a ng-click="removeConference(conference)">Sterge</a></div>
             </div>
         </div>
     </div>

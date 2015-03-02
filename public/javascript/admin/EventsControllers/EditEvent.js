@@ -1,4 +1,4 @@
-controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'EventsService', 'GroupsService', 'InfoModal', 'ActionModal', function ($scope, $state, $stateParams, EventsService, GroupsService, InfoModal, ActionModal) {
+controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'EventsService', 'GroupsService', 'InfoModal', 'ActionModal', 'AmazonService', function ($scope, $state, $stateParams, EventsService, GroupsService, InfoModal, ActionModal, AmazonService) {
 
     var refreshConferences = function () {
         EventsService.conferences.query({event: $stateParams.idEvent}).$promise.then(function (resp) {
@@ -45,10 +45,18 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
         $state.go('content.events.editConference', {idEvent: $stateParams.idEvent, idConference: id});
     };
 
-    $scope.removeConference = function (id) {
-        EventsService.conferences.delete({id: id}).$promise.then(function () {
-            refreshConferences();
-        });
+    $scope.removeConference = function (conference) {
+        ActionModal.show("Stergere conferinta", "Sunteti sigur ca doriti sa stergeti conferinta?", function () {
+            EventsService.conferences.delete({id: conference._id}).$promise.then(function () {
+                //delete image
+                AmazonService.deleteFile(conference.image_path, function (err, success) {
+                    if(err){
+                        console.log(err);
+                    }
+                    refreshConferences();
+                });
+            });
+        }, "Da");
     };
 
     $scope.editRoom = function (id) {
@@ -56,12 +64,14 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
     };
 
     $scope.deleteRoom = function (id) {
-        EventsService.rooms.delete({id: id}).$promise.then(function (resp) {
-            if(resp.error){
-                InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea camerei");
-            }
-            refreshRooms();
-        });
+        ActionModal.show("Stergere camera", "Sunteti sigur ca doriti sa stergeti camera?", function () {
+            EventsService.rooms.delete({id: id}).$promise.then(function (resp) {
+                if(resp.error){
+                    InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea camerei");
+                }
+                refreshRooms();
+            });
+        }, "Da");
     };
 
     $scope.addConference = function () {
