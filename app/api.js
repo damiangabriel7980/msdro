@@ -3404,11 +3404,61 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/applications/contractManagement/templates')
         .get(function (req, res) {
-            CM_templates.find({}, function (err, templates) {
+            if(req.query.id){
+                CM_templates.findOne({_id: req.query.id}, function (err, template) {
+                    if(err || !template){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: template});
+                    }
+                });
+            }else{
+                CM_templates.find({}, function (err, templates) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: templates});
+                    }
+                });
+            }
+
+        })
+        .post(function (req, res) {
+            var template = new CM_templates({
+                name: "untitled",
+                last_modified: Date.now(),
+                isEnabled: false
+            });
+            template.save(function (err, saved) {
                 if(err){
-                    console.log({error: true});
+                    logger.error(err);
+                    res.send({error: true});
                 }else{
-                    res.send({success: templates});
+                    res.send({success: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            CM_templates.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: true});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            CM_templates.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: true});
                 }
             });
         });

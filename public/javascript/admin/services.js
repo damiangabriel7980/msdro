@@ -496,7 +496,10 @@ services.factory('qaService', ['$resource', function($resource){
 services.factory('ContractManagementService', ['$resource', function($resource){
     return {
         templates: $resource('api/admin/applications/contractManagement/templates', {}, {
-            query: { method: 'GET', isArray: false }
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         })
     }
 }]);
