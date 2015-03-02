@@ -1828,7 +1828,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 });
             }else{
-                Events.find({}).populate('listconferences').exec(function (err, events) {
+                Events.find({}, function (err, events) {
                     if(err){
                         res.send({error: "Could not find events"});
                     }else{
@@ -1857,6 +1857,44 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: true});
                 }else{
                     res.send({success: "Updated "+wres+" events"});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            //get event details
+            Events.findOne({_id: req.query.id}, function (err, event) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    var conferencesIds = event.listconferences || [];
+                    //delete conferences for this event
+                    //delete rooms for this event
+                    //delete talks for all conferences of this event
+                    async.parallel([
+                        function (callback) {
+                            Conferences.remove({_id: {$in: conferencesIds}}, function (err, wres) {
+                                callback(err?err:null);
+                            });
+                        },
+                        function (callback) {
+                            Rooms.remove({event: event._id}, function (err, wres) {
+                                callback(err?err:null);
+                            });
+                        },
+                        function (callback) {
+                            Talks.remove({conference: {$in: conferencesIds}}, function (err, wres) {
+                                callback(err?err:null);
+                            });
+                        }
+                    ], function (err) {
+                        if(err) {
+                            logger.error(err);
+                            res.send({error: true});
+                        }else{
+                            res.send({success: true});
+                        }
+                    });
                 }
             });
         });
