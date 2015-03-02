@@ -13,6 +13,7 @@ var userSchema = new Schema({
     language: String,
     last_updated: Date,
     name: String,
+    showPresentation: Boolean,
     phone: {type: String, select: false},
     points: {type: Number, select: false},
     proof_path: {type: String, select: false},

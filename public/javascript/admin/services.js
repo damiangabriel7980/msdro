@@ -206,6 +206,52 @@ services.factory('NewAccountsService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('ManageAccountsService', ['$resource', function($resource){
+    return {
+        getAllUsers: $resource('api/admin/users/ManageAccounts/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getOneUser: $resource('api/admin/users/ManageAccounts/getAccount', {}, {
+            query: { method: 'POST', isArray: false }
+        }),
+        toggleUser: $resource('api/admin/users/ManageAccounts/toggle', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        professions: $resource('api/admin/professions', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        saveUser: $resource('api/admin/saveUser', {}, {
+            save: {method:'POST'}
+        }),
+        specialGroups: $resource('api/admin/specialGroups/:profession', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
+
+services.factory('IntroService', ['$resource', function($resource){
+    return {
+        getIntros: $resource('api/admin/intros/', {}, {
+            query: { method: 'GET', isArray: true }
+        }),
+        getOneIntro: $resource('api/admin/oneIntro', {}, {
+            query: { method: 'POST', isArray: false }
+        }),
+        saveIntroChanges: $resource('api/admin/saveIntroChanges', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        deleteIntro: $resource('api/admin/deleteIntro', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        addIntro: $resource('api/admin/addIntro', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
+        getAllGroups: $resource('api/admin/getAllGroups', {}, {
+            query: { method: 'GET', isArray: true }
+        })
+    }
+}]);
+
 services.factory('publicContentService', ['$resource', function($resource){
     return {
         getAllContent: $resource('api/admin/users/publicContent/getAllContent', {}, {

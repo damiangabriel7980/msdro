@@ -25,7 +25,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('users.manageAccounts',{
             url: '/manageAccounts',
-            templateUrl: 'partials/admin/users/manageAccounts.html'
+            templateUrl: 'partials/admin/users/manageAccounts.html',
+            controller: 'ManageAccounts'
         })
         .state('users.newAccounts',{
             url: '/newAccounts',
@@ -134,7 +135,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('content.intro',{
             url: '/intro',
-            templateUrl: 'partials/admin/content/intro.html'
+            templateUrl: 'partials/admin/content/intro.html',
+            controller: 'Intro'
         })
         .state('content.carouselMedic',{
             url: '/carouselMedic',

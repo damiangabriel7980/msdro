@@ -1,1 +1,27 @@
-manageAccounts
+<div class="col-md-12">
+    <div class="col-md-12 well">
+        <h3>Gestionare Conturi</h3>
+    </div>
+<table ng-table="tableParams" show-filter="true" class="table table-bordered">
+    <tr ng-repeat="user in $data">
+        <td data-title="'Username'" filter="{ 'username': 'text' }" sortable="'username'">
+            {{user.username}}
+        </td>
+        <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
+            {{user.name}}
+        </td>
+        <td data-title="'Profesie'" sortable="'profession.display_name'">
+            {{user.profession.display_name}}
+        </td>
+        <td data-title="'Phone'" filter="{ 'phone': 'text' }" sortable="'phone'">
+            {{user.phone}}
+        </td>
+        <td data-title="'Actiuni'">
+            <div class="btn-group">
+                <div class="btn btn-warning" ng-click="viewUser(user._id)"><i class="glyphicon glyphicon-cog"></i></div>
+                <div ng-class="{'btn btn-danger': user.enabled==false,'btn btn-success': user.enabled==true}" ng-click="toggleUser(user._id,user.enabled)"><i class="glyphicon glyphicon-remove"></i></div>
+            </div>
+        </td>
+    </tr>
+</table>
+    </div>

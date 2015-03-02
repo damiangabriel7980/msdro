@@ -1,8 +1,16 @@
 controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state){
 
     SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
+        var modalGroups={};
         $rootScope.specialGroups = resp;
-        console.log(resp);
+        for(var i=0;i<$rootScope.specialGroups.length;i++)
+        {
+            modalGroups[$rootScope.specialGroups[i]._id]=true;
+            console.log(modalGroups);
+        }
+        //if(sessionStorage.statusModalGroups)
+        //    sessionStorage.removeItem('statusModalGroups');
+        sessionStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
         if (resp.length != 0) {
             $rootScope.specialGroups = resp;
             if (localStorage.specialGroupSelected) {
@@ -14,7 +22,6 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
                 }
                 if(checkGroupInGroups(specialGroup, resp)){
                     console.log("special group found");
-                    console.log(specialGroup);
                     $scope.selectSpecialGroup(specialGroup);
                 }else{
                     console.log("special group found in storage, but not on user");
@@ -38,7 +45,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         return $sce.trustAsHtml(convertedText);
     };
     $scope.selectSpecialGroup = function(group){
-        console.log(group._id);
+        //sessionStorage.setItem(group._id,false);
         SpecialFeaturesService.getSpecialProducts.query({specialGroup: group._id}).$promise.then(function(result){
             if(result._id)
                 $scope.groupProduct = result;
@@ -47,7 +54,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         });
         $rootScope.specialGroupSelected = group;
         localStorage.specialGroupSelected = angular.toJson(group);
-        //load group features into array. use "DisplayFeatureController" to establish paths for them
+       //load group features into array. use "DisplayFeatureController" to establish paths for them
         switch(group.display_name){
             case "MSD Diabetes": $scope.groupFeatures = ["Januvia"];
                 break;
@@ -78,6 +85,8 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         }catch(ex){
             return false;
         }
-    }
+    };
+
+
 
 }]);

@@ -76,6 +76,9 @@ services.factory('HomeService', ['$resource', function($resource){
         getUserEvents: $resource('api/userHomeEvents/', {}, {
             query: { method: 'POST', isArray: true }
         }),
+       checkUserPresentation: $resource('api/checkUserPresentation/', {}, {
+            query: { method: 'POST', isArray: false }
+        }),
         getUserNews: $resource('api/userHomeNews', {}, {
             query: { method: 'POST', isArray: true }
         }),
@@ -93,6 +96,17 @@ services.factory('HomeService', ['$resource', function($resource){
         }),
         getUserImage: $resource('api/userImage/', {}, {
             query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
+services.factory('PresentationService', ['$resource', function($resource){
+    return {
+        getUserHomeModal: $resource('api/userHomeModalPresentation/', {}, {
+            query: { method: 'POST', isArray: false }
+        }),
+        saveOption: $resource('api/changeUserModalStatus', {}, {
+            query: { method: 'POST', isArray: false }
         })
     }
 }]);

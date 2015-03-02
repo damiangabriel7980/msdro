@@ -37,8 +37,19 @@
                                 <p class="" ng-show="profileForm.telefon.$error.required">Numarul de telefon este obligatoriu!</p>
                             </div>
                             <div class="col-md-12">
-                                <label for="abonat">Abonat la newsletter</label>
-                                <input type="checkbox" id="abonat" ng-model="newsletter" ng-checked="newsletter"/>
+                                <div class="col-md-6">
+                                    <label class="checkbox">
+                                    <input type="checkbox" id="abonat" ng-model="newsletter" ng-checked="newsletter"/>
+                                        Abonat la newsletter
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="checkbox">
+                                        <input type="checkbox"name="rememberOption" ng-model="rememberOption">
+                                        Afiseaza prezentarile initiale
+                                    </label>
+                                </div>
+
                             </div>
                             <div class="col-md-12 margintop30px">
                                 <div class="btn col-md-12" ng-click="uploadAlert.newAlert=false" ng-class="uploadAlert.type==='danger'?'btn-danger':'btn-success'" ng-if="uploadAlert.newAlert"><span class="pull-left">{{uploadAlert.message}}&nbsp; &nbsp; &nbsp;</span> <i ng-click="uploadAlert.newAlert=false" class="glyphicon pull-right glyphicon-remove-circle"></i></div>
