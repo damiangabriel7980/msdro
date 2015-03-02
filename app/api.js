@@ -26,6 +26,7 @@ var Threads = require('./models/qa_threads');
 var qaMessages = require('./models/qa_messages');
 var Professions = require('./models/professions');
 var Presentations =require('./models/presentations');
+var CM_templates =require('./models/CM_templates');
 
 //live Streaming
 var socketio = require('socket.io'),
@@ -3397,6 +3398,17 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             });
                         }
                     });
+                }
+            });
+        });
+
+    router.route('/admin/applications/contractManagement/templates')
+        .get(function (req, res) {
+            CM_templates.find({}, function (err, templates) {
+                if(err){
+                    console.log({error: true});
+                }else{
+                    res.send({success: templates});
                 }
             });
         });
