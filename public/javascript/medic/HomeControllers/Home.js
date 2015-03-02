@@ -30,8 +30,56 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
         $rootScope.imageForUser = resp.image_path;
         $rootScope.userFullName=resp.name;
     });
+    var changeGroupModalStatus= function(groupID,value){
+        var retrievedObject = sessionStorage.getItem('statusModalGroups');
+        var statusModals = JSON.parse(retrievedObject);
+        statusModals[groupID] = value;
+        sessionStorage.setItem('statusModalGroups',JSON.stringify(statusModals));
+    };
+    console.log(localStorage);
+    if(!localStorage.statusModalGroups)
+    {
+        var modalGroups={};
+        for(var i=0;i<$rootScope.specialGroups.length;i++)
+        {
+            modalGroups[$rootScope.specialGroups[i]._id]=true;
+            console.log(modalGroups);
+        }
+        //if(sessionStorage.statusModalGroups)
+        //    sessionStorage.removeItem('statusModalGroups');
+        localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
+        $modal.open({
+            templateUrl: 'partials/medic/modals/presentationModal.html',
+            size: 'lg',
+            keyboard: false,
+            backdrop: 'static',
+            windowClass: 'fade',
+            controller: 'PresentationModal'
+        });
+    }
+    else
+    {
+        if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]==false || JSON.parse(sessionStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]==false)
+            console.log('No Presentation!');
+        else
+        {
+            changeGroupModalStatus($rootScope.specialGroupSelected._id,false);
+            $modal.open({
+                templateUrl: 'partials/medic/modals/presentationModal.html',
+                size: 'lg',
+                keyboard: false,
+                backdrop: 'static',
+                windowClass: 'fade',
+                controller: 'PresentationModal'
+            });
+        }
+    }
+
+
+
 
     //------------------------------------------------------------------------------------------------- get all content
+
     HomeService.getUserEvents.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         $scope.events = resp;
     });

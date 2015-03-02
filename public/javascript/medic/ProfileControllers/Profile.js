@@ -233,6 +233,8 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
     $scope.userProfileAlert = {newAlert:false, type:"", message:""};
     $scope.submitProfileForm = function (isValid) {
         if(isValid){
+            if(this.rememberOption==true)
+                localStorage.removeItem('statusModalGroups');
             var toSend = {};
             toSend.fullname = this.fullname;
             toSend.phone = this.phone;

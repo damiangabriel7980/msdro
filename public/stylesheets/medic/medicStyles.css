@@ -7377,3 +7377,7 @@ hr {
 .borderRadiusMenu {
   border-radius: 4px !important;
 }
+.specialProductTitleMargins {
+  margin-top: 25px;
+  margin-bottom: 40px;
+}

@@ -135,7 +135,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('content.intro',{
             url: '/intro',
-            templateUrl: 'partials/admin/content/intro.html'
+            templateUrl: 'partials/admin/content/intro.html',
+            controller: 'Intro'
         })
         .state('content.carouselMedic',{
             url: '/carouselMedic',

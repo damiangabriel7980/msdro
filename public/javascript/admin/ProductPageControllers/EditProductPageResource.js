@@ -1,4 +1,4 @@
-controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsService', 'AmazonService', function($scope, SpecialProductsService, AmazonService) {
+controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsService', 'AmazonService','$timeout', function($scope, SpecialProductsService, AmazonService,$timeout) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
@@ -7,17 +7,24 @@ controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsSer
     $scope.currentItem = $scope.sessionData.resourceToEdit;
 
     $scope.resourceFileSelected = function ($files, $event) {
-        if($files[0]){
+        if($files[0] && $files[0].type=="application/pdf"){
             $scope.resourceFileBody = $files[0];
             $scope.currentItem.size = Math.round($files[0].size / 1024)+" KB";
             $scope.currentItem.type = $files[0].name.split('.').pop().toUpperCase();
             console.log($files[0]);
         }
+        else
+        {
+            $scope.resetAlert("danger","Resource must be a pdf file!");
+            $timeout(function(){
+                $scope.resetAlert();
+            },3000)
+        }
     };
 
     $scope.editResource = function () {
         if(!$scope.currentItem._id){
-            $scope.resetAlert("danger","Resource not found");
+
         }else{
             $scope.resetAlert("warning", "Va rugam asteptati");
             var amazonKey;

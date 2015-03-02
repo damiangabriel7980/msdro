@@ -13,6 +13,9 @@
         <td data-title="'Profesie'" sortable="'profession.display_name'">
             {{user.profession.display_name}}
         </td>
+        <td data-title="'Phone'" filter="{ 'phone': 'text' }" sortable="'phone'">
+            {{user.phone}}
+        </td>
         <td data-title="'Actiuni'">
             <div class="btn-group">
                 <div class="btn btn-warning" ng-click="viewUser(user._id)"><i class="glyphicon glyphicon-cog"></i></div>
