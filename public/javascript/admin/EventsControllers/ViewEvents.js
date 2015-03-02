@@ -55,49 +55,50 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
     };
 
     $scope.deleteEvent = function (event) {
-        console.log(event);
-        var conferencesIds = event.listconferences || [];
-        async.parallel([
-            function (callbackParallel) {
-                //remove all pictures for each conference
-                async.each(conferencesIds, function (conferenceID, callbackEach) {
-                    AmazonService.deleteFilesAtPath("conferences/"+conferenceID, function (err, success) {
+        ActionModal.show("Stergere eveniment", "Sunteti sigur ca doriti sa stergeti evenimentul?", function () {
+            var conferencesIds = event.listconferences || [];
+            async.parallel([
+                function (callbackParallel) {
+                    //remove all pictures for each conference
+                    async.each(conferencesIds, function (conferenceID, callbackEach) {
+                        AmazonService.deleteFilesAtPath("conferences/"+conferenceID, function (err, success) {
+                            if(err){
+                                console.log(err);
+                                callbackEach("Eroare la stergerea fisierelor");
+                            }else{
+                                callbackEach();
+                            }
+                        });
+                    }, function (err) {
                         if(err){
-                            console.log(err);
-                            callbackEach("Eroare la stergerea fisierelor");
+                            callbackParallel(err);
                         }else{
-                            callbackEach();
+                            callbackParallel();
                         }
                     });
-                }, function (err) {
-                    if(err){
-                        callbackParallel(err);
-                    }else{
-                        callbackParallel();
-                    }
+                },
+                function (callback) {
+                    //remove this event
+                    EventsService.events.delete({id: event._id}).$promise.then(function (resp) {
+                        if(resp.error){
+                            callback("Eroare la stergerea evenimentului");
+                        }else{
+                            callback();
+                        }
+                    });
+                }
+            ], function (err) {
+                var status;
+                if(err){
+                    status = err;
+                }else{
+                    status = "Evenimentul a fost sters";
+                }
+                ActionModal.show("Stergere eveniment", status, function () {
+                    refreshEvents();
                 });
-            },
-            function (callback) {
-                //remove this event
-                EventsService.events.delete({id: event._id}).$promise.then(function (resp) {
-                    if(resp.error){
-                        callback("Eroare la stergerea evenimentului");
-                    }else{
-                        callback();
-                    }
-                });
-            }
-        ], function (err) {
-            var status;
-            if(err){
-                status = err;
-            }else{
-                status = "Evenimentul a fost sters";
-            }
-            ActionModal.show("Stergere eveniment", status, function () {
-                refreshEvents();
             });
-        });
+        }, "Da");
     };
 
 }]);

@@ -1871,6 +1871,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     //delete conferences for this event
                     //delete rooms for this event
                     //delete talks for all conferences of this event
+                    //remove event itself
                     async.parallel([
                         function (callback) {
                             Conferences.remove({_id: {$in: conferencesIds}}, function (err, wres) {
@@ -1884,6 +1885,11 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         },
                         function (callback) {
                             Talks.remove({conference: {$in: conferencesIds}}, function (err, wres) {
+                                callback(err?err:null);
+                            });
+                        },
+                        function (callback) {
+                            Events.remove({_id: event._id}, function (err, wres) {
                                 callback(err?err:null);
                             });
                         }
