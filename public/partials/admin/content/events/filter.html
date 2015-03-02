@@ -1,0 +1,13 @@
+<div class="col-md-12">
+    <div class="newAccountsTabs">
+        <div class="tab" ng-class="{'active': $state.includes('content.events.viewAll.events')}" ui-sref="content.events.viewAll.events">
+            Evenimente
+        </div>
+        <div class="tab" ng-class="{'active': $state.includes('content.events.viewAll.speakers')}" ui-sref="content.events.viewAll.speakers">
+            Speakeri
+        </div>
+    </div>
+    <div class="col-md-12 noPadding">
+        <ui-view></ui-view>
+    </div>
+</div>

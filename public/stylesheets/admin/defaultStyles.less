@@ -1,3 +1,7 @@
+a{
+  cursor: pointer;
+}
+
 .main-view-container {
   width: 100%;
   position:absolute;
@@ -62,6 +66,34 @@
     &:hover{
       background-color: white;
     }
+  }
+}
+
+.manageItems{
+  display: block;
+  width: 100%;
+  .item{
+    display: block;
+    width: 48%;
+    float: left;
+    background-color: #f5f5f5;
+    margin: 5px 1%;
+    padding: 5px;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    &.full{
+      width: 98%;
+    }
+    &.half{
+      width: 23%;
+    }
+  }
+  .title{
+    float: left;
+  }
+  .action{
+    float: right;
+    padding-left: 5px;
   }
 }
 

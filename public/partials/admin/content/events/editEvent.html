@@ -1,0 +1,100 @@
+<div class="col-md-12 noPadding">
+    <div class="col-md-12">
+        <h3>Update eveniment</h3>
+    </div>
+    <div class="col-md-12 noPadding">
+        <div class="col-md-4 form-group">
+            <label>Denumire:</label>
+            <input ng-model="event.name" type="text" class="form-control">
+        </div>
+        <div class="col-md-4 form-group">
+            <label>Tip:</label>
+            <select ng-model="event.type" class="form-control">
+                <option value="1" selected="selected">Eveniment</option>
+                <option value="2">Transmisie Live</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>Eveniment public:</label>
+            <input ng-model="event.isPublic" type="checkbox">
+        </div>
+    </div>
+    <div class="col-md-12 noPadding">
+        <div class="col-md-4">
+            <div class="dropdown">
+                <a class="dropdown-toggle my-toggle-select" role="button" data-toggle="dropdown" data-target="#" href="">
+                    <div class="input-group col-md-12">
+                        <label>Inceput:</label>
+                        <input type="text" class="form-control" data-ng-model="event.start">
+                    </div>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="event.start"
+                                    data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dropdown">
+                <a class="dropdown-toggle my-toggle-select" role="button" data-toggle="dropdown" data-target="#" href="">
+                    <div class="input-group col-md-12">
+                        <label>Sfarsit:</label>
+                        <input type="text" class="form-control" data-ng-model="event.end">
+                    </div>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="event.end"
+                                    data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4 form-group">
+            <label>Locatie:</label>
+            <input ng-model="event.place" type="text" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-12 form-group">
+        <label>Grupuri:</label>
+        <my-multiple-select all-objects="allGroups" selected-objects="event.groupsID" track-by="_id" display-by="display_name"
+                            split-by="profession.display_name" output="selectedGroups"></my-multiple-select>
+    </div>
+    <div class="col-md-6">
+        <label>Conferinte:</label>
+        <div class="btn btn-default" ng-click="addConference()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
+        <div class="manageItems">
+            <div class="item full" ng-repeat="conference in conferences | orderBy:last_updated.substr(0,10):true">
+                <div class="title">{{conference.title}}</div>
+                <div class="action"><a ng-click="editConference(conference._id)">Modifica</a></div>
+                <div class="action"><a ng-click="removeConference(conference)">Sterge</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label>Camere:</label>
+        <div class="btn btn-default" ng-click="addRoom()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
+        <div class="manageItems">
+            <div class="item full" ng-repeat="room in rooms">
+                <div class="title">{{room.room_name}}</div>
+                <div class="action"><a ng-click="editRoom(room._id)">Modifica</a></div>
+                <div class="action"><a ng-click="deleteRoom(room._id)">Sterge</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <label>Detalii:</label>
+        <textarea ui-tinymce ng-model="event.description"></textarea>
+    </div>
+    <div class="col-md-12 noPadding">
+        <div class="form-group col-md-6" style="margin-bottom: 0;">
+            <label for="notificationCheck">Trimite notificare&nbsp;</label>
+            <input type="checkbox" id="notificationCheck" ng-model="notification.send">
+            <input type="text" ng-model="notification.text" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-12" style="margin: 10px 0">
+        <a class="btn pull-left btn-default" ui-sref="content.events.viewAll.events">Inapoi la evenimente</a>
+        <a class="btn pull-right btn-primary" ng-click="updateEvent()">Salveaza modificarile</a>
+    </div>
+</div>
+
+
