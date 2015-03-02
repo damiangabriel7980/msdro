@@ -53,5 +53,21 @@ controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$statePa
                 }
             }
         });
+    };
+    $scope.toggleIntro= function(id,status){
+        $modal.open({
+            templateUrl: 'partials/admin/content/toggleIntro.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'IntroToggle',
+            resolve: {
+                idToEdit: function () {
+                    return id;
+                },
+                status: function(){
+                    return status;
+                }
+            }
+        });
     }
 }]);

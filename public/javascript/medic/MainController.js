@@ -31,7 +31,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         {
             if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true)
             {
-                if(JSON.parse(sessionStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true)
+                if(JSON.parse(sessionStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true &&$state.includes('home'))
                 {
                     changeGroupModalStatus($rootScope.specialGroupSelected._id,false);
                     $modal.open({
