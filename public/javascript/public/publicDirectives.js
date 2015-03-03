@@ -61,7 +61,7 @@ app.directive('carouselResizable', function($window) {
             // Initiate the resize function default values
             angular.element(document).ready(function () {
                 initializeElementSize();
-                $scope.$apply();
+                //$scope.$apply();
             });
 
         }
