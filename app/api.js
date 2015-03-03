@@ -3463,44 +3463,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
-    router.route('admin/user')
-        .get(function(req,res){
-            User.find(function (error, result) {
-                if (error) {
-                    res.send(error);
-                    return ;
-                } else {
-                    //console.log(result);
-                    res.json(result);
-                }
-            });
-        })
-        .post(function(req,res){
-            var newuser = new User(); 		// create a new instance of the Bear model
-            therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
-            therapeutic.last_updated=req.body.last_updated ;
-            therapeutic.name= req.body.name   ;
-            therapeutic.enabled= req.body.enabled  ;
-            therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
-            therapeutic.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Area created!' });
-            });
-        });
-    router.route('admin/user/:id')
-        .get(function(req,res){
-            User.findById(req.params.id,function (error, result) {
-                if (error) {
-                    res.send(error);
-                    return ;
-                } else {
-                    //console.log(result);
-                    res.json(result);
-                }
-            });
-        });
     router.route('/admin/users/ManageAccounts/users')
         .get(function (req, res) {
             if(req.query.id){
@@ -3522,29 +3484,19 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 })
             }
+        })
+        .put(function (req, res) {
+            var idToUpdate = req.query.id;
+            User.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: true});
+                }
+            });
         });
     
-    router.route('/admin/users/ManageAccounts/toggle')
-        .post(function (req, res) {
-            console.log(req.body.id);
-            console.log(req.body.enabled);
-            if(req.body.id)
-            {
-                User.update({_id: req.body.id}, {$set: {enabled: req.body.enabled}}, function (err, wres) {
-                    if (err) {
-                        console.log(err);
-                        res.send(err);
-                    } else {
-                        console.log(wres);
-                        res.json(wres);
-                    }
-                })
-
-            }
-            else
-                res.send({message: "User could not be updated!"});
-        });
-
     router.route('/admin/users/ManageAccounts/professions')
         .get(function (req, res) {
             Professions.find({}).exec(function (err, professions) {

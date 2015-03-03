@@ -218,9 +218,6 @@ services.factory('ManageAccountsService', ['$resource', function($resource){
             query: { method: 'GET', isArray: false },
             update: { method: 'PUT', isArray: false }
         }),
-        toggleUser: $resource('api/admin/users/ManageAccounts/toggle', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
         professions: $resource('api/admin/users/ManageAccounts/professions', {}, {
             query: { method: 'GET', isArray: true }
         }),
