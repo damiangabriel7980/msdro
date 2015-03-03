@@ -1,5 +1,6 @@
 // load the things we need
 var mongoose = require('mongoose');
+var deepPopulate = require('mongoose-deep-populate');
 var crypto   = require('crypto-js/sha256');
 var Schema			= mongoose.Schema;
 // define the schema for our user model
@@ -35,6 +36,9 @@ var userSchema = new Schema({
     topicsID:[{type: Schema.Types.ObjectId,ref: 'topics'}],
     visible: Boolean,
     connectedToDOC: Boolean
+});
+userSchema.plugin(deepPopulate, {
+    whitelist: ['profession', 'groupsID.profession']
 });
 
 // generating a hash

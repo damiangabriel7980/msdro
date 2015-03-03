@@ -3466,7 +3466,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/admin/users/ManageAccounts/users')
         .get(function (req, res) {
             if(req.query.id){
-                User.findOne({_id: req.query.id}).select('state enabled name username image_path phone profession groupsID therapeutic-areasID jobsID citiesID').populate('profession groupsID therapeutic-areasID jobsID citiesID').exec(function (err, OneUser) {
+                User.findOne({_id: req.query.id}).select('+enabled +phone').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
                     if(err){
                         console.log(err);
                         res.send({error: true});
@@ -3475,7 +3475,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 })
             }else{
-                User.find({state:"ACCEPTED"}).select('state enabled name username image_path phone profession groupsID therapeutic-areasID jobsID citiesID').populate('profession groupsID therapeutic-areasID jobsID citiesID').exec(function (err, users) {
+                User.find({state:"ACCEPTED"}).select('+enabled +phone').populate('profession').exec(function (err, users) {
                     if(err){
                         console.log(err);
                         res.send({error: true});
@@ -3505,27 +3505,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }else{
                     res.send(professions);
                 }
-            });
-        });
-
-    router.route('/admin/users/ManageAccounts/saveUser')
-        .post(function(req,res){
-            User.findOne({_id: req.body.id}).exec(function (err, user) {
-                if(err)
-                {
-                    res.send(err);
-                }
-                else
-                {
-                    User.update({_id: user._id},{$set: {name: req.body.name,username: req.body.username, profession: req.body.professionId}},function (err) {
-                        if (err){
-                            res.json({"type":"danger","message":"Eroare la salvarea datelor"});
-                        }else{
-                            res.json({"type":"success","message":"Datele au fost salvate cu succes.", success: true});
-                        }
-                    });
-                }
-
             });
         });
 

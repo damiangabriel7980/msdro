@@ -19,7 +19,7 @@
         <td data-title="'Actiuni'">
             <div class="btn-group">
                 <div class="btn btn-warning" ng-click="viewUser(user._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                <div ng-class="{'btn btn-danger': user.enabled==false,'btn btn-success': user.enabled==true}" ng-click="toggleUser(user._id,user.enabled)"><i class="glyphicon glyphicon-remove"></i></div>
+                <div ng-class="{'btn btn-danger': !user.enabled,'btn btn-success': user.enabled}" ng-click="toggleUser(user._id,user.enabled)"><i class="glyphicon glyphicon-remove"></i></div>
             </div>
         </td>
     </tr>

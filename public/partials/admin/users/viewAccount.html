@@ -11,13 +11,13 @@
                 <!--<div class="form-group col-md-12" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">-->
                 <div class="form-group col-md-12" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
                     <label for="nume">Nume<sup>*</sup>:</label>
-                    <input type="text" class="form-control" id="nume" name="nume" ng-model="selectedUser.name" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\s]{3,30}$/" ng-required="true">
+                    <input type="text" class="form-control" id="nume" name="nume" ng-model="user.name" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\s]{3,30}$/" ng-required="true">
                     <p class="" ng-show="profileForm.nume.$error.pattern">Numele nu contine caractere valide/are mai putin de 3 caractere!</p>
                     <p class="" ng-show="profileForm.nume.$error.required">Numele este obligatoriu!</p>
                 </div>
                 <div class="form-group col-md-12">
                     <label for="emailNew">Adresa de e-mail:</label>
-                    <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="selectedUser.username">
+                    <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="user.username">
                     <p class="" ng-show="profileForm.emailNew.$invalid && !profileForm.emailNew.$pristine ">Introduceti un email valid!</p>
                 </div>
             </div>
@@ -25,13 +25,13 @@
                 <hr/>
                 <div class="form-group col-md-12">
                     <label for="profession">Profesie:</label>
-                    <select ng-model="selectedProfession" class="form-control" ng-change="selectProfession()" ng-disabled="saveSuccess"
-                            ng-options="profession as profession.display_name for profession in professions" id="profession"></select>
+                    <select ng-model="selectedProfession" class="form-control" ng-disabled="saveSuccess"
+                            ng-options="profession._id as profession.display_name for profession in professions" id="profession"></select>
                 </div>
                 <div class="form-group col-md-12">
                     <label for="group">Grupuri:</label>
                     <ul class="list-group" id="group">
-                        <li class="list-group-item" ng-repeat="groups in selectedUser.groupsID">{{groups.display_name}}</li>
+                        <li class="list-group-item" ng-repeat="group in user.groupsID">{{group.display_name+" ("+group.profession.display_name+")"}}</li>
                     </ul>
                 </div>
             </div>

@@ -221,9 +221,6 @@ services.factory('ManageAccountsService', ['$resource', function($resource){
         professions: $resource('api/admin/users/ManageAccounts/professions', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        saveUser: $resource('api/admin/users/ManageAccounts/saveUser', {}, {
-            save: {method:'POST'}
-        }),
         specialGroups: $resource('api/admin/users/ManageAccounts/specialGroups/:profession', {}, {
             query: { method: 'GET', isArray: true }
         })
