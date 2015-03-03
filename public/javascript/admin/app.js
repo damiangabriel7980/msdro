@@ -252,6 +252,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/applications/qa/qa.html',
             controller: 'qaController'
         })
+        .state('applications.contractManagement',{
+            url: '/contractManagement',
+            templateUrl: 'partials/admin/applications/contractManagement/viewAll.html',
+            controller: 'ContractManagement'
+        })
 }]);
 
 app.run(
