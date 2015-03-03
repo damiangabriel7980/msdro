@@ -3508,23 +3508,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
-    router.route('/admin/users/ManageAccounts/specialGroups/:profession')
-        .get(function (req, res) {
-            var profession = req.params.profession;
-            if(profession){
-                profession = mongoose.Types.ObjectId(profession.toString());
-                UserGroup.find({content_specific: true, profession: profession}).exec(function (err, groups) {
-                    if(err){
-                        res.send(err);
-                    }else{
-                        res.send(groups);
-                    }
-                });
-            }else{
-                res.send([]);
-            }
-        });
-
     router.route('/admin/users/newAccounts/state/:type')
         .get(function (req, res) {
             User.find({state: req.params.type}).select('+state +proof_path').populate('profession').exec(function (err, users) {
