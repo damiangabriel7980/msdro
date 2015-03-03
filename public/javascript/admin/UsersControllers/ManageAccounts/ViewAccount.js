@@ -30,6 +30,8 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
         ManageAccountsService.users.update({id: user._id}, user).$promise.then(function (resp) {
             if(resp.error){
                 resetAlert("danger", "Eroare la update");
+            }else if(resp.userExists) {
+                resetAlert("warning", "Un utilizator cu acelasi e-mail exista deja");
             }else{
                 resetAlert("success", "Update efectuat!");
                 $scope.saveSuccess = true;

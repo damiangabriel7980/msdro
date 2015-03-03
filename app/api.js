@@ -3486,15 +3486,34 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             }
         })
         .put(function (req, res) {
-            var idToUpdate = req.query.id;
-            User.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
-                if(err){
-                    console.log(err);
-                    res.send({error: true});
-                }else{
-                    res.send({success: true});
-                }
-            });
+            var idToUpdate = ObjectId(req.query.id);
+            var dataToUpdate = req.body;
+
+            var updateUser = function () {
+                User.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: true});
+                    }
+                });
+            };
+
+            if(dataToUpdate.username){
+                User.findOne({username:{$regex: "^"+dataToUpdate.username.replace(/\+/g,"\\+")+"$", $options: "i"}, _id:{$ne: idToUpdate}}, function (err, user) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else if(user){
+                        res.send({userExists: true});
+                    }else{
+                        updateUser();
+                    }
+                });
+            }else{
+                updateUser();
+            }
         });
     
     router.route('/admin/users/ManageAccounts/professions')
