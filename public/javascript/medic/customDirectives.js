@@ -17,13 +17,16 @@ app.directive('noCacheSrc', function($window) {
         restrict: 'A',
         link: function ($scope, $element) {
 
+            var element = angular.element($element);
+            var elementWidth;
+            var carouselH;
+
             $scope.initializeWindowSize = function () {
-                $scope.elementWidth = angular.element($element)[0].offsetWidth;
-                //$scope.elementHeight = angular.element($element)[0].offsetHeight;
+                elementWidth = element[0].offsetWidth;
 
-                var carouselH = $scope.elementWidth / 4;
+                carouselH = elementWidth / 4;
 
-                $scope.carouselResponsiveStyle = 'height:' + carouselH + 'px;';
+                element.css('height',carouselH+'px');
             };
 
             angular.element($window).bind('resize', function () {
