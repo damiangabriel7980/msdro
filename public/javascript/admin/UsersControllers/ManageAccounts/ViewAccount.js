@@ -3,35 +3,41 @@
  */
 controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modalInstance', '$state','idToView','$timeout', function($scope, ManageAccountsService, $modalInstance, $state,idToView,$timeout){
 
-    $scope.myAlert = {
-        newAlert: false,
-        type: "info",
-        message: ""
+    var resetAlert = function (type, text) {
+        $scope.myAlert = {
+            newAlert: text?true:false,
+            type: type?type:"danger",
+            message: text?text:"Unknown error"
+        };
     };
 
-    ManageAccountsService.getOneUser.query({id: idToView}).$promise.then(function(user){
-        $scope.selectedUser = user;
-        console.log($scope.selectedUser);
-        ManageAccountsService.professions.query().$promise.then(function (response) {
-            $scope.professions = response;
-            for(var i=0;i<$scope.professions.length;i++)
-            {
-                if($scope.selectedUser.profession._id===$scope.professions[i]._id)
-                    $scope.selectedProfession=$scope.professions[i];
-            }
-
-        });
+    ManageAccountsService.professions.query().$promise.then(function (response) {
+        $scope.professions = response;
     });
 
+    ManageAccountsService.users.query({id: idToView}).$promise.then(function(resp){
+        var user = resp.success;
+        $scope.user = user;
+        if(user.profession) $scope.selectedProfession = user.profession._id;
+    });
+
+    ManageAccountsService.groups.query().$promise.then(function (resp) {
+        $scope.groups = resp.success;
+    });
 
     $scope.saveSuccess = false;
 
     $scope.saveModifiedUser=function(){
-        ManageAccountsService.saveUser.save({id: $scope.selectedUser._id, name: $scope.selectedUser.name, username: $scope.selectedUser.username, professionId: $scope.selectedProfession._id}).$promise.then(function (message) {
-            $scope.myAlert.type = message.type;
-            $scope.myAlert.message = message.message;
-            $scope.myAlert.newAlert = true;
-            if(message.success){
+        var user = this.user;
+        user.profession = this.selectedProfession;
+        user.groupsID = this.selectedGroups;
+        ManageAccountsService.users.update({id: user._id}, user).$promise.then(function (resp) {
+            if(resp.error){
+                resetAlert("danger", "Eroare la update");
+            }else if(resp.userExists) {
+                resetAlert("warning", "Un utilizator cu acelasi e-mail exista deja");
+            }else{
+                resetAlert("success", "Update efectuat!");
                 $scope.saveSuccess = true;
                 $timeout(function(){
                     $modalInstance.close();
@@ -43,7 +49,6 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
 
     $scope.closeModal=function(){
         $modalInstance.close();
-        $state.reload();
     };
 
 }]);
