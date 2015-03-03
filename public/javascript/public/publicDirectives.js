@@ -29,16 +29,16 @@ app.directive('carouselResizable', function($window) {
         link: function ($scope, $element) {
 
             var resizeT;
+            var elementWidth;
+            var element = angular.element($element);
+            var divToResize = element.find('#divToResize');
 
             var initializeElementSize = function () {
-                $scope.elementWidth = angular.element($element)[0].offsetWidth;
-                //$scope.elementHeight = angular.element($element)[0].offsetHeight;
+                elementWidth = element[0].offsetWidth;
 
-                var carouselH = Math.round($scope.elementWidth / 3);
+                var carouselH = Math.round(elementWidth / 3);
 
-                $scope.carouselStyle = 'height:' + carouselH + 'px;' +
-                    'width:' + ($scope.elementWidth) + 'px;';
-
+                divToResize.css('height', carouselH+'px');
             };
 
             angular.element($window).bind('resize', function () {
