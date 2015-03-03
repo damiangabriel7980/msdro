@@ -1,6 +1,7 @@
-controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$modal', '$state','$filter', 'ngTableParams', function($scope, ManageAccountsService, $modal, $state,$filter,ngTableParams){
+controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$modal', '$state','$filter', 'ngTableParams', 'ActionModal', function($scope, ManageAccountsService, $modal, $state,$filter,ngTableParams, ActionModal){
 
-    ManageAccountsService.getAllUsers.query().$promise.then(function (data) {
+    ManageAccountsService.users.query().$promise.then(function (resp) {
+        var data = resp.success;
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page

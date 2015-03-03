@@ -3501,28 +3501,29 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         });
-    router.route('/admin/users/ManageAccounts')
+    router.route('/admin/users/ManageAccounts/users')
         .get(function (req, res) {
-            User.find({state:"ACCEPTED"}).select('state enabled name username image_path phone profession groupsID therapeutic-areasID jobsID citiesID').populate('profession groupsID therapeutic-areasID jobsID citiesID').exec(function (err, users) {
-                if(err){
-                    console.log(err);
-                    res.send(err);
-                }else{
-                    res.send(users);
-                }
-            })
+            if(req.query.id){
+                User.findOne({_id: req.query.id}).select('state enabled name username image_path phone profession groupsID therapeutic-areasID jobsID citiesID').populate('profession groupsID therapeutic-areasID jobsID citiesID').exec(function (err, OneUser) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: OneUser});
+                    }
+                })
+            }else{
+                User.find({state:"ACCEPTED"}).select('state enabled name username image_path phone profession groupsID therapeutic-areasID jobsID citiesID').populate('profession groupsID therapeutic-areasID jobsID citiesID').exec(function (err, users) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: users});
+                    }
+                })
+            }
         });
-    router.route('/admin/users/ManageAccounts/getAccount')
-        .post(function (req, res) {
-            User.findOne({_id: req.body.id}).select('state enabled name username image_path phone profession groupsID therapeutic-areasID jobsID citiesID').populate('profession groupsID therapeutic-areasID jobsID citiesID').exec(function (err, OneUser) {
-                if(err){
-                    console.log(err);
-                    res.send(err);
-                }else{
-                    res.send(OneUser);
-                }
-            })
-        });
+    
     router.route('/admin/users/ManageAccounts/toggle')
         .post(function (req, res) {
             console.log(req.body.id);

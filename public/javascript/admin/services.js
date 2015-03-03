@@ -214,11 +214,9 @@ services.factory('NewAccountsService', ['$resource', function($resource){
 
 services.factory('ManageAccountsService', ['$resource', function($resource){
     return {
-        getAllUsers: $resource('api/admin/users/ManageAccounts/', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        getOneUser: $resource('api/admin/users/ManageAccounts/getAccount', {}, {
-            query: { method: 'POST', isArray: false }
+        users: $resource('api/admin/users/ManageAccounts/users', {}, {
+            query: { method: 'GET', isArray: false },
+            update: { method: 'PUT', isArray: false }
         }),
         toggleUser: $resource('api/admin/users/ManageAccounts/toggle', {}, {
             save: { method: 'POST', isArray: false }

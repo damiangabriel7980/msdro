@@ -9,8 +9,8 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
         message: ""
     };
 
-    ManageAccountsService.getOneUser.query({id: idToView}).$promise.then(function(user){
-        $scope.selectedUser = user;
+    ManageAccountsService.users.query({id: idToView}).$promise.then(function(resp){
+        $scope.selectedUser = resp.success;
         console.log($scope.selectedUser);
         ManageAccountsService.professions.query().$promise.then(function (response) {
             $scope.professions = response;
