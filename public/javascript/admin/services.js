@@ -223,13 +223,13 @@ services.factory('ManageAccountsService', ['$resource', function($resource){
         toggleUser: $resource('api/admin/users/ManageAccounts/toggle', {}, {
             save: { method: 'POST', isArray: false }
         }),
-        professions: $resource('api/admin/professions', {}, {
+        professions: $resource('api/admin/users/ManageAccounts/professions', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        saveUser: $resource('api/admin/saveUser', {}, {
+        saveUser: $resource('api/admin/users/ManageAccounts/saveUser', {}, {
             save: {method:'POST'}
         }),
-        specialGroups: $resource('api/admin/specialGroups/:profession', {}, {
+        specialGroups: $resource('api/admin/users/ManageAccounts/specialGroups/:profession', {}, {
             query: { method: 'GET', isArray: true }
         })
     }
