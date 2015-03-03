@@ -29,10 +29,9 @@
                             ng-options="profession._id as profession.display_name for profession in professions" id="profession"></select>
                 </div>
                 <div class="form-group col-md-12">
-                    <label for="group">Grupuri:</label>
-                    <ul class="list-group" id="group">
-                        <li class="list-group-item" ng-repeat="group in user.groupsID">{{group.display_name+" ("+group.profession.display_name+")"}}</li>
-                    </ul>
+                    <label>Grupuri:</label>
+                    <my-multiple-select all-objects="groups" selected-objects="user.groupsID" track-by="_id" display-by="display_name"
+                                        split-by="profession.display_name" output="selectedGroups"></my-multiple-select>
                 </div>
             </div>
             </div>

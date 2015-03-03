@@ -3527,6 +3527,18 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
+    router.route('/admin/users/ManageAccounts/groups')
+        .get(function (req, res) {
+            UserGroup.find({}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: groups});
+                }
+            });
+        });
+
     router.route('/admin/users/newAccounts/state/:type')
         .get(function (req, res) {
             User.find({state: req.params.type}).select('+state +proof_path').populate('profession').exec(function (err, users) {

@@ -21,12 +21,16 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
         if(user.profession) $scope.selectedProfession = user.profession._id;
     });
 
+    ManageAccountsService.groups.query().$promise.then(function (resp) {
+        $scope.groups = resp.success;
+    });
+
     $scope.saveSuccess = false;
 
     $scope.saveModifiedUser=function(){
         var user = this.user;
         user.profession = this.selectedProfession;
-        if(user.groupsID) delete user.groupsID;
+        user.groupsID = this.selectedGroups;
         ManageAccountsService.users.update({id: user._id}, user).$promise.then(function (resp) {
             if(resp.error){
                 resetAlert("danger", "Eroare la update");

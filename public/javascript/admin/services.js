@@ -220,6 +220,9 @@ services.factory('ManageAccountsService', ['$resource', function($resource){
         }),
         professions: $resource('api/admin/users/ManageAccounts/professions', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        groups: $resource('api/admin/users/ManageAccounts/groups', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
