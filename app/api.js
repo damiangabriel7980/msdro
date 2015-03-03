@@ -3503,7 +3503,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
     router.route('/admin/users/ManageAccounts')
         .get(function (req, res) {
-            User.find({}).select('state enabled name username image_path phone profession groupsID therapeutic-areasID jobsID citiesID').populate('profession groupsID therapeutic-areasID jobsID citiesID').exec(function (err, users) {
+            User.find({state:"ACCEPTED"}).select('state enabled name username image_path phone profession groupsID therapeutic-areasID jobsID citiesID').populate('profession groupsID therapeutic-areasID jobsID citiesID').exec(function (err, users) {
                 if(err){
                     console.log(err);
                     res.send(err);
