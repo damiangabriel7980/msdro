@@ -480,36 +480,36 @@ ul.products li {
 .gray{color: @gray;}
 .justified{text-align: justify;}
 .myMenu{
-  border-radius: 6px !important;
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-
-}
-.myMenu a:hover{
-  border-radius: 3px !important;
-  background-color: @MSDTitle !important;
-}
-.myMenu a::selection{
-  border-radius: 3px !important;
-  background-color: @MSDTitle !important;
-}
-.myListItem{
-  padding-left: 20px !important ;
-  padding-right: 5px !important;
-  padding-bottom: 10px !important;
-  padding-top: 10px !important;
-  min-width: 180px !important;
-}
-.rightPosition{
-  float: right !important;
-}
-.myListItem2{
-  padding-left: 20px !important ;
-  padding-right: 5px !important;
-}
-.white{
-  color: white;
-  top: 3px;
+  border-radius: 6px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  min-width: 180px;
+  li{
+    padding: 10px 5px 10px 5px;
+    min-width: 180px;
+    height: 50px;
+    &:hover{
+      border-radius: 3px;
+      background-color: @MSDTitle;
+      a{
+        color: #ffffff;
+        background-color: @MSDTitle;
+      }
+      &:after{
+        position: relative;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        content: "\e080";
+        left: 150px;
+        bottom: 22px;
+        color: #ffffff;
+      }
+    }
+  }
 }
 .navbar-fixed-top .navbar-nav > .active > a {
   color: #008780;
@@ -546,12 +546,6 @@ ul.products li {
 }
 .greyBackground{
   background-color: #F0F0F0;
-}
-.greyColor{
-  color: #F0F0F0;
-}
-.myMenu i:hover{
-  color: #ffffff;
 }
 .bottomBorder{
   border-bottom: 1px solid @MSDTitle;
@@ -597,10 +591,6 @@ ul.products li {
   margin-top: 3% ;
   margin-left: 3%;
 }
-.leftPosition {
-  float: left !important;
-}
-
 .hiddenSearch {
   width: 33%;
   float: right;
@@ -627,10 +617,7 @@ ul.products li {
 .padd5pxLeft{
   padding-left: 5px;
 }
-.iconLeft{margin-left: -10px;}
-.darkGrey{
-  color:darkgrey;
-}
+.iconLeft{margin-left: -10px;color:darkgrey;}
 .padd40px{
   padding-left: 40px;
 }
