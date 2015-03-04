@@ -3807,7 +3807,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send(err);
                 }
                 else{
-                    specialProductMenu.find({product: id,_id:{$nin:allChildren}}).populate('children_ids').exec(function(err, details) {
+                    specialProductMenu.find({product: id,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
                         if(err) {
                             res.send(err);
                         }
