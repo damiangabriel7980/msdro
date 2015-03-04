@@ -3,11 +3,11 @@
 
   'use strict';
 
-  angular.module('pdf', []).directive('ngPdf', function($window) {
+  angular.module('pdf', []).directive('ngPdf', ['$window', function($window) {
     return {
       restrict: 'E',
       templateUrl: function(element, attr) {
-          console.log(attr);
+        console.log(attr);
         return attr.templateUrl ? attr.templateUrl : 'partials/viewer.html'
       },
       link: function(scope, element, attrs) {
@@ -18,6 +18,9 @@
           canvas = (attrs.canvasid ? document.getElementById(attrs.canvasid) : document.getElementById('pdf-canvas')),
           ctx = canvas.getContext('2d'),
           windowEl = angular.element($window);
+
+          var canvasEl = angular.element(canvas);
+          var rotation = 0;
 
         windowEl.on('scroll', function() {
           scope.$apply(function() {
@@ -76,46 +79,59 @@
 //        };
 
           scope.zoomIn = function() {
-              var width = canvas.getAttribute('style');
-              width = width.trim(' ').replace('width','').replace(':','').replace('%','').replace(';','');
+              var width = canvasEl.css('width');
+              width = width.replace('%','').replace('px','');
               width = parseInt(width);
-              width+=10;
-              if(width>300) width=300;
-              canvas.setAttribute('style','width:'+width+'%;');
+              width+=width*0.1;
+              if(width>6000) width=6000;
+              canvasEl.css('width',width+'px');
           };
 
           scope.zoomOut = function() {
-              var width = canvas.getAttribute('style');
-              width = width.trim(' ').replace('width','').replace(':','').replace('%','').replace(';','');
+              var width = canvasEl.css('width');
+              width = width.replace('%','').replace('px','');
               width = parseInt(width);
-              width-=10;
-              if(width<0) width=0;
-              canvas.setAttribute('style','width:'+width+'%;');
+              width-=width*0.1;
+              if(width<50) width=50;
+              canvasEl.css('width',width+'px');
           };
 
           scope.fitToScreen = function() {
-              canvas.setAttribute('style','width:100%;');
+              canvasEl.css('width','100%');
           };
 
-        scope.changePage = function() {
-          scope.renderPage(scope.pageToDisplay);
-        };
+          scope.changePage = function() {
+              scope.renderPage(scope.pageToDisplay);
+          };
+
+//          scope.rotateLeft = function() {
+//              var cls = canvas.getAttribute('class');
+//              var rotation = cls.substring(6,cls.length);
+//              var rotation = parseInt(rotation);
+//              rotation -= 90;
+//              if(rotation < 0) rotation = 270;
+//              canvas.setAttribute('class', 'rotate'+rotation);
+//          };
+//          scope.rotateRight = function() {
+//              var cls = canvas.getAttribute('class');
+//              var rotation = cls.substring(6,cls.length);
+//              var rotation = parseInt(rotation);
+//              rotation += 90;
+//              if(rotation > 270) rotation = 0;
+//              canvas.setAttribute('class', 'rotate'+rotation);
+//          };
 
           scope.rotateLeft = function() {
-              var cls = canvas.getAttribute('class');
-              var rotation = cls.substring(6,cls.length);
-              var rotation = parseInt(rotation);
+              canvasEl.removeClass('rotate'+rotation);
               rotation -= 90;
               if(rotation < 0) rotation = 270;
-              canvas.setAttribute('class', 'rotate'+rotation);
+              canvasEl.addClass('rotate'+rotation);
           };
           scope.rotateRight = function() {
-              var cls = canvas.getAttribute('class');
-              var rotation = cls.substring(6,cls.length);
-              var rotation = parseInt(rotation);
+              canvasEl.removeClass('rotate'+rotation);
               rotation += 90;
               if(rotation > 270) rotation = 0;
-              canvas.setAttribute('class', 'rotate'+rotation);
+              canvasEl.addClass('rotate'+rotation);
           };
 
         PDFJS.getDocument(url).then(function(_pdfDoc) {
@@ -136,6 +152,6 @@
 
       }
     };
-  });
+  }]);
 
 })();

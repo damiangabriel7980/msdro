@@ -8,33 +8,30 @@
     <form name="profileForm" novalidate>
         <div class="col-md-12">
             <div class="col-md-12">
-                <div class="col-md-12">
-                    <!--<div class="form-group col-md-12" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">-->
-                    <div class="form-group col-md-12" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
-                        <label for="nume">Nume<sup>*</sup>:</label>
-                        <input type="text" class="form-control" id="nume" name="nume" ng-model="selectedUser.name" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\s]{3,30}$/" ng-required="true">
-                        <p class="" ng-show="profileForm.nume.$error.pattern">Numele nu contine caractere valide/are mai putin de 3 caractere!</p>
-                        <p class="" ng-show="profileForm.nume.$error.required">Numele este obligatoriu!</p>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label for="emailNew">Adresa de e-mail:</label>
-                        <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="selectedUser.username">
-                        <p class="" ng-show="profileForm.emailNew.$invalid && !profileForm.emailNew.$pristine ">Introduceti un email valid!</p>
-                    </div>
+                <!--<div class="form-group col-md-12" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">-->
+                <div class="form-group col-md-12" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
+                    <label for="nume">Nume<sup>*</sup>:</label>
+                    <input type="text" class="form-control" id="nume" name="nume" ng-model="user.name" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\s]{3,30}$/" ng-required="true">
+                    <p class="" ng-show="profileForm.nume.$error.pattern">Numele nu contine caractere valide/are mai putin de 3 caractere!</p>
+                    <p class="" ng-show="profileForm.nume.$error.required">Numele este obligatoriu!</p>
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="emailNew">Adresa de e-mail:</label>
+                    <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="user.username">
+                    <p class="" ng-show="profileForm.emailNew.$invalid && !profileForm.emailNew.$pristine ">Introduceti un email valid!</p>
                 </div>
             </div>
             <div class="col-md-12">
                 <hr/>
                 <div class="form-group col-md-12">
                     <label for="profession">Profesie:</label>
-                    <select ng-model="selectedProfession" class="form-control" ng-change="selectProfession()" ng-disabled="saveSuccess"
-                            ng-options="profession as profession.display_name for profession in professions" id="profession"></select>
+                    <select ng-model="selectedProfession" class="form-control" ng-disabled="saveSuccess"
+                            ng-options="profession._id as profession.display_name for profession in professions" id="profession"></select>
                 </div>
                 <div class="form-group col-md-12">
-                    <label for="group">Grupuri:</label>
-                    <ul class="list-group" id="group">
-                        <li class="list-group-item" ng-repeat="groups in selectedUser.groupsID">{{groups.display_name}}</li>
-                    </ul>
+                    <label>Grupuri:</label>
+                    <my-multiple-select all-objects="groups" selected-objects="user.groupsID" track-by="_id" display-by="display_name"
+                                        split-by="profession.display_name" output="selectedGroups"></my-multiple-select>
                 </div>
             </div>
             </div>

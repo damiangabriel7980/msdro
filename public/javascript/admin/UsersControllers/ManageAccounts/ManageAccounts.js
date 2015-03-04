@@ -1,6 +1,7 @@
-controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$modal', '$state','$filter', 'ngTableParams', function($scope, ManageAccountsService, $modal, $state,$filter,ngTableParams){
+controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$modal', '$state','$filter', 'ngTableParams', 'ActionModal', function($scope, ManageAccountsService, $modal, $state,$filter,ngTableParams, ActionModal){
 
-    ManageAccountsService.getAllUsers.query().$promise.then(function (data) {
+    ManageAccountsService.users.query().$promise.then(function (resp) {
+        var data = resp.success;
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -34,20 +35,14 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
         });
     };
     $scope.toggleUser= function(id,enabledUser){
-        console.log(id);
-        $modal.open({
-            templateUrl: 'partials/admin/users/toggleAccount.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'ToggleAccount',
-            resolve: {
-                idToEdit: function () {
-                    return id;
-                },
-                enabledUser: function () {
-                    return enabledUser;
-                }
-            }
-        });
+        ActionModal.show(
+            enabledUser?"Dezactiveaza cont":"Activeaza cont",
+            enabledUser?"Sunteti sigur ca doriti sa dezactivati contul?":"Sunteti sigur ca doriti sa activati contul?",
+            function () {
+                ManageAccountsService.users.update({id: id}, {enabled: !enabledUser}).$promise.then(function (resp) {
+                    $state.reload();
+                });
+            }, "Da"
+        );
     }
 }]);

@@ -46,7 +46,6 @@
     <script src="javascript/admin/IntroControllers/IntroAdd.js"></script>
     <script src="javascript/admin/IntroControllers/IntroToggle.js"></script>
     <script src="javascript/admin/UsersControllers/ManageAccounts/ManageAccounts.js"></script>
-    <script src="javascript/admin/UsersControllers/ManageAccounts/ToggleAccount.js"></script>
     <script src="javascript/admin/UsersControllers/ManageAccounts/ViewAccount.js"></script>
     <script src="javascript/admin/UsersControllers/Groups.js"></script>
     <script src="javascript/admin/UsersControllers/Groups.js"></script>
@@ -113,6 +112,8 @@
     <script src="javascript/admin/applicationsControllers/qa/addAnswerGiverController.js"></script>
     <script src="javascript/admin/applicationsControllers/qa/editAnswerGiverController.js"></script>
     <script src="javascript/admin/applicationsControllers/qa/deleteAnswerGiverController.js"></script>
+    <script src="javascript/admin/applicationsControllers/ContractManagement/ContractManagement.js"></script>
+    <script src="javascript/admin/applicationsControllers/ContractManagement/EditTemplate.js"></script>
 
 
     <!--Plug-ins-->
@@ -207,9 +208,10 @@
                 </li>
                 <li ng-class="{'active': $state.includes('ariiTerapeutice')}"><a ui-sref="ariiTerapeutice"> Arii terapeutice </a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('applications')}">
-                    <a class="dropdown-toggle" data-toggle="dropdown"> Applicatii <b class="caret"></b></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown"> Aplicatii <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="applications.qa"> Q/A </a></li>
+                        <li><a ui-sref="applications.contractManagement"> Contract management </a></li>
                     </ul>
                 </li>
             </ul>

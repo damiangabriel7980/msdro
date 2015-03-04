@@ -1,13 +1,16 @@
 <div>
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="searchText" placeholder="Cauta...">
+    </div>
     <div class="myMultipleSelect" ng-if="!split">
-        <div class="item" ng-repeat="obj in allObjects">
+        <div class="item" ng-repeat="obj in allObjects | filter:searchText">
             <input type="checkbox" ng-model="obj.selected" ng-change="refreshSelected()"> {{obj[displayBy]}}
         </div>
     </div>
     <div class="myMultipleSelect" ng-if="split">
         <div ng-repeat="branch in branches" class="branch">
             <div class="title">{{branch}}:</div>
-            <div ng-repeat="obj in tree[branch]" class="item">
+            <div ng-repeat="obj in tree[branch] | filter:searchText" class="item">
                 <input type="checkbox" ng-model="obj.selected" ng-change="refreshSelected()"> {{obj[displayBy]}}
             </div>
         </div>

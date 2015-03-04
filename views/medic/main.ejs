@@ -106,7 +106,7 @@
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground mySpecialMenuMobile" role="menu">
                         <li ng-repeat="group in specialGroups">
-                            <a class="myListItem" style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}} <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a>
+                            <a style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}}</a>
                         </li>
                     </ul>
             </ul>
@@ -160,9 +160,9 @@
                        Noutati <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu" >
-                        <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:1})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-file white leftPosition iconLeft darkGrey"></i>&nbsp Stiri<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a> </li>
+                        <li><a ui-sref="noutati.listaArticole({articleType:1})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-file iconLeft"></i>&nbspStiri</a> </li>
 
-                        <li><a class="myListItem" ui-sref="noutati.listaArticole({articleType:2})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-folder-open white leftPosition iconLeft darkGrey"></i>&nbsp Stiri legislative <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i> </a></li>
+                        <li><a ui-sref="noutati.listaArticole({articleType:2})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-folder-open iconLeft"></i>&nbspStiri legislative</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
@@ -170,9 +170,9 @@
                         Biblioteca <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li><a class="myListItem" ui-sref="biblioteca.produse.productsByArea({id:0})" ng-click="navCollapsed = true" href="#/produse"><i class="glyphicon glyphicon-th-large white leftPosition iconLeft darkGrey"></i>&nbsp Produse <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
-                        <li><a class="myListItem" ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-file white leftPosition iconLeft darkGrey"></i>&nbsp Articole stiintifice <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
-                        <li><a class="myListItem" ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" ng-click="navCollapsed = true" target="_blank"><i class="glyphicon glyphicon-th-large white leftPosition iconLeft darkGrey"></i>&nbsp Manualul Merck <i class="glyphicon white glyphicon-chevron-right rightPosition greyColor"></i></a></li>
+                        <li><a ui-sref="biblioteca.produse.productsByArea({id:0})" ng-click="navCollapsed = true" href="#/produse"><i class="glyphicon glyphicon-th-large iconLeft "></i>&nbspProduse </a></li>
+                        <li><a ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-file iconLeft "></i>&nbspArticole stiintifice </a></li>
+                        <li><a ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" ng-click="navCollapsed = true" target="_blank"><i class="glyphicon glyphicon-th-large iconLeft "></i>&nbspManualul Merck</a></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar" ng-click="navCollapsed = true">Calendar</a></li>
@@ -181,9 +181,9 @@
                         E-learning <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li><a class="myListItem" ng-click="navCollapsed = true; $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><i class="glyphicon glyphicon-film white leftPosition iconLeft darkGrey"></i>&nbsp Multimedia<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
-                        <li><a class="myListItem" ui-sref="elearning.transmisii" href="#/transmisii" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-facetime-video white leftPosition iconLeft darkGrey"></i>&nbsp Transmisii live<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
-                        <li><a class="myListItem" ui-sref="elearning.teste" href="#/teste" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-question-sign white leftPosition iconLeft darkGrey"></i>&nbsp Teste interactive <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li><a ng-click="navCollapsed = true; $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><i class="glyphicon glyphicon-film iconLeft "></i>&nbspMultimedia</a></li>
+                        <li><a ui-sref="elearning.transmisii" href="#/transmisii" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-facetime-video iconLeft "></i>&nbspTransmisii live</a></li>
+                        <li><a ui-sref="elearning.teste" href="#/teste" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-question-sign iconLeft "></i>&nbspTeste interactive </a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures') || $state.includes('groupSpecialProduct')}" ng-if="groupFeatures || groupProduct">
@@ -191,8 +191,8 @@
                         {{specialGroupSelected?specialGroupSelected.display_name:""}} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li ng-repeat="feat in groupFeatures"><a class="myListItem" ui-sref="groupFeatures({feature: feat})" ng-click="navCollapsed = true">{{feat}}<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
-                        <li><a class="myListItem" ng-if="groupProduct" ui-sref="groupSpecialProduct.productInfo({product_id: groupProduct._id})" ng-click="navCollapsed = true">{{groupProduct.product_name}}<i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a></li>
+                        <li ng-repeat="feat in groupFeatures"><a ui-sref="groupFeatures({feature: feat})" ng-click="navCollapsed = true">{{feat}}</a></li>
+                        <li><a ng-if="groupProduct" ui-sref="groupSpecialProduct.productInfo({product_id: groupProduct._id})" ng-click="navCollapsed = true">{{groupProduct.product_name}}</a></li>
 
                     </ul>
                 </li>
@@ -204,7 +204,7 @@
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li ng-repeat="group in specialGroups">
-                            <a class="myListItem" style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}} <i class="glyphicon glyphicon-chevron-right white rightPosition greyColor"></i></a>
+                            <a style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}} </a>
                         </li>
                     </ul>
                 </li>

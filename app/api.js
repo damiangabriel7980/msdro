@@ -26,6 +26,7 @@ var Threads = require('./models/qa_threads');
 var qaMessages = require('./models/qa_messages');
 var Professions = require('./models/professions');
 var Presentations =require('./models/presentations');
+var CM_templates =require('./models/CM_templates');
 
 //live Streaming
 var socketio = require('socket.io'),
@@ -608,8 +609,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
         .get(function(req, res) {
             if(req.query.group){
-                var id = ObjectId(req.query.group);
-                User.find({groupsID: {$in:[id, id.toString()]}}, {username: 1}).limit(0).exec(function(err, cont) {
+                var id = req.query.group;
+                User.find({groupsID: {$in:[id]}}, {username: 1}).limit(0).exec(function(err, cont) {
                     if(err) {
                         logger.error(err);
                         res.send({error: "Error finding users by group"});
@@ -3401,86 +3402,143 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
-    router.route('admin/user')
-        .get(function(req,res){
-            User.find(function (error, result) {
-                if (error) {
-                    res.send(error);
-                    return ;
-                } else {
-                    //console.log(result);
-                    res.json(result);
+    router.route('/admin/applications/contractManagement/templates')
+        .get(function (req, res) {
+            if(req.query.id){
+                CM_templates.findOne({_id: req.query.id}, function (err, template) {
+                    if(err || !template){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: template});
+                    }
+                });
+            }else{
+                CM_templates.find({}, function (err, templates) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: templates});
+                    }
+                });
+            }
+
+        })
+        .post(function (req, res) {
+            var template = new CM_templates({
+                name: "untitled",
+                last_modified: Date.now(),
+                isEnabled: false
+            });
+            template.save(function (err, saved) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: saved});
                 }
             });
         })
-        .post(function(req,res){
-            var newuser = new User(); 		// create a new instance of the Bear model
-            therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
-            therapeutic.last_updated=req.body.last_updated ;
-            therapeutic.name= req.body.name   ;
-            therapeutic.enabled= req.body.enabled  ;
-            therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
-            therapeutic.save(function(err) {
-                if (err)
-                    res.send(err);
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            CM_templates.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: true});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            CM_templates.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: true});
+                }
+            });
+        });
 
-                res.json({ message: 'Area created!' });
-            });
-        });
-    router.route('admin/user/:id')
-        .get(function(req,res){
-            User.findById(req.params.id,function (error, result) {
-                if (error) {
-                    res.send(error);
-                    return ;
-                } else {
-                    //console.log(result);
-                    res.json(result);
-                }
-            });
-        });
-    router.route('/admin/users/ManageAccounts')
+    router.route('/admin/users/ManageAccounts/users')
         .get(function (req, res) {
-            User.find({}).select('state enabled name username image_path phone profession groupsID therapeutic-areasID jobsID citiesID').populate('profession groupsID therapeutic-areasID jobsID citiesID').exec(function (err, users) {
-                if(err){
-                    console.log(err);
-                    res.send(err);
-                }else{
-                    res.send(users);
-                }
-            })
-        });
-    router.route('/admin/users/ManageAccounts/getAccount')
-        .post(function (req, res) {
-            User.findOne({_id: req.body.id}).select('state enabled name username image_path phone profession groupsID therapeutic-areasID jobsID citiesID').populate('profession groupsID therapeutic-areasID jobsID citiesID').exec(function (err, OneUser) {
-                if(err){
-                    console.log(err);
-                    res.send(err);
-                }else{
-                    res.send(OneUser);
-                }
-            })
-        });
-    router.route('/admin/users/ManageAccounts/toggle')
-        .post(function (req, res) {
-            console.log(req.body.id);
-            console.log(req.body.enabled);
-            if(req.body.id)
-            {
-                User.update({_id: req.body.id}, {$set: {enabled: req.body.enabled}}, function (err, wres) {
-                    if (err) {
+            if(req.query.id){
+                User.findOne({_id: req.query.id}).select('+enabled +phone').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
+                    if(err){
                         console.log(err);
-                        res.send(err);
-                    } else {
-                        console.log(wres);
-                        res.json(wres);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: OneUser});
                     }
                 })
-
+            }else{
+                User.find({state:"ACCEPTED"}).select('+enabled +phone').populate('profession').exec(function (err, users) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: users});
+                    }
+                })
             }
-            else
-                res.send({message: "User could not be updated!"});
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            var dataToUpdate = req.body;
+
+            var updateUser = function () {
+                User.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: true});
+                    }
+                });
+            };
+
+            if(dataToUpdate.username){
+                User.findOne({username:{$regex: "^"+dataToUpdate.username.replace(/\+/g,"\\+")+"$", $options: "i"}, _id:{$ne: idToUpdate}}, function (err, user) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else if(user){
+                        res.send({userExists: true});
+                    }else{
+                        updateUser();
+                    }
+                });
+            }else{
+                updateUser();
+            }
         });
+    
+    router.route('/admin/users/ManageAccounts/professions')
+        .get(function (req, res) {
+            Professions.find({}).exec(function (err, professions) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(professions);
+                }
+            });
+        });
+
+    router.route('/admin/users/ManageAccounts/groups')
+        .get(function (req, res) {
+            UserGroup.find({}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: groups});
+                }
+            });
+        });
+
     router.route('/admin/users/newAccounts/state/:type')
         .get(function (req, res) {
             User.find({state: req.params.type}).select('+state +proof_path').populate('profession').exec(function (err, users) {
@@ -3684,27 +3742,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         });
                     }
                 }
-            });
-        });
-
-    router.route('/admin/saveUser')
-        .post(function(req,res){
-            User.findOne({_id: req.body.id}).exec(function (err, user) {
-                if(err)
-                {
-                    res.send(err);
-                }
-                else
-                {
-                    User.update({_id: user._id},{$set: {name: req.body.name,username: req.body.username, profession: req.body.professionId}},function (err) {
-                        if (err){
-                            res.json({"type":"danger","message":"Eroare la salvarea datelor"});
-                        }else{
-                            res.json({"type":"success","message":"Datele au fost salvate cu succes.", success: true});
-                        }
-                    });
-                }
-
             });
         });
 
@@ -4905,33 +4942,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
 
     router.route('/proof/specialGroups/:profession')
-        .get(function (req, res) {
-            var profession = req.params.profession;
-            if(profession){
-                profession = mongoose.Types.ObjectId(profession.toString());
-                UserGroup.find({content_specific: true, profession: profession}).exec(function (err, groups) {
-                    if(err){
-                        res.send(err);
-                    }else{
-                        res.send(groups);
-                    }
-                });
-            }else{
-                res.send([]);
-            }
-        });
-    router.route('/admin/professions')
-        .get(function (req, res) {
-            Professions.find({}).exec(function (err, professions) {
-                if(err){
-                    res.send(err);
-                }else{
-                    res.send(professions);
-                }
-            });
-        });
-
-    router.route('/admin/specialGroups/:profession')
         .get(function (req, res) {
             var profession = req.params.profession;
             if(profession){
