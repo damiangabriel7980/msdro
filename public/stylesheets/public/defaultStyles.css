@@ -6285,6 +6285,9 @@ button.close {
     display: none !important;
   }
 }
+a {
+  cursor: pointer;
+}
 html {
   height: 100%;
 }
