@@ -1,12 +1,12 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope', function ($scope, $state, $modal,$rootScope) {
-    console.log(localStorage);
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService', function ($scope, $state, $modal,$rootScope,alterIntroService) {
+    console.log(sessionStorage);
     var changeGroupModalStatus= function(groupID,value){
         var retrievedObject = sessionStorage.getItem('statusModalGroups');
         var statusModals = JSON.parse(retrievedObject);
         statusModals[groupID] = value;
         sessionStorage.setItem('statusModalGroups',JSON.stringify(statusModals));
     };
-    $rootScope.$watch('specialGroups',function(){
+    $rootScope.$watch('specialGroupSelected',function(){
         if(!localStorage.statusModalGroups)
         {
             var modalGroups={};
@@ -29,25 +29,36 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         }
         else
         {
-            if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true)
-            {
-                if(JSON.parse(sessionStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true &&$state.includes('home'))
+            var opened = false;
+            alterIntroService.alterIntro.query().$promise.then(function(resp){
+                $scope.introSession=resp;
+                if($scope.introSession[$rootScope.specialGroupSelected._id]===true)
                 {
-                    changeGroupModalStatus($rootScope.specialGroupSelected._id,false);
-                    $modal.open({
-                        templateUrl: 'partials/medic/modals/presentationModal.html',
-                        size: 'lg',
-                        keyboard: false,
-                        backdrop: 'static',
-                        windowClass: 'fade',
-                        controller: 'PresentationModal'
-                    });
+                    alterIntroService.alterIntro.save({groupID: $rootScope.specialGroupSelected._id}).$promise.then(function(alteredSession){
+                        console.log(alteredSession);
+                        if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true && $state.includes('home'))
+                        {
+                            if (opened)
+                                return;
+                            opened = true;
+                            $modal.open({
+                                templateUrl: 'partials/medic/modals/presentationModal.html',
+                                size: 'lg',
+                                keyboard: false,
+                                backdrop: 'static',
+                                windowClass: 'fade',
+                                controller: 'PresentationModal'
+                            }).opened.then(function(selectedModal){
+                                    opened = false;
+                                });
+                        }
+                    })
                 }
-            }
-            else
-            {
-                console.log('No Presentation!');
-            }
+                else
+                {
+                    console.log($scope.introSession);
+                }
+            });
         }
     });
 

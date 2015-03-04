@@ -5035,6 +5035,13 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         });
-
+    router.route('/alterIntroSession')
+        .get(function(req,res){
+           res.json(req.session.statusModalGroups);
+        })
+        .post(function(req,res){
+            req.session.statusModalGroups[req.body.groupID]=false;
+                res.json(req.session.statusModalGroups);
+        });
     app.use('/api', router);
 };

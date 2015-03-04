@@ -21,6 +21,14 @@ services.factory('SpecialFeaturesService', ['$resource', function($resource){
         })
     }
 }]);
+services.factory('alterIntroService', ['$resource', function($resource){
+    return {
+        alterIntro: $resource('api/alterIntroSession', {}, {
+            query: { method: 'GET', isArray: false },
+            save: {method: 'POST', isArray: false}
+        })
+    }
+}]);
 
 services.factory('specialProductService', ['$resource', function($resource){
     return {
