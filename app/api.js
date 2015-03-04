@@ -1610,7 +1610,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         res.send({error: true});
                     }else{
                         //next, get all menu items that are not children; populate their children_ids attribute
-                        specialProductMenu.find({product: req.query.product_id, _id: {$nin: children_ids}}).populate("children_ids").exec(function (err, menuItems) {
+                        specialProductMenu.find({product: req.query.product_id, _id: {$nin: children_ids}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function (err, menuItems) {
                             if(err){
                                 console.log(err);
                                 res.send({error: true});

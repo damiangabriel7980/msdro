@@ -19,6 +19,12 @@
                     accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine header</button>
             <span ng-if="headerImageBody">{{headerImageBody.name}}</span>
         </div>
+        <div class="col-md-12 noPadding">
+            <div class="form-group col-md-4">
+                <label>Ordine:</label>
+                <input type="text" class="form-control" ng-model="newItem.order_index">
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <a class="btn btn-default pull-left" ng-click="renderView('editProductMenu')">Inapoi</a>
