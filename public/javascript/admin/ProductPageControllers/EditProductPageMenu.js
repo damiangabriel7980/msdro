@@ -16,6 +16,31 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
         }
     };
 
+    $scope.removeHeaderImage = function () {
+        $scope.resetAlert("warning", "Se sterge imaginea...");
+        SpecialProductsService.menu.update({id: $scope.sessionData.editMenuId}, {header_image: null}).$promise.then(function (resp) {
+            if(resp.error){
+                $scope.resetAlert("error", "Eroare la stergerea imaginii din baza de date");
+            }else{
+                if($scope.currentItem.header_image){
+                    AmazonService.deleteFile($scope.currentItem.header_image, function (err, success) {
+                        if(err){
+                            $scope.resetAlert("error", "Eroare la stergerea imaginii");
+                        }else{
+                            $scope.headerImageBody = null;
+                            $scope.currentItem.header_image = null;
+                            $scope.resetAlert("success", "Imaginea a fost stearsa");
+                            $scope.$apply();
+                        }
+                    });
+                }else{
+                    $scope.headerImageBody = null;
+                    $scope.resetAlert("success", "Imaginea a fost stearsa");
+                }
+            }
+        });
+    };
+
     $scope.editMenuItem = function () {
         var toAdd = this.currentItem;
         async.waterfall([
@@ -36,7 +61,8 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
                                 console.log(err);
                                 callback("Eroare la adaugarea imaginii");
                             }else{
-                                //update database key
+                                //update scope and database keys
+                                $scope.currentItem.header_image = key;
                                 toAdd.header_image = key;
                                 callback();
                             }
