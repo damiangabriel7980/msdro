@@ -4360,7 +4360,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             forGroups.push(req.body.specialGroupSelected);
                         }
                         console.log(forGroups);
-                        Presentations.find({groupsID: {$in: forGroups}}).exec(function (err, presentation) {
+                        Presentations.find({groupsID: {$in: forGroups}, enabled: true}).exec(function (err, presentation) {
                             if(err){
                                 console.log(err);
                                 res.send(err);
@@ -5000,6 +5000,16 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         });
+    router.route('/admin/toggleIntro')
+        .post(function (req, res) {
+            Presentations.update({_id: req.body.id},{$set:{enabled: req.body.isEnabled}}).exec(function (err, presentation) {
+                if(err){
+                    res.send({message:"Error occured!"});
+                }else{
+                    res.send({message:"Update successful!"});
+                }
+            });
+        });
     router.route('/admin/addIntro')
         .post(function (req, res) {
             var presentation = new Presentations();
@@ -5025,6 +5035,13 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         });
-
+    router.route('/alterIntroSession')
+        .get(function(req,res){
+           res.json(req.session.statusModalGroups);
+        })
+        .post(function(req,res){
+            req.session.statusModalGroups[req.body.groupID]=false;
+                res.json(req.session.statusModalGroups);
+        });
     app.use('/api', router);
 };

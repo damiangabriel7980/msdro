@@ -1,16 +1,7 @@
 controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state){
 
     SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
-        var modalGroups={};
         $rootScope.specialGroups = resp;
-        for(var i=0;i<$rootScope.specialGroups.length;i++)
-        {
-            modalGroups[$rootScope.specialGroups[i]._id]=true;
-            console.log(modalGroups);
-        }
-        //if(sessionStorage.statusModalGroups)
-        //    sessionStorage.removeItem('statusModalGroups');
-        sessionStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
         if (resp.length != 0) {
             $rootScope.specialGroups = resp;
             if (localStorage.specialGroupSelected) {

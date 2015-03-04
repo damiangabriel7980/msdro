@@ -254,6 +254,9 @@ services.factory('IntroService', ['$resource', function($resource){
         }),
         getAllGroups: $resource('api/admin/getAllGroups', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        toggleIntro: $resource('api/admin/toggleIntro', {}, {
+            save: { method: 'POST', isArray: false }
         })
     }
 }]);

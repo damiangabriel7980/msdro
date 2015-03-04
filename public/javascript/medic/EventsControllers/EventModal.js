@@ -9,6 +9,7 @@ controllers.controller('EventModal',['$scope','eventsService2','$stateParams','$
 
     $scope.cancell = function () {
         $modalInstance.close();
+        $stateParams.id=null;
     };
     $scope.htmlToPlainText = function(text) {
         return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');

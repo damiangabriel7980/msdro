@@ -147,8 +147,6 @@ module.exports = function(app, email, logger, passport) {
             }else{
                 passport.authenticate('local-login', function (err, user, info) {
                     console.log(err);
-                    console.log(info);
-
                     if(err){
                         logger.log(err);
                         return res.send({error: true, message: "A aparut o eroare pe server"});
@@ -165,7 +163,18 @@ module.exports = function(app, email, logger, passport) {
                                     } else {
                                         req.session.cookie.expires = false;
                                     }
-                                    return res.send({error: false, proof: true});
+
+                                    {
+                                        var statusModalGroups={};
+                                        for(var i=0;i<user.groupsID.length;i++)
+                                        {
+                                            statusModalGroups[user.groupsID[i]]=true;
+                                            console.log(statusModalGroups);
+                                        }
+                                        req.session.statusModalGroups=statusModalGroups;
+                                        console.log(req.session);
+                                        return  res.send({error: false, proof: true});
+                                    }
                                 }else if(user.state === "PENDING"){
                                     return res.send({error: false, proof: false});
                                 }else{
