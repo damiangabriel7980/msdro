@@ -62,8 +62,21 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
         }, "Da");
     };
 
-    $scope.toggleSpecialProduct = function (id, enabled) {
-        //toggle app
+    $scope.toggleSpecialApp = function (app) {
+        ActionModal.show(
+            app.isEnabled?"Dezactiveaza aplicatie":"Activeaza aplicatie",
+            app.isEnabled?"Sunteti sigur ca doriti sa dezactivati aplicatia?":"Sunteti sigur ca doriti sa activati aplicatia?",
+            function () {
+                SpecialAppsService.apps.update({id: app._id}, {isEnabled: !app.isEnabled}).$promise.then(function (resp) {
+                    if(resp.error){
+                        InfoModal.show("Eroare", "Eroare la modificarea aplicatiei");
+                    }else{
+                        refreshTable();
+                    }
+                });
+            },
+            "Da"
+        );
     }
 
 }]);
