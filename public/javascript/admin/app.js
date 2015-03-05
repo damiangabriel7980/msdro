@@ -67,6 +67,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/content/products/root.html',
             controller:'Products'
         })
+        .state('content.specialApps',{
+            url: '/specialApps',
+            templateUrl: 'partials/admin/content/specialApps/viewAll.html',
+            controller:'ViewSpecialApps'
+        })
         .state('content.specialProducts',{
             url: '/specialProducts',
             templateUrl: 'partials/admin/content/specialProducts/viewAll.html',

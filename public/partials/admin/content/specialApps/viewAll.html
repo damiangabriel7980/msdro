@@ -1,0 +1,30 @@
+<div class = "col-md-12 well">
+    <div class="col-md-9"><h3>Gestionare aplicatii speciale</h3></div>
+    <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addSpecialApp()">Adauga aplicatie speciala</div></div>
+</div>
+<div class="col-md-12">
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="app in $data">
+            <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
+                {{app.name}}
+            </td>
+            <td data-title="'Grupuri atasate'">
+                <ul>
+                    <li ng-repeat="group in app.groups">
+                        {{group.display_name}}&nbsp;({{group.profession.display_name}})
+                    </li>
+                </ul>
+            </td>
+            <td data-title="'Actiuni'">
+                <div class="btn-group">
+                    <button ng-click="toggleSpecialApp(app)"
+                            class="btn" ng-class="{'btn-danger':app.isEnabled, 'btn-default':!app.isEnabled}">
+                        <i class="glyphicon glyphicon-lock"></i>
+                    </button>
+                    <div class="btn btn-default" ng-click="editSpecialApp(app._id)"><i class="glyphicon glyphicon-cog"></i></div>
+                    <div class="btn btn-danger" ng-click="deleteSpecialApp(app._id)"><i class="glyphicon glyphicon-trash"></i></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

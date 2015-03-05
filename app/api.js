@@ -40,6 +40,7 @@ var specialProductMenu = require('./models/specialProduct_Menu');
 var specialProductGlossary = require('./models/specialProduct_glossary');
 var specialProductFiles = require('./models/specialProduct_files');
 var specialProductQa = require('./models/specialProduct_qa');
+var specialApps = require('./models/userGroupApplications');
 
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
@@ -1814,6 +1815,41 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: true, message: "Eroare la stergere"});
                 }else{
                     res.send({error: false, message: "Removed "+wres+" documents"});
+                }
+            });
+        });
+
+    router.route('/admin/content/specialApps/apps')
+        .get(function (req, res) {
+            specialApps.find({}).deepPopulate('groups.profession').exec(function (err, apps) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: apps});
+                }
+            });
+        })
+        .post(function (req, res) {
+            var toSave = new specialApps(req.body);
+            toSave.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: saved});
+                }
+            });
+        });
+
+    router.route('/admin/content/specialApps/groups')
+        .get(function (req, res) {
+            UserGroup.find({content_specific: true}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: groups});
                 }
             });
         });
