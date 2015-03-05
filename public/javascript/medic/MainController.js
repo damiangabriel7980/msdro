@@ -1,4 +1,10 @@
 controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService', function ($scope, $state, $modal,$rootScope,alterIntroService) {
+    var changeLocalGroupModalStatus= function(groupID,value){
+        var retrievedObject = localStorage.getItem('statusModalGroups');
+        var statusModals = JSON.parse(retrievedObject);
+        statusModals[groupID] = value;
+        localStorage.setItem('statusModalGroups',JSON.stringify(statusModals));
+    };
     $rootScope.$watch('specialGroupSelected',function(oldVal,newVal){
         if($rootScope.specialGroupSelected!=undefined || $rootScope.specialGroupSelected===null)
         {
@@ -80,6 +86,8 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                         $scope.introSession=resp;
                         if($scope.introSession[$rootScope.specialGroupSelected._id]===true)
                         {
+                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]==undefined)
+                                changeLocalGroupModalStatus($rootScope.specialGroupSelected._id,true);
                             if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true && $state.includes('home'))
                             {
                                 $modal.open({
