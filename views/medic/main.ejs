@@ -64,7 +64,7 @@
     <script src="javascript/medic/SpecialGroupsControllers/DisplayFeatures.js"></script>
     <script src="javascript/medic/SpecialGroupsControllers/SpecialGroupsMenu.js"></script>
     <script src="javascript/medic/ProductPageControllers/ProductPage.js"></script>
-    <script src="javascript/medic/ProductPageControllers/ProductPageDescription.js"></script>
+    <script src="javascript/medic/ProductPageControllers/ProductPageMenu.js"></script>
     <script src="javascript/medic/ProductPageControllers/ProductPageDownloads.js"></script>
     <script src="javascript/medic/ProductPageControllers/ProductPagePrescription.js"></script>
     <script src="javascript/medic/ProductPageControllers/ProductPageGlossary.js"></script>
@@ -192,7 +192,7 @@
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li ng-repeat="feat in groupFeatures"><a ui-sref="groupFeatures({feature: feat})" ng-click="navCollapsed = true">{{feat}}</a></li>
-                        <li><a ng-if="groupProduct" ui-sref="groupSpecialProduct.productInfo({product_id: groupProduct._id})" ng-click="navCollapsed = true">{{groupProduct.product_name}}</a></li>
+                        <li><a ng-if="groupProduct" ui-sref="groupSpecialProduct({product_id: groupProduct._id})" ng-click="navCollapsed = true">{{groupProduct.product_name}}</a></li>
 
                     </ul>
                 </li>

@@ -11,12 +11,6 @@ controllers.controller('ProductPageMap', ['$scope', '$rootScope', '$stateParams'
     $scope.trustAsHtml = function (data) {
         return $sce.trustAsHtml(data);
     };
-    specialProductService.getSpecialProduct.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-        if(result._id)
-            $scope.specialProduct=result;
-        else
-            $state.go('home');
-    });
     $scope.printPage=function(){
         window.print();
     };

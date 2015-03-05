@@ -5,12 +5,7 @@ controllers.controller('ProductPageDownloads', ['$scope', '$rootScope', '$stateP
     specialProductService.getSpecialProductFiles.query({id:$stateParams.product_id}).$promise.then(function(files){
         $scope.specialProductFiles=files;
     });
-    specialProductService.getSpecialProduct.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-        if(result._id)
-            $scope.specialProduct=result;
-        else
-            $state.go('home');
-    });
+
     $scope.printPage=function(){
         window.print();
     };

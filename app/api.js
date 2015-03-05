@@ -3776,27 +3776,17 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
     router.route('/specialProduct')
 
-        .post(function(req, res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroupSelected) {
-                        forGroups.push(req.body.specialGroupSelected.toString());
-                    }
-                    console.log(forGroups);
-                    specialProduct.find({groups: {$in: forGroups}, enabled: true}, function(err, product) {
-                        if(err) {
-                            res.send(err);
-                        }
-                        else
-                        {
-                            res.json(product[0]);
-                        }
-                    });
-                    //get allowed articles for user;
-                }});
+        .get(function(req, res) {
+            specialProduct.findOne({_id: req.query.id}, function(err, product) {
+                if(err || !product) {
+                    console.log(err);
+                    res.send({error: true});
+                }
+                else
+                {
+                    res.send({success: product});
+                }
+            });
         });
     router.route('/specialProductMenu')
         .post(function(req, res) {
