@@ -160,12 +160,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'DisplayFeatures'
         })
         .state('groupSpecialProduct', {
-            url: '/groupSpecialProduct',
+            url: '/groupSpecialProduct/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
             controller: 'ProductPage'
         })
         .state('groupSpecialProduct.productInfo', {
-        url: '/productInfo/:product_id',
+        url: '/productInfo',
         templateUrl: 'partials/medic/groupFeatures/specialProductInfo.html',
         controller: 'ProductPageInfo'
         })
@@ -175,22 +175,22 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'ProductPageDescription'
         })
         .state('groupSpecialProduct.files', {
-            url: '/selectedMenuFiles/:product_id',
+            url: '/selectedMenuFiles',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_files.html',
             controller: 'ProductPageDownloads'
         })
         .state('groupSpecialProduct.prescription', {
-            url: '/selectedMenuPrescription/:product_id',
+            url: '/selectedMenuPrescription',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_prescription.html',
             controller: 'ProductPagePrescription'
         })
         .state('groupSpecialProduct.glossary', {
-            url: '/selectedGlossary/:product_id',
+            url: '/selectedGlossary',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_glossary.html',
             controller: 'ProductPageGlossary'
         })
         .state('groupSpecialProduct.sitemap', {
-            url: '/sitemap/:product_id',
+            url: '/sitemap',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html',
             controller: 'ProductPageMap'
         })

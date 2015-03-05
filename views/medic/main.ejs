@@ -192,7 +192,7 @@
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li ng-repeat="feat in groupFeatures"><a ui-sref="groupFeatures({feature: feat})" ng-click="navCollapsed = true">{{feat}}</a></li>
-                        <li><a ng-if="groupProduct" ui-sref="groupSpecialProduct.productInfo({product_id: groupProduct._id})" ng-click="navCollapsed = true">{{groupProduct.product_name}}</a></li>
+                        <li><a ng-if="groupProduct" ui-sref="groupSpecialProduct({product_id: groupProduct._id})" ng-click="navCollapsed = true">{{groupProduct.product_name}}</a></li>
 
                     </ul>
                 </li>
