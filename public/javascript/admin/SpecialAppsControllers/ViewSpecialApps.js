@@ -1,6 +1,6 @@
-controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialAppsService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialAppsService, $modal){
+controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'SpecialAppsService', '$modal', 'ActionModal', 'InfoModal', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, SpecialAppsService, $modal, ActionModal, InfoModal){
 
-    $scope.refreshTable = function () {
+    var refreshTable = function () {
         SpecialAppsService.apps.query().$promise.then(function (resp) {
             var data = resp.success;
 
@@ -25,7 +25,7 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$stateParams
         });
     };
 
-    $scope.refreshTable();
+    refreshTable();
 
     $scope.addSpecialApp = function(){
         $modal.open({
@@ -51,7 +51,15 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$stateParams
     };
 
     $scope.deleteSpecialApp = function (id) {
-        //delete app
+        ActionModal.show("Stergere aplicatie", "Sunteti sigur ca doriti sa stergeti aplicatia?", function () {
+            SpecialAppsService.apps.delete({id: id}).$promise.then(function (resp) {
+                if(resp.error){
+                    InfoModal.show("Eroare", "Eroare la stergerea aplicatiei");
+                }else{
+                    refreshTable();
+                }
+            });
+        }, "Da");
     };
 
     $scope.toggleSpecialProduct = function (id, enabled) {

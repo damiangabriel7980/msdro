@@ -1862,6 +1862,17 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({success: wres});
                 }
             });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            specialApps.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: wres});
+                }
+            });
         });
 
     router.route('/admin/content/specialApps/groups')
