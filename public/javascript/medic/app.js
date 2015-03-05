@@ -165,12 +165,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'ProductPage'
         })
         .state('groupSpecialProduct.productInfo', {
-        url: '/groupSpecialProduct/:product_id/productInfo',
+        url: '/productInfo/:product_id',
         templateUrl: 'partials/medic/groupFeatures/specialProductInfo.html',
         controller: 'ProductPageInfo'
         })
-        .state('groupSpecialProduct.description', {
-            url: '/selectedMenuItem/:id',
+        .state('groupSpecialProduct.menuItem', {
+            url: '/menuItem/:menuId/:childId',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Description.html',
             controller: 'ProductPageDescription'
         })

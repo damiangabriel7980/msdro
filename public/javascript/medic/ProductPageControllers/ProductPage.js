@@ -1,6 +1,6 @@
 controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window){
-    $scope.oneAtATime = true;
-    $scope.activeItem = null;
+    $scope.oneAtATime = true; //open accordion groups one at a time
+
     specialProductService.getSpecialProduct.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         console.log(result);
         if(result._id)
@@ -14,19 +14,11 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         else
             $state.go('home');
     });
-    $scope.activeItem=null;
-    $scope.changeItem=function(id){
-        //if($scope.activeItem==id)
-        $scope.activeItem=id;
-    };
     $scope.trustAsHtml = function (data) {
         return $sce.trustAsHtml(data);
     };
     $scope.printPage=function(){
         window.print();
-    };
-    $scope.statusMainMenu = {
-        isFirstOpen: false
     };
     $scope.status = {
         isFirstOpen: false
