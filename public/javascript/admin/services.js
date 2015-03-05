@@ -200,6 +200,20 @@ services.factory('SpecialProductsService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('SpecialAppsService', ['$resource', function($resource){
+    return {
+        apps: $resource('api/admin/content/specialApps/apps', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        groups: $resource('api/admin/content/specialApps/groups', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
 services.factory('NewAccountsService', ['$resource', function($resource){
     return {
         state: $resource('api/admin/users/newAccounts/state/:type', {}, {

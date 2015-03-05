@@ -40,6 +40,7 @@ var specialProductMenu = require('./models/specialProduct_Menu');
 var specialProductGlossary = require('./models/specialProduct_glossary');
 var specialProductFiles = require('./models/specialProduct_files');
 var specialProductQa = require('./models/specialProduct_qa');
+var specialApps = require('./models/userGroupApplications');
 
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
@@ -1814,6 +1815,74 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: true, message: "Eroare la stergere"});
                 }else{
                     res.send({error: false, message: "Removed "+wres+" documents"});
+                }
+            });
+        });
+
+    router.route('/admin/content/specialApps/apps')
+        .get(function (req, res) {
+            if(req.query.id){
+                specialApps.findOne({_id: req.query.id}).deepPopulate('groups.profession').exec(function (err, app) {
+                    if(err || !app){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: app});
+                    }
+                });
+            }else{
+                specialApps.find({}).deepPopulate('groups.profession').exec(function (err, apps) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: apps});
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var toSave = new specialApps(req.body);
+            toSave.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToEdit = ObjectId(req.query.id);
+            specialApps.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: wres});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            specialApps.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: wres});
+                }
+            });
+        });
+
+    router.route('/admin/content/specialApps/groups')
+        .get(function (req, res) {
+            UserGroup.find({content_specific: true}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: groups});
                 }
             });
         });
@@ -3745,7 +3814,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
-    router.route('/groups/specialGroups')
+    router.route('/specialFeatures/specialGroups')
 
         .get(function(req, res) {
             UserGroup.find({_id: {$in: req.user.groupsID}, content_specific: {$exists:true, $ne: false}}, function(err, groups) {
@@ -3759,8 +3828,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
             });
         });
-    router.route('/groupSpecialProducts')
-
+    router.route('/specialFeatures/groupSpecialProducts')
         .post(function(req, res) {
             var data = [mongoose.Types.ObjectId(req.body.specialGroup.toString())];
             console.log(data);
@@ -3774,6 +3842,33 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         });
+
+    router.route('/specialFeatures/specialApps')
+        .get(function (req, res) {
+            if(req.query.group){
+                var group = ObjectId(req.query.group);
+                specialApps.find({groups: {$in: [group]}, isEnabled: true}).exec(function (err, apps) {
+                    if(err){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: apps});
+                    }
+                });
+            }else if(req.query.id){
+                var id = ObjectId(req.query.id);
+                specialApps.findOne({_id: id}).exec(function (err, app) {
+                    if(err){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: app});
+                    }
+                });
+            }else{
+                res.send({error: "Invalid query params"});
+            }
+        });
+
+
     router.route('/specialProduct')
 
         .get(function(req, res) {
