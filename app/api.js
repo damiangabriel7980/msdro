@@ -4393,63 +4393,48 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         res.send(err);
                     }else {
                         var forGroups = nonSpecificGroupsIds;
+                        var specialgroup=[];
                         if (req.body.specialGroupSelected) {
-                            forGroups.push(req.body.specialGroupSelected);
+                            specialgroup.push(req.body.specialGroupSelected);
+                            Presentations.find({groupsID: {$in: specialgroup}, enabled: true}).exec(function (err, presentation) {
+                                if(err){
+                                    console.log(err);
+                                    res.send(err);
+                                }else{
+                                    console.log(presentation);
+                                    res.json(presentation[0]);
+                                }
+                            });
                         }
-                        console.log(forGroups);
-                        Presentations.find({groupsID: {$in: forGroups}, enabled: true}).exec(function (err, presentation) {
-                            if(err){
-                                console.log(err);
-                                res.send(err);
-                            }else{
-                                console.log(presentation);
-                                res.json(presentation[0]);
-                            }
-                        });
+                        else
+                        {
+                            console.log(forGroups);
+                            Presentations.find({groupsID: {$in: forGroups}, enabled: true}).exec(function (err, presentation) {
+                                if(err){
+                                    console.log(err);
+                                    res.send(err);
+                                }else{
+                                    console.log(presentation);
+                                    res.json(presentation[0]);
+                                }
+                            });
+                        }
+
                     }
                 });
         });
-    router.route('/changeUserModalStatus')
-        .post(function (req,res) {
-            User.update({_id: req.user._id}, {$set: {showPresentation: req.body.newStatus}}, function (err, wRes) {
-                if(err){
-                    logger.error(err);
-                    res.send({error: "Error at changing user modal"});
-                }else{
-                    res.send({success: wRes});
-                }
-            });
-        });
-
-
-    router.route('/checkUserPresentation')
+    router.route('/getDefaultGroupID')
         .post(function(req,res){
-            if(req.user.showPresentation==false)
-                res.json({hideMessage:"Don't show the presentation!"});
-            else
-            {
                 getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
                     if(err){
                         res.send(err);
                     }else {
                         var forGroups = nonSpecificGroupsIds;
-                        if (req.body.specialGroupSelected) {
-                            forGroups.push(req.body.specialGroupSelected);
-                        }
                         console.log(forGroups);
-                        Presentations.find({groupsID: {$in: forGroups}}).exec(function (err, presentation) {
-                            if(err){
-                                res.send(err);
-                            }else{
-                                if(presentation.length==0)
-                                    res.json( {hideMessage:"Don't show the presentation!"});
-                                else
-                                  res.json({showMessage:"Show the presentation!"});
-                            }
-                        });
+                        res.json({defaultGroup:forGroups[0]});
                     }
                 });
-            }
+
 
         });
     router.route('/userHomeMultimedia')

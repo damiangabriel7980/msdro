@@ -26,6 +26,9 @@ services.factory('alterIntroService', ['$resource', function($resource){
         alterIntro: $resource('api/alterIntroSession', {}, {
             query: { method: 'GET', isArray: false },
             save: {method: 'POST', isArray: false}
+        }),
+        getDefaultGroupID: $resource('api/getDefaultGroupID/', {}, {
+            query: { method: 'POST', isArray: false }
         })
     }
 }]);
@@ -83,9 +86,6 @@ services.factory('HomeService', ['$resource', function($resource){
     return {
         getUserEvents: $resource('api/userHomeEvents/', {}, {
             query: { method: 'POST', isArray: true }
-        }),
-       checkUserPresentation: $resource('api/checkUserPresentation/', {}, {
-            query: { method: 'POST', isArray: false }
         }),
         getUserNews: $resource('api/userHomeNews', {}, {
             query: { method: 'POST', isArray: true }

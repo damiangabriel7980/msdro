@@ -1,35 +1,21 @@
 controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService', function ($scope, $state, $modal,$rootScope,alterIntroService) {
     $rootScope.$watch('specialGroupSelected',function(oldVal,newVal){
-        if(!localStorage.statusModalGroups)
+        if($rootScope.specialGroupSelected!=undefined || $rootScope.specialGroupSelected===null)
         {
-            var modalGroups={};
-            for(var i=0;i<$rootScope.specialGroups.length;i++)
+            if(!localStorage.statusModalGroups)
             {
-                modalGroups[$rootScope.specialGroups[i]._id]=true;
-                console.log(modalGroups);
-            }
-            //if(sessionStorage.statusModalGroups)
-            //    sessionStorage.removeItem('statusModalGroups');
-            localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
-            $modal.open({
-                templateUrl: 'partials/medic/modals/presentationModal.html',
-                size: 'lg',
-                keyboard: false,
-                backdrop: 'static',
-                windowClass: 'fade',
-                controller: 'PresentationModal'
-            });
-        }
-        else
-        {
-//            if($rootScope.specialGroupSelected==undefined)
-//                return;
-            alterIntroService.alterIntro.query().$promise.then(function(resp){
-                $scope.introSession=resp;
-                if($scope.introSession[$rootScope.specialGroupSelected._id]===true)
+                var modalGroups={};
+                if($rootScope.specialGroups===undefined)
                 {
-                    if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true && $state.includes('home'))
-                    {
+                    alterIntroService.getDefaultGroupID.query().$promise.then(function(group){
+                        var defaultGroupArray=[];
+                        defaultGroupArray.push(group.defaultGroup);
+                        for(var i=0;i<defaultGroupArray.length;i++)
+                        {
+                            modalGroups[defaultGroupArray[i]]=true;
+                            console.log(modalGroups);
+                        }
+                        localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
                         $modal.open({
                             templateUrl: 'partials/medic/modals/presentationModal.html',
                             size: 'lg',
@@ -37,33 +23,82 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                             backdrop: 'static',
                             windowClass: 'fade',
                             controller: 'PresentationModal'
-                        }).opened.then(function(selectedModal){
+                        });
+                    });
 
-                            });
-                    }
-
-//                    alterIntroService.alterIntro.save({groupID: $rootScope.specialGroupSelected._id}).$promise.then(function(alteredSession){
-//                        console.log(alteredSession);
-//                        if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true && $state.includes('home'))
-//                        {
-//                            if (opened)
-//                                return;
-//                            opened = true;
-//                            $modal.open({
-//                                templateUrl: 'partials/medic/modals/presentationModal.html',
-//                                size: 'lg',
-//                                keyboard: false,
-//                                backdrop: 'static',
-//                                windowClass: 'fade',
-//                                controller: 'PresentationModal'
-//                            }).opened.then(function(selectedModal){
-//
-//                                });
-//                        }
-//                    })
                 }
-            });
+                else
+                {
+                    for(var i=0;i<$rootScope.specialGroups.length;i++)
+                    {
+                        modalGroups[$rootScope.specialGroups[i]._id]=true;
+                        console.log(modalGroups);
+                    }
+                    localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
+                    $modal.open({
+                        templateUrl: 'partials/medic/modals/presentationModal.html',
+                        size: 'lg',
+                        keyboard: false,
+                        backdrop: 'static',
+                        windowClass: 'fade',
+                        controller: 'PresentationModal'
+                    });
+                }
+
+            }
+            else
+            {
+               if($rootScope.specialGroupSelected===null)
+                {
+                    alterIntroService.alterIntro.query().$promise.then(function(resp){
+
+                        $scope.introSession=resp;
+                        console.log( $scope.introSession);
+                      alterIntroService.getDefaultGroupID.query().$promise.then(function(group){
+                            if($scope.introSession[group.defaultGroup]===true)
+                        {
+                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[group.defaultGroup]===true && $state.includes('home'))
+                            {
+                                $modal.open({
+                                    templateUrl: 'partials/medic/modals/presentationModal.html',
+                                    size: 'lg',
+                                    keyboard: false,
+                                    backdrop: 'static',
+                                    windowClass: 'fade',
+                                    controller: 'PresentationModal'
+                                }).opened.then(function(selectedModal){
+
+                                    });
+                            }
+                        }
+                        });
+                    });
+                }
+                else{
+                    alterIntroService.alterIntro.query().$promise.then(function(resp){
+
+                        $scope.introSession=resp;
+                        if($scope.introSession[$rootScope.specialGroupSelected._id]===true)
+                        {
+                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true && $state.includes('home'))
+                            {
+                                $modal.open({
+                                    templateUrl: 'partials/medic/modals/presentationModal.html',
+                                    size: 'lg',
+                                    keyboard: false,
+                                    backdrop: 'static',
+                                    windowClass: 'fade',
+                                    controller: 'PresentationModal'
+                                }).opened.then(function(selectedModal){
+
+                                    });
+                            }
+                        }
+                    });
+                }
+            }
         }
+
     });
 
     $scope.showFarmaModal = function() {

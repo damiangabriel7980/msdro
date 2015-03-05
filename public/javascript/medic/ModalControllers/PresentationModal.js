@@ -9,7 +9,10 @@ controllers.controller('PresentationModal', ['$scope', '$rootScope', 'Presentati
 
     $scope.changeStatus=function(){
         console.log(this.rememberOption);
-        changeLocalGroupModalStatus($rootScope.specialGroupSelected._id,this.rememberOption);
+        if($rootScope.specialGroupSelected===null)
+            changeLocalGroupModalStatus($scope.presentation.groupsID[0],this.rememberOption);
+        else
+            changeLocalGroupModalStatus($rootScope.specialGroupSelected._id,this.rememberOption);
 
     };
     var changeLocalGroupModalStatus= function(groupID,value){
@@ -19,10 +22,21 @@ controllers.controller('PresentationModal', ['$scope', '$rootScope', 'Presentati
         localStorage.setItem('statusModalGroups',JSON.stringify(statusModals));
     };
     $scope.closeModal=function(){
-        alterIntroService.alterIntro.save({groupID: $rootScope.specialGroupSelected._id}).$promise.then(function(alteredSession){
-            console.log(alteredSession);
-            $modalInstance.close();
-                    });
+        if($rootScope.specialGroupSelected===null)
+        {
+            alterIntroService.alterIntro.save({groupID: $scope.presentation.groupsID[0]}).$promise.then(function(alteredSession){
+                console.log(alteredSession);
+                $modalInstance.close();
+            });
+        }
+        else
+        {
+            alterIntroService.alterIntro.save({groupID: $rootScope.specialGroupSelected._id}).$promise.then(function(alteredSession){
+                console.log(alteredSession);
+                $modalInstance.close();
+            });
+        }
+
 
     };
 
