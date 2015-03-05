@@ -17,8 +17,15 @@
         <div class="col-md-6" style="padding-top: 25px;">
             <button class="btn btn-default" type="file" ng-file-select ng-file-change="headerImageSelected($files, $event)" multiple="false"
                     accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine header</button>
+            <button ng-if="headerImageBody || currentItem.header_image" class="btn btn-default" ng-click="removeHeaderImage()">Sterge imagine header</button>
             <span ng-if="headerImageBody">{{headerImageBody.name}}</span>
             <span ng-if="!headerImageBody">{{currentItem.header_image?currentItem.header_image.split('/').pop():''}}</span>
+        </div>
+        <div class="col-md-12 noPadding">
+            <div class="form-group col-md-4">
+                <label>Ordine:</label>
+                <input type="text" class="form-control" ng-model="currentItem.order_index">
+            </div>
         </div>
         <div class="col-md-12">
             <s3-upload-manager bucket="{{amazonBucket}}" path="{{'productPages/'+currentItem.product+'/menu/'+currentItem._id+'/resources/'}}"></s3-upload-manager>

@@ -88,7 +88,7 @@ services.factory('AmazonService', ['$resource', '$rootScope', function($resource
                 getClient(function (s3) {
                     console.log("delete file");
                     console.log($rootScope.amazonBucket);
-                    console.log(key);
+                    console.log('"'+key+'"');
                     s3.deleteObject({Bucket: $rootScope.amazonBucket, Key: key}, function (err, data) {
                         if (err) {
                             console.log(err);
