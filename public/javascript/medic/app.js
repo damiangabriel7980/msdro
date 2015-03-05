@@ -128,7 +128,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 console.log('Open modal');
                 $modal.open({
                     templateUrl: 'partials/medic/elearning/MultimediaBeforeQuiz.ejs',
-                    windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html',
                     backdrop: 'static',
                     size: 'lg',
                     keyboard: false,

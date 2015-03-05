@@ -6602,7 +6602,7 @@ ul.products li {
 }
 #footer {
   border-top: 1p solid #eeeeee;
-  z-index: 2000;
+  z-index: 1040;
   background: #009d97;
   padding: 5px 0;
   width: 100%;
@@ -6705,6 +6705,22 @@ ul.products li {
   color: #1c9893;
   font-size: 40px;
   font-weight: bold;
+}
+.modal-responsive .modal-dialog {
+  height: 90%;
+}
+.modal-responsive .modal-dialog .modal-content {
+  height: 100%;
+}
+.modal-responsive .modal-dialog .modal-content .modal-header {
+  height: 10%;
+}
+.modal-responsive .modal-dialog .modal-content .modal-body {
+  height: 80%;
+  overflow-y: scroll;
+}
+.modal-responsive .modal-dialog .modal-content .modal-footer {
+  height: 10%;
 }
 .unselectable {
   -webkit-touch-callout: none;

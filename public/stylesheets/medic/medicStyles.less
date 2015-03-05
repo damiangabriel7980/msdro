@@ -447,7 +447,7 @@ ul.products li {
 
 #footer {
   border-top: 1p solid @grayLightest;
-  z-index: 2000;
+  z-index: 1040;
   background: @MSDgreenDarker;
   padding: 5px 0;
   width: 100%;
@@ -555,6 +555,26 @@ ul.products li {
   color: @MSDgreen;
   font-size: 40px;
   font-weight: bold
+}
+
+//============================================================================================= RESPONSIVE MODALS
+.modal-responsive{
+  .modal-dialog{
+    height: 90%;
+    .modal-content{
+      height: 100%;
+      .modal-header{
+        height: 10%;
+      }
+      .modal-body{
+        height: 80%;
+        overflow-y: scroll;
+      }
+      .modal-footer{
+        height: 10%;
+      }
+    }
+  }
 }
 
 //============================================================================================= USEFUL STYLES / MIX-INS
