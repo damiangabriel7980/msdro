@@ -36,7 +36,7 @@ services.factory('alterIntroService', ['$resource', function($resource){
 services.factory('specialProductService', ['$resource', function($resource){
     return {
         getSpecialProduct: $resource('api/specialProduct/', {}, {
-            query: { method: 'POST', isArray: false }
+            query: { method: 'GET', isArray: false }
         }),
         getSpecialProductMenu: $resource('api/specialProductMenu/', {}, {
             query: { method: 'POST', isArray: true }

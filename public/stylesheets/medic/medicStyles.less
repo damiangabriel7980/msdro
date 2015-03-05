@@ -458,6 +458,105 @@ ul.products li {
   left: 0;
 }
 
+//============================================================================================= PRODUCT PAGE
+#menuDiv{
+  .panel-body{
+    padding: 0;
+  }
+  .list-group{
+    margin-bottom: 0px;
+  }
+  .borderRadiusSpecial{
+    border-radius: 0px;
+  }
+  .panel-heading{
+    background-color: #ffffff;
+  }
+  .panel-group{
+    box-shadow: 0px 3px 1px #dddddd;
+    .panel{
+      margin-top: 0px;
+    }
+    border: 1px solid #dddddd;
+    border-top: 0px;
+    div{
+      border: 0;
+      border-radius: 0px;
+    }
+  }
+  .parentBorderTop{
+    border-top: 1px solid #dddddd !important;
+  }
+  .productPageMenu{
+    .parent{
+      a{
+        text-decoration: none;
+      }
+      .panel-heading{
+        .MSDgreenDarker;
+        .panel-title{
+          font-size: inherit;
+        }
+      }
+      .noPaddingBottom;
+      .parentBorderTop;
+      &.active{
+        background-color: @MSDTitle;
+        color: white;
+        .panel-heading{
+          background-color: @MSDTitle;
+          color: white !important;
+          .MSDgreenDarker{
+            color: #ffffff !important;
+          }
+        }
+      }
+    }
+    .child{
+      a{
+        text-decoration: none;
+      }
+      .MSDgreenDarker;
+      .handCursor;
+      .smallFontSize;
+      position: relative;
+      display: block;
+      padding: 10px 15px;
+      background-color: #ffffff;
+      &.active{
+        color: darkorange;
+      }
+    }
+  }
+}
+@media print{
+  #menuDiv{
+    display: none;
+  }
+  #descriptionDiv{
+    width: 100%;
+  }
+  #initialDescriptionDiv{
+    width: 100%;
+  }
+  #siteMapDiv{
+    width: 100%;
+  }
+  #footer{
+    display: none !important;
+  }
+  a:link:after, a:visited:after {
+    content: "";
+  }
+}
+.specialProductTitle{
+  margin-top: 25px;
+  margin-bottom: 40px;
+  color: @MSDgreen;
+  font-size: 40px;
+  font-weight: bold
+}
+
 //============================================================================================= USEFUL STYLES / MIX-INS
 .unselectable{
   -webkit-touch-callout: none;
@@ -901,17 +1000,6 @@ border: 1px solid transparent;
 .no-text-decoration:focus{
   text-decoration: none !important;
 }
-.activeArea{
-  background-color: @MSDTitle;
-  color: white !important;
-  .panel-heading{
-    background-color: @MSDTitle !important;
-    color: white !important;
-    .MSDgreenDarker{
-      color: #ffffff !important;
-    }
-  }
-}
 .top2percent{
   margin-top: -10px;
 }
@@ -1078,26 +1166,6 @@ border: 1px solid transparent;
 .whiteBackground{
   background-color: #ffffff;
 }
-@media print{
-  #menuDiv{
-    display: none;
-  }
-  #descriptionDiv{
-    width: 100%;
-  }
-  #initialDescriptionDiv{
-    width: 100%;
-  }
-  #siteMapDiv{
-    width: 100%;
-  }
-  #footer{
-    display: none !important;
-  }
-  a:link:after, a:visited:after {
-    content: "";
-  }
-}
 .noBorderTop{
   border-top: 0px;
 }
@@ -1125,35 +1193,6 @@ border: 1px solid transparent;
 .centerText{
   text-align: center;
 }
-#menuDiv{
-  .panel-body{
-    padding: 0;
-  }
-  .list-group{
-    margin-bottom: 0px;
-  }
-  .borderRadiusSpecial{
-    border-radius: 0px;
-  }
-  .panel-heading{
-    background-color: #ffffff;
-  }
-  .panel-group{
-    box-shadow: 0px 3px 1px #dddddd;
-    .panel{
-      margin-top: 0px;
-    }
-    border: 1px solid #dddddd;
-    border-top: 0px;
-    div{
-      border: 0;
-      border-radius: 0px;
-    }
-  }
-  .parentBorderTop{
-    border-top: 1px solid #dddddd !important;
-  }
-}
 .shadowSpecialProduct{
   box-shadow: 0px 3px 1px #dddddd;
 }
@@ -1179,10 +1218,6 @@ border: 1px solid transparent;
 }
 .borderRadiusMenu{
   border-radius: 4px !important;
-}
-.specialProductTitleMargins{
-  margin-top: 25px;
-  margin-bottom: 40px;
 }
 .specialLink{
   color: #009d97 !important;
