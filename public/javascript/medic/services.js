@@ -13,11 +13,14 @@ services.factory('ContentService', ['$resource', function($resource){
 
 services.factory('SpecialFeaturesService', ['$resource', function($resource){
     return {
-        getSpecialGroups: $resource('api/groups/specialGroups', {}, {
+        getSpecialGroups: $resource('api/specialFeatures/specialGroups', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        getSpecialProducts: $resource('api/groupSpecialProducts', {}, {
+        getSpecialProducts: $resource('api/specialFeatures/groupSpecialProducts', {}, {
             query: { method: 'POST', isArray: false }
+        }),
+        specialApps: $resource('api/specialFeatures/specialApps', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

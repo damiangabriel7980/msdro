@@ -44,15 +44,18 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         });
         $rootScope.specialGroupSelected = group;
         localStorage.specialGroupSelected = angular.toJson(group);
-       //load group features into array. use "DisplayFeatureController" to establish paths for them
-        switch(group.display_name){
-            case "MSD Diabetes": $scope.groupFeatures = ["Januvia"];
-                break;
-            //case "Immunology": $scope.groupFeatures = [];
-            //    break;
-            default: $scope.groupFeatures = null;
-                break;
-        }
+        //load group's special apps into array
+        SpecialFeaturesService.specialApps.query({group: group._id}).$promise.then(function (resp) {
+            if(resp.success){
+                if(resp.success.length > 0){
+                    $scope.specialApps = resp.success;
+                }else{
+                    $scope.specialApps = null;
+                }
+            }else{
+                $scope.specialApps = null;
+            }
+        });
         if($state.includes('groupFeatures')||$state.includes('groupSpecialProduct')){
             //if user changed his group while being on a feature page, redirect him to home
             $state.go('home');

@@ -3814,7 +3814,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
-    router.route('/groups/specialGroups')
+    router.route('/specialFeatures/specialGroups')
 
         .get(function(req, res) {
             UserGroup.find({_id: {$in: req.user.groupsID}, content_specific: {$exists:true, $ne: false}}, function(err, groups) {
@@ -3828,8 +3828,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
             });
         });
-    router.route('/groupSpecialProducts')
-
+    router.route('/specialFeatures/groupSpecialProducts')
         .post(function(req, res) {
             var data = [mongoose.Types.ObjectId(req.body.specialGroup.toString())];
             console.log(data);
@@ -3843,6 +3842,33 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             });
         });
+
+    router.route('/specialFeatures/specialApps')
+        .get(function (req, res) {
+            if(req.query.group){
+                var group = ObjectId(req.query.group);
+                specialApps.find({groups: {$in: [group]}, isEnabled: true}).exec(function (err, apps) {
+                    if(err){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: apps});
+                    }
+                });
+            }else if(req.query.id){
+                var id = ObjectId(req.query.id);
+                specialApps.findOne({_id: id}).exec(function (err, app) {
+                    if(err){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: app});
+                    }
+                });
+            }else{
+                res.send({error: "Invalid query params"});
+            }
+        });
+
+
     router.route('/specialProduct')
 
         .get(function(req, res) {
