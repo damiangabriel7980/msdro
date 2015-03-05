@@ -63,6 +63,8 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                       alterIntroService.getDefaultGroupID.query().$promise.then(function(group){
                             if($scope.introSession[group.defaultGroup]===true)
                         {
+                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[group.defaultGroup]==undefined)
+                                changeLocalGroupModalStatus(group.defaultGroup,true);
                             if(JSON.parse(localStorage.getItem('statusModalGroups'))[group.defaultGroup]===true && $state.includes('home'))
                             {
                                 $modal.open({

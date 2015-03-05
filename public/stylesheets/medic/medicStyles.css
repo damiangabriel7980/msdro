@@ -7425,3 +7425,6 @@ hr {
 .specialLink:focus {
   text-decoration: none !important;
 }
+.defaultNavbarBrand{
+    margin-left: 10px!important;
+}
