@@ -1,7 +1,6 @@
 controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state){
 
     SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
-        $rootScope.specialGroups = resp;
         if (resp.length != 0) {
             $rootScope.specialGroups = resp;
             if (localStorage.specialGroupSelected) {

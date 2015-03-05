@@ -5051,7 +5051,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         })
         .post(function(req,res){
             req.session.statusModalGroups[req.body.groupID]=false;
-                res.json(req.session.statusModalGroups);
+            res.json(req.session.statusModalGroups);
         });
     app.use('/api', router);
 };
