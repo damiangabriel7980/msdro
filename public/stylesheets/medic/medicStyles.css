@@ -6699,6 +6699,13 @@ ul.products li {
     content: "";
   }
 }
+.specialProductTitle {
+  margin-top: 25px;
+  margin-bottom: 40px;
+  color: #1c9893;
+  font-size: 40px;
+  font-weight: bold;
+}
 .unselectable {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -7395,10 +7402,6 @@ hr {
 }
 .borderRadiusMenu {
   border-radius: 4px !important;
-}
-.specialProductTitleMargins {
-  margin-top: 25px;
-  margin-bottom: 40px;
 }
 .specialLink {
   color: #009d97 !important;
