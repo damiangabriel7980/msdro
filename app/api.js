@@ -1821,14 +1821,25 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/content/specialApps/apps')
         .get(function (req, res) {
-            specialApps.find({}).deepPopulate('groups.profession').exec(function (err, apps) {
-                if(err){
-                    console.log(err);
-                    res.send({error: true});
-                }else{
-                    res.send({success: apps});
-                }
-            });
+            if(req.query.id){
+                specialApps.findOne({_id: req.query.id}).deepPopulate('groups.profession').exec(function (err, app) {
+                    if(err || !app){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: app});
+                    }
+                });
+            }else{
+                specialApps.find({}).deepPopulate('groups.profession').exec(function (err, apps) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: apps});
+                    }
+                });
+            }
         })
         .post(function (req, res) {
             var toSave = new specialApps(req.body);
@@ -1838,6 +1849,17 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: true});
                 }else{
                     res.send({success: saved});
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToEdit = ObjectId(req.query.id);
+            specialApps.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: wres});
                 }
             });
         });

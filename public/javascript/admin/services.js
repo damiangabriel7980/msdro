@@ -204,7 +204,8 @@ services.factory('SpecialAppsService', ['$resource', function($resource){
     return {
         apps: $resource('api/admin/content/specialApps/apps', {}, {
             query: { method: 'GET', isArray: false },
-            create: { method: 'POST', isArray: false }
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false }
         }),
         groups: $resource('api/admin/content/specialApps/groups', {}, {
             query: { method: 'GET', isArray: false }

@@ -37,7 +37,17 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$stateParams
     };
 
     $scope.editSpecialApp = function (id) {
-        //edit app
+        $modal.open({
+            templateUrl: 'partials/admin/content/specialApps/modalEditSpecialApp.html',
+            size: 'lg',
+            windowClass: 'fade',
+            controller: 'EditSpecialApp',
+            resolve:{
+                idToEdit: function () {
+                    return id;
+                }
+            }
+        });
     };
 
     $scope.deleteSpecialApp = function (id) {
