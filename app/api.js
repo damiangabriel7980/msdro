@@ -4614,27 +4614,16 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         forGroups.push(req.body.specialGroup);
                     }
                     //get allowed articles for user
-                    if(forGroups.length==1)
-                    {
-                        Events.find({groupsID: {$in: forGroups},groupsID:{$size: 1},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
-                            if (err) {
-                                res.send(err);
-                            }
-                            else
-                                res.json(cont);
-                        })
-                    }
-                    else
-                    {
                         Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
                             if (err) {
                                 res.send(err);
                             }
                             else
-                                res.json(cont);
-                        })
-                    }
+                            {
+                               res.json(cont);
+                            }
 
+                        })
                 }
             })
         });
