@@ -11,7 +11,7 @@
         <tr ng-repeat="prod in $data">
             <td data-title="'Name'" filter="{ 'name': 'text' }" sortable="'name'">{{prod.name}}</td>
             <td data-title="'Description'" sortable="'description'" ng-bind-html="renderHtml(prod.description)"></td>
-            <td data-title="'Therapeutic Areas'">
+            <td data-title="'Therapeutic Areas'" filter="{ 'therapeutic-areasID': 'text' }">
                 <li ng-repeat="therap in prod['therapeutic-areasID']">
                     {{therap.name}}
                 </li>

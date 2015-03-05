@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope, $state, ProductService,$sce,ngTableParams,$filter,$modal,ActionModal){
+controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce','ngTableParams','$filter', '$modal', 'ActionModal','$q', function($scope, $state, ProductService,$sce,ngTableParams,$filter,$modal,ActionModal,$q){
     ProductService.getAll.query().$promise.then(function(result){
         var products = result['productList'];
         $scope.tableParams = new ngTableParams({
@@ -41,6 +41,7 @@ controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce',
             }
         });
     });
+
     $scope.addProduct = function () {
         $modal.open({
             templateUrl: 'partials/admin/content/products/productsAdd.ejs',
