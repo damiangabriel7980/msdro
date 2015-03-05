@@ -171,8 +171,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('groupSpecialProduct.menuItem', {
             url: '/menuItem/:menuId/:childId',
-            templateUrl: 'partials/medic/groupFeatures/specialProduct_Description.html',
-            controller: 'ProductPageDescription'
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
+            controller: 'ProductPageMenu'
         })
         .state('groupSpecialProduct.files', {
             url: '/selectedMenuFiles',
