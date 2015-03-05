@@ -16,7 +16,7 @@ var date = new Date();
         var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
         return $sce.trustAsHtml(convertedText);
     };
-    eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString:null}).$promise.then(function(result){
+    eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.events =result;
        $scope.eventsS=[];
        for(var i = 0; i < $scope.events.length; i++)
