@@ -6602,7 +6602,7 @@ ul.products li {
 }
 #footer {
   border-top: 1p solid #eeeeee;
-  z-index: 2000;
+  z-index: 1040;
   background: #009d97;
   padding: 5px 0;
   width: 100%;
