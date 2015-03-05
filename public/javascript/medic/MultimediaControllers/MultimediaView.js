@@ -21,7 +21,6 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
     $scope.openMultimedia=function(idMultimedia) {
         $modal.open({
             templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
-            //windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html',
             backdrop: 'static',
             keyboard: false,
             size: 'lg',
@@ -50,7 +49,6 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
         $stateParams.idMulti = null;
         $modal.open({
             templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
-            //windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html',
             backdrop: 'static',
             keyboard: false,
             size: 'lg',

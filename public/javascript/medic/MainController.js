@@ -107,9 +107,8 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             keyboard: false,
             controller: 'Pharmacovigilance',
             size: 'lg',
-            windowClass: 'fade',
+            windowClass: 'fade modal-responsive',
             backdrop: 'static'
-            //windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
 
@@ -126,11 +125,10 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         $modal.open({
             templateUrl: 'partials/medic/modals/Terms.html',
             size: 'lg',
-            windowClass: 'fade',
+            windowClass: 'fade modal-responsive',
             backdrop: 'static',
             controller: 'Terms',
             keyboard: false
-            //windowTemplateUrl: 'partials/medic/modals/responsiveModalTemplate.html'
         });
     };
 
@@ -153,7 +151,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             size: 'lg',
             backdrop: 'static',
             keyboard: false,
-            windowClass: 'fade',
+            windowClass: 'fade modal-responsive',
             controller: 'Profile'
         });
     };
