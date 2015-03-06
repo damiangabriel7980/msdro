@@ -1,4 +1,4 @@
-controllers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 'ContentService','$timeout','$window','$document','$sce', function($scope, $rootScope, $stateParams, ContentService,$timeout,$window,$document,$sce){
+ontrollers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 'ContentService','$timeout','$window','$document','$sce', function($scope, $rootScope, $stateParams, ContentService,$timeout,$window,$document,$sce){
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.lmt=5;
@@ -49,7 +49,6 @@ controllers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 
     };
     ContentService.getByType.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.content = result;
-        console.log($stateParams);
         $timeout(function(){
             var footer = angular.element('#footer');
             var check = function () {

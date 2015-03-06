@@ -102,7 +102,6 @@ var date = new Date();
             if (new Date($scope.events2[i].end) > date)
                 $scope.events2Filtered.push($scope.events2[i]);
         }
-        console.log($scope.events2Filtered);
     });
     $scope.goToEvent=function(eventId) {
         $modal.open({

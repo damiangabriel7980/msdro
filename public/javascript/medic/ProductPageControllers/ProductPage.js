@@ -4,7 +4,6 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
     specialProductService.getSpecialProduct.query({id: $stateParams.product_id}).$promise.then(function(result){
         $scope.specialProductPage=result.success;
         specialProductService.getSpecialProductMenu.query({id:$scope.specialProductPage._id}).$promise.then(function(resp){
-            console.log($stateParams.product_id);
             $scope.specialProductMenu = resp;
             //load first element in menu
             $scope.firstParentId = resp[0]._id;

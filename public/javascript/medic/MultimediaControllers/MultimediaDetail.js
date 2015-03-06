@@ -11,7 +11,6 @@ controllers.controller('MultimediaDetail', ['$scope','multimediaService','$state
         $scope.videosrc = $sce.trustAsResourceUrl($scope.amazon + $scope.selectedMultimedia.file_path);
         if(result.type==2){
             multimediaService.getSlides.query({multimedia_id:result._id}).$promise.then(function (slides) {
-                console.log(slides);
                 $scope.slidesArray = slides;
             });
         }
