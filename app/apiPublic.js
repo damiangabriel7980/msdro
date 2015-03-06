@@ -144,16 +144,25 @@ module.exports = function(app,email, router) {
             })
         });
 
-    router.route('/mostReadContentByType/:type')
+    router.route('/mostRead')
 
         .get(function (req, res) {
-            PublicContent.find({type: req.params.type, enable: true}).sort({date_added: -1}).limit(3).exec(function (err, resp) {
-                if(err){
-                    res.send(err);
-                }else{
-                    res.send(resp);
+            if(req.query.type){
+                var q = {type: req.query.type, enable: true};
+                if(req.query.withFile){
+                    q['file_path'] = {$exists: true, $nin:[null,""]};
                 }
-            })
+                PublicContent.find(q).sort({date_added: -1}).limit(3).exec(function (err, resp) {
+                    if(err){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: resp});
+                    }
+                })
+            }else{
+                res.send({error: "Missing query param: type"});
+            }
+
         });
 
     router.route('/events')
