@@ -4,8 +4,8 @@ controllers.controller('DownloadsView', ['$scope', '$rootScope', 'ContentService
 
     //------------------------------------------------------------------------------------------------- get all content
 
-    ContentService.contentByType.query({type: 4}).$promise.then(function (resp) {
-        $scope.downloads = resp;
+    ContentService.content.query({type: 4}).$promise.then(function (resp) {
+        $scope.downloads = resp.success;
     });
     ContentService.mostReadByType.query({type: 4}).$promise.then(function (resp) {
         $scope.mostDownloads = resp;

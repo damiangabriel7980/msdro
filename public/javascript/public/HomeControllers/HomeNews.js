@@ -1,11 +1,11 @@
-controllers.controller('HomeNews', ['$scope', '$rootScope', 'HomeService', '$sce', function($scope, $rootScope, HomeService, $sce) {
+controllers.controller('HomeNews', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
 
-    HomeService.contentByType.query({type: 1}).$promise.then(function (resp) {
-        $scope.noutati = resp;
+    ContentService.content.query({type: 1}).$promise.then(function (resp) {
+        $scope.noutati = resp.success;
 
         //pagination
         $scope.maxSize = 3;
-        $scope.totalItems = resp.length;
+        $scope.totalItems = resp.success.length;
         $scope.currentPage = 1;
         $scope.resultsPerPage = 5;
         $scope.$watch('currentPage', function () {
