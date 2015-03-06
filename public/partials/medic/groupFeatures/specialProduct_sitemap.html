@@ -12,7 +12,6 @@
     </div>
     <div class="col-xs-12">
         <ul class="MSDgreenDarker no-text-decoration handCursor">
-            <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.productInfo({product_id: $stateParams.product_id})">Descriere generala</li>
             <li ng-repeat="menuItem in specialProductMenu">
                 <span class="MSDgreenDarker handCursor no-text-decoration" ng-click="menuItem.children_ids.length==0?$state.go('groupSpecialProduct.menuItem',{product_id: $stateParams.product_id, menuId: menuItem._id, childId:''}):null">
                     {{menuItem.title}}
