@@ -7429,10 +7429,10 @@ hr {
   margin-left: 10px!important;
 }
 .modal-dialog .modal-header {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    color: white;
-    background-color: #009d97;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: white;
+  background-color: #009d97;
 }
 .equalMarginModalTitle {
   margin-top: 10px;

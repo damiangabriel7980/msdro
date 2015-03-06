@@ -1,5 +1,6 @@
 controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', function($scope, $rootScope, publicContentService, $modalInstance, $state, idToEdit, AmazonService){
 
+    $scope.idToEdit = idToEdit;
     var contentDataLoaded = false;
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};

@@ -750,54 +750,11 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
         .post(function (req, res) {
             var content_id = req.body.id;
-            //find files to remove from amazon
-            PublicContent.find({_id: content_id}, {image_path: 1, file_path: 1}, function (err, content) {
+            PublicContent.remove({_id: content_id}, function (err, success) {
                 if(err){
-                    res.json({error: true, message: err});
+                    res.json({error: true, message: "Eroare la stergerea continutului"});
                 }else{
-                    if(content[0]){
-                        var image = content[0].image_path;
-                        var file = content[0].file_path;
-                        //remove content
-                        PublicContent.remove({_id: content_id}, function (err, success) {
-                            if(err){
-                                res.json({error: true, message: "Eroare la stergerea continutului"});
-                            }else{
-                                //remove image and file from amazon
-                                if(image){
-                                    deleteObjectS3(image, function (err, data) {
-                                        if(err){
-                                            res.json({error: true, message: "Continutul a fost sters. Eroare la stergerea fisierelor asociate"});
-                                        }else{
-                                            if(file){
-                                                deleteObjectS3(file, function (err, data) {
-                                                    if(err){
-                                                        res.json({error: true, message: "Continutul a fost sters. Eroare la stergerea fisierelor asociate"});
-                                                    }else{
-                                                        res.json({error: false, message: "Continutul a fost sters. Fisierele asociate au fost sterse"});
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-                                }else{
-                                    if(file){
-                                        deleteObjectS3(file, function (err, data) {
-                                            if(err){
-                                                res.json({error: true, message: "Continutul a fost sters. Eroare la stergerea fisierelor asociate"});
-                                            }else{
-                                                res.json({error: false, message: "Continutul a fost sters. Fisierele asociate au fost sterse"});
-                                            }
-                                        });
-                                    }else{
-                                        res.json({error: false, message: "Continutul a fost sters. Nu s-au gasit fisiere asociate"});
-                                    }
-                                }
-                            }
-                        });
-                    }else{
-                        res.json({error: true, message: "Nu s-a gasit continutul"});
-                    }
+                    res.json({error: false, message: "Continutul a fost sters."});
                 }
             });
         });
