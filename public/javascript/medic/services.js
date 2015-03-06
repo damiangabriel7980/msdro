@@ -29,6 +29,9 @@ services.factory('alterIntroService', ['$resource', function($resource){
         }),
         getDefaultGroupID: $resource('api/getDefaultGroupID/', {}, {
             query: { method: 'POST', isArray: false }
+        }),
+        checkIntroEnabled:$resource('api/checkIntroEnabled/', {}, {
+            query: { method: 'POST', isArray: false }
         })
     }
 }]);

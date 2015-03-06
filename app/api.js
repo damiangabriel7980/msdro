@@ -4413,6 +4413,40 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 });
         });
+    router.route('/checkIntroEnabled')
+        .post(function (req,res) {
+            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
+                if(err){
+                    res.send(err);
+                }else {
+                    var forGroups = nonSpecificGroupsIds;
+                    var specialgroup=[];
+                    if (req.body.specialGroupSelected) {
+                        specialgroup.push(req.body.specialGroupSelected);
+                        Presentations.find({groupsID: {$in: specialgroup}, enabled: true}).exec(function (err, presentation) {
+                            if(err){
+                                console.log(err);
+                                res.send(err);
+                            }else{
+                                res.json(presentation[0]);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        Presentations.find({groupsID: {$in: forGroups}, enabled: true}).exec(function (err, presentation) {
+                            if(err){
+                                console.log(err);
+                                res.send(err);
+                            }else{
+                                res.json(presentation[0]);
+                            }
+                        });
+                    }
+
+                }
+            });
+        });
     router.route('/getDefaultGroupID')
         .post(function(req,res){
                 getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {

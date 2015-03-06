@@ -22,14 +22,20 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                             console.log(modalGroups);
                         }
                         localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
-                        $modal.open({
-                            templateUrl: 'partials/medic/modals/presentationModal.html',
-                            size: 'lg',
-                            keyboard: false,
-                            backdrop: 'static',
-                            windowClass: 'fade',
-                            controller: 'PresentationModal'
+                        alterIntroService.checkIntroEnabled.query({specialGroupSelected:null}).$promise.then(function(resp){
+                            if(resp._id)
+                            {
+                                $modal.open({
+                                    templateUrl: 'partials/medic/modals/presentationModal.html',
+                                    size: 'lg',
+                                    keyboard: false,
+                                    backdrop: 'static',
+                                    windowClass: 'fade',
+                                    controller: 'PresentationModal'
+                                });
+                            }
                         });
+
                     });
 
                 }
@@ -41,13 +47,18 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                         console.log(modalGroups);
                     }
                     localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
-                    $modal.open({
-                        templateUrl: 'partials/medic/modals/presentationModal.html',
-                        size: 'lg',
-                        keyboard: false,
-                        backdrop: 'static',
-                        windowClass: 'fade',
-                        controller: 'PresentationModal'
+                    alterIntroService.checkIntroEnabled.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
+                        if(resp._id)
+                        {
+                            $modal.open({
+                                templateUrl: 'partials/medic/modals/presentationModal.html',
+                                size: 'lg',
+                                keyboard: false,
+                                backdrop: 'static',
+                                windowClass: 'fade',
+                                controller: 'PresentationModal'
+                            });
+                        }
                     });
                 }
 
@@ -67,16 +78,19 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                                 changeLocalGroupModalStatus(group.defaultGroup,true);
                             if(JSON.parse(localStorage.getItem('statusModalGroups'))[group.defaultGroup]===true && $state.includes('home'))
                             {
-                                $modal.open({
-                                    templateUrl: 'partials/medic/modals/presentationModal.html',
-                                    size: 'lg',
-                                    keyboard: false,
-                                    backdrop: 'static',
-                                    windowClass: 'fade',
-                                    controller: 'PresentationModal'
-                                }).opened.then(function(selectedModal){
-
-                                    });
+                                alterIntroService.checkIntroEnabled.query({specialGroupSelected:null}).$promise.then(function(resp){
+                                    if(resp._id)
+                                    {
+                                        $modal.open({
+                                            templateUrl: 'partials/medic/modals/presentationModal.html',
+                                            size: 'lg',
+                                            keyboard: false,
+                                            backdrop: 'static',
+                                            windowClass: 'fade',
+                                            controller: 'PresentationModal'
+                                        });
+                                    }
+                                });
                             }
                         }
                         });
@@ -92,16 +106,19 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                                 changeLocalGroupModalStatus($rootScope.specialGroupSelected._id,true);
                             if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true && $state.includes('home'))
                             {
-                                $modal.open({
-                                    templateUrl: 'partials/medic/modals/presentationModal.html',
-                                    size: 'lg',
-                                    keyboard: false,
-                                    backdrop: 'static',
-                                    windowClass: 'fade',
-                                    controller: 'PresentationModal'
-                                }).opened.then(function(selectedModal){
-
-                                    });
+                                alterIntroService.checkIntroEnabled.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
+                                    if(resp._id)
+                                    {
+                                        $modal.open({
+                                            templateUrl: 'partials/medic/modals/presentationModal.html',
+                                            size: 'lg',
+                                            keyboard: false,
+                                            backdrop: 'static',
+                                            windowClass: 'fade',
+                                            controller: 'PresentationModal'
+                                        });
+                                    }
+                                });
                             }
                         }
                     });
