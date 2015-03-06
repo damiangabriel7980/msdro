@@ -7229,6 +7229,7 @@ hr {
   border: 0px solid #cccccc;
   -webkit-transition: width 1s ease;
   /* Safari */
+
   transition: width 1s ease;
 }
 .btnSearchBefore {
@@ -7423,6 +7424,9 @@ hr {
 }
 .specialLink:focus {
   text-decoration: none !important;
+}
+.defaultNavbarBrand {
+  margin-left: 10px!important;
 }
 .defaultNavbarBrand {
   margin-left: 10px!important;

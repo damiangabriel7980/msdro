@@ -1,4 +1,4 @@
-controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state){
+controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', '$timeout', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state, $timeout){
 
     SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
         if (resp.length != 0) {
@@ -61,7 +61,14 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
             $state.go('home');
         }else{
             //if he changed his group while being on another page, just reload the page
-            $state.reload();
+            var reloadState = function () {
+                try {
+                    $state.reload();
+                } catch (ex) {
+                    $timeout(reloadState, 300);
+                }
+            };
+            reloadState();
         }
     };
 
