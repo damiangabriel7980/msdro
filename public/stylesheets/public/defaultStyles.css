@@ -6668,6 +6668,10 @@ html body .rootView {
   height: 100%;
   overflow: hidden;
 }
+.homeNewsDisplay .largeDisplay .left .text img {
+  display: none;
+  visibility: hidden;
+}
 .homeNewsDisplay .largeDisplay .left .dispFooter {
   position: absolute;
   bottom: 0;
@@ -6739,6 +6743,10 @@ html body .rootView {
 .homeNewsDisplay .smallDisplay .excerpt .title {
   font-weight: bold;
 }
+.homeNewsDisplay .smallDisplay .excerpt .text img {
+  display: none;
+  visibility: hidden;
+}
 .homeNewsDisplay .smallDisplay .excerpt:after {
   content: '';
   position: absolute;
@@ -6791,6 +6799,10 @@ html body .rootView {
 }
 .homeDownloadsDisplay .item .excerpt .title {
   font-weight: bold;
+}
+.homeDownloadsDisplay .item .excerpt .text img {
+  display: none;
+  visibility: hidden;
 }
 .homeDownloadsDisplay .item .excerpt:after {
   content: '';
@@ -6951,6 +6963,10 @@ html body .rootView {
   margin-bottom: 15px;
   font-size: 15px;
 }
+.contentLayout .articlesList .article .details .excerpt img {
+  visibility: hidden;
+  display: none;
+}
 .contentLayout .articlesList .article .details .author {
   font-size: 13px;
   font-weight: bold;
@@ -7085,6 +7101,10 @@ html body .rootView {
 .downloadsLayout .downloadsList .entry .details .excerpt {
   padding: 0;
   margin-bottom: 20px;
+}
+.downloadsLayout .downloadsList .entry .details .excerpt img {
+  display: none;
+  visibility: hidden;
 }
 .downloadsLayout .downloadsList .entry .details .author {
   font-size: 13px;
