@@ -7229,7 +7229,6 @@ hr {
   border: 0px solid #cccccc;
   -webkit-transition: width 1s ease;
   /* Safari */
-
   transition: width 1s ease;
 }
 .btnSearchBefore {
@@ -7425,6 +7424,16 @@ hr {
 .specialLink:focus {
   text-decoration: none !important;
 }
-.defaultNavbarBrand{
-    margin-left: 10px!important;
+.defaultNavbarBrand {
+  margin-left: 10px!important;
+}
+.modalTitleStyles {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: white;
+  background-color: #009d97;
+}
+.equalMarginModalTitle {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
