@@ -29,7 +29,7 @@ controllers.controller('ElearningView', ['$scope', '$rootScope', 'ContentService
         $scope.$watch('$stateParams', function (val) {
             var area = $scope.tpa[val.area];
             console.log(area);
-            ContentService.content.query({type: 3, area: area._id}).$promise.then(function (resp) {
+            ContentService.content.query({type: 3, area: area._id, withFile: true}).$promise.then(function (resp) {
                 $scope.elearning = resp.success;
             });
         });
