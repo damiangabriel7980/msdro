@@ -33,7 +33,7 @@
                 </accordion-heading>
             </accordion-group>
         </accordion>
-        <img class="img-responsive img-thumbnail handCursor col-xs-12" ui-sref="groupSpecialProduct.productInfo({product_id: $stateParams.product_id})" no-cache-src="{{pathAmazonDev+specialProductPage.logo_path}}" />
+        <img class="img-responsive img-thumbnail handCursor col-xs-12" ng-click="goHome(homeID)" no-cache-src="{{pathAmazonDev+specialProductPage.logo_path}}" />
     </div>
     <div class="col-xs-9 marginRightMinus30 width81" id="descriptionDiv">
         <ui-view>
