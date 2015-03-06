@@ -1,4 +1,4 @@
-controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$filter', 'ngTableParams', '$modal', 'ActionModal', 'publicContentService' ,function($scope, $rootScope, $state, $filter, ngTableParams, $modal, ActionModal, publicContentService){
+controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$filter', 'ngTableParams', '$modal', 'ActionModal', 'publicContentService', 'AmazonService', function($scope, $rootScope, $state, $filter, ngTableParams, $modal, ActionModal, publicContentService, AmazonService){
 
     $scope.refreshTable = function () {
         publicContentService.getAllContent.query().$promise.then(function (resp) {
@@ -47,10 +47,20 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
     };
 
     $scope.deleteContent = function (id) {
+        console.log(id);
         ActionModal.show("Stergere continut", "Sunteti sigur ca doriti sa stergeti continutul?", function () {
-            publicContentService.deleteContent.save({id: id}).$promise.then(function (resp) {
-                console.log(resp);
-                $state.reload();
+            //remove images
+            AmazonService.deleteFilesAtPath('generalContent/'+id, function (err, count) {
+                if(err){
+                    console.log("Eroare la stergerea continutului");
+                }else{
+                    console.log("S-au sters "+count+" imagini");
+                    //remove content
+                    publicContentService.deleteContent.save({id: id}).$promise.then(function (resp) {
+                        console.log(resp);
+                        $state.reload();
+                    });
+                }
             });
         }, "Sterge");
     };

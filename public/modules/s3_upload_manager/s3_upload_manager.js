@@ -74,7 +74,7 @@
                     });
                 };
 
-                scope.fileSelected = function ($files, $event) {
+                scope.s3ManagerFileSelected = function ($files, $event) {
                     if($files[0]){
                         var extension = $files[0].name.split(".").pop();
                         var key;

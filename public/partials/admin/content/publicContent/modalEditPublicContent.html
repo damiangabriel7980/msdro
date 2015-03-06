@@ -72,6 +72,11 @@
                 </div>
             </div>
             <div class="col-md-12">
+                <div class="col-md-12">
+                    <s3-upload-manager bucket="{{amazonBucket}}" path="{{'generalContent/'+idToEdit+'/resources/'}}"></s3-upload-manager>
+                </div>
+            </div>
+            <div class="col-md-12">
                 <div class="form-group col-md-12">
                     <label for="textArea">Text:</label>
                     <textarea ui-tinymce="tinymceOptions" ng-model="contentText" id="textArea"></textarea>
