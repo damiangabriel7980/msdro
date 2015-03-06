@@ -7328,11 +7328,11 @@ a:focus {
 .noMarginTop {
   margin-top: 0px;
 }
-.loginTitleBackground {
+.modal-dialog .modal-header {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   color: white;
-  background-color: #17b3ad;
+  background-color: #009d97;
 }
 .loginInput {
   margin-left: 26px;
