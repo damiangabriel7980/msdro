@@ -1,11 +1,11 @@
-controllers.controller('HomeMostRead', ['$scope', '$rootScope', 'HomeService', '$sce', function($scope, $rootScope, HomeService, $sce) {
+controllers.controller('HomeMostRead', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
 
-    HomeService.contentByType.query({type: 2}).$promise.then(function (resp) {
-        $scope.articole = resp;
+    ContentService.content.query({type: 2}).$promise.then(function (resp) {
+        $scope.articole = resp.success;
 
         //pagination
         $scope.maxSize = 3;
-        $scope.totalItems = resp.length;
+        $scope.totalItems = resp.success.length;
         $scope.currentPage = 1;
         $scope.resultsPerPage = 5;
         $scope.$watch('currentPage', function () {

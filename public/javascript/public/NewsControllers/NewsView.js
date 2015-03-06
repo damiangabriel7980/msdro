@@ -4,8 +4,8 @@ controllers.controller('NewsView', ['$scope', '$rootScope', 'ContentService', '$
 
     //------------------------------------------------------------------------------------------------- get all content
 
-    ContentService.contentByType.query({type: 1}).$promise.then(function (resp) {
-        $scope.news = resp;
+    ContentService.content.query({type: 1}).$promise.then(function (resp) {
+        $scope.news = resp.success;
     });
     ContentService.mostReadByType.query({type: 1}).$promise.then(function (resp) {
         $scope.mostRead = resp;

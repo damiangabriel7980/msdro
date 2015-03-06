@@ -6,6 +6,8 @@ var UserGroup = require('./models/userGroup');
 
 var email = require('mandrill-send')('XKp6n_7NhHB5opUWo0WWmw');
 
+var ObjectId = require('mongoose').Types.ObjectId;
+
 var getIds = function (documentsArray) {
     var ret = [];
     for(var i=0; i<documentsArray.length; i++){
@@ -28,19 +30,65 @@ module.exports = function(app,email, router) {
             })
         });
 
-    router.route('/contentByType/:type')
-
+    router.route('/content')
         .get(function (req, res) {
-            var paramsObject = {type: req.params.type, enable: true};
-                if(req.params.type==4 || req.params.type==3)
-                    paramsObject = {$and : [paramsObject,{file_path:{$exists: true,$nin:[null,""]}}]};
-            PublicContent.find(paramsObject).sort({date_added: -1}).exec(function (err, resp) {
-                if(err){
-                    res.send(err);
+            if(req.query.id){
+                PublicContent.findOne({_id: req.query.id, enable: true}, function (err, resp) {
+                    if(err){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: resp});
+                    }
+                })
+            }else if(req.query.type && req.query.area){
+                var params = req.query;
+
+                //get documents once we know their therapeutic areas
+                var getDocuments = function (areasIds) {
+                    var q = {type: params.type, enable: true};
+                    if(areasIds){
+                        q['therapeutic-areasID'] = {$in: areasIds};
+                    }
+                    if(params.withFile){
+                        q['file_path'] = {$exists: true, $nin:[null,""]};
+                    }
+                    PublicContent.find(q).sort({date_added: -1}).exec(function (err, content) {
+                        if(err){
+                            res.send({error: true});
+                        }else{
+                            res.send({success: content});
+                        }
+                    });
+                };
+
+                if(params.area != 0){
+                    //form an array of this area's id and all it's children id's
+                    TherapeuticAreas.find({$or: [{_id: ObjectId(params.area)}, {'therapeutic-areasID': {$in: [params.area.toString()]}}]}, function (err, areas) {
+                        if(err){
+                            console.log(err);
+                            res.send({error: true});
+                        }else{
+                            var areasIds = getIds(areas);
+                            getDocuments(areasIds);
+                        }
+                    })
                 }else{
-                    res.send(resp);
+                    //we need all documents
+                    getDocuments();
                 }
-            })
+            }else if(req.query.type){
+                var q = {type: req.query.type, enable: true};
+                if(req.query.withFile){
+                    q['file_path'] = {$exists: true, $nin:[null,""]};
+                }
+                PublicContent.find(q).sort({date_added: -1}).exec(function (err, resp) {
+                    if(err){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: resp});
+                    }
+                })
+            }
         });
 
     router.route('/publicSearchResults')
@@ -84,57 +132,6 @@ module.exports = function(app,email, router) {
             });
         });
 
-    router.route('/contentByTypeAndTherapeuticArea')
-
-        .post(function (req, res) {
-
-            var requestData = req.body;
-
-            //get documents once we know their therapeutic areas
-            var getDocuments = function (areasIds) {
-                var q = {type: requestData.type, enable: true};
-                if(areasIds){
-                    q['therapeutic-areasID'] = {$in: areasIds};
-                }
-                if(requestData.type==3)
-                    q = {$and : [q,{file_path:{$exists: true,$nin:[null,""]}}]};
-                PublicContent.find(q).sort({date_added: -1}).exec(function (err, content) {
-                    if(err){
-                        res.send(err);
-                    }else{
-                        res.send(content);
-                    }
-                });
-            };
-
-
-            if(requestData.area && requestData.type){
-                var area = requestData.area;
-                if(area._id != 0){
-                    if(area.has_children){
-                        //form an array of parent's id and all it's children id's
-                        TherapeuticAreas.find({$or: [{_id: area._id}, {'therapeutic-areasID': {$in: [area._id.toString()]}}]}, function (err, areas) {
-                            if(err){
-                                res.send(err);
-                            }else{
-                                var areasIds = getIds(areas);
-                                getDocuments(areasIds);
-                            }
-                        })
-                    }else{
-                        //we only need the parent's id
-                        getDocuments([area._id.toString()]);
-                    }
-                }else{
-                    //we need all documents
-                    getDocuments();
-                }
-            }else{
-                res.statusCode = 400;
-                res.end();
-            }
-        });
-
     router.route('/therapeuticAreas')
 
         .get(function (req, res) {
@@ -151,18 +148,6 @@ module.exports = function(app,email, router) {
 
         .get(function (req, res) {
             PublicContent.find({type: req.params.type, enable: true}).sort({date_added: -1}).limit(3).exec(function (err, resp) {
-                if(err){
-                    res.send(err);
-                }else{
-                    res.send(resp);
-                }
-            })
-        });
-
-    router.route('/contentById/:id')
-
-        .get(function (req, res) {
-            PublicContent.findOne({_id: req.params.id, enable: true}, function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{

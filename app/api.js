@@ -3635,8 +3635,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                         to: [user.username],
                                         subject:'Activare cont MSD',
                                         text: 'Draga '+user.name+',\n\n\n'+
-                                            'Ati primit acest email deoarece v-ati inregistrat pe MSD.Contul dumneavoastra a fost activat si il puteti accesa la aceasta adresa:\n\n'+
-                                            req.headers.host+'\n\n\n'+
+                                            'Ati primit acest email ca urmare a inregistrarii si a acceptarii dovezii identitatii dumneavoastra pe MSD. Contul dumneavoastra este activat si il puteti accesa la adresa:\n\n'+
+                                            req.headers.host+'/login\n\n\n'+
                                             'Succes!\n\nEchipa MSD'
                                     }, function(err){
                                         if(err) {
