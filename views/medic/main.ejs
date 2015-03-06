@@ -183,7 +183,6 @@
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li><a ng-click="navCollapsed = true; $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><i class="glyphicon glyphicon-film iconLeft "></i>&nbspMultimedia</a></li>
                         <li><a ui-sref="elearning.transmisii" href="#/transmisii" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-facetime-video iconLeft "></i>&nbspTransmisii live</a></li>
-                        <li><a ui-sref="elearning.teste" href="#/teste" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-question-sign iconLeft "></i>&nbspTeste interactive </a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures') || $state.includes('groupSpecialProduct')}" ng-if="specialApps || groupProduct">
