@@ -5,9 +5,6 @@ services.factory('HomeService', ['$resource', function($resource){
         getCarouselData: $resource('apiPublic/getCarouselData/', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        contentByType: $resource('apiPublic/contentByType/:type', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
         getSearchResults: $resource('apiPublic/publicSearchResults/', {}, {
             query: { method: 'POST', isArray: true }
         }),
@@ -18,17 +15,11 @@ services.factory('HomeService', ['$resource', function($resource){
 }]);
 services.factory('ContentService', ['$resource', function($resource){
     return {
-        contentByType: $resource('apiPublic/contentByType/:type', {}, {
-            query: { method: 'GET', isArray: true }
+        content: $resource('apiPublic/content', {}, {
+            query: { method: 'GET', isArray: false }
         }),
         mostReadByType: $resource('apiPublic/mostReadContentByType/:type', {}, {
             query: { method: 'GET', isArray: true }
-        }),
-        contentById: $resource('apiPublic/contentById/:id', {}, {
-            query: { method: 'GET', isArray: false }
-        }),
-        contentByTypeAndTherapeuticArea: $resource('apiPublic/contentByTypeAndTherapeuticArea', {}, {
-            query: { method: 'POST', isArray: true }
         }),
         therapeuticAreas: $resource('apiPublic/therapeuticAreas/', {}, {
             query: { method: 'GET', isArray: true }
