@@ -10,6 +10,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
             "insertdatetime media table contextmenu paste charmap"
         ],
         image_advtab: true,
+        height: 500,
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 

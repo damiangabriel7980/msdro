@@ -101,6 +101,7 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
             "searchreplace visualblocks code fullscreen",
             "insertdatetime media table contextmenu paste charmap"
         ],
+        height: 500,
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 
