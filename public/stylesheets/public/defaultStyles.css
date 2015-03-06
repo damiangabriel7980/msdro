@@ -7347,6 +7347,12 @@ a:focus {
 }
 .loginNoPaddingBottom {
   padding-bottom: 0px;
+  padding-left: 30px;
+  padding-right: 40px;
+}
+.loginHeaderPadding {
+  padding-left: 30px;
+  padding-right: 40px;
 }
 .loginListMargin {
   margin-bottom: 15px;
