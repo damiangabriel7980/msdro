@@ -23,17 +23,23 @@ module.exports = function(app, email, logger, passport) {
         if(req.isAuthenticated()){
             res.redirect('/pro');
         }else{
+            var requestedActivation = 0, accountActivated = 0, showLogin = 0;
             if(req.session.requestedActivation){
+                requestedActivation = 1;
                 delete req.session.requestedActivation;
-                if(req.session.accountActivated){
-                    delete req.session.accountActivated;
-                    res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation:1, accountActivated: 1});
-                }else{
-                    res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation:1, accountActivated: 0});
-                }
-            }else{
-                res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket, requestedActivation: 0, accountActivated: 0});
             }
+            if(req.session.accountActivated){
+                accountActivated = 1;
+                delete req.session.accountActivated;
+            }
+            if(req.session.showLogin){
+                showLogin = 1;
+                delete req.session.showLogin;
+            }
+            res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket,
+                                           requestedActivation: requestedActivation,
+                                           accountActivated: accountActivated,
+                                           showLogin: showLogin});
         }
     });
 
@@ -187,6 +193,12 @@ module.exports = function(app, email, logger, passport) {
                 })(req, res, next);
             }
         });
+    
+    //redirect user to home page and open login
+    app.get('/login', function (req, res) {
+        req.session.showLogin = true;
+        res.redirect('/');
+    });
 
     //activate user account
     // ! used by mobile apps
@@ -202,7 +214,7 @@ module.exports = function(app, email, logger, passport) {
         //to be displayed after redirecting to the home page
         req.session.requestedActivation = true;
         User.findOne({ activationToken: req.params.token}, function(err, user) {
-            if (!user) {
+            if (err || !user) {
                 logger.error(err);
                 res.redirect('/');
             }else{

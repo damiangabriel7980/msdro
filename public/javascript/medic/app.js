@@ -206,7 +206,7 @@ app.run(
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
             //amazon service paths
-            $rootScope.amazonBucket = sessionStorage.defaultAmazonBucket;
+            $rootScope.amazonBucket = DEFAULT_AMAZON_BUCKET;
             $rootScope.pathAmazonDev = "https://s3-eu-west-1.amazonaws.com/"+$rootScope.amazonBucket+"/";
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
             $rootScope.pathGlycemizer = $rootScope.pathAmazonDev + "glycemizer/Glycemizer.exe";
