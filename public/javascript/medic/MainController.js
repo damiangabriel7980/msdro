@@ -166,7 +166,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             size: 'lg',
             keyboard: false,
             backdrop: 'static',
-            windowClass: 'fade',
+            windowClass: 'fade modal-responsive',
             controller: 'MerckManual'
         });
     };
