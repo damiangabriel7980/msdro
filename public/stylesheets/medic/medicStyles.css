@@ -7427,7 +7427,7 @@ hr {
 .defaultNavbarBrand {
   margin-left: 10px!important;
 }
-.modalTitleStyles {
+.modal-dialog .modal-header {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   color: white;
