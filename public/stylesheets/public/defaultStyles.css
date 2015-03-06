@@ -6989,12 +6989,6 @@ html body .rootView {
 .contentLayout .articleDetail .articleContent {
   padding: 30px 0 0 0;
 }
-.contentLayout .articleDetail .articleContent img {
-  width: 30%;
-  max-width: 300px;
-  padding-right: 30px;
-  padding-bottom: 30px;
-}
 .contentLayout .articleDetail:before {
   content: '';
   position: absolute;
