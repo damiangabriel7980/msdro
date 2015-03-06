@@ -1,8 +1,8 @@
 <form ng-submit="reset()">
-    <div class="modal-header">
-        <div class="modal-title"><h3>Reseteaza parola</h3></div>
+    <div class="modal-header loginHeaderPadding">
+        <div class="modal-title"><h3><i class="glyphicon glyphicon-lock" style="font-size: 20px"></i>&nbsp;Reseteaza parola</h3></div>
     </div>
-    <div class="modal-body">
+    <div class="modal-body loginNoPaddingBottom">
         <alert type="{{alert.type}}" ng-if="alert.show" close="alert.show=false">{{alert.text}}</alert>
         <div class="form-group">
             <label for="email">Email: </label>
@@ -11,6 +11,6 @@
     </div>
     <div class="modal-footer">
         <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
-        <button class="btn btn-warning pull-right" type="submit">Reseteaza parola</button>
+        <button class="btn btn-primary pull-right" type="submit">Reseteaza parola</button>
     </div>
 </form>
