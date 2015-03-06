@@ -7229,7 +7229,6 @@ hr {
   border: 0px solid #cccccc;
   -webkit-transition: width 1s ease;
   /* Safari */
-
   transition: width 1s ease;
 }
 .btnSearchBefore {
@@ -7428,9 +7427,6 @@ hr {
 .defaultNavbarBrand {
   margin-left: 10px!important;
 }
-.defaultNavbarBrand {
-  margin-left: 10px!important;
-}
 .modalTitleStyles {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -7440,4 +7436,8 @@ hr {
 .equalMarginModalTitle {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.activeArea {
+  background-color: #009d97;
+  color: white;
 }
