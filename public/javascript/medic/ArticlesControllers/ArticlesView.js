@@ -1,4 +1,4 @@
-ontrollers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 'ContentService','$timeout','$window','$document','$sce', function($scope, $rootScope, $stateParams, ContentService,$timeout,$window,$document,$sce){
+controllers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 'ContentService','$timeout','$window','$document','$sce', function($scope, $rootScope, $stateParams, ContentService,$timeout,$window,$document,$sce){
 
     $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.lmt=5;
