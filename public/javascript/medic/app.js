@@ -154,7 +154,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             }]
         })
         .state('groupFeatures', {
-            url: '/groupFeatures/:feature',
+            url: '/groupFeatures/:specialApp',
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
             controller: 'DisplayFeatures'
         })
