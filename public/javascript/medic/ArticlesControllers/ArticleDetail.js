@@ -2,7 +2,6 @@ controllers.controller('ArticleDetail', ['$scope', '$rootScope', '$stateParams',
     var imagePre = $rootScope.pathAmazonDev;
     console.log($stateParams);
     ContentService.getById.query({content_id: $stateParams.articleId,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        console.log(resp);
         if(resp._id)
         {
             $scope.currentArticle = resp;

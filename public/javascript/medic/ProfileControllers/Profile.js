@@ -44,7 +44,6 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
                 }
 
             }
-            console.log($scope.userTherapeuticAreas);
         }
         if(resp.job){
             $scope.job = resp.job[0];
@@ -182,7 +181,6 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
                 }
 
             }
-            console.log($scope.userTherapeuticAreas);
         }
     });
 

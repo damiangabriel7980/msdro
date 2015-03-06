@@ -49,7 +49,6 @@ controllers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 
     };
     ContentService.getByType.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.content = result;
-        console.log($stateParams);
         $timeout(function(){
             var footer = angular.element('#footer');
             var check = function () {

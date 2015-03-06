@@ -8,7 +8,6 @@ controllers.controller('PresentationModal', ['$scope', '$rootScope', 'Presentati
     };
 
     $scope.changeStatus=function(){
-        console.log(this.rememberOption);
         if($rootScope.specialGroupSelected===null)
             changeLocalGroupModalStatus($scope.presentation.groupsID[0],this.rememberOption);
         else
@@ -25,14 +24,12 @@ controllers.controller('PresentationModal', ['$scope', '$rootScope', 'Presentati
         if($rootScope.specialGroupSelected===null)
         {
             alterIntroService.alterIntro.save({groupID: $scope.presentation.groupsID[0]}).$promise.then(function(alteredSession){
-                console.log(alteredSession);
                 $modalInstance.close();
             });
         }
         else
         {
             alterIntroService.alterIntro.save({groupID: $rootScope.specialGroupSelected._id}).$promise.then(function(alteredSession){
-                console.log(alteredSession);
                 $modalInstance.close();
             });
         }

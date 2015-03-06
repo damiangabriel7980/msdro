@@ -19,7 +19,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                         for(var i=0;i<defaultGroupArray.length;i++)
                         {
                             modalGroups[defaultGroupArray[i]]=true;
-                            console.log(modalGroups);
                         }
                         localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
                         alterIntroService.checkIntroEnabled.query({specialGroupSelected:null}).$promise.then(function(resp){
@@ -44,7 +43,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                     for(var i=0;i<$rootScope.specialGroups.length;i++)
                     {
                         modalGroups[$rootScope.specialGroups[i]._id]=true;
-                        console.log(modalGroups);
                     }
                     localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
                     alterIntroService.checkIntroEnabled.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
@@ -70,7 +68,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                     alterIntroService.alterIntro.query().$promise.then(function(resp){
 
                         $scope.introSession=resp;
-                        console.log( $scope.introSession);
                       alterIntroService.getDefaultGroupID.query().$promise.then(function(group){
                             if($scope.introSession[group.defaultGroup]===true)
                         {
