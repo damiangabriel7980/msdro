@@ -116,7 +116,7 @@
                 </a>
                 <ul class="dropdown-menu myProfile myMenu greyBackground">
                     <li ng-click="showProfile()"><a>Profile</a></li>
-                    <li><a href="logout">Sign Out</a></li>
+                    <li ng-click="logoutUser()"><a>Sign Out</a></li>
                 </ul>
             </ul>
             <ul class="nav navbar-nav pull-right disableDesktop dropdown margintop8px headerProfileNoSpecial" ng-if="specialGroups.length==0">
@@ -125,7 +125,7 @@
                 </a>
                 <ul class="dropdown-menu myProfileNoSpecial myMenu greyBackground">
                     <li ng-click="showProfile()"><a>Profile</a></li>
-                    <li><a href="logout">Sign Out</a></li>
+                    <li ng-click="logoutUser()"><a>Sign Out</a></li>
                 </ul>
             </ul>
 
@@ -171,7 +171,7 @@
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li ui-sref="biblioteca.produse.productsByArea({id:0})" ng-click="navCollapsed = true" href="#/produse"><a><i class="glyphicon glyphicon-th-large iconLeft "></i>&nbspProduse </a></li>
                         <li ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="navCollapsed = true"><a><i class="glyphicon glyphicon-file iconLeft "></i>&nbspArticole stiintifice </a></li>
-                        <li><a href="http://www.merckmanuals.com/" ng-click="navCollapsed = true" target="_blank"><i class="glyphicon glyphicon-th-large iconLeft "></i>&nbspManualul Merck</a></li>
+                        <li ng-click="goToMerckSite()"><a ng-click="navCollapsed = true"><i class="glyphicon glyphicon-th-large iconLeft "></i>&nbspManualul Merck</a></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar" ng-click="navCollapsed = true">Calendar</a></li>
@@ -224,7 +224,7 @@
                 </a>
                 <ul class="dropdown-menu myProfile myMenu greyBackground">
                     <li ng-click="showProfile()"><a >Profile</a></li>
-                    <li><a href="logout">Sign Out</a></li>
+                    <li ng-click="logoutUser()"><a>Sign Out</a></li>
                 </ul>
             </ul>
             <ul class="nav navbar-nav navbar-right disableSpecial dropdown margintop8px" ng-if="specialGroups.length==0">
@@ -233,7 +233,7 @@
                 </a>
                 <ul class="dropdown-menu myProfileNoSpecial myMenu greyBackground">
                     <li ng-click="showProfile()"><a >Profile</a></li>
-                    <li><a href="logout">Sign Out</a></li>
+                    <li ng-click="logoutUser()"><a>Sign Out</a></li>
                 </ul>
             </ul>
             <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="specialGroups.length!=0">

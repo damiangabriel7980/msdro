@@ -1,10 +1,19 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService', function ($scope, $state, $modal,$rootScope,alterIntroService) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService','$window', function ($scope, $state, $modal,$rootScope,alterIntroService,$window) {
     var changeLocalGroupModalStatus= function(groupID,value){
         var retrievedObject = localStorage.getItem('statusModalGroups');
         var statusModals = JSON.parse(retrievedObject);
         statusModals[groupID] = value;
         localStorage.setItem('statusModalGroups',JSON.stringify(statusModals));
     };
+
+    $scope.goToMerckSite=function(){
+      $window.open('http://www.merckmanuals.com/','_blank');
+    };
+    $scope.logoutUser=function(){
+        $window.location.href='logout';
+    };
+
+
     $rootScope.$watch('specialGroupSelected',function(oldVal,newVal){
         if($rootScope.specialGroupSelected!=undefined || $rootScope.specialGroupSelected===null)
         {
@@ -167,6 +176,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             controller: 'MerckManual'
         });
     };
+
 
     //profile modal
     $scope.showProfile = function(){
