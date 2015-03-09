@@ -12,7 +12,9 @@ var app = angular.module('app',
         'angular-carousel',
         'ui.select',
         'angularFileUpload',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'angulartics',
+        'angulartics.google.analytics'
     ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
