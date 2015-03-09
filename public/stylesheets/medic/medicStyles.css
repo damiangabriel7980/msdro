@@ -6706,6 +6706,10 @@ ul.products li {
   font-size: 40px;
   font-weight: bold;
 }
+#specialApp iframe {
+  width: 100%;
+  height: 100%;
+}
 .modal-responsive .modal-dialog {
   height: 90%;
 }

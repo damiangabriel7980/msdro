@@ -111,3 +111,41 @@ app.directive('noCacheSrc', function($window) {
         } // end of link
     }
 });
+app.directive('coverScreeen', ['$window', function ($window) {
+    return{
+        restrict: 'A',
+        link: function ($scope, $element, $attrs) {
+            var occupiedSpace = $attrs.occupiedSpace || 0;
+            var runOnState = $attrs.runOnState;
+
+            var elementWidth;
+            var elementHeight;
+
+            var element = angular.element($element);
+            var window = angular.element($window);
+
+            var initializeElementSize = function () {
+                elementWidth = window[0].innerWidth;
+                elementHeight = window[0].innerHeight - occupiedSpace;
+
+                element.css('width', '100%');
+                element.css('height', elementHeight+'px');
+            };
+
+            angular.element($window).bind('resize', function () {
+                if($scope.$state.includes(runOnState)){
+                    initializeElementSize();
+                    $scope.$apply();
+                }else{
+                    angular.element($window).unbind('resize');
+                }
+            });
+
+            // Initiate the resize function default values
+            angular.element(document).ready(function () {
+                initializeElementSize();
+                //$scope.$apply();
+            });
+        }
+    }
+}]);
