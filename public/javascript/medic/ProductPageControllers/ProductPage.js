@@ -14,9 +14,10 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
             $state.go('groupSpecialProduct.menuItem', {menuId: $scope.firstParentId, childId: $scope.firstChildId});
             for(var i=0;i<$scope.specialProductMenu.length;i++)
             {
-                if($scope.specialProductMenu[i].title=="Acasa")
+                if($scope.specialProductMenu[i].title=='Acasa'||$scope.specialProductMenu[i].title=='Acasă')
                 {
                     $scope.homeID=$scope.specialProductMenu[i]._id;
+                    break;
                 }
             }
         });
