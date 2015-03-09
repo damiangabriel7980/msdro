@@ -105,8 +105,8 @@
                         <img class="navbar-brand logoBottom" ng-if="!specialGroupSelected.image_path" ng-src="{{MSDlogo}}"
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground mySpecialMenuMobile" role="menu">
-                        <li ng-repeat="group in specialGroups">
-                            <a style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}}</a>
+                        <li ng-repeat="group in specialGroups" ng-click="selectSpecialGroup(group)">
+                            <a style="cursor: pointer;">{{group.display_name}}</a>
                         </li>
                     </ul>
             </ul>
@@ -115,7 +115,7 @@
                     <i class="glyphicon glyphicon-user"></i>
                 </a>
                 <ul class="dropdown-menu myProfile myMenu greyBackground">
-                    <li><a ng-click="showProfile()">Profile</a></li>
+                    <li ng-click="showProfile()"><a>Profile</a></li>
                     <li><a href="logout">Sign Out</a></li>
                 </ul>
             </ul>
@@ -124,7 +124,7 @@
                     <i class="glyphicon glyphicon-user"></i>
                 </a>
                 <ul class="dropdown-menu myProfileNoSpecial myMenu greyBackground">
-                    <li><a ng-click="showProfile()">Profile</a></li>
+                    <li ng-click="showProfile()"><a>Profile</a></li>
                     <li><a href="logout">Sign Out</a></li>
                 </ul>
             </ul>
@@ -160,9 +160,8 @@
                        Noutati <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu" >
-                        <li><a ui-sref="noutati.listaArticole({articleType:1})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-file iconLeft"></i>&nbspStiri</a> </li>
-
-                        <li><a ui-sref="noutati.listaArticole({articleType:2})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><i class="glyphicon glyphicon-folder-open iconLeft"></i>&nbspStiri legislative</a></li>
+                        <li ui-sref="noutati.listaArticole({articleType:1})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><a><i class="glyphicon glyphicon-file iconLeft"></i>&nbspStiri</a></li>
+                        <li ui-sref="noutati.listaArticole({articleType:2})" ng-click="navCollapsed = true" style=":hover{background-color:#009d97}"><a><i class="glyphicon glyphicon-folder-open iconLeft"></i>&nbspStiri legislative</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
@@ -170,9 +169,9 @@
                         Biblioteca <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li><a ui-sref="biblioteca.produse.productsByArea({id:0})" ng-click="navCollapsed = true" href="#/produse"><i class="glyphicon glyphicon-th-large iconLeft "></i>&nbspProduse </a></li>
-                        <li><a ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-file iconLeft "></i>&nbspArticole stiintifice </a></li>
-                        <li><a ui-sref="biblioteca.manualMerck" href="http://www.merckmanuals.com/" ng-click="navCollapsed = true" target="_blank"><i class="glyphicon glyphicon-th-large iconLeft "></i>&nbspManualul Merck</a></li>
+                        <li ui-sref="biblioteca.produse.productsByArea({id:0})" ng-click="navCollapsed = true" href="#/produse"><a><i class="glyphicon glyphicon-th-large iconLeft "></i>&nbspProduse </a></li>
+                        <li ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="navCollapsed = true"><a><i class="glyphicon glyphicon-file iconLeft "></i>&nbspArticole stiintifice </a></li>
+                        <li><a href="http://www.merckmanuals.com/" ng-click="navCollapsed = true" target="_blank"><i class="glyphicon glyphicon-th-large iconLeft "></i>&nbspManualul Merck</a></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar" ng-click="navCollapsed = true">Calendar</a></li>
@@ -181,8 +180,8 @@
                         E-learning <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li><a ng-click="navCollapsed = true; $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><i class="glyphicon glyphicon-film iconLeft "></i>&nbspMultimedia</a></li>
-                        <li><a ui-sref="elearning.transmisii" href="#/transmisii" ng-click="navCollapsed = true"><i class="glyphicon glyphicon-facetime-video iconLeft "></i>&nbspTransmisii live</a></li>
+                        <li ng-click="navCollapsed = true; $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><a><i class="glyphicon glyphicon-film iconLeft "></i>&nbspMultimedia</a></li>
+                        <li ui-sref="elearning.transmisii" href="#/transmisii" ng-click="navCollapsed = true"><a><i class="glyphicon glyphicon-facetime-video iconLeft "></i>&nbspTransmisii live</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures') || $state.includes('groupSpecialProduct')}" ng-if="specialApps || groupProduct">
@@ -190,8 +189,8 @@
                         {{specialGroupSelected?specialGroupSelected.display_name:""}} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li ng-repeat="app in specialApps"><a ui-sref="groupFeatures({specialApp: app._id})" ng-click="navCollapsed = true">{{app.name}}</a></li>
-                        <li><a ng-if="groupProduct" ui-sref="groupSpecialProduct({product_id: groupProduct._id})" ng-click="navCollapsed = true">{{groupProduct.product_name}}</a></li>
+                        <li ng-repeat="app in specialApps"  ui-sref="groupFeatures({specialApp: app._id})" ng-click="navCollapsed = true"><a>{{app.name}}</a></li>
+                        <li ng-if="groupProduct" ui-sref="groupSpecialProduct({product_id: groupProduct._id})" ng-click="navCollapsed = true"><a >{{groupProduct.product_name}}</a></li>
 
                     </ul>
                 </li>
@@ -204,8 +203,8 @@
                     </a>
 
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li ng-repeat="group in specialGroups">
-                            <a style="cursor: pointer;" ng-click="selectSpecialGroup(group)">{{group.display_name}} </a>
+                        <li ng-repeat="group in specialGroups" style="cursor: pointer;" ng-click="selectSpecialGroup(group)">
+                            <a>{{group.display_name}} </a>
                         </li>
                     </ul>
                 </li>
@@ -224,7 +223,7 @@
                     <i class="glyphicon glyphicon-user"></i>
                 </a>
                 <ul class="dropdown-menu myProfile myMenu greyBackground">
-                    <li><a ng-click="showProfile()">Profile</a></li>
+                    <li ng-click="showProfile()"><a >Profile</a></li>
                     <li><a href="logout">Sign Out</a></li>
                 </ul>
             </ul>
@@ -233,7 +232,7 @@
                     <i class="glyphicon glyphicon-user"></i>
                 </a>
                 <ul class="dropdown-menu myProfileNoSpecial myMenu greyBackground">
-                    <li><a ng-click="showProfile()">Profile</a></li>
+                    <li ng-click="showProfile()"><a >Profile</a></li>
                     <li><a href="logout">Sign Out</a></li>
                 </ul>
             </ul>

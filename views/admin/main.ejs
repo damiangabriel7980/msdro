@@ -162,61 +162,61 @@
                 <li class="dropdown" ng-class="{'active': $state.includes('users')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Utilizatori <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="users.manageAccounts"> Gestionare conturi </a></li>
+                        <li ui-sref="users.manageAccounts"><a > Gestionare conturi </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="users.newAccounts.pending"> Conturi noi </a></li>
+                        <li ui-sref="users.newAccounts.pending"><a > Conturi noi </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="users.groups"> Grupuri utilizatori </a></li>
+                        <li ui-sref="users.groups"><a > Grupuri utilizatori </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="users.importUsers"> Import Users </a></li>
+                        <li ui-sref="users.importUsers"><a > Import Users </a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('content')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Continut <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="content.produse"> Produse </a></li>
+                        <li ui-sref="content.produse"><a > Produse </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="content.specialProducts"> Produs special </a></li>
+                        <li ui-sref="content.specialProducts"><a > Produs special </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="content.specialApps"> Aplicatii speciale </a></li>
+                        <li ui-sref="content.specialApps"><a > Aplicatii speciale </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="content.articles"> Articole </a></li>
+                        <li ui-sref="content.articles"><a > Articole </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="content.events.viewAll.events"> Evenimente </a></li>
+                        <li ui-sref="content.events.viewAll.events"><a > Evenimente </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="content.intro"> Intro </a></li>
+                        <li ui-sref="content.intro"><a > Intro </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="content.carouselMedic"> Carousel Medic </a></li>
+                        <li ui-sref="content.carouselMedic"><a > Carousel Medic </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="content.carouselPublic"> Carousel Public </a></li>
+                        <li ui-sref="content.carouselPublic"><a > Carousel Public </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="content.publicContent"> Continut Public </a></li>
+                        <li ui-sref="content.publicContent"><a > Continut Public </a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('newsletter')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Newsletter <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="newsletter.consolaNewsletter"> Consola Newsletter </a></li>
+                        <li ui-sref="newsletter.consolaNewsletter"><a > Consola Newsletter </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="newsletter.rapoarteUtilizare"> Rapoarte Utilizare </a></li>
+                        <li ui-sref="newsletter.rapoarteUtilizare"><a > Rapoarte Utilizare </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="newsletter.rapoarteGlobale"> Rapoarte Globale </a></li>
+                        <li ui-sref="newsletter.rapoarteGlobale"><a > Rapoarte Globale </a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('elearning')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Elearning <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="elearning.multimedia"> Multimedia </a></li>
+                        <li ui-sref="elearning.multimedia"><a > Multimedia </a></li>
                         <li class="divider"></li>
-                        <li><a ui-sref="elearning.testeInteractive"> Teste Interactive </a></li>
+                        <li ui-sref="elearning.testeInteractive"><a > Teste Interactive </a></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('ariiTerapeutice')}"><a ui-sref="ariiTerapeutice"> Arii terapeutice </a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('applications')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Aplicatii <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="applications.qa"> Q/A </a></li>
-                        <li><a ui-sref="applications.contractManagement"> Contract management </a></li>
+                        <li ui-sref="applications.qa"><a > Q/A </a></li>
+                        <li ui-sref="applications.contractManagement"><a > Contract management </a></li>
                     </ul>
                 </li>
             </ul>
@@ -226,7 +226,7 @@
                         <span class="glyphicon glyphicon-user"></span> <%= user.username %> <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a style="cursor: pointer;" ng-click="showProfile()">Profile</a></li>
+                        <li style="cursor: pointer;" ng-click="showProfile()"><a >Profile</a></li>
                         <li class="divider"></li>
                         <li><a href="logout">Sign Out</a></li>
                     </ul>
