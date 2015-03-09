@@ -3,7 +3,7 @@ var Schema			= mongoose.Schema;
 
 var schema		= new Schema({
     profession: {type: Schema.Types.ObjectId, ref: 'professions'},
-    value: String
+    value: {type: String, select: false}
 });
 
 module.exports = mongoose.model('ActivationCodes', schema, 'activationCodes');

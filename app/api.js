@@ -3491,6 +3491,41 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
+    router.route('/admin/system/activationCodes/codes')
+        .get(function (req, res) {
+            ActivationCodes.find({}).populate('profession').exec(function (err, codes) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: codes});
+                }
+            });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            ActivationCodes.findOne({_id: idToUpdate}).select('+value').exec(function (err, code) {
+                if(err || !code){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    //verify code
+                    if(SHA512(req.body.old).toString() !== code.value){
+                        res.send({error: true});
+                    }else{
+                        ActivationCodes.update({_id: idToUpdate}, {$set: {value: SHA512(req.body.new).toString()}}, function (err, wres) {
+                            if(err){
+                                logger.error(err);
+                                res.send({error: true});
+                            }else{
+                                res.send({success: true});
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
     router.route('/admin/users/ManageAccounts/users')
         .get(function (req, res) {
             if(req.query.id){
@@ -4985,7 +5020,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                 groupsToAdd.push(groupId.toString());
                             }
                             //get code
-                            ActivationCodes.findOne({profession: professionId}, function (err, code) {
+                            ActivationCodes.findOne({profession: professionId}).select('+value').exec(function (err, code) {
                                 if(err){
                                     logger.error(err);
                                     res.send({error: true});

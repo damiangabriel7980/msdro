@@ -262,6 +262,16 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/applications/contractManagement/viewAll.html',
             controller: 'ContractManagement'
         })
+        .state('system', {
+            abstract: true,
+            url: '/system',
+            templateUrl: '/partials/admin/system/root.html'
+        })
+        .state('system.activationCodes', {
+            url: '/activationCodes',
+            templateUrl: '/partials/admin/system/activationCodes/activationCodes.html',
+            controller: 'ActivationCodes'
+        })
 }]);
 
 app.run(
