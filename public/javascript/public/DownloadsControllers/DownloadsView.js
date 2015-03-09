@@ -7,8 +7,8 @@ controllers.controller('DownloadsView', ['$scope', '$rootScope', 'ContentService
     ContentService.content.query({type: 4, withFile: true}).$promise.then(function (resp) {
         $scope.downloads = resp.success;
     });
-    ContentService.mostReadByType.query({type: 4}).$promise.then(function (resp) {
-        $scope.mostDownloads = resp;
+    ContentService.mostRead.query({type: 4, withFile: true}).$promise.then(function (resp) {
+        $scope.mostDownloads = resp.success;
     });
 
 }]);

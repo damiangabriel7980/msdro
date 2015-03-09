@@ -372,6 +372,10 @@ html{
         position: relative;
         height: 100%;
         overflow: hidden;
+        img{
+          display: none;
+          visibility: hidden;
+        }
       }
       .dispFooter{
         position: absolute;
@@ -424,7 +428,12 @@ html{
       .title{
         font-weight: bold;
       }
-      .text{}
+      .text{
+        img{
+          display: none;
+          visibility: hidden;
+        }
+      }
       &:after{
         content:'';
         position: absolute;
@@ -463,7 +472,12 @@ html{
       .title{
         font-weight: bold;
       }
-      .text{}
+      .text{
+        img{
+          display: none;
+          visibility: hidden;
+        }
+      }
       &:after{
         content:'';
         position: absolute;
@@ -613,6 +627,10 @@ html{
           padding: 0;
           margin-bottom: 15px;
           font-size: 15px;
+          img{
+            visibility: hidden;
+            display: none;
+          }
         }
         .author{
           font-size: 13px;
@@ -755,6 +773,10 @@ html{
         .excerpt{
           padding: 0;
           margin-bottom: 20px;
+          img{
+            display: none;
+            visibility: hidden;
+          }
         }
         .author{
           font-size: 13px;

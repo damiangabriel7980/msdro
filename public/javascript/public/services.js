@@ -18,8 +18,8 @@ services.factory('ContentService', ['$resource', function($resource){
         content: $resource('apiPublic/content', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        mostReadByType: $resource('apiPublic/mostReadContentByType/:type', {}, {
-            query: { method: 'GET', isArray: true }
+        mostRead: $resource('apiPublic/mostRead', {}, {
+            query: { method: 'GET', isArray: false }
         }),
         therapeuticAreas: $resource('apiPublic/therapeuticAreas/', {}, {
             query: { method: 'GET', isArray: true }

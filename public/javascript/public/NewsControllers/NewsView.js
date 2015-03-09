@@ -7,8 +7,8 @@ controllers.controller('NewsView', ['$scope', '$rootScope', 'ContentService', '$
     ContentService.content.query({type: 1}).$promise.then(function (resp) {
         $scope.news = resp.success;
     });
-    ContentService.mostReadByType.query({type: 1}).$promise.then(function (resp) {
-        $scope.mostRead = resp;
+    ContentService.mostRead.query({type: 1}).$promise.then(function (resp) {
+        $scope.mostRead = resp.success;
     });
 
 }]);
