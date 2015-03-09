@@ -27,6 +27,7 @@ var qaMessages = require('./models/qa_messages');
 var Professions = require('./models/professions');
 var Presentations =require('./models/presentations');
 var CM_templates =require('./models/CM_templates');
+var ActivationCodes =require('./models/activationCodes');
 
 //live Streaming
 var socketio = require('socket.io'),
@@ -44,6 +45,7 @@ var specialApps = require('./models/userGroupApplications');
 
 var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
+var SHA512   = require('crypto-js/sha512');
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 var async = require('async');
@@ -3725,52 +3727,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             }
         });
 
-    router.route('/proof/image')
-        .post(function(req,res){
-            User.findOne({_id: req.user._id}).select('+proof_path').exec(function (err, user) {
-
-                var encodedImage = req.body.encodedImage;
-                var key = "user/"+user._id+"/proof."+req.body.extension;
-
-                if(err || !user){
-                    res.json({"type":"danger","message":"Utilizatorul nu a fost gasit"});
-                }else{
-                    if(user.proof_path){
-                        res.json({"type":"success","message":"Dovada a fost deja incarcata. Va rugam asteptati primirea mail-ului de activare pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam."});
-                    }else{
-                        addObjectS3(key, encodedImage, function (err) {
-                            if (err){
-                                console.log(err);
-                                res.json({"type":"danger","message":"Fotografia nu a putut fi salvata pe server"});
-                            }else{
-                                //establish default user group
-                                var profession = req.body.professionId;
-                                UserGroup.findOne({profession: profession, display_name: "Default"}, function (err, group) {
-                                    if(err || !group){
-                                        res.json({"type":"danger","message":"Eroare la salvarea datelor"});
-                                    }else{
-                                        var groupsToAdd = [group._id.toString()];
-                                        if(req.body.groupId){
-                                            groupsToAdd.push(req.body.groupId.toString());
-                                        }
-                                        User.update({_id: user._id},{$set: {proof_path: key, profession: profession, groupsID: groupsToAdd}},function (err) {
-                                            if (err){
-                                                res.json({"type":"danger","message":"Eroare la salvarea datelor"});
-                                            }else{
-                                                //we're done with this user, so log out
-                                                res.json({"type":"success","message":"Datele au fost salvate cu succes. In maxim 48 de ore veti primi un e-mail pe adresa "+req.user.username+". Va rugam verificati si folder-ul de spam.", success: true});
-                                                req.logout();
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                }
-            });
-        });
-
     router.route('/specialFeatures/specialGroups')
 
         .get(function(req, res) {
@@ -4980,7 +4936,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         }) ;
     });
 
-    router.route('/proof/professions')
+    router.route('/accountActivation/professions')
         .get(function (req, res) {
             Professions.find({}).exec(function (err, professions) {
                 if(err){
@@ -4991,7 +4947,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
-    router.route('/proof/specialGroups/:profession')
+    router.route('/accountActivation/specialGroups/:profession')
         .get(function (req, res) {
             var profession = req.params.profession;
             if(profession){
@@ -5006,6 +4962,56 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             }else{
                 res.send([]);
             }
+        });
+
+    router.route('/accountActivation/processData')
+        .post(function(req,res){
+            var professionId = req.body.professionId;
+            var groupId = req.body.groupId;
+            var activationCode = req.body.activationCode;
+            User.findOne({_id: req.user._id}).exec(function (err, user) {
+                if(err || !user){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    //establish default user group
+                    UserGroup.findOne({profession: professionId, display_name: "Default"}, function (err, group) {
+                        if(err || !group){
+                            logger.error(err);
+                            res.send({error: true});
+                        }else{
+                            var groupsToAdd = [group._id.toString()];
+                            if(groupId){
+                                groupsToAdd.push(groupId.toString());
+                            }
+                            //get code
+                            ActivationCodes.findOne({profession: professionId}, function (err, code) {
+                                if(err){
+                                    logger.error(err);
+                                    res.send({error: true});
+                                }else{
+                                    //validate code
+                                    console.log(SHA512(activationCode).toString());
+                                    console.log(code.value);
+                                    if(SHA512(activationCode).toString() !== code.value){
+                                        res.send({success: true, activated: false});
+                                    }else{
+                                        User.update({_id: user._id},{$set: {profession: professionId, groupsID: groupsToAdd, state: "ACCEPTED"}},function (err) {
+                                            if (err){
+                                                logger.error(err);
+                                                res.send({error: true});
+                                            }else{
+                                                //user is activated
+                                                res.send({success: true, activated: true});
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         });
 
     router.route('/admin/intros')
