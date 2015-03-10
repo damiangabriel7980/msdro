@@ -20,37 +20,45 @@
                                         output="newProductPage.groups"></my-multiple-select>
                 </div>
             </div>
-            <div class="form-group col-md-6">
-                <label>General description:</label>
-                <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.general_description"></textarea>
-            </div>
-        </div>
-        <div class="col-md-12 noPadding">
-            <div class="form-group col-md-6">
-                <label>Prescription:</label>
-                <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.prescription"></textarea>
-            </div>
-            <div class="form-group col-md-6">
-                <label>Safety info:</label>
-                <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.safety_information"></textarea>
-            </div>
             <div class="col-md-6">
-                <button class="btn btn-default" type="file" ng-file-select ng-file-change="logoSelected($files, $event)" multiple="false"
-                        accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca logo</button>
-                <span ng-if="logoImageBody">{{logoImageBody.name}}</span>
-                <span ng-if="!logoImageBody">{{newProductPage.logo_path}}</span>
-            </div>
-            <div class="col-md-6">
+                <div class="form-group col-md-12 noPadding">
+                    <label>Header title:</label>
+                    <input type="text" class="form-control" ng-model="newProductPage.header_title">
+                </div>
                 <div class="col-md-12 noPadding">
                     <button class="btn btn-default" type="file" ng-file-select ng-file-change="headerSelected($files, $event)" multiple="false"
                             accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca header</button>
                     <span ng-if="headerImageBody">{{headerImageBody.name}}</span>
                     <span ng-if="!headerImageBody">{{newProductPage.header_image}}</span>
                 </div>
-                <div class="form-group col-md-12 noPadding">
-                    <label>Header title:</label>
-                    <input type="text" class="form-control" ng-model="newProductPage.header_title">
+                <div class="col-md-12 noPadding" style="margin-top: 10px">
+                    <button class="btn btn-default" type="file" ng-file-select ng-file-change="logoSelected($files, $event)" multiple="false"
+                            accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca logo</button>
+                    <span ng-if="logoImageBody">{{logoImageBody.name}}</span>
+                    <span ng-if="!logoImageBody">{{newProductPage.logo_path}}</span>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-top: 15px">
+            <div class="newAccountsTabs">
+                <div class="tab" ng-class="{'active': activeTab == 'description'}" ng-click="showTab('description')">
+                    <span>General description</span>
+                </div>
+                <div class="tab" ng-class="{'active': activeTab == 'prescription'}" ng-click="showTab('prescription')">
+                    <span>Prescription</span>
+                </div>
+                <div class="tab" ng-class="{'active': activeTab == 'safety'}" ng-click="showTab('safety')">
+                    <span>Safety info</span>
+                </div>
+            </div>
+            <div class="col-md-12 noPadding" ng-class="{'hidden': activeTab != 'description'}">
+                <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.general_description"></textarea>
+            </div>
+            <div class="col-md-12 noPadding" ng-class="{'hidden': activeTab != 'prescription'}">
+                <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.prescription"></textarea>
+            </div>
+            <div class="col-md-12 noPadding" ng-class="{'hide': activeTab != 'safety'}">
+                <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.safety_information"></textarea>
             </div>
         </div>
     </div>
