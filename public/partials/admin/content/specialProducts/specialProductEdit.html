@@ -37,6 +37,21 @@
                     <span ng-if="logoImageBody">{{logoImageBody.name}}</span>
                     <span ng-if="!logoImageBody">{{newProductPage.logo_path}}</span>
                 </div>
+                <div class="col-md-12 noPadding" style="margin-top: 10px">
+                    <div class="col-md-12 noPadding"><label>Afiseaza safety info pentru:</label></div>
+                    <div class="col-md-4 noPadding">
+                        <label>Resurse: </label>
+                        <input type="checkbox" ng-model="newProductPage.show_safety_info_for.resources">
+                    </div>
+                    <div class="col-md-4 noPadding">
+                        <label>Glosar: </label>
+                        <input type="checkbox" ng-model="newProductPage.show_safety_info_for.glossary">
+                    </div>
+                    <div class="col-md-4 noPadding">
+                        <label>Site map: </label>
+                        <input type="checkbox" ng-model="newProductPage.show_safety_info_for.site_map">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-12" style="margin-top: 15px">

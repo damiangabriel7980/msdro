@@ -84,4 +84,9 @@ controllers.controller('AddProductPage', ['$scope', 'SpecialProductsService', 'A
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 
+    $scope.showTab = function (content) {
+        $scope.activeTab = content;
+    };
+    $scope.showTab('description');
+
 }]);

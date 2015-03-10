@@ -14,7 +14,12 @@ var specialProductSchema		= new Schema({
     product_name: String,
     general_description:String,
     groups: [{type: Schema.Types.ObjectId,ref: 'UserGroup'}],
-    enabled: Boolean
+    enabled: Boolean,
+    show_safety_info_for: {
+        resources: Boolean,
+        glossary: Boolean,
+        site_map: Boolean
+    }
 });
 
 specialProductSchema.plugin(deepPopulate, {
