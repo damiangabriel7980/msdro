@@ -60,6 +60,9 @@
                 <div class="tab" ng-class="{'active': activeTab == 'safety'}" ng-click="showTab('safety')">
                     <span>Safety info</span>
                 </div>
+                <div class="tab" ng-class="{'active': activeTab == 'site_map'}" ng-click="showTab('site_map')">
+                    <span>Site map description</span>
+                </div>
             </div>
             <div class="col-md-12 noPadding" ng-class="{'hidden': activeTab != 'description'}">
                 <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.general_description"></textarea>
@@ -69,6 +72,9 @@
             </div>
             <div class="col-md-12 noPadding" ng-class="{'hide': activeTab != 'safety'}">
                 <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.safety_information"></textarea>
+            </div>
+            <div class="col-md-12 noPadding" ng-class="{'hide': activeTab != 'site_map'}">
+                <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.site_map_description"></textarea>
             </div>
         </div>
     </div>
