@@ -3509,19 +3509,14 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     logger.error(err);
                     res.send({error: true});
                 }else{
-                    //verify code
-                    if(SHA512(req.body.old).toString() !== code.value){
-                        res.send({error: true});
-                    }else{
-                        ActivationCodes.update({_id: idToUpdate}, {$set: {value: SHA512(req.body.new).toString()}}, function (err, wres) {
-                            if(err){
-                                logger.error(err);
-                                res.send({error: true});
-                            }else{
-                                res.send({success: true});
-                            }
-                        });
-                    }
+                    ActivationCodes.update({_id: idToUpdate}, {$set: {value: SHA512(req.body.new).toString()}}, function (err, wres) {
+                        if(err){
+                            logger.error(err);
+                            res.send({error: true});
+                        }else{
+                            res.send({success: true});
+                        }
+                    });
                 }
             });
         });
@@ -5026,8 +5021,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                     res.send({error: true});
                                 }else{
                                     //validate code
-                                    console.log(SHA512(activationCode).toString());
-                                    console.log(code.value);
                                     if(SHA512(activationCode).toString() !== code.value){
                                         res.send({success: true, activated: false});
                                     }else{
