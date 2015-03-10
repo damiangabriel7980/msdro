@@ -18,14 +18,14 @@ controllers.controller('EditActivationCode', ['$scope', '$state', '$modalInstanc
     };
 
     $scope.updateActivationCode = function () {
-        if(!(this.changeCode.old && this.changeCode.new && this.changeCode.confirm)){
+        if(!(this.changeCode.new && this.changeCode.confirm)){
             resetAlert("danger", "Toate campurile sunt obligatorii");
         }else if(this.changeCode.new != this.changeCode.confirm){
             resetAlert("danger", "Codurile nu corespund");
         }else{
             SystemService.codes.update({id: code._id}, this.changeCode).$promise.then(function (resp) {
                 if(resp.error){
-                    resetAlert("danger", "Codul vechi nu a putut fi verificat");
+                    resetAlert("danger", "Eroare la schimbarea codului");
                 }else{
                     resetAlert("success", "Codul a fost modificat");
                 }
