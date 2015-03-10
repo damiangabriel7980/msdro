@@ -102,7 +102,7 @@ module.exports = function(app, mandrill, logger, router) {
                                                     text:
                                                         'Draga '+inserted.name+',\n\n\n'+
                                                         'Ati primit acest email deoarece v-ati inregistrat pe MSD.\n\n' +
-                                                        'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va activa contul:\n\n' +
+                                                        'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru validarea adresei de e-mail:\n\n' +
                                                         activationLink + '\n\n' +
                                                         'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n\n\n'+
                                                         'Toate cele bune,\nAdmin MSD'
@@ -113,7 +113,7 @@ module.exports = function(app, mandrill, logger, router) {
                                                     }else{
                                                         info.error = false;
                                                         info.type = "success";
-                                                        info.message = "Un email de activare a fost trimis";
+                                                        info.message = "Un email de verificare a fost trimis";
                                                         info.user = email;
                                                         res.json(info);
                                                     }

@@ -179,10 +179,10 @@ module.exports = function(app, email, logger, passport) {
                                         }
                                         req.session.statusModalGroups=statusModalGroups;
                                         console.log(req.session);
-                                        return  res.send({error: false, proof: true});
+                                        return  res.send({error: false, accepted: true});
                                     }
                                 }else if(user.state === "PENDING"){
-                                    return res.send({error: false, proof: false});
+                                    return res.send({error: false, accepted: false});
                                 }else{
                                     //this final else should never be reached
                                     req.logout();

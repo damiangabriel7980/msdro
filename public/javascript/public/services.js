@@ -39,15 +39,15 @@ services.factory('AuthService', ['$resource', function($resource){
         })
     }
 }]);
-services.factory('ProofService', ['$resource', function($resource){
+services.factory('ActivationCodeService', ['$resource', function($resource){
     return {
-        professions: $resource('api/proof/professions', {}, {
+        professions: $resource('api/accountActivation/professions', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        proofImage: $resource('api/proof/image', {}, {
+        processData: $resource('api/accountActivation/processData', {}, {
             save: {method:'POST'}
         }),
-        specialGroups: $resource('api/proof/specialGroups/:profession', {}, {
+        specialGroups: $resource('api/accountActivation/specialGroups/:profession', {}, {
             query: { method: 'GET', isArray: true }
         })
     }

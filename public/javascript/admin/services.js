@@ -214,6 +214,15 @@ services.factory('SpecialAppsService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('SystemService', ['$resource', function($resource){
+    return {
+        codes: $resource('api/admin/system/activationCodes/codes', {}, {
+            query: { method: 'GET', isArray: false },
+            update: { method: 'PUT', isArray: false }
+        })
+    }
+}]);
+
 services.factory('NewAccountsService', ['$resource', function($resource){
     return {
         state: $resource('api/admin/users/newAccounts/state/:type', {}, {

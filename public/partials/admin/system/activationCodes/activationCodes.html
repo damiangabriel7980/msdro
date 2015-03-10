@@ -1,0 +1,17 @@
+<div class = "col-md-12 well">
+    <div class="col-md-9"><h3>Coduri de activare cont</h3></div>
+</div>
+<div class="col-md-12">
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="code in $data">
+            <td data-title="'Profesie'" filter="{ 'profession.display_name': 'text' }" sortable="'profession.display_name'">
+                {{code.profession.display_name}}
+            </td>
+            <td data-title="'Actiuni'">
+                <div class="btn-group">
+                    <div class="btn btn-default" ng-click="editActivationCode(code)"><i class="glyphicon glyphicon-cog"></i></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
