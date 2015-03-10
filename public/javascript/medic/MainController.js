@@ -1,11 +1,10 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService','$window', function ($scope, $state, $modal,$rootScope,alterIntroService,$window) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService','$window','$cookies', function ($scope, $state, $modal,$rootScope,alterIntroService,$window,$cookies) {
     var changeLocalGroupModalStatus= function(groupID,value){
         var retrievedObject = localStorage.getItem('statusModalGroups');
         var statusModals = JSON.parse(retrievedObject);
         statusModals[groupID] = value;
         localStorage.setItem('statusModalGroups',JSON.stringify(statusModals));
     };
-
     $scope.goToMerckSite=function(){
       $window.open('http://www.merckmanuals.com/','_blank');
     };
@@ -13,6 +12,14 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         $window.location.href='logout';
     };
 
+    if($cookies.MSDCookie=='yes')
+         $scope.isCollapsed=true;
+    else
+        $scope.isCollapsed=false;
+    $scope.setCookie=function(){
+        $cookies.MSDCookie='yes';
+        $scope.isCollapsed=true;
+    };
 
     $rootScope.$watch('specialGroupSelected',function(oldVal,newVal){
         if($rootScope.specialGroupSelected!=undefined || $rootScope.specialGroupSelected===null)
