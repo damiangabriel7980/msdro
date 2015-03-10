@@ -75,6 +75,8 @@
     <script src="modules/my_slider/slider.js"></script>
     <script src="components/angular-timer/app/js/timer.js"></script>
     <script src="components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="components/angular-cookies/angular-cookies.js"></script>
+
 <!--Stylesheets-->
 
     <link href="components/angular-carousel/dist/angular-carousel.css" rel="stylesheet" type="text/css" />
@@ -84,9 +86,14 @@
     <link rel="stylesheet" href="stylesheets/style.css">
     <link rel="stylesheet" href="stylesheets/medic/medicStyles.css">
     <link rel="stylesheet" href="stylesheets/stylesThatReignSupreme.css">
-
 </head>
 <body ng-controller="MainController">
+<div class="col-xs-12 cookieBar" collapse="isCollapsed">
+    <div class="col-xs-12 pull-left">
+        Acest site foloseste cookie-uri. Prin continuarea navigarii in site acceptati modul in care folosim aceste informatii!
+        <div class="btn btn-default pull-right" ng-click="setCookie()">Am inteles</div>
+    </div>
+</div>
 <!-- Fixed navbar -->
 <div class="navbar navbar-default navbar-fixed-top ng-scope navbar-border padd35px" role="navigation" ng-controller="SpecialGroupsMenu">
     <div class="container padd5pxBottom">
@@ -261,6 +268,10 @@
         <a ng-click="showFarmaModal()" class="link-footer handCursor">Farmacovigilenta</a>&nbsp &nbsp <a ng-click="showContactModal()" class="link-footer handCursor">Contact</a>
     </div>
 </div>
-
+<script>
+    new CookiesEuBanner(function(){
+        // Your code to launch when user accept cookies
+    }, true);
+</script>
 </body>
 </html>

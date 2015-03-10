@@ -7448,3 +7448,12 @@ hr {
 a:focus {
   text-decoration: none;
 }
+.cookieBar {
+  position: fixed;
+  z-index: 1060;
+  background-color: #009d97;
+  bottom: 0;
+  line-height: 30px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: white;
+}

@@ -12,7 +12,8 @@ var app = angular.module('app',
         'angular-carousel',
         'ui.select',
         'angularFileUpload',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'ngCookies'
     ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
