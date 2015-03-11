@@ -30,6 +30,7 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var configDB = require('./config/database.js');
 var email = require('mandrill-send')(mandrillKey);
+var mandrill = require('node-mandrill')(mandrillKey);
 var rooms = {},
     userIds = {};
     //logging ======================================================================
@@ -74,6 +75,7 @@ require('./app/apiGloballyShared.js')(app, email, logger, express.Router());
 require('./app/apiMobileShared.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
 require('./app/apiConferences.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
 require('./app/apiMSDDoc.js')(app, logger, tokenSecret, secureServer, express.Router());
+require('./app/apiDPOC.js')(app, mandrill, logger, express.Router());
 require('./app/apiCourses.js')(app, logger, tokenSecret, express.Router());
 require('./app/apiContractManagement.js')(app, logger, express.Router());
 // socket comm test =================================================================

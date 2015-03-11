@@ -1,0 +1,24 @@
+<div class = "col-md-12 well">
+    <div class="col-md-9"><h3>MSD DPOC</h3></div>
+</div>
+<div class="col-md-12">
+    <div class="titleAndButton">
+        <div><h3>Device-uri:</h3></div>
+        <div>
+            <div class="btn btn-primary" ng-click="addDevice()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
+        </div>
+    </div>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="device in $data">
+            <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
+                {{device.name}}
+            </td>
+            <td data-title="'Actiuni'">
+                <div class="btn-group">
+                    <div class="btn btn-default" ng-click="editDevice(device._id)"><i class="glyphicon glyphicon-cog"></i></div>
+                    <div class="btn btn-danger" ng-click="removeDevice(device._id)"><i class="glyphicon glyphicon-trash"></i></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

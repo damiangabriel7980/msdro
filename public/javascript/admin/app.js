@@ -262,6 +262,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/applications/contractManagement/viewAll.html',
             controller: 'ContractManagement'
         })
+        .state('applications.DPOC',{
+            url: '/DPOC',
+            templateUrl: 'partials/admin/applications/DPOC/viewDevices.html',
+            controller: 'ViewDevicesDPOC'
+        })
         .state('system', {
             abstract: true,
             url: '/system',
