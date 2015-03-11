@@ -11,6 +11,7 @@ var specialProductDetailsSchema		= new Schema({
     header_image:String,
     children_ids:[{type: Schema.Types.ObjectId,ref: 'specialProducts_Menu'}],
     product:{type: Schema.Types.ObjectId,ref: 'specialProducts'},
-    order_index: Number
+    order_index: Number,
+    show_safety_info: Boolean
 });
 module.exports = mongoose.model('specialProducts_Menu', specialProductDetailsSchema,'specialProducts_Menu');
