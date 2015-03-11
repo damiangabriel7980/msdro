@@ -2,29 +2,26 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
     $scope.oneAtATime = true; //open accordion groups one at a time
 
     specialProductService.getSpecialProduct.query({id: $stateParams.product_id}).$promise.then(function(result){
-        $scope.specialProductPage=result.success;
-        specialProductService.getSpecialProductMenu.query({id:$scope.specialProductPage._id}).$promise.then(function(resp){
-            $scope.specialProductMenu = resp;
-            //load first element in menu
-            $scope.firstParentId = resp[0]._id;
-            $scope.firstChildId = "";
-            if(resp[0].children_ids){
-                if(resp[0].children_ids.length>0) $scope.firstChildId = resp[0].children_ids[0]._id;
-            }
-            $state.go('groupSpecialProduct.menuItem', {menuId: $scope.firstParentId, childId: $scope.firstChildId});
-            for(var i=0;i<$scope.specialProductMenu.length;i++)
-            {
-                if($scope.specialProductMenu[i].title=='Acasa'||$scope.specialProductMenu[i].title=='Acasă')
-                {
-                    $scope.homeID=$scope.specialProductMenu[i]._id;
-                    break;
-                }
-            }
-        });
+        if(result.success){
+            $scope.specialProductPage=result.success;
+            specialProductService.getSpecialProductMenu.query({id:$scope.specialProductPage._id}).$promise.then(function(resp){
+                $scope.specialProductMenu = resp;
+                //load first element in menu
+                $scope.selectFirstMenuItem();
+            });
+        }
     });
-    $scope.goHome=function(parentID){
-        $state.go('groupSpecialProduct.menuItem', {menuId: parentID, childId: ''});
+
+    $scope.selectFirstMenuItem = function () {
+        var menu = $scope.specialProductMenu;
+        var firstParentId = menu[0]._id;
+        var firstChildId = "";
+        if(menu[0].children_ids){
+            if(menu[0].children_ids.length>0) firstChildId = menu[0].children_ids[0]._id;
+        }
+        $state.go('groupSpecialProduct.menuItem', {menuId: firstParentId, childId: firstChildId});
     };
+
     $scope.trustAsHtml = function (data) {
         return $sce.trustAsHtml(data);
     };
