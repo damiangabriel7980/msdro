@@ -18,9 +18,13 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group col-md-12 noPadding">
+                <div class="form-group col-md-6 noPadding">
                     <label>Header title:</label>
                     <input type="text" class="form-control" ng-model="newProductPage.header_title">
+                </div>
+                <div class="form-group col-md-6" style="padding: 0 0 0 10px">
+                    <label>Job ID:</label>
+                    <input type="text" class="form-control" ng-model="newProductPage.job_id">
                 </div>
                 <div class="col-md-12 noPadding">
                     <button class="btn btn-default" type="file" ng-file-select ng-file-change="headerSelected($files, $event)" multiple="false"
@@ -45,6 +49,12 @@
                     <div class="col-md-4 noPadding">
                         <label>Site map: </label>
                         <input type="checkbox" ng-model="newProductPage.show_safety_info_for.site_map">
+                    </div>
+                </div>
+                <div class="col-md-12 noPadding" style="margin-top: 10px">
+                    <div class="col-md-12 noPadding">
+                        <label>Afiseaza prescription in site map: </label>
+                        <input type="checkbox" ng-model="newProductPage.show_sitemap_prescription">
                     </div>
                 </div>
             </div>

@@ -105,9 +105,9 @@ module.exports = function(app, email, logger, passport) {
                                           'Parola pentru contul dumneavoastra a fost modificata.\n\n\nO zi buna,\nAdmin MSD'
                                 }, function(err){
                                     if(err){
-                                        res.render('forgotPass.ejs', {message : {message: 'Parola a fost schimbata.', type: 'success'}});
+                                        res.render('resetPass.ejs', {message : {message: 'Parola a fost schimbata.', type: 'success'}});
                                     }else{
-                                        res.render('forgotPass.ejs', {message : {message: 'Parola a fost schimbata. Veti primi in scurt timp un e-mail de confirmare.', type: 'success'}});
+                                        res.render('resetPass.ejs', {message : {message: 'Parola a fost schimbata. Veti primi in scurt timp un e-mail de confirmare.', type: 'success'}});
                                     }
                                 });
                             }

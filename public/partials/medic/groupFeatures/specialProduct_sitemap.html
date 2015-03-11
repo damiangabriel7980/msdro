@@ -11,32 +11,42 @@
             </span>
     </div>
     <div class="col-xs-12 noPadding">
-        <div class="col-xs-6">
-            <ul class="MSDgreenDarker no-text-decoration noListStyle handCursor">
+        <div class="col-xs-4 siteMap">
+            <ul class="MSDgreenDarker no-text-decoration handCursor">
                 <li ng-repeat="menuItem in specialProductMenu">
                 <span class="MSDgreenDarker handCursor no-text-decoration" ng-click="menuItem.children_ids.length==0?$state.go('groupSpecialProduct.menuItem',{product_id: $stateParams.product_id, menuId: menuItem._id, childId:''}):null">
-                    <strong>{{menuItem.title}}</strong>
+                    {{menuItem.title}}
                 </span>
                     <ul ng-if="menuItem.children_ids.length!=0">
                         <li ng-repeat="subItem in menuItem.children_ids" class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.menuItem({product_id: $stateParams.product_id, menuId: menuItem._id, childId: subItem._id})">
-                            <strong> &nbsp;&nbsp;{{subItem.title}}</strong>
+                            &nbsp;&nbsp;{{subItem.title}}
                         </li>
                     </ul>
                 </li>
                 <li style="display: none;" class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.files({product_id: $stateParams.product_id})">
                     Resurse
                 </li>
-                <li style="display: none;" class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.prescription({product_id: $stateParams.product_id})">
-                    Prescription Assistance
-                </li>
                 <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.sitemap({product_id: $stateParams.product_id})">
-                    <strong>Harta site</strong>
+                    Harta site
                 </li>
             </ul>
         </div>
-        <div class="col-xs-6" conver="specialProductPage.site_map_description" ng-bind-html="trustAsHtml(specialProductPage.site_map_description)"></div>
+        <div class="col-xs-8" conver="specialProductPage.site_map_description" ng-bind-html="trustAsHtml(specialProductPage.site_map_description)"></div>
     </div>
-    <div class="col-xs-12 justify marginBottom50" ng-if="specialProductPage.show_safety_info_for.site_map"
-         convert-special conver="specialProductPage.safety_information" ng-bind-html="trustAsHtml(specialProductPage.safety_information)">
+    <div class="col-xs-12 justify" ng-if="specialProductPage.show_sitemap_prescription" style="margin-top: 15px"
+         convert-special conver="specialProductPage.prescription" ng-bind-html="trustAsHtml(specialProductPage.prescription)">
+    </div>
+    <div class="col-xs-12 noPadding" ng-if="specialProductPage.show_safety_info_for.site_map">
+        <div class="col-xs-12">
+            <hr>
+            <p>
+                <strong>Informa&#355;ii selectate privind siguran&#355;a</strong>
+            </p>
+        </div>
+        <div class="col-xs-12 justify" convert-special conver="specialProductPage.safety_information" ng-bind-html="trustAsHtml(specialProductPage.safety_information)">
+        </div>
+    </div>
+    <div class="col-xs-12 justify" ng-if="specialProductPage.job_id" convert-special conver="specialProductPage.job_id" style="margin-top: 20px">
+        {{specialProductPage.job_id}}
     </div>
 </div>

@@ -6706,6 +6706,12 @@ ul.products li {
   font-size: 40px;
   font-weight: bold;
 }
+.siteMap ul {
+  list-style: none;
+  font-weight: bold;
+  padding: 0;
+  line-height: 2em;
+}
 #specialApp iframe {
   width: 100%;
   height: 100%;
@@ -7233,6 +7239,7 @@ hr {
   border: 0px solid #cccccc;
   -webkit-transition: width 1s ease;
   /* Safari */
+
   transition: width 1s ease;
 }
 .btnSearchBefore {

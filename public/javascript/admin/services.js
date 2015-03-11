@@ -522,3 +522,11 @@ services.factory('ContractManagementService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('DPOCService', ['$resource', function($resource){
+    return {
+        devices: $resource('api/admin/applications/DPOC/devices', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
