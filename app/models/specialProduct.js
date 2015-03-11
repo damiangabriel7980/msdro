@@ -21,7 +21,8 @@ var specialProductSchema		= new Schema({
         resources: Boolean,
         glossary: Boolean,
         site_map: Boolean
-    }
+    },
+    show_sitemap_prescription: Boolean
 });
 
 specialProductSchema.plugin(deepPopulate, {

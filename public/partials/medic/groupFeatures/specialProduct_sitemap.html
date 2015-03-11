@@ -33,7 +33,20 @@
         </div>
         <div class="col-xs-6" conver="specialProductPage.site_map_description" ng-bind-html="trustAsHtml(specialProductPage.site_map_description)"></div>
     </div>
-    <div class="col-xs-12 justify marginBottom50" ng-if="specialProductPage.show_safety_info_for.site_map"
-         convert-special conver="specialProductPage.safety_information" ng-bind-html="trustAsHtml(specialProductPage.safety_information)">
+    <div class="col-xs-12 justify" ng-if="specialProductPage.show_sitemap_prescription" style="margin-top: 30px"
+         convert-special conver="specialProductPage.prescription" ng-bind-html="trustAsHtml(specialProductPage.prescription)">
+    </div>
+    <div class="col-xs-12 noPadding" ng-if="specialProductPage.show_safety_info_for.site_map" style="margin: 10px 0">
+        <div class="col-xs-12">
+            <hr>
+            <p>
+                <strong>Informa&#355;ii selectate privind siguran&#355;a</strong>
+            </p>
+        </div>
+        <div class="col-xs-12 justify" convert-special conver="specialProductPage.safety_information" ng-bind-html="trustAsHtml(specialProductPage.safety_information)">
+        </div>
+    </div>
+    <div class="col-xs-12 justify" ng-if="specialProductPage.job_id" convert-special conver="specialProductPage.job_id" style="margin: 10px 0">
+        {{specialProductPage.job_id}}
     </div>
 </div>
