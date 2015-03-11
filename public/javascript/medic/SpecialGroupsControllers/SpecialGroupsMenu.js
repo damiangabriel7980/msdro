@@ -35,16 +35,19 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         return $sce.trustAsHtml(convertedText);
     };
     $scope.selectSpecialGroup = function(group){
-        //sessionStorage.setItem(group._id,false);
+        //select special group and add it to local storage
+        $rootScope.specialGroupSelected = group;
+        localStorage.specialGroupSelected = angular.toJson(group);
+
+        //load group's product page
         SpecialFeaturesService.getSpecialProducts.query({specialGroup: group._id}).$promise.then(function(result){
             if(result._id)
                 $scope.groupProduct = result;
             else
                 $scope.groupProduct=null;
         });
-        $rootScope.specialGroupSelected = group;
-        localStorage.specialGroupSelected = angular.toJson(group);
-        //load group's special apps into array
+
+        //load group's special features (apps)
         SpecialFeaturesService.specialApps.query({group: group._id}).$promise.then(function (resp) {
             if(resp.success){
                 if(resp.success.length > 0){
@@ -57,7 +60,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
             }
         });
         if($state.includes('groupFeatures')||$state.includes('groupSpecialProduct')){
-            //if user changed his group while being on a feature page, redirect him to home
+            //if user changed his group while being on a feature page or product page, redirect him to home
             $state.go('home');
         }else{
             //if he changed his group while being on another page, just reload the page
