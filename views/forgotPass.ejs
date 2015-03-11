@@ -1,34 +1,50 @@
 <!doctype html>
-<html>
+<html style="height: 100%;">
 <head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
     <title>Resetare parola</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <style>
-        body 		{ padding-top:80px; }
+        .btn-primary{
+            background-color: #009d97;
+            border-color: #009d97;
+        }
+        .btn-primary:hover,.btn-primary:focus,.btn-primary:active{
+            background-color:#006a66;
+            border-color: #006a66;
+        }
     </style>
 </head>
-<body>
-<div class="container">
-    <div class="col-md-12">
-        <h3>Password reset</h3>
-    </div>
-    <div class="col-md-12">
-        <% if (typeof message !== 'undefined') { %>
-        <div class="alert alert-<%= message.type %>"><%= message.message %></div>
-        <% } %>
-    </div>
-    <div class="col-md-12">
-
-        <form action="/forgot" method="post">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" class="form-control" id="email" name="email">
+<body style="height: 100%;">
+<div style="height: 100%;">
+    <div style="position: relative; top: 50%; transform: translateY(-50%); padding: 0 50px;">
+        <div style="max-width: 400px; margin: 0 auto">
+            <div style="text-align: left">
+                <img style="width: 200px;margin-left: -20px" src="http://www.healthsummit.ie/site/uploads/msdbewellgreengray.jpg"/>
             </div>
+            <div>
+                <h3 style="margin-top: 10px;"><i class="glyphicon glyphicon-lock" style="font-size: 20px"></i>&nbsp;Password reset</h3>
+            </div>
+            <div style="text-align: left">
+                <% if (typeof message !== 'undefined') { %>
+                <div class="alert alert-<%= message.type %>"><%= message.message %></div>
+                <% } %>
+            </div>
+            <div style="width: 100%">
 
-            <button type="submit" class="btn btn-primary">Resetare parola</button>
-        </form>
+                <form action="/forgot" method="post">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" id="email" name="email">
+                    </div>
+                    <div style="width:100%;text-align: left" >
+                        <button type="submit" class="btn btn-primary">Resetare parola</button>
+                    </div>
+                </form>
 
+            </div>
+        </div>
     </div>
 </div>
 </body>

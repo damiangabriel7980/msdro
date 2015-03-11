@@ -1,22 +1,24 @@
 <!doctype html>
-<html>
+<html style="height: 100%;">
 <head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
     <title>Activare cont</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        body 		{ padding-top:80px; }
-    </style>
 </head>
-<body>
-<div class="container">
-    <div class="col-md-12">
-        <% if(!success) { %>
-            <h5>Link-ul de verificare nu este valid. Daca ati urmat instructiunile de activare,
-                va rugam contactati prin email administratorul MSD la adresa "adminMSD@qualitance.ro"</h5>
-        <% }else { %>
-            <h5>Adresa de e-mail a fost verificata cu succes!</h5>
-        <% } %>
+<body style="height: 100%;">
+<div style="position: relative; height: 100%;">
+    <div style="position: absolute; top: 50%; transform: translateY(-50%); padding: 0 20px">
+        <div style="text-align: center">
+            <img style="width: 100%;" src="http://www.healthsummit.ie/site/uploads/msdbewellgreengray.jpg"/>
+        </div>
+        <div style="text-align: justify; font-size: 16px">
+
+            <% if(!success) { %>
+            Link-ul de activare nu este valid. Daca ati urmat instructiunile de activare,
+            va rugam contactati prin email administratorul MSD la adresa "adminMSD@qualitance.ro"
+            <% }else { %>
+            Contul dumneavoastra a fost activat!
+            <% } %>
+        </div>
     </div>
 </div>
 </body>
