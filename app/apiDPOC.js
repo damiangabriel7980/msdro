@@ -45,10 +45,6 @@ module.exports = function(app, mandrill, logger, router) {
                                 "template_name": "DPOC",
                                 "template_content": [
                                     {
-                                        "name": "accepted",
-                                        "content": req.body.accepted
-                                    },
-                                    {
                                         "name": "message",
                                         "content": req.body.message
                                     },
