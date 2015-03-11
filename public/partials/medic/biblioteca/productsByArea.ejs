@@ -4,7 +4,7 @@
         <div class="col-md-3 noPadding" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt" style="padding: 0 15px 0 0;">
             <div class="col-md-12 well" style="min-height: 450px;">
                 <div class="col-md-12 noPadding">
-                    <img class="img-responsive img-back img-thumbnail" src="{{amazon + prod.image_path}}" alt="{{prod.name}}" style="width: 100%;"/>
+                    <img class="img-responsive img-back img-thumbnail" src="{{prod.image_path?amazon + prod.image_path:defaultProductImage}}" alt="{{prod.name}}" style="width: 100%;"/>
                 </div>
                 <div class="col-md-12 noPadding contentBlock textProduct" style="min-height: 250px;">
                     <div class="col-md-12 noPadding MSDgreen"><h4><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
