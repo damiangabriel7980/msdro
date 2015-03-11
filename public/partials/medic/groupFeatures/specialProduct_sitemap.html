@@ -1,6 +1,6 @@
 <div class="col-xs-12 well well-lg whiteBackground borderRadiusSpecial" id="siteMapDiv">
     <div class="col-xs-12">
-        <img class="col-xs-12  noPadding " ng-if="specialProductPage.header_image" no-cache-src="{{pathAmazonDev+specialProductPage.header_image}}" />
+        <img class="col-xs-12  noPadding " ng-if="specialProductPage.header_image" src="{{pathAmazonDev+specialProductPage.header_image}}" />
     </div>
     <div class="col-xs-12 paddTopBottomSpecialProduct">
             <span>
@@ -12,14 +12,14 @@
     </div>
     <div class="col-xs-12 noPadding">
         <div class="col-xs-6">
-            <ul class="MSDgreenDarker no-text-decoration handCursor">
+            <ul class="MSDgreenDarker no-text-decoration noListStyle handCursor">
                 <li ng-repeat="menuItem in specialProductMenu">
                 <span class="MSDgreenDarker handCursor no-text-decoration" ng-click="menuItem.children_ids.length==0?$state.go('groupSpecialProduct.menuItem',{product_id: $stateParams.product_id, menuId: menuItem._id, childId:''}):null">
-                    {{menuItem.title}}
+                    <strong>{{menuItem.title}}</strong>
                 </span>
                     <ul ng-if="menuItem.children_ids.length!=0">
                         <li ng-repeat="subItem in menuItem.children_ids" class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.menuItem({product_id: $stateParams.product_id, menuId: menuItem._id, childId: subItem._id})">
-                            &nbsp;&nbsp;{{subItem.title}}
+                            <strong> &nbsp;&nbsp;{{subItem.title}}</strong>
                         </li>
                     </ul>
                 </li>
@@ -30,7 +30,7 @@
                     Prescription Assistance
                 </li>
                 <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.sitemap({product_id: $stateParams.product_id})">
-                    Harta site
+                    <strong>Harta site</strong>
                 </li>
             </ul>
         </div>
