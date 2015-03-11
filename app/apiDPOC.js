@@ -34,7 +34,7 @@ module.exports = function(app, mandrill, logger, router) {
                 }else{
                     //get email
                     Parameters.findOne({name: "DPOC_MAIL_TO"}, function (err, param) {
-                        if(err){
+                        if(err || !param){
                             logger.error(err);
                             res.statusCode = 500;
                             res.end();
