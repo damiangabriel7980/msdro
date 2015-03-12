@@ -6601,7 +6601,7 @@ ul.products li {
   }
 }
 #footer {
-  border-top: 1p solid #eeeeee;
+  border-top: 1px solid #eeeeee;
   z-index: 1040;
   background: #009d97;
   padding: 5px 0;
@@ -7257,7 +7257,7 @@ hr {
 }
 .expandSearchNoSpecial {
   position: absolute;
-  right: 85px;
+  right: 125px;
 }
 @media (max-width: 1050px) {
   .expandSearchNoSpecial {

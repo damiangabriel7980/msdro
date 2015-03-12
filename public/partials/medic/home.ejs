@@ -24,86 +24,86 @@
     </div>
 </div>
 
-<div class="col-md-12 container homeStyles" >
-    <div class="col-md-6 leftColumn">
-        <div class="col-md-11 leftMargin noPaddingRight">
-            <div class="col-md-12 noPadding padd5pxBottom">
+<div class="col-sm-12 container homeStyles" >
+    <div class="col-sm-6 leftColumn">
+        <div class="col-sm-11 leftMargin noPaddingRight">
+            <div class="col-sm-12 noPadding padd5pxBottom">
                 <h3>ULTIMELE NOUTATI</h3>
             </div>
-            <div class="col-md-4 noPadding" ng-repeat="n in news | limitTo: 3">
-                <div class="col-md-10 noPadding">
+            <div class="col-sm-4 noPadding" ng-repeat="n in news | limitTo: 3">
+                <div class="col-sm-10 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive" height="155" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div class="col-md-10 contentBlock textHome noPadding fixedHeight">
-                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b convert-special conver="n.title" ng-bind-html="trustAsHtml(n.title)"></b></a></div>
-                    <div class="col-md-10 header justified margintop5px noPadding" convert-special conver="n.text" ng-bind-html="convertAndTrustAsHtml(n.text,0)"></div>
+                <div class="col-sm-10 contentBlock textHome noPadding fixedHeight">
+                    <div class="col-sm-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b convert-special conver="n.title" ng-bind-html="trustAsHtml(n.title)"></b></a></div>
+                    <div class="col-sm-10 header justified margintop5px noPadding" convert-special conver="n.text" ng-bind-html="convertAndTrustAsHtml(n.text,0)"></div>
 
                 </div>
-                <div class="col-md-10 noPadding margintop5px">
+                <div class="col-sm-10 noPadding margintop5px">
                     <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"> Citeste mai mult </a>
                 </div>
             </div>
         </div>
-        <div class="col-md-10 leftMargin "><hr></div>
-        <div class="col-md-11 leftMargin margintop25px noPaddingRight" >
-            <div class="col-md-12 noPadding padd5pxBottom">
+        <div class="col-sm-10 leftMargin "><hr></div>
+        <div class="col-sm-11 leftMargin margintop25px noPaddingRight" >
+            <div class="col-sm-12 noPadding padd5pxBottom">
                 <h3>ULTIMELE NOUTATI STIINTIFICE</h3>
             </div>
-            <div class="col-md-4 noPadding" ng-repeat="n in scientificNews | limitTo: 3">
-                <div class="col-md-10 noPadding">
+            <div class="col-sm-4 noPadding" ng-repeat="n in scientificNews | limitTo: 3">
+                <div class="col-sm-10 noPadding">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div class="col-md-10 noPadding contentBlock textHome fixedHeight">
-                    <div class="col-md-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b convert-special conver="n.title" ng-bind-html="convertAndTrustAsHtml(n.title,0)"></b></a></div>
-                    <div class="col-md-10 header margintop5px justified noPadding" convert-special conver="n.text" ng-bind-html="convertAndTrustAsHtml(n.text,0)"></div>
+                <div class="col-sm-10 noPadding contentBlock textHome fixedHeight">
+                    <div class="col-sm-10 title margintop5px noPadding"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b convert-special conver="n.title" ng-bind-html="convertAndTrustAsHtml(n.title,0)"></b></a></div>
+                    <div class="col-sm-10 header margintop5px justified noPadding" convert-special conver="n.text" ng-bind-html="convertAndTrustAsHtml(n.text,0)"></div>
                 </div>
-                <div class="col-md-10 noPadding margintop5px">
+                <div class="col-sm-10 noPadding margintop5px">
                     <a class="btn btn-info btn-more-news btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"> Citeste mai mult</a>
                     </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3 midColumn margin2Left padd0left width32">
-        <div class="col-md-12">
-            <div class="col-md-12 noPadding ">
+    <div class="col-sm-3 midColumn margin2Left padd0left width32">
+        <div class="col-sm-12">
+            <div class="col-sm-12 noPadding ">
                 <h3 class="bottom1Percent">MULTIMEDIA</h3>
             </div>
-            <div class="col-md-12 noPadding margintop20px" ng-repeat="m in multimedia | limitTo: 3">
-                <div class="col-md-1 noPadding">
+            <div class="col-sm-12 noPadding margintop20px" ng-repeat="m in multimedia | limitTo: 3">
+                <div class="col-sm-1 noPadding">
                     <i class="gray glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
                 </div>
-                <div class="col-md-11 noPadding justify">
+                <div class="col-sm-11 noPadding justify">
                     <a ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: m._id})"><b class="MSDTitleDark" convert-special conver="m.title" ng-bind-html="trustAsHtml(m.title)"></b><b class="MSDTitleDark">&nbsp;(</b><b class="MSDTitleDark" convert-special conver="m.author" ng-bind-html="trustAsHtml(m.author)"></b><b class="MSDTitleDark">)</b></a>
                     <p ng-if="m.description != null" convert-special conver="m.description" ng-bind-html="convertAndTrustAsHtml(m.description,0)"></p>
                 </div>
             </div>
         </div>
-        <div class="col-md-12"><hr/></div>
-        <div class="col-md-12">
-            <div class="col-md-12 noPadding">
+        <div class="col-sm-12"><hr/></div>
+        <div class="col-sm-12">
+            <div class="col-sm-12 noPadding">
                 <h3 class="bottom4Percent">EVENIMENTE URMATOARE</h3>
             </div>
-            <div class="col-md-12 eventDisplay" ng-repeat="e in events | limitTo: 3">
-                <div class="col-md-1 noPadding date MSDTitleDark">
-                    <div class="col-md-12 noPadding day">{{toDate(e.start).getDate()}}</div>
-                    <div class="col-md-12 noPadding month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
+            <div class="col-sm-12 eventDisplay" ng-repeat="e in events | limitTo: 3">
+                <div class="col-sm-1 noPadding date MSDTitleDark">
+                    <div class="col-sm-12 noPadding day">{{toDate(e.start).getDate()}}</div>
+                    <div class="col-sm-12 noPadding month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
                 </div>
-                <div class="col-md-11 noPadding leftBorder">
-                    <div class="col-md-12 justify title MSDTitleDark handCursor" ng-if="e.type==2" ui-sref="calendar({id:e._id})"><b convert-special conver="e.name" ng-bind-html="trustAsHtml(iconLive + e.name)"></b></div>
-                    <div class="col-md-12 justify title MSDTitleDark handCursor" ng-if="e.type==1 || e.type==null" ui-sref="calendar({id:e._id})"><b convert-special conver="e.name" ng-bind-html="trustAsHtml(e.name)"></b></div>
-                    <div class="col-md-12 justify header margintop5px" ng-if="e.description!='undefined'" convert-special conver="e.description" ng-bind-html="convertAndTrustAsHtml(e.description,50)"></div>
-                    <div class="col-md-12 justify header margintop5px" ng-if="e.description=='undefined'" convert-special conver="e.description">&nbsp;</div>
+                <div class="col-sm-11 noPadding leftBorder">
+                    <div class="col-sm-12 justify title MSDTitleDark handCursor" ng-if="e.type==2" ui-sref="calendar({id:e._id})"><b convert-special conver="e.name" ng-bind-html="trustAsHtml(iconLive + e.name)"></b></div>
+                    <div class="col-sm-12 justify title MSDTitleDark handCursor" ng-if="e.type==1 || e.type==null" ui-sref="calendar({id:e._id})"><b convert-special conver="e.name" ng-bind-html="trustAsHtml(e.name)"></b></div>
+                    <div class="col-sm-12 justify header margintop5px" ng-if="e.description!='undefined'" convert-special conver="e.description" ng-bind-html="convertAndTrustAsHtml(e.description,50)"></div>
+                    <div class="col-sm-12 justify header margintop5px" ng-if="e.description=='undefined'" convert-special conver="e.description">&nbsp;</div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-2 padd4Left padd15Right rightColumn">
-        <div class="col-md-12 noPadding" ng-if="specialWidgetUrl" ng-include="specialWidgetUrl"></div>
-        <div class="col-md-12 noPadding" ng-include="merckBoxUrl"></div>
+    <div class="col-sm-2 padd4Left padd15Right rightColumn">
+        <div class="col-sm-12 noPadding" ng-if="specialWidgetUrl" ng-include="specialWidgetUrl"></div>
+        <div class="col-sm-12 noPadding" ng-include="merckBoxUrl"></div>
     </div>
 </div>
