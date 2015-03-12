@@ -172,33 +172,21 @@ app.run(
                     controller: 'ContactModal'
                 });
             };
-            $modal.open({
-                templateUrl: 'partials/public/auth/baseModal.html',
-                size: 'lg',
-                windowClass: 'fade',
-                controller: 'AuthModal',
-                backdrop: 'static',
-                keyboard: false,
-                resolve:{
-                    intent: function () {
-                        return 'login';
-                    }
-                }
-            });
+
             //auth modal
-            //$rootScope.showAuthModal = function(intent){
-            //    $modal.open({
-            //        templateUrl: 'partials/public/auth/baseModal.html',
-            //        size: 'lg',
-            //        windowClass: 'fade',
-            //        controller: 'AuthModal',
-            //        resolve:{
-            //            intent: function () {
-            //                return intent;
-            //            }
-            //        }
-            //    });
-            //};
+            $rootScope.showAuthModal = function(intent){
+                $modal.open({
+                    templateUrl: 'partials/public/auth/baseModal.html',
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'AuthModal',
+                    resolve:{
+                        intent: function () {
+                            return intent;
+                        }
+                    }
+                });
+            };
         }
     ]
 );
