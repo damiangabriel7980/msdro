@@ -22,37 +22,40 @@
 <body style="height: 100%;">
 <div style="height: 100%;">
     <div style="position: relative; top: 40%; transform: translateY(-50%); padding: 0 50px;">
-        <div style="max-width: 800px; margin: 0 auto">
+        <div style="max-width: 500px; margin: 0 auto">
             <div style="text-align: left">
-            <img style="width: 180px; margin-left: -18px" src="http://www.healthsummit.ie/site/uploads/msdbewellgreengray.jpg"/>
-        </div>
+                <a href="/">
+                    <img src="https://s3-eu-west-1.amazonaws.com/msddev-test/resources/rsz_msd_be_well_green_gray.jpg"/>
+                </a>
+            </div>
             <div>
-            <h3 style="margin-top: 10px;"><i class="glyphicon glyphicon-lock" style="font-size: 20px"></i>&nbsp;Password reset</h3>
-        </div>
+                <h3 style="margin-top: 10px;"><i class="glyphicon glyphicon-lock" style="font-size: 20px"></i>&nbsp;Password reset</h3>
+            </div>
             <div style="text-align: left">
-            <% if (typeof message !== 'undefined') { %>
-            <div class="alert alert-<%= message.type %>"><%= message.message %></div>
-            <% } %>
+                <% if (typeof message !== 'undefined') { %>
+                <div class="alert alert-<%= message.type %>"><%= message.message %></div>
+                <% } %>
+            </div>
+
+            <div style="width: 100%">
+
+                <form method="post" style="padding-top: 5px; border-top: 1px solid #eee">
+                    <div class="form-group">
+                        <label for="password">Parola: </label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm">Confirma parola: </label>
+                        <input type="password" class="form-control" id="confirm" name="confirm">
+                    </div>
+                    <div style="width:100%;text-align: left">
+                        <button type="submit" class="btn btn-primary">Resetare parola</button>
+                    </div>
+
+                </form>
+            </div>
         </div>
-
-    <div style="width: 100%">
-
-            <form method="post" style="padding-top: 5px; border-top: 1px solid #eee">
-                <div class="form-group">
-                    <label for="password">Parola: </label>
-                    <input type="password" class="form-control" id="password" name="password">
-                </div>
-                <div class="form-group">
-                    <label for="confirm">Confirma parola: </label>
-                    <input type="password" class="form-control" id="confirm" name="confirm">
-                </div>
-                          <div style="width:100%;text-align: left">
-                    <button type="submit" class="btn btn-primary">Resetare parola</button>
-                            </div>
-
-            </form>
     </div>
-        </div>
 </div>
 </body>
 </html>
