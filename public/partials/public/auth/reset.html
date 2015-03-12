@@ -8,6 +8,12 @@
             <label for="email">Email: </label>
             <input type="text" class="form-control" name="emailInput" id="email" ng-model="email">
         </div>
+        <div>
+            <ul class="pointerLinks">
+                <li>Nu ai cont? <a ng-click="renderView('signup')">Creaza cont nou</a></li>
+                <li>Ai deja un cont creat? <a ng-click="renderView('login')">Acceseaza contul</a></li>
+            </ul>
+        </div>
     </div>
     <div class="modal-footer">
         <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
