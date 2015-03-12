@@ -6601,7 +6601,7 @@ ul.products li {
   }
 }
 #footer {
-  border-top: 1p solid #eeeeee;
+  border-top: 1px solid #eeeeee;
   z-index: 1040;
   background: #009d97;
   padding: 5px 0;
@@ -6703,7 +6703,7 @@ ul.products li {
   margin-top: 25px;
   margin-bottom: 40px;
   color: #1c9893;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: bold;
 }
 .siteMap ul {
@@ -7264,7 +7264,7 @@ hr {
 }
 .expandSearchNoSpecial {
   position: absolute;
-  right: 85px;
+  right: 90px;
 }
 @media (max-width: 1050px) {
   .expandSearchNoSpecial {
@@ -7463,4 +7463,8 @@ a:focus {
   line-height: 30px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
+}
+.specialGroupMobile {
+  margin-right: -10px;
+  margin-top: 4px;
 }

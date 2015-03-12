@@ -197,9 +197,9 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         });
     };
 
-    $scope.animateInput=function(){
-        angular.element('.form-control').removeClass('popSearch');
-    };
+    //$scope.animateInput=function(){
+    //    angular.element('.form-control').removeClass('popSearch');
+    //};
 
     $scope.textToSearch="";
     $scope.getInput = function(){
