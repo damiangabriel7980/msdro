@@ -48,7 +48,6 @@ app.run(
                     templateUrl: 'partials/public/auth/baseModal.html',
                     backdrop: 'static',
                     keyboard: false,
-                    size: 'lg',
                     windowClass: 'authModalNoPatients',
                     controller: 'AuthModal',
                     resolve:{
