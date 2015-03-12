@@ -22,7 +22,7 @@
 }
 .authModalNoPatients .modal-content .modal-header {
   background-color: #ffffff;
-  color: #009d97;
+  color: #000000;
   border-bottom: 0;
 }
 .authModalNoPatients .btn-default {
@@ -32,5 +32,5 @@
 .noPatientsLogo {
   visibility: visible;
   display: block;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 }
