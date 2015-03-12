@@ -7257,7 +7257,7 @@ hr {
 }
 .expandSearchNoSpecial {
   position: absolute;
-  right: 125px;
+  right: 90px;
 }
 @media (max-width: 1050px) {
   .expandSearchNoSpecial {
@@ -7456,4 +7456,8 @@ a:focus {
   line-height: 30px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
+}
+.specialGroupMobile {
+  margin-right: -10px;
+  margin-top: 4px;
 }
