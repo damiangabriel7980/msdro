@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>MSD Be Well</title>
+    <!--Get amazon bucket-->
+    <script>
+        const DEFAULT_AMAZON_BUCKET = "<%=amazonBucket%>";
+        const REQUESTED_STAYWELL_ACTIVATION = <%=requestedActivation%>;
+        const ACTIVATED_STAYWELL_ACCOUNT = <%=accountActivated%>;
+        const REQUESTED_STAYWELL_LOGIN = <%=showLogin%>;
+    </script>
+
+    <!--Core-modules-->
+    <script src="components/jquery/dist/jquery.js"></script>
+    <script src="components/jquery-ui/ui/jquery-ui.js"></script>
+    <script src="components/angular/angular.js"></script>
+    <script src="components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="components/angular-resource/angular-resource.js"></script>
+    <script src="components/angular-route/angular-route.js"></script>
+    <script src="components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="components/ng-file-upload/angular-file-upload.min.js"></script>
+
+
+    <!--Controllers-->
+    <script src="javascript/noPatients/app.js"></script>
+    <script src="javascript/noPatients/controllers.js"></script>
+    <script src="javascript/public/services.js"></script>
+    <script src="javascript/public/AuthControllers/AuthModal.js"></script>
+    <script src="javascript/public/AuthControllers/ActivationCode.js"></script>
+
+    <!--Stylesheets-->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="components/angular-carousel/dist/angular-carousel.min.css">
+    <link rel="stylesheet" href="stylesheets/public/defaultStyles.css">
+    <link rel="stylesheet" href="stylesheets/noPatients/styles.css">
+    <link rel="stylesheet" href="stylesheets/stylesThatReignSupreme.css">
+</head>
+<body>
+</body>
+</html>
