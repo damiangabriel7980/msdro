@@ -34,3 +34,6 @@
   display: block;
   margin-bottom: 50px;
 }
+.noPatientsLogo img {
+  cursor: pointer;
+}
