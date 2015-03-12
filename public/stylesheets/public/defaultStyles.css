@@ -7413,3 +7413,7 @@ a:focus {
 .loginListMargin {
   margin-bottom: 15px;
 }
+.noPatientsLogo {
+  visibility: hidden;
+  display: none;
+}

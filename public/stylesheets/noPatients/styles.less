@@ -1,0 +1,44 @@
+//the main objective here is to make the modal behave as a static page
+
+//=========================== remove modal animation
+.modal.fade {
+  opacity: 1;
+}
+.modal.fade .modal-dialog, .modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+//==================
+
+
+//========================== restyle modal
+.authModalNoPatients{
+  background-color: #ffffff;
+  .modal-content{
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: 2px solid #ffffff;
+    .modal-footer{
+      border-top: 0;
+      padding: 15px 40px;
+    }
+    .modal-header{
+      background-color: #ffffff;
+      color: #000000;
+      border-bottom: 0;
+    }
+  }
+  .btn-default{
+    visibility: hidden;
+    display: none;
+  }
+}
+
+//add logo to modal
+.noPatientsLogo{
+  visibility: visible;
+  display: block;
+  margin-bottom: 50px;
+}

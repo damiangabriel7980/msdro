@@ -1,0 +1,36 @@
+.modal.fade {
+  opacity: 1;
+}
+.modal.fade .modal-dialog,
+.modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+.authModalNoPatients {
+  background-color: #ffffff;
+}
+.authModalNoPatients .modal-content {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border: 2px solid #ffffff;
+}
+.authModalNoPatients .modal-content .modal-footer {
+  border-top: 0;
+  padding: 15px 40px;
+}
+.authModalNoPatients .modal-content .modal-header {
+  background-color: #ffffff;
+  color: #000000;
+  border-bottom: 0;
+}
+.authModalNoPatients .btn-default {
+  visibility: hidden;
+  display: none;
+}
+.noPatientsLogo {
+  visibility: visible;
+  display: block;
+  margin-bottom: 50px;
+}

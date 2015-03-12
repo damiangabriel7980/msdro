@@ -1,8 +1,18 @@
+//set following variable to true if you want to disable patients area
+const DISABLE_PATIENTS = true;
+
 var User = require('./models/user');
 var Roles = require('./models/roles');
 
 var crypto   = require('crypto');
 var async = require('async');
+
+var MAIN_VIEW;
+if(DISABLE_PATIENTS){
+    MAIN_VIEW = 'noPatients/main.ejs';
+}else{
+    MAIN_VIEW = 'public/main.ejs';
+}
 
 module.exports = function(app, email, logger, passport) {
 
@@ -36,7 +46,7 @@ module.exports = function(app, email, logger, passport) {
                 showLogin = 1;
                 delete req.session.showLogin;
             }
-            res.render('public/main.ejs', {amazonBucket: process.env.amazonBucket,
+            res.render(MAIN_VIEW, {amazonBucket: process.env.amazonBucket,
                                            requestedActivation: requestedActivation,
                                            accountActivated: accountActivated,
                                            showLogin: showLogin});
