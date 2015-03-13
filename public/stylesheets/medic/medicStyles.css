@@ -6700,8 +6700,8 @@ ul.products li {
   }
 }
 .specialProductTitle {
-  margin-top: 25px;
-  margin-bottom: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   color: #1c9893;
   font-size: 30px;
   font-weight: bold;
@@ -7362,8 +7362,8 @@ hr {
   overflow: hidden;
 }
 .paddTopBottomSpecialProduct {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 .boldTitle {
   font-weight: bold;
