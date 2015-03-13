@@ -44,7 +44,7 @@ module.exports = function(app, mandrill, logger, router) {
                 res.json(info);
             }else{
                 //data is valid
-                User.findOne({username: email}, function(err, user) {
+                User.findOne({username: {$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}, function(err, user) {
                     // if there are any errors, return the error
                     if (err){
                         res.json(err);
@@ -142,7 +142,7 @@ module.exports = function(app, mandrill, logger, router) {
                 },
                 function(token, done) {
                     //find user
-                    User.findOne({ username: req.body.email }, function(err, user) {
+                    User.findOne({ username: {$regex: "^"+req.body.email.replace(/\+/g,"\\+")+"$", $options: "i"} }, function(err, user) {
                         if (!user) {
                             res.send({message : {hasError: true, text: 'Nu a fost gasit un cont pentru acest e-mail.'}});
                         }else{

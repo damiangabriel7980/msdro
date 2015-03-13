@@ -71,7 +71,7 @@ module.exports = function(passport) {
                     }
 
 
-                    User.findOne({ 'username' :  email }, function(err, user) {
+                    User.findOne({'username' : {$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}, function(err, user) {
                         // if there are any errors, return the error
                         if (err)
                             return done(err);
