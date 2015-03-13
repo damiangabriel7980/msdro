@@ -186,41 +186,86 @@ gulp.task('replaceUsers', function () {
     var mongoAddress = 'mongodb://msdprod:PWj4zOt_qX9oRRDH8cwiUqadb@81.196.104.4:2941/MSDQualitance';
 
     MongoClient.connect(mongoAddress, function (err, db) {
-        db.collection('users').find({}).toArray(function (err, users) {
-            if(err){
-                console.log('FAIL');
-                db.close();
-            }else{
-                var updateCount = 0;
-                async.each(users, function (user, callback) {
-                    var newProfession = null;
-                    var newGroups = [];
-                    if(user.profession){
-                        //console.log(conversionAttributes.profession[user.profession.toString()]);
-                        newProfession = conversionAttributes.profession[user.profession.toString()];
-                    }
-                    if(user.groupsID){
-                        for(var i=0; i<user.groupsID.length; i++){
-                            //console.log(conversionArrays.groupsID[user.groupsID[i]]);
-                            newGroups.push(conversionArrays.groupsID[user.groupsID[i]]);
-                        }
-                        //console.log(newGroups);
-                    }
-                    db.collection('users').update({_id: user._id}, {$set: {profession: newProfession, groupsID: newGroups}}, function (err, wres) {
-                        if(err){
-                            callback(err);
-                        }else{
-                            updateCount++;
-                            callback();
-                        }
-                    });
-                }, function (err) {
+        var updateCount = 0;
+        var eventsUpdateCount = 0;
+        async.waterfall([
+            function (wtfCallback) {
+                db.collection('users').find({}).toArray(function (err, users) {
                     if(err){
-                        console.log(err);
+                        wtfCallback(err);
+                    }else{
+                        async.each(users, function (user, callback) {
+                            var newProfession = null;
+                            var newGroups = [];
+                            if(user.profession){
+                                //console.log(conversionAttributes.profession[user.profession.toString()]);
+                                newProfession = conversionAttributes.profession[user.profession.toString()];
+                            }
+                            if(user.groupsID){
+                                for(var i=0; i<user.groupsID.length; i++){
+                                    //console.log(conversionArrays.groupsID[user.groupsID[i]]);
+                                    newGroups.push(conversionArrays.groupsID[user.groupsID[i]]);
+                                }
+                                //console.log(newGroups);
+                            }
+                            db.collection('users').update({_id: user._id}, {$set: {profession: newProfession, groupsID: newGroups}}, function (err, wres) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    updateCount++;
+                                    callback();
+                                }
+                            });
+                        }, function (err) {
+                            if(err){
+                                wtfCallback(err);
+                            }else{
+                                console.log("Updated "+updateCount+" users");
+                                wtfCallback();
+                            }
+                        });
                     }
-                    console.log("Updated "+updateCount+" users");
-                    db.close();
                 });
+            },
+            function (wtfCallback) {
+                db.collection('calendar-events').find({}).toArray(function (err, events) {
+                    if(err){
+                        wtfCallback(err);
+                    }else{
+                        async.each(events, function (event, callback) {
+                            var newGroups = [];
+                            if(event.groupsID){
+                                for(var i=0; i<event.groupsID.length; i++){
+                                    //console.log(conversionArrays.groupsID[event.groupsID[i]]);
+                                    newGroups.push(conversionArrays.groupsID[event.groupsID[i]]);
+                                }
+                                //console.log(newGroups);
+                            }
+                            db.collection('calendar-events').update({_id: event._id}, {$set: {groupsID: newGroups}}, function (err, wres) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    eventsUpdateCount++;
+                                    callback();
+                                }
+                            });
+                        }, function (err) {
+                            if(err){
+                                wtfCallback(err);
+                            }else{
+                                console.log("Updated "+eventsUpdateCount+" events");
+                                wtfCallback();
+                            }
+                        });
+                    }
+                });
+            }
+        ], function (err) {
+            if(err){
+                console.log(err);
+            }else{
+                console.log("SUCCESS");
+                db.close();
             }
         });
     });
