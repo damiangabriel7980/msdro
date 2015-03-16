@@ -1,5 +1,5 @@
 //set following variable to true if you want to disable patients area
-const DISABLE_PATIENTS = true;
+const DISABLE_PATIENTS = false;
 
 var User = require('./models/user');
 var Roles = require('./models/roles');
