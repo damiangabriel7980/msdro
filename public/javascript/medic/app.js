@@ -16,6 +16,10 @@ var app = angular.module('app',
         'ngCookies'
     ]);
 
+app.config(['$locationProvider', function($location) {
+    $location.hashPrefix('!');
+}]);
+
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
     $stateProvider
