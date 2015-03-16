@@ -14,6 +14,10 @@ var app = angular.module('app',
         'angularFileUpload'
     ]);
 
+app.config(['$locationProvider', function($location) {
+    $location.hashPrefix('!');
+}]);
+
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/home/noutati");
     $stateProvider
