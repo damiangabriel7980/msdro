@@ -1349,6 +1349,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         .post(function(req, res) {
             var content = new Content(req.body);
             content.enable = false;
+            content.created = Date.now();
             content.last_updated = Date.now();
             content.save(function(err,saved) {
                 if (err){

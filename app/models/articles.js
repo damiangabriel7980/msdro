@@ -11,6 +11,7 @@ var articlesSchema		= new Schema({
     description:  String,
     text:         {type:String, es_indexed:true},
     type:         Number,
+    created: Date,
     last_updated: Date,
     version:      Number,
     enable:       Boolean,
