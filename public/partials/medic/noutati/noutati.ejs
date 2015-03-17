@@ -4,7 +4,7 @@
             <div class="col-md-12 padd35px">
             <h3>CELE MAI CITITE {{title}}</h3>
             </div>
-            <div ng-repeat="cont in content | orderBy: last_updated| limitTo: 3">
+            <div ng-repeat="cont in content | limitTo: 3">
                 <div class="col-md-12 articleBox ">
                      <div class="col-md-12 noPadding padd5left">
                         <div class="col-md-12 title handCursor" style="color:#1c9893" ui-sref="{{sr}}" convert-special conver='cont.title' ng-bind-html="trustAsHtml(cont.title)"></div>

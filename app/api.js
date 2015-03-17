@@ -1349,6 +1349,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         .post(function(req, res) {
             var content = new Content(req.body);
             content.enable = false;
+            content.created = Date.now();
             content.last_updated = Date.now();
             content.save(function(err,saved) {
                 if (err){
@@ -3954,7 +3955,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         .post(function(req, res) {
             var cType = req.body.content_type;
             var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, cType, specialGroupSelected, null, 'last_updated', function (err, content) {
+            getUserContent(req.user, cType, specialGroupSelected, null, 'created', function (err, content) {
                 if(err){
                     res.send(err);
                 }else{
@@ -4538,7 +4539,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
         .post(function(req, res) {
             var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "last_updated", function (err, cont) {
+            getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "created", function (err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -4550,7 +4551,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
         .post(function(req, res) {
             var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, 3, specialGroupSelected, 4, "last_updated", function (err, cont) {
+            getUserContent(req.user, 3, specialGroupSelected, 4, "created", function (err, cont) {
                 if(err) {
                     res.send(err);
                 }
