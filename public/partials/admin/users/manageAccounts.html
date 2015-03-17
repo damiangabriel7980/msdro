@@ -13,6 +13,9 @@
         <td data-title="'Profesie'" sortable="'profession.display_name'">
             {{user.profession.display_name}}
         </td>
+        <td data-title="'Data crearii'" sortable="'last_updated'">
+            {{user.last_updated.substr(0,10)}}
+        </td>
         <td data-title="'Phone'" filter="{ 'phone': 'text' }" sortable="'phone'">
             {{user.phone}}
         </td>
