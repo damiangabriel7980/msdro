@@ -20,9 +20,10 @@ controllers.controller('MultimediaDetail', ['$scope','multimediaService','$state
     $scope.getVideoSrc = function(filepath){
         return $sce.trustAsResourceUrl($rootScope.pathAmazonDev+filepath)
     };
-
+    $stateParams.idMulti=null;
     $scope.okk = function () {
         $modalInstance.close();
+        $state.go('elearning.multimedia.multimediaByArea',{idArea:0,idMulti: null});
     };
     $scope.trustAsHtml = function (data) {
         return $sce.trustAsHtml(data);
@@ -33,5 +34,6 @@ controllers.controller('MultimediaDetail', ['$scope','multimediaService','$state
     };
     $scope.cancell = function () {
         $modalInstance.dismiss('cancel');
+        $state.go('elearning.multimedia.multimediaByArea',{idArea:0,idMulti: null});
     };
 }]);
