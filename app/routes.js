@@ -30,10 +30,16 @@ module.exports = function(app, email, logger, passport) {
 // normal routes ===============================================================
 
     app.get('/', function (req, res) {
+        var requestedActivation = 0, accountActivated = 0, showLogin = 0, accessRoute="";
+        if(req.query._escaped_fragment_){
+            // _escaped_fragment_ holds a route that a crawler tries to access
+            // the crawler doesn't know how to access routes, so we will send
+            // a message in front-end to programatically access that route
+            accessRoute = req.query._escaped_fragment_;
+        }
         if(req.isAuthenticated()){
             res.redirect('/pro');
         }else{
-            var requestedActivation = 0, accountActivated = 0, showLogin = 0;
             if(req.session.requestedActivation){
                 requestedActivation = 1;
                 delete req.session.requestedActivation;
@@ -46,10 +52,13 @@ module.exports = function(app, email, logger, passport) {
                 showLogin = 1;
                 delete req.session.showLogin;
             }
-            res.render(MAIN_VIEW, {amazonBucket: process.env.amazonBucket,
-                                           requestedActivation: requestedActivation,
-                                           accountActivated: accountActivated,
-                                           showLogin: showLogin});
+            res.render(MAIN_VIEW, {
+                amazonBucket: process.env.amazonBucket,
+                requestedActivation: requestedActivation,
+                accountActivated: accountActivated,
+                showLogin: showLogin,
+                accessRoute: accessRoute
+            });
         }
     });
 

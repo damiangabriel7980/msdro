@@ -6,9 +6,10 @@
     <!--Get amazon bucket-->
     <script>
         const DEFAULT_AMAZON_BUCKET = "<%=amazonBucket%>";
-        const REQUESTED_STAYWELL_ACTIVATION = <%=requestedActivation%>;
-        const ACTIVATED_STAYWELL_ACCOUNT = <%=accountActivated%>;
-        const REQUESTED_STAYWELL_LOGIN = <%=showLogin%>;
+        const REQUESTED_STAYWELL_ACTIVATION = parseInt("<%=requestedActivation%>");
+        const ACTIVATED_STAYWELL_ACCOUNT = parseInt("<%=accountActivated%>");
+        const REQUESTED_STAYWELL_LOGIN = parseInt("<%=showLogin%>");
+        const ACCESS_ROUTE = "<%=accessRoute%>";
     </script>
 
     <!--Core-modules-->
