@@ -111,8 +111,9 @@ app.run(
     [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', '$location',
         function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   $location) {
 
-            if(ACCESS_ROUTE){
-                $location.url(ACCESS_ROUTE);
+            $rootScope.accessRoute = ACCESS_ROUTE;
+            if($rootScope.accessRoute){
+                $location.url($rootScope.accessRoute);
             }
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
