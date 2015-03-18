@@ -1,7 +1,12 @@
-controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', function($scope, $rootScope, HomeService, $sce, $state) {
+controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', function($scope, $rootScope, HomeService, $sce, $state, StateService) {
 
     if($rootScope.accessRoute){
-        $state.go('stiri.all');
+        var state = StateService.getStateFromUrl($rootScope.accessRoute);
+        if(state){
+            $state.go(state.name, state.params);
+        }else{
+            //there is no state, or there are multiple states that match the url
+        }
     }
 
     $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
