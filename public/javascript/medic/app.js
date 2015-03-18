@@ -216,7 +216,7 @@ app.run(
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
             $rootScope.defaultProductImage = $rootScope.pathAmazonResources+ "piles-of-pills.jpg";
 
-            $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.jpg";
+            $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.png";
 
             $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
                 $rootScope.previousState = from.name;
