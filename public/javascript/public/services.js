@@ -12,11 +12,13 @@ services.factory('StateService', ['$state', function ($state) {
         var root = getUrlComponents(url)[0];
 
         var stateUrlComp;
+        var stateNameComp;
 
         for(var i=0; i<allStates.length; i++){
             if(allStates[i].url){
                 stateUrlComp = getUrlComponents(allStates[i].url);
-                if(stateUrlComp.length==1 && stateUrlComp[0]==root) return allStates[i];
+                stateNameComp = allStates[i].name.split('.');
+                if(stateNameComp.length==1 && stateUrlComp[0]==root) return allStates[i];
             }
         }
 
