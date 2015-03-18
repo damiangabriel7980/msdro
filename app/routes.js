@@ -157,6 +157,10 @@ module.exports = function(app, email, logger, passport) {
         res.sendFile('/private_storage/merck.pdf', {root: __dirname});
     });
 
+    app.get('/sitemap', function (req, res) {
+        res.sendFile('/private_storage/sitemap.xml', {root: __dirname});
+    });
+
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
 // =============================================================================
