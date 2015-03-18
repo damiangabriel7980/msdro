@@ -108,13 +108,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', '$location',
-        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   $location) {
+    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce',
+        function ($rootScope,   $state,   $stateParams,   $modal,   $sce  ) {
 
             $rootScope.accessRoute = ACCESS_ROUTE;
-            if($rootScope.accessRoute){
-                $location.url($rootScope.accessRoute);
-            }
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
