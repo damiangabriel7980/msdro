@@ -3,6 +3,7 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     sass = require('gulp-ruby-sass'),
     uglify = require('gulp-uglify'),
+    minifyCSS = require('gulp-minify-css');
     watch = require('gulp-watch'),
     concat = require('gulp-concat'),
     notify = require('gulp-notify'),
@@ -67,16 +68,21 @@ var gulp = require('gulp'),
 //gulp.task('default', ['sass', 'js', 'watch']);
 
 gulp.task('minify_angular', function () {
-    var stream = gulp.src('./public/javascript/**/*.js')
+    return gulp.src('./public/javascript/**/*.js')
         .pipe(uglify())
         .pipe(gulp.dest('./public/min/javascript'));
-    return stream;
+});
+
+gulp.task('minify_css', function () {
+    return gulp.src('./public/stylesheets/**/*.css')
+        .pipe(minifyCSS())
+        .pipe(gulp.dest('./public/min/stylesheets'));
 });
 
 gulp.task('run', function () {
     nodemon({
         script: 'server.js',
-        ext: 'js html',
+        ext: 'js html css',
         env: {
             'NODE_ENV': 'development',
             'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
@@ -85,10 +91,10 @@ gulp.task('run', function () {
     })
 });
 
-gulp.task('run_staging', ['minify_angular'], function () {
+gulp.task('run_staging', ['minify_angular', 'minify_css'], function () {
     nodemon({
         script: 'server.js',
-        ext: 'js html',
+        ext: 'js html css',
         env: {
             'NODE_ENV': 'development',
             'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
