@@ -1,9 +1,12 @@
 // server.js
+var Config = require('./config/environment.js'),
+    my_config = new Config();
+console.log(my_config);
 
 var sessionSecret = "yours3cr3tisveryveryvvverysafew1thmee";
 var tokenSecret = "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss";
-var mandrillKey = process.env.mandrillKey;
-var pushServerAddr = process.env.pushServerAddress;
+var mandrillKey = my_config.mandrillKey;
+var pushServerAddr = my_config.pushServerAddress;
 
 //=========================================================== https certificates
 var fs = require('fs');
@@ -83,8 +86,8 @@ require('./app/apiContractManagement.js')(app, logger, express.Router());
 
 // launch ======================================================================
 
-var devPort = process.env.devPORT || 8080;
-var ssPort   = process.env.ssPORT || 3000;
+var devPort = my_config.devPORT || 8080;
+var ssPort   = my_config.ssPORT || 3000;
 
 secureServer.listen(ssPort);
 devServer.listen(devPort);

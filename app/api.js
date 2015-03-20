@@ -54,6 +54,9 @@ var request = require('request');
 var AWS = require('aws-sdk');
 var fs = require('fs');
 
+var Config = require('../config/environment.js'),
+    my_config = new Config();
+
 //form sts object from environment variables. Used for retrieving temporary credentials to front end
 var sts = new AWS.STS();
 //configure credentials for use on server only; assign credentials based on role (never use master credentials)
@@ -64,7 +67,7 @@ AWS.config.credentials = new AWS.TemporaryCredentials({
 //s3 object for use on server
 var s3 = new AWS.S3();
 //bucket retrieved from environment variables
-var amazonBucket = process.env.amazonBucket;
+var amazonBucket = my_config.amazonBucket;
 
 //used to sign cookies based on session secret
 var cookieSig = require('express-session/node_modules/cookie-signature');
