@@ -73,6 +73,27 @@ gulp.task('minify_angular', function () {
         .pipe(gulp.dest('./public/min/javascript'));
 });
 
+gulp.task('copy_modules', function () {
+    return gulp.src('./public/modules/**/*.{ttf,woff,eof,svg,css,html,js}')
+        .pipe(gulp.dest('./public/min/modules'));
+});
+
+gulp.task('minify_modules_js', ['copy_modules'], function () {
+    return gulp.src('./public/min/modules/**/*.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('./public/min/modules'));
+});
+
+gulp.task('minify_modules_css', ['copy_modules'], function () {
+    return gulp.src('./public/min/modules/**/*.css')
+        .pipe(minifyCSS())
+        .pipe(gulp.dest('./public/min/modules'));
+});
+
+gulp.task('minify_modules', ['minify_modules_js', 'minify_modules_css'], function (callback) {
+    callback();
+});
+
 gulp.task('minify_css', function () {
     return gulp.src('./public/stylesheets/**/*.css')
         .pipe(minifyCSS())
@@ -91,7 +112,7 @@ gulp.task('run', function () {
     })
 });
 
-gulp.task('run_staging', ['minify_angular', 'minify_css'], function () {
+gulp.task('run_staging', ['minify_angular', 'minify_css', 'minify_modules'], function () {
     nodemon({
         script: 'server.js',
         ext: 'js html css',
