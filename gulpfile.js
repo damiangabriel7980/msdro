@@ -66,7 +66,26 @@ var gulp = require('gulp'),
 //
 //gulp.task('default', ['sass', 'js', 'watch']);
 
+gulp.task('minify_angular', function () {
+    var stream = gulp.src('./public/javascript/**/*.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('./public/min/javascript'));
+    return stream;
+});
+
 gulp.task('run', function () {
+    nodemon({
+        script: 'server.js',
+        ext: 'js html',
+        env: {
+            'NODE_ENV': 'development',
+            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
+            'AWS_SECRET_ACCESS_KEY': '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'
+        }
+    })
+});
+
+gulp.task('run_staging', ['minify_angular'], function () {
     nodemon({
         script: 'server.js',
         ext: 'js html',
