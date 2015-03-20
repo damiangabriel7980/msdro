@@ -1,21 +1,12 @@
-FROM debian:jessie
+FROM paduraru/docker-node-dev
 
-#Install curl, supervisor, openssh-server, openssh-client, git
-RUN apt-get update && apt-get install -y curl openssh-server supervisor git
-RUN mkdir -p /var/run/sshd /var/log/supervisor
-
-#Install node js
-RUN curl -sL https://deb.nodesource.com/setup | bash -
-RUN apt-get install -y nodejs
-
-#Install bower
-RUN npm install -g bower
+#REPLACE msd_container_bitbucket with your private bitbucket key
+ENV your_bitbucket_key msd_container_bitbucket
 
 #Copy private key for bitbucket repo
-ADD keys/id_rsa /root/.ssh/id_rsa
-ADD keys/id_rsa.pub /root/.ssh/id_rsa.pub
+ADD keys/$your_bitbucket_key /root/.ssh/$your_bitbucket_key
 RUN touch /root/.ssh/known_hosts
-RUN ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
+RUN ssh-keyscan -t rsa bitbucket.org >> /root/.ssh/known_hosts
 RUN chmod 600 /root/.ssh/*
 RUN ls -al /root/.ssh
 
@@ -26,7 +17,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD authorized_keys /root/.ssh/authorized_keys
 
 #Bundle app source
-RUN git clone git@bitbucket.org:qualitance/msd-new.git /opt/msd
+RUN ssh-agent bash -c 'ssh-add /root/.ssh/$your_bitbucket_key; git clone git@bitbucket.org:qualitance/msd-new.git /opt/msd'
 
 #Install app dependencies
 RUN cd /opt/msd; npm install; bower install --allow-root
