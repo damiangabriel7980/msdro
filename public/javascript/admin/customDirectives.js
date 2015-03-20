@@ -2,7 +2,7 @@
  * Created by andrei on 03.12.2014.
  */
 //similar use as ng-src. Forces server to request image, instead of loading it from cache
-app.directive('noCacheSrc', function($window) {
+app.directive('noCacheSrc', ['$window', function($window) {
     return {
         priority: 99,
         link: function(scope, element, attrs) {
@@ -12,4 +12,4 @@ app.directive('noCacheSrc', function($window) {
             });
         }
     }
-});
+}]);
