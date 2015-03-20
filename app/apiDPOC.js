@@ -99,5 +99,24 @@ module.exports = function(app, mandrill, logger, router) {
             });
         });
 
+    router.route('/validate')
+        .get(function (req, res) {
+            //validate device uuid
+            var uuid = req.headers.authorization;
+            DPOC_Devices.findOne({uuid: SHA512(uuid).toString()}, function (err, device) {
+                if(err){
+                    logger.error(err);
+                    res.statusCode = 500;
+                    res.end();
+                }else if(!device){
+                    res.statusCode = 403;
+                    res.end();
+                }else{
+                    res.statusCode = 200;
+                    res.end();
+                }
+            });
+        });
+
     app.use('/apiDPOC', router);
 };
