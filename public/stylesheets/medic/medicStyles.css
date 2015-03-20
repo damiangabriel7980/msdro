@@ -7238,7 +7238,6 @@ hr {
   border: 0px solid #cccccc;
   -webkit-transition: width 1s ease;
   /* Safari */
-
   transition: width 1s ease;
 }
 .btnSearchBefore {
@@ -7466,4 +7465,7 @@ a:focus {
 .specialGroupMobile {
   margin-right: -10px;
   margin-top: 4px;
+}
+.fixedHeightLogo {
+  height: 50px;
 }
