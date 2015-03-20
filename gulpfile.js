@@ -3,7 +3,8 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     sass = require('gulp-ruby-sass'),
     uglify = require('gulp-uglify'),
-    minifyCSS = require('gulp-minify-css');
+    minifyCSS = require('gulp-minify-css'),
+    minifyHTML = require('gulp-minify-html'),
     watch = require('gulp-watch'),
     concat = require('gulp-concat'),
     notify = require('gulp-notify'),
@@ -12,7 +13,7 @@ var gulp = require('gulp'),
     MongoClient = require('mongodb').MongoClient,
     ObjectID = require('mongodb').ObjectID,
     assert = require('assert'),
-    mysql = require('mysql');
+    mysql = require('mysql'),
     async = require('async');
 
 //// sass task
@@ -67,43 +68,36 @@ var gulp = require('gulp'),
 //
 //gulp.task('default', ['sass', 'js', 'watch']);
 
-gulp.task('minify_angular', function () {
-    return gulp.src('./public/javascript/**/*.js')
-        .pipe(uglify())
-        .pipe(gulp.dest('./public/min/javascript'));
-});
-
-gulp.task('copy_modules', function () {
-    return gulp.src('./public/modules/**/*.{ttf,woff,eof,svg,css,html,js}')
-        .pipe(gulp.dest('./public/min/modules'));
-});
-
-gulp.task('minify_modules_js', ['copy_modules'], function () {
-    return gulp.src('./public/min/modules/**/*.js')
-        .pipe(uglify())
-        .pipe(gulp.dest('./public/min/modules'));
-});
-
-gulp.task('minify_modules_css', ['copy_modules'], function () {
-    return gulp.src('./public/min/modules/**/*.css')
-        .pipe(minifyCSS())
-        .pipe(gulp.dest('./public/min/modules'));
-});
-
-gulp.task('minify_modules', ['minify_modules_js', 'minify_modules_css'], function (callback) {
+gulp.task('minify_all', ['minify_css'], function (callback) {
     callback();
 });
 
-gulp.task('minify_css', function () {
-    return gulp.src('./public/stylesheets/**/*.css')
+gulp.task('minify_css', ['minify_html'], function () {
+    return gulp.src('./public/**/*.css')
         .pipe(minifyCSS())
-        .pipe(gulp.dest('./public/min/stylesheets'));
+        .pipe(gulp.dest('./public'));
+});
+
+gulp.task('minify_html', ['minify_js'], function () {
+    return gulp.src('./public/**/*.html')
+        .pipe(minifyHTML({
+            contitionals: true,
+            spare: true,
+            loose: true
+        }))
+        .pipe(gulp.dest('./public'));
+});
+
+gulp.task('minify_js', function () {
+    return gulp.src(['./public/**/*.js','!./public/**/*min.js'])
+        .pipe(uglify())
+        .pipe(gulp.dest('./public'));
 });
 
 gulp.task('run', function () {
     nodemon({
         script: 'server.js',
-        ext: 'js html css',
+        ext: 'js',
         env: {
             'NODE_ENV': 'development',
             'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
@@ -112,7 +106,7 @@ gulp.task('run', function () {
     })
 });
 
-gulp.task('run_staging', ['minify_angular', 'minify_css', 'minify_modules'], function () {
+gulp.task('run_staging', ['minify_all'], function () {
     nodemon({
         script: 'server.js',
         ext: 'js html css',
