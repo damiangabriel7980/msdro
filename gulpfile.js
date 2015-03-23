@@ -14,7 +14,9 @@ var gulp = require('gulp'),
     ObjectID = require('mongodb').ObjectID,
     assert = require('assert'),
     mysql = require('mysql'),
-    async = require('async');
+    async = require('async'),
+    fs = require('fs'),
+    readdirR = require('fs-readdir-recursive');
 
 //// sass task
 //gulp.task('sass', function () {
@@ -94,6 +96,25 @@ gulp.task('run', function () {
             'AWS_SECRET_ACCESS_KEY': 'EZAVbfuV05z5oFYDuB4KlpxSLMVtI7YYyqLKMvou'
         }
     })
+});
+
+gulp.task('generate_manifests', ['minify_all'], function () {
+    var componentsPaths = fs.readFileSync('config/cached_components.txt');
+    var commonData = "CACHE MANIFEST\n#"+Date.now().toString()+"\n\nNETWORK:\n*\n\nCACHE:\n"+componentsPaths+"\n";
+    var publicFolder = "public";
+    var prefixes = [
+        ['public', 'javascript/public'],
+        ['medic', 'javascript/medic']
+    ];
+    for(var p=0; p<prefixes.length; p++){
+        var common_path = prefixes[p][1];
+        var paths = readdirR(publicFolder+"/"+common_path);
+        var data = "";
+        for(var i=0; i<paths.length;i++){
+            data = data.concat(common_path+"/"+paths[i]+"\n");
+        }
+        fs.writeFileSync('public/manifest_'+prefixes[p][0]+'.mf', commonData+data);
+    }
 });
 
 gulp.task('run_staging', ['minify_all'], function () {
