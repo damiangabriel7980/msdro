@@ -89,7 +89,7 @@ gulp.task('minify_html', ['minify_js'], function () {
 });
 
 gulp.task('minify_js', function () {
-    return gulp.src(['./public/**/*.js','!./public/**/*min.js'])
+    return gulp.src(['./public/**/*.js','!./public/components/**/*.*'])
         .pipe(uglify())
         .pipe(gulp.dest('./public'));
 });
