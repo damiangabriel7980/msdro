@@ -68,23 +68,13 @@ var gulp = require('gulp'),
 //
 //gulp.task('default', ['sass', 'js', 'watch']);
 
-gulp.task('minify_all', ['minify_css'], function (callback) {
+gulp.task('minify_all', ['minify_css', 'minify_js'], function (callback) {
     callback();
 });
 
-gulp.task('minify_css', ['minify_html'], function () {
+gulp.task('minify_css', function () {
     return gulp.src('./public/**/*.css')
         .pipe(minifyCSS())
-        .pipe(gulp.dest('./public'));
-});
-
-gulp.task('minify_html', ['minify_js'], function () {
-    return gulp.src('./public/**/*.html')
-        .pipe(minifyHTML({
-            contitionals: true,
-            spare: true,
-            loose: true
-        }))
         .pipe(gulp.dest('./public'));
 });
 
