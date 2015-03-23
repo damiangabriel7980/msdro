@@ -3569,6 +3569,16 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 });
             }
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            DPOC_Devices.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    res.send({success: true});
+                }
+            });
         });
 
     router.route('/admin/system/activationCodes/codes')
