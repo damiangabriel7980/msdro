@@ -3503,6 +3503,31 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({success: devices});
                 }
             });
+        })
+        .post(function (req, res) {
+            if(!req.body.name || !req.body.uuid){
+                res.send({error: "Completati toate campurile"});
+            }else{
+                DPOC_Devices.findOne({name: req.body.name}, function (err, dev) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: "Eroare la creare"});
+                    }else if(dev){
+                        res.send({error: "Un device cu acelasi nume exista deja"});
+                    }else{
+                        var device = new DPOC_Devices(req.body);
+                        device.uuid = device.generateHash(req.body.uuid);
+                        device.save(function (err, saved) {
+                            if(err){
+                                logger.error(err);
+                                res.send({error: "Eroare la creare"});
+                            }else{
+                                res.send({success: true});
+                            }
+                        });
+                    }
+                })
+            }
         });
 
     router.route('/admin/system/activationCodes/codes')

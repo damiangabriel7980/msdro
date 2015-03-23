@@ -26,30 +26,37 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
     refreshDevices();
 
     $scope.addDevice = function () {
-//        $modal.open({
-//            DeviceUrl: 'partials/admin/applications/contractManagement/editDevice.html',
-//            size: 'lg',
-//            windowClass: 'fade',
-//            controller: 'EditDevice',
-//            resolve: {
-//                idToEdit: function () {
-//                    return id;
-//                }
-//            }
-//        });
+        $modal.open({
+            templateUrl: 'partials/admin/applications/DPOC/modalEditDevice.html',
+            windowClass: 'fade',
+            controller: 'AddDeviceDPOC'
+        });
     };
 
-    $scope.toggleDevice = function (device) {
-        ActionModal.show(
-            device.isEnabled?"Dezactiveaza device":"Activeaza device",
-            device.isEnabled?"Sunteti sigur ca doriti sa dezactivati device-ul?":"Sunteti sigur ca doriti sa activati device-ul?",
-            function () {
-                DPOCService.devices.update({id: device._id}, {isEnabled: !device.isEnabled}).$promise.then(function (resp) {
-                    refreshDevices();
-                });
+    $scope.editDevice = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/applications/DPOC/modalEditDevice.html',
+            windowClass: 'fade',
+            controller: 'EditDeviceDPOC',
+            resolve: {
+                idToEdit: function () {
+                    return id;
+                }
             }
-        );
+        });
     };
+
+//    $scope.toggleDevice = function (device) {
+//        ActionModal.show(
+//            device.isEnabled?"Dezactiveaza device":"Activeaza device",
+//            device.isEnabled?"Sunteti sigur ca doriti sa dezactivati device-ul?":"Sunteti sigur ca doriti sa activati device-ul?",
+//            function () {
+//                DPOCService.devices.update({id: device._id}, {isEnabled: !device.isEnabled}).$promise.then(function (resp) {
+//                    refreshDevices();
+//                });
+//            }
+//        );
+//    };
 
     $scope.editDevice = function (id) {
         //TODO
