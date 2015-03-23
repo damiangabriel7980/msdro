@@ -46,22 +46,6 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
         });
     };
 
-//    $scope.toggleDevice = function (device) {
-//        ActionModal.show(
-//            device.isEnabled?"Dezactiveaza device":"Activeaza device",
-//            device.isEnabled?"Sunteti sigur ca doriti sa dezactivati device-ul?":"Sunteti sigur ca doriti sa activati device-ul?",
-//            function () {
-//                DPOCService.devices.update({id: device._id}, {isEnabled: !device.isEnabled}).$promise.then(function (resp) {
-//                    refreshDevices();
-//                });
-//            }
-//        );
-//    };
-
-    $scope.editDevice = function (id) {
-        //TODO
-    };
-
     $scope.removeDevice = function (id) {
         //TODO
     };

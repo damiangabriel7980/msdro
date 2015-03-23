@@ -3495,14 +3495,25 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/applications/DPOC/devices')
         .get(function (req, res) {
-            DPOC_Devices.find({}, function (err, devices) {
-                if(err){
-                    logger.error(err);
-                    res.send({error: true});
-                }else{
-                    res.send({success: devices});
-                }
-            });
+            if(req.query.id){
+                DPOC_Devices.findOne({_id: req.query.id}, {name: 1}, function (err, device) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: device});
+                    }
+                });
+            }else{
+                DPOC_Devices.find({}, function (err, devices) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: devices});
+                    }
+                });
+            }
         })
         .post(function (req, res) {
             if(!req.body.name || !req.body.uuid){
@@ -3527,6 +3538,36 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         });
                     }
                 })
+            }
+        })
+        .put(function (req, res) {
+            var idToEdit = ObjectId(req.query.id);
+            if(!req.body.name){
+                res.send({error: "Device-ul trebuie sa aiba un nume"});
+            }else{
+                DPOC_Devices.findOne({_id: {$ne: idToEdit}, name: req.body.name}, function (err, dev) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: "Eroare la gasirea device-ului"});
+                    }else if(dev){
+                        res.send({error: "Un device cu acelasi nume exista deja"});
+                    }else{
+                        var upd = {
+                            name: req.body.name
+                        };
+                        if(req.body.uuid){
+                            upd.uuid = new DPOC_Devices().generateHash(req.body.uuid);
+                        }
+                        DPOC_Devices.update({_id: idToEdit}, {$set: upd}, function (err, wres) {
+                            if(err){
+                                logger.error(err);
+                                res.send({error: "Eroare la update"});
+                            }else{
+                                res.send({success: true});
+                            }
+                        });
+                    }
+                });
             }
         });
 
