@@ -14,7 +14,7 @@ controllers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 
         $scope.btn = "Vezi stire";
     }
     if($stateParams.articleType==2){
-        $scope.title = "STIRI LEGISLATIVE";
+        $scope.title = "STIRI NATIONALE SI INTERNATIONALE";
         $scope.sr = "noutati.articol({articleType:cont.type, articleId:cont._id})";
         $scope.btn = "Vezi stire";
     }

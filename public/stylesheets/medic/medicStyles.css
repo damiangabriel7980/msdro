@@ -6812,6 +6812,38 @@ ul.products li {
   bottom: 22px;
   color: #ffffff;
 }
+.newsSection {
+  border-radius: 6px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  min-width: 180px;
+}
+.newsSection li {
+  padding: 10px 5px 10px 5px;
+  min-width: 180px;
+  height: 50px;
+}
+.newsSection li:hover {
+  border-radius: 3px;
+  background-color: #006d69;
+}
+.newsSection li:hover a {
+  color: #ffffff;
+  background-color: #006d69;
+}
+.newsSection li:hover:after {
+  position: relative;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e080";
+  left: 220px;
+  bottom: 22px;
+  color: #ffffff;
+}
 .navbar-fixed-top .navbar-nav > .active > a {
   color: #008780;
   font-weight: bold;
