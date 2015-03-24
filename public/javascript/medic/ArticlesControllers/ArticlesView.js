@@ -9,12 +9,12 @@ controllers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 
             $scope.showMore='hide';
     };
     if($stateParams.articleType==1){
-        $scope.title = "STIRI";
+        $scope.title = "STIRI NATIONALE";
         $scope.sr = "noutati.articol({articleType:cont.type, articleId:cont._id})";
         $scope.btn = "Vezi stire";
     }
     if($stateParams.articleType==2){
-        $scope.title = "STIRI NATIONALE SI INTERNATIONALE";
+        $scope.title = "STIRI INTERNATIONALE";
         $scope.sr = "noutati.articol({articleType:cont.type, articleId:cont._id})";
         $scope.btn = "Vezi stire";
     }
