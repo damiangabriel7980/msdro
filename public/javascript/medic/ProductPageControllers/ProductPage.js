@@ -4,12 +4,15 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
     specialProductService.getSpecialProduct.query({id: $stateParams.product_id}).$promise.then(function(result){
         if(result.success){
             $scope.specialProductPage=result.success;
-            specialProductService.getSpecialProductMenu.query({id:$scope.specialProductPage._id}).$promise.then(function(resp){
-                $scope.specialProductMenu = resp;
-                //load first element in menu
-                $scope.selectFirstMenuItem();
-            });
+        }else{
+            $state.reload();
         }
+    });
+
+    specialProductService.getSpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
+        $scope.specialProductMenu = resp;
+        //load first element in menu
+        $scope.selectFirstMenuItem();
     });
 
     $scope.selectFirstMenuItem = function () {
