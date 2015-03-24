@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
   <url>
-    <loc>https://msd-staging.qualitance.com/#!/stiri/all</loc> 
+    <loc>https://msd-staging.qualitance.com#!/stiri/all</loc>
   </url>
   <url>
     <loc>https://msd-staging.qualitance.com/#!/articole/all</loc> 
