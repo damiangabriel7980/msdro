@@ -2,6 +2,9 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 var mongoosastic = require('mongoosastic');
 
+var Config = require('../../config/environment.js'),
+    my_config = new Config();
+
 //type: 1 = stire
 //      2 = articol
 //      3 = elearning
@@ -19,7 +22,7 @@ var publicContentSchema		= new Schema({
     file_path:   String,
     'therapeutic-areasID': Array
 });
-publicContentSchema.plugin(mongoosastic,{host:process.env.elasticServer,port:process.env.elasticPORT});
+publicContentSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 
 
 module.exports = mongoose.model('public-content', publicContentSchema, 'public-content');

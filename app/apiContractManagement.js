@@ -1,4 +1,7 @@
-const AMAZON_BUCKET = process.env.amazonBucket;
+var Config = require('../config/environment.js'),
+    my_config = new Config();
+
+const AMAZON_BUCKET = my_config.amazonBucket;
 const AMAZON_PREFIX = "https://s3-eu-west-1.amazonaws.com/"+AMAZON_BUCKET+"/";
 
 var mongoose = require('mongoose');

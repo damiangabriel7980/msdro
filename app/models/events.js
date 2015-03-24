@@ -6,6 +6,9 @@ var Schema			= mongoose.Schema;
 var mongoosastic = require('mongoosastic');
 var Conferences=require('./conferences');
 
+var Config = require('../../config/environment.js'),
+    my_config = new Config();
+
 var EventsSchema		= new Schema({
     description:  {type:String, es_indexed:true},
     enable:         Boolean,
@@ -19,7 +22,7 @@ var EventsSchema		= new Schema({
     type: Number,
     listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
 });
-EventsSchema.plugin(mongoosastic,{host:process.env.elasticServer,port:process.env.elasticPORT});
+EventsSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 
 module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');
 var Event = mongoose.model('calendar-events', EventsSchema,'calendar-events');

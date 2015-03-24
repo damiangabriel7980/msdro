@@ -8,6 +8,9 @@ var mongoose		= require('mongoose');
 var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
 
+var Config = require('../../config/environment.js'),
+    my_config = new Config();
+
 var quizSchema		= new Schema({
     description : {type:String,es_indexed:true},
     enabled : Boolean,
@@ -23,7 +26,7 @@ var quizSchema		= new Schema({
     title : {type:String,es_indexed:true},
     treshhold : Number
 });
-quizSchema.plugin(mongoosastic,{host:process.env.elasticServer,port:process.env.elasticPORT});
+quizSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 module.exports = mongoose.model('quizes', quizSchema,'quizes');
 var Quiz = mongoose.model('quizes', quizSchema,'quizes');
 var stream = Quiz.synchronize();
