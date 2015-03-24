@@ -3704,7 +3704,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             var data = req.body.data;
             var key = "user/"+req.user._id+"/img"+req.user._id+"."+data.extension;
             console.log(req.user.image_path);
-            if(req.user.image_path.length!=0) {
+            if(req.user.image_path!=undefined) {
                 deleteObjectS3(req.user.image_path, function (err, resp1) {
                     if (err) {
                         console.log(err);

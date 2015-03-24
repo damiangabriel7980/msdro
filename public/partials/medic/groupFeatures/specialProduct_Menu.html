@@ -11,11 +11,11 @@
             </span>
     </div>
     <div class="col-xs-12">
-        <h3 class="specialProductTitle" convert-special conver="specialProductDescription.header_title" ng-bind-html="trustAsHtml(specialProductDescription.header_title)">
+        <h3 class="specialProductTitle" ng-if="specialProductDescription.header_title!=undefined" convert-special conver="specialProductDescription.header_title" ng-bind-html="trustAsHtml(specialProductDescription.header_title)">
 
         </h3>
     </div>
-    <div class="col-xs-12 justify" convert-special conver="specialProductDescription.description" ng-bind-html="trustAsHtml(specialProductDescription.description)">
+    <div class="col-xs-12 justify"  ng-if="specialProductDescription.description!=undefined" convert-special conver="specialProductDescription.description" ng-bind-html="trustAsHtml(specialProductDescription.description)">
 
     </div>
     <div class="col-xs-12 justify" ng-if="specialProductDescription.show_prescription" style="margin-top: 15px"

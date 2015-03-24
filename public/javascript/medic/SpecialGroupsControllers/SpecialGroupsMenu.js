@@ -38,6 +38,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         if(!$rootScope.specialGroupSelected)
             $rootScope.specialGroupSelected={_id:0};
         if(group._id!= $rootScope.specialGroupSelected._id){
+            console.log("here");
             //select special group and add it to local storage
             $rootScope.specialGroupSelected = group;
             localStorage.specialGroupSelected = angular.toJson(group);
