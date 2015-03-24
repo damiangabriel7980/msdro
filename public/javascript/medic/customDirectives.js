@@ -2,7 +2,7 @@
  * Created by andrei on 03.12.2014.
  */
 //similar use as ng-src. Forces server to request image, instead of loading it from cache
-app.directive('noCacheSrc', function($window) {
+app.directive('noCacheSrc', ['$window', function($window) {
     return {
         priority: 99,
         link: function(scope, element, attrs) {
@@ -12,7 +12,7 @@ app.directive('noCacheSrc', function($window) {
             });
         }
     }
-}).directive('carouselResizable', function($window) {
+}]).directive('carouselResizable', ['$window', function($window) {
     return {
         restrict: 'A',
         link: function ($scope, $element) {
@@ -38,7 +38,7 @@ app.directive('noCacheSrc', function($window) {
             $scope.initializeWindowSize();
         }
     }
-}).directive('convertSpecial', function($sce) {
+}]).directive('convertSpecial', ['$sce', function($sce) {
     return {
         scope: {conver: '='},
         link: function(scope, element, attrs) {
@@ -62,7 +62,7 @@ app.directive('noCacheSrc', function($window) {
             });
         }
     }
-}).directive('thereIsMore', function($timeout,$document,$window) {
+}]).directive('thereIsMore', ['$timeout', '$document', '$window', function($timeout,$document,$window) {
     return {
         restrict: 'A',
         link: function (scope, element) {
@@ -110,7 +110,7 @@ app.directive('noCacheSrc', function($window) {
             //    });
         } // end of link
     }
-});
+}]);
 app.directive('coverScreeen', ['$window', function ($window) {
     return{
         restrict: 'A',

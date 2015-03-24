@@ -2,6 +2,9 @@ var mongoose		= require('mongoose');
 var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
 
+var Config = require('../../config/environment.js'),
+    my_config = new Config();
+
 //type: 1 = normal
 //      2 = legislativ
 //      3 = stiintific
@@ -19,7 +22,7 @@ var articlesSchema		= new Schema({
     groupsID:     Array,
     associated_images: Array
 });
-articlesSchema.plugin(mongoosastic,{host:process.env.elasticServer, port:process.env.elasticPORT});
+articlesSchema.plugin(mongoosastic,{host:my_config.elasticServer, port:my_config.elasticPORT});
 
 module.exports = mongoose.model('articles', articlesSchema);
 var Article = mongoose.model('articles', articlesSchema);

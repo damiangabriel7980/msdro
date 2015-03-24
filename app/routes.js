@@ -1,6 +1,9 @@
 //set following variable to true if you want to disable patients area
 const DISABLE_PATIENTS = false;
 
+var Config = require('../config/environment.js'),
+    my_config = new Config();
+
 var User = require('./models/user');
 var Roles = require('./models/roles');
 
@@ -53,7 +56,7 @@ module.exports = function(app, email, logger, passport) {
                 delete req.session.showLogin;
             }
             res.render(MAIN_VIEW, {
-                amazonBucket: process.env.amazonBucket,
+                amazonBucket: my_config.amazonBucket,
                 requestedActivation: requestedActivation,
                 accountActivated: accountActivated,
                 showLogin: showLogin,
@@ -293,11 +296,11 @@ var transportUser = function (req, res) {
                     if(roles[0]){
                         if(roles[0].authority === "ROLE_FARMACIST"){
                             console.log("medic");
-                            res.render("medic/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
+                            res.render("medic/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket});
                         }else if(roles[0].authority === "ROLE_ADMIN"){
-                            res.render("admin/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
+                            res.render("admin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket});
                         }else if(roles[0].authority === "ROLE_STREAM_ADMIN") {
-                            res.render("streamAdmin/main.ejs", {user: req.user, amazonBucket: process.env.amazonBucket});
+                            res.render("streamAdmin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket});
                         }else {
                             req.logout();
                             res.redirect('/');

@@ -26,36 +26,31 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
     refreshDevices();
 
     $scope.addDevice = function () {
-//        $modal.open({
-//            DeviceUrl: 'partials/admin/applications/contractManagement/editDevice.html',
-//            size: 'lg',
-//            windowClass: 'fade',
-//            controller: 'EditDevice',
-//            resolve: {
-//                idToEdit: function () {
-//                    return id;
-//                }
-//            }
-//        });
-    };
-
-    $scope.toggleDevice = function (device) {
-        ActionModal.show(
-            device.isEnabled?"Dezactiveaza device":"Activeaza device",
-            device.isEnabled?"Sunteti sigur ca doriti sa dezactivati device-ul?":"Sunteti sigur ca doriti sa activati device-ul?",
-            function () {
-                DPOCService.devices.update({id: device._id}, {isEnabled: !device.isEnabled}).$promise.then(function (resp) {
-                    refreshDevices();
-                });
-            }
-        );
+        $modal.open({
+            templateUrl: 'partials/admin/applications/DPOC/modalEditDevice.html',
+            windowClass: 'fade',
+            controller: 'AddDeviceDPOC'
+        });
     };
 
     $scope.editDevice = function (id) {
-        //TODO
+        $modal.open({
+            templateUrl: 'partials/admin/applications/DPOC/modalEditDevice.html',
+            windowClass: 'fade',
+            controller: 'EditDeviceDPOC',
+            resolve: {
+                idToEdit: function () {
+                    return id;
+                }
+            }
+        });
     };
 
     $scope.removeDevice = function (id) {
-        //TODO
+        ActionModal.show("Stergere device", "Sunteti sigur ca doriti sa stergeti device-ul?", function () {
+            DPOCService.devices.delete({id: id}).$promise.then(function () {
+                $state.reload();
+            });
+        }, "Sterge");
     };
 }]);

@@ -54,6 +54,9 @@ var request = require('request');
 var AWS = require('aws-sdk');
 var fs = require('fs');
 
+var Config = require('../config/environment.js'),
+    my_config = new Config();
+
 //form sts object from environment variables. Used for retrieving temporary credentials to front end
 var sts = new AWS.STS();
 //configure credentials for use on server only; assign credentials based on role (never use master credentials)
@@ -64,7 +67,7 @@ AWS.config.credentials = new AWS.TemporaryCredentials({
 //s3 object for use on server
 var s3 = new AWS.S3();
 //bucket retrieved from environment variables
-var amazonBucket = process.env.amazonBucket;
+var amazonBucket = my_config.amazonBucket;
 
 //used to sign cookies based on session secret
 var cookieSig = require('express-session/node_modules/cookie-signature');
@@ -3495,12 +3498,88 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/applications/DPOC/devices')
         .get(function (req, res) {
-            DPOC_Devices.find({}, function (err, devices) {
+            if(req.query.id){
+                DPOC_Devices.findOne({_id: req.query.id}, {name: 1}, function (err, device) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: device});
+                    }
+                });
+            }else{
+                DPOC_Devices.find({}, function (err, devices) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: devices});
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            if(!req.body.name || !req.body.uuid){
+                res.send({error: "Completati toate campurile"});
+            }else{
+                DPOC_Devices.findOne({name: req.body.name}, function (err, dev) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: "Eroare la creare"});
+                    }else if(dev){
+                        res.send({error: "Un device cu acelasi nume exista deja"});
+                    }else{
+                        var device = new DPOC_Devices(req.body);
+                        device.uuid = device.generateHash(req.body.uuid);
+                        device.save(function (err, saved) {
+                            if(err){
+                                logger.error(err);
+                                res.send({error: "Eroare la creare"});
+                            }else{
+                                res.send({success: true});
+                            }
+                        });
+                    }
+                })
+            }
+        })
+        .put(function (req, res) {
+            var idToEdit = ObjectId(req.query.id);
+            if(!req.body.name){
+                res.send({error: "Device-ul trebuie sa aiba un nume"});
+            }else{
+                DPOC_Devices.findOne({_id: {$ne: idToEdit}, name: req.body.name}, function (err, dev) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: "Eroare la gasirea device-ului"});
+                    }else if(dev){
+                        res.send({error: "Un device cu acelasi nume exista deja"});
+                    }else{
+                        var upd = {
+                            name: req.body.name
+                        };
+                        if(req.body.uuid){
+                            upd.uuid = new DPOC_Devices().generateHash(req.body.uuid);
+                        }
+                        DPOC_Devices.update({_id: idToEdit}, {$set: upd}, function (err, wres) {
+                            if(err){
+                                logger.error(err);
+                                res.send({error: "Eroare la update"});
+                            }else{
+                                res.send({success: true});
+                            }
+                        });
+                    }
+                });
+            }
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            DPOC_Devices.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    logger.error(err);
                     res.send({error: true});
                 }else{
-                    res.send({success: devices});
+                    res.send({success: true});
                 }
             });
         });

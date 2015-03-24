@@ -1,4 +1,4 @@
-app.directive('resizable', function($window) {
+app.directive('resizable', ['$window', function($window) {
     return {
         restrict: 'A',
         link: function ($scope, $element, attrs) {
@@ -22,8 +22,8 @@ app.directive('resizable', function($window) {
             initializeElementSize();
         }
     }
-});
-app.directive('carouselResizable', function($window) {
+}]);
+app.directive('carouselResizable', ['$window', function($window) {
     return {
         restrict: 'A',
         link: function ($scope, $element) {
@@ -66,8 +66,8 @@ app.directive('carouselResizable', function($window) {
 
         }
     }
-});
-app.directive('scrollcenter', function($window) {
+}]);
+app.directive('scrollcenter', ['$window', function($window) {
     return {
         restrict: 'A',
         link: function ($scope, $element, attrs) {
@@ -94,7 +94,7 @@ app.directive('scrollcenter', function($window) {
             });
         }
     }
-}).directive('convertSpecial', function() {
+}]).directive('convertSpecial', function() {
     return {
         scope: {toConvert: '='},
         link: function(scope, element, attrs) {
@@ -124,7 +124,7 @@ app.directive('scrollcenter', function($window) {
         }
     }
 });
-app.directive('footerBottom', function($window, $rootScope, $timeout, $state) {
+app.directive('footerBottom', ['$window', '$rootScope', '$timeout', '$state', function($window, $rootScope, $timeout, $state) {
     return {
         restrict: 'A',
         link: function ($scope, $element, attrs) {
@@ -177,4 +177,4 @@ app.directive('footerBottom', function($window, $rootScope, $timeout, $state) {
                 });
         }
     }
-});
+}]);

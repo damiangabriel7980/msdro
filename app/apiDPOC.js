@@ -40,13 +40,28 @@ module.exports = function(app, mandrill, logger, router) {
                             res.end();
                         }else{
                             var emailTo = param.value?param.value:param.default_value;
-                            console.log(req.body);
+
+                            var message = req.body.message || "";
+                            message = message.replace(/\n/g,'<br>');
+
+                            var phone = req.body.phone || "";
+                            if(!req.body.accepted){
+                                phone = phone + " (nu doreste sa fie contactat)";
+                            }
+
+                            var patientNumber = req.body.patientNumber || 0;
+                            var patientSex = req.body.patientSex;
+
+                            if(!patientSex || patientNumber != 1){
+                                patientSex = "Vezi narativ";
+                            }
+
                             mandrill('/messages/send-template', {
                                 "template_name": "DPOC",
                                 "template_content": [
                                     {
                                         "name": "message",
-                                        "content": req.body.message
+                                        "content": message
                                     },
                                     {
                                         "name": "name",
@@ -58,11 +73,11 @@ module.exports = function(app, mandrill, logger, router) {
                                     },
                                     {
                                         "name": "patientSex",
-                                        "content": req.body.patientSex
+                                        "content": patientSex
                                     },
                                     {
                                         "name": "phone",
-                                        "content": req.body.phone
+                                        "content": phone
                                     },
                                     {
                                         "name": "reportType",

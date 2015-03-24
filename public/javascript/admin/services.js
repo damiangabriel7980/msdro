@@ -525,8 +525,10 @@ services.factory('ContractManagementService', ['$resource', function($resource){
 services.factory('DPOCService', ['$resource', function($resource){
     return {
         devices: $resource('api/admin/applications/DPOC/devices', {}, {
-            query: { method: 'GET', isArray: false }
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         })
     }
 }]);
-
