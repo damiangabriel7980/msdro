@@ -1,6 +1,6 @@
 FROM paduraru/docker-node-dev
 
-#REPLACE msd_container_bitbucket with your private bitbucket key
+#REPLACE msd_container_bitbucket with your private bitbucket key and add the key inside a folder named "keys"
 ENV your_bitbucket_key msd_container_bitbucket
 
 #Copy private key for bitbucket repo
@@ -19,13 +19,17 @@ ADD authorized_keys /root/.ssh/authorized_keys
 #Bundle app source
 RUN ssh-agent bash -c 'ssh-add /root/.ssh/$your_bitbucket_key; git clone git@bitbucket.org:qualitance/msd-new.git /opt/msd'
 
+WORKDIR /opt/msd
+
+RUN git checkout origin/develop
+
 #Install app dependencies
-RUN cd /opt/msd; npm install; bower install --allow-root
+RUN npm install; bower install --allow-root
 
 EXPOSE  22 8080
 
 #Create file for logging
 RUN mkdir -p /logs; touch /logs/msd_log.txt
 
-#CMD ["/usr/bin/supervisord"]
-CMD ["/usr/sbin/sshd","-D"]
+CMD ["/usr/bin/supervisord"]
+#CMD ["/usr/sbin/sshd","-D"]
