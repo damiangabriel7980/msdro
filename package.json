@@ -51,6 +51,7 @@
     "gulp-ruby-sass": "^0.7.1",
     "gulp-uglify": "~0.1.0",
     "gulp-minify-css": "latest",
+    "fs-readdir-recursive": "latest",
     "gulp-util": "^3.0.1",
     "gulp-watch": "~0.5.0",
     "gulp-webserver": "^0.8.2",
