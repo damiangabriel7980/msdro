@@ -6,8 +6,6 @@ module.exports = function(){
                 pushServerAddress: "https://notif.qualitance.com",
                 elasticServer: "10.200.0.221",
                 elasticPORT: "9004",
-                elasticUser: "qdev",
-                elasticPass: "quuhohF%i9ahsh@u*egi",
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw"
             };
 
@@ -15,10 +13,8 @@ module.exports = function(){
             return {
                 amazonBucket: "msd-prod",
                 pushServerAddress: "https://notif.qualitance.com",
-                elasticServer: "81.196.104.2",
+                elasticServer: "127.0.0.1",
                 elasticPORT: "9004",
-                elasticUser: "qdev",
-                elasticPass: "quuhohF%i9ahsh@u*egi",
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw"
             };
 

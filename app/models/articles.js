@@ -22,7 +22,7 @@ var articlesSchema		= new Schema({
     groupsID:     Array,
     associated_images: Array
 });
-articlesSchema.plugin(mongoosastic,{host:my_config.elasticServer, port:my_config.elasticPORT, auth:my_config.elasticUser+":"+my_config.elasticPass});
+articlesSchema.plugin(mongoosastic,{host:my_config.elasticServer, port:my_config.elasticPORT});
 
 module.exports = mongoose.model('articles', articlesSchema);
 var Article = mongoose.model('articles', articlesSchema);

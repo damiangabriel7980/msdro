@@ -18,7 +18,7 @@ var ProductSchema		= new Schema({
     groupsID: [{type: String, ref: 'UserGroup'}],
     'therapeutic-areasID': [{type: String, ref: 'therapeutic-areas'}]
 });
-ProductSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT, auth:my_config.elasticUser+":"+my_config.elasticPass});
+ProductSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 module.exports = mongoose.model('products', ProductSchema);
 var Product = mongoose.model('products', ProductSchema);
 var stream = Product.synchronize();

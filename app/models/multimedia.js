@@ -25,7 +25,7 @@ var multimediaSchema		= new Schema({
     title : {type:String,es_indexed:true},
     type : Number
 });
-multimediaSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT, auth:my_config.elasticUser+":"+my_config.elasticPass});
+multimediaSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 module.exports = mongoose.model('multimedia', multimediaSchema,'multimedia');
 var Multimedia = mongoose.model('multimedia', multimediaSchema,'multimedia');
 var stream = Multimedia.synchronize();
