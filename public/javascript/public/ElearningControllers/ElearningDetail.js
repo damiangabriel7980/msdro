@@ -7,7 +7,8 @@ controllers.controller('ElearningDetail', ['$scope', '$rootScope', 'ContentServi
             theme: "components/videogular-themes-default/videogular.css",
             plugins: {
                 poster: "http://www.videogular.com/assets/images/videogular.png"
-            }
+            },
+            autoPlay: true
         };
     });
 
