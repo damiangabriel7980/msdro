@@ -7218,7 +7218,7 @@ hr {
 }
 .middleMerck {
   vertical-align: middle;
-  text-align: center;
+  text-align: left;
 }
 .no-text-decoration {
   text-decoration: none !important;
@@ -7510,4 +7510,60 @@ h3 {
 }
 h4 {
   font-size: 16px;
+}
+.glycemizerImage {
+  width: 100%;
+  margin-bottom: 10px;
+}
+@media (max-width: 1024px) {
+  .glycemizerImage {
+    width: 50%;
+    margin-bottom: 10px;
+  }
+}
+.merckImage {
+  width: 70%;
+  cursor: pointer;
+}
+@media (max-width: 1024px) {
+  .merckImage {
+    width: 40%;
+  }
+}
+.productsResponsiveMargin {
+  margin-right: 50px;
+}
+@media (min-width: 1025px) {
+  .productMinHeight {
+    min-height: 450px;
+  }
+}
+@media (max-width: 1024px) {
+  .productMinHeight {
+    min-height: 305px;
+  }
+}
+@media (min-width: 1025px) {
+  .paddRightMobile {
+    padding-right: 0;
+  }
+}
+@media (max-width: 1024px) {
+  .paddRightMobile {
+    padding-right: 45px;
+  }
+}
+.newHomeLeftColumn {
+  padding-left: 180px;
+}
+.newHomeRightColumn {
+  padding-right: 45px;
+}
+.col-xs-1Half {
+  width: 12.666666666666664%;
+  float: left;
+  position: relative;
+  min-height: 1px;
+  padding-left: 0px;
+  padding-right: 15px;
 }
