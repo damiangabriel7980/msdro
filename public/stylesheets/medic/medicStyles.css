@@ -6285,6 +6285,9 @@ button.close {
     display: none !important;
   }
 }
+body {
+  font-size: 12px;
+}
 .main-view-container {
   width: 100%;
   position: relative;
@@ -7270,7 +7273,6 @@ hr {
   border: 0px solid #cccccc;
   -webkit-transition: width 1s ease;
   /* Safari */
-
   transition: width 1s ease;
 }
 .btnSearchBefore {
