@@ -15,6 +15,10 @@ var app = angular.module('app',
         's3UploadManager'
     ]);
 
+app.config(['$locationProvider', function($location) {
+    $location.hashPrefix('!');
+}]);
+
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/users/manageAccounts");
     $stateProvider

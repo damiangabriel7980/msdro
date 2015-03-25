@@ -5,6 +5,10 @@ var cloudStreamAdminApp = angular.module('cloudStreamAdminApp',
         'cloudStreamAdminServices'
     ]);
 
+app.config(['$locationProvider', function($location) {
+    $location.hashPrefix('!');
+}]);
+
 cloudStreamAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/transmisiiLive");
     $stateProvider
