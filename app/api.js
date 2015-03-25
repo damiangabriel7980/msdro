@@ -3508,7 +3508,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 });
             }else{
-                DPOC_Devices.find({}, function (err, devices) {
+                DPOC_Devices.find({}, {name: 1}, function (err, devices) {
                     if(err){
                         logger.error(err);
                         res.send({error: true});
@@ -3519,7 +3519,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             }
         })
         .post(function (req, res) {
-            if(!req.body.name || !req.body.uuid){
+            if(!req.body.name || !req.body.code){
                 res.send({error: "Completati toate campurile"});
             }else{
                 DPOC_Devices.findOne({name: req.body.name}, function (err, dev) {
@@ -3530,7 +3530,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         res.send({error: "Un device cu acelasi nume exista deja"});
                     }else{
                         var device = new DPOC_Devices(req.body);
-                        device.uuid = device.generateHash(req.body.uuid);
+                        device.code = device.generateHash(req.body.code);
                         device.save(function (err, saved) {
                             if(err){
                                 logger.error(err);
@@ -3558,8 +3558,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         var upd = {
                             name: req.body.name
                         };
-                        if(req.body.uuid){
-                            upd.uuid = new DPOC_Devices().generateHash(req.body.uuid);
+                        if(req.body.code){
+                            upd.code = new DPOC_Devices().generateHash(req.body.code);
                         }
                         DPOC_Devices.update({_id: idToEdit}, {$set: upd}, function (err, wres) {
                             if(err){

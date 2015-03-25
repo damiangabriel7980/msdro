@@ -6,7 +6,7 @@ module.exports = function(){
                 amazonBucket: "msddev-test",
                 pushServerAddress: "https://notif.qualitance.com",
                 elasticServer: "10.200.0.221",
-                elasticPORT: "9200",
+                elasticPORT: "9004",
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw"
             };
 
@@ -15,8 +15,8 @@ module.exports = function(){
                 database: "mongodb://msdprod:PWj4zOt_qX9oRRDH8cwiUqadb@81.196.104.4:2941/MSDQualitance",
                 amazonBucket: "msd-prod",
                 pushServerAddress: "https://notif.qualitance.com",
-                elasticServer: "81.196.104.2",
-                elasticPORT: "9200",
+                elasticServer: "127.0.0.1",
+                elasticPORT: "9004",
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw"
             };
 

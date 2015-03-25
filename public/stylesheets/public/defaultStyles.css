@@ -7271,24 +7271,24 @@ html body .rootView {
 .elearningLayout .elearningDetail .videoWrapper videogular {
   background-color: #ffffff;
 }
-.elearningLayout .elearningDetail .videoWrapper videogular #controls-container {
+.elearningLayout .elearningDetail .videoWrapper videogular .controls-container {
   background-color: #ffffff;
   opacity: 1;
 }
-.elearningLayout .elearningDetail .videoWrapper videogular #controls-container .iconButton {
+.elearningLayout .elearningDetail .videoWrapper videogular .controls-container .iconButton {
   color: #008780;
   font-size: 25px;
 }
-.elearningLayout .elearningDetail .videoWrapper videogular #controls-container vg-timedisplay {
+.elearningLayout .elearningDetail .videoWrapper videogular .controls-container vg-time-display {
   color: #008780;
   font-weight: bold;
 }
-.elearningLayout .elearningDetail .videoWrapper videogular #controls-container vg-scrubbar div {
+.elearningLayout .elearningDetail .videoWrapper videogular .controls-container vg-scrub-bar div {
   height: 10px;
   margin-top: 20px;
   background-color: #ccfffa;
 }
-.elearningLayout .elearningDetail .videoWrapper videogular #controls-container vg-scrubbar div vg-scrubbarcurrenttime {
+.elearningLayout .elearningDetail .videoWrapper videogular .controls-container vg-scrub-bar div vg-scrub-bar-current-time {
   height: 10px;
   background-color: #008780;
 }
@@ -7416,4 +7416,7 @@ a:focus {
 .noPatientsLogo {
   visibility: hidden;
   display: none;
+}
+.noPatientsLogo img {
+  max-width: 150px;
 }
