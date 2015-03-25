@@ -42,11 +42,13 @@ module.exports = function(app, mandrill, logger, router) {
                             res.end();
                         }else{
                             //allow pass
+                            req.nameDPOC = device.name;
                             next();
                         }
                     });
                 }else if(device.uuid === deviceUUID){ //check the device's uuid against the one just sent
                     //allow pass
+                    req.nameDPOC = device.name;
                     next();
                 }else{
                     res.statusCode = 403;
@@ -116,6 +118,10 @@ module.exports = function(app, mandrill, logger, router) {
                             {
                                 "name": "selectedProduct",
                                 "content": req.body.selectedProduct
+                            },
+                            {
+                                "name": "deviceName",
+                                "content": req.nameDPOC
                             }
                         ],
                         "message": {
@@ -141,6 +147,7 @@ module.exports = function(app, mandrill, logger, router) {
     router.route('/validate')
         .get(validateDevice, function (req, res) {
             //if we got here, the device is valid
+            //console.log(req.nameDPOC);
             res.statusCode = 200;
             res.end();
         });
