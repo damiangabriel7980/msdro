@@ -139,3 +139,15 @@ gulp.task('run_production', ['minify_all'], function () {
         }
     })
 });
+
+gulp.task('run_production_no_min', function () {
+    nodemon({
+        script: 'server.js',
+        ext: 'js html css',
+        env: {
+            'NODE_ENV': 'production',
+            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
+            'AWS_SECRET_ACCESS_KEY': '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'
+        }
+    })
+});
