@@ -19,11 +19,15 @@ module.exports = function(app, mandrill, logger, router) {
 
     //========================================================================================================================================== ROUTES
 
-    router.route('/report')
-        .post(function (req, res) {
-            //validate device uuid
-            var uuid = req.headers.authorization;
-            DPOC_Devices.findOne({uuid: SHA512(uuid).toString()}, function (err, device) {
+    var validateDevice = function (req, res, next) {
+        var deviceCode = req.headers["authorization-code"];
+        var deviceUUID = req.headers["authorization-uuid"];
+        if(!deviceCode || !deviceUUID){
+            res.statusCode = 403;
+            res.end();
+        }else{
+            //find a device with the same code as the sent code
+            DPOC_Devices.findOne({code: SHA512(deviceCode).toString()}, function (err, device) {
                 if(err){
                     logger.error(err);
                     res.statusCode = 500;
@@ -31,83 +35,103 @@ module.exports = function(app, mandrill, logger, router) {
                 }else if(!device){
                     res.statusCode = 403;
                     res.end();
+                }else if(!device.uuid){ //if the device has no uuid, assign it the one just sent
+                    DPOC_Devices.update({_id: device._id}, {$set: {uuid: deviceUUID}}, function (err, wres) {
+                        if(err){
+                            res.statusCode = 500;
+                            res.end();
+                        }else{
+                            //allow pass
+                            next();
+                        }
+                    });
+                }else if(device.uuid === deviceUUID){ //check the device's uuid against the one just sent
+                    //allow pass
+                    next();
                 }else{
-                    //get email
-                    Parameters.findOne({name: "DPOC_MAIL_TO"}, function (err, param) {
-                        if(err || !param){
+                    res.statusCode = 403;
+                    res.end();
+                }
+            });
+        }
+    };
+
+    router.route('/report')
+        .post(validateDevice, function (req, res) {
+            //get email
+            Parameters.findOne({name: "DPOC_MAIL_TO"}, function (err, param) {
+                if(err || !param){
+                    logger.error(err);
+                    res.statusCode = 500;
+                    res.end();
+                }else{
+                    var emailTo = param.value?param.value:param.default_value;
+
+                    var message = req.body.message || "";
+                    message = message.replace(/\n/g,'<br>');
+
+                    var phone = req.body.phone || "";
+                    if(!req.body.accepted){
+                        phone = phone + " (nu doreste sa fie contactat)";
+                    }
+
+                    var patientNumber = req.body.patientNumber || 0;
+                    var patientSex = req.body.patientSex;
+
+                    if(!patientSex || patientNumber != 1){
+                        patientSex = "Vezi narativ";
+                    }
+
+                    mandrill('/messages/send-template', {
+                        "template_name": "DPOC",
+                        "template_content": [
+                            {
+                                "name": "message",
+                                "content": message
+                            },
+                            {
+                                "name": "name",
+                                "content": req.body.name
+                            },
+                            {
+                                "name": "patientNumber",
+                                "content": req.body.patientNumber
+                            },
+                            {
+                                "name": "patientSex",
+                                "content": patientSex
+                            },
+                            {
+                                "name": "phone",
+                                "content": phone
+                            },
+                            {
+                                "name": "reportType",
+                                "content": req.body.reportType
+                            },
+                            {
+                                "name": "reporterType",
+                                "content": req.body.reporterType
+                            },
+                            {
+                                "name": "selectedProduct",
+                                "content": req.body.selectedProduct
+                            }
+                        ],
+                        "message": {
+                            from_email: 'adminMSD@qualitance.ro',
+                            to: [{email: emailTo}],
+                            subject:'DPOC Report'
+                        }
+
+                    }, function(err){
+                        if(err) {
                             logger.error(err);
                             res.statusCode = 500;
                             res.end();
                         }else{
-                            var emailTo = param.value?param.value:param.default_value;
-
-                            var message = req.body.message || "";
-                            message = message.replace(/\n/g,'<br>');
-
-                            var phone = req.body.phone || "";
-                            if(!req.body.accepted){
-                                phone = phone + " (nu doreste sa fie contactat)";
-                            }
-
-                            var patientNumber = req.body.patientNumber || 0;
-                            var patientSex = req.body.patientSex;
-
-                            if(!patientSex || patientNumber != 1){
-                                patientSex = "Vezi narativ";
-                            }
-
-                            mandrill('/messages/send-template', {
-                                "template_name": "DPOC",
-                                "template_content": [
-                                    {
-                                        "name": "message",
-                                        "content": message
-                                    },
-                                    {
-                                        "name": "name",
-                                        "content": req.body.name
-                                    },
-                                    {
-                                        "name": "patientNumber",
-                                        "content": req.body.patientNumber
-                                    },
-                                    {
-                                        "name": "patientSex",
-                                        "content": patientSex
-                                    },
-                                    {
-                                        "name": "phone",
-                                        "content": phone
-                                    },
-                                    {
-                                        "name": "reportType",
-                                        "content": req.body.reportType
-                                    },
-                                    {
-                                        "name": "reporterType",
-                                        "content": req.body.reporterType
-                                    },
-                                    {
-                                        "name": "selectedProduct",
-                                        "content": req.body.selectedProduct
-                                    }
-                                ],
-                                "message": {
-                                    from_email: 'adminMSD@qualitance.ro',
-                                    to: [{email: emailTo}],
-                                    subject:'DPOC Report'
-                                }
-
-                            }, function(err){
-                                if(err) {
-                                    logger.error(err);
-                                    res.statusCode = 500;
-                                    res.end();
-                                }else{
-                                    res.statusCode = 200;
-                                    res.end();
-                                }
-                            });
+                            res.statusCode = 200;
+                            res.end();
                         }
                     });
                 }
@@ -115,22 +139,10 @@ module.exports = function(app, mandrill, logger, router) {
         });
 
     router.route('/validate')
-        .get(function (req, res) {
-            //validate device uuid
-            var uuid = req.headers.authorization;
-            DPOC_Devices.findOne({uuid: SHA512(uuid).toString()}, function (err, device) {
-                if(err){
-                    logger.error(err);
-                    res.statusCode = 500;
-                    res.end();
-                }else if(!device){
-                    res.statusCode = 403;
-                    res.end();
-                }else{
-                    res.statusCode = 200;
-                    res.end();
-                }
-            });
+        .get(validateDevice, function (req, res) {
+            //if we got here, the device is valid
+            res.statusCode = 200;
+            res.end();
         });
 
     app.use('/apiDPOC', router);
