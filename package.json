@@ -21,7 +21,7 @@
     "method-override": "~1.0.0",
     "mongodb": "~1.4.19",
     "mongoosastic": "^2.0.6",
-    "mongoose": "latest",
+    "mongoose": "~3.8.x",
     "mongoose-deep-populate": "latest",
     "morgan": "~1.0.0",
     "mysql": "~2.5.2",
