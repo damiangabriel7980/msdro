@@ -7417,3 +7417,6 @@ a:focus {
   visibility: hidden;
   display: none;
 }
+.noPatientsLogo img {
+  max-width: 150px;
+}
