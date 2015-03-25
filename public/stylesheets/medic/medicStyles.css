@@ -7137,7 +7137,7 @@ hr {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   color: white;
   text-shadow: black 0.1em 0.1em 0.2em;
-  font-size: 35px;
+  font-size: 30px;
 }
 .width81 {
   width: 81%;
@@ -7518,4 +7518,10 @@ a:focus {
 }
 .fixedHeightLogo {
   height: 50px;
+}
+h3 {
+  font-size: 20px;
+}
+h4 {
+  font-size: 16px;
 }
