@@ -4,7 +4,6 @@ var gulp = require('gulp'),
     sass = require('gulp-ruby-sass'),
     uglify = require('gulp-uglify'),
     minifyCSS = require('gulp-minify-css'),
-    minifyHTML = require('gulp-minify-html'),
     watch = require('gulp-watch'),
     concat = require('gulp-concat'),
     notify = require('gulp-notify'),
@@ -123,6 +122,18 @@ gulp.task('run_staging', ['minify_all'], function () {
         ext: 'js html css',
         env: {
             'NODE_ENV': 'development',
+            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
+            'AWS_SECRET_ACCESS_KEY': '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'
+        }
+    })
+});
+
+gulp.task('run_production', ['minify_all'], function () {
+    nodemon({
+        script: 'server.js',
+        ext: 'js html css',
+        env: {
+            'NODE_ENV': 'production',
             'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
             'AWS_SECRET_ACCESS_KEY': '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'
         }

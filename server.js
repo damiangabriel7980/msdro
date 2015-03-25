@@ -31,7 +31,6 @@ var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
-var configDB = require('./config/database.js');
 var email = require('mandrill-send')(mandrillKey);
 var mandrill = require('node-mandrill')(mandrillKey);
 var rooms = {},
@@ -43,7 +42,7 @@ var logger = require('./config/winston');
 app.use(morgan({ "stream": logger.stream }));
 
 // configuration ===============================================================
-mongoose.connect(configDB.url); // connect to our database
+mongoose.connect(my_config.database); // connect to our database
 
 require('./config/passport')(passport, logger); // pass passport for configuration
 
