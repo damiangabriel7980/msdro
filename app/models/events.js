@@ -22,7 +22,7 @@ var EventsSchema		= new Schema({
     type: Number,
     listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
 });
-EventsSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
+EventsSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT, auth:my_config.elasticUser+":"+my_config.elasticPass});
 
 module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');
 var Event = mongoose.model('calendar-events', EventsSchema,'calendar-events');

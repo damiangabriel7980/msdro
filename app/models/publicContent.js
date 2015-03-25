@@ -22,7 +22,7 @@ var publicContentSchema		= new Schema({
     file_path:   String,
     'therapeutic-areasID': Array
 });
-publicContentSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
+publicContentSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT, auth:my_config.elasticUser+":"+my_config.elasticPass});
 
 
 module.exports = mongoose.model('public-content', publicContentSchema, 'public-content');

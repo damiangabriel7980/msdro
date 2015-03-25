@@ -26,7 +26,7 @@ var quizSchema		= new Schema({
     title : {type:String,es_indexed:true},
     treshhold : Number
 });
-quizSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
+quizSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT, auth:my_config.elasticUser+":"+my_config.elasticPass});
 module.exports = mongoose.model('quizes', quizSchema,'quizes');
 var Quiz = mongoose.model('quizes', quizSchema,'quizes');
 var stream = Quiz.synchronize();
