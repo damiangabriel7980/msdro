@@ -172,7 +172,6 @@ module.exports = function(app, email, logger, passport) {
 		// LOGIN =============================== passport login - used by staywell core
 		// process the login form
 		app.post('/login', function (req, res, next) {
-            console.log(req.body);
             //middleware to allow flashing messages on empty user/password fields
             if(!req.body.email || !req.body.password){
                 return res.send({error: true, message: 'Campurile sunt obligatorii'});
