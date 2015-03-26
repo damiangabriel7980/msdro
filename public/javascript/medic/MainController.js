@@ -1,4 +1,15 @@
 controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService','$window','$cookies', function ($scope, $state, $modal,$rootScope,alterIntroService,$window,$cookies) {
+
+    var openIntro = function () {
+        $modal.open({
+            templateUrl: 'partials/medic/modals/presentationModal.html',
+            keyboard: false,
+            backdrop: 'static',
+            windowClass: 'fade',
+            controller: 'PresentationModal'
+        });
+    };
+
     var changeLocalGroupModalStatus= function(groupID,value){
         var retrievedObject = localStorage.getItem('statusModalGroups');
         var statusModals = JSON.parse(retrievedObject);
@@ -63,14 +74,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                         alterIntroService.checkIntroEnabled.query({specialGroupSelected:null}).$promise.then(function(resp){
                             if(resp._id)
                             {
-                                $modal.open({
-                                    templateUrl: 'partials/medic/modals/presentationModal.html',
-                                    size: 'lg',
-                                    keyboard: false,
-                                    backdrop: 'static',
-                                    windowClass: 'fade',
-                                    controller: 'PresentationModal'
-                                });
+                                openIntro();
                             }
                         });
 
@@ -87,14 +91,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                     alterIntroService.checkIntroEnabled.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
                         if(resp._id)
                         {
-                            $modal.open({
-                                templateUrl: 'partials/medic/modals/presentationModal.html',
-                                size: 'lg',
-                                keyboard: false,
-                                backdrop: 'static',
-                                windowClass: 'fade',
-                                controller: 'PresentationModal'
-                            });
+                            openIntro();
                         }
                     });
                 }
@@ -117,14 +114,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                                 alterIntroService.checkIntroEnabled.query({specialGroupSelected:null}).$promise.then(function(resp){
                                     if(resp._id)
                                     {
-                                        $modal.open({
-                                            templateUrl: 'partials/medic/modals/presentationModal.html',
-                                            size: 'lg',
-                                            keyboard: false,
-                                            backdrop: 'static',
-                                            windowClass: 'fade',
-                                            controller: 'PresentationModal'
-                                        });
+                                        openIntro();
                                     }
                                 });
                             }
@@ -145,14 +135,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                                 alterIntroService.checkIntroEnabled.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
                                     if(resp._id)
                                     {
-                                        $modal.open({
-                                            templateUrl: 'partials/medic/modals/presentationModal.html',
-                                            size: 'lg',
-                                            keyboard: false,
-                                            backdrop: 'static',
-                                            windowClass: 'fade',
-                                            controller: 'PresentationModal'
-                                        });
+                                        openIntro();
                                     }
                                 });
                             }

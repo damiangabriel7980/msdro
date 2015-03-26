@@ -1,15 +1,13 @@
 <div class="modal-header">
-    <h3 class="equalMarginModalTitle">{{presentation.description}}</h3>
+    <h4 class="equalMarginModalTitle">{{presentation.description}}</h4>
 </div>
 
 <div class="modal-body col-md-12">
     <div class="col-md-12" ng-bind-html="trustAsHtml(presentation.article_content)">
     </div>
     <div class="col-md-12">
-        <label class="checkbox">
-            <input type="checkbox"name="rememberOption" ng-checked="true" ng-change="changeStatus()" ng-model="rememberOption">
-            Aratati data viitoare?
-        </label>
+        <input type="checkbox" name="rememberOption" ng-checked="true" ng-change="changeStatus()" ng-model="rememberOption">
+        <label>Aratati data viitoare?</label>
     </div>
 </div>
 
