@@ -10,7 +10,6 @@ var app = angular.module('app',
         'mySlider',
         'angular-growl',
         'angular-carousel',
-        'ui.select',
         'angularFileUpload',
         'ui.bootstrap',
         'ngCookies'
