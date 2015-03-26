@@ -6285,9 +6285,6 @@ button.close {
     display: none !important;
   }
 }
-body {
-  font-size: 12px;
-}
 .main-view-container {
   width: 100%;
   position: relative;
