@@ -7291,7 +7291,7 @@ hr {
   }
 }
 .expandSearch .newWidthPopSearch {
-  width: 330px !important;
+  width: 230px !important;
   padding: 6px 12px;
   border: 1px solid #cccccc;
 }
@@ -7306,7 +7306,7 @@ hr {
   }
 }
 .expandSearchNoSpecial .newWidthPopSearch {
-  width: 330px !important;
+  width: 230px !important;
   padding: 6px 12px;
   border: 1px solid #cccccc;
 }
@@ -7315,7 +7315,7 @@ hr {
   right: 80px;
 }
 .expandSearchOther .newWidthPopSearch {
-  width: 330px !important;
+  width: 230px !important;
   padding: 6px 12px;
   border: 1px solid #cccccc;
 }
