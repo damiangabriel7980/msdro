@@ -5,7 +5,7 @@ var cloudStreamAdminApp = angular.module('cloudStreamAdminApp',
         'cloudStreamAdminServices'
     ]);
 
-app.config(['$locationProvider', function($location) {
+cloudStreamAdminApp.config(['$locationProvider', function($location) {
     $location.hashPrefix('!');
 }]);
 

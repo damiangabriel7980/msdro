@@ -5,7 +5,7 @@ var SHA512   = require('crypto-js/sha512');
 
 var schema		= new Schema({
     name: { type: String, required: true, unique: true},
-    uuid: { type: String, unique: true},
+    uuid: String,
     code: { type: String, required: true, unique: true},
     isEnabled: Boolean
 });

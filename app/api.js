@@ -3522,12 +3522,12 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             if(!req.body.name || !req.body.code){
                 res.send({error: "Completati toate campurile"});
             }else{
-                DPOC_Devices.findOne({name: req.body.name}, function (err, dev) {
+                DPOC_Devices.findOne({$or: [{name: req.body.name}, {code: req.body.code}]}, function (err, dev) {
                     if(err){
                         logger.error(err);
                         res.send({error: "Eroare la creare"});
                     }else if(dev){
-                        res.send({error: "Un device cu acelasi nume exista deja"});
+                        res.send({error: "Un device cu acelasi nume sau cod exista deja"});
                     }else{
                         var device = new DPOC_Devices(req.body);
                         device.code = device.generateHash(req.body.code);
@@ -3548,12 +3548,18 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             if(!req.body.name){
                 res.send({error: "Device-ul trebuie sa aiba un nume"});
             }else{
-                DPOC_Devices.findOne({_id: {$ne: idToEdit}, name: req.body.name}, function (err, dev) {
+                var q = {_id: {$ne: idToEdit}};
+                if(req.body.code){
+                    q['name'] = req.body.name;
+                }else{
+                    q['$or'] = [{name: req.body.name}, {code: new DPOC_Devices().generateHash(req.body.code)}];
+                }
+                DPOC_Devices.findOne(q, function (err, dev) {
                     if(err){
                         logger.error(err);
                         res.send({error: "Eroare la gasirea device-ului"});
                     }else if(dev){
-                        res.send({error: "Un device cu acelasi nume exista deja"});
+                        res.send({error: "Un device cu acelasi nume sau cod exista deja"});
                     }else{
                         var upd = {
                             name: req.body.name

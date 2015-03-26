@@ -67,7 +67,9 @@ module.exports = function(app, mandrill, logger, router) {
                     res.statusCode = 500;
                     res.end();
                 }else{
-                    var emailTo = param.value?param.value:param.default_value;
+                    var emailTo = [];
+                    if(param.default_value) emailTo.push({email: param.default_value});
+                    if(param.value) emailTo.push({email: param.value});
 
                     var message = req.body.message || "";
                     message = message.replace(/\n/g,'<br>');
@@ -126,7 +128,7 @@ module.exports = function(app, mandrill, logger, router) {
                         ],
                         "message": {
                             from_email: 'adminMSD@qualitance.ro',
-                            to: [{email: emailTo}],
+                            to: emailTo,
                             subject:'DPOC Report'
                         }
 
