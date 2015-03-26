@@ -35,7 +35,13 @@ var userSchema = new Schema({
     conferencesID:[{type: Schema.Types.ObjectId,ref: 'conferences'}],
     topicsID:[{type: Schema.Types.ObjectId,ref: 'topics'}],
     visible: Boolean,
-    connectedToDOC: Boolean
+    connectedToDOC: Boolean,
+    subscriptions: {
+        newsletterStaywell: Boolean,
+        infoMSD: Boolean
+    },
+    address: {type: String, select: false},
+    practiceType: {type: Number, select: false} // 1 = Public , 2 = Private
 });
 userSchema.plugin(deepPopulate, {
     whitelist: ['profession', 'groupsID.profession']
