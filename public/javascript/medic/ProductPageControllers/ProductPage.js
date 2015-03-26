@@ -22,7 +22,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         if(menu[0].children_ids){
             if(menu[0].children_ids.length>0) firstChildId = menu[0].children_ids[0]._id;
         }
-        $state.go('groupSpecialProduct.menuItem', {menuId: firstParentId, childId: firstChildId});
+        $state.go('groupSpecialProduct.menuItem', {product_id: $stateParams.product_id, menuId: firstParentId, childId: firstChildId});
     };
 
     $scope.trustAsHtml = function (data) {
