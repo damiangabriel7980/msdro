@@ -7273,6 +7273,7 @@ hr {
   border: 0px solid #cccccc;
   -webkit-transition: width 1s ease;
   /* Safari */
+
   transition: width 1s ease;
 }
 .btnSearchBefore {
@@ -7553,10 +7554,10 @@ h4 {
   }
 }
 .newHomeLeftColumn {
-  padding-left: 110px;
+  padding-left: 180px;
 }
 .newHomeRightColumn {
-  padding-right: 35px;
+  padding-right: 45px;
 }
 .col-xs-1Half {
   width: 12.666666666666664%;
