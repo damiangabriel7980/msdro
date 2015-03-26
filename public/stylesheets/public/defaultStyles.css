@@ -7292,6 +7292,9 @@ html body .rootView {
   height: 10px;
   background-color: #008780;
 }
+#codeAddon .popover {
+  max-width: 430px;
+}
 .btnGreenBorder {
   border-color: #008780;
 }

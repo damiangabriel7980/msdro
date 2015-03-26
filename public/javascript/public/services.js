@@ -165,6 +165,12 @@ services.factory('ActivationCodeService', ['$resource', function($resource){
         }),
         specialGroups: $resource('api/accountActivation/specialGroups/:profession', {}, {
             query: { method: 'GET', isArray: true }
+        }),
+        counties: $resource('api/accountActivation/counties', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        cities: $resource('api/accountActivation/cities', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

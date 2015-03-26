@@ -3,18 +3,7 @@
         <div class="noPatientsLogo"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}" ng-click="renderView('login')"></div>
         <div class="modal-title"><h3><span class="fa fa-sign-in"></span>&nbsp;Activare cont</h3></div>
     </div>
-    <div class="modal-body col-md-12 noPadding">
-        <div class="col-md-12">
-            <div class="well" style="margin: 20px 0">
-                Va multumim pentru inscrierea pe portalul medical www.staywell.ro.<br><br>
-                Deoarece statul roman, prin legea 95/2006 cu HCS nr 27_11.10.2013 reglementeaza publicitatea
-                medicamentelor doar catre specialisti in domeniul sanatatii, va rugam sa introduceti codul care
-                atesta dovada calitatii dvs de profesionist in domeniul sanatatii (medic/farmacist) pentru a
-                activa contul dumneavoastra.<br><br>
-                Daca nu aveti un cod de activare, va rugam sa contactati un reprezentant MSD sau sa sunati
-                la numarul de telefon ...
-            </div>
-        </div>
+    <div class="modal-body col-md-12" style="padding: 10px 0 0 0">
 
         <div class="col-md-12">
             <alert ng-if="alert.show" type="{{alert.type}}" close="alert.show=false">{{alert.text}}</alert>
@@ -23,17 +12,77 @@
         <div class="col-md-12 noPadding">
             <div class="form-group col-md-6">
                 <label for="profession">Profesie:</label>
-                <select ng-model="selectedProfession" class="form-control" ng-change="selectProfession()"
+                <select ng-model="user.profession" class="form-control" ng-change="selectProfession()"
                         ng-options="profession._id as profession.display_name for profession in professions" id="profession"></select>
             </div>
             <div class="form-group col-md-6">
+                <label for="code">Cod de activare:</label>
+                <div class="input-group">
+                    <input id="code" type="text" ng-model="activationCode" class="form-control" aria-describedby="codeAddon">
+                    <span class="input-group-addon" id="codeAddon">
+                        <i class="glyphicon glyphicon-info-sign" popover="{{codeTooltip}}" popover-trigger="mouseenter" popover-placement="left"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
                 <label for="group">Grup preferat:</label>
-                <select ng-model="selectedSpecialGroup" class="form-control"
+                <select ng-model="user.groupsID" class="form-control"
                         ng-options="group._id as group.display_name for group in groups" id="group"></select>
             </div>
             <div class="form-group col-md-6">
-                <label for="code">Cod de activare:</label>
-                    <input id="code" type="text" ng-model="activationCode" class="form-control">
+                <label>Tip de practica:</label>
+                <select ng-model="user.practiceType" class="form-control" ng-init="user.practiceType = practices[0].number"
+                        ng-options="practice.number as practice.name for practice in practices"></select>
+            </div>
+            <div class="form-group col-md-12">
+                <label>Adresa:</label>
+                <input type="text" class="form-control" ng-model="user.address">
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Judet: </label>
+                    <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county">
+                        <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="county in counties | propsFilter: {name: $select.search}">
+                            <div ng-bind-html="trustAsHtml((county.name | highlight: $select.search))"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Oras: </label>
+                    <ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city">
+                        <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">
+                            <div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Telefon:</label>
+                <input type="text" class="form-control" ng-model="user.phone">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Sursa de informare:</label>
+                <select ng-model="infoSource" class="form-control"></select>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="checkbox" ng-model="termsStaywell">
+                <span>Accept termenii si conditiile Staywell</span>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="checkbox" ng-model="termsMSD">
+                <span>Accept politica MSD privind datele profesionale</span>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="checkbox" ng-model="user.subscriptions.newsletterStaywell">
+                <span>Sunt de acord sa primesc newsletter Staywell</span>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="checkbox" ng-model="user.subscriptions.infoMSD">
+                <span>Sunt de acord sa primesc informatii de la MSD</span>
             </div>
         </div>
     </div>

@@ -5093,6 +5093,36 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             }
         });
 
+    router.route('/accountActivation/counties')
+        .get(function (req, res) {
+            Counties.find({}, function (err, counties) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true})
+                }else{
+                    res.send({success: counties});
+                }
+            });
+        });
+
+    router.route('/accountActivation/cities')
+        .get(function (req, res) {
+            if(!req.query.county){
+                res.send({error: true});
+            }else{
+                Counties.findOne({_id: req.query.county}).populate('citiesID').exec(function (err, county) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else if(!county){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: county.citiesID});
+                    }
+                });
+            }
+        });
+
     router.route('/accountActivation/processData')
         .post(function(req,res){
             var professionId = req.body.professionId;
