@@ -85,18 +85,6 @@ gulp.task('minify_js', function () {
         .pipe(gulp.dest('./public'));
 });
 
-gulp.task('run', function () {
-    nodemon({
-        script: 'server.js',
-        ext: 'js',
-        env: {
-            'NODE_ENV': 'development',
-            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
-            'AWS_SECRET_ACCESS_KEY': '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'
-        }
-    })
-});
-
 gulp.task('generate_manifests', ['minify_all'], function () {
     var componentsPaths = fs.readFileSync('config/cached_components.txt');
     var commonData = "CACHE MANIFEST\n#"+Date.now().toString()+"\n\nNETWORK:\n*\n\nCACHE:\n"+componentsPaths+"\n";
@@ -116,12 +104,36 @@ gulp.task('generate_manifests', ['minify_all'], function () {
     }
 });
 
-gulp.task('run_staging', ['minify_all'], function () {
+gulp.task('run', function () {
     nodemon({
         script: 'server.js',
         ext: 'js html css',
         env: {
             'NODE_ENV': 'development',
+            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
+            'AWS_SECRET_ACCESS_KEY': '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'
+        }
+    })
+});
+
+gulp.task('run_staging', ['minify_all'], function () {
+    nodemon({
+        script: 'server.js',
+        ext: 'js html css',
+        env: {
+            'NODE_ENV': 'staging',
+            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
+            'AWS_SECRET_ACCESS_KEY': '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'
+        }
+    })
+});
+
+gulp.task('run_staging_no_min', function () {
+    nodemon({
+        script: 'server.js',
+        ext: 'js html css',
+        env: {
+            'NODE_ENV': 'staging',
             'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
             'AWS_SECRET_ACCESS_KEY': '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'
         }
