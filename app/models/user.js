@@ -7,7 +7,7 @@ var Schema			= mongoose.Schema;
 var userSchema = new Schema({
     account_expired: {type: Boolean, select: false},
     account_locked: {type: Boolean, select: false},
-    citiesID: {type: Array, select: false},
+    citiesID: {type: [{type: String, ref: 'cities'}], select: false},
     enabled: {type: Boolean, select: false},
     image_path: String,
     jobsID: {type: Array, select: false},

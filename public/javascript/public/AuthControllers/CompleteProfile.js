@@ -87,10 +87,13 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
 
     $scope.sendActivationForm = function () {
         if(!lockSubmitting){
-            var user = this.user;
             var activationCode = this.activationCode;
+            var user = JSON.parse(JSON.stringify(this.user));
             var county = this.county.selected._id;
             var city = this.city.selected._id;
+            //format data according to database model
+            user.citiesID = [city];
+            user.groupsID = [user.groupsID];
 
             if(!user.profession){
                 $scope.resetAlert("danger", "Va rugam selectati o profesie");
@@ -98,36 +101,25 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
                 $scope.resetAlert("danger", "Va rugam introduceti codul de activare");
             }else if(!user.groupsID){
                 $scope.resetAlert("danger", "Va rugam selectati un grup preferat");
-            }else if(!user.practiceType){
-                $scope.resetAlert("danger", "Va rugam selectati un tip de practica");
             }else if(!user.address){
                 $scope.resetAlert("danger", "Va rugam introduceti o adresa");
             }else if(!county){
                 $scope.resetAlert("danger", "Va rugam selectati un judet");
             }else if(!city){
                 $scope.resetAlert("danger", "Va rugam selectati un oras");
-            }else if(!user.phone){
-                $scope.resetAlert("danger", "Va rugam introduceti un numar de telefon");
             }else if(!this.termsStaywell){
                 $scope.resetAlert("danger", "Trebuie sa acceptati termenii si conditiile Staywell pentru a continua");
             }else if(!this.termsMSD){
                 $scope.resetAlert("danger", "Trebuie sa acceptati politica MSD privind datele profesionale pentru a continua");
             }else{
-                console.log(user);
-                console.log(activationCode);
-                console.log(county);
-                console.log(city);
-//                CompleteProfileService.processData.save({professionId: this.selectedProfession, groupId: this.selectedSpecialGroup, activationCode: this.activationCode}).$promise.then(function (resp) {
-//                    if(resp.error){
-//                        $scope.resetAlert("danger", "A aparut o eroare pe server");
-//                    }else{
-//                        if(resp.activated){
-//                            $window.location.href = "pro";
-//                        }else{
-//                            $scope.resetAlert("danger", "Codul de activare nu este valid");
-//                        }
-//                    }
-//                });
+                CompleteProfileService.processData.save({user: user, activationCode: activationCode}).$promise.then(function (resp) {
+                    console.log(resp);
+                    if(resp.error){
+                        $scope.resetAlert("danger", resp.error);
+                    }else{
+                        $window.location.href = "pro";
+                    }
+                });
             }
         }
     };

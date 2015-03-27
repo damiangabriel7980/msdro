@@ -205,6 +205,26 @@ var disconnectAllEntitiesFromEntity = function (connectedEntity, connection_name
     });
 };
 
+//trim every keys except the ones specified in the "fields" array
+var trimObject = function (obj, fields) {
+    if(typeof obj !== "object") obj = {};
+    if(typeof fields !== "object") fields = [];
+    if(fields.constructor.toString().indexOf("Array") == -1) fields = [];
+    try{
+        var ret = {};
+        for(var key in obj){
+            if(obj.hasOwnProperty(key)){
+                if(fields.indexOf(key) > -1){
+                    ret[key] = obj[key];
+                }
+            }
+        }
+        return ret;
+    }catch(ex){
+        return {};
+    }
+};
+
 //=========================================================================================== functions for user groups
 
 var getNonSpecificUserGroupsIds = function(user, callback){
@@ -5124,42 +5144,42 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
 
     router.route('/accountActivation/processData')
-        .post(function(req,res){
-            var professionId = req.body.professionId;
-            var groupId = req.body.groupId;
+        .post(isLoggedIn, function(req,res){
             var activationCode = req.body.activationCode;
+            //make sure only the info provided in the form is updated
+            var userData = trimObject(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions']);
+
             User.findOne({_id: req.user._id}).exec(function (err, user) {
                 if(err || !user){
                     logger.error(err);
-                    res.send({error: true});
+                    res.send({error: "A aparut o eroare pe server"});
                 }else{
                     //establish default user group
-                    UserGroup.findOne({profession: professionId, display_name: "Default"}, function (err, group) {
+                    UserGroup.findOne({profession: userData.profession, display_name: "Default"}, function (err, group) {
                         if(err || !group){
                             logger.error(err);
-                            res.send({error: true});
+                            res.send({error: "A aparut o eroare pe server"});
                         }else{
-                            var groupsToAdd = [group._id.toString()];
-                            if(groupId){
-                                groupsToAdd.push(groupId.toString());
-                            }
-                            //get code
-                            ActivationCodes.findOne({profession: professionId}).select('+value').exec(function (err, code) {
-                                if(err){
+                            if(!userData.groupsID) userData.groupsID = [];
+                            userData.groupsID.push(group._id.toString());
+                            //validate activation code
+                            ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
+                                if(err || !code){
                                     logger.error(err);
-                                    res.send({error: true});
+                                    res.send({error: "A aparut o eroare pe server"});
                                 }else{
                                     //validate code
                                     if(SHA512(activationCode).toString() !== code.value){
-                                        res.send({success: true, activated: false});
+                                        res.send({error: "Codul de activare nu este valid"});
                                     }else{
-                                        User.update({_id: user._id},{$set: {profession: professionId, groupsID: groupsToAdd, state: "ACCEPTED"}},function (err) {
+                                        userData.state = "ACCEPTED";
+                                        User.update({_id: user._id},{$set: userData},function (err) {
                                             if (err){
                                                 logger.error(err);
-                                                res.send({error: true});
+                                                res.send({error: "A aparut o eroare pe server"});
                                             }else{
-                                                //user is activated
-                                                res.send({success: true, activated: true});
+                                                //all done. user is activated and profile completed
+                                                res.send({success: true});
                                             }
                                         });
                                     }
