@@ -155,7 +155,7 @@ services.factory('AuthService', ['$resource', function($resource){
         })
     }
 }]);
-services.factory('ActivationCodeService', ['$resource', function($resource){
+services.factory('CompleteProfileService', ['$resource', function($resource){
     return {
         professions: $resource('api/accountActivation/professions', {}, {
             query: { method: 'GET', isArray: true }

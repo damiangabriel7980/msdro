@@ -1,4 +1,4 @@
-app.controller('CompleteProfile', ['$scope', 'ActivationCodeService', '$window', function($scope, ActivationCodeService, $window) {
+app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window', function($scope, CompleteProfileService, $window) {
 
     //================================================================================================== init variables
     $scope.user = {
@@ -30,14 +30,14 @@ app.controller('CompleteProfile', ['$scope', 'ActivationCodeService', '$window',
     //============================================================================================== profession / group
 
     $scope.selectProfession = function () {
-        ActivationCodeService.specialGroups.query({profession: $scope.user.profession}).$promise.then(function (response) {
+        CompleteProfileService.specialGroups.query({profession: $scope.user.profession}).$promise.then(function (response) {
             $scope.groups = response;
             $scope.user.groupsID = response[0]._id;
             lockSubmitting = false;
         });
     };
 
-    ActivationCodeService.professions.query().$promise.then(function (response) {
+    CompleteProfileService.professions.query().$promise.then(function (response) {
         lockSubmitting = true;
         $scope.professions = response;
         $scope.user.profession = response[0]._id;
@@ -64,7 +64,7 @@ app.controller('CompleteProfile', ['$scope', 'ActivationCodeService', '$window',
     $scope.$watch('county.selected', function () {
         if($scope.county.selected){
             resetCities();
-            ActivationCodeService.cities.query({county: $scope.county.selected._id}).$promise.then(function (resp) {
+            CompleteProfileService.cities.query({county: $scope.county.selected._id}).$promise.then(function (resp) {
                 if(resp.success){
                     $scope.cities = resp.success.sort(function(a,b){
                         if ( a.name < b.name )
@@ -79,7 +79,7 @@ app.controller('CompleteProfile', ['$scope', 'ActivationCodeService', '$window',
     });
 
     // get counties and cities
-    ActivationCodeService.counties.query().$promise.then(function (resp) {
+    CompleteProfileService.counties.query().$promise.then(function (resp) {
         $scope.counties = resp.success;
     });
 
@@ -117,7 +117,7 @@ app.controller('CompleteProfile', ['$scope', 'ActivationCodeService', '$window',
                 console.log(activationCode);
                 console.log(county);
                 console.log(city);
-//                ActivationCodeService.processData.save({professionId: this.selectedProfession, groupId: this.selectedSpecialGroup, activationCode: this.activationCode}).$promise.then(function (resp) {
+//                CompleteProfileService.processData.save({professionId: this.selectedProfession, groupId: this.selectedSpecialGroup, activationCode: this.activationCode}).$promise.then(function (resp) {
 //                    if(resp.error){
 //                        $scope.resetAlert("danger", "A aparut o eroare pe server");
 //                    }else{
