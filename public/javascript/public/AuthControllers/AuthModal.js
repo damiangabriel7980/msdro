@@ -32,7 +32,7 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
                 if(resp.accepted){
                     $window.location.href = "pro";
                 }else{
-                    $scope.renderView("insertCode");
+                    $scope.renderView("completeProfile");
                 }
             }
         })

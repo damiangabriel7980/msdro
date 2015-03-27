@@ -1,4 +1,4 @@
-app.controller('ActivationCode', ['$scope', 'ActivationCodeService', '$window', function($scope, ActivationCodeService, $window) {
+app.controller('CompleteProfile', ['$scope', 'ActivationCodeService', '$window', function($scope, ActivationCodeService, $window) {
 
     //================================================================================================== init variables
     $scope.user = {
