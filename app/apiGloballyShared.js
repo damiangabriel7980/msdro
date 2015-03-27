@@ -24,6 +24,7 @@ module.exports = function(app, mandrill, logger, router) {
         .post(function (req, res) {
             var namePatt = new XRegExp('^[a-zA-Z]{3,100}$');
 
+            var title = req.body.title?req.body.title:"";
             var name = req.body.name?req.body.name:"";
             var email = req.body.email?req.body.email:"";
             var password = req.body.password?req.body.password:"";
@@ -35,6 +36,9 @@ module.exports = function(app, mandrill, logger, router) {
             //validate data
             if(!validator.isEmail(email)){
                 info.message = "Adresa de e-mail nu este valida";
+                res.json(info);
+            }else if(typeof title !== "number"){
+                info.message = "Titlul este obligatoriu";
                 res.json(info);
             }else if(!namePatt.test(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''))){
                 info.message = "Numele trebuie sa contina minim 3 litere si doar caracterele speciale '-', '.'";
@@ -75,6 +79,7 @@ module.exports = function(app, mandrill, logger, router) {
                                 newUser.birthday=null;
                                 newUser.description="";
                                 newUser.jobsID=[];
+                                newUser.title = title;
                                 //set activation token
                                 crypto.randomBytes(40, function(err, buf) {
                                     if(err){

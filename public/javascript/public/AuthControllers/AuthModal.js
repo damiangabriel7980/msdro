@@ -38,26 +38,6 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
         })
     };
 
-    $scope.signup = function () {
-        console.log(this);
-        if(!(this.email && this.name && this.password && this.confirm)){
-            $scope.resetAlert("danger", "Toate campurile sunt obligatorii");
-        }else if(!this.terms) {
-            $scope.resetAlert("danger", "Trebuie sa acceptati termenii si conditiile pentru a continua");
-        }else if(this.password != this.confirm) {
-            $scope.resetAlert("danger", "Parolele nu corespund");
-        }else{
-            AuthService.signup.query({name: this.name, email: this.email, password: this.password, createdFromStaywell: true}).$promise.then(function (resp) {
-                if(resp.error){
-                    $scope.resetAlert("danger", resp.message);
-                }else{
-                    $scope.registeredAddress = resp.user;
-                    $scope.renderView("created");
-                }
-            })
-        }
-    };
-
     $scope.reset = function () {
         console.log(this.email);
         if(this.email==undefined)
