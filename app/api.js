@@ -4052,7 +4052,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/userdata')
 
         .get(function(req, res) {
-            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID +address").populate('therapeutic-areasID').exec(function (err, user) {
+            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID +address +practiceType").populate('therapeutic-areasID').exec(function (err, user) {
                 if(err){
                     res.send(err);
                 }else{
@@ -4164,7 +4164,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     "therapeutic-areasID": newData.therapeuticAreas || [],
                     citiesID: [newData.city],
                     address: newData.address,
-                    subscriptions: newData.subscriptions
+                    subscriptions: newData.subscriptions,
+                    practiceType: newData.practiceType
                 }, function (err, wres) {
                     if(err){
                         logger.error(err);

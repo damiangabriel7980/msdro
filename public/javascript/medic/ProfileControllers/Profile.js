@@ -10,12 +10,24 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
 
     //================================================================================================================== PERSONAL INFO
 
+    //------------------------------------------------------------------------------- init variables
 
     $scope.jobTypes = [
         {number: 1, name: "Spital"},
         {number: 2, name: "CMI"},
         {number: 3, name: "Policlinica"},
         {number: 4, name: "Farmacie"}
+    ];
+
+    $scope.practices = [
+        {
+            number: 1,
+            name: "Public"
+        },
+        {
+            number: 2,
+            name: "Privat"
+        }
     ];
 
     //------------------------------------------------------------------------------ retrieve personal info
@@ -149,6 +161,8 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
             toSend.city = this.city.selected._id;
             toSend.address = this.address;
             toSend.subscriptions = this.userData.subscriptions;
+            console.log(this.userData.practiceType);
+            toSend.practiceType = this.userData.practiceType;
             ProfileService.uploadProfile.save({newData:toSend}).$promise.then(function (resp) {
                 $scope.userProfileAlert.message = resp.message;
                 if(resp.error){
