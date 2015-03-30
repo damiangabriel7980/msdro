@@ -4052,7 +4052,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/userdata')
 
         .get(function(req, res) {
-            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID").populate('therapeutic-areasID').exec(function (err, user) {
+            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID +address").populate('therapeutic-areasID').exec(function (err, user) {
                 if(err){
                     res.send(err);
                 }else{
@@ -4143,37 +4143,38 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             var newData = req.body.newData;
             var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
-            //check name
-            if((!namePatt.test(newData.fullname.toString()))){
+            if((!namePatt.test(newData.fullname.toString()))){ //check name
                 ans.error = true;
                 ans.message = "Numele trebuie sa contina doar caractere, minim 3";
                 res.json(ans);
+            }else if(!phonePatt.test(newData.phone.toString())){ //check phone number
+                ans.error = true;
+                ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
+                res.json(ans);
+            }else if(!newData.address){
+                ans.error = true;
+                ans.message = "Adresa este obligatorie";
+                res.json(ans);
             }else{
-                //check phone number
-                if(!phonePatt.test(newData.phone.toString())){
-                    ans.error = true;
-                    ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
+                console.log(newData);
+                User.update({_id: req.user._id}, {
+                    name: newData.fullname,
+                    phone: newData.phone,
+                    subscription: newData.newsletter?1:0,
+                    "therapeutic-areasID": newData.therapeuticAreas || [],
+                    citiesID: [newData.city],
+                    address: newData.address
+                }, function (err, wres) {
+                    if(err){
+                        logger.error(err);
+                        ans.error = true;
+                        ans.message = "Eroare la actualizare. Verificati datele";
+                    }else{
+                        ans.error = false;
+                        ans.message = "Datele au fost modificate";
+                    }
                     res.json(ans);
-                }else{
-                    console.log(newData);
-                    User.update({_id: req.user._id}, {
-                        name: newData.fullname,
-                        phone: newData.phone,
-                        subscription: newData.newsletter?1:0,
-                        "therapeutic-areasID": newData.therapeuticAreas || [],
-                        citiesID: [newData.city]
-                    }, function (err, wres) {
-                        if(err){
-                            logger.error(err);
-                            ans.error = true;
-                            ans.message = "Eroare la actualizare. Verificati datele";
-                        }else{
-                            ans.error = false;
-                            ans.message = "Datele au fost modificate";
-                        }
-                        res.json(ans);
-                    });
-                }
+                });
             }
         });
 

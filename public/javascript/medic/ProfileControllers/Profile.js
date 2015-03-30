@@ -30,6 +30,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
         $scope.imageUser = imagePre + resp.image_path;
         $scope.hideImg="show";
         $scope.selectedAreas = resp['therapeutic-areasID'] || [];
+        $scope.address = resp.address;
 
         if(resp.job){
             $scope.job = resp.job[0];
@@ -146,6 +147,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
             toSend.therapeuticAreas = this.newAreas;
             toSend.county = this.county.selected._id;
             toSend.city = this.city.selected._id;
+            toSend.address = this.address;
             ProfileService.uploadProfile.save({newData:toSend}).$promise.then(function (resp) {
                 $scope.userProfileAlert.message = resp.message;
                 if(resp.error){
