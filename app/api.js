@@ -4163,7 +4163,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     subscription: newData.newsletter?1:0,
                     "therapeutic-areasID": newData.therapeuticAreas || [],
                     citiesID: [newData.city],
-                    address: newData.address
+                    address: newData.address,
+                    subscriptions: newData.subscriptions
                 }, function (err, wres) {
                     if(err){
                         logger.error(err);

@@ -23,7 +23,6 @@ var userSchema = new Schema({
     show_welcome_screen: Boolean,
     state: {type: String, select: false},
     description: {type: String, select: false},
-    subscription: Number,
     password     : {type: String, select: false},
     username     : String,
     groupsID     : [{type: String, ref: 'UserGroup'}],

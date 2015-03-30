@@ -26,7 +26,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
         $scope.uploadAlert = {newAlert:false, type:"", message:""};
         $scope.fullname = resp.name;
         $scope.phone = resp.phone;
-        $scope.newsletter = resp.subscription == 1;
+        $scope.subscriptions = resp.subscriptions;
         $scope.imageUser = imagePre + resp.image_path;
         $scope.hideImg="show";
         $scope.selectedAreas = resp['therapeutic-areasID'] || [];
@@ -148,6 +148,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
             toSend.county = this.county.selected._id;
             toSend.city = this.city.selected._id;
             toSend.address = this.address;
+            toSend.subscriptions = this.userData.subscriptions;
             ProfileService.uploadProfile.save({newData:toSend}).$promise.then(function (resp) {
                 $scope.userProfileAlert.message = resp.message;
                 if(resp.error){
