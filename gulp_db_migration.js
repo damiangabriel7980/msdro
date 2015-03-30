@@ -791,3 +791,110 @@ gulp.task('breakGroups', function () {
         });
     });
 });
+
+gulp.task('replaceUsers', function () {
+    var conversionArrays = {
+        groupsID: {
+            "54f58b16c3ee70fa20571e46": "54d12b2968a61a964a33523d",
+            "54f58b16c3ee70fa20571e47": "54d12b2968a61a964a33523e",
+            "54f58b16c3ee70fa20571e48": "54d12b2968a61a964a335241",
+            "54f58b16c3ee70fa20571e49": "54d12b2968a61a964a335242",
+            "54f58b16c3ee70fa20571e4a": "54d12b2968a61a964a335243",
+            "54f58b16c3ee70fa20571e4b": "54d12b2968a61a964a335246"
+        }
+    };
+
+    var conversionAttributes = {
+        profession: {
+            "54f58b16c3ee70fa20571e44": ObjectID("54d12b2968a61a964a33523b"),
+            "54f58b16c3ee70fa20571e45": ObjectID("54d12b2968a61a964a33523c")
+        }
+    };
+
+    var mongoAddress = 'mongodb://msdprod:PWj4zOt_qX9oRRDH8cwiUqadb@81.196.104.4:2941/MSDQualitance';
+
+    MongoClient.connect(mongoAddress, function (err, db) {
+        var updateCount = 0;
+        var eventsUpdateCount = 0;
+        async.waterfall([
+            function (wtfCallback) {
+                db.collection('users').find({}).toArray(function (err, users) {
+                    if(err){
+                        wtfCallback(err);
+                    }else{
+                        async.each(users, function (user, callback) {
+                            var newProfession = null;
+                            var newGroups = [];
+                            if(user.profession){
+                                //console.log(conversionAttributes.profession[user.profession.toString()]);
+                                newProfession = conversionAttributes.profession[user.profession.toString()];
+                            }
+                            if(user.groupsID){
+                                for(var i=0; i<user.groupsID.length; i++){
+                                    //console.log(conversionArrays.groupsID[user.groupsID[i]]);
+                                    newGroups.push(conversionArrays.groupsID[user.groupsID[i]]);
+                                }
+                                //console.log(newGroups);
+                            }
+                            db.collection('users').update({_id: user._id}, {$set: {profession: newProfession, groupsID: newGroups}}, function (err, wres) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    updateCount++;
+                                    callback();
+                                }
+                            });
+                        }, function (err) {
+                            if(err){
+                                wtfCallback(err);
+                            }else{
+                                console.log("Updated "+updateCount+" users");
+                                wtfCallback();
+                            }
+                        });
+                    }
+                });
+            },
+            function (wtfCallback) {
+                db.collection('calendar-events').find({}).toArray(function (err, events) {
+                    if(err){
+                        wtfCallback(err);
+                    }else{
+                        async.each(events, function (event, callback) {
+                            var newGroups = [];
+                            if(event.groupsID){
+                                for(var i=0; i<event.groupsID.length; i++){
+                                    //console.log(conversionArrays.groupsID[event.groupsID[i]]);
+                                    newGroups.push(conversionArrays.groupsID[event.groupsID[i]]);
+                                }
+                                //console.log(newGroups);
+                            }
+                            db.collection('calendar-events').update({_id: event._id}, {$set: {groupsID: newGroups}}, function (err, wres) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    eventsUpdateCount++;
+                                    callback();
+                                }
+                            });
+                        }, function (err) {
+                            if(err){
+                                wtfCallback(err);
+                            }else{
+                                console.log("Updated "+eventsUpdateCount+" events");
+                                wtfCallback();
+                            }
+                        });
+                    }
+                });
+            }
+        ], function (err) {
+            if(err){
+                console.log(err);
+            }else{
+                console.log("SUCCESS");
+                db.close();
+            }
+        });
+    });
+});
