@@ -160,7 +160,7 @@ services.factory('CompleteProfileService', ['$resource', function($resource){
         professions: $resource('api/accountActivation/professions', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        processData: $resource('api/accountActivation/processData', {}, {
+        processData: $resource('apiGloballyShared/accountActivation/completeProfile', {}, {
             save: {method:'POST'}
         }),
         specialGroups: $resource('api/accountActivation/specialGroups/:profession', {}, {

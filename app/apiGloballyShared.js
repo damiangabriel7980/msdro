@@ -19,6 +19,36 @@ module.exports = function(app, mandrill, logger, router) {
         next();
     });
 
+    // middleware to ensure user is logged in
+    function isLoggedIn(req, res, next) {
+        console.log("check login");
+        if (req.isAuthenticated()){
+            return next();
+        }else{
+            res.status(403).end();
+        }
+    }
+
+    //trim every keys except the ones specified in the "fields" array
+    var trimObject = function (obj, fields) {
+        if(typeof obj !== "object") obj = {};
+        if(typeof fields !== "object") fields = [];
+        if(fields.constructor.toString().indexOf("Array") == -1) fields = [];
+        try{
+            var ret = {};
+            for(var key in obj){
+                if(obj.hasOwnProperty(key)){
+                    if(fields.indexOf(key) > -1){
+                        ret[key] = obj[key];
+                    }
+                }
+            }
+            return ret;
+        }catch(ex){
+            return {};
+        }
+    };
+
 //===================================================================================================================== create account
     router.route('/createAccount')
         .post(function (req, res) {
@@ -132,6 +162,54 @@ module.exports = function(app, mandrill, logger, router) {
                     }
                 });
             }
+        });
+
+    router.route('/accountActivation/completeProfile')
+        .post(isLoggedIn, function(req,res){
+            var activationCode = req.body.activationCode;
+            //make sure only the info provided in the form is updated
+            var userData = trimObject(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions']);
+
+            User.findOne({_id: req.user._id}).exec(function (err, user) {
+                if(err || !user){
+                    logger.error(err);
+                    res.send({error: "A aparut o eroare pe server"});
+                }else{
+                    //establish default user group
+                    UserGroup.findOne({profession: userData.profession, display_name: "Default"}, function (err, group) {
+                        if(err || !group){
+                            logger.error(err);
+                            res.send({error: "A aparut o eroare pe server"});
+                        }else{
+                            if(!userData.groupsID) userData.groupsID = [];
+                            userData.groupsID.push(group._id.toString());
+                            //validate activation code
+                            ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
+                                if(err || !code){
+                                    logger.error(err);
+                                    res.send({error: "A aparut o eroare pe server"});
+                                }else{
+                                    //validate code
+                                    if(SHA512(activationCode).toString() !== code.value){
+                                        res.send({error: "Codul de activare nu este valid"});
+                                    }else{
+                                        userData.state = "ACCEPTED";
+                                        User.update({_id: user._id},{$set: userData},function (err) {
+                                            if (err){
+                                                logger.error(err);
+                                                res.send({error: "A aparut o eroare pe server"});
+                                            }else{
+                                                //all done. user is activated and profile completed
+                                                res.send({success: true});
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         });
 
 //============================================================================================= generate token for resetting user password
