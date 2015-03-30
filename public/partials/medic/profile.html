@@ -93,6 +93,10 @@
                             <label>Tip de practica:</label>
                             <select ng-model="userData.practiceType" class="form-control" ng-options="practice.number as practice.name for practice in practices"></select>
                         </div>
+                        <div class="form-group col-md-6">
+                            <label>Sursa de informare:</label>
+                            <select ng-model="infoSource" class="form-control"></select>
+                        </div>
                         <div class="col-md-12">
                             <button type="submit" ng-click="submitProfileForm(profileForm.$valid)" class="btn btn-primary pull-right">Salveaza</button>
                         </div>
