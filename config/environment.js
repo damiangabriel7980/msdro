@@ -22,7 +22,7 @@ module.exports = function(){
 
         case 'production':
             return {
-                database: "mongodb://msdprod:PWj4zOt_qX9oRRDH8cwiUqadb@81.196.104.4:2941/MSDQualitance",
+                database: "mongodb://msdprod:PWj4zOt_qX9oRRDH8cwiUqadb@188.166.46.88:9050/MSDQualitance",
                 amazonBucket: "msd-prod",
                 pushServerAddress: "https://notif.qualitance.com",
                 elasticServer: "127.0.0.1",
