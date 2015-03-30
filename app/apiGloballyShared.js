@@ -1,10 +1,14 @@
-var mongoose = require('mongoose');
 var User = require('./models/user');
+var UserGroup = require('./models/userGroup');
+var ActivationCodes =require('./models/activationCodes');
 var Roles=require('./models/roles');
+
+var mongoose = require('mongoose');
 var XRegExp  = require('xregexp').XRegExp;
 var validator = require('validator');
 var crypto   = require('crypto');
 var async = require('async');
+var SHA512   = require('crypto-js/sha512');
 
 
 module.exports = function(app, mandrill, logger, router) {
