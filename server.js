@@ -24,7 +24,6 @@ var path = require('path');
 var app      = express();
 var http = require('http');
 var https = require('https');
-var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
 var morgan       = require('morgan');
@@ -42,8 +41,11 @@ var logger = require('./config/winston');
 app.use(morgan({ "stream": logger.stream }));
 
 // configuration ===============================================================
-mongoose.connect(my_config.database); // connect to our database
 
+//database
+require('./config/database.js')(my_config);
+
+//passport
 require('./config/passport')(passport, logger); // pass passport for configuration
 
 // set up our express application
