@@ -1,8 +1,8 @@
-//set following variable to true if you want to disable patients area
-const DISABLE_PATIENTS = false;
-
 var Config = require('../config/environment.js'),
     my_config = new Config();
+
+//set following variable to true if you want to disable patients area
+const DISABLE_PATIENTS = my_config.disablePatients;
 
 var User = require('./models/user');
 var Roles = require('./models/roles');
