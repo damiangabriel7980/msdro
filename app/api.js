@@ -4072,21 +4072,11 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/userdata')
 
         .get(function(req, res) {
-            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID").exec(function (err, user) {
+            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID").populate('therapeutic-areasID').exec(function (err, user) {
                 if(err){
                     res.send(err);
                 }else{
-                    console.log(user);
-                    var userCopy = {};
-                    userCopy['id']=user._id;
-                    userCopy['name'] = user.name;
-                    userCopy['image_path'] = user.image_path;
-                    userCopy['phone'] = user.phone;
-                    userCopy['points'] = user.points;
-                    userCopy['subscription'] = user.subscription;
-                    userCopy['username'] = user.username;
-                    userCopy['therapeutic-areasID'] = user['therapeutic-areasID'];
-                    userCopy['citiesID'] = user.citiesID;
+                    var userCopy = JSON.parse(JSON.stringify(user));
                     async.parallel([
                         function (callback) {
                             if(user['jobsID']){
@@ -4185,23 +4175,21 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
                     res.json(ans);
                 }else{
-                    var serializedAreas = [];
-                    for(var i=0; i<newData.therapeuticAreas.length; i++){
-                        serializedAreas.push(newData.therapeuticAreas[i].id.toString());
-                    }
-                    var upd = User.update({_id:req.user._id}, {
+                    console.log(newData);
+                    User.update({_id: req.user._id}, {
                         name: newData.fullname,
                         phone: newData.phone,
                         subscription: newData.newsletter?1:0,
-                        "therapeutic-areasID": serializedAreas,
+                        "therapeutic-areasID": newData.therapeuticAreas || [],
                         citiesID: [newData.city]
-                    }, function () {
-                        if(!upd._castError){
-                            ans.error = false;
-                            ans.message = "Datele au fost modificate";
-                        }else{
+                    }, function (err, wres) {
+                        if(err){
+                            logger.error(err);
                             ans.error = true;
                             ans.message = "Eroare la actualizare. Verificati datele";
+                        }else{
+                            ans.error = false;
+                            ans.message = "Datele au fost modificate";
                         }
                         res.json(ans);
                     });

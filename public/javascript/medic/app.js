@@ -12,7 +12,8 @@ var app = angular.module('app',
         'angular-carousel',
         'angularFileUpload',
         'ui.bootstrap',
-        'ngCookies'
+        'ngCookies',
+        'therapeuticSelect'
     ]);
 
 app.config(['$locationProvider', function($location) {

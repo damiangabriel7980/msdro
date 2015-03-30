@@ -30,9 +30,9 @@
                                 <p class="" ng-show="profileForm.nume.$error.required">Numele este obligatoriu!</p>
                             </div>
 
-                            <div class="form-group col-md-12" ng-class="{'has-error': profileForm.telefon.$error.pattern || profileForm.telefon.$error.required}">
+                            <div class="form-group col-md-12" ng-class="{'has-error': profileForm.telefon.$error.pattern}">
                                 <label for="telefon">Telefon<sup>*</sup>:</label>
-                                <input type="text" class="form-control" id="telefon" name="telefon" ng-model="phone" ng-pattern="/^[0-9]{10,20}$/" ng-required="true">
+                                <input type="text" class="form-control" id="telefon" name="telefon" ng-model="phone" ng-pattern="/^[0-9]{10,20}$/">
                                 <p class="" ng-show="profileForm.telefon.$error.pattern">Numarul de telefon trebuie sa aiba minim 10 cifre!</p>
                                 <p class="" ng-show="profileForm.telefon.$error.required">Numarul de telefon este obligatoriu!</p>
                             </div>
@@ -83,20 +83,7 @@
                             <p class="" ng-show="profileForm.oras.$invalid && !profileForm.oras.$pristine">Orasul nu este valid!</p>
                         </div>
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="areas">Arii terapeutice:</label>
-                                <select ng-model="selectedArea" ng-options="area as area.name.replace('0','&nbsp;&nbsp;&nbsp;&nbsp;') for area in allAreas"
-                                        class="form-control" id="areas" style="width: 100%;" ng-change="areaWasSelected(selectedArea)">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div ng-repeat="userArea in userTherapeuticAreas">
-                                <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
-                                    {{userArea.name.replace('0','')}}&nbsp;
-                                    <i class="glyphicon glyphicon-remove-sign" ng-click="removeUserArea(userArea.id)" style="cursor: pointer;"></i>
-                                </div>
-                            </div>
+                            <therapeutic-select all-areas="allAreas" selected-areas="selectedAreas" returned-areas="newAreas"></therapeutic-select>
                         </div>
                         <div class="col-md-12">
                             <button type="submit" ng-click="submitProfileForm(profileForm.$valid)" class="btn btn-primary pull-right">Salveaza</button>
@@ -112,10 +99,10 @@
             </div>
             <form name="jobForm" novalidate>
                 <div class="col-md-12">
-                    <div class="form-group col-md-6" ng-class="{'has-error':jobForm.tip_munca.$invalid && !jobForm.tip_munca.$pristine}">
+                    <div class="form-group col-md-6">
                         <label for="tipLoc">Tip loc de munca<sup>*</sup>:</label>
-                        <select ng-model="selectedJob" name="tip_munca" ng-options="jobS for jobS in jobTypes" class="form-control" id="tipLoc" style="width: 100%;" ng-required="true">
-                            <option value="">Selecteaza o optiune</option>
+                        <select ng-model="selectedJob" name="tip_munca" ng-options="job.number as job.name for job in jobTypes"
+                                class="form-control" id="tipLoc" style="width: 100%;" ng-required="true">
                         </select>
                         <p class="" ng-show="jobForm.tip_munca.$invalid && !jobForm.tip_munca.$pristine">Tipul locului de munca este invalid!</p>
                     </div>
