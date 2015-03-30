@@ -43,7 +43,7 @@ app.use(morgan({ "stream": logger.stream }));
 // configuration ===============================================================
 
 //database
-require('./config/database.js')(my_config);
+require('./config/database.js')(my_config, logger);
 
 //passport
 require('./config/passport')(passport, logger); // pass passport for configuration
