@@ -196,7 +196,7 @@
                     </a>
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li ng-repeat="app in specialApps"  ui-sref="groupFeatures({specialApp: app._id})" ng-click="navCollapsed = true"><a>{{app.name}}</a></li>
-                        <li ng-if="groupProduct" ui-sref="groupSpecialProduct({product_id: groupProduct._id})" ng-click="navCollapsed = true"><a >{{groupProduct.product_name}}</a></li>
+                        <li ng-if="groupProduct" ui-sref="groupSpecialProduct({product_id: groupProduct._id})" ui-sref-opts="{reload: true}" ng-click="navCollapsed = true"><a >{{groupProduct.product_name}}</a></li>
 
                     </ul>
                 </li>
