@@ -19,7 +19,7 @@
                 <input type="radio" ng-model="proofType" value="file"><label>&nbsp;Dovada:</label>
                 <button class="btn btn-default form-control" type="file" ng-file-select ng-file-change="proofSelected($files, $event)" id="proof"
                         multiple="false" ng-disabled="proofType!='file'" popover="{{codeTooltip}}" popover-trigger="mouseenter" popover-placement="bottom">
-                    <i class="glyphicon glyphicon-file"></i>&nbsp;Incarca dovada
+                    <i class="glyphicon glyphicon-file"></i>&nbsp;{{proofFile?proofFile.name:"Incarca dovada"}}
                 </button>
             </div>
             <div class="form-group col-md-3">

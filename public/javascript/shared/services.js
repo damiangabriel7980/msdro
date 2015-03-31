@@ -49,3 +49,15 @@ services.factory('ActionModal', ['$modal', function($modal){
         }
     }
 }]);
+services.factory('Utils', function () {
+    return{
+        fileToBase64: function (file, callback) {
+            var reader = new FileReader();
+            reader.onloadend = function(event){
+                var f = event.target.result;
+                callback(f.split("base64,")[1]);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+});

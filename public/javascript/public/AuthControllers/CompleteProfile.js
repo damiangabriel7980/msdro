@@ -1,4 +1,4 @@
-app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window', function($scope, CompleteProfileService, $window) {
+app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window', 'Utils', function($scope, CompleteProfileService, $window, Utils) {
 
     //================================================================================================== init variables
     $scope.user = {
@@ -26,6 +26,8 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
             name: "Privat"
         }
     ];
+
+    $scope.proofFile = null;
 
     //============================================================================================== profession / group
 
@@ -83,6 +85,14 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
         $scope.counties = resp.success;
     });
 
+    //====================================================================================================== load proof
+
+    $scope.proofSelected = function ($files, $event) {
+        if(($files||[])[0]){
+            $scope.proofFile = $files[0];
+        }
+    };
+
     //========================================================================================================== submit
 
     $scope.sendActivationForm = function () {
@@ -97,8 +107,12 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
 
             if(!user.profession){
                 $scope.resetAlert("danger", "Va rugam selectati o profesie");
-            }else if(!activationCode){
+            }else if(!(this.proofType === 'code' || this.proofType === 'file')){
+                $scope.resetAlert("danger", "Trebuie sa incarcati o dovada sau sa introduceti un cod");
+            }else if(this.proofType == "code" && !activationCode){
                 $scope.resetAlert("danger", "Va rugam introduceti codul de activare");
+            }else if(this.proofType == "file" && !$scope.proofFile){
+                $scope.resetAlert("danger", "Va rugam incarcati dovada");
             }else if(!user.groupsID){
                 $scope.resetAlert("danger", "Va rugam selectati un grup preferat");
             }else if(!user.address){
@@ -112,14 +126,39 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
             }else if(!this.termsMSD){
                 $scope.resetAlert("danger", "Trebuie sa acceptati politica MSD privind datele profesionale pentru a continua");
             }else{
-                CompleteProfileService.processData.save({user: user, activationCode: activationCode}).$promise.then(function (resp) {
-                    console.log(resp);
-                    if(resp.error){
-                        $scope.resetAlert("danger", resp.error);
-                    }else{
-                        $window.location.href = "pro";
-                    }
-                });
+
+                var uploadData = function (userData, activationData) {
+                    //console.log(userData);
+                    //console.log(activationData);
+                    CompleteProfileService.processData.save({user: userData, activation: activationData}).$promise.then(function (resp) {
+                        console.log(resp);
+                        if(resp.error){
+                            $scope.resetAlert("danger", resp.error);
+                        }else{
+                            $window.location.href = "pro";
+                        }
+                    });
+                };
+
+                var activation = {
+                    type: this.proofType,
+                    value: null
+                };
+
+                if(this.proofType === "file"){
+                    var extension = $scope.proofFile.name.split('.').pop();
+                    Utils.fileToBase64($scope.proofFile, function (b64) {
+                        activation.value = {
+                            file: b64,
+                            extension: extension
+                        };
+                        uploadData(user, activation);
+                    });
+                }else{
+                    activation.value = activationCode;
+                    uploadData(user, activation);
+                }
+
             }
         }
     };
