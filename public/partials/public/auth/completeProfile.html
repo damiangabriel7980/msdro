@@ -9,20 +9,22 @@
             <alert ng-if="alert.show" type="{{alert.type}}" close="alert.show=false">{{alert.text}}</alert>
         </div>
 
-        <div class="col-md-12 noPadding">
+        <div class="col-md-12 noPadding" ng-init="proofType='file'">
             <div class="form-group col-md-6">
                 <label for="profession">Profesie<sup>*</sup>:</label>
                 <select ng-model="user.profession" class="form-control" ng-change="selectProfession()"
                         ng-options="profession._id as profession.display_name for profession in professions" id="profession"></select>
             </div>
-            <div class="form-group col-md-6">
-                <label for="code">Cod de activare<sup>*</sup>:</label>
-                <div class="input-group">
-                    <input id="code" type="text" ng-model="activationCode" class="form-control" aria-describedby="codeAddon">
-                    <span class="input-group-addon" id="codeAddon">
-                        <i class="glyphicon glyphicon-info-sign" popover="{{codeTooltip}}" popover-trigger="mouseenter" popover-placement="left"></i>
-                    </span>
-                </div>
+            <div class="form-group col-md-3">
+                <input type="radio" ng-model="proofType" value="file"><label>&nbsp;Dovada:</label>
+                <button class="btn btn-default form-control" type="file" ng-file-select ng-file-change="proofSelected($files, $event)" id="proof"
+                        multiple="false" ng-disabled="proofType!='file'" popover="{{codeTooltip}}" popover-trigger="mouseenter" popover-placement="bottom">
+                    <i class="glyphicon glyphicon-file"></i>&nbsp;Incarca dovada
+                </button>
+            </div>
+            <div class="form-group col-md-3">
+                <input type="radio" ng-model="proofType" value="code"><label>&nbsp;Cod de activare:</label>
+                <input id="code" type="text" ng-model="activationCode" class="form-control" aria-describedby="codeAddon" ng-disabled="proofType!='code'">
             </div>
             <div class="form-group col-md-6">
                 <label for="group">Grup preferat<sup>*</sup>:</label>
