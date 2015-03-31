@@ -228,6 +228,20 @@ app.run(
                 $rootScope.previousState = from.name;
                 $rootScope.currentState = to.name;
             });
+            $rootScope.Terms = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf";
+            $rootScope.Pharma = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf";
+            $rootScope.MerckManual = "/merckManual";
+            var standalone = window.navigator.standalone,
+                userAgent = window.navigator.userAgent.toLowerCase(),
+                safari = /safari/.test( userAgent ),
+                ios = /iphone|ipod|ipad/.test( userAgent );
+            $rootScope.iosDetect = false;
+            if(ios)
+            {
+                if ( !standalone && safari ) {
+                    $rootScope.iosDetect = true;
+                };
+            }
         }
     ]
 );

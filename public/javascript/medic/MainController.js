@@ -148,14 +148,18 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     });
 
     $scope.showFarmaModal = function() {
-        var modalInstance = $modal.open({
-            templateUrl: 'partials/medic/modals/Farma.html',
-            keyboard: false,
-            controller: 'Pharmacovigilance',
-            size: 'lg',
-            windowClass: 'fade modal-responsive',
-            backdrop: 'static'
-        });
+        if($rootScope.iosDetect)
+            window.open($rootScope.Pharma);
+        else {
+            var modalInstance = $modal.open({
+                templateUrl: 'partials/medic/modals/Farma.html',
+                keyboard: false,
+                controller: 'Pharmacovigilance',
+                size: 'lg',
+                windowClass: 'fade modal-responsive',
+                backdrop: 'static'
+            });
+        }
     };
 
     $scope.showContactModal = function(){
@@ -168,26 +172,34 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     };
 
     $scope.showTermsModal = function(){
-        $modal.open({
-            templateUrl: 'partials/medic/modals/Terms.html',
-            size: 'lg',
-            windowClass: 'fade modal-responsive',
-            backdrop: 'static',
-            controller: 'Terms',
-            keyboard: false
-        });
+        if($rootScope.iosDetect)
+            window.open($rootScope.Terms);
+        else {
+            $modal.open({
+                templateUrl: 'partials/medic/modals/Terms.html',
+                size: 'lg',
+                windowClass: 'fade modal-responsive',
+                backdrop: 'static',
+                controller: 'Terms',
+                keyboard: false
+            });
+        }
     };
 
     //merck modal
     $scope.showMerckManual = function(){
-        $modal.open({
-            templateUrl: 'partials/medic/modals/merckManual.html',
-            size: 'lg',
-            keyboard: false,
-            backdrop: 'static',
-            windowClass: 'fade modal-responsive',
-            controller: 'MerckManual'
-        });
+        if($rootScope.iosDetect)
+            window.open($rootScope.MerckManual);
+        else{
+            $modal.open({
+                templateUrl: 'partials/medic/modals/merckManual.html',
+                size: 'lg',
+                keyboard: false,
+                backdrop: 'static',
+                windowClass: 'fade modal-responsive',
+                controller: 'MerckManual'
+            });
+        }
     };
 
 

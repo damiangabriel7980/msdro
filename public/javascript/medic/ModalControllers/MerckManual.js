@@ -1,6 +1,6 @@
 controllers.controller('MerckManual', ['$scope', '$rootScope', '$sce', '$modalInstance', '$resource','$timeout', function($scope, $rootScope, $sce, $modalInstance, $resource,$timeout) {
     $scope.pdfUrl="/merckManual";
-
+    
     $scope.closeModal = function(){
         $modalInstance.close();
         //var $body = angular.element(document.body);
