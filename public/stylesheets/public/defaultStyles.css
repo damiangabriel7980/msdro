@@ -7295,14 +7295,6 @@ html body .rootView {
 #codeAddon .popover {
   max-width: 430px;
 }
-.signupForm #name {
-  padding: 0 0 0 10px;
-}
-@media (max-width: 991px) {
-  .signupForm #name {
-    padding: 0;
-  }
-}
 .btnGreenBorder {
   border-color: #008780;
 }
@@ -7411,15 +7403,6 @@ a:focus {
 }
 .rememberMeInput {
   padding-left: 20px;
-}
-.loginNoPaddingBottom {
-  padding-bottom: 0px;
-  padding-left: 30px;
-  padding-right: 40px;
-}
-.loginHeaderPadding {
-  padding-left: 30px;
-  padding-right: 40px;
 }
 .loginListMargin {
   margin-bottom: 15px;
