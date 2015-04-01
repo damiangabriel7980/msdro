@@ -16,6 +16,10 @@ controllers.controller('ProductsView', ['$scope','$rootScope' ,'ProductService',
     $scope.lmt=8;
     $scope.message="";
     $scope.showMoreProd="show";
+    $scope.status = {
+        isopen: false
+        //open: false
+    };
     $scope.increaseLimit=function(){
 
         $scope.lmt+=8;

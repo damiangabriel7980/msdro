@@ -6,7 +6,7 @@
                 <div class="col-md-12 col-xs-12 noPadding text-center">
                     <img class="img-responsive img-back img-thumbnail width100Percent" src="{{prod.image_path?amazon + prod.image_path:defaultProductImage}}" alt="{{prod.name}}"/>
                 </div>
-                <div class="col-md-12 col-xs-12 noPadding contentBlock textProduct" style="min-height: 250px;">
+                <div class="col-md-12 col-xs-12 noPadding contentBlockProducts textProduct" style="min-height: 250px;">
                     <div class="col-md-12 col-xs-12 noPadding MSDgreen"><h4><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
                     <div class="col-md-12 col-xs-12 noPadding " convert-special conver="prod.description" ng-bind-html="convertAndTrustAsHtml(prod.description)"></div>
                 </div>
