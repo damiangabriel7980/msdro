@@ -1,9 +1,9 @@
 <form ng-submit="reset()">
-    <div class="modal-header loginHeaderPadding">
+    <div class="modal-header">
         <div class="noPatientsLogo"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}" ng-click="renderView('login')"></div>
         <div class="modal-title"><h3><i class="glyphicon glyphicon-lock" style="font-size: 20px"></i>&nbsp;Reseteaza parola</h3></div>
     </div>
-    <div class="modal-body loginNoPaddingBottom">
+    <div class="modal-body">
         <alert type="{{alert.type}}" ng-if="alert.show" close="alert.show=false">{{alert.text}}</alert>
         <div class="form-group">
             <label for="email">Email: </label>
@@ -11,7 +11,7 @@
         </div>
         <div>
             <ul class="pointerLinks">
-                <li>Nu ai cont? <a ng-click="renderView('signup')">Creaza cont nou</a></li>
+                <li>Nu ai cont? <a ng-click="showSignup()">Creaza cont nou</a></li>
                 <li>Ai deja un cont creat? <a ng-click="renderView('login')">Acceseaza contul</a></li>
             </ul>
         </div>
