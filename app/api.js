@@ -57,51 +57,8 @@ var fs = require('fs');
 var Config = require('../config/environment.js'),
     my_config = new Config();
 
-//form sts object from environment variables. Used for retrieving temporary credentials to front end
-var sts = new AWS.STS();
-//configure credentials for use on server only; assign credentials based on role (never use master credentials)
-AWS.config.credentials = new AWS.EnvironmentCredentials('AWS');
-AWS.config.credentials = new AWS.TemporaryCredentials({
-    RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
-});
-//s3 object for use on server
-var s3 = new AWS.S3();
-//bucket retrieved from environment variables
-var amazonBucket = my_config.amazonBucket;
-
 //used to sign cookies based on session secret
 var cookieSig = require('express-session/node_modules/cookie-signature');
-
-//================================================================================================= amazon s3 functions
-// Used for retrieving temporary credentials to front end
-var getS3Credentials = function(RoleSessionName, callback){
-    sts.assumeRole({
-        RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin',
-        RoleSessionName: RoleSessionName,
-        DurationSeconds: 900
-    }, function (err, data) {
-        if(err){
-            callback(err, null);
-        }else{
-            callback(null, data);
-        }
-    });
-};
-
-//function for deleting object from amazon
-var deleteObjectS3 = function (key, callback) {
-    s3.deleteObject({Bucket: amazonBucket, Key: key}, function (err, data) {
-        callback(err, data);
-    });
-};
-
-var addObjectS3 = function(key,body,callback){
-    var bodyNew = new Buffer(body,'base64');
-    s3.upload({Bucket: amazonBucket,Key: key, Body:bodyNew, ACL:'public-read'}, function (err, data2) {
-        callback(err, data2);
-    });
-
-};
 
 //================================================================================== useful db administration functions
 
@@ -387,7 +344,7 @@ var sendPushNotification = function (message, arrayUsersIds, callback) {
 
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, router) {
+module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, amazon, router) {
 
 //======================================================================================================= secure routes
 
@@ -472,7 +429,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/admin/s3tc')
 
         .get(function (req, res) {
-            getS3Credentials(req.user.username, function(err, data){
+            amazon.getS3Credentials(req.user.username, function(err, data){
                 if(err){
                     logger.error(err);
                     res.status(404).end();
@@ -897,7 +854,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             }else{
                                 //remove image from amazon
                                 if(imageS3){
-                                    deleteObjectS3(imageS3, function (err, data) {
+                                    amazon.deleteObjectS3(imageS3, function (err, data) {
                                         if(err){
                                             res.json({error: true, message: "Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon"});
                                         }else{
@@ -1093,7 +1050,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             }else{
                                 //remove image from amazon
                                 if(imageS3){
-                                    deleteObjectS3(imageS3, function (err, data) {
+                                    amazon.deleteObjectS3(imageS3, function (err, data) {
                                         if(err){
                                             res.json({error: true, message: "Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon"});
                                         }else{
@@ -1276,12 +1233,12 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         else{
                             //product was deleted. Now delete image and file if there is one
                             if(s3Image || s3File){
-                                s3.deleteObject({Bucket: amazonBucket, Key: s3Image}, function (err, data) {
+                                amazon.deleteObjectS3(s3Image, function (err, data) {
                                     if(err){
                                         logger.error(err);
                                         res.json({message: "Product was deleted. Image could not be deleted"});
                                     }else{
-                                        s3.deleteObject({Bucket: amazonBucket, Key: s3File}, function (err, data) {
+                                        amazon.deleteObjectS3(s3File, function (err, data) {
                                             if(err) {
                                                 logger.error(err);
                                                 res.json({message: "Product was deleted. RPC could not be deleted!"});
@@ -1290,10 +1247,9 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                             {
                                                 res.json({message: "Product was deleted. All files and images associated with were also deleted!"});
                                             }
-                                        })
-
+                                        });
                                     }
-                                });
+                                })
                             }else{
                                 res.json({message:'Product was deleted!'});
                             }
@@ -1432,7 +1388,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         else{
                             //speaker was deleted. Now delete image if there is one
                             if(s3Key){
-                                s3.deleteObject({Bucket: amazonBucket, Key: s3Key}, function (err, data) {
+                                amazon.deleteObjectS3(s3Key, function (err, data) {
                                     if(err){
                                         logger.error(err);
                                         res.json({message: "Article was deleted. Image could not be deleted"});
@@ -3790,7 +3746,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             var key = "user/"+req.user._id+"/img"+req.user._id+"."+data.extension;
             console.log(req.user.image_path);
             if(req.user.image_path!=undefined) {
-                deleteObjectS3(req.user.image_path, function (err, resp1) {
+                amazon.deleteObjectS3(req.user.image_path, function (err, resp1) {
                     if (err) {
                         console.log(err);
                         res.json({"type":"danger","message":"Fotografia nu a fost stearsa!"});
@@ -3809,7 +3765,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                     if (err)
                                         res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
                                     else {
-                                        addObjectS3(key, data.Body, function (err, resp2) {
+                                        amazon.addObjectS3(key, data.Body, function (err, resp2) {
                                             if (err)
                                             {
                                                 console.log(err);
@@ -3841,7 +3797,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             if (err)
                                 res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
                             else {
-                                addObjectS3(key, data.Body, function (err, resp2) {
+                                amazon.addObjectS3(key, data.Body, function (err, resp2) {
                                     if (err)
                                     {
                                         console.log(err);

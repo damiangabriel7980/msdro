@@ -42,7 +42,13 @@ var logger = require('./config/winston');
 app.use(morgan({ "stream": logger.stream }));
 
 // configuration ===============================================================
+
+//database
 mongoose.connect(my_config.database); // connect to our database
+
+//amazon
+var Amazon = require('./config/amazon.js'),
+    amazon = new Amazon();
 
 require('./config/passport')(passport, logger); // pass passport for configuration
 
@@ -71,7 +77,7 @@ var secureServer = https.createServer(certificateOptions, app);
 var devServer = http.createServer(app);
 
 // api ======================================================================
-require('./app/api.js')(app, sessionSecret, email, logger, pushServerAddr, express.Router()); // load our private routes and pass in our app and session secret
+require('./app/api.js')(app, sessionSecret, email, logger, pushServerAddr, amazon, express.Router()); // load our private routes and pass in our app and session secret
 require('./app/apiPublic.js')(app, email, express.Router()); // load our public routes and pass in our app
 require('./app/apiGloballyShared.js')(app, email, logger, express.Router());
 require('./app/apiMobileShared.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
