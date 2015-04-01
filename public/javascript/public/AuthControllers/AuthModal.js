@@ -12,9 +12,10 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
         $scope.renderView(intent);
     });
 
-    $scope.renderView = function (view) {
+    $scope.renderView = function (view, data) {
         $scope.resetAlert();
         $scope.modalTemplate = $sce.trustAsResourceUrl('partials/public/auth/'+view+'.html');
+        $scope.modalData = data;
     };
 
     $scope.closeModal = function(){
