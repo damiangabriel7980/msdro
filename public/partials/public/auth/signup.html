@@ -1,21 +1,18 @@
 <div ng-controller="Signup">
-    <form ng-submit="signup()" class="signupForm">
-        <div class="modal-header">
-            <div class="noPatientsLogo"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}" ng-click="renderView('login')"></div>
-            <div class="modal-title"><h3><span class="fa fa-sign-in"></span>&nbsp;Creaza cont</h3></div>
+    <div class="modal-header">
+        <div class="noPatientsLogo"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}" ng-click="renderView('login')"></div>
+        <div class="modal-title"><h3><span class="fa fa-sign-in"></span>&nbsp;Creaza cont</h3></div>
+    </div>
+    <div class="modal-body col-md-12" style="padding: 10px 0 0 0">
+        <div class="col-md-12">
+            <alert type="{{alert.type}}" ng-if="alert.show" close="alert.show=false">{{alert.text}}</alert>
         </div>
-        <div class="modal-body col-md-12" style="padding: 10px 0 0 0">
-            <div class="col-md-12">
-                <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
-            </div>
 
-            <div ng-include="modalData.template1"></div>
-            <div ng-include="modalData.template2"></div>
-
-        </div>
-        <div class="modal-footer">
-            <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
-            <button class="btn btn-primary pull-right" type="submit">Creaza cont</button>
-        </div>
-    </form>
+        <ng-include src="modalData.template1"></ng-include>
+        <ng-include src="modalData.template2"></ng-include>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
+        <button class="btn btn-primary pull-right" ng-click="createAccount()">Creaza cont</button>
+    </div>
 </div>

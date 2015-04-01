@@ -1,10 +1,9 @@
-<div ng-controller="CompleteProfile">
+<div ng-controller="Signup">
     <div class="modal-header">
         <div class="noPatientsLogo"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}" ng-click="renderView('login')"></div>
         <div class="modal-title"><h3><span class="fa fa-sign-in"></span>&nbsp;Completare profil</h3></div>
     </div>
     <div class="modal-body col-md-12" style="padding: 10px 0 0 0">
-
         <div class="col-md-12">
             <alert ng-if="alert.show" type="{{alert.type}}" close="alert.show=false">{{alert.text}}</alert>
         </div>
@@ -13,6 +12,6 @@
     </div>
     <div class="modal-footer" style="padding: 15px">
         <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
-        <button class="btn btn-primary pull-right" ng-click="sendActivationForm()">Trimite</button>
+        <button class="btn btn-primary pull-right" ng-click="completeProfile()">Trimite</button>
     </div>
 </div>
