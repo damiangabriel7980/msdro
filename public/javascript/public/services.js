@@ -147,7 +147,7 @@ services.factory('AuthService', ['$resource', function($resource){
         login: $resource('/login', {}, {
             query: { method: 'POST', isArray: false }
         }),
-        signup: $resource('/apiGloballyShared/createAccount', {}, {
+        signup: $resource('/apiGloballyShared/createAccountStaywell', {}, {
             query: { method: 'POST', isArray: false }
         }),
         reset: $resource('/apiGloballyShared/requestPasswordReset', {}, {
@@ -160,7 +160,7 @@ services.factory('CompleteProfileService', ['$resource', function($resource){
         professions: $resource('api/accountActivation/professions', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        processData: $resource('apiGloballyShared/accountActivation/completeProfile', {}, {
+        completeProfile: $resource('apiGloballyShared/completeProfile', {}, {
             save: {method:'POST'}
         }),
         specialGroups: $resource('api/accountActivation/specialGroups/:profession', {}, {

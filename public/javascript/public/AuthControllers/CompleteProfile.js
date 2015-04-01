@@ -130,7 +130,7 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
                 var uploadData = function (userData, activationData) {
                     //console.log(userData);
                     //console.log(activationData);
-                    CompleteProfileService.processData.save({user: userData, activation: activationData}).$promise.then(function (resp) {
+                    CompleteProfileService.completeProfile.save({user: userData, activation: activationData}).$promise.then(function (resp) {
                         console.log(resp);
                         if(resp.error){
                             $scope.resetAlert("danger", resp.message);
