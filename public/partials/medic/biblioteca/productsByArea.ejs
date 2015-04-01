@@ -1,16 +1,16 @@
-<div class="col-md-11 noPadding">
+<div class="col-md-11 col-xs-11 noPadding">
     <div class="row noPadding">
         <div class="row noPadding" style="text-align: center" ng-if="message!=''"><h4>{{message}}</h4></div>
-        <div class="col-md-3 noPadding" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt" style="padding: 0 15px 0 0;">
-            <div class="col-md-12 well" style="min-height: 450px;">
-                <div class="col-md-12 noPadding">
-                    <img class="img-responsive img-back img-thumbnail" src="{{prod.image_path?amazon + prod.image_path:defaultProductImage}}" alt="{{prod.name}}" style="width: 100%;"/>
+        <div class="col-md-3 col-xs-12 productsPadding noPadding" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
+            <div class="col-md-12 col-xs-12 well productMinHeight">
+                <div class="col-md-12 col-xs-12 noPadding text-center">
+                    <img class="img-responsive img-back img-thumbnail width100Percent" src="{{prod.image_path?amazon + prod.image_path:defaultProductImage}}" alt="{{prod.name}}"/>
                 </div>
-                <div class="col-md-12 noPadding contentBlock textProduct" style="min-height: 250px;">
-                    <div class="col-md-12 noPadding MSDgreen"><h4><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
-                    <div class="col-md-12 noPadding " convert-special conver="prod.description" ng-bind-html="convertAndTrustAsHtml(prod.description)"></div>
+                <div class="col-md-12 col-xs-12 noPadding contentBlock textProduct" style="min-height: 250px;">
+                    <div class="col-md-12 col-xs-12 noPadding MSDgreen"><h4><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
+                    <div class="col-md-12 col-xs-12 noPadding " convert-special conver="prod.description" ng-bind-html="convertAndTrustAsHtml(prod.description)"></div>
                 </div>
-                <div class="col-md-12 noPadding">
+                <div class="col-md-12 col-xs-12 noPadding">
                     <button class="btn btn-sm btn-info pull-right btn-more-news" ui-sref="biblioteca.produse.prodById({id:prod._id})">Detalii produs</button>
                 </div>
             </div>
@@ -20,7 +20,7 @@
         <button class="btn btn-sm btn-info btn-more-news" ng-class="showMoreProd" ng-click="increaseLimit()">Mai multe produse</button>
     </div>
 </div>
-<div class="col-md-1 noPadding" style="text-align: center">
+<div class="col-md-1 hidden-xs noPadding" style="text-align: center">
     <ul class="nav nav-list MSDgreen">
         <li class="active" ng-click="reset()">A - Z</li>
         <li class="divider"></li>

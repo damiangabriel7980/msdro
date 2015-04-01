@@ -7,7 +7,7 @@
 <body>
 <div class="padd55px" id="content">
     <div class="row">
-        <div class="col-md-2 noPadding hidden-sm" >
+        <div ng-if="!$state.includes('biblioteca.produse.prodById')" class="col-md-2 col-xs-12 noPadding hidden-sm" >
             <h3 class="h-title top0px specialTitleProductsMobile">ARII TERAPEUTICE</h3>
 
             <ul class="list-group MSDgreen" style="list-style: none">
@@ -21,7 +21,7 @@
                 </ul>
                 </li>
                 </ul>
-            <hr class="visible-phone ">
+            <hr class="visible-xs ">
         </div>
 
         <div class="col-md-10 padd3Percent" >
