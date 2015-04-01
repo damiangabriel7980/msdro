@@ -22,6 +22,13 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
         $modalInstance.close();
     };
 
+    $scope.showSignup = function () {
+        $scope.renderView("signup", {
+            template1: $sce.trustAsResourceUrl('partials/public/auth/signup_step1.html'),
+            template2: $sce.trustAsResourceUrl('partials/public/auth/signup_step2.html')
+        });
+    };
+
     $scope.login = function () {
         console.log(this);
         AuthService.login.query({email: this.email, password: this.password,remember: this.remember}).$promise.then(function (resp) {
@@ -33,7 +40,9 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
                 if(resp.accepted){
                     $window.location.href = "pro";
                 }else{
-                    $scope.renderView("completeProfile");
+                    $scope.renderView("completeProfile", {
+                        template: $sce.trustAsResourceUrl('partials/public/auth/signup_step2.html')
+                    });
                 }
             }
         })

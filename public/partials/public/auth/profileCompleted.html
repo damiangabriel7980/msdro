@@ -1,0 +1,12 @@
+<div class="modal-header">
+    <div class="noPatientsLogo"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}" ng-click="renderView('login')"></div>
+    <div class="modal-title"><h3><span class="fa fa-sign-in"></span>&nbsp;Completare profil</h3></div>
+</div>
+<div class="modal-body" style="padding: 20px; min-height: 150px">
+    Va multumim pentru inregistrarea pe Staywell !<br>
+    In maxim 48 de ore veti primi un e-mail pe adresa "{{modalData.registeredAddress}}" referitor la acceptul dovezii dumneavoastra.<br>
+    Va rugam verificati si folder-ul de spam.
+</div>
+<div class="modal-footer">
+    <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
+</div>
