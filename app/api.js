@@ -5012,64 +5012,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         }) ;
     });
 
-    router.route('/accountActivation/professions')
-        .get(function (req, res) {
-            Professions.find({}).exec(function (err, professions) {
-                if(err){
-                    res.send(err);
-                }else{
-                    res.send(professions);
-                }
-            });
-        });
-
-    router.route('/accountActivation/specialGroups/:profession')
-        .get(function (req, res) {
-            var profession = req.params.profession;
-            if(profession){
-                profession = mongoose.Types.ObjectId(profession.toString());
-                UserGroup.find({content_specific: true, profession: profession}).exec(function (err, groups) {
-                    if(err){
-                        res.send(err);
-                    }else{
-                        res.send(groups);
-                    }
-                });
-            }else{
-                res.send([]);
-            }
-        });
-
-    router.route('/accountActivation/counties')
-        .get(function (req, res) {
-            Counties.find({}, function (err, counties) {
-                if(err){
-                    logger.error(err);
-                    res.send({error: true})
-                }else{
-                    res.send({success: counties});
-                }
-            });
-        });
-
-    router.route('/accountActivation/cities')
-        .get(function (req, res) {
-            if(!req.query.county){
-                res.send({error: true});
-            }else{
-                Counties.findOne({_id: req.query.county}).populate('citiesID').exec(function (err, county) {
-                    if(err){
-                        logger.error(err);
-                        res.send({error: true});
-                    }else if(!county){
-                        res.send({error: true});
-                    }else{
-                        res.send({success: county.citiesID});
-                    }
-                });
-            }
-        });
-
     router.route('/admin/intros')
         .get(function (req, res) {
             Presentations.find({}).exec(function (err, presentations) {
