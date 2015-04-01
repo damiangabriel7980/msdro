@@ -846,6 +846,10 @@ ul.products li {
 }
 .padd55px{
   padding-left: 55px;
+  @media(max-width: 768px){
+    padding-left: 35px;
+    padding-right: 35px;
+  }
 }
 .top0px{
   margin-top: 0px;
@@ -941,6 +945,14 @@ ul.products li {
   padding: 0 0 15px 0;
   position: relative;
 }
+.contentBlockProducts {
+  width: 100%;
+  padding: 0 0 15px 0;
+  position: relative;
+  @media (max-width: 768px){
+    padding: 0 25px 15px 25px;
+  }
+}
 .marginbottom30px{
   margin-bottom: 30px;
 }
@@ -983,11 +995,11 @@ hr{
     margin-left: 0;
   }
 }
-.margin3Left
+.margin4LeftMultimedia
 {
   margin-left: -3%;
   @media (max-width: 768px) {
-    margin-left: -10%;
+    margin-left: -4%;
   }
 }
 .justify{
@@ -1068,7 +1080,14 @@ hr{
 {
   padding-left: 3%;
   @media(max-width: 768px){
-    padding-left: 0%;
+    padding-left: 55px;
+  }
+}
+.padd3PercentMobile
+{
+  padding-left: 3%;
+  @media(max-width: 768px){
+    padding-left: 42px;
   }
 }
 .therapeuticBottom{
@@ -1172,7 +1191,30 @@ hr{
   border-radius: 4px !important;
   height: 34px;
 }
-
+.expandSearchInDropdown{
+  position: absolute;
+  right: 270px;
+  @media(min-width: 769px)and(max-width: 1050px){
+    right: 310px;
+    margin-top: -19px;
+  }
+  @media(max-width: 768px){
+    margin-right: 4% !important;
+    margin-left: 3%;
+    margin-top: -19px;
+    right: 0;
+  }
+  .newWidthPopSearch {
+    width: 230px !important;
+    padding: 6px 12px;
+    border: 1px solid #cccccc;
+    @media(max-width: 768px){
+      width: 100% !important;
+      padding: 6px 12px;
+      border: 1px solid #cccccc;
+    }
+  }
+}
 .expandSearch{
   position: absolute;
   right: 270px;
@@ -1280,6 +1322,7 @@ hr{
 .menuPadding{
   padding-top: 4px;
   padding-left: 4px;
+  overflow-x: hidden;
 }
 .btnCloseProfile{
   margin-top: 13px;
@@ -1290,6 +1333,9 @@ hr{
 }
 .marginLeft30px{
   margin-left: 30px;
+}
+.marginLeft25px{
+  margin-left: 25px;
 }
 .smallFontSize{
   font-size: smaller;
@@ -1502,4 +1548,17 @@ h4{
   @media(max-width: 768px){
     width: 85%;
   }
+}
+.width87PercentTherapeutic{
+  @media(max-width: 768px){
+    width: 87%;
+  }
+}
+.hideOnSmallScreen{
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+.padd25Bottom{
+  padding-bottom: 25px;
 }

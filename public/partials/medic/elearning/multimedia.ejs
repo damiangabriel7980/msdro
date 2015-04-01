@@ -8,16 +8,32 @@
 <body>
 <div class="padd55px" id="content">
     <div class="row">
-        <div class="col-md-3 col-xs-12 noPadding hidden-sm padd65pxRight" >
-            <h3 class="h-title top0px">ARII TERAPEUTICE</h3>
+        <div class="col-xs-12 disableDesktop col-md-2 marginLeft25px padd25Bottom" dropdown is-open="status.isopen" id="menuDiv">
+            <button type="button" class="btn btn-default dropdown-toggle width87PercentTherapeutic" dropdown-toggle>
+                Arii terapeutice <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu MSDgreen width87PercentTherapeutic" role="menu" style="list-style: none;">
+                <li  ui-sref-active="activeArea" class="list-group-item no-border handCursor padd5pxLeft margin1pxBottom borderRadiusMenu" ui-sref="biblioteca.produse.productsByArea({id:0})"><b>Toate ariile terapeutice</b></li>
+                <li  ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
+                    <span ui-sref-active="activeArea" class="list-group-item no-border handCursor borderRadiusMenu" ui-sref="biblioteca.produse.productsByArea({id:area._id})"><b convert-special conver="area.name" ng-bind-html="trustAsHtml(area.name)"></b></span>
+                    <ul ng-if="area.has_children" class="margin1pxTop ">
+                        <li ui-sref-active="active" ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'" ui-sref="biblioteca.produse.productsByArea({id:area2._id})">
+                            <span ui-sref-active="activeArea" class="list-group-item no-border handCursor" ui-sref="biblioteca.produse.productsByArea({id:area2._id})"><b convert-special conver="area2.name" ng-bind-html="trustAsHtml(area2.name)"></b></span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-2 col-xs-12 hideOnSmallScreen noPadding hidden-sm" >
+            <h3 class="h-title top0px specialTitleProductsMobile">ARII TERAPEUTICE</h3>
 
             <ul class="list-group MSDgreen" style="list-style: none">
-                <li  ui-sref-active="activeArea" class="list-group-item no-border handCursor padd5pxLeft margin1pxBottom borderRadiusMenu" ui-sref="elearning.multimedia.multimediaByArea({idArea:0})"><b>Toate ariile terapeutice</b></li>
+                <li  ui-sref-active="activeArea" class="list-group-item no-border handCursor padd5pxLeft margin1pxBottom borderRadiusMenu" ui-sref="biblioteca.produse.productsByArea({id:0})"><b>Toate ariile terapeutice</b></li>
                 <li  ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
-                    <span ui-sref-active="activeArea" class="list-group-item no-border handCursor borderRadiusMenu" ui-sref="elearning.multimedia.multimediaByArea({idArea:area._id})"><b convert-special conver="area.name" ng-bind-html="trustAsHtml(area.name)"></b></span>
+                    <span ui-sref-active="activeArea" class="list-group-item no-border handCursor borderRadiusMenu" ui-sref="biblioteca.produse.productsByArea({id:area._id})"><b convert-special conver="area.name" ng-bind-html="trustAsHtml(area.name)"></b></span>
                     <ul ng-if="area.has_children" class="margin1pxTop ">
-                        <li ui-sref-active="active" ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'">
-                            <span ui-sref-active="activeArea" class="list-group-item no-border handCursor" ui-sref="elearning.multimedia.multimediaByArea({idArea:area2._id})"><b convert-special conver="area2.name" ng-bind-html="trustAsHtml(area2.name)"></b></span>
+                        <li ui-sref-active="active" ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'" ui-sref="biblioteca.produse.productsByArea({id:area2._id})">
+                            <span ui-sref-active="activeArea" class="list-group-item no-border handCursor" ui-sref="biblioteca.produse.productsByArea({id:area2._id})"><b convert-special conver="area2.name" ng-bind-html="trustAsHtml(area2.name)"></b></span>
                         </li>
                     </ul>
                 </li>
@@ -25,7 +41,7 @@
             <hr class="visible-xs ">
         </div>
 
-        <div class="col-md-9 noPadding margin3Left col-xs-12" style="margin-top: -10px" >
+        <div class="col-md-9 noPadding margin4LeftMultimedia col-xs-12" style="margin-top: -10px" >
             <ui-view></ui-view>
         </div>
 

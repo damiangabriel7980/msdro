@@ -17,7 +17,10 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
     multimediaService.getByArea.query({id:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.multimedias = result;
     });
-
+    $scope.status = {
+        isopen: false
+        //open: false
+    };
     $scope.openMultimedia=function(idMultimedia) {
         $modal.open({
             templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',

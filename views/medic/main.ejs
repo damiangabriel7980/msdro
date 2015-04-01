@@ -162,25 +162,25 @@
                 </ul>
             </ul>
 
-            <ul class="nav navbar-nav pull-right disableDesktop" ng-if="specialGroupSelected==null">
-                <form class="navbar-form" role="search">
-                    <div class="input-group expandSearchNoSpecial">
-                        <input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
-                        <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
-                    </div>
-                </form>
+            <!--<ul class="nav navbar-nav pull-right disableDesktop" ng-if="specialGroupSelected==null">-->
+                <!--<form class="navbar-form" role="search">-->
+                    <!--<div class="input-group expandSearchNoSpecial">-->
+                        <!--<input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">-->
+                        <!--<span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>-->
+                    <!--</div>-->
+                <!--</form>-->
 
-            </ul>
+            <!--</ul>-->
 
-            <ul class="nav navbar-nav pull-right disableDesktop" ng-if="specialGroupSelected!=null">
-                <form class="navbar-form" role="search">
-                    <div class="input-group expandSearch">
-                        <input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
-                        <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
-                    </div>
-                </form>
+            <!--<ul class="nav navbar-nav pull-right disableDesktop" ng-if="specialGroupSelected!=null">-->
+                <!--<form class="navbar-form" role="search">-->
+                    <!--<div class="input-group expandSearch">-->
+                        <!--<input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">-->
+                        <!--<span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>-->
+                    <!--</div>-->
+                <!--</form>-->
 
-            </ul>
+            <!--</ul>-->
 
             <a class="navbar-brand logoBottom" ui-sref="home"><img class="fixedHeightLogo" ng-src="{{MSDlogo}}"></a>
         </div>
@@ -188,6 +188,17 @@
         <div class="collapse navbar-collapse" collapse="navCollapsed">
 
             <ul class="nav navbar-nav menuPadding">
+                <li class="mySearchInDropdown">
+                    <ul class="nav navbar-nav navbar-right mySearchInDropdown disableDesktop">
+                        <form class="navbar-form mySearchInDropdown" role="search">
+                            <div class="input-group mySearchInDropdown expandSearchInDropdown">
+                                <input type="text" class="form-control mySearchInDropdown popSearch newWidthPopSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
+                                <span class="input-group-addon mySearchInDropdown" ng-click="searchText(textToSearch)"><i class="glyphicon glyphicon-search"></i></span>
+                            </div>
+                        </form>
+
+                    </ul>
+                </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('noutati')}">
                     <a class="dropdown-toggle " data-toggle="dropdown">
                        Noutati <b class="caret"></b>
@@ -227,6 +238,7 @@
 
                     </ul>
                 </li>
+
             </ul>
             <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="specialGroupSelected!=null">
                 <li class="dropdown">

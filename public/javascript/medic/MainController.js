@@ -241,9 +241,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         var clickover = angular.element(event.target);
         var $navbar = angular.element(".navbar-collapse");
         var _opened = $navbar.hasClass("in");
-        if (_opened === true && !clickover.hasClass("navbar-toggle")) {
-            //$navbar.collapse('hide');
-            //$navbar.height(0);
+        if (_opened === true && !clickover.hasClass("navbar-toggle")&& !clickover.hasClass("mySearchInDropdown")) {
             angular.element("button.navbar-toggle").click();
         }
     });
