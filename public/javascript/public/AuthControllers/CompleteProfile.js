@@ -1,4 +1,4 @@
-app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window', 'Utils', function($scope, CompleteProfileService, $window, Utils) {
+app.controller('CompleteProfile', ['$scope', 'AuthService', '$window', 'Utils', function($scope, AuthService, $window, Utils) {
 
     //================================================================================================== init variables
     $scope.user = {
@@ -32,14 +32,14 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
     //============================================================================================== profession / group
 
     $scope.selectProfession = function () {
-        CompleteProfileService.specialGroups.query({profession: $scope.user.profession}).$promise.then(function (response) {
+        AuthService.specialGroups.query({profession: $scope.user.profession}).$promise.then(function (response) {
             $scope.groups = response;
             $scope.user.groupsID = response[0]._id;
             lockSubmitting = false;
         });
     };
 
-    CompleteProfileService.professions.query().$promise.then(function (response) {
+    AuthService.professions.query().$promise.then(function (response) {
         lockSubmitting = true;
         $scope.professions = response;
         $scope.user.profession = response[0]._id;
@@ -66,7 +66,7 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
     $scope.$watch('county.selected', function () {
         if($scope.county.selected){
             resetCities();
-            CompleteProfileService.cities.query({county: $scope.county.selected._id}).$promise.then(function (resp) {
+            AuthService.cities.query({county: $scope.county.selected._id}).$promise.then(function (resp) {
                 if(resp.success){
                     $scope.cities = resp.success.sort(function(a,b){
                         if ( a.name < b.name )
@@ -81,7 +81,7 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
     });
 
     // get counties and cities
-    CompleteProfileService.counties.query().$promise.then(function (resp) {
+    AuthService.counties.query().$promise.then(function (resp) {
         $scope.counties = resp.success;
     });
 
@@ -130,7 +130,7 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
                 var uploadData = function (userData, activationData) {
                     //console.log(userData);
                     //console.log(activationData);
-                    CompleteProfileService.completeProfile.save({user: userData, activation: activationData}).$promise.then(function (resp) {
+                    AuthService.completeProfile.save({user: userData, activation: activationData}).$promise.then(function (resp) {
                         console.log(resp);
                         if(resp.error){
                             $scope.resetAlert("danger", resp.message);

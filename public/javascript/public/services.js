@@ -152,11 +152,7 @@ services.factory('AuthService', ['$resource', function($resource){
         }),
         reset: $resource('/apiGloballyShared/requestPasswordReset', {}, {
             query: { method: 'POST', isArray: false }
-        })
-    }
-}]);
-services.factory('CompleteProfileService', ['$resource', function($resource){
-    return {
+        }),
         professions: $resource('api/accountActivation/professions', {}, {
             query: { method: 'GET', isArray: true }
         }),
