@@ -82,7 +82,7 @@ module.exports = function(app, mandrill, logger, router) {
                     var patientNumber = req.body.patientNumber || 0;
                     var patientSex = req.body.patientSex;
 
-                    if(!patientSex || patientNumber != 1){
+                    if(!patientSex || (patientNumber !=1 && patientNumber != "N/A")){
                         patientSex = "Vezi narativ";
                     }
 
