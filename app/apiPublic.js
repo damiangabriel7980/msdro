@@ -4,8 +4,6 @@ var Events = require('./models/events');
 var TherapeuticAreas = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
 
-var email = require('mandrill-send')('XKp6n_7NhHB5opUWo0WWmw');
-
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var getIds = function (documentsArray) {
@@ -16,7 +14,7 @@ var getIds = function (documentsArray) {
     return ret;
 };
 
-module.exports = function(app,email, router) {
+module.exports = function(app, router) {
 
     router.route('/getCarouselData')
 

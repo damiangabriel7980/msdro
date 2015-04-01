@@ -74,7 +74,7 @@ var devServer = http.createServer(app);
 
 // api ======================================================================
 require('./app/api.js')(app, sessionSecret, email, logger, pushServerAddr, express.Router()); // load our private routes and pass in our app and session secret
-require('./app/apiPublic.js')(app, email, express.Router()); // load our public routes and pass in our app
+require('./app/apiPublic.js')(app, express.Router()); // load our public routes and pass in our app
 require('./app/apiGloballyShared.js')(app, email, logger, express.Router());
 require('./app/apiMobileShared.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
 require('./app/apiConferences.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
