@@ -233,6 +233,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     };
     $scope.showInput=false;
     $scope.animateInput=function(){
+        angular.element('.expandSearch').css('z-index','auto');
         angular.element('.popSearch').toggleClass('newWidthPopSearch');
         angular.element('.input-group-addon').toggleClass('btnSearchBefore');
     };

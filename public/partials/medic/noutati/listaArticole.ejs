@@ -3,7 +3,7 @@
     <div class="row articleBox zeroMarginLeft">
         <img class="img-thumbnail width20 pull-left img-back" ng-src="{{cont.image_path?pathAmazonDev+cont.image_path:defaultArticleImage}}"/>
 
-        <div class="col-md-9 width80 noPaddingLeft ">
+        <div class="col-md-9 col-xs-12 width80 noPaddingLeft ">
             <div class="col-md-12 title MSDgreenDarker handCursor" ui-sref="{{sr}}" convert-special conver="cont.title" ng-bind-html="trustAsHtml(cont.title)"></div>
             <div class="col-md-12 trimmedArticle" convert-special conver="cont.text" ng-bind-html="convertAndTrustAsHtml(cont.text,250)"></div>
 
