@@ -2,6 +2,8 @@ var User = require('./models/user');
 var UserGroup = require('./models/userGroup');
 var ActivationCodes =require('./models/activationCodes');
 var Roles=require('./models/roles');
+var Professions = require('./models/professions');
+var Counties = require('./models/counties');
 
 var mongoose = require('mongoose');
 var XRegExp  = require('xregexp').XRegExp;
@@ -72,14 +74,17 @@ module.exports = function(app, mandrill, logger, amazon, router) {
     var validateCreateAccount = function (req, res, next) {
         var namePatt = new XRegExp('^[a-zA-Z]{3,100}$');
 
-        var title = req.body.title?req.body.title:"";
-        var name = req.body.name?req.body.name:"";
-        var email = req.body.email?req.body.email:"";
-        var password = req.body.password?req.body.password:"";
+        var user = req.body.user || {};
+
+        var title = req.body.title || user.title || "";
+        var name = req.body.name || user.name || "";
+        var email = req.body.email || user.username || "";
+        var password = req.body.password || user.password || "";
 
         var info = {error: true, type:"danger"};
 
-        console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
+        //console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
+
         //validate data
         if(!validator.isEmail(email)){
             info.message = "Adresa de e-mail nu este valida";
@@ -111,10 +116,10 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                         name: name,
                         username: email,
                         password: new User().generateHash(password),
-                        state: "PENDING",
+                        state: "PENDING", //proof verification status
                         account_expired: false,
                         account_locked: false,
-                        enabled: false,
+                        enabled: false, //email verification status
                         created: Date.now(),
                         last_updated: Date.now()
                     };
@@ -308,6 +313,64 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                 state: req.staywellUser.state
             };
             res.json(info);
+        });
+
+    router.route('/accountActivation/professions')
+        .get(function (req, res) {
+            Professions.find({}).exec(function (err, professions) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(professions);
+                }
+            });
+        });
+
+    router.route('/accountActivation/specialGroups/:profession')
+        .get(function (req, res) {
+            var profession = req.params.profession;
+            if(profession){
+                profession = mongoose.Types.ObjectId(profession.toString());
+                UserGroup.find({content_specific: true, profession: profession}).exec(function (err, groups) {
+                    if(err){
+                        res.send(err);
+                    }else{
+                        res.send(groups);
+                    }
+                });
+            }else{
+                res.send([]);
+            }
+        });
+
+    router.route('/accountActivation/counties')
+        .get(function (req, res) {
+            Counties.find({}, function (err, counties) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true})
+                }else{
+                    res.send({success: counties});
+                }
+            });
+        });
+
+    router.route('/accountActivation/cities')
+        .get(function (req, res) {
+            if(!req.query.county){
+                res.send({error: true});
+            }else{
+                Counties.findOne({_id: req.query.county}).populate('citiesID').exec(function (err, county) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else if(!county){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: county.citiesID});
+                    }
+                });
+            }
         });
 
 
