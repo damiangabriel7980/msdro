@@ -133,9 +133,13 @@ app.controller('CompleteProfile', ['$scope', 'CompleteProfileService', '$window'
                     CompleteProfileService.processData.save({user: userData, activation: activationData}).$promise.then(function (resp) {
                         console.log(resp);
                         if(resp.error){
-                            $scope.resetAlert("danger", resp.error);
+                            $scope.resetAlert("danger", resp.message);
                         }else{
-                            $window.location.href = "pro";
+                            if(resp.state === "ACCEPTED"){
+                                $window.location.href = "pro";
+                            }else{
+                                $scope.renderView("profileCompleted", {registeredAddress: resp.user});
+                            }
                         }
                     });
                 };

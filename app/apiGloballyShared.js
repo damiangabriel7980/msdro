@@ -10,8 +10,22 @@ var crypto   = require('crypto');
 var async = require('async');
 var SHA512   = require('crypto-js/sha512');
 
+var mergeKeys = function (obj1, obj2){
+    var obj3 = {};
+    for (var attrname in obj1) {
+        if(obj1.hasOwnProperty(attrname)){
+            obj3[attrname] = obj1[attrname];
+        }
+    }
+    for (var attrname in obj2) {
+        if(obj2.hasOwnProperty(attrname)){
+            obj3[attrname] = obj2[attrname];
+        }
+    }
+    return obj3;
+};
 
-module.exports = function(app, mandrill, logger, router) {
+module.exports = function(app, mandrill, logger, amazon, router) {
 
     //access control allow origin *
     app.all("/apiGloballyShared/*", function(req, res, next) {
@@ -54,167 +68,248 @@ module.exports = function(app, mandrill, logger, router) {
     };
 
 //===================================================================================================================== create account
-    router.route('/createAccount')
-        .post(function (req, res) {
-            var namePatt = new XRegExp('^[a-zA-Z]{3,100}$');
 
-            var title = req.body.title?req.body.title:"";
-            var name = req.body.name?req.body.name:"";
-            var email = req.body.email?req.body.email:"";
-            var password = req.body.password?req.body.password:"";
-            var createdFromStaywell = req.body.createdFromStaywell?true:false;
+    var validateCreateAccount = function (req, res, next) {
+        var namePatt = new XRegExp('^[a-zA-Z]{3,100}$');
 
-            var info = {error: true, type:"danger"};
+        var title = req.body.title?req.body.title:"";
+        var name = req.body.name?req.body.name:"";
+        var email = req.body.email?req.body.email:"";
+        var password = req.body.password?req.body.password:"";
 
-            console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
-            //validate data
-            if(!validator.isEmail(email)){
-                info.message = "Adresa de e-mail nu este valida";
-                res.json(info);
-            }else if(typeof title !== "number"){
-                info.message = "Titlul este obligatoriu";
-                res.json(info);
-            }else if(!namePatt.test(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''))){
-                info.message = "Numele trebuie sa contina minim 3 litere si doar caracterele speciale '-', '.'";
-                res.json(info);
-            }else if(password.length < 6 || password.length > 32){
-                info.message = "Parola trebuie sa contina intre 6 si 32 de caractere";
-                res.json(info);
-            }else{
-                //data is valid
-                User.findOne({username: {$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}, function(err, user) {
-                    // if there are any errors, return the error
-                    if (err){
-                        res.json(err);
-                    }else if (user) {
-                        // check to see if there's already a user with that email
-                        info.message = "Acest e-mail este deja folosit";
-                        res.send(info);
-                    } else {
-                        // create the user
-                        var newUser = new User();
+        var info = {error: true, type:"danger"};
 
-                        //get default role
-                        Roles.findOne({'authority': 'ROLE_FARMACIST'}, function (err, role) {
-                            if(err){
-                                res.send(err);
-                            }else{
-                                newUser.rolesID = [role._id.toString()];
-                                newUser.username = email;
-                                newUser.name     = name;
-                                newUser.password = newUser.generateHash(password);
-                                newUser.password_expired = false;
-                                newUser.account_expired = false;
-                                newUser.account_locked = false;
-                                newUser.enabled = false; //enable only after email activation
-                                newUser.last_updated = Date.now();
-                                newUser.state = "PENDING";
-                                newUser.phone="";
-                                newUser.birthday=null;
-                                newUser.description="";
-                                newUser.jobsID=[];
-                                newUser.title = title;
-                                //set activation token
-                                crypto.randomBytes(40, function(err, buf) {
-                                    if(err){
-                                        res.send(err);
-                                    }else{
-                                        newUser.activationToken = buf.toString('hex');
+        console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
+        //validate data
+        if(!validator.isEmail(email)){
+            info.message = "Adresa de e-mail nu este valida";
+            res.json(info);
+        }else if(typeof title !== "number"){
+            info.message = "Titlul este obligatoriu";
+            res.json(info);
+        }else if(!namePatt.test(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''))){
+            info.message = "Numele trebuie sa contina minim 3 litere si doar caracterele speciale '-', '.'";
+            res.json(info);
+        }else if(password.length < 6 || password.length > 32){
+            info.message = "Parola trebuie sa contina intre 6 si 32 de caractere";
+            res.json(info);
+        }else{
+            User.findOne({username: {$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}, function(err, user) {
+                //if there are any errors, return the error
+                if(err){
+                    logger.error(err);
+                    info.message = "A aparut o eroare pe server";
+                    res.json(info);
+                }else if(user) {
+                    // check to see if there's already a user with that email
+                    info.message = "Acest e-mail este deja folosit";
+                    res.send(info);
+                }else{
+                    //data is valid
+                    req.staywellUser = {
+                        title: title,
+                        name: name,
+                        username: email,
+                        password: new User().generateHash(password),
+                        state: "PENDING",
+                        account_expired: false,
+                        account_locked: false,
+                        enabled: false,
+                        created: Date.now(),
+                        last_updated: Date.now()
+                    };
+                    next();
+                }
+            });
+        }
+    };
 
-                                        //save user
-                                        newUser.save(function(err, inserted) {
-                                            if (err){
-                                                res.send(err);
-                                            }else{
-                                                //we need to email the user
-                                                //first, create an activation link
-                                                var activationLink;
-                                                //if the account was created from Staywell site, create a special link
-                                                if(createdFromStaywell){
-                                                    activationLink = 'http://' + req.headers.host + '/activateAccountStaywell/' + inserted.activationToken;
-                                                }else{
-                                                    activationLink = 'http://' + req.headers.host + '/activateAccount/' + inserted.activationToken;
-                                                }
-                                                mandrill({from: 'adminMSD@qualitance.ro',
-                                                    to: [inserted.username],
-                                                    subject:'Activare cont MSD',
-                                                    text:
-                                                        'Draga '+inserted.name+',\n\n\n'+
-                                                        'Ati primit acest email deoarece v-ati inregistrat pe MSD.\n\n' +
-                                                        'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru validarea adresei de e-mail:\n\n' +
-                                                        activationLink + '\n\n' +
-                                                        'Daca nu v-ati creat cont pe MSD, va rugam sa ignorati acest e-mail\n\n\n'+
-                                                        'Toate cele bune,\nAdmin MSD'
-                                                }, function(errm){
-                                                    if(errm) {
-                                                        logger.error(errm);
-                                                        res.send(errm);
-                                                    }else{
-                                                        info.error = false;
-                                                        info.type = "success";
-                                                        info.message = "Un email de verificare a fost trimis";
-                                                        info.user = email;
-                                                        res.json(info);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        });
+    var validateCompleteProfile = function (req, res, next) {
+        var staywellUser = req.staywellUser || {};
 
-    router.route('/accountActivation/completeProfile')
-        .post(isLoggedIn, function(req,res){
-            var activationCode = req.body.activationCode;
+        var info = {error: true, type:"danger"};
+        try{
+            var activation = req.body.activation || {};
             //make sure only the info provided in the form is updated
             var userData = trimObject(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions']);
+            userData.groupsID = userData.groupsID || [];
 
-            User.findOne({_id: req.user._id}).exec(function (err, user) {
-                if(err || !user){
-                    logger.error(err);
-                    res.send({error: "A aparut o eroare pe server"});
-                }else{
-                    //establish default user group
-                    UserGroup.findOne({profession: userData.profession, display_name: "Default"}, function (err, group) {
-                        if(err || !group){
-                            logger.error(err);
-                            res.send({error: "A aparut o eroare pe server"});
-                        }else{
-                            if(!userData.groupsID) userData.groupsID = [];
-                            userData.groupsID.push(group._id.toString());
-                            //validate activation code
+            if(activation.type !== "code" && activation.type !== "file"){
+                info.message = "Tipul de activare nu este valid";
+                res.json(info);
+            }else if(activation.type === "file" && !(activation.value.extension && activation.value.file)){
+                info.message = "Eroare la citirea fisierului";
+                res.json(info);
+            }else if(activation.type === "code" && !activation.value){
+                info.message = "Eroare la citirea codului";
+                res.json(info);
+            }else if(!userData.profession){
+                info.message = "Profesia este obligatorie";
+                res.json(info);
+            }else if(!userData.groupsID[0]){
+                info.message = "Selectati un grup preferat";
+                res.json(info);
+            }else if(!userData.citiesID){
+                info.message = "Selectati un oras";
+                res.json(info);
+            }else{
+                //establish default user group
+                UserGroup.findOne({profession: userData.profession, display_name: "Default"}, function (err, group) {
+                    if(err || !group){
+                        logger.error(err);
+                        info.message = "A aparut o eroare pe server";
+                        res.json(info);
+                    }else{
+                        //establish groups ids
+                        userData.groupsID.push(group._id.toString());
+                        //validate activation code / proof
+                        if(activation.type === "code"){
+                            //validate code
                             ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
                                 if(err || !code){
                                     logger.error(err);
-                                    res.send({error: "A aparut o eroare pe server"});
+                                    info.message = "A aparut o eroare pe server";
+                                    res.json(info);
                                 }else{
-                                    //validate code
-                                    if(SHA512(activationCode).toString() !== code.value){
-                                        res.send({error: "Codul de activare nu este valid"});
+                                    if(SHA512(activation.value).toString() !== code.value){
+                                        info.message = "Codul de activare nu este valid";
+                                        res.json(info);
                                     }else{
-                                        userData.state = "ACCEPTED";
-                                        User.update({_id: user._id},{$set: userData},function (err) {
-                                            if (err){
-                                                logger.error(err);
-                                                res.send({error: "A aparut o eroare pe server"});
-                                            }else{
-                                                //all done. user is activated and profile completed
-                                                res.send({success: true});
-                                            }
-                                        });
+                                        staywellUser.state = "ACCEPTED";
+                                        req.staywellUser = mergeKeys(staywellUser, userData);
+                                        next();
                                     }
+                                }
+                            });
+                        }else{
+                            //validate proof
+                            if(typeof activation.value.extension === "string" && typeof activation.value.file === "string"){
+                                staywellUser.state = "PENDING";
+                                req.staywellUser = mergeKeys(staywellUser, userData);
+                                req.staywellProof = activation.value;
+                                next();
+                            }else{
+                                info.message = "Dovada nu a putut fi incarcata";
+                                res.json(info);
+                            }
+                        }
+                    }
+                });
+            }
+        }catch(ex){
+            info.message = "A aparut o eroare pe server";
+            res.json(info);
+        }
+    };
+
+    var uploadProof = function (req, res, next) {
+        var info = {error: true, type:"danger"};
+
+        var staywellUser = req.staywellUser || {};
+        var userEmail = staywellUser.username || req.user.username;
+
+        var staywellProof = req.staywellProof;
+
+        if(staywellUser.state === "ACCEPTED"){
+            next();
+        }else if(!staywellProof){
+            info.message = "A aparut o eroare la incarcarea dovezii";
+            res.json(info);
+        }else if(!userEmail){
+            info.message = "A aparut o eroare la incarcarea dovezii";
+            res.json(info);
+        }else{
+            User.findOne({username: {$regex: "^"+userEmail.replace(/\+/g,"\\+")+"$", $options: "i"}}).exec(function (err, user) {
+                if(err || !user){
+                    logger.error(err);
+                    info.message = "A aparut o eroare la incarcarea dovezii";
+                    res.json(info);
+                }else{
+                    var key = "user/"+user._id+"/proof."+staywellProof.extension;
+                    amazon.addObjectS3(key, staywellProof.file, function (err) {
+                        if (err){
+                            logger.error(err);
+                            info.message = "Dovada nu a putut fi incarcata";
+                            res.json(info);
+                        }else{
+                            User.update({_id: user._id}, {$set: {proof_path: key}}, function (err, wres) {
+                                if(err){
+                                    logger.error(err);
+                                    info.message = "A aparut o eroare la incarcarea dovezii";
+                                    res.json(info);
+                                }else{
+                                    next();
                                 }
                             });
                         }
                     });
                 }
             });
+        }
+    };
+
+    var createAccount = function (req, res, next) {
+        var info = {error: true, type:"danger"};
+
+        var user = new User(req.staywellUser);
+        user.save(function (err, saved) {
+            if(err){
+                logger.error(err);
+                info.message = "A aparut o eroare la salvarea datelor";
+                res.json(info);
+            }else{
+                next();
+            }
         });
+    };
+
+    var completeProfile = function (req, res, next) {
+        var info = {error: true, type:"danger"};
+
+        User.update({_id: req.user._id}, {$set: req.staywellUser}, function (err, wres) {
+            if(err){
+                logger.error(err);
+                info.message = "A aparut o eroare la salvarea datelor";
+                res.json(info);
+            }else{
+                next();
+            }
+        });
+    };
+
+    router.route('/createAccountStaywell')
+        .post(validateCreateAccount, validateCompleteProfile, createAccount, uploadProof, function (req, res) {
+            var info = {
+                error: false,
+                type: "success",
+                user: req.staywellUser.username,
+                state: req.staywellUser.state
+            };
+            res.send(info);
+        });
+
+    router.route('/completeProfile')
+        .post(isLoggedIn, validateCompleteProfile, completeProfile, uploadProof, function (req,res) {
+            var info = {
+                error: false,
+                type: "success",
+                user: req.user.username,
+                state: req.staywellUser.state
+            };
+            res.send(info);
+        });
+
+    router.route('/createAccountMobile')
+        .post(validateCreateAccount, createAccount, function (req, res) {
+            var info = {
+                error: false,
+                type: "success",
+                user: req.staywellUser.username,
+                state: req.staywellUser.state
+            };
+            res.json(info);
+        });
+
 
 //============================================================================================= generate token for resetting user password
     router.route('/requestPasswordReset')

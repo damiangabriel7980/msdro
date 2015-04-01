@@ -136,7 +136,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, ro
     //===================================================================================================================== create account
     router.route('/createAccount')
         .post(function (req, res) {
-            res.redirect(307, '/apiGloballyShared/createAccount');
+            res.redirect(307, '/apiGloballyShared/createAccountMobile');
         });
 
     //generate token for resetting user password
