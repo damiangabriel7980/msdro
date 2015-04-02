@@ -331,60 +331,12 @@ module.exports = function(app, mandrill, logger, amazon, router) {
             res.send(info);
 
             if(req.staywellUser.state === "ACCEPTED"){
-                if(!req.staywellUser.enabled){
-                    generateToken(req.staywellUser.username, function (err, activationToken) {
-                        var activationLink = activationPrefixStaywell(req.headers.host) + activationToken;
-                        var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
-
-                        mandrill('/messages/send-template', {
-                            "template_name": "Staywell_createdAccountStaywell",
-                            "template_content": [
-                                {
-                                    "name": "title",
-                                    "content": req.staywellUser.title
-                                },
-                                {
-                                    "name": "name",
-                                    "content": req.staywellUser.name
-                                },
-                                {
-                                    "name": "activationLink",
-                                    "content": activationLink
-                                }
-                            ],
-                            "message": {
-                                from_email: 'adminMSD@qualitance.ro',
-                                to: emailTo,
-                                subject: 'Activare cont MSD'
-                            }
-                        }, function(err){
-                            if(err) {
-                                logger.error(err);
-                            }
-                        });
-                    });
-                }
-            }
-        });
-
-    router.route('/completeProfile')
-        .post(isLoggedIn, validateCompleteProfile, completeProfile, uploadProof, function (req,res) {
-            var info = {
-                error: false,
-                type: "success",
-                user: req.user.username,
-                state: req.staywellUser.state,
-                enabled: req.staywellUser.enabled
-            };
-            res.send(info);
-
-            if(req.staywellUser.state === "ACCEPTED"){
                 generateToken(req.staywellUser.username, function (err, activationToken) {
                     var activationLink = activationPrefixStaywell(req.headers.host) + activationToken;
                     var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
 
                     mandrill('/messages/send-template', {
-                        "template_name": "Staywell_createdAccountStaywell",
+                        "template_name": "Staywell_createdAccount",
                         "template_content": [
                             {
                                 "name": "title",
@@ -411,7 +363,17 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                     });
                 });
             }
+        });
 
+    router.route('/completeProfile')
+        .post(isLoggedIn, validateCompleteProfile, completeProfile, uploadProof, function (req,res) {
+            var info = {
+                error: false,
+                type: "success",
+                user: req.user.username,
+                state: req.staywellUser.state
+            };
+            res.send(info);
         });
 
     router.route('/createAccountMobile')
