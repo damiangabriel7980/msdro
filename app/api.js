@@ -3672,30 +3672,38 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }else{
                         if(req.params.type == "ACCEPTED" && wres==1){
                             //email user
-                            User.findOne({_id: req.body.id}).select('+title').exec(function (err, user) {
+                            User.findOne({_id: req.body.id}).select('+title +enabled').exec(function (err, user) {
                                 if(err){
                                     res.send(err);
                                 }else{
-                                    var generateToken = function (username, callback) {
-                                        crypto.randomBytes(40, function(err, buf) {
-                                            if(err){
-                                                callback(err);
-                                            }else{
-                                                var activationToken = buf.toString('hex');
-                                                User.update({username: {$regex: "^"+username.replace(/\+/g,"\\+")+"$", $options: "i"}}, {$set: {activationToken: activationToken}}, function (err, wres) {
-                                                    if(err){
-                                                        callback(err);
-                                                    }else{
-                                                        callback(null, activationToken);
-                                                    }
-                                                });
-                                            }
-                                        });
+                                    var generateToken = function (callback) {
+                                        if(user.enabled){
+                                            callback(null, "");
+                                        }else{
+                                            crypto.randomBytes(40, function(err, buf) {
+                                                if(err){
+                                                    callback(err);
+                                                }else{
+                                                    var activationToken = buf.toString('hex');
+                                                    User.update({username: {$regex: "^"+user.username.replace(/\+/g,"\\+")+"$", $options: "i"}}, {$set: {activationToken: activationToken}}, function (err, wres) {
+                                                        if(err){
+                                                            callback(err);
+                                                        }else{
+                                                            callback(null, activationToken);
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
                                     };
-                                    generateToken(user.username, function (err, activationToken) {
+                                    generateToken(function (err, activationToken) {
                                         var emailTo = [{email: user.username, name: user.name}];
+                                        var emailTemplate = "Staywell_createdAccount";
+                                        if(user.enabled){
+                                            emailTemplate = "Staywell_createdAccount_noActivation";
+                                        }
                                         mandrill('/messages/send-template', {
-                                            "template_name": "Staywell_createdAccountStaywell",
+                                            "template_name": emailTemplate,
                                             "template_content": [
                                                 {
                                                     "name": "title",
@@ -3708,6 +3716,10 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                                 {
                                                     "name": "activationLink",
                                                     "content": 'http://' + req.headers.host + '/activateAccountStaywell/' + activationToken
+                                                },
+                                                {
+                                                    "name": "loginAddress",
+                                                    "content": 'http://' + req.headers.host + '/login'
                                                 }
                                             ],
                                             "message": {
