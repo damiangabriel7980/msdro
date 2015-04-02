@@ -70,7 +70,7 @@ require('./config/tokenAuth')(app,  logger, tokenSecret, pushServerAddr);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes ======================================================================
-require('./app/routes.js')(app, email, logger, passport); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, mandrill, logger, passport); // load our routes and pass in our app and fully configured passport
 
 //create https server ==========================================================
 var secureServer = https.createServer(certificateOptions, app);

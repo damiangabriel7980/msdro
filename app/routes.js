@@ -17,7 +17,7 @@ if(DISABLE_PATIENTS){
     MAIN_VIEW = 'public/main.ejs';
 }
 
-module.exports = function(app, email, logger, passport) {
+module.exports = function(app, mandrill, logger, passport) {
 
     //access control origin
     app.all("/*", function(req, res, next) {
@@ -120,11 +120,24 @@ module.exports = function(app, email, logger, passport) {
                                 res.render('forgotPass.ejs', {message : {message: 'A aparut o eroare la actualizare. Va rugam introduceti din nou email-ul', type: 'danger'}});
                             }else{
                                 //email user
-                                email({from: 'adminMSD@qualitance.ro',
-                                    to: [user.username],
-                                    subject:'Resetare parola MSD',
-                                    text: 'Buna ziua,\n\n\n' +
-                                          'Parola pentru contul dumneavoastra a fost modificata.\n\n\nO zi buna,\nAdmin MSD'
+                                var emailTo = [{email: user.username, name: user.name}];
+                                mandrill('/messages/send-template', {
+                                    "template_name": "Staywell_completedReset",
+                                    "template_content": [
+                                        {
+                                            "name": "title",
+                                            "content": user.title
+                                        },
+                                        {
+                                            "name": "name",
+                                            "content": user.name
+                                        }
+                                    ],
+                                    "message": {
+                                        from_email: 'adminMSD@qualitance.ro',
+                                        to: emailTo,
+                                        subject: 'Resetare parola MSD'
+                                    }
                                 }, function(err){
                                     if(err){
                                         res.render('resetPass.ejs', {message : {message: 'Parola a fost schimbata.', type: 'success'}});
