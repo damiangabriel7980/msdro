@@ -133,6 +133,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            <ul class="nav navbar-nav pull-right disableDesktop dropdown margintop8px marginRight10px" ng-if="specialGroupSelected!=null">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-user"></i>
+                </a>
+                <ul class="dropdown-menu myProfile myMenu greyBackground">
+                    <li ng-click="showProfile()"><a>Profile</a></li>
+                    <li ng-click="logoutUser()"><a>Sign Out</a></li>
+                </ul>
+            </ul>
             <ul class="nav navbar-nav pull-right disableDesktop specialGroupMobile" ng-if="specialGroupSelected!=null">
                 <a class="dropdown-toggle specialGroupDropdown " data-toggle="dropdown">
                     <img ng-if="specialGroupSelected.image_path" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
@@ -141,15 +150,6 @@
                     <li ng-repeat="group in specialGroups" ng-click="selectSpecialGroup(group)">
                         <a style="cursor: pointer;">{{group.display_name}}</a>
                     </li>
-                </ul>
-            </ul>
-            <ul class="nav navbar-nav pull-right disableDesktop dropdown margintop8px marginRight10px" ng-if="specialGroupSelected!=null">
-                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <i class="glyphicon glyphicon-user"></i>
-                </a>
-                <ul class="dropdown-menu myProfile myMenu greyBackground">
-                    <li ng-click="showProfile()"><a>Profile</a></li>
-                    <li ng-click="logoutUser()"><a>Sign Out</a></li>
                 </ul>
             </ul>
             <ul class="nav navbar-nav pull-right disableDesktop dropdown margintop8px headerProfileNoSpecial" ng-if="specialGroupSelected==null">
