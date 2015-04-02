@@ -80,8 +80,8 @@ var devServer = http.createServer(app);
 require('./app/api.js')(app, sessionSecret, mandrill, logger, pushServerAddr, amazon, express.Router()); // load our private routes and pass in our app and session secret
 require('./app/apiPublic.js')(app, email, express.Router()); // load our public routes and pass in our app
 require('./app/apiGloballyShared.js')(app, mandrill, logger, amazon, express.Router());
-require('./app/apiMobileShared.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
-require('./app/apiConferences.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
+require('./app/apiMobileShared.js')(app, logger, tokenSecret, pushServerAddr, express.Router());
+require('./app/apiConferences.js')(app, logger, tokenSecret, pushServerAddr, express.Router());
 require('./app/apiMSDDoc.js')(app, logger, tokenSecret, secureServer, express.Router());
 require('./app/apiDPOC.js')(app, mandrill, logger, express.Router());
 require('./app/apiCourses.js')(app, logger, tokenSecret, express.Router());

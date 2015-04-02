@@ -14,7 +14,7 @@ var Counties = require('./models/counties');
 var Job = require('./models/jobs');
 
 
-module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, router) {
+module.exports = function(app, logger, tokenSecret, pushServerAddr, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
