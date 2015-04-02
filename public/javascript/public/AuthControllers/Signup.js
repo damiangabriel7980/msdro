@@ -114,9 +114,11 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                     $scope.resetAlert("danger", resp.message);
                 }else{
                     if(resp.state === "ACCEPTED"){
-                        $window.location.href = "pro";
+                        //awaiting email activation; you will soon receive it
+                        $scope.renderView("awaitingEmailActivation", {registeredAddress: resp.user});
                     }else{
-                        $scope.renderView("profileCompleted", {registeredAddress: resp.user});
+                        //awaiting proof acceptance (48 h)
+                        $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user});
                     }
                 }
             }
@@ -131,7 +133,17 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                 if(resp.error){
                     $scope.resetAlert("danger", resp.message);
                 }else{
-                    $scope.renderView("created", {registeredAddress: resp.user});
+                    if(resp.state === "ACCEPTED"){
+                        if(resp.enabled){
+                            $window.location.href = "pro";
+                        }else{
+                            //awaiting email activation; you will soon receive it
+                            $scope.renderView("awaitingEmailActivation", {registeredAddress: resp.user});
+                        }
+                    }else{
+                        //awaiting proof acceptance (48 h)
+                        $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user});
+                    }
                 }
             }
         });

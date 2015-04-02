@@ -53,6 +53,7 @@ var async = require('async');
 var request = require('request');
 var AWS = require('aws-sdk');
 var fs = require('fs');
+var crypto   = require('crypto');
 
 var Config = require('../config/environment.js'),
     my_config = new Config();
@@ -3671,40 +3672,84 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }else{
                         if(req.params.type == "ACCEPTED" && wres==1){
                             //email user
-                            User.findOne({_id: req.body.id}, function (err, user) {
+                            User.findOne({_id: req.body.id}).select('+title').exec(function (err, user) {
                                 if(err){
                                     res.send(err);
                                 }else{
-                                    mandrill({from: 'adminMSD@qualitance.ro',
-                                        to: [user.username],
-                                        subject:'Activare cont MSD',
-                                        text: 'Draga '+user.name+',\n\n\n'+
-                                            'Ati primit acest email ca urmare a inregistrarii si a acceptarii dovezii identitatii dumneavoastra pe MSD. Contul dumneavoastra este activat si il puteti accesa la adresa:\n\n'+
-                                            req.headers.host+'/login\n\n\n'+
-                                            'Succes!\n\nEchipa MSD'
-                                    }, function(err){
-                                        if(err) {
-                                            logger.error(err);
-                                            res.send(err);
-                                        }else{
-                                            res.send({message: "Updated "+wres+" user. Email sent"});
-                                        }
+                                    var generateToken = function (username, callback) {
+                                        crypto.randomBytes(40, function(err, buf) {
+                                            if(err){
+                                                callback(err);
+                                            }else{
+                                                var activationToken = buf.toString('hex');
+                                                User.update({username: {$regex: "^"+username.replace(/\+/g,"\\+")+"$", $options: "i"}}, {$set: {activationToken: activationToken}}, function (err, wres) {
+                                                    if(err){
+                                                        callback(err);
+                                                    }else{
+                                                        callback(null, activationToken);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    };
+                                    generateToken(user.username, function (err, activationToken) {
+                                        var emailTo = [{email: user.username, name: user.name}];
+                                        mandrill('/messages/send-template', {
+                                            "template_name": "Staywell_createdAccountStaywell",
+                                            "template_content": [
+                                                {
+                                                    "name": "title",
+                                                    "content": user.title
+                                                },
+                                                {
+                                                    "name": "name",
+                                                    "content": user.name
+                                                },
+                                                {
+                                                    "name": "activationLink",
+                                                    "content": 'http://' + req.headers.host + '/activateAccountStaywell/' + activationToken
+                                                }
+                                            ],
+                                            "message": {
+                                                from_email: 'adminMSD@qualitance.ro',
+                                                to: emailTo,
+                                                subject: 'Activare cont MSD'
+                                            }
+                                        }, function(err){
+                                            if(err) {
+                                                logger.error(err);
+                                                res.send(err);
+                                            }else{
+                                                res.send({message: "Updated "+wres+" user. Email sent"});
+                                            }
+                                        });
                                     });
                                 }
                             });
                         }else if(req.params.type == "REJECTED" && wres==1){
                             //email user
-                            User.findOne({_id: req.body.id}, function (err, user) {
+                            User.findOne({_id: req.body.id}).select('+title').exec(function (err, user) {
                                 if(err){
                                     res.send(err);
                                 }else{
-                                    mandrill({from: 'adminMSD@qualitance.ro',
-                                        to: [user.username],
-                                        subject:'Activare cont MSD',
-                                        text: 'Draga '+user.name+',\n\n\n'+
-                                            'Din pacate, nu am putut valida dovada identitatii dumneavoastra pe baza pozei trimise.\n\n'+
-                                            'Pentru a solicita un review sau a obtine mai multe informatii, va rugam sa raspundeti la acest mail printr-un reply.\n\n\n'+
-                                            'O zi buna,\nAdmin MSD'
+                                    var emailTo = [{email: user.username, name: user.name}];
+                                    mandrill('/messages/send-template', {
+                                        "template_name": "Staywell_rejectedAccountStaywell",
+                                        "template_content": [
+                                            {
+                                                "name": "title",
+                                                "content": user.title
+                                            },
+                                            {
+                                                "name": "name",
+                                                "content": user.name
+                                            }
+                                        ],
+                                        "message": {
+                                            from_email: 'adminMSD@qualitance.ro',
+                                            to: emailTo,
+                                            subject: 'Activare cont MSD'
+                                        }
                                     }, function(err){
                                         if(err) {
                                             logger.error(err);

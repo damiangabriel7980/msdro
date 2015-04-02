@@ -139,19 +139,29 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                     res.send(info);
                 }else{
                     //data is valid
-                    req.staywellUser = {
-                        title: title,
-                        name: name,
-                        username: email,
-                        password: new User().generateHash(password),
-                        state: "PENDING", //proof verification status
-                        account_expired: false,
-                        account_locked: false,
-                        enabled: false, //email verification status
-                        created: Date.now(),
-                        last_updated: Date.now()
-                    };
-                    next();
+                    //get default role
+                    Roles.findOne({'authority': 'ROLE_FARMACIST'}, function (err, role) {
+                        if(err || !role){
+                            logger.error(err);
+                            info.message = "A aparut o eroare pe server";
+                            res.json(info);
+                        }else{
+                            req.staywellUser = {
+                                rolesID: [role._id.toString()],
+                                title: title,
+                                name: name,
+                                username: email,
+                                password: new User().generateHash(password),
+                                state: "PENDING", //proof verification status
+                                account_expired: false,
+                                account_locked: false,
+                                enabled: false, //email verification status
+                                created: Date.now(),
+                                last_updated: Date.now()
+                            };
+                            next();
+                        }
+                    });
                 }
             });
         }
@@ -319,6 +329,42 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                 state: req.staywellUser.state
             };
             res.send(info);
+
+            if(req.staywellUser.state === "ACCEPTED"){
+                if(!req.staywellUser.enabled){
+                    generateToken(req.staywellUser.username, function (err, activationToken) {
+                        var activationLink = activationPrefixStaywell(req.headers.host) + activationToken;
+                        var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
+
+                        mandrill('/messages/send-template', {
+                            "template_name": "Staywell_createdAccountStaywell",
+                            "template_content": [
+                                {
+                                    "name": "title",
+                                    "content": req.staywellUser.title
+                                },
+                                {
+                                    "name": "name",
+                                    "content": req.staywellUser.name
+                                },
+                                {
+                                    "name": "activationLink",
+                                    "content": activationLink
+                                }
+                            ],
+                            "message": {
+                                from_email: 'adminMSD@qualitance.ro',
+                                to: emailTo,
+                                subject: 'Activare cont MSD'
+                            }
+                        }, function(err){
+                            if(err) {
+                                logger.error(err);
+                            }
+                        });
+                    });
+                }
+            }
         });
 
     router.route('/completeProfile')
@@ -327,9 +373,45 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                 error: false,
                 type: "success",
                 user: req.user.username,
-                state: req.staywellUser.state
+                state: req.staywellUser.state,
+                enabled: req.staywellUser.enabled
             };
             res.send(info);
+
+            if(req.staywellUser.state === "ACCEPTED"){
+                generateToken(req.staywellUser.username, function (err, activationToken) {
+                    var activationLink = activationPrefixStaywell(req.headers.host) + activationToken;
+                    var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
+
+                    mandrill('/messages/send-template', {
+                        "template_name": "Staywell_createdAccountStaywell",
+                        "template_content": [
+                            {
+                                "name": "title",
+                                "content": req.staywellUser.title
+                            },
+                            {
+                                "name": "name",
+                                "content": req.staywellUser.name
+                            },
+                            {
+                                "name": "activationLink",
+                                "content": activationLink
+                            }
+                        ],
+                        "message": {
+                            from_email: 'adminMSD@qualitance.ro',
+                            to: emailTo,
+                            subject: 'Activare cont MSD'
+                        }
+                    }, function(err){
+                        if(err) {
+                            logger.error(err);
+                        }
+                    });
+                });
+            }
+
         });
 
     router.route('/createAccountMobile')
