@@ -110,12 +110,12 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
             if(err){
                 $scope.resetAlert("danger", err);
             }else{
+                console.log(resp);
                 if(resp.error){
                     $scope.resetAlert("danger", resp.message);
                 }else{
                     if(resp.state === "ACCEPTED"){
-                        //awaiting email activation; you will soon receive it
-                        $scope.renderView("awaitingEmailActivation", {registeredAddress: resp.user});
+                        $window.location.href = "pro";
                     }else{
                         //awaiting proof acceptance (48 h)
                         $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user});
@@ -130,16 +130,13 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
             if(err){
                 $scope.resetAlert("danger", err);
             }else{
+                console.log(resp);
                 if(resp.error){
                     $scope.resetAlert("danger", resp.message);
                 }else{
                     if(resp.state === "ACCEPTED"){
-                        if(resp.enabled){
-                            $window.location.href = "pro";
-                        }else{
-                            //awaiting email activation; you will soon receive it
-                            $scope.renderView("awaitingEmailActivation", {registeredAddress: resp.user});
-                        }
+                        //awaiting email activation; you will soon receive it
+                        $scope.renderView("awaitingEmailActivation", {registeredAddress: resp.user});
                     }else{
                         //awaiting proof acceptance (48 h)
                         $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user});
