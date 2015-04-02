@@ -240,7 +240,6 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
             query: { method: 'GET', isArray: false }
         }),
         createAccount: function (thiz, callback) {
-            console.log(thiz);
             validateCreate(thiz, function (err) {
                 if(err){
                     callback(err);
@@ -264,7 +263,6 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
             });
         },
         completeProfile: function (thiz, callback) {
-            console.log(thiz);
             validateUpdate(thiz, function (err) {
                 if(err){
                     callback(err);
