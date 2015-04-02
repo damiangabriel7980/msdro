@@ -12,6 +12,16 @@ var crypto   = require('crypto');
 var async = require('async');
 var SHA512   = require('crypto-js/sha512');
 
+const activationPrefixStaywell = function (hostname) {
+    return 'http://' + hostname + '/activateAccountStaywell/';
+};
+const activationPrefixMobile = function (hostname) {
+    return 'http://' + hostname + '/apiMobileShared/activateAccount/';
+};
+const resetPasswordPrefix = function (hostname) {
+    return 'http://' + hostname + '/reset/';
+};
+
 var mergeKeys = function (obj1, obj2){
     var obj3 = {};
     for (var attrname in obj1) {
@@ -67,6 +77,24 @@ module.exports = function(app, mandrill, logger, amazon, router) {
         }catch(ex){
             return {};
         }
+    };
+
+//==================================================================================================== activate account
+    var generateToken = function (username, callback) {
+        crypto.randomBytes(40, function(err, buf) {
+            if(err){
+                callback(err);
+            }else{
+                var activationToken = buf.toString('hex');
+                User.update({username: {$regex: "^"+username.replace(/\+/g,"\\+")+"$", $options: "i"}}, {$set: {activationToken: activationToken}}, function (err, wres) {
+                    if(err){
+                        callback(err);
+                    }else{
+                        callback(null, activationToken);
+                    }
+                });
+            }
+        });
     };
 
 //===================================================================================================================== create account
@@ -313,6 +341,42 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                 state: req.staywellUser.state
             };
             res.json(info);
+
+            generateToken(req.staywellUser.username, function (err, activationToken) {
+                if(err){
+                    logger.error(err);
+                }else{
+                    var activationLink = activationPrefixMobile(req.headers.host) + activationToken;
+                    var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
+
+                    mandrill('/messages/send-template', {
+                        "template_name": "Staywell_createdAccountMobile",
+                        "template_content": [
+                            {
+                                "name": "title",
+                                "content": req.staywellUser.title
+                            },
+                            {
+                                "name": "name",
+                                "content": req.staywellUser.name
+                            },
+                            {
+                                "name": "activationLink",
+                                "content": activationLink
+                            }
+                        ],
+                        "message": {
+                            from_email: 'adminMSD@qualitance.ro',
+                            to: emailTo,
+                            subject: 'Activare cont MSD'
+                        }
+                    }, function(err){
+                        if(err) {
+                            logger.error(err);
+                        }
+                    });
+                }
+            });
         });
 
     router.route('/accountActivation/professions')
@@ -377,6 +441,8 @@ module.exports = function(app, mandrill, logger, amazon, router) {
 //============================================================================================= generate token for resetting user password
     router.route('/requestPasswordReset')
         .post(function(req, res) {
+            console.log("here");
+            console.log(req.body);
             async.waterfall([
                 //generate unique token
                 function(done) {
@@ -387,7 +453,7 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                 },
                 function(token, done) {
                     //find user
-                    User.findOne({ username: {$regex: "^"+req.body.email.replace(/\+/g,"\\+")+"$", $options: "i"} }, function(err, user) {
+                    User.findOne({ username: {$regex: "^"+req.body.email.replace(/\+/g,"\\+")+"$", $options: "i"} }).select('+title').exec(function(err, user) {
                         if (!user) {
                             res.send({message : {hasError: true, text: 'Nu a fost gasit un cont pentru acest e-mail.'}});
                         }else{
@@ -403,14 +469,29 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                 },
                 function(token, user, done) {
                     //email user
-                    mandrill({from: 'adminMSD@qualitance.ro',
-                        to: [user.username],
-                        subject:'Resetare parola MSD',
-                        text: 'Ati primit acest email deoarece a fost ceruta resetarea parolei pentru contul dumneavoastra de MSD.\n\n' +
-                            'Va rugam accesati link-ul de mai jos (sau copiati link-ul in browser) pentru a va reseta parola:\n\n' +
-                            'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-                            'Link-ul este valabil maxim o ora\n'+
-                            'Daca nu ati cerut resetarea parolei, va rugam sa ignorati acest e-mail si parola va ramane neschimbata\n'
+                    var emailTo = [{email: user.username, name: user.name}];
+
+                    mandrill('/messages/send-template', {
+                        "template_name": "Staywell_requestedReset",
+                        "template_content": [
+                            {
+                                "name": "title",
+                                "content": user.title
+                            },
+                            {
+                                "name": "name",
+                                "content": user.name
+                            },
+                            {
+                                "name": "resetLink",
+                                "content": resetPasswordPrefix(req.headers.host) + token
+                            }
+                        ],
+                        "message": {
+                            from_email: 'adminMSD@qualitance.ro',
+                            to: emailTo,
+                            subject: 'Resetare parola MSD'
+                        }
                     }, function(err){
                         done(err, user.username);
                     });
