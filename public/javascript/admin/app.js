@@ -150,7 +150,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('content.publicContent.categories',{
             url: '/categories',
-            templateUrl: 'partials/admin/content/publicContent/categories.html',
+            templateUrl: 'partials/admin/content/publicContent/categories/viewAll.html',
             controller: 'PublicCategories'
         })
         .state('newsletter', {
