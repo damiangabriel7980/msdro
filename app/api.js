@@ -803,6 +803,23 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({success: categories});
                 }
             });
+        })
+        .post(function (req, res) {
+            var category = new PublicCategories(req.body);
+            category.save(function (err, saved) {
+                if(err){
+                    if(err.code == 11000 || err.code == 11001){
+                        res.send({error: "O categorie cu acelasi nume exista deja"});
+                    }else if(err.name == "ValidationError"){
+                        res.send({error: "Numele este obligatoriu"});
+                    }else{
+                        logger.error(err);
+                        res.send({error: "Eroare la creare"});
+                    }
+                }else{
+                    res.send({success: true});
+                }
+            });
         });
 
     router.route('/admin/users/carouselPublic/getAllImages')

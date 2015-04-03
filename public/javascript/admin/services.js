@@ -303,7 +303,8 @@ services.factory('publicContentService', ['$resource', function($resource){
             save: { method: 'POST'}
         }),
         categories: $resource('api/admin/users/publicContent/categories', {}, {
-            query: { method: 'GET', isArray: false}
+            query: { method: 'GET', isArray: false},
+            create: { method: 'POST', isArray: false}
         })
     }
 }]);
