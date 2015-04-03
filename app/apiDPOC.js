@@ -83,7 +83,7 @@ module.exports = function(app, mandrill, logger, router) {
                     var patientSex = req.body.patientSex;
 
                     if(!patientSex || (patientNumber !=1 && patientNumber != "N/A")){
-                        patientSex = "Vezi narativ";
+                        patientSex = "Vezi descriere";
                     }
 
                     mandrill('/messages/send-template', {
