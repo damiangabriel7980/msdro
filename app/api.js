@@ -3519,65 +3519,51 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             }
         })
         .post(function (req, res) {
-            if(!req.body.name || !req.body.code){
-                res.send({error: "Completati toate campurile"});
-            }else{
-                DPOC_Devices.findOne({$or: [{name: req.body.name}, {code: req.body.code}]}, function (err, dev) {
-                    if(err){
+            console.log(req.body);
+            var device = new DPOC_Devices(req.body);
+            device.code = device.generateHash(req.body.code);
+            device.save(function (err, saved) {
+                if(err){
+                    if(err.code == 11000 || err.code == 11001){
+                        res.send({error: "Un device cu acelasi nume sau cod exista deja"});
+                    }else if(err.name == "ValidationError"){
+                        res.send({error: "Toate campurile sunt obligatorii"});
+                    }else{
                         logger.error(err);
                         res.send({error: "Eroare la creare"});
-                    }else if(dev){
-                        res.send({error: "Un device cu acelasi nume sau cod exista deja"});
-                    }else{
-                        var device = new DPOC_Devices(req.body);
-                        device.code = device.generateHash(req.body.code);
-                        device.save(function (err, saved) {
-                            if(err){
-                                logger.error(err);
-                                res.send({error: "Eroare la creare"});
-                            }else{
-                                res.send({success: true});
-                            }
-                        });
                     }
-                })
-            }
+                }else{
+                    res.send({success: true});
+                }
+            });
         })
         .put(function (req, res) {
             var idToEdit = ObjectId(req.query.id);
-            if(!req.body.name){
-                res.send({error: "Device-ul trebuie sa aiba un nume"});
-            }else{
-                var q = {_id: {$ne: idToEdit}};
-                if(req.body.code){
-                    q['name'] = req.body.name;
+            DPOC_Devices.findOne({_id: idToEdit}, function (err, device) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: "Eroare la update"});
                 }else{
-                    q['$or'] = [{name: req.body.name}, {code: new DPOC_Devices().generateHash(req.body.code)}];
-                }
-                DPOC_Devices.findOne(q, function (err, dev) {
-                    if(err){
-                        logger.error(err);
-                        res.send({error: "Eroare la gasirea device-ului"});
-                    }else if(dev){
-                        res.send({error: "Un device cu acelasi nume sau cod exista deja"});
-                    }else{
-                        var upd = {
-                            name: req.body.name
-                        };
-                        if(req.body.code){
-                            upd.code = new DPOC_Devices().generateHash(req.body.code);
-                        }
-                        DPOC_Devices.update({_id: idToEdit}, {$set: upd}, function (err, wres) {
-                            if(err){
+                    device.name = req.body.name;
+                    if(req.body.code){
+                        device.code = device.generateHash(req.body.code);
+                    }
+                    device.save(function (err, saved) {
+                        if(err){
+                            if(err.code == 11000 || err.code == 11001){
+                                res.send({error: "Un device cu acelasi nume sau cod exista deja"});
+                            }else if(err.name == "ValidationError"){
+                                res.send({error: "Toate campurile sunt obligatorii"});
+                            }else{
                                 logger.error(err);
                                 res.send({error: "Eroare la update"});
-                            }else{
-                                res.send({success: true});
                             }
-                        });
-                    }
-                });
-            }
+                        }else{
+                            res.send({success: true});
+                        }
+                    });
+                }
+            });
         })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
