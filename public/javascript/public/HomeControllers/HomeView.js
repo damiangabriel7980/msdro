@@ -51,12 +51,15 @@ controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce
     };
 
     if(REQUESTED_STAYWELL_LOGIN == 1){
+        REQUESTED_STAYWELL_LOGIN = 0;
         $rootScope.showAuthModal("login");
     }else{
         //if user accesses the home page from an e-mail activation link,
         //show a custom modal
         if(REQUESTED_STAYWELL_ACTIVATION == 1){
+            REQUESTED_STAYWELL_ACTIVATION = 0;
             if(ACTIVATED_STAYWELL_ACCOUNT == 1){
+                ACTIVATED_STAYWELL_ACCOUNT = 0;
                 $rootScope.showAuthModal("activationSuccess");
             }else{
                 $rootScope.showAuthModal("activationFailed");
