@@ -117,9 +117,9 @@ module.exports = function(app, mandrill, logger, amazon, router) {
         if(!validator.isEmail(email)){
             info.message = "Adresa de e-mail nu este valida";
             res.json(info);
-        }else if(typeof title !== "number"){
-            info.message = "Titlul este obligatoriu";
-            res.json(info);
+//        }else if(typeof title !== "number"){
+//            info.message = "Titlul este obligatoriu";
+//            res.json(info);
         }else if(!namePatt.test(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''))){
             info.message = "Numele trebuie sa contina minim 3 litere si doar caracterele speciale '-', '.'";
             res.json(info);
