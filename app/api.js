@@ -3707,7 +3707,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                             "template_content": [
                                                 {
                                                     "name": "title",
-                                                    "content": user.title
+                                                    "content": user.getEmailTitle()
                                                 },
                                                 {
                                                     "name": "name",
@@ -3750,7 +3750,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                         "template_content": [
                                             {
                                                 "name": "title",
-                                                "content": user.title
+                                                "content": user.getEmailTitle()
                                             },
                                             {
                                                 "name": "name",

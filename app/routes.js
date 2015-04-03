@@ -105,7 +105,7 @@ module.exports = function(app, mandrill, logger, passport) {
                 res.render('resetPass.ejs', {message : {message: 'Parolele nu corespund', type: 'danger'}});
             }else{
                 //find user by token
-                User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+                User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }).select('+title').exec(function(err, user) {
                     if (!user) {
                         res.render('forgotPass.ejs', {message : {message: 'Link-ul a expirat sau este invalid. Va rugam introduceti din nou mail-ul', type: 'danger'}});
                     }else{
@@ -126,7 +126,7 @@ module.exports = function(app, mandrill, logger, passport) {
                                     "template_content": [
                                         {
                                             "name": "title",
-                                            "content": user.title
+                                            "content": user.getEmailTitle()
                                         },
                                         {
                                             "name": "name",

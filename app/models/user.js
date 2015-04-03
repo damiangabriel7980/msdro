@@ -57,5 +57,15 @@ userSchema.methods.validPassword = function(password) {
      return crypto(password).toString()===this.password;
 };
 
+userSchema.methods.getEmailTitle = function () {
+    switch(this.title){
+        case 1: return "D-le";
+        case 2: return "D-na";
+        case 3: return "Prof.";
+        case 4: return "Dr.";
+        default: return "";
+    }
+};
+
 // create the model for users and expose it to our app
 module.exports = mongoose.model('User', userSchema);

@@ -340,7 +340,7 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                         "template_content": [
                             {
                                 "name": "title",
-                                "content": req.staywellUser.title
+                                "content": new User({title: req.staywellUser.title}).getEmailTitle()
                             },
                             {
                                 "name": "name",
@@ -398,7 +398,7 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                         "template_content": [
                             {
                                 "name": "title",
-                                "content": req.staywellUser.title
+                                "content": new User({title: req.staywellUser.title}).getEmailTitle()
                             },
                             {
                                 "name": "name",
@@ -520,7 +520,7 @@ module.exports = function(app, mandrill, logger, amazon, router) {
                         "template_content": [
                             {
                                 "name": "title",
-                                "content": user.title
+                                "content": user.getEmailTitle()
                             },
                             {
                                 "name": "name",
