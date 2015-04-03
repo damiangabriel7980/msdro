@@ -13,7 +13,7 @@ module.exports = function(){
 
         case 'staging':
             return {
-                database: "mongodb://msddev:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/MSDdev",
+                database: "mongodb://msdStaging:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/msdStaging",
                 amazonBucket: "msddev-test",
                 pushServerAddress: "https://notif.qualitance.com",
                 elasticServer: "10.200.0.221",
