@@ -301,6 +301,9 @@ services.factory('publicContentService', ['$resource', function($resource){
         }),
         changeImageOrFile: $resource('api/admin/users/publicContent/changeImageOrFile/:data', {}, {
             save: { method: 'POST'}
+        }),
+        categories: $resource('api/admin/users/publicContent/categories', {}, {
+            query: { method: 'GET', isArray: false}
         })
     }
 }]);

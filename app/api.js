@@ -14,6 +14,7 @@ var Answers = require('./models/answers');
 var Slides = require('./models/slides');
 var Roles=require('./models/roles');
 var PublicContent = require('./models/publicContent');
+var PublicCategories = require('./models/publicCategories');
 var PublicCarousel = require('./models/publicCarousel');
 var Carousel=require('./models/carousel_Medic');
 var Conferences = require('./models/conferences');
@@ -790,6 +791,18 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 });
             }
+        });
+
+    router.route('/admin/users/publicContent/categories')
+        .get(function (req, res) {
+            PublicCategories.find(function (err, categories) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: categories});
+                }
+            });
         });
 
     router.route('/admin/users/carouselPublic/getAllImages')

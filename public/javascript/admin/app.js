@@ -141,8 +141,17 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('content.publicContent',{
             url: '/publicContent',
+            templateUrl: 'partials/admin/content/publicContent/root.html'
+        })
+        .state('content.publicContent.content',{
+            url: '/content',
             templateUrl: 'partials/admin/content/publicContent/publicContent.html',
             controller: 'PublicContent'
+        })
+        .state('content.publicContent.categories',{
+            url: '/categories',
+            templateUrl: 'partials/admin/content/publicContent/categories.html',
+            controller: 'PublicCategories'
         })
         .state('newsletter', {
             abstract: true,
