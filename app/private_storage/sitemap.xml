@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://msd-staging.qualitance.com#!/stiri/all</loc>
   </url>
   <url>
-    <loc>https://msd-staging.qualitance.com/#!/articole/all</loc> 
+    <loc>https://msd-staging.qualitance.com#!/articole/all</loc>
   </url>
   <url>
-    <loc>https://msd-staging.qualitance.com/#!/elearning/0/all</loc> 
+    <loc>https://msd-staging.qualitance.com#!/elearning/0/all</loc>
   </url>
   <url>
-    <loc>https://msd-staging.qualitance.com/#!/downloads/all</loc> 
+    <loc>https://msd-staging.qualitance.com#!/downloads/all</loc>
   </url>
   <url>
-    <loc>https://msd-staging.qualitance.com/#!/home/noutati</loc> 
+    <loc>https://msd-staging.qualitance.com#!/home/noutati</loc>
   </url>
   <url>
-    <loc>https://msd-staging.qualitance.com/#!/home/cmcArticole</loc> 
+    <loc>https://msd-staging.qualitance.com#!/home/cmcArticole</loc>
   </url>
   <url>
-    <loc>https://msd-staging.qualitance.com/#!/home/downloads</loc> 
+    <loc>https://msd-staging.qualitance.com#!/home/downloads</loc>
   </url>
 </urlset>
