@@ -7295,6 +7295,12 @@ html body .rootView {
 #codeAddon .popover {
   max-width: 430px;
 }
+#authModal .form-group-sm {
+  padding-bottom: 8px;
+}
+#authModal .form-group-sm label {
+  font-size: 13px;
+}
 .btnGreenBorder {
   border-color: #008780;
 }
