@@ -186,6 +186,7 @@ app.run(
                 $modal.open({
                     templateUrl: 'partials/public/auth/baseModal.html',
                     size: 'lg',
+                    backdrop: 'static',
                     windowClass: 'fade',
                     controller: 'AuthModal',
                     resolve:{
