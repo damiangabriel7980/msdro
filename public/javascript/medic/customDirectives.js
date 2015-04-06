@@ -153,20 +153,20 @@ app.directive('buffering',['$timeout','$document', function ($timeout,$document)
     return {
         restrict: 'A',
         link: function(rootscope,scope, element, attrs) {
-            var checkVideo = function(){
-                $('video').on('suspend', function (event) {
-                    $(this).css('background-image',rootscope.loaderForSlowConn);
-                });
-                $('video').on('canplay', function (event) {
-                    $(this).css('background-image','none');
-                });
-            };
-            angular.element(document).ready(function(){
-                checkVideo();
-            });
-            angular.element(document).ajaxComplete(function(){
-                checkVideo();
-            });
+            //var checkVideo = function(){
+            //    $('video').on('suspend', function (event) {
+            //        $(this).css('background-image',rootscope.loaderForSlowConn);
+            //    });
+            //    $('video').on('canplay', function (event) {
+            //        $(this).css('background-image','none');
+            //    });
+            //};
+            //angular.element(document).ready(function(){
+            //    checkVideo();
+            //});
+            //angular.element(document).ajaxComplete(function(){
+            //    checkVideo();
+            //});
         }
     }
 }]);
