@@ -9,7 +9,8 @@
             scope: {
                 allAreas: '=',
                 selectedAreas: '=',
-                returnedAreas: '='
+                returnedAreas: '=',
+                displayCompact: '='
             },
             link: function(scope, element, attrs) {
 
