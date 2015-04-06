@@ -4181,7 +4181,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 ans.error = true;
                 ans.message = "Numele trebuie sa contina doar caractere, minim 3";
                 res.json(ans);
-            }else if(!phonePatt.test(newData.phone)){ //check phone number
+            }else if(newData.phone && !phonePatt.test(newData.phone)){ //check phone number
                 ans.error = true;
                 ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
                 res.json(ans);

@@ -177,6 +177,8 @@ module.exports = function(app, globals, mandrill, logger, amazon, router) {
             var userData = trimObject(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions']);
             userData.groupsID = userData.groupsID || [];
 
+            var phonePatt = new XRegExp('^[0-9]{10,20}$');
+
             if(activation.type !== "code" && activation.type !== "file"){
                 info.message = "Tipul de activare nu este valid";
                 res.json(info);
@@ -192,8 +194,14 @@ module.exports = function(app, globals, mandrill, logger, amazon, router) {
             }else if(!userData.groupsID[0]){
                 info.message = "Selectati un grup preferat";
                 res.json(info);
+            }else if(!userData.address){
+                info.message = "Adresa este obligatorie";
+                res.json(info);
             }else if(!userData.citiesID){
                 info.message = "Selectati un oras";
+                res.json(info);
+            }else if(userData.phone && !phonePatt.test(userData.phone)){
+                info.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
                 res.json(info);
             }else{
                 //establish default user group
