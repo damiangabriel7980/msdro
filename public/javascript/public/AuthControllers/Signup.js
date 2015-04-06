@@ -118,7 +118,7 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                         $window.location.href = "pro";
                     }else{
                         //awaiting proof acceptance (48 h)
-                        $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user});
+                        $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user, title: "Completare profil"});
                     }
                 }
             }
@@ -139,7 +139,7 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                         $scope.renderView("awaitingEmailActivation", {registeredAddress: resp.user});
                     }else{
                         //awaiting proof acceptance (48 h)
-                        $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user});
+                        $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user, title: "Creare cont"});
                     }
                 }
             }
