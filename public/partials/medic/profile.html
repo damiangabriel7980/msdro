@@ -9,88 +9,37 @@
                 <alert ng-if="userProfileAlert.newAlert" type="{{userProfileAlert.type}}" close="userProfileAlert.newAlert=false">{{userProfileAlert.message}}</alert>
             </div>
             <form name="profileForm" novalidate>
-                <div class="col-md-12">
-                    <div class="col-md-12">
-                        <div class="col-md-4">
+                <div class="col-md-12 noPadding">
+                    <div class="col-md-4 noPadding">
+                        <div class="col-md-12">
                             <img ng-class="hideImg" class="img-responsive img-thumbnail imgFix" no-cache-src="{{imageUser}}" style="width:100%;">
-                            <div class="col-md-12 noPadding ">
-
-                                <div class="col-md-12 noPadding margintop5px">
-                                    <button class="btn btn-default " type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o poza</button>
-                                </div>
-
-                            </div>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-12 margintop5px">
+                            <button class="btn btn-default" style="width: 100%" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o poza</button>
+                        </div>
+                        <div class="col-md-12 margintop5px">
+                            <div class="btn col-md-12" ng-click="uploadAlert.newAlert=false" ng-class="uploadAlert.type==='danger'?'btn-danger':'btn-success'" ng-if="uploadAlert.newAlert"><span class="pull-left">{{uploadAlert.message}}&nbsp; &nbsp; &nbsp;</span> <i ng-click="uploadAlert.newAlert=false" class="glyphicon pull-right glyphicon-remove-circle"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 noPadding">
+                        <div class="col-md-6 noPadding">
                             <!--<div class="form-group col-md-12" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">-->
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <label>Titlu:</label>
-                                <select ng-model="userData.title" class="form-control" ng-options="title.number as title.name for title in titles"></select>
+                                <select ng-model="userData.title" class="form-control" style="padding: 0" ng-options="title.number as title.name for title in titles"></select>
                             </div>
-                            <div class="form-group col-md-9" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
+                            <div class="form-group col-md-8" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
                                 <label>Nume<sup>*</sup>:</label>
                                 <input type="text" class="form-control" id="nume" name="nume" ng-model="fullname" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\s]{3,30}$/" ng-required="true">
                                 <p class="" ng-show="profileForm.nume.$error.pattern">Numele nu contine caractere valide/are mai putin de 3 caractere!</p>
                                 <p class="" ng-show="profileForm.nume.$error.required">Numele este obligatoriu!</p>
                             </div>
-                            <div class="form-group col-md-12" ng-class="{'has-error': profileForm.telefon.$error.pattern}">
-                                <label for="telefon">Telefon:</label>
-                                <input type="text" class="form-control" id="telefon" name="telefon" ng-model="phone" ng-pattern="/^[0-9]{10,20}$/">
-                                <p class="" ng-show="profileForm.telefon.$error.pattern">Numarul de telefon trebuie sa aiba minim 10 cifre!</p>
-                                <p class="" ng-show="profileForm.telefon.$error.required">Numarul de telefon este obligatoriu!</p>
-                            </div>
-                            <div class="col-md-12 noPadding">
-                                <div class="col-md-6 form-group">
-                                    <input type="checkbox" ng-model="userData.subscriptions.newsletterStaywell"/>
-                                    <span>Abonat la newsletter Staywell</span>
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <input type="checkbox" ng-model="userData.subscriptions.infoMSD"/>
-                                    <span>Abonat la informatii MSD</span>
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <input type="checkbox" name="rememberOption" ng-model="rememberOption">
-                                    <span>Afiseaza prezentarile initiale</span>
-                                </div>
-                            </div>
-                            <div class="col-md-12 margintop30px">
-                                <div class="btn col-md-12" ng-click="uploadAlert.newAlert=false" ng-class="uploadAlert.type==='danger'?'btn-danger':'btn-success'" ng-if="uploadAlert.newAlert"><span class="pull-left">{{uploadAlert.message}}&nbsp; &nbsp; &nbsp;</span> <i ng-click="uploadAlert.newAlert=false" class="glyphicon pull-right glyphicon-remove-circle"></i></div>
-                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <hr/>
-                        <div class="col-md-12 form-group" ng-class="{'has-error': profileForm.address.$error.required}">
-                            <label>Adresa<sup>*</sup>:</label>
-                            <input type="text" class="form-control" name="address" ng-model="address" ng-required="true">
-                            <p ng-show="profileForm.address.$error.required">Adresa este obligatorie</p>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Judet<sup>*</sup>:</label>
-                                <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county" ng-required="true">
-                                    <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="county in counties | propsFilter: {name: $select.search}">
-                                        <div ng-bind-html="trustAsHtml((county.name | highlight: $select.search))"></div>
-                                    </ui-select-choices>
-                                </ui-select>
-                                <p class="" ng-show="profileForm.judet.$invalid && !profileForm.judet.$pristine">Judetul nu este valid!</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Oras<sup>*</sup>:</label>
-                                <ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" ng-required="true">
-                                    <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">
-                                        <div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-                            <p class="" ng-show="profileForm.oras.$invalid && !profileForm.oras.$pristine">Orasul nu este valid!</p>
-                        </div>
-                        <div class="col-md-12">
-                            <therapeutic-select all-areas="allAreas" selected-areas="selectedAreas" returned-areas="newAreas"></therapeutic-select>
+                        <div class="form-group col-md-6" ng-class="{'has-error': profileForm.telefon.$error.pattern}">
+                            <label for="telefon">Telefon:</label>
+                            <input type="text" class="form-control" id="telefon" name="telefon" ng-model="phone" ng-pattern="/^[0-9]{10,20}$/">
+                            <p class="" ng-show="profileForm.telefon.$error.pattern">Numarul de telefon trebuie sa aiba minim 10 cifre!</p>
+                            <p class="" ng-show="profileForm.telefon.$error.required">Numarul de telefon este obligatoriu!</p>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Tip de practica:</label>
@@ -101,9 +50,58 @@
                             <select ng-model="infoSource" class="form-control"></select>
                         </div>
                         <div class="col-md-12">
-                            <button type="submit" ng-click="submitProfileForm(profileForm.$valid)" class="btn btn-primary pull-right">Salveaza</button>
+                            <therapeutic-select all-areas="allAreas" selected-areas="selectedAreas" returned-areas="newAreas"></therapeutic-select>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-12 noPadding">
+                    <hr/>
+                    <div class="col-md-12 form-group" ng-class="{'has-error': profileForm.address.$error.required}">
+                        <label>Adresa<sup>*</sup>:</label>
+                        <input type="text" class="form-control" name="address" ng-model="address" ng-required="true">
+                        <p ng-show="profileForm.address.$error.required">Adresa este obligatorie</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Judet<sup>*</sup>:</label>
+                            <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county" ng-required="true">
+                                <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices repeat="county in counties | propsFilter: {name: $select.search}">
+                                    <div ng-bind-html="trustAsHtml((county.name | highlight: $select.search))"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <p class="" ng-show="profileForm.judet.$invalid && !profileForm.judet.$pristine">Judetul nu este valid!</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Oras<sup>*</sup>:</label>
+                            <ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" ng-required="true">
+                                <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">
+                                    <div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <p class="" ng-show="profileForm.oras.$invalid && !profileForm.oras.$pristine">Orasul nu este valid!</p>
+                    </div>
+                </div>
+                <div class="col-md-12 noPadding">
+                    <div class="col-md-12 form-group">
+                        <input type="checkbox" ng-model="userData.subscriptions.newsletterStaywell"/>
+                        <span>Abonat la newsletter Staywell</span>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <input type="checkbox" ng-model="userData.subscriptions.infoMSD"/>
+                        <span>Abonat la informatii MSD</span>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <input type="checkbox" name="rememberOption" ng-model="rememberOption">
+                        <span>Afiseaza prezentarile initiale</span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" ng-click="submitProfileForm(profileForm.$valid)" class="btn btn-primary pull-right">Salveaza</button>
                 </div>
             </form>
         </accordion-group>
@@ -113,7 +111,7 @@
                 <alert ng-if="userJobAlert.newAlert" type="{{userJobAlert.type}}" close="userJobAlert.newAlert=false">{{userJobAlert.message}}</alert>
             </div>
             <form name="jobForm" novalidate>
-                <div class="col-md-12">
+                <div class="col-md-12 noPadding">
                     <div class="form-group col-md-6">
                         <label for="tipLoc">Tip loc de munca<sup>*</sup>:</label>
                         <select ng-model="selectedJob" name="tip_munca" ng-options="job.number as job.name for job in jobTypes"
@@ -128,7 +126,7 @@
 
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 noPadding">
                     <div class="form-group col-md-4" ng-class="{'has-error':jobForm.numeStrada.$error.required}">
                         <label for="numeStrada">Numele strazii<sup>*</sup>:</label>
                         <input type="text" class="form-control" name="numeStrada" id="numeStrada" ng-model="job.street_name" ng-required="true">
@@ -147,7 +145,7 @@
                         <p class="" ng-show="jobForm.codPostal.$error.pattern">Codul postal trebuie sa contina numai cifre!</p>
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 noPadding">
                     <div class="form-group col-md-12">
                         <label for="codPostal">Alte informatii, adresa:</label>
                         <input type="text" class="form-control" id="alteInfoAdr" ng-model="job.job_address">
@@ -164,7 +162,7 @@
                 <alert ng-if="userChangeMailAlert.newAlert" type="{{userChangeMailAlert.type}}" close="userChangeMailAlert.newAlert=false">{{userChangeMailAlert.message}}</alert>
             </div>
             <form name="emailForm" ng-submit="submitEmailForm(true)">
-                <div class="col-md-12">
+                <div class="col-md-12 noPadding">
                     <div class="form-group col-md-12">
                         <label for="emailNew">Adresa de e-mail:</label>
                         <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="username" disabled>
@@ -179,21 +177,19 @@
                 </div>
             </form>
             <div class="col-md-12">
-                <h4>Schimba parola</h4>
-                <hr/>
+                <hr style="margin: 10px 0"/>
+                <label style="margin-bottom: 15px">Schimba parola</label>
             </div>
             <div class="col-md-12">
                 <alert ng-if="userChangePassAlert.newAlert" type="{{userChangePassAlert.type}}" close="userChangePassAlert.newAlert=false">{{userChangePassAlert.message}}</alert>
             </div>
             <form name="changePassForm" novalidate>
-                <div class="col-md-12">
-                    <div class="form-group col-md-12" ng-class="{'has-error': changePassForm.oldPass.$error.required && showerrorPass}">
-                        <label for="oldPass">Parola<sup>*</sup>:</label>
-                        <input type="password" class="form-control" id="oldPass" name="oldPass" ng-model="oldPass" ng-required="true">
-                        <p class="" ng-show="changePassForm.oldPass.$error.required && showerrorPass">Introduceti vechea parola!</p>
-                    </div>
+                <div class="form-group col-md-12" ng-class="{'has-error': changePassForm.oldPass.$error.required && showerrorPass}">
+                    <label for="oldPass">Parola<sup>*</sup>:</label>
+                    <input type="password" class="form-control" id="oldPass" name="oldPass" ng-model="oldPass" ng-required="true">
+                    <p class="" ng-show="changePassForm.oldPass.$error.required && showerrorPass">Introduceti vechea parola!</p>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 noPadding">
                     <div class="form-group col-md-6" ng-class="{'has-error':changePassForm.newPass.$error.required && showerrorPass}">
                         <label for="newPass">Parola noua<sup>*</sup>:</label>
                         <input type="password" class="form-control" id="newPass" name="newPass" ng-model="newPass" ng-required="true">
