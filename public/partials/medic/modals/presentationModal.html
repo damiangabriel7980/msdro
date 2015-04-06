@@ -3,7 +3,7 @@
 </div>
 
 <div class="modal-body col-md-12">
-    <div class="col-md-12" ng-bind-html="trustAsHtml(presentation.article_content)">
+    <div buffering class="col-md-12" ng-bind-html="trustAsHtml(presentation.article_content)">
     </div>
     <div class="col-md-12">
         <input type="checkbox" name="rememberOption" ng-checked="true" ng-change="changeStatus()" ng-model="rememberOption">
