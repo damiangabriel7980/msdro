@@ -231,6 +231,7 @@ app.run(
             $rootScope.Terms = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf";
             $rootScope.Pharma = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf";
             $rootScope.MerckManual = "/merckManual";
+            $rootScope.loaderForSlowConn = "https://s3-eu-west-1.amazonaws.com/msddev-test/resources/page-loader.gif";
             var standalone = window.navigator.standalone,
                 userAgent = window.navigator.userAgent.toLowerCase(),
                 safari = /safari/.test( userAgent ),
