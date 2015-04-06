@@ -63,6 +63,26 @@ var cookieSig = require('express-session/node_modules/cookie-signature');
 
 //================================================================================== useful db administration functions
 
+//trim every keys except the ones specified in the "fields" array
+var trimObject = function (obj, fields) {
+    if(typeof obj !== "object") obj = {};
+    if(typeof fields !== "object") fields = [];
+    if(fields.constructor.toString().indexOf("Array") == -1) fields = [];
+    try{
+        var ret = {};
+        for(var key in obj){
+            if(obj.hasOwnProperty(key)){
+                if(fields.indexOf(key) > -1){
+                    ret[key] = obj[key];
+                }
+            }
+        }
+        return ret;
+    }catch(ex){
+        return {};
+    }
+};
+
 //returns ONLY id's of entities connected to specified document in array
 var findConnectedEntitiesIds = function(connected_to_entity, connection_name, connected_to_id, callback){
     var qry = {};
@@ -4065,7 +4085,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/userdata')
 
         .get(function(req, res) {
-            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID +address +practiceType").populate('therapeutic-areasID').exec(function (err, user) {
+            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID +address +practiceType +title").populate('therapeutic-areasID').exec(function (err, user) {
                 if(err){
                     res.send(err);
                 }else{
@@ -4153,14 +4173,15 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
         .post(function (req, res) {
             var ans = {};
-            var newData = req.body.newData;
+            var newData = trimObject(req.body.newData,["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
+            console.log(newData);
             var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
-            if((!namePatt.test(newData.fullname.toString()))){ //check name
+            if((!namePatt.test(newData.name))){ //check name
                 ans.error = true;
                 ans.message = "Numele trebuie sa contina doar caractere, minim 3";
                 res.json(ans);
-            }else if(!phonePatt.test(newData.phone.toString())){ //check phone number
+            }else if(!phonePatt.test(newData.phone)){ //check phone number
                 ans.error = true;
                 ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
                 res.json(ans);
@@ -4170,16 +4191,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 res.json(ans);
             }else{
                 console.log(newData);
-                User.update({_id: req.user._id}, {
-                    name: newData.fullname,
-                    phone: newData.phone,
-                    subscription: newData.newsletter?1:0,
-                    "therapeutic-areasID": newData.therapeuticAreas || [],
-                    citiesID: [newData.city],
-                    address: newData.address,
-                    subscriptions: newData.subscriptions,
-                    practiceType: newData.practiceType
-                }, function (err, wres) {
+                User.update({_id: req.user._id}, {$set: newData}, function (err, wres) {
                     if(err){
                         logger.error(err);
                         ans.error = true;

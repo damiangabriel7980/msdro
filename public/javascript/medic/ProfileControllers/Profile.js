@@ -30,6 +30,13 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
         }
     ];
 
+    $scope.titles = [
+        {number: 1, name: "Dl"},
+        {number: 2, name: "Dna"},
+        {number: 3, name: "Prof"},
+        {number: 4, name: "Dr"}
+    ];
+
     //------------------------------------------------------------------------------ retrieve personal info
     ProfileService.getUserData.query().$promise.then(function (resp) {
         $scope.username=resp.username;
@@ -153,15 +160,15 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
             if(this.rememberOption==true)
                 localStorage.removeItem('statusModalGroups');
             var toSend = {};
-            toSend.fullname = this.fullname;
+            toSend.name = this.fullname;
+            toSend.title = this.userData.title;
+            console.log("====================");
+            console.log(toSend.title);
             toSend.phone = this.phone;
-            toSend.newsletter = this.newsletter;
-            toSend.therapeuticAreas = this.newAreas;
-            toSend.county = this.county.selected._id;
-            toSend.city = this.city.selected._id;
+            toSend['therapeutic-areasID'] = this.newAreas;
+            toSend.citiesID = [this.city.selected._id];
             toSend.address = this.address;
             toSend.subscriptions = this.userData.subscriptions;
-            console.log(this.userData.practiceType);
             toSend.practiceType = this.userData.practiceType;
             ProfileService.uploadProfile.save({newData:toSend}).$promise.then(function (resp) {
                 $scope.userProfileAlert.message = resp.message;
