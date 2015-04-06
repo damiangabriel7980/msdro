@@ -37,7 +37,7 @@ var mergeKeys = function (obj1, obj2){
     return obj3;
 };
 
-module.exports = function(app, mandrill, logger, amazon, router) {
+module.exports = function(app, globals, mandrill, logger, amazon, router) {
 
     //access control allow origin *
     app.all("/apiGloballyShared/*", function(req, res, next) {
@@ -114,7 +114,7 @@ module.exports = function(app, mandrill, logger, amazon, router) {
         //console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
 
         //validate data
-        if(!validator.isEmail(email)){
+        if(!globals.validateEmail(email)){
             info.message = "Adresa de e-mail nu este valida";
             res.json(info);
 //        }else if(typeof title !== "number"){
