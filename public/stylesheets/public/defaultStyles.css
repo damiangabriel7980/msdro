@@ -7298,6 +7298,15 @@ html body .rootView {
 #authModal {
   font-size: 12px;
 }
+#authModal .modal-header {
+  padding: 10px 15px;
+}
+#authModal .modal-header .modal-title h3 {
+  font-size: 22px;
+}
+#authModal .modal-footer {
+  padding: 10px 15px;
+}
 #authModal .form-group-sm {
   padding-bottom: 8px;
 }
