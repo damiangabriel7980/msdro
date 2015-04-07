@@ -14,6 +14,15 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 
+    //----------------------------------------------------------------------------------------------- categories
+
+    publicContentService.categories.query().$promise.then(function (resp) {
+        if(resp.success){
+            $scope.categories = resp.success;
+            if(resp.success.length > 0) $scope.selectedCategory = resp.success[0]._id;
+        }
+    });
+
     //----------------------------------------------------------------------------------------------- therapeutic areas
 
     //get all
@@ -82,6 +91,7 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
         toSend.author = this.autor?this.autor:"";
         toSend.description = this.descriere?this.descriere:"";
         toSend.type = $scope.selectedType;
+        toSend.category = $scope.selectedCategory;
         //form array of selected areas id's
         var areasIDs = [];
         for(var i=0; i<$scope.selectedTherapeuticAreas.length; i++){
