@@ -91,7 +91,7 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
         toSend.author = this.autor?this.autor:"";
         toSend.description = this.descriere?this.descriere:"";
         toSend.type = $scope.selectedType;
-        toSend.category = $scope.selectedCategory;
+        toSend.category = this.selectedCategory;
         //form array of selected areas id's
         var areasIDs = [];
         for(var i=0; i<$scope.selectedTherapeuticAreas.length; i++){

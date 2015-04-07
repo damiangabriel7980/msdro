@@ -16,7 +16,15 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 
-    //get content by id
+    //----------------------------------------------------------------------------------------------- categories
+
+    publicContentService.categories.query().$promise.then(function (resp) {
+        if(resp.success){
+            $scope.categories = resp.success;
+        }
+    });
+
+    //----------------------------------------------------------------------------------------------------- get content
     publicContentService.getContentById.query({id: idToEdit}).$promise.then(function (resp) {
         console.log(resp);
         $scope.titlu = resp.title;
@@ -26,6 +34,7 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         $scope.contentText = resp.text;
         $scope.imagePath = resp.image_path;
         $scope.filePath = resp.file_path;
+        $scope.selectedCategory = resp.category;
 
         contentDataLoaded = true;
 
@@ -238,6 +247,7 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         toUpdate.author = this.autor?this.autor:"";
         toUpdate.description = this.descriere?this.descriere:"";
         toUpdate.type = $scope.selectedType;
+        toUpdate.category = this.selectedCategory;
         //form array of selected areas id's
         var areasIDs = [];
         for(var i=0; i<$scope.selectedTherapeuticAreas.length; i++){
