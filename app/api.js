@@ -820,6 +820,30 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({success: true});
                 }
             });
+        })
+        .put(function (req, res) {
+            PublicCategories.findOne({_id: req.query.id}, function (err, category) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    category.name = req.body.name;
+                    category.save(function (err, saved) {
+                        if(err){
+                            if(err.code == 11000 || err.code == 11001){
+                                res.send({error: "O categorie cu acelasi nume exista deja"});
+                            }else if(err.name == "ValidationError"){
+                                res.send({error: "Numele este obligatoriu"});
+                            }else{
+                                logger.error(err);
+                                res.send({error: "Eroare la salvare"});
+                            }
+                        }else{
+                            res.send({success: true});
+                        }
+                    });
+                }
+            });
         });
 
     router.route('/admin/users/carouselPublic/getAllImages')

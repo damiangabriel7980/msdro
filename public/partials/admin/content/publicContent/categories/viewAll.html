@@ -10,7 +10,7 @@
             </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
-                    <div class="btn btn-default" ng-click="editCategory(category._id)"><i class="glyphicon glyphicon-cog"></i></div>
+                    <div class="btn btn-default" ng-click="editCategory(category)"><i class="glyphicon glyphicon-cog"></i></div>
                     <div class="btn btn-danger" ng-click="deleteCategory(category._id)"><i class="glyphicon glyphicon-trash"></i></div>
                     <div class="btn" ng-class="{'btn-primary':!category.isEnabled,'btn-danger':category.isEnabled}" ng-click="toogleCategoryEnabled(category._id, category.isEnabled)"><i class="glyphicon" ng-class="{'glyphicon-lock':category.isEnabled,'glyphicon-share':!category.isEnabled}"></i></div>
                 </div>

@@ -30,7 +30,6 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
     $scope.addCategory = function(){
         $modal.open({
             templateUrl: 'partials/admin/content/publicContent/categories/modalAddCategory.html',
-            size: 'sm',
             windowClass: 'fade',
             controller: 'AddPublicContentCategory'
         });
@@ -60,15 +59,14 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
         );
     };
 
-    $scope.editCategory = function (id) {
+    $scope.editCategory = function (category) {
         $modal.open({
             templateUrl: 'partials/admin/content/publicContent/categories/modalEditCategory.html',
-            size: 'sm',
             windowClass: 'fade',
             controller: 'EditPublicContentCategory',
             resolve: {
-                idToEdit: function () {
-                    return id;
+                category: function () {
+                    return JSON.parse(JSON.stringify(category));
                 }
             }
         });
