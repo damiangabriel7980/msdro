@@ -852,7 +852,13 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 if(err){
                     res.send({error: true});
                 }else{
-                    res.send({success: true});
+                    PublicContent.update({category: idToDelete}, {$set: {category: null}}, function (err, wres) {
+                        if(err){
+                            res.send({error: true});
+                        }else{
+                            res.send({success: true});
+                        }
+                    });
                 }
             });
         });
