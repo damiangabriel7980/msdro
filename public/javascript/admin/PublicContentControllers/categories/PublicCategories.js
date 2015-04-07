@@ -50,7 +50,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
             isEnabled?"Dezactiveaza categorie":"Activeaza categorie",
             isEnabled?"Sunteti sigur ca doriti sa dezactivati categoria?":"Sunteti sigur ca doriti sa activati categoria?",
             function () {
-                publicContentService.categories.update({id: id}, {isEnabled: isEnabled}).$promise.then(function (resp) {
+                publicContentService.categories.update({id: id}, {isEnabled: !isEnabled}).$promise.then(function (resp) {
                     console.log(resp);
                     $state.reload();
                 });

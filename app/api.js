@@ -827,7 +827,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     logger.error(err);
                     res.send({error: true});
                 }else{
-                    category.name = req.body.name;
+                    if(req.body.name) category.name = req.body.name;
+                    if(typeof req.body.isEnabled === "boolean") category.isEnabled = req.body.isEnabled;
                     category.save(function (err, saved) {
                         if(err){
                             if(err.code == 11000 || err.code == 11001){
