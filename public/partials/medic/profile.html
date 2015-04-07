@@ -18,7 +18,7 @@
                             <button class="btn btn-default" style="width: 100%" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o poza</button>
                         </div>
                         <div class="col-md-12 margintop5px">
-                            <div class="btn col-md-12" ng-click="uploadAlert.newAlert=false" ng-class="uploadAlert.type==='danger'?'btn-danger':'btn-success'" ng-if="uploadAlert.newAlert"><span class="pull-left">{{uploadAlert.message}}&nbsp; &nbsp; &nbsp;</span> <i ng-click="uploadAlert.newAlert=false" class="glyphicon pull-right glyphicon-remove-circle"></i></div>
+                            <alert type="{{uploadAlert.type}}" ng-if="uploadAlert.newAlert" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
                         </div>
                     </div>
                     <div class="col-md-8 noPadding">
