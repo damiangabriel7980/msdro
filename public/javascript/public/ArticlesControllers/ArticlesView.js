@@ -1,10 +1,10 @@
-controllers.controller('ArticlesView', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
+controllers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 'ContentService', function($scope, $rootScope, $stateParams, ContentService) {
 
     $scope.articlesLimit = 3;
 
     //------------------------------------------------------------------------------------------------- get all content
 
-    ContentService.content.query({type: 2}).$promise.then(function (resp) {
+    ContentService.content.query({category: $stateParams.category}).$promise.then(function (resp) {
         $scope.news = resp.success;
     });
     ContentService.mostRead.query({type: 2}).$promise.then(function (resp) {

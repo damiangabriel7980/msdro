@@ -58,12 +58,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('articole', {
             abstract: true,
-            url: '/articole',
+            url: '/articole/:category',
             templateUrl: 'partials/public/articole/root.html',
             controller: 'ArticlesView'
         })
         .state('articole.all',{
-            url: '/all/:category',
+            url: '/all',
             templateUrl: 'partials/public/articole/all.html'
         })
         .state('articole.detail',{

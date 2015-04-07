@@ -15,7 +15,7 @@ var getIds = function (documentsArray) {
     return ret;
 };
 
-module.exports = function(app, router) {
+module.exports = function(app, logger, router) {
 
     router.route('/getCarouselData')
 
@@ -31,6 +31,7 @@ module.exports = function(app, router) {
 
     router.route('/content')
         .get(function (req, res) {
+            console.log(req.query);
             if(req.query.id){
                 PublicContent.findOne({_id: req.query.id, enable: true}, function (err, resp) {
                     if(err){
@@ -85,6 +86,16 @@ module.exports = function(app, router) {
                         res.send({error: true});
                     }else{
                         res.send({success: resp});
+                    }
+                })
+            }else if(req.query.category){
+                console.log("===================");
+                console.log(req.query.category);
+                PublicContent.find({category: req.query.category, enable: true}).sort({date_added: -1}).exec(function (err, content) {
+                    if(err){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: content});
                     }
                 })
             }
@@ -191,7 +202,7 @@ module.exports = function(app, router) {
                     }
                 });
             }else{
-                PublicCategories.find(function (err, categories) {
+                PublicCategories.find({isEnabled: true}, function (err, categories) {
                     if(err){
                         logger.error(err);
                         res.send({error: true});
