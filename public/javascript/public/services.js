@@ -116,6 +116,14 @@ services.factory('StateService', ['$state', function ($state) {
     }
 }]);
 
+services.factory('RootService', ['$resource', function ($resource) {
+    return {
+        categories: $resource('apiPublic/categories', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
 services.factory('HomeService', ['$resource', function($resource){
     return {
         getCarouselData: $resource('apiPublic/getCarouselData/', {}, {

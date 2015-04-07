@@ -1,5 +1,6 @@
 var PublicContent = require('./models/publicContent');
 var PublicCarousel = require('./models/publicCarousel');
+var PublicCategories = require('./models/publicCategories');
 var Events = require('./models/events');
 var TherapeuticAreas = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
@@ -176,6 +177,29 @@ module.exports = function(app, router) {
                     res.send(resp);
                 }
             });
+        });
+
+    router.route('/categories')
+        .get(function (req, res) {
+            if(req.query.id){
+                PublicCategories.findOne({_id: req.query.id}, function (err, category) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: category});
+                    }
+                });
+            }else{
+                PublicCategories.find(function (err, categories) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: categories});
+                    }
+                });
+            }
         });
 
     router.route('/termsAndConditions')
