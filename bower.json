@@ -43,7 +43,8 @@
     "videogular-poster": "latest",
     "videogular-themes-default": "latest",
     "he": "latest",
-    "async": "latest"
+    "async": "latest",
+    "angulartics": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

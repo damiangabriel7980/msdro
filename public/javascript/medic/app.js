@@ -13,7 +13,9 @@ var app = angular.module('app',
         'angularFileUpload',
         'ui.bootstrap',
         'ngCookies',
-        'therapeuticSelect'
+        'therapeuticSelect',
+        'angulartics',
+        'angulartics.google.analytics'
     ]);
 
 app.config(['$locationProvider', function($location) {
