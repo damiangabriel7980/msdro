@@ -4,6 +4,11 @@
 //import stripped-from-variables version of bootstrap, which will use our custom variables
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 
+body{
+  @media (max-width: 1366px) {
+    font-size: 12px;
+  }
+}
 .main-view-container {
   width: 100%;
   position:relative;
@@ -898,7 +903,7 @@ ul.products li {
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #f5f5f5 100%);
 }
 .textHome {
-  height: 12em;
+  height: 9.5em;
   overflow: hidden;
 }
 .textHome:after
@@ -1066,7 +1071,7 @@ hr{
 }
 .middleMerck{
   vertical-align: middle;
-  text-align: center;
+  text-align: left;
 }
 .no-text-decoration{
   text-decoration: none !important;
@@ -1352,4 +1357,88 @@ a:focus{
 }
 .fixedHeightLogo{
   height: 50px;
+}
+.glycemizerImage{
+  width: 100%; margin-bottom: 10px;
+  @media(max-width: 1024px){
+    width: 50%; margin-bottom: 10px;
+  }
+}
+.merckImage{
+  width: 70%; cursor:pointer;
+  @media(max-width: 1024px){
+    width: 40%;
+  }
+}
+.productsResponsiveMargin{
+  margin-right: 50px;
+}
+.productMinHeight{
+  @media(min-width: 1025px){
+    min-height: 450px;
+  }
+  @media(max-width: 1024px){
+    min-height: 305px;
+  }
+}
+.paddRightMobile{
+  @media(min-width: 1025px){
+    padding-right: 0;
+  }
+  @media(max-width: 1024px){
+    padding-right: 45px;
+  }
+}
+.newHomeLeftColumn{
+  padding-left: 8%;
+  @media(min-width: 1367px){
+    padding-left: 9%;
+  }
+}
+.newHomeRightColumn{
+  padding-right: 2%;
+  @media(min-width: 1367px){
+   padding-right: 2.5%;
+  }
+}
+.col-xs-1Half {
+  width: 12.666666666666664%;
+  float: left;
+  position: relative;
+  min-height: 1px;
+  padding-left: 0px;
+  padding-right: 15px;
+}
+.left36Percent{
+  margin-left: 36%;
+}
+.topMinus3Percent{
+  margin-top: -3%;
+}
+.width100{
+  width: 100%
+}
+.timelineContainer{
+  width: 100%;
+  height: 200px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  .timelineBody{
+    width: 0;
+    position: absolute;
+    left: 50%;
+    margin-left: -600px;
+    transform: scale(0.8);
+    transform-origin: 50% 0;
+    .zi{
+      bottom: -12px !important;
+    }
+  }
+}
+.evenimente {
+  font-size: 18px;
+  font-weight: bold;
+  color: @MSDgreenDarker;
+  margin-top: 20px;
 }

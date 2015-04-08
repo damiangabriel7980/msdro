@@ -4574,11 +4574,14 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     if (req.body.specialGroupSelected) {
                         forGroups.push(req.body.specialGroupSelected);
                     }
-                    Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: true}).sort({start: 1}).exec(function (err, events) {
+                    var daysToReturn = 80;
+                    var startDate = new Date(new Date().setDate(new Date().getDate()-(daysToReturn/2)));
+                    var endDate = new Date(new Date().setDate(new Date().getDate()+(daysToReturn/2)));
+                    Events.find({groupsID: {$in: forGroups},enable: true, start: {$gt: startDate, $lt: endDate}, isPublic: {$ne: true}}).sort({start: 1}).exec(function (err, events) {
                         if(err){
                             res.send(err);
                         }else{
-                            res.json(events);
+                            res.send(events);
                         }
                     });
                 }
