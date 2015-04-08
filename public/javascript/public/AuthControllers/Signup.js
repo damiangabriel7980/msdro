@@ -13,7 +13,7 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
 
     $scope.nonUser = {};
 
-    var lockSubmitting = false;
+    $scope.lockSubmitting = false;
 
     $scope.codeTooltip = "Deoarece statul roman, prin legea 95/2006 cu HCS nr 27_11.10.2013 " +
         "reglementeaza publicitatea medicamentelor doar catre specialisti in domeniul sanatatii, " +
@@ -60,12 +60,10 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
         AuthService.specialGroups.query({profession: $scope.user.profession}).$promise.then(function (response) {
             $scope.groups = response;
             $scope.user.groupsID = response[0]._id;
-            lockSubmitting = false;
         });
     };
 
     AuthService.professions.query().$promise.then(function (response) {
-        lockSubmitting = true;
         $scope.professions = response;
         $scope.user.profession = response[0]._id;
         $scope.selectProfession();
@@ -171,9 +169,11 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
     };
 
     $scope.createAccount = function () {
+        $scope.lockSubmitting = true;
         var is = this.infoSource;
         //send data
         AuthService.createAccount(this, function (err, resp) {
+            $scope.lockSubmitting = false;
             if(err){
                 $scope.resetAlert("danger", err);
             }else{
