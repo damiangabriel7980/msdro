@@ -178,9 +178,14 @@ module.exports = function(app, router) {
             });
         });
 
-    router.route('/termsAndConditions')
+    router.route('/termsAndConditionsStaywell')
         .get(function (req, res) {
-            res.sendFile('/private_storage/termsAndConditions.html', {root: __dirname});
+            res.sendFile('/private_storage/termsAndConditionsStaywell.html', {root: __dirname});
+        });
+
+    router.route('/termsAndConditionsMSD')
+        .get(function (req, res) {
+            res.sendFile('/private_storage/termsAndConditionsMSD.html', {root: __dirname});
         });
 
 
