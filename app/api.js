@@ -4487,7 +4487,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     if (req.body.specialGroupSelected) {
                         forGroups.push(req.body.specialGroupSelected);
                     }
-                    Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: {$ne: false}}).sort({start: 1}).exec(function (err, events) {
+                    Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: true}).sort({start: 1}).exec(function (err, events) {
                         if(err){
                             res.send(err);
                         }else{

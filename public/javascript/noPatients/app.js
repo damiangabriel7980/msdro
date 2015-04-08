@@ -59,7 +59,9 @@ app.run(
             };
 
             if(REQUESTED_STAYWELL_ACTIVATION == 1){
+                REQUESTED_STAYWELL_ACTIVATION = 0;
                 if(ACTIVATED_STAYWELL_ACCOUNT == 1){
+                    ACTIVATED_STAYWELL_ACCOUNT = 0;
                     $rootScope.showAuthModal("activationSuccess");
                 }else{
                     $rootScope.showAuthModal("activationFailed");
