@@ -1,23 +1,23 @@
 <form ng-submit="reset()">
-    <div class="modal-header loginHeaderPadding">
+    <div class="modal-header">
         <div class="noPatientsLogo"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}" ng-click="renderView('login')"></div>
         <div class="modal-title"><h3><i class="glyphicon glyphicon-lock" style="font-size: 20px"></i>&nbsp;Reseteaza parola</h3></div>
     </div>
-    <div class="modal-body loginNoPaddingBottom">
+    <div class="modal-body">
         <alert type="{{alert.type}}" ng-if="alert.show" close="alert.show=false">{{alert.text}}</alert>
-        <div class="form-group">
+        <div class="form-group-sm">
             <label for="email">Email: </label>
             <input type="text" class="form-control" name="emailInput" id="email" ng-model="email">
         </div>
         <div>
             <ul class="pointerLinks">
-                <li>Nu ai cont? <a ng-click="renderView('signup')">Creaza cont nou</a></li>
+                <li>Nu ai cont? <a ng-click="showSignup()">Creaza cont nou</a></li>
                 <li>Ai deja un cont creat? <a ng-click="renderView('login')">Acceseaza contul</a></li>
             </ul>
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
-        <button class="btn btn-primary pull-right" type="submit">Reseteaza parola</button>
+        <a class="btn btn-sm btn-default pull-left" ng-click="closeModal()">Inchide</a>
+        <button class="btn btn-sm btn-primary pull-right" type="submit">Reseteaza parola</button>
     </div>
 </form>

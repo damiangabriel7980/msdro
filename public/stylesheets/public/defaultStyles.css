@@ -7292,6 +7292,24 @@ html body .rootView {
   height: 10px;
   background-color: #008780;
 }
+#codeAddon .popover {
+  max-width: 430px;
+}
+#authModal {
+  font-size: 12px;
+}
+#authModal .modal-header {
+  padding: 10px 15px;
+}
+#authModal .modal-header .modal-title h3 {
+  font-size: 22px;
+}
+#authModal .modal-footer {
+  padding: 10px 15px;
+}
+#authModal .form-group-sm {
+  padding-bottom: 8px;
+}
 .btnGreenBorder {
   border-color: #008780;
 }
@@ -7400,15 +7418,6 @@ a:focus {
 }
 .rememberMeInput {
   padding-left: 20px;
-}
-.loginNoPaddingBottom {
-  padding-bottom: 0px;
-  padding-left: 30px;
-  padding-right: 40px;
-}
-.loginHeaderPadding {
-  padding-left: 30px;
-  padding-right: 40px;
 }
 .loginListMargin {
   margin-bottom: 15px;

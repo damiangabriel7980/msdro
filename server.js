@@ -45,8 +45,15 @@ app.use(morgan({ "stream": logger.stream }));
 //database
 require('./config/database.js')(my_config, logger);
 
+//amazon
+var Amazon = require('./config/amazon.js'),
+    amazon = new Amazon();
+
 //passport
 require('./config/passport')(passport, logger); // pass passport for configuration
+
+//globals
+var Globals = require('./config/globals.js'), globals = new Globals();
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
@@ -66,18 +73,18 @@ require('./config/tokenAuth')(app,  logger, tokenSecret, pushServerAddr);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes ======================================================================
-require('./app/routes.js')(app, email, logger, passport); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, mandrill, logger, passport); // load our routes and pass in our app and fully configured passport
 
 //create https server ==========================================================
 var secureServer = https.createServer(certificateOptions, app);
 var devServer = http.createServer(app);
 
 // api ======================================================================
-require('./app/api.js')(app, sessionSecret, email, logger, pushServerAddr, express.Router()); // load our private routes and pass in our app and session secret
+require('./app/api.js')(app, sessionSecret, mandrill, logger, pushServerAddr, amazon, express.Router()); // load our private routes and pass in our app and session secret
 require('./app/apiPublic.js')(app, express.Router()); // load our public routes and pass in our app
-require('./app/apiGloballyShared.js')(app, email, logger, express.Router());
-require('./app/apiMobileShared.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
-require('./app/apiConferences.js')(app, email, logger, tokenSecret, pushServerAddr, express.Router());
+require('./app/apiGloballyShared.js')(app, globals, mandrill, logger, amazon, express.Router());
+require('./app/apiMobileShared.js')(app, logger, tokenSecret, pushServerAddr, express.Router());
+require('./app/apiConferences.js')(app, logger, tokenSecret, pushServerAddr, express.Router());
 require('./app/apiMSDDoc.js')(app, logger, tokenSecret, secureServer, express.Router());
 require('./app/apiDPOC.js')(app, mandrill, logger, express.Router());
 require('./app/apiCourses.js')(app, logger, tokenSecret, express.Router());

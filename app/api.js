@@ -53,57 +53,35 @@ var async = require('async');
 var request = require('request');
 var AWS = require('aws-sdk');
 var fs = require('fs');
+var crypto   = require('crypto');
 
 var Config = require('../config/environment.js'),
     my_config = new Config();
 
-//form sts object from environment variables. Used for retrieving temporary credentials to front end
-var sts = new AWS.STS();
-//configure credentials for use on server only; assign credentials based on role (never use master credentials)
-AWS.config.credentials = new AWS.EnvironmentCredentials('AWS');
-AWS.config.credentials = new AWS.TemporaryCredentials({
-    RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin'
-});
-//s3 object for use on server
-var s3 = new AWS.S3();
-//bucket retrieved from environment variables
-var amazonBucket = my_config.amazonBucket;
-
 //used to sign cookies based on session secret
 var cookieSig = require('express-session/node_modules/cookie-signature');
 
-//================================================================================================= amazon s3 functions
-// Used for retrieving temporary credentials to front end
-var getS3Credentials = function(RoleSessionName, callback){
-    sts.assumeRole({
-        RoleArn: 'arn:aws:iam::578381890239:role/msdAdmin',
-        RoleSessionName: RoleSessionName,
-        DurationSeconds: 900
-    }, function (err, data) {
-        if(err){
-            callback(err, null);
-        }else{
-            callback(null, data);
-        }
-    });
-};
-
-//function for deleting object from amazon
-var deleteObjectS3 = function (key, callback) {
-    s3.deleteObject({Bucket: amazonBucket, Key: key}, function (err, data) {
-        callback(err, data);
-    });
-};
-
-var addObjectS3 = function(key,body,callback){
-    var bodyNew = new Buffer(body,'base64');
-    s3.upload({Bucket: amazonBucket,Key: key, Body:bodyNew, ACL:'public-read'}, function (err, data2) {
-        callback(err, data2);
-    });
-
-};
-
 //================================================================================== useful db administration functions
+
+//trim every keys except the ones specified in the "fields" array
+var trimObject = function (obj, fields) {
+    if(typeof obj !== "object") obj = {};
+    if(typeof fields !== "object") fields = [];
+    if(fields.constructor.toString().indexOf("Array") == -1) fields = [];
+    try{
+        var ret = {};
+        for(var key in obj){
+            if(obj.hasOwnProperty(key)){
+                if(fields.indexOf(key) > -1){
+                    ret[key] = obj[key];
+                }
+            }
+        }
+        return ret;
+    }catch(ex){
+        return {};
+    }
+};
 
 //returns ONLY id's of entities connected to specified document in array
 var findConnectedEntitiesIds = function(connected_to_entity, connection_name, connected_to_id, callback){
@@ -387,7 +365,7 @@ var sendPushNotification = function (message, arrayUsersIds, callback) {
 
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, router) {
+module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, amazon, router) {
 
 //======================================================================================================= secure routes
 
@@ -472,7 +450,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/admin/s3tc')
 
         .get(function (req, res) {
-            getS3Credentials(req.user.username, function(err, data){
+            amazon.getS3Credentials(req.user.username, function(err, data){
                 if(err){
                     logger.error(err);
                     res.status(404).end();
@@ -897,7 +875,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             }else{
                                 //remove image from amazon
                                 if(imageS3){
-                                    deleteObjectS3(imageS3, function (err, data) {
+                                    amazon.deleteObjectS3(imageS3, function (err, data) {
                                         if(err){
                                             res.json({error: true, message: "Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon"});
                                         }else{
@@ -1093,7 +1071,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             }else{
                                 //remove image from amazon
                                 if(imageS3){
-                                    deleteObjectS3(imageS3, function (err, data) {
+                                    amazon.deleteObjectS3(imageS3, function (err, data) {
                                         if(err){
                                             res.json({error: true, message: "Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon"});
                                         }else{
@@ -1276,12 +1254,12 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         else{
                             //product was deleted. Now delete image and file if there is one
                             if(s3Image || s3File){
-                                s3.deleteObject({Bucket: amazonBucket, Key: s3Image}, function (err, data) {
+                                amazon.deleteObjectS3(s3Image, function (err, data) {
                                     if(err){
                                         logger.error(err);
                                         res.json({message: "Product was deleted. Image could not be deleted"});
                                     }else{
-                                        s3.deleteObject({Bucket: amazonBucket, Key: s3File}, function (err, data) {
+                                        amazon.deleteObjectS3(s3File, function (err, data) {
                                             if(err) {
                                                 logger.error(err);
                                                 res.json({message: "Product was deleted. RPC could not be deleted!"});
@@ -1290,10 +1268,9 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                             {
                                                 res.json({message: "Product was deleted. All files and images associated with were also deleted!"});
                                             }
-                                        })
-
+                                        });
                                     }
-                                });
+                                })
                             }else{
                                 res.json({message:'Product was deleted!'});
                             }
@@ -1432,7 +1409,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         else{
                             //speaker was deleted. Now delete image if there is one
                             if(s3Key){
-                                s3.deleteObject({Bucket: amazonBucket, Key: s3Key}, function (err, data) {
+                                amazon.deleteObjectS3(s3Key, function (err, data) {
                                     if(err){
                                         logger.error(err);
                                         res.json({message: "Article was deleted. Image could not be deleted"});
@@ -3701,40 +3678,96 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }else{
                         if(req.params.type == "ACCEPTED" && wres==1){
                             //email user
-                            User.findOne({_id: req.body.id}, function (err, user) {
+                            User.findOne({_id: req.body.id}).select('+title +enabled').exec(function (err, user) {
                                 if(err){
                                     res.send(err);
                                 }else{
-                                    mandrill({from: 'adminMSD@qualitance.ro',
-                                        to: [user.username],
-                                        subject:'Activare cont MSD',
-                                        text: 'Draga '+user.name+',\n\n\n'+
-                                            'Ati primit acest email ca urmare a inregistrarii si a acceptarii dovezii identitatii dumneavoastra pe MSD. Contul dumneavoastra este activat si il puteti accesa la adresa:\n\n'+
-                                            req.headers.host+'/login\n\n\n'+
-                                            'Succes!\n\nEchipa MSD'
-                                    }, function(err){
-                                        if(err) {
-                                            logger.error(err);
-                                            res.send(err);
+                                    var generateToken = function (callback) {
+                                        if(user.enabled){
+                                            callback(null, "");
                                         }else{
-                                            res.send({message: "Updated "+wres+" user. Email sent"});
+                                            crypto.randomBytes(40, function(err, buf) {
+                                                if(err){
+                                                    callback(err);
+                                                }else{
+                                                    var activationToken = buf.toString('hex');
+                                                    User.update({username: {$regex: "^"+user.username.replace(/\+/g,"\\+")+"$", $options: "i"}}, {$set: {activationToken: activationToken}}, function (err, wres) {
+                                                        if(err){
+                                                            callback(err);
+                                                        }else{
+                                                            callback(null, activationToken);
+                                                        }
+                                                    });
+                                                }
+                                            });
                                         }
+                                    };
+                                    generateToken(function (err, activationToken) {
+                                        var emailTo = [{email: user.username, name: user.name}];
+                                        var emailTemplate = "Staywell_createdAccount";
+                                        if(user.enabled){
+                                            emailTemplate = "Staywell_createdAccount_noActivation";
+                                        }
+                                        mandrill('/messages/send-template', {
+                                            "template_name": emailTemplate,
+                                            "template_content": [
+                                                {
+                                                    "name": "title",
+                                                    "content": user.getEmailTitle()
+                                                },
+                                                {
+                                                    "name": "name",
+                                                    "content": user.name
+                                                },
+                                                {
+                                                    "name": "activationLink",
+                                                    "content": 'http://' + req.headers.host + '/activateAccountStaywell/' + activationToken
+                                                },
+                                                {
+                                                    "name": "loginAddress",
+                                                    "content": 'http://' + req.headers.host + '/login'
+                                                }
+                                            ],
+                                            "message": {
+                                                from_email: 'adminMSD@qualitance.ro',
+                                                to: emailTo,
+                                                subject: 'Activare cont MSD'
+                                            }
+                                        }, function(err){
+                                            if(err) {
+                                                logger.error(err);
+                                                res.send(err);
+                                            }else{
+                                                res.send({message: "Updated "+wres+" user. Email sent"});
+                                            }
+                                        });
                                     });
                                 }
                             });
                         }else if(req.params.type == "REJECTED" && wres==1){
                             //email user
-                            User.findOne({_id: req.body.id}, function (err, user) {
+                            User.findOne({_id: req.body.id}).select('+title').exec(function (err, user) {
                                 if(err){
                                     res.send(err);
                                 }else{
-                                    mandrill({from: 'adminMSD@qualitance.ro',
-                                        to: [user.username],
-                                        subject:'Activare cont MSD',
-                                        text: 'Draga '+user.name+',\n\n\n'+
-                                            'Din pacate, nu am putut valida dovada identitatii dumneavoastra pe baza pozei trimise.\n\n'+
-                                            'Pentru a solicita un review sau a obtine mai multe informatii, va rugam sa raspundeti la acest mail printr-un reply.\n\n\n'+
-                                            'O zi buna,\nAdmin MSD'
+                                    var emailTo = [{email: user.username, name: user.name}];
+                                    mandrill('/messages/send-template', {
+                                        "template_name": "Staywell_rejectedAccountStaywell",
+                                        "template_content": [
+                                            {
+                                                "name": "title",
+                                                "content": user.getEmailTitle()
+                                            },
+                                            {
+                                                "name": "name",
+                                                "content": user.name
+                                            }
+                                        ],
+                                        "message": {
+                                            from_email: 'adminMSD@qualitance.ro',
+                                            to: emailTo,
+                                            subject: 'Activare cont MSD'
+                                        }
                                     }, function(err){
                                         if(err) {
                                             logger.error(err);
@@ -3776,7 +3809,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             var key = "user/"+req.user._id+"/img"+req.user._id+"."+data.extension;
             console.log(req.user.image_path);
             if(req.user.image_path!=undefined) {
-                deleteObjectS3(req.user.image_path, function (err, resp1) {
+                amazon.deleteObjectS3(req.user.image_path, function (err, resp1) {
                     if (err) {
                         console.log(err);
                         res.json({"type":"danger","message":"Fotografia nu a fost stearsa!"});
@@ -3795,7 +3828,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                     if (err)
                                         res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
                                     else {
-                                        addObjectS3(key, data.Body, function (err, resp2) {
+                                        amazon.addObjectS3(key, data.Body, function (err, resp2) {
                                             if (err)
                                             {
                                                 console.log(err);
@@ -3827,7 +3860,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             if (err)
                                 res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
                             else {
-                                addObjectS3(key, data.Body, function (err, resp2) {
+                                amazon.addObjectS3(key, data.Body, function (err, resp2) {
                                     if (err)
                                     {
                                         console.log(err);
@@ -4038,21 +4071,11 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/userdata')
 
         .get(function(req, res) {
-            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID").exec(function (err, user) {
+            User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID +address +practiceType +title").populate('therapeutic-areasID').exec(function (err, user) {
                 if(err){
                     res.send(err);
                 }else{
-                    console.log(user);
-                    var userCopy = {};
-                    userCopy['id']=user._id;
-                    userCopy['name'] = user.name;
-                    userCopy['image_path'] = user.image_path;
-                    userCopy['phone'] = user.phone;
-                    userCopy['points'] = user.points;
-                    userCopy['subscription'] = user.subscription;
-                    userCopy['username'] = user.username;
-                    userCopy['therapeutic-areasID'] = user['therapeutic-areasID'];
-                    userCopy['citiesID'] = user.citiesID;
+                    var userCopy = JSON.parse(JSON.stringify(user));
                     async.parallel([
                         function (callback) {
                             if(user['jobsID']){
@@ -4136,42 +4159,35 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
         .post(function (req, res) {
             var ans = {};
-            var newData = req.body.newData;
+            var newData = trimObject(req.body.newData,["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
+            console.log(newData);
             var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
-            //check name
-            if((!namePatt.test(newData.fullname.toString()))){
+            if((!namePatt.test(newData.name))){ //check name
                 ans.error = true;
                 ans.message = "Numele trebuie sa contina doar caractere, minim 3";
                 res.json(ans);
+            }else if(newData.phone && !phonePatt.test(newData.phone)){ //check phone number
+                ans.error = true;
+                ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
+                res.json(ans);
+            }else if(!newData.address){
+                ans.error = true;
+                ans.message = "Adresa este obligatorie";
+                res.json(ans);
             }else{
-                //check phone number
-                if(!phonePatt.test(newData.phone.toString())){
-                    ans.error = true;
-                    ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
-                    res.json(ans);
-                }else{
-                    var serializedAreas = [];
-                    for(var i=0; i<newData.therapeuticAreas.length; i++){
-                        serializedAreas.push(newData.therapeuticAreas[i].id.toString());
+                console.log(newData);
+                User.update({_id: req.user._id}, {$set: newData}, function (err, wres) {
+                    if(err){
+                        logger.error(err);
+                        ans.error = true;
+                        ans.message = "Eroare la actualizare. Verificati datele";
+                    }else{
+                        ans.error = false;
+                        ans.message = "Datele au fost modificate";
                     }
-                    var upd = User.update({_id:req.user._id}, {
-                        name: newData.fullname,
-                        phone: newData.phone,
-                        subscription: newData.newsletter?1:0,
-                        "therapeutic-areasID": serializedAreas,
-                        citiesID: [newData.city]
-                    }, function () {
-                        if(!upd._castError){
-                            ans.error = false;
-                            ans.message = "Datele au fost modificate";
-                        }else{
-                            ans.error = true;
-                            ans.message = "Eroare la actualizare. Verificati datele";
-                        }
-                        res.json(ans);
-                    });
-                }
+                    res.json(ans);
+                });
             }
         });
 
@@ -5050,82 +5066,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             }
         }) ;
     });
-
-    router.route('/accountActivation/professions')
-        .get(function (req, res) {
-            Professions.find({}).exec(function (err, professions) {
-                if(err){
-                    res.send(err);
-                }else{
-                    res.send(professions);
-                }
-            });
-        });
-
-    router.route('/accountActivation/specialGroups/:profession')
-        .get(function (req, res) {
-            var profession = req.params.profession;
-            if(profession){
-                profession = mongoose.Types.ObjectId(profession.toString());
-                UserGroup.find({content_specific: true, profession: profession}).exec(function (err, groups) {
-                    if(err){
-                        res.send(err);
-                    }else{
-                        res.send(groups);
-                    }
-                });
-            }else{
-                res.send([]);
-            }
-        });
-
-    router.route('/accountActivation/processData')
-        .post(function(req,res){
-            var professionId = req.body.professionId;
-            var groupId = req.body.groupId;
-            var activationCode = req.body.activationCode;
-            User.findOne({_id: req.user._id}).exec(function (err, user) {
-                if(err || !user){
-                    logger.error(err);
-                    res.send({error: true});
-                }else{
-                    //establish default user group
-                    UserGroup.findOne({profession: professionId, display_name: "Default"}, function (err, group) {
-                        if(err || !group){
-                            logger.error(err);
-                            res.send({error: true});
-                        }else{
-                            var groupsToAdd = [group._id.toString()];
-                            if(groupId){
-                                groupsToAdd.push(groupId.toString());
-                            }
-                            //get code
-                            ActivationCodes.findOne({profession: professionId}).select('+value').exec(function (err, code) {
-                                if(err){
-                                    logger.error(err);
-                                    res.send({error: true});
-                                }else{
-                                    //validate code
-                                    if(SHA512(activationCode).toString() !== code.value){
-                                        res.send({success: true, activated: false});
-                                    }else{
-                                        User.update({_id: user._id},{$set: {profession: professionId, groupsID: groupsToAdd, state: "ACCEPTED"}},function (err) {
-                                            if (err){
-                                                logger.error(err);
-                                                res.send({error: true});
-                                            }else{
-                                                //user is activated
-                                                res.send({success: true, activated: true});
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        });
 
     router.route('/admin/intros')
         .get(function (req, res) {

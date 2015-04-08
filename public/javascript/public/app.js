@@ -8,6 +8,7 @@ var app = angular.module('app',
         'angular-carousel',
         'msdTimeline',
         'ngSanitize',
+        'ui.select',
         'com.2fdevs.videogular',
         'com.2fdevs.videogular.plugins.controls',
         'com.2fdevs.videogular.plugins.overlayplay',
@@ -185,6 +186,7 @@ app.run(
                 $modal.open({
                     templateUrl: 'partials/public/auth/baseModal.html',
                     size: 'lg',
+                    backdrop: 'static',
                     windowClass: 'fade',
                     controller: 'AuthModal',
                     resolve:{

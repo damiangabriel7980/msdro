@@ -198,7 +198,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             size: 'lg',
             backdrop: 'static',
             keyboard: false,
-            windowClass: 'fade modal-responsive',
+            windowClass: 'fade modal-responsive MyProfileModal',
             controller: 'Profile'
         });
     };

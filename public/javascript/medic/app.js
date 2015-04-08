@@ -10,10 +10,12 @@ var app = angular.module('app',
         'mySlider',
         'angular-growl',
         'angular-carousel',
-        'ui.select',
         'angularFileUpload',
         'ui.bootstrap',
-        'ngCookies'
+        'ngCookies',
+        'therapeuticSelect',
+        'angulartics',
+        'angulartics.google.analytics'
     ]);
 
 app.config(['$locationProvider', function($location) {

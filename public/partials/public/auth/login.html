@@ -1,15 +1,15 @@
 <form ng-submit="login()">
-    <div class="modal-header loginHeaderPadding">
+    <div class="modal-header">
         <div class="noPatientsLogo"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}" ng-click="renderView('login')"></div>
         <div class="modal-title "><h3><span class="fa fa-sign-in"></span>&nbsp;Login</h3></div>
     </div>
-    <div class="modal-body loginNoPaddingBottom ">
+    <div class="modal-body">
         <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
-        <div class="form-group ">
+        <div class="form-group-sm">
             <label>Email</label>
             <input type="text" class="form-control" ng-model="email" name="email">
         </div>
-        <div class="form-group ">
+        <div class="form-group-sm">
             <label>Password</label>
             <input type="password" class="form-control" ng-model="password" name="password">
         </div>
@@ -18,10 +18,10 @@
                 <li>Ai uitat parola? <a ng-click="renderView('reset')">Cere resetarea parolei</a>
 
                 </li>
-                <li>Nu ai cont? <a ng-click="renderView('signup')">Creaza cont nou</a></li>
+                <li>Nu ai cont? <a ng-click="showSignup()">Creaza cont nou</a></li>
                 <li class="noListStyle rememberMeInput">
                     <label class="checkbox">
-                        <input type="checkbox"name="remember" ng-model="remember">
+                        <input type="checkbox" name="remember" ng-model="remember">
                         Tine-ma minte
                     </label>
                 </li>
@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
-        <button class="btn btn-primary pull-right" type="submit">Login</button>
+        <a class="btn btn-sm btn-default pull-left" ng-click="closeModal()">Inchide</a>
+        <button class="btn btn-sm btn-primary pull-right" type="submit">Login</button>
     </div>
 </form>

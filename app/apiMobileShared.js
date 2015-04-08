@@ -14,7 +14,7 @@ var Counties = require('./models/counties');
 var Job = require('./models/jobs');
 
 
-module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, router) {
+module.exports = function(app, logger, tokenSecret, pushServerAddr, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
@@ -43,7 +43,7 @@ module.exports = function(app, mandrill, logger, tokenSecret, pushServerAddr, ro
 
     router.route('/createAccount')
         .post(function (req, res) {
-            res.redirect(307, '/apiGloballyShared/createAccount');
+            res.redirect(307, '/apiGloballyShared/createAccountMobile');
         });
 
     //generate token for resetting user password

@@ -142,29 +142,138 @@ services.factory('ContentService', ['$resource', function($resource){
         })
     }
 }]);
-services.factory('AuthService', ['$resource', function($resource){
+services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils){
+    var validateCreate = function (thiz, callback) {
+        if(!thiz.user.username){
+            callback("Va rugam introduceti un email");
+        }else if(!thiz.user.name){
+            callback("Va rugam introduceti un nume");
+        }else if(!thiz.user.title){
+            callback("Va rugam selectati un titlu");
+        }else if(!thiz.user.password){
+            callback("Va rugam introduceti o parola");
+        }else if(!thiz.nonUser.confirm){
+            callback("Va rugam confirmati parola");
+        }else if(thiz.user.password != thiz.nonUser.confirm) {
+            callback("Parolele nu corespund");
+        }else{
+            callback(null);
+        }
+    };
+    var validateUpdate = function (thiz, callback) {
+        var user = JSON.parse(JSON.stringify(thiz.user));
+        var county = thiz.county.selected._id;
+        var city = thiz.city.selected._id;
+
+        if(!user.profession){
+            callback("Va rugam selectati o profesie");
+        }else if(!(user.temp.proofType === 'code' || user.temp.proofType === 'file')){
+            callback("Trebuie sa incarcati o dovada sau sa introduceti un cod");
+        }else if(user.temp.proofType == "code" && !user.temp.activationCode){
+            callback("Va rugam introduceti codul de activare");
+        }else if(user.temp.proofType == "file" && !user.temp.proofFile){
+            callback("Va rugam incarcati dovada");
+        }else if(!user.groupsID){
+            callback("Va rugam selectati un grup preferat");
+        }else if(!user.address){
+            callback("Va rugam introduceti o adresa");
+        }else if(!county){
+            callback("Va rugam selectati un judet");
+        }else if(!city){
+            callback("Va rugam selectati un oras");
+        }else if(!thiz.nonUser.termsStaywell){
+            callback("Trebuie sa acceptati termenii si conditiile Staywell pentru a continua");
+        }else if(!thiz.nonUser.termsMSD){
+            callback("Trebuie sa acceptati politica MSD privind datele profesionale pentru a continua");
+        }else{
+
+            //format data according to database model
+            thiz.user.citiesID = [city];
+            thiz.user.groupsID = [user.groupsID];
+
+            callback();
+        }
+    };
+    var getActivationData = function (thiz, callback) {
+        var activation = {
+            type: thiz.user.temp.proofType,
+            value: null
+        };
+
+        if(thiz.user.temp.proofType === "file"){
+            var extension = thiz.user.temp.proofFile.name.split('.').pop();
+            Utils.fileToBase64(thiz.user.temp.proofFile, function (b64) {
+                activation.value = {
+                    file: b64,
+                    extension: extension
+                };
+                callback(activation);
+            });
+        }else{
+            activation.value = thiz.user.temp.activationCode;
+            callback(activation);
+        }
+    };
+    var completeProfile = $resource('apiGloballyShared/completeProfile', {}, {
+        save: {method:'POST'}
+    });
+    var createAccount = $resource('/apiGloballyShared/createAccountStaywell', {}, {
+        save: { method: 'POST', isArray: false }
+    });
     return {
         login: $resource('/login', {}, {
             query: { method: 'POST', isArray: false }
         }),
-        signup: $resource('/apiGloballyShared/createAccount', {}, {
-            query: { method: 'POST', isArray: false }
-        }),
         reset: $resource('/apiGloballyShared/requestPasswordReset', {}, {
             query: { method: 'POST', isArray: false }
-        })
-    }
-}]);
-services.factory('ActivationCodeService', ['$resource', function($resource){
-    return {
-        professions: $resource('api/accountActivation/professions', {}, {
+        }),
+        professions: $resource('apiGloballyShared/accountActivation/professions', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        processData: $resource('api/accountActivation/processData', {}, {
-            save: {method:'POST'}
-        }),
-        specialGroups: $resource('api/accountActivation/specialGroups/:profession', {}, {
+        specialGroups: $resource('apiGloballyShared/accountActivation/specialGroups/:profession', {}, {
             query: { method: 'GET', isArray: true }
-        })
+        }),
+        counties: $resource('apiGloballyShared/accountActivation/counties', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        cities: $resource('apiGloballyShared/accountActivation/cities', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        createAccount: function (thiz, callback) {
+            validateCreate(thiz, function (err) {
+                if(err){
+                    callback(err);
+                }else{
+                    validateUpdate(thiz, function (err) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            getActivationData(thiz, function (activationData) {
+                                createAccount.save({user: thiz.user, activation: activationData}).$promise.then(function (resp) {
+                                    if(resp.error){
+                                        callback(resp.message);
+                                    }else{
+                                        callback(null, resp);
+                                    }
+                                })
+                            });
+                        }
+                    });
+                }
+            });
+        },
+        completeProfile: function (thiz, callback) {
+            validateUpdate(thiz, function (err) {
+                if(err){
+                    callback(err);
+                }else{
+                    getActivationData(thiz, function (activationData) {
+                        completeProfile.save({user: thiz.user, activation: activationData}).$promise.then(function (resp) {
+                            callback(null, resp);
+                        });
+                    });
+                }
+            });
+        }
     }
 }]);

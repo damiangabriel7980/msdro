@@ -12,13 +12,21 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
         $scope.renderView(intent);
     });
 
-    $scope.renderView = function (view) {
+    $scope.renderView = function (view, data) {
         $scope.resetAlert();
         $scope.modalTemplate = $sce.trustAsResourceUrl('partials/public/auth/'+view+'.html');
+        $scope.modalData = data;
     };
 
     $scope.closeModal = function(){
         $modalInstance.close();
+    };
+
+    $scope.showSignup = function () {
+        $scope.renderView("signup", {
+            template1: $sce.trustAsResourceUrl('partials/public/auth/signup_step1.html'),
+            template2: $sce.trustAsResourceUrl('partials/public/auth/signup_step2.html')
+        });
     };
 
     $scope.login = function () {
@@ -32,30 +40,12 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
                 if(resp.accepted){
                     $window.location.href = "pro";
                 }else{
-                    $scope.renderView("insertCode");
+                    $scope.renderView("completeProfile", {
+                        template: $sce.trustAsResourceUrl('partials/public/auth/signup_step2.html')
+                    });
                 }
             }
         })
-    };
-
-    $scope.signup = function () {
-        console.log(this);
-        if(!(this.email && this.name && this.password && this.confirm)){
-            $scope.resetAlert("danger", "Toate campurile sunt obligatorii");
-        }else if(!this.terms) {
-            $scope.resetAlert("danger", "Trebuie sa acceptati termenii si conditiile pentru a continua");
-        }else if(this.password != this.confirm) {
-            $scope.resetAlert("danger", "Parolele nu corespund");
-        }else{
-            AuthService.signup.query({name: this.name, email: this.email, password: this.password, createdFromStaywell: true}).$promise.then(function (resp) {
-                if(resp.error){
-                    $scope.resetAlert("danger", resp.message);
-                }else{
-                    $scope.registeredAddress = resp.user;
-                    $scope.renderView("created");
-                }
-            })
-        }
     };
 
     $scope.reset = function () {
