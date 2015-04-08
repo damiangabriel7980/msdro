@@ -163,8 +163,7 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                 hitType: 'event',
                 eventCategory: 'userStats',
                 eventAction: 'pickInformationSource',
-                eventLabel: 'sourceName',
-                eventValue: infoSource
+                eventLabel: infoSource
             });
         }
         console.log(infoSource);
