@@ -39,6 +39,21 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
         {number: 4, name: "Dr"}
     ];
 
+    $scope.infoSources = [
+        {id: 1, name: 'Internet'},
+        {id: 2, name: 'Recomandarea unui coleg'},
+        {id: 3, name: 'Email'},
+        {id: 4, name: 'Congress'},
+        {id: 5, name: 'Reprezentant MSD'},
+        {id: 6, name: 'Reviste medicale'},
+        {id: 7, name: 'Publicitate online'},
+        {id: 0, name: 'Altele'}
+    ];
+
+    $scope.infoSource = {
+        type: {}
+    };
+
     //============================================================================================== profession / group
 
     $scope.selectProfession = function () {
@@ -126,6 +141,23 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
     };
 
     $scope.createAccount = function () {
+        //establish info source
+        var is = this.infoSource;
+        var infoSource;
+        if(is){
+            if(is.type.id == 0){
+                infoSource = is.type.name;
+                if(is.text){
+                    infoSource += " ("+is.text+")";
+                }else{
+                    infoSource += " (nespecificat)";
+                }
+            }else{
+                infoSource = is.type.name;
+            }
+        }
+        console.log(infoSource);
+        //send data
         AuthService.createAccount(this, function (err, resp) {
             if(err){
                 $scope.resetAlert("danger", err);
