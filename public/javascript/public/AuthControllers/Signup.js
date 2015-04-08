@@ -156,6 +156,17 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                 infoSource = is.type.name;
             }
         }
+        //send info source stats
+        if(infoSource && window.ga){
+            console.log("Send info source");
+            ga('send', {
+                hitType: 'event',
+                eventCategory: 'userStats',
+                eventAction: 'pickInformationSource',
+                eventLabel: 'sourceName',
+                eventValue: infoSource
+            });
+        }
         console.log(infoSource);
         //send data
         AuthService.createAccount(this, function (err, resp) {
