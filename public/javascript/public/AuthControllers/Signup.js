@@ -120,29 +120,8 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
 
     //========================================================================================================== submit
 
-    $scope.completeProfile = function () {
-        AuthService.completeProfile(this, function (err, resp) {
-            if(err){
-                $scope.resetAlert("danger", err);
-            }else{
-                console.log(resp);
-                if(resp.error){
-                    $scope.resetAlert("danger", resp.message);
-                }else{
-                    if(resp.state === "ACCEPTED"){
-                        $window.location.href = "pro";
-                    }else{
-                        //awaiting proof acceptance (48 h)
-                        $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user, title: "Completare profil"});
-                    }
-                }
-            }
-        });
-    };
-
-    $scope.createAccount = function () {
-        //establish info source
-        var is = this.infoSource;
+    var sendInfoSource = function (is) {
+        //get info source value and sent it to google analytics
         var infoSource;
         if(is){
             if(is.type.id == 0){
@@ -156,6 +135,7 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                 infoSource = is.type.name;
             }
         }
+        console.log(infoSource);
         //send info source stats
         if(infoSource && window.ga){
             console.log("Send info source");
@@ -166,7 +146,32 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                 eventLabel: infoSource
             });
         }
-        console.log(infoSource);
+    };
+
+    $scope.completeProfile = function () {
+        var is = this.infoSource;
+        AuthService.completeProfile(this, function (err, resp) {
+            if(err){
+                $scope.resetAlert("danger", err);
+            }else{
+                console.log(resp);
+                if(resp.error){
+                    $scope.resetAlert("danger", resp.message);
+                }else{
+                    sendInfoSource(is);
+                    if(resp.state === "ACCEPTED"){
+                        $window.location.href = "pro";
+                    }else{
+                        //awaiting proof acceptance (48 h)
+                        $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user, title: "Completare profil"});
+                    }
+                }
+            }
+        });
+    };
+
+    $scope.createAccount = function () {
+        var is = this.infoSource;
         //send data
         AuthService.createAccount(this, function (err, resp) {
             if(err){
@@ -176,6 +181,7 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                 if(resp.error){
                     $scope.resetAlert("danger", resp.message);
                 }else{
+                    sendInfoSource(is);
                     if(resp.state === "ACCEPTED"){
                         //awaiting email activation; you will soon receive it
                         $scope.renderView("awaitingEmailActivation", {registeredAddress: resp.user});
