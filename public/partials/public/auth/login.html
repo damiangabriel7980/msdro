@@ -14,18 +14,15 @@
             <input type="password" class="form-control" ng-model="password" name="password">
         </div>
         <div>
-            <ul class="pointerLinks loginListMargin">
+            <ul class="pointerLinks" style="margin: 10px 0">
                 <li>Ai uitat parola? <a ng-click="renderView('reset')">Cere resetarea parolei</a>
 
                 </li>
                 <li>Nu ai cont? <a ng-click="showSignup()">Creaza cont nou</a></li>
-                <li class="noListStyle rememberMeInput">
-                    <label class="checkbox">
-                        <input type="checkbox" name="remember" ng-model="remember">
-                        Tine-ma minte
-                    </label>
-                </li>
             </ul>
+        </div>
+        <div class="form-group-sm">
+            <input type="checkbox" name="remember" ng-model="remember">&nbsp;<label>Tine-ma minte</label>
         </div>
     </div>
     <div class="modal-footer">
