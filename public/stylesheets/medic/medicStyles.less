@@ -5,9 +5,7 @@
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 
 body{
-  @media (max-width: 1366px) {
     font-size: 12px;
-  }
 }
 .main-view-container {
   width: 100%;
@@ -903,8 +901,11 @@ ul.products li {
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #f5f5f5 100%);
 }
 .textHome {
-  height: 9.5em;
+  height: 11em;
   overflow: hidden;
+  @media(min-width: 1367px){
+    height: 14em;
+  }
 }
 .textHome:after
 {
@@ -955,7 +956,7 @@ hr{
 }
 .margin2Left
 {
-  margin-left: -2%;
+  margin-left: -2.5%;
 }
 .margin3Left
 {
@@ -1071,7 +1072,10 @@ hr{
 }
 .middleMerck{
   vertical-align: middle;
-  text-align: left;
+  text-align: center;
+  @media (max-width: 1365px)  {
+    text-align: left;
+  }
 }
 .no-text-decoration{
   text-decoration: none !important;
@@ -1390,15 +1394,15 @@ a:focus{
   }
 }
 .newHomeLeftColumn{
-  padding-left: 8%;
+  padding-left: 10.5%;
   @media(min-width: 1367px){
-    padding-left: 9%;
+    padding-left: 11.5%;
   }
 }
 .newHomeRightColumn{
-  padding-right: 2%;
+  padding-right: 4.5%;
   @media(min-width: 1367px){
-   padding-right: 2.5%;
+   padding-right: 5%;
   }
 }
 .col-xs-1Half {
@@ -1411,9 +1415,15 @@ a:focus{
 }
 .left36Percent{
   margin-left: 36%;
+  @media(max-width: 1366px){
+    margin-left: 37%;
+  }
 }
 .topMinus3Percent{
   margin-top: -3%;
+//  @media(max-width: 1366px){
+//    margin-top: -2.5%;
+//  }
 }
 .width100{
   width: 100%
@@ -1441,4 +1451,18 @@ a:focus{
   font-weight: bold;
   color: @MSDgreenDarker;
   margin-top: 20px;
+}
+h3{
+  font-size: 22px;
+}
+.padd16pxLeft{
+  padding-left: 16px;
+}
+.padd16Right{
+  padding-right: 16px;
+}
+.fixedHeightPosterMultimedia{
+  display: block;
+  height: auto;
+  max-width: 100%;
 }
