@@ -1,5 +1,6 @@
 var PublicContent = require('./models/publicContent');
 var PublicCarousel = require('./models/publicCarousel');
+var PublicCategories = require('./models/publicCategories');
 var Events = require('./models/events');
 var TherapeuticAreas = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
@@ -14,7 +15,7 @@ var getIds = function (documentsArray) {
     return ret;
 };
 
-module.exports = function(app, router) {
+module.exports = function(app, logger, router) {
 
     router.route('/getCarouselData')
 
@@ -84,6 +85,14 @@ module.exports = function(app, router) {
                         res.send({error: true});
                     }else{
                         res.send({success: resp});
+                    }
+                })
+            }else if(req.query.category){
+                PublicContent.find({category: req.query.category, enable: true}).sort({date_added: -1}).exec(function (err, content) {
+                    if(err){
+                        res.send({error: true});
+                    }else{
+                        res.send({success: content});
                     }
                 })
             }
@@ -176,6 +185,29 @@ module.exports = function(app, router) {
                     res.send(resp);
                 }
             });
+        });
+
+    router.route('/categories')
+        .get(function (req, res) {
+            if(req.query.id){
+                PublicCategories.findOne({_id: req.query.id}, function (err, category) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: category});
+                    }
+                });
+            }else{
+                PublicCategories.find({isEnabled: true}, function (err, categories) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: categories});
+                    }
+                });
+            }
         });
 
     router.route('/termsAndConditionsStaywell')

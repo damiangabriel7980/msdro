@@ -20,7 +20,8 @@ var publicContentSchema		= new Schema({
     enable:       Boolean,
     image_path:   String,
     file_path:   String,
-    'therapeutic-areasID': Array
+    'therapeutic-areasID': Array,
+    category: {type: Schema.Types.ObjectId, ref: 'public-categories'}
 });
 publicContentSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 

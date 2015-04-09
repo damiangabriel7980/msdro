@@ -14,6 +14,7 @@ var Answers = require('./models/answers');
 var Slides = require('./models/slides');
 var Roles=require('./models/roles');
 var PublicContent = require('./models/publicContent');
+var PublicCategories = require('./models/publicCategories');
 var PublicCarousel = require('./models/publicCarousel');
 var Carousel=require('./models/carousel_Medic');
 var Conferences = require('./models/conferences');
@@ -768,6 +769,76 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 });
             }
+        });
+
+    router.route('/admin/users/publicContent/categories')
+        .get(function (req, res) {
+            PublicCategories.find(function (err, categories) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: categories});
+                }
+            });
+        })
+        .post(function (req, res) {
+            var category = new PublicCategories(req.body);
+            category.save(function (err, saved) {
+                if(err){
+                    if(err.code == 11000 || err.code == 11001){
+                        res.send({error: "O categorie cu acelasi nume exista deja"});
+                    }else if(err.name == "ValidationError"){
+                        res.send({error: "Numele este obligatoriu"});
+                    }else{
+                        logger.error(err);
+                        res.send({error: "Eroare la creare"});
+                    }
+                }else{
+                    res.send({success: true});
+                }
+            });
+        })
+        .put(function (req, res) {
+            PublicCategories.findOne({_id: req.query.id}, function (err, category) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    if(req.body.name) category.name = req.body.name;
+                    if(typeof req.body.isEnabled === "boolean") category.isEnabled = req.body.isEnabled;
+                    category.save(function (err, saved) {
+                        if(err){
+                            if(err.code == 11000 || err.code == 11001){
+                                res.send({error: "O categorie cu acelasi nume exista deja"});
+                            }else if(err.name == "ValidationError"){
+                                res.send({error: "Numele este obligatoriu"});
+                            }else{
+                                logger.error(err);
+                                res.send({error: "Eroare la salvare"});
+                            }
+                        }else{
+                            res.send({success: true});
+                        }
+                    });
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            PublicCategories.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    res.send({error: true});
+                }else{
+                    PublicContent.update({category: idToDelete}, {$set: {category: null}}, function (err, wres) {
+                        if(err){
+                            res.send({error: true});
+                        }else{
+                            res.send({success: true});
+                        }
+                    });
+                }
+            });
         });
 
     router.route('/admin/users/carouselPublic/getAllImages')

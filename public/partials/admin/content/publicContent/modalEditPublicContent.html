@@ -32,6 +32,13 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group col-md-12">
+                    <label>Categorie:</label>
+                    <select ng-model="selectedCategory" ng-options="category._id as category.name for category in categories" class="form-control">
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group col-md-12">
                     <label for="areas">Arii terapeutice:</label>
                     <select ng-model="selectedArea" ng-options="area as area.name.replace('0','&nbsp;&nbsp;&nbsp;&nbsp;') for area in allAreas"
                             class="form-control" id="areas" style="width: 100%;" ng-change="areaWasSelected(selectedArea)">
