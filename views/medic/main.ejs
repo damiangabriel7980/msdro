@@ -132,13 +132,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <ul class="nav navbar-nav pull-right disableDesktop specialGroupMobile" ng-if="specialGroupSelected!=null">
+            <ul class="nav navbar-nav pull-right disableDesktop specialGroupMobile" ng-if="specialGroupSelected!=null && specialGroupSelected.image_path">
                 <a class="dropdown-toggle specialGroupDropdown " data-toggle="dropdown">
-                    <img ng-if="specialGroupSelected.image_path" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
+                    <img ng-if="specialGroupSelected.image_path" alt="Nu exista o imagine pentru acest grup!" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
                 </a>
                 <ul class="dropdown-menu myMenu greyBackground mySpecialMenuMobile" role="menu">
-                    <li ng-repeat="group in specialGroups" ng-click="selectSpecialGroup(group)">
-                        <a style="cursor: pointer;">{{group.display_name}}</a>
+                    <li ng-repeat="specialGroups" ng-click="selectSpecialGroup(group)">
+                        <a class="paddingSpecialGroups" style="cursor: pointer;">{{group.display_name}}</a>
                     </li>
                 </ul>
             </ul>
@@ -146,7 +146,7 @@
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>
                 </a>
-                <ul class="dropdown-menu myProfile myMenu greyBackground">
+                <ul ng-class="{'dropdown-menu myProfile myMenu greyBackground':specialGroupSelected.image_path,'dropdown-menu myProfileNoImage myMenu greyBackground':!specialGroupSelected.image_path}">
                     <li ng-click="showProfile()"><a>Profile</a></li>
                     <li ng-click="logoutUser()"><a>Sign Out</a></li>
                 </ul>
@@ -173,7 +173,7 @@
 
             <ul class="nav navbar-nav pull-right disableDesktop" ng-if="specialGroupSelected!=null">
                 <form class="navbar-form" role="search">
-                    <div class="input-group expandSearch">
+                    <div ng-class="{'input-group expandSearch': specialGroupSelected.image_path,'input-group expandSearchNoImage': !specialGroupSelected.image_path}">
                         <input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
                         <span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
                     </div>
@@ -227,15 +227,15 @@
                     </ul>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="specialGroupSelected!=null">
+            <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="specialGroupSelected!=null && specialGroupSelected.image_path">
                 <li class="dropdown">
                     <a class="dropdown-toggle specialGroupDropdown " data-toggle="dropdown">
-                        <img ng-if="specialGroupSelected!=null" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
+                        <img ng-if="specialGroupSelected!=null" alt="Nu exista o imagine pentru acest grup!" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
                     </a>
 
                     <ul class="dropdown-menu myMenu greyBackground" role="menu">
                         <li ng-repeat="group in specialGroups" style="cursor: pointer;" ng-click="selectSpecialGroup(group)">
-                            <a>{{group.display_name}} </a>
+                            <a class="paddingSpecialGroups">{{group.display_name}} </a>
                         </li>
                     </ul>
                 </li>
@@ -253,7 +253,7 @@
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>
                 </a>
-                <ul class="dropdown-menu myProfile myMenu greyBackground">
+                <ul ng-class="{'dropdown-menu myProfile myMenu greyBackground':specialGroupSelected.image_path,'dropdown-menu myProfileNoImage myMenu greyBackground':!specialGroupSelected.image_path}">
                     <li ng-click="showProfile()"><a >Profile</a></li>
                     <li ng-click="logoutUser()"><a>Sign Out</a></li>
                 </ul>
@@ -269,7 +269,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="specialGroupSelected!=null">
                 <form class="navbar-form" role="search">
-                    <div class="input-group expandSearch">
+                    <div ng-class="{'input-group expandSearch': specialGroupSelected.image_path,'input-group expandSearchNoImage': !specialGroupSelected.image_path}">
                         <input type="text" class="form-control popSearch newWidthPopSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
                         <span class="input-group-addon" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
                     </div>

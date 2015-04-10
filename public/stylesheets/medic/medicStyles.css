@@ -7320,6 +7320,21 @@ hr {
   padding: 6px 12px;
   border: 1px solid #cccccc;
 }
+.expandSearchNoImage {
+  position: absolute;
+  right: 60px;
+}
+@media (max-width: 1050px) {
+  .expandSearchNoImage {
+    right: 100px;
+    margin-top: -19px;
+  }
+}
+.expandSearchNoImage .newWidthPopSearch {
+  width: 230px !important;
+  padding: 6px 12px;
+  border: 1px solid #cccccc;
+}
 .expandSearchNoSpecial {
   position: absolute;
   right: 90px;
@@ -7646,4 +7661,13 @@ h3 {
   display: block;
   height: auto;
   max-width: 100%;
+}
+.paddingSpecialGroups {
+  padding-right: 10px !important;
+  padding-left: 10px !important;
+}
+.myProfileNoImage {
+  right: auto;
+  margin-top: 5px;
+  left: auto;
 }
