@@ -88,7 +88,7 @@ module.exports = function(app, logger, router) {
                     }
                 })
             }else if(req.query.category){
-                PublicContent.find({category: req.query.category, enable: true}).sort({date_added: -1}).exec(function (err, content) {
+                PublicContent.find({type:2, category: req.query.category, enable: true}).sort({date_added: -1}).exec(function (err, content) {
                     if(err){
                         res.send({error: true});
                     }else{
