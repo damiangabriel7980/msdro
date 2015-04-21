@@ -2,7 +2,7 @@ module.exports = function(){
     switch(process.env.NODE_ENV){
         case 'development':
             return {
-                database: "mongodb://localhost:27017/MSDdev",
+                database: "mongodb://msddev:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/MSDdev",
                 amazonBucket: "msddev-test",
                 pushServerAddress: "https://notif.qualitance.com",
                 elasticServer: "10.200.0.221",
