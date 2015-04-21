@@ -152,13 +152,16 @@ services.factory('ContentService', ['$resource', function($resource){
 }]);
 services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils){
     var getFormData = function (thiz) {
+        var temp = thiz.user.temp;
         var data = {
             user: thiz.user || {},
             nonUser: thiz.nonUser || {},
             county: thiz.county,
             city: thiz.city
         };
-        return JSON.parse(JSON.stringify(data));
+        data = JSON.parse(JSON.stringify(data));
+        data.user.temp = temp;
+        return data;
     };
     var validateCreate = function (formData, callback) {
         if(!formData.user.username){
