@@ -21,7 +21,7 @@ module.exports = function(){
                 elasticPORT: "9004",
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
                 GA_code: "UA-61695877-1",
-                disablePatients: false
+                disablePatients: true
             };
 
         case 'production':
