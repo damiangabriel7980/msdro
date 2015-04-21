@@ -151,27 +151,36 @@ services.factory('ContentService', ['$resource', function($resource){
     }
 }]);
 services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils){
-    var validateCreate = function (thiz, callback) {
-        if(!thiz.user.username){
+    var getFormData = function (thiz) {
+        var data = {
+            user: thiz.user || {},
+            nonUser: thiz.nonUser || {},
+            county: thiz.county,
+            city: thiz.city
+        };
+        return JSON.parse(JSON.stringify(data));
+    };
+    var validateCreate = function (formData, callback) {
+        if(!formData.user.username){
             callback("Va rugam introduceti un email");
-        }else if(!thiz.user.name){
+        }else if(!formData.user.name){
             callback("Va rugam introduceti un nume");
-        }else if(!thiz.user.title){
+        }else if(!formData.user.title){
             callback("Va rugam selectati un titlu");
-        }else if(!thiz.user.password){
+        }else if(!formData.user.password){
             callback("Va rugam introduceti o parola");
-        }else if(!thiz.nonUser.confirm){
+        }else if(!formData.nonUser.confirm){
             callback("Va rugam confirmati parola");
-        }else if(thiz.user.password != thiz.nonUser.confirm) {
+        }else if(formData.user.password != formData.nonUser.confirm) {
             callback("Parolele nu corespund");
         }else{
             callback(null);
         }
     };
-    var validateUpdate = function (thiz, callback) {
-        var user = JSON.parse(JSON.stringify(thiz.user));
-        var county = thiz.county.selected._id;
-        var city = thiz.city.selected._id;
+    var validateUpdate = function (formData, callback) {
+        var user = formData.user;
+        var county = formData.county.selected._id;
+        var city = formData.city.selected._id;
 
         if(!user.profession){
             callback("Va rugam selectati o profesie");
@@ -189,28 +198,28 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
             callback("Va rugam selectati un judet");
         }else if(!city){
             callback("Va rugam selectati un oras");
-        }else if(!thiz.nonUser.termsStaywell){
+        }else if(!formData.nonUser.termsStaywell){
             callback("Trebuie sa acceptati termenii si conditiile Staywell pentru a continua");
-        }else if(!thiz.nonUser.termsMSD){
+        }else if(!formData.nonUser.termsMSD){
             callback("Trebuie sa acceptati politica MSD privind datele profesionale pentru a continua");
         }else{
 
             //format data according to database model
-            thiz.user.citiesID = [city];
-            thiz.user.groupsID = [user.groupsID];
+            formData.user.citiesID = [city];
+            formData.user.groupsID = [user.groupsID];
 
             callback();
         }
     };
-    var getActivationData = function (thiz, callback) {
+    var getActivationData = function (formData, callback) {
         var activation = {
-            type: thiz.user.temp.proofType,
+            type: formData.user.temp.proofType,
             value: null
         };
 
-        if(thiz.user.temp.proofType === "file"){
-            var extension = thiz.user.temp.proofFile.name.split('.').pop();
-            Utils.fileToBase64(thiz.user.temp.proofFile, function (b64) {
+        if(formData.user.temp.proofType === "file"){
+            var extension = formData.user.temp.proofFile.name.split('.').pop();
+            Utils.fileToBase64(formData.user.temp.proofFile, function (b64) {
                 activation.value = {
                     file: b64,
                     extension: extension
@@ -218,7 +227,7 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
                 callback(activation);
             });
         }else{
-            activation.value = thiz.user.temp.activationCode;
+            activation.value = formData.user.temp.activationCode;
             callback(activation);
         }
     };
@@ -248,16 +257,17 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
             query: { method: 'GET', isArray: false }
         }),
         createAccount: function (thiz, callback) {
-            validateCreate(thiz, function (err) {
+            var formData = getFormData(thiz);
+            validateCreate(formData, function (err) {
                 if(err){
                     callback(err);
                 }else{
-                    validateUpdate(thiz, function (err) {
+                    validateUpdate(formData, function (err) {
                         if(err){
                             callback(err);
                         }else{
-                            getActivationData(thiz, function (activationData) {
-                                createAccount.save({user: thiz.user, activation: activationData}).$promise.then(function (resp) {
+                            getActivationData(formData, function (activationData) {
+                                createAccount.save({user: formData.user, activation: activationData}).$promise.then(function (resp) {
                                     if(resp.error){
                                         callback(resp.message);
                                     }else{
@@ -271,12 +281,13 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
             });
         },
         completeProfile: function (thiz, callback) {
-            validateUpdate(thiz, function (err) {
+            var formData = getFormData(thiz);
+            validateUpdate(formData, function (err) {
                 if(err){
                     callback(err);
                 }else{
-                    getActivationData(thiz, function (activationData) {
-                        completeProfile.save({user: thiz.user, activation: activationData}).$promise.then(function (resp) {
+                    getActivationData(formData, function (activationData) {
+                        completeProfile.save({user: formData.user, activation: activationData}).$promise.then(function (resp) {
                             callback(null, resp);
                         });
                     });
