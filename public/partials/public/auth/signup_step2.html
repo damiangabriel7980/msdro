@@ -17,7 +17,7 @@
         <input id="code" type="text" ng-model="user.temp.activationCode" class="form-control" ng-disabled="user.temp.proofType!='code'">
     </div>
     <div class="form-group-sm col-md-6">
-        <label for="group">Grup preferat<sup>*</sup>:</label>
+        <label for="group">Specialitate<sup>*</sup>:</label>
         <select ng-model="user.groupsID" class="form-control"
                 ng-options="group._id as group.display_name for group in groups" id="group"></select>
     </div>
