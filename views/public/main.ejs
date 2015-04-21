@@ -7,6 +7,7 @@
     <script>
         const DEFAULT_AMAZON_BUCKET = "<%=amazonBucket%>";
         const ACCESS_ROUTE = "<%=accessRoute%>";
+        const GA_CODE = "<%=GA_code%>";
         var REQUESTED_STAYWELL_ACTIVATION = parseInt("<%=requestedActivation%>");
         var ACTIVATED_STAYWELL_ACCOUNT = parseInt("<%=accountActivated%>");
         var REQUESTED_STAYWELL_LOGIN = parseInt("<%=showLogin%>");
@@ -19,7 +20,7 @@
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-61695877-1', 'auto');
+        ga('create', GA_CODE, 'auto');
     </script>
 
     <!--Google analytics debug-->

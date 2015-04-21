@@ -33,7 +33,7 @@ module.exports = function(app, mandrill, logger, passport) {
 // normal routes ===============================================================
 
     app.get('/', function (req, res) {
-        var requestedActivation = 0, accountActivated = 0, showLogin = 0, accessRoute="";
+        var requestedActivation = 0, accountActivated = 0, showLogin = 0, accessRoute="", GA_code = my_config.GA_code;
         if(req.query._escaped_fragment_){
             // _escaped_fragment_ holds a route that a crawler tries to access
             // the crawler doesn't know how to access routes, so we will send
@@ -60,7 +60,8 @@ module.exports = function(app, mandrill, logger, passport) {
                 requestedActivation: requestedActivation,
                 accountActivated: accountActivated,
                 showLogin: showLogin,
-                accessRoute: accessRoute
+                accessRoute: accessRoute,
+                GA_code: GA_code
             });
         }
     });
@@ -308,11 +309,11 @@ var transportUser = function (req, res) {
                     if(roles[0]){
                         if(roles[0].authority === "ROLE_FARMACIST"){
                             console.log("medic");
-                            res.render("medic/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket});
+                            res.render("medic/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, GA_code: my_config.GA_code});
                         }else if(roles[0].authority === "ROLE_ADMIN"){
-                            res.render("admin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket});
+                            res.render("admin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, GA_code: my_config.GA_code});
                         }else if(roles[0].authority === "ROLE_STREAM_ADMIN") {
-                            res.render("streamAdmin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket});
+                            res.render("streamAdmin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, GA_code: my_config.GA_code});
                         }else {
                             req.logout();
                             res.redirect('/');
