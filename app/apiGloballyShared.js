@@ -447,7 +447,7 @@ module.exports = function(app, globals, mandrill, logger, amazon, router) {
             var profession = req.params.profession;
             if(profession){
                 profession = mongoose.Types.ObjectId(profession.toString());
-                UserGroup.find({content_specific: true, profession: profession}).exec(function (err, groups) {
+                UserGroup.find({content_specific: true, profession: profession}).sort({display_name: 1}).exec(function (err, groups) {
                     if(err){
                         res.send(err);
                     }else{
