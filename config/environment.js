@@ -32,7 +32,7 @@ module.exports = function(){
                 elasticServer: "127.0.0.1",
                 elasticPORT: "9004",
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
-                GA_code: "UA-61695877-1",
+                GA_code: "UA-62113963-1",
                 disablePatients: true
             };
 
