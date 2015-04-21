@@ -1,8 +1,11 @@
 var app = angular.module('app',
     [
+        'ui.router',
         'ui.bootstrap',
         'controllers',
         'services',
+        'ngSanitize',
+        'ui.select',
         'angularFileUpload'
     ]);
 
@@ -46,6 +49,7 @@ app.run(
             $rootScope.showAuthModal = function(intent){
                 $modal.open({
                     templateUrl: 'partials/public/auth/baseModal.html',
+                    size: 'lg',
                     backdrop: 'static',
                     keyboard: false,
                     windowClass: 'authModalNoPatients',

@@ -6,6 +6,7 @@
     <!--Get amazon bucket-->
     <script>
         const DEFAULT_AMAZON_BUCKET = "<%=amazonBucket%>";
+        const ACCESS_ROUTE = "<%=accessRoute%>";
         var REQUESTED_STAYWELL_ACTIVATION = parseInt("<%=requestedActivation%>");
         var ACTIVATED_STAYWELL_ACCOUNT = parseInt("<%=accountActivated%>");
         var REQUESTED_STAYWELL_LOGIN = parseInt("<%=showLogin%>");
@@ -42,14 +43,18 @@
     <script src="components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="components/ng-file-upload/angular-file-upload.min.js"></script>
+    <script src="components/requestAnimationFrame/app/requestAnimationFrame.js"></script>
+    <script src="components/es5-shim/es5-shim.min.js"></script>
+    <script src="components/angular-ui-select/dist/select.min.js"></script>
 
 
     <!--Controllers-->
     <script src="javascript/noPatients/app.js"></script>
     <script src="javascript/noPatients/controllers.js"></script>
     <script src="javascript/public/services.js"></script>
+    <script src="javascript/shared/services.js"></script>
     <script src="javascript/public/AuthControllers/AuthModal.js"></script>
-    <script src="javascript/public/AuthControllers/ActivationCode.js"></script>
+    <script src="javascript/public/AuthControllers/Signup.js"></script>
 
     <!--Stylesheets-->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
@@ -57,6 +62,8 @@
     <link rel="stylesheet" href="stylesheets/public/defaultStyles.css">
     <link rel="stylesheet" href="stylesheets/noPatients/styles.css">a
     <link rel="stylesheet" href="stylesheets/stylesThatReignSupreme.css">
+    <link rel='stylesheet' href='components/angular-ui-select/dist/select.min.css' />
+    <link rel='stylesheet' href='components/select2/select2.css' />
 
     <meta name="google-site-verification" content="l5SSD9XMYMA-7lSY4GrpskwIVGfxeyyk71tgU26evHY" />
 </head>
