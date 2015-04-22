@@ -1,8 +1,7 @@
 var Config = require('../config/environment.js'),
     my_config = new Config();
 
-const AMAZON_BUCKET = my_config.amazonBucket;
-const AMAZON_PREFIX = "https://s3-eu-west-1.amazonaws.com/"+AMAZON_BUCKET+"/";
+const AMAZON_PREFIX = my_config.amazonPrefix + my_config.amazonBucket + "/";
 
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;

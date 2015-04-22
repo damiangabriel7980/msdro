@@ -57,6 +57,7 @@ module.exports = function(app, mandrill, logger, passport) {
             }
             res.render(MAIN_VIEW, {
                 amazonBucket: my_config.amazonBucket,
+                amazonPrefix: my_config.amazonPrefix,
                 requestedActivation: requestedActivation,
                 accountActivated: accountActivated,
                 showLogin: showLogin,
@@ -309,11 +310,11 @@ var transportUser = function (req, res) {
                     if(roles[0]){
                         if(roles[0].authority === "ROLE_FARMACIST"){
                             console.log("medic");
-                            res.render("medic/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, GA_code: my_config.GA_code});
+                            res.render("medic/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
                         }else if(roles[0].authority === "ROLE_ADMIN"){
-                            res.render("admin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, GA_code: my_config.GA_code});
+                            res.render("admin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
                         }else if(roles[0].authority === "ROLE_STREAM_ADMIN") {
-                            res.render("streamAdmin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, GA_code: my_config.GA_code});
+                            res.render("streamAdmin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
                         }else {
                             req.logout();
                             res.redirect('/');
