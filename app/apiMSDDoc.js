@@ -14,6 +14,8 @@ var Chat= require('./models/MSDDoc_chat');
 var Messages= require('./models/MSDDoc_messages');
 var User = require('./models/user');
 
+var amazon = require('../config/amazon');
+var UserModule = require('./modules/user');
 
 //CONSTANTS
 const defaultPageSize = 10;
@@ -43,6 +45,12 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
 
     // We are going to protect /apiConferences routes with JWT
     app.use('/apiMSDDoc', expressJwt({secret: tokenSecret}));
+
+    // Get user data from token and place it on request
+    app.all('/apiMSDDoc/*', function (req, res, next) {
+        req.user = getUserData(req);
+        next();
+    });
 
 
     //========================================================================================================================================== all routes
@@ -76,7 +84,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             }
         })
     .post(function(req,res){
-        var userData = getUserData(req);
+        var userData = req.user;
         var MyNewsPost = new NewsPost();
         MyNewsPost.title=req.body.title;
         MyNewsPost.message=req.body.message;
@@ -193,7 +201,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
 
     router.route('/chats')
         .get(function(req,res){
-            var user = getUserData(req);
+            var user = req.user;
             var created=req.query.created;
             var pageSize=req.query.pageSize || defaultPageSize;
             var type=req.query.type;
@@ -216,7 +224,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             });
         })
         .post(function (req, res) {
-            var userData = getUserData(req);
+            var userData = req.user;
 
             var keepGoing = true;
 
@@ -291,7 +299,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
         .put(function (req, res) {
             var keepGoing = true;
 
-            var userData = getUserData(req);
+            var userData = req.user;
 
             var chatId = mongoose.Types.ObjectId(req.query.chatId);
             var subscribe = req.query.subscribe;
