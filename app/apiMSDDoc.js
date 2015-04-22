@@ -58,11 +58,6 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
         res.status(500).send({error: "Server error"});
     };
 
-    //form full amazon path from key
-    var amazonPath = function (key) {
-        return env.amazonPrefix + env.amazonBucket + "/" + key;
-    };
-
 
     //========================================================================================================================================== all routes
 
@@ -355,7 +350,7 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
             if(file){
                 UserModule.updateUserImage(req.user._id, file.buffer, file.extension).then(
                     function (image_path) {
-                        res.send({success: amazonPath(image_path)});
+                        res.send({success: image_path});
                     },
                     function (error) {
                         handleError(res, error);
@@ -394,7 +389,7 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                                     if(err){
                                         handleError(res, err);
                                     }else{
-                                        res.send({success: amazonPath(newspost.image)});
+                                        res.send({success: newspost.image});
                                         //remove old image; careful not to remove the newly added one
                                         if(oldImage && oldImage != key) amazon.deleteObjectS3(oldImage);
                                     }
