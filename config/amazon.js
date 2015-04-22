@@ -40,11 +40,10 @@ module.exports = function(){
     };
 
     var addObjectS3 = function(key,body,callback){
-        var bodyNew = new Buffer(body,'base64');
-        s3.upload({Bucket: amazonBucket,Key: key, Body:bodyNew, ACL:'public-read'}, function (err, data2) {
+        if(typeof body === "string") body = new Buffer(body,'base64');
+        s3.upload({Bucket: amazonBucket,Key: key, Body:body, ACL:'public-read'}, function (err, data2) {
             callback(err, data2);
         });
-
     };
 
     return {
