@@ -54,7 +54,8 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
 
     //handle errors
     var handleError = function (res, error) {
-        res.status(500).send({error: error});
+        logger.error(error);
+        res.status(500).send({error: "Server error"});
     };
 
 
@@ -359,6 +360,72 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                 res.status(400).send({message: "File not found"});
             }
         });
+
+    router.route('/image/newspost')
+        .post(function (req, res) {
+            //get necessary params
+            var file = getFile(req);
+            var newspost_id = req.query.id;
+            if(file && newspost_id){
+                //find the newspost
+                NewsPost.find({_id: newspost_id, owner: req.user._id}, function (err, newspost) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!newspost){
+                        handleError(res, "Newspost not found");
+                    }else{
+                        //memorise current image path for deleting it at the end
+                        var oldImage = newspost.image;
+                        //form s3 key
+                        var key = "MSD_Doc/newsposts/"+newspost._id+"/image."+file.extension;
+                        //upload new image
+                        amazon.addObjectS3(key, file.buffer, function (err, success) {
+                            if(err){
+                                handleError(res, err);
+                            }else{
+                                //save path to DB
+                                newspost.image = key;
+                                newspost.save(function (err, newspost) {
+                                    if(err){
+                                        handleError(res, err);
+                                    }else{
+                                        res.send({success: "Newspost image updated"});
+                                        //remove old image; careful not to remove the newly added one
+                                        if(oldImage && oldImage != key) amazon.deleteObjectS3(oldImage);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }else{
+                res.status(400).send({message: "File or id not found"});
+            }
+        });
+
+//    router.route('/image')
+//        .post(function (req, res) {
+//            var user = req.user;
+//            var type = req.query.type;
+//            var collection;
+//            if(type === "newspost"){
+//                collection = NewsPost;
+//            }else if(type === "profile"){
+//                collection = User;
+//            }else if(type === "chat"){
+//                collection = Chat;
+//            }else{
+//                res.statusCode = 400;
+//                return res.send({error: "Invalid type"});
+//            }
+//            //upload image
+//            if(req.files && req.files.file){
+//                if()
+//            }else{
+//                res.statusCode = 400;
+//                return res.send({error: "File not found"});
+//            }
+//        });
 
     //============================================================================================================= SOCKET COMM
 
