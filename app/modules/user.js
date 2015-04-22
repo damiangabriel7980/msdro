@@ -25,7 +25,7 @@ var updateUserImage = function (user_id, imageBody, imageExtension) {
                         if(err){
                             deferred.reject(err);
                         }else{
-                            deferred.resolve(user);
+                            deferred.resolve(user.image_path);
                             //remove old image if any; careful not to delete the newly uploaded one
                             if(oldImage && oldImage != key) amazon.deleteObject(oldImage);
                         }

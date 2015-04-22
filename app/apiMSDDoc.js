@@ -20,7 +20,7 @@ var UserModule = require('./modules/user');
 //CONSTANTS
 const defaultPageSize = 10;
 
-module.exports = function(app, logger, tokenSecret, socketServer, router) {
+module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
@@ -56,6 +56,11 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
     var handleError = function (res, error) {
         logger.error(error);
         res.status(500).send({error: "Server error"});
+    };
+
+    //form full amazon path from key
+    var amazonPath = function (key) {
+        return env.amazonPrefix + env.amazonBucket + "/" + key;
     };
 
 
@@ -349,8 +354,8 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
             var file = getFile(req);
             if(file){
                 UserModule.updateUserImage(req.user._id, file.buffer, file.extension).then(
-                    function (success) {
-                        res.send({success: "Profile image updated"})
+                    function (image_path) {
+                        res.send({success: amazonPath(image_path)});
                     },
                     function (error) {
                         handleError(res, error);
@@ -389,7 +394,7 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                                     if(err){
                                         handleError(res, err);
                                     }else{
-                                        res.send({success: "Newspost image updated"});
+                                        res.send({success: amazonPath(newspost.image)});
                                         //remove old image; careful not to remove the newly added one
                                         if(oldImage && oldImage != key) amazon.deleteObjectS3(oldImage);
                                     }

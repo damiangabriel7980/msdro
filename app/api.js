@@ -3884,7 +3884,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             var imageExtension = data.extension;
             if(imageBody && imageExtension){
                 UserModule.updateUserImage(req.user._id, imageBody, imageExtension).then(
-                    function (success) {
+                    function (image_path) {
                         res.json({"type":"success", "message": "Fotografia a fost actualizata cu succes!"});
                     },
                     function (err) {

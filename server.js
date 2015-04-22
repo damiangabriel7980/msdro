@@ -87,7 +87,7 @@ require('./app/apiPublic.js')(app, logger, express.Router()); // load our public
 require('./app/apiGloballyShared.js')(app, globals, mandrill, logger, amazon, express.Router());
 require('./app/apiMobileShared.js')(app, logger, tokenSecret, pushServerAddr, express.Router());
 require('./app/apiConferences.js')(app, logger, tokenSecret, pushServerAddr, express.Router());
-require('./app/apiMSDDoc.js')(app, logger, tokenSecret, secureServer, express.Router());
+require('./app/apiMSDDoc.js')(app, my_config, logger, tokenSecret, secureServer, express.Router());
 require('./app/apiDPOC.js')(app, mandrill, logger, express.Router());
 require('./app/apiCourses.js')(app, logger, tokenSecret, express.Router());
 require('./app/apiContractManagement.js')(app, logger, express.Router());
