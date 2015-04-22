@@ -38,7 +38,9 @@
     "usergrid": ">=0.10.7",
     "validator": "latest",
     "winston": "latest",
-    "xregexp": "latest"
+    "xregexp": "latest",
+    "multer": "latest",
+    "q": "latest"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",

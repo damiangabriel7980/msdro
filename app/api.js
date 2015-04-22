@@ -31,6 +31,9 @@ var CM_templates =require('./models/CM_templates');
 var ActivationCodes =require('./models/activationCodes');
 var DPOC_Devices = require('./models/DPOC_Devices');
 
+//modules
+var UserModule = require('./modules/user');
+
 //live Streaming
 var socketio = require('socket.io'),
     uuid = require('node-uuid'),
@@ -3876,73 +3879,20 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/user/addPhoto')
         .post(function(req,res){
-            var data = req.body.data;
-            var key = "user/"+req.user._id+"/img"+req.user._id+"."+data.extension;
-            console.log(req.user.image_path);
-            if(req.user.image_path!=undefined) {
-                amazon.deleteObjectS3(req.user.image_path, function (err, resp1) {
-                    if (err) {
-                        console.log(err);
-                        res.json({"type":"danger","message":"Fotografia nu a fost stearsa!"});
-
-                    }
-                    else {
-
-                        User.findOne({_id: req.user._id}).exec(function (err, response) {
-                            if (err) {
-                                console.log(err);
-                                res.json({"type":"danger","message":"Nu a fost gasit utilizatorul!"});
-                            }
-                            else {
-                                console.log(req.user._id);
-                                User.update({_id:req.user._id},{image_path: key },function (err, info) {
-                                    if (err)
-                                        res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
-                                    else {
-                                        amazon.addObjectS3(key, data.Body, function (err, resp2) {
-                                            if (err)
-                                            {
-                                                console.log(err);
-                                                res.json({"type":"danger","message":"Fotografia nu a fost adaugata pe server!"});
-
-                                            }
-                                            else
-                                                res.json({"type":"success","message": "Fotografia a fost actualizata cu succes!"})
-                                        });
-                                    }
-                                })
-                            }
-                        })
-                    }
-                });
-            }
-            else
-            {
-                User.findOne({_id: req.user._id}).exec(function (err, response) {
-                    if (err) {
-                        console.log(err);
-                        res.json({"type":"danger","message":"Nu a fost gasit utilizatorul!"});
-                    }
-                    else {
-                        console.log(req.user._id);
-                        User.update({_id:req.user._id},{ image_path: key },function (err, data2) {
-                            console.log(data2);
-                            console.log(err);
-                            if (err)
-                                res.json({"type":"danger","message":"Fotografia nu a fost salvata in baza de date!"});
-                            else {
-                                amazon.addObjectS3(key, data.Body, function (err, resp2) {
-                                    if (err)
-                                    {
-                                        console.log(err);
-                                        res.json({"type":"danger","message":"Fotografia nu a fost adaugata pe server!"});                                    }
-                                    else
-                                        res.json({"type":"success","message":"Fotografia a fost actualizata cu succes!"});
-                                });
-                            }
-                        })
-                    }
-                });
+            var data = req.body.data || {};
+            var imageBody = data.Body;
+            var imageExtension = data.extension;
+            if(imageBody && imageExtension){
+                UserModule.updateUserImage(req.user._id, imageBody, imageExtension).then(
+                    function (success) {
+                        res.json({"type":"success", "message": "Fotografia a fost actualizata cu succes!"});
+                    },
+                    function (err) {
+                        logger.error(err);
+                        res.json({"type":"danger", "message":"A aparut o eroare la modificarea fotografiei"});
+                    });
+            }else{
+                res.json({"type":"danger", "message":"Parametrii invalizi"});
             }
         });
 
