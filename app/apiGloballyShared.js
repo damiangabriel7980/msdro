@@ -37,7 +37,7 @@ var mergeKeys = function (obj1, obj2){
     return obj3;
 };
 
-module.exports = function(app, globals, mandrill, logger, amazon, router) {
+module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
 
     //access control allow origin *
     app.all("/apiGloballyShared/*", function(req, res, next) {
@@ -78,6 +78,14 @@ module.exports = function(app, globals, mandrill, logger, amazon, router) {
             return {};
         }
     };
+
+    //route for retrieving environment info; CAREFUL NOT TO INCLUDE SENSIBLE DATA
+    router.route('/appSettings')
+        .get(function (req, res) {
+            res.send({
+                amazonPrefix: env.amazonPrefix + env.amazonBucket + "/"
+            });
+        });
 
 //==================================================================================================== activate account
     var generateToken = function (username, callback) {
