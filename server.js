@@ -32,6 +32,7 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var email = require('mandrill-send')(mandrillKey);
 var mandrill = require('node-mandrill')(mandrillKey);
+var multer  = require('multer'); //for multipart form uploads
 var rooms = {},
     userIds = {};
     //logging ======================================================================
@@ -58,6 +59,7 @@ var Globals = require('./config/globals.js'), globals = new Globals();
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
+app.use(multer({ inMemory: true})); //parse form data. keep files in memory only
 app.use(bodyParser.json({limit: '50mb'})); // get information from html forms
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
 app.set('view engine', 'ejs'); // set up ejs for templating

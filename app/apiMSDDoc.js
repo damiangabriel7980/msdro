@@ -52,6 +52,11 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
         next();
     });
 
+    //handle errors
+    var handleError = function (res, error) {
+        res.status(500).send({error: error});
+    };
+
 
     //========================================================================================================================================== all routes
 
@@ -322,6 +327,36 @@ module.exports = function(app, logger, tokenSecret, socketServer, router) {
                         res.send({hasError: false, message: "Update succeeded"});
                     }
                 });
+            }
+        });
+
+    //========    IMAGES    =======//
+
+    var getFile = function (req) {
+        if(req.files && req.files.file && req.files.file.originalname && req.files.file.buffer){
+            return {
+                extension: req.files.file.originalname.split(".").pop(),
+                buffer: req.files.file.buffer
+            };
+        }else{
+            return null;
+        }
+    };
+
+    router.route('/image/profile')
+        .post(function (req, res) {
+            var file = getFile(req);
+            if(file){
+                UserModule.updateUserImage(req.user._id, file.buffer, file.extension).then(
+                    function (success) {
+                        res.send({success: "Profile image updated"})
+                    },
+                    function (error) {
+                        handleError(res, error);
+                    }
+                );
+            }else{
+                res.status(400).send({message: "File not found"});
             }
         });
 
