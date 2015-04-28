@@ -3,9 +3,11 @@
 </div>
 <div class="col-xs-12 noPadding">
     <div class="col-xs-12 middleMerck noPaddingLeft mobile">
-        <img  ng-src="{{merckManualImage}}" class="handCursor" style="width: 70%; cursor:pointer;" ng-click="showMerckManual()">
+        <img  ng-src="{{merckManualImage}}" class="handCursor hidden-sm hidden-xs" style="width: 70%; cursor:pointer;" ng-click="showMerckManual()">
+        <img  ng-src="{{merckManualImage}}" class="handCursor hidden-md hidden-lg" style="width: 70%; cursor:pointer;" ng-click="goToMerckManual()">
     </div>
-    <div class="col-xs-12 noPadding"><a class="MSDTitleDark" style="cursor: pointer;" ng-click="showMerckManual()"><b>MANUALUL MERCK</b></a></div>
+    <div class="col-xs-12 noPadding hidden-sm hidden-xs"><a class="MSDTitleDark" style="cursor: pointer;" ng-click="showMerckManual()"><b>MANUALUL MERCK</b></a></div>
+    <div class="col-xs-12 noPadding hidden-md hidden-lg"><a class="MSDTitleDark" style="cursor: pointer;" ng-click="goToMerckManual()"><b>MANUALUL MERCK</b></a></div>
     <div class="col-xs-12 noPadding">
         De peste o suta de ani, Manualul Merck de Diagnostic si Tratament este cartea medicala
         cea mai utilizata din lume. Manualul Merck ofera informatii medicale, in special despre

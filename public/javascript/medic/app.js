@@ -232,6 +232,7 @@ app.run(
             $rootScope.Pharma = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf";
             $rootScope.MerckManual = "/merckManual";
             $rootScope.loaderForSlowConn = "https://s3-eu-west-1.amazonaws.com/msddev-test/resources/page-loader.gif";
+            $rootScope.deviceWidth= window.screen.width;
             var standalone = window.navigator.standalone,
                 userAgent = window.navigator.userAgent.toLowerCase(),
                 safari = /safari/.test( userAgent ),

@@ -70,7 +70,7 @@ app.directive('noCacheSrc', ['$window', function($window) {
             var check = function () {
                 //if(angular.element($window).scrollTop()===0&&angular.element($document).height() >= (angular.element($window).height() + angular.element($window).scrollTop()))
                 //    f.hide();
-                if (angular.element($document).height() <= (angular.element($window).height() + angular.element($window).scrollTop()))
+                if (angular.element($document).height() <= (angular.element($window).height() + angular.element($window).scrollTop()) + 3)
                     footer.show();
                 else
                     footer.hide();
