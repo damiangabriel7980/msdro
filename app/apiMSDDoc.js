@@ -14,7 +14,7 @@ var Chat= require('./models/MSDDoc_chat');
 var Messages= require('./models/MSDDoc_messages');
 var User = require('./models/user');
 
-var amazon = require('../config/amazon');
+var amazon = require('../config/amazon')();
 var UserModule = require('./modules/user');
 
 //CONSTANTS
@@ -368,7 +368,7 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
             var newspost_id = req.query.id;
             if(file && newspost_id){
                 //find the newspost
-                NewsPost.find({_id: newspost_id, owner: req.user._id}, function (err, newspost) {
+                NewsPost.findOne({_id: newspost_id, owner: req.user._id}, function (err, newspost) {
                     if(err){
                         handleError(res, err);
                     }else if(!newspost){
