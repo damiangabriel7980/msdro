@@ -4,6 +4,7 @@
 controllers.controller('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce){
 var date = new Date();
     $scope.realEvents=[];
+    $scope.realEventsMob=[];
     var y=$(date);
     $scope.trustAsHtml = function (data) {
         var newName=$sce.trustAsHtml(data);
@@ -19,6 +20,7 @@ var date = new Date();
     eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.events =result;
        $scope.eventsS=[];
+        $scope.eventsMob=[];
        for(var i = 0; i < $scope.events.length; i++)
        {
            var today = new Date($scope.events[i].end);
@@ -26,8 +28,16 @@ var date = new Date();
            tomorrow.setDate(today.getDate()+1);
            $scope.eventsS.push({id:$scope.events[i]._id, title:trimTitle($scope.events[i].name),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: popOverTitle($scope.events[i].name)});
        }
+        for(var i = 0; i < $scope.events.length; i++)
+        {
+            var today = new Date($scope.events[i].end);
+            var tomorrow = new Date($scope.events[i].end);
+            tomorrow.setDate(today.getDate()+1);
+            $scope.eventsMob.push({id:$scope.events[i]._id, title:trimTitleMobile($scope.events[i].name),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: popOverTitle($scope.events[i].name)});
+        }
 
          $scope.realEvents=[$scope.eventsS];
+        $scope.realEventsMob=[$scope.eventsMob];
          $scope.eventRender = function(data, event, view){
               angular.element('.fc-event-hori').attr("data-toggle","popover");
              angular.element('.fc-event-hori').attr("data-content",data.type);
@@ -76,6 +86,33 @@ var date = new Date();
                 }
 
      }};
+        $scope.uiConfigMobile = {
+            calendar: {
+                eventSources: $scope.realEventsMob,
+                height: 400,
+                editable: false,
+                header: {
+                    left: 'month basicWeek basicDay',
+                    center: 'title',
+                    right: 'today prev,next'
+                },
+                eventMouseover: $scope.eventRender,
+                eventClick:function(event){
+                    $modal.open({
+                        templateUrl: 'partials/medic/calendarDetails.ejs',
+                        backdrop: true,
+                        size: 'lg',
+                        windowClass: 'fade',
+                        controller: 'EventModal',
+                        resolve:{
+                            idEvent: function () {
+                                return event._id;
+                            }
+                        }
+                    });
+                }
+
+            }};
          if($stateParams.id)
          {
              angular.element($document).ready(function(){
@@ -138,6 +175,26 @@ var date = new Date();
             .replace('Ţ','T')
             .replace('ţ','t');
         newEventName=newEventName.split(/\s+/).slice(0,3).join(" ");
+        return newEventName;
+    };
+    var trimTitleMobile=function(str) {
+        var newEventName=String(str)
+            .replace('Ă','A')
+            .replace('ă','a')
+            .replace('Â','A')
+            .replace('â','a')
+            .replace('Î','I')
+            .replace('î','i')
+            .replace('Ș','S')
+            .replace('ș','s')
+            .replace('Ş','S')
+            .replace('ş','s')
+            .replace('Ț','T')
+            .replace('ț','t')
+            .replace('Ţ','T')
+            .replace('ţ','t');
+        newEventName=newEventName.split(/\s+/).join(" ");
+        newEventName=newEventName.substr(0,10)+"...";
         return newEventName;
     };
     var popOverTitle=function(str) {

@@ -22,7 +22,12 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     $scope.logoutUser=function(){
         $window.location.href='logout';
     };
-
+    $scope.goToPharma=function(){
+        $window.open($rootScope.Pharma,'_tab');
+    };
+    $scope.goToTerms=function(){
+        $window.open($rootScope.Terms,'_tab');
+    };
     function setCookie(cname, cvalue) {
         var now = new Date(),
         // this will set the expiration to 6 months
@@ -201,7 +206,9 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             });
         }
     };
-
+    $scope.goToMerckManual=function(){
+        window.open($rootScope.MerckManual,'_tab');
+    };
 
     //profile modal
     $scope.showProfile = function(){
@@ -214,7 +221,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             controller: 'Profile'
         });
     };
-
     //$scope.animateInput=function(){
     //    angular.element('.form-control').removeClass('popSearch');
     //};

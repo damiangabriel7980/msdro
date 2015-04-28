@@ -99,7 +99,8 @@
     <script src="javascript/medic/ProductPageControllers/ProductPageMap.js"></script>
     <script src="javascript/medic/ProductPageControllers/ProductPageInfo.js"></script>
 
-<!--Plug-ins-->
+
+    <!--Plug-ins-->
     <script src="components/shifty/dist/shifty.min.js"></script>
     <script src="components/angular-carousel/dist/angular-carousel.min.js"></script>
     <script src="modules/angular-pdf/pdf.js"></script>
@@ -176,7 +177,7 @@
                 <!--<form class="navbar-form" role="search">-->
                     <!--<div class="input-group expandSearch">-->
                         <!--<input type="text" class="form-control popSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">-->
-                        <!--<span class="input-group-addon btnSearchBefore" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>-->
+                        <!--<span class="input-group-addon btnSearchBefore" ng-click="showSearch()"><i class="glyphicon glyphicon-search"></i></span>-->
                     <!--</div>-->
                 <!--</form>-->
 
@@ -185,7 +186,7 @@
             <a class="navbar-brand logoBottom" ui-sref="home"><img class="fixedHeightLogo" ng-src="{{MSDlogo}}"></a>
         </div>
 
-        <div class="collapse navbar-collapse" collapse="navCollapsed">
+        <div class="collapse navbar-collapse noXOver" collapse="navCollapsed">
 
             <ul class="nav navbar-nav menuPadding">
                 <li class="mySearchInDropdown">
@@ -301,9 +302,12 @@
     <div class="col-md-6">
         <a ui-sref="home"><img src="https://s3-eu-west-1.amazonaws.com/msdapp/resources/msd_white.png" class="pull-left img-responsive" style="height:28px;margin-right:10px;"></a>
     </div>
-    <div id="notMsieDiv" class="col-md-6 text-right">&nbsp &nbsp <a ng-click="showTermsModal()" class="link-footer handCursor">Termeni si conditii</a>&nbsp &nbsp
-        <a ng-click="showFarmaModal()" class="link-footer handCursor">Farmacovigilenta</a>&nbsp &nbsp <a ng-click="showContactModal()" class="link-footer handCursor">Contact</a>
+    <div id="notMsieDiv" class="col-md-6 text-right">&nbsp &nbsp <a ng-click="showTermsModal()" class="link-footer handCursor hidden-xs hidden-sm">Termeni si conditii</a>&nbsp &nbsp
+        <a ng-click="showFarmaModal()" class="link-footer handCursor hidden-xs hidden-sm">Farmacovigilenta</a>
+        <a ng-click="goToTerms()" class="link-footer handCursor hidden-md hidden-lg">Termeni si conditii</a>
+        <a ng-click="goToPharma()" class="link-footer handCursor hidden-md hidden-lg">Farmacovigilenta</a>&nbsp &nbsp <a ng-click="showContactModal()" class="link-footer handCursor">Contact</a>
     </div>
+
 </div>
 </body>
 </html>
