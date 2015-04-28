@@ -375,7 +375,7 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                         handleError(res, "Newspost not found");
                     }else{
                         //memorise current image path for deleting it at the end
-                        var oldImage = newspost.image;
+                        var oldImage = newspost.image_path;
                         //form s3 key
                         var key = "MSD_Doc/newsposts/"+newspost._id+"/image."+file.extension;
                         //upload new image
@@ -384,12 +384,12 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                                 handleError(res, err);
                             }else{
                                 //save path to DB
-                                newspost.image = key;
+                                newspost.image_path = key;
                                 newspost.save(function (err, newspost) {
                                     if(err){
                                         handleError(res, err);
                                     }else{
-                                        res.send({success: newspost.image});
+                                        res.send({success: newspost.image_path});
                                         //remove old image; careful not to remove the newly added one
                                         if(oldImage && oldImage != key) amazon.deleteObjectS3(oldImage);
                                     }

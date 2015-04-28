@@ -8,7 +8,7 @@ var NewsPostSchema = new Schema({
     title: String,
     message:String,
     created:Date,
-    image: String,
+    image_path: String,
     owner: {type: Schema.Types.ObjectId,ref: 'User'}
 });
 
