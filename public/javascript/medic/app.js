@@ -114,7 +114,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'TherapeuticAreas'
         })
         .state('elearning.multimedia.multimediaMobile',{
-            url: '/multimedia/:id',
+            url: '/multimedia/mobile/:id',
             templateUrl: 'partials/medic/elearning/multimediaDetailsNoModal.ejs' ,
             controller: 'MultimediaDetailMobile'
         })
