@@ -1,6 +1,6 @@
 <div class="row margintop20px paddLeft45px" style="text-align: center" ng-if="multimedias[0].message"><h2>{{multimedias[0].message}}</h2></div>
 <div ng-if="multimedias.length>=1&&!multimedias[0].message" class="articles" style="list-style: none;">
-    <div class="col-md-12 col-xs-12 marginMultimedia" ng-repeat="prod in multimedias | orderBy:'title'">
+    <div ng-class="{'col-md-12 col-xs-12 marginMultimedia':deviceWidth>700,'col-md-12 col-xs-12 col-sm-12':deviceWidth<=700}" ng-repeat="prod in multimedias | orderBy:'title'">
 
             <div ng-class="{'col-md-12 col-xs-12 col-sm-12 well noPadding':deviceWidth >= 700, 'col-md-12 col-xs-12 col-sm-12 noPadding padd25Bottom':deviceWidth < 700}">
                 <div ng-class="{'col-md-2 col-xs-12 col-sm-12 noPadding text-center':deviceWidth >= 700, 'col-md-2 col-xs-4 col-sm-4 noPadding text-center':deviceWidth < 700}">

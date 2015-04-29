@@ -6594,7 +6594,7 @@ ul.products li {
   padding-bottom: 0px;
   padding-right: 0px;
 }
-@media (max-width: 768px) {
+@media (max-device-width: 767px) {
   .navbar-fixed-top .navbar-brand {
     padding-left: 0px;
     padding-top: 0px;
@@ -7283,7 +7283,7 @@ hr {
 }
 @media (max-width: 768px) {
   .padd3PercentMobile {
-    padding-left: 42px;
+    padding-left: 15px;
   }
 }
 .therapeuticBottom {
@@ -7677,7 +7677,7 @@ a:focus {
 .fixedHeightLogo {
   height: 50px;
 }
-@media (max-width: 768px) {
+@media (max-device-width: 767px) {
   .fixedHeightLogo {
     height: 40px;
     margin-top: 9px;
@@ -7805,6 +7805,9 @@ h4 {
 }
 .padd25Bottom {
   padding-bottom: 25px;
+}
+.padd25Left {
+  padding-left: 25px;
 }
 .navbar-toggle {
   position: relative;

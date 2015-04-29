@@ -207,7 +207,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         }
     };
     $scope.goToMerckManual=function(){
-        window.open($rootScope.MerckManual,'_tab');
+        window.open($rootScope.MerckManual,'_blank');
     };
 
     //profile modal
