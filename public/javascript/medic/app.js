@@ -113,6 +113,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/elearning/multimedia.ejs' ,
             controller: 'TherapeuticAreas'
         })
+        .state('elearning.multimedia.multimediaMobile',{
+            url: '/multimedia/:id',
+            templateUrl: 'partials/medic/elearning/multimediaDetailsNoModal.ejs' ,
+            controller: 'MultimediaDetailMobile'
+        })
         .state('elearning.multimedia.multimediaByArea',{
             url: '/multimedia/:idArea:idMulti',
             templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
