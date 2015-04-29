@@ -6288,6 +6288,11 @@ button.close {
 body {
   font-size: 14px;
 }
+@media (max-device-width: 767px) {
+  body {
+    font-size: 15px;
+  }
+}
 .main-view-container {
   width: 100%;
   position: relative;
@@ -6454,7 +6459,7 @@ ul.products li {
   height: 100%;
   border-right: 1px solid #000000;
 }
-@media (max-width: 768px) {
+@media (max-device-width: 768px) {
   .homeStyles .leftColumn:after {
     border-right: 0px solid #000000;
   }
@@ -7027,7 +7032,7 @@ ul.products li {
 .padd55px {
   padding-left: 55px;
 }
-@media (max-width: 768px) {
+@media (max-device-width: 768px) {
   .padd55px {
     padding-left: 35px;
     padding-right: 35px;
@@ -7169,7 +7174,7 @@ hr {
 .padd4Left {
   padding-left: 2%;
 }
-@media (max-width: 768px) {
+@media (max-device-width: 768px) {
   .padd4Left {
     padding-left: 25px;
   }
@@ -7369,7 +7374,7 @@ hr {
   margin-top: 5px;
   left: 0 !important;
 }
-@media (max-width: 768px) {
+@media (max-device-width: 768px) {
   .myProfile {
     left: auto !important;
   }
@@ -7402,7 +7407,6 @@ hr {
 }
 @media (min-width: 769px) and (max-width: 1050px) {
   .expandSearchInDropdown {
-    right: 310px;
     margin-top: -19px;
   }
 }
@@ -7764,7 +7768,7 @@ h4 {
   width: 100%;
   height: 100%;
 }
-@media (max-width: 768px) {
+@media (max-device-width: 768px) {
   .mobile {
     width: 50% !important;
   }
@@ -7850,6 +7854,12 @@ h4 {
   overflow-x: hidden;
   overflow-y: hidden !important;
   max-height: 375px!important;
+}
+@media only screen and (orientation: landscape) {
+  .noXOver {
+    overflow-y: auto !important;
+    max-height: 475px!important;
+  }
 }
 @media (max-device-width: 600px) {
   .specialProdImage {

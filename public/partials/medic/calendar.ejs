@@ -8,8 +8,8 @@
 </head>
 <body>
 <div class="col-md-12 col-xs-12">
-    <div id="calendar" calendar="myCalendar" ui-calendar="uiConfigMobile.calendar" ng-model="realEventsMob" class="visible-xs col-xs-12 padd35px"></div>
-    <div class="visible-xs col-xs-12 padd40px">
+    <div id="calendar" calendar="myCalendar" ui-calendar="uiConfigMobile.calendar" ng-model="realEventsMob" class="visible-xs visible-sm col-xs-12 padd35px"></div>
+    <div class="visible-xs visible-sm col-xs-12 padd40px">
         <h3 class="bottomBorder specialTitleCalendarMobile">EVENIMENTE URMATOARE</h3>
         <div class="col-md-12" ng-if="!events2Filtered">
             <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4 hidden-xs padd40px">
+    <div class="col-md-4 hidden-xs hidden-sm padd40px">
             <h3 class="bottomBorder specialTitleCalendarMobile">EVENIMENTE URMATOARE</h3>
             <div class="col-md-12" ng-if="!events2Filtered">
                 <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
          </div>
-<div id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="realEvents" class="col-md-8 hidden-xs padd35px"></div>
+<div id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="realEvents" class="col-md-8 hidden-xs hidden-sm padd35px"></div>
         </div>
 <ng-view></ng-view>
 </body>
