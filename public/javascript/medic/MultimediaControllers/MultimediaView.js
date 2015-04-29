@@ -12,7 +12,7 @@
  * */
 
 
-controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document){
+controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state){
     window.scrollTo(0,0);
     multimediaService.getByArea.query({id:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.multimedias = result;
@@ -22,19 +22,25 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
         //open: false
     };
     $scope.openMultimedia=function(idMultimedia) {
-        $modal.open({
-            templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'MultimediaDetail',
-            resolve:{
-                idd: function () {
-                    return idMultimedia;
+        if($rootScope.deviceWidth<=700)
+            $state.go('elearning.multimedia.multimediaMobile',{id: idMultimedia});
+        else
+        {
+            $modal.open({
+                templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
+                backdrop: 'static',
+                keyboard: false,
+                size: 'lg',
+                windowClass: 'fade',
+                controller: 'MultimediaDetail',
+                resolve:{
+                    idd: function () {
+                        return idMultimedia;
+                    }
                 }
-            }
-        });
+            });
+        }
+
     };
     $scope.trustAsHtml = function (data) {
         return $sce.trustAsHtml(data);
@@ -50,19 +56,23 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
     {
         var idM = $stateParams.idMulti;
         $stateParams.idMulti = null;
-        $modal.open({
-            templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'MultimediaDetail',
-            resolve:{
-                idd: function () {
-                    return idM;
+        if($rootScope.deviceWidth<=700)
+            $state.go('elearning.multimedia.multimediaMobile',{id: idM});
+        else{
+            $modal.open({
+                templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
+                backdrop: 'static',
+                keyboard: false,
+                size: 'lg',
+                windowClass: 'fade',
+                controller: 'MultimediaDetail',
+                resolve:{
+                    idd: function () {
+                        return idM;
+                    }
                 }
-            }
-        });
+            });
+        }
     }
     $scope.amazonPre = $rootScope.pathAmazonDev;
 
