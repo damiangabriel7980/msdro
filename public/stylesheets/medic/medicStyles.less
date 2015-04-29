@@ -5,6 +5,9 @@
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 body{
   font-size: 14px;
+  @media(max-device-width: 767px){
+    font-size: 15px;
+  }
 }
 .main-view-container {
   width: 100%;
@@ -290,7 +293,7 @@ ul.products li {
       width: 0;
       height: 100%;
       border-right: 1px solid #000000;
-      @media(max-width: 768px){
+      @media(max-device-width: 768px){
         border-right: 0px solid #000000;
       }
     }
@@ -846,7 +849,7 @@ ul.products li {
 }
 .padd55px{
   padding-left: 55px;
-  @media(max-width: 768px){
+  @media(max-device-width: 768px){
     padding-left: 35px;
     padding-right: 35px;
   }
@@ -981,7 +984,7 @@ hr{
 .padd4Left
 {
   padding-left: 2%;
-  @media(max-width: 768px){
+  @media(max-device-width: 768px){
     padding-left: 25px;
   }
 }
@@ -1175,7 +1178,7 @@ hr{
   right: auto;
   margin-top: 5px;
   left: 0 !important;
-  @media(max-width: 768px){
+  @media(max-device-width: 768px){
     left: auto !important;
   }
 }
@@ -1203,7 +1206,7 @@ hr{
   position: absolute;
   right: 270px;
   @media(min-width: 769px)and(max-width: 1050px){
-    right: 310px;
+    //right: 310px;
     margin-top: -19px;
   }
   @media(max-width: 768px){
@@ -1537,7 +1540,7 @@ h4{
   height: 100%;
 }
 .mobile{
-  @media(max-width: 768px){
+  @media(max-device-width: 768px){
     width: 50% !important;
   }
 }
@@ -1620,6 +1623,10 @@ h4{
   overflow-x: hidden;
   overflow-y: hidden !important;
   max-height: 375px!important;
+  @media only screen and (orientation: landscape) {
+    overflow-y: auto !important;
+    max-height: 475px!important;
+  }
 }
 @media(max-device-width: 600px){
   .specialProdImage{

@@ -25,7 +25,7 @@
 </div>
 
 <div class="col-xs-12 container homeStyles" >
-    <div class="col-sm-6 col-xs-12 leftColumn">
+    <div class="col-md-6 col-sm-12 col-xs-12 leftColumn">
         <div ng-class="{'col-xs-11 leftMargin noPaddingRight':deviceWidth >= 700, 'col-xs-12 noPaddingRight':deviceWidth < 700}">
             <div class="col-xs-12 noPadding padd5pxBottom">
                 <h3>ULTIMELE NOUTATI</h3>
@@ -68,7 +68,7 @@
         </div>
     </div>
 
-    <div class="col-md-4 col-xs-12 midColumn margin2Left padd0left">
+    <div ng-class="{'col-md-4 col-xs-12 col-sm-12 midColumn margin2Left padd0left':deviceWidth>700, 'col-md-4 col-xs-12 col-sm-12 midColumn':deviceWidth<=700}">
         <div class="col-xs-12">
             <div class="col-xs-12 noPadding ">
                 <h3 class="bottom1Percent">MULTIMEDIA</h3>
@@ -103,7 +103,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-2 col-xs-12 padd4Left rightColumn">
+    <div class="col-sm-12 col-md-2 col-xs-12 padd4Left rightColumn">
         <div class="col-xs-12 noPadding" ng-if="specialWidgetUrl" ng-include="specialWidgetUrl"></div>
         <div class="col-xs-12 noPadding" ng-include="merckBoxUrl"></div>
     </div>
