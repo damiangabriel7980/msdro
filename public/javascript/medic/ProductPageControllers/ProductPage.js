@@ -13,18 +13,47 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
     });
     $scope.mobileMenuTitle="";
     $scope.goToMenuItemWithNoChildren=function(parent){
-        $scope.mobileMenuTitle = parent.title;
+        //$scope.mobileMenuTitle = parent.title;
         if(parent.children_ids.length==0)
             $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:''});
         else
             return null;
     };
+    $scope.$watch('$state.params.menuId',function(){
+        if($scope.specialProductMenu){
+            if($state.params.childId)
+            {
+                for(var i=0;i<$scope.specialProductMenu.length;i++)
+                    if($scope.specialProductMenu[i]._id==$stateParams.menuId)
+                    {
+                        for(var j=0;j<$scope.specialProductMenu[i].children_ids.length;j++)
+                            if($scope.specialProductMenu[i].children_ids[j]._id==$state.params.childId)
+                            {
+                                $scope.mobileMenuTitle=$scope.specialProductMenu[i].children_ids[j].title;
+                                return;
+                            }
+                    }
+            }
+            else
+            {
+                for(var i=0;i<$scope.specialProductMenu.length;i++)
+                    if($scope.specialProductMenu[i]._id==$state.params.menuId)
+                    {
+                            if($scope.specialProductMenu[i]._id==$state.params.menuId)
+                            {
+                                $scope.mobileMenuTitle=$scope.specialProductMenu[i].title;
+                                return;
+                            }
+                    }
+            }
+        }
+    });
     $scope.goToMenuItemWithChildren=function(parent,child){
-        $scope.mobileMenuTitle = child.title;
+        //$scope.mobileMenuTitle = child.title;
         $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:child._id});
     };
     $scope.goToSiteMapMobile=function(name){
-      $scope.mobileMenuTitle=name;
+      //$scope.mobileMenuTitle=name;
         $state.go('groupSpecialProduct.sitemap',{product_id: $scope.specialProductPage._id});
     };
     specialProductService.getSpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){

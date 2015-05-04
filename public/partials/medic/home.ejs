@@ -31,12 +31,12 @@
                 <h3>ULTIMELE NOUTATI</h3>
             </div>
             <div ng-class="{'col-xs-4 noPadding':deviceWidth >= 700, 'col-xs-12 noPadding padd10Bottom':deviceWidth < 700}" ng-repeat="n in news | limitTo: 3">
-                <div ng-class="{'col-xs-10 noPadding':deviceWidth >= 700, 'col-xs-4 noPadding':deviceWidth < 700}">
+                <div ng-class="{'col-xs-10 noPadding':deviceWidth >= 700, 'col-xs-4 col-sm-2 noPadding':deviceWidth < 700}">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive" height="155" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div ng-class="{'col-xs-10 contentBlock textHome noPadding fixedHeight':deviceWidth >= 700, 'col-xs-8 padd15Left textHome noPadding fixedHeight':deviceWidth < 700}">
+                <div ng-class="{'col-xs-10 contentBlock textHome noPadding fixedHeight':deviceWidth >= 700, 'col-xs-8  col-sm-10 padd15Left textHome noPadding fixedHeight':deviceWidth < 700}">
                     <div ng-class="{'col-xs-10 title margintop5px noPadding':deviceWidth >= 700, 'col-xs-11 title noPadding':deviceWidth < 700}"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b convert-special conver="n.title" ng-bind-html="trustAsHtml(n.title)"></b></a></div>
                     <div ng-class="{'col-xs-10 header margintop5px noPadding': deviceWidth>=700, 'col-xs-11 header margintop5px noPadding': deviceWidth<700}" convert-special conver="n.text" ng-bind-html="convertAndTrustAsHtml(n.text,0)"></div>
 
@@ -52,12 +52,12 @@
                 <h3>ULTIMELE NOUTATI STIINTIFICE</h3>
             </div>
             <div ng-class="{'col-xs-4 noPadding':deviceWidth >= 700, 'col-xs-12 noPadding padd10Bottom':deviceWidth < 700}" ng-repeat="n in scientificNews | limitTo: 3">
-                <div ng-class="{'col-xs-10 noPadding':deviceWidth >= 700, 'col-xs-4 noPadding':deviceWidth < 700}">
+                <div ng-class="{'col-xs-10 noPadding':deviceWidth >= 700, 'col-xs-4 col-sm-2 noPadding':deviceWidth < 700}">
                     <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
                         <img class="my-img-thumbnail img-responsive" ng-src="{{n.image_path?imagePre+n.image_path:defaultArticleImage}}">
                     </a>
                 </div>
-                <div ng-class="{'col-xs-10 contentBlock textHome noPadding fixedHeight':deviceWidth >= 700, 'col-xs-8 padd15Left textHome noPadding fixedHeight':deviceWidth < 700}">
+                <div ng-class="{'col-xs-10 contentBlock textHome noPadding fixedHeight':deviceWidth >= 700, 'col-xs-8 col-sm-10 padd15Left textHome noPadding fixedHeight':deviceWidth < 700}">
                     <div ng-class="{'col-xs-10 title margintop5px noPadding':deviceWidth >= 700, 'col-xs-11 title noPadding':deviceWidth < 700}"><a class="MSDTitleDark" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b convert-special conver="n.title" ng-bind-html="convertAndTrustAsHtml(n.title,0)"></b></a></div>
                     <div ng-class="{'col-xs-10 header margintop5px noPadding':deviceWidth>=700,'col-xs-11 header margintop5px noPadding':deviceWidth<700}" convert-special conver="n.text" ng-bind-html="convertAndTrustAsHtml(n.text,0)"></div>
                 </div>
