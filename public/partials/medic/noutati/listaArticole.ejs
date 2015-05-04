@@ -1,5 +1,5 @@
 <div class="row noPadding" style="text-align: center" ng-if="message!=''"><h4>{{message}}</h4></div>
-<div class="col-xs-12 col-sm-12 noPadding padd10Bottom hidden-md hidden-lg" style="text-align: center"><h3 class="noMarginTop">{{title}}</h3></div>
+<div class="col-xs-12 col-sm-12 noPadding padd10Bottom hidden-md hidden-lg" style="text-align: left"><h3 class="noMarginTop">{{title}}</h3></div>
 <div class="well noBox noPadding" ng-repeat="cont in content | limitTo: lmt">
     <div ng-class="{'row articleBox zeroMarginLeft':deviceWidth >= 700, 'col-xs-12 noPadding padd25Bottom':deviceWidth < 700}">
         <img ng-class="{'img-thumbnail width20 pull-left img-back':deviceWidth >= 700, 'my-img-thumbnail col-xs-4 pull-left img-responsive noPadding':deviceWidth < 700}" class="" ng-src="{{cont.image_path?pathAmazonDev+cont.image_path:defaultArticleImage}}"/>

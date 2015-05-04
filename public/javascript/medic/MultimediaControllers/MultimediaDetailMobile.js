@@ -5,7 +5,10 @@
  * Created by miricaandrei23 on 03.11.2014.
  */
 controllers.controller('MultimediaDetailMobile', ['$scope','multimediaService','$stateParams','$log','$rootScope','$sce','$state','$window','$timeout',function ($scope,multimediaService,$stateParams, $log,$rootScope,$sce,$state,$window,$timeout) {
-
+    $scope.selectedMultimedia={
+        title: '',
+        description: ''
+    };
     multimediaService.getSingle.query({idd: $stateParams.id}).$promise.then(function(result){
         $scope.selectedMultimedia = result;
         $scope.videosrc = $sce.trustAsResourceUrl($scope.amazon + $scope.selectedMultimedia.file_path);

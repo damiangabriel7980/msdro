@@ -4,7 +4,10 @@
 controllers.controller('ProductDetail', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout','$state', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout,$state) {
 
     window.scrollTo(0,0);
-
+    $scope.selectedProduct={
+      name: '',
+        description: ''
+    };
      ProductService.getSingle.query({id:$stateParams.id,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
          if(result._id)
          {

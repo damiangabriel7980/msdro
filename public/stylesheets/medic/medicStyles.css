@@ -7122,6 +7122,11 @@ ul.products li {
   height: 12em;
   overflow: hidden;
 }
+@media (max-device-width: 700px) {
+  .textHome {
+    height: 9em;
+  }
+}
 .textHome:after {
   content: '';
   position: absolute;
@@ -7689,6 +7694,12 @@ a:focus {
 }
 h3 {
   font-size: 20px;
+}
+@media (max-device-width: 767px) {
+  h3 {
+    font-weight: bold;
+    font-family: "Helvetica Neue";
+  }
 }
 h4 {
   font-size: 16px;
