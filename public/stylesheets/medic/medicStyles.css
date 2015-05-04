@@ -7122,6 +7122,11 @@ ul.products li {
   height: 12em;
   overflow: hidden;
 }
+@media (max-device-width: 700px) {
+  .textHome {
+    height: 10em;
+  }
+}
 .textHome:after {
   content: '';
   position: absolute;
@@ -7690,6 +7695,12 @@ a:focus {
 h3 {
   font-size: 20px;
 }
+@media (max-device-width: 767px) {
+  h3 {
+    font-weight: bold;
+    font-family: "Helvetica Neue";
+  }
+}
 h4 {
   font-size: 16px;
 }
@@ -7825,6 +7836,11 @@ h4 {
   background-image: none;
   border: 1px solid transparent;
   border-radius: 4px;
+}
+@media (min-device-width: 480px) and (max-device-width: 767px) {
+  .navbar-toggle {
+    margin-left: 9px;
+  }
 }
 .glyphicon-Special-Product {
   margin-top: 2px;
