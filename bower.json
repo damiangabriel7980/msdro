@@ -15,7 +15,7 @@
     "angular-ui-router": "latest",
     "bootstrap": "latest",
     "jquery": "latest",
-    "angular-bootstrap": "latest",
+    "angular-bootstrap": "0.12.1",
     "angular-strap": "latest",
     "angular-ui-select": "latest",
     "select2": "<4.0.0",
