@@ -6860,6 +6860,12 @@ ul.products li {
   bottom: 22px;
   color: #ffffff;
 }
+@media (max-device-width: 767px) {
+  .myMenu li:hover:after {
+    float: right;
+    left: -20px;
+  }
+}
 .newsSection {
   border-radius: 6px;
   padding-top: 0px;
@@ -7124,7 +7130,7 @@ ul.products li {
 }
 @media (max-device-width: 700px) {
   .textHome {
-    height: 10em;
+    height: 9.5em;
   }
 }
 .textHome:after {
@@ -7837,11 +7843,6 @@ h4 {
   border: 1px solid transparent;
   border-radius: 4px;
 }
-@media (min-device-width: 480px) and (max-device-width: 767px) {
-  .navbar-toggle {
-    margin-left: 9px;
-  }
-}
 .glyphicon-Special-Product {
   margin-top: 2px;
 }
@@ -7873,8 +7874,8 @@ h4 {
 }
 @media only screen and (orientation: landscape) {
   .noXOver {
-    overflow-y: auto !important;
-    max-height: 475px!important;
+    overflow-y: visible !important;
+    max-height: 340px!important;
   }
 }
 @media (max-device-width: 600px) {

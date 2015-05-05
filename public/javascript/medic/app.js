@@ -200,6 +200,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html',
             controller: 'ProductPageMap'
         })
+        .state('profileMobile',{
+            url: '/profileMobile',
+            templateUrl: 'partials/medic/profileMobile.html',
+            controller: 'ProfileMobile'
+        })
 }]);
 
 app.run(
@@ -243,12 +248,22 @@ app.run(
                 safari = /safari/.test( userAgent ),
                 ios = /iphone|ipod|ipad/.test( userAgent );
             $rootScope.iosDetect = false;
+            $rootScope.iosDev=ios;
+            $rootScope.androidDetect=userAgent.indexOf("android") > -1;
             if(ios)
             {
                 if ( !standalone && safari ) {
                     $rootScope.iosDetect = true;
                 };
             }
+            $rootScope.isIpad=/ipad/.test( userAgent );
+            var isAndroidTablet = function(){
+                var ua = navigator.userAgent.toLowerCase();
+                return (ua.indexOf("android") > -1 && ua.indexOf("mobile")==-1);
+            };
+            $rootScope.androidTab=isAndroidTablet();
+            console.log($rootScope.isIpad);
+            console.log($rootScope.androidTab);
         }
     ]
 );
