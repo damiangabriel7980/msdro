@@ -226,18 +226,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                 });
             }
             else{
-                if(window.orientation!= 0)
                     $state.go('profileMobile');
-                else{
-                    $modal.open({
-                        templateUrl: 'partials/medic/profile.html',
-                        size: 'lg',
-                        backdrop: 'static',
-                        keyboard: false,
-                        windowClass: 'fade modal-responsive MyProfileModal',
-                        controller: 'Profile'
-                    });
-                }
             }
         }
         else{
@@ -254,10 +243,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     //$scope.animateInput=function(){
     //    angular.element('.form-control').removeClass('popSearch');
     //};
-   window.addEventListener("orientationchange", function() {
-        if($state.is('profileMobile'))
-            $state.go('home');
-    },false);
     $scope.textToSearch="";
     $scope.getInput = function(){
         var x = document.getElementById("upperSearch");

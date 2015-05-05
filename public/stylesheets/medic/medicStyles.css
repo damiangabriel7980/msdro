@@ -7040,8 +7040,8 @@ ul.products li {
 }
 @media (max-device-width: 768px) {
   .padd55px {
-    padding-left: 35px;
-    padding-right: 35px;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 .top0px {
@@ -7290,6 +7290,11 @@ hr {
   padding-left: 3%;
 }
 @media (max-width: 768px) {
+  .padd3Percent {
+    padding-left: 30px;
+  }
+}
+@media (max-device-width: 767px) {
   .padd3Percent {
     padding-left: 30px;
   }
