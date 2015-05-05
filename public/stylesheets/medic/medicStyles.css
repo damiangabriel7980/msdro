@@ -7187,7 +7187,7 @@ hr {
 }
 @media (max-device-width: 768px) {
   .padd4Left {
-    padding-left: 25px;
+    padding-left: 3%;
   }
 }
 .padd15Right {
