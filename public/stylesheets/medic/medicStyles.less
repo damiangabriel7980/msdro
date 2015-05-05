@@ -1222,6 +1222,10 @@ hr{
     margin-top: -19px;
     right: 0;
   }
+  @media(max-device-width: 767px) and(orientation: landscape){
+    right: initial;
+    left: 13px;
+  }
   .newWidthPopSearch {
     width: 230px !important;
     padding: 6px 12px;
@@ -1642,8 +1646,11 @@ h4{
     max-height: 340px!important;
   }
 }
-@media(max-device-width: 600px){
+@media(max-device-width: 700px){
   .specialProdImage{
     width: 100%;
+    @media (orientation: landscape){
+      width: 40%;
+    }
   }
 }
