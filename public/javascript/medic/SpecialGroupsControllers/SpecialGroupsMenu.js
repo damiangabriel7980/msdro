@@ -45,7 +45,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
 
             //load group's product page
             SpecialFeaturesService.getSpecialProducts.query({specialGroup: group._id}).$promise.then(function(result){
-                if(result._id)
+                if(result.length!=0)
                     $scope.groupProduct = result;
                 else
                     $scope.groupProduct=null;

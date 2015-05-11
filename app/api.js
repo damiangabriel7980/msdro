@@ -1710,19 +1710,15 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/content/specialProducts/groupsAvailable')
         .get(function (req, res) {
-            specialProduct.distinct("groups", function (err, groups) {
-                if(err){
-                    res.send(err);
-                }else{
-                    UserGroup.find({_id: {$nin: groups}}).populate('profession').exec(function (err, groups) {
+
+                    UserGroup.find({}).populate('profession').exec(function (err, groups) {
                         if(err){
                             res.send(err);
                         }else{
                             res.send(groups);
                         }
                     })
-                }
-            });
+
         });
 
     router.route('/admin/content/specialProducts/glossary')
@@ -3920,7 +3916,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
                 else
                 {
-                    res.json(product[0]);
+                    res.json(product);
                 }
             });
         });
