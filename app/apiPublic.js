@@ -110,7 +110,7 @@ module.exports = function(app, logger, router) {
                     lowercase_expanded_terms: true
                 }
 
-            },{hydrate: true}, function(err, results) {
+            },{hydrate: true,hydrateOptions:{find:{enable:true}}}, function(err, results) {
                 if(err)
                 {
                     res.json(err);
