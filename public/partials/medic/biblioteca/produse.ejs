@@ -11,7 +11,7 @@
             <select ng-model="selectedArea" class="form-control" ng-change="selectArea()"
                     ng-options="area as area.name for area in therapeuticAreasMobile | orderBy: 'name'" id="area"></select>
         </div>
-        <div ng-if="!$state.includes('biblioteca.produse.prodById')" class="col-md-2 col-xs-12 hideOnSmallScreen noPadding hidden-sm" >
+        <div class="col-md-2 col-xs-12 hideOnSmallScreen noPadding hidden-sm" >
             <h3 class="h-title top0px specialTitleProductsMobile">ARII TERAPEUTICE</h3>
 
             <ul class="list-group MSDgreen" style="list-style: none">
