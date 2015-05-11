@@ -7899,3 +7899,8 @@ h4 {
     width: 40%;
   }
 }
+@media (max-device-width: 480px) {
+  .profileImg {
+    margin: auto;
+  }
+}
