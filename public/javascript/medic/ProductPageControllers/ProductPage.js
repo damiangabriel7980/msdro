@@ -53,7 +53,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:child._id});
     };
     $scope.goToSiteMapMobile=function(name){
-      //$scope.mobileMenuTitle=name;
+      $scope.mobileMenuTitle=name;
         $state.go('groupSpecialProduct.sitemap',{product_id: $scope.specialProductPage._id});
     };
     specialProductService.getSpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){

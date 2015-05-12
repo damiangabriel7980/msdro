@@ -7375,6 +7375,7 @@ hr {
 }
 .imgFix {
   height: 200px !important;
+  image-orientation: from-image;
 }
 .margintop8px {
   margin-top: 8px;
@@ -7902,6 +7903,14 @@ h4 {
 @media (max-device-width: 480px) {
   .profileImg {
     margin: auto;
+    image-orientation: from-image;
+  }
+  .fc-header-title h2 {
+    font-size: 20px;
+    padding-top: 3px;
+  }
+  .fc-button-today {
+    display: none !important;
   }
 }
 .multimedia10PaddPicture {

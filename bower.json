@@ -44,7 +44,8 @@
     "videogular-themes-default": "latest",
     "he": "latest",
     "async": "latest",
-    "angulartics": "latest"
+    "angulartics": "latest",
+    "exif-js": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
