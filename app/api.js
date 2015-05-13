@@ -3675,8 +3675,28 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/applications/DPOC/importDevices')
         .post(function (req, res) {
-            console.log(req.body);
-            res.send({success: {}});
+            var processedWithErrors = [];
+            async.each(req.body, function (device, callback) {
+                console.log(device);
+                addDeviceDPOC(device.name, device.email).then(
+                    function () {
+                        callback();
+                    },
+                    function (err) {
+                        processedWithErrors.push({
+                            device: device,
+                            reason: err
+                        });
+                        callback();
+                    }
+                );
+            }, function () {
+                if(processedWithErrors.length == 0){
+                    res.send({success: true});
+                }else{
+                    res.send({error: processedWithErrors});
+                }
+            })
         });
 
     router.route('/admin/system/activationCodes/codes')
