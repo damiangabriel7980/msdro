@@ -58,6 +58,7 @@ var request = require('request');
 var AWS = require('aws-sdk');
 var fs = require('fs');
 var crypto   = require('crypto');
+var Q = require('q');
 
 var Config = require('../config/environment.js'),
     my_config = new Config();
@@ -3543,32 +3544,17 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
-    router.route('/admin/applications/DPOC/devices')
-        .get(function (req, res) {
-            if(req.query.id){
-                DPOC_Devices.findOne({_id: req.query.id}, {name: 1}, function (err, device) {
-                    if(err){
-                        logger.error(err);
-                        res.send({error: true});
-                    }else{
-                        res.send({success: device});
-                    }
-                });
-            }else{
-                DPOC_Devices.find({}, {name: 1}, function (err, devices) {
-                    if(err){
-                        logger.error(err);
-                        res.send({error: true});
-                    }else{
-                        res.send({success: devices});
-                    }
-                });
-            }
-        })
-        .post(function (req, res) {
-            console.log(req.body);
-            var device = new DPOC_Devices(req.body);
-            if(device.email) device.email = device.email.toLowerCase();
+    //=================================================================================================== DPOC
+
+    var addDeviceDPOC = function (name, email) {
+        var deferred = Q.defer();
+        if(typeof name !== "string" || typeof email !== "string"){
+            deferred.reject("Numele si email-ul sunt obligatorii");
+        }else{
+            var device = new DPOC_Devices({
+                name: name,
+                email: email.toLowerCase()
+            });
             var code;
             var codeOK = false;
             async.whilst(
@@ -3605,7 +3591,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 },
                 function (err) {
                     if(err){
-                        res.send({error: err});
+                        deferred.reject(err);
                     }else{
                         mandrill('/messages/send-template', {
                             "template_name": "dpoc_register",
@@ -3629,14 +3615,50 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                 subject: 'Activare cont DPOC'
                             }
                         }, function(err){
-                            if(err) {
+                            if(err){
                                 logger.error(err);
-                                res.send({error: "Eroare la trimitere email catre utilizatorul adaugat"});
+                                deferred.reject("Eroare la trimitere email");
                             }else{
-                                res.send({success: "Un email a fost trimis catre utilizatorul adaugat"});
+                                deferred.resolve();
                             }
                         });
                     }
+                }
+            );
+        }
+        return deferred.promise;
+    };
+
+    router.route('/admin/applications/DPOC/devices')
+        .get(function (req, res) {
+            if(req.query.id){
+                DPOC_Devices.findOne({_id: req.query.id}, {name: 1}, function (err, device) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: device});
+                    }
+                });
+            }else{
+                DPOC_Devices.find({}, {name: 1}, function (err, devices) {
+                    if(err){
+                        logger.error(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: devices});
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            console.log(req.body);
+            addDeviceDPOC(req.body.name, req.body.email).then(
+                function () {
+                    res.send({success: "Un email a fost trimis catre utilizatorul adaugat"});
+                },
+                function (err) {
+                    res.send({error: err});
                 }
             );
         })
