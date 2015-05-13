@@ -6305,7 +6305,7 @@ html body #publicHeaderWrapper {
 }
 html body #publicHeaderWrapper #publicHeader {
   width: 100%;
-  max-width: 1380px;
+  max-width: 1024px;
   margin: 0 auto;
 }
 html body #publicContentWrapper {
@@ -6320,7 +6320,7 @@ html body #publicContentWrapper .container {
 }
 html body #publicContentWrapper #publicContent {
   width: 100%;
-  max-width: 1380px;
+  max-width: 1024px;
   margin: 0 auto;
   padding-bottom: 30px;
 }
