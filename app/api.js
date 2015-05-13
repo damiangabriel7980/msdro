@@ -3651,6 +3651,12 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
+    router.route('/admin/applications/DPOC/importDevices')
+        .post(function (req, res) {
+            console.log(req.body);
+            res.send({success: {}});
+        });
+
     router.route('/admin/system/activationCodes/codes')
         .get(function (req, res) {
             ActivationCodes.find({}).populate('profession').exec(function (err, codes) {
