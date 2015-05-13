@@ -533,7 +533,6 @@ services.factory('DPOCService', ['$resource', function($resource){
         devices: $resource('api/admin/applications/DPOC/devices', {}, {
             query: { method: 'GET', isArray: false },
             create: { method: 'POST', isArray: false },
-            update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
         })
     }
