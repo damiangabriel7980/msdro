@@ -7,10 +7,19 @@
         <div style="margin-bottom: 15px;">
             <alert ng-if="alert.show" type="{{alert.type}}" close="alert.newAlert=false">{{alert.text}}</alert>
         </div>
-        <div ng-if="importedWithErrors" ng-repeat="error in importedWithErrors">
-            <div>
-                {{error}}
-            </div>
+        <div ng-if="importedWithErrors">
+            <table class="importTable">
+                <tr class="headers">
+                    <td>nume</td>
+                    <td>email</td>
+                    <td>motiv</td>
+                </tr>
+                <tr class="body" ng-repeat="error in importedWithErrors">
+                    <td>{{error.device.name}}</td>
+                    <td>{{error.device.email}}</td>
+                    <td>{{error.reason}}</td>
+                </tr>
+            </table>
         </div>
         <div ng-if="parsedCSV.unprocessed.length > 0">
             <div>
@@ -18,22 +27,24 @@
             </div>
             <div ng-repeat="u in parsedCSV.unprocessed">{{u}}</div>
         </div>
-        <div>
-            Urmatoarele device-uri au fost citite cu succes:
-        </div>
-        <div>
-            <table class="importTable">
-                <tr class="headers">
-                    <td ng-repeat="header in parsedCSV.headers">
-                        {{header}}
-                    </td>
-                </tr>
-                <tr class="body" ng-repeat="row in parsedCSV.body">
-                    <td ng-repeat="h in parsedCSV.headers">
-                        {{row[h]}}
-                    </td>
-                </tr>
-            </table>
+        <div ng-if="!importedWithErrors">
+            <div>
+                Urmatoarele device-uri au fost citite cu succes:
+            </div>
+            <div>
+                <table class="importTable">
+                    <tr class="headers">
+                        <td ng-repeat="header in parsedCSV.headers">
+                            {{header}}
+                        </td>
+                    </tr>
+                    <tr class="body" ng-repeat="row in parsedCSV.body">
+                        <td ng-repeat="h in parsedCSV.headers">
+                            {{row[h]}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
