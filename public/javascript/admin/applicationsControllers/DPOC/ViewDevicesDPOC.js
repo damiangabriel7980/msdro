@@ -88,8 +88,10 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
                 }
             }
             return {
-                result: result,
-                unprocessed: linesUnprocessed
+                headers: headers,
+                body: result,
+                unprocessed: linesUnprocessed,
+                columns: columnsCount
             };
         }else{
             parseError("no lines");
@@ -104,11 +106,18 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
             r.onload = function(e) {
                 var contents = e.target.result;
                 var parsedCSV = parseCSV(contents);
-//                $modal.open({
-//                    templateUrl: 'partials/admin/applications/DPOC/modalImportDevices.html',
-//                    windowClass: 'fade',
-//                    controller: 'ImportDevicesDPOC'
-//                });
+                if(parsedCSV){
+                    $modal.open({
+                        templateUrl: 'partials/admin/applications/DPOC/modalImportDevices.html',
+                        windowClass: 'fade',
+                        controller: 'ImportDevicesDPOC',
+                        resolve: {
+                            parsedCSV: function () {
+                                return parsedCSV;
+                            }
+                        }
+                    });
+                }
             };
             r.readAsText(file);
         }
