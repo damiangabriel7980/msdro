@@ -33,19 +33,6 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
         });
     };
 
-    $scope.editDevice = function (id) {
-        $modal.open({
-            templateUrl: 'partials/admin/applications/DPOC/modalEditDevice.html',
-            windowClass: 'fade',
-            controller: 'EditDeviceDPOC',
-            resolve: {
-                idToEdit: function () {
-                    return id;
-                }
-            }
-        });
-    };
-
     $scope.removeDevice = function (id) {
         ActionModal.show("Stergere device", "Sunteti sigur ca doriti sa stergeti device-ul?", function () {
             DPOCService.devices.delete({id: id}).$promise.then(function () {

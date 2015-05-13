@@ -3643,34 +3643,6 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
             );
         })
-        .put(function (req, res) {
-            var idToEdit = ObjectId(req.query.id);
-            DPOC_Devices.findOne({_id: idToEdit}, function (err, device) {
-                if(err){
-                    logger.error(err);
-                    res.send({error: "Eroare la update"});
-                }else{
-                    device.name = req.body.name;
-                    if(req.body.code){
-                        device.code = device.generateHash(req.body.code);
-                    }
-                    device.save(function (err, saved) {
-                        if(err){
-                            if(err.code == 11000 || err.code == 11001){
-                                res.send({error: "Un device cu acelasi nume sau cod exista deja"});
-                            }else if(err.name == "ValidationError"){
-                                res.send({error: "Toate campurile sunt obligatorii"});
-                            }else{
-                                logger.error(err);
-                                res.send({error: "Eroare la update"});
-                            }
-                        }else{
-                            res.send({success: true});
-                        }
-                    });
-                }
-            });
-        })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             DPOC_Devices.remove({_id: idToDelete}, function (err, wres) {
