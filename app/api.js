@@ -3572,21 +3572,76 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         .post(function (req, res) {
             console.log(req.body);
             var device = new DPOC_Devices(req.body);
-            device.code = device.generateHash(req.body.code);
-            device.save(function (err, saved) {
-                if(err){
-                    if(err.code == 11000 || err.code == 11001){
-                        res.send({error: "Un device cu acelasi nume sau cod exista deja"});
-                    }else if(err.name == "ValidationError"){
-                        res.send({error: "Toate campurile sunt obligatorii"});
+            var code;
+            var codeOK = false;
+            async.whilst(
+                function () {
+                    return !codeOK;
+                },
+                function (callback) {
+                    codeOK = true;
+                    code = crypto.randomBytes(8).toString('base64');
+                    device.code = device.generateHash(code);
+                    console.log("code: "+code);
+                    console.log("device code: "+device.code);
+                    device.save(function (err, saved) {
+                        if(err){
+                            if(err.code == 11000 || err.code == 11001){
+                                var field = err.err.split(".$")[1].split("_")[0];
+                                console.log(field);
+                                if(field === "code"){
+                                    codeOK = false;
+                                    callback();
+                                }else{
+                                    callback("Un device cu acelasi nume sau email exista deja");
+                                }
+                            }else if(err.name == "ValidationError"){
+                                callback("Toate campurile sunt obligatorii");
+                            }else{
+                                logger.error(err);
+                                callback("Eroare la creare");
+                            }
+                        }else{
+                            callback();
+                        }
+                    });
+                },
+                function (err) {
+                    if(err){
+                        res.send({error: err});
                     }else{
-                        logger.error(err);
-                        res.send({error: "Eroare la creare"});
+                        mandrill('/messages/send-template', {
+                            "template_name": "dpoc_register",
+                            "template_content": [
+                                {
+                                    "name": "name",
+                                    "content": device.name
+                                },
+                                {
+                                    "name": "applicationLink",
+                                    "content": my_config.dpocAppLink
+                                },
+                                {
+                                    "name": "activationCode",
+                                    "content": code
+                                }
+                            ],
+                            "message": {
+                                from_email: 'adminMSD@qualitance.ro',
+                                to: [{email: device.email, name: device.name}],
+                                subject: 'Activare cont DPOC'
+                            }
+                        }, function(err){
+                            if(err) {
+                                logger.error(err);
+                                res.send({error: "Eroare la trimitere email catre utilizatorul adaugat"});
+                            }else{
+                                res.send({success: "Un email a fost trimis catre utilizatorul adaugat"});
+                            }
+                        });
                     }
-                }else{
-                    res.send({success: true});
                 }
-            });
+            );
         })
         .put(function (req, res) {
             var idToEdit = ObjectId(req.query.id);

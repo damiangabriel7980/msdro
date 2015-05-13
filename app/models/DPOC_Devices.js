@@ -4,9 +4,10 @@ var Schema			= mongoose.Schema;
 var SHA512   = require('crypto-js/sha512');
 
 var schema		= new Schema({
-    name: { type: String, required: "required_name", unique: true},
+    name: { type: String, required: "required_name", unique: "name_unique"},
     uuid: String,
-    code: { type: String, required: "required_code", unique: true},
+    code: { type: String, required: "required_code", unique: "code_unique"},
+    email: { type: String, required: "required_email", unique: "email_unique" },
     isEnabled: Boolean
 });
 

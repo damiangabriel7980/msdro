@@ -10,7 +10,8 @@ module.exports = function(){
                 elasticPORT: "9004",
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
                 GA_code: "UA-61695877-1",
-                disablePatients: false
+                disablePatients: false,
+                dpocAppLink: "unavailable"
             };
 
         case 'staging':
@@ -23,7 +24,8 @@ module.exports = function(){
                 elasticPORT: "9004",
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
                 GA_code: "UA-61695877-1",
-                disablePatients: false
+                disablePatients: false,
+                dpocAppLink: "unavailable"
             };
 
         case 'production':
@@ -36,7 +38,8 @@ module.exports = function(){
                 elasticPORT: "9004",
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
                 GA_code: "UA-62113963-1",
-                disablePatients: true
+                disablePatients: true,
+                dpocAppLink: "https://msd-ios-distribution.s3.amazonaws.com/MSD_dpoc_InHouse/index.html"
             };
 
         default:
