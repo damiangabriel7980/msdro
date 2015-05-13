@@ -3568,6 +3568,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         .post(function (req, res) {
             console.log(req.body);
             var device = new DPOC_Devices(req.body);
+            if(device.email) device.email = device.email.toLowerCase();
             var code;
             var codeOK = false;
             async.whilst(
