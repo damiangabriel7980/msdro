@@ -32,7 +32,6 @@ controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce',
             }
 
     });
-    $scope.articlesLimit=3;
     $scope.getCategory=function(type){
         switch(type){
             case 1: return "Stiri"; break;

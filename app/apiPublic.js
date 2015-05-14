@@ -126,12 +126,6 @@ module.exports = function(app, logger, router) {
                     }
                     else
                     {
-                        //var myResults=[];
-                        //for(var i=0;i<results.hits.hits.length;i++)
-                        //{
-                        //    if(results.hits.hits[i].groupsID.indexOf(req.user.groupsID)>-1)
-                        //        myResults.push(results.hits.hits[i]);
-                        //}
                         res.json(results.hits.hits);
                     }
 
