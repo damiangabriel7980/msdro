@@ -2,6 +2,7 @@
 <html lang="en" ng-app="app">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>MSD Be Well</title>
     <!--Get amazon bucket-->
     <script>
@@ -135,7 +136,7 @@
                             </form>
                         </div>
                     </div>
-                    <a class="navbar-brand" href="#"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}"></a>
+                    <a class="navbar-brand" ui-sref="home.noutati"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}"></a>
                 </div>
 
                 <div class="collapse navbar-collapse" collapse="navCollapsed">
@@ -189,7 +190,7 @@
 
     <div class="footer text-center">
         <hr>
-        <a href="#">Home</a>&nbsp;|&nbsp;
+        <a ui-sref="home.noutati">Home</a>&nbsp;|&nbsp;
         <a href="http://www.merckmanuals.com" target="_blank">Manualul Merck</a>&nbsp;|&nbsp;
         <a style="cursor: pointer" ng-click="showContactModal()">Contact</a>
     </div>

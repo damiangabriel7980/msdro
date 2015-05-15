@@ -40,4 +40,87 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
             });
         }, "Sterge");
     };
+
+    var parseCSV = function (contents) {
+        //CSV config
+        var separator = ",";
+        var headers = ["name", "email"];
+
+        //init variables
+        var headerPatts = [];
+        for(var h=0; h<headers.length; h++){
+            headerPatts.push(new RegExp("^"+headers[h]+"$"));
+        }
+        var columnsCount = headerPatts.length;
+
+        //handle errors
+        var parseError = function (err) {
+            window.alert("Parse error - "+err);
+        };
+
+        //begin parse
+        var lines = contents.split("\n");
+        console.log(lines);
+        if(lines && lines[0]){
+            var result = [];
+            var linesUnprocessed = [];
+            for(var i=0; i<lines.length; i++){
+                //get line
+                var line = lines[i].split(separator);
+                //check line lenght
+                if(line.length != columnsCount && i!=0) {
+                    if(lines[i] != "") linesUnprocessed.push(lines[i]);
+                }else if(i==0){
+                    //check headers
+                    for(var j=0; j<headerPatts.length; j++){
+                        if(!headerPatts[j].test(line[j])) {
+                            parseError("headers");
+                            return false;
+                        }
+                    }
+                }else{
+                    //add to result
+                    var lineObj = {};
+                    for(var l=0; l < columnsCount; l++){
+                        lineObj[headers[l]] = line[l];
+                    }
+                    result.push(lineObj);
+                }
+            }
+            return {
+                headers: headers,
+                body: result,
+                unprocessed: linesUnprocessed,
+                columns: columnsCount
+            };
+        }else{
+            parseError("no lines");
+            return false;
+        }
+    };
+
+    $scope.fileSelected = function ($files, $event){
+        if($files && $files[0]){
+            var file = $files[0];
+            var r = new FileReader();
+            r.onload = function(e) {
+                var contents = e.target.result;
+                var parsedCSV = parseCSV(contents);
+                if(parsedCSV){
+                    $modal.open({
+                        templateUrl: 'partials/admin/applications/DPOC/modalImportDevices.html',
+                        windowClass: 'fade',
+                        controller: 'ImportDevicesDPOC',
+                        resolve: {
+                            parsedCSV: function () {
+                                return parsedCSV;
+                            }
+                        }
+                    });
+                }
+            };
+            r.readAsText(file);
+        }
+    }
+
 }]);

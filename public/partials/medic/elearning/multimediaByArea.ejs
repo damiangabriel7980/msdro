@@ -1,14 +1,15 @@
 <div class="row margintop20px paddLeft45px" style="text-align: center" ng-if="multimedias[0].message"><h2>{{multimedias[0].message}}</h2></div>
-<ul ng-if="multimedias.length>=1&&!multimedias[0].message" class="articles" style="list-style: none;">
-    <li class="col-md-12" ng-repeat="prod in multimedias | orderBy:'title'">
+<div ng-if="multimedias.length>=1&&!multimedias[0].message" class="articles" style="list-style: none;">
+    <div ng-class="{'col-md-12 col-xs-12 marginMultimedia':deviceWidth>700,'col-md-12 col-xs-12 col-sm-12':deviceWidth<=700}" ng-repeat="prod in multimedias | orderBy:'title'">
 
-            <div class="col-md-12 well noPadding">
-                <div class="col-md-2 noPadding">
-                    <img class="img-responsive img-thumbnail img-multimedia" ng-src="{{prod.thumbnail_path?prod.thumbnail_path:(prod.type==1?defaultVideoImage:defaultSlideImage)}}" alt="{{prod.title}}"/>
+            <div ng-class="{'col-md-12 col-xs-12 col-sm-12 well noPadding':deviceWidth >= 700, 'col-md-12 col-xs-12 col-sm-12 noPadding padd25Bottom':deviceWidth < 700}">
+                <div ng-class="{'col-md-2 col-xs-12 col-sm-12 noPadding multimedia10PaddPicture text-center':deviceWidth >= 700, 'col-md-2 col-xs-4 col-sm-2 noPadding text-center':deviceWidth < 700}">
+                    <img ng-class="{'img-responsive img-thumbnail img-multimedia width100Percent':deviceWidth >= 700, 'img-responsive my-img-thumbnail noPadding':deviceWidth < 700}" ng-src="{{prod.thumbnail_path?prod.thumbnail_path:(prod.type==1?defaultVideoImage:defaultSlideImage)}}" alt="{{prod.title}}"/>
                 </div>
-                <div class="col-md-10">
-                    <div class="col-md-12">
-                        <h4><a class="handCursor" ng-click="openMultimedia(prod._id)"></a>{{prod.title}}</h4>
+                <div ng-class="{'col-md-10 col-xs-8 col-sm-8':deviceWidth >= 700, 'col-md-10 col-xs-8 col-sm-10 noPadding':deviceWidth < 700}">
+                    <div class="col-md-12 col-xs-12 col-sm-12">
+                        <h4 class="hidden-xs hidden-sm"><a class="handCursor" ng-click="openMultimedia(prod._id)"></a>{{prod.title}}</h4>
+                        <h4 class="noMarginTop MSDgreenDarker hidden-md hidden-lg handCursor" ng-click="openMultimedia(prod._id)">{{prod.title}}</h4>
 
                         <p ng-if="prod.description!=null" class="padd7percent" convert-special conver="prod.description" ng-bind-html="convertAndTrustAsHtml(prod.description,190)">
                         </p>
@@ -17,11 +18,11 @@
                     </div>
 
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 col-xs-12 col-sm-12 hidden-xs hidden-sm multimedia10PaddButton">
                 <a class="btn btn-info btn-sm pull-right margintop11percent btn-more-news" ng-click="openMultimedia(prod._id)">Vezi material</a>
                     </div>
             </div>
 
-    </li>
+    </div>
 
-</ul>
+</div>

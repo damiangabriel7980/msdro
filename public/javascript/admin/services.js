@@ -534,6 +534,9 @@ services.factory('DPOCService', ['$resource', function($resource){
             query: { method: 'GET', isArray: false },
             create: { method: 'POST', isArray: false },
             delete: { method: 'DELETE', isArray: false }
+        }),
+        importDevices: $resource('api/admin/applications/DPOC/importDevices', {}, {
+            create: { method: 'POST', isArray: false }
         })
     }
 }]);

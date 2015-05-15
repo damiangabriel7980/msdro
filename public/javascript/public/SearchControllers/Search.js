@@ -21,7 +21,7 @@ controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce',
         if(!results[0].answer) {
             if ($scope.searchResultsFirstSet != undefined) {
                 for (var i = 0; i < $scope.searchResultsFirstSet.length; i++) {
-                    if ($scope.searchResultsFirstSet[i] != null)
+                    if ($scope.searchResultsFirstSet[i] != null && $scope.searchResultsFirstSet[i]._id)
                         $scope.searchResults.push($scope.searchResultsFirstSet[i]);
                 }
             }
@@ -32,7 +32,6 @@ controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce',
             }
 
     });
-    $scope.articlesLimit=3;
     $scope.getCategory=function(type){
         switch(type){
             case 1: return "Stiri"; break;

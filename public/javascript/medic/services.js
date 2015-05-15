@@ -17,7 +17,7 @@ services.factory('SpecialFeaturesService', ['$resource', function($resource){
             query: { method: 'GET', isArray: true }
         }),
         getSpecialProducts: $resource('api/specialFeatures/groupSpecialProducts', {}, {
-            query: { method: 'POST', isArray: false }
+            query: { method: 'POST', isArray: true }
         }),
         specialApps: $resource('api/specialFeatures/specialApps', {}, {
             query: { method: 'GET', isArray: false }

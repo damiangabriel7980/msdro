@@ -8,8 +8,12 @@
 <body>
 <div class="padd55px" id="content">
     <div class="row">
-        <div class="col-md-3 noPadding hidden-sm padd25pxRight" >
-            <h3 class="h-title top0px">ARII TERAPEUTICE</h3>
+        <div class="col-xs-12 marginLeft0 hidden-md hidden-lg col-md-2 marginLeft25px padd25Bottom" dropdown is-open="status.isopen" id="menuDiv">
+            <select ng-model="selectedArea" class="form-control" ng-change="selectAreaMultimedia()"
+                    ng-options="area as area.name for area in therapeuticAreasMobile | orderBy: 'name'" id="area"></select>
+        </div>
+        <div class="col-md-2 col-xs-12 hideOnSmallScreen noPadding hidden-sm margin65pxRight" >
+            <h3 class="h-title top0px specialTitleProductsMobile">ARII TERAPEUTICE</h3>
 
             <ul class="list-group MSDgreen" style="list-style: none">
                 <li  ui-sref-active="activeArea" class="list-group-item no-border handCursor padd5pxLeft margin1pxBottom borderRadiusMenu" ui-sref="elearning.multimedia.multimediaByArea({idArea:0})"><b>Toate ariile terapeutice</b></li>
@@ -25,7 +29,7 @@
             <hr class="visible-phone ">
         </div>
 
-        <div class="col-xs-9 noPadding margin3Left width8" style="margin-top: -10px" >
+        <div ng-class="{'col-md-9 noPadding margin4LeftMultimedia col-xs-12':deviceWidth>700,'col-md-9 noPadding col-xs-12':deviceWidth<=700}" style="margin-top: 0px" >
             <ui-view></ui-view>
         </div>
 

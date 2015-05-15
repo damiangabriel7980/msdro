@@ -60,6 +60,19 @@ a {
 .specialProductsMenu .item:hover {
   background-color: white;
 }
+.importTable {
+  width: 100%;
+  border-top: 1px solid gray;
+  border-left: 1px solid gray;
+}
+.importTable td {
+  border-right: 1px solid gray;
+  border-bottom: 1px solid gray;
+  padding: 5px;
+}
+.importTable .headers {
+  font-weight: bold;
+}
 .manageItems {
   display: block;
   width: 100%;

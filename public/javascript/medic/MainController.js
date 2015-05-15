@@ -22,7 +22,12 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     $scope.logoutUser=function(){
         $window.location.href='logout';
     };
-
+    $scope.goToPharma=function(){
+        $window.open($rootScope.Pharma,'_tab');
+    };
+    $scope.goToTerms=function(){
+        $window.open($rootScope.Terms,'_tab');
+    };
     function setCookie(cname, cvalue) {
         var now = new Date(),
         // this will set the expiration to 6 months
@@ -148,14 +153,18 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     });
 
     $scope.showFarmaModal = function() {
-        var modalInstance = $modal.open({
-            templateUrl: 'partials/medic/modals/Farma.html',
-            keyboard: false,
-            controller: 'Pharmacovigilance',
-            size: 'lg',
-            windowClass: 'fade modal-responsive',
-            backdrop: 'static'
-        });
+        if($rootScope.iosDetect)
+            window.open($rootScope.Pharma);
+        else {
+            var modalInstance = $modal.open({
+                templateUrl: 'partials/medic/modals/Farma.html',
+                keyboard: false,
+                controller: 'Pharmacovigilance',
+                size: 'lg',
+                windowClass: 'fade modal-responsive',
+                backdrop: 'static'
+            });
+        }
     };
 
     $scope.showContactModal = function(){
@@ -168,45 +177,72 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     };
 
     $scope.showTermsModal = function(){
-        $modal.open({
-            templateUrl: 'partials/medic/modals/Terms.html',
-            size: 'lg',
-            windowClass: 'fade modal-responsive',
-            backdrop: 'static',
-            controller: 'Terms',
-            keyboard: false
-        });
+        if($rootScope.iosDetect)
+            window.open($rootScope.Terms);
+        else {
+            $modal.open({
+                templateUrl: 'partials/medic/modals/Terms.html',
+                size: 'lg',
+                windowClass: 'fade modal-responsive',
+                backdrop: 'static',
+                controller: 'Terms',
+                keyboard: false
+            });
+        }
     };
 
     //merck modal
     $scope.showMerckManual = function(){
-        $modal.open({
-            templateUrl: 'partials/medic/modals/merckManual.html',
-            size: 'lg',
-            keyboard: false,
-            backdrop: 'static',
-            windowClass: 'fade modal-responsive',
-            controller: 'MerckManual'
-        });
+        if($rootScope.iosDetect)
+            window.open($rootScope.MerckManual);
+        else{
+            $modal.open({
+                templateUrl: 'partials/medic/modals/merckManual.html',
+                size: 'lg',
+                keyboard: false,
+                backdrop: 'static',
+                windowClass: 'fade modal-responsive',
+                controller: 'MerckManual'
+            });
+        }
     };
-
+    $scope.goToMerckManual=function(){
+        window.open($rootScope.MerckManual,'_blank');
+    };
 
     //profile modal
     $scope.showProfile = function(){
-        $modal.open({
-            templateUrl: 'partials/medic/profile.html',
-            size: 'lg',
-            backdrop: 'static',
-            keyboard: false,
-            windowClass: 'fade modal-responsive MyProfileModal',
-            controller: 'Profile'
-        });
+        if($rootScope.iosDev || $rootScope.androidDetect)
+        {
+            if($rootScope.isIpad || $rootScope.androidTab)
+            {
+                $modal.open({
+                    templateUrl: 'partials/medic/profile.html',
+                    size: 'lg',
+                    backdrop: 'static',
+                    keyboard: false,
+                    windowClass: 'fade modal-responsive MyProfileModal',
+                    controller: 'Profile'
+                });
+            }
+            else{
+                    $state.go('profileMobile');
+            }
+        }
+        else{
+            $modal.open({
+                templateUrl: 'partials/medic/profile.html',
+                size: 'lg',
+                backdrop: 'static',
+                keyboard: false,
+                windowClass: 'fade modal-responsive MyProfileModal',
+                controller: 'Profile'
+            });
+        }
     };
-
     //$scope.animateInput=function(){
     //    angular.element('.form-control').removeClass('popSearch');
     //};
-
     $scope.textToSearch="";
     $scope.getInput = function(){
         var x = document.getElementById("upperSearch");
@@ -228,9 +264,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         var clickover = angular.element(event.target);
         var $navbar = angular.element(".navbar-collapse");
         var _opened = $navbar.hasClass("in");
-        if (_opened === true && !clickover.hasClass("navbar-toggle")) {
-            //$navbar.collapse('hide');
-            //$navbar.height(0);
+        if (_opened === true && !clickover.hasClass("navbar-toggle")&& !clickover.hasClass("mySearchInDropdown")) {
             angular.element("button.navbar-toggle").click();
         }
     });

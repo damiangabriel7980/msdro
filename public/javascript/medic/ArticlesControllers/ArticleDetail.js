@@ -1,6 +1,10 @@
 controllers.controller('ArticleDetail', ['$scope', '$rootScope', '$stateParams', 'ContentService', 'FormatService', '$sce','$state','$window','$timeout', function($scope, $rootScope, $stateParams, ContentService, FormatService, $sce,$state,$window,$timeout){
     var imagePre = $rootScope.pathAmazonDev;
-    console.log($stateParams);
+    $scope.currentArticle={
+      title: '',
+        author: '',
+        text: ''
+    };
     ContentService.getById.query({content_id: $stateParams.articleId,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         if(resp._id)
         {

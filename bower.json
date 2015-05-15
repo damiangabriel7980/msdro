@@ -19,7 +19,7 @@
     "angular-strap": "latest",
     "angular-ui-select": "latest",
     "select2": "<4.0.0",
-    "angular-ui-calendar": "latest",
+    "angular-ui-calendar": "0.8.1",
     "angular-timer": "latest",
     "qtip2": "latest",
     "perfect-tooltip": "latest",
@@ -44,7 +44,8 @@
     "videogular-themes-default": "latest",
     "he": "latest",
     "async": "latest",
-    "angulartics": "latest"
+    "angulartics": "latest",
+    "exif-js": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

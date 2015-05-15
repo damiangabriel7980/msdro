@@ -139,21 +139,34 @@ app.directive('footerBottom', ['$window', '$rootScope', '$timeout', '$state', fu
 
             var containerHeight;
             var windowHeight;
-            var lastHeight = 0;
             var padding;
+            var calculatedPadding;
+
+            var stateIsChanging = false;
+            var lockInit = false;
 
             var initialize = function () {
-                containerHeight = container.offsetHeight;
-                if(containerHeight != lastHeight){
-                    lastHeight = containerHeight;
-                    windowHeight = angular.element($window)[0].innerHeight;
-                    padding = windowHeight - containerHeight - fixedOffset;
-                    if(padding>0){
-                        footer.css('padding-top',padding+'px');
-                    }else{
-                        footer.css('padding-top','0px');
+                if(!lockInit){
+                    lockInit = true;
+                    if(!stateIsChanging){
+                        //console.log("init");
+                        containerHeight = container.offsetHeight;
+                        windowHeight = angular.element($window)[0].innerHeight;
+                        calculatedPadding = windowHeight - containerHeight - fixedOffset;
+                        if(calculatedPadding < 0) calculatedPadding = 0;
+                        if(calculatedPadding != padding){
+                            padding = calculatedPadding;
+                            //console.log("render");
+                            footer.css('padding-top',padding+'px');
+                        }
                     }
+                    lockInit = false;
                 }
+            };
+
+            var continuousRefresh = function () {
+                initialize();
+                $timeout(continuousRefresh, 300);
             };
 
             angular.element($window).bind('resize', function () {
@@ -162,18 +175,20 @@ app.directive('footerBottom', ['$window', '$rootScope', '$timeout', '$state', fu
             });
 
             angular.element(document).ready(function () {
-                initialize();
+                continuousRefresh();
                 $scope.$apply();
             });
 
             $rootScope.$on('$stateChangeStart',
                 function(){
+                    stateIsChanging = true;
+                    padding = 0;
                     footer.css('padding-top','0px');
                 });
 
             $rootScope.$on('$viewContentLoaded',
                 function(){
-                    $timeout(initialize, 300);
+                    stateIsChanging = false;
                 });
         }
     }

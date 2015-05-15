@@ -3,7 +3,12 @@
 
 //import stripped-from-variables version of bootstrap, which will use our custom variables
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
-
+body{
+  font-size: 14px;
+  @media(max-device-width: 767px){
+    font-size: 15px;
+  }
+}
 .main-view-container {
   width: 100%;
   position:relative;
@@ -223,6 +228,10 @@ ul.products li {
 .padd35px{
   padding-left: 25px;
   padding-right: 25px;
+  @media(max-width: 768px){
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .specialGlyph{
@@ -284,6 +293,9 @@ ul.products li {
       width: 0;
       height: 100%;
       border-right: 1px solid #000000;
+      @media(max-device-width: 768px){
+        border-right: 0px solid #000000;
+      }
     }
   }
   .midColumn{
@@ -424,11 +436,21 @@ ul.products li {
     padding-left:35px;
     padding-bottom: 0px;
     padding-right:0px;
+    @media(max-device-width: 767px){
+      padding-left: 0px;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      padding-right:0px;
+    }
   }
   .specialGroupDropdown{
     padding: 5px 15px;
     img{
       width: 180px;
+      @media(max-width: 540px){
+        width: 135px;
+        margin-top: 7px;
+      }
     }
   }
   .navbar-collapse{
@@ -662,6 +684,10 @@ ul.products li {
         left: 150px;
         bottom: 22px;
         color: #ffffff;
+        @media(max-device-width: 767px){
+          float: right;
+          left: -20px;
+        }
       }
 
     }
@@ -797,8 +823,8 @@ ul.products li {
 .padd21px{
   padding-left: 21px;
 }
-.padd25pxRight{
-  padding-right: 25px;
+.padd65pxRight{
+  padding-right: 65px;
 }
 .padd5pxBottom{
   padding-bottom: 8px !important;
@@ -809,6 +835,9 @@ ul.products li {
 .iconLeft{margin-left: -10px;color:darkgrey;}
 .padd40px{
   padding-left: 40px;
+  @media(max-width: 768px){
+    padding-left: 0;
+  }
 }
 .firstIllusion{
   display: inline-block; -webkit-transform: translate3d(-100%, 0px, 0px);-moz-transform: translate3d(-100%, 0px, 0px); transform: translate3d(-100%, 0px, 0px);
@@ -824,6 +853,10 @@ ul.products li {
 }
 .padd55px{
   padding-left: 55px;
+  @media(max-device-width: 768px){
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 .top0px{
   margin-top: 0px;
@@ -849,6 +882,9 @@ ul.products li {
 }
 .padd0left{
   padding-left: 0px;
+  @media(max-width: 768px){
+    padding-left: 15px !important;
+  }
 }
 .padd5left{
   padding-left: 5px;
@@ -900,6 +936,9 @@ ul.products li {
 .textHome {
   height: 12em;
   overflow: hidden;
+  @media (max-device-width: 700px) {
+    height: 9.5em;
+  }
 }
 .textHome:after
 {
@@ -915,6 +954,14 @@ ul.products li {
   width: 100%;
   padding: 0 0 15px 0;
   position: relative;
+}
+.contentBlockProducts {
+  width: 100%;
+  padding: 0 0 15px 0;
+  position: relative;
+  @media (max-width: 768px){
+    padding: 0 25px 15px 25px;
+  }
 }
 .marginbottom30px{
   margin-bottom: 30px;
@@ -944,6 +991,9 @@ hr{
 .padd4Left
 {
   padding-left: 2%;
+  @media(max-device-width: 768px){
+    padding-left: 3%;
+  }
 }
 .padd15Right{
   padding-right: 15px;
@@ -951,10 +1001,16 @@ hr{
 .margin2Left
 {
   margin-left: -2%;
+  @media(max-width: 768px){
+    margin-left: 0;
+  }
 }
-.margin3Left
+.margin4LeftMultimedia
 {
   margin-left: -3%;
+  @media (max-width: 768px) {
+    margin-left: -4%;
+  }
 }
 .justify{
   text-align: justify;
@@ -966,7 +1022,13 @@ hr{
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   color: white;
   text-shadow: black 0.1em 0.1em 0.2em;
-  font-size: 35px;
+  font-size: 30px;
+  @media(max-width: 768px){
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: white;
+    text-shadow: black 0.1em 0.1em 0.2em;
+    font-size: 18px;
+  }
 }
 .width81
 {
@@ -978,6 +1040,9 @@ hr{
 }
 .margintop11percent{
   margin-top: 0%;
+}
+.margintop6Percent{
+  margin-top: 6%;
 }
 .padd11percent{
   @media (min-width: 1367px ) {
@@ -1027,6 +1092,19 @@ hr{
 .padd3Percent
 {
   padding-left: 3%;
+  @media(max-width: 768px){
+    padding-left: 30px;
+  }
+  @media(max-device-width: 767px){
+    padding-left: 30px;
+  }
+}
+.padd3PercentMobile
+{
+  padding-left: 3%;
+  @media(max-width: 768px){
+    padding-left: 15px;
+  }
 }
 .therapeuticBottom{
   margin-bottom: -4%;
@@ -1052,7 +1130,9 @@ hr{
 .noMarginTopPermanent{
   margin-top: 0px !important;
 }
-
+.padd15Left{
+  padding-left: 15px;
+}
 .padd10Bottom{
   padding-bottom: 10px;
 }
@@ -1066,7 +1146,7 @@ hr{
 }
 .middleMerck{
   vertical-align: middle;
-  text-align: center;
+  text-align: left;
 }
 .no-text-decoration{
   text-decoration: none !important;
@@ -1094,6 +1174,7 @@ hr{
 }
 .imgFix{
   height: 200px !important;
+  image-orientation: from-image;
 }
 .margintop8px{
   margin-top: 8px;
@@ -1108,6 +1189,9 @@ hr{
   right: auto;
   margin-top: 5px;
   left: 0 !important;
+  @media(max-device-width: 768px){
+    left: auto !important;
+  }
 }
 .myProfileNoSpecial{
   right: 0 !important;
@@ -1119,26 +1203,65 @@ hr{
   width: 0px !important;
   padding: 0px;
   border: 0px solid #cccccc;
-  -webkit-transition: width 1s ease; /* Safari */
-  transition: width 1s ease;
+  -webkit-animation-direction: reverse; /* Chrome, Safari, Opera */
+  animation-direction: reverse;
+  -webkit-transition: all 1s ease; /* Safari */
+  transition: all 1s ease;
 }
 .btnSearchBefore{
   border-left: 1px solid !important;
   border-radius: 4px !important;
   height: 34px;
 }
-
-.expandSearch{
+.expandSearchInDropdown{
   position: absolute;
   right: 270px;
-  @media(max-width: 1050px){
-    right: 310px;
+  @media(min-width: 769px)and(max-width: 1050px){
+    //right: 310px;
     margin-top: -19px;
+  }
+  @media(max-width: 768px){
+    margin-right: 4% !important;
+    margin-left: 3%;
+    margin-top: -19px;
+    right: 0;
+  }
+  @media(max-device-width: 767px) and(orientation: landscape){
+    right: initial;
+    left: 13px;
   }
   .newWidthPopSearch {
     width: 230px !important;
     padding: 6px 12px;
     border: 1px solid #cccccc;
+    @media(max-width: 768px){
+      width: 100% !important;
+      padding: 6px 12px;
+      border: 1px solid #cccccc;
+    }
+  }
+}
+.expandSearch{
+  position: absolute;
+  right: 270px;
+  @media(min-width: 769px)and(max-width: 1050px){
+    right: 310px;
+    margin-top: -19px;
+  }
+  @media(max-width: 768px){
+    margin-right: 48% !important;
+    margin-top: -19px;
+    right: 0;
+  }
+  .newWidthPopSearch {
+    width: 230px !important;
+    padding: 6px 12px;
+    border: 1px solid #cccccc;
+    @media(max-width: 768px){
+      width: 100% !important;
+      padding: 6px 12px;
+      border: 1px solid #cccccc;
+    }
   }
 }
 .expandSearchNoSpecial{
@@ -1180,6 +1303,10 @@ hr{
 }
 .marginRight10px{
   margin-right: 10px;
+  @media(max-width: 768px)
+  {
+    margin-right: 25px;
+  }
 }
 .disableSpecial{
   @media(max-width: 1049px){
@@ -1231,6 +1358,12 @@ hr{
 }
 .marginLeft30px{
   margin-left: 30px;
+  @media(max-width: 768px){
+    margin-left: 0px;
+  }
+}
+.marginLeft25px{
+  margin-left: 25px;
 }
 .smallFontSize{
   font-size: smaller;
@@ -1347,9 +1480,204 @@ a:focus{
   color:white;
 }
 .specialGroupMobile{
-  margin-right: -10px;
+  margin-right: 15px;
   margin-top: 4px
 }
 .fixedHeightLogo{
   height: 50px;
+  @media (max-device-width: 767px){
+    height: 40px;
+    margin-top: 9px;
+  }
+}
+h3{
+  font-size: 20px;
+  @media (max-device-width: 767px) {
+    font-weight: bold;
+    font-family: "Helvetica Neue";
+  }
+}
+h4{
+  font-size: 16px;
+}
+.glycemizerImage{
+  width: 100%; margin-bottom: 10px;
+  @media(max-width: 1024px){
+    width: 50%; margin-bottom: 10px;
+  }
+}
+.merckImage{
+  width: 70%; cursor:pointer;
+  @media(max-width: 1024px){
+    width: 40%;
+  }
+}
+.productsResponsiveMargin{
+  margin-right: 50px;
+}
+.productMinHeight{
+  @media(min-width: 1025px){
+    min-height: 350px;
+  }
+  @media(max-width: 1024px){
+    min-height: 250px;
+  }
+}
+.paddRightMobile{
+  @media(min-width: 1025px){
+    padding-right: 0;
+  }
+  @media(max-width: 1024px){
+    padding-right: 45px;
+  }
+}
+.newHomeLeftColumn{
+  padding-left: 8%;
+  @media(min-width: 1367px){
+    padding-left: 9%;
+  }
+  @media(max-width: 768px){
+    padding-left: 0;
+  }
+}
+.newHomeRightColumn{
+  padding-right: 2%;
+  @media(min-width: 1367px){
+    padding-right: 2.5%;
+  }
+}
+.col-xs-1Half {
+  width: 12.666666666666664%;
+  float: left;
+  position: relative;
+  min-height: 1px;
+  padding-left: 0px;
+  padding-right: 15px;
+}
+.iframeStyles{
+  width: 100%;
+  height: 100%;
+}
+.mobile{
+  @media(max-device-width: 768px){
+    width: 50% !important;
+  }
+}
+.input-group{
+  .form-control{
+    @media(max-width: 768px){
+     float: right !important;
+    }
+  }
+}
+.productsPadding{
+  padding: 0 15px 0 0;
+}
+.marginMultimedia{
+  margin-left: 0px;
+  @media(max-width: 768px){
+    margin-left: 15px;
+  }
+}
+.width100Percent{
+  width: 100%;
+  @media(max-width: 768px){
+    width: 85%;
+  }
+}
+.width87PercentTherapeutic{
+  @media(max-width: 768px){
+    width: 87%;
+  }
+}
+.hideOnSmallScreen{
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+.padd25Bottom{
+  padding-bottom: 25px;
+}
+.padd25Left{
+  padding-left: 25px;
+}
+.navbar-toggle {
+  position: relative;
+  float: left;
+  margin-left: 25px;
+  margin-right: 10px;
+  padding: 9px 10px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background-color: transparent;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  //@media (min-device-width: 480px) and (max-device-width: 767px) {
+  //  margin-left: 9px;
+  //}
+}
+.glyphicon-Special-Product{
+  margin-top: 2px;
+}
+.my-dropdown-menu{
+  padding: 0;
+  background-color: transparent;
+  border: 0px solid #cccccc;
+  border: 0px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background-clip: border-box;
+}
+.my-list-menu-item{
+  padding: 0px 15px;
+  background-color: transparent;
+  border: 0px solid #dddddd;
+}
+.marginLeft0{
+  margin-left: 0px;
+}
+.margin65pxRight{
+  margin-right: 65px;
+}
+.noXOver{
+  overflow-x: hidden;
+  overflow-y: hidden !important;
+  max-height: 375px!important;
+  @media only screen and (orientation: landscape) {
+    overflow-y: visible !important;
+    max-height: 340px!important;
+  }
+}
+@media(max-device-width: 700px){
+  .specialProdImage{
+    width: 100%;
+    @media (orientation: landscape){
+      width: 40%;
+    }
+  }
+}
+@media (max-device-width: 480px) {
+  .profileImg{
+    margin: auto;
+    image-orientation: from-image;
+  }
+  .fc-header-title{
+    h2{
+      font-size: 20px;
+      padding-top: 3px;
+    }
+  }
+  .fc-button-today{
+    display: none !important;
+  }
+}
+.multimedia10PaddPicture{
+  padding-left: 10px;
+  padding-top: 10px;
+}
+.multimedia10PaddButton{
+  padding-bottom: 10px;
+  padding-right: 10px;
 }

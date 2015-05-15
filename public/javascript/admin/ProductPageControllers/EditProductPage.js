@@ -8,11 +8,7 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
         $scope.selectedGroups = resp[0].groups;
         //get available groups (a group can have only one special product)
         SpecialProductsService.groupsAvailable.query().$promise.then(function (resp) {
-            var groupsAvailable = resp;
-            for(var i=0; i<$scope.selectedGroups.length; i++){
-                groupsAvailable.push($scope.selectedGroups[i]);
-            }
-            $scope.groupsAvailable = groupsAvailable;
+            $scope.groupsAvailable = resp;
         });
     });
 
