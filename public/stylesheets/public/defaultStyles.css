@@ -6327,6 +6327,21 @@ html body #publicContentWrapper #publicContent {
 html body .rootView {
   height: 100%;
 }
+@media (min-width: 480px) {
+  .showOnP {
+    display: none !important;
+  }
+}
+@media (min-width: 992px) {
+  .showOnPT {
+    display: none !important;
+  }
+}
+@media (max-width: 991px) {
+  .showOnD {
+    display: none !important;
+  }
+}
 .navbar-fixed-top {
   height: 70px;
   padding-top: 10px;

@@ -469,7 +469,7 @@ module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
 
     router.route('/accountActivation/counties')
         .get(function (req, res) {
-            Counties.find({}, function (err, counties) {
+            Counties.find({}).sort({name: 1}).exec(function (err, counties) {
                 if(err){
                     logger.error(err);
                     res.send({error: true})

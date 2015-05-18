@@ -49,6 +49,25 @@ html{
   }
 }
 
+//================================= hide / show elements depending on device type
+.showOnP{ //show only on phones
+  @media (min-width: @screen-xs) {
+    .hide;
+  }
+}
+
+.showOnPT{ //show on phones and tablets
+  @media (min-width: @screen-md) {
+    .hide;
+  }
+}
+
+.showOnD{ //show on normal desktops only
+  @media (max-width: @screen-sm-max) {
+    .hide;
+  }
+}
+
 //============================================================================================================== NAVBAR
 
 .navbar-fixed-top{
