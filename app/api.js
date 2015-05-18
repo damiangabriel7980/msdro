@@ -5275,6 +5275,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             presentation.description= req.body.description;
             presentation.article_content = req.body.article_content;
             presentation.groupsID = req.body.groupsID;
+            presentation.enabled=false;
             presentation.save(function (err, presentation) {
                 if(err){
                     res.send({message:"Error occured!"});

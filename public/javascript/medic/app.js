@@ -254,7 +254,7 @@ app.run(
             {
                 if ( !standalone && safari ) {
                     $rootScope.iosDetect = true;
-                };
+                }
             }
             $rootScope.isIpad=/ipad/.test( userAgent );
             var isAndroidTablet = function(){
@@ -264,6 +264,10 @@ app.run(
             $rootScope.androidTab=isAndroidTablet();
             console.log($rootScope.isIpad);
             console.log($rootScope.androidTab);
+            window.onresize = function(){
+                $rootScope.deviceWidth= window.screen.width;
+                $rootScope.$apply();
+            }
         }
     ]
 );
