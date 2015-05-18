@@ -58,8 +58,6 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
     };
     specialProductService.getSpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
         $scope.specialProductMenu = resp;
-        //load first element in menu
-        $scope.selectFirstMenuItem();
     });
 
     $scope.selectFirstMenuItem = function () {
