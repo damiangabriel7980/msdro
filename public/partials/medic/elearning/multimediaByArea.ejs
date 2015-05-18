@@ -4,7 +4,7 @@
 
             <div ng-class="{'col-md-12 col-xs-12 col-sm-12 well noPadding':deviceWidth >= 700, 'col-md-12 col-xs-12 col-sm-12 noPadding padd25Bottom':deviceWidth < 700}">
                 <div ng-class="{'col-md-2 col-xs-12 col-sm-12 noPadding multimedia10PaddPicture text-center':deviceWidth >= 700, 'col-md-2 col-xs-4 col-sm-2 noPadding text-center':deviceWidth < 700}">
-                    <img ng-class="{'img-responsive img-thumbnail img-multimedia width100Percent':deviceWidth >= 700, 'img-responsive my-img-thumbnail noPadding':deviceWidth < 700}" ng-src="{{prod.thumbnail_path?prod.thumbnail_path:(prod.type==1?defaultVideoImage:defaultSlideImage)}}" alt="{{prod.title}}"/>
+                    <img ng-class="{'img-responsive img-thumbnail img-multimedia width100Percent':deviceWidth >= 700, 'img-responsive my-img-thumbnail noPadding':deviceWidth < 700}" ng-src="{{prod.thumbnail_path?pathAmazonDev+prod.thumbnail_path:(prod.type==1?defaultVideoImage:defaultSlideImage)}}" alt="{{prod.title}}"/>
                 </div>
                 <div ng-class="{'col-md-10 col-xs-8 col-sm-8':deviceWidth >= 700, 'col-md-10 col-xs-8 col-sm-10 noPadding':deviceWidth < 700}">
                     <div class="col-md-12 col-xs-12 col-sm-12">

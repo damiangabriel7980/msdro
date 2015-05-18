@@ -2951,88 +2951,134 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 if(err) {
                     res.send(err);
                 }
-
-                res.json(cont);
+                else
+                {
+                    var multimedias={};
+                    multimedias['MultimediaList']=cont;
+                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
+                        if(err) {
+                            logger.error(err);
+                            res.send(err);
+                        }else{
+                            multimedias['groups']=cont2;
+                            res.json(multimedias);
+                        }
+                    });
+                }
             });
         })
-        .post(function(req, res) {
-
-            var multimedia = new Multimedia(); 		// create a new instance of the Bear model
-            multimedia.author = req.body.author;  // set the bears name (comes from the request)
-            multimedia.description=req.body.description ;
-            multimedia.enable= req.body.enable    ;
-            multimedia.file_path= req.body.file_path  ;
-            multimedia.groupsID= req.body.groupsID ;
-            multimedia.last_updated=req.body.last_updated;
-            multimedia.points= req.body.points ;
-            multimedia.quizesID=req.body.quizesID;
-            multimedia['therapeutic-areasID']=req.body['therapeutic-areasID'];
-            multimedia.thumbnail_path=req.body.thumbnail_path;
-            multimedia.title=req.body.title;
-            multimedia.type=req.body.type;
-
-            multimedia.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Multimedia created!' });
+        .post(function (req, res) {
+            var toCreate = new Multimedia(req.body.newMultimedia);
+            console.log(req.body.newMultimedia);
+            console.log(toCreate);
+            toCreate.save(function (err, saved) {
+                if(err){
+                    console.log(err);
+                    logger.error(err);
+                    res.send({error: err, message: "A aparut o eroare pe server"});
+                }else{
+                    res.send({error: false, message: "Datele au fost salvate", justSaved: saved});
+                }
             });
-
         });
     router.route('/admin/multimedia/:id')
-
         .get(function(req, res) {
-            Multimedia.find({_id:req.params.id}, function(err, cont) {
-                if(err) {
+            console.log(req.params.id);
+            Multimedia.findOne({_id: req.params.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                if (err){
                     res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
                 }else{
-                    res.json(null);
+                    console.log(product);
+                    res.json(product);
                 }
-            })
+            });
         })
-        .put(function(req, res) {
-
-            Multimedia.findById(req.params.id, function(err, multimedia) {
-
-                if (err)
-                    res.send(err);
-
-                multimedia.author = req.body.author;  // set the bears name (comes from the request)
-                multimedia.description=req.body.description ;
-                multimedia.enable= req.body.enable    ;
-                multimedia.file_path= req.body.file_path  ;
-                multimedia.groupsID= req.body.groupsID ;
-                multimedia.last_updated=req.body.last_updated;
-                multimedia.points= req.body.points ;
-                multimedia.quizesID=req.body.quizesID;
-                multimedia['therapeutic-areasID']=req.body['therapeutic-areasID'];
-                multimedia.thumbnail_path=req.body.thumbnail_path;
-                multimedia.title=req.body.title;
-                multimedia.type=req.body.type;
-                multimedia.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Multimedia updated!' });
-                });
-
+        .put(function (req, res) {
+            console.log(req.params.id);
+            Multimedia.update({_id: req.params.id}, {$set: req.body.multimedia}, function (err, wRes) {
+                if(err){
+                    res.send({error: err, message: "A aparut o eroare pe server"});
+                }else{
+                    res.send({error: false, message: "Datele au fost actualizate"});
+                }
             });
         })
         .delete(function(req, res) {
-            Multimedia.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted!' });
+            var id = req.params.id;
+            Multimedia.findOne({_id: id}, function (err, multimedia) {
+                if(multimedia){
+                    var s3Image = multimedia.thumbnail_path;
+                    var s3File = multimedia.file_path;
+                    //delete product
+                    Multimedia.remove({_id:id},function(err,cont) {
+                        if (err){
+                            res.json({message:'Could not delete product!'});
+                        }
+                        else{
+                            //product was deleted. Now delete image and file if there is one
+                            if(s3Image || s3File){
+                                amazon.deleteObjectS3(s3Image, function (err, data) {
+                                    if(err){
+                                        logger.error(err);
+                                        res.json({message: "Multimedia was deleted. Image could not be deleted"});
+                                    }else{
+                                        amazon.deleteObjectS3(s3File, function (err, data) {
+                                            if(err) {
+                                                logger.error(err);
+                                                res.json({message: "Multimedia was deleted. Video could not be deleted!"});
+                                            }
+                                            else
+                                            {
+                                                res.json({message: "Multimedia was deleted. All files and images associated with were also deleted!"});
+                                            }
+                                        });
+                                    }
+                                })
+                            }else{
+                                res.json({message:'Multimedia was deleted!'});
+                            }
+                        }
+                    });
+                }else{
+                    res.json({message:'Multimedia not found!'});
+                }
             });
         });
-
-
+    router.route('/admin/multimedia/editImage')
+        .post(function(req,res) {
+            var data = req.body.data;
+            Multimedia.update({_id: data.id}, {thumbnail_path: data.path}, function (err, wRes) {
+                if (err) {
+                    logger.error("Error at multimedia change logo. Multimedia id = " + data.id + "; Key = " + data.path);
+                    res.json({error: true});
+                } else {
+                    res.json({error: false, updated: wRes});
+                }
+            });
+        });
+    router.route('/admin/multimedia/editVideo')
+        .post(function(req,res){
+            var data = req.body.data;
+            Multimedia.update({_id:data.id}, {file_path: data.path}, function (err, wRes) {
+                if(err){
+                    logger.error("Error at multimedia video change. Multimedia id = "+data.id+"; Key = "+data.path);
+                    res.json({error:true});
+                }else{
+                    res.json({error:false, updated:wRes});
+                }
+            });
+        });
+    router.route('/admin/multimedia/toggleVideo')
+        .post(function (req, res) {
+            console.log(req.body);
+            Multimedia.update({_id: req.body.id},{$set:{enable: req.body.isEnabled}}).exec(function (err, presentation) {
+                if(err){
+                    res.send({message:"Error occured!"});
+                }else{
+                    res.send({message:"Update successful!"});
+                }
+            });
+        });
     router.route('/admin/quizes')
 
         .get(function(req, res) {
@@ -4937,6 +4983,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             forGroups.push(req.body.specialGroupSelected);
                         }
                         findObj['groupsID']={$in:forGroups};
+                        findObj['enable']={$ne: false};
                         console.log(findObj);
                         if(req.body.id==0)
                         {
