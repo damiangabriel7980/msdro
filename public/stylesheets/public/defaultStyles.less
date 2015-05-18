@@ -56,6 +56,12 @@ html{
   }
 }
 
+.showOnPsT{ //show on phones and small tablets
+  @media (min-width: @screen-sm) {
+    .hide;
+  }
+}
+
 .showOnPT{ //show on phones and tablets
   @media (min-width: @screen-md) {
     .hide;
@@ -80,7 +86,12 @@ html{
     margin: 0;
     overflow-x: hidden;
     @media (max-width: @grid-float-breakpoint-max) {
-      border: 1px solid @gray-lighter;
+      border-bottom: 1px solid @gray-lighter;
+    }
+    .collapsedForm{
+      form{
+        padding: 5px 15px 0 15px;
+      }
     }
   }
   .container{
@@ -92,10 +103,17 @@ html{
       margin: 0;
     }
   }
+  .navbar-toggle{
+    float: left;
+    margin-left: 15px;
+  }
   .navbar-brand{
     padding: 0px 15px;
     img{
       width: 125px;
+    }
+    @media (max-width: @screen-xs-max) {
+      float: right;
     }
   }
   .navbar-link{
@@ -113,6 +131,9 @@ html{
   .navbar-nav>li>a{
     padding: 15px 0 7px 0;
     margin: 0 10px 0 10px;
+    @media (max-width: @grid-float-breakpoint-max) {
+      margin-left: 15px;
+    }
   }
   .navbar-nav>.active>a{
     color: @greenDark;
@@ -163,6 +184,15 @@ html{
         margin: 0;
         padding-top: 8px;
         width: 250px;
+      }
+    }
+    @media (max-width: @screen-xs-max) {
+      float: left;
+      .item{
+        float: left;
+      }
+      form{
+        .hide;
       }
     }
   }

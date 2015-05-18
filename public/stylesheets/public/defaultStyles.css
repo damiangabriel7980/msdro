@@ -1243,7 +1243,7 @@ dt {
 dd {
   margin-left: 0;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .dl-horizontal dt {
     float: left;
     width: 160px;
@@ -3284,7 +3284,7 @@ tbody.collapse.in {
   bottom: 100%;
   margin-bottom: 1px;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-right .dropdown-menu {
     left: auto;
     right: 0;
@@ -3816,12 +3816,12 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   margin-bottom: 20px;
   border: 1px solid transparent;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar {
     border-radius: 4px;
   }
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-header {
     float: left;
   }
@@ -3837,7 +3837,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-collapse.in {
   overflow-y: auto;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-collapse {
     width: auto;
     border-top: 0;
@@ -3877,7 +3877,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   margin-right: -15px;
   margin-left: -15px;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .container > .navbar-header,
   .container-fluid > .navbar-header,
   .container > .navbar-collapse,
@@ -3890,7 +3890,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   z-index: 1000;
   border-width: 0 0 1px;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-static-top {
     border-radius: 0;
   }
@@ -3902,7 +3902,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   left: 0;
   z-index: 1030;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-fixed-top,
   .navbar-fixed-bottom {
     border-radius: 0;
@@ -3931,7 +3931,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-brand > img {
   display: block;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar > .container .navbar-brand,
   .navbar > .container-fluid .navbar-brand {
     margin-left: -15px;
@@ -3961,7 +3961,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-toggle .icon-bar + .icon-bar {
   margin-top: 4px;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-toggle {
     display: none;
   }
@@ -3974,7 +3974,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   padding-bottom: 10px;
   line-height: 20px;
 }
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
   .navbar-nav .open .dropdown-menu {
     position: static;
     float: none;
@@ -3996,7 +3996,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     background-image: none;
   }
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-nav {
     float: left;
     margin: 0;
@@ -4070,7 +4070,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     top: 0;
   }
 }
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
   .navbar-form .form-group {
     margin-bottom: 5px;
   }
@@ -4078,7 +4078,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     margin-bottom: 0;
   }
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-form {
     width: auto;
     border: 0;
@@ -4117,14 +4117,14 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-text {
     float: left;
     margin-left: 15px;
     margin-right: 15px;
   }
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-left {
     float: left !important;
   }
@@ -4191,7 +4191,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   background-color: #ffffff;
   color: #008780;
 }
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: #a0a0a0;
   }
@@ -4287,7 +4287,7 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   background-color: #080808;
   color: #ffffff;
 }
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
   .navbar-inverse .navbar-nav .open .dropdown-menu > .dropdown-header {
     border-color: #080808;
   }
@@ -6332,6 +6332,11 @@ html body .rootView {
     display: none !important;
   }
 }
+@media (min-width: 768px) {
+  .showOnPsT {
+    display: none !important;
+  }
+}
 @media (min-width: 992px) {
   .showOnPT {
     display: none !important;
@@ -6353,15 +6358,18 @@ html body .rootView {
   margin: 0;
   overflow-x: hidden;
 }
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
   .navbar-fixed-top .navbar-collapse {
-    border: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
   }
+}
+.navbar-fixed-top .navbar-collapse .collapsedForm form {
+  padding: 5px 15px 0 15px;
 }
 .navbar-fixed-top .container {
   width: 100%;
 }
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
   .navbar-fixed-top .container {
     padding: 0;
   }
@@ -6369,11 +6377,20 @@ html body .rootView {
 .navbar-fixed-top .container .navbar-header {
   margin: 0;
 }
+.navbar-fixed-top .navbar-toggle {
+  float: left;
+  margin-left: 15px;
+}
 .navbar-fixed-top .navbar-brand {
   padding: 0px 15px;
 }
 .navbar-fixed-top .navbar-brand img {
   width: 125px;
+}
+@media (max-width: 767px) {
+  .navbar-fixed-top .navbar-brand {
+    float: right;
+  }
 }
 .navbar-fixed-top .navbar-link a {
   padding-left: 5px;
@@ -6389,12 +6406,17 @@ html body .rootView {
   padding: 15px 0 7px 0;
   margin: 0 10px 0 10px;
 }
+@media (max-width: 1023px) {
+  .navbar-fixed-top .navbar-nav > li > a {
+    margin-left: 15px;
+  }
+}
 .navbar-fixed-top .navbar-nav > .active > a {
   color: #008780;
   font-weight: bold;
   background-color: #ffffff;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-fixed-top .navbar-nav > .active > a:after {
     content: '';
     position: absolute;
@@ -6406,7 +6428,7 @@ html body .rootView {
     top: 40px;
   }
 }
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
   .navbar-fixed-top .searchAndLinks {
     display: none;
   }
@@ -6414,7 +6436,7 @@ html body .rootView {
 .navbar-fixed-top .headerSearchAndLinks {
   float: right;
 }
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .navbar-fixed-top .headerSearchAndLinks {
     display: none;
   }
@@ -6441,6 +6463,17 @@ html body .rootView {
   margin: 0;
   padding-top: 8px;
   width: 250px;
+}
+@media (max-width: 767px) {
+  .navbar-fixed-top .headerSearchAndLinks {
+    float: left;
+  }
+  .navbar-fixed-top .headerSearchAndLinks .item {
+    float: left;
+  }
+  .navbar-fixed-top .headerSearchAndLinks form {
+    display: none !important;
+  }
 }
 .fixedBox {
   position: absolute;

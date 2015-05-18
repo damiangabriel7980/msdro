@@ -142,6 +142,15 @@
                 <div class="collapse navbar-collapse" collapse="navCollapsed">
 
                     <ul class="nav navbar-nav">
+                        <li class="collapsedForm showOnPsT">
+                            <form role="search" ng-submit="searchText(this.textToSearch)">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" ng-model="textToSearch">
+                                    <span class="input-group-addon" ng-click="searchText(textToSearch)"><i class="glyphicon glyphicon-search"></i></span>
+                                </div>
+                                <button type="submit" class="btn btn-default sr-only">Submit</button>
+                            </form>
+                        </li>
                         <li ng-class="{'active': $state.includes('home')}"><a ui-sref="home.noutati" ng-click="navCollapsed = true"> Home </a></li>
                         <li ng-class="{'active': $state.includes('stiri')}"><a ui-sref="stiri.all" ng-click="navCollapsed = true"> Stiri </a></li>
                         <li dropdown class="dropdown" ng-class="{'active': $state.includes('articole')}">
