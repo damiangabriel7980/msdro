@@ -4907,6 +4907,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             forGroups.push(req.body.specialGroupSelected);
                         }
                         findObj['groupsID']={$in:forGroups};
+                        findObj['enable']={$ne: false};
                         console.log(findObj);
                         if(req.body.id==0)
                         {
