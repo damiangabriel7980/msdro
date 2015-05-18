@@ -242,7 +242,9 @@ app.run(
             $rootScope.Pharma = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf";
             $rootScope.MerckManual = "/merckManual";
             $rootScope.loaderForSlowConn = "https://s3-eu-west-1.amazonaws.com/msddev-test/resources/page-loader.gif";
-            $rootScope.deviceWidth= window.screen.width;
+            $rootScope.deviceWidth= window.innerWidth
+                || document.documentElement.clientWidth
+                || document.body.clientWidth;
             var standalone = window.navigator.standalone,
                 userAgent = window.navigator.userAgent.toLowerCase(),
                 safari = /safari/.test( userAgent ),
@@ -265,7 +267,9 @@ app.run(
             console.log($rootScope.isIpad);
             console.log($rootScope.androidTab);
             window.onresize = function(){
-                $rootScope.deviceWidth= window.screen.width;
+                $rootScope.deviceWidth= window.innerWidth
+                    || document.documentElement.clientWidth
+                    || document.body.clientWidth;
                 $rootScope.$apply();
             }
         }
