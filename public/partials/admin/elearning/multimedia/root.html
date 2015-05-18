@@ -16,8 +16,12 @@
 
             <td>
                 <div class="btn-group-sm"  role="group" style="display: flex">
-                    <button class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
-                    <button class="btn btn-info"><i class="glyphicon glyphicon-cog"></i></button>
+                    <button ng-click="toggleMultimedia(cont._id,cont.enable)"
+                            class="btn" ng-class="{'btn-danger':cont.enable, 'btn-default':!cont.enable}">
+                        <i class="glyphicon glyphicon-lock"></i>
+                    </button>
+                    <button class="btn btn-danger" ng-click="deleteMultimedia(cont._id)"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button class="btn btn-info" ng-click="editMultimedia(cont._id)"><i class="glyphicon glyphicon-cog"></i></button>
                 </div>
             </td>
         </tr>

@@ -455,13 +455,22 @@ services.factory('EventsService', ['$resource', function($resource){
 services.factory('MultimediaAdminService', ['$resource', function($resource){
     return {
         getAll: $resource('api/admin/multimedia/', {}, {
-            query: { method: 'GET', isArray: true },
+            query: { method: 'GET', isArray: false },
             save: { method: 'POST'}
         }),
         deleteOrUpdateMultimedia:$resource('api/admin/multimedia/:id', {}, {
             getMultimedia: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
+            deleteMultimedia: { method: 'DELETE'},
+            updateMultimedia: { method: 'PUT'}
+        }),
+        editImage: $resource('api/admin/multimedia/editImage/:data', {}, {
+            save: { method: 'POST' }
+        }),
+        editVideo: $resource('api/admin/multimedia/editVideo/:data', {}, {
+            save: { method: 'POST' }
+        }),
+        toggleVideo: $resource('api/admin/multimedia/toggleVideo', {}, {
+            save: { method: 'POST' }
         })
     }
 }]);
