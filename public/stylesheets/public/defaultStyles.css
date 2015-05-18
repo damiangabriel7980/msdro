@@ -6454,7 +6454,7 @@ html body .rootView {
 .fixedBox .textWrapper .carouselTitle {
   width: 100%;
   white-space: normal;
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bold;
   color: #028985;
   line-height: 1em;
@@ -6470,7 +6470,7 @@ html body .rootView {
   width: 100%;
   white-space: normal;
   padding-left: 30px;
-  padding-top: 20px;
+  padding-top: 15px;
   font-size: 15px;
   margin: 0;
 }
