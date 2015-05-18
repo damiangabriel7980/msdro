@@ -34,6 +34,7 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
             toSend.indexNumber = this.ordine?this.ordine:"";
             toSend.type = $scope.selectedType;
             toSend.article_id = $scope.content.selected._id;
+            toSend.redirect_to_href = this.redirect_to;
 
             //send data to server
             CarouselMedicService.addImage.save({data: {toAdd: toSend, extension: extension}}).$promise.then(function (resp) {

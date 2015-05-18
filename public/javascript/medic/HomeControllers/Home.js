@@ -32,6 +32,15 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
         $rootScope.userFullName=resp.name;
     });
 
+    $scope.carouselNavigate = function (carouselItem) {
+        console.log(carouselItem);
+        if(carouselItem.redirect_to_href){
+            window.location.href = carouselItem.redirect_to_href;
+        }else{
+            $state.go("noutati.articol", {articleId: carouselItem.article_id._id, articleType: carouselItem.article_id.type});
+        }
+    };
+
        //------------------------------------------------------------------------------------------------- get all content
 
     HomeService.getUserEvents.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
