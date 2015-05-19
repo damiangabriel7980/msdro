@@ -1,10 +1,15 @@
-controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce', 'AuthService', '$window', function($scope, $modalInstance, intent, $sce, AuthService, $window) {
+controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce', 'AuthService', '$window', 'Utils', function($scope, $modalInstance, intent, $sce, AuthService, $window, Utils) {
 
     $scope.resetAlert = function (type, text) {
-        $scope.alert = {
-            type: type?type:"danger",
-            show: text?true:false,
-            text: text?text:"Unknown error"
+        if(Utils.isMobile() && text){
+            //on mobile, show alerts inside popup
+            window.alert(text);
+        }else{
+            $scope.alert = {
+                type: type?type:"danger",
+                show: text?true:false,
+                text: text?text:"Unknown error"
+            }
         }
     };
 
