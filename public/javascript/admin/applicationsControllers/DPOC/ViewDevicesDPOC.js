@@ -49,7 +49,7 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
         //init variables
         var headerPatts = [];
         for(var h=0; h<headers.length; h++){
-            headerPatts.push(new RegExp("^"+headers[h]+"$"));
+            headerPatts.push(new RegExp("^"+headers[h]));
         }
         var columnsCount = headerPatts.length;
 
@@ -72,6 +72,8 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
                     if(lines[i] != "") linesUnprocessed.push(lines[i]);
                 }else if(i==0){
                     //check headers
+                    console.log(line);
+                    console.log(headerPatts);
                     for(var j=0; j<headerPatts.length; j++){
                         if(!headerPatts[j].test(line[j])) {
                             parseError("headers");

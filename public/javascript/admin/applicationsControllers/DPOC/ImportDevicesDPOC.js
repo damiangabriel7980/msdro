@@ -20,6 +20,7 @@ controllers.controller('ImportDevicesDPOC', ['$scope', '$state', '$modalInstance
                 console.log(resp.error);
                 resetAlert("danger", "Urmatoarele device-uri au suferit erori la import:");
                 $scope.importedWithErrors = resp.error;
+                $state.reload();
             }else{
                 resetAlert("danger", "A aparut o eroare pe server");
             }
