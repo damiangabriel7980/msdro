@@ -7340,6 +7340,9 @@ a:focus {
   -ms-user-select: none;
   user-select: none;
 }
+.pointer {
+  cursor: pointer;
+}
 .noPadding {
   padding: 0;
 }

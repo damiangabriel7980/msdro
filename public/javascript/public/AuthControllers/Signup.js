@@ -21,6 +21,10 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
         "sanatatii (medic/farmacist). Daca nu aveti un cod de activare, va rugam sa contactati " +
         "un reprezentant MSD sau sa sunati la numarul de telefon ...";
 
+    $scope.proofAlert = function () {
+        window.alert($scope.codeTooltip);
+    };
+
     $scope.practices = [
         {
             number: 1,
