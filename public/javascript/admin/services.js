@@ -196,6 +196,11 @@ services.factory('SpecialProductsService', ['$resource', function($resource){
             create: { method: 'POST', isArray: false },
             update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
+        }),
+        speakers: $resource('api/admin/content/specialProducts/speakers', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         })
     }
 }]);

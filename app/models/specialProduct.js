@@ -16,6 +16,7 @@ var specialProductSchema		= new Schema({
     site_map_description: String,
     job_id: String,
     groups: [{type: Schema.Types.ObjectId,ref: 'UserGroup'}],
+    speakers: [{type: Schema.Types.ObjectId,ref: 'speakers'}],
     enabled: Boolean,
     show_safety_info_for: {
         resources: Boolean,

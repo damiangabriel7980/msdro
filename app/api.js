@@ -1831,6 +1831,41 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
         });
 
+    router.route('/admin/content/specialProducts/speakers')
+        .get(function (req, res) {
+            if(req.query.product){
+                specialProduct.findOne({_id: req.query.product}).populate('speakers').exec(function (err, product) {
+                    if(err) {
+                        console.log(err);
+                        res.send({error: true, message: "Erare la gasire speakeri"});
+                    }else if(!product){
+                        console.log(err);
+                        res.send({error: true, message: "Erare la gasire produs"});
+                    }else{
+                        res.send({success: product.speakers});
+                    }
+                });
+            }else if(req.query.id){
+                Speakers.findOne({_id: req.query.id}, function (err, speaker) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: speaker});
+                    }
+                });
+            }else{
+                Speakers.find({}, function (err, speakers) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true});
+                    }else{
+                        res.send({success: speakers});
+                    }
+                });
+            }
+        });
+
     router.route('/admin/content/specialApps/apps')
         .get(function (req, res) {
             if(req.query.id){
