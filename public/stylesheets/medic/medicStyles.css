@@ -6822,6 +6822,23 @@ ul.products li {
 .viewSpeakers .speaker .descriptionFrame .cell.bold {
   font-weight: bold;
 }
+.largeDisplaySpeaker img {
+  width: 300px;
+  float: left;
+  padding: 0 15px 15px 0;
+}
+.largeDisplaySpeaker .name {
+  color: #1c9893;
+  font-size: 13px;
+  font-weight: bold;
+}
+.largeDisplaySpeaker .cell {
+  padding-top: 5px;
+  font-size: 12px;
+}
+.largeDisplaySpeaker .cell.bold {
+  font-weight: bold;
+}
 #specialApp iframe {
   width: 100%;
   height: 100%;
