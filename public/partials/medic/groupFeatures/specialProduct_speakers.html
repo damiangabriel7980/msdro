@@ -13,12 +13,12 @@
     <div ng-repeat="speaker in specialProductPage.speakers" class="col-xs-4 noPadding speaker">
         <div class="pull-left imageOuterFrame">
             <div class="imageInnerFrame">
-                <img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}">
+                <a><img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}"></a>
             </div>
         </div>
-        <div class="descriptionFrame">
+        <div class="descriptionFrame" ui-sref="groupSpecialProduct.speakerDetails({speaker: speaker})">
             <div class="name">
-                {{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}
+                <span>{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</span>
                 <!--prof. RUXANDRA MARIA IONESCU-->
             </div>
             <div class="cell title">

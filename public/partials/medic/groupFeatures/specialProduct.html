@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </accordion-group>
-            <accordion-group ng-if="specialProductPage.speakers && specialProductPage.speakers.length > 0" is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.speakers')}" ui-sref="groupSpecialProduct.speakers({product_id: specialProductPage._id})">
+            <accordion-group ng-if="specialProductPage.speakers && specialProductPage.speakers.length > 0" is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.speakers')||$state.includes('groupSpecialProduct.speakerDetails')}" ui-sref="groupSpecialProduct.speakers({product_id: specialProductPage._id})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right" ></i>&nbsp;&nbsp;Speakers</div>
                 </accordion-heading>

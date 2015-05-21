@@ -6772,6 +6772,7 @@ ul.products li {
   height: 60px;
 }
 .viewSpeakers .speaker .descriptionFrame {
+  cursor: pointer;
   position: relative;
   left: 0;
   top: 0;
