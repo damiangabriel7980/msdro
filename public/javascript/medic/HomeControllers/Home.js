@@ -14,7 +14,8 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
     //add widgets in partials/medic/widgets, then associate file name and group name in object below
     var specialGroupWidgets = {
         "MSD Diabetes": "Glycemizer.html",
-        "Diabetes and Nutrition": "Glycemizer.html"
+        "Diabetes and Nutrition": "Glycemizer.html",
+        "Immunology":"Immunology.html"
     };
     $scope.specialWidgetUrl = null;
 
