@@ -10,6 +10,7 @@ var SpeakersSchema		= new Schema({
     first_name:  String,
     last_name:         String,
     profession:        String,
+    country:           String,
     last_updated: Date,
     workplace:       String,
     short_description:   String,
