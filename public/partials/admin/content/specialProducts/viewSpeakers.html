@@ -7,10 +7,10 @@
         <div class="form-group col-md-12 noPadding">
             <label>Adauga speaker:</label>
             <select class="form-control" style="width:50%" ng-model="selectedSpeaker"
-                    ng-options="speaker._id as speaker.last_name+' '+speaker.first_name for speaker in allSpeakers" ng-change="addSpeaker()"></select>
+                    ng-options="speaker as speaker.last_name+' '+speaker.first_name for speaker in allSpeakers" ng-change="addSpeaker()"></select>
         </div>
         <div class="col-md-12 noPadding">
-            <table ng-table="resourcesTableParams" show-filter="true" class="table table-bordered">
+            <table ng-table="tableParams" show-filter="true" class="table table-bordered">
                 <tr ng-repeat="r in $data">
                     <td data-title="'Nume'" filter="{ 'last_name': 'text' }" sortable="'last_name'">
                         {{r.last_name}}

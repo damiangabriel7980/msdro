@@ -14,9 +14,9 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
             if(resp.error){
                 $scope.resetAlert("danger", "Eroare la gasire speakeri");
             }else{
-                console.log(resp);
-                var data = resp.resources;
-                $scope.resourcesTableParams = new ngTableParams({
+                var data = resp.success;
+                //console.log(data);
+                $scope.tableParams = new ngTableParams({
                     page: 1,            // show first page
                     count: 10,          // count per page
                     sorting: {
@@ -41,11 +41,23 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
     refreshTable();
 
     $scope.addSpeaker = function () {
-        console.log(this.selectedSpeaker);
+        var speaker = this.selectedSpeaker;
+        var product_id = $scope.sessionData.idToEdit;
+        if(speaker && speaker._id && product_id){
+            SpecialProductsService.speakers.create({product_id: product_id, speaker_id: speaker._id}).$promise.then(function (resp) {
+                refreshTable();
+            });
+        }
     };
 
-    $scope.removeSpeaker = function (item) {
-        console.log("remove speaker");
+    $scope.removeSpeaker = function (speaker) {
+        //console.log(speaker);
+        var product_id = $scope.sessionData.idToEdit;
+        if(speaker && speaker._id && product_id){
+            SpecialProductsService.speakers.delete({product_id: product_id, speaker_id: speaker._id}).$promise.then(function (resp) {
+                refreshTable();
+            });
+        }
     };
 
 }]);

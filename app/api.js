@@ -1864,6 +1864,30 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 });
             }
+        })
+        .post(function (req, res) {
+            var speaker_id = ObjectId(req.body.speaker_id);
+            var product_id = ObjectId(req.body.product_id);
+            specialProduct.update({_id: product_id}, {$addToSet: {speakers: speaker_id}}, function (err, wres) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: wres});
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var speaker_id = ObjectId(req.query.speaker_id);
+            var product_id = ObjectId(req.query.product_id);
+            specialProduct.update({_id: product_id}, {$pull: {speakers: speaker_id}}, function (err, wres) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: wres});
+                }
+            });
         });
 
     router.route('/admin/content/specialApps/apps')
