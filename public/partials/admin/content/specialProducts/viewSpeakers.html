@@ -4,8 +4,10 @@
     </div>
     <div class="modal-body container" style="margin: 0; width: 100%">
         <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
-        <div class="col-md-12 noPadding">
-            <button class="btn btn-default" ng-click="addSpeaker()">Adauga speaker</button>
+        <div class="form-group col-md-12 noPadding">
+            <label>Adauga speaker:</label>
+            <select class="form-control" style="width:50%" ng-model="selectedSpeaker"
+                    ng-options="speaker._id as speaker.last_name+' '+speaker.first_name for speaker in allSpeakers" ng-change="addSpeaker()"></select>
         </div>
         <div class="col-md-12 noPadding">
             <table ng-table="resourcesTableParams" show-filter="true" class="table table-bordered">

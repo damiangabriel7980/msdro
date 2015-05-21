@@ -1855,7 +1855,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     }
                 });
             }else{
-                Speakers.find({}, function (err, speakers) {
+                Speakers.find({}).sort({last_name: 1, first_name: 1}).exec(function (err, speakers) {
                     if(err){
                         console.log(err);
                         res.send({error: true});

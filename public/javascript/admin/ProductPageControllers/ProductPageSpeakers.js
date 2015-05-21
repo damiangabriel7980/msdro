@@ -3,6 +3,12 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
+    //get all speakers
+    SpecialProductsService.speakers.query().$promise.then(function (resp) {
+        $scope.allSpeakers = resp.success;
+    });
+
+    //get selected speakers
     var refreshTable = function () {
         SpecialProductsService.speakers.query({product: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
             if(resp.error){
@@ -35,8 +41,7 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
     refreshTable();
 
     $scope.addSpeaker = function () {
-        console.log("add speaker");
-        //$scope.renderView("addSpeaker");
+        console.log(this.selectedSpeaker);
     };
 
     $scope.removeSpeaker = function (item) {
