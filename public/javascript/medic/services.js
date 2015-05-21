@@ -55,6 +55,9 @@ services.factory('specialProductService', ['$resource', function($resource){
         }),
         getSpecialProductGlossary: $resource('api/specialProductGlossary/', {}, {
             query: { method: 'POST', isArray: true }
+        }),
+        speakers: $resource('api/specialProduct/speakers/', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

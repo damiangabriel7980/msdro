@@ -4213,6 +4213,20 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             });
             //get allowed articles for user;
         });
+
+    router.route('/specialProduct/speakers')
+        .get(function (req, res) {
+            var speaker_id = ObjectId(req.query.speaker_id);
+            Speakers.findOne({_id: speaker_id}, function (err, speaker) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: speaker});
+                }
+            });
+        });
+
     router.route('/content')
 
         .get(function(req, res) {

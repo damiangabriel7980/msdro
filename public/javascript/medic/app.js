@@ -190,11 +190,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakers.html'
         })
         .state('groupSpecialProduct.speakerDetails', {
-            url: '/speakerDetails',
+            url: '/speakerDetails/:speaker_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakerDetails.html',
-            params: {
-                speaker: null
-            }
+            controller: 'ProductPageSpeaker'
         })
         .state('groupSpecialProduct.files', {
             url: '/selectedMenuFiles',
