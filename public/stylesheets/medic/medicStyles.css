@@ -6745,6 +6745,82 @@ ul.products li {
   padding: 0;
   line-height: 2em;
 }
+.viewSpeakers .speaker {
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+.viewSpeakers .speaker .imageOuterFrame {
+  width: 70px;
+  height: 70px;
+  border: 1px solid #eeeeee;
+  border-radius: 100px;
+  overflow: hidden;
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.1);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.1);
+  box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.1);
+}
+.viewSpeakers .speaker .imageOuterFrame .imageInnerFrame {
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+  overflow: hidden;
+  margin-left: 4px;
+  margin-top: 4px;
+}
+.viewSpeakers .speaker .imageOuterFrame .imageInnerFrame img {
+  width: 60px;
+  height: 60px;
+}
+.viewSpeakers .speaker .descriptionFrame {
+  position: relative;
+  left: 0;
+  top: 0;
+  padding-left: 85px;
+}
+.viewSpeakers .speaker .descriptionFrame .ellips {
+  display: block;
+  /* Fallback for non-webkit */
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.viewSpeakers .speaker .descriptionFrame .name {
+  color: #1c9893;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1.5em;
+  max-height: 3em;
+  display: block;
+  /* Fallback for non-webkit */
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.viewSpeakers .speaker .descriptionFrame .title {
+  line-height: 1.4em;
+  height: 6em;
+  display: block;
+  /* Fallback for non-webkit */
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.viewSpeakers .speaker .descriptionFrame .cell {
+  padding-top: 5px;
+  font-size: 12px;
+}
+.viewSpeakers .speaker .descriptionFrame .cell.bold {
+  font-weight: bold;
+}
 #specialApp iframe {
   width: 100%;
   height: 100%;

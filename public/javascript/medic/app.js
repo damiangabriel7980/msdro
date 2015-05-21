@@ -235,6 +235,7 @@ app.run(
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
             $rootScope.defaultProductImage = $rootScope.pathAmazonResources+ "piles-of-pills.jpg";
+            $rootScope.defaultUserImage = $rootScope.pathAmazonResources+ "avatar_unknown.png";
 
             $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.png";
 
