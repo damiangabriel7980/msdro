@@ -5,7 +5,7 @@ controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams
 
     var loadData = function () {
         if($scope.$parent){
-            if(!$scope.$parent.specialProductPage){
+            if(!$scope.$parent.specialProductPage || !$scope.$parent.specialProductMenu){
                 $timeout(loadData, 300);
             }else{
                 if(!$stateParams.childId && !$stateParams.menuId){
