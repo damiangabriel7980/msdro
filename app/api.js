@@ -4131,7 +4131,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/specialProduct')
 
         .get(function(req, res) {
-            specialProduct.findOne({_id: req.query.id}, function(err, product) {
+            specialProduct.findOne({_id: req.query.id}).populate('speakers').exec(function(err, product) {
                 if(err || !product) {
                     console.log(err);
                     res.send({error: true});
