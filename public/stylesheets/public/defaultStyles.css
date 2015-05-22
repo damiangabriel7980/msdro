@@ -6342,6 +6342,11 @@ html body .rootView {
     display: none !important;
   }
 }
+@media (max-width: 767px) {
+  .showOnTD {
+    display: none !important;
+  }
+}
 @media (max-width: 991px) {
   .showOnD {
     display: none !important;
@@ -6387,9 +6392,9 @@ html body .rootView {
 .navbar-fixed-top .navbar-brand img {
   width: 125px;
 }
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .navbar-fixed-top .navbar-brand {
-    float: right;
+    padding: 0;
   }
 }
 .navbar-fixed-top .navbar-link a {
@@ -6465,12 +6470,6 @@ html body .rootView {
   width: 250px;
 }
 @media (max-width: 767px) {
-  .navbar-fixed-top .headerSearchAndLinks {
-    float: left;
-  }
-  .navbar-fixed-top .headerSearchAndLinks .item {
-    float: left;
-  }
   .navbar-fixed-top .headerSearchAndLinks form {
     display: none !important;
   }

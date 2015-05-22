@@ -68,6 +68,12 @@ html{
   }
 }
 
+.showOnTD{ //show on tablets and normal desktops
+  @media (max-width: @screen-xs-max) {
+    .hide;
+  }
+}
+
 .showOnD{ //show on normal desktops only
   @media (max-width: @screen-sm-max) {
     .hide;
@@ -112,8 +118,8 @@ html{
     img{
       width: 125px;
     }
-    @media (max-width: @screen-xs-max) {
-      float: right;
+    @media (max-width: @grid-float-breakpoint-max) {
+      padding: 0;
     }
   }
   .navbar-link{
@@ -187,10 +193,6 @@ html{
       }
     }
     @media (max-width: @screen-xs-max) {
-      float: left;
-      .item{
-        float: left;
-      }
       form{
         .hide;
       }

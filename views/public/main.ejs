@@ -112,7 +112,7 @@
                     </button>
                     <div class="headerSearchAndLinks">
                         <div class="item">
-                            <ul>
+                            <ul class="showOnTD">
                                 <li>
                                     <a href="#">Manualul Merck</a>
                                 </li>
@@ -121,6 +121,11 @@
                                     <a style="cursor: pointer" ng-click="showContactModal()">Contact</a>
                                 </li>
                                 <li>|</li>
+                                <li>
+                                    <a ng-click="showAuthModal('login')">Log in</a>
+                                </li>
+                            </ul>
+                            <ul class="showOnPsT">
                                 <li>
                                     <a ng-click="showAuthModal('login')">Log in</a>
                                 </li>
