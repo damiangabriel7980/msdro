@@ -6,6 +6,7 @@ var TherapeuticAreas = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
 
 var ObjectId = require('mongoose').Types.ObjectId;
+var async = require('async');
 
 var getIds = function (documentsArray) {
     var ret = [];
@@ -96,6 +97,38 @@ module.exports = function(app, logger, router) {
                     }
                 })
             }
+        });
+
+    router.route('/mobileContent')
+        .get(function (req, res) {
+            var types = {
+                "1": "news",
+                "2": "articles",
+                "3": "elearning",
+                "4": "downloads"
+            };
+            var ret = {};
+            async.each([1,2,4], function (type, callback) {
+                var q = {type: type, enable: true};
+                if(type == 4){
+                    q['file_path'] = {$exists: true, $nin:[null,""]};
+                }
+                PublicContent.find(q).sort({date_added: -1}).limit(2).exec(function (err, resp) {
+                    if(err){
+                        callback(err);
+                    }else{
+                        ret[types[type]] = resp;
+                        callback();
+                    }
+                })
+            }, function (err) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: ret});
+                }
+            });
         });
 
     router.route('/publicSearchResults')

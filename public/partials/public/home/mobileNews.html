@@ -1,1 +1,8 @@
-mobile news
+<div class="col-xs-12">
+    <div ng-repeat="category in categories">
+        <div>{{category.name}}</div>
+        <div ng-repeat="article in category.content">
+            {{article.title}}
+        </div>
+    </div>
+</div>

@@ -142,6 +142,9 @@ services.factory('ContentService', ['$resource', function($resource){
         content: $resource('apiPublic/content', {}, {
             query: { method: 'GET', isArray: false }
         }),
+        mobileContent: $resource('apiPublic/mobileContent', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
         mostRead: $resource('apiPublic/mostRead', {}, {
             query: { method: 'GET', isArray: false }
         }),
