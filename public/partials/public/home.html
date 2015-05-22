@@ -1,4 +1,4 @@
-<div class="col-md-12 unselectable noPadding" style="overflow: hidden" carousel-resizable>
+<div class="col-md-12 unselectable noPadding showOnTD" style="overflow: hidden" carousel-resizable>
     <div class="carouselWrapper" id="divToResize">
         <div class="fixedBox">
             <div class="textWrapper">
@@ -31,7 +31,7 @@
     </div>
 </div>
 <div class="col-md-12 noPadding" ui-view></div>
-<div class="col-md-12 evenimente text-center" ng-if="events.length!=0"><i class="glyphicon glyphicon-calendar"></i>&nbsp;Evenimente</div>
-<div class="col-md-12 timelineContainer" ng-if="events.length!=0">
+<div class="col-md-12 evenimente text-center showOnD" ng-if="events.length!=0"><i class="glyphicon glyphicon-calendar"></i>&nbsp;Evenimente</div>
+<div class="col-md-12 timelineContainer showOnD" ng-if="events.length!=0">
     <ng-msd-timeline events="events" months="monthsArray"></ng-msd-timeline>
 </div>
