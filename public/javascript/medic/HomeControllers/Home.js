@@ -15,7 +15,7 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
     var specialGroupWidgets = {
         "MSD Diabetes": "Glycemizer.html",
         "Diabetes and Nutrition": "Glycemizer.html",
-        "Immunology":"Immunology.html"
+        "Immunology - Rheumatology":"Immunology.html"
     };
     $scope.specialWidgetUrl = null;
 
