@@ -23,6 +23,48 @@ app.directive('resizable', ['$window', function($window) {
         }
     }
 }]);
+app.directive('mobileContentBox', ['$window', function($window) {
+    return {
+        restrict: 'A',
+        link: function ($scope, $element, attrs) {
+
+            var init = function () {
+                var image;
+                var imageDiv;
+                var imageDivE;
+                var imageDivWidth;
+
+                var elem = angular.element($element);
+                var images = elem.find('img');
+                if(images[0]){
+                    image = images[0];
+                    imageDiv = image.parentElement;
+                    imageDivE = angular.element(imageDiv);
+                    console.log(imageDiv);
+                }
+                if(image){
+                    //resize image parent div to have same height as width
+                    imageDivWidth = imageDiv.offsetWidth;
+                    console.log(imageDivWidth);
+                    imageDivE.css('height', imageDivWidth+'px');
+                    //resize whole box to match image size
+                    elem.css('height', imageDivWidth+'px');
+                }
+            };
+
+            angular.element($window).bind('resize', function () {
+                init();
+                $scope.$apply();
+            });
+
+            // Initiate the resize function default values
+            angular.element(document).ready(function () {
+                init();
+                //$scope.$apply();
+            });
+        }
+    }
+}]);
 app.directive('carouselResizable', ['$window', function($window) {
     return {
         restrict: 'A',
