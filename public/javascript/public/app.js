@@ -29,8 +29,16 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('home.noutati',{
             url: '/home/noutati',
-            templateUrl: 'partials/public/home/noutati.html',
-            controller: 'HomeNews'
+            views: {
+                mobile: {
+                    templateUrl: 'partials/public/home/mobileNews.html',
+                    controller: 'HomeMobileNews'
+                },
+                desktop: {
+                    templateUrl: 'partials/public/home/noutati.html',
+                    controller: 'HomeNews'
+                }
+            }
         })
         .state('home.cmcArticole',{
             url: '/home/cmcArticole',
@@ -110,8 +118,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce',
-        function ($rootScope,   $state,   $stateParams,   $modal,   $sce  ) {
+    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils',
+        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils) {
 
             $rootScope.accessRoute = ACCESS_ROUTE;
 
@@ -160,6 +168,7 @@ app.run(
             $rootScope.trustAsHtml = function (data) {
                 return $sce.trustAsHtml(data);
             };
+            $rootScope.isMobile = Utils.isMobile;
 
             angular.element(document).click(function (event) {
                 var clickover = angular.element(event.target);
