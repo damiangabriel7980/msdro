@@ -11,12 +11,14 @@
             </span>
     </div>
     <div class="col-xs-12 noPadding largeDisplaySpeaker">
-        <img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}">
-        <div class="name">{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</div>
-        <div class="cell">{{speaker.country}}</div>
-        <div class="cell">{{speaker.short_description}}</div>
-    </div>
-    <div class="col-xs-12 noPadding">
-        <a ui-sref="groupSpecialProduct.speakers">Inapoi</a>
+        <div class="col-xs-2 col-xs-offset-1">
+            <img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}">
+        </div>
+        <div class="col-xs-8">
+            <div class="name">{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</div>
+            <div class="country">{{speaker.country}}</div>
+            <div class="cell" ng-bind-html="trustAsHtml(speaker.short_description)"></div>
+            <div><a ui-sref="groupSpecialProduct.speakers">Inapoi</a></div>
+        </div>
     </div>
 </div>
