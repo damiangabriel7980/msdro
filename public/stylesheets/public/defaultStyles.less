@@ -565,6 +565,10 @@ html{
       }
       .description{
         padding-right: 0;
+        img{
+          visibility: hidden;
+          display: none;
+        }
         .title{
           color: @MSDgreen;
           padding: 0;
@@ -572,6 +576,18 @@ html{
           font-size: 16px;
           font-weight: bold;
         }
+        .content{
+          padding: 0;
+        }
+      }
+      &:after{
+        content:'';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 66%;
+        min-height: 4.5em;
+        .gradientVertical;
       }
     }
   }

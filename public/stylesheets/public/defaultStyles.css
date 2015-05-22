@@ -6904,12 +6904,48 @@ html body .rootView {
 .mobileHome .category .content .description {
   padding-right: 0;
 }
+.mobileHome .category .content .description img {
+  visibility: hidden;
+  display: none;
+}
 .mobileHome .category .content .description .title {
   color: #1c9893;
   padding: 0;
   margin-bottom: 10px;
   font-size: 16px;
   font-weight: bold;
+}
+.mobileHome .category .content .description .content {
+  padding: 0;
+}
+.mobileHome .category .content:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 66%;
+  min-height: 4.5em;
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* FF3.6+ */
+
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #ffffff));
+  /* Chrome,Safari4+ */
+
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* Chrome10+,Safari5.1+ */
+
+  background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* Opera 11.10+ */
+
+  background: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* IE10+ */
+
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* W3C */
+
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0);
+  /* IE6-9 */
+
 }
 .searchResults .article {
   padding: 0;

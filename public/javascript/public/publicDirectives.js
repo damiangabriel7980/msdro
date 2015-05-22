@@ -40,12 +40,10 @@ app.directive('mobileContentBox', ['$window', function($window) {
                     image = images[0];
                     imageDiv = image.parentElement;
                     imageDivE = angular.element(imageDiv);
-                    console.log(imageDiv);
                 }
                 if(image){
                     //resize image parent div to have same height as width
                     imageDivWidth = imageDiv.offsetWidth;
-                    console.log(imageDivWidth);
                     imageDivE.css('height', imageDivWidth+'px');
                     //resize whole box to match image size
                     elem.css('height', imageDivWidth+'px');
