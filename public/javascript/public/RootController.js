@@ -5,4 +5,11 @@ controllers.controller('RootController', ['$scope', 'RootService', function ($sc
         $scope.categories = resp.success;
     });
 
+    //navbar collapse
+    $scope.navCollapsed = true;
+    $scope.closeNavbar = function () {
+        console.log("here");
+        $scope.navCollapsed = true;
+    }
+
 }]);

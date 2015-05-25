@@ -14,7 +14,8 @@ var app = angular.module('app',
         'com.2fdevs.videogular.plugins.overlayplay',
         'com.2fdevs.videogular.plugins.poster',
         'angularFileUpload',
-        'mobileContentList'
+        'mobileContentList',
+        'offClick'
     ]);
 
 app.config(['$locationProvider', function($location) {
@@ -171,16 +172,6 @@ app.run(
             };
             $rootScope.isMobile = Utils.isMobile;
 
-            angular.element(document).click(function (event) {
-                var clickover = angular.element(event.target);
-                var $navbar = angular.element(".navbar-collapse");
-                var _opened = $navbar.hasClass("in");
-                if (_opened === true && !clickover.hasClass("navbar-toggle")) {
-                    //$navbar.collapse('hide');
-                    //$navbar.height(0);
-                    angular.element("button.navbar-toggle").click();
-                }
-            });
             //contact modal
             $rootScope.showContactModal = function(){
                 $modal.open({
