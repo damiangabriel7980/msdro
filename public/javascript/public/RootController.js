@@ -1,4 +1,4 @@
-controllers.controller('RootController', ['$scope', 'RootService', function ($scope, RootService) {
+controllers.controller('RootController', ['$scope', '$rootScope', 'RootService', function ($scope, $rootScope, RootService) {
 
     RootService.categories.query().$promise.then(function (resp) {
         console.log(resp.success);
@@ -8,8 +8,13 @@ controllers.controller('RootController', ['$scope', 'RootService', function ($sc
     //navbar collapse
     $scope.navCollapsed = true;
     $scope.closeNavbar = function () {
-        console.log("here");
         $scope.navCollapsed = true;
-    }
+    };
+    $scope.openNavbar = function () {
+        $scope.navCollapsed = false;
+    };
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $scope.closeNavbar();
+    })
 
 }]);
