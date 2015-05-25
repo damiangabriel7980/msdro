@@ -13,7 +13,8 @@ var app = angular.module('app',
         'com.2fdevs.videogular.plugins.controls',
         'com.2fdevs.videogular.plugins.overlayplay',
         'com.2fdevs.videogular.plugins.poster',
-        'angularFileUpload'
+        'angularFileUpload',
+        'mobileContentList'
     ]);
 
 app.config(['$locationProvider', function($location) {

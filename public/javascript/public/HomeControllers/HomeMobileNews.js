@@ -1,4 +1,4 @@
-controllers.controller('HomeMobileNews', ['$scope', '$state', 'ContentService', function($scope, $state, ContentService) {
+controllers.controller('HomeMobileNews', ['$scope', 'ContentService', function($scope, ContentService) {
 
     ContentService.mobileContent.query().$promise.then(function (resp) {
         if(resp.success){
@@ -21,9 +21,5 @@ controllers.controller('HomeMobileNews', ['$scope', '$state', 'ContentService', 
             $scope.categories = categories;
         }
     });
-
-    $scope.navigateTo = function (sref, params) {
-        $state.go(sref, params);
-    }
 
 }]);
