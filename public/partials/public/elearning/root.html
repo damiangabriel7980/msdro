@@ -12,8 +12,8 @@
     </div>
     <div class="col-sm-3" ng-if="isMobile(true)" style="margin-bottom:25px">
         <label>Arii terapeutice:</label>
-        <select class="form-control" ng-options="area as (area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;':'')+area.name for area in tpa"
-                ng-model="selectedArea" ng-change="$state.go('elearning.all', {area: selectedArea._id})"></select>
+        <select class="form-control" ng-options="area._id as (area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;':'')+area.name for area in tpa"
+                ng-model="selectedArea" ng-change="$state.go('elearning.all', {area: selectedArea})"></select>
     </div>
     <div class="col-sm-9 noPadding">
         <div ui-view></div>

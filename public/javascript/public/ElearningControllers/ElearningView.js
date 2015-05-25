@@ -27,6 +27,7 @@ controllers.controller('ElearningView', ['$scope', '$rootScope', 'ContentService
         $scope.tpa = areasOrganised;
 
         $scope.$watch('$stateParams', function (val) {
+            $scope.selectedArea = $stateParams.area;
             ContentService.content.query({type: 3, area: $stateParams.area, withFile: true}).$promise.then(function (resp) {
                 $scope.elearning = resp.success;
             });
