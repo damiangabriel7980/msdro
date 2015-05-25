@@ -13,6 +13,7 @@
     "angular-touch": "latest",
     "angular-route": "latest",
     "angular-ui-router": "latest",
+    "angular-off-click": "latest",
     "bootstrap": "latest",
     "jquery": "latest",
     "angular-bootstrap": "0.12.1",
