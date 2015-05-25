@@ -23,31 +23,6 @@ app.directive('resizable', ['$window', function($window) {
         }
     }
 }]);
-app.directive('matchParentHeight', ['$window', function($window) {
-    return {
-        restrict: 'A',
-        link: function ($scope, $element, attrs) {
-
-            var init = function () {
-                var elem = angular.element($element);
-                var parent = elem[0].parentElement;
-                elem.css('height', '0px');
-                elem.css('height', parent.innerHeight+'px');
-            };
-
-            angular.element($window).bind('resize', function () {
-                init();
-                $scope.$apply();
-            });
-
-            // Initiate the resize function default values
-            angular.element(document).ready(function () {
-                init();
-                //$scope.$apply();
-            });
-        }
-    }
-}]);
 app.directive('carouselResizable', ['$window', function($window) {
     return {
         restrict: 'A',

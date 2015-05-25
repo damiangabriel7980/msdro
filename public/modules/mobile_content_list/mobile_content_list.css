@@ -14,6 +14,8 @@
 }
 .content .description {
   padding-right: 0;
+  height: 0;
+  overflow: visible;
 }
 .content .description img {
   visibility: hidden;
