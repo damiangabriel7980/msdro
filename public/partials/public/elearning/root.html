@@ -1,16 +1,21 @@
-<div class="col-md-12 elearningLayout">
-    <div class="col-md-3 categories">
-        <div class="col-md-12 mainTitle">
+<div class="col-sm-12 elearningLayout">
+    <div class="col-sm-3 categories" ng-if="!isMobile(true)">
+        <div class="col-sm-12 mainTitle">
             CATEGORII
         </div>
-        <div class="col-md-12 noPadding">
-            <div class="therapeuticArea" ng-repeat="area in tpa track by $index">
+        <div class="col-sm-12 noPadding">
+            <div class="therapeuticArea" ng-repeat="area in tpa">
                 {{area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;':''}}
-                <a class="area" ui-sref="elearning.all({area: $index})" convert-special to-convert="area.name" ng-bind-html="trustAsHtml(area.name)"></a>
+                <a class="area" ui-sref="elearning.all({area: area._id})" convert-special to-convert="area.name" ng-bind-html="trustAsHtml(area.name)"></a>
             </div>
         </div>
     </div>
-    <div class="col-md-9 noPadding">
+    <div class="col-sm-3" ng-if="isMobile(true)" style="margin-bottom:25px">
+        <label>Arii terapeutice:</label>
+        <select class="form-control" ng-options="area as (area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;':'')+area.name for area in tpa"
+                ng-model="selectedArea" ng-change="$state.go('elearning.all', {area: selectedArea._id})"></select>
+    </div>
+    <div class="col-sm-9 noPadding">
         <div ui-view></div>
     </div>
 </div>
