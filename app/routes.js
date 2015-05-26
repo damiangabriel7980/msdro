@@ -215,10 +215,10 @@ module.exports = function(app, mandrill, logger, passport) {
                                         for(var i=0;i<user.groupsID.length;i++)
                                         {
                                             statusModalGroups[user.groupsID[i]]=true;
-                                            console.log(statusModalGroups);
+
                                         }
                                         req.session.statusModalGroups=statusModalGroups;
-                                        console.log(req.session);
+
                                         return  res.send({error: false, accepted: true});
                                     }
                                 }else if(user.state === "PENDING"){
@@ -299,7 +299,7 @@ function isLoggedIn(req, res, next) {
 
 //validates user and transports it to a page taking it's role and/or state into account
 var transportUser = function (req, res) {
-    console.log("transport");
+
     User.findOne({_id: req.user._id}).select("+rolesID +state +proof_path").exec(function (err, user) {
         if(user.state === "ACCEPTED"){
             Roles.find({_id: {$in: user.rolesID}}, function (err, roles) {
@@ -309,7 +309,7 @@ var transportUser = function (req, res) {
                 }else{
                     if(roles[0]){
                         if(roles[0].authority === "ROLE_FARMACIST"){
-                            console.log("medic");
+
                             res.render("medic/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
                         }else if(roles[0].authority === "ROLE_ADMIN"){
                             res.render("admin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});

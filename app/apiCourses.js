@@ -23,7 +23,7 @@ module.exports = function(app, logger, tokenSecret, router) {
 
     //make sure that the user has admin rights
     var isAdmin = function (req, res, next) {
-        console.log("check admin");
+        
         //get data from token
         var token;
         try{
@@ -49,7 +49,7 @@ module.exports = function(app, logger, tokenSecret, router) {
                 }
             });
         }catch(ex){
-            console.log(ex);
+            
             logger.error(ex);
             res.statusCode = 403;
             res.end();

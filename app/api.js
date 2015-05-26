@@ -229,7 +229,7 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
                 if(err){
                     callback(err, null);
                 }else{
-                    //console.log(arrayOfGroupsIds);
+                    //
                     callback(null, content);
                 }
             });
@@ -376,7 +376,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
 // middleware to ensure user is logged in
     function isLoggedIn(req, res, next) {
-        console.log("check login");
+        
         if (req.isAuthenticated()){
             return next();
         }else{
@@ -386,7 +386,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
 //middleware to ensure a user has admin rights
     function hasAdminRights(req, res, next) {
-        console.log("check admin");
+        
         try{
             //get encripted session id from cookie
             var esidc = req.cookies['connect.sid'];
@@ -494,7 +494,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             var toCreate = req.body.toCreate;
             var users = req.body.users || [];
             toCreate = new UserGroup(toCreate);
-            console.log(users);
+            
             toCreate.save(function (err, saved) {
                 if(err){
                     logger.error(err);
@@ -518,12 +518,12 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send({error: "Error finding group"});
                 }else{
                     var dataToUpdate = req.body.toUpdate;
-                    console.log(dataToUpdate);
+                    
                     if(dataToUpdate.profession) delete dataToUpdate.profession; //do not allow changing group profession
                     if(oldGroup.restrict_CRUD){
                         if(dataToUpdate.display_name) delete dataToUpdate.display_name; //do not allow changing group name
                     }
-                    console.log(dataToUpdate);
+                    
                     var users = req.body.users || [];
                     UserGroup.update({_id: req.query.id}, {$set: dataToUpdate}, function (err, wRes) {
                         if(err){
@@ -1169,7 +1169,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
         .post(function(req, res) {
             var data = req.body.data.toUpdate;
-            console.log(data);
+            
             var id = req.body.data.id;
             var ans = {};
                 //validate type
@@ -1280,7 +1280,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
 
     router.route('/admin/products/:id')
         .get(function(req, res) {
-            console.log("asasa");
+            
             Products.findOne({_id: req.params.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
                 if (err){
                     res.send(err);
@@ -1424,7 +1424,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.statusCode = 400;
                     res.end();
                 }else{
-                    console.log(groups);
+                    
                     res.send(groups);
                 }
             });
@@ -1504,7 +1504,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
     router.route('/admin/content/editImage')
         .post(function(req,res){
-            console.log(req.body.data);
+            
             var data = req.body.data;
             Content.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
                 if(err){
@@ -1517,7 +1517,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
     router.route('/admin/content/editAssociatedImages')
         .post(function(req,res){
-            console.log(req.body.data);
+            
             var data = req.body.data;
             Content.update({_id:data.id}, {associated_images: data.associated_images}, function (err, wRes) {
                 if(err){
@@ -1674,7 +1674,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     var arrayIdsToDelete = [idToDelete];
                     if(item.children_ids){
                         arrayIdsToDelete = arrayIdsToDelete.concat(item.children_ids);
-                        console.log(arrayIdsToDelete);
+                        
                     }
                     specialProductMenu.remove({_id: {$in: arrayIdsToDelete}}, function (err, wRes) {
                         if(err){
@@ -3028,8 +3028,8 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         })
         .post(function (req, res) {
             var toCreate = new Multimedia(req.body.newMultimedia);
-            console.log(req.body.newMultimedia);
-            console.log(toCreate);
+            
+            
             toCreate.save(function (err, saved) {
                 if(err){
                     console.log(err);
@@ -3042,18 +3042,18 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
     router.route('/admin/multimedia/:id')
         .get(function(req, res) {
-            console.log(req.params.id);
+            
             Multimedia.findOne({_id: req.params.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
                 if (err){
                     res.send(err);
                 }else{
-                    console.log(product);
+                    
                     res.json(product);
                 }
             });
         })
         .put(function (req, res) {
-            console.log(req.params.id);
+            
             Multimedia.update({_id: req.params.id}, {$set: req.body.multimedia}, function (err, wRes) {
                 if(err){
                     res.send({error: err, message: "A aparut o eroare pe server"});
@@ -3129,7 +3129,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
     router.route('/admin/multimedia/toggleVideo')
         .post(function (req, res) {
-            console.log(req.body);
+            
             Multimedia.update({_id: req.body.id},{$set:{enable: req.body.isEnabled}}).exec(function (err, presentation) {
                 if(err){
                     res.send({message:"Error occured!"});
@@ -3670,13 +3670,13 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     codeOK = true;
                     code = crypto.randomBytes(8).toString('base64');
                     device.code = device.generateHash(code);
-                    console.log("code: "+code);
-                    console.log("device code: "+device.code);
+                    
+                    
                     device.save(function (err, saved) {
                         if(err){
                             if(err.code == 11000 || err.code == 11001){
                                 var field = err.err.split(".$")[1].split("_")[0];
-                                console.log(field);
+                                
                                 if(field === "code"){
                                     codeOK = false;
                                     callback();
@@ -3757,7 +3757,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
             }
         })
         .post(function (req, res) {
-            console.log(req.body);
+            
             addDeviceDPOC(req.body.name, req.body.email).then(
                 function () {
                     res.send({success: "Un email a fost trimis catre utilizatorul adaugat"});
@@ -3782,7 +3782,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         .post(function (req, res) {
             var processedWithErrors = [];
             async.each(req.body, function (device, callback) {
-                console.log(device);
+                
                 addDeviceDPOC(device.name, device.email).then(
                     function () {
                         callback();
@@ -4090,7 +4090,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/specialFeatures/groupSpecialProducts')
         .post(function(req, res) {
             var data = [mongoose.Types.ObjectId(req.body.specialGroup.toString())];
-            console.log(data);
+            
             specialProduct.find({groups: {$in: data}, enabled: true}, function(err, product) {
                 if(err) {
                     res.send(err);
@@ -4169,7 +4169,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/specialProductDescription/:id')
         .get(function(req, res) {
             var id = mongoose.Types.ObjectId(req.params.id.toString());
-            console.log(id);
+            
             specialProductMenu.findOne({_id: id}).exec(function(err, details) {
                 if(err) {
                     console.log(err);
@@ -4177,16 +4177,16 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 }
                 else
                 {
-                    console.log(details);
+                    
                     res.json(details);
                 }
             });
         });
     router.route('/specialProductFiles')
         .post(function(req, res) {
-            console.log(req.body);
+            
             var id = mongoose.Types.ObjectId(req.body.id.toString());
-            console.log(id);
+            
             specialProductFiles.find({product: id}).exec(function(err, details) {
                 if(err) {
                     res.send(err);
@@ -4201,7 +4201,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/specialProductGlossary')
         .post(function(req, res) {
             var id = mongoose.Types.ObjectId(req.body.id.toString());
-            console.log(id);
+            
             specialProductGlossary.find({product: id}).exec(function(err, details) {
                 if(err) {
                     res.send(err);
@@ -4250,7 +4250,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     if (req.body.specialGroup) {
                         forGroups.push(req.body.specialGroup.toString());
                     }
-                    console.log(req.body);
+                    
                     Content.find({_id:req.body.content_id, groupsID: { $in: forGroups}}, function(err, cont) {
                         if(err) {
                             res.send(err);
@@ -4332,7 +4332,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                             console.log(err);
                             res.send(err);
                         }else{
-                            console.log(userCopy);
+                            
                             res.json(userCopy);
                         }
                     });
@@ -4372,7 +4372,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         .post(function (req, res) {
             var ans = {};
             var newData = trimObject(req.body.newData,["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
-            console.log(newData);
+            
             var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
             if((!namePatt.test(newData.name))){ //check name
@@ -4388,7 +4388,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                 ans.message = "Adresa este obligatorie";
                 res.json(ans);
             }else{
-                console.log(newData);
+                
                 User.update({_id: req.user._id}, {$set: newData}, function (err, wres) {
                     if(err){
                         logger.error(err);
@@ -4599,7 +4599,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     if(req.body.specialGroupSelected){
                         forGroups.push(req.body.specialGroupSelected.toString());
                     }
-                    console.log(forGroups);
+                    
                     //get allowed articles for user
                     Content.find({groupsID: {$in: forGroups},enable:true}, {_id: 1}, function (err, content) {
                         if(err){
@@ -4647,7 +4647,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     if (req.body.specialGroupSelected) {
                         forGroups.push(req.body.specialGroupSelected);
                     }
-                    console.log(forGroups);
+                    
                     var date = new Date();
 
                     async.each(arr_of_items, function (item, callback) {
@@ -4742,20 +4742,20 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                     console.log(err);
                                     res.send(err);
                                 }else{
-                                    console.log(presentation);
+                                    
                                     res.json(presentation[0]);
                                 }
                             });
                         }
                         else
                         {
-                            console.log(forGroups);
+                            
                             Presentations.find({groupsID: {$in: forGroups}, enabled: true}).exec(function (err, presentation) {
                                 if(err){
                                     console.log(err);
                                     res.send(err);
                                 }else{
-                                    console.log(presentation);
+                                    
                                     res.json(presentation[0]);
                                 }
                             });
@@ -4805,7 +4805,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         res.send(err);
                     }else {
                         var forGroups = nonSpecificGroupsIds;
-                        console.log(forGroups);
+                        
                         res.json({defaultGroup:forGroups[0]});
                     }
                 });
@@ -5036,7 +5036,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
         });
     router.route('/multimedia/multimediaByArea')
         .post(function(req,res){
-            console.log(req.body);
+            
         var findObj={};
             if(req.body.id!=0)
                 findObj['therapeutic-areasID'] = {$in: [req.body.id]};
@@ -5057,7 +5057,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                         }
                         findObj['groupsID']={$in:forGroups};
                         findObj['enable']={$ne: false};
-                        console.log(findObj);
+                        
                         if(req.body.id==0)
                         {
                             Multimedia.find(findObj, function (err, multimedia) {
@@ -5065,7 +5065,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                     console.log(err);
                                     res.json(err);
                                 } else {
-                                    console.log(multimedia);
+                                    
                                     if (multimedia.length == 0) {
                                         res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
                                     }
@@ -5083,15 +5083,15 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                     Therapeutic_Area.find({"therapeutic-areasID": {$in :[req.body.id]}}).exec(function(err,response){
                                         var children=response;
                                         getStringIds(children, function(ids){
-                                            console.log(ids);
-                                            console.log(forGroups);
+                                            
+                                            
                                             findObj['therapeutic-areasID'] = {$in: ids};
                                             Multimedia.find(findObj, function (err, multimedia) {
                                                 if (err) {
                                                     console.log(err);
                                                     res.json(err);
                                                 } else {
-                                                    console.log(multimedia);
+                                                    
                                                     if (multimedia.length == 0) {
                                                         res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
                                                     }
@@ -5110,7 +5110,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                             console.log(err);
                                             res.json(err);
                                         } else {
-                                            console.log(multimedia);
+                                            
                                             if (multimedia.length == 0) {
                                                 res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
                                             }
@@ -5185,7 +5185,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/quizes/:id/questions/:idd')
         .get(function(req,res) {
             Quizes.find({_id: req.params.id}, function (err, testR) {
-                //console.log(req.params.id);
+                //
                 if (err) {
                     logger.error(err);
                     res.send(err);
@@ -5221,7 +5221,7 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
     router.route('/quizes/:id')
         .get(function(req,res) {
             Quizes.find({_id: req.params.id}, function (err, testR) {
-                //console.log(req.params.id);
+                //
                 if (err) {
                     logger.error(err);
                     res.send(err);
@@ -5255,21 +5255,21 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     res.send(error);
                     return ;
                 } else {
-                    //console.log(result);
+                    //
                     res.json(result);
                 }
             });
         })
 
         .put(function(req, res) {
-        //console.log(req.user.username);
+        //
         User.findOne({ username :  {$regex: "^"+req.user.username.replace(/\+/g,"\\+")+"$", $options: "i"}},function(err,usr){
             if(err) {
                 logger.error(err);
                 res.send(err)
             }
             else {
-                //console.log(req.body.score_obtained);
+                //
                 usr.points += req.body.score;
                 req.user.points=usr.points;
                 usr.save(function(err){

@@ -52,7 +52,7 @@ module.exports = function(passport) {
                         info.message = "Adresa de e-mail nu este valida";
                         return done(null, false, info);
                     }
-                    console.log("name test");
+
                     if(!namePatt.test(name.replace(/ /g,''))){
                         info.message = "Numele trebuie sa contina doar litere, minim 3";
                         return done(null, false, info);

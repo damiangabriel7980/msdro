@@ -51,7 +51,7 @@ module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
 
     // middleware to ensure user is logged in
     function isLoggedIn(req, res, next) {
-        console.log("check login");
+        
         if (req.isAuthenticated()){
             return next();
         }else{
@@ -501,8 +501,8 @@ module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
 //============================================================================================= generate token for resetting user password
     router.route('/requestPasswordReset')
         .post(function(req, res) {
-            console.log("here");
-            console.log(req.body);
+            
+            
             async.waterfall([
                 //generate unique token
                 function(done) {
