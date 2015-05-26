@@ -2,7 +2,6 @@ controllers.controller('RootController', ['$scope', '$rootScope', 'RootService',
 
     //navbar "despre" categories
     RootService.categories.query().$promise.then(function (resp) {
-        console.log(resp.success);
         $scope.navCategories = resp.success;
     });
 
