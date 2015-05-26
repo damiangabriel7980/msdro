@@ -7,6 +7,8 @@ const DISABLE_PATIENTS = my_config.disablePatients;
 var User = require('./models/user');
 var Roles = require('./models/roles');
 
+var MailerModule = require('./modules/mailer');
+
 var crypto   = require('crypto');
 var async = require('async');
 
@@ -17,7 +19,7 @@ if(DISABLE_PATIENTS){
     MAIN_VIEW = 'public/main.ejs';
 }
 
-module.exports = function(app, mandrill, logger, passport) {
+module.exports = function(app, logger, passport) {
 
     //access control origin
     app.all("/*", function(req, res, next) {
@@ -123,30 +125,29 @@ module.exports = function(app, mandrill, logger, passport) {
                             }else{
                                 //email user
                                 var emailTo = [{email: user.username, name: user.name}];
-                                mandrill('/messages/send-template', {
-                                    "template_name": "Staywell_completedReset",
-                                    "template_content": [
-                                        {
-                                            "name": "title",
-                                            "content": user.getEmailTitle()
-                                        },
-                                        {
-                                            "name": "name",
-                                            "content": user.name
-                                        }
-                                    ],
-                                    "message": {
-                                        from_email: 'adminMSD@qualitance.ro',
-                                        to: emailTo,
-                                        subject: 'Resetare parola MSD'
+                                var templateContent = [
+                                    {
+                                        "name": "title",
+                                        "content": user.getEmailTitle()
+                                    },
+                                    {
+                                        "name": "name",
+                                        "content": user.name
                                     }
-                                }, function(err){
-                                    if(err){
-                                        res.render('resetPass.ejs', {message : {message: 'Parola a fost schimbata.', type: 'success'}});
-                                    }else{
+                                ];
+                                MailerModule.send(
+                                    "Staywell_completedReset",
+                                    templateContent,
+                                    emailTo,
+                                    'Resetare parola MSD'
+                                ).then(
+                                    function (success) {
                                         res.render('resetPass.ejs', {message : {message: 'Parola a fost schimbata. Veti primi in scurt timp un e-mail de confirmare.', type: 'success'}});
+                                    },
+                                    function (err) {
+                                        res.render('resetPass.ejs', {message : {message: 'Parola a fost schimbata.', type: 'success'}});
                                     }
-                                });
+                                );
                             }
                         });
                     }

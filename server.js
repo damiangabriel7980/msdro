@@ -30,7 +30,6 @@ var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
-var email = require('mandrill-send')(mandrillKey);
 var mandrill = require('node-mandrill')(mandrillKey);
 var multer  = require('multer'); //for multipart form uploads
 var rooms = {},
@@ -75,7 +74,7 @@ require('./config/tokenAuth')(app,  logger, tokenSecret, pushServerAddr);
 app.use(express.static(path.join(__dirname, my_config.publicFolder)));
 
 // routes ======================================================================
-require('./app/routes.js')(app, mandrill, logger, passport); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, logger, passport); // load our routes and pass in our app and fully configured passport
 
 //create https server ==========================================================
 var secureServer = https.createServer(certificateOptions, app);
