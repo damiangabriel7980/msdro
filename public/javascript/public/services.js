@@ -124,6 +124,15 @@ services.factory('PublicService', ['$resource', function () {
                 case 2: return 'articole.detail'; break;
                 case 3: return 'elearning.detail'; break;
                 case 4: return 'downloads.detail'; break;
+                default: return ''; break;
+            }
+        },
+        getContentNamedType: function (int_type) {
+            switch(int_type){
+                case 1: return 'stire'; break;
+                case 2: return 'articol'; break;
+                case 3: return 'elearning'; break;
+                case 4: return 'download'; break;
                 default: break;
             }
         }
