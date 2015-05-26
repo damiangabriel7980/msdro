@@ -5,18 +5,15 @@ controllers.controller('HomeMobileNews', ['$scope', 'ContentService', function($
             var categories = [];
             categories.push({
                 name: "ULTIMELE NOUTATI",
-                content: resp.success.news,
-                sref: "stiri.detail"
+                content: resp.success.news
             });
             categories.push({
                 name: "CELE MAI CITITE ARTICOLE",
-                content: resp.success.articles,
-                sref: "articole.detail"
+                content: resp.success.articles
             });
             categories.push({
                 name: "DOWNLOADS",
-                content: resp.success.downloads,
-                sref: "downloads.detail"
+                content: resp.success.downloads
             });
             $scope.categories = categories;
         }

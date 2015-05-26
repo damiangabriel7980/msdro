@@ -116,6 +116,20 @@ services.factory('StateService', ['$state', function ($state) {
     }
 }]);
 
+services.factory('PublicService', ['$resource', function () {
+    return {
+        getSref: function (content_type) {
+            switch(content_type){
+                case 1: return 'stiri.detail'; break;
+                case 2: return 'articole.detail'; break;
+                case 3: return 'elearning.detail'; break;
+                case 4: return 'downloads.detail'; break;
+                default: break;
+            }
+        }
+    }
+}]);
+
 services.factory('RootService', ['$resource', function ($resource) {
     return {
         categories: $resource('apiPublic/categories', {}, {

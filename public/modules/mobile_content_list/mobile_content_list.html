@@ -1,10 +1,10 @@
 <div class="col-xs-12 noPadding">
     <div class="col-xs-12 content" ng-repeat="content in content | limitTo:limit||content.length track by $index">
-        <div class="col-xs-4 image" ng-click="navigateTo(content._id)">
+        <div class="col-xs-4 image" ng-click="navigateTo(content)">
             <img ng-src="{{content.image_path?imagePrefix+content.image_path:defaultImage}}">
         </div>
         <div class="col-xs-8 description">
-            <div class="col-xs-12 title" ng-click="navigateTo(content._id)" ng-bind-html="trustAsHtml(content.title)"></div>
+            <div class="col-xs-12 title" ng-click="navigateTo(content)" ng-bind-html="trustAsHtml(content.title)"></div>
             <div class="col-xs-12 content" ng-bind-html="trustAsHtml(content.text)"></div>
         </div>
     </div>
