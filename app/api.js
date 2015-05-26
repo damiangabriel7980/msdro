@@ -33,6 +33,7 @@ var DPOC_Devices = require('./models/DPOC_Devices');
 
 //modules
 var UserModule = require('./modules/user');
+var MailerModule = require('./modules/mailer');
 
 //live Streaming
 var socketio = require('socket.io'),
@@ -370,7 +371,7 @@ var sendPushNotification = function (message, arrayUsersIds, callback) {
 
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, amazon, router) {
+module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, router) {
 
 //======================================================================================================= secure routes
 
@@ -3698,35 +3699,33 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                     if(err){
                         deferred.reject(err);
                     }else{
-                        mandrill('/messages/send-template', {
-                            "template_name": "dpoc_register",
-                            "template_content": [
-                                {
-                                    "name": "name",
-                                    "content": device.name
-                                },
-                                {
-                                    "name": "applicationLink",
-                                    "content": my_config.dpocAppLink
-                                },
-                                {
-                                    "name": "activationCode",
-                                    "content": code
-                                }
-                            ],
-                            "message": {
-                                from_email: 'adminMSD@qualitance.ro',
-                                to: [{email: device.email, name: device.name}],
-                                subject: 'Activare cont DPOC'
+                        var templateContent = [
+                            {
+                                "name": "name",
+                                "content": device.name
+                            },
+                            {
+                                "name": "applicationLink",
+                                "content": my_config.dpocAppLink
+                            },
+                            {
+                                "name": "activationCode",
+                                "content": code
                             }
-                        }, function(err){
-                            if(err){
-                                logger.error(err);
-                                deferred.reject("Eroare la trimitere email");
-                            }else{
+                        ];
+                        MailerModule.send(
+                            "dpoc_register",
+                            templateContent,
+                            [{email: device.email, name: device.name}],
+                            'Activare cont DPOC'
+                        ).then(
+                            function (success) {
                                 deferred.resolve();
+                            },
+                            function (err) {
+                                deferred.reject("Eroare la trimitere email");
                             }
-                        });
+                        );
                     }
                 }
             );
@@ -3959,39 +3958,38 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                         if(user.enabled){
                                             emailTemplate = "Staywell_createdAccount_noActivation";
                                         }
-                                        mandrill('/messages/send-template', {
-                                            "template_name": emailTemplate,
-                                            "template_content": [
-                                                {
-                                                    "name": "title",
-                                                    "content": user.getEmailTitle()
-                                                },
-                                                {
-                                                    "name": "name",
-                                                    "content": user.name
-                                                },
-                                                {
-                                                    "name": "activationLink",
-                                                    "content": 'http://' + req.headers.host + '/activateAccountStaywell/' + activationToken
-                                                },
-                                                {
-                                                    "name": "loginAddress",
-                                                    "content": 'http://' + req.headers.host + '/login'
-                                                }
-                                            ],
-                                            "message": {
-                                                from_email: 'adminMSD@qualitance.ro',
-                                                to: emailTo,
-                                                subject: 'Activare cont MSD'
+                                        var templateContent = [
+                                            {
+                                                "name": "title",
+                                                "content": user.getEmailTitle()
+                                            },
+                                            {
+                                                "name": "name",
+                                                "content": user.name
+                                            },
+                                            {
+                                                "name": "activationLink",
+                                                "content": 'http://' + req.headers.host + '/activateAccountStaywell/' + activationToken
+                                            },
+                                            {
+                                                "name": "loginAddress",
+                                                "content": 'http://' + req.headers.host + '/login'
                                             }
-                                        }, function(err){
-                                            if(err) {
+                                        ];
+                                        MailerModule.send(
+                                            emailTemplate,
+                                            templateContent,
+                                            emailTo,
+                                            'Activare cont MSD'
+                                        ).then(
+                                            function (success) {
+                                                res.send({message: "Updated "+wres+" user. Email sent"});
+                                            },
+                                            function (err) {
                                                 logger.error(err);
                                                 res.send(err);
-                                            }else{
-                                                res.send({message: "Updated "+wres+" user. Email sent"});
                                             }
-                                        });
+                                        );
                                     });
                                 }
                             });
@@ -4002,31 +4000,22 @@ module.exports = function(app, sessionSecret, mandrill, logger, pushServerAddr, 
                                     res.send(err);
                                 }else{
                                     var emailTo = [{email: user.username, name: user.name}];
-                                    mandrill('/messages/send-template', {
-                                        "template_name": "Staywell_rejectedAccountStaywell",
-                                        "template_content": [
-                                            {
-                                                "name": "title",
-                                                "content": user.getEmailTitle()
-                                            },
-                                            {
-                                                "name": "name",
-                                                "content": user.name
-                                            }
-                                        ],
-                                        "message": {
-                                            from_email: 'adminMSD@qualitance.ro',
-                                            to: emailTo,
-                                            subject: 'Activare cont MSD'
+                                    var templateContent = [
+                                        {
+                                            "name": "title",
+                                            "content": user.getEmailTitle()
+                                        },
+                                        {
+                                            "name": "name",
+                                            "content": user.name
                                         }
-                                    }, function(err){
-                                        if(err) {
-                                            logger.error(err);
-                                            res.send(err);
-                                        }else{
-                                            res.send({message: "Updated "+wres+" user. Email sent"});
-                                        }
-                                    });
+                                    ];
+                                    MailerModule.send(
+                                        "Staywell_rejectedAccountStaywell",
+                                        templateContent,
+                                        emailTo,
+                                        'Activare cont MSD'
+                                    );
                                 }
                             });
                         }else{
