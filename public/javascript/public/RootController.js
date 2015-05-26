@@ -5,6 +5,16 @@ controllers.controller('RootController', ['$scope', '$rootScope', 'RootService',
         $scope.navCategories = resp.success;
     });
 
+    $rootScope.getNavCategoryName = function (category_id) {
+        var categories = $scope.navCategories;
+        if(categories){
+            for(var i=0; i<categories.length; i++){
+                if(categories[i]._id === category_id) return categories[i].name;
+            }
+            return "";
+        }
+    };
+
     //navbar collapse
     $scope.navCollapsed = true;
     $scope.closeNavbar = function () {

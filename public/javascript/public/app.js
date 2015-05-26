@@ -69,7 +69,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('articole', {
             abstract: true,
-            url: '/articole/:category/:category_name',
+            url: '/articole/:category',
             templateUrl: 'partials/public/articole/root.html',
             controller: 'ArticlesView'
         })
