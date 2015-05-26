@@ -6394,7 +6394,10 @@ html body .rootView {
 }
 @media (max-width: 1023px) {
   .navbar-fixed-top .navbar-brand {
-    padding: 0;
+    padding: 5px 0 0 0;
+  }
+  .navbar-fixed-top .navbar-brand img {
+    width: 95px;
   }
 }
 .navbar-fixed-top .navbar-link a {
@@ -6944,6 +6947,11 @@ html body .rootView {
   margin-top: 30px;
   padding: 0;
 }
+@media (max-width: 1023px) {
+  .contentLayout {
+    margin-top: 0;
+  }
+}
 .contentLayout .mostRead .mainTitle {
   font-size: 22px;
   margin-bottom: 15px;
@@ -7072,6 +7080,11 @@ html body .rootView {
 .downloadsLayout {
   margin-top: 30px;
   padding: 0;
+}
+@media (max-width: 1023px) {
+  .downloadsLayout {
+    margin-top: 0;
+  }
 }
 .downloadsLayout .mostDownloaded {
   padding: 0 15px 0 30px;
@@ -7217,6 +7230,11 @@ html body .rootView {
 .elearningLayout {
   margin-top: 30px;
   padding: 0;
+}
+@media (max-width: 1023px) {
+  .elearningLayout {
+    margin-top: 0;
+  }
 }
 .elearningLayout .categories {
   padding: 0 15px 0 30px;

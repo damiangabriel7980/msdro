@@ -119,7 +119,10 @@ html{
       width: 125px;
     }
     @media (max-width: @grid-float-breakpoint-max) {
-      padding: 0;
+      padding: 5px 0 0 0;
+      img{
+        width: 95px;
+      }
     }
   }
   .navbar-link{
@@ -615,6 +618,9 @@ html{
 
 .contentLayout{
   margin-top: 30px;
+  @media (max-width: @grid-float-breakpoint-max) {
+    margin-top: 0;
+  }
   padding: 0;
   .mostRead{
     .mainTitle{
@@ -753,6 +759,9 @@ html{
 
 .downloadsLayout{
   margin-top: 30px;
+  @media (max-width: @grid-float-breakpoint-max) {
+    margin-top: 0;
+  }
   padding: 0;
   .mostDownloaded{
     padding: 0 15px 0 30px;
@@ -905,6 +914,9 @@ html{
 
 .elearningLayout{
   margin-top: 30px;
+  @media (max-width: @grid-float-breakpoint-max) {
+    margin-top: 0;
+  }
   padding: 0;
   .categories{
     padding: 0 15px 0 30px;
