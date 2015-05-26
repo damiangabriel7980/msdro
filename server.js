@@ -72,7 +72,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 //token auth ===================================================================
 require('./config/tokenAuth')(app,  logger, tokenSecret, pushServerAddr);
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, my_config.publicFolder)));
 
 // routes ======================================================================
 require('./app/routes.js')(app, mandrill, logger, passport); // load our routes and pass in our app and fully configured passport

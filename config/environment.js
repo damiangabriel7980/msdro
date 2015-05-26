@@ -11,7 +11,8 @@ module.exports = function(){
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
                 GA_code: "UA-61695877-1",
                 disablePatients: false,
-                dpocAppLink: "unavailable"
+                dpocAppLink: "unavailable",
+                publicFolder: "public"
             };
 
         case 'staging':
@@ -25,7 +26,8 @@ module.exports = function(){
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
                 GA_code: "UA-61695877-1",
                 disablePatients: false,
-                dpocAppLink: "unavailable"
+                dpocAppLink: "unavailable",
+                publicFolder: "public_min"
             };
 
         case 'production':
@@ -39,7 +41,8 @@ module.exports = function(){
                 mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
                 GA_code: "UA-62113963-1",
                 disablePatients: true,
-                dpocAppLink: "https://msd-ios-distribution.s3.amazonaws.com/MSD_dpoc_InHouse/index.html"
+                dpocAppLink: "https://msd-ios-distribution.s3.amazonaws.com/MSD_dpoc_InHouse/index.html",
+                publicFolder: "public_min"
             };
 
         default:

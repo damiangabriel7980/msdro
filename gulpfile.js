@@ -73,16 +73,31 @@ gulp.task('minify_all', ['minify_css', 'minify_js'], function (callback) {
     callback();
 });
 
+gulp.task('copy_components', function () {
+    return gulp.src('./public/components/**/*.*')
+        .pipe(gulp.dest('./public_min/components'));
+});
+
+gulp.task('copy_partials', function () {
+    return gulp.src('./public/partials/**/*.*')
+        .pipe(gulp.dest('./public_min/partials'));
+});
+
+gulp.task('copy_module_templates', function () {
+    return gulp.src('./public/modules/**/*.{html,eot,svg,ttf,woff}')
+        .pipe(gulp.dest('./public_min/modules'));
+});
+
 gulp.task('minify_css', function () {
-    return gulp.src('./public/**/*.css')
+    return gulp.src(['./public/**/*.css','!./public/components/**/*.*'])
         .pipe(minifyCSS())
-        .pipe(gulp.dest('./public'));
+        .pipe(gulp.dest('./public_min'));
 });
 
 gulp.task('minify_js', function () {
     return gulp.src(['./public/**/*.js','!./public/components/**/*.*'])
         .pipe(uglify())
-        .pipe(gulp.dest('./public'));
+        .pipe(gulp.dest('./public_min'));
 });
 
 gulp.task('generate_manifests', ['minify_all'], function () {
@@ -116,7 +131,7 @@ gulp.task('run', function () {
     })
 });
 
-gulp.task('run_staging', ['minify_all'], function () {
+gulp.task('run_staging', ['minify_all', 'copy_components', 'copy_partials', 'copy_module_templates'], function () {
     nodemon({
         script: 'server.js',
         ext: 'js html css',
@@ -140,7 +155,7 @@ gulp.task('run_staging_no_min', function () {
     })
 });
 
-gulp.task('run_production', ['minify_all'], function () {
+gulp.task('run_production', ['minify_all', 'copy_components', 'copy_partials', 'copy_module_templates'], function () {
     nodemon({
         script: 'server.js',
         ext: 'js html css',

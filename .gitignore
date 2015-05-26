@@ -22,3 +22,6 @@ dist
 .sass-cache
 public/components
 .idea/
+
+public_min
+public/modules/bootstrap_noVariables/**/*.css
