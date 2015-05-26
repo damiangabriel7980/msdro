@@ -61,9 +61,9 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
     //============================================================================================== profession / group
 
     $scope.selectProfession = function () {
-        AuthService.specialGroups.query({profession: $scope.user.profession}).$promise.then(function (response) {
+        AuthService.signupGroups.query({profession: $scope.user.profession}).$promise.then(function (response) {
             $scope.groups = response;
-            $scope.user.groupsID = response[0]._id;
+            if(response[0]) $scope.user.groupsID = response[0]._id;
         });
     };
 

@@ -276,7 +276,7 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
         professions: $resource('apiGloballyShared/accountActivation/professions', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        specialGroups: $resource('apiGloballyShared/accountActivation/specialGroups/:profession', {}, {
+        signupGroups: $resource('apiGloballyShared/accountActivation/signupGroups/:profession', {}, {
             query: { method: 'GET', isArray: true }
         }),
         counties: $resource('apiGloballyShared/accountActivation/counties', {}, {
