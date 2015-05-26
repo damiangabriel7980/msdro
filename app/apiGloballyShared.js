@@ -12,6 +12,8 @@ var crypto   = require('crypto');
 var async = require('async');
 var SHA512   = require('crypto-js/sha512');
 
+var MailerModule = require('./modules/mailer');
+
 const activationPrefixStaywell = function (hostname) {
     return 'http://' + hostname + '/activateAccountStaywell/';
 };
@@ -37,7 +39,7 @@ var mergeKeys = function (obj1, obj2){
     return obj3;
 };
 
-module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
+module.exports = function(app, env, globals, logger, amazon, router) {
 
     //access control allow origin *
     app.all("/apiGloballyShared/*", function(req, res, next) {
@@ -351,9 +353,9 @@ module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
                     var activationLink = activationPrefixStaywell(req.headers.host) + activationToken;
                     var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
 
-                    mandrill('/messages/send-template', {
-                        "template_name": "Staywell_createdAccount",
-                        "template_content": [
+                    MailerModule.send(
+                        "Staywell_createdAccount",
+                        [
                             {
                                 "name": "title",
                                 "content": new User({title: req.staywellUser.title}).getEmailTitle()
@@ -367,16 +369,16 @@ module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
                                 "content": activationLink
                             }
                         ],
-                        "message": {
-                            from_email: 'adminMSD@qualitance.ro',
-                            to: emailTo,
-                            subject: 'Activare cont MSD'
-                        }
-                    }, function(err){
-                        if(err) {
+                        emailTo,
+                        'Activare cont MSD'
+                    ).then(
+                        function (success) {
+                            //do nothing
+                        },
+                        function (err) {
                             logger.error(err);
                         }
-                    });
+                    );
                 });
             }
         });
@@ -409,9 +411,9 @@ module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
                     var activationLink = activationPrefixMobile(req.headers.host) + activationToken;
                     var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
 
-                    mandrill('/messages/send-template', {
-                        "template_name": "Staywell_createdAccountMobile",
-                        "template_content": [
+                    MailerModule.send(
+                        "Staywell_createdAccountMobile",
+                        [
                             {
                                 "name": "title",
                                 "content": new User({title: req.staywellUser.title}).getEmailTitle()
@@ -425,16 +427,16 @@ module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
                                 "content": activationLink
                             }
                         ],
-                        "message": {
-                            from_email: 'adminMSD@qualitance.ro',
-                            to: emailTo,
-                            subject: 'Activare cont MSD'
-                        }
-                    }, function(err){
-                        if(err) {
+                        emailTo,
+                        'Activare cont MSD'
+                    ).then(
+                        function (success) {
+                            //do nothing
+                        },
+                        function (err) {
                             logger.error(err);
                         }
-                    });
+                    );
                 }
             });
         });
@@ -531,9 +533,9 @@ module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
                     //email user
                     var emailTo = [{email: user.username, name: user.name}];
 
-                    mandrill('/messages/send-template', {
-                        "template_name": "Staywell_requestedReset",
-                        "template_content": [
+                    MailerModule.send(
+                        "Staywell_requestedReset",
+                        [
                             {
                                 "name": "title",
                                 "content": user.getEmailTitle()
@@ -547,14 +549,16 @@ module.exports = function(app, env, globals, mandrill, logger, amazon, router) {
                                 "content": resetPasswordPrefix(req.headers.host) + token
                             }
                         ],
-                        "message": {
-                            from_email: 'adminMSD@qualitance.ro',
-                            to: emailTo,
-                            subject: 'Resetare parola MSD'
+                        emailTo,
+                        'Resetare parola MSD'
+                    ).then(
+                        function (success) {
+                            done(false, user.username);
+                        },
+                        function (err) {
+                            done(err, user.username);
                         }
-                    }, function(err){
-                        done(err, user.username);
-                    });
+                    );
                 }
             ], function(err, user) {
                 if (err){
