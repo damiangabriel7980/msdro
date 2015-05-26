@@ -129,8 +129,8 @@ services.factory('HomeService', ['$resource', function($resource){
         getCarouselData: $resource('apiPublic/getCarouselData/', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        getSearchResults: $resource('apiPublic/publicSearchResults/', {}, {
-            query: { method: 'POST', isArray: true }
+        searchResults: $resource('apiPublic/publicSearch', {}, {
+            query: { method: 'GET', isArray: false }
         }),
         events: $resource('apiPublic/events', {}, {
             query: { method: 'GET', isArray: true }

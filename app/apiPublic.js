@@ -131,35 +131,26 @@ module.exports = function(app, logger, router) {
             });
         });
 
-    router.route('/publicSearchResults')
-        .post(function(req,res){
-            var checker=0;
-            var data=req.body.data;
-            PublicContent.search({
+    router.route('/publicSearch')
+        .get(function(req,res){
+            var term = req.query.term;
 
+            PublicContent.search({
                 query_string: {
-                    query: data,
+                    query: term,
                     default_operator: 'OR',
                     lowercase_expanded_terms: true
                 }
-
-            },{hydrate: true,hydrateOptions:{find:{enable:true}}}, function(err, results) {
-                if(err)
-                {
-                    res.json(err);
-                    return;
-                }
-                else
-                {
-                    console.log(results.hits.hits);
-                    if(results.hits.hits.length===0)
-                    {
-                        checker+=1;
-                        res.json([{answer:"Cautarea nu a returnat nici un rezultat!"}]);
-                    }
-                    else
-                    {
-                        res.json(results.hits.hits);
+            },{ hydrate: true, hydrateOptions: {find: {enable:true}}}, function(err, results) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true});
+                }else{
+                    //console.log(results.hits.hits);
+                    if(!results || !results.hits || !results.hits.hits){
+                        res.send({error: "Invalid response format"});
+                    }else{
+                        res.send({success: results.hits.hits});
                     }
 
                 }
