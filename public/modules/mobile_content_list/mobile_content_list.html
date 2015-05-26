@@ -5,6 +5,7 @@
         </div>
         <div class="col-xs-8 description">
             <div class="col-xs-12 title" ng-click="navigateTo(content)" ng-bind-html="trustAsHtml(content.title)"></div>
+            <div class="col-xs-12 type" ng-if="showType">{{getContentNamedType(content.type)}}</div>
             <div class="col-xs-12 content" ng-bind-html="trustAsHtml(content.text)"></div>
         </div>
     </div>

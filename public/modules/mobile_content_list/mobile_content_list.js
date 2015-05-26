@@ -11,13 +11,17 @@
                 content: '=',
                 limit: '=',
                 imagePrefix: '=',
-                defaultImage: '='
+                defaultImage: '=',
+                showType: '='
             },
             link: function(scope, element, attrs) {
                 scope.trustAsHtml = $sce.trustAsHtml;
                 scope.navigateTo = function (content) {
                     $state.go(PublicService.getSref(content.type), {id: content._id});
-                }
+                };
+                scope.getContentNamedType = function (int_type) {
+                    return PublicService.getContentNamedType(int_type);
+                };
             }
         };
     }]);
