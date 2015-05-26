@@ -6881,12 +6881,12 @@ html body .rootView {
   /* IE6-9 */
 
 }
-.mobileHome .category {
+.mobileArea .category {
   padding: 0;
 }
-.mobileHome .category .name {
-  padding: 10px 0 20px 0;
-  font-size: 20px;
+.mobileArea .category .name {
+  padding: 10px 0 12px 0;
+  font-size: 18px;
 }
 .searchResults .article {
   padding: 0;
