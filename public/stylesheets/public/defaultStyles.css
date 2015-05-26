@@ -6894,6 +6894,15 @@ html body .rootView {
   padding: 10px 0 12px 0;
   font-size: 18px;
 }
+.searchResults .mainTitle {
+  padding: 10px 0 12px 0;
+  font-size: 18px;
+}
+@media (min-width: 1024px) {
+  .searchResults .mainTitle {
+    margin-top: 30px;
+  }
+}
 .searchResults .article {
   padding: 0;
 }
