@@ -137,7 +137,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             parent:'elearning.teste',
             url: '/:id',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                console.log('Open modal');
+
                 $modal.open({
                     templateUrl: 'partials/medic/elearning/MultimediaBeforeQuiz.ejs',
                     backdrop: 'static',
@@ -153,7 +153,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             parent:'elearning.teste',
             url: '/:id/questions/:idd',
             onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                console.log('Open modal');
+
                 $modal.open({
                     templateUrl: 'partials/medic/elearning/testeQuestions.ejs',
                     backdrop: 'static',
@@ -274,8 +274,8 @@ app.run(
                 return (ua.indexOf("android") > -1 && ua.indexOf("mobile")==-1);
             };
             $rootScope.androidTab=isAndroidTablet();
-            console.log($rootScope.isIpad);
-            console.log($rootScope.androidTab);
+
+
             window.onresize = function(){
                 $rootScope.deviceWidth= window.innerWidth
                     || document.documentElement.clientWidth

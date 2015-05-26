@@ -35,9 +35,9 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
     };
 
     $scope.login = function () {
-        console.log(this);
+
         AuthService.login.query({email: this.email, password: this.password,remember: this.remember}).$promise.then(function (resp) {
-            console.log(resp);
+
             if(resp.error){
                 $scope.resetAlert("danger", resp.message);
             }else{
@@ -54,7 +54,7 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
     };
 
     $scope.reset = function () {
-        console.log(this.email);
+
         if(this.email==undefined)
         {
             $scope.resetAlert("danger","Email-ul este obligatoriu!");

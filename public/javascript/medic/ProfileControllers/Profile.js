@@ -162,8 +162,8 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
             var toSend = {};
             toSend.name = this.fullname;
             toSend.title = this.userData.title;
-            console.log("====================");
-            console.log(toSend.title);
+
+
             toSend.phone = this.phone;
             toSend['therapeutic-areasID'] = this.newAreas;
             toSend.citiesID = [this.city.selected._id];

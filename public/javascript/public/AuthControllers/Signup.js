@@ -137,10 +137,10 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                 infoSource = is.type.name;
             }
         }
-        console.log(infoSource);
+
         //send info source stats
         if(infoSource && window.ga){
-            console.log("Send info source");
+
             ga('send', {
                 hitType: 'event',
                 eventCategory: 'userStats',
@@ -156,7 +156,7 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
             if(err){
                 $scope.resetAlert("danger", err);
             }else{
-                console.log(resp);
+
                 if(resp.error){
                     $scope.resetAlert("danger", resp.message);
                 }else{
@@ -181,7 +181,7 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
             if(err){
                 $scope.resetAlert("danger", err);
             }else{
-                console.log(resp);
+
                 if(resp.error){
                     $scope.resetAlert("danger", resp.message);
                 }else{

@@ -149,14 +149,14 @@ app.directive('footerBottom', ['$window', '$rootScope', '$timeout', '$state', fu
                 if(!lockInit){
                     lockInit = true;
                     if(!stateIsChanging){
-                        //console.log("init");
+                        //
                         containerHeight = container.offsetHeight;
                         windowHeight = angular.element($window)[0].innerHeight;
                         calculatedPadding = windowHeight - containerHeight - fixedOffset;
                         if(calculatedPadding < 0) calculatedPadding = 0;
                         if(calculatedPadding != padding){
                             padding = calculatedPadding;
-                            //console.log("render");
+                            //
                             footer.css('padding-top',padding+'px');
                         }
                     }

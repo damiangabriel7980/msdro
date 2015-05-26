@@ -1,7 +1,7 @@
 controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce', '$timeout', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce, $timeout){
 
-    console.log("==============================");
-    console.log($stateParams);
+
+
 
     var loadData = function () {
         if($scope.$parent){

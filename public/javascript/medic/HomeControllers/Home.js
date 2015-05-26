@@ -34,7 +34,7 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
     });
 
     $scope.carouselNavigate = function (carouselItem) {
-        console.log(carouselItem);
+
         if(carouselItem.redirect_to_href){
             window.location.href = carouselItem.redirect_to_href;
         }else{

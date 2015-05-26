@@ -11,18 +11,18 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
                     specialGroup = null;
                 }
                 if(checkGroupInGroups(specialGroup, resp)){
-                    console.log("special group found");
+
                     $scope.selectSpecialGroup(specialGroup);
                 }else{
-                    console.log("special group found in storage, but not on user");
+
                     $scope.selectSpecialGroup(resp[0]);
                 }
             } else {
-                console.log("special group not found");
+
                 $scope.selectSpecialGroup(resp[0]);
             }
         } else {
-            console.log("no special groups");
+
             $rootScope.specialGroupSelected = null;
             localStorage.removeItem('specialGroupSelected');
         }
@@ -38,7 +38,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         if(!$rootScope.specialGroupSelected)
             $rootScope.specialGroupSelected={_id:0};
         if(group._id!= $rootScope.specialGroupSelected._id){
-            console.log("here");
+
             //select special group and add it to local storage
             $rootScope.specialGroupSelected = group;
             localStorage.specialGroupSelected = angular.toJson(group);
