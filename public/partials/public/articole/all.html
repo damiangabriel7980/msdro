@@ -20,8 +20,11 @@
             <div class="col-sm-12 divider" ng-if="$index!=articlesLimit-1 && $index!=news.length-1"></div>
         </div>
     </div>
-    <div class="col-sm-12 noPadding" ng-if="isMobile(true)">
-        <mobile-content-list content="news" limit="articlesLimit" image-prefix="pathAmazonDev" default-image="defaultArticleImage" sref="'articole.detail'"></mobile-content-list>
+    <div class="col-sm-12 noPadding mobileArea" ng-if="isMobile(true)">
+        <div class="col-xs-12 category">
+            <div class="col-xs-12 name">DESPRE - {{categoryName}}</div>
+            <mobile-content-list content="news" limit="articlesLimit" image-prefix="pathAmazonDev" default-image="defaultArticleImage" sref="'articole.detail'"></mobile-content-list>
+        </div>
     </div>
 </div>
 <div class="col-sm-12 text-center" ng-style="{'display':articlesLimit<news.length?'initial':'none'}">

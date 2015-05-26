@@ -1,6 +1,7 @@
 controllers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 'ContentService', function($scope, $rootScope, $stateParams, ContentService) {
 
     $scope.articlesLimit = 3;
+    $scope.categoryName = $stateParams.category_name;
 
     //------------------------------------------------------------------------------------------------- get all content
 

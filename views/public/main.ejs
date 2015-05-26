@@ -167,7 +167,7 @@
                                 Despre <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li ng-repeat="category in navCategories" ui-sref="articole.all({category: category._id})"><a>{{category.name}}</a></li>
+                                <li ng-repeat="category in navCategories" ui-sref="articole.all({category: category._id, category_name: category.name})"><a>{{category.name}}</a></li>
                             </ul>
                         </li>
                         <li ng-class="{'active': $state.includes('elearning')}" ui-sref="elearning.all({area: 0})"><a>Elearning</a></li>
