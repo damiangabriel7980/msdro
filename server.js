@@ -5,7 +5,6 @@ console.log(my_config);
 
 var sessionSecret = "yours3cr3tisveryveryvvverysafew1thmee";
 var tokenSecret = "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss";
-var mandrillKey = my_config.mandrillKey;
 var pushServerAddr = my_config.pushServerAddress;
 
 //=========================================================== https certificates
@@ -30,7 +29,6 @@ var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
-var mandrill = require('node-mandrill')(mandrillKey);
 var multer  = require('multer'); //for multipart form uploads
 var rooms = {},
     userIds = {};
