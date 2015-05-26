@@ -5,7 +5,9 @@ var SHA512   = require('crypto-js/sha512');
 var Parameters = require('./models/parameters');
 var DPOC_Devices = require('./models/DPOC_Devices');
 
-module.exports = function(app, mandrill, logger, router) {
+var MailerModule = require('./modules/mailer');
+
+module.exports = function(app, logger, router) {
 
     //access control allow origin *
     app.all("/apiDPOC/*", function(req, res, next) {
@@ -86,62 +88,60 @@ module.exports = function(app, mandrill, logger, router) {
                         patientSex = "Vezi descriere";
                     }
 
-                    mandrill('/messages/send-template', {
-                        "template_name": "DPOC",
-                        "template_content": [
-                            {
-                                "name": "message",
-                                "content": message
-                            },
-                            {
-                                "name": "name",
-                                "content": req.body.name
-                            },
-                            {
-                                "name": "patientNumber",
-                                "content": req.body.patientNumber
-                            },
-                            {
-                                "name": "patientSex",
-                                "content": patientSex
-                            },
-                            {
-                                "name": "phone",
-                                "content": phone
-                            },
-                            {
-                                "name": "reportType",
-                                "content": req.body.reportType
-                            },
-                            {
-                                "name": "reporterType",
-                                "content": req.body.reporterType
-                            },
-                            {
-                                "name": "selectedProduct",
-                                "content": req.body.selectedProduct
-                            },
-                            {
-                                "name": "deviceName",
-                                "content": req.nameDPOC
-                            }
-                        ],
-                        "message": {
-                            from_email: 'adminMSD@qualitance.ro',
-                            to: emailTo,
-                            subject:'DPOC Report'
+                    var templateContent = [
+                        {
+                            "name": "message",
+                            "content": message
+                        },
+                        {
+                            "name": "name",
+                            "content": req.body.name
+                        },
+                        {
+                            "name": "patientNumber",
+                            "content": req.body.patientNumber
+                        },
+                        {
+                            "name": "patientSex",
+                            "content": patientSex
+                        },
+                        {
+                            "name": "phone",
+                            "content": phone
+                        },
+                        {
+                            "name": "reportType",
+                            "content": req.body.reportType
+                        },
+                        {
+                            "name": "reporterType",
+                            "content": req.body.reporterType
+                        },
+                        {
+                            "name": "selectedProduct",
+                            "content": req.body.selectedProduct
+                        },
+                        {
+                            "name": "deviceName",
+                            "content": req.nameDPOC
                         }
-
-                    }, function(err){
-                        if(err) {
+                    ];
+                    MailerModule.send(
+                        "DPOC",
+                        templateContent,
+                        emailTo,
+                        'DPOC Report'
+                    ).then(
+                        function (success) {
+                            res.statusCode = 200;
+                            res.end();
+                        },
+                        function (err) {
                             logger.error(err);
                             res.statusCode = 500;
                             res.end();
-                        }else{
-                            res.statusCode = 200;
-                            res.end();
                         }
-                    });
+                    );
                 }
             });
         });
