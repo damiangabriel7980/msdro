@@ -13,6 +13,7 @@ var async = require('async');
 var SHA512   = require('crypto-js/sha512');
 
 var MailerModule = require('./modules/mailer');
+var UtilsModule = require('./modules/utils');
 
 const activationPrefixStaywell = function (hostname) {
     return 'http://' + hostname + '/activateAccountStaywell/';
@@ -60,26 +61,6 @@ module.exports = function(app, env, globals, logger, amazon, router) {
             res.status(403).end();
         }
     }
-
-    //trim every keys except the ones specified in the "fields" array
-    var trimObject = function (obj, fields) {
-        if(typeof obj !== "object") obj = {};
-        if(typeof fields !== "object") fields = [];
-        if(fields.constructor.toString().indexOf("Array") == -1) fields = [];
-        try{
-            var ret = {};
-            for(var key in obj){
-                if(obj.hasOwnProperty(key)){
-                    if(fields.indexOf(key) > -1){
-                        ret[key] = obj[key];
-                    }
-                }
-            }
-            return ret;
-        }catch(ex){
-            return {};
-        }
-    };
 
     //route for retrieving environment info; CAREFUL NOT TO INCLUDE SENSIBLE DATA
     router.route('/appSettings')
@@ -184,7 +165,8 @@ module.exports = function(app, env, globals, logger, amazon, router) {
         try{
             var activation = req.body.activation || {};
             //make sure only the info provided in the form is updated
-            var userData = trimObject(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions']);
+            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions']);
+            var userData = req.body.user;
             userData.groupsID = userData.groupsID || [];
 
             var phonePatt = new XRegExp('^[0-9]{10,20}$');

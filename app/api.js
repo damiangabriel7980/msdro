@@ -35,6 +35,7 @@ var Parameters = require('./models/parameters');
 //modules
 var UserModule = require('./modules/user');
 var MailerModule = require('./modules/mailer');
+var UtilsModule = require('./modules/utils');
 
 //live Streaming
 var socketio = require('socket.io'),
@@ -69,26 +70,6 @@ var Config = require('../config/environment.js'),
 var cookieSig = require('express-session/node_modules/cookie-signature');
 
 //================================================================================== useful db administration functions
-
-//trim every keys except the ones specified in the "fields" array
-var trimObject = function (obj, fields) {
-    if(typeof obj !== "object") obj = {};
-    if(typeof fields !== "object") fields = [];
-    if(fields.constructor.toString().indexOf("Array") == -1) fields = [];
-    try{
-        var ret = {};
-        for(var key in obj){
-            if(obj.hasOwnProperty(key)){
-                if(fields.indexOf(key) > -1){
-                    ret[key] = obj[key];
-                }
-            }
-        }
-        return ret;
-    }catch(ex){
-        return {};
-    }
-};
 
 //returns ONLY id's of entities connected to specified document in array
 var findConnectedEntitiesIds = function(connected_to_entity, connection_name, connected_to_id, callback){
@@ -4373,8 +4354,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
 
         .post(function (req, res) {
             var ans = {};
-            var newData = trimObject(req.body.newData,["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
-            
+            UtilsModule.allowFields(req.body.newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
+            var newData = req.body.newData;
+
             var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
             if((!namePatt.test(newData.name))){ //check name
