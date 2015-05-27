@@ -96,7 +96,7 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
         return $sce.trustAsHtml(data);
     };
 
-    $scope.deviceWidth = screen.availWidth;
+    //$scope.deviceWidth = screen.availWidth;
     /* --- carousel --- */
 
 

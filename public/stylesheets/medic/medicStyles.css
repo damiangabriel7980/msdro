@@ -6459,7 +6459,7 @@ ul.products li {
   height: 100%;
   border-right: 1px solid #000000;
 }
-@media (max-device-width: 768px) {
+@media (max-width: 1155px) {
   .homeStyles .leftColumn:after {
     border-right: 0px solid #000000;
   }
@@ -6599,7 +6599,7 @@ ul.products li {
   padding-bottom: 0px;
   padding-right: 0px;
 }
-@media (max-device-width: 767px) {
+@media (max-width: 767px) {
   .navbar-fixed-top .navbar-brand {
     padding-left: 0px;
     padding-top: 0px;
@@ -7798,7 +7798,7 @@ a:focus {
 .fixedHeightLogo {
   height: 50px;
 }
-@media (max-device-width: 767px) {
+@media (max-width: 1155px) {
   .fixedHeightLogo {
     height: 40px;
     margin-top: 9px;
