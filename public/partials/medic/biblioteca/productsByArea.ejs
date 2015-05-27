@@ -1,15 +1,15 @@
 <div class="col-md-11 col-xs-12
  noPadding">
     <div class="row noPadding">
-        <div class="row noPadding" style="text-align: center" ng-if="message!=''"><h4 ng-class="{'noMarginTop':deviceWidth<=1023}">{{message}}</h4></div>
-        <div ng-class="{'col-md-3 col-xs-12 productsPadding noPadding':deviceWidth>1023,'col-md-3 col-xs-12 noPadding padd25Bottom':deviceWidth<=1023}" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
-            <div ng-class="{'col-md-12 col-xs-12 well productMinHeight':deviceWidth>1023,'col-md-12 col-xs-12 noPadding':deviceWidth<=1023}">
-                <div ng-class="{'col-md-12 col-xs-12 noPadding text-center':deviceWidth>1023,'col-md-12 col-xs-4 col-sm-2 noPadding text-center':deviceWidth<=1023}">
-                    <img ng-class="{'img-responsive img-back img-thumbnail width100Percent':deviceWidth>1023,'img-responsive my-img-thumbnail':deviceWidth<=1023}" src="{{prod.image_path?amazon + prod.image_path:defaultProductImage}}" alt="{{prod.name}}"/>
+        <div class="row noPadding" style="text-align: center" ng-if="message!=''"><h4 ng-class="{'noMarginTop':deviceWidth<=1155}">{{message}}</h4></div>
+        <div ng-class="{'col-md-3 col-xs-12 productsPadding noPadding':deviceWidth>1155,'col-md-3 col-xs-12 noPadding padd25Bottom':deviceWidth<=1155}" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
+            <div ng-class="{'col-md-12 col-xs-12 well productMinHeight':deviceWidth>1155,'col-md-12 col-xs-12 noPadding':deviceWidth<=1155}">
+                <div ng-class="{'col-md-12 col-xs-12 noPadding text-center':deviceWidth>1155,'col-md-12 col-xs-4 col-sm-2 noPadding text-center':deviceWidth<=1155}">
+                    <img ng-class="{'img-responsive img-back img-thumbnail width100Percent':deviceWidth>1155,'img-responsive my-img-thumbnail':deviceWidth<=1155}" src="{{prod.image_path?amazon + prod.image_path:defaultProductImage}}" alt="{{prod.name}}"/>
                 </div>
-                <div ng-class="{'col-md-12 col-xs-12 noPadding contentBlockProducts textProduct productMinHeight':deviceWidth>1023,'col-md-12 col-xs-8 col-sm-10 padd25Left noPadding textHome':deviceWidth<=1023}">
-                    <div class="col-md-12 col-xs-12 noPadding MSDgreen hidden-xs hidden-sm handCursor" ui-sref="biblioteca.produse.prodById({id:prod._id})"><h4 ng-class="{'noMarginTop':deviceWidth<=1023}"><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
-                    <div class="col-md-12 col-xs-12 noPadding MSDgreen hidden-lg hidden-md " ui-sref="biblioteca.produse.prodById({id:prod._id})"><h4 ng-class="{'noMarginTop':deviceWidth<=1023}"><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
+                <div ng-class="{'col-md-12 col-xs-12 noPadding contentBlockProducts textProduct productMinHeight':deviceWidth>1155,'col-md-12 col-xs-8 col-sm-10 padd25Left noPadding textHome':deviceWidth<=1155}">
+                    <div class="col-md-12 col-xs-12 noPadding MSDgreen hidden-xs hidden-sm handCursor" ui-sref="biblioteca.produse.prodById({id:prod._id})"><h4 ng-class="{'noMarginTop':deviceWidth<=1155}"><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
+                    <div class="col-md-12 col-xs-12 noPadding MSDgreen hidden-lg hidden-md " ui-sref="biblioteca.produse.prodById({id:prod._id})"><h4 ng-class="{'noMarginTop':deviceWidth<=1155}"><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
                     <div class="col-md-12 col-xs-12 noPadding " convert-special conver="prod.description" ng-bind-html="convertAndTrustAsHtml(prod.description)"></div>
                 </div>
                 <div class="col-md-12 col-xs-12 noPadding">
