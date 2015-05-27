@@ -57,6 +57,7 @@
                             }
                         }
                         scope.areasOrganised = areasOrganised;
+                        scope.selectedArea = areasOrganised[0];
                     }
                 };
 
@@ -88,11 +89,9 @@
                 var refreshReturnedAreas = function () {
                     if(scope.selectedAreas){
                         scope.returnedAreas = [];
-                        console.log("refresh returned areas");
                         for(var i=0; i<scope.selectedAreas.length; i++){
                             scope.returnedAreas.push(scope.selectedAreas[i]._id.toString())
                         }
-                        console.log(scope.returnedAreas);
                     }
                 }
             }
