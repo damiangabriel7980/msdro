@@ -3825,6 +3825,28 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                     res.send({success: params});
                 }
             });
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            Parameters.findOne({_id: idToUpdate}).exec(function (err, parameter) {
+                if(err) {
+                    logger.error(err);
+                    res.send({error: true});
+                }else if(!parameter){
+                    logger.error("Update parameter - not found");
+                    res.send({error: true});
+                }else{
+                    UtilsModule.allowFields(req.body, ["default_value", "value"]);
+                    Parameters.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                        if(err){
+                            logger.error(err);
+                            res.send({error: true});
+                        }else{
+                            res.send({success: true});
+                        }
+                    });
+                }
+            });
         });
 
     router.route('/admin/users/ManageAccounts/users')

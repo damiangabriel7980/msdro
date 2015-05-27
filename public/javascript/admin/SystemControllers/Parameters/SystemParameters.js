@@ -3,7 +3,6 @@ controllers.controller('SystemParameters', ['$scope', 'SystemService', 'ngTableP
     var refreshTable = function () {
         SystemService.parameters.query().$promise.then(function (resp) {
             var data = resp.success;
-            console.log(data);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
