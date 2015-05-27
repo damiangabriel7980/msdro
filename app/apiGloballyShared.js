@@ -4,6 +4,7 @@ var ActivationCodes =require('./models/activationCodes');
 var Roles=require('./models/roles');
 var Professions = require('./models/professions');
 var Counties = require('./models/counties');
+var Parameters = require('./models/parameters');
 
 var mongoose = require('mongoose');
 var XRegExp  = require('xregexp').XRegExp;
@@ -320,6 +321,27 @@ module.exports = function(app, env, globals, logger, amazon, router) {
         });
     };
 
+    var notifyAdmin = function (user) {
+        if(user.state === "PENDING"){
+            //get mail_to value
+            Parameters.findOne({name: "TO_EMAIL"}, function (err, to_email) {
+                if(to_email){
+                    MailerModule.send(
+                        "Staywell_user_pending",
+                        [
+                            {
+                                "name": "user_email",
+                                "content": user.username
+                            }
+                        ],
+                        [{email: to_email.value || to_email.default_value}],
+                        "Utilizator in asteptare"
+                    );
+                }
+            });
+        }
+    };
+
     router.route('/createAccountStaywell')
         .post(validateCreateAccount, validateCompleteProfile, createAccount, uploadProof, function (req, res) {
             var info = {
@@ -329,6 +351,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 state: req.staywellUser.state
             };
             res.send(info);
+            notifyAdmin(req.staywellUser);
 
             if(req.staywellUser.state === "ACCEPTED"){
                 generateToken(req.staywellUser.username, function (err, activationToken) {
@@ -374,6 +397,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 state: req.staywellUser.state
             };
             res.send(info);
+            notifyAdmin(req.staywellUser);
         });
 
     router.route('/createAccountMobile')
