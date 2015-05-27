@@ -224,6 +224,10 @@ services.factory('SystemService', ['$resource', function($resource){
         codes: $resource('api/admin/system/activationCodes/codes', {}, {
             query: { method: 'GET', isArray: false },
             update: { method: 'PUT', isArray: false }
+        }),
+        parameters: $resource('api/admin/system/parameters', {}, {
+            query: { method: 'GET', isArray: false },
+            update: { method: 'PUT', isArray: false }
         })
     }
 }]);

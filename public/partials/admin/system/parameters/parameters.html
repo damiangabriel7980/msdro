@@ -1,0 +1,23 @@
+<div class = "col-md-12 well">
+    <div class="col-md-9"><h3>Parametrii de sistem</h3></div>
+</div>
+<div class="col-md-12">
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="param in $data">
+            <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
+                {{param.name}}
+            </td>
+            <td data-title="'Valoare default'" sortable="'default_value'">
+                {{param.default_value}}
+            </td>
+            <td data-title="'Valoare'" sortable="'value'">
+                {{param.value}}
+            </td>
+            <td data-title="'Actiuni'">
+                <div class="btn-group">
+                    <div class="btn btn-default" ng-click="editParam(param)"><i class="glyphicon glyphicon-cog"></i></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -290,6 +290,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: '/partials/admin/system/activationCodes/activationCodes.html',
             controller: 'ActivationCodes'
         })
+        .state('system.parameters', {
+            url: '/parameters',
+            templateUrl: '/partials/admin/system/parameters/parameters.html',
+            controller: 'SystemParameters'
+        })
 }]);
 
 app.run(

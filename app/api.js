@@ -30,6 +30,7 @@ var Presentations =require('./models/presentations');
 var CM_templates =require('./models/CM_templates');
 var ActivationCodes =require('./models/activationCodes');
 var DPOC_Devices = require('./models/DPOC_Devices');
+var Parameters = require('./models/parameters');
 
 //modules
 var UserModule = require('./modules/user');
@@ -3829,6 +3830,18 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             res.send({success: true});
                         }
                     });
+                }
+            });
+        });
+
+    router.route('/admin/system/parameters')
+        .get(function (req, res) {
+            Parameters.find({}).exec(function (err, params) {
+                if(err){
+                    logger.error(err);
+                    res.send({error: true});
+                }else{
+                    res.send({success: params});
                 }
             });
         });
