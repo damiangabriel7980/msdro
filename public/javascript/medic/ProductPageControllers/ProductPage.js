@@ -49,8 +49,16 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         }
     });
     $scope.goToMenuItemWithChildren=function(parent,child){
-        //$scope.mobileMenuTitle = child.title;
+        $scope.mobileMenuTitle = child.title;
         $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:child._id});
+    };
+    $scope.goToResourcesMobile=function(name){
+        $scope.mobileMenuTitle=name;
+        $state.go('groupSpecialProduct.files',{product_id: $scope.specialProductPage._id});
+    };
+    $scope.goToSpeakersMobile=function(name){
+        $scope.mobileMenuTitle=name;
+        $state.go('groupSpecialProduct.speakers',{product_id: $scope.specialProductPage._id});
     };
     $scope.goToSiteMapMobile=function(name){
       $scope.mobileMenuTitle=name;
