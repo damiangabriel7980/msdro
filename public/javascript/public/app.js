@@ -18,12 +18,24 @@ var app = angular.module('app',
         'offClick'
     ]);
 
-app.config(['$locationProvider', function($location) {
-    $location.hashPrefix('!');
+app.config(['$locationProvider', function($locationProvider) {
+    $locationProvider.hashPrefix(HASH_PREFIX);
 }]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/home/noutati");
+    $urlRouterProvider.rule(function ($injector, $location) {
+        console.log($location.url());
+        if(REQUESTED_PRO) {
+            REDIRECT_AFTER_LOGIN = $location.url();
+            REQUESTED_PRO = 0;
+            $location.path("/home/noutati");
+        }
+    });
+    $urlRouterProvider.otherwise(function ($injector, $location) {
+        if(!REQUESTED_PRO) {
+            $location.path("/home/noutati");
+        }
+    });
     $stateProvider
         .state('home',{
             templateUrl: 'partials/public/home.html',
@@ -120,8 +132,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils',
-        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils) {
+    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location',
+        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location) {
 
             $rootScope.accessRoute = ACCESS_ROUTE;
 
@@ -195,8 +207,18 @@ app.run(
                             return intent;
                         }
                     }
-                });
+                })
+                    .result.finally(function () {
+                        //console.log("modal closed");
+                        REDIRECT_AFTER_LOGIN = null;
+                    });
             };
+
+//            $rootScope.$on('$locationChangeStart', function (event) {
+//                console.log("change");
+//                console.log($location.host());
+//                console.log($location.url());
+//            })
         }
     ]
 );

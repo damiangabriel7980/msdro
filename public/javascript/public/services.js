@@ -260,6 +260,11 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
             callback(activation);
         }
     };
+    var getProHref = function () {
+        var href = "pro";
+        if(REDIRECT_AFTER_LOGIN) href+= "#"+HASH_PREFIX+REDIRECT_AFTER_LOGIN;
+        return href;
+    };
     var completeProfile = $resource('apiGloballyShared/completeProfile', {}, {
         save: {method:'POST'}
     });
@@ -322,6 +327,7 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
                     });
                 }
             });
-        }
+        },
+        getProHref: getProHref
     }
 }]);

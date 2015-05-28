@@ -162,7 +162,7 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
                 }else{
                     sendInfoSource(is);
                     if(resp.state === "ACCEPTED"){
-                        $window.location.href = "pro";
+                        $window.location.href = AuthService.getProHref();
                     }else{
                         //awaiting proof acceptance (48 h)
                         $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user, title: "Completare profil"});

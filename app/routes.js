@@ -35,7 +35,7 @@ module.exports = function(app, logger, passport) {
 // normal routes ===============================================================
 
     app.get('/', function (req, res) {
-        var requestedActivation = 0, accountActivated = 0, showLogin = 0, accessRoute="", GA_code = my_config.GA_code;
+        var requestedPRO= 0, requestedActivation = 0, accountActivated = 0, showLogin = 0, accessRoute="", GA_code = my_config.GA_code;
         if(req.query._escaped_fragment_){
             // _escaped_fragment_ holds a route that a crawler tries to access
             // the crawler doesn't know how to access routes, so we will send
@@ -45,6 +45,10 @@ module.exports = function(app, logger, passport) {
         if(req.isAuthenticated()){
             res.redirect('/pro');
         }else{
+            if(req.session.requestedPRO){
+                requestedPRO = 1;
+                delete req.session.requestedPRO;
+            }
             if(req.session.requestedActivation){
                 requestedActivation = 1;
                 delete req.session.requestedActivation;
@@ -60,6 +64,7 @@ module.exports = function(app, logger, passport) {
             res.render(MAIN_VIEW, {
                 amazonBucket: my_config.amazonBucket,
                 amazonPrefix: my_config.amazonPrefix,
+                requestedPRO: requestedPRO,
                 requestedActivation: requestedActivation,
                 accountActivated: accountActivated,
                 showLogin: showLogin,
@@ -70,8 +75,15 @@ module.exports = function(app, logger, passport) {
     });
 
 	// show the home page (will also have our login links)
-	app.get('/pro', isLoggedIn, function(req, res) {
-        transportUser(req, res);
+	app.get('/pro', function(req, res) {
+        if(req.isAuthenticated()){
+            transportUser(req, res);
+        }else if(req.url === "/pro"){
+            req.session.requestedPRO = 1;
+            res.redirect('/login');
+        }else{
+            res.redirect('/');
+        }
 	});
 
 	// LOGOUT ==============================

@@ -43,7 +43,7 @@ controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce
             }else{
                 //redirect to pro area or proof loading
                 if(resp.accepted){
-                    $window.location.href = "pro";
+                    $window.location.href = AuthService.getProHref();
                 }else{
                     $scope.renderView("completeProfile", {
                         template: $sce.trustAsResourceUrl('partials/public/auth/signup_step2.html')
