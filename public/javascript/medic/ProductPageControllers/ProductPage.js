@@ -19,39 +19,16 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         else
             return null;
     };
-    $scope.$watch('$state.params.menuId',function(){
-        if($scope.specialProductMenu){
-            if($state.params.childId)
-            {
-                for(var i=0;i<$scope.specialProductMenu.length;i++)
-                    if($scope.specialProductMenu[i]._id==$stateParams.menuId)
-                    {
-                        for(var j=0;j<$scope.specialProductMenu[i].children_ids.length;j++)
-                            if($scope.specialProductMenu[i].children_ids[j]._id==$state.params.childId)
-                            {
-                                $scope.mobileMenuTitle=$scope.specialProductMenu[i].children_ids[j].title;
-                                return;
-                            }
-                    }
-            }
-            else
-            {
-                for(var i=0;i<$scope.specialProductMenu.length;i++)
-                    if($scope.specialProductMenu[i]._id==$state.params.menuId)
-                    {
-                            if($scope.specialProductMenu[i]._id==$state.params.menuId)
-                            {
-                                $scope.mobileMenuTitle=$scope.specialProductMenu[i].title;
-                                return;
-                            }
-                    }
-            }
-        }
-    });
     $scope.goToMenuItemWithChildren=function(parent,child){
         $scope.mobileMenuTitle = child.title;
         $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:child._id});
     };
+    if($state.is('groupSpecialProduct.files'))
+        $scope.mobileMenuTitle = 'Resurse';
+    if($state.is('groupSpecialProduct.speakers'))
+        $scope.mobileMenuTitle = 'Speakers';
+    if($state.is('groupSpecialProduct.sitemap'))
+        $scope.mobileMenuTitle = 'Sitemap';
     $scope.goToResourcesMobile=function(name){
         $scope.mobileMenuTitle=name;
         $state.go('groupSpecialProduct.files',{product_id: $scope.specialProductPage._id});

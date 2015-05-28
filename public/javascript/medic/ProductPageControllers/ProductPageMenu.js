@@ -13,6 +13,7 @@ controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams
                 }else{
                     specialProductService.getSpecialProductDescription.query({id:$stateParams.childId?$stateParams.childId:$stateParams.menuId}).$promise.then(function(resp){
                         $scope.specialProductDescription = resp;
+                        $scope.$parent.mobileMenuTitle= resp.title;
                     });
                 }
             }
