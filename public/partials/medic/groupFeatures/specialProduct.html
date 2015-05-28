@@ -40,7 +40,7 @@
             <li class="list-group-item my-list-menu-item">
                 <accordion close-others="oneAtATime" class="productPageMenu">
                     <accordion-group is-open="mystatus.open" class="parent" ng-repeat="parent in specialProductMenu"
-                                     ng-class="{'active':$state.includes('groupSpecialProduct.menuItem') && $state.params.menuId==parent._id}" ng-click="goToMenuItemWithNoChildren(parent)">
+                                     ng-class="{'active':$state.includes('groupSpecialProduct.menuItem') && $state.params.menuId==parent._id}" ng-click="goToMenuItemWithNoChildren(parent,$event)">
                         <accordion-heading>
                 <span>
                     <i ng-class="{'glyphicon glyphicon-chevron-down': mystatus.open&&parent.children_ids.length!=0,

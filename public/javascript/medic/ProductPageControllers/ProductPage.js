@@ -12,12 +12,12 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         }
     });
     $scope.mobileMenuTitle="";
-    $scope.goToMenuItemWithNoChildren=function(parent){
+    $scope.goToMenuItemWithNoChildren=function(parent,event){
         //$scope.mobileMenuTitle = parent.title;
         if(parent.children_ids.length==0)
             $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:''});
         else
-            return null;
+            event.stopPropagation();
     };
     $scope.goToMenuItemWithChildren=function(parent,child){
         $scope.mobileMenuTitle = child.title;
