@@ -151,7 +151,43 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         }
 
     });
-
+    $scope.specialCollapsed = true;
+    $scope.collapseAndStyle = function(){
+        if(angular.element('#normalMenu').hasClass('menuShadow'))
+            {
+                angular.element('#normalMenu').removeClass('menuShadow');
+                $scope.specialCollapsed = true;
+            }
+        else{
+            angular.element('#normalMenu').addClass('menuShadow');
+            $scope.specialCollapsed = false;
+        }
+    };
+    $scope.collapseFinal=function(){
+        if(angular.element('#normalMenu').hasClass('menuShadow'))
+        {
+            angular.element('#normalMenu').removeClass('menuShadow');
+            $scope.specialCollapsed = true;
+        }
+    };
+    $scope.collapseAndStyleMobile = function(){
+        if(angular.element('#normalMenuMobile').hasClass('menuShadow'))
+        {
+            angular.element('#normalMenuMobile').removeClass('menuShadow');
+            $scope.specialCollapsed = true;
+        }
+        else{
+            angular.element('#normalMenuMobile').addClass('menuShadow');
+            $scope.specialCollapsed = false;
+        }
+    };
+    $scope.collapseFinalMobile=function(){
+        if(angular.element('#normalMenuMobile').hasClass('menuShadow'))
+        {
+            angular.element('#normalMenuMobile').removeClass('menuShadow');
+            $scope.specialCollapsed = true;
+        }
+    };
     $scope.showFarmaModal = function() {
         if($rootScope.iosDetect)
             window.open($rootScope.Pharma);

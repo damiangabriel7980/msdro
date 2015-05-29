@@ -444,12 +444,17 @@ ul.products li {
     }
   }
   .specialGroupDropdown{
-    padding: 5px 15px;
+    padding: 5px 13px;
     img{
       width: 180px;
       @media(max-width: 540px){
         width: 135px;
         margin-top: 7px;
+      }
+    }
+    &:hover{
+      .my-dropdown-menu{
+        display: block;
       }
     }
   }
@@ -1278,6 +1283,10 @@ hr{
   @media(max-width: 1155px){
     left: auto !important;
   }
+  @media(min-width: 1157px)
+  {
+    right: 100px !important;
+  }
 }
 .myProfileNoSpecial{
   right: 0 !important;
@@ -1329,7 +1338,7 @@ hr{
 }
 .expandSearch{
   position: absolute;
-  right: 270px;
+  right: 290px;
   @media(min-width: 769px)and(max-width: 1050px){
     right: 310px;
     margin-top: -19px;
@@ -1766,4 +1775,62 @@ h4{
 .multimedia10PaddButton{
   padding-bottom: 10px;
   padding-right: 10px;
+}
+.absolute{
+  position: absolute;
+}
+.groups-list-group-item {
+  position: relative;
+  display: block;
+  padding: 15px 15px;
+  margin-bottom: -1px;
+  background-color: #ffffff;
+}
+.my-list-group-item {
+  position: relative;
+  display: block;
+  padding: 15px 15px;
+  margin-bottom: -1px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #dddddd;
+}
+.paddProfileRight{
+  padding-right: 235px;
+}
+.menuShadow{
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+}
+.subitems{
+  color: #009d97;
+  &:hover{
+    border-left: 3px solid #00514d;
+    color: #00514d;
+    font-weight: bolder;
+  }
+}
+.top5px{
+  top: 5px !important;
+}
+.specialDropdown{
+  float: left;
+  position: relative;
+  display: block;
+}
+.specialMenu{
+  position: absolute;
+  right: 5px;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+  top: 13px;
+  @media (max-width: 768px){
+    right: 55px;
+  }
+  @media (min-width: 769px) and (max-width: 1157px) {
+    right: 70px;
+  }
+}
+.relative{
+  position: relative;
 }

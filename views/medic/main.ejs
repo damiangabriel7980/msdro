@@ -116,6 +116,7 @@
     <script src="components/angular-cookies/angular-cookies.js"></script>
     <script src="modules/therapeutic_select/therapeutic_select.js"></script>
     <link rel="stylesheet" href="modules/therapeutic_select/therapeutic_select.css">
+    <script src="components/angular-off-click/offClick.js"></script>
 
 </head>
 <body ng-controller="MainController">
@@ -146,15 +147,28 @@
                     <li ng-click="logoutUser()"><a>Sign Out</a></li>
                 </ul>
             </ul>
-            <ul class="nav navbar-nav pull-right disableDesktop specialGroupMobile" ng-if="specialGroupSelected!=null">
-                <a class="dropdown-toggle specialGroupDropdown " data-toggle="dropdown">
-                    <img ng-if="specialGroupSelected.image_path" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
-                </a>
-                <ul class="dropdown-menu myMenu greyBackground mySpecialMenuMobile" role="menu">
-                    <li ng-repeat="group in specialGroups" ng-click="selectSpecialGroup(group)">
-                        <a style="cursor: pointer;">{{group.display_name}}</a>
-                    </li>
-                </ul>
+            <!--<ul class="nav navbar-nav pull-right disableDesktop specialGroupMobile" ng-if="specialGroupSelected!=null">-->
+                <!--<a class="dropdown-toggle specialGroupDropdown " data-toggle="dropdown">-->
+                    <!--<img ng-if="specialGroupSelected.image_path" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">-->
+                <!--</a>-->
+                <!--<ul class="dropdown-menu myMenu greyBackground mySpecialMenuMobile" role="menu">-->
+                    <!--<li ng-repeat="group in specialGroups" ng-click="selectSpecialGroup(group)">-->
+                        <!--<a style="cursor: pointer;">{{group.display_name}}</a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</ul>-->
+            <ul id="normalMenuMobile" class="list-group noMarginBottom specialMenu disableDesktop" ng-if="specialGroupSelected!=null" off-click="collapseFinalMobile()">
+                <div class="specialDropdown noMarginBottom">
+                    <a class="text-center specialGroupDropdown no-text-decoration groups-list-group-item" ng-click="collapseAndStyleMobile()">
+                        <img ng-if="specialGroupSelected!=null" style="border-right: 1px solid #cccccc;padding-right: 10px" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
+                        &nbsp;<i class="top5px glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <div collapse="specialCollapsed">
+                        <li class="subitems greyBackground my-list-group-item" ng-repeat="group in specialGroups" style="cursor: pointer;" ng-click="collapseFinalMobile();selectSpecialGroup(group)">
+                            {{group.display_name}}
+                        </li>
+                    </div>
+                </div>
             </ul>
             <ul class="nav navbar-nav pull-right disableDesktop dropdown margintop8px headerProfileNoSpecial" ng-if="specialGroupSelected==null">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -244,18 +258,18 @@
                 </li>
 
             </ul>
-            <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="specialGroupSelected!=null">
-                <li class="dropdown">
-                    <a class="dropdown-toggle specialGroupDropdown " data-toggle="dropdown">
-                        <img ng-if="specialGroupSelected!=null" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
+            <ul id="normalMenu" class="list-group noMarginBottom specialMenu disableSpecial" ng-if="specialGroupSelected!=null" off-click="collapseFinal()">
+                <div class="specialDropdown noMarginBottom">
+                    <a class="specialGroupDropdown no-text-decoration groups-list-group-item" ng-click="collapseAndStyle()">
+                        <img ng-if="specialGroupSelected!=null" style="border-right: 1px solid #cccccc;padding-right: 10px" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
+                        &nbsp;<i class="top5px glyphicon glyphicon-chevron-down"></i>
                     </a>
-
-                    <ul class="dropdown-menu myMenu greyBackground" role="menu">
-                        <li ng-repeat="group in specialGroups" style="cursor: pointer;" ng-click="selectSpecialGroup(group)">
-                            <a>{{group.display_name}} </a>
+                    <div collapse="specialCollapsed">
+                        <li class="subitems greyBackground my-list-group-item" ng-repeat="group in specialGroups" style="cursor: pointer;" ng-click="collapseFinal();selectSpecialGroup(group)">
+                            {{group.display_name}}
                         </li>
-                    </ul>
-                </li>
+                    </div>
+                </div>
             </ul>
             <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="!specialGroupSelected">
                 <form class="navbar-form" role="search">
@@ -266,7 +280,7 @@
                 </form>
 
             </ul>
-            <ul class="nav navbar-nav navbar-right disableSpecial dropdown margintop8px" ng-if="specialGroupSelected!=null">
+            <ul class="nav navbar-nav navbar-right disableSpecial dropdown margintop8px paddProfileRight" ng-if="specialGroupSelected!=null">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>
                 </a>

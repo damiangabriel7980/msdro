@@ -15,7 +15,8 @@ var app = angular.module('app',
         'ngCookies',
         'therapeuticSelect',
         'angulartics',
-        'angulartics.google.analytics'
+        'angulartics.google.analytics',
+        'offClick'
     ]);
 
 app.config(['$locationProvider', function($location) {
