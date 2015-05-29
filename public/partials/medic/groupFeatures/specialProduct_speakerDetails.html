@@ -11,10 +11,10 @@
             </span>
     </div>
     <div class="col-xs-12 noPadding largeDisplaySpeaker">
-        <div class="col-xs-2 col-xs-offset-1">
+        <div class="col-xs-12 col-sm-4 col-md-2 col-md-offset-1">
             <img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}">
         </div>
-        <div class="col-xs-8">
+        <div class="col-xs-12 col-md-8 col-sm-8">
             <div class="name">{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</div>
             <div class="country">{{speaker.country}}</div>
             <div class="cell" ng-bind-html="trustAsHtml(speaker.short_description)"></div>
