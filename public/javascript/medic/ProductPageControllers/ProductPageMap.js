@@ -8,4 +8,10 @@ controllers.controller('ProductPageMap', ['$scope', '$rootScope', '$stateParams'
     $scope.printPage=function(){
         window.print();
     };
+
+    $scope.navigateToSpeakers = function () {
+        $state.go("groupSpecialProduct.speakers", {product_id: $stateParams.product_id});
+        $scope.$parent.mobileMenuTitle= "Speakers";
+    }
+
 }]);

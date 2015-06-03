@@ -26,8 +26,7 @@
                 <!--<li style="display: none;" class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.files({product_id: $stateParams.product_id})">-->
                     <!--Resurse-->
                 <!--</li>-->
-                <li class="MSDgreenDarker no-text-decoration handCursor" ng-if="specialProductPage.speakers && specialProductPage.speakers.length > 0"
-                    ui-sref="groupSpecialProduct.speakers({product_id: $stateParams.product_id})">
+                <li class="MSDgreenDarker no-text-decoration handCursor" ng-if="specialProductPage.speakers && specialProductPage.speakers.length > 0" ng-click="navigateToSpeakers()">
                     Speakers
                 </li>
                 <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.sitemap({product_id: $stateParams.product_id})">
