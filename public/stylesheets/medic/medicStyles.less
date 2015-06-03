@@ -1602,9 +1602,11 @@ h4{
   }
 }
 .merckImage{
-  width: 70%; cursor:pointer;
-  @media(max-width: 1024px){
+  width: 70%;
+  cursor:pointer;
+  @media(max-width: 768px){
     width: 40%;
+    cursor:pointer;
   }
 }
 .productsResponsiveMargin{
@@ -1836,4 +1838,16 @@ h4{
 }
 .relative{
   position: relative;
+}
+.centeredMobile{
+  text-align: left;
+  @media(max-width: 768px){
+    text-align: center;
+  }
+}
+.justifiedMobile{
+  text-align: left;
+  @media(max-width: 768px){
+    text-align: justify;
+  }
 }
