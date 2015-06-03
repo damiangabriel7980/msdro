@@ -82,7 +82,7 @@
     </div>
     <div class="col-md-12">
         <label>Detalii:</label>
-        <textarea ui-tinymce ng-model="event.description"></textarea>
+        <textarea ui-tinymce="tinymceOptions" ng-model="event.description"></textarea>
     </div>
     <div class="col-md-12 noPadding">
         <div class="form-group col-md-6" style="margin-bottom: 0;">
@@ -96,5 +96,3 @@
         <a class="btn pull-right btn-primary" ng-click="updateEvent()">Salveaza modificarile</a>
     </div>
 </div>
-
-
