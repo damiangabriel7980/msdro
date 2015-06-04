@@ -9,9 +9,13 @@ var app = angular.module('app',
         'angularFileUpload'
     ]);
 
+app.config(['$locationProvider', function($locationProvider) {
+    $locationProvider.hashPrefix(HASH_PREFIX);
+}]);
+
 app.run(
-    [            '$rootScope', '$modal', '$sce',
-        function ($rootScope,   $modal,   $sce) {
+    [            '$rootScope', '$modal', '$sce', '$location',
+        function ($rootScope,   $modal,   $sce,   $location) {
 
             //amazon service paths
             $rootScope.amazonBucket = DEFAULT_AMAZON_BUCKET;
@@ -72,6 +76,11 @@ app.run(
                 }
             }else{
                 $rootScope.showAuthModal("login");
+            }
+
+            if (REQUESTED_PRO) {
+                REDIRECT_AFTER_LOGIN = $location.url();
+                REQUESTED_PRO = 0;
             }
         }
     ]
