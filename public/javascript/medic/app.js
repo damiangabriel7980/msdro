@@ -120,7 +120,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'MultimediaDetailMobile'
         })
         .state('elearning.multimedia.multimediaByArea',{
-            url: '/multimedia/:idArea:idMulti',
+            url: '/multimedia/:idArea/:idMulti',
             templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
             controller: 'MultimediaView'
         })

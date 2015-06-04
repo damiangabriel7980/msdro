@@ -55,7 +55,6 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
     if($stateParams.idMulti)
     {
         var idM = $stateParams.idMulti;
-        $stateParams.idMulti = null;
         if($rootScope.deviceWidth<=700)
             $state.go('elearning.multimedia.multimediaMobile',{id: idM});
         else{
