@@ -33,11 +33,11 @@
                 </accordion-heading>
             </accordion-group>
         </accordion>
-        <div dropdown is-open="isCollapsed.isFirstOpen" class="col-xs-12 col-sm-12 hidden-md hidden-lg padd10Bottom">
+        <div dropdown is-open="isCollapsed.isFirstOpen" class="col-xs-12 col-sm-12 hidden-md hidden-lg padd10Bottom noPaddingRight noPaddingLeft">
         <button type="button" class="btn btn-primary col-xs-12 text-center pull-left dropdown-toggle" dropdown-toggle>{{mobileMenuTitle}}<i class="glyphicon glyphicon-chevron-down pull-right glyphicon-Special-Product" ></i></button>
 
         <ul class="dropdown-menu my-dropdown-menu col-xs-12 col-sm-12 hidden-md hidden-lg" role="menu" style="list-style: none">
-            <li class="list-group-item my-list-menu-item">
+            <li class="list-group-item my-list-menu-item noPaddingRight noPaddingLeft">
                 <accordion close-others="oneAtATime" class="productPageMenu">
                     <accordion-group is-open="mystatus.open" class="parent" ng-repeat="parent in specialProductMenu"
                                      ng-class="{'active':$state.includes('groupSpecialProduct.menuItem') && $state.params.menuId==parent._id}" ng-click="goToMenuItemWithNoChildren(parent,$event)">
