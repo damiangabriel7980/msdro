@@ -3242,7 +3242,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
     router.route('/admin/areas/:id')
 
         .get(function(req, res) {
-            Therapeutic_Area.find({_id:req.params.id}, function(err, cont) {
+            Therapeutic_Area.find({_id:req.params.id}).populate('therapeutic-areasID').exec(function(err, cont) {
                 if(err) {
                     res.send(err);
                 }
@@ -3276,6 +3276,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         })
         .delete(function(req, res) {
             var data = req.params.id;
+            var dataArray = [req.params.id];
             var connEntities=[Products,Multimedia];
             async.each(connEntities,function(item,callback){
                 disconnectAllEntitiesFromEntity(item,'therapeutic-areasID',data,function(err,result){
@@ -3290,9 +3291,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 }
                 else
                 {
-                    Therapeutic_Area.remove({
-                        _id: data
-                    }, function(err,cont) {
+                    Therapeutic_Area.remove({$or :[{_id: data},{'therapeutic-areasID': {$in: dataArray}}]}, function(err,cont) {
                         if (err)
                             res.send(err);
                         else

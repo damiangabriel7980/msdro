@@ -4,7 +4,7 @@
 controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'areasAdminService','$stateParams','$sce','ngTableParams','$filter', 'ActionModal', function($scope,$rootScope, $state, areasAdminService,$stateParams,$sce,ngTableParams,$filter, ActionModal){
     areasAdminService.getAll.query().$promise.then(function(result){
         var arii = result;
-        console.log(result);
+        $scope.areasForFilter = result;
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
