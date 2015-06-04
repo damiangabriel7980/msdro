@@ -4031,6 +4031,14 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                         templateContent,
                                         emailTo,
                                         'Activare cont MSD'
+                                    ).then(
+                                        function (success) {
+                                            res.send({message: "Updated "+wres+" user. Email sent"});
+                                        },
+                                        function (err) {
+                                            logger.error(err);
+                                            res.send(err);
+                                        }
                                     );
                                 }
                             });
