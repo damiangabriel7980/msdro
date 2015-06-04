@@ -7,7 +7,14 @@
             <label class="label label-default">Nume arie:</label>
             <input type="text" ng-model="arie.name" class="form-control col-xs-12">
         </div>
-
+        <div class="col-md-12 form-group-sm" style="padding-bottom: 0">
+            <input type="checkbox" ng-model="arie.has_children"/>
+            <span>Are sub-arii</span>
+        </div>
+        <div class="col-md-12 form-group-sm">
+            <label class="label label-default">Arie parinte:</label>
+            <therapeutic-select all-areas="areas" selected-areas="selectedAreas" returned-areas="returnedAreas"></therapeutic-select>
+        </div>
     </div>
 </div>
 <div class="modal-footer">
