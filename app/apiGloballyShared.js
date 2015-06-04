@@ -397,7 +397,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 state: req.staywellUser.state
             };
             res.send(info);
-            notifyAdmin(req.staywellUser);
+            notifyAdmin(req.user);
         });
 
     router.route('/createAccountMobile')
