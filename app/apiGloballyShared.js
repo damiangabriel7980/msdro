@@ -302,6 +302,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 info.message = "A aparut o eroare la salvarea datelor";
                 res.json(info);
             }else{
+                req.staywellUser._id = saved._id;
                 next();
             }
         });
@@ -321,25 +322,27 @@ module.exports = function(app, env, globals, logger, amazon, router) {
         });
     };
 
-    var notifyAdmin = function (user) {
-        if(user.state === "PENDING"){
-            //get mail_to value
-            Parameters.findOne({name: "TO_EMAIL"}, function (err, to_email) {
-                if(to_email){
-                    MailerModule.send(
-                        "Staywell_user_pending",
-                        [
-                            {
-                                "name": "user_email",
-                                "content": user.username
-                            }
-                        ],
-                        [{email: to_email.value || to_email.default_value}],
-                        "Utilizator in asteptare"
-                    );
-                }
-            });
-        }
+    var notifyAdmin = function (user_id) {
+        User.findOne({_id: user_id}).select('+state').exec(function (err, user) {
+            if(user && user.state === "PENDING"){
+                //get mail_to value
+                Parameters.findOne({name: "TO_EMAIL"}, function (err, to_email) {
+                    if(to_email){
+                        MailerModule.send(
+                            "Staywell_user_pending",
+                            [
+                                {
+                                    "name": "user_email",
+                                    "content": user.username
+                                }
+                            ],
+                            [{email: to_email.value || to_email.default_value}],
+                            "Utilizator in asteptare"
+                        );
+                    }
+                });
+            }
+        });
     };
 
     router.route('/createAccountStaywell')
@@ -351,7 +354,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 state: req.staywellUser.state
             };
             res.send(info);
-            notifyAdmin(req.staywellUser);
+            notifyAdmin(req.staywellUser._id);
 
             if(req.staywellUser.state === "ACCEPTED"){
                 generateToken(req.staywellUser.username, function (err, activationToken) {
@@ -397,7 +400,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 state: req.staywellUser.state
             };
             res.send(info);
-            notifyAdmin(req.user);
+            notifyAdmin(req.user._id);
         });
 
     router.route('/createAccountMobile')
