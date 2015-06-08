@@ -7745,6 +7745,10 @@ hr {
 .borderRadiusMenu {
   border-radius: 4px !important;
 }
+.borderRadiusMenu:hover {
+  background-color: #009d97;
+  color: white;
+}
 .specialLink {
   color: #009d97 !important;
 }
@@ -8085,4 +8089,8 @@ h4 {
   .justifiedMobile {
     text-align: justify;
   }
+}
+.subArea:hover {
+  background-color: #009d97;
+  color: white;
 }
