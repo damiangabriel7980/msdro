@@ -243,6 +243,7 @@ app.run(
             $rootScope.defaultProductImage = $rootScope.pathAmazonResources+ "piles-of-pills.jpg";
             $rootScope.defaultUserImage = $rootScope.pathAmazonResources+ "avatar_unknown.png";
 
+            $rootScope.defaultGroupPhoto = $rootScope.pathAmazonResources + 'customGroups/grup_logo2.png';
             $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.png";
 
             $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {

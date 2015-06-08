@@ -160,7 +160,7 @@
             <ul id="normalMenuMobile" class="list-group noMarginBottom specialMenu disableDesktop" ng-if="specialGroupSelected!=null" off-click="collapseFinalMobile()">
                 <div class="specialDropdown noMarginBottom">
                     <a class="text-center specialGroupDropdown no-text-decoration groups-list-group-item" ng-click="collapseAndStyleMobile()">
-                        <img ng-if="specialGroupSelected!=null" style="border-right: 1px solid #cccccc;padding-right: 10px" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
+                        <img ng-if="specialGroupSelected!=null" style="border-right: 1px solid #cccccc;padding-right: 10px" ng-src="{{specialGroupSelected.image_path?pathAmazonDev+specialGroupSelected.image_path:defaultGroupPhoto}}">
                         &nbsp;<i class="top5px glyphicon glyphicon-chevron-down"></i>
                     </a>
                     <div collapse="specialCollapsed">
@@ -261,7 +261,7 @@
             <ul id="normalMenu" class="list-group noMarginBottom specialMenu disableSpecial" ng-if="specialGroupSelected!=null" off-click="collapseFinal()">
                 <div class="specialDropdown noMarginBottom">
                     <a class="specialGroupDropdown no-text-decoration groups-list-group-item" ng-click="collapseAndStyle()">
-                        <img ng-if="specialGroupSelected!=null" style="border-right: 1px solid #cccccc;padding-right: 10px" ng-src="{{pathAmazonDev+specialGroupSelected.image_path}}">
+                        <img ng-if="specialGroupSelected!=null" style="border-right: 1px solid #cccccc;padding-right: 10px" ng-src="{{specialGroupSelected.image_path?pathAmazonDev+specialGroupSelected.image_path:defaultGroupPhoto}}">
                         &nbsp;<i class="top5px glyphicon glyphicon-chevron-down"></i>
                     </a>
                     <div collapse="specialCollapsed">
