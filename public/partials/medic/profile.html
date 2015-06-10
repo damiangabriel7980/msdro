@@ -24,33 +24,33 @@
                     <div class="col-md-8 col-sm-6 noPadding">
                         <div class="col-md-12 noPadding">
                             <!--<div class="form-group-sm col-md-12" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">-->
-                            <div class="form-group-sm col-md-3">
+                            <div class="form-group-sm col-md-3 col-sm-12">
                                 <label>Titlu:</label>
                                 <select ng-model="userData.title" class="form-control" ng-options="title.number as title.name for title in titles"></select>
                             </div>
-                            <div class="form-group-sm col-md-9" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
+                            <div class="form-group-sm col-md-9 col-sm-12" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
                                 <label>Nume<sup>*</sup>:</label>
                                 <input type="text" class="form-control" id="nume" name="nume" ng-model="fullname" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\s]{3,30}$/" ng-required="true">
                                 <p class="" ng-show="profileForm.nume.$error.pattern">Numele nu contine caractere valide/are mai putin de 3 caractere!</p>
                                 <p class="" ng-show="profileForm.nume.$error.required">Numele este obligatoriu!</p>
                             </div>
                         </div>
-                        <div class="form-group-sm col-md-6" ng-class="{'has-error': profileForm.telefon.$error.pattern}">
+                        <div class="form-group-sm col-md-6 col-sm-12" ng-class="{'has-error': profileForm.telefon.$error.pattern}">
                             <label for="telefon">Telefon:</label>
                             <input type="text" class="form-control" id="telefon" name="telefon" ng-model="phone" ng-pattern="/^[0-9]{10,20}$/">
                             <p class="" ng-show="profileForm.telefon.$error.pattern">Numarul de telefon trebuie sa aiba minim 10 cifre!</p>
                             <p class="" ng-show="profileForm.telefon.$error.required">Numarul de telefon este obligatoriu!</p>
                         </div>
-                        <div class="form-group-sm col-md-6">
+                        <div class="form-group-sm col-md-6 col-sm-12">
                             <label>Tip de practica:</label>
                             <select ng-model="userData.practiceType" class="form-control" ng-options="practice.number as practice.name for practice in practices"></select>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 col-sm-12">
                             <therapeutic-select all-areas="allAreas" selected-areas="selectedAreas" returned-areas="newAreas" display-compact="true"></therapeutic-select>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 noPadding">
+                <div class="col-md-12 col-sm-12 noPadding">
                     <hr style="margin: 10px 0"/>
                     <div class="col-md-12 form-group-sm" ng-class="{'has-error': profileForm.address.$error.required}">
                         <label>Adresa<sup>*</sup>:</label>
@@ -82,7 +82,7 @@
                         <p class="" ng-show="profileForm.oras.$invalid && !profileForm.oras.$pristine">Orasul nu este valid!</p>
                     </div>
                 </div>
-                <div class="col-md-12 noPadding">
+                <div class="col-md-12 col-sm-12 noPadding">
                     <div class="col-md-12 form-group-sm" style="padding-bottom: 0">
                         <input type="checkbox" ng-model="userData.subscriptions.newsletterStaywell"/>
                         <span>Abonat la newsletter Staywell</span>

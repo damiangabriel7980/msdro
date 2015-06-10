@@ -7096,7 +7096,7 @@ ul.products li {
 .padd40px {
   padding-left: 40px;
 }
-@media (max-width: 768px) {
+@media (max-width: 1277px) {
   .padd40px {
     padding-left: 0;
   }

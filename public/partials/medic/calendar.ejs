@@ -15,13 +15,13 @@
             <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
         </div>
         <div class="event blue" ng-repeat="eventim in events2Filtered">
-            <div class="col-md-12 col-xs-12 noPadding" ng-class="$index==0?'paddingTop5':''">
-                <div class="col-md-2 col-xs-2 noPadding padd10Bottom date2">
+            <div class="col-md-12 col-xs-12 col-sm-12 noPadding" ng-class="$index==0?'paddingTop5':''">
+                <div class="col-md-2 col-xs-2 col-sm-1 noPadding padd10Bottom date2">
                     <h2 class="MSDTitleDark noMarginBottom">{{eventim.start | filter: asDate | date:'dd'}}</h2>
                     <h5 class="MSDTitleDark noMarginTop">{{eventim.start | filter: asDate | date:'MMM'}}</h5>
                 </div>
 
-                <div class="noPadding col-md-9 col-xs-9 top2percent margin2Left">
+                <div class="noPadding col-md-9 col-sm-9 col-xs-9 top2percent margin2Left">
 
                     <h4 class="handCursor" ng-if="eventim.type==1" ng-click="goToEvent(eventim._id)" convert-special conver="eventim.name" ng-bind-html="trustAsHtml(eventim.name)">
 
