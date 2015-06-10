@@ -20,10 +20,11 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
     $scope.addArie = function(){
         if($scope.arie){
             $scope.arie['therapeutic-areasID'] = $scope.returnedAreas;
-            areasAdminService.getAll.save($scope.arie);
-            $scope.arie = {};
-            $modalInstance.close();
-            $state.go('ariiTerapeutice',{},{reload: true});
+            areasAdminService.getAll.save($scope.arie).$promise.then(function(resp){
+                $scope.arie = {};
+                $modalInstance.close();
+                $state.go('ariiTerapeutice',{},{reload: true});
+            });
         }
     };
 

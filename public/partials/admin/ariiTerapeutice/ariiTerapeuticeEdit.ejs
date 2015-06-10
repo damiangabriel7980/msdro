@@ -11,8 +11,8 @@
             <input type="checkbox" ng-model="arie.has_children"/>
             <span>Are sub-arii</span>
         </div>
-        <div class="col-md-12 form-group-sm">
-            <label class="label label-default">Arie parinte:</label>
+        <div ng-show="arie.has_children==true" class="col-md-12 form-group-sm">
+            <label class="label label-default">Sub-arii</label>
             <therapeutic-select all-areas="areas" selected-areas="selectedAreas" returned-areas="returnedAreas"></therapeutic-select>
         </div>
     </div>

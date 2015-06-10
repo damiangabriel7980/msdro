@@ -3230,12 +3230,33 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             therapeutic.last_updated=req.body.last_updated ;
             therapeutic.name= req.body.name   ;
             therapeutic.enabled= req.body.enabled  ;
-            therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
-            therapeutic.save(function(err) {
+            therapeutic.save(function(err,saved) {
                 if (err)
                     res.send(err);
-
-                res.json({ message: 'Area created!' });
+                        else{
+                    async.each(req.body['therapeutic-areasID'], function (item, callback) {
+                        Therapeutic_Area.findById(item, function (err, foundArea) {
+                            if(err){
+                                callback(err);
+                            }else{
+                                foundArea['therapeutic-areasID'] = [saved._id];
+                                foundArea.save(function(error){
+                                    if(error)
+                                        res.json(err);
+                                    else
+                                        callback();
+                                })
+                            }
+                        })
+                    }, function (err) {
+                        if(err){
+                            console.log(err);
+                            res.send({message: "Eroare la adaugarea sub-ariilor"});
+                        }else{
+                            res.send({message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                        }
+                    });
+                }
             });
 
         });
@@ -3243,36 +3264,95 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
 
         .get(function(req, res) {
             Therapeutic_Area.find({_id:req.params.id}).populate('therapeutic-areasID').exec(function(err, cont) {
+                var objectToSend = {};
                 if(err) {
                     res.send(err);
                 }
                 if(cont.length == 1){
-                    res.json(cont[0]);
+                    objectToSend['selectedArea'] = cont[0];
+                    if(cont[0].has_children==true)
+                    {
+                        Therapeutic_Area.find({'therapeutic-areasID':{$in : [cont[0]._id]}}).exec(function(err,response){
+                            objectToSend['childrenAreas'] = response;
+                            res.json(objectToSend);
+                        })
+                    }
+                    else{
+                        res.json(objectToSend);
+                    }
                 }else{
                     res.json(null);
                 }
             })
         })
         .put(function(req, res) {
-
-            Therapeutic_Area.findById(req.params.id, function(err, therapeutic) {
-
+            Therapeutic_Area.findById(req.params.id, function (err, therapeutic) {
                 if (err)
                     res.send(err);
-
-                therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
-                therapeutic.last_updated=req.body.last_updated ;
-                therapeutic.name= req.body.name   ;
-                therapeutic.enabled= req.body.enabled  ;
-                therapeutic['therapeutic-areasID']= req.body['therapeutic-areasID'];
-                therapeutic.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Area updated!' });
-                });
-
-            });
+                else {
+                    if (req.body.has_children == true) {
+                        therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
+                        therapeutic.last_updated = req.body.last_updated;
+                        therapeutic.name = req.body.name;
+                        therapeutic.enabled = req.body.enabled;
+                        therapeutic['therapeutic-areasID'] = [];
+                        therapeutic.save(function (err, newTherapeutic) {
+                            if (err)
+                                res.json(err);
+                            else {
+                                console.log(req.body['therapeutic-areasID']);
+                                async.each(req.body['therapeutic-areasID'], function (item, callback) {
+                                    Therapeutic_Area.findById(item, function (err, foundArea) {
+                                        if (err) {
+                                            callback(err);
+                                        } else {
+                                            foundArea['therapeutic-areasID'] = [therapeutic._id];
+                                            foundArea.save(function (error) {
+                                                if (error)
+                                                    res.json(err);
+                                                else
+                                                    callback();
+                                            })
+                                        }
+                                    })
+                                }, function (err) {
+                                    if (err) {
+                                        console.log(err);
+                                        res.send({message: "Eroare la adaugarea sub-ariilor"});
+                                    } else {
+                                        res.send({message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                                    }
+                                });
+                            }
+                        })
+                    }
+                    else {
+                        if (req.body['therapeutic-areasID'].length > 0 && req.body['therapeutic-areasID']) {
+                            Therapeutic_Area.update({'therapeutic-areasID':{$in : [therapeutic._id]}}, {$set: {'therapeutic-areasID': []}}, function (err, wres) {
+                                if(err){
+                                    logger.error(err);
+                                    res.send({error: true});
+                                }else{
+                                    res.json({message: 'Update successful'});
+                                }
+                            });
+                        }
+                        else {
+                            therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
+                            therapeutic.last_updated = req.body.last_updated;
+                            therapeutic.name = req.body.name;
+                            therapeutic.enabled = req.body.enabled;
+                            therapeutic['therapeutic-areasID'] = [];
+                            therapeutic.save(function (err) {
+                                if (err)
+                                    res.json(err);
+                                else
+                                    res.json({message: 'Update successful'});
+                            });
+                        }
+                    }
+                }
+            })
         })
         .delete(function(req, res) {
             var data = req.params.id;
