@@ -1441,8 +1441,14 @@ hr{
 }
 .marginLeft30px{
   margin-left: 30px;
-  @media(max-width: 768px){
+  @media(max-width: 1277px){
     margin-left: 0px;
+  }
+}
+.leftForTablet{
+  @media(min-width: 768px) and (max-width: 1277px)
+  {
+    left: -5%;
   }
 }
 .marginLeft25px{
@@ -1596,7 +1602,7 @@ h4{
 .merckImage{
   width: 70%;
   cursor:pointer;
-  @media(max-width: 768px){
+  @media(max-width: 1277px),(orientation: portrait){
     width: 40%;
     cursor:pointer;
   }
@@ -1833,13 +1839,13 @@ h4{
 }
 .centeredMobile{
   text-align: left;
-  @media(max-width: 768px){
+  @media(max-width: 1277px),(orientation: portrait){
     text-align: center;
   }
 }
 .justifiedMobile{
   text-align: left;
-  @media(max-width: 768px){
+  @media(max-width: 1277px),(orientation: portrait){
     text-align: justify;
   }
 }
