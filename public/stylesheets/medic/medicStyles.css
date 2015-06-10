@@ -6864,6 +6864,12 @@ ul.products li {
 .modal-responsive .modal-dialog {
   height: 90%;
 }
+@media screen and (orientation: portrait) {
+  .modal-responsive .modal-dialog {
+    height: 65%;
+    width: 700px;
+  }
+}
 .modal-responsive .modal-dialog .modal-content {
   height: 100%;
 }
