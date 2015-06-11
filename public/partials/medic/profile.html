@@ -1,7 +1,7 @@
 <div class="modal-header modalTitleStyles">
     <div class="modal-title"><h3 class="equalMarginModalTitle">{{userData.name}}</h3></div>
 </div>
-<div class="modal-body noPaddingBottom col-md-12">
+<div class="modal-body noPaddingBottom col-md-12 col-sm-12">
     <accordion close-others="true">
         <accordion-group class="no-text-decoration" is-open="openFirst">
             <accordion-heading class="no-text-decoration" ><p class="no-text-decoration"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Profilul meu</p></accordion-heading>
@@ -58,7 +58,7 @@
                         <p ng-show="profileForm.address.$error.required">Adresa este obligatorie</p>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group-sm">
+                        <div class="form-group-sm hidden-xs hidden-sm">
                             <label>Judet<sup>*</sup>:</label>
                             <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county" ng-required="true">
                                 <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
@@ -68,9 +68,13 @@
                             </ui-select>
                             <p class="" ng-show="profileForm.judet.$invalid && !profileForm.judet.$pristine">Judetul nu este valid!</p>
                         </div>
+                        <div class="form-group-sm hidden-md hidden-lg">
+                            <label>Judet<sup>*</sup>: </label>
+                            <select class="form-control" ng-model="county.selected" ng-options="county as county.name for county in counties"></select>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group-sm">
+                        <div class="form-group-sm hidden-xs hidden-sm">
                             <label>Oras<sup>*</sup>:</label>
                             <ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" ng-required="true">
                                 <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
@@ -78,6 +82,10 @@
                                     <div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>
                                 </ui-select-choices>
                             </ui-select>
+                        </div>
+                        <div class="form-group-sm hidden-md hidden-lg">
+                            <label>Oras<sup>*</sup>: </label>
+                            <select class="form-control" ng-model="city.selected" ng-options="city as city.name for city in cities"></select>
                         </div>
                         <p class="" ng-show="profileForm.oras.$invalid && !profileForm.oras.$pristine">Orasul nu este valid!</p>
                     </div>

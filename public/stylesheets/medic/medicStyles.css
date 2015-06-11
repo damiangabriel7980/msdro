@@ -6866,7 +6866,7 @@ ul.products li {
 }
 @media screen and (orientation: portrait) {
   .modal-responsive .modal-dialog {
-    height: 65%;
+    height: auto;
     width: 700px;
   }
 }
