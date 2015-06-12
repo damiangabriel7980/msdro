@@ -13,7 +13,7 @@
             <td data-title="'Text'" sortable="'text'" >{{cont.text| htmlToPlaintext | limitTo : 200}}...</td>
             <td data-title="'Autor'" filter="{ 'author': 'text' }" sortable="'author'">{{cont.author}}</td>
             <td data-title="'Data adaugare'" filter="{ 'created': 'text' }" sortable="'created'">{{cont.created.substr(0,10)}}</td>
-            <td data-title="'Tip'" sortable="'type'">{{cont.type==1?"Noutati":cont.type==2?"Legislativ":"Stiintific"}}</td>
+            <td data-title="'Tip'" sortable="'type'">{{cont.type==1?"National":cont.type==2?"International":"Stiintific"}}</td>
             <td data-title="'Grup'" sortable="'groupsID'">
                 <ul>
                     <li class="margintop20px" ng-repeat="c in cont.groupsID">{{groupMap[c]}}&nbsp;
