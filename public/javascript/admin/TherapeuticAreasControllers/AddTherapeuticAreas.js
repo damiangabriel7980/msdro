@@ -6,6 +6,7 @@
  */
 controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService){
     $scope.selectedAreas=[];
+    $scope.therapeuticAlert = {newAlert:false, type:"", message:""};
     therapeuticAreaService.query().$promise.then(function (resp) {
         $scope.areas = resp;
     });
@@ -18,13 +19,19 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
     };
 
     $scope.addArie = function(){
-        if($scope.arie){
+        if($scope.arie && $scope.arie.name!=""){
             $scope.arie['therapeutic-areasID'] = $scope.returnedAreas;
             areasAdminService.getAll.save($scope.arie).$promise.then(function(resp){
                 $scope.arie = {};
                 $modalInstance.close();
                 $state.go('ariiTerapeutice',{},{reload: true});
             });
+        }
+        else{
+
+                $scope.therapeuticAlert.newAlert = true;
+                $scope.therapeuticAlert.message = "Numele ariei terapeutice este obligatoriu!";
+                $scope.therapeuticAlert.type = "danger";
         }
     };
 

@@ -3290,6 +3290,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 if (err)
                     res.send(err);
                 else {
+                    console.log(req.body);
                     if (req.body.has_children == true) {
                         therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
                         therapeutic.last_updated = req.body.last_updated;
@@ -3300,34 +3301,80 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             if (err)
                                 res.json(err);
                             else {
-                                console.log(req.body['therapeutic-areasID']);
-                                async.each(req.body['therapeutic-areasID'], function (item, callback) {
-                                    Therapeutic_Area.findById(item, function (err, foundArea) {
+                                if(req.body.oldAreas.length > 0){
+                                    async.each(req.body.oldAreas, function (item1, callback) {
+                                        Therapeutic_Area.findById(item1._id, function (err, foundArea) {
+                                            if (err) {
+                                                callback(err);
+                                            } else {
+                                                foundArea['therapeutic-areasID'] = [];
+                                                foundArea.save(function (error) {
+                                                    if (error)
+                                                        res.json(err);
+                                                    else
+                                                        callback();
+                                                })
+                                            }
+                                        })
+                                    }, function (err) {
                                         if (err) {
-                                            callback(err);
+                                            console.log(err);
+                                            res.send({message: "Eroare la adaugarea sub-ariilor"});
                                         } else {
-                                            foundArea['therapeutic-areasID'] = [therapeutic._id];
-                                            foundArea.save(function (error) {
-                                                if (error)
-                                                    res.json(err);
-                                                else
-                                                    callback();
-                                            })
+                                            async.each(req.body['therapeutic-areasID'], function (item, callback) {
+                                                Therapeutic_Area.findById(item, function (err, foundArea) {
+                                                    if (err) {
+                                                        callback(err);
+                                                    } else {
+                                                        foundArea['therapeutic-areasID'] = [therapeutic._id];
+                                                        foundArea.save(function (error) {
+                                                            if (error)
+                                                                res.json(err);
+                                                            else
+                                                                callback();
+                                                        })
+                                                    }
+                                                })
+                                            }, function (err) {
+                                                if (err) {
+                                                    console.log(err);
+                                                    res.send({message: "Eroare la adaugarea sub-ariilor"});
+                                                } else {
+                                                    res.send({message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                                                }
+                                            });
                                         }
-                                    })
-                                }, function (err) {
-                                    if (err) {
-                                        console.log(err);
-                                        res.send({message: "Eroare la adaugarea sub-ariilor"});
-                                    } else {
-                                        res.send({message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
-                                    }
-                                });
+                                    });
+                                }
+                                else{
+                                    async.each(req.body['therapeutic-areasID'], function (item, callback) {
+                                        Therapeutic_Area.findById(item, function (err, foundArea) {
+                                            if (err) {
+                                                callback(err);
+                                            } else {
+                                                foundArea['therapeutic-areasID'] = [therapeutic._id];
+                                                foundArea.save(function (error) {
+                                                    if (error)
+                                                        res.json(err);
+                                                    else
+                                                        callback();
+                                                })
+                                            }
+                                        })
+                                    }, function (err) {
+                                        if (err) {
+                                            console.log(err);
+                                            res.send({message: "Eroare la adaugarea sub-ariilor"});
+                                        } else {
+                                            res.send({message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                                        }
+                                    });
+                                }
                             }
                         })
                     }
                     else {
-                        if (req.body['therapeutic-areasID'].length > 0 && req.body['therapeutic-areasID']) {
+                        if (req.body['therapeutic-areasID']) {
                             Therapeutic_Area.update({'therapeutic-areasID':{$in : [therapeutic._id]}}, {$set: {'therapeutic-areasID': []}}, function (err, wres) {
                                 if(err){
                                     logger.error(err);
@@ -4915,7 +4962,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                     if (req.body.specialGroupSelected) {
                         forGroups.push(req.body.specialGroupSelected);
                     }
-                    Multimedia.find({groupsID: {$in: forGroups}, enable: {$ne: false}}, function (err, multimedia) {
+                    Multimedia.find({groupsID: {$in: forGroups}, enable: {$ne: false}}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
                         if(err){
                             res.send(err);
                         }else{
