@@ -2,29 +2,28 @@ var mongoose = require('mongoose');
 var User = require('./models/user');
 var Roles=require('./models/roles');
 var jwt = require('jsonwebtoken');
-var XRegExp  = require('xregexp').XRegExp;
 var validator = require('validator');
 var crypto   = require('crypto');
 var expressJwt = require('express-jwt');
 var async = require('async');
+var Q = require('q');
 
-var Cities = require('./models/cities');
-var Therapeutic_Area = require('./models/therapeutic_areas');
-var Counties = require('./models/counties');
 var Job = require('./models/jobs');
 
+var UtilsService = require('./modules/utils');
+var TokenService = require('./modules/tokenAuth');
 
 module.exports = function(app, logger, tokenSecret, pushServerAddr, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
-        var token;
-        try{
-            token = req.headers.authorization.split(' ').pop();
-        }catch(ex){
-            token = null;
-        }
-        return token?jwt.decode(token):{};
+        return TokenService.getUserData(req);
+    };
+
+    //handle errors
+    var handleError = function (res, err, msg) {
+        logger.error(err);
+        return res.send({error: msg || "Server error"});
     };
 
     //access control allow origin *
@@ -72,10 +71,20 @@ module.exports = function(app, logger, tokenSecret, pushServerAddr, router) {
             });
         });
 
-//========================================================================================================== route for retrieving user's profile info
+//========================================================================================================== USER PROFILE
     router.route('/userProfile')
         .get(function (req, res) {
             res.json(getUserData(req));
+        })
+        .put(function (req, res) {
+            UtilsService.allowFields(req.body, ['citiesID', 'jobsID', 'name', 'phone', 'birthday', 'password', 'therapeutic-areasID', 'address', 'practiceType', 'title']);
+            User.update({_id: getUserData(req)._id}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    return handleError(res, err);
+                }else{
+                    res.send({});
+                }
+            });
         });
 
     app.use('/apiMobileShared', router);

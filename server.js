@@ -4,7 +4,7 @@ var Config = require('./config/environment.js'),
 console.log(my_config);
 
 var sessionSecret = "yours3cr3tisveryveryvvverysafew1thmee";
-var tokenSecret = "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss";
+var tokenSecret = my_config.tokenSecret;
 var pushServerAddr = my_config.pushServerAddress;
 
 //=========================================================== https certificates

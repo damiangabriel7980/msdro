@@ -12,7 +12,8 @@ module.exports = function(){
                 GA_code: "UA-61695877-1",
                 disablePatients: false,
                 dpocAppLink: "unavailable",
-                publicFolder: "public"
+                publicFolder: "public",
+                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss"
             };
 
         case 'staging':
@@ -27,7 +28,8 @@ module.exports = function(){
                 GA_code: "UA-61695877-1",
                 disablePatients: false,
                 dpocAppLink: "unavailable",
-                publicFolder: "public_min"
+                publicFolder: "public_min",
+                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss"
             };
 
         case 'production':
@@ -42,7 +44,8 @@ module.exports = function(){
                 GA_code: "UA-62113963-1",
                 disablePatients: true,
                 dpocAppLink: "https://msd-ios-distribution.s3.amazonaws.com/MSD_dpoc_InHouse/index.html",
-                publicFolder: "public_min"
+                publicFolder: "public_min",
+                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss"
             };
 
         default:

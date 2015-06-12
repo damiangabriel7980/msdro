@@ -1,11 +1,8 @@
-var jwt = require('jsonwebtoken');
-var expressJwt = require('express-jwt');
-
-var request = require('request');
-
 var User = require('../app/models/user');
 var UserGroup = require('../app/models/userGroup');
-var AnswerGivers = require('../app/models/qa_answerGivers');
+
+var TokenService = require('../app/modules/tokenAuth');
+var PushService = require('../app/modules/pushNotifications');
 
 module.exports = function (app, logger, tokenSecret, pushServerAddr) {
 
@@ -21,6 +18,19 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
         res.writeHead(200, headers);
         res.end();
     });
+    
+    app.get('/authenticateToken', function (req, res) {
+        logger.warn("token refresh");
+        TokenService.refreshToken(req).then(
+            function (token) {
+                res.send({token: token});
+            },
+            function (err) {
+                logger.error(err);
+                res.send(500, "Server error");
+            }
+        );
+    });
 
     app.post('/authenticateToken', function (req, res) {
         logger.warn("token auth - username: ", req.body.username);
@@ -31,81 +41,34 @@ module.exports = function (app, logger, tokenSecret, pushServerAddr) {
         res.setHeader("Access-Control-Max-Age", '86400'); // 24 hours
         res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
 
+        var username = req.body.username;
+        var password = req.body.password;
         var deviceType = req.body.deviceType;
         var notificationToken = req.body.notificationToken;
 
-        //find user in database
-        User.findOne({ 'username' :  {$regex: "^"+(req.body.username || "").replace(/\+/g,"\\+")+"$", $options: "i"}}).select("+account_expired +account_locked +enabled +password +state").exec(function(err, user) {
-            // if there are any errors, return error status
-            if (err){
-                res.status(403).end();
-            }else{
-                // if no user is found, return the message
-                if (!user){
-                    res.send(401, 'Wrong username/password');
-                }else{
-                    //check account not expired, not locked etc
-                    if(user.account_expired || user.account_locked || !user.enabled){
-                        res.send(401, 'Access not allowed');
-                    }else{
-                        //check password
-                        if (!user.validPassword(req.body.password)){
-                            res.send(401, 'Wrong username/password');
-                        }else{
-                            var profile = {
-                                _id: user._id,
-                                username: user.username,
-                                name: user.name,
-                                image_path: user.image_path,
-                                answerer: false
-                            };
-                            //check if user is an answerer
-                            AnswerGivers.findOne({id_user: user._id}, function (err, data) {
-                                if(err){
-                                    logger.error(err);
-                                    res.send(err);
-                                }else{
-                                    if(data){
-                                        profile.answerer = true;
-                                        profile.alias = data;
-                                    }
-                                    // We are sending the profile inside the token
-                                    var token = jwt.sign(profile, tokenSecret);
-                                    
-                                    // if user logs in from a device, subscribe user for push notifications
-                                    console.log("----------- check subscribe req");
-                                    console.log("device: "+deviceType);
-                                    console.log("token: "+notificationToken);
-                                    if(deviceType && notificationToken){
-                                        //subscribe user for push notifications
-                                        var subscribeData = {
-                                            "user": "MSD"+user._id.toString(),
-                                            "type": deviceType,
-                                            "token": notificationToken
-                                        };
-
-                                        request({
-                                            url: pushServerAddr+"/subscribe",
-                                            method: "POST",
-                                            json: true,
-                                            body: subscribeData,
-                                            strictSSL: false
-                                        }, function (error, message, response) {
-                                            if(error){
-                                                console.log("---- !!! push server subscribe error");
-                                                console.log(error);
-                                                logger.error(error);
-                                            }
-                                        });
-                                    }
-                                    
-                                    res.json({ token: token , profile: profile});
-                                }
-                            });
-                        }
+        TokenService.authenticateToken(username, password).then(
+            function (success) {
+                res.send(success);
+                //subscribe for notifications
+                PushService.subscribe(success.profile._id, deviceType, notificationToken).then(
+                    function () {
+                        logger.warn("Subscribed for push notifications");
+                    },
+                    function (err) {
+                        logger.error(err);
                     }
+                );
+            },
+            function (error) {
+                var status = error.status;
+                var msg = error.message;
+                logger.error(msg);
+                if(error.status === 500){
+                    msg = "Server error";
                 }
+                res.send(status, msg);
             }
-        });
+        );
+
     });
 };
