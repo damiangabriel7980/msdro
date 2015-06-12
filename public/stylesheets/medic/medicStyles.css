@@ -6293,6 +6293,19 @@ body {
     font-size: 15px;
   }
 }
+@media (min-width: 768px) and (orientation: portrait) {
+  .biggerTitle {
+    font-size: 16px;
+  }
+}
+.paddingLeftMobile {
+  padding-left: 0;
+}
+@media (max-width: 768px) {
+  .paddingLeftMobile {
+    padding-left: 15px;
+  }
+}
 .main-view-container {
   width: 100%;
   position: relative;
