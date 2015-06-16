@@ -142,36 +142,6 @@ services.factory('ProductService', ['$resource', function($resource){
     }
 }]);
 
-services.factory('therapeuticAreas', ['$resource', function($resource){
-    return {
-        areas: $resource('apiPublic/therapeuticAreas/', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        formatAreas: function (areas) {
-            var areasOrganised = [];
-            areasOrganised.push({_id:0, name:"Toate", has_children:false});
-            for(var i=0; i<areas.length; i++){
-                var thisArea = areas[i];
-                if(thisArea['therapeutic-areasID'].length == 0){
-                    //it's a parent. Add it
-                    areasOrganised.push(thisArea);
-                    if(thisArea.has_children){
-                        //find all it's children
-                        for(var j=0; j < areas.length; j++){
-                            if(areas[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
-                                //found one children. Add it
-                                areas[j]['ident']=true;
-                                areasOrganised.push(areas[j]);
-                            }
-                        }
-                    }
-                }
-            }
-            return areasOrganised;
-        }
-    }
-}]);
-
 services.factory('multimediaService', ['$resource', function($resource){
     return {
         getByArea: $resource('api/multimedia/multimediaByArea', {}, {
