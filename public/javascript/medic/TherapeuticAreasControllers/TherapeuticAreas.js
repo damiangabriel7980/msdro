@@ -9,12 +9,12 @@
  * */
 
 
-controllers.controller('TherapeuticAreas', ['$scope', 'therapeuticAreaService','$sce','$state', function($scope, therapeuticAreaService,$sce,$state){
+controllers.controller('TherapeuticAreas', ['$scope', 'therapeuticAreas','$sce','$state', function($scope, therapeuticAreas,$sce,$state){
 
     $scope.selectedArea = 0;
 
-   therapeuticAreaService.areas.query().$promise.then(function(areas){
-       $scope.therapeuticAreas = therapeuticAreaService.formatAreas(areas);
+    therapeuticAreas.areas.query().$promise.then(function(areas){
+       $scope.therapeuticAreas = therapeuticAreas.formatAreas(areas);
     });
     $scope.selectArea = function(id){
         $scope.selectedArea = id;

@@ -142,7 +142,7 @@ services.factory('ProductService', ['$resource', function($resource){
     }
 }]);
 
-services.factory('therapeuticAreaService', ['$resource', function($resource){
+services.factory('therapeuticAreas', ['$resource', function($resource){
     return {
         areas: $resource('apiPublic/therapeuticAreas/', {}, {
             query: { method: 'GET', isArray: true }

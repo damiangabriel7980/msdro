@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload','$timeout', '$state', 'Utils', function($scope, $rootScope, ProfileService, therapeuticAreaService, $sce,$upload,$timeout,$state, Utils){
+controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce','$upload','$timeout', '$state', 'Utils', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce,$upload,$timeout,$state, Utils){
 
     //===================================================================== init variables
     var imagePre = $rootScope.pathAmazonDev;
@@ -128,7 +128,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
     });
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
-    therapeuticAreaService.areas.query().$promise.then(function (resp) {
+    therapeuticAreas.areas.query().$promise.then(function (resp) {
         $scope.allAreas = resp;
     });
 
