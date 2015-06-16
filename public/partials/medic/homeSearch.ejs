@@ -1,14 +1,14 @@
-<div class="col-md-6 col-md-offset-3">
+<div class="col-md-6 col-md-offset-3 col-xs-12">
 
     <h4 class="margintop20px">Cautare Continut</h4>
     <div ng-if="answer!=''" class="col-md-12">
         <h4>{{answer}}</h4>
     </div>
-    <div ng-if="products.length>0" ng-repeat="product in products" class="col-md-12 searchArticle noPadding">
-        <div class="col-md-2 noPadding" ng-class="showDetails">
+    <div ng-if="product!=null" ng-show="products.length>0" ng-repeat="product in products track by $index" class="col-md-12 col-xs-12 col-sm-12 searchArticle noPadding">
+        <div class="col-md-2 col-sm-2 col-xs-6 noPadding" ng-class="showDetails">
             <img class="img-responsive img-thumbnail"  ng-src="{{amazon+product.image_path}}">
         </div>
-        <div ng-class="showDetails=='show' ? 'col-md-10':'col-md-12'">
+        <div ng-class="showDetails=='show' ? 'col-md-10 col-xs-6 col-sm-10':'col-md-12'">
             <div class="col-md-12 noPaddingLeft">
                 <div class="col-md-11">
                     <h4 class="MSDgreen handCursor" ui-sref="biblioteca.produse.prodById({id:product._id})" convert-special conver="product.name" ng-bind-html="trustAsHtml(product.name)">
@@ -26,18 +26,18 @@
             <div class="col-md-12" convert-special conver="product.description" ng-bind-html="trimText(htmlToPlainText(product.description), 220)">
             </div>
         </div>
-        <div class="btn btn-info btn-sm pull-right btnSearchTop btn-more-news" ng-class="showDetails" ui-sref="biblioteca.produse.prodById({id:product._id})">
+        <div class="btn btn-info btn-sm hidden-xs pull-right btnSearchTop btn-more-news" ng-class="showDetails" ui-sref="biblioteca.produse.prodById({id:product._id})">
             Vezi detalii
         </div>
     </div>
-    <div ng-if="calendarEv.length>0" ng-repeat="calendar in calendarEv" class="col-md-12 searchArticle noPadding">
+    <div ng-if="calendar!=null" ng-show="calendarEv.length>0" ng-repeat="calendar in calendarEv track by $index" class="col-md-12 col-xs-12 col-sm-12 searchArticle noPadding">
         <div ng-class="showDetails=='show'?'col-md-12 searchLeftBorder':'col-md-12'">
 
-            <div class="col-md-1 date3 " ng-class="showDetails">
+            <div class="col-md-1 col-xs-3 col-sm-3 date3 " ng-class="showDetails">
                 <h2 class="MSDgreen">{{calendar.start | filter: asDate | date:'dd'}}</h2>
                 <h5 class="MSDgreen">{{calendar.start | filter: asDate | date:'MMM'}}</h5>
             </div>
-            <div ng-class="showDetails=='show' ? 'col-md-11':'col-md-12'">
+            <div ng-class="showDetails=='show' ? 'col-md-11 col-xs-9 col-sm-9':'col-md-12'">
                 <div class="col-md-12 noPaddingLeft">
                     <div class="col-md-11">
                         <h4 class="MSDgreen handCursor" ui-sref="calendar({id:calendar._id})" convert-special conver="calendar.name" ng-bind-html="trimText(htmlToPlainText(calendar.name), 100)">
@@ -59,56 +59,34 @@
         </div>
 
     </div>
-    <div ng-if="quizes.length>0" ng-repeat="quiz in quizes track by $index" class="col-md-12 well noPadding">
-        <div class="col-md-2 noPadding" ng-class="showDetails">
-            <img class="img-responsive img-thumbnail" ng-if="quiz.entity!='SLIDE'" ng-src="{{defaultImageVideo}}">
-            <img class="img-responsive img-thumbnail" ng-if="quiz.entity=='SLIDE'" ng-src="{{defaultImageSlide}}">
-        </div>
-        <div ng-class="showDetails=='show' ? 'col-md-10':'col-md-12'">
-            <div class="col-md-12 noPaddingLeft">
-                <div class="col-md-11">
-                    <h4 class="MSDgreen handCursor" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})" convert-special conver="quiz.title" ng-bind-html="trustAsHtml(quiz.title)">
-                    </h4>
-                </div>
-                <div class="col-md-1">
-                    <span ng-if="showDetails=='hide'" class="margintop10px label label-warning pull-right"><i class="glyphicon glyphicon-list-alt"></i>Quiz</span>
-                </div>
-
-
-            </div>
-            <div class="col-md-12" convert-special conver="quiz.description" ng-bind-html="trimText(htmlToPlainText(quiz.description), 220)">
-            </div>
-        </div>
-        <button class="btn btn-info pull-right btnArticleSearch btn-more-news " ng-class="showDetails" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})">Sustine testul</button>
-    </div>
-    <div ng-if="articles.length>0" ng-repeat="article in articles" class="col-md-12 searchArticle noPadding">
-        <div class="col-md-2 noPadding" ng-class="showDetails">
+    <div ng-if="article!=null" ng-repeat="article in articles track by $index" ng-show="articles.length>0" class="col-md-12 col-xs-12 col-sm-12 searchArticle noPadding">
+        <div class="col-md-2 col-xs-6 col-sm-2 noPadding" ng-class="showDetails">
             <img class="img-responsive img-thumbnail" ng-src="{{amazon+article.image_path}}">
         </div>
 
-        <div ng-class="showDetails=='show' ? 'col-md-10':'col-md-12'">
+        <div ng-class="showDetails=='show' ? 'col-md-10 col-sm-10 col-xs-6':'col-md-12'">
             <div class="col-md-12 noPaddingLeft">
                 <div class="col-md-11">
                     <h4 class="MSDgreen handCursor" ui-sref="{{sref(article.type)}}" convert-special conver="article.title" ng-bind-html="trustAsHtml(article.title)">
                     </h4>
                 </div>
                 <div class="col-md-1">
-                    <span ng-if="showDetails=='hide'" class="margintop10px label label-warning pull-right"><i class="glyphicon glyphicon-file"></i>Article</span>
+                    <span ng-if="showDetails=='hide'" class="margintop10px label label-warning pull-right"><i class="glyphicon glyphicon-file"></i>Articol</span>
                 </div>
 
 
             </div>
             <div class="col-md-12" convert-special conver="article.text" ng-bind-html="trimText(htmlToPlainText(article.text), 260)"></div>
         </div>
-        <div class="btn btn-info pull-right btnArticleSearch btn-more-news" ui-sref="{{sref(article.type)}}" ng-class="showDetails">
+        <div class="btn btn-info pull-right hidden-xs btnArticleSearch btn-more-news" ui-sref="{{sref(article.type)}}" ng-class="showDetails">
             Vezi detalii
         </div>
     </div>
-    <div ng-if="multimedia.length>0"  ng-repeat="media in multimedia" class="col-md-12 searchArticle noPadding">
-        <div class="col-md-2 noPadding" ng-class="showDetails">
+    <div ng-if="media != null" ng-show="multimedia.length>0" ng-repeat="media in multimedia track by $index" class="col-md-12 col-xs-12 col-sm-12 searchArticle noPadding">
+        <div class="col-md-2 col-xs-6 col-sm-2 noPadding" ng-class="showDetails">
             <img class="img-responsive img-thumbnail" ng-src="{{media.thumbnail_path?amazon+media.thumbnail_path:(media.type==1?defaultVideoImage:defaultSlideImage)}}">
         </div>
-        <div ng-class="showDetails=='show' ? 'col-md-10':'col-md-12'">
+        <div ng-class="showDetails=='show' ? 'col-md-10 col-sm-10 col-xs-6':'col-md-12'">
             <div class="col-md-12 noPaddingLeft">
                 <div class="col-md-11">
                     <h4 class="MSDgreen handCursor" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: media._id})" convert-special conver="media.title" ng-bind-html="trustAsHtml(media.title)">
@@ -124,10 +102,10 @@
                &nbsp ...
             </div>
         </div>
-        <button class="btn btn-info  pull-right btnMultimediaSearch btn-more-news" ng-class="showDetails" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: media._id})">Vezi material</button>
+        <button class="btn btn-info hidden-xs pull-right btnMultimediaSearch btn-more-news" ng-class="showDetails" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: media._id})">Vezi material</button>
     </div>
 </div>
-<div class="col-md-2 homeSearchPreview">
+<div class="col-md-2 col-xs-12 homeSearchPreview">
     <ul class="nav nav-list MSDgreen">
         <li class="active" ng-click="clasicPreview()">Clasic</li>
         <li class="divider"></li>

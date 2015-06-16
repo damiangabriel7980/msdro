@@ -4776,7 +4776,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
     router.route('/userHomeSearch/')
         .post(function(req,res){
             var data=req.body.data;
-            var arr_of_items=[Products,Multimedia,Quizes,Content,Events];
+            var arr_of_items=[Products,Multimedia,Content,Events];
             var ObjectOfResults={};
             var checker=0;
             getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
