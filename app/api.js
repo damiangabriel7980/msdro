@@ -5015,17 +5015,6 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             }
         });
 
-    router.route('/therapeutic_areas')
-
-        .get(function(req, res) {
-            Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
     router.route('/calendar/getEvents/')
         .post(function(req,res) {
             getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {

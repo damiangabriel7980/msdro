@@ -128,7 +128,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
     });
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
-    therapeuticAreaService.query().$promise.then(function (resp) {
+    therapeuticAreaService.areas.query().$promise.then(function (resp) {
         $scope.allAreas = resp;
     });
 
