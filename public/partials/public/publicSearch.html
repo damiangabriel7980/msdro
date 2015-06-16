@@ -8,7 +8,7 @@
     </div>
     <div class="col-sm-12 noPadding" ng-if="searchResults && searchResults.length > 0">
         <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
-            <div ng-repeat="item in searchResults" class="col-sm-12 article">
+            <div ng-repeat="item in searchResults track by $index" ng-if="item" class="col-sm-12 article">
                 <div class="col-sm-2 picture">
                     <div>
                         <img ng-src="{{item.image_path?pathAmazonDev+item.image_path:defaultArticleImage}}">

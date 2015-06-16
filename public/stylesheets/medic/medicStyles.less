@@ -9,6 +9,17 @@ body{
     font-size: 15px;
   }
 }
+.biggerTitle{
+  @media(min-width: 768px) and (orientation: portrait){
+    font-size: 16px;
+  }
+}
+.paddingLeftMobile{
+  padding-left: 0;
+  @media(max-width: 768px){
+    padding-left: 15px;
+  }
+}
 .main-view-container {
   width: 100%;
   position:relative;
@@ -293,7 +304,7 @@ ul.products li {
       width: 0;
       height: 100%;
       border-right: 1px solid #000000;
-      @media(max-width: 1155px){
+      @media(max-width: 1277px){
         border-right: 0px solid #000000;
       }
     }
@@ -710,6 +721,10 @@ ul.products li {
 .modal-responsive{
   .modal-dialog{
     height: 90%;
+    @media screen and (orientation:portrait){
+      height: auto;
+      width: 700px;
+    }
     .modal-content{
       height: 100%;
       .modal-header{
@@ -763,24 +778,6 @@ ul.products li {
         color: #ffffff;
         background-color: @MSDTitle;
       }
-      &:after{
-        position: relative;
-        font-family: 'Glyphicons Halflings';
-        font-style: normal;
-        font-weight: normal;
-        line-height: 1;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        content: "\e080";
-        left: 93%;
-        bottom: 22px;
-        color: #ffffff;
-        @media(max-device-width: 767px){
-          float: right;
-          left: 1%;
-        }
-      }
-
     }
   }
 }
@@ -926,7 +923,7 @@ ul.products li {
 .iconLeft{margin-left: -10px;color:darkgrey;}
 .padd40px{
   padding-left: 40px;
-  @media(max-width: 768px){
+  @media(max-width: 1277px){
     padding-left: 0;
   }
 }
@@ -944,7 +941,7 @@ ul.products li {
 }
 .padd55px{
   padding-left: 55px;
-  @media(max-width: 1155px){
+  @media(max-width: 1277px){
     padding-left: 15px;
     padding-right: 15px;
   }
@@ -1099,7 +1096,7 @@ hr{
 .margin4LeftMultimedia
 {
   margin-left: -3%;
-  @media (max-width: 1155px) {
+  @media (max-width: 1277px) {
     margin-left: 0%;
   }
 }
@@ -1149,7 +1146,7 @@ hr{
   }
 }
 .noPaddingLeft{
-  padding-left: 0;
+  padding-left: 0px !important;
 }
 .noPaddingRight{
   padding-right: 0px !important;
@@ -1176,6 +1173,10 @@ hr{
 .glycemizerPadd{
   padding-top: 10%;
   padding-bottom: 10%;
+  @media(max-width: 1277px),(orientation: portrait){
+    padding-bottom: 1%;
+    padding-top: 1%;
+  }
 }
 .zeroMarginLeft{
   margin-left: 0%;
@@ -1280,10 +1281,10 @@ hr{
   right: auto;
   margin-top: 5px;
   left: 0 !important;
-  @media(max-width: 1155px){
+  @media(max-width: 1279px){
     left: auto !important;
   }
-  @media(min-width: 1157px)
+  @media(min-width: 1280px)
   {
     right: 100px !important;
   }
@@ -1311,8 +1312,10 @@ hr{
 .expandSearchInDropdown{
   position: absolute;
   right: 270px;
-  @media(min-width: 769px)and(max-width: 1050px){
-    //right: 310px;
+  bottom: -5px;
+  @media(min-width: 769px)and(max-width: 1279px){
+    left: 15px;
+    right: auto;
     margin-top: -19px;
   }
   @media(max-width: 768px){
@@ -1349,7 +1352,7 @@ hr{
     right: 0;
   }
   .newWidthPopSearch {
-    width: 230px !important;
+    width: 165px !important;
     padding: 6px 12px;
     border: 1px solid #cccccc;
     @media(max-width: 768px){
@@ -1394,7 +1397,9 @@ hr{
   margin-right: -15px;
 }
 .paddingTop5{
-  padding-top: 5px;
+  @media(max-width: 768px){
+    padding-top: 5px;
+  }
 }
 .marginRight10px{
   margin-right: 10px;
@@ -1404,12 +1409,12 @@ hr{
   }
 }
 .disableSpecial{
-  @media(max-width: 1155px){
+  @media(max-width: 1279px){
     display: none;
   }
 }
 .disableDesktop{
-  @media(min-width: 1156px){
+  @media(min-width: 1280px){
     display: none;
   }
 }
@@ -1453,8 +1458,14 @@ hr{
 }
 .marginLeft30px{
   margin-left: 30px;
-  @media(max-width: 768px){
+  @media(max-width: 1277px){
     margin-left: 0px;
+  }
+}
+.leftForTablet{
+  @media(min-width: 768px) and (max-width: 1277px)
+  {
+    left: -5%;
   }
 }
 .marginLeft25px{
@@ -1535,6 +1546,10 @@ hr{
 }
 .borderRadiusMenu{
   border-radius: 4px !important;
+  &:hover{
+    background-color: @MSDgreenDarker;
+    color:white;
+  }
 }
 .specialLink{
   color: #009d97 !important;
@@ -1580,7 +1595,7 @@ a:focus{
 }
 .fixedHeightLogo{
   height: 50px;
-  @media (max-width: 1155px){
+  @media (max-width: 1277px){
     height: 40px;
     margin-top: 9px;
   }
@@ -1604,8 +1619,8 @@ h4{
 .merckImage{
   width: 70%;
   cursor:pointer;
-  @media(max-width: 768px){
-    width: 40%;
+  @media(max-width: 1277px),(orientation: portrait){
+    width: 30%;
     cursor:pointer;
   }
 }
@@ -1758,21 +1773,28 @@ h4{
     width: 100% !important;
   }
 }
-@media (max-device-width: 480px) {
   .profileImg{
-    margin: auto;
-    image-orientation: from-image;
+    width: 100%;
+    @media (max-device-width: 480px) {
+      width: auto;
+      margin: auto;
+      image-orientation: from-image;
+    }
   }
   .fc-header-title{
-    h2{
-      font-size: 20px;
-      padding-top: 3px;
+    h2 {
+      @media (max-device-width: 480px) {
+
+        font-size: 20px;
+        padding-top: 3px;
+      }
     }
   }
   .fc-button-today{
-    display: none !important;
+    @media (max-device-width: 480px) {
+      display: none !important;
+    }
   }
-}
 .multimedia10PaddPicture{
   padding-left: 10px;
   padding-top: 10px;
@@ -1832,7 +1854,7 @@ h4{
   @media (max-width: 768px){
     right: 55px;
   }
-  @media (min-width: 769px) and (max-width: 1157px) {
+  @media (min-width: 769px) and (max-width: 1279px) {
     right: 70px;
   }
 }
@@ -1841,13 +1863,19 @@ h4{
 }
 .centeredMobile{
   text-align: left;
-  @media(max-width: 768px){
+  @media(max-width: 1277px),(orientation: portrait){
     text-align: center;
   }
 }
 .justifiedMobile{
   text-align: left;
-  @media(max-width: 768px){
+  @media(max-width: 1277px),(orientation: portrait){
     text-align: justify;
+  }
+}
+.subArea{
+  &:hover{
+    background-color: @MSDgreenDarker;
+    color:white;
   }
 }

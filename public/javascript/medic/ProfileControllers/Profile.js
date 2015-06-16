@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload','$timeout',function($scope, $rootScope, $modalInstance, ProfileService, therapeuticAreaService, $sce,$upload,$timeout){
+controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload','$timeout', '$state',function($scope, $rootScope, ProfileService, therapeuticAreaService, $sce,$upload,$timeout,$state){
 
     var imagePre = $rootScope.pathAmazonDev;
     $scope.showerror=false;
@@ -18,7 +18,9 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
         {number: 3, name: "Policlinica"},
         {number: 4, name: "Farmacie"}
     ];
-
+    $scope.goHomeMobile=function(){
+        $state.go('home');
+    };
     $scope.practices = [
         {
             number: 1,
@@ -267,10 +269,6 @@ controllers.controller('Profile', ['$scope', '$rootScope', '$modalInstance', 'Pr
 
     //open first accordion group by default
     $scope.openFirst = true;
-
-    $scope.closeModal = function(){
-        $modalInstance.close();
-    };
 
     $scope.trustAsHtml = function (data) {
         return $sce.trustAsHtml(data);

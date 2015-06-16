@@ -120,7 +120,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'MultimediaDetailMobile'
         })
         .state('elearning.multimedia.multimediaByArea',{
-            url: '/multimedia/:idArea:idMulti',
+            url: '/multimedia/:idArea/:idMulti',
             templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
             controller: 'MultimediaView'
         })
@@ -212,8 +212,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('profileMobile',{
             url: '/profileMobile',
-            templateUrl: 'partials/medic/profileMobile.html',
-            controller: 'ProfileMobile'
+            templateUrl: 'partials/medic/profile.html',
+            controller: 'Profile'
         })
 }]);
 
@@ -243,6 +243,7 @@ app.run(
             $rootScope.defaultProductImage = $rootScope.pathAmazonResources+ "piles-of-pills.jpg";
             $rootScope.defaultUserImage = $rootScope.pathAmazonResources+ "avatar_unknown.png";
 
+            $rootScope.defaultGroupPhoto = $rootScope.pathAmazonResources + 'customGroups/grup_logo2.png';
             $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.png";
 
             $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {

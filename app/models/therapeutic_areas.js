@@ -12,7 +12,7 @@ var therapeuticAreaSchema		= new Schema({
     last_updated: Date,
     name: String,
     enabled:      Boolean,
-    "therapeutic-areasID": Array
+    "therapeutic-areasID": [{type: String, ref: 'therapeutic-areas'}]
 });
 
 module.exports = mongoose.model('therapeutic-areas', therapeuticAreaSchema,'therapeutic-areas');

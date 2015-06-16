@@ -21,7 +21,7 @@
                     <span ui-sref-active="activeArea" class="list-group-item no-border handCursor borderRadiusMenu" ui-sref="elearning.multimedia.multimediaByArea({idArea:area._id})"><b convert-special conver="area.name" ng-bind-html="trustAsHtml(area.name)"></b></span>
                     <ul ng-if="area.has_children" class="margin1pxTop ">
                         <li ui-sref-active="active" ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'">
-                            <span ui-sref-active="activeArea" class="list-group-item no-border handCursor" ui-sref="elearning.multimedia.multimediaByArea({idArea:area2._id})"><b convert-special conver="area2.name" ng-bind-html="trustAsHtml(area2.name)"></b></span>
+                            <span ui-sref-active="activeArea" class="list-group-item no-border handCursor subArea" ui-sref="elearning.multimedia.multimediaByArea({idArea:area2._id})"><b convert-special conver="area2.name" ng-bind-html="trustAsHtml(area2.name)"></b></span>
                         </li>
                     </ul>
                 </li>
