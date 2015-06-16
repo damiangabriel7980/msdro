@@ -60,9 +60,6 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         $state.go('groupSpecialProduct.menuItem', {product_id: $stateParams.product_id, menuId: firstParentId, childId: firstChildId});
     };
 
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
     $scope.printPage=function(){
         window.print();
     };

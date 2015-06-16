@@ -27,11 +27,4 @@ controllers.controller('ArticleDetail', ['$scope', '$rootScope', '$stateParams',
                 $state.go('biblioteca.articoleStiintifice.listaArticole',{articleType:$scope.currentArticle.type});
         }
     });
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
 }]);

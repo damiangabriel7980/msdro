@@ -42,16 +42,6 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
         }
 
     };
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data,limit) {
-        if(limit!=0)
-            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').substring(0,limit) + '...';
-        else
-            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
     if($stateParams.idMulti)
     {
         var idM = $stateParams.idMulti;
@@ -73,11 +63,5 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
             });
         }
     }
-    $scope.amazonPre = $rootScope.pathAmazonDev;
 
-}])
-    .filter('htmlToPlaintext', function() {
-        return function(text) {
-            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');
-        }
-    });
+}]);

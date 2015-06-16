@@ -23,7 +23,7 @@
             </div>
 
 
-            <div class="col-md-12" convert-special conver="product.description" ng-bind-html="convertAndTrustAsHtml(product.description,220)">
+            <div class="col-md-12" convert-special conver="product.description" ng-bind-html="trimText(htmlToPlainText(product.description), 220)">
             </div>
         </div>
         <div class="btn btn-info btn-sm pull-right btnSearchTop btn-more-news" ng-class="showDetails" ui-sref="biblioteca.produse.prodById({id:product._id})">
@@ -40,7 +40,7 @@
             <div ng-class="showDetails=='show' ? 'col-md-11':'col-md-12'">
                 <div class="col-md-12 noPaddingLeft">
                     <div class="col-md-11">
-                        <h4 class="MSDgreen handCursor" ui-sref="calendar({id:calendar._id})" convert-special conver="calendar.name" ng-bind-html="convertAndTrustAsHtml(calendar.name,100)">
+                        <h4 class="MSDgreen handCursor" ui-sref="calendar({id:calendar._id})" convert-special conver="calendar.name" ng-bind-html="trimText(htmlToPlainText(calendar.name), 100)">
                         </h4>
                     </div>
                     <div class="col-md-1">
@@ -51,7 +51,7 @@
 
                 </div>
                 <div class="col-md-12">
-                    <div convert-special conver="calendar.description" ng-bind-html="convertAndTrustAsHtml(calendar.description,100)">
+                    <div convert-special conver="calendar.description" ng-bind-html="trimText(htmlToPlainText(calendar.description), 100)">
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
 
 
             </div>
-            <div class="col-md-12" convert-special conver="quiz.description" ng-bind-html="convertAndTrustAsHtml(quiz.description,220)">
+            <div class="col-md-12" convert-special conver="quiz.description" ng-bind-html="trimText(htmlToPlainText(quiz.description), 220)">
             </div>
         </div>
         <button class="btn btn-info pull-right btnArticleSearch btn-more-news " ng-class="showDetails" ui-sref="elearning.teste.quizById({id:quiz._id,idd:quiz.questionsID[0]})">Sustine testul</button>
@@ -98,7 +98,7 @@
 
 
             </div>
-            <div class="col-md-12" convert-special conver="article.text" ng-bind-html="convertAndTrustAsHtml(article.text,260)"></div>
+            <div class="col-md-12" convert-special conver="article.text" ng-bind-html="trimText(htmlToPlainText(article.text), 260)"></div>
         </div>
         <div class="btn btn-info pull-right btnArticleSearch btn-more-news" ui-sref="{{sref(article.type)}}" ng-class="showDetails">
             Vezi detalii
@@ -120,7 +120,7 @@
 
 
             </div>
-            <div class="col-md-12" convert-special conver="media.description" ng-bind-html="convertAndTrustAsHtml(media.description,260)">
+            <div class="col-md-12" convert-special conver="media.description" ng-bind-html="trimText(htmlToPlainText(media.description), 260)">
                &nbsp ...
             </div>
         </div>

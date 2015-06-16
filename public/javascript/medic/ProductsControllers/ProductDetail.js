@@ -20,13 +20,5 @@ controllers.controller('ProductDetail', ['$scope','$rootScope' ,'ProductService'
          else
             $state.go('biblioteca.produse.productsByArea',{id:0});
      });
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
 
-    $scope.amazon = $rootScope.pathAmazonDev;
 }]);

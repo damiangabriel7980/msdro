@@ -102,13 +102,6 @@ controllers.controller('ProductsView', ['$scope','$rootScope' ,'ProductService',
     $scope.showElem ='{display: list-item}';
     $scope.hideElem = function(){
         $scope.showElem='{display: none}';
-    }
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
     };
   }])
     .filter('htmlToPlaintext2', function() {

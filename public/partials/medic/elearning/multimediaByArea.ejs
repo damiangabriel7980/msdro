@@ -11,7 +11,7 @@
                         <h4 class="hidden-xs hidden-sm"><a class="handCursor" ng-click="openMultimedia(prod._id)"></a>{{prod.title}}</h4>
                         <h4 class="noMarginTop MSDgreenDarker hidden-md hidden-lg handCursor" ng-click="openMultimedia(prod._id)">{{prod.title}}</h4>
 
-                        <p ng-if="prod.description!=null" class="padd7percent" convert-special conver="prod.description" ng-bind-html="convertAndTrustAsHtml(prod.description,190)">
+                        <p ng-if="prod.description!=null" class="padd7percent" convert-special conver="prod.description" ng-bind-html="trimText(htmlToPlainText(prod.description), 190)">
                         </p>
                         <p ng-if="prod.description==null" class="padd11percent"></p>
 

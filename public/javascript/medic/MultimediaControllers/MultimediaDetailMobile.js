@@ -27,13 +27,6 @@ controllers.controller('MultimediaDetailMobile', ['$scope','multimediaService','
     $scope.okk = function () {
         $state.go('elearning.multimedia.multimediaByArea',{idArea:0,idMulti: null});
     };
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
     $scope.cancell = function () {
         $state.go('elearning.multimedia.multimediaByArea',{idArea:0,idMulti: null});
     };

@@ -28,13 +28,8 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
             }
         }
     });
-    HomeService.getUserImage.query().$promise.then(function(resp){
-        $rootScope.imageForUser = resp.image_path;
-        $rootScope.userFullName=resp.name;
-    });
 
     $scope.carouselNavigate = function (carouselItem) {
-
         if(carouselItem.redirect_to_href){
             window.location.href = carouselItem.redirect_to_href;
         }else{
@@ -64,59 +59,14 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
             $scope.lastIllusion=resp[0];
         }
     });
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtmlTrimmed=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        var newText = convertedText.split(/\s+/).slice(0,3).join(" ");
-        newText += '...';
-        return $sce.trustAsHtml(newText);
-    };
-    $scope.convertAndTrustAsHtml=function (data,limit) {
-        if(limit!=0)
-            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').substring(0,limit) + '...';
-        else
-            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
     //------------------------------------------------------------------------------------------------ useful functions
-    $scope.htmlToPlainText = function(text) {
-        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');
-    };
-
-    $scope.createHeader = function (text,length) {
-        return $scope.htmlToPlainText(text).substring(0,length)+"...";
-    };
 
     $scope.toDate = function (ISOdate) {
         return new Date(ISOdate);
     };
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-
-    //$scope.deviceWidth = screen.availWidth;
-    /* --- carousel --- */
-
-
 
     /* --- footer realign ---*/
 
     $scope.iconLive='<i class="glyphicon glyphicon-facetime-video smallFontSize" ng-if="e.type==2"></i>&nbsp;';
 
-}])
-    .directive('ngEnter', function () {
-        return function (scope, element, attrs) {
-            element.bind("keydown keypress", function (event) {
-                if (event.which === 13) {
-                    scope.$apply(function () {
-                        scope.$eval(attrs.ngEnter);
-                    });
-
-                    event.preventDefault();
-                }
-            });
-        };
-    });
-
+}]);

@@ -8,7 +8,7 @@
                 <div class="col-md-12 articleBox ">
                      <div class="col-md-12 noPadding padd5left">
                         <div class="col-md-12 title handCursor" style="color:#1c9893" ui-sref="{{sr}}" convert-special conver='cont.title' ng-bind-html="trustAsHtml(cont.title)"></div>
-                        <div class="col-md-12 trimmedArticle" convert-special conver="cont.text" ng-bind-html="convertAndTrustAsHtml(cont.text,100)"></div>
+                        <div class="col-md-12 trimmedArticle" convert-special conver="cont.text" ng-bind-html="trimText(htmlToPlainText(cont.text), 100)"></div>
                         <div class="col-md-12"><a class="handCursor" style="color:#1c9893" ui-sref="{{sr}}">Citeste mai mult &nbsp;</a></div>
                     </div>
                 </div>

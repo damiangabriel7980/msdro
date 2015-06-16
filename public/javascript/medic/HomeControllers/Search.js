@@ -2,23 +2,7 @@
  * Created by miricaandrei23 on 07.01.2015.
  */
 controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce','$animate','$stateParams','$window','$timeout', function($scope, $rootScope, HomeService, $sce,$animate,$stateParams,$window,$timeout) {
-    $scope.htmlToPlainText = function(text) {
-        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');
-    };
 
-    $scope.trustDescription = function(text){
-        return $sce.trustAsHtml(text);
-    };
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data,limit) {
-        if(limit!=0)
-            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').substring(0,limit) + '...';
-        else
-            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
     $scope.amazon = $rootScope.pathAmazonDev;
     HomeService.getSearchResults.query({data:$stateParams.textToSearch.toString(),specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(response){
        $scope.productsFirstSet = response.products;
@@ -84,5 +68,4 @@ controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce',
     $scope.detailedPreview = function(){
         $scope.showDetails="show";
     };
-}])
-    .filter('unsafe', function($sce) { return $sce.trustAsHtml; });
+}]);

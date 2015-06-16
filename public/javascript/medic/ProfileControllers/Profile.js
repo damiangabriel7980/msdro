@@ -270,14 +270,6 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
     //open first accordion group by default
     $scope.openFirst = true;
 
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
-
 }]).filter('propsFilter', function() {
     //used for select2
     return function(items, props) {

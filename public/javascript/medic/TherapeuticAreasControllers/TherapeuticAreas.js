@@ -30,13 +30,6 @@ controllers.controller('TherapeuticAreas', ['$scope', 'therapeuticAreaService','
         name: "Toate ariile terapeutice",
         _id: 0
     };
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
     //
     //$scope.toggleActive = function(){
     //    $('.list-group li').removeClass('active');

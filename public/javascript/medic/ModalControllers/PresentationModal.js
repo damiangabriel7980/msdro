@@ -3,10 +3,6 @@ controllers.controller('PresentationModal', ['$scope', '$rootScope', 'Presentati
        $scope.presentation=resp;
     });
 
-    $scope.trustAsHtml=function(content){
-      return $sce.trustAsHtml(content);
-    };
-
     $scope.changeStatus=function(){
         if($rootScope.specialGroupSelected===null)
             changeLocalGroupModalStatus($scope.presentation.groupsID[0],this.rememberOption);

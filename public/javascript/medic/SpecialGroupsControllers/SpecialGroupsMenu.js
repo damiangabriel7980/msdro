@@ -27,13 +27,6 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
             localStorage.removeItem('specialGroupSelected');
         }
     });
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
     $scope.selectSpecialGroup = function(group){
         if(!$rootScope.specialGroupSelected)
             $rootScope.specialGroupSelected={_id:0};

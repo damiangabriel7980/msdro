@@ -2,9 +2,6 @@ controllers.controller('ProductPageGlossary', ['$scope', '$rootScope', '$statePa
     specialProductService.getSpecialProductGlossary.query({id:$stateParams.product_id}).$promise.then(function(result){
             $scope.specialProductGlossary=result;
     });
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
 
     $scope.printPage=function(){
         window.print();

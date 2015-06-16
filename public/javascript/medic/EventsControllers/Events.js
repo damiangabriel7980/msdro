@@ -6,17 +6,9 @@ var date = new Date();
     $scope.realEvents=[];
     $scope.realEventsMob=[];
     var y=$(date);
-    $scope.trustAsHtml = function (data) {
-        var newName=$sce.trustAsHtml(data);
-        return newName;
-    };
     $scope.eventIcon='<i class="glyphicon glyphicon-facetime-video verySmallFont" ng-if="eventim.type==2"></i>&nbsp;';
     $scope.eventIconCalendar='<i class="glyphicon glyphicon-facetime-video verySmallFont"></i>&nbsp;';
 
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
     eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.events =result;
        $scope.eventsS=[];
@@ -217,11 +209,6 @@ var date = new Date();
     };
 
 }])
-    .filter('htmlToPlaintext', function() {
-        return function(text) {
-            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');
-        }
-    })
     .filter("asDate", function () {
         return function (input) {
             return new Date(input);

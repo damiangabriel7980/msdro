@@ -24,10 +24,6 @@ controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams
 
     loadData();
 
-
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
     $scope.printPage=function(){
         window.print();
     };

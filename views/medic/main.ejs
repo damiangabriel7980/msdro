@@ -207,9 +207,9 @@
             <ul class="nav navbar-nav menuPadding">
                 <li class="mySearchInDropdown">
                     <ul class="nav navbar-nav navbar-right mySearchInDropdown disableDesktop">
-                        <form class="navbar-form mySearchInDropdown" role="search">
+                        <form class="navbar-form mySearchInDropdown" role="search" ng-submit="searchText(textToSearch);navCollapsed=!navCollapsed">
                             <div class="input-group mySearchInDropdown expandSearchInDropdown">
-                                <input type="text" class="form-control mySearchInDropdown popSearch newWidthPopSearch" ng-enter="searchText(textToSearch);navCollapsed=!navCollapsed" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
+                                <input type="text" class="form-control mySearchInDropdown popSearch newWidthPopSearch" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
                                 <span class="input-group-addon mySearchInDropdown" ng-click="searchText(textToSearch);navCollapsed=!navCollapsed"><i class="glyphicon glyphicon-search"></i></span>
                             </div>
                         </form>
@@ -271,9 +271,9 @@
                 </div>
             </ul>
             <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="!specialGroupSelected">
-                <form class="navbar-form" role="search">
+                <form class="navbar-form" role="search" ng-submit="searchText(textToSearch)">
                     <div class="input-group expandSearchNoSpecial">
-                        <input type="text" class="form-control popSearch newWidthPopSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
+                        <input type="text" class="form-control popSearch newWidthPopSearch" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
                         <span class="input-group-addon" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
                     </div>
                 </form>
@@ -298,9 +298,9 @@
                 </ul>
             </ul>
             <ul class="nav navbar-nav navbar-right disableSpecial" ng-if="specialGroupSelected!=null">
-                <form class="navbar-form" role="search">
+                <form class="navbar-form" role="search" ng-submit="searchText(textToSearch)">
                     <div class="input-group expandSearch">
-                        <input type="text" class="form-control popSearch newWidthPopSearch" ng-enter="searchText(textToSearch)" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
+                        <input type="text" class="form-control popSearch newWidthPopSearch" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
                         <span class="input-group-addon" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
                     </div>
                 </form>

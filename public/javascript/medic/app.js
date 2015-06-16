@@ -219,7 +219,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 
 app.run(
     [            '$rootScope', '$state', '$stateParams', '$modal','$sce',
-        function ($rootScope,   $state,   $stateParams, $modal,$sce) {
+        function ($rootScope,   $state,   $stateParams,   $modal,  $sce) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -283,7 +283,35 @@ app.run(
                     || document.documentElement.clientWidth
                     || document.body.clientWidth;
                 $rootScope.$apply();
-            }
+            };
+
+            //============================================================================= global functions
+            $rootScope.trustAsHtml = function (data) {
+                return $sce.trustAsHtml(data);
+            };
+            $rootScope.htmlToPlainText = function(text) {
+                return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+            };
+            $rootScope.convertAndTrustAsHtml=function (data) {
+                return $sce.trustAsHtml($rootScope.htmlToPlainText(data));
+            };
+            $rootScope.trimText = function (text, length) {
+                if(typeof text === "string"){
+                    if(text.length > length){
+                        //TODO: convert special characters before substring
+                        return $rootScope.trustAsHtml($rootScope.htmlToPlainText(text).substring(0, length) + "...");
+                    }else{
+                        return $rootScope.trustAsHtml($rootScope.htmlToPlainText(text));
+                    }
+                }else{
+                    return "";
+                }
+            };
+            $rootScope.trimWords = function (text, wordsCount) {
+                if(typeof text === "string"){
+                    return text.split(" ").slice(0, wordsCount).join(" ") + "...";
+                }
+            };
         }
     ]
 );

@@ -18,13 +18,6 @@ controllers.controller('MultimediaBeforeQuiz', ['$scope','$rootScope' ,'quizesSe
         $scope.idQ=$scope.attachedTest.questionsID[0];
     });
     $scope.amazon = $rootScope.pathAmazonDev;
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
     $scope.getVideoSrc = function(filepath){
         return $sce.trustAsResourceUrl($rootScope.pathAmazonDev+filepath)
     };
