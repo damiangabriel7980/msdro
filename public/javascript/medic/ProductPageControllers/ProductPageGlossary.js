@@ -2,10 +2,6 @@ controllers.controller('ProductPageGlossary', ['$scope', '$rootScope', '$statePa
     specialProductService.getSpecialProductGlossary.query({id:$stateParams.product_id}).$promise.then(function(result){
             $scope.specialProductGlossary=result;
     });
-
-    $scope.printPage=function(){
-        window.print();
-    };
 }]);
 /**
  * Created by miricaandrei23 on 16.02.2015.

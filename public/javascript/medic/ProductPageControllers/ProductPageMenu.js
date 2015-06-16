@@ -23,8 +23,4 @@ controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams
     };
 
     loadData();
-
-    $scope.printPage=function(){
-        window.print();
-    };
 }]);

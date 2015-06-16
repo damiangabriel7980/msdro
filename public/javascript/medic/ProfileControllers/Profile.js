@@ -1,13 +1,14 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload','$timeout', '$state',function($scope, $rootScope, ProfileService, therapeuticAreaService, $sce,$upload,$timeout,$state){
+controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload','$timeout', '$state', 'Utils', function($scope, $rootScope, ProfileService, therapeuticAreaService, $sce,$upload,$timeout,$state,Utils){
 
     var imagePre = $rootScope.pathAmazonDev;
     $scope.showerror=false;
     $scope.showerrorProf=false;
     $scope.showerrorPass=false;
 
+    $scope.isIpad = Utils.isMobile(false,true)['isIpad'];
     //================================================================================================================== PERSONAL INFO
 
     //------------------------------------------------------------------------------- init variables

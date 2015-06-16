@@ -5,8 +5,4 @@ controllers.controller('ProductPageDownloads', ['$scope', '$rootScope', '$stateP
     specialProductService.getSpecialProductFiles.query({id:$stateParams.product_id}).$promise.then(function(files){
         $scope.specialProductFiles=files;
     });
-
-    $scope.printPage=function(){
-        window.print();
-    };
 }]);

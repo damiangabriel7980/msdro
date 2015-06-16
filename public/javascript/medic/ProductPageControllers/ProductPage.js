@@ -1,4 +1,4 @@
-controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window){
+controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window','PrintService', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window,PrintService){
     $scope.oneAtATime = true; //open accordion groups one at a time
     $scope.isCollapsed = {
         isFirstOpen: false
@@ -58,10 +58,6 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
                 $scope.mobileMenuTitle = menu[0].title;
         }
         $state.go('groupSpecialProduct.menuItem', {product_id: $stateParams.product_id, menuId: firstParentId, childId: firstChildId});
-    };
-
-    $scope.printPage=function(){
-        window.print();
     };
     $scope.status = {
         isFirstOpen: false

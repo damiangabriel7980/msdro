@@ -181,8 +181,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal','$sce',
-        function ($rootScope,   $state,   $stateParams,   $modal,  $sce) {
+    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils',
+        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -220,26 +220,9 @@ app.run(
             $rootScope.deviceWidth= window.innerWidth
                 || document.documentElement.clientWidth
                 || document.body.clientWidth;
-            var standalone = window.navigator.standalone,
-                userAgent = window.navigator.userAgent.toLowerCase(),
-                safari = /safari/.test( userAgent ),
-                ios = /iphone|ipod|ipad/.test( userAgent );
-            $rootScope.iosDetect = false;
-            $rootScope.iosDev=ios;
-            $rootScope.androidDetect=userAgent.indexOf("android") > -1;
-            if(ios)
-            {
-                if ( !standalone && safari ) {
-                    $rootScope.iosDetect = true;
-                }
-            }
-            $rootScope.isIpad=/ipad/.test( userAgent );
-            var isAndroidTablet = function(){
-                var ua = navigator.userAgent.toLowerCase();
-                return (ua.indexOf("android") > -1 && ua.indexOf("mobile")==-1);
+            $rootScope.printPage = function(){
+                PrintService.printWindow();
             };
-            $rootScope.androidTab=isAndroidTablet();
-
 
             window.onresize = function(){
                 $rootScope.deviceWidth= window.innerWidth

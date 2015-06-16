@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-controllers.controller('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce){
+controllers.controller('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce','Utils','Diacritics', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce,Utils,Diacritics){
 var date = new Date();
     $scope.realEvents=[];
     $scope.realEventsMob=[];
@@ -18,14 +18,14 @@ var date = new Date();
            var today = new Date($scope.events[i].end);
            var tomorrow = new Date($scope.events[i].end);
            tomorrow.setDate(today.getDate()+1);
-           $scope.eventsS.push({id:$scope.events[i]._id, title:trimTitle($scope.events[i].name),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: popOverTitle($scope.events[i].name)});
+           $scope.eventsS.push({id:$scope.events[i]._id, title:Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,true),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,false)});
        }
         for(var i = 0; i < $scope.events.length; i++)
         {
             var today = new Date($scope.events[i].end);
             var tomorrow = new Date($scope.events[i].end);
             tomorrow.setDate(today.getDate()+1);
-            $scope.eventsMob.push({id:$scope.events[i]._id, title:trimTitleMobile($scope.events[i].name),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: popOverTitle($scope.events[i].name)});
+            $scope.eventsMob.push({id:$scope.events[i]._id, title:Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,true,true),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,false)});
         }
 
          $scope.realEvents=[$scope.eventsS];
@@ -40,7 +40,7 @@ var date = new Date();
                 var endDate=tomorrow;
              else
                  var endDate=today;
-             angular.element('.fc-event-hori').attr("data-original-title",newDate(data.start)  + " - " +  newDate(endDate));
+             angular.element('.fc-event-hori').attr("data-original-title",Utils.customDateFormat(data.start)  + " - " +  Utils.customDateFormat(endDate));
 
              var options = {
                  trigger:"hover",
@@ -48,7 +48,6 @@ var date = new Date();
                  container:'body',
                  delay: 500
              };
-             //options.title=newDate(data.start)  + " - " + newDate(data.end);
                  $('[data-toggle="popover"]').popover(options);
          };
         $scope.uiConfig = {
@@ -146,68 +145,6 @@ var date = new Date();
             }
         });
     };
-    var newDate=function(input){
-        var data = input;
-        return data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
-    };
-    var trimTitle=function(str) {
-        var newEventName=String(str)
-            .replace('Ă','A')
-            .replace('ă','a')
-            .replace('Â','A')
-            .replace('â','a')
-            .replace('Î','I')
-            .replace('î','i')
-            .replace('Ș','S')
-            .replace('ș','s')
-            .replace('Ş','S')
-            .replace('ş','s')
-            .replace('Ț','T')
-            .replace('ț','t')
-            .replace('Ţ','T')
-            .replace('ţ','t');
-        newEventName=newEventName.split(/\s+/).slice(0,3).join(" ");
-        return newEventName;
-    };
-    var trimTitleMobile=function(str) {
-        var newEventName=String(str)
-            .replace('Ă','A')
-            .replace('ă','a')
-            .replace('Â','A')
-            .replace('â','a')
-            .replace('Î','I')
-            .replace('î','i')
-            .replace('Ș','S')
-            .replace('ș','s')
-            .replace('Ş','S')
-            .replace('ş','s')
-            .replace('Ț','T')
-            .replace('ț','t')
-            .replace('Ţ','T')
-            .replace('ţ','t');
-        newEventName=newEventName.split(/\s+/).join(" ");
-        newEventName=newEventName.substr(0,10)+"...";
-        return newEventName;
-    };
-    var popOverTitle=function(str) {
-        var newEventName=String(str)
-            .replace('Ă','A')
-            .replace('ă','a')
-            .replace('Â','A')
-            .replace('â','a')
-            .replace('Î','I')
-            .replace('î','i')
-            .replace('Ș','S')
-            .replace('ș','s')
-            .replace('Ş','S')
-            .replace('ş','s')
-            .replace('Ț','T')
-            .replace('ț','t')
-            .replace('Ţ','T')
-            .replace('ţ','t');
-        return newEventName;
-    };
-
 }])
     .filter("asDate", function () {
         return function (input) {

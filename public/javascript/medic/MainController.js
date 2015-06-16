@@ -1,4 +1,4 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService','$window','$cookies', function ($scope, $state, $modal,$rootScope,alterIntroService,$window,$cookies) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService','$window','$cookies','Utils', function ($scope, $state, $modal,$rootScope,alterIntroService,$window,$cookies,Utils) {
 
     var openIntro = function () {
         $modal.open({
@@ -189,7 +189,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         }
     };
     $scope.showFarmaModal = function() {
-        if($rootScope.iosDetect)
+        if(Utils.isMobile(false,true)['iosDetect'])
             window.open($rootScope.Pharma);
         else {
             var modalInstance = $modal.open({
@@ -211,7 +211,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     };
 
     $scope.showTermsModal = function(){
-        if($rootScope.iosDetect)
+        if(Utils.isMobile(false,true)['iosDetect'])
             window.open($rootScope.Terms);
         else {
             $modal.open({
@@ -226,7 +226,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
 
     //merck modal
     $scope.showMerckManual = function(){
-        if($rootScope.iosDetect)
+        if(Utils.isMobile(false,true)['iosDetect'])
             window.open($rootScope.MerckManual);
         else{
             $modal.open({
@@ -244,9 +244,9 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
 
     //profile modal
     $scope.showProfile = function(){
-        if($rootScope.iosDev || $rootScope.androidDetect)
+        if(Utils.isMobile(false,true)['iosDev'] || Utils.isMobile(false,true)['androidDetect'])
         {
-            if($rootScope.isIpad || $rootScope.androidTab)
+            if(Utils.isMobile(false,true)['isIpad'] || Utils.isMobile(false,true)['androidTab'])
             {
                 $modal.open({
                     templateUrl: 'partials/medic/profile.html',
