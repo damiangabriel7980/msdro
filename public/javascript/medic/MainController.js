@@ -195,7 +195,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             var modalInstance = $modal.open({
                 templateUrl: 'partials/medic/modals/Farma.html',
                 keyboard: false,
-                controller: 'Pharmacovigilance',
                 size: 'lg',
                 windowClass: 'fade modal-responsive',
                 backdrop: 'static'
@@ -207,8 +206,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         $modal.open({
             templateUrl: 'partials/medic/modals/contact.html',
             size: 'lg',
-            windowClass: 'fade',
-            controller: 'Contact'
+            windowClass: 'fade'
         });
     };
 
@@ -221,7 +219,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                 size: 'lg',
                 windowClass: 'fade modal-responsive',
                 backdrop: 'static',
-                controller: 'Terms',
                 keyboard: false
             });
         }
@@ -237,8 +234,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                 size: 'lg',
                 keyboard: false,
                 backdrop: 'static',
-                windowClass: 'fade modal-responsive',
-                controller: 'MerckManual'
+                windowClass: 'fade modal-responsive'
             });
         }
     };

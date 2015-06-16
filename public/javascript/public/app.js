@@ -189,8 +189,7 @@ app.run(
                 $modal.open({
                     templateUrl: 'partials/public/modals/contactModal.html',
                     size: 'lg',
-                    windowClass: 'fade',
-                    controller: 'ContactModal'
+                    windowClass: 'fade'
                 });
             };
 

@@ -69,6 +69,9 @@ services.factory('Utils', function () {
             }else{
                 return window.innerWidth < 992;
             }
+        },
+        getMonthsArray: function () {
+            return ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
         }
     }
 });

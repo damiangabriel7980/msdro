@@ -1,14 +1,14 @@
 <div class="col-md-12">
-    <button class="btn btn-default" ng-click="goPrevious()"><i class="glyphicon glyphicon-chevron-left"></i></button>
-    <button class="btn btn-default" ng-click="goNext()"><i class="glyphicon glyphicon-chevron-right"></i></button>
-    <button class="btn btn-default" ng-click="rotateLeft()"><i class="glyphicon glyphicon-circle-arrow-left"></i></button>
-    <button class="btn btn-default" ng-click="rotateRight()"><i class="glyphicon glyphicon-circle-arrow-right"></i></button>
-    <button class="btn btn-default" ng-click="zoomIn()"><i class="glyphicon glyphicon-plus"></i></button>
-    <button class="btn btn-default" ng-click="zoomOut()"><i class="glyphicon glyphicon-minus"></i></button>
-    <button class="btn btn-default" ng-click="fitToScreen()"><i class="glyphicon glyphicon-fullscreen"></i></button>
+    <button class="btn btn-default" ng-click="goPrevious()" tooltip="Pagina precedenta" tooltip-placement="bottom"><i class="glyphicon glyphicon-chevron-left"></i></button>
+    <button class="btn btn-default" ng-click="goNext()" tooltip="Pagina urmatoare" tooltip-placement="bottom"><i class="glyphicon glyphicon-chevron-right"></i></button>
+    <button class="btn btn-default" ng-click="rotateLeft()" tooltip="Rotire pagina la stanga" tooltip-placement="bottom"><i class="glyphicon glyphicon-circle-arrow-left"></i></button>
+    <button class="btn btn-default" ng-click="rotateRight()" tooltip="Rotire pagina la dreapta" tooltip-placement="bottom"><i class="glyphicon glyphicon-circle-arrow-right"></i></button>
+    <button class="btn btn-default" ng-click="zoomIn()" tooltip="Mareste pagina" tooltip-placement="bottom"><i class="glyphicon glyphicon-plus"></i></button>
+    <button class="btn btn-default" ng-click="zoomOut()" tooltip="Micsoreaza pagina" tooltip-placement="bottom"><i class="glyphicon glyphicon-minus"></i></button>
+    <button class="btn btn-default" ng-click="fitToScreen()" tooltip="Revenire la dimensiunea initiala" tooltip-placement="bottom"><i class="glyphicon glyphicon-fullscreen"></i></button>
     <span style="padding-left: 10px;">Page: {{pageToDisplay}} / {{pageCount}}</span>
 </div>
-<div class="col-md-12" style="height: 80%; overflow: scroll;">
+<div class="col-md-12" style="height: 95%; overflow: scroll;">
     <!--IMPORTANT - zoom in/out uses the style attribute in this form-->
-    <canvas id="pdf-canvas" style="width:100%"></canvas>
+    <canvas id="pdf-canvas" style="width:100%;" class="rotate0"></canvas>
 </div>
