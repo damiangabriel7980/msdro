@@ -170,7 +170,7 @@ services.factory('PrintService',function(){
            return window.print();
        }
    }
-});});
+});
 services.factory('CollectionsService', function () {
     return {
         findById: function (id, collection) {
