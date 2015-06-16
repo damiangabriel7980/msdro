@@ -5,59 +5,59 @@
     <accordion close-others="true">
         <accordion-group class="no-text-decoration" is-open="openFirst">
             <accordion-heading class="no-text-decoration" ><p class="no-text-decoration"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Profilul meu</p></accordion-heading>
-            <div class="col-md-12">
+            <div class="col-md-12 col-xs-12">
                 <alert ng-if="userProfileAlert.newAlert" type="{{userProfileAlert.type}}" close="userProfileAlert.newAlert=false">{{userProfileAlert.message}}</alert>
             </div>
             <form name="profileForm" novalidate>
-                <div class="col-md-12 col-sm-12 noPadding">
-                    <div class="col-md-4 col-sm-5 noPadding">
-                        <div class="col-md-12">
-                            <img ng-class="hideImg" class="img-responsive img-thumbnail imgFix" no-cache-src="{{imageUser}}" style="width:100%;">
+                <div class="col-md-12 col-xs-12 col-sm-12 noPadding">
+                    <div class="col-md-4 col-xs-12 col-sm-5 noPadding">
+                        <div class="col-md-12 col-xs-12">
+                            <img id="imgMobile" ng-class="hideImg" class="img-responsive img-thumbnail profileImg imgFix" no-cache-src="{{imageUser}}">
                         </div>
-                        <div class="col-md-12 margintop5px">
+                        <div class="col-md-12 col-xs-12 margintop5px">
                             <button class="btn btn-default" style="width: 100%" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o poza</button>
                         </div>
-                        <div class="col-md-12 margintop5px">
+                        <div class="col-md-12 col-xs-12 margintop5px">
                             <alert type="{{uploadAlert.type}}" ng-if="uploadAlert.newAlert" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
                         </div>
                     </div>
-                    <div class="col-md-8 col-sm-7 noPadding">
-                        <div class="col-md-12 noPadding">
+                    <div class="col-md-8 col-sm-8 col-xs-12 noPadding">
+                        <div class="col-md-12 col-xs-12 noPadding">
                             <!--<div class="form-group-sm col-md-12" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">-->
-                            <div class="form-group-sm col-md-3 col-sm-12">
+                            <div class="form-group-sm col-md-3 col-sm-12 col-xs-12">
                                 <label>Titlu:</label>
                                 <select ng-model="userData.title" class="form-control" ng-options="title.number as title.name for title in titles"></select>
                             </div>
-                            <div class="form-group-sm col-md-9 col-sm-12" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
+                            <div class="form-group-sm col-md-9 col-sm-12 col-xs-12" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
                                 <label>Nume<sup>*</sup>:</label>
                                 <input type="text" class="form-control" id="nume" name="nume" ng-model="fullname" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\s]{3,30}$/" ng-required="true">
                                 <p class="" ng-show="profileForm.nume.$error.pattern">Numele nu contine caractere valide/are mai putin de 3 caractere!</p>
                                 <p class="" ng-show="profileForm.nume.$error.required">Numele este obligatoriu!</p>
                             </div>
                         </div>
-                        <div class="form-group-sm col-md-6 col-sm-12" ng-class="{'has-error': profileForm.telefon.$error.pattern}">
+                        <div class="form-group-sm col-md-6 col-sm-12 col-xs-12" ng-class="{'has-error': profileForm.telefon.$error.pattern}">
                             <label for="telefon">Telefon:</label>
                             <input type="text" class="form-control" id="telefon" name="telefon" ng-model="phone" ng-pattern="/^[0-9]{10,20}$/">
                             <p class="" ng-show="profileForm.telefon.$error.pattern">Numarul de telefon trebuie sa aiba minim 10 cifre!</p>
                             <p class="" ng-show="profileForm.telefon.$error.required">Numarul de telefon este obligatoriu!</p>
                         </div>
-                        <div class="form-group-sm col-md-6 col-sm-12">
+                        <div class="form-group-sm col-md-6 col-sm-12 col-xs-12">
                             <label>Tip de practica:</label>
                             <select ng-model="userData.practiceType" class="form-control" ng-options="practice.number as practice.name for practice in practices"></select>
                         </div>
-                        <div class="col-md-12 col-sm-12">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
                             <therapeutic-select all-areas="allAreas" selected-areas="selectedAreas" returned-areas="newAreas" display-compact="true"></therapeutic-select>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12 noPadding">
                     <hr style="margin: 10px 0"/>
-                    <div class="col-md-12 form-group-sm" ng-class="{'has-error': profileForm.address.$error.required}">
+                    <div class="col-md-12 form-group-sm col-xs-12" ng-class="{'has-error': profileForm.address.$error.required}">
                         <label>Adresa<sup>*</sup>:</label>
                         <input type="text" class="form-control" name="address" ng-model="address" ng-required="true">
                         <p ng-show="profileForm.address.$error.required">Adresa este obligatorie</p>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-xs-12">
                         <div class="form-group-sm" ng-show="!isIpad">
                             <label>Judet<sup>*</sup>:</label>
                             <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county" ng-required="true">
@@ -73,7 +73,7 @@
                             <select class="form-control" ng-model="county.selected" ng-options="county as county.name for county in counties"></select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-xs-12">
                         <div class="form-group-sm" ng-show="!isIpad">
                             <label>Oras<sup>*</sup>:</label>
                             <ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" ng-required="true">
@@ -90,84 +90,84 @@
                         <p class="" ng-show="profileForm.oras.$invalid && !profileForm.oras.$pristine">Orasul nu este valid!</p>
                     </div>
                 </div>
-                <div class="col-md-12 col-sm-12 noPadding">
+                <div class="col-md-12 col-sm-12 col-xs-12 noPadding">
                     <div class="col-md-12 form-group-sm" style="padding-bottom: 0">
                         <input type="checkbox" ng-model="userData.subscriptions.newsletterStaywell"/>
                         <span>Abonat la newsletter Staywell</span>
                     </div>
-                    <div class="col-md-12 form-group-sm" style="padding-bottom: 0">
+                    <div class="col-md-12 col-xs-12 form-group-sm" style="padding-bottom: 0">
                         <input type="checkbox" ng-model="userData.subscriptions.infoMSD"/>
                         <span>Abonat la informatii MSD</span>
                     </div>
-                    <div class="col-md-12 form-group-sm" style="padding-bottom: 0">
+                    <div class="col-md-12 col-xs-12 form-group-sm" style="padding-bottom: 0">
                         <input type="checkbox" name="rememberOption" ng-model="rememberOption">
                         <span>Afiseaza prezentarile initiale</span>
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 col-xs-12">
                     <button type="submit" ng-click="submitProfileForm(profileForm.$valid)" class="btn btn-primary pull-right">Salveaza</button>
                 </div>
             </form>
         </accordion-group>
         <accordion-group class="no-text-decoration">
             <accordion-heading class="no-text-decoration"><p class="no-text-decoration"><i class="glyphicon glyphicon-lock"></i>&nbsp;&nbsp;Loc de munca</p></accordion-heading>
-            <div class="col-md-12">
+            <div class="col-md-12 col-xs-12">
                 <alert ng-if="userJobAlert.newAlert" type="{{userJobAlert.type}}" close="userJobAlert.newAlert=false">{{userJobAlert.message}}</alert>
             </div>
             <form name="jobForm" novalidate>
-                <div class="col-md-12 noPadding">
-                    <div class="form-group-sm col-md-6">
+                <div class="col-md-12 col-xs-12 noPadding">
+                    <div class="form-group-sm col-md-6 col-xs-12">
                         <label for="tipLoc">Tip loc de munca<sup>*</sup>:</label>
                         <select ng-model="selectedJob" name="tip_munca" ng-options="job.number as job.name for job in jobTypes"
                                 class="form-control" id="tipLoc" style="width: 100%;" ng-required="true">
                         </select>
                         <p class="" ng-show="jobForm.tip_munca.$invalid && !jobForm.tip_munca.$pristine">Tipul locului de munca este invalid!</p>
                     </div>
-                    <div class="form-group-sm col-md-6" ng-class="{'has-error':jobForm.locMunca.$error.required}">
+                    <div class="form-group-sm col-md-6 col-xs-12" ng-class="{'has-error':jobForm.locMunca.$error.required}">
                         <label for="locMunca">Loc de munca<sup>*</sup>:</label>
                         <input type="text" class="form-control" id="locMunca" name="locMunca" ng-model="job.job_name" ng-required="true">
                         <p class="" ng-show="jobForm.locMunca.$error.required">Locul de munca este obligatoriu!</p>
 
                     </div>
                 </div>
-                <div class="col-md-12 noPadding">
-                    <div class="form-group-sm col-md-4" ng-class="{'has-error':jobForm.numeStrada.$error.required}">
+                <div class="col-md-12 noPadding col-xs-12">
+                    <div class="form-group-sm col-md-4 col-xs-12" ng-class="{'has-error':jobForm.numeStrada.$error.required}">
                         <label for="numeStrada">Numele strazii<sup>*</sup>:</label>
                         <input type="text" class="form-control" name="numeStrada" id="numeStrada" ng-model="job.street_name" ng-required="true">
                         <p class="" ng-show="jobForm.numeStrada.$error.required">Numele strazii este obligatoriu!</p>
                     </div>
-                    <div class="form-group-sm col-md-4" ng-class="{'has-error':jobForm.numarStrada.$error.required || jobForm.numarStrada.$error.pattern}">
+                    <div class="form-group-sm col-md-4 col-xs-12" ng-class="{'has-error':jobForm.numarStrada.$error.required || jobForm.numarStrada.$error.pattern}">
                         <label for="numarStrada">Numarul strazii<sup>*</sup>:</label>
                         <input type="text" class="form-control" id="numarStrada" name="numarStrada" ng-pattern="/^[a-zA-Z0-9-\s]{1,5}$/" ng-model="job.street_number" ng-required="true">
                         <p class="" ng-show="jobForm.numarStrada.$error.required">Numarul strazii este obligatoriu!</p>
                         <p class="" ng-show="jobForm.numarStrada.$error.pattern">Numarul strazii trebuie sa contina intre 1 si 5 caractere/contine caractere invalide!</p>
                     </div>
-                    <div class="form-group-sm col-md-4" ng-class="{'has-error':jobForm.codPostal.$error.required || jobForm.codPostal.$error.pattern}">
+                    <div class="form-group-sm col-md-4 col-xs-12" ng-class="{'has-error':jobForm.codPostal.$error.required || jobForm.codPostal.$error.pattern}">
                         <label for="codPostal">Cod postal<sup>*</sup>:</label>
                         <input type="text" class="form-control" id="codPostal" name="codPostal" ng-model="job.postal_code" ng-pattern="/^\d+$/" ng-required="true">
                         <p class="" ng-show="jobForm.codPostal.$error.required">Codul postal este obligatoriu!</p>
                         <p class="" ng-show="jobForm.codPostal.$error.pattern">Codul postal trebuie sa contina numai cifre!</p>
                     </div>
                 </div>
-                <div class="col-md-12 noPadding">
+                <div class="col-md-12 noPadding col-xs-12">
                     <div class="form-group-sm col-md-12">
                         <label for="codPostal">Alte informatii, adresa:</label>
                         <input type="text" class="form-control" id="alteInfoAdr" ng-model="job.job_address">
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 col-xs-12 paddingTop5">
                     <button ng-click="submitJobForm(jobForm.$valid)" class="btn btn-primary pull-right">Salveaza loc de munca</button>
                 </div>
             </form>
         </accordion-group>
         <accordion-group class="no-text-decoration">
             <accordion-heading class="no-text-decoration"><p class="no-text-decoration"><i class="glyphicon glyphicon-tags"></i>&nbsp;&nbsp;Contul meu</p></accordion-heading>
-            <div class="col-md-12">
+            <div class="col-md-12 col-xs-12">
                 <alert ng-if="userChangeMailAlert.newAlert" type="{{userChangeMailAlert.type}}" close="userChangeMailAlert.newAlert=false">{{userChangeMailAlert.message}}</alert>
             </div>
             <form name="emailForm" ng-submit="submitEmailForm(true)">
-                <div class="col-md-12 noPadding">
-                    <div class="form-group-sm col-md-12">
+                <div class="col-md-12 col-xs-12 noPadding">
+                    <div class="form-group-sm col-md-12 col-xs-12">
                         <label for="emailNew">Adresa de e-mail:</label>
                         <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="username" disabled>
                         <p class="" ng-show="emailForm.emailNew.$invalid && !emailForm.emailNew.$pristine ">Introduceti un email valid!</p>
@@ -180,32 +180,32 @@
                     <!--</div>-->
                 </div>
             </form>
-            <div class="col-md-12">
+            <div class="col-md-12 col-xs-12">
                 <hr style="margin: 10px 0"/>
                 <label style="margin-bottom: 15px">Schimba parola</label>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 col-xs-12">
                 <alert ng-if="userChangePassAlert.newAlert" type="{{userChangePassAlert.type}}" close="userChangePassAlert.newAlert=false">{{userChangePassAlert.message}}</alert>
             </div>
             <form name="changePassForm" novalidate>
-                <div class="form-group-sm col-md-12" ng-class="{'has-error': changePassForm.oldPass.$error.required && showerrorPass}">
+                <div class="form-group-sm col-md-12 col-xs-12" ng-class="{'has-error': changePassForm.oldPass.$error.required && showerrorPass}">
                     <label for="oldPass">Parola<sup>*</sup>:</label>
                     <input type="password" class="form-control" id="oldPass" name="oldPass" ng-model="oldPass" ng-required="true">
                     <p class="" ng-show="changePassForm.oldPass.$error.required && showerrorPass">Introduceti vechea parola!</p>
                 </div>
-                <div class="col-md-12 noPadding">
+                <div class="col-md-12 noPadding col-xs-12">
                     <div class="form-group-sm col-md-6" ng-class="{'has-error':changePassForm.newPass.$error.required && showerrorPass}">
                         <label for="newPass">Parola noua<sup>*</sup>:</label>
                         <input type="password" class="form-control" id="newPass" name="newPass" ng-model="newPass" ng-required="true">
                         <p class="" ng-show="changePassForm.newPass.$error.required && showerrorPass">Introduceti noua parola!</p>
                     </div>
-                    <div class="form-group-sm col-md-6" ng-class="{'has-error':changePassForm.confirmPass.$error.required && showerrorPass}">
+                    <div class="form-group-sm col-md-6 col-xs-12" ng-class="{'has-error':changePassForm.confirmPass.$error.required && showerrorPass}">
                         <label for="confirmPass">Repeta parola<sup>*</sup>:</label>
                         <input type="password" class="form-control" id="confirmPass" name="confirmPass" ng-model="confirmPass" ng-required="true">
                         <p class="" ng-show="changePassForm.confirmPass.$error.required && showerrorPass">Reintroduceti noua parola!</p>
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 col-xs-12 paddingTop5">
                     <button type="submit" ng-click="submitChangePassForm(changePassForm.$valid)" class="btn btn-danger pull-right">Schimba parola</button>
                 </div>
             </form>
@@ -232,5 +232,5 @@
     </accordion>
 </div>
 <div class="modal-footer noPaddingTop noPaddingBottom">
-    <a class="btn btn-default btnCloseProfile" ng-click="closeModal()">Inchide</a>
+    <a class="btn btn-default btnCloseProfile" ng-click="deviceWidth < 768? goHomeMobile() : $close()">Inchide</a>
 </div>

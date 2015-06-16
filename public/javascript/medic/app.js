@@ -212,8 +212,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('profileMobile',{
             url: '/profileMobile',
-            templateUrl: 'partials/medic/profileMobile.html',
-            controller: 'ProfileMobile'
+            templateUrl: 'partials/medic/profile.html',
+            controller: 'Profile'
         })
 }]);
 

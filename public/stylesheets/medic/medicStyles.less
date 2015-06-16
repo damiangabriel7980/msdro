@@ -1397,7 +1397,9 @@ hr{
   margin-right: -15px;
 }
 .paddingTop5{
-  padding-top: 5px;
+  @media(max-width: 768px){
+    padding-top: 5px;
+  }
 }
 .marginRight10px{
   margin-right: 10px;
@@ -1771,21 +1773,28 @@ h4{
     width: 100% !important;
   }
 }
-@media (max-device-width: 480px) {
   .profileImg{
-    margin: auto;
-    image-orientation: from-image;
+    width: 100%;
+    @media (max-device-width: 480px) {
+      width: auto;
+      margin: auto;
+      image-orientation: from-image;
+    }
   }
   .fc-header-title{
-    h2{
-      font-size: 20px;
-      padding-top: 3px;
+    h2 {
+      @media (max-device-width: 480px) {
+
+        font-size: 20px;
+        padding-top: 3px;
+      }
     }
   }
   .fc-button-today{
-    display: none !important;
+    @media (max-device-width: 480px) {
+      display: none !important;
+    }
   }
-}
 .multimedia10PaddPicture{
   padding-left: 10px;
   padding-top: 10px;
