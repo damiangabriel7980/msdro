@@ -1,4 +1,4 @@
-controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', '$timeout', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state, $timeout){
+controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', '$timeout', 'CollectionsService', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state, $timeout, CollectionsService){
 
     SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
         if (resp.length != 0) {
@@ -10,7 +10,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
                 }catch(ex){
                     specialGroup = null;
                 }
-                if(checkGroupInGroups(specialGroup, resp)){
+                if(CollectionsService.findById(specialGroup._id, resp)){
 
                     $scope.selectSpecialGroup(specialGroup);
                 }else{
@@ -73,22 +73,5 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         }
 
     };
-
-    var checkGroupInGroups = function (group, groups) {
-        var i=0;
-        try{
-            while(i<groups.length){
-                if(groups[i]._id == group._id){
-                    return true;
-                }
-                i++;
-            }
-            return false;
-        }catch(ex){
-            return false;
-        }
-    };
-
-
 
 }]);

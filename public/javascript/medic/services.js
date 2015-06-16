@@ -142,12 +142,6 @@ services.factory('ProductService', ['$resource', function($resource){
     }
 }]);
 
-services.factory('therapeuticAreaService', ['$resource', function($resource){
-    return $resource('api/therapeutic_areas', {}, {
-        query: { method: 'GET', isArray: true }
-    });
-}]);
-
 services.factory('multimediaService', ['$resource', function($resource){
     return {
         getByArea: $resource('api/multimedia/multimediaByArea', {}, {

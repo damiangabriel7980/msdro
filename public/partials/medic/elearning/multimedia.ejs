@@ -9,21 +9,17 @@
 <div class="padd55px" id="content">
     <div class="row">
         <div class="col-xs-12 marginLeft0 hidden-md hidden-lg col-md-2 marginLeft25px padd25Bottom" dropdown is-open="status.isopen" id="menuDiv">
-            <select ng-model="selectedArea" class="form-control" ng-change="selectAreaMultimedia()"
-                    ng-options="area as area.name for area in therapeuticAreasMobile | orderBy: 'name'" id="area"></select>
+            <select class="form-control" ng-options="area._id as (area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;':'')+area.name for area in therapeuticAreas"
+                    ng-model="selectedArea" ng-change="selectAreaMultimedia(selectedArea)"></select>
         </div>
         <div class="col-md-2 col-xs-12 hideOnSmallScreen noPadding hidden-sm margin65pxRight" >
             <h3 class="h-title top0px specialTitleProductsMobile">ARII TERAPEUTICE</h3>
 
             <ul class="list-group MSDgreen" style="list-style: none">
-                <li  ui-sref-active="activeArea" class="list-group-item no-border handCursor padd5pxLeft margin1pxBottom borderRadiusMenu" ui-sref="elearning.multimedia.multimediaByArea({idArea:0})"><b>Toate ariile terapeutice</b></li>
-                <li  ng-repeat="area in therapeuticAreas| orderBy: 'name'" ng-if="area['therapeutic-areasID'].length==0">
-                    <span ui-sref-active="activeArea" class="list-group-item no-border handCursor borderRadiusMenu" ui-sref="elearning.multimedia.multimediaByArea({idArea:area._id})"><b convert-special conver="area.name" ng-bind-html="trustAsHtml(area.name)"></b></span>
-                    <ul ng-if="area.has_children" class="margin1pxTop ">
-                        <li ui-sref-active="active" ng-repeat="area2 in therapeuticAreas | filter : { 'therapeutic-areasID' : area._id } | orderBy: 'name'">
-                            <span ui-sref-active="activeArea" class="list-group-item no-border handCursor subArea" ui-sref="elearning.multimedia.multimediaByArea({idArea:area2._id})"><b convert-special conver="area2.name" ng-bind-html="trustAsHtml(area2.name)"></b></span>
-                        </li>
-                    </ul>
+                <li  ng-repeat="area in therapeuticAreas">
+                    <span ng-class="{'activeArea':area._id == selectedArea}" class="list-group-item no-border handCursor borderRadiusMenu" ng-click="selectAreaMultimedia(area._id)">
+                        <b convert-special conver="area.name" ng-bind-html="trustAsHtml(area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;'+area.name:area.name)"></b>
+                    </span>
                 </li>
             </ul>
             <hr class="visible-phone ">
