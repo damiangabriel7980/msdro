@@ -75,3 +75,21 @@ services.factory('Utils', function () {
         }
     }
 });
+services.factory('CollectionsService', function () {
+    return {
+        findById: function (id, collection) {
+            var i=0;
+            try{
+                while(i<collection.length){
+                    if(collection[i]._id == id){
+                        return collection[i];
+                    }
+                    i++;
+                }
+                return null;
+            }catch(ex){
+                return null;
+            }
+        }
+    }
+});
