@@ -284,12 +284,23 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         var x = document.getElementById("upperSearch");
         $scope.textToSearch = x.value;
     };
-
+    $scope.navCollapsed = true;
+    $scope.closeNavbar = function () {
+        $scope.navCollapsed = true;
+    };
+    $scope.openNavbar = function () {
+        $scope.navCollapsed = false;
+    };
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $scope.closeNavbar();
+    });
     $scope.searchText=function(data){
         if(data==="")
             return;
-        else
+        else{
             $state.go('homeSearch',{textToSearch: data},{reload: true});
+            $scope.closeNavbar();
+        }
     };
     $scope.showInput=false;
     $scope.animateInput=function(){

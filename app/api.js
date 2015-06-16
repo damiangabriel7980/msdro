@@ -4741,7 +4741,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             res.json(err);
                         else
                         {
-                            if(checker===5)
+                            if(checker===4)
                                 res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
                             else{
                                 res.json(ObjectOfResults);
