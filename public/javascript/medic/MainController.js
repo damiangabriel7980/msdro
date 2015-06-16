@@ -207,8 +207,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         $modal.open({
             templateUrl: 'partials/medic/modals/contact.html',
             size: 'lg',
-            windowClass: 'fade',
-            controller: 'Contact'
+            windowClass: 'fade'
         });
     };
 
