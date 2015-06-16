@@ -129,43 +129,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/elearning/transmisii.ejs',
             controller: 'LiveTransmission'
         })
-        .state('elearning.teste',{
-            url: '/teste',
-            templateUrl: 'partials/medic/elearning/teste.ejs',
-            controller: 'QuizesView'
-        })
-        .state('elearning.multimediaBeforeQuiz',{
-            parent:'elearning.teste',
-            url: '/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-
-                $modal.open({
-                    templateUrl: 'partials/medic/elearning/MultimediaBeforeQuiz.ejs',
-                    backdrop: 'static',
-                    size: 'lg',
-                    keyboard: false,
-                    mouse:false,
-                    windowClass: 'fade',
-                    controller: 'MultimediaBeforeQuiz'
-                })
-            }]
-        })
-        .state('elearning.teste.quizById',{
-            parent:'elearning.teste',
-            url: '/:id/questions/:idd',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-
-                $modal.open({
-                    templateUrl: 'partials/medic/elearning/testeQuestions.ejs',
-                    backdrop: 'static',
-                    size: 'lg',
-                    keyboard: false,
-                    mouse:false,
-                    windowClass: 'fade',
-                    controller: 'QuizQuestions'
-                })
-            }]
-        })
         .state('groupFeatures', {
             url: '/groupFeatures/:specialApp',
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',

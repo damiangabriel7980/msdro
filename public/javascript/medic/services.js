@@ -185,23 +185,6 @@ services.factory('FormatService', function () {
         }
     }
 });
-services.factory('quizesService', ['$resource', function($resource){
-    return {
-        getAll: $resource('api/quizes/', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        getByQuiz: $resource('api/quizes/:id', {}, {
-            query: { method: 'GET', isArray: false }
-        }),
-        getQuestions: $resource('api/quizes/:id/questions/:idd',{},{
-            query: { method: 'GET', isArray: false }
-        }),
-        getMultimedia: $resource('api/multimediaBefore/:id',{},{
-            query: { method: 'GET', isArray: false }
-        })
-
-    }
-}]);
 services.factory('userService', ['$resource', function($resource){
     return {
         postTest: $resource('api/user',{},{

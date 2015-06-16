@@ -8,7 +8,6 @@ var Cities = require('./models/cities');
 var Multimedia = require('./models/multimedia');
 var User = require('./models/user');
 var Job = require('./models/jobs');
-var Quizes=require('./models/quizes');
 var Questions=require('./models/questions');
 var Answers = require('./models/answers');
 var Slides = require('./models/slides');
@@ -3121,97 +3120,6 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 }
             });
         });
-    router.route('/admin/quizes')
-
-        .get(function(req, res) {
-            Quizes.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        })
-        .post(function(req, res) {
-
-            var test = new Quizes(); 		// create a new instance of the Bear model
-            test.description = req.body.description;  // set the bears name (comes from the request)
-            test.enabled=req.body.enabled ;
-            test.entity= req.body.entity   ;
-            test.expired= req.body.expired  ;
-            test.expiry_date= req.body.expiry_date ;
-            test.last_updated=req.body.last_updated;
-            test.no_of_exam_questions= req.body.no_of_exam_questions ;
-            test.points=req.body.points;
-            test.questionsID=req.body.questionsID;
-            test.time=req.body.time;
-            test.times=req.body.times;
-            test.title=req.body.title;
-            test.treshhold=req.body.treshhold;
-
-            test.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Test created!' });
-            });
-
-        });
-    router.route('/admin/quizes/:id')
-
-        .get(function(req, res) {
-            Quizes.find({_id:req.params.id}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
-                }else{
-                    res.json(null);
-                }
-            })
-        })
-        .put(function(req, res) {
-
-            Quizes.findById(req.params.id, function(err, test) {
-
-                if (err)
-                    res.send(err);
-
-                test.description = req.body.description;  // set the bears name (comes from the request)
-                test.enabled=req.body.enabled ;
-                test.entity= req.body.entity   ;
-                test.expired= req.body.expired  ;
-                test.expiry_date= req.body.expiry_date ;
-                test.last_updated=req.body.last_updated;
-                test.no_of_exam_questions= req.body.no_of_exam_questions ;
-                test.points=req.body.points;
-                test.questionsID=req.body.questionsID;
-                test.time=req.body.time;
-                test.times=req.body.times;
-                test.title=req.body.title;
-                test.treshhold=req.body.treshhold;
-                test.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Test updated!' });
-                });
-
-            });
-        })
-        .delete(function(req, res) {
-            Quizes.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted!' });
-            });
-        });
-
-
     router.route('/admin/areas')
 
         .get(function(req, res) {
@@ -5291,103 +5199,6 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             }
 
         })});
-    var getQuizesIds = function (arr, cb) {
-        var ret = [];
-        async.each(arr, function (item, callback) {
-            if(item.quizesID[0])
-                ret.push(item.quizesID[0]);
-            callback();
-        }, function (err) {
-            cb(ret);
-        });
-    };
-
-   router.route('/quizes')
-
-        .get(function(req,res){
-            var resp = [];
-            Multimedia.find({groupsID: {$in: req.user.groupsID}}).exec(function(err,responses){
-                if(responses.length==0)
-                    res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}]);
-                else {
-                    getQuizesIds(responses,function(arrayIdQuizes){
-                        Quizes.find({_id:{$in:arrayIdQuizes}}, function (err, quizes) {
-                            if(err){
-                                res.send(err);
-                            }else{
-                                res.send(quizes);
-                            }
-                        });
-                    });
-                }
-            });
-        });
-    router.route('/quizes/:id/questions/:idd')
-        .get(function(req,res) {
-            Quizes.find({_id: req.params.id}, function (err, testR) {
-                //
-                if (err) {
-                    logger.error(err);
-                    res.send(err);
-                    return;
-                }
-                else {
-                    var qa = {};
-                    qa["test"] = testR;
-                    Questions.find({_id: req.params.idd}, function (err2, cont) {
-                        if (err) {
-                            logger.error(err);
-                            res.send(err);
-                            return;
-                        }
-                        else {
-                            qa["questions"] = cont;
-                            Answers.find({_id: {$in:qa["questions"][0].answersID}},function(err,cont2) {
-                                if(err)
-                                {
-                                    res.send(err);
-                                    return;
-                                }
-                                else {
-                                    qa["answers"] = cont2;
-                                    res.send(qa);
-                                }
-                            });
-                        }
-                    })
-                }
-            })
-        });
-    router.route('/quizes/:id')
-        .get(function(req,res) {
-            Quizes.find({_id: req.params.id}, function (err, testR) {
-                //
-                if (err) {
-                    logger.error(err);
-                    res.send(err);
-                    return;
-                }
-                else
-                    res.json(testR[0]);
-            })
-        });
-    router.route('/multimediaBefore/:id')
-        .get(function(req,res){
-            var id=[];
-            id.push(req.params.id);
-            Multimedia.find({quizesID: {$in:id}},function(err, cont) {
-                if(err) {
-                    console.log(err);
-                    res.json(err);
-                }
-                else
-                {
-                    res.json(cont[0]);
-                }
-
-            });
-
-        });
     router.route('/user')
         .get(function(req,res){
             User.find(function (error, result) {

@@ -194,25 +194,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 })
             }]
         })
-        .state('elearning.testeInteractive',{
-            url: '/testeInteractive',
-            templateUrl: 'partials/admin/elearning/testeInteractive.html',
-            controller: 'testeInteractiveCtrl'
-        })
-        .state('elearning.testeInteractive.adaugaTest',{
-            parent:'elearning.testeInteractive',
-            url: '',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/elearning/testeInteractiveAdd.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"testeAddCtrl"
-                })
-            }]
-        })
         .state('ariiTerapeutice',{
             url: '/ariiTerapeutice',
             templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeutice.html',

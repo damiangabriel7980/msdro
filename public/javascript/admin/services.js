@@ -483,19 +483,6 @@ services.factory('MultimediaAdminService', ['$resource', function($resource){
         })
     }
 }]);
-services.factory('quizesAdminService', ['$resource', function($resource){
-    return {
-        getAll: $resource('api/admin/quizes/', {}, {
-            query: { method: 'GET', isArray: true },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateQuizes:$resource('api/admin/quizes/:id', {}, {
-            getTest: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
-        })
-    }
-}]);
 services.factory('areasAdminService', ['$resource', function($resource){
     return {
         getAll: $resource('api/admin/areas/', {}, {

@@ -17,7 +17,6 @@ var multimediaSchema		= new Schema({
     file_path : String,
     last_updated : Date,
     points : Number,
-    quizesID : Array,
     run_time: Number,
     groupsID: [{type: String, ref: 'UserGroup'}],
     'therapeutic-areasID': [{type: String, ref: 'therapeutic-areas'}],
