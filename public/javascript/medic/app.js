@@ -170,8 +170,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('groupSpecialProduct.sitemap', {
             url: '/sitemap',
-            templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html',
-            controller: 'ProductPageMap'
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html'
         })
         .state('profileMobile',{
             url: '/profileMobile',

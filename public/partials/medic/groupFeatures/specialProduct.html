@@ -55,17 +55,17 @@
                             </div>
                         </div>
                     </accordion-group>
-                    <accordion-group ng-if="specialProductPage.speakers && specialProductPage.speakers.length > 0" is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.speakers')||$state.includes('groupSpecialProduct.speakerDetails')}" ng-click="goToSpeakersMobile('Speakers')">
+                    <accordion-group ng-if="specialProductPage.speakers && specialProductPage.speakers.length > 0" is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.speakers')||$state.includes('groupSpecialProduct.speakerDetails')}" ng-click="navigateMobile('Speakers')">
                         <accordion-heading>
                             <div><i class="glyphicon glyphicon-chevron-right" ></i>&nbsp;&nbsp;Speakers</div>
                         </accordion-heading>
                     </accordion-group>
-                    <accordion-group style="display: none;" is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.files')}" ng-click="goToResourcesMobile('Resurse')">
+                    <accordion-group style="display: none;" is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.files')}" ng-click="navigateMobile('Resurse')">
                         <accordion-heading>
                             <div><i class="glyphicon glyphicon-chevron-right" ></i>&nbsp;&nbsp;Resurse</div>
                         </accordion-heading>
                     </accordion-group>
-                    <accordion-group is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ng-click="goToSiteMapMobile('Sitemap')">
+                    <accordion-group is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ng-click="navigateMobile('Sitemap')">
                         <accordion-heading>
                             <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
                         </accordion-heading>

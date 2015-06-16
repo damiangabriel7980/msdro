@@ -29,18 +29,22 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         $scope.mobileMenuTitle = 'Speakers';
     if($state.is('groupSpecialProduct.sitemap'))
         $scope.mobileMenuTitle = 'Sitemap';
-    $scope.goToResourcesMobile=function(name){
-        $scope.mobileMenuTitle=name;
-        $state.go('groupSpecialProduct.files',{product_id: $scope.specialProductPage._id});
+
+    $scope.navigateMobile = function(name){
+      if(name === "Resurse"){
+          $scope.mobileMenuTitle=name;
+          $state.go('groupSpecialProduct.files',{product_id: $scope.specialProductPage._id});
+      }
+        if(name === 'Speakers'){
+            $scope.mobileMenuTitle=name;
+            $state.go('groupSpecialProduct.speakers',{product_id: $scope.specialProductPage._id});
+        }
+        if(name === 'Sitemap'){
+            $scope.mobileMenuTitle=name;
+            $state.go('groupSpecialProduct.sitemap',{product_id: $scope.specialProductPage._id});
+        }
     };
-    $scope.goToSpeakersMobile=function(name){
-        $scope.mobileMenuTitle=name;
-        $state.go('groupSpecialProduct.speakers',{product_id: $scope.specialProductPage._id});
-    };
-    $scope.goToSiteMapMobile=function(name){
-      $scope.mobileMenuTitle=name;
-        $state.go('groupSpecialProduct.sitemap',{product_id: $scope.specialProductPage._id});
-    };
+
     specialProductService.getSpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
         $scope.specialProductMenu = resp;
     });
