@@ -1,12 +1,22 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload','$timeout', '$state',function($scope, $rootScope, ProfileService, therapeuticAreaService, $sce,$upload,$timeout,$state){
+controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreaService' , '$sce','$upload','$timeout', '$state', 'Utils', function($scope, $rootScope, ProfileService, therapeuticAreaService, $sce,$upload,$timeout,$state, Utils){
 
+    //===================================================================== init variables
     var imagePre = $rootScope.pathAmazonDev;
     $scope.showerror=false;
     $scope.showerrorProf=false;
     $scope.showerrorPass=false;
+
+    //=============================================================================== alert
+    $scope.resetAlert = function (message, type) {
+        $scope.uploadAlert = {
+            newAlert: message?true:false,
+            message: message,
+            type: type || "danger"
+        };
+    };
 
     //================================================================================================================== PERSONAL INFO
 
@@ -43,8 +53,6 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
     ProfileService.getUserData.query().$promise.then(function (resp) {
         $scope.username=resp.username;
         $scope.userData = resp;
-        $scope.statusAlert = {newAlert:false, type:"", message:""};
-        $scope.uploadAlert = {newAlert:false, type:"", message:""};
         $scope.fullname = resp.name;
         $scope.phone = resp.phone;
         $scope.subscriptions = resp.subscriptions;
@@ -63,42 +71,19 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
                 //make sure a file was actually loaded
                 if($files[0]){
                     var extension = $files[0].name.split('.').pop();
-                    var key2 = "user/"+$scope.userData._id+"/img"+$scope.userData._id+"."+extension;
-                    // Closure to capture the file information.
-                    var reader = new FileReader();
-                    $scope.uploadAlert.newAlert = true;
-                    $scope.uploadAlert.type = "success";
-                    $scope.uploadAlert.message = "Fotografia se incarca...";
-                    reader.onloadend = function(event){
-                        $scope.newImage = event.target.result;
-                        var b64 = $scope.newImage.split("base64,")[1];
-                        $scope.imageUser="";
-                        ProfileService.saveUserPhoto.save({data:{Body: b64, extension: extension}}).$promise.then(function (message) {
+                    $scope.resetAlert("Fotografia se incarca...", "warning");
+                    Utils.fileToBase64($files[0], function (result) {
+                        ProfileService.saveUserPhoto.save({data:{Body: result, extension: extension}}).$promise.then(function (message) {
                             if(message){
-                                $scope.uploadAlert.type = message.type;
-                                $scope.uploadAlert.message = message.message;
-                                $scope.uploadAlert.newAlert = true;
+                                $scope.resetAlert(message.message, message.type);
+                                $scope.imageUser = "";
                                 ProfileService.getUserData.query().$promise.then(function (resp) {
                                     $scope.imageUser = imagePre + resp.image_path;
-                                    $timeout(function() {
-                                        $scope.$apply($scope);
-                                    },100);
                                 });
-
-
                             }
                         });
-                    };
-
-                    reader.readAsDataURL($files[0]);
-
-                    // Read in the image file as a data URL.
-
-
-
-
-                    }
-
+                    });
+                }
         };
 
 
