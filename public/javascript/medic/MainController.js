@@ -195,7 +195,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             var modalInstance = $modal.open({
                 templateUrl: 'partials/medic/modals/Farma.html',
                 keyboard: false,
-                controller: 'Pharmacovigilance',
                 size: 'lg',
                 windowClass: 'fade modal-responsive',
                 backdrop: 'static'
