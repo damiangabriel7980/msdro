@@ -219,7 +219,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                 size: 'lg',
                 windowClass: 'fade modal-responsive',
                 backdrop: 'static',
-                controller: 'Terms',
                 keyboard: false
             });
         }
