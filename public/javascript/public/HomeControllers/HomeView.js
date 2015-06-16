@@ -1,4 +1,4 @@
-controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', function($scope, $rootScope, HomeService, $sce, $state, StateService) {
+controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', 'Utils', function($scope, $rootScope, HomeService, $sce, $state, StateService, Utils) {
 
     if($rootScope.accessRoute){
         var state = StateService.getStateFromUrl($rootScope.accessRoute);
@@ -9,7 +9,7 @@ controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce
         }
     }
 
-    $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
+    $scope.monthsArray = Utils.getMonthsArray();
     $scope.carouselSlides = [{
         title: "",
         description: "",
