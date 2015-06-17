@@ -1,23 +1,8 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService','$window','$cookies','Utils', 'CookiesService', function ($scope, $state, $modal,$rootScope,alterIntroService,$window,$cookies,Utils, CookiesService) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', 'IntroService', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService, IntroService) {
 
-    var openIntro = function () {
-        $modal.open({
-            templateUrl: 'partials/medic/modals/presentationModal.html',
-            keyboard: false,
-            backdrop: 'static',
-            windowClass: 'fade',
-            controller: 'PresentationModal'
-        });
-    };
-
-    var changeLocalGroupModalStatus= function(groupID,value){
-        var retrievedObject = localStorage.getItem('statusModalGroups');
-        var statusModals = JSON.parse(retrievedObject);
-        statusModals[groupID] = value;
-        localStorage.setItem('statusModalGroups',JSON.stringify(statusModals));
-    };
+    //===================================================================== navigation
     $scope.goToMerckSite=function(){
-      $window.open('http://www.merckmanuals.com/','_blank');
+        $window.open('http://www.merckmanuals.com/','_blank');
     };
     $scope.logoutUser=function(){
         $window.location.href='logout';
@@ -38,98 +23,52 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         $scope.isCollapsed=true;
     };
 
+    //========================================================================================= intro modals
+    var showIntroPresentation = function (groupID) {
+        $modal.open({
+            templateUrl: 'partials/medic/modals/presentationModal.html',
+            keyboard: false,
+            backdrop: 'static',
+            windowClass: 'fade',
+            controller: 'PresentationModal',
+            resolve: {
+                groupID: function () {
+                    return groupID;
+                }
+            }
+        });
+    };
+
     //==================================================================== watch group selection
-    $rootScope.$watch('specialGroupSelected',function(oldVal,newVal){
+    $rootScope.$watch('specialGroupSelected',function(){
         if($rootScope.specialGroupSelected)
         {
-            if(!localStorage.statusModalGroups)
-            {
-                var modalGroups={};
-                if($rootScope.specialGroups===undefined)
-                {
-                    alterIntroService.getDefaultGroupID.query().$promise.then(function(group){
-                        var defaultGroupArray=[];
-                        defaultGroupArray.push(group.defaultGroup);
-                        for(var i=0;i<defaultGroupArray.length;i++)
-                        {
-                            modalGroups[defaultGroupArray[i]]=true;
-                        }
-                        localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
-                        alterIntroService.checkIntroEnabled.query({specialGroupSelected:null}).$promise.then(function(resp){
-                            if(resp._id)
-                            {
-                                openIntro();
+            var idSelected = $rootScope.specialGroupSelected._id;
+            //check if user opted to hide this intro video
+            var hideVideo = IntroService.hideNextTime.getStatus(idSelected);
+            if(!hideVideo){
+                //if not, check if this intro video is enabled
+                IntroService.checkIntroEnabled.query({groupID: idSelected}).$promise.then(function (resp) {
+                    if(resp.success){
+                        //if so, check if user already viewed the video in this log in session
+                        IntroService.rememberIntroView.query({groupID: idSelected}).$promise.then(function (resp) {
+                            if(resp.success){
+                                console.log(resp.success.isViewed);
+                                if(!resp.success.isViewed){
+                                    //if not, show it
+                                    showIntroPresentation(idSelected);
+                                    //and mark as viewed (async)
+                                    IntroService.rememberIntroView.save({groupID: idSelected});
+                                }
                             }
                         });
-
-                    });
-
-                }
-                else
-                {
-                    for(var i=0;i<$rootScope.specialGroups.length;i++)
-                    {
-                        modalGroups[$rootScope.specialGroups[i]._id]=true;
                     }
-                    localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
-                    alterIntroService.checkIntroEnabled.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
-                        if(resp._id)
-                        {
-                            openIntro();
-                        }
-                    });
-                }
-
-            }
-            else
-            {
-               if($rootScope.specialGroupSelected===null)
-                {
-                    alterIntroService.alterIntro.query().$promise.then(function(resp){
-
-                        $scope.introSession=resp;
-                      alterIntroService.getDefaultGroupID.query().$promise.then(function(group){
-                            if($scope.introSession[group.defaultGroup]===true)
-                        {
-                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[group.defaultGroup]==undefined)
-                                changeLocalGroupModalStatus(group.defaultGroup,true);
-                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[group.defaultGroup]===true && $state.includes('home'))
-                            {
-                                alterIntroService.checkIntroEnabled.query({specialGroupSelected:null}).$promise.then(function(resp){
-                                    if(resp._id)
-                                    {
-                                        openIntro();
-                                    }
-                                });
-                            }
-                        }
-                        });
-                    });
-                }
-                else{
-                    alterIntroService.alterIntro.query().$promise.then(function(resp){
-
-                        $scope.introSession=resp;
-                        if($scope.introSession[$rootScope.specialGroupSelected._id]===true)
-                        {
-                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]==undefined)
-                                changeLocalGroupModalStatus($rootScope.specialGroupSelected._id,true);
-                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true && $state.includes('home'))
-                            {
-                                alterIntroService.checkIntroEnabled.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
-                                    if(resp._id)
-                                    {
-                                        openIntro();
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
+                });
             }
         }
-
     });
+
+    //==================================================================== special groups drop-down
     $scope.specialCollapsed = true;
     $scope.collapseAndStyle = function(){
         if(angular.element('#normalMenu').hasClass('menuShadow'))

@@ -32,17 +32,35 @@ services.factory('SpecialFeaturesService', ['$resource', 'StorageService', funct
         }
     }
 }]);
-services.factory('alterIntroService', ['$resource', function($resource){
+services.factory("IntroService", ['$resource', 'StorageService', function ($resource, StorageService) {
     return {
-        alterIntro: $resource('api/alterIntroSession', {}, {
+        hideNextTime: {
+            getStatus: function (groupID) {
+                var viewStatus = StorageService.local.getElement("introHideNextTime") || {};
+                if(groupID){
+                    return viewStatus[groupID];
+                }else{
+                    return viewStatus;
+                }
+            },
+            setStatus: function (groupID, value) {
+                var statusViews = StorageService.local.getElement("introHideNextTime") || {};
+                statusViews[groupID] = value;
+                StorageService.local.setElement("introHideNextTime", statusViews);
+            },
+            resetStatus: function () {
+                StorageService.local.removeElement("introHideNextTime");
+            }
+        },
+        checkIntroEnabled: $resource('api/checkIntroEnabled/', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        rememberIntroView: $resource('api/rememberIntroView', {}, {
             query: { method: 'GET', isArray: false },
-            save: {method: 'POST', isArray: false}
+            save: { method: 'POST', isArray: false }
         }),
-        getDefaultGroupID: $resource('api/getDefaultGroupID/', {}, {
-            query: { method: 'POST', isArray: false }
-        }),
-        checkIntroEnabled:$resource('api/checkIntroEnabled/', {}, {
-            query: { method: 'POST', isArray: false }
+        presentation: $resource('api/introPresentation', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
@@ -121,17 +139,6 @@ services.factory('HomeService', ['$resource', function($resource){
         }),
         getUserImage: $resource('api/userImage/', {}, {
             query: { method: 'GET', isArray: false }
-        })
-    }
-}]);
-
-services.factory('PresentationService', ['$resource', function($resource){
-    return {
-        getUserHomeModal: $resource('api/userHomeModalPresentation/', {}, {
-            query: { method: 'POST', isArray: false }
-        }),
-        saveOption: $resource('api/changeUserModalStatus', {}, {
-            query: { method: 'POST', isArray: false }
         })
     }
 }]);

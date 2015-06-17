@@ -8,6 +8,7 @@ var User = require('./models/user');
 var Roles = require('./models/roles');
 
 var MailerModule = require('./modules/mailer');
+var SessionStorage = require('./modules/sessionStorage');
 
 var crypto   = require('crypto');
 var async = require('async');
@@ -88,9 +89,11 @@ module.exports = function(app, logger, passport) {
 
 	// LOGOUT ==============================
 	app.get('/logout', function(req, res) {
-
+        //delete presentations viewed status from current session
+        SessionStorage.setElement(req, "viewedIntroPresentations", {});
+        //logout
 		req.logout();
-        //encrypt sid using session secret
+        //redirect to main
 		res.redirect('/');
 	});
 

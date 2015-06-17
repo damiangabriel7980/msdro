@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce','$upload','$timeout', '$state', 'Utils', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce,$upload,$timeout,$state, Utils){
+controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce','$upload','$timeout', '$state', 'Utils', 'IntroService', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce,$upload,$timeout,$state, Utils, IntroService){
 
     //===================================================================== init variables
     var imagePre = $rootScope.pathAmazonDev;
@@ -146,8 +146,9 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
     $scope.userProfileAlert = {newAlert:false, type:"", message:""};
     $scope.submitProfileForm = function (isValid) {
         if(isValid){
-            if(this.rememberOption==true)
-                localStorage.removeItem('statusModalGroups');
+            if(this.rememberOption){
+                IntroService.hideNextTime.resetStatus();
+            }
             var toSend = {};
             toSend.name = this.fullname;
             toSend.title = this.userData.title;

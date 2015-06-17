@@ -254,12 +254,22 @@ services.factory('StorageService', function () {
         }
     };
     var setLocalStorageElement = function (elem, value) {
-        localStorage[elem] = value;
+        try{
+            localStorage[elem] = JSON.stringify(value);
+        }catch(ex){
+            //console.log("At add to local storage:");
+            //console.log(ex);
+            localStorage[elem] = value;
+        }
+    };
+    var removeLocalStorageElement = function (elem) {
+        localStorage[elem] = null;
     };
     return {
         local: {
             getElement: getLocalStorageElement,
-            setElement: setLocalStorageElement
+            setElement: setLocalStorageElement,
+            removeElement: removeLocalStorageElement
         }
     }
 });
