@@ -140,34 +140,31 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         window.open($rootScope.MerckManual,'_blank');
     };
 
-    //profile modal
+    //============================================ profile modal
+
+    var openProfileModal = function () {
+        $modal.open({
+            templateUrl: 'partials/medic/profile.html',
+            size: 'lg',
+            backdrop: 'static',
+            keyboard: false,
+            windowClass: 'fade modal-responsive MyProfileModal',
+            controller: 'Profile'
+        });
+    };
     $scope.showProfile = function(){
         if(Utils.isMobile(false,true)['iosDev'] || Utils.isMobile(false,true)['androidDetect'])
         {
             if(Utils.isMobile(false,true)['isIpad'] || Utils.isMobile(false,true)['androidTab'])
             {
-                $modal.open({
-                    templateUrl: 'partials/medic/profile.html',
-                    size: 'lg',
-                    backdrop: 'static',
-                    keyboard: false,
-                    windowClass: 'fade modal-responsive MyProfileModal',
-                    controller: 'Profile'
-                });
+                openProfileModal();
             }
             else{
                     $state.go('profileMobile');
             }
         }
         else{
-            $modal.open({
-                templateUrl: 'partials/medic/profile.html',
-                size: 'lg',
-                backdrop: 'static',
-                keyboard: false,
-                windowClass: 'fade modal-responsive MyProfileModal',
-                controller: 'Profile'
-            });
+            openProfileModal();
         }
     };
     //$scope.animateInput=function(){
