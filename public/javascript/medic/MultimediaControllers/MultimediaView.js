@@ -12,7 +12,7 @@
  * */
 
 
-controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state){
+controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state','Utils', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state,Utils){
     window.scrollTo(0,0);
     multimediaService.getByArea.query({id:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.multimedias = result;
@@ -21,8 +21,9 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
         isopen: false
         //open: false
     };
+    $scope.isMobile = Utils.isMobile(true,false);
     $scope.openMultimedia=function(idMultimedia) {
-        if($rootScope.deviceWidth<=700)
+        if($scope.isMobile)
             $state.go('elearning.multimedia.multimediaMobile',{id: idMultimedia});
         else
         {
@@ -34,7 +35,7 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
                 windowClass: 'fade',
                 controller: 'MultimediaDetail',
                 resolve:{
-                    idd: function () {
+                    idMultimedia: function () {
                         return idMultimedia;
                     }
                 }
@@ -44,24 +45,7 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
     };
     if($stateParams.idMulti)
     {
-        var idM = $stateParams.idMulti;
-        if($rootScope.deviceWidth<=700)
-            $state.go('elearning.multimedia.multimediaMobile',{id: idM});
-        else{
-            $modal.open({
-                templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
-                backdrop: 'static',
-                keyboard: false,
-                size: 'lg',
-                windowClass: 'fade',
-                controller: 'MultimediaDetail',
-                resolve:{
-                    idd: function () {
-                        return idM;
-                    }
-                }
-            });
-        }
+        $scope.openMultimedia($stateParams.idMulti);
     }
 
 }]);

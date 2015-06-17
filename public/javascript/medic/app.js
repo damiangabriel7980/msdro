@@ -116,8 +116,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('elearning.multimedia.multimediaMobile',{
             url: '/multimedia/mobile/:id',
-            templateUrl: 'partials/medic/elearning/multimediaDetailsNoModal.ejs' ,
-            controller: 'MultimediaDetailMobile'
+            templateUrl: 'partials/medic/elearning/multimediaDetails.ejs' ,
+            resolve:{
+                idMultimedia: function ($stateParams) {
+                    return $stateParams.id;
+                }
+            },
+            controller: 'MultimediaDetail'
         })
         .state('elearning.multimedia.multimediaByArea',{
             url: '/multimedia/:idArea/:idMulti',

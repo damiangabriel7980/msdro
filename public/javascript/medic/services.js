@@ -153,7 +153,7 @@ services.factory('multimediaService', ['$resource', function($resource){
         getByArea: $resource('api/multimedia/multimediaByArea', {}, {
             query: { method: 'POST', isArray: true }
         }),
-        getSingle: $resource('api/multimedia2/:idd', {}, {
+        getSingle: $resource('api/multimedia2/:idMultimedia', {}, {
             query: { method: 'GET', isArray: false }
         }),
         getSlides: $resource('api/slidesByMultimediaId/:multimedia_id', {}, {

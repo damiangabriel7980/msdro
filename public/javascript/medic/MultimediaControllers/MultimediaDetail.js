@@ -4,9 +4,13 @@
 /**
  * Created by miricaandrei23 on 03.11.2014.
  */
-controllers.controller('MultimediaDetail', ['$scope','multimediaService','$stateParams','$modal','$log','$modalInstance','$rootScope','$sce','$state','idd','$window','$timeout',function ($scope,multimediaService,$stateParams, $modal, $log,$modalInstance,$rootScope,$sce,$state,idd,$window,$timeout) {
-
-    multimediaService.getSingle.query({idd:idd}).$promise.then(function(result){
+controllers.controller('MultimediaDetail', ['$scope','multimediaService','$stateParams','$modal','$log','$rootScope','$sce','$state','idMultimedia','$window','$timeout','Utils', function ($scope,multimediaService,$stateParams, $modal, $log,$rootScope,$sce,$state,idMultimedia,$window,$timeout,Utils) {
+    $scope.selectedMultimedia={
+        title: '',
+        description: ''
+    };
+    $scope.isMobile = Utils.isMobile(true,false);
+    multimediaService.getSingle.query({idMultimedia:idMultimedia}).$promise.then(function(result){
         $scope.selectedMultimedia = result;
         $scope.videosrc = $sce.trustAsResourceUrl($scope.amazon + $scope.selectedMultimedia.file_path);
         if(result.type==2){
@@ -21,12 +25,7 @@ controllers.controller('MultimediaDetail', ['$scope','multimediaService','$state
         return $sce.trustAsResourceUrl($rootScope.pathAmazonDev+filepath)
     };
     $stateParams.idMulti=null;
-    $scope.okk = function () {
-        $modalInstance.close();
-        $state.go('elearning.multimedia.multimediaByArea',{idArea:0,idMulti: null});
-    };
-    $scope.cancell = function () {
-        $modalInstance.dismiss('cancel');
-        $state.go('elearning.multimedia.multimediaByArea',{idArea:0,idMulti: null});
+    $scope.goToMultimedia = function () {
+        $state.go('elearning.multimedia.multimediaByArea',{idArea:0,idMulti: null},{},{reload: true});
     };
 }]);

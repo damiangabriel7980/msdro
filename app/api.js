@@ -5060,9 +5060,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             });
 
         });
-    router.route('/multimedia2/:idd')
+    router.route('/multimedia2/:idMultimedia')
         .get(function(req,res){
-            Multimedia.findById(req.params.idd,function(err, cont) {
+            Multimedia.findById(req.params.idMultimedia,function(err, cont) {
                 if(err) {
                     res.json(err);
                 }
