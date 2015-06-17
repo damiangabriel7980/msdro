@@ -35,6 +35,7 @@ var Parameters = require('./models/parameters');
 var UserModule = require('./modules/user');
 var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
+var SessionStorage = require('./modules/sessionStorage');
 
 //live Streaming
 var socketio = require('socket.io'),
@@ -4099,6 +4100,95 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             });
         });
 
+    router.route('/admin/intros')
+        .get(function (req, res) {
+            Presentations.find({}).exec(function (err, presentations) {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(presentations);
+                }
+            });
+        });
+    router.route('/admin/oneIntro')
+        .post(function (req, res) {
+            var presentations={};
+            Presentations.find({_id: req.body.id}).populate('groupsID').exec(function (err, presentation) {
+                if(err){
+                    res.send(err);
+                }else{
+                    presentations['onePresentation']=presentation[0];
+                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
+                        if(err) {
+                            logger.error(err);
+                            res.send(err);
+                        }else{
+                            presentations['groups']=cont2;
+                            res.json(presentations);
+                        }
+                    });
+                }
+            });
+        });
+    router.route('/admin/getAllGroups')
+        .get(function(req,res){
+            UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
+                if(err) {
+                    logger.error(err);
+                    res.send(err);
+                }else{
+                    res.json(cont2);
+                }
+            });
+        });
+    router.route('/admin/saveIntroChanges')
+        .post(function (req, res) {
+            Presentations.update({_id: req.body.id},{$set:{description: req.body.description, article_content: req.body.article_content, groupsID: req.body.groupsID}}).exec(function (err, presentation) {
+                if(err){
+                    res.send({message:"Error occured!"});
+                }else{
+
+                    res.send({message:"Update successful!"});
+                }
+            });
+        });
+    router.route('/admin/toggleIntro')
+        .post(function (req, res) {
+            Presentations.update({_id: req.body.id},{$set:{enabled: req.body.isEnabled}}).exec(function (err, presentation) {
+                if(err){
+                    res.send({message:"Error occured!"});
+                }else{
+                    res.send({message:"Update successful!"});
+                }
+            });
+        });
+    router.route('/admin/addIntro')
+        .post(function (req, res) {
+            var presentation = new Presentations();
+            presentation.description= req.body.description;
+            presentation.article_content = req.body.article_content;
+            presentation.groupsID = req.body.groupsID;
+            presentation.enabled=false;
+            presentation.save(function (err, presentation) {
+                if(err){
+                    res.send({message:"Error occured!"});
+                }else{
+                    res.send({message:"Create successful!"});
+                }
+            });
+        });
+    router.route('/admin/deleteIntro')
+        .post(function (req, res) {
+            Presentations.remove({_id: req.body.idToDelete}, function (err, count) {
+                if(err){
+                    console.log(err);
+                    res.send({error: true, message: "Eroare la stergerea produsului"});
+                }else{
+                    res.send({error: false, message: "S-au sters "+count+" prezentari!"});
+                }
+            });
+        });
+
     //==================================================================================================================================== USER ROUTES
 
     router.route('/user/addPhoto')
@@ -4775,91 +4865,6 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
 
         });
 
-    router.route('/userHomeModalPresentation')
-        .post(function (req,res) {
-                getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                    if(err){
-                        res.send(err);
-                    }else {
-                        var forGroups = nonSpecificGroupsIds;
-                        var specialgroup=[];
-                        if (req.body.specialGroupSelected) {
-                            specialgroup.push(req.body.specialGroupSelected);
-                            Presentations.find({groupsID: {$in: specialgroup}, enabled: true}).exec(function (err, presentation) {
-                                if(err){
-                                    console.log(err);
-                                    res.send(err);
-                                }else{
-                                    
-                                    res.json(presentation[0]);
-                                }
-                            });
-                        }
-                        else
-                        {
-                            
-                            Presentations.find({groupsID: {$in: forGroups}, enabled: true}).exec(function (err, presentation) {
-                                if(err){
-                                    console.log(err);
-                                    res.send(err);
-                                }else{
-                                    
-                                    res.json(presentation[0]);
-                                }
-                            });
-                        }
-
-                    }
-                });
-        });
-    router.route('/checkIntroEnabled')
-        .post(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
-                    var forGroups = nonSpecificGroupsIds;
-                    var specialgroup=[];
-                    if (req.body.specialGroupSelected) {
-                        specialgroup.push(req.body.specialGroupSelected);
-                        Presentations.find({groupsID: {$in: specialgroup}, enabled: true}).exec(function (err, presentation) {
-                            if(err){
-                                console.log(err);
-                                res.send(err);
-                            }else{
-                                res.json(presentation[0]);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        Presentations.find({groupsID: {$in: forGroups}, enabled: true}).exec(function (err, presentation) {
-                            if(err){
-                                console.log(err);
-                                res.send(err);
-                            }else{
-                                res.json(presentation[0]);
-                            }
-                        });
-                    }
-
-                }
-            });
-        });
-    router.route('/getDefaultGroupID')
-        .post(function(req,res){
-                getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                    if(err){
-                        res.send(err);
-                    }else {
-                        var forGroups = nonSpecificGroupsIds;
-                        
-                        res.json({defaultGroup:forGroups[0]});
-                    }
-                });
-
-
-        });
     router.route('/userHomeMultimedia')
         .post(function (req,res) {
             getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
@@ -5220,101 +5225,47 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         }) ;
     });
 
-    router.route('/admin/intros')
-        .get(function (req, res) {
-            Presentations.find({}).exec(function (err, presentations) {
-                if(err){
-                    res.send(err);
-                }else{
-                    res.send(presentations);
-                }
-            });
-        });
-    router.route('/admin/oneIntro')
-        .post(function (req, res) {
-            var presentations={};
-            Presentations.find({_id: req.body.id}).populate('groupsID').exec(function (err, presentation) {
-                if(err){
-                    res.send(err);
-                }else{
-                    presentations['onePresentation']=presentation[0];
-                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                        if(err) {
-                            logger.error(err);
-                            res.send(err);
-                        }else{
-                            presentations['groups']=cont2;
-                            res.json(presentations);
-                        }
-                    });
-                }
-            });
-        });
-    router.route('/admin/getAllGroups')
-        .get(function(req,res){
-            UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }else{
-                    res.json(cont2);
-                }
-            });
-        });
-    router.route('/admin/saveIntroChanges')
-        .post(function (req, res) {
-            Presentations.update({_id: req.body.id},{$set:{description: req.body.description, article_content: req.body.article_content, groupsID: req.body.groupsID}}).exec(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
+    //============================================ intro presentations
 
-                    res.send({message:"Update successful!"});
-                }
-            });
-        });
-    router.route('/admin/toggleIntro')
-        .post(function (req, res) {
-            Presentations.update({_id: req.body.id},{$set:{enabled: req.body.isEnabled}}).exec(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
-                    res.send({message:"Update successful!"});
-                }
-            });
-        });
-    router.route('/admin/addIntro')
-        .post(function (req, res) {
-            var presentation = new Presentations();
-            presentation.description= req.body.description;
-            presentation.article_content = req.body.article_content;
-            presentation.groupsID = req.body.groupsID;
-            presentation.enabled=false;
-            presentation.save(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
-                    res.send({message:"Create successful!"});
-                }
-            });
-        });
-    router.route('/admin/deleteIntro')
-        .post(function (req, res) {
-            Presentations.remove({_id: req.body.idToDelete}, function (err, count) {
+    router.route('/checkIntroEnabled')
+        .get(function (req, res) {
+            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: true}).exec(function (err, presentation) {
                 if(err){
                     console.log(err);
-                    res.send({error: true, message: "Eroare la stergerea produsului"});
+                    res.send({error: err});
                 }else{
-                    res.send({error: false, message: "S-au sters "+count+" prezentari!"});
+                    res.send({success: presentation});
                 }
             });
         });
-    router.route('/alterIntroSession')
+
+    router.route('/rememberIntroView')
         .get(function(req,res){
-           res.json(req.session.statusModalGroups);
+            var viewStatus = SessionStorage.getElement(req, "viewedIntroPresentations") || {};
+            res.send({
+                success: {
+                    isViewed: viewStatus[req.query.groupID]
+                }
+            });
         })
         .post(function(req,res){
-            req.session.statusModalGroups[req.body.groupID]=false;
-            res.json(req.session.statusModalGroups);
+            var viewStatus = SessionStorage.getElement(req, "viewedIntroPresentations") || {};
+            viewStatus[req.body.groupID] = true;
+            SessionStorage.setElement(req, "viewedIntroPresentations", viewStatus);
+            res.send(200, "View remembered");
         });
+
+    router.route('/introPresentation')
+        .get(function (req, res) {
+            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: true}).exec(function (err, presentation) {
+                if(err){
+                    console.log(err);
+                    res.send({error: err});
+                }else{
+                    res.send({success: presentation});
+                }
+            });
+        });
+
     app.use('/api', router);
 };

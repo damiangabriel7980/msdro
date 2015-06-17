@@ -220,11 +220,11 @@ services.factory('therapeuticAreas', ['$resource', function($resource){
 }]);
 services.factory('CookiesService', function () {
     return {
-        setCookie: function(cname, cvalue) {
-            var now = new Date(),
-            // this will set the expiration to 6 months
-                exp = new Date(now.getFullYear(), now.getMonth()+6, now.getDate());
-            var expires = "expires="+exp.toUTCString();
+        setCookie: function(cname, cvalue, expires) {
+            var now = new Date();
+            // this will set the expiration to 6 months by default
+            if(!expires) expires = new Date(now.getFullYear(), now.getMonth()+6, now.getDate());
+            expires = "expires="+expires.toUTCString();
             document.cookie = cname + "=" + cvalue + "; " + expires;
         },
         getCookie: function(cname) {
@@ -254,12 +254,22 @@ services.factory('StorageService', function () {
         }
     };
     var setLocalStorageElement = function (elem, value) {
-        localStorage[elem] = value;
+        try{
+            localStorage[elem] = JSON.stringify(value);
+        }catch(ex){
+            //console.log("At add to local storage:");
+            //console.log(ex);
+            localStorage[elem] = value;
+        }
+    };
+    var removeLocalStorageElement = function (elem) {
+        localStorage[elem] = null;
     };
     return {
         local: {
             getElement: getLocalStorageElement,
-            setElement: setLocalStorageElement
+            setElement: setLocalStorageElement,
+            removeElement: removeLocalStorageElement
         }
     }
 });
