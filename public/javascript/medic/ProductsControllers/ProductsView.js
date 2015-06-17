@@ -45,11 +45,8 @@ controllers.controller('ProductsView', ['$scope','$rootScope' ,'ProductService',
                 var firstLetter = item.name.charAt(0);
                 if (!$scope.firstLetters[firstLetter]) {
                     $scope.firstLetters[firstLetter] = [];
-                    $scope.firstLetters[firstLetter].push(item);
                 }
-                else{
-                    $scope.firstLetters[firstLetter].push(item);
-                }
+                $scope.firstLetters[firstLetter].push(item);
             });
 
         });
