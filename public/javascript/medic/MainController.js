@@ -1,4 +1,4 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService','$window','$cookies','Utils', function ($scope, $state, $modal,$rootScope,alterIntroService,$window,$cookies,Utils) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService','$window','$cookies','Utils', 'CookiesService', function ($scope, $state, $modal,$rootScope,alterIntroService,$window,$cookies,Utils, CookiesService) {
 
     var openIntro = function () {
         $modal.open({
@@ -28,40 +28,19 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     $scope.goToTerms=function(){
         $window.open($rootScope.Terms,'_tab');
     };
-    function setCookie(cname, cvalue) {
-        var now = new Date(),
-        // this will set the expiration to 6 months
-            exp = new Date(now.getFullYear(), now.getMonth()+6, now.getDate());
-        var expires = "expires="+exp.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires;
-    }
-    function getCookie(cname) {
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0; i<ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1);
-            if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-        }
-        return "";
-    }
 
-        var MSDCookie=getCookie("MSDCookies");
-        if (MSDCookie!="") {
-            if(MSDCookie=='yes')
-                $scope.isCollapsed=true;
-            else
-                $scope.isCollapsed=false;
-        }else{
-            $scope.isCollapsed=false;
-        }
+    //===================================================================== user accepts cookies
+    var acceptedCookies = CookiesService.getCookie("MSDCookies");
+    $scope.isCollapsed = (acceptedCookies == 'yes');
+
     $scope.setCookie=function(){
-        setCookie('MSDCookies','yes');
+        CookiesService.setCookie('MSDCookies','yes');
         $scope.isCollapsed=true;
     };
 
+    //==================================================================== watch group selection
     $rootScope.$watch('specialGroupSelected',function(oldVal,newVal){
-        if($rootScope.specialGroupSelected!=undefined || $rootScope.specialGroupSelected===null)
+        if($rootScope.specialGroupSelected)
         {
             if(!localStorage.statusModalGroups)
             {

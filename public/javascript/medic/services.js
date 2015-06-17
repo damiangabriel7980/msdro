@@ -11,7 +11,7 @@ services.factory('ContentService', ['$resource', function($resource){
     }
 }]);
 
-services.factory('SpecialFeaturesService', ['$resource', function($resource){
+services.factory('SpecialFeaturesService', ['$resource', 'StorageService', function($resource, StorageService){
     return {
         getSpecialGroups: $resource('api/specialFeatures/specialGroups', {}, {
             query: { method: 'GET', isArray: true }
@@ -21,7 +21,15 @@ services.factory('SpecialFeaturesService', ['$resource', function($resource){
         }),
         specialApps: $resource('api/specialFeatures/specialApps', {}, {
             query: { method: 'GET', isArray: false }
-        })
+        }),
+        specialGroups: {
+            getSelected: function () {
+                return StorageService.local.getElement("selectedGroup");
+            },
+            setSelected: function (value) {
+                StorageService.local.setElement("selectedGroup", value);
+            }
+        }
     }
 }]);
 services.factory('alterIntroService', ['$resource', function($resource){
