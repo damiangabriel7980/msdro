@@ -7,7 +7,7 @@ controllers.controller('EventModal',['$scope','eventsService2','$stateParams','$
        $scope.itemsEvent=resp;
     });
 
-    $scope.cancell = function () {
+    $scope.closeModal = function () {
         $modalInstance.close();
         $stateParams.id=null;
     };

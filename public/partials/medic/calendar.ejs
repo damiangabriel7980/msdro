@@ -11,10 +11,10 @@
     <div id="calendar" calendar="myCalendar" ui-calendar="uiConfigMobile.calendar" ng-model="realEventsMob" class="visible-xs visible-sm col-xs-12 noPadding"></div>
     <div class="visible-xs visible-sm col-xs-12 padd40px">
         <h3 class="bottomBorder specialTitleCalendarMobile">EVENIMENTE URMATOARE</h3>
-        <div class="col-md-12" ng-if="!events2Filtered">
+        <div class="col-md-12" ng-if="!eventsFiltered">
             <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
         </div>
-        <div class="event blue" ng-repeat="eventim in events2Filtered">
+        <div class="event blue" ng-repeat="eventim in eventsFiltered">
             <div class="col-md-12 col-xs-12 col-sm-12 noPadding" ng-class="$index==0?'paddingTop5':''">
                 <div class="col-md-2 col-xs-2 col-sm-1 noPadding padd10Bottom date2">
                     <h2 class="MSDTitleDark noMarginBottom">{{eventim.start | filter: asDate | date:'dd'}}</h2>
@@ -35,10 +35,10 @@
     </div>
     <div class="col-md-4 hidden-xs hidden-sm padd40px">
             <h3 class="bottomBorder specialTitleCalendarMobile">EVENIMENTE URMATOARE</h3>
-            <div class="col-md-12" ng-if="!events2Filtered">
+            <div class="col-md-12" ng-if="!eventsFiltered">
                 <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
             </div>
-             <div class="event blue" ng-repeat="eventim in events2Filtered">
+             <div class="event blue" ng-repeat="eventim in eventsFiltered">
                     <div class="col-md-12 col-xs-12 noPadding" ng-class="$index==0?'paddingTop5':''">
                         <div ng-cloak class="col-md-2 col-xs-2 noPadding padd10Bottom date2">
                             <h2 class="MSDTitleDark noMarginBottom">{{eventim.start | filter: asDate | date:'dd'}}</h2>

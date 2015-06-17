@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div ng-class="{'col-md-8':screenW>991, 'col-md-12':screenW<991}">
+        <div ng-class="{'col-md-8':deviceWidth>=991, 'col-md-12':deviceWidth<991}">
             <ui-view>
 
             </ui-view>

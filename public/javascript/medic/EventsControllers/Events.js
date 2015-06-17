@@ -11,6 +11,11 @@ var date = new Date();
 
     eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.events =result;
+        $scope.eventsFiltered = [];
+        for (var i = 0; i < $scope.events.length; i++) {
+            if (new Date($scope.events[i].end) > date)
+                $scope.eventsFiltered.push($scope.events[i]);
+        }
        $scope.eventsS=[];
         $scope.eventsMob=[];
        for(var i = 0; i < $scope.events.length; i++)
@@ -121,16 +126,7 @@ var date = new Date();
                  });
              });
          }
-     })
-    ;
-    eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result) {
-        $scope.events2 = result;
-        $scope.events2Filtered = [];
-        for (var i = 0; i < $scope.events2.length; i++) {
-            if (new Date($scope.events2[i].end) > date)
-                $scope.events2Filtered.push($scope.events2[i]);
-        }
-    });
+     });
     $scope.goToEvent=function(eventId) {
         $modal.open({
             templateUrl: 'partials/medic/calendarDetails.ejs',
