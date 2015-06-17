@@ -239,3 +239,27 @@ services.factory('CookiesService', function () {
         }
     }
 });
+services.factory('StorageService', function () {
+    var getLocalStorageElement = function (elem) {
+        try{
+            if(localStorage[elem]){
+                return JSON.parse(localStorage[elem]);
+            }else{
+                return null;
+            }
+        }catch(ex){
+            //console.log("At get from local storage:");
+            //console.log(ex);
+            return localStorage[elem];
+        }
+    };
+    var setLocalStorageElement = function (elem, value) {
+        localStorage[elem] = value;
+    };
+    return {
+        local: {
+            getElement: getLocalStorageElement,
+            setElement: setLocalStorageElement
+        }
+    }
+});

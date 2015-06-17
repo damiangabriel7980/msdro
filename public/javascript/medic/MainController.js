@@ -38,8 +38,9 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         $scope.isCollapsed=true;
     };
 
+    //==================================================================== watch group selection
     $rootScope.$watch('specialGroupSelected',function(oldVal,newVal){
-        if($rootScope.specialGroupSelected!=undefined || $rootScope.specialGroupSelected===null)
+        if($rootScope.specialGroupSelected)
         {
             if(!localStorage.statusModalGroups)
             {
