@@ -127,14 +127,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <ul id="normalMenuMobile" class="list-group noMarginBottom specialMenu" ng-if="specialGroupSelected" off-click="collapseFinalMobile()">
+            <ul id="normalMenuMobile" class="list-group noMarginBottom specialMenu" ng-if="specialGroupSelected" off-click="collapseAndStyle(true)">
                 <div class="specialDropdown noMarginBottom">
-                    <a class="text-center specialGroupDropdown no-text-decoration groups-list-group-item" ng-click="collapseAndStyleMobile()">
+                    <a class="text-center specialGroupDropdown no-text-decoration groups-list-group-item" ng-click="collapseAndStyle()">
                         <img ng-if="specialGroupSelected" style="border-right: 1px solid #cccccc;padding-right: 10px" ng-src="{{specialGroupSelected.image_path?pathAmazonDev+specialGroupSelected.image_path:defaultGroupPhoto}}">
                         &nbsp;<i class="top5px glyphicon glyphicon-chevron-down"></i>
                     </a>
                     <div collapse="specialCollapsed">
-                        <li class="subitems greyBackground my-list-group-item" ng-repeat="group in specialGroups" style="cursor: pointer;" ng-click="collapseFinalMobile();selectSpecialGroup(group)">
+                        <li class="subitems greyBackground my-list-group-item" ng-repeat="group in specialGroups" style="cursor: pointer;" ng-click="collapseAndStyle(true);selectSpecialGroup(group)">
                             {{group.display_name}}
                         </li>
                     </div>
