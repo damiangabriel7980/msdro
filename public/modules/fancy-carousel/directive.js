@@ -16,7 +16,8 @@
                     carouselSlides: '=',
                     carouselAction: '=',
                     pathPrefix: '=',
-                    slideSeconds: '='
+                    slideSeconds: '=',
+                    wHRatio: '='
                 },
                 link: function(scope, element, attrs) {
 
@@ -74,7 +75,7 @@
                     var initializeElementSize = function () {
                         elementWidth = element[0].offsetWidth;
 
-                        var carouselH = Math.round(elementWidth / 3);
+                        var carouselH = Math.round(elementWidth * ($scope.wHRatio || 0.3));
 
                         divToResize.css('height', carouselH+'px');
                     };
