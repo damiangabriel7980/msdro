@@ -25,7 +25,7 @@ app.config(['$locationProvider', function($locationProvider) {
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.rule(function ($injector, $location) {
-        console.log($location.url());
+        //console.log($location.url());
         if(REQUESTED_PRO) {
             REDIRECT_AFTER_LOGIN = $location.url();
             REQUESTED_PRO = 0;

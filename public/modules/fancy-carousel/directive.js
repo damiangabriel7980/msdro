@@ -14,7 +14,7 @@
                 replace: true,
                 scope: {
                     carouselSlides: '=',
-                    carouselAction: '&',
+                    carouselAction: '=',
                     pathPrefix: '='
                 },
                 link: function(scope, element, attrs) {
