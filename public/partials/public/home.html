@@ -1,4 +1,6 @@
-<fancy-carousel ng-if="!isMobile(true)" carousel-slides="carouselSlides" carousel-action="carouselLearnMore" path-prefix="pathAmazonDev"></fancy-carousel>
+<fancy-carousel ng-if="!isMobile(true)" carousel-slides="carouselSlides"
+                carousel-action="carouselLearnMore" path-prefix="pathAmazonDev"
+                slide-seconds="8"></fancy-carousel>
 <div class="col-md-12 noPadding unselectable" ng-if="!isMobile(true)">
     <div class="myTabs">
         <div class="myTab left" ng-class="{'active': $state.includes('home.noutati')}" ui-sref="home.noutati">ULTIMELE NOUTATI</div>

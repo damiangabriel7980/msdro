@@ -16,7 +16,7 @@
                 <img ng-src="{{slide.image_path?pathPrefix+slide.image_path:''}}" tooltip-html-unsafe="{{getTooltip(slide)}}" tooltip-trigger="mouseenter">
             </div>
         </div>
-        <ul rn-carousel rn-carousel-index="selectedIndex" class="myCarousel" rn-carousel-auto-slide="8">
+        <ul rn-carousel rn-carousel-index="selectedIndex" class="myCarousel" rn-carousel-auto-slide="{{slideSeconds}}">
             <li ng-repeat="slide in carouselSlides">
                 <img ng-src="{{slide.image_path?pathPrefix+slide.image_path:''}}" ondragstart="return false;">
             </li>

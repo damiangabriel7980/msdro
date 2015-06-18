@@ -15,7 +15,8 @@
                 scope: {
                     carouselSlides: '=',
                     carouselAction: '=',
-                    pathPrefix: '='
+                    pathPrefix: '=',
+                    slideSeconds: '='
                 },
                 link: function(scope, element, attrs) {
 
@@ -25,8 +26,8 @@
                     };
 
                     scope.$watch('carouselSlides', function () {
-                        if(scope.carouselSlides){
-                            scope.selectedIndex = 1;
+                        if(scope.carouselSlides && scope.carouselSlides[0]){
+                            scope.selectedIndex = 0;
                         }
                     });
 
