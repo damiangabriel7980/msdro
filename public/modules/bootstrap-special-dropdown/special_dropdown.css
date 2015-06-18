@@ -1,0 +1,40 @@
+.top5px {
+  top: 5px !important;
+}
+.my-list-group-item {
+  position: relative;
+  display: block;
+  padding: 15px 15px;
+  margin-bottom: -1px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #dddddd;
+}
+.noMarginBottom {
+  margin-bottom: 0px;
+}
+.groups-list-group-item {
+  position: relative;
+  display: block;
+  padding: 15px 15px;
+  margin-bottom: -1px;
+  background-color: #ffffff;
+}
+.menuShadow {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+}
+.specialGroupDropdown {
+  padding: 5px 13px;
+}
+.specialGroupDropdown img {
+  width: 180px;
+}
+@media (max-width: 540px) {
+  .specialGroupDropdown img {
+    width: 135px;
+    margin-top: 7px;
+  }
+}
+.specialGroupDropdown:hover .my-dropdown-menu {
+  display: block;
+}

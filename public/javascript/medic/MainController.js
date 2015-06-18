@@ -69,23 +69,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     });
 
     //==================================================================== special groups drop-down
-    $scope.specialCollapsed = true;
-    $scope.collapseAndStyle = function(forClose){
-        if(!forClose)
-        {
-            if(!angular.element('#normalMenuMobile').hasClass('menuShadow')) {
-                angular.element('#normalMenuMobile').addClass('menuShadow');
-                $scope.specialCollapsed = false;
-            }
-        }
-        else{
-            if(angular.element('#normalMenuMobile').hasClass('menuShadow'))
-            {
-                angular.element('#normalMenuMobile').removeClass('menuShadow');
-                $scope.specialCollapsed = true;
-            }
-        }
-    };
     $scope.showFarmaModal = function() {
         if(Utils.isMobile(false,true)['iosDetect'])
             window.open($rootScope.Pharma);

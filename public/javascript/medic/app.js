@@ -17,7 +17,8 @@ var app = angular.module('app',
         'angulartics',
         'angulartics.google.analytics',
         'offClick',
-        'bootstrapSearch'
+        'bootstrapSearch',
+        'specialDropdown'
     ]);
 
 app.config(['$locationProvider', function($location) {
