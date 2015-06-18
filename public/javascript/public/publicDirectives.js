@@ -23,50 +23,6 @@ app.directive('resizable', ['$window', function($window) {
         }
     }
 }]);
-app.directive('carouselResizable', ['$window', function($window) {
-    return {
-        restrict: 'A',
-        link: function ($scope, $element) {
-
-            var resizeT;
-            var elementWidth;
-            var element = angular.element($element);
-            var divToResize = element.find('#divToResize');
-
-            var initializeElementSize = function () {
-                elementWidth = element[0].offsetWidth;
-
-                var carouselH = Math.round(elementWidth / 3);
-
-                divToResize.css('height', carouselH+'px');
-            };
-
-            angular.element($window).bind('resize', function () {
-                if($scope.$state.includes('home')){
-                    initializeElementSize();
-                    //wait for resizing to finish
-                    clearTimeout(resizeT);
-                    resizeT = setTimeout(doneResizing, 700);
-                    $scope.$apply();
-                }else{
-                    angular.element($window).unbind('resize');
-                }
-            });
-
-            function doneResizing(){
-                //reload state to fix carousel locking bug
-                $scope.$state.reload();
-            }
-
-            // Initiate the resize function default values
-            angular.element(document).ready(function () {
-                initializeElementSize();
-                //$scope.$apply();
-            });
-
-        }
-    }
-}]);
 app.directive('scrollcenter', ['$window', function($window) {
     return {
         restrict: 'A',

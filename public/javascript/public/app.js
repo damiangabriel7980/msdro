@@ -15,7 +15,8 @@ var app = angular.module('app',
         'com.2fdevs.videogular.plugins.poster',
         'angularFileUpload',
         'mobileContentList',
-        'offClick'
+        'offClick',
+        'fancyCarousel'
     ]);
 
 app.config(['$locationProvider', function($locationProvider) {
