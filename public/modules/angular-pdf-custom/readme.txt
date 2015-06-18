@@ -5,7 +5,7 @@ Angular pdf viewer
 
 Install:
 
-1. Import "angular-pdf.js", "styles.css", "pdf.js" into html
+1. Import "angular-pdf-custom.js", "styles.css", "pdf.js" into html
 2. Add "pdf" to module dependencies
 3. In your controller define path to pdf: $scope.pdfUrl="...";
 4. In same controller, use directive to init viewer:
