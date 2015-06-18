@@ -7,7 +7,7 @@
 var scripts = document.getElementsByTagName("script");
 var currentScriptPath = scripts[scripts.length-1].src;
 
-angular.module('msdTimeline', []).directive('ngMsdTimeline', ['$sce', function($sce) {
+angular.module('calendarTimeline', []).directive('calendarTimeline', ['$sce', function($sce) {
     return {
         restrict: 'E',
         templateUrl: currentScriptPath.replace('timelineDirective.js', 'timelineTemplate.html'),
