@@ -16,7 +16,8 @@ var app = angular.module('app',
         'therapeuticSelect',
         'angulartics',
         'angulartics.google.analytics',
-        'offClick'
+        'offClick',
+        'bootstrapSearch'
     ]);
 
 app.config(['$locationProvider', function($location) {

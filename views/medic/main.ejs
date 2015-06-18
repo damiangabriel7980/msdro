@@ -108,7 +108,8 @@
     <script src="modules/therapeutic_select/therapeutic_select.js"></script>
     <link rel="stylesheet" href="modules/therapeutic_select/therapeutic_select.css">
     <script src="components/angular-off-click/offClick.js"></script>
-
+    <link rel="stylesheet" href="modules/bootstrap-search/bootstrap_search.css">
+    <script src="modules/bootstrap-search/bootstrap_search.js"></script>
 </head>
 <body ng-controller="MainController">
 <div class="col-xs-12 cookieBar" collapse="isCollapsed">
@@ -157,15 +158,10 @@
         <div class="collapse navbar-collapse noXOver" collapse="navCollapsed" off-click="closeNavbar()" off-click-if="!navCollapsed">
 
             <ul class="nav navbar-nav menuPadding">
-                <li class="mySearchInDropdown">
-                    <ul class="nav navbar-nav navbar-right mySearchInDropdown disableDesktop">
-                        <form class="navbar-form mySearchInDropdown" role="search" ng-submit="searchText(textToSearch);">
-                            <div class="input-group mySearchInDropdown expandSearchInDropdown">
-                                <input type="text" class="form-control mySearchInDropdown popSearch newWidthPopSearch" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
-                                <span class="input-group-addon mySearchInDropdown" ng-click="searchText(textToSearch);"><i class="glyphicon glyphicon-search"></i></span>
-                            </div>
-                        </form>
-
+                <li ng-click="openNavbar()">
+                    <ul class="nav navbar-nav navbar-right">
+                       <bootstrap-search is-in-dropdown=true on-search="searchText" search-width-class="expandSearchInDropdown" input-width-class="newWidthPopSearch">
+                       </bootstrap-search>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('noutati')}">
@@ -209,14 +205,9 @@
                 </li>
 
             </ul>
-            <ul class="nav navbar-nav navbar-right disableSpecial">
-                <form class="navbar-form" role="search" ng-submit="searchText(textToSearch)">
-                    <div class="input-group expandSearchNoSpecial">
-                        <input type="text" class="form-control popSearch newWidthPopSearch" placeholder="Search" name="srch-term" id="srch-term" ng-model="textToSearch">
-                        <span class="input-group-addon" ng-click="animateInput()"><i class="glyphicon glyphicon-search"></i></span>
-                    </div>
-                </form>
-
+            <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
+                <bootstrap-search is-in-dropdown=false on-search="searchText" search-width-class="expandSearchNoSpecial" input-width-class="newWidthPopSearch">
+                </bootstrap-search>
             </ul>
 
         </div>

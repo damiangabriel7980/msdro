@@ -167,15 +167,16 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             openProfileModal();
         }
     };
-    //$scope.animateInput=function(){
-    //    angular.element('.form-control').removeClass('popSearch');
-    //};
-    $scope.textToSearch="";
-    $scope.getInput = function(){
-        var x = document.getElementById("upperSearch");
-        $scope.textToSearch = x.value;
-    };
     $scope.navCollapsed = true;
+    $scope.searchText = function(data){
+        console.log(data);
+        if(data==="")
+            return;
+        else{
+            $state.go('homeSearch',{textToSearch : data},{reload: true});
+            $scope.closeNavbar();
+        }
+    };
     $scope.closeNavbar = function () {
         $scope.navCollapsed = true;
     };
@@ -185,26 +186,11 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
         $scope.closeNavbar();
     });
-    $scope.searchText=function(data){
-        if(data==="")
-            return;
-        else{
-            $state.go('homeSearch',{textToSearch: data},{reload: true});
-            $scope.closeNavbar();
-        }
-    };
+
     $scope.showInput=false;
     $scope.animateInput=function(){
         angular.element('.popSearch').toggleClass('newWidthPopSearch');
         angular.element('.input-group-addon').toggleClass('btnSearchBefore');
     };
-    angular.element(document).click(function (event) {
-        var clickover = angular.element(event.target);
-        var $navbar = angular.element(".navbar-collapse");
-        var _opened = $navbar.hasClass("in");
-        if (_opened === true && !clickover.hasClass("navbar-toggle")&& !clickover.hasClass("mySearchInDropdown")) {
-            angular.element("button.navbar-toggle").click();
-        }
-    });
 
 }]);
