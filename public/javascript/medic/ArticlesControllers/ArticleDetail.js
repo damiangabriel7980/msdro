@@ -16,8 +16,6 @@ controllers.controller('ArticleDetail', ['$scope', '$rootScope', '$stateParams',
         {
             $scope.currentArticle = resp;
             $scope.date = FormatService.formatMongoDate(resp.last_updated);
-            $scope.image = imagePre + resp.image_path;
-            $scope.articleContent = $sce.trustAsHtml(resp.text);
         }
        else
         {

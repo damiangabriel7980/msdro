@@ -12,15 +12,12 @@ controllers.controller('MultimediaDetail', ['$scope','multimediaService','$state
     $scope.isMobile = Utils.isMobile(true,false);
     multimediaService.getSingle.query({idMultimedia:idMultimedia}).$promise.then(function(result){
         $scope.selectedMultimedia = result;
-        $scope.videosrc = $sce.trustAsResourceUrl($scope.amazon + $scope.selectedMultimedia.file_path);
         if(result.type==2){
             multimediaService.getSlides.query({multimedia_id:result._id}).$promise.then(function (slides) {
                 $scope.slidesArray = slides;
             });
         }
     });
-    $scope.amazon = $rootScope.pathAmazonDev;
-
     $scope.getVideoSrc = function(filepath){
         return $sce.trustAsResourceUrl($rootScope.pathAmazonDev+filepath)
     };

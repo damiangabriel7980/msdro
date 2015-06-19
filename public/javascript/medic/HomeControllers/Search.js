@@ -2,8 +2,6 @@
  * Created by miricaandrei23 on 07.01.2015.
  */
 controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce','$animate','$stateParams','$window','$timeout', function($scope, $rootScope, HomeService, $sce,$animate,$stateParams,$window,$timeout) {
-
-    $scope.amazon = $rootScope.pathAmazonDev;
     HomeService.getSearchResults.query({data:$stateParams.textToSearch.toString(),specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(response){
         $scope.answer="";
         if(!response.answer) {

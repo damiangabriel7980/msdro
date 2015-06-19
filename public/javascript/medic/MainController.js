@@ -170,10 +170,4 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         $scope.closeNavbar();
     });
 
-    $scope.showInput=false;
-    $scope.animateInput=function(){
-        angular.element('.popSearch').toggleClass('newWidthPopSearch');
-        angular.element('.input-group-addon').toggleClass('btnSearchBefore');
-    };
-
 }]);

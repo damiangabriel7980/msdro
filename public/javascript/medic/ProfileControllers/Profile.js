@@ -134,12 +134,6 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
         $scope.allAreas = resp;
     });
 
-    //----------------------------------------------------------------------------------------------------- User points
-    $scope.pointsTotal = 0;
-    $scope.pointsSlide = 0;
-    $scope.pointsVideo = 0;
-    $scope.pointsArticles = 0;
-
     //------------------------------------------------------------------------------------------------ form submissions
 
     //user profile

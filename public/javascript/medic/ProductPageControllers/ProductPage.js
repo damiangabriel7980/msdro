@@ -13,7 +13,6 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
     });
     $scope.mobileMenuTitle="";
     $scope.goToMenuItemWithNoChildren=function(parent,event){
-        //$scope.mobileMenuTitle = parent.title;
         if(parent.children_ids.length==0)
             $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:''});
         else
@@ -29,7 +28,6 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         $scope.mobileMenuTitle = 'Speakers';
     if($state.is('groupSpecialProduct.sitemap'))
         $scope.mobileMenuTitle = 'Sitemap';
-
     $scope.navigateMobile = function(name){
       if(name === "Resurse"){
           $scope.mobileMenuTitle=name;
@@ -65,6 +63,5 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
     };
     $scope.status = {
         isFirstOpen: false
-        //open: false
     };
 }]);

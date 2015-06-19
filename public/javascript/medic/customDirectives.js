@@ -47,54 +47,6 @@ app.directive('noCacheSrc', ['$window', function($window) {
             });
         }
     }
-}]).directive('thereIsMore', ['$timeout', '$document', '$window', function($timeout,$document,$window) {
-    return {
-        restrict: 'A',
-        link: function (scope, element) {
-            var footer = angular.element('#footer');
-            var check = function () {
-                //if(angular.element($window).scrollTop()===0&&angular.element($document).height() >= (angular.element($window).height() + angular.element($window).scrollTop()))
-                //    f.hide();
-                if (angular.element($document).height() <= (angular.element($window).height() + angular.element($window).scrollTop()) + 86)
-                    footer.show();
-                else
-                    footer.hide();
-            };
-            var appliedCheck = function () {
-                scope.$apply(check);
-            };
-            angular.element($window).scroll(function () {
-                //appliedCheck();
-                check();
-            });
-            check();
-            $timeout(function(){
-                check();
-            }, 1000);
-            angular.element($window).resize(function () {
-                //appliedCheck();
-                check();
-            });
-            angular.element(document).ready(function(){
-                //appliedCheck();
-                check();
-            });
-            angular.element(document).ajaxComplete(function(){
-                //appliedCheck();
-                check();
-            });
-            scope.$on('$viewContentLoaded',
-                function(event){
-                    $timeout(function(){
-                        check();
-                    }, 500)
-                });
-            //scope.$on('$stateChangeSuccess',
-            //    function(event){
-            //        check();
-            //    });
-        } // end of link
-    }
 }]);
 app.directive('coverScreeen', ['$window', function ($window) {
     return{
@@ -131,27 +83,6 @@ app.directive('coverScreeen', ['$window', function ($window) {
                 initializeElementSize();
                 //$scope.$apply();
             });
-        }
-    }
-}]);
-app.directive('buffering',['$timeout','$document', function ($timeout,$document) {
-    return {
-        restrict: 'A',
-        link: function(rootscope,scope, element, attrs) {
-            //var checkVideo = function(){
-            //    $('video').on('suspend', function (event) {
-            //        $(this).css('background-image',rootscope.loaderForSlowConn);
-            //    });
-            //    $('video').on('canplay', function (event) {
-            //        $(this).css('background-image','none');
-            //    });
-            //};
-            //angular.element(document).ready(function(){
-            //    checkVideo();
-            //});
-            //angular.element(document).ajaxComplete(function(){
-            //    checkVideo();
-            //});
         }
     }
 }]);

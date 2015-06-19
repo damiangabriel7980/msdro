@@ -112,18 +112,7 @@ var date = new Date();
          if($stateParams.id)
          {
              angular.element($document).ready(function(){
-                 $modal.open({
-                     templateUrl: 'partials/medic/calendarDetails.ejs',
-                     backdrop: true,
-                     size: 'lg',
-                     windowClass: 'fade',
-                     controller: 'EventModal',
-                     resolve:{
-                         idEvent: function () {
-                             return $stateParams.id;
-                         }
-                     }
-                 });
+                 $scope.goToEvent($stateParams.id);
              });
          }
      });

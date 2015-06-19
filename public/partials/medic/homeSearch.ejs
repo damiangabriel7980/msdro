@@ -6,7 +6,7 @@
     </div>
     <div ng-if="product!=null" ng-show="products.length>0" ng-repeat="product in products track by $index" class="col-md-12 col-xs-12 col-sm-12 searchArticle noPadding">
         <div class="col-md-2 col-sm-2 col-xs-6 noPadding" ng-class="showDetails">
-            <img class="img-responsive img-thumbnail"  ng-src="{{amazon+product.image_path}}">
+            <img class="img-responsive img-thumbnail"  ng-src="{{product.image_path?pathAmazonDev+product.image_path:defaultProductImage}}">
         </div>
         <div ng-class="showDetails=='show' ? 'col-md-10 col-xs-6 col-sm-10':'col-md-12'">
             <div class="col-md-12 noPaddingLeft">
@@ -61,7 +61,7 @@
     </div>
     <div ng-if="article!=null" ng-repeat="article in articles track by $index" ng-show="articles.length>0" class="col-md-12 col-xs-12 col-sm-12 searchArticle noPadding">
         <div class="col-md-2 col-xs-6 col-sm-2 noPadding" ng-class="showDetails">
-            <img class="img-responsive img-thumbnail" ng-src="{{amazon+article.image_path}}">
+            <img class="img-responsive img-thumbnail" ng-src="{{article.image_path?pathAmazonDev+article.image_path:defaultArticleImage}}">
         </div>
 
         <div ng-class="showDetails=='show' ? 'col-md-10 col-sm-10 col-xs-6':'col-md-12'">
@@ -84,7 +84,7 @@
     </div>
     <div ng-if="media != null" ng-show="multimedia.length>0" ng-repeat="media in multimedia track by $index" class="col-md-12 col-xs-12 col-sm-12 searchArticle noPadding">
         <div class="col-md-2 col-xs-6 col-sm-2 noPadding" ng-class="showDetails">
-            <img class="img-responsive img-thumbnail" ng-src="{{media.thumbnail_path?amazon+media.thumbnail_path:(media.type==1?defaultVideoImage:defaultSlideImage)}}">
+            <img class="img-responsive img-thumbnail" ng-src="{{media.thumbnail_path?pathAmazonDev+media.thumbnail_path:(media.type==1?defaultVideoImage:defaultSlideImage)}}">
         </div>
         <div ng-class="showDetails=='show' ? 'col-md-10 col-sm-10 col-xs-6':'col-md-12'">
             <div class="col-md-12 noPaddingLeft">

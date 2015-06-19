@@ -1,9 +1,7 @@
 controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state','$anchorScroll', 'Utils', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state,$anchorScroll, Utils) {
 
-    $scope.imagePre = $rootScope.pathAmazonDev;
     $scope.monthsArray = Utils.getMonthsArray();
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
-    $scope.merckManualImage = $rootScope.merckManualImage;
     $scope.myInterval = 10;
     $scope.HomeCarousel = [];
     $scope.selectedIndexCarousel = 0;

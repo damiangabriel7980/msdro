@@ -147,11 +147,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
             controller: 'ProductPage'
         })
-        .state('groupSpecialProduct.productInfo', {
-        url: '/productInfo',
-        templateUrl: 'partials/medic/groupFeatures/specialProductInfo.html',
-        controller: 'ProductPageInfo'
-        })
         .state('groupSpecialProduct.menuItem', {
             url: '/menuItem/:menuId/:childId',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
@@ -215,11 +210,6 @@ app.run(
 
             $rootScope.defaultGroupPhoto = $rootScope.pathAmazonResources + 'customGroups/grup_logo2.png';
             $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.png";
-
-            $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
-                $rootScope.previousState = from.name;
-                $rootScope.currentState = to.name;
-            });
             $rootScope.Terms = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf";
             $rootScope.Pharma = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf";
             $rootScope.MerckManual = "/merckManual";
