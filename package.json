@@ -44,7 +44,7 @@
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",
-    "start": "NODE_ENV='development' AWS_ACCESS_KEY_ID='AKIAIM6KJKTQ3DODHQPA' AWS_SECRET_ACCESS_KEY='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' node server.js"
+    "start": "NODE_ENV='development' AWS_ACCESS_KEY_ID='AKIAIU26AHNKP7VDKG6A' AWS_SECRET_ACCESS_KEY='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' node server.js"
   },
   "devDependencies": {
     "gulp": "^3.8.8",
