@@ -22,6 +22,7 @@ angular.module('calendarTimeline', []).directive('calendarTimeline', ['$sce', fu
             //========================== customize
             scope.dayWidth = 15;
             scope.hideTodayBoxLine = true;
+            scope.eventSafetyMargin = 4;
 
             //========================== useful functions
             var resetTimeInDate = function (date) {
@@ -58,6 +59,7 @@ angular.module('calendarTimeline', []).directive('calendarTimeline', ['$sce', fu
             scope.today = today;
             const gridLinesCount = 80;
             const maxEventLength = 250;
+            var gridsAllowed = 0;
 
             //===================================================== events function
 
@@ -112,6 +114,13 @@ angular.module('calendarTimeline', []).directive('calendarTimeline', ['$sce', fu
                 return event.gridUnitsAvailable * scope.dayWidth < maxEventLength;
             };
 
+            scope.isInBounds = function (offset, safetyMargin) {
+                if(offset > 0) offset++;
+                offset = Math.abs(offset);
+                if(safetyMargin) offset += safetyMargin;
+                return offset <= gridsAllowed;
+            };
+
             //====================================================== watch events input
             scope.$watch('events', function () {
                 if(scope.events && scope.events[0]){
@@ -124,9 +133,26 @@ angular.module('calendarTimeline', []).directive('calendarTimeline', ['$sce', fu
             //===================================================== initialize
             var init = function () {
                 addEventsProperties();
-                console.log(scope.events);
+                //console.log(scope.events);
                 generateTimeGrid();
             };
+
+            //==================================================== resize
+            var resize = function () {
+                var timeline = angular.element(element[0].children[0]);
+                var timelineWidth = timeline[0].offsetWidth;
+                gridsAllowed = parseInt(timelineWidth / scope.dayWidth / 2);
+                //console.log(gridsAllowed);
+            };
+            angular.element(window).bind('resize', function () {
+                resize();
+            });
+            angular.element(document).ready(function () {
+                resize();
+            });
+            scope.$watch('dayWidth', function () {
+                resize();
+            });
         }
     };
 }]);

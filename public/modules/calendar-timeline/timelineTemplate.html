@@ -7,7 +7,8 @@
         </div>
         <div class="event" ng-repeat="event in events track by $index"
              ng-style="{'left': (event.positionOffset * dayWidth) + 'px'}"
-             ng-class="{'isBelow': event.isBelow}">
+             ng-class="{'isBelow': event.isBelow}"
+             ng-if="isInBounds(event.positionOffset, eventSafetyMargin)">
             <div class="eventLine"></div>
             <div class="day" popover="{{event[nameAttr]}}" popover-trigger="mouseenter" popover-placement="top">
                 {{dayDisplay(toDate(event[dateAttr]))}}
@@ -15,7 +16,8 @@
         </div>
         <div class="grid" ng-repeat="grid in timeGrid"
              ng-style="{'left': (grid.offset * dayWidth) + 'px', 'width': dayWidth + 'px'}"
-             ng-class="{'contrastColor': grid.contrastColor, 'firstDay': grid.data}">
+             ng-class="{'contrastColor': grid.contrastColor, 'firstDay': grid.data}"
+             ng-if="isInBounds(grid.offset)">
             {{grid.data}}
         </div>
     </div>
