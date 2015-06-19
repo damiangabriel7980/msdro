@@ -125,8 +125,8 @@ gulp.task('run', function () {
         ext: 'js html css',
         env: {
             'NODE_ENV': 'development',
-            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
-            'AWS_SECRET_ACCESS_KEY': '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'
+            'AWS_ACCESS_KEY_ID': 'AKIAIU26AHNKP7VDKG6A',
+            'AWS_SECRET_ACCESS_KEY': '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'
         }
     })
 });
@@ -137,8 +137,8 @@ gulp.task('run_staging', ['minify_all', 'copy_components', 'copy_partials', 'cop
         ext: 'js html css',
         env: {
             'NODE_ENV': 'staging',
-            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
-            'AWS_SECRET_ACCESS_KEY': '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'
+            'AWS_ACCESS_KEY_ID': 'AKIAIU26AHNKP7VDKG6A',
+            'AWS_SECRET_ACCESS_KEY': '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'
         }
     })
 });
@@ -149,8 +149,8 @@ gulp.task('run_staging_no_min', function () {
         ext: 'js html css',
         env: {
             'NODE_ENV': 'staging',
-            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
-            'AWS_SECRET_ACCESS_KEY': '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'
+            'AWS_ACCESS_KEY_ID': 'AKIAIU26AHNKP7VDKG6A',
+            'AWS_SECRET_ACCESS_KEY': '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'
         }
     })
 });
@@ -161,8 +161,8 @@ gulp.task('run_production', ['minify_all', 'copy_components', 'copy_partials', '
         ext: 'js html css',
         env: {
             'NODE_ENV': 'production',
-            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
-            'AWS_SECRET_ACCESS_KEY': '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'
+            'AWS_ACCESS_KEY_ID': 'AKIAIU26AHNKP7VDKG6A',
+            'AWS_SECRET_ACCESS_KEY': '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'
         }
     })
 });
@@ -173,8 +173,8 @@ gulp.task('run_production_no_min', function () {
         ext: 'js html css',
         env: {
             'NODE_ENV': 'production',
-            'AWS_ACCESS_KEY_ID': 'AKIAIM6KJKTQ3DODHQPA',
-            'AWS_SECRET_ACCESS_KEY': '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'
+            'AWS_ACCESS_KEY_ID': 'AKIAIU26AHNKP7VDKG6A',
+            'AWS_SECRET_ACCESS_KEY': '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'
         }
     })
 });
