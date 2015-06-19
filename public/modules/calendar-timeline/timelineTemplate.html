@@ -3,12 +3,12 @@
         <div class="todayBox">
             <div class="dateShow">{{dayDisplay(today)+"."+monthDisplay(today)}}</div>
             <div class="arrowDown"></div>
-            <div class="lineDown" ng-style="{'display':hideTodayBoxLine?'none':'initial'}"></div>
+            <div class="lineDown" ng-if="showTodayBoxLine"></div>
         </div>
         <div class="event" ng-repeat="event in events track by $index"
              ng-style="{'left': (event.positionOffset * dayWidth) + 'px'}"
              ng-class="{'isBelow': event.isBelow}"
-             ng-if="isInBounds(event.positionOffset, eventSafetyMargin)">
+             ng-if="isInBounds(event.positionOffset, eventSafetyMargin || 4)">
             <div class="eventLine"></div>
             <div class="day" popover="{{event[nameAttr]}}" popover-trigger="mouseenter" popover-placement="top">
                 {{dayDisplay(toDate(event[dateAttr]))}}

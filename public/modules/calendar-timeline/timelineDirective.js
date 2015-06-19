@@ -15,14 +15,12 @@ angular.module('calendarTimeline', []).directive('calendarTimeline', ['$sce', fu
             events: '=',
             months: '=',
             dateAttr: '@',
-            nameAttr: '@'
+            nameAttr: '@',
+            dayWidth: '=',
+            eventSafetyMargin: '=',
+            showTodayBoxLine: '='
         },
         link: function(scope, element, attrs) {
-
-            //========================== customize
-            scope.dayWidth = 15;
-            scope.hideTodayBoxLine = true;
-            scope.eventSafetyMargin = 4;
 
             //========================== useful functions
             var resetTimeInDate = function (date) {
