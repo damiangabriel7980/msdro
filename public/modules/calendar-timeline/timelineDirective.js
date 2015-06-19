@@ -12,149 +12,120 @@ angular.module('calendarTimeline', []).directive('calendarTimeline', ['$sce', fu
         restrict: 'E',
         templateUrl: currentScriptPath.replace('timelineDirective.js', 'timelineTemplate.html'),
         scope: {
-            loadEvents: '=events',
-            loadMonths: '=months'
+            events: '=',
+            months: '=',
+            dateAttr: '@',
+            nameAttr: '@'
         },
         link: function(scope, element, attrs) {
-            var events = null;
-            var months = null;
 
-            scope.timeBoxTop = 40;
-            scope.timeBoxTopWhenFlipped = 135;
-            var gridLength = 1200;
-            var daysTotal = 80;
-            var gridSize = gridLength / daysTotal;
-
-            //customize:
-            var allCollapsed = true; // all dates appear collapsed by default; if true, dates that
-                                    //  have enough available room will be expanded
-
+            //========================== customize
+            scope.dayWidth = 15;
             scope.hideTodayBoxLine = true;
 
-            var removeExpandingBeyond = true; //remove events that expand beyond the grid width
-
-            scope.$watch('loadEvents', function (loadedEvents) {
-                if(loadedEvents){
-                    events=loadedEvents;
-                    creazaLista(loadedEvents);
-                }
-            });
-
-            scope.$watch('loadMonths', function (loadedMonths) {
-                if(loadedMonths){
-                    months=loadedMonths;
-                    alignMonths(loadedMonths);
-                }
-            });
-
-            scope.thisMonth = new Date().getMonth();
-            scope.thisDay = new Date().getDate();
-
-            var creazaLista = function(resp){
-                console.log(resp);
-                var ret = [];
-                var prevMonth = resp[0]['start'].substr(5,2);
-                var thisMonth;
-                var idxLuna = 0;
-                var leftPx;
-
-                var firstDate = new Date();
-                firstDate.setDate(firstDate.getDate()-daysTotal/2);  //  This finds the first date on the grid
-
-                idxLuna = new Date(resp[0]['start']).getMonth() - firstDate.getMonth(); // Gets the difference in months between the first month
-                if(idxLuna < 0) idxLuna = 12 + idxLuna;                                // on the grid and the first month in our response
-
-                var dayOffset = firstDate.getDate();
-
-                for(var i=0; i<resp.length; i++){
-                    thisMonth = resp[i]['start'].substr(5,2);
-                    if(thisMonth!=prevMonth){
-                        prevMonth = thisMonth;
-                        idxLuna++;
-                    }
-
-                    leftPx = ((idxLuna*31)+(parseInt(resp[i]['start'].substr(8,2))-dayOffset))*gridSize;
-
-                    ret.push({
-                        nume: resp[i]['name'],
-                        start: resp[i]['start'],
-                        stop: resp[i]['end'],
-                        luna: resp[i]['start'].substr(5,2),
-                        zi: resp[i]['start'].substr(8,2),
-                        idxLuna: idxLuna,
-                        leftPx: leftPx
-                    });
-                }
-
-                var poz = true;
-                var currentPoz;
-                var nextPoz;
-                var availableSpace;
-
-                var finalList = [];
-
-                for(var i=0; i<ret.length; i++){
-
-                    //alternatively place a box up or down
-                    poz = !poz;
-                    ret[i].isDown = poz;
-
-                    currentPoz = ret[i].leftPx;
-                    if(i+2<ret.length){
-                        nextPoz = ret[i+2].leftPx;
-                    }else{
-                        nextPoz = currentPoz + 300;
-                    }
-
-                    //calculates available space on the grid in pixels
-                    availableSpace = nextPoz - currentPoz;
-
-                    //grid has 1200 pixels (each day has 15 pixels)
-
-                    if(availableSpace >= 250){
-                        //every expanded box has a width of 250 pixels
-                        ret[i].slim = false;
-                        ret[i].collapsed = false||allCollapsed;
-                    }else if(availableSpace >= 80){
-                        //a normal collapsed box has a width of 80 pixels
-                        ret[i].slim = false;
-                        ret[i].collapsed = true||allCollapsed;
-                    }else{
-                        //a slim collapsed box has a width of 15 pixels
-                        ret[i].slim = true;
-                        ret[i].collapsed = true||allCollapsed;
-                    }
-
-                    //remove boxes that expand beyond the grid if decided so
-                    //grid = 1200px
-                    //box = 250px
-                    //1200 - 250 = 950px
-                    if(ret[i].leftPx < 950 && removeExpandingBeyond){
-                        finalList.push(ret[i]);
-                    }
-                }
-
-                scope.formatEvents = finalList;
+            //========================== useful functions
+            var resetTimeInDate = function (date) {
+                return new Date(date.setHours(12,0,0,0));
             };
 
-            var alignMonths = function (monthNames) {
-                var thisMonth = scope.thisMonth;
-                var thisMonthPoz = 600 - (scope.thisDay * 15) + 15;
-                var firstMonth = thisMonth - 2;
-                var firstMonthPoz = thisMonthPoz - (2 * 465);
+            var oneDay = 24*60*60*1000;
+            var daysBetweenDates = function (firstDate, secondDate) {
+                return Math.round((firstDate.getTime() - secondDate.getTime())/(oneDay));
+            };
 
-                var ret = [];
-                for(var i=0; i<=4; i++){
-                    var m = firstMonth+i;
-                    if(m < 0)  m = 12 + m;
-                    if(m > 11) m = m - 12;
-                    ret.push({
-                        poz: firstMonthPoz + (i*465),
-                        name: monthNames[m]
-                    });
+            scope.toDate = function (dateStr) {
+                return new Date(dateStr);
+            };
+
+            var addDaysToDate = function (date, days) {
+                var myDate = new Date(date);
+                myDate.setDate(myDate.getDate() + days);
+                return myDate;
+            };
+
+            scope.dayDisplay = function (date) {
+                var day = date.getDate();
+                return day<10?"0"+day:day;
+            };
+
+            scope.monthDisplay = function (date) {
+                var month = date.getMonth() + 1;
+                return month<10?"0"+month:month
+            };
+
+            //========================== initialize vars / constants
+            const today = resetTimeInDate(new Date());
+            scope.today = today;
+            const gridLinesCount = 80;
+            const maxEventLength = 250;
+
+            //===================================================== events function
+
+            var orderEvents = function () {
+                var ordered = false;
+                var temp;
+                while(!ordered){
+                    ordered = true;
+                    for(var i=0; i<scope.events.length - 1; i++){
+                        if(scope.events[i+1] && scope.events[i][scope.dateAttr] > scope.events[i+1][scope.dateAttr]){
+                            temp = scope.events[i];
+                            scope.events[i] = scope.events[i+1];
+                            scope.events[i+1] = temp;
+                            ordered = false;
+                        }
+                    }
                 }
+            };
 
-                scope.formatMonths = ret;
+            var addEventsProperties = function () {
+                for(var i=0; i<scope.events.length; i++){
+                    //create an offset based on the difference in days between today and this event's start date
+                    var eventDate = resetTimeInDate(new Date(scope.events[i][scope.dateAttr]));
+                    scope.events[i].positionOffset = daysBetweenDates(eventDate, today);
+                    //decide whether to place this event above or below the time grid
+                    scope.events[i].isBelow = i % 2;
+                    //calculate the space (in grid units) between two events placed on the same side of the time grid (defaults to 30)
+                    scope.events[i].gridUnitsAvailable = 30;
+                    if(i-2 >= 0){
+                        scope.events[i-2].gridUnitsAvailable = scope.events[i].positionOffset - scope.events[i-2].positionOffset;
+                    }
+                }
+            };
+
+            var generateTimeGrid = function () {
+                var g = gridLinesCount / 2;
+                scope.timeGrid = [];
+                for(var i=g; i>-1*g; i--){
+                    var thisDate = addDaysToDate(today, i);
+                    var obj = {
+                        offset: i,
+                        contrastColor: thisDate.getMonth() % 2
+                    };
+                    if(thisDate.getDate() === 1){
+                        obj.data = scope.months[thisDate.getMonth()];
+                    }
+                    scope.timeGrid.push(obj);
+                }
+            };
+
+            scope.isCompact = function (event) {
+                return event.gridUnitsAvailable * scope.dayWidth < maxEventLength;
+            };
+
+            //====================================================== watch events input
+            scope.$watch('events', function () {
+                if(scope.events && scope.events[0]){
+                    //console.log(scope.events);
+                    orderEvents();
+                    init();
+                }
+            });
+
+            //===================================================== initialize
+            var init = function () {
+                addEventsProperties();
+                console.log(scope.events);
+                generateTimeGrid();
             };
         }
     };

@@ -1,144 +1,30 @@
 .timelineBody {
+  display: block;
+  float: left;
+  width: 100%;
+  height: 200px;
+  padding: 0;
+  overflow-x: hidden;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+.timelineBody .gridMiddle {
+  width: 0;
+  height: 200px;
+  margin-left: 50%;
   position: relative;
-  overflow-x: hidden;
-  min-height: 270px;
-  min-width: 1200px;
-  padding-top: 65px;
 }
-.timelineBody .timeBox {
-  position: absolute;
-  cursor: pointer;
-}
-.timelineBody .timeBox .timeBoxLine {
+.timelineBody .gridMiddle .todayBox {
   position: absolute;
   left: 0;
-  border: 1px solid #009d96;
-  height: 20px;
+  bottom: 150px;
 }
-.timelineBody .timeBox .zi {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  float: left;
-  font-size: 35px;
-  font-weight: bold;
-  color: #009d96;
-}
-.timelineBody .timeBox .luna {
-  position: absolute;
-  left: 40px;
-  bottom: -6px;
-  float: left;
-  font-size: 18px;
-  font-weight: bold;
-}
-.timelineBody .timeBox .isCollapsed {
-  position: absolute;
-  left: 65px;
-  bottom: -6px;
-  float: left;
-}
-.timelineBody .timeBox .nume {
-  position: absolute;
-  left: 80px;
-  bottom: -6px;
-  font-size: 15px;
-  float: left;
-  width: 170px;
-  background-color: rgba(255, 255, 255, 0.9);
-  min-height: 33px;
-  border: 1px solid #eeeeee;
-  text-align: center;
-}
-.timelineBody .timeBox2 {
-  position: absolute;
-  cursor: pointer;
-}
-.timelineBody .timeBox2 .timeBoxLine {
-  position: absolute;
-  left: 0;
-  border: 1px solid #009d96;
-  height: 33px;
-}
-.timelineBody .timeBox2 .zi {
-  position: absolute;
-  left: 15px;
-  bottom: 0;
-  float: left;
-  font-size: 35px;
-  font-weight: bold;
-  color: #009d96;
-  width: 65px;
-  background-color: rgba(255, 255, 255, 0.9);
-}
-.timelineBody .timeBox2 .luna {
-  position: absolute;
-  left: 55px;
-  bottom: -7px;
-  float: left;
-  font-size: 18px;
-  font-weight: bold;
-}
-.timelineBody .timeBox2 .isCollapsed {
-  position: absolute;
-  left: 0;
-  bottom: 9px;
-  float: left;
-}
-.timelineBody .timeBox2 .nume {
-  position: absolute;
-  left: 80px;
-  bottom: -4px;
-  font-size: 15px;
-  float: left;
-  width: 170px;
-  min-height: 33px;
-  text-align: center;
-  border: 1px solid #eeeeee;
-  background-color: rgba(255, 255, 255, 0.9);
-}
-.timelineBody .timeGrid {
-  position: absolute;
-}
-.timelineBody .timeGrid .gridd {
-  position: absolute;
-  width: 1200px;
-  height: 25px;
-  border-radius: 12px;
-  top: 65px;
-  background-color: #009d96;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAHCAQAAAB9jN+sAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAE0lEQVQI12P4/58BD2BiYBii0gCzTwILoELU3QAAAABJRU5ErkJggg==);
-  background-repeat: repeat-x;
-  background-position: 0px 21px;
-  overflow: hidden;
-}
-.timelineBody .timeGrid .gridd .month {
-  position: absolute;
-}
-.timelineBody .timeGrid .gridd .month .monthLine {
-  float: left;
-  border: 1px solid;
-  border-color: #ffffff;
-  height: 10px;
-}
-.timelineBody .timeGrid .gridd .month .monthName {
-  float: left;
-  color: #ffffff;
-  font-weight: bold;
-  padding-left: 3px;
-}
-.timelineBody .timeGrid .todayBox {
-  position: absolute;
-  left: 600px;
-}
-.timelineBody .timeGrid .todayBox .dateShow {
-  background-color: #67cad3;
+.timelineBody .gridMiddle .todayBox .dateShow {
+  background-color: #36cfa5;
   min-height: 40px;
   min-width: 60px;
   position: absolute;
@@ -150,7 +36,7 @@
   padding-top: 7px;
   text-align: center;
 }
-.timelineBody .timeGrid .todayBox .arrowDown {
+.timelineBody .gridMiddle .todayBox .arrowDown {
   position: absolute;
   left: -10px;
   top: -10px;
@@ -158,13 +44,67 @@
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-top: 10px solid #67cad3;
+  border-top: 10px solid #36cfa5;
 }
-.timelineBody .timeGrid .todayBox .lineDown {
+.timelineBody .gridMiddle .todayBox .lineDown {
   border: 1px solid;
   border-color: rgba(103, 202, 211, 0.4);
-  height: 70px;
+  height: 60px;
   width: 0px;
   position: absolute;
   top: -5px;
+}
+.timelineBody .gridMiddle .event {
+  position: absolute;
+  bottom: 115px;
+  cursor: pointer;
+}
+.timelineBody .gridMiddle .event .eventLine {
+  position: absolute;
+  left: 0;
+  border: 1px solid #008780;
+  height: 20px;
+  bottom: -25px;
+}
+.timelineBody .gridMiddle .event .day {
+  position: absolute;
+  left: -13px;
+  bottom: 0;
+  float: left;
+  font-size: 25px;
+  font-weight: bold;
+  color: #008780;
+  z-index: 2;
+}
+.timelineBody .gridMiddle .event.isBelow {
+  bottom: 25px;
+}
+.timelineBody .gridMiddle .event.isBelow .eventLine {
+  bottom: 25px;
+}
+.timelineBody .gridMiddle .grid {
+  position: absolute;
+  bottom: 70px;
+  background-color: #008780;
+  padding-left: 5px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  height: 23px;
+}
+.timelineBody .gridMiddle .grid.contrastColor {
+  background-color: #008780;
+}
+.timelineBody .gridMiddle .grid.firstDay {
+  border-left: 1px solid #ffffff;
+}
+.timelineBody .gridMiddle .grid:after {
+  content: '';
+  position: absolute;
+  left: -1px;
+  z-index: 1;
+  bottom: 0;
+  height: 5px;
+  width: 0;
+  border-left: 1px solid #ffffff;
 }

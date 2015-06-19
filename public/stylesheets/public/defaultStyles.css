@@ -6504,21 +6504,6 @@ html body .rootView {
   color: #008780;
   margin-top: 20px;
 }
-.timelineContainer {
-  width: 100%;
-  height: 200px;
-  padding: 0;
-  overflow: hidden;
-  position: relative;
-}
-.timelineContainer .timelineBody {
-  width: 0;
-  position: absolute;
-  left: 50%;
-  margin-left: -600px;
-  transform: scale(0.8);
-  transform-origin: 50% 0;
-}
 .footer {
   width: 100%;
   margin-top: 20px;

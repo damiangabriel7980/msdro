@@ -11,6 +11,4 @@
 <div class="col-md-12 noPadding" ui-view="desktop" ng-if="!isMobile(true)"></div>
 <div class="col-md-12 noPadding" ui-view="mobile" ng-if="isMobile(true)"></div>
 <div class="col-md-12 evenimente text-center" ng-if="events.length!=0 && !isMobile()"><i class="glyphicon glyphicon-calendar"></i>&nbsp;Evenimente</div>
-<div class="col-md-12 timelineContainer" ng-if="events.length!=0 && !isMobile()">
-    <calendar-timeline events="events" months="monthsArray"></calendar-timeline>
-</div>
+<calendar-timeline events="events" months="monthsArray" date-attr="start" name-attr="name"></calendar-timeline>
