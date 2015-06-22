@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="col-md-12 text-center">
-        <button class="btn btn-sm btn-info" ng-class="showMoreProd" ng-click="increaseLimit()">Mai multe produse</button>
+        <button class="btn btn-sm btn-info" ng-class="{'hidden': !products || products.length <= lmt}" ng-click="increaseLimit()">Mai multe produse</button>
     </div>
 </div>
 <div class="col-md-1 noPadding text-center">
