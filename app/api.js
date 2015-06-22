@@ -206,18 +206,6 @@ var encodeNotificationsIds = function (ids, cb) {
     });
 };
 
-var getUsersForConference = function (id_conference, callback) {
-    User.find({conferencesID: {$in: [id_conference]}}, function (err, users) {
-        if(err){
-            callback(err, null);
-        }else{
-            getIds(users).then(function (ids) {
-                callback(null, ids);
-            });
-        }
-    });
-};
-
 //================================================================================================= send push notifications
 
 var sendPushNotification = function (message, arrayUsersIds, callback) {
