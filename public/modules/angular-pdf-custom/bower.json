@@ -1,0 +1,9 @@
+{
+    "name": "angular-pdf-custom",
+    "version": "0.1.0",
+    "main": "./angular-pdf-custom.js",
+    "dependencies": {
+        "angular": "1.3.x",
+        "pdfjs-dist": "1.1.3"
+    }
+}

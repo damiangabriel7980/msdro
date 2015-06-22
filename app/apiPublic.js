@@ -196,7 +196,7 @@ module.exports = function(app, logger, router) {
             var daysToReturn = 80;
             var startDate = new Date(new Date().setDate(new Date().getDate()-(daysToReturn/2)));
             var endDate = new Date(new Date().setDate(new Date().getDate()+(daysToReturn/2)));
-            Events.find({enable: {$exists: true, $ne: false}, start: {$gt: startDate, $lt: endDate}, isPublic: true}).sort({start: 1}).exec(function (err, resp) {
+            Events.find({enable: {$exists: true, $ne: false}, start: {$gt: startDate, $lt: endDate}, isPublic: true}).exec(function (err, resp) {
                 if(err){
                     res.send(err);
                 }else{

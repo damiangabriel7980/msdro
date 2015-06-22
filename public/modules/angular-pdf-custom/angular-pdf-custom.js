@@ -6,10 +6,10 @@
     var scripts = document.getElementsByTagName("script");
     var currentScriptPath = scripts[scripts.length-1].src;
 
-    angular.module('pdf', []).directive('ngPdf', ['$window', function($window) {
+    angular.module('pdfCustom', []).directive('ngPdfCustom', ['$window', function($window) {
         return {
             restrict: 'E',
-            templateUrl: currentScriptPath.replace('angular-pdf.js', 'viewerTemplate.html'),
+            templateUrl: currentScriptPath.replace('angular-pdf-custom.js', 'viewerTemplate.html'),
             scope: {
                 pdfUrl: '='
             },

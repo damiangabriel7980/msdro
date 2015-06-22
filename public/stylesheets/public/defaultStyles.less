@@ -203,115 +203,6 @@ html{
   }
 }
 
-//============================================================================================================ CAROUSEL
-
-.fixedBox{
-  position: absolute;
-  left: 0px;
-  top: 20%;
-  height: 65%;
-  width: 45%;
-  border-top-right-radius: 7px;
-  border-bottom-right-radius: 7px;
-  z-index: 100;
-  padding: 30px 15px 35px 70px;
-  background-color:rgba(250, 250, 250, 0.7);
-  box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
-  box-sizing: border-box;
-  @media (max-width: @carousel-font-change) {
-    padding: 20px 15px 35px 40px;
-  }
-  .textWrapper{
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    .carouselTitle{
-      width: 100%;
-      white-space: normal;
-      font-size: 30px;
-      font-weight: bold;
-      color: #028985;
-      line-height: 1em;
-      margin: 0;
-      @media (max-width: @carousel-font-change) {
-        font-size: 30px;
-      }
-    }
-    .carouselDescription{
-      color: #000000;
-      width: 100%;
-      white-space: normal;
-      padding-left: 30px;
-      padding-top: 15px;
-      font-size: 15px;
-      margin: 0;
-      @media (max-width: @carousel-font-change) {
-        padding-top: 10px;
-      }
-    }
-  }
-  .carouselLearnMore{
-    position: absolute;
-    left: 70px;
-    bottom: 15px;
-    cursor: pointer;
-    color: @orange;
-    font-weight: bold;
-    font-size: 17px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
-  }
-}
-.carouselNavigation{
-  position: absolute;
-  right: 20px;
-  bottom: 10%;
-  width: 45%;
-  z-index: 101;
-  height: auto;
-  .navSlide{
-    float: right;
-    width: 60px;
-    height: 35px;
-    overflow: hidden;
-    border: 2px solid @gray;
-    border-radius: 5px;
-    margin-right: 10px;
-    margin-bottom: 0;
-    cursor: pointer;
-    &.active{
-      margin-bottom: 5px;
-      border-color: #ffffff;
-    }
-    img{
-      height: 100%;
-    }
-    .tooltip{
-      width: 150px;
-      padding-right: 50px;
-      .tooltip-inner{
-        background-color:rgba(0, 135, 128, 0.5);
-        margin-bottom: 4px;
-        padding: 5px;
-        img{
-          width: 100%;
-          margin-bottom: 5px;
-        }
-        color: #ffffff;
-        font-weight: bold;
-      }
-      .tooltip-arrow{
-        border-width: 10px 10px 0;
-        border-top-color:rgba(0, 135, 128, 0.5);
-      }
-    }
-  }
-}
-.myCarousel{
-  height: 100%;
-  img{
-    width: 100%;
-  }
-}
 .margin35px{
   margin-top: 35px;
 }
@@ -336,22 +227,6 @@ html{
   font-weight: bold;
   color: @greenDark;
   margin-top: 20px;
-}
-
-.timelineContainer{
-  width: 100%;
-  height: 200px;
-  padding: 0;
-  overflow: hidden;
-  position: relative;
-  .timelineBody{
-    width: 0;
-    position: absolute;
-    left: 50%;
-    margin-left: -600px;
-    transform: scale(0.8);
-    transform-origin: 50% 0;
-  }
 }
 
 .footer{

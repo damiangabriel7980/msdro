@@ -1,0 +1,139 @@
+//=================================== generic
+@pluginHeight: 200px;
+
+//=================================== time grid
+@timeGridBottom: 70px;
+@gridBackgroundColor: #008780;
+@gridBackgroundColorContrast: #008780;
+@gridTextColor: #ffffff;
+@gridFontSize: 12px;
+@gridHeight: 23px;
+@gridLineHeight: 5px;
+@gridLineColor: #ffffff;
+
+//=================================== events
+@eventAboveBottom: 115px;
+@eventBelowBottom: 25px;
+@eventBackgroundColor: rgba(255, 255, 255, 0.9);
+@eventDayColor: #008780;
+
+//=================================== today box
+@todayBoxBottom: 150px;
+@todayBoxLineHeight: 60px;
+@todayBoxBackgroundColor: #36cfa5;
+@todayBoxTextColor: #ffffff;
+@todayBoxLineColor: rgba(103, 202, 211, 0.4);
+
+.timelineBody {
+  display: block;
+  float: left;
+  width: 100%;
+  height: @pluginHeight;
+  padding: 0;
+
+  //make everything non selectable
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  .gridMiddle{
+    width: 0;
+    height: @pluginHeight;
+    //border: 1px solid #000000;
+    margin-left: 50%;
+    position: relative;
+    .todayBox{
+      position: absolute;
+      left: 0;
+      bottom: @todayBoxBottom;
+      .dateShow {
+        background-color: @todayBoxBackgroundColor;
+        min-height: 40px;
+        min-width: 60px;
+        position: absolute;
+        top: -50px;
+        left: -30px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        padding-top: 7px;
+        text-align: center;
+      }
+      .arrowDown {
+        position: absolute;
+        left: -10px;
+        top: -10px;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid @todayBoxBackgroundColor;
+      }
+      .lineDown {
+        border: 1px solid;
+        border-color: @todayBoxLineColor;
+        height: @todayBoxLineHeight;
+        width: 0px;
+        position: absolute;
+        top: -5px;
+      }
+    }
+    .event{
+      position: absolute;
+      bottom: @eventAboveBottom;
+      cursor: pointer;
+      .eventLine {
+        position: absolute;
+        left: 0;
+        border: 1px solid @eventDayColor;
+        height: 20px;
+        bottom: -25px;
+      }
+      .day {
+        position: absolute;
+        left: -13px;
+        bottom: 0;
+        float: left;
+        font-size: 25px;
+        font-weight: bold;
+        color: @eventDayColor;
+        z-index: 2;
+      }
+      &.isBelow{
+        bottom: @eventBelowBottom;
+        .eventLine{
+          bottom: 25px;
+        }
+      }
+    }
+    .grid{
+      position: absolute;
+      bottom: @timeGridBottom;
+      background-color: @gridBackgroundColor;
+      padding-left: 5px;
+      &.contrastColor{
+        background-color: @gridBackgroundColorContrast;
+      }
+      &.firstDay{
+        border-left: 1px solid @gridLineColor;
+      }
+      color: @gridTextColor;
+      font-size: @gridFontSize;
+      font-weight: bold;
+      height: @gridHeight;
+      &:after{
+        content: '';
+        position: absolute;
+        left: -1px;
+        z-index: 1;
+        bottom: 0;
+        height: @gridLineHeight;
+        width: 0;
+        border-left: 1px solid @gridLineColor;
+      }
+    }
+  }
+}

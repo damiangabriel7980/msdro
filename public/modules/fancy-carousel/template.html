@@ -1,0 +1,25 @@
+<div class="col-md-12 unselectable noPadding" style="overflow: hidden" carousel-resizable>
+    <div class="carouselWrapper" id="divToResize">
+        <div class="fixedBox">
+            <div class="textWrapper">
+                <p class="carouselTitle" ng-bind-html="trustAsHtml(createHeader(carouselSlides[selectedIndex].title, 40))">
+                </p>
+                <p class="carouselDescription" ng-bind-html="trustAsHtml(carouselSlides[selectedIndex].description)">
+                </p>
+            </div>
+            <div class="carouselLearnMore" ng-click="carouselAction(carouselSlides[selectedIndex])">
+                Learn more <i class="fa fa-caret-right"></i>
+            </div>
+        </div>
+        <div class="carouselNavigation">
+            <div class="navSlide" ng-repeat="slide in carouselSlides | repeatReverse track by $index"  ng-class="{'active':(carouselSlides.length - $index - 1) == selectedIndex}" ng-click="setSlide(carouselSlides.length - $index - 1)">
+                <img ng-src="{{slide.image_path?pathPrefix+slide.image_path:''}}" tooltip-html-unsafe="{{getTooltip(slide)}}" tooltip-trigger="mouseenter">
+            </div>
+        </div>
+        <ul rn-carousel rn-carousel-index="selectedIndex" class="myCarousel" rn-carousel-auto-slide="{{slideSeconds}}">
+            <li ng-repeat="slide in carouselSlides">
+                <img ng-src="{{slide.image_path?pathPrefix+slide.image_path:''}}" ondragstart="return false;">
+            </li>
+        </ul>
+    </div>
+</div>

@@ -6,7 +6,7 @@ var app = angular.module('app',
         'services',
         'ngTouch',
         'angular-carousel',
-        'msdTimeline',
+        'calendarTimeline',
         'ngSanitize',
         'ui.select',
         'com.2fdevs.videogular',
@@ -15,7 +15,8 @@ var app = angular.module('app',
         'com.2fdevs.videogular.plugins.poster',
         'angularFileUpload',
         'mobileContentList',
-        'offClick'
+        'offClick',
+        'fancyCarousel'
     ]);
 
 app.config(['$locationProvider', function($locationProvider) {
@@ -24,7 +25,7 @@ app.config(['$locationProvider', function($locationProvider) {
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.rule(function ($injector, $location) {
-        console.log($location.url());
+        //console.log($location.url());
         if(REQUESTED_PRO) {
             REDIRECT_AFTER_LOGIN = $location.url();
             REQUESTED_PRO = 0;
