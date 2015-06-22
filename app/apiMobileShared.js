@@ -13,7 +13,7 @@ var Job = require('./models/jobs');
 var UtilsService = require('./modules/utils');
 var TokenService = require('./modules/tokenAuth');
 
-module.exports = function(app, logger, tokenSecret, pushServerAddr, router) {
+module.exports = function(app, logger, tokenSecret, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {

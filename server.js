@@ -67,7 +67,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 //token auth ===================================================================
-require('./config/tokenAuth')(app,  logger, tokenSecret, pushServerAddr);
+require('./config/tokenAuth')(app,  logger);
 
 app.use(express.static(path.join(__dirname, my_config.publicFolder)));
 
