@@ -9,6 +9,39 @@ body{
     font-size: 15px;
   }
 }
+.filterByTherapeuticAreas{
+  padding: 0 0 25px 55px;
+  .areasMobile{
+    margin-left: 25px;
+  }
+  .areas{
+    padding: 0;
+    margin-right: 65px;
+    .title{
+      margin-top: 0;
+    }
+    .menu{
+      .MSDgreen;
+      list-style: none;
+      .area{
+        border: 0px solid #ddd;
+        cursor: pointer;
+        border-radius: 4px !important;
+        &:hover{
+          background-color: @MSDgreenDarker;
+          color:white;
+        }
+        &.active{
+          background-color: @MSDgreenDarker;
+          color:white;
+        }
+      }
+    }
+  }
+  .viewport{
+    margin-top: 0;
+  }
+}
 .biggerTitle{
   @media(min-width: 768px) and (orientation: portrait){
     font-size: 16px;
@@ -1529,10 +1562,6 @@ hr{
 .equalMarginModalTitle{
   margin-top: 10px;
   margin-bottom: 10px;
-}
-.activeArea{
-  background-color: @MSDgreenDarker;
-  color:white;
 }
 a:focus{
   text-decoration: none;
