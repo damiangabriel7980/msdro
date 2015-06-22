@@ -6374,6 +6374,16 @@ body {
   padding: 10px 15px 10px 15px;
   text-align: right;
 }
+.productDetails .imageAndRCP img {
+  width: 100%;
+}
+.productDetails .imageAndRCP .btn {
+  margin-top: 10px;
+}
+.productDetails .imageAndRCP hr {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
 @media (min-width: 768px) and (orientation: portrait) {
   .biggerTitle {
     font-size: 16px;
@@ -6470,6 +6480,10 @@ ul.products li {
   border-radius: 5px !important;
 }
 .btn-more-news {
+  background-color: transparent;
+  color: black;
+}
+.btn-transparent {
   background-color: transparent;
   color: black;
 }
