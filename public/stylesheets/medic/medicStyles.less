@@ -32,12 +32,6 @@ body{
   .articleBox{
     padding: 5px 5px 5px 5px;
     margin-bottom: 15px;
-    //    .displayImage{
-    //      padding: 0;
-    //      img{
-    //        width: 205px;
-    //      }
-    //    }
     .title{
       font-size: 17px;
       font-weight: bold;
@@ -142,91 +136,6 @@ ul.products li {
 .MerckContentAlign{
   text-align: justify;
 }
-
-
-//@media(min-width: 1367px){
-//  .newsClass {
-//    float: left;
-//    height: 310px !important;
-//  }
-//}
-
-//@media(max-width: 1366.5px){
-//  .container-fluid{
-//    margin-left: 6%;
-//    margin-right: 6%;
-//  }
-//  .newsClass {
-//    float: left;
-//    height: 310px;
-//  }
-//
-//}
-
-//@media (min-width: 1025px) and (max-width: 1365px) {
-//  .newsClass {
-//    float: left;
-//    height: 315px !important;
-//  }
-//}
-
-//@media (max-width: 1025px) {
-//  .leftBorder{
-//    border-left: 2px solid @grayLight;
-//  }
-//  h1 {
-//    font-size: 26px;
-//  }
-//  h4 {
-//    font-size: 14px;
-//  }
-//  body {
-//    font-size: 11px;
-//  }
-//  .newsClass{
-//    float:left !important;
-//    height: 240px !important;
-//  }
-//  .paddingLeft {
-//    padding-left: 0px;
-//  }
-//  .container-fluid{
-//    margin-left: 0% !important;
-//    margin-right: 0% !important;
-//  }
-//}
-
-//@media(max-width: 768px){
-//  .container-fluid {
-//    margin-left: -5% !important;
-//    margin-right: -5% !important;
-//  }
-//
-//  .newsClass{
-//    float:left !important;
-//    height: auto !important;
-//  }
-//
-//  .rightBorder{
-//    border-right: 0px !important;
-//  }
-//
-//  .leftBorder{
-//    border-left: 0px !important;
-//  }
-//
-//  .hrNewColor{
-//    display: none;
-//  }
-//  .wrapping-div {
-//    margin-left: -20%;
-//    height: 150px;
-//    width: 145%;
-//    overflow: hidden;
-//    margin-bottom: 25px;
-//  }
-//}
-
 .articleEye{
   color: #1c9893;
   background-color: transparent;
@@ -284,19 +193,73 @@ ul.products li {
 .homeStyles{
   height: 100%;
   padding: 0 0 50px 0;
-  .eventDisplay{
-    padding: 0 0 30px 0;
-    .date{
-      border-right: 0px solid @gray;
-      .day{
-        font-size: 20px;
-      }
-      .month{
-        margin-top: -5px;
-      }
-    }
-  }
   .leftColumn{
+    .lastNewsWrapper{
+        padding-right: 0;
+      @media(min-width: 1278px) {
+        margin-left: 25px;
+      }
+        .Title{
+          padding:0;
+          padding-bottom: 8px !important;
+        }
+        .Article{
+          padding:0;
+          @media(max-width: 1278px){
+            padding-bottom: 10px;
+          }
+          .homeNewsArticleImage{
+            padding:0;
+            img{
+              border-radius: 5px !important;
+            }
+          }
+          .TextWrapper{
+            a{
+              color: #006d69;
+            }
+            @media(min-width: 1278px){
+              width: 100%;
+              padding: 0 0 15px 0;
+              position: relative;
+            }
+            height: 12em;
+            overflow: hidden;
+            @media (max-device-width: 700px) {
+              height: 9.5em;
+            }
+            .Description{
+              padding: 0;
+              margin-top: 5px;
+              @media(min-width: 768px) and (orientation: portrait){
+                font-size: 16px;
+              }
+            }
+            &:after{
+              content: '';
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              min-height: 4.5em;
+              background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+            }
+          }
+          .buttonWrapper{
+            padding: 0;
+            margin-top: 5px;
+            .btn-news{
+              background-color: transparent;
+              color: black;
+              &:hover{
+                color: #fff;
+                background-color: #31b0d5;
+                border-color: #269abc;
+              }
+            }
+          }
+        }
+    }
     &:after{
       position: absolute;
       content: '';
@@ -319,6 +282,98 @@ ul.products li {
       height: 100%;
       margin-left: -1%;
     }
+      margin-left: -2%;
+      @media(max-width: 768px){
+        margin-left: 0;
+      }
+      padding-left: 0;
+      @media(max-width: 768px){
+        padding-left: 15px !important;
+      }
+    .Multimedia{
+      @media(max-width: 768px){
+        padding-left: 15px;
+      }
+      .Title{
+        padding:0;
+        h3{
+          margin-bottom: -1%;
+        }
+      }
+      .Wrapper{
+        padding: 0;
+        margin-top:20px !important;
+        .iconWrapper{
+          padding: 0;
+          i{
+            color: @gray;
+          }
+        }
+        .Content{
+          b{
+            color: #006d69;
+          }
+          padding: 0;
+          text-align: justify;
+            @media(min-width: 768px) and (max-width: 1277px)
+            {
+              left: -5%;
+            }
+          .mediaTitle{
+            @media(min-width: 768px) and (orientation: portrait){
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+    .Events{
+      @media(max-width: 768px){
+        padding-left: 15px;
+      }
+    .Title{
+      padding: 0;
+      h3{
+        margin-bottom: 4%;
+      }
+     }
+      .eventDisplay{
+        padding: 0 0 30px 0;
+        .date{
+          padding: 0;
+          border-right: 0px solid @gray;
+          color: #006d69;
+          .day{
+            padding: 0;
+            font-size: 20px;
+          }
+          .month{
+            padding: 0;
+            margin-top: -5px;
+          }
+        }
+        .Content{
+          @media(min-width: 768px) and (max-width: 1277px)
+          {
+            left: -5%;
+          }
+          padding: 0;
+          border-left: 1px solid #000000;
+          .MediaTitle{
+            color: #006d69;
+            cursor: pointer;
+            text-align: justify;
+            @media(max-width: 768px){
+              padding-left: 15px;
+            }
+          }
+          .Description{
+            margin-top: 5px;
+            text-align: justify;
+          }
+        }
+      }
+    }
     &:after{
       position: absolute;
       content: '';
@@ -327,8 +382,18 @@ ul.products li {
       width: 0;
       height: 100%;
     }
+    .MobileWidgets{
+      padding: 0;
+    }
   }
   .rightColumn{
+      padding-left: 2%;
+      @media(max-device-width: 768px){
+        padding-left: 3%;
+      }
+    .homeWidgetsColumnNoPadding{
+      padding:0;
+    }
     &:before{
       position: absolute;
       content: '';
@@ -390,6 +455,18 @@ ul.products li {
         bottom: 10px;
         left: 3%;
         cursor: pointer;
+        .titleFont{
+          font-family: "Trebuchet MS", Helvetica, sans-serif;
+          color: white;
+          text-shadow: black 0.1em 0.1em 0.2em;
+          font-size: 30px;
+          @media(max-width: 768px){
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            color: white;
+            text-shadow: black 0.1em 0.1em 0.2em;
+            font-size: 18px;
+          }
+        }
       }
       .imageCover{
         z-index: 1000;
@@ -411,6 +488,12 @@ ul.products li {
         img{
           width: 98%;
         }
+      }
+      .firstTrimmedImage{
+        display: inline-block; -webkit-transform: translate3d(-100%, 0px, 0px);-moz-transform: translate3d(-100%, 0px, 0px); transform: translate3d(-100%, 0px, 0px);
+      }
+      .lastTrimmedImage{
+        display: inline-block; -webkit-transform: translate3d(100%, 0px, 0px);-moz-transform: translate3d(100%, 0px, 0px); transform: translate3d(100%, 0px, 0px);
       }
     }
   }
@@ -921,12 +1004,6 @@ ul.products li {
     padding-left: 0;
   }
 }
-.firstIllusion{
-  display: inline-block; -webkit-transform: translate3d(-100%, 0px, 0px);-moz-transform: translate3d(-100%, 0px, 0px); transform: translate3d(-100%, 0px, 0px);
-}
-.secondIllusion{
-  display: inline-block; -webkit-transform: translate3d(100%, 0px, 0px);-moz-transform: translate3d(100%, 0px, 0px); transform: translate3d(100%, 0px, 0px);
-}
 .Box300{
   height: 300px;
 }
@@ -1099,18 +1176,6 @@ hr{
 }
 .center{
   text-align: center;
-}
-.newFont{
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  color: white;
-  text-shadow: black 0.1em 0.1em 0.2em;
-  font-size: 30px;
-  @media(max-width: 768px){
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: white;
-    text-shadow: black 0.1em 0.1em 0.2em;
-    font-size: 18px;
-  }
 }
 .width81
 {
