@@ -9,7 +9,7 @@
 <div class="filterByTherapeuticAreas" id="content">
     <div class="col-xs-12 areasMobile" dropdown is-open="status.isopen" id="menuDiv" ng-if="isMobile(true)">
         <select class="form-control" ng-options="area._id as (area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;':'')+area.name for area in therapeuticAreas"
-                ng-model="selectedArea" ng-change="selectAreaMultimedia(selectedArea)"></select>
+                ng-model="selectedArea" ng-change="selectArea(selectedArea)"></select>
     </div>
     <div class="col-md-2 col-xs-12 areas" ng-if="!isMobile(true)">
         <h3 class="title">ARII TERAPEUTICE</h3>
