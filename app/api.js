@@ -223,23 +223,18 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 //================================================================================ find id's of users associated to conferences, rooms, talks
 
 //receives an array of documents and returns an array with only the id's of those documents
-var getIds = function (arr, cb) {
+var getIds = function (arr, convertToString) {
+    var deferred = Q.defer();
     var ret = [];
     async.each(arr, function (item, callback) {
-        if(item._id) ret.push(item._id);
+        if(item._id){
+            convertToString?ret.push(item._id.toString()):ret.push(item._id);
+        }
         callback();
     }, function (err) {
-        cb(ret);
+        deferred.resolve(ret);
     });
-};
-var getStringIds = function (arr, cb) {
-    var ret = [];
-    async.each(arr, function (item, callback) {
-        if(item._id) ret.push(item._id.toString());
-        callback();
-    }, function (err) {
-        cb(ret);
-    });
+    return deferred.promise;
 };
 
 // get user ids
@@ -259,7 +254,7 @@ var getUsersForConference = function (id_conference, callback) {
         if(err){
             callback(err, null);
         }else{
-            getIds(users, function (ids) {
+            getIds(users).then(function (ids) {
                 callback(null, ids);
             });
         }
@@ -313,7 +308,7 @@ var getUsersForConferences = function (conferences_ids, callback) {
         if(err){
             callback(err, null);
         }else{
-            getIds(users, function (ids) {
+            getIds(users).then(function (ids) {
                 callback(null, ids);
             });
         }
@@ -4744,7 +4739,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             res.send(err);
                         }else{
                             //get ids of allowed articles
-                            getIds(content, function (ids) {
+                            getIds(content).then(function (ids) {
                                 //get carousel content within allowed articles
                                 Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
                                     if(err){
@@ -4965,7 +4960,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             if(TArea.has_children==true)
                             {
                                 Therapeutic_Area.find({$or: [{_id:req.body.id},{"therapeutic-areasID": {$in :[test]}}]}).exec(function(err,response){
-                                    getStringIds(response, function(ids){
+                                    getIds(response, true).then(function(ids){
                                     Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
                                         if(err) {
                                             res.send(err);
@@ -5124,7 +5119,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                 {
                                     Therapeutic_Area.find({"therapeutic-areasID": {$in :[req.body.id]}}).exec(function(err,response){
                                         var children=response;
-                                        getStringIds(children, function(ids){
+                                        getIds(children, true).then(function(ids){
                                             
                                             
                                             findObj['therapeutic-areasID'] = {$in: ids};
