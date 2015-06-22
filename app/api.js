@@ -8,8 +8,6 @@ var Cities = require('./models/cities');
 var Multimedia = require('./models/multimedia');
 var User = require('./models/user');
 var Job = require('./models/jobs');
-var Questions=require('./models/questions');
-var Answers = require('./models/answers');
 var Slides = require('./models/slides');
 var Roles=require('./models/roles');
 var PublicContent = require('./models/publicContent');
@@ -42,7 +40,6 @@ var specialProduct = require('./models/specialProduct');
 var specialProductMenu = require('./models/specialProduct_Menu');
 var specialProductGlossary = require('./models/specialProduct_glossary');
 var specialProductFiles = require('./models/specialProduct_files');
-var specialProductQa = require('./models/specialProduct_qa');
 var specialApps = require('./models/userGroupApplications');
 
 var XRegExp  = require('xregexp').XRegExp;
