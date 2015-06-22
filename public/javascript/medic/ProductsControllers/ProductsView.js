@@ -12,7 +12,6 @@
 controllers.controller('ProductsView', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout){
     window.scrollTo(0,0);
     $scope.lmt=8;
-    $scope.message="";
     $scope.status = {
         isopen: false
     };

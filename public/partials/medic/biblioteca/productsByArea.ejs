@@ -1,5 +1,5 @@
 <div class="col-md-11 productsView">
-    <div class="col-md-12 noProducts" ng-if="message"><h4>{{message}}</h4></div>
+    <div class="col-md-12 noProducts" ng-if="products.length == 0"><h4>Nu exista produse conform criteriilor selectate</h4></div>
     <div class="col-md-3 productWrapper" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
         <div class="col-md-12 product well">
             <div class="col-md-12 imageWrapper">
