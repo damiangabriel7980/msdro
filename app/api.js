@@ -194,52 +194,9 @@ var getIds = function (arr, convertToString) {
     return deferred.promise;
 };
 
-// get user ids
-// return array like ["MSD"+idAsString]
-var encodeNotificationsIds = function (ids, cb) {
-    var ret = [];
-    async.each(ids, function (id, callback) {
-        ret.push("MSD"+id.toString());
-        callback();
-    }, function (err) {
-        cb(ret);
-    });
-};
-
-//================================================================================================= send push notifications
-
-var sendPushNotification = function (message, arrayUsersIds, callback) {
-    encodeNotificationsIds(arrayUsersIds, function (usersToSendTo) {
-        var data = {
-            "users": usersToSendTo,
-            "android": {
-                "collapseKey": "optional",
-                "data": {
-                    "message": message
-                }
-            },
-            "ios": {
-                "badge": 0,
-                "alert": message,
-                "sound": "soundName"
-            }
-        };
-
-        request({
-            url: pushServerAddr+"/send",
-            method: 'POST',
-            json: true,
-            body: data,
-            strictSSL: false
-        }, function (error, message, response) {
-            callback(error, response);
-        });
-    });
-};
-
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, router) {
+module.exports = function(app, sessionSecret, logger, amazon, router) {
 
 //======================================================================================================= secure routes
 
