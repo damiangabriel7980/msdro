@@ -4105,7 +4105,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .post(function(req, res) {
             getNonSpecificUserGroupsIds(req.user).then(
-                function (err, nonSpecificGroupsIds) {
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
                     if (req.body.specialGroup) {
                         forGroups.push(req.body.specialGroup);
