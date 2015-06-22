@@ -37,12 +37,6 @@ var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
 var SessionStorage = require('./modules/sessionStorage');
 
-//live Streaming
-var socketio = require('socket.io'),
-    uuid = require('node-uuid'),
-    rooms = {},
-    userIds = {};
-
 //special Products
 var specialProduct = require('./models/specialProduct');
 var specialProductMenu = require('./models/specialProduct_Menu');
