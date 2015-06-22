@@ -243,10 +243,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
         $scope.article.groupsID=id_groups;
 
         ContentService.deleteOrUpdateContent.update({id: idToEdit},$scope.article).$promise.then(function (resp) {
-            console.log(resp);
-            $state.reload();
-            $modalInstance.close();
-            $state.go('content.articles',{},{reload: true});
+            $scope.closeModal();
         });
     };
 

@@ -30,11 +30,8 @@ controllers.controller('AddArticles', ['$scope', 'ContentService', '$modalInstan
         $scope.articolNou.groupsID=id_groups;
 
         ContentService.getAll.save($scope.articolNou).$promise.then(function (resp) {
-            console.log(resp);
-            $state.reload();
             $modalInstance.close();
             $state.go('content.articles',{},{reload: true});
-
         });
     };
 
