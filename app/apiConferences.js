@@ -16,7 +16,9 @@ var expressJwt = require('express-jwt');
 var async = require('async');
 var request = require('request');
 
-module.exports = function(app, logger, tokenSecret, pushServerAddr, router) {
+var PushService = require('./modules/pushNotifications');
+
+module.exports = function(app, logger, tokenSecret, router) {
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
@@ -156,27 +158,14 @@ module.exports = function(app, logger, tokenSecret, pushServerAddr, router) {
     router.route('/unsubscribeFromPush')
         .post(function (req, res) {
             var token = req.body.token;
-            //var userData = getUserData(req);
-            if(token){
-                var unsubscribeData = {
-                    "token": token
-                };
-                request({
-                    url: pushServerAddr+"/unsubscribe",
-                    method: "POST",
-                    json: true,
-                    body: unsubscribeData,
-                    strictSSL: false
-                }, function (error, message, response) {
-                    if(error){
-                        res.json({hasError: true, message:"Error unsubscibing from push notifications"});
-                    }else{
-                        res.json({hasError: false, message:"Successfully unsubscribed from push notifications"});
-                    }
-                });
-            }else{
-                res.json({hasError: true, message:"No token received"});
-            }
+            PushService.unsubscribe(token).then(
+                function () {
+                    res.json({hasError: false, message:"Successfully unsubscribed from push notifications"});
+                },
+                function () {
+                    res.json({hasError: true, message:"Error unsubscibing from push notifications"});
+                }
+            );
         });
 
     //==================================================================================================================== all routes

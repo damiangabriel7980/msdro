@@ -35,6 +35,31 @@ var subscribe = function (user_id, deviceType, notificationToken) {
     return deferred.promise;
 };
 
+var unsubscribe = function (token) {
+    var deferred = Q.defer();
+    if(token){
+        var unsubscribeData = {
+            "token": token
+        };
+        request({
+            url: my_config.pushServerAddress + "/unsubscribe",
+            method: "POST",
+            json: true,
+            body: unsubscribeData,
+            strictSSL: false
+        }, function (error, message, response) {
+            if(error){
+                deferred.reject("Error unsubscibing from push notifications");
+            }else{
+                deferred.resolve("Successfully unsubscribed from push notifications");
+            }
+        });
+    }else{
+        deferred.reject("No token");
+    }
+    return deferred.promise;
+};
+
 // get user ids
 // return array like [PREFIX + idAsString]
 var encodeNotificationsIds = function (ids, cb) {
@@ -86,5 +111,6 @@ var sendPushNotification = function (message, arrayUsersIds) {
 
 module.exports = {
     subscribe: subscribe,
+    unsubscribe: unsubscribe,
     sendPushNotification: sendPushNotification
 };
