@@ -24,7 +24,7 @@ body{
       .MSDgreen;
       list-style: none;
       .area{
-        border: 0px solid #ddd;
+        border: 0px solid @grayLighter;
         cursor: pointer;
         border-radius: 4px !important;
         &:hover{
@@ -57,11 +57,11 @@ body{
         .image{
           padding: 0;
           text-align: center;
-          border: 3px solid #ddd;
-          background-color: #ddd;
+          border: 3px solid @grayLighter;
+          background-color: @grayLighter;
           border-radius: 5px;
           img{
-            background-color: #ddd;
+            background-color: @grayLighter;
             border-radius: 4px;
             width: 100%;
           }
@@ -120,7 +120,7 @@ body{
         padding: 10px;
         img{
           width: 100%;
-          border: 5px solid #ddd;
+          border: 5px solid @grayLighter;
         }
       }
       .content{
@@ -184,7 +184,7 @@ body{
           }
           a{
             cursor: pointer;
-            color:#1c9893;
+            color:@MSDgreen;
           }
           .trimmedArticle{
             padding-bottom: 10px;
@@ -234,14 +234,14 @@ body{
           margin-bottom: 15px;
           margin-left: 0%;
           .image{
-            background-color: #ddd;
+            background-color: @grayLighter;
             padding: 4px;
           }
           .textWrapper{
             padding-left: 0;
             .articleTitle{
               cursor: pointer;
-              color:#1c9893
+              color:@MSDgreen
             }
             .Description{
               padding-bottom: 10px;
@@ -355,9 +355,6 @@ body{
   .mainTitle{
     margin-top: 20px;
   }
-  .noPadding{
-    padding: 0;
-  }
   .searchResult {
     border-radius: 4px;
     position: relative;
@@ -368,16 +365,12 @@ body{
     -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
     -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
     box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
     .calendar{
-      border-left: 2px solid #1c9893;
+      border-left: 2px solid @MSDgreen;
       .date{
         margin-top: -18px;
         .green{
-          color: #1c9893;
+          color: @MSDgreen;
         }
       }
     }
@@ -459,7 +452,7 @@ ul.products li {
 }
 
 .no-border{
-  border: 0px solid #ddd !important;
+  border: 0px solid @grayLighter !important;
 }
 .margintop5px{
   margin-top: 5px;
@@ -471,12 +464,12 @@ ul.products li {
   text-align: justify;
 }
 .articleEye{
-  color: #1c9893;
+  color: @MSDgreen;
   background-color: transparent;
 }
 
 .img-back{
-  background-color: #ddd;
+  background-color: @grayLighter;
 }
 
 .padd35px{
@@ -928,11 +921,11 @@ ul.products li {
       background-color: #ffffff;
     }
     .panel-group{
-      box-shadow: 0px 3px 1px #dddddd;
+      box-shadow: 0px 3px 1px @grayLighter;
       .panel{
         margin-top: 0px;
       }
-      border: 1px solid #dddddd;
+      border: 1px solid @grayLighter;
       border-top: 0px;
       div{
         border: 0;
@@ -940,7 +933,7 @@ ul.products li {
       }
     }
     .parentBorderTop{
-      border-top: 1px solid #dddddd !important;
+      border-top: 1px solid @grayLighter !important;
     }
     .productPageMenu{
       .parent{
@@ -1314,7 +1307,7 @@ ul.products li {
   }
 }
 .img-multimedia{
-  border: 5px solid #ddd;
+  border: 5px solid @grayLighter;
 }
 .top10{
   margin-top: 13%;
@@ -1345,7 +1338,7 @@ ul.products li {
   margin-top: -2%;
 }
 .searchLeftBorder{
-  border-left: 2px solid #1c9893;
+  border-left: 2px solid @MSDgreen;
 }
 .searchArticle {
   border-radius: 4px;
@@ -1945,7 +1938,7 @@ hr{
   text-align: center;
 }
 .shadowSpecialProduct{
-  box-shadow: 0px 3px 1px #dddddd;
+  box-shadow: 0px 3px 1px @grayLighter;
 }
 .noBorderBottom{
   border-bottom: 0px;
@@ -2164,7 +2157,7 @@ h4{
 .my-list-menu-item{
   padding: 0px 15px;
   background-color: transparent;
-  border: 0px solid #dddddd;
+  border: 0px solid @grayLighter;
 }
 .marginLeft0{
   margin-left: 0px;

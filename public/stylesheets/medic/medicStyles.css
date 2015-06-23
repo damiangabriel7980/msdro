@@ -6311,7 +6311,7 @@ body {
   list-style: none;
 }
 .filterByTherapeuticAreas .areas .menu .area {
-  border: 0px solid #ddd;
+  border: 0px solid #dddddd;
   cursor: pointer;
   border-radius: 4px !important;
 }
@@ -6345,12 +6345,12 @@ body {
 .productsView .productWrapper .product .imageWrapper .image {
   padding: 0;
   text-align: center;
-  border: 3px solid #ddd;
-  background-color: #ddd;
+  border: 3px solid #dddddd;
+  background-color: #dddddd;
   border-radius: 5px;
 }
 .productsView .productWrapper .product .imageWrapper .image img {
-  background-color: #ddd;
+  background-color: #dddddd;
   border-radius: 4px;
   width: 100%;
 }
@@ -6404,7 +6404,7 @@ body {
 }
 .multimediaView .multimediaWrapper .multimedia .image img {
   width: 100%;
-  border: 5px solid #ddd;
+  border: 5px solid #dddddd;
 }
 .multimediaView .multimediaWrapper .multimedia .content {
   margin-bottom: 50px;
@@ -6512,7 +6512,7 @@ body {
   margin-left: 0%;
 }
 .articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .image {
-  background-color: #ddd;
+  background-color: #dddddd;
   padding: 4px;
 }
 .articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper {
@@ -6608,9 +6608,6 @@ body {
 .homeSearchWrapper .mainTitle {
   margin-top: 20px;
 }
-.homeSearchWrapper .noPadding {
-  padding: 0;
-}
 .homeSearchWrapper .searchResult {
   border-radius: 4px;
   position: relative;
@@ -6621,10 +6618,6 @@ body {
   -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
   -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
   box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
 }
 .homeSearchWrapper .searchResult .calendar {
   border-left: 2px solid #1c9893;
@@ -6707,7 +6700,7 @@ ul.products li {
   font-size: 12px;
 }
 .no-border {
-  border: 0px solid #ddd !important;
+  border: 0px solid #dddddd !important;
 }
 .margintop5px {
   margin-top: 5px;
@@ -6723,7 +6716,7 @@ ul.products li {
   background-color: transparent;
 }
 .img-back {
-  background-color: #ddd;
+  background-color: #dddddd;
 }
 .padd35px {
   padding-left: 25px;
@@ -7598,7 +7591,7 @@ ul.products li {
   }
 }
 .img-multimedia {
-  border: 5px solid #ddd;
+  border: 5px solid #dddddd;
 }
 .top10 {
   margin-top: 13%;
