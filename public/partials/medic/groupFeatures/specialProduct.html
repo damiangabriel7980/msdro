@@ -1,5 +1,5 @@
-<div class="row-fluid margintop20px col-xs-offset-0">
-    <div ng-class="{'col-xs-12 col-md-2 marginLeft30px':deviceWidth>700, 'col-xs-12 col-md-2':deviceWidth<=700}" id="menuDiv">
+<div class="row-fluid specialProductMainWrapper col-xs-offset-0">
+    <div class="col-xs-12 col-md-2" id="menuDiv">
         <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
             <accordion-group is-open="mystatus.open" class="parent" ng-repeat="parent in specialProductMenu"
                              ng-class="{'active':$state.includes('groupSpecialProduct.menuItem') && $state.params.menuId==parent._id}">
@@ -33,10 +33,10 @@
                 </accordion-heading>
             </accordion-group>
         </accordion>
-        <div dropdown is-open="isCollapsed.isFirstOpen" class="col-xs-12 col-sm-12 hidden-md hidden-lg padd10Bottom noPaddingRight noPaddingLeft">
+        <div dropdown is-open="isCollapsed.isFirstOpen" class="col-xs-12 col-sm-12 hidden-md hidden-lg mobileDropdown">
         <button type="button" class="btn btn-primary col-xs-12 text-center pull-left dropdown-toggle" dropdown-toggle>{{mobileMenuTitle}}<i class="glyphicon glyphicon-chevron-down pull-right glyphicon-Special-Product" ></i></button>
 
-        <ul class="dropdown-menu my-dropdown-menu col-xs-12 col-sm-12 hidden-md hidden-lg" role="menu" style="list-style: none">
+        <ul class="dropdown-menu my-dropdown-menu col-xs-12 col-sm-12 hidden-md hidden-lg" role="menu">
             <li class="list-group-item my-list-menu-item noPaddingRight noPaddingLeft">
                 <accordion close-others="oneAtATime" class="productPageMenu">
                     <accordion-group is-open="mystatus.open" class="parent" ng-repeat="parent in specialProductMenu"
@@ -76,7 +76,7 @@
         </div>
         <img class="img-responsive hidden-sm hidden-xs img-thumbnail handCursor col-xs-12" ng-if="specialProductPage.logo_path" ng-click="selectFirstMenuItem()" ng-src="{{pathAmazonDev+specialProductPage.logo_path}}" />
     </div>
-    <div class="col-md-8 col-xs-12 paddRight30" id="descriptionDiv">
+    <div class="col-md-8 col-xs-12" id="descriptionDiv">
         <ui-view>
 
         </ui-view>

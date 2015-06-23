@@ -3,27 +3,27 @@
         <img class="col-xs-12 noPadding " ng-if="specialProductPage.header_image" ng-src="{{pathAmazonDev+specialProductPage.header_image}}" />
     </div>
 </div>
-<div class="col-xs-12 well well-lg whiteBackground borderRadiusSpecial" id="siteMapDiv">
+<div class="col-xs-12 well well-lg DescriptionWrapper" id="siteMapDiv">
     <div class="col-xs-12 hidden-xs hidden-sm">
         <img class="col-xs-12  noPadding " ng-if="specialProductPage.header_image" ng-src="{{pathAmazonDev+specialProductPage.header_image}}" />
     </div>
-    <div class="col-xs-12 paddTopBottomSpecialProduct">
+    <div class="col-xs-12 glossaryPrintButtons">
             <span>
-                <i class="glyphicon glyphicon-print pull-right handCursor" ng-click="printPage()">&nbsp;Print&nbsp;</i>
+                <i class="glyphicon glyphicon-print pull-right" ng-click="printPage()">&nbsp;Print&nbsp;</i>
             </span>
             <span style="display: none;">
-                <i class="glyphicon glyphicon-th-list pull-right handCursor" ui-sref="groupSpecialProduct.glossary({product_id: $stateParams.product_id})">&nbsp;Glosar&nbsp;</i>
+                <i class="glyphicon glyphicon-th-list pull-right" ui-sref="groupSpecialProduct.glossary({product_id: $stateParams.product_id})">&nbsp;Glosar&nbsp;</i>
             </span>
     </div>
     <div class="col-xs-12 noPadding">
         <div class="col-xs-12 col-md-4 siteMap">
-            <ul class="MSDgreenDarker no-text-decoration handCursor">
+            <ul class="no-text-decoration">
                 <li ng-repeat="menuItem in specialProductMenu">
-                <span class="MSDgreenDarker handCursor no-text-decoration" ng-click="menuItem.children_ids.length==0?$state.go('groupSpecialProduct.menuItem',{product_id: $stateParams.product_id, menuId: menuItem._id, childId:''}):null">
+                <span class="siteMapList no-text-decoration" ng-click="menuItem.children_ids.length==0?$state.go('groupSpecialProduct.menuItem',{product_id: $stateParams.product_id, menuId: menuItem._id, childId:''}):null">
                     {{menuItem.title}}
                 </span>
                     <ul ng-if="menuItem.children_ids.length!=0">
-                        <li ng-repeat="subItem in menuItem.children_ids" class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.menuItem({product_id: $stateParams.product_id, menuId: menuItem._id, childId: subItem._id})">
+                        <li ng-repeat="subItem in menuItem.children_ids" class="siteMapList no-text-decoration" ui-sref="groupSpecialProduct.menuItem({product_id: $stateParams.product_id, menuId: menuItem._id, childId: subItem._id})">
                             &nbsp;&nbsp;{{subItem.title}}
                         </li>
                     </ul>
@@ -31,10 +31,10 @@
                 <!--<li style="display: none;" class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.files({product_id: $stateParams.product_id})">-->
                     <!--Resurse-->
                 <!--</li>-->
-                <li class="MSDgreenDarker no-text-decoration handCursor" ng-if="specialProductPage.speakers && specialProductPage.speakers.length > 0" ng-click="navigateMobile('Speakers')">
+                <li class="siteMapList no-text-decoration" ng-if="specialProductPage.speakers && specialProductPage.speakers.length > 0" ng-click="navigateMobile('Speakers')">
                     Speakers
                 </li>
-                <li class="MSDgreenDarker no-text-decoration handCursor" ui-sref="groupSpecialProduct.sitemap({product_id: $stateParams.product_id})">
+                <li class="siteMapList no-text-decoration" ui-sref="groupSpecialProduct.sitemap({product_id: $stateParams.product_id})">
                     Sitemap
                 </li>
             </ul>
