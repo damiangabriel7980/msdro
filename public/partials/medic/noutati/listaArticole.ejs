@@ -1,10 +1,10 @@
-<div class="row noArticles" style="text-align: center" ng-if="message!=''"><h4>{{message}}</h4></div>
+<div class="row noArticles text-center" ng-if="message!=''"><h4>{{message}}</h4></div>
 <div class="col-xs-12 col-sm-12 articlesMobileMessage hidden-md hidden-lg" ><h3 class="noMarginTop">{{title}}</h3></div>
 <div class="well articlesListWrapper" ng-repeat="cont in content | limitTo: lmt">
-    <div ng-class="{'row article':deviceWidth >= 700, 'col-xs-12 noPadding padd25Bottom':deviceWidth < 700}">
-        <img ng-class="{'img-thumbnail col-md-2 pull-left image':deviceWidth >= 700, 'my-img-thumbnail col-xs-4 col-sm-2 pull-left img-responsive noPadding':deviceWidth < 700}" class="" ng-src="{{cont.image_path?pathAmazonDev+cont.image_path:defaultArticleImage}}"/>
+    <div class="row article">
+        <img class="img-thumbnail col-md-2 pull-left image" ng-src="{{cont.image_path?pathAmazonDev+cont.image_path:defaultArticleImage}}"/>
 
-        <div ng-class="{'col-md-9 col-xs-12 textWrapper':deviceWidth >= 700, 'col-md-9 col-xs-8 col-sm-10 noPadding textHome':deviceWidth < 700}">
+        <div class="col-md-9 col-xs-12 textWrapper">
             <div class="col-md-12 title articleTitle" ui-sref="{{sr}}" convert-special conver="cont.title" ng-bind-html="trustAsHtml(cont.title)"></div>
             <div class="col-md-12 Description" convert-special conver="cont.text" ng-bind-html="trimText(htmlToPlainText(cont.text), 250)"></div>
 

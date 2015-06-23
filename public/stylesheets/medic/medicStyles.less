@@ -163,7 +163,7 @@ body{
   .articlesWrapper{
     padding: 0;
     .articlesMenu{
-      border-right: 1px solid #000000;
+      border-right: 1px solid @gray-base;
       padding: 0;
       padding-left: 21px;
       .Title{
@@ -181,10 +181,11 @@ body{
             font-weight: bold;
             padding-bottom: 10px;
             cursor: pointer;
+            color:@MSDgreenDarker;
           }
           a{
             cursor: pointer;
-            color:@MSDgreen;
+            color:@MSDgreenDarker;
           }
           .trimmedArticle{
             padding-bottom: 10px;
@@ -207,7 +208,7 @@ body{
           background-color: transparent;
           color: black;
           &:hover{
-            color: #fff;
+            color: @body-bg;
             background-color: #31b0d5;
             border-color: #269abc;
           }
@@ -232,7 +233,8 @@ body{
         .article{
           padding: 5px 5px 5px 5px;
           margin-bottom: 15px;
-          margin-left: 0%;
+          margin-left: 0;
+          margin-right: -15px;
           .image{
             background-color: @grayLighter;
             padding: 4px;
@@ -241,7 +243,7 @@ body{
             padding-left: 0;
             .articleTitle{
               cursor: pointer;
-              color:@MSDgreen
+              color:@MSDgreenDarker
             }
             .Description{
               padding-bottom: 10px;
@@ -285,10 +287,16 @@ body{
       background-color: transparent;
       color: black;
       &:hover{
-        color: #fff;
+        color: @body-bg;
         background-color: #31b0d5;
         border-color: #269abc;
       }
+    }
+    .date {
+      margin-top: 0%;
+    }
+    .author{
+      font-weight: bold;
     }
   }
   .stretchHorizontal{
@@ -360,17 +368,17 @@ body{
     position: relative;
     margin-bottom: 20px;
     padding: 5px;
-    background: #f9f9f9;
+    background: @table-bg-accent;
     border: 1px solid rgba(51, 51, 51, 0.2);
     -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
     -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
     box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
     .calendar{
-      border-left: 2px solid @MSDgreen;
+      border-left: 2px solid @MSDgreenDarker;
       .date{
         margin-top: -18px;
         .green{
-          color: @MSDgreen;
+          color: @MSDgreenDarker;
         }
       }
     }
@@ -381,7 +389,7 @@ body{
         background-color: transparent;
         color: black;
         &:hover{
-          color: #fff;
+          color: @body-bg;
           background-color: #31b0d5;
           border-color: #269abc;
         }
@@ -395,7 +403,7 @@ body{
   .contentWrapper{
     padding-left: 0;
     .Title{
-      color: @MSDgreen;
+      color: @MSDgreenDarker;
       cursor: pointer;
     }
   }
@@ -543,7 +551,7 @@ ul.products li {
           }
           .TextWrapper{
             a{
-              color: #006d69;
+              color: @MSDTitle;
             }
             @media(min-width: 1278px){
               width: 100%;
@@ -569,7 +577,7 @@ ul.products li {
               left: 0;
               width: 100%;
               min-height: 4.5em;
-              background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+              background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, @body-bg 100%);
             }
           }
           .buttonWrapper{
@@ -579,7 +587,7 @@ ul.products li {
               background-color: transparent;
               color: black;
               &:hover{
-                color: #fff;
+                color: @body-bg;
                 background-color: #31b0d5;
                 border-color: #269abc;
               }
@@ -638,7 +646,7 @@ ul.products li {
         }
         .Content{
           b{
-            color: #006d69;
+            color: @MSDTitle;
           }
           padding: 0;
           text-align: justify;
@@ -669,7 +677,7 @@ ul.products li {
         .date{
           padding: 0;
           border-right: 0px solid @gray;
-          color: #006d69;
+          color: @MSDTitle;
           .day{
             padding: 0;
             font-size: 20px;
@@ -687,7 +695,7 @@ ul.products li {
           padding: 0;
           border-left: 1px solid #000000;
           .MediaTitle{
-            color: #006d69;
+            color: @MSDTitle;
             cursor: pointer;
             text-align: justify;
             @media(max-width: 768px){
@@ -772,6 +780,10 @@ ul.products li {
     width: 75%;
     margin: 0 auto;
     overflow: visible!important;
+    .carouselMargins{
+      margin-left: 10px;
+      margin-right:10px
+    }
     .carouselSlide{
       height: 100%;
       position: relative;
@@ -905,7 +917,10 @@ ul.products li {
   margin-top: 20px;
   #menuDiv{
     margin-left: 30px;
-    //@media(max-width: 1277px){
+    .menuMarginBottom{
+    margin-bottom: 0;
+    }
+      //@media(max-width: 1277px){
     //  margin-left: 0px;
     //}
     .panel-body{
@@ -918,7 +933,7 @@ ul.products li {
       border-radius: 0px;
     }
     .panel-heading{
-      background-color: #ffffff;
+      background-color: @body-bg;
     }
     .panel-group{
       box-shadow: 0px 3px 1px @grayLighter;
@@ -955,7 +970,7 @@ ul.products li {
             background-color: @MSDTitle;
             color: white !important;
             .MSDgreenDarker{
-              color: #ffffff !important;
+              color: @body-bg !important;
             }
           }
         }
@@ -970,7 +985,7 @@ ul.products li {
         position: relative;
         display: block;
         padding: 10px 15px;
-        background-color: #ffffff;
+        background-color: @body-bg;
         &.active{
           color: darkorange;
         }
@@ -980,6 +995,12 @@ ul.products li {
       padding-bottom: 10px;
       padding-left: 0;
       padding-right: 0;
+      .glyphicon-Special-Product{
+        margin-top: 2px;
+      }
+      .smallFontSize{
+        font-size: smaller;
+      }
       .my-dropdown-menu {
         padding: 0;
         background-color: transparent;
@@ -989,7 +1010,12 @@ ul.products li {
         -webkit-box-shadow: none;
         box-shadow: none;
         background-clip: border-box;
-        list-style: none
+        list-style: none;
+        .my-list-menu-item{
+          padding: 0;
+          background-color: transparent;
+          border: 0px solid @grayLighter;
+        }
       }
     }
   }
@@ -1003,7 +1029,7 @@ ul.products li {
     .specialProductTitle{
       margin-top: 20px;
       margin-bottom: 20px;
-      color: @MSDgreen;
+      color: @MSDgreenDarker;
       font-size: 30px;
       font-weight: bold
     }
@@ -1011,10 +1037,16 @@ ul.products li {
       text-align: justify;
     }
     .DescriptionWrapper{
-      background-color: #ffffff;
+      background-color: @body-bg;
       border-radius: 0px;
+      .prescription{
+        margin-top: 15px
+      }
+      .job_id{
+        margin-top: 20px
+      }
       .fileLinks{
-          color: #009d97 !important;
+          color: @MSDgreenDarker !important;
         &:focus
         {
           text-decoration: none !important;
@@ -1022,7 +1054,7 @@ ul.products li {
       }
       .glossary{
         font-weight: bold;
-        color: #009d97;
+        color: @MSDgreenDarker;
         padding-bottom: 10px;
         .Description{
           padding-bottom: 10px;
@@ -1045,11 +1077,11 @@ ul.products li {
           padding: 0;
           line-height: 2em;
           cursor: pointer;
-          color: #009d97 !important;
+          color: @MSDgreenDarker !important;
         }
         .siteMapList{
           cursor: pointer;
-          color: #009d97 !important;
+          color: @MSDgreenDarker !important;
         }
       }
     }
@@ -1207,6 +1239,9 @@ ul.products li {
       .modal-body{
         height: 80%;
         overflow-y: scroll;
+        .multimediaVideo{
+          height: 80%;
+        }
       }
       .modal-footer{
         height: 10%;

@@ -9,7 +9,7 @@
                                   'glyphicon glyphicon-chevron-right': !mystatus.open||parent.children_ids.length==0}"></i>&nbsp;&nbsp;{{parent.title}}
                 </span>
                 </accordion-heading>
-                <div style="margin-bottom: 0">
+                <div class="menuMarginBottom">
                     <div class="child" ng-repeat="subItem in parent.children_ids"
                          ui-sref="groupSpecialProduct.menuItem({menuId: parent._id, childId: subItem._id})"
                          ng-class="{'active':$state.includes('groupSpecialProduct.menuItem') && $state.params.childId==subItem._id}">
@@ -22,7 +22,7 @@
                     <div><i class="glyphicon glyphicon-chevron-right" ></i>&nbsp;&nbsp;Speakers</div>
                 </accordion-heading>
             </accordion-group>
-            <accordion-group style="display: none;" is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.files')}" ui-sref="groupSpecialProduct.files({product_id: specialProductPage._id})">
+            <accordion-group is-open="status.isFirstOpen" class="parent hide" ng-class="{'active':$state.includes('groupSpecialProduct.files')}" ui-sref="groupSpecialProduct.files({product_id: specialProductPage._id})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right" ></i>&nbsp;&nbsp;Resurse</div>
                 </accordion-heading>
@@ -37,7 +37,7 @@
         <button type="button" class="btn btn-primary col-xs-12 text-center pull-left dropdown-toggle" dropdown-toggle>{{mobileMenuTitle}}<i class="glyphicon glyphicon-chevron-down pull-right glyphicon-Special-Product" ></i></button>
 
         <ul class="dropdown-menu my-dropdown-menu col-xs-12 col-sm-12 hidden-md hidden-lg" role="menu">
-            <li class="list-group-item my-list-menu-item noPaddingRight noPaddingLeft">
+            <li class="list-group-item my-list-menu-item">
                 <accordion close-others="oneAtATime" class="productPageMenu">
                     <accordion-group is-open="mystatus.open" class="parent" ng-repeat="parent in specialProductMenu"
                                      ng-class="{'active':$state.includes('groupSpecialProduct.menuItem') && $state.params.menuId==parent._id}" ng-click="goToMenuItemWithNoChildren(parent,$event)">
@@ -47,7 +47,7 @@
                                   'glyphicon glyphicon-chevron-right': !mystatus.open||parent.children_ids.length==0}"></i>&nbsp;&nbsp;{{parent.title}}
                 </span>
                         </accordion-heading>
-                        <div style="margin-bottom: 0">
+                        <div class="menuMarginBottom">
                             <div class="child" ng-repeat="subItem in parent.children_ids"
                                  ng-click="goToMenuItemWithChildren(parent,subItem)"
                                  ng-class="{'active':$state.includes('groupSpecialProduct.menuItem') && $state.params.childId==subItem._id}">
@@ -60,7 +60,7 @@
                             <div><i class="glyphicon glyphicon-chevron-right" ></i>&nbsp;&nbsp;Speakers</div>
                         </accordion-heading>
                     </accordion-group>
-                    <accordion-group style="display: none;" is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.files')}" ng-click="navigateMobile('Resurse')">
+                    <accordion-group is-open="status.isFirstOpen" class="parent hide" ng-class="{'active':$state.includes('groupSpecialProduct.files')}" ng-click="navigateMobile('Resurse')">
                         <accordion-heading>
                             <div><i class="glyphicon glyphicon-chevron-right" ></i>&nbsp;&nbsp;Resurse</div>
                         </accordion-heading>
