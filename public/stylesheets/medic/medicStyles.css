@@ -6480,6 +6480,60 @@ body {
 .calendarWrapper .nextEvents .Title h4 {
   cursor: pointer;
 }
+.homeSearchWrapper .mainTitle {
+  margin-top: 20px;
+}
+.homeSearchWrapper .noPadding {
+  padding: 0;
+}
+.homeSearchWrapper .searchResult {
+  border-radius: 4px;
+  position: relative;
+  margin-bottom: 20px;
+  padding: 5px;
+  background: #f9f9f9;
+  border: 1px solid rgba(51, 51, 51, 0.2);
+  -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
+  -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
+  box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.homeSearchWrapper .searchResult .calendar {
+  border-left: 2px solid #1c9893;
+}
+.homeSearchWrapper .searchResult .calendar .date {
+  margin-top: -18px;
+}
+.homeSearchWrapper .searchResult .calendar .date .green {
+  color: #1c9893;
+}
+.homeSearchWrapper .searchResult .buttonWrapper {
+  padding-right: 0;
+  padding-bottom: 0;
+}
+.homeSearchWrapper .searchResult .buttonWrapper .btn-news {
+  background-color: transparent;
+  color: black;
+}
+.homeSearchWrapper .searchResult .buttonWrapper .btn-news:hover {
+  color: #fff;
+  background-color: #31b0d5;
+  border-color: #269abc;
+}
+.homeSearchWrapper .searchResult .category {
+  padding-top: 5px;
+  font-weight: bolder;
+}
+.homeSearchWrapper .contentWrapper {
+  padding-left: 0;
+}
+.homeSearchWrapper .contentWrapper .Title {
+  color: #1c9893;
+  cursor: pointer;
+}
 ul.products li {
   display: inline-block !important;
   vertical-align: top;
@@ -7467,10 +7521,6 @@ ul.products li {
 }
 .btnMultimediaSearch {
   margin-top: 7%;
-}
-.homeSearchPreview {
-  margin-top: 3% ;
-  margin-left: 3%;
 }
 .hiddenSearch {
   width: 33%;
