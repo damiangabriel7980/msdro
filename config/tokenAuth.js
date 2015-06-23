@@ -4,7 +4,7 @@ var UserGroup = require('../app/models/userGroup');
 var TokenService = require('../app/modules/tokenAuth');
 var PushService = require('../app/modules/pushNotifications');
 
-module.exports = function (app, logger, tokenSecret, pushServerAddr) {
+module.exports = function (app, logger) {
 
     app.options('/authenticateToken', function (req, res) {
         var headers = {};

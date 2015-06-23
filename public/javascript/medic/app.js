@@ -75,7 +75,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('biblioteca.produse',{
             url: '/produse',
-            templateUrl: 'partials/medic/biblioteca/produse.ejs',
+            templateUrl: 'partials/medic/filterByTherapeuticAreas.html',
             controller: 'TherapeuticAreas'
         })
         .state('biblioteca.produse.productsByArea',{
@@ -114,7 +114,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('elearning.multimedia',{
             url: '/multimedia',
-            templateUrl: 'partials/medic/elearning/multimedia.ejs' ,
+            templateUrl: 'partials/medic/filterByTherapeuticAreas.html' ,
             controller: 'TherapeuticAreas'
         })
         .state('elearning.multimedia.multimediaMobile',{
@@ -255,6 +255,7 @@ app.run(
                     return text.split(" ").slice(0, wordsCount).join(" ") + "...";
                 }
             };
+            $rootScope.isMobile = Utils.isMobile;
         }
     ]
 );

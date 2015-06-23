@@ -3,7 +3,7 @@
  */
 (function() {
     'use strict';
-    angular.module('footerResponsive', []).directive('footerResponsive', function($window,$timeout) {
+    angular.module('footerResponsive', []).directive('footerResponsive', ['$window', '$timeout', function($window, $timeout) {
         return {
         restrict: 'EA',
             templateUrl: function(element, attr) {
@@ -20,12 +20,13 @@
             var calculatePadding = function(){
                 footerElement = angular.element(element[0].firstChild);
                 content = angular.element('#'+ scope.stickBelowId)[0];
-                var heightOfContent = content.getBoundingClientRect().bottom + element[0].firstChild.offsetHeight;
+                var heightOfContent = content.offsetTop + content.offsetHeight;
+                var footerHeight = element[0].firstChild.offsetHeight;
                 var windowHeight = angular.element($window)[0].innerHeight;
-                if(heightOfContent > windowHeight)
-                    footerElement.css('margin-top',0);
+                if(heightOfContent + footerHeight > windowHeight)
+                    footerElement.css('margin-top', 0);
                 else
-                    footerElement.css('margin-top',windowHeight - heightOfContent);
+                    footerElement.css('margin-top', windowHeight - heightOfContent - footerHeight);
             };
 
             var continuousRefresh = function () {
@@ -43,5 +44,5 @@
             });
         }
         };
-    });
+    }]);
 })();

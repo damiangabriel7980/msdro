@@ -16,7 +16,8 @@ var app = angular.module('app',
         'angularFileUpload',
         'mobileContentList',
         'offClick',
-        'fancyCarousel'
+        'fancyCarousel',
+        'footerResponsive'
     ]);
 
 app.config(['$locationProvider', function($locationProvider) {

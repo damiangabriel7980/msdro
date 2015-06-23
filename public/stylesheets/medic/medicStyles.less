@@ -9,6 +9,135 @@ body{
     font-size: 15px;
   }
 }
+.filterByTherapeuticAreas{
+  padding: 0 0 25px 55px;
+  .areasMobile{
+    margin-left: 25px;
+  }
+  .areas{
+    padding: 0;
+    margin-right: 65px;
+    .title{
+      margin-top: 0;
+    }
+    .menu{
+      .MSDgreen;
+      list-style: none;
+      .area{
+        border: 0px solid #ddd;
+        cursor: pointer;
+        border-radius: 4px !important;
+        &:hover{
+          background-color: @MSDgreenDarker;
+          color:white;
+        }
+        &.active{
+          background-color: @MSDgreenDarker;
+          color:white;
+        }
+      }
+    }
+  }
+  .viewport{
+    margin-top: 0;
+  }
+}
+.productsView{
+  padding: 0;
+  .noProducts{
+    padding: 0;
+    text-align: center
+  }
+  .productWrapper{
+    padding: 0 15px 0 0;
+    .product{
+      padding: 0;
+      .imageWrapper{
+        padding: 15px 15px 0 15px;
+        .image{
+          padding: 0;
+          text-align: center;
+          border: 3px solid #ddd;
+          background-color: #ddd;
+          border-radius: 5px;
+          img{
+            background-color: #ddd;
+            border-radius: 4px;
+            width: 100%;
+          }
+        }
+      }
+      .content{
+        width: 100%;
+        padding: 0 15px 15px 15px;
+        position: relative;
+        height: 13em;
+        overflow: hidden;
+        &:after{
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          min-height: 4.5em;
+          background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #f5f5f5 100%);
+        }
+      }
+      .details{
+        padding: 10px 15px 10px 15px;
+        text-align: right;
+      }
+    }
+  }
+}
+.productDetails{
+  .imageAndRCP{
+    img{
+      width: 100%;
+    }
+    .btn{
+      margin-top: 10px;
+    }
+    hr{
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
+  }
+}
+.multimediaView{
+  padding: 0;
+  .message{
+    padding: 0 0 0 45px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  .multimediaWrapper{
+    padding: 0 0 25px 0;
+    .multimedia{
+      padding: 0;
+      position: relative;
+      .image{
+        padding: 10px;
+        img{
+          width: 100%;
+          border: 5px solid #ddd;
+        }
+      }
+      .content{
+        margin-bottom: 50px;
+        .title{
+          padding: 0;
+        }
+      }
+      .showMore{
+        padding: 10px;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+      }
+    }
+  }
+}
 .biggerTitle{
   @media(min-width: 768px) and (orientation: portrait){
     font-size: 16px;
@@ -318,6 +447,10 @@ ul.products li {
 }
 
 .btn-more-news{
+  background-color: transparent;
+  color: black;
+}
+.btn-transparent{
   background-color: transparent;
   color: black;
 }
@@ -1862,10 +1995,6 @@ hr{
 .equalMarginModalTitle{
   margin-top: 10px;
   margin-bottom: 10px;
-}
-.activeArea{
-  background-color: @MSDgreenDarker;
-  color:white;
 }
 a:focus{
   text-decoration: none;

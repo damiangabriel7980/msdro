@@ -103,6 +103,7 @@
     <script src="components/angular-off-click/offClick.js"></script>
     <script src="modules/fancy-carousel/directive.js"></script>
     <link rel="stylesheet" href="modules/fancy-carousel/styles.css">
+    <script src="modules/sticky-footer/footer_responsive.js"></script>
 </head>
 <body ng-controller="RootController">
 
@@ -206,18 +207,11 @@
     </div>
 </div>
 
-<div id="publicContentWrapper" footer-bottom>
+<div id="publicContentWrapper">
     <div class="container" id="publicContent">
         <div ui-view class="view-container rootView"></div>
     </div>
-
-    <div class="footer text-center">
-        <hr>
-        <a ui-sref="home.noutati">Home</a>&nbsp;|&nbsp;
-        <a href="http://www.merckmanuals.com" target="_blank">Manualul Merck</a>&nbsp;|&nbsp;
-        <a style="cursor: pointer" ng-click="showContactModal()">Contact</a>
-    </div>
+    <footer-responsive stick-below-id="publicContent" template-link="partials/public/footer.html"></footer-responsive>
 </div>
-
 </body>
 </html>

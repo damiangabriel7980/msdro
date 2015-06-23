@@ -18,11 +18,11 @@ controllers.controller('TherapeuticAreas', ['$scope', 'therapeuticAreas','$sce',
     });
     $scope.selectArea = function(id){
         $scope.selectedArea = id;
-        $state.go('biblioteca.produse.productsByArea', {id: id});
-    };
-    $scope.selectAreaMultimedia=function(id){
-        $scope.selectedArea = id;
-        $state.go('elearning.multimedia.multimediaByArea', {idArea: id});
+        if($state.includes('biblioteca')){
+            $state.go('biblioteca.produse.productsByArea', {id: id});
+        }else{
+            $state.go('elearning.multimedia.multimediaByArea', {idArea: id});
+        }
     };
 
 }]);

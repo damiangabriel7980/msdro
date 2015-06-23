@@ -8,8 +8,6 @@ var Cities = require('./models/cities');
 var Multimedia = require('./models/multimedia');
 var User = require('./models/user');
 var Job = require('./models/jobs');
-var Questions=require('./models/questions');
-var Answers = require('./models/answers');
 var Slides = require('./models/slides');
 var Roles=require('./models/roles');
 var PublicContent = require('./models/publicContent');
@@ -37,18 +35,11 @@ var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
 var SessionStorage = require('./modules/sessionStorage');
 
-//live Streaming
-var socketio = require('socket.io'),
-    uuid = require('node-uuid'),
-    rooms = {},
-    userIds = {};
-
 //special Products
 var specialProduct = require('./models/specialProduct');
 var specialProductMenu = require('./models/specialProduct_Menu');
 var specialProductGlossary = require('./models/specialProduct_glossary');
 var specialProductFiles = require('./models/specialProduct_files');
-var specialProductQa = require('./models/specialProduct_qa');
 var specialApps = require('./models/userGroupApplications');
 
 var XRegExp  = require('xregexp').XRegExp;
@@ -72,71 +63,27 @@ var cookieSig = require('express-session/node_modules/cookie-signature');
 //================================================================================== useful db administration functions
 
 //returns ONLY id's of entities connected to specified document in array
-var findConnectedEntitiesIds = function(connected_to_entity, connection_name, connected_to_id, callback){
+var findConnectedEntitiesIds = function(connected_to_entity, connection_name, connected_to_id){
     var qry = {};
+    var deferred = Q.defer();
     qry[connection_name] = {$in: [connected_to_id]};
     connected_to_entity.find(qry, function (err, documents) {
         if(err){
-            callback("Error finding connecting entities", null);
+            deferred.reject("Error finding connecting entities");
         }else{
             var ret = [];
             for(var i=0; i<documents.length; i++){
                 ret.push(documents[i]._id);
             }
-            callback(false, ret);
+            deferred.resolve(ret);
         }
     });
+    return deferred.promise;
 };
 
-//returns entities connected to specified document
-var findConnectedEntities = function(connected_to_entity, connection_name, connected_to_id, callback){
-    var qry = {};
-    qry[connection_name] = {$in: [connected_to_id]};
-    connected_to_entity.find(qry, function (err, documents) {
-        if(err){
-            callback("Error finding connecting entities", null);
-        }else{
-            callback(false, documents);
-        }
-    });
-};
-
-//returns entities connected to specified document,
-//but only returns the attributes specified in projection
-var findConnectedEntitiesWithProjection = function(connected_to_entity, connection_name, connected_to_id, projection, callback){
-    var qry = {};
-    qry[connection_name] = {$in: [connected_to_id]};
-    connected_to_entity.find(qry, projection, function (err, documents) {
-        if(err){
-            callback("Error finding connecting entities", null);
-        }else{
-            callback(false, documents);
-        }
-    });
-};
-
-var connectEntitiesToEntity = function (connecting_array_of_ids, connectedEntity, connection_name, id_document_to_connect_to, callback) {
+var disconnectEntitiesFromEntity = function (array_of_ids_to_disconnect, connectedEntity, connection_name, id_document_to_disconnect_from) {
     //convert string id's to ObjectId's
-    var format_connecting_array = [];
-    for(var i=0; i<connecting_array_of_ids.length; i++){
-        if(typeof connecting_array_of_ids[i] === "string"){
-            format_connecting_array.push(mongoose.Types.ObjectId(connecting_array_of_ids[i]));
-        }else{
-            format_connecting_array.push(connecting_array_of_ids[i]);
-        }
-    }
-    //insert only strings in connections array
-    if(typeof id_document_to_connect_to !== "string") id_document_to_connect_to = id_document_to_connect_to.toString();
-    //use $addToSet to avoid inserting duplicates
-    var upd = {};
-    upd[connection_name] = id_document_to_connect_to;
-    connectedEntity.update({_id:{$in: format_connecting_array}}, {$addToSet: upd}, {multi: true}, function (err, res) {
-        callback(err, res);
-    });
-};
-
-var disconnectEntitiesFromEntity = function (array_of_ids_to_disconnect, connectedEntity, connection_name, id_document_to_disconnect_from, callback) {
-    //convert string id's to ObjectId's
+    var deferred = Q.defer();
     var format_connecting_array = [];
     for(var i=0; i<array_of_ids_to_disconnect.length; i++){
         if(typeof array_of_ids_to_disconnect[i] === "string"){
@@ -151,53 +98,61 @@ var disconnectEntitiesFromEntity = function (array_of_ids_to_disconnect, connect
     var upd = {};
     upd[connection_name] = id_document_to_disconnect_from;
     connectedEntity.update({_id:{$in: format_connecting_array}}, {$pull: upd}, {multi: true}, function (err, res) {
-        callback(err, res);
-    });
-};
-
-var disconnectAllEntitiesFromEntity = function (connectedEntity, connection_name, id_document_to_disconnect_from, callback) {
-    findConnectedEntitiesIds(connectedEntity, connection_name, id_document_to_disconnect_from, function (err, array_of_ids) {
         if(err){
-            callback("Error finding connected entities", null);
+            deferred.reject(err);
         }else{
-            disconnectEntitiesFromEntity(array_of_ids, connectedEntity, connection_name, id_document_to_disconnect_from, function (err, success) {
-                if(err){
-                    callback("Error at disconnecting entities", null);
-                }else{
-                    callback(null, "Entities disconnected: "+success);
-                }
-            });
+            deferred.resolve(res);
         }
     });
+    return deferred.promise;
+};
+
+var disconnectAllEntitiesFromEntity = function (connectedEntity, connection_name, id_document_to_disconnect_from) {
+    var deferred = Q.defer();
+    findConnectedEntitiesIds(connectedEntity, connection_name, id_document_to_disconnect_from).then(
+        function (array_of_ids) {
+            disconnectEntitiesFromEntity(array_of_ids, connectedEntity, connection_name, id_document_to_disconnect_from).then(
+                function (success) {
+                    deferred.resolve("Entities disconnected: "+success);
+                },
+                function (err) {
+                    deferred.reject("Error at disconnecting entities");
+                });
+        },
+        function (err) {
+            deferred.reject(err);
+        });
+    return deferred.promise;
 };
 
 //=========================================================================================== functions for user groups
 
-var getNonSpecificUserGroupsIds = function(user, callback){
+var getNonSpecificUserGroupsIds = function(user){
+    var deferred = Q.defer();
     //find all group ids with non-specific content for user
     UserGroup.find({_id: {$in: user.groupsID}, content_specific: {$ne: true}}, {_id:1}, function (err, groups) {
         if(err){
-            callback(err, null);
+            deferred.reject(err);
         }else{
             //now make an array of those id's
             var arr = [];
             for(var i=0; i<groups.length; i++){
                 arr.push(groups[i]._id.toString());
             }
-            callback(null, arr);
+            deferred.resolve(arr);
         }
     });
+    return deferred.promise;
 };
 
 //get content for all non content_specific groups plus one content_specific group
 //if specific content group is null, get non specific content only
 //tip: content_type can be injected; ex: {$in: [1,3]}
-var getUserContent = function (user, content_type, specific_content_group_id, limit, sortDescendingByAttribute, callback) {
+var getUserContent = function (user, content_type, specific_content_group_id, limit, sortDescendingByAttribute) {
+    var deferred = Q.defer();
     //first get non specific content groups only
-    getNonSpecificUserGroupsIds(user, function(err, arrayOfGroupsIds){
-        if(err){
-            callback(err, null);
-        }else{
+    getNonSpecificUserGroupsIds(user).then(
+        function(arrayOfGroupsIds){
             //if we have specific content group id, add it to our array
             if(specific_content_group_id) arrayOfGroupsIds.push(specific_content_group_id.toString());
             //now get user content for our array of groups
@@ -210,150 +165,38 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
             if(limit) myCursor=myCursor.limit(limit);
             myCursor.exec(function (err, content) {
                 if(err){
-                    callback(err, null);
+                    deferred.reject(err);
                 }else{
-                    //
-                    callback(null, content);
+                    deferred.resolve(content);
                 }
             });
-        }
-    });
+        },
+        function (err) {
+            deferred.reject(err);
+        });
+    return deferred.promise;
 };
 
 //================================================================================ find id's of users associated to conferences, rooms, talks
 
 //receives an array of documents and returns an array with only the id's of those documents
-var getIds = function (arr, cb) {
+var getIds = function (arr, convertToString) {
+    var deferred = Q.defer();
     var ret = [];
     async.each(arr, function (item, callback) {
-        if(item._id) ret.push(item._id);
+        if(item._id){
+            convertToString?ret.push(item._id.toString()):ret.push(item._id);
+        }
         callback();
     }, function (err) {
-        cb(ret);
+        deferred.resolve(ret);
     });
-};
-var getStringIds = function (arr, cb) {
-    var ret = [];
-    async.each(arr, function (item, callback) {
-        if(item._id) ret.push(item._id.toString());
-        callback();
-    }, function (err) {
-        cb(ret);
-    });
-};
-
-// get user ids
-// return array like ["MSD"+idAsString]
-var encodeNotificationsIds = function (ids, cb) {
-    var ret = [];
-    async.each(ids, function (id, callback) {
-        ret.push("MSD"+id.toString());
-        callback();
-    }, function (err) {
-        cb(ret);
-    });
-};
-
-var getUsersForConference = function (id_conference, callback) {
-    User.find({conferencesID: {$in: [id_conference]}}, function (err, users) {
-        if(err){
-            callback(err, null);
-        }else{
-            getIds(users, function (ids) {
-                callback(null, ids);
-            });
-        }
-    });
-};
-
-var getUsersForRoom = function (id_room, callback) {
-    //find conference for room
-    Talks.findOne({room: id_room}, function (err, talk) {
-        if(err){
-            callback(err, null);
-        }else{
-            if(talk){
-                getUsersForConference(talk.conference, function (err, ids) {
-                    if(err){
-                        callback(err, null);
-                    }else{
-                        callback(null, ids);
-                    }
-                });
-            }else{
-                callback({hasError: true, message: "No connecting room"});
-            }
-        }
-    });
-};
-
-var getUsersForTalk = function (id_talk, callback) {
-    //find talk
-    Talks.findOne({_id: id_talk}, function (err, talk) {
-        if(err){
-            callback(err, null);
-        }else{
-            if(talk){
-                getUsersForConference(talk.conference, function (err, ids) {
-                    if(err){
-                        callback(err, null);
-                    }else{
-                        callback(null, ids);
-                    }
-                });
-            }else{
-                callback({hasError: true, message: "No talk found"});
-            }
-        }
-    });
-};
-
-var getUsersForConferences = function (conferences_ids, callback) {
-    User.find({conferencesID: {$in: conferences_ids}}, function (err, users) {
-        if(err){
-            callback(err, null);
-        }else{
-            getIds(users, function (ids) {
-                callback(null, ids);
-            });
-        }
-    });
-};
-
-//================================================================================================= send push notifications
-
-var sendPushNotification = function (message, arrayUsersIds, callback) {
-    encodeNotificationsIds(arrayUsersIds, function (usersToSendTo) {
-        var data = {
-            "users": usersToSendTo,
-            "android": {
-                "collapseKey": "optional",
-                "data": {
-                    "message": message
-                }
-            },
-            "ios": {
-                "badge": 0,
-                "alert": message,
-                "sound": "soundName"
-            }
-        };
-
-        request({
-            url: pushServerAddr+"/send",
-            method: 'POST',
-            json: true,
-            body: data,
-            strictSSL: false
-        }, function (error, message, response) {
-            callback(error, response);
-        });
-    });
+    return deferred.promise;
 };
 
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, router) {
+module.exports = function(app, sessionSecret, logger, amazon, router) {
 
 //======================================================================================================= secure routes
 
@@ -1423,7 +1266,6 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 if(cont.length == 1){
                     res.json(cont[0]);
                 }else{
-                    findConnectedEntitiesWithProjection();
                     res.json(null);
                 }
             })
@@ -2369,623 +2211,6 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             });
         });
 
-//    router.route('/admin/events')
-//
-//        .get(function(req, res) {
-//            Events.find().populate('listconferences').exec(function(err, cont) {
-//                if(err) {
-//                    res.send(err);
-//                }
-//
-//                res.json(cont);
-//            });
-//        })
-//        .post(function(req, res) {
-//
-//            var event = new Events();
-//
-//            if(req.body.description) event.description = req.body.description;
-//            if(typeof req.body.enable === "boolean"){
-//                event.enable = req.body.enable;
-//            }else{
-//                event.enable = false;
-//            }
-//            if(req.body.end) event.end= req.body.end;
-//            if(req.body.name) event.name=req.body.name;
-//            if(req.body.place) event.place= req.body.place;
-//            if(req.body.start) event.start=req.body.start;
-//            if(req.body.type) event.type=req.body.type;
-//
-//            if(req.body.listconferences) event.listconferences = req.body.listconferences;
-//            if(req.body.groupsID) event.groupsID= req.body.groupsID;
-//
-//            event.last_updated = Date.now();
-//
-//            event.save(function(err, saved) {
-//                if (err){
-//                    res.send(err);
-//                }else{
-//                    res.json({ message: 'Event created!' , saved: saved});
-//                }
-//            });
-//
-//        });
-//    router.route('/admin/events/toggleEvent')
-//        .post(function(req, res) {
-//        Events.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
-//            if(err){
-//                res.send({error: true});
-//            }else{
-//                res.send({error: false});
-//            }
-//        });
-//    });
-//    router.route('/admin/events/:id')
-//
-//        .get(function(req, res) {
-//            Events.findOne({_id:req.params.id}).populate('listconferences').populate('groupsID').exec(function(err, cont) {
-//                if(err) {
-//                    res.send(err);
-//                }else{
-//                    res.json(cont);
-//                }
-//            })
-//        })
-//        .put(function(req, res) {
-//
-//            Events.findById(req.params.id, function(err, event) {
-//
-//                if (err){
-//                    res.send(err);
-//                }else{
-//                    event.description = req.body.description;
-//                    if(typeof req.body.enable === "boolean"){
-//                        event.enable = req.body.enable;
-//                    }else{
-//                        event.enable = false;
-//                    }
-//                    if(req.body.end) event.end= req.body.end;
-//                    if(req.body.name) event.name=req.body.name;
-//                    if(req.body.place) event.place= req.body.place;
-//                    if(req.body.start) event.start=req.body.start;
-//                    if(req.body.type) event.type=req.body.type;
-//
-//                    if(req.body.listconferences) event.listconferences = req.body.listconferences;
-//                    if(req.body.groupsID) event.groupsID= req.body.groupsID;
-//
-//                    event.last_updated= Date.now();
-//
-//                    event.save(function(err, eventSaved) {
-//                        if (err){
-//                            res.send(err);
-//                        }else{
-//                            //send notification
-//                            if(req.body.notificationText){
-//                                getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
-//                                    if(err){
-//                                        res.json({ message: 'Event updated! Error sending notification' });
-//                                    }else{
-//                                        if(id_users.length != 0){
-//                                            sendPushNotification(req.body.notificationText, id_users, function (err, success) {
-//                                                if(err){
-//                                                    console.log(err);
-//                                                    logger.error(err);
-//                                                    res.json({ message: 'Event updated! Error notifying users' });
-//                                                }else{
-//                                                    res.json({ message: 'Event updated! Notification was sent' });
-//                                                }
-//                                            });
-//                                        }else{
-//                                            res.json({ message: 'Event updated! No users found to notify' });
-//                                        }
-//                                    }
-//                                });
-//                            }else{
-//                                res.json({ message: 'Event updated! No notification sent' });
-//                            }
-//                        }
-//                    });
-//                }
-//            });
-//        })
-//        .delete(function(req, res) {
-//            Events.findOne({_id:req.params.id},function(err,resp){
-//                resp.remove(function(err,cont) {
-//                    if (err)
-//                        res.send(err);
-//
-//                    res.json({ message: 'Successfully deleted!' });
-//                });
-//            })
-//
-//        });
-//
-//    router.route('/admin/speakers')
-//        .get(function(req,res){
-//            Speakers.find().sort({first_name: 1}).exec(function (err, speakers) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(speakers);
-//                    return;
-//                }
-//            })
-//        })
-//    .post(function(req, res) {
-//
-//        var speaker = new Speakers(); 		// create a new instance of the Bear model
-//            speaker.first_name = req.body.first_name;  // set the bears name (comes from the request)
-//            speaker.last_name=req.body.last_name ;
-//            speaker.profession= req.body.profession     ;
-//            speaker.last_updated= req.body.last_updated ;
-//            speaker.workplace=req.body.workplace;
-//            speaker.short_description= req.body.short_description ;
-//            speaker.image_path=req.body.image_path;
-//            speaker.save(function(err) {
-//            if (err)
-//                res.send(err);
-//            else
-//                res.json({ message: 'Speaker created!' });
-//        });
-//
-//    });
-//    router.route('/admin/speakers/changeSpeakerLogo')
-//        .post(function(req,res){
-//            var data = req.body.data;
-//            Speakers.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
-//                if(err){
-//                    logger.error("Error at speaker change logo. Speaker id = "+data.id+"; Key = "+data.path);
-//                    res.json({error:true});
-//                }else{
-//                    res.json({error:false, updated:wRes});
-//                }
-//            });
-//        });
-//    router.route('/admin/speakers/:id')
-//        .get(function(req,res){
-//            Speakers.findById(req.params.id).exec(function (err, speaker) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(speaker);
-//                    return;
-//                }
-//            })
-//        })
-//    .put(function(req, res) {
-//
-//        Speakers.findById(req.params.id, function(err, speaker) {
-//
-//            if (err)
-//                res.send(err);
-//
-//            speaker.first_name = req.body.first_name;  // set the bears name (comes from the request)
-//            speaker.last_name=req.body.last_name ;
-//            speaker.profession= req.body.profession     ;
-//            speaker.last_updated= req.body.last_updated ;
-//            speaker.workplace=req.body.workplace;
-//            speaker.short_description= req.body.short_description ;
-//            speaker.save(function(err) {
-//                if (err) {
-//                    logger.error(err);
-//                    res.send(err);
-//                    return;
-//                }
-//                res.json({ message: 'Speaker updated!' });
-//            });
-//
-//        });
-//    })
-//        .delete(function(req, res) {
-//            var id= req.params.id;
-//            disconnectAllEntitiesFromEntity(Talks, "speakers", id, function (err, result){
-//                if(err){
-//                    res.send(err);
-//                }else{
-//                    //get speaker to find out image path
-//                    Speakers.findOne({_id: id}, function (err, speaker) {
-//                        if(speaker){
-//                            var s3Key = speaker.image_path;
-//                            //delete speaker
-//                            Speakers.remove({_id:id},function(err,cont) {
-//                                if (err){
-//                                    res.json({message:'Could not delete speaker!'});
-//                                }
-//                                else{
-//                                    //speaker was deleted. Now delete image if there is one
-//                                    if(s3Key){
-//                                        s3.deleteObject({Bucket: amazonBucket, Key: s3Key}, function (err, data) {
-//                                            if(err){
-//                                                logger.error(err);
-//                                                res.json({message: "Speaker was deleted. Image could not be deleted"});
-//                                            }else{
-//                                                res.json({message: "Speaker was deleted. Image was deleted"});
-//                                            }
-//                                        });
-//                                    }else{
-//                                        res.json({message:'Speaker was deleted!'});
-//                                    }
-//                                }
-//                            });
-//                        }else{
-//                            res.json({message:'Speaker not found!'});
-//                        }
-//                    });
-//                }
-//            });
-//
-//
-//
-//        });
-//    router.route('/admin/conferences')
-//        .get(function(req,res){
-//            Conferences.find().exec(function (err, conf) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(conf);
-//                    return;
-//                }
-//            })
-//        })
-//    .post(function(req, res) {
-//
-//        var conferences = new Conferences(); 		// create a new instance of the Bear model
-//            conferences.title = req.body.title;  // set the bears name (comes from the request)
-//            conferences.enable=req.body.enable ;
-//            conferences.begin_date= req.body.begin_date     ;
-//            conferences.end_date= req.body.end_date     ;
-//            conferences.last_updated= req.body.last_updated ;
-//            conferences.description=req.body.description;
-//            conferences.qr_code=req.body.qr_code;
-//            conferences.topicsID=req.body.topicsID;
-//            conferences.image_path=req.body.image_path;
-//            conferences.save(function(err,saved) {
-//            if (err)
-//                res.send(err);
-//            else
-//            {
-//                var conf = new Conferences();
-//                conf = saved;
-//                var newQR = new Object();
-//                newQR.type = 2;
-//                newQR.message = saved.qr_code.message;
-//                newQR.conference_id = saved._id;
-//                conf.qr_code=newQR;
-//                conf.save(function(err){
-//                    if(err)
-//                        res.send(err);
-//                    else
-//                        res.json({ message: 'Conference created!' });
-//                })
-//
-//            }
-//
-//        });
-//
-//    });
-//    router.route('/admin/conferences/:id')
-//        .get(function(req,res){
-//            Conferences.findById(req.params.id).exec(function (err, conf) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//
-//                    res.json(conf);
-//                    return;
-//                }
-//            })
-//        })
-//        .put(function(req, res) {
-//
-//            Conferences.findById(req.params.id, function(err, conferences) {
-//
-//                if (err){
-//                    res.send(err);
-//                }else{
-//                    conferences.title = req.body.title;  // set the bears name (comes from the request)
-//                    conferences.enable=req.body.enable;
-//                    conferences.begin_date= req.body.begin_date;
-//                    conferences.end_date= req.body.end_date;
-//                    conferences.last_updated= req.body.last_updated;
-//                    conferences.description=req.body.description;
-//                    conferences.topicsID=req.body.topicsID;
-//                    conferences.qr_code=req.body.qr_code;
-//                    conferences.save(function(err, conferenceSaved) {
-//                        if (err){
-//                            res.send(err);
-//                        }else{
-//                            //send notification
-//                            if(req.body.notificationText){
-//                                getUsersForConference(conferenceSaved._id, function (err, users) {
-//                                    if(err){
-//                                        res.json({ message: 'Conference updated! Error at sending notification' });
-//                                    }else{
-//                                        if(users.length != 0){
-//                                            sendPushNotification(req.body.notificationText, users, function (err, success) {
-//                                                if(err){
-//                                                    res.json({ message: 'Conference updated! Error notifying users' });
-//                                                }else{
-//                                                    res.json({ message: 'Conference updated! Notification was sent' });
-//                                                }
-//                                            });
-//                                        }else{
-//                                            res.json({ message: 'Conference updated! No users found to notify' });
-//                                        }
-//                                    }
-//                                });
-//                            }else{
-//                                res.json({ message: 'Conference updated! No notification sent' });
-//                            }
-//                        }
-//                    });
-//                }
-//            });
-//        })
-//        .delete(function(req, res) {
-//            var id = req.params.id;
-//            disconnectAllEntitiesFromEntity(Events, "listconferences", id, function (err, result){
-//                if(err)
-//                    res.send(err);
-//                else
-//                {
-//
-//                    disconnectAllEntitiesFromEntity(User, "conferencesID", id, function (err, result) {
-//                        if (err)
-//                            res.send(err);
-//                        else
-//                        {
-//                            Conferences.findOne({_id: id}, function (err, resp) {
-//                                if (resp) {
-//                                    resp.remove(function (err, cont) {
-//                                        if (err)
-//                                            res.send(err);
-//                                        else
-//                                            res.json({message: 'Successfully deleted!'});
-//                                    });
-//                                }
-//                                else
-//                                    res.send(err);
-//                            });
-//                        }
-//
-//
-//                    })
-//
-//                }
-//            });
-//
-//
-//        });
-//    router.route('/admin/conferences/changeConferenceLogo')
-//        .post(function(req,res){
-//            var data = req.body.data;
-//            Conferences.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
-//                if(err){
-//                    logger.error("Error at conference change logo. Conference id = "+data.id+"; Key = "+data.path);
-//                    res.json({error:true});
-//                }else{
-//                    res.json({error:false, updated:wRes});
-//                }
-//            });
-//        });
-//     router.route('/admin/talks')
-//        .get(function(req,res){
-//            Talks.find().populate('conference room speakers').exec(function (err, talks) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(talks);
-//                    return;
-//                }
-//
-//
-//            })
-//
-//        })
-//         .post(function(req, res) {
-//             var talk = new Talks(req.body.data);
-//             talk.enable = true;
-//             talk.last_updated = Date.now();
-//             talk.save(function (err, savedTalk) {
-//                 if(err){
-//                     res.send(err);
-//                 }else{
-//                     res.json({ message: 'Talk created!' });
-//                 }
-//             });
-//         });
-//    router.route('/admin/talks/:id')
-//        .get(function(req,res){
-//            Talks.findById(req.params.id).populate('speakers room conference').exec(function (err, talk) {
-//                if (err)
-//                {
-//                    logger.error(err);
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(talk);
-//                    return;
-//                }
-//            })
-//        })
-//        .put(function(req, res) {
-//
-//            var toUpdate = req.body.talk;
-//            delete toUpdate._id;
-//
-//            Talks.update({_id: req.params.id}, toUpdate, function (err, wRes) {
-//                if(err){
-//                    res.send(err);
-//                }else{
-//                    //send notification
-//                    if(req.body.notification){
-//                        getUsersForTalk(req.params.id, function (err, id_users) {
-//                            if(err){
-//                                res.json({ message: 'Talk updated! Error sending notification' });
-//                            }else{
-//                                if(id_users.length != 0){
-//                                    sendPushNotification(req.body.notification, id_users, function (err, success) {
-//                                        if(err){
-//                                            res.json({ message: 'Talk updated! Error notifying users' });
-//                                        }else{
-//                                            res.json({ message: 'Talk updated! Notification was sent' });
-//                                        }
-//                                    });
-//                                }else{
-//                                    res.json({ message: 'Talk updated! No users found to notify' });
-//                                }
-//                            }
-//                        });
-//                    }else{
-//                        res.json({ message: 'Talk updated! No notification sent' });
-//                    }
-//                }
-//            });
-//        })
-//        .delete(function(req, res) {
-//            var id = req.params.id;
-//            Talks.remove({_id: id}, function(err,cont) {
-//                if (err)
-//                    res.send(err);
-//                else
-//                    res.json({ message: 'Successfully deleted!' });
-//            });
-//
-//        });
-//    router.route('/admin/rooms')
-//        .get(function(req,res){
-//            Rooms.find().exec(function (err, rooms) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(rooms);
-//                    return;
-//                }
-//
-//
-//            })
-//
-//        })
-//        .post(function(req, res) {
-//            var data = req.body.data;
-//
-//            var rooms = new Rooms();
-//            rooms.room_name = data.room_name;
-//            rooms.qr_code = {
-//                message: data.qrMessage,
-//                room_id: "",
-//                type: 1
-//            };
-//            rooms.save(function (err, roomSaved) {
-//                if (err)
-//                    res.send(err);
-//                else {
-//                    var newQR = new Object();
-//                    newQR.type = roomSaved.qr_code.type;
-//                    newQR.message = roomSaved.qr_code.message;
-//                    newQR.room_id = mongoose.Types.ObjectId(roomSaved._id.toString());
-//                    roomSaved.qr_code = newQR;
-//                    roomSaved.save(function (err) {
-//                        if (err)
-//                            res.send(err);
-//                        else
-//                            res.json({message: 'Room created!'});
-//                    });
-//                }
-//            });
-//        });
-//    router.route('/admin/rooms/:id')
-//        .get(function(req,res){
-//            Rooms.findById(req.params.id).exec(function (err, room) {
-//                if (err)
-//                {
-//                    logger.error(err);
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(room);
-//                    return;
-//                }
-//            })
-//        })
-//        .put(function(req, res) {
-//
-//            var room = req.body.room;
-//            Rooms.update({_id: room._id}, room,  function (err, writeConcern) {
-//                if(err){
-//                    console.log(err);
-//                    res.send(err);
-//                }else{
-//                    //send notification
-//                        if(req.body.notification){
-//                            getUsersForRoom(room._id, function (err, id_users) {
-//                                if(err){
-//                                    res.json({ message: 'Room updated! Error sending notification' });
-//                                }else{
-//                                    if(id_users.length != 0){
-//                                        sendPushNotification(req.body.notification, id_users, function (err, success) {
-//                                            if(err){
-//                                                res.json({ message: 'Room updated! Error notifying users' });
-//                                            }else{
-//                                                res.json({ message: 'Room updated! Notification was sent' });
-//                                            }
-//                                        });
-//                                    }else{
-//                                        res.json({ message: 'Room updated! No users found to notify' });
-//                                    }
-//                                }
-//                            });
-//                        }else{
-//                            res.json({ message: 'Room updated! No notification sent' });
-//                        }
-//                }
-//            });
-//        })
-//        .delete(function(req, res) {
-//            var id = req.params.id;
-//            disconnectAllEntitiesFromEntity(Talks, "room", id, function (err, result){
-//                if(err)
-//                    res.send(err);
-//                else {
-//                    Rooms.remove({_id: req.params.id}, function (err, cont) {
-//                        if (err)
-//                            res.send(err);
-//                        else
-//                            res.json({message: 'Successfully deleted!'});
-//                    });
-//                }});
-//
-//        });
-
     router.route('/admin/multimedia')
 
         .get(function(req, res) {
@@ -3315,12 +2540,13 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var dataArray = [req.params.id];
             var connEntities=[Products,Multimedia];
             async.each(connEntities,function(item,callback){
-                disconnectAllEntitiesFromEntity(item,'therapeutic-areasID',data,function(err,result){
-                    if(err)
-                        res.json({ message: 'Eroare la stergerea ariei din entitatile conectate!' });
-                    else
+                disconnectAllEntitiesFromEntity(item, 'therapeutic-areasID', data).then(
+                    function(){
                         callback();
-                });
+                    },
+                    function (err) {
+                        callback(err);
+                    });
             },function(err){
                 if(err){
                     res.json({ message: 'Nu s-a putut efectua stergerea asincrona!' });
@@ -4379,15 +3605,13 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
     router.route('/content/articleDetails')
 
         .post(function(req, res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
                     if (req.body.specialGroup) {
                         forGroups.push(req.body.specialGroup.toString());
                     }
-                    
+
                     Content.find({_id:req.body.content_id, groupsID: { $in: forGroups}}, function(err, cont) {
                         if(err) {
                             res.send(err);
@@ -4398,9 +3622,10 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             res.json(null);
                         }
                     })
-                }});
-
-
+                },
+                function (err) {
+                    res.send(err);
+                });
         });
 
     router.route('/content/type')
@@ -4408,13 +3633,13 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .post(function(req, res) {
             var cType = req.body.content_type;
             var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, cType, specialGroupSelected, null, 'created', function (err, content) {
-                if(err){
-                    res.send(err);
-                }else{
+            getUserContent(req.user, cType, specialGroupSelected, null, 'created').then(
+                function (content) {
                     res.json(content);
-                }
-            });
+                },
+                function (err) {
+                    res.send(err);
+                });
         });
 
     router.route('/userdata')
@@ -4625,53 +3850,6 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             }
         });
 
-//    router.route('/changeEmail')
-//        .post(function (req, res) {
-//            var ans = {error: true, message:"Server error"};
-//            var userData = req.body.userData;
-//            //check if mail is valid
-//            var mailPatt = new XRegExp('^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$', 'i');
-//            if(!mailPatt.test(userData.mail.toString())){
-//                ans.error = true;
-//                ans.message = "E-mail invalid";
-//                res.json(ans);
-//            }else{
-//                //check if mail already exists
-//                User.find({username: userData.mail}, function(err, result){
-//                    if(err){
-//                        ans.error = true;
-//                        ans.message = "Eroare la schimbarea adresei de e-mail";
-//                        res.json(ans);
-//                    }else{
-//                        if(result.length == 0){
-//                            //check password
-//                            if(SHA256(userData.pass).toString() === req.user.password){
-//                                var upd = User.update({_id:req.user._id}, {username: userData.mail}, function () {
-//                                    if(!upd._castError){
-//                                        ans.error = false;
-//                                        ans.message = "Adresa de e-mail a fost modificata";
-//                                        res.json(ans);
-//                                    }else{
-//                                        ans.error = true;
-//                                        ans.message = "Eroare la schimbarea adresei de e-mail";
-//                                        res.json(ans);
-//                                    }
-//                                });
-//                            }else{
-//                                ans.error = true;
-//                                ans.message = "Parola incorecta";
-//                                res.json(ans);
-//                            }
-//                        }else{
-//                            ans.error = true;
-//                            ans.message = "Acest e-mail este deja folosit";
-//                            res.json(ans);
-//                        }
-//                    }
-//                });
-//            }
-//        });
-
     router.route('/changePassword')
         .post(function (req, res) {
             var ans = {error: true, message:"Server error"};
@@ -4729,22 +3907,20 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
 
     router.route('/userHomeCarousel/')
         .post(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else{
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
                     if(req.body.specialGroupSelected){
                         forGroups.push(req.body.specialGroupSelected.toString());
                     }
-                    
+
                     //get allowed articles for user
                     Content.find({groupsID: {$in: forGroups},enable:true}, {_id: 1}, function (err, content) {
                         if(err){
                             res.send(err);
                         }else{
                             //get ids of allowed articles
-                            getIds(content, function (ids) {
+                            getIds(content).then(function (ids) {
                                 //get carousel content within allowed articles
                                 Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
                                     if(err){
@@ -4756,8 +3932,10 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             });
                         }
                     });
-                }
-            });
+                },
+                function (err) {
+                    res.send(err);
+                });
         });
     router.route('/userImage')
         .get(function(req,res) {
@@ -4777,15 +3955,13 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var arr_of_items=[Products,Multimedia,Content,Events];
             var ObjectOfResults={};
             var checker=0;
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
                     if (req.body.specialGroupSelected) {
                         forGroups.push(req.body.specialGroupSelected);
                     }
-                    
+
                     var date = new Date();
 
                     async.each(arr_of_items, function (item, callback) {
@@ -4794,37 +3970,37 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                         else
                             var hydrateOp = {find: { $and: [ { groupsID: { $in: forGroups } }, { enable:true } ] } };
 
-                            item.search({
+                        item.search({
 
-                                query_string: {
-                                    query: data,
-                                    default_operator: 'OR',
-                                    lowercase_expanded_terms: true
-                                    //phrase_slop: 50,
-                                    //analyze_wildcard: true
+                            query_string: {
+                                query: data,
+                                default_operator: 'OR',
+                                lowercase_expanded_terms: true
+                                //phrase_slop: 50,
+                                //analyze_wildcard: true
 
-                                }
+                            }
 
-                            },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
-                                if(err)
-                                {
-                                    res.json(err);
-                                    return;
-                                }
+                        },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
+                            if(err)
+                            {
+                                res.json(err);
+                                return;
+                            }
+                            else
+                            {
+                                if(results.hits.hits.length===0)
+                                    checker+=1;
                                 else
                                 {
-                                    if(results.hits.hits.length===0)
-                                        checker+=1;
-                                    else
-                                    {
-                                        ObjectOfResults[item.modelName]=results.hits.hits;
-                                    }
-
+                                    ObjectOfResults[item.modelName]=results.hits.hits;
                                 }
 
+                            }
 
-                                callback();
-                            });
+
+                            callback();
+                        });
 
                     }, function (err) {
                         if(err)
@@ -4840,15 +4016,15 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                         }
 
                     })
-                }
-            });
+                },
+                function (err) {
+                    res.send(err);
+                });
         });
     router.route('/userHomeEvents')
         .post(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
                     if (req.body.specialGroupSelected) {
                         forGroups.push(req.body.specialGroupSelected);
@@ -4860,17 +4036,16 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             res.json(events);
                         }
                     });
-                }
-            });
-
+                },
+                function (err) {
+                    res.send(err);
+                });
         });
 
     router.route('/userHomeMultimedia')
         .post(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
                     if (req.body.specialGroupSelected) {
                         forGroups.push(req.body.specialGroupSelected);
@@ -4882,33 +4057,36 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             res.json(multimedia);
                         }
                     });
-                }
-            });
-
+                },
+                function (err) {
+                    res.send(err);
+                });
         });
 
     router.route('/userHomeNews')
 
         .post(function(req, res) {
             var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "created", function (err, cont) {
-                if(err) {
+            getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "created").then(
+                function (cont) {
+                    res.json(cont);
+                },
+                function (err) {
                     res.send(err);
-                }
-                res.json(cont);
-            });
+                });
         });
 
     router.route('/userHomeScientific')
 
         .post(function(req, res) {
             var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, 3, specialGroupSelected, 4, "created", function (err, cont) {
-                if(err) {
+            getUserContent(req.user, 3, specialGroupSelected, 4, "created").then(
+                function (cont) {
+                    res.json(cont);
+                },
+                function (err) {
                     res.send(err);
-                }
-                res.json(cont);
-            });
+                });
         });
 
     router.route('/products')
@@ -4926,10 +4104,8 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
     router.route('/productsDetails')
 
         .post(function(req, res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
                     if (req.body.specialGroup) {
                         forGroups.push(req.body.specialGroup);
@@ -4941,8 +4117,10 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                         else
                             res.json(cont[0]);
                     })
-                }});
-
+                },
+                function (err) {
+                    res.send(err);
+                });
         });
 
     router.route('/products/productsByArea')
@@ -4952,10 +4130,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var test = req.body.id.toString();
             if(test!=0)
             {
-                getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                    if(err){
-                        res.send(err);
-                    }else {
+                getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
                         var forGroups = nonSpecificGroupsIds;
                         if (req.body.specialGroup) {
                             forGroups.push(req.body.specialGroup);
@@ -4965,17 +4140,17 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             if(TArea.has_children==true)
                             {
                                 Therapeutic_Area.find({$or: [{_id:req.body.id},{"therapeutic-areasID": {$in :[test]}}]}).exec(function(err,response){
-                                    getStringIds(response, function(ids){
-                                    Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
-                                        if(err) {
-                                            res.send(err);
-                                        }
-                                        else
-                                        {
-                                            res.json(cont);
-                                        }
+                                    getIds(response, true).then(function(ids){
+                                        Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
+                                            if(err) {
+                                                res.send(err);
+                                            }
+                                            else
+                                            {
+                                                res.json(cont);
+                                            }
+                                        })
                                     })
-                                })
                                 });
 
                             }
@@ -4993,15 +4168,15 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             }
                         });
                         //get allowed articles for user
-
-                    }});
+                    },
+                    function (err) {
+                        res.send(err);
+                    });
             }
             else
             {
-                getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                    if(err){
-                        res.send(err);
-                    }else {
+                getNonSpecificUserGroupsIds(req.user).then(
+                    function (nonSpecificGroupsIds) {
                         var forGroups = nonSpecificGroupsIds;
                         if (req.body.specialGroup) {
                             forGroups.push(req.body.specialGroup);
@@ -5016,32 +4191,33 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                 res.json(cont);
                             }
                         })
-                    }});
+                    },
+                    function (err) {
+                        res.send(err);
+                    });
             }
         });
 
     router.route('/calendar/getEvents/')
         .post(function(req,res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else{
-                    var forGroups = nonSpecificGroupsIds;
-                    if(req.body.specialGroup){
-                        forGroups.push(req.body.specialGroup);
-                    }
-                    //get allowed articles for user
-                        Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
-                            if (err) {
-                                res.send(err);
-                            }
-                            else
-                            {
-                               res.json(cont);
-                            }
-
-                        })
+            getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
+                var forGroups = nonSpecificGroupsIds;
+                if(req.body.specialGroup){
+                    forGroups.push(req.body.specialGroup);
                 }
+                //get allowed articles for user
+                Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
+                    if (err) {
+                        res.send(err);
+                    }
+                    else
+                    {
+                        res.json(cont);
+                    }
+
+                })
+            }, function (err) {
+                res.send(err);
             })
         });
     router.route('/calendar/:id')
@@ -5089,17 +4265,15 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}])
             }
             else {
-                getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                    if(err){
-                        res.send(err);
-                    }else {
+                getNonSpecificUserGroupsIds(req.user).then(
+                    function (nonSpecificGroupsIds) {
                         var forGroups = nonSpecificGroupsIds;
                         if (req.body.specialGroupSelected) {
                             forGroups.push(req.body.specialGroupSelected);
                         }
                         findObj['groupsID']={$in:forGroups};
                         findObj['enable']={$ne: false};
-                        
+
                         if(req.body.id==0)
                         {
                             Multimedia.find(findObj, function (err, multimedia) {
@@ -5107,7 +4281,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                     console.log(err);
                                     res.json(err);
                                 } else {
-                                    
+
                                     if (multimedia.length == 0) {
                                         res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
                                     }
@@ -5124,16 +4298,16 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                 {
                                     Therapeutic_Area.find({"therapeutic-areasID": {$in :[req.body.id]}}).exec(function(err,response){
                                         var children=response;
-                                        getStringIds(children, function(ids){
-                                            
-                                            
+                                        getIds(children, true).then(function(ids){
+
+
                                             findObj['therapeutic-areasID'] = {$in: ids};
                                             Multimedia.find(findObj, function (err, multimedia) {
                                                 if (err) {
                                                     console.log(err);
                                                     res.json(err);
                                                 } else {
-                                                    
+
                                                     if (multimedia.length == 0) {
                                                         res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
                                                     }
@@ -5152,7 +4326,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                             console.log(err);
                                             res.json(err);
                                         } else {
-                                            
+
                                             if (multimedia.length == 0) {
                                                 res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
                                             }
@@ -5165,9 +4339,10 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                         }
 
                         //get allowed articles for user
-
-
-                    }})
+                    },
+                    function (err) {
+                        res.send(err);
+                    })
 
             }
         });
