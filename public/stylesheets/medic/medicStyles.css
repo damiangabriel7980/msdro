@@ -7040,9 +7040,6 @@ ul.products li {
     text-align: center;
   }
 }
-.widgets .noPadding {
-  padding: 0;
-}
 .widgets .contentPadding {
   padding-top: 10%;
   padding-bottom: 10%;
