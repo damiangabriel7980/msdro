@@ -6314,21 +6314,108 @@ body {
   padding-top: 70px;
   padding-bottom: 50px;
 }
-.articlesStyles .articleBox {
+.articlesStyles .articlesWrapper {
+  padding: 0;
+}
+.articlesStyles .articlesWrapper .articlesMenu {
+  border-right: 1px solid #000000;
+  padding: 0;
+  padding-left: 21px;
+}
+.articlesStyles .articlesWrapper .articlesMenu .Title {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.articlesStyles .articlesWrapper .articlesMenu .articleBox {
   padding: 5px 5px 5px 5px;
   margin-bottom: 15px;
 }
-.articlesStyles .articleBox .title {
+.articlesStyles .articlesWrapper .articlesMenu .articleBox .wrapper {
+  padding: 0;
+  padding-left: 5px;
+}
+.articlesStyles .articlesWrapper .articlesMenu .articleBox .wrapper .title {
   font-size: 17px;
   font-weight: bold;
   padding-bottom: 10px;
+  cursor: pointer;
 }
-.articlesStyles .articleBox .trimmedArticle {
+.articlesStyles .articlesWrapper .articlesMenu .articleBox .wrapper a {
+  cursor: pointer;
+  color: #1c9893;
+}
+.articlesStyles .articlesWrapper .articlesMenu .articleBox .wrapper .trimmedArticle {
   padding-bottom: 10px;
   text-align: justify;
 }
-.articlesStyles .articleBox .author {
+.articlesStyles .articlesWrapper .articlesMenu .articleBox .wrapper .author {
   font-weight: bold;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesMoreNews {
+  clear: both;
+  margin: 0 auto;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesMoreNews .btn-news {
+  margin-top: 20px;
+  background-color: transparent;
+  color: black;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesMoreNews .btn-news:hover {
+  color: #fff;
+  background-color: #31b0d5;
+  border-color: #269abc;
+}
+.articlesStyles .articlesWrapper .articlesList .noArticles {
+  padding: 0;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesMobileMessage {
+  padding: 0;
+  padding-bottom: 10px;
+  text-align: left;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesListWrapper {
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article {
+  padding: 5px 5px 5px 5px;
+  margin-bottom: 15px;
+  margin-left: 0%;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .image {
+  background-color: #ddd;
+  padding: 4px;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper {
+  padding-left: 0;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .articleTitle {
+  cursor: pointer;
+  color: #1c9893;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .Description {
+  padding-bottom: 10px;
+  text-align: justify;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .author {
+  font-weight: bold;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .noPadding {
+  padding: 0;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .btn-news {
+  margin-top: 20px;
+  background-color: transparent;
+  color: black;
+}
+.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .btn-news:hover {
+  color: #fff;
+  background-color: #31b0d5;
+  border-color: #269abc;
 }
 .articlesStyles .articleDetail .title {
   font-size: 20px;
@@ -6338,6 +6425,16 @@ body {
 .articlesStyles .articleDetail .articleContent img {
   padding-right: 15px;
   padding-bottom: 15px;
+}
+.articlesStyles .articleDetail .btn-news {
+  margin-top: 20px;
+  background-color: transparent;
+  color: black;
+}
+.articlesStyles .articleDetail .btn-news:hover {
+  color: #fff;
+  background-color: #31b0d5;
+  border-color: #269abc;
 }
 .articlesStyles .stretchHorizontal {
   padding-left: 0px;

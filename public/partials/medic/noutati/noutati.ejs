@@ -1,20 +1,20 @@
 <div class="articlesStyles">
-    <div class="col-md-12 noPadding">
-        <div class="col-md-4 hidden-xs hidden-sm rightBorder newsLeft noPadding padd21px">
-            <div class="col-md-12 padd35px">
+    <div class="col-md-12 articlesWrapper">
+        <div class="col-md-4 hidden-xs hidden-sm articlesMenu">
+            <div class="col-md-12 Title">
             <h3>CELE MAI CITITE {{title}}</h3>
             </div>
             <div ng-repeat="cont in content | limitTo: 3">
-                <div class="col-md-12 articleBox ">
-                     <div class="col-md-12 noPadding padd5left">
-                        <div class="col-md-12 title handCursor" style="color:#1c9893" ui-sref="{{sr}}" convert-special conver='cont.title' ng-bind-html="trustAsHtml(cont.title)"></div>
+                <div class="col-md-12 articleBox">
+                     <div class="col-md-12 wrapper">
+                        <div class="col-md-12 title" style="color:#1c9893" ui-sref="{{sr}}" convert-special conver='cont.title' ng-bind-html="trustAsHtml(cont.title)"></div>
                         <div class="col-md-12 trimmedArticle" convert-special conver="cont.text" ng-bind-html="trimText(htmlToPlainText(cont.text), 100)"></div>
-                        <div class="col-md-12"><a class="handCursor" style="color:#1c9893" ui-sref="{{sr}}">Citeste mai mult &nbsp;</a></div>
+                        <div class="col-md-12"><a ui-sref="{{sr}}">Citeste mai mult &nbsp;</a></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div ng-class="{'col-md-8':deviceWidth>=991, 'col-md-12':deviceWidth<991}">
+        <div ng-class="{'col-md-8 articlesList':deviceWidth>=991, 'col-md-12 articlesList':deviceWidth<991}">
             <ui-view>
 
             </ui-view>

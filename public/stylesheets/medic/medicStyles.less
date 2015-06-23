@@ -29,23 +29,112 @@ body{
   padding-bottom: 50px;
 }
 .articlesStyles{
-  .articleBox{
-    padding: 5px 5px 5px 5px;
-    margin-bottom: 15px;
-    .title{
-      font-size: 17px;
-      font-weight: bold;
-      padding-bottom: 10px;
-    }
-    .trimmedArticle{
-      padding-bottom: 10px;
-      text-align: justify;
-    }
-    .author{
-      font-weight: bold;
-    }
-    .lastUpdate{
+  .articlesWrapper{
+    padding: 0;
+    .articlesMenu{
+      border-right: 1px solid #000000;
+      padding: 0;
+      padding-left: 21px;
+      .Title{
+        padding-left: 25px;
+        padding-right: 25px;
+      }
+      .articleBox{
+        padding: 5px 5px 5px 5px;
+        margin-bottom: 15px;
+        .wrapper{
+          padding: 0;
+          padding-left: 5px;
+          .title{
+            font-size: 17px;
+            font-weight: bold;
+            padding-bottom: 10px;
+            cursor: pointer;
+          }
+          a{
+            cursor: pointer;
+            color:#1c9893;
+          }
+          .trimmedArticle{
+            padding-bottom: 10px;
+            text-align: justify;
+          }
+          .author{
+            font-weight: bold;
+          }
+          .lastUpdate{
 
+          }
+        }
+      }
+    }
+    .articlesList{
+      .articlesMoreNews{
+        clear: both;margin:0 auto;
+        .btn-news{
+          margin-top: 20px;
+          background-color: transparent;
+          color: black;
+          &:hover{
+            color: #fff;
+            background-color: #31b0d5;
+            border-color: #269abc;
+          }
+        }
+      }
+      .noArticles{
+        padding: 0;
+      }
+      .articlesMobileMessage
+      {
+        padding: 0;
+        padding-bottom: 10px;
+        text-align: left;
+      }
+      .articlesListWrapper{
+        padding: 0;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: 0px;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        .article{
+          padding: 5px 5px 5px 5px;
+          margin-bottom: 15px;
+          margin-left: 0%;
+          .image{
+            background-color: #ddd;
+            padding: 4px;
+          }
+          .textWrapper{
+            padding-left: 0;
+            .articleTitle{
+              cursor: pointer;
+              color:#1c9893
+            }
+            .Description{
+              padding-bottom: 10px;
+              text-align: justify;
+            }
+            .author{
+              font-weight: bold;
+            }
+            .noPadding{
+              padding: 0;
+            }
+            .btn-news{
+              margin-top: 20px;
+              background-color: transparent;
+              color: black;
+              &:hover{
+                color: #fff;
+                background-color: #31b0d5;
+                border-color: #269abc;
+              }
+            }
+          }
+        }
+      }
     }
   }
   .articleDetail{
@@ -58,6 +147,16 @@ body{
       img{
         padding-right: 15px;
         padding-bottom: 15px;
+      }
+    }
+    .btn-news{
+      margin-top: 20px;
+      background-color: transparent;
+      color: black;
+      &:hover{
+        color: #fff;
+        background-color: #31b0d5;
+        border-color: #269abc;
       }
     }
   }
