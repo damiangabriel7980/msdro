@@ -28,6 +28,8 @@ body{
   padding-top: 70px;
   padding-bottom: 50px;
 }
+//===========================================================ARTICLES
+
 .articlesStyles{
   .articlesWrapper{
     padding: 0;
@@ -174,6 +176,48 @@ body{
 .therapeuticAreas{
   li{
     cursor: pointer;
+  }
+}
+
+//===========================================================CALENDAR
+.calendarWrapper{
+  .noPadding{
+    padding: 0;
+  }
+  .nextEvents{
+    padding-left: 40px;
+    //@media(max-width: 1277px){
+    //  padding-left: 0;
+    //}
+    .paddingTop5{
+      padding-top: 5px;
+    }
+    .MainTitle{
+      border-bottom: 1px solid @MSDTitle;
+      //@media(max-width: 1277px){
+      //  font-size: 20px;
+      //  font-weight: bold;
+      //}
+    }
+    .Date{
+      padding-bottom: 10px;
+      margin-top: -25px;
+      .day{
+        color: #006d69;
+        margin-bottom: 0;
+      }
+      .month{
+        color: #006d69;
+        margin-top: 0;
+      }
+    }
+    .Title{
+      margin-top: -10px;
+      margin-left: -2%;
+      h4{
+        cursor: pointer;
+      }
+    }
   }
 }
 

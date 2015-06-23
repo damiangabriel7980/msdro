@@ -6449,6 +6449,37 @@ body {
 .therapeuticAreas li {
   cursor: pointer;
 }
+.calendarWrapper .noPadding {
+  padding: 0;
+}
+.calendarWrapper .nextEvents {
+  padding-left: 40px;
+}
+.calendarWrapper .nextEvents .paddingTop5 {
+  padding-top: 5px;
+}
+.calendarWrapper .nextEvents .MainTitle {
+  border-bottom: 1px solid #006d69;
+}
+.calendarWrapper .nextEvents .Date {
+  padding-bottom: 10px;
+  margin-top: -25px;
+}
+.calendarWrapper .nextEvents .Date .day {
+  color: #006d69;
+  margin-bottom: 0;
+}
+.calendarWrapper .nextEvents .Date .month {
+  color: #006d69;
+  margin-top: 0;
+}
+.calendarWrapper .nextEvents .Title {
+  margin-top: -10px;
+  margin-left: -2%;
+}
+.calendarWrapper .nextEvents .Title h4 {
+  cursor: pointer;
+}
 ul.products li {
   display: inline-block !important;
   vertical-align: top;
