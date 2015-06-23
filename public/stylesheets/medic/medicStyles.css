@@ -7023,6 +7023,77 @@ ul.products li {
     visibility: hidden;
   }
 }
+.widgets .subtitle {
+  color: #006d69;
+}
+.widgets .glycemizerTextPadding {
+  padding: 0 0 30px 0;
+}
+.widgets .handCursor {
+  cursor: pointer;
+}
+.widgets .title {
+  text-align: left;
+}
+@media (max-width: 1277px), (orientation: portrait) {
+  .widgets .title {
+    text-align: center;
+  }
+}
+.widgets .noPadding {
+  padding: 0;
+}
+.widgets .contentPadding {
+  padding-top: 10%;
+  padding-bottom: 10%;
+}
+@media (max-width: 1277px), (orientation: portrait) {
+  .widgets .contentPadding {
+    padding-bottom: 1%;
+    padding-top: 1%;
+  }
+}
+.widgets .contentJustified {
+  text-align: left;
+}
+@media (max-width: 1277px), (orientation: portrait) {
+  .widgets .contentJustified {
+    text-align: justify;
+  }
+}
+.widgets .contentPaddingMobile {
+  padding-left: 0;
+}
+@media (max-width: 768px) {
+  .widgets .contentPaddingMobile {
+    padding-left: 15px;
+  }
+}
+.widgets .widgetImage {
+  width: 100%;
+  margin-bottom: 10px;
+}
+@media (max-device-width: 768px) {
+  .widgets .widgetImage {
+    width: 50% !important;
+  }
+}
+.widgets .merckImageWrapper {
+  vertical-align: middle;
+  text-align: left;
+  padding-left: 0;
+  padding-right: 0;
+}
+.widgets .merckImageWrapper .merckImage {
+  width: 70%;
+  cursor: pointer;
+}
+@media (max-width: 1277px), (orientation: portrait) {
+  .widgets .merckImageWrapper .merckImage {
+    width: 30%;
+    cursor: pointer;
+  }
+}
 .carousel-container {
   margin-bottom: 1%;
   overflow-x: hidden;
