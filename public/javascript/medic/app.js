@@ -20,7 +20,8 @@ var app = angular.module('app',
         'bootstrapSearch',
         'specialDropdown',
         'footerResponsive',
-        'verticalContentList'
+        'verticalContentList',
+        'horizontalContentList'
     ]);
 
 app.config(['$locationProvider', function($location) {

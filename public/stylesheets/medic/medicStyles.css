@@ -6461,48 +6461,9 @@ body {
 }
 .articlesStyles .articlesWrapper .articlesList .articlesListWrapper {
   padding: 0;
-  background-color: transparent;
-  border: 1px solid transparent;
-  border-radius: 0px;
-  -webkit-box-shadow: none;
-  box-shadow: none;
 }
 .articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article {
-  padding: 5px 5px 5px 5px;
-  margin-bottom: 15px;
-  margin-left: 0;
-  margin-right: -15px;
-}
-.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .image {
-  background-color: #dddddd;
-  padding: 4px;
-}
-.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper {
-  padding-left: 0;
-}
-.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .articleTitle {
-  cursor: pointer;
-  color: #009d97;
-}
-.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .Description {
-  padding-bottom: 10px;
-  text-align: justify;
-}
-.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .author {
-  font-weight: bold;
-}
-.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .noPadding {
   padding: 0;
-}
-.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .btn-news {
-  margin-top: 20px;
-  background-color: transparent;
-  color: black;
-}
-.articlesStyles .articlesWrapper .articlesList .articlesListWrapper .article .textWrapper .btn-news:hover {
-  color: #fff;
-  background-color: #31b0d5;
-  border-color: #269abc;
 }
 .articlesStyles .articleDetail .title {
   font-size: 20px;
