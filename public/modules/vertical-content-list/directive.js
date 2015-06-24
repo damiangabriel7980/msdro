@@ -18,6 +18,7 @@ angular.module('verticalContentList', []).directive('verticalContentList', ['Uti
             // expose functions
             scope.trustAsHtml = Utils.trustAsHtml;
             scope.convertAndTrustAsHtml = Utils.convertAndTrustAsHtml;
+            scope.withBackground = attrs.hasOwnProperty("withBackground");
         }
     };
 }]);
