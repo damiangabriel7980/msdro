@@ -6358,29 +6358,6 @@ body {
 .multimediaView .multimediaWrapper {
   padding: 0 0 25px 0;
 }
-.multimediaView .multimediaWrapper .multimedia {
-  padding: 0;
-  position: relative;
-}
-.multimediaView .multimediaWrapper .multimedia .image {
-  padding: 10px;
-}
-.multimediaView .multimediaWrapper .multimedia .image img {
-  width: 100%;
-  border: 5px solid #dddddd;
-}
-.multimediaView .multimediaWrapper .multimedia .content {
-  margin-bottom: 50px;
-}
-.multimediaView .multimediaWrapper .multimedia .content .title {
-  padding: 0;
-}
-.multimediaView .multimediaWrapper .multimedia .showMore {
-  padding: 10px;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-}
 .paddingLeftMobile {
   padding-left: 0;
 }
