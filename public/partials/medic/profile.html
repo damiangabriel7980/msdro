@@ -14,10 +14,10 @@
                         <div class="col-md-12 col-xs-12">
                             <img id="imgMobile" ng-class="hideImg" class="img-responsive img-thumbnail profileImg imgFix" no-cache-src="{{imageUser}}">
                         </div>
-                        <div class="col-md-12 col-xs-12 margintop5px">
+                        <div class="col-md-12 col-xs-12" style="margin-top: 5px">
                             <button class="btn btn-default" style="width: 100%" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o poza</button>
                         </div>
-                        <div class="col-md-12 col-xs-12 margintop5px">
+                        <div class="col-md-12 col-xs-12" style="margin-top: 5px">
                             <alert type="{{uploadAlert.type}}" ng-if="uploadAlert.newAlert" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
                         </div>
                     </div>
