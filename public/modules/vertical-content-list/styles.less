@@ -1,0 +1,49 @@
+//import stripped-from-variables version of bootstrap, which will use our custom variables
+@import '../../stylesheets/globalVariables';
+
+.vertical-content-list{
+  padding:0;
+  .image{
+    padding:0;
+    img{
+      width: 100%;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  }
+  .TextWrapper{
+    padding: 0;
+    a{
+      color: @MSDTitle;
+      cursor: pointer;
+    }
+    height: 12em;
+    overflow: hidden;
+    .Description{
+      padding: 0;
+      margin-top: 5px;
+    }
+    &:after{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      min-height: 4.5em;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+    }
+  }
+  .buttonWrapper{
+    padding: 0;
+    margin-top: 5px;
+    .btn-news{
+      background-color: transparent;
+      color: black;
+      &:hover{
+        color: #ffffff;
+        background-color: #31b0d5;
+        border-color: #269abc;
+      }
+    }
+  }
+}
