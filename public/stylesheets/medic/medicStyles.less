@@ -51,6 +51,7 @@ body{
   }
   .product{
     margin-bottom: 25px;
+    padding: 0 25px 0 0;
   }
 }
 .productDetails{
@@ -379,14 +380,17 @@ body{
   padding: 0 0 50px 0;
   .leftColumn{
     .lastNewsWrapper{
-        padding-right: 0;
+      padding-right: 0;
       @media(min-width: 1278px) {
         margin-left: 25px;
       }
-        .Title{
-          padding:0;
-          padding-bottom: 8px !important;
-        }
+      .Title{
+        padding: 0 0 0 10px;
+        padding-bottom: 8px !important;
+      }
+      .content{
+        padding: 0 15px 0 0;
+      }
     }
     &:after{
       position: absolute;

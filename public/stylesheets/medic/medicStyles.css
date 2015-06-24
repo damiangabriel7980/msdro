@@ -6335,6 +6335,7 @@ body {
 }
 .productsView .product {
   margin-bottom: 25px;
+  padding: 0 25px 0 0;
 }
 .productDetails .imageAndRCP img {
   width: 100%;
@@ -6637,8 +6638,11 @@ body {
   }
 }
 .homeStyles .leftColumn .lastNewsWrapper .Title {
-  padding: 0;
+  padding: 0 0 0 10px;
   padding-bottom: 8px !important;
+}
+.homeStyles .leftColumn .lastNewsWrapper .content {
+  padding: 0 15px 0 0;
 }
 .homeStyles .leftColumn:after {
   position: absolute;
