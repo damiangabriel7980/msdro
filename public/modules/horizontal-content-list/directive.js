@@ -25,6 +25,7 @@
                 scope.trustAsHtml = Utils.trustAsHtml;
                 scope.createHeader = Utils.createHeader;
                 scope.withBackground = attrs.hasOwnProperty("withBackground");
+                scope.smallerPicture = attrs.hasOwnProperty("smallerImage");
             }
         };
     }]);
