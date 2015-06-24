@@ -17,6 +17,7 @@
 }
 .horizontal-content-list .details .title {
   padding: 0;
+  cursor: pointer;
   margin-bottom: 10px;
 }
 .horizontal-content-list .details .title a {
