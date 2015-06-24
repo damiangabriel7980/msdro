@@ -7096,54 +7096,6 @@ html body .rootView {
 .elearningLayout .elearningList .entry {
   padding: 0;
 }
-.elearningLayout .elearningList .entry .picture {
-  padding: 0;
-}
-.elearningLayout .elearningList .entry .picture div {
-  border: 5px solid #eeeeee;
-  border-radius: 10px;
-}
-.elearningLayout .elearningList .entry .picture div img {
-  width: 100%;
-  border-radius: 5px;
-}
-.elearningLayout .elearningList .entry .details {
-  padding: 5px 0 0 15px;
-}
-.elearningLayout .elearningList .entry .details .title {
-  padding: 0;
-  margin-bottom: 10px;
-}
-.elearningLayout .elearningList .entry .details .title a {
-  color: #008780;
-  font-size: 20px;
-  font-weight: bold;
-}
-.elearningLayout .elearningList .entry .details .description {
-  padding: 0;
-  margin-bottom: 20px;
-}
-.elearningLayout .elearningList .entry .details .author {
-  font-size: 13px;
-  font-weight: bold;
-  padding: 0;
-}
-.elearningLayout .elearningList .entry .details .footer {
-  padding: 0;
-}
-.elearningLayout .elearningList .entry .details .footer .date {
-  font-size: 13px;
-  float: left;
-}
-.elearningLayout .elearningList .entry .details .footer .readMore {
-  float: right;
-}
-.elearningLayout .elearningList .entry .divider {
-  border-bottom: 1px solid #eeeeee;
-  padding: 0;
-  margin: 15px 20%;
-  width: 60%;
-}
 .elearningLayout .elearningList:before {
   content: '';
   position: absolute;
