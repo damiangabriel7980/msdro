@@ -7113,7 +7113,6 @@ body {
   background-color: #006d69;
 }
 .navbarMedic .dropdown-menu li:hover a .glyphicon {
-  margin-left: -10px;
   color: darkgrey;
 }
 .navbarMedic .dropdown-menu.myProfile {
