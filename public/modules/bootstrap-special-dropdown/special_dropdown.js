@@ -16,7 +16,8 @@
                 genericObject: '=',
                 amazonPath: '=',
                 defaultImageUrl: '=',
-                arrayOfObjects: '='
+                arrayOfObjects: '=',
+                defaultStyles: '='
             },
             link: function(scope, element, attrs) {
                 scope.callSelect = function (genericObject) {

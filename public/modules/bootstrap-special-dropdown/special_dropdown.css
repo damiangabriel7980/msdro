@@ -38,3 +38,29 @@
 .specialGroupDropdown:hover .my-dropdown-menu {
   display: block;
 }
+.specialMenu {
+  position: absolute;
+  right: 5px;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+  top: 13px;
+}
+@media (max-width: 768px) {
+  .specialMenu {
+    right: 55px;
+  }
+}
+@media (min-width: 769px) and (max-width: 1279px) {
+  .specialMenu {
+    right: 70px;
+  }
+}
+.subitems {
+  color: #009d97;
+}
+.subitems:hover {
+  border-left: 3px solid #00514d;
+  color: #00514d;
+  padding: 15px 15px 15px 12px;
+}

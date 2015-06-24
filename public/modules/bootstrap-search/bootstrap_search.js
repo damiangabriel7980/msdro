@@ -10,14 +10,15 @@
                 isInDropdown: '=',
                 inputWidthClass: '@',
                 searchWidthClass: '@',
-                onSearch: '='
+                onSearch: '=',
+                defaultStyle: '='
             },
             link: function(scope, element, attrs) {
                 scope.callSearch = function (term) {
                     scope.onSearch(term);
                 };
                 scope.animateInput=function(){
-                    angular.element('.popSearch').toggleClass(scope.inputWidthClass);
+                    angular.element('.popSearch').toggleClass(scope.inputWidthClass?scope.inputWidthClass:'newWidthPopSearch');
                     angular.element('.input-group-addon').toggleClass('btnSearchBefore');
                 };
             }

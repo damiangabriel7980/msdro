@@ -131,7 +131,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <special-dropdown dropdown-class="specialMenu" item-class="subitems" generic-object="specialGroupSelected" array-of-objects="specialGroups" amazon-path="pathAmazonDev" default-image-url="defaultGroupPhoto" on-item-select="selectSpecialGroup">
+            <special-dropdown default-styles=true generic-object="specialGroupSelected" array-of-objects="specialGroups" amazon-path="pathAmazonDev" default-image-url="defaultGroupPhoto" on-item-select="selectSpecialGroup">
             </special-dropdown>
             <ul class="profile nav navbar-nav pull-right dropdown">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -152,7 +152,7 @@
             <ul class="nav navbar-nav navbarMenu">
                 <li ng-click="openNavbar()">
                     <ul class="nav navbar-nav navbar-right">
-                       <bootstrap-search is-in-dropdown=true on-search="searchText" search-width-class="expandSearchInDropdown" input-width-class="newWidthPopSearch">
+                       <bootstrap-search is-in-dropdown=true on-search="searchText" default-style=true>
                        </bootstrap-search>
                     </ul>
                 </li>
@@ -198,7 +198,7 @@
 
             </ul>
             <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
-                <bootstrap-search is-in-dropdown=false on-search="searchText" search-width-class="expandSearchNoSpecial" input-width-class="newWidthPopSearch">
+                <bootstrap-search is-in-dropdown=false on-search="searchText" default-style=true>
                 </bootstrap-search>
             </ul>
 
