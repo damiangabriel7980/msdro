@@ -1,0 +1,54 @@
+.vertical-content-list {
+  padding: 10px;
+}
+.vertical-content-list .image {
+  padding: 0;
+}
+.vertical-content-list .image img {
+  width: 100%;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.vertical-content-list .TextWrapper {
+  padding: 0;
+  height: 12em;
+  overflow: hidden;
+}
+.vertical-content-list .TextWrapper a {
+  color: #006d69;
+  cursor: pointer;
+}
+.vertical-content-list .TextWrapper .Description {
+  padding: 0;
+  margin-top: 5px;
+}
+.vertical-content-list .TextWrapper:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  min-height: 4.5em;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+}
+.vertical-content-list .buttonWrapper {
+  padding: 0;
+  margin-top: 15px;
+}
+.vertical-content-list .buttonWrapper .btn-news {
+  background-color: transparent;
+  color: black;
+}
+.vertical-content-list .buttonWrapper .btn-news:hover {
+  color: #ffffff;
+  background-color: #31b0d5;
+  border-color: #269abc;
+}
+.vertical-content-list.withBackground {
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+}
+.vertical-content-list.withBackground .TextWrapper:after {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #f5f5f5 100%);
+}

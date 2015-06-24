@@ -1,4 +1,4 @@
-controllers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 'ContentService', function($scope, $rootScope, $stateParams, ContentService) {
+controllers.controller('ArticlesView', ['$scope', '$state', '$rootScope', '$stateParams', 'ContentService', function($scope, $state, $rootScope, $stateParams, ContentService) {
 
     $scope.articlesLimit = 3;
 
@@ -13,5 +13,9 @@ controllers.controller('ArticlesView', ['$scope', '$rootScope', '$stateParams', 
 
     //------------ get category name
     $scope.categoryName = $rootScope.getNavCategoryName($stateParams.category);
+
+    $scope.navigateToArticles = function (content) {
+        $state.go('articole.detail', {id: content._id});
+    }
 
 }]);

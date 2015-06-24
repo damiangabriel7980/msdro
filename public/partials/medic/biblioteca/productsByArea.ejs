@@ -1,20 +1,8 @@
 <div class="col-md-11 productsView">
     <div class="col-md-12 noProducts" ng-if="products.length == 0"><h4>Nu exista produse conform criteriilor selectate</h4></div>
-    <div class="col-md-3 productWrapper" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
-        <div class="col-md-12 product well">
-            <div class="col-md-12 imageWrapper">
-                <div class="col-md-12 image">
-                    <img  ng-src="{{prod.image_path ? pathAmazonDev + prod.image_path : defaultProductImage}}" alt="{{prod.name}}"/>
-                </div>
-            </div>
-            <div class="col-md-12 content">
-                <div class="col-md-12 noPadding MSDgreen" ui-sref="biblioteca.produse.prodById({id:prod._id})"><h4><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
-                <div class="col-md-12 noPadding" convert-special conver="prod.description" ng-bind-html="convertAndTrustAsHtml(prod.description)"></div>
-            </div>
-            <div class="col-md-12 noPadding details">
-                <button class="btn btn-sm btn-info" ui-sref="biblioteca.produse.prodById({id:prod._id})">Detalii produs</button>
-            </div>
-        </div>
+    <div class="col-md-3 product" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
+        <vertical-content-list content="prod" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
+                               title-attr="name" text-attr="description" navigate="navigateProductDetails" with-background></vertical-content-list>
     </div>
     <div class="col-md-12 text-center">
         <button class="btn btn-sm btn-info" ng-class="{'hidden': !products || products.length <= lmt}" ng-click="increaseLimit()">Mai multe produse</button>

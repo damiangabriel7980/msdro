@@ -6883,59 +6883,6 @@ html body .rootView {
 .contentLayout .articlesList .article {
   padding: 0;
 }
-.contentLayout .articlesList .article .picture {
-  padding: 0;
-}
-.contentLayout .articlesList .article .picture div {
-  border: 5px solid #eeeeee;
-  border-radius: 10px;
-}
-.contentLayout .articlesList .article .picture div img {
-  width: 100%;
-  border-radius: 5px;
-}
-.contentLayout .articlesList .article .details {
-  padding: 5px 0 0 15px;
-}
-.contentLayout .articlesList .article .details .title {
-  padding: 0;
-  margin-bottom: 10px;
-}
-.contentLayout .articlesList .article .details .title a {
-  color: #008780;
-  font-size: 20px;
-  font-weight: bold;
-}
-.contentLayout .articlesList .article .details .excerpt {
-  padding: 0;
-  margin-bottom: 15px;
-  font-size: 15px;
-}
-.contentLayout .articlesList .article .details .excerpt img {
-  visibility: hidden;
-  display: none;
-}
-.contentLayout .articlesList .article .details .author {
-  font-size: 13px;
-  font-weight: bold;
-  padding: 0;
-}
-.contentLayout .articlesList .article .details .footer {
-  padding: 0;
-}
-.contentLayout .articlesList .article .details .footer .date {
-  font-size: 13px;
-  float: left;
-}
-.contentLayout .articlesList .article .details .footer .readMore {
-  float: right;
-}
-.contentLayout .articlesList .article .divider {
-  border-bottom: 1px solid #eeeeee;
-  padding: 0;
-  margin: 15px 20%;
-  width: 60%;
-}
 .contentLayout .articlesList:before {
   content: '';
   position: absolute;

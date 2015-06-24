@@ -1,0 +1,13 @@
+<div class="col-xs-12 vertical-content-list" ng-class="{'withBackground': withBackground}">
+    <div class="col-xs-12 image">
+        <img ng-src="{{content[imagePathAttr]?imagePathPrefix+content[imagePathAttr]:defaultImagePath}}" ng-click="navigate(content)">
+    </div>
+    <div class="col-xs-12 TextWrapper">
+        <div class="col-xs-12 Description"><a ng-click="navigate(content)"><b ng-bind-html="trustAsHtml(content[titleAttr])"></b></a></div>
+        <div class="col-xs-12 Description" ng-bind-html="convertAndTrustAsHtml(content[textAttr])"></div>
+
+    </div>
+    <div class="col-xs-12 buttonWrapper hidden-sm hidden-xs">
+        <a class="btn btn-info btn-sm btn-news" ng-click="navigate(content)"> Citeste mai mult </a>
+    </div>
+</div>

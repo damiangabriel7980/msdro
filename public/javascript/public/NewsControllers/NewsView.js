@@ -1,4 +1,4 @@
-controllers.controller('NewsView', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
+controllers.controller('NewsView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', function($scope, $state, $rootScope, ContentService, $sce) {
 
     $scope.articlesLimit = 3;
 
@@ -10,5 +10,8 @@ controllers.controller('NewsView', ['$scope', '$rootScope', 'ContentService', '$
     ContentService.mostRead.query({type: 1}).$promise.then(function (resp) {
         $scope.mostRead = resp.success;
     });
+    $scope.navigateToNews = function (content) {
+        $state.go('stiri.detail', {id: content._id});
+    }
 
 }]);

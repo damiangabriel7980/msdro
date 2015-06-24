@@ -32,20 +32,9 @@
             <div class="col-xs-12 Title">
                 <h3>ULTIMELE NOUTATI</h3>
             </div>
-            <div class="col-xs-4 Article" ng-repeat="n in news | limitTo: 3">
-                <div class="col-xs-10 homeNewsArticleImage">
-                    <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
-                        <img class="img-responsive" height="155" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
-                    </a>
-                </div>
-                <div class="col-xs-10 TextWrapper">
-                    <div class="col-xs-10 title Description"><a ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b convert-special conver="n.title" ng-bind-html="trustAsHtml(n.title)"></b></a></div>
-                    <div class="col-xs-10 header Description" convert-special conver="n.text" ng-bind-html="convertAndTrustAsHtml(n.text)"></div>
-
-                </div>
-                <div class="col-xs-10 buttonWrapper hidden-sm hidden-xs">
-                    <a class="btn btn-news btn-info btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"> Citeste mai mult </a>
-                </div>
+            <div class="col-xs-4 content" ng-repeat="n in news | limitTo: 3">
+                <vertical-content-list content="n" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
+                                       title-attr="title" text-attr="text" navigate="navigateToNews"></vertical-content-list>
             </div>
         </div>
         <div class="col-xs-10"><hr></div>
@@ -53,19 +42,9 @@
             <div class="col-xs-12 Title">
                 <h3>ULTIMELE NOUTATI STIINTIFICE</h3>
             </div>
-            <div class="col-xs-4 Article" ng-repeat="n in scientificNews | limitTo: 3">
-                <div class="col-xs-10 homeNewsArticleImage">
-                    <a ui-sref="noutati.articol({articleType:n.type, articleId:n._id})">
-                        <img class="homeNews-img-thumbnail img-responsive" ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
-                    </a>
-                </div>
-                <div class="col-xs-10 TextWrapper">
-                    <div class="col-xs-10 title Description"><a class="homeNewsDarkTitle" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"><b convert-special conver="n.title" ng-bind-html="convertAndTrustAsHtml(n.title)"></b></a></div>
-                    <div class="col-xs-10 header Description" convert-special conver="n.text" ng-bind-html="convertAndTrustAsHtml(n.text)"></div>
-                </div>
-                <div class="col-xs-10 buttonWrapper hidden-xs hidden-sm">
-                    <a class="btn btn-news btn-info btn-sm" ui-sref="noutati.articol({articleType:n.type, articleId:n._id, fromHome: 1})"> Citeste mai mult</a>
-                    </div>
+            <div class="col-xs-4 content" ng-repeat="n in scientificNews | limitTo: 3">
+                <vertical-content-list content="n" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
+                                       title-attr="title" text-attr="text" navigate="navigateToArticles"></vertical-content-list>
             </div>
         </div>
     </div>
