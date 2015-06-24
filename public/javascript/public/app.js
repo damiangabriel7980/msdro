@@ -17,7 +17,8 @@ var app = angular.module('app',
         'mobileContentList',
         'offClick',
         'fancyCarousel',
-        'footerResponsive'
+        'footerResponsive',
+        'horizontalContentList'
     ]);
 
 app.config(['$locationProvider', function($locationProvider) {
