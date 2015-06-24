@@ -7657,6 +7657,17 @@ h4 {
     image-orientation: from-image;
   }
 }
+.popover {
+  z-index: 1000 ! important;
+  width: 376px !important;
+}
+.popover-title {
+  background: #006d69;
+  color: white;
+}
+.popover-content {
+  color: black;
+}
 @media (max-device-width: 480px) {
   .fc-header-title h2 {
     font-size: 20px;
