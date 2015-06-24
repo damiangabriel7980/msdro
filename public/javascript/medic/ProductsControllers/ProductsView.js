@@ -7,7 +7,7 @@
  *
  * @requires $scope
  * */
-controllers.controller('ProductsView', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout){
+controllers.controller('ProductsView', ['$scope', '$state', '$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', function($scope, $state, $rootScope,ProductService,$stateParams,$sce,$window,$timeout){
     window.scrollTo(0,0);
     $scope.lmt=8;
     $scope.status = {
@@ -37,4 +37,7 @@ controllers.controller('ProductsView', ['$scope','$rootScope' ,'ProductService',
         else
             $scope.products = $scope.firstLetters[key];
     };
+    $scope.navigateProductDetails = function (product) {
+        $state.go('biblioteca.produse.prodById', {id:product._id});
+    }
 }]);

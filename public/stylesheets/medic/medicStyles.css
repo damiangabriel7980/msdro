@@ -6333,46 +6333,8 @@ body {
   padding: 0;
   text-align: center;
 }
-.productsView .productWrapper {
-  padding: 0 15px 0 0;
-}
-.productsView .productWrapper .product {
-  padding: 0;
-}
-.productsView .productWrapper .product .imageWrapper {
-  padding: 15px 15px 0 15px;
-}
-.productsView .productWrapper .product .imageWrapper .image {
-  padding: 0;
-  text-align: center;
-  border: 3px solid #dddddd;
-  background-color: #dddddd;
-  border-radius: 5px;
-}
-.productsView .productWrapper .product .imageWrapper .image img {
-  background-color: #dddddd;
-  border-radius: 4px;
-  width: 100%;
-}
-.productsView .productWrapper .product .content {
-  width: 100%;
-  padding: 0 15px 15px 15px;
-  position: relative;
-  height: 13em;
-  overflow: hidden;
-}
-.productsView .productWrapper .product .content:after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  min-height: 4.5em;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #f5f5f5 100%);
-}
-.productsView .productWrapper .product .details {
-  padding: 10px 15px 10px 15px;
-  text-align: right;
+.productsView .product {
+  margin-bottom: 25px;
 }
 .productDetails .imageAndRCP img {
   width: 100%;
