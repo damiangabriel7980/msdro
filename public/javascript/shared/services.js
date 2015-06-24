@@ -76,6 +76,19 @@ services.factory('Utils', ['$sce', function ($sce) {
             return text.split(" ").slice(0, wordsCount).join(" ") + "...";
         }
     };
+    var createHeader = function (text,length) {
+        var textLength = text?text.length:0;
+        if(textLength > length){
+            var trimmed = htmlToPlainText(text).substring(0,length);
+            var i = trimmed.length;
+            while(trimmed[i]!=' ' && i>0) i--;
+            trimmed = trimmed.substr(0, i);
+            if(trimmed.length > 0) trimmed = trimmed+"...";
+            return trimmed;
+        }else{
+            return htmlToPlainText(text);
+        }
+    };
     return{
         fileToBase64: function (file, callback) {
             var reader = new FileReader();
@@ -138,7 +151,8 @@ services.factory('Utils', ['$sce', function ($sce) {
         htmlToPlainText: htmlToPlainText,
         convertAndTrustAsHtml: convertAndTrustAsHtml,
         trimText: trimText,
-        trimWords: trimWords
+        trimWords: trimWords,
+        createHeader: createHeader
     }
 }]);
 services.factory('Diacritics',function(){

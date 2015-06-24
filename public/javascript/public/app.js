@@ -164,26 +164,11 @@ app.run(
                 else
                     $state.go('publicSearch',{},{reload: true});
             };
+
             //global functions
-            $rootScope.htmlToPlainText = function(text) {
-                return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-            };
-            $rootScope.createHeader = function (text,length) {
-                var textLength = text?text.length:0;
-                if(textLength > length){
-                    var trimmed = $rootScope.htmlToPlainText(text).substring(0,length);
-                    var i = trimmed.length;
-                    while(trimmed[i]!=' ' && i>0) i--;
-                    trimmed = trimmed.substr(0, i);
-                    if(trimmed.length > 0) trimmed = trimmed+"...";
-                    return trimmed;
-                }else{
-                    return $rootScope.htmlToPlainText(text);
-                }
-            };
-            $rootScope.trustAsHtml = function (data) {
-                return $sce.trustAsHtml(data);
-            };
+            $rootScope.htmlToPlainText = Utils.htmlToPlainText;
+            $rootScope.createHeader = Utils.createHeader;
+            $rootScope.trustAsHtml = Utils.trustAsHtml;
             $rootScope.isMobile = Utils.isMobile;
 
             //contact modal
