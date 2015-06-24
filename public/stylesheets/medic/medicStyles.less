@@ -150,6 +150,8 @@ body{
   }
 }
 .main-view-container {
+  overflow-x: hidden;
+  margin-top:20px !important;
   width: 100%;
   position:relative;
   top: 0;
@@ -919,27 +921,68 @@ ul.products li {
 }
 
 //===================================================================================================== HEADER / FOOTER
-.navbar-fixed-top {
-  padding-top: 10px;
+.navbarMedic {
+  padding: 10px 25px 0 25px;
+  border-bottom: 1px solid #ccc;
   .container{
     padding: 0;
     width: 100%;
+    padding-bottom: 8px !important;
+  }
+  .dropdown-menu{
+    border-radius: 6px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    min-width: 180px;
+    background-color: #F0F0F0;
+    li{
+      padding: 10px 5px 10px 5px;
+      min-width: 180px;
+      height: 50px;
+      &:hover{
+        border-radius: 3px;
+        background-color: @MSDTitle;
+        a {
+          color: #ffffff;
+          background-color: @MSDTitle;
+          .glyphicon{
+            margin-left: -10px;color:darkgrey;
+          }
+        }
+      }
+    }
+    &.myProfile{
+      right: auto;
+      margin-top: 5px;
+      left: 0 !important;
+      @media(max-width: 1279px){
+        left: auto !important;
+      }
+      @media(min-width: 1280px)
+      {
+        right: 100px !important;
+      }
+    }
   }
   .navbar-brand{
-    padding-top: 0px;
-    padding-left:35px;
-    padding-bottom: 0px;
-    padding-right:0px;
+    padding: 0 0 0 35px;
+    margin-bottom: 6px;
     @media(max-width: 767px){
-      padding-left: 0px;
-      padding-top: 0px;
-      padding-bottom: 0px;
-      padding-right:0px;
+      padding: 0;
+    }
+    img{
+      height: 50px;
+      @media (max-width: 1277px){
+        height: 40px;
+        margin-top: 9px;
+      }
     }
   }
   .profile{
     position: absolute;
     right: 234px;
+    margin-top: 8px;
+    margin-right: 10px;
     @media(min-width: 769px) and (max-width: @grid-float-breakpoint-max){
       right: 10px;
     }
@@ -951,6 +994,19 @@ ul.products li {
     background-color: #ffffff;
     @media (max-width: @grid-float-breakpoint-max) {
       border: 1px solid @gray-lighter;
+    }
+    overflow-x: hidden;
+    overflow-y: hidden !important;
+    max-height: 375px!important;
+    @media only screen and (orientation: landscape) {
+      overflow-y: visible !important;
+      max-height: 340px!important;
+    }
+  }
+  .navbar-nav{
+    &.navbarMenu{
+      padding-top: 4px;
+      padding-left: 4px;
     }
   }
   .userDropdown{
@@ -1332,25 +1388,6 @@ ul.products li {
 .MSDgreenDarker{color: @MSDgreenDarker;}
 .gray{color: @gray;}
 .justified{text-align: justify;}
-.myMenu{
-  border-radius: 6px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-  min-width: 180px;
-  li{
-    padding: 10px 5px 10px 5px;
-    min-width: 180px;
-    height: 50px;
-    &:hover{
-      border-radius: 3px;
-      background-color: @MSDTitle;
-      a {
-        color: #ffffff;
-        background-color: @MSDTitle;
-      }
-    }
-  }
-}
 .newsSection{
   border-radius: 6px;
   padding-top: 0px;
@@ -1471,9 +1508,6 @@ ul.products li {
 }
 .nameMedic{
   padding-top: 0.8%;
-}
-.navbar-border{
-  border-bottom: 1px solid #ccc;
 }
 .padd21px{
   padding-left: 21px;
@@ -1826,18 +1860,6 @@ hr{
 .height20{
   height:20px;
 }
-.myProfile{
-  right: auto;
-  margin-top: 5px;
-  left: 0 !important;
-  @media(max-width: 1279px){
-    left: auto !important;
-  }
-  @media(min-width: 1280px)
-  {
-    right: 100px !important;
-  }
-}
 .myProfileNoSpecial{
   right: 0 !important;
   margin-top: 5px;
@@ -1953,13 +1975,6 @@ hr{
     font-size: 22px;
   }
 
-}
-.logoBottom{
-  margin-bottom: 6px;
-}
-.menuPadding{
-  padding-top: 4px;
-  padding-left: 4px;
 }
 .btnCloseProfile{
   margin-top: 13px;
@@ -2100,13 +2115,6 @@ a:focus{
 .specialGroupMobile{
   margin-right: 15px;
   margin-top: 4px
-}
-.fixedHeightLogo{
-  height: 50px;
-  @media (max-width: 1277px){
-    height: 40px;
-    margin-top: 9px;
-  }
 }
 h3{
   font-size: 20px;
@@ -2260,15 +2268,6 @@ h4{
 }
 .margin65pxRight{
   margin-right: 65px;
-}
-.noXOver{
-  overflow-x: hidden;
-  overflow-y: hidden !important;
-  max-height: 375px!important;
-  @media only screen and (orientation: landscape) {
-    overflow-y: visible !important;
-    max-height: 340px!important;
-  }
 }
 @media(max-width: 768px){
   .specialProdImage{
