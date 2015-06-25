@@ -6776,58 +6776,6 @@ html body .rootView {
     margin-top: 30px;
   }
 }
-.searchResults .article {
-  padding: 0;
-}
-.searchResults .article .picture {
-  padding: 0;
-}
-.searchResults .article .picture div {
-  border: 5px solid #eeeeee;
-  border-radius: 10px;
-}
-.searchResults .article .picture div img {
-  width: 100%;
-  border-radius: 5px;
-}
-.searchResults .article .details {
-  padding: 5px 0 0 15px;
-}
-.searchResults .article .details .title {
-  padding: 0;
-  margin-bottom: 10px;
-}
-.searchResults .article .details .title a {
-  color: #008780;
-  font-size: 20px;
-  font-weight: bold;
-}
-.searchResults .article .details .excerpt {
-  padding: 0;
-  margin-bottom: 15px;
-  font-size: 15px;
-}
-.searchResults .article .details .author {
-  font-size: 13px;
-  font-weight: bold;
-  padding: 0;
-}
-.searchResults .article .details .footer {
-  padding: 0;
-}
-.searchResults .article .details .footer .date {
-  font-size: 13px;
-  float: left;
-}
-.searchResults .article .details .footer .readMore {
-  float: right;
-}
-.searchResults .article .divider {
-  border-bottom: 1px solid #eeeeee;
-  padding: 0;
-  margin: 15px 20%;
-  width: 60%;
-}
 .contentLayout {
   margin-top: 30px;
   padding: 0;
