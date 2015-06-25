@@ -15,7 +15,6 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
         "Diabetes and Nutrition": "Glycemizer.html",
         "Immunology - Rheumatology":"Immunology.html"
     };
-    $scope.specialWidgetUrl = null;
 
     $scope.$watch($rootScope.specialGroupSelected, function () {
         //check if special group is selected
