@@ -4233,7 +4233,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/multimedia')
         .get(function(req,res){
         var findObj={};
-            if(req.query.idArea!=0)
+            if(req.query.idArea && req.query.idArea!=0)
                 findObj['therapeutic-areasID'] = {$in: [req.query.idArea]};
             else {
                 getNonSpecificUserGroupsIds(req.user).then(
@@ -4247,10 +4247,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(req.query.idMultimedia){
                             Multimedia.findById(req.query.idMultimedia,function(err, cont) {
                                 if(err) {
+                                    console.log(err);
                                     res.json({error:err});
                                 }
-                                else
+                                else{
+                                    console.log(cont);
                                     res.json({success:cont});
+                                }
                             });
                         }else{
                             if(req.query.idArea==0)
