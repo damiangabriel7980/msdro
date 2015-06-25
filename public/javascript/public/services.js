@@ -149,14 +149,14 @@ services.factory('RootService', ['$resource', function ($resource) {
 
 services.factory('HomeService', ['$resource', function($resource){
     return {
-        getCarouselData: $resource('apiPublic/getCarouselData/', {}, {
-            query: { method: 'GET', isArray: true }
+        CarouselData: $resource('apiPublic/getCarouselData/', {}, {
+            query: { method: 'GET', isArray: false }
         }),
         searchResults: $resource('apiPublic/publicSearch', {}, {
             query: { method: 'GET', isArray: false }
         }),
         events: $resource('apiPublic/events', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

@@ -19,13 +19,12 @@ var getIds = function (documentsArray) {
 module.exports = function(app, logger, router) {
 
     router.route('/getCarouselData')
-
         .get(function (req, res) {
             PublicCarousel.find({enable: true}).sort({order_index: 1}).exec(function (err, resp) {
                 if(err){
-                    res.send(err);
+                    res.send({error:err});
                 }else{
-                    res.send(resp);
+                    res.send({success:resp});
                 }
             })
         });
@@ -198,9 +197,9 @@ module.exports = function(app, logger, router) {
             var endDate = new Date(new Date().setDate(new Date().getDate()+(daysToReturn/2)));
             Events.find({enable: {$exists: true, $ne: false}, start: {$gt: startDate, $lt: endDate}, isPublic: true}).exec(function (err, resp) {
                 if(err){
-                    res.send(err);
+                    res.send({error:err});
                 }else{
-                    res.send(resp);
+                    res.send({success:resp});
                 }
             });
         });

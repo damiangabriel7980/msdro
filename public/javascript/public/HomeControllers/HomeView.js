@@ -20,12 +20,12 @@ controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce
 
     //------------------------------------------------------------------------------------------------- get all content
 
-    HomeService.getCarouselData.query().$promise.then(function(resp){
-        $scope.carouselSlides = resp;
+    HomeService.CarouselData.query().$promise.then(function(resp){
+        $scope.carouselSlides = resp.success;
     });
 
     HomeService.events.query().$promise.then(function (resp) {
-        $scope.events = resp;
+        $scope.events = resp.success;
     });
 
     $scope.carouselLearnMore = function (slide) {
