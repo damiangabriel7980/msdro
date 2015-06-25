@@ -6,6 +6,9 @@
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 body{
   font-size: 14px;
+  a{
+    cursor: pointer;
+  }
   @media(max-device-width: 767px){
     font-size: 15px;
   }
@@ -100,44 +103,6 @@ body{
 .articlesStyles{
   .articlesWrapper{
     padding: 0;
-    .articlesMenu{
-      border-right: 1px solid @gray-base;
-      padding: 0;
-      padding-left: 21px;
-      .Title{
-        padding-left: 25px;
-        padding-right: 25px;
-      }
-      .articleBox{
-        padding: 5px 5px 5px 5px;
-        margin-bottom: 15px;
-        .wrapper{
-          padding: 0;
-          padding-left: 5px;
-          .title{
-            font-size: 17px;
-            font-weight: bold;
-            padding-bottom: 10px;
-            cursor: pointer;
-            color:@MSDgreenDarker;
-          }
-          a{
-            cursor: pointer;
-            color:@MSDgreenDarker;
-          }
-          .trimmedArticle{
-            padding-bottom: 10px;
-            text-align: justify;
-          }
-          .author{
-            font-weight: bold;
-          }
-          .lastUpdate{
-
-          }
-        }
-      }
-    }
     .articlesList{
       .articlesMoreNews{
         clear: both;margin:0 auto;

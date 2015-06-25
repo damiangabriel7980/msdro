@@ -1,24 +1,10 @@
 <div class="articlesStyles">
     <div class="col-md-12 articlesWrapper">
-        <div class="col-md-4 hidden-xs hidden-sm articlesMenu">
-            <div class="col-md-12 Title">
-            <h3>CELE MAI CITITE {{title}}</h3>
-            </div>
-            <div ng-repeat="cont in content | limitTo: 3">
-                <div class="col-md-12 articleBox">
-                     <div class="col-md-12 wrapper">
-                        <div class="col-md-12 title" ng-click="navigateToContent(cont)" convert-special conver='cont.title' ng-bind-html="trustAsHtml(cont.title)"></div>
-                        <div class="col-md-12 trimmedArticle" convert-special conver="cont.text" ng-bind-html="trimText(htmlToPlainText(cont.text), 100)"></div>
-                        <div class="col-md-12"><a ng-click="navigateToContent(cont)">Citeste mai mult &nbsp;</a></div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-4">
+            <widget-most-read objects-array="mostRead" objects-limit="3" widget-title="{{'CELE MAI CITITE ' + title}}"
+                              title-attr="title" text-attr="text" link-text="Citeste mai mult" navigate="navigateToContent"
+                              delimiter-right></widget-most-read>
         </div>
-        <div class="col-md-8 articlesList">
-            <ui-view>
-
-            </ui-view>
-        </div>
+        <div class="col-md-8 articlesList" ui-view></div>
     </div>
-
 </div>
