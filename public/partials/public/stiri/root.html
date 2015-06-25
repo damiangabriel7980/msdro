@@ -1,15 +1,7 @@
 <div class="col-md-12 contentLayout">
-    <div class="col-md-3 mostRead" ng-if="!isMobile()">
-        <div class="col-md-12 mainTitle">
-            CELE MAI CITITE STIRI
-        </div>
-        <div class="col-md-12 article" ng-repeat="a in mostRead track by $index">
-            <div class="col-md-12 title"><a ui-sref="stiri.detail({id: a._id})" convert-special to-convert="a.title"
-                                            ng-bind-html="trustAsHtml(a.title)"></a></div>
-            <div class="col-md-12 excerpt" convert-special to-convert="a.text" ng-bind-html="trustAsHtml(createHeader(a.text, 150))"></div>
-            <div class="col-md-12 readMore"><a ui-sref="stiri.detail({id: a._id})">Citeste mai mult</a></div>
-            <div class="col-md-12 divider" ng-if="$index!=mostRead.length-1"></div>
-        </div>
+    <div class="col-md-3 noPadding" ng-if="!isMobile()">
+        <widget-most-read objects-array="mostRead" widget-title="CELE MAI CITITE STIRI" title-attr="title" text-attr="text"
+                          link-text="Citeste mai mult" navigate="navigateToNews" delimiter-right></widget-most-read>
     </div>
     <div class="col-md-9 noPadding">
         <div ui-view></div>

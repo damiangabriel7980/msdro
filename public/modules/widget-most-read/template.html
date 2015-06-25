@@ -1,0 +1,11 @@
+<div class="col-md-12 widget-most-read" ng-class="{'delimiterRight': delimiterRight}">
+    <div class="col-md-12 mainTitle">
+        {{widgetTitle}}
+    </div>
+    <div class="col-md-12 article" ng-repeat="a in objectsArray track by $index">
+        <div class="col-md-12 title"><a ng-click="navigate(a)" ng-bind-html="trustAsHtml(a[titleAttr])"></a></div>
+        <div class="col-md-12 excerpt" ng-bind-html="trustAsHtml(createHeader(a[textAttr], 150))"></div>
+        <div class="col-md-12 readMore"><a ng-click="navigate(a)">{{linkText}}</a></div>
+        <div class="col-md-12 divider" ng-if="$index!=objectsArray.length-1"></div>
+    </div>
+</div>
