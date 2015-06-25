@@ -1,4 +1,4 @@
-controllers.controller('ElearningView', ['$scope', '$rootScope', 'ContentService', '$sce', '$stateParams', 'therapeuticAreas', function($scope, $rootScope, ContentService, $sce, $stateParams, therapeuticAreas) {
+controllers.controller('ElearningView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', '$stateParams', 'therapeuticAreas', function($scope, $state, $rootScope, ContentService, $sce, $stateParams, therapeuticAreas) {
 
     $scope.contentLimit = 3;
 
@@ -15,5 +15,9 @@ controllers.controller('ElearningView', ['$scope', '$rootScope', 'ContentService
         });
 
     });
+
+    $scope.navigateToElearning = function (content) {
+        $state.go('elearning.detail', {id: content._id});
+    }
 
 }]);

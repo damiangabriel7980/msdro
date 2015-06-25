@@ -35,6 +35,14 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
         }
     };
 
+    $scope.navigateToNews = function (article) {
+        $state.go('noutati.articol', {articleType: article.type, articleId: article._id, fromHome: 1});
+    };
+
+    $scope.navigateToArticles = function (article) {
+        $state.go('noutati.articol', {articleType: article.type, articleId: article._id, fromHome: 1});
+    };
+
        //------------------------------------------------------------------------------------------------- get all content
 
     HomeService.getUserEvents.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {

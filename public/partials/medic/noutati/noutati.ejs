@@ -7,9 +7,9 @@
             <div ng-repeat="cont in content | limitTo: 3">
                 <div class="col-md-12 articleBox">
                      <div class="col-md-12 wrapper">
-                        <div class="col-md-12 title" ui-sref="{{sr}}" convert-special conver='cont.title' ng-bind-html="trustAsHtml(cont.title)"></div>
+                        <div class="col-md-12 title" ng-click="navigateToContent(cont)" convert-special conver='cont.title' ng-bind-html="trustAsHtml(cont.title)"></div>
                         <div class="col-md-12 trimmedArticle" convert-special conver="cont.text" ng-bind-html="trimText(htmlToPlainText(cont.text), 100)"></div>
-                        <div class="col-md-12"><a ui-sref="{{sr}}">Citeste mai mult &nbsp;</a></div>
+                        <div class="col-md-12"><a ng-click="navigateToContent(cont)">Citeste mai mult &nbsp;</a></div>
                     </div>
                 </div>
             </div>

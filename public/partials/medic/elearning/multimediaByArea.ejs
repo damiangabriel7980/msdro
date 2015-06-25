@@ -1,22 +1,11 @@
 <div class="col-md-12 multimediaView">
-    <div class="col-md-12 message" ng-if="multimedias.message"><h2>{{multimedias.message}}</h2></div>
-    <div ng-if="multimedias.length>=1 && !multimedias.message">
-        <div class="col-xs-12 multimediaWrapper" ng-repeat="media in multimedias | orderBy:'title'">
-            <div class="col-xs-12 well multimedia">
-                <div class="col-md-2 image">
-                    <img class="img-thumbnail" alt="{{media.title}}"
-                         ng-src="{{media.thumbnail_path?pathAmazonDev+media.thumbnail_path:(media.type==1?defaultVideoImage:defaultSlideImage)}}"/>
-                </div>
-                <div class="col-md-10 col-xs-8 col-sm-8 content">
-                    <div class="col-md-12 title">
-                        <h4><a class="handCursor" ng-click="openMultimedia(media._id)">{{media.title}}</a></h4>
-                    </div>
-                    <div class="col-md-12 noPadding" convert-special conver="prod.description" ng-bind-html="trimText(htmlToPlainText(media.description), 190)"></div>
-                </div>
-                <div class="col-md-12 showMore">
-                    <a class="btn btn-info btn-sm btn-transparent pull-right" ng-click="openMultimedia(media._id)">Vezi material</a>
-                </div>
-            </div>
+    <div class="col-md-12 message" ng-if="multimedias[0].message"><h2>{{multimedias[0].message}}</h2></div>
+    <div ng-if="multimedias.length>=1 && !multimedias[0].message">
+        <div class="col-xs-12 multimediaWrapper" ng-repeat="prod in multimedias | orderBy:'title'">
+            <horizontal-content-list content="prod" image-path-attr="thumbnail_path" image-path-prefix="{{pathAmazonDev}}"
+                                     default-image-path="{{prod.type==1?defaultVideoImage:defaultSlideImage}}"
+                                     title-attr="title" text-attr="description" button-label="Vezi material"
+                                     navigate="openMultimedia" with-background smaller-image></horizontal-content-list>
         </div>
     </div>
 </div>

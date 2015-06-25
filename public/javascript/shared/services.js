@@ -49,7 +49,46 @@ services.factory('ActionModal', ['$modal', function($modal){
         }
     }
 }]);
-services.factory('Utils', function () {
+services.factory('Utils', ['$sce', function ($sce) {
+    var trustAsHtml = function (data) {
+        return $sce.trustAsHtml(data);
+    };
+    var htmlToPlainText = function(text) {
+        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
+    };
+    var convertAndTrustAsHtml = function (data) {
+        return $sce.trustAsHtml(htmlToPlainText(data));
+    };
+    var trimText = function (text, length) {
+        if(typeof text === "string"){
+            if(text.length > length){
+                //TODO: convert special characters before substring
+                return trustAsHtml(htmlToPlainText(text).substring(0, length) + "...");
+            }else{
+                return trustAsHtml(htmlToPlainText(text));
+            }
+        }else{
+            return "";
+        }
+    };
+    var trimWords = function (text, wordsCount) {
+        if(typeof text === "string"){
+            return text.split(" ").slice(0, wordsCount).join(" ") + "...";
+        }
+    };
+    var createHeader = function (text,length) {
+        var textLength = text?text.length:0;
+        if(textLength > length){
+            var trimmed = htmlToPlainText(text).substring(0,length);
+            var i = trimmed.length;
+            while(trimmed[i]!=' ' && i>0) i--;
+            trimmed = trimmed.substr(0, i);
+            if(trimmed.length > 0) trimmed = trimmed+"...";
+            return trimmed;
+        }else{
+            return htmlToPlainText(text);
+        }
+    };
     return{
         fileToBase64: function (file, callback) {
             var reader = new FileReader();
@@ -107,9 +146,15 @@ services.factory('Utils', function () {
         customDateFormat : function(input){
             return input.getDate() + '/' + (input.getMonth() + 1) + '/' + input.getFullYear();
 
-        }
+        },
+        trustAsHtml: trustAsHtml,
+        htmlToPlainText: htmlToPlainText,
+        convertAndTrustAsHtml: convertAndTrustAsHtml,
+        trimText: trimText,
+        trimWords: trimWords,
+        createHeader: createHeader
     }
-});
+}]);
 services.factory('Diacritics',function(){
     return{
         trimTextAndReplaceDiacritics : function(input, isMobile,trimFlag){

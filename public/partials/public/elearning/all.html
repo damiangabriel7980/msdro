@@ -1,23 +1,9 @@
 <div class="col-sm-12 elearningList">
     <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
         <div class="col-sm-12 entry" ng-repeat="n in elearning | limitTo:contentLimit track by $index">
-            <div class="col-sm-2 picture">
-                <div>
-                    <img ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultSlideImage}}">
-                </div>
-            </div>
-            <div class="col-sm-10 details">
-                <div class="col-sm-12 title">
-                    <a ui-sref="elearning.detail({id: n._id})" convert-special to-convert="n.title" ng-bind-html="trustAsHtml(n.title)"></a>
-                </div>
-                <div class="col-sm-12 description" convert-special to-convert="n.description" ng-bind-html="trustAsHtml(n.description)"></div>
-                <div class="col-sm-12 author" convert-special to-convert="n.author" ng-bind-html='trustAsHtml(n.author)'></div>
-                <div class="col-sm-12 footer">
-                    <div class="date">{{n.date_added | date:'dd/MM/yyyy'}}</div>
-                    <div class="readMore"><a class="btn btn-default btn-sm btnGreenBorder" ui-sref="elearning.detail({id: n._id})">Vizualizeaza</a></div>
-                </div>
-            </div>
-            <div class="col-sm-12 divider" ng-if="$index!=contentLimit-1 && $index!=elearning.length-1"></div>
+            <horizontal-content-list content="n" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultSlideImage}}"
+                                     title-attr="title" text-attr="description" bold-attr-1="author" date-attr="date_added" button-label="Vizualizeaza"
+                                     show-divider="$index!=contentLimit-1 && $index!=elearning.length-1" navigate="navigateToElearning"></horizontal-content-list>
         </div>
     </div>
     <div class="col-sm-12 noPadding" ng-if="isMobile(true)">

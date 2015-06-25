@@ -19,7 +19,9 @@ var app = angular.module('app',
         'offClick',
         'bootstrapSearch',
         'specialDropdown',
-        'footerResponsive'
+        'footerResponsive',
+        'verticalContentList',
+        'horizontalContentList'
     ]);
 
 app.config(['$locationProvider', function($location) {
@@ -228,33 +230,12 @@ app.run(
                 $rootScope.$apply();
             };
 
-            //============================================================================= global functions
-            $rootScope.trustAsHtml = function (data) {
-                return $sce.trustAsHtml(data);
-            };
-            $rootScope.htmlToPlainText = function(text) {
-                return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-            };
-            $rootScope.convertAndTrustAsHtml=function (data) {
-                return $sce.trustAsHtml($rootScope.htmlToPlainText(data));
-            };
-            $rootScope.trimText = function (text, length) {
-                if(typeof text === "string"){
-                    if(text.length > length){
-                        //TODO: convert special characters before substring
-                        return $rootScope.trustAsHtml($rootScope.htmlToPlainText(text).substring(0, length) + "...");
-                    }else{
-                        return $rootScope.trustAsHtml($rootScope.htmlToPlainText(text));
-                    }
-                }else{
-                    return "";
-                }
-            };
-            $rootScope.trimWords = function (text, wordsCount) {
-                if(typeof text === "string"){
-                    return text.split(" ").slice(0, wordsCount).join(" ") + "...";
-                }
-            };
+            //============================================================================= expose global functions
+            $rootScope.trustAsHtml = Utils.trustAsHtml;
+            $rootScope.htmlToPlainText = Utils.htmlToPlainText;
+            $rootScope.convertAndTrustAsHtml = Utils.convertAndTrustAsHtml;
+            $rootScope.trimText = Utils.trimText;
+            $rootScope.trimWords = Utils.trimWords;
             $rootScope.isMobile = Utils.isMobile;
         }
     ]

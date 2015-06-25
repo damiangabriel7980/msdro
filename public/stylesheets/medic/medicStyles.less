@@ -1,4 +1,5 @@
 //import our customizable variables
+@import '../globalVariables';
 @import 'medicVariables';
 
 //import stripped-from-variables version of bootstrap, which will use our custom variables
@@ -48,46 +49,9 @@ body{
     padding: 0;
     text-align: center
   }
-  .productWrapper{
-    padding: 0 15px 0 0;
-    .product{
-      padding: 0;
-      .imageWrapper{
-        padding: 15px 15px 0 15px;
-        .image{
-          padding: 0;
-          text-align: center;
-          border: 3px solid @grayLighter;
-          background-color: @grayLighter;
-          border-radius: 5px;
-          img{
-            background-color: @grayLighter;
-            border-radius: 4px;
-            width: 100%;
-          }
-        }
-      }
-      .content{
-        width: 100%;
-        padding: 0 15px 15px 15px;
-        position: relative;
-        height: 13em;
-        overflow: hidden;
-        &:after{
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          min-height: 4.5em;
-          background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #f5f5f5 100%);
-        }
-      }
-      .details{
-        padding: 10px 15px 10px 15px;
-        text-align: right;
-      }
-    }
+  .product{
+    margin-bottom: 25px;
+    padding: 0 25px 0 0;
   }
 }
 .productDetails{
@@ -113,29 +77,6 @@ body{
   }
   .multimediaWrapper{
     padding: 0 0 25px 0;
-    .multimedia{
-      padding: 0;
-      position: relative;
-      .image{
-        padding: 10px;
-        img{
-          width: 100%;
-          border: 5px solid @grayLighter;
-        }
-      }
-      .content{
-        margin-bottom: 50px;
-        .title{
-          padding: 0;
-        }
-      }
-      .showMore{
-        padding: 10px;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-      }
-    }
   }
 }
 .paddingLeftMobile{
@@ -222,47 +163,8 @@ body{
       }
       .articlesListWrapper{
         padding: 0;
-        background-color: transparent;
-        border: 1px solid transparent;
-        border-radius: 0px;
-        -webkit-box-shadow: none;
-        box-shadow: none;
         .article{
-          padding: 5px 5px 5px 5px;
-          margin-bottom: 15px;
-          margin-left: 0;
-          margin-right: -15px;
-          .image{
-            background-color: @grayLighter;
-            padding: 4px;
-          }
-          .textWrapper{
-            padding-left: 0;
-            .articleTitle{
-              cursor: pointer;
-              color:@MSDgreenDarker
-            }
-            .Description{
-              padding-bottom: 10px;
-              text-align: justify;
-            }
-            .author{
-              font-weight: bold;
-            }
-            .noPadding{
-              padding: 0;
-            }
-            .btn-news{
-              margin-top: 20px;
-              background-color: transparent;
-              color: black;
-              &:hover{
-                color: #fff;
-                background-color: #31b0d5;
-                border-color: #269abc;
-              }
-            }
-          }
+          padding: 0;
         }
       }
     }
@@ -416,70 +318,17 @@ body{
   padding: 0 0 50px 0;
   .leftColumn{
     .lastNewsWrapper{
-        padding-right: 0;
+      padding-right: 0;
       @media(min-width: 1278px) {
         margin-left: 25px;
       }
-        .Title{
-          padding:0;
-          padding-bottom: 8px !important;
-        }
-        .Article{
-          padding:0;
-          @media(max-width: 1278px){
-            padding-bottom: 10px;
-          }
-          .homeNewsArticleImage{
-            padding:0;
-            img{
-              border-radius: 5px !important;
-            }
-          }
-          .TextWrapper{
-            a{
-              color: @MSDTitle;
-            }
-            @media(min-width: 1278px){
-              width: 100%;
-              padding: 0 0 15px 0;
-              position: relative;
-            }
-            height: 12em;
-            overflow: hidden;
-            @media (max-device-width: 700px) {
-              height: 9.5em;
-            }
-            .Description{
-              padding: 0;
-              margin-top: 5px;
-              @media(min-width: 768px) and (orientation: portrait){
-                font-size: 16px;
-              }
-            }
-            &:after{
-              content: '';
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              width: 100%;
-              min-height: 4.5em;
-              background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, @body-bg 100%);
-            }
-          }
-          .buttonWrapper{
-            padding: 0;
-            margin-top: 5px;
-            .btn-news{
-              background-color: transparent;
-              color: black;
-              &:hover{
-                color: @body-bg;
-                background-color: #31b0d5;
-                border-color: #269abc;
-              }
-            }
-          }
-        }
+      .Title{
+        padding: 0 0 0 10px;
+        padding-bottom: 8px !important;
+      }
+      .content{
+        padding: 0 15px 0 0;
+      }
     }
     &:after{
       position: absolute;

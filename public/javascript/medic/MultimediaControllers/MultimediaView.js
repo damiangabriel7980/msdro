@@ -25,9 +25,10 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
         //open: false
     };
     $scope.isMobile = Utils.isMobile(true,false);
-    $scope.openMultimedia=function(idMultimedia) {
+    $scope.openMultimedia=function(multimedia) {
+        if(multimedia._id) multimedia = multimedia._id;
         if($scope.isMobile)
-            $state.go('elearning.multimedia.multimediaMobile',{id: idMultimedia});
+            $state.go('elearning.multimedia.multimediaMobile',{id: multimedia});
         else
         {
             $modal.open({
@@ -39,7 +40,7 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
                 controller: 'MultimediaDetail',
                 resolve:{
                     idMultimedia: function () {
-                        return idMultimedia;
+                        return multimedia;
                     }
                 }
             });

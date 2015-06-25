@@ -1,4 +1,4 @@
-controllers.controller('DownloadsView', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
+controllers.controller('DownloadsView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', function($scope, $state, $rootScope, ContentService, $sce) {
 
     $scope.contentLimit = 3;
 
@@ -10,5 +10,9 @@ controllers.controller('DownloadsView', ['$scope', '$rootScope', 'ContentService
     ContentService.mostRead.query({type: 4, withFile: true}).$promise.then(function (resp) {
         $scope.mostDownloads = resp.success;
     });
+
+    $scope.navigateToDownloads = function (content) {
+        $state.go('downloads.detail', {id: content._id});
+    }
 
 }]);
