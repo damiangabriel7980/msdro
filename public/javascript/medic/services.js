@@ -159,27 +159,18 @@ services.factory('ProductService', ['$resource', function($resource){
 
 services.factory('multimediaService', ['$resource', function($resource){
     return {
-        getByArea: $resource('api/multimedia/multimediaByArea', {}, {
-            query: { method: 'POST', isArray: true }
-        }),
-        getSingle: $resource('api/multimedia2/:idMultimedia', {}, {
+        multimedia: $resource('api/multimedia', {}, {
             query: { method: 'GET', isArray: false }
-        }),
-        getSlides: $resource('api/slidesByMultimediaId/:multimedia_id', {}, {
-            query: { method: 'GET', isArray: true }
         })
     }
 }]);
 
 services.factory('eventsService', ['$resource', function($resource){
-    return $resource('api/calendar/getEvents/', {}, {
-        query: { method: 'POST', isArray: true }
-    });
-}]);
-services.factory('eventsService2', ['$resource', function($resource){
-    return $resource('api/calendar/:id', {}, {
-        query: { method: 'GET', isArray: false }
-    });
+    return {
+        calendar: $resource('api/calendar', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
 }]);
 
 services.factory('FormatService', function () {
@@ -194,11 +185,3 @@ services.factory('FormatService', function () {
         }
     }
 });
-services.factory('userService', ['$resource', function($resource){
-    return {
-        postTest: $resource('api/user',{},{
-                save:{method:'PUT'}
-            }
-        )
-    };
-}]);

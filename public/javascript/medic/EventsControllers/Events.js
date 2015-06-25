@@ -9,8 +9,8 @@ var date = new Date();
     $scope.eventIcon='<i class="glyphicon glyphicon-facetime-video verySmallFont" ng-if="eventim.type==2"></i>&nbsp;';
     $scope.eventIconCalendar='<i class="glyphicon glyphicon-facetime-video verySmallFont"></i>&nbsp;';
 
-    eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-        $scope.events =result;
+    eventsService.calendar.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
+        $scope.events = result.success;
         $scope.eventsFiltered = [];
         for (var i = 0; i < $scope.events.length; i++) {
             if (new Date($scope.events[i].end) > date)

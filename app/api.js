@@ -4198,176 +4198,127 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }
         });
 
-    router.route('/calendar/getEvents/')
-        .post(function(req,res) {
+    router.route('/calendar')
+        .get(function(req,res) {
             getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
                 var forGroups = nonSpecificGroupsIds;
-                if(req.body.specialGroup){
-                    forGroups.push(req.body.specialGroup);
+                if(req.query.specialGroup){
+                    forGroups.push(req.query.specialGroup);
                 }
-                //get allowed articles for user
-                Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
-                    if (err) {
-                        res.send(err);
-                    }
-                    else
-                    {
-                        res.json(cont);
-                    }
+                if(req.query.id){
+                    Events.findById(req.query.id,function(err, cont) {
+                        if(err) {
+                            res.send({error:err});
+                        }else{
+                            res.json({success: cont});
+                        }
+                    });
+                }
+                else{
+                    Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
+                        if (err) {
+                            res.send({error:err});
+                        }
+                        else
+                        {
+                            res.json({success: cont});
+                        }
 
-                })
+                    })
+                }
             }, function (err) {
                 res.send(err);
             })
         });
-    router.route('/calendar/:id')
-        .get(function(req,res){
-            Events.findById(req.params.id,function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-
-        });
-    router.route('/multimedia2/:idMultimedia')
-        .get(function(req,res){
-            Multimedia.findById(req.params.idMultimedia,function(err, cont) {
-                if(err) {
-                    res.json(err);
-                }
-                else
-                res.json(cont);
-            });
-
-        });
     router.route('/multimedia')
-        .get(function(req,res) {
-            Multimedia.find({groupsID: {$in: req.user.groupsID}}).exec(function (err, responses) {
-                if (responses.length == 0)
-                    res.send([{"message": "Nu ai acces la materiale!"}]);
-                else {
-                    res.json(responses);
-
-                }
-            })
-        });
-    router.route('/multimedia/multimediaByArea')
-        .post(function(req,res){
-            
+        .get(function(req,res){
         var findObj={};
-            if(req.body.id!=0)
-                findObj['therapeutic-areasID'] = {$in: [req.body.id]};
-            //find all by area
-
+            if(req.query.idArea!=0)
+                findObj['therapeutic-areasID'] = {$in: [req.query.idArea]};
             if(req.user.groupsID.length==0)
             {
-                res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}])
+                res.json({message:"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"})
             }
             else {
                 getNonSpecificUserGroupsIds(req.user).then(
                     function (nonSpecificGroupsIds) {
                         var forGroups = nonSpecificGroupsIds;
-                        if (req.body.specialGroupSelected) {
-                            forGroups.push(req.body.specialGroupSelected);
+                        if (req.query.specialGroupSelected) {
+                            forGroups.push(req.query.specialGroupSelected);
                         }
                         findObj['groupsID']={$in:forGroups};
                         findObj['enable']={$ne: false};
-
-                        if(req.body.id==0)
-                        {
-                            Multimedia.find(findObj, function (err, multimedia) {
-                                if (err) {
-                                    console.log(err);
-                                    res.json(err);
-                                } else {
-
-                                    if (multimedia.length == 0) {
-                                        res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
-                                    }
-                                    else
-                                        res.json(multimedia);
-                                }
-                            });
-                        }
-                        else
-                        {
-                            Therapeutic_Area.find({_id:req.body.id}).exec(function(err,response){
-                                var TArea=response[0];
-                                if(TArea.has_children==true)
-                                {
-                                    Therapeutic_Area.find({"therapeutic-areasID": {$in :[req.body.id]}}).exec(function(err,response){
-                                        var children=response;
-                                        getIds(children, true).then(function(ids){
-
-
-                                            findObj['therapeutic-areasID'] = {$in: ids};
-                                            Multimedia.find(findObj, function (err, multimedia) {
-                                                if (err) {
-                                                    console.log(err);
-                                                    res.json(err);
-                                                } else {
-
-                                                    if (multimedia.length == 0) {
-                                                        res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
-                                                    }
-                                                    else
-                                                        res.json(multimedia);
-                                                }
-                                            });
-                                        })
-                                    });
-
+                        if(req.query.idMultimedia){
+                            Multimedia.findById(req.query.idMultimedia,function(err, cont) {
+                                if(err) {
+                                    res.json({error:err});
                                 }
                                 else
-                                {
-                                    Multimedia.find(findObj, function (err, multimedia) {
-                                        if (err) {
-                                            console.log(err);
-                                            res.json(err);
-                                        } else {
-
-                                            if (multimedia.length == 0) {
-                                                res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
-                                            }
-                                            else
-                                                res.json(multimedia);
-                                        }
-                                    });
-                                }
+                                    res.json({success:cont});
                             });
-                        }
+                        }else{
+                            if(req.query.idArea==0)
+                            {
+                                Multimedia.find(findObj, function (err, multimedia) {
+                                    if (err) {
+                                        res.json({error:err});
+                                    } else {
 
-                        //get allowed articles for user
+                                        if (multimedia.length == 0) {
+                                            res.json({message: "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"})
+                                        }
+                                        else
+                                            res.json({success:multimedia});
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Therapeutic_Area.find({_id:req.query.idArea}).exec(function(err,response){
+                                    var TArea=response[0];
+                                    if(TArea.has_children==true)
+                                    {
+                                        Therapeutic_Area.find({"therapeutic-areasID": {$in :[req.query.idArea]}}).exec(function(err,response){
+                                            var children=response;
+                                            getIds(children, true).then(function(ids){
+                                                findObj['therapeutic-areasID'] = {$in: ids};
+                                                Multimedia.find(findObj, function (err, multimedia) {
+                                                    if (err) {
+                                                        res.json({error:err});
+                                                    } else {
+                                                        if (multimedia.length == 0) {
+                                                            res.json({message: "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"})
+                                                        }
+                                                        else
+                                                            res.json({success:multimedia});
+                                                    }
+                                                });
+                                            })
+                                        });
+                                    }
+                                    else
+                                    {
+                                        Multimedia.find(findObj, function (err, multimedia) {
+                                            if (err) {
+                                                res.json({error:err});
+                                            } else {
+                                                if (multimedia.length == 0) {
+                                                    res.json({"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"})
+                                                }
+                                                else
+                                                    res.json({success:multimedia});
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
                     },
                     function (err) {
-                        res.send(err);
+                        res.send({error:err});
                     })
-
             }
         });
-
-    router.route('/slidesByMultimediaId/:multimedia_id')
-        .get(function(req,res){
-            Multimedia.find({_id: req.params.multimedia_id, groupsID: {$in: req.user.groupsID}, enable: {$ne: false}}, function (err, multimedia) {
-                if(err){
-                    res.send(err);
-                }else{
-                    if(multimedia[0]){
-                        Slides.find({_id: {$in: multimedia[0]._doc.slidesID}}).sort({no_of_order: 1}).exec(function (err, slides) {
-                            if(err){
-                                res.send(err);
-                            }else{
-                                res.json(slides);
-                            }
-                        });
-                    }else{
-                        res.send(err);
-                    }
-
-            }
-
-        })});
     router.route('/user')
         .get(function(req,res){
             User.find(function (error, result) {
@@ -4380,9 +4331,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         })
-
         .put(function(req, res) {
-        //
         User.findOne({ username :  {$regex: "^"+req.user.username.replace(/\+/g,"\\+")+"$", $options: "i"}},function(err,usr){
             if(err) {
                 logger.error(err);
