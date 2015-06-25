@@ -6,7 +6,7 @@
     </div>
     <div class="col-sm-12 noPadding" ng-if="searchResults && searchResults.length > 0">
         <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
-            <div ng-repeat="item in searchResults track by $index" ng-if="item" class="col-sm-12 noPadding">
+            <div ng-repeat="item in searchResults track by $index" class="col-sm-12 noPadding">
                 <horizontal-content-list content="item" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
                                          title-attr="title" text-attr="text" bold-attr-1="author" date-attr="date_added" button-label="Vizualizeaza"
                                          show-divider="$index!=articlesLimit-1 && $index!=searchResults.length-1" navigate="sref"></horizontal-content-list>
