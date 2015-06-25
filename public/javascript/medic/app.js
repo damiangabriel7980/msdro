@@ -22,7 +22,8 @@ var app = angular.module('app',
         'footerResponsive',
         'verticalContentList',
         'horizontalContentList',
-        'widgetMostRead'
+        'widgetMostRead',
+        'mobileContentList'
     ]);
 
 app.config(['$locationProvider', function($location) {
