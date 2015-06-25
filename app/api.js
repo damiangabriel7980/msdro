@@ -3492,7 +3492,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
 
     router.route('/specialProduct')
-
         .get(function(req, res) {
             specialProduct.findOne({_id: req.query.id}).populate('speakers').exec(function(err, product) {
                 if(err || !product) {
@@ -3506,75 +3505,65 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
         });
     router.route('/specialProductMenu')
-        .post(function(req, res) {
-            var id = mongoose.Types.ObjectId(req.body.id.toString());
+        .get(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.query.id.toString());
             specialProductMenu.distinct('children_ids', function (err,allChildren) {
                 if(err)
                 {
-                    res.send(err);
+                    res.send({error:err});
                 }
                 else{
                     specialProductMenu.find({product: id,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
                         if(err) {
-                            res.send(err);
+                            res.send({error:err});
                         }
                         else
                         {
-                            res.json(details);
+                            res.json({success:details});
                         }
                     });
                 }
 
             });
-
-                    //get allowed articles for user;
         });
-    router.route('/specialProductDescription/:id')
+    router.route('/specialProductDescription')
         .get(function(req, res) {
-            var id = mongoose.Types.ObjectId(req.params.id.toString());
-            
+            var id = mongoose.Types.ObjectId(req.query.id.toString());
             specialProductMenu.findOne({_id: id}).exec(function(err, details) {
                 if(err) {
-                    console.log(err);
-                    res.send(err);
+                    res.send({error:err});
                 }
                 else
                 {
-                    
-                    res.json(details);
+                    res.json({success:details});
                 }
             });
         });
     router.route('/specialProductFiles')
-        .post(function(req, res) {
-            
-            var id = mongoose.Types.ObjectId(req.body.id.toString());
-            
+        .get(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.query.id.toString());
             specialProductFiles.find({product: id}).exec(function(err, details) {
                 if(err) {
-                    res.send(err);
+                    res.send({error:err});
                 }
                 else
                 {
-                    res.json(details);
+                    res.json({success:details});
                 }
             });
-            //get allowed articles for user;
         });
     router.route('/specialProductGlossary')
-        .post(function(req, res) {
-            var id = mongoose.Types.ObjectId(req.body.id.toString());
-            
+        .get(function(req, res) {
+            var id = mongoose.Types.ObjectId(req.query.id.toString());
             specialProductGlossary.find({product: id}).exec(function(err, details) {
                 if(err) {
-                    res.send(err);
+                    res.send({error:err});
                 }
                 else
                 {
-                    res.json(details);
+                    res.json({success:details});
                 }
             });
-            //get allowed articles for user;
         });
 
     router.route('/specialProduct/speakers')

@@ -7,9 +7,9 @@ controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams
                 if(!$stateParams.childId && !$stateParams.menuId){
                     $scope.selectFirstMenuItem();
                 }else{
-                    specialProductService.getSpecialProductDescription.query({id:$stateParams.childId?$stateParams.childId:$stateParams.menuId}).$promise.then(function(resp){
-                        $scope.specialProductDescription = resp;
-                        $scope.$parent.mobileMenuTitle= resp.title;
+                    specialProductService.SpecialProductDescription.query({id:$stateParams.childId?$stateParams.childId:$stateParams.menuId}).$promise.then(function(resp){
+                        $scope.specialProductDescription = resp.success;
+                        $scope.$parent.mobileMenuTitle= resp.success.title;
                     });
                 }
             }

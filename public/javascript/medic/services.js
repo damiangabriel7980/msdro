@@ -64,20 +64,20 @@ services.factory("IntroService", ['$resource', 'StorageService', function ($reso
 
 services.factory('specialProductService', ['$resource', function($resource){
     return {
-        getSpecialProduct: $resource('api/specialProduct/', {}, {
+        SpecialProduct: $resource('api/specialProduct', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        getSpecialProductMenu: $resource('api/specialProductMenu/', {}, {
-            query: { method: 'POST', isArray: true }
-        }),
-        getSpecialProductDescription: $resource('api/specialProductDescription/:id', {}, {
+        SpecialProductMenu: $resource('api/specialProductMenu', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        getSpecialProductFiles: $resource('api/specialProductFiles/', {}, {
-            query: { method: 'POST', isArray: true }
+        SpecialProductDescription: $resource('api/specialProductDescription', {}, {
+            query: { method: 'GET', isArray: false }
         }),
-        getSpecialProductGlossary: $resource('api/specialProductGlossary/', {}, {
-            query: { method: 'POST', isArray: true }
+        SpecialProductFiles: $resource('api/specialProductFiles', {}, {
+            query: { method: 'POST', isArray: false }
+        }),
+        SpecialProductGlossary: $resource('api/specialProductGlossary', {}, {
+            query: { method: 'GET', isArray: false }
         }),
         speakers: $resource('api/specialProduct/speakers/', {}, {
             query: { method: 'GET', isArray: false }

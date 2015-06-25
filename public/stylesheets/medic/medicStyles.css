@@ -6956,18 +6956,11 @@ body {
   color: darkgrey;
 }
 .navbarMedic .dropdown-menu.myProfile {
-  right: auto;
   margin-top: 5px;
-  left: 0 !important;
 }
 @media (max-width: 1279px) {
   .navbarMedic .dropdown-menu.myProfile {
     left: auto !important;
-  }
-}
-@media (min-width: 1280px) {
-  .navbarMedic .dropdown-menu.myProfile {
-    right: 100px !important;
   }
 }
 .navbarMedic .navbar-brand {

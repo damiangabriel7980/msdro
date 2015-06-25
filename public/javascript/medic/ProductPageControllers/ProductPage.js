@@ -4,7 +4,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         isFirstOpen: false
         //open: false
     };
-    specialProductService.getSpecialProduct.query({id: $stateParams.product_id}).$promise.then(function(result){
+    specialProductService.SpecialProduct.query({id: $stateParams.product_id}).$promise.then(function(result){
         if(result.success){
             $scope.specialProductPage=result.success;
         }else{
@@ -43,8 +43,8 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         }
     };
 
-    specialProductService.getSpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
-        $scope.specialProductMenu = resp;
+    specialProductService.SpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
+        $scope.specialProductMenu = resp.success;
     });
 
     $scope.selectFirstMenuItem = function () {
