@@ -1,34 +1,16 @@
 <div class="col-md-8 col-md-offset-2 col-xs-12 homeSearchWrapper">
 
     <h4 class="mainTitle">Cautare Continut</h4>
-    <div ng-if="answer!=''" class="col-md-12">
+    <div ng-if="answer" class="col-md-12">
         <h4>{{answer}}</h4>
     </div>
-    <div ng-if="product!=null" ng-show="products.length>0" ng-repeat="product in products track by $index" class="col-md-12 col-xs-12 col-sm-12 searchResult noPadding">
-        <div class="col-md-2 col-sm-2 col-xs-6 noPadding">
-            <img class="img-responsive img-thumbnail"  ng-src="{{product.image_path?pathAmazonDev+product.image_path:defaultProductImage}}">
-        </div>
-        <div class="col-md-10 col-xs-6 col-sm-10">
-            <div class="col-md-12 contentWrapper">
-                <div class="col-md-11">
-                    <h4 class="Title" ui-sref="biblioteca.produse.prodById({id:product._id})" convert-special conver="product.name" ng-bind-html="trustAsHtml(product.name)">
-                    </h4>
-                </div>
-            </div>
-            <div class="col-md-12" convert-special conver="product.description" ng-bind-html="trimText(htmlToPlainText(product.description), 220)">
-            </div>
-            <div class="col-md-12 category">
-                Categorie: Produs
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 buttonWrapper">
-            <div class="btn btn-info btn-sm hidden-xs pull-right btn-news" ui-sref="biblioteca.produse.prodById({id:product._id})">
-            Vezi detalii
-            </div>
-        </div>
+    <div ng-show="products && products.length>0" ng-repeat="product in products track by $index" ng-if="product" class="col-md-12 col-xs-12 col-sm-12 result">
+        <horizontal-content-list content="product" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
+                                 title-attr="name" text-attr="description" bold-attr-hardcoded="Categorie: Produs" button-label="Vezi detalii"
+                                 navigate="navigateToProduct" smaller-image with-background drop-shadow></horizontal-content-list>
     </div>
-    <div ng-if="calendar!=null" ng-show="calendarEv.length>0" ng-repeat="calendar in calendarEv track by $index" class="col-md-12 col-xs-12 col-sm-12 searchResult noPadding">
-        <div class="col-md-12 col-xs-12 col-sm-12 calendar">
+    <div ng-show="calendarEv && calendarEv.length>0" ng-repeat="calendar in calendarEv track by $index" ng-if="calendar" class="col-md-12 col-xs-12 col-sm-12 eventWrapper noPadding">
+        <div class="col-md-12 col-xs-12 col-sm-12 event">
 
             <div class="col-md-1 col-xs-2 col-sm-1 date">
                 <h2 class="green">{{calendar.start | filter: asDate | date:'dd'}}</h2>
@@ -53,49 +35,14 @@
         </div>
 
     </div>
-    <div ng-if="article!=null" ng-repeat="article in articles track by $index" ng-show="articles.length>0" class="col-md-12 col-xs-12 col-sm-12 searchResult noPadding">
-        <div class="col-md-2 col-xs-6 col-sm-2 noPadding">
-            <img class="img-responsive img-thumbnail" ng-src="{{article.image_path?pathAmazonDev+article.image_path:defaultArticleImage}}">
-        </div>
-
-        <div class="col-md-10 col-sm-10 col-xs-6">
-            <div class="col-md-12 contentWrapper">
-                <div class="col-md-11">
-                    <h4 class="Title" ui-sref="{{sref(article.type)}}" convert-special conver="article.title" ng-bind-html="trustAsHtml(article.title)">
-                    </h4>
-                </div>
-            </div>
-            <div class="col-md-12" convert-special conver="article.text" ng-bind-html="trimText(htmlToPlainText(article.text), 260)"></div>
-            <div class="col-md-12 category">
-                Categorie: Articol
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 buttonWrapper">
-            <div class="btn btn-info pull-right btn-sm hidden-xs btn-news" ui-sref="{{sref(article.type)}}">
-            Vezi detalii
-            </div>
-        </div>
+    <div ng-show="articles && articles.length>0" ng-repeat="article in articles track by $index" ng-if="article" class="col-md-12 col-xs-12 col-sm-12 result">
+        <horizontal-content-list content="article" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
+                                 title-attr="title" text-attr="text" bold-attr-hardcoded="Categorie: Articol" button-label="Vezi detalii"
+                                 navigate="navigateToArticle" smaller-image with-background drop-shadow></horizontal-content-list>
     </div>
-    <div ng-if="media != null" ng-show="multimedia.length>0" ng-repeat="media in multimedia track by $index" class="col-md-12 col-xs-12 col-sm-12 searchResult noPadding">
-        <div class="col-md-2 col-xs-6 col-sm-2 noPadding">
-            <img class="img-responsive img-thumbnail" ng-src="{{media.thumbnail_path?pathAmazonDev+media.thumbnail_path:(media.type==1?defaultVideoImage:defaultSlideImage)}}">
-        </div>
-        <div class="col-md-10 col-sm-10 col-xs-6">
-            <div class="col-md-12 contentWrapper">
-                <div class="col-md-11">
-                    <h4 class="Title" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: media._id})" convert-special conver="media.title" ng-bind-html="trustAsHtml(media.title)">
-                    </h4>
-                </div>
-            </div>
-            <div class="col-md-12" convert-special conver="media.description" ng-bind-html="trimText(htmlToPlainText(media.description), 260)">
-               &nbsp ...
-            </div>
-            <div class="col-md-12 category">
-                Categorie: Multimedia
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 buttonWrapper">
-            <div class="btn btn-info hidden-xs pull-right btn-news btn-sm" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: media._id})">Vezi material</div>
-        </div>
+    <div ng-show="multimedia && multimedia.length>0" ng-repeat="media in multimedia track by $index" ng-if="media" class="col-md-12 col-xs-12 col-sm-12 noPadding">
+        <horizontal-content-list content="media" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{media.type==1?defaultVideoImage:defaultSlideImage}}"
+                                 title-attr="title" text-attr="description" bold-attr-hardcoded="Categorie: Multimedia" button-label="Vezi material"
+                                 navigate="navigateToMultimedia" smaller-image with-background drop-shadow></horizontal-content-list>
     </div>
 </div>

@@ -15,6 +15,7 @@
                 textAttr: '@',
                 boldAttr1: '@',
                 boldAttr2: '@',
+                boldAttrHardcoded: '@',
                 dateAttr: '@',
                 buttonLabel: '@',
                 showDivider: '=',
@@ -26,6 +27,7 @@
                 scope.createHeader = Utils.createHeader;
                 scope.withBackground = attrs.hasOwnProperty("withBackground");
                 scope.smallerPicture = attrs.hasOwnProperty("smallerImage");
+                scope.dropShadow = attrs.hasOwnProperty("dropShadow");
             }
         };
     }]);

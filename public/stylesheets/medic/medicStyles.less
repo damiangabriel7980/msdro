@@ -257,17 +257,19 @@ body{
   .mainTitle{
     margin-top: 20px;
   }
-  .searchResult {
+  .result{
+    padding: 0;
+    margin-bottom: 20px;
+  }
+  .eventWrapper {
     border-radius: 4px;
     position: relative;
     margin-bottom: 20px;
     padding: 5px;
     background: @table-bg-accent;
     border: 1px solid rgba(51, 51, 51, 0.2);
-    -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
-    -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
-    box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
-    .calendar{
+    .contentShadow;
+    .event{
       border-left: 2px solid @MSDgreenDarker;
       .date{
         margin-top: -18px;
@@ -316,7 +318,7 @@ body{
 .homeStyles{
   height: 100%;
   padding: 0 0 50px 0;
-  .leftColumn{
+  .leftSection{
     .lastNewsWrapper{
       padding-right: 0;
       @media(min-width: 1278px) {
@@ -342,16 +344,18 @@ body{
       }
     }
   }
-  .midColumn{
-    &:before{
-      position: absolute;
-      content: '';
-      top: 0;
-      left: -16px;
-      width: 0;
-      height: 100%;
-      margin-left: -1%;
-    }
+  .rightSection{
+    padding: 0;
+    .leftColumn{
+      &:before{
+        position: absolute;
+        content: '';
+        top: 0;
+        left: -16px;
+        width: 0;
+        height: 100%;
+        margin-left: -1%;
+      }
       margin-left: -2%;
       @media(max-width: 768px){
         margin-left: 0;
@@ -360,118 +364,113 @@ body{
       @media(max-width: 768px){
         padding-left: 15px !important;
       }
-    .Multimedia{
-      @media(max-width: 768px){
-        padding-left: 15px;
-      }
-      .Title{
-        padding:0;
-        h3{
-          margin-bottom: -1%;
+      .Multimedia{
+        @media(max-width: 768px){
+          padding-left: 15px;
         }
-      }
-      .Wrapper{
-        padding: 0;
-        margin-top:20px !important;
-        .iconWrapper{
-          padding: 0;
-          i{
-            color: @gray;
+        .Title{
+          padding:0;
+          h3{
+            margin-bottom: -1%;
           }
         }
-        .Content{
-          b{
-            color: @MSDTitle;
-          }
+        .Wrapper{
           padding: 0;
-          text-align: justify;
+          margin-top:20px !important;
+          .iconWrapper{
+            padding: 0;
+            i{
+              color: @gray;
+            }
+          }
+          .Content{
+            b{
+              color: @MSDTitle;
+            }
+            padding: 0;
+            text-align: justify;
             @media(min-width: 768px) and (max-width: 1277px)
             {
               left: -5%;
             }
-          .mediaTitle{
-            @media(min-width: 768px) and (orientation: portrait){
-              font-size: 16px;
+            .mediaTitle{
+              @media(min-width: 768px) and (orientation: portrait){
+                font-size: 16px;
+              }
             }
           }
         }
       }
-    }
-    .Events{
-      @media(max-width: 768px){
-        padding-left: 15px;
-      }
-    .Title{
-      padding: 0;
-      h3{
-        margin-bottom: 4%;
-      }
-     }
-      .eventDisplay{
-        padding: 0 0 30px 0;
-        .date{
+      .Events{
+        @media(max-width: 768px){
+          padding-left: 15px;
+        }
+        .Title{
           padding: 0;
-          border-right: 0px solid @gray;
-          color: @MSDTitle;
-          .day{
-            padding: 0;
-            font-size: 20px;
-          }
-          .month{
-            padding: 0;
-            margin-top: -5px;
+          h3{
+            margin-bottom: 4%;
           }
         }
-        .Content{
-          @media(min-width: 768px) and (max-width: 1277px)
-          {
-            left: -5%;
-          }
-          padding: 0;
-          border-left: 1px solid #000000;
-          .MediaTitle{
+        .eventDisplay{
+          padding: 0 0 30px 0;
+          .date{
+            padding: 0;
+            border-right: 0px solid @gray;
             color: @MSDTitle;
-            cursor: pointer;
-            text-align: justify;
-            @media(max-width: 768px){
-              padding-left: 15px;
+            .day{
+              padding: 0;
+              font-size: 20px;
+            }
+            .month{
+              padding: 0;
+              margin-top: -5px;
             }
           }
-          .Description{
-            margin-top: 5px;
-            text-align: justify;
+          .Content{
+            @media(min-width: 768px) and (max-width: 1277px)
+            {
+              left: -5%;
+            }
+            padding: 0;
+            border-left: 1px solid #000000;
+            .MediaTitle{
+              color: @MSDTitle;
+              cursor: pointer;
+              text-align: justify;
+              @media(max-width: 768px){
+                padding-left: 15px;
+              }
+            }
+            .Description{
+              margin-top: 5px;
+              text-align: justify;
+            }
           }
         }
       }
+      &:after{
+        position: absolute;
+        content: '';
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 100%;
+      }
     }
-    &:after{
-      position: absolute;
-      content: '';
-      top: 0;
-      right: 0;
-      width: 0;
-      height: 100%;
-    }
-    .MobileWidgets{
-      padding: 0;
-    }
-  }
-  .rightColumn{
+    .rightColumn{
       padding-left: 2%;
       @media(max-device-width: 768px){
         padding-left: 3%;
       }
-    .homeWidgetsColumnNoPadding{
-      padding:0;
-    }
-    &:before{
-      position: absolute;
-      content: '';
-      top: 0;
-      left: -1px;
-      width: 0;
-      height: 100%;
-      border-left: 1px solid #000000;
+      &:before{
+        position: absolute;
+        content: '';
+        top: 0;
+        left: -1px;
+        width: 0;
+        height: 100%;
+        border-left: 1px solid #000000;
+      }
     }
   }
 }

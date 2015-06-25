@@ -18,7 +18,8 @@ var app = angular.module('app',
         'offClick',
         'fancyCarousel',
         'footerResponsive',
-        'horizontalContentList'
+        'horizontalContentList',
+        'widgetMostRead'
     ]);
 
 app.config(['$locationProvider', function($locationProvider) {
