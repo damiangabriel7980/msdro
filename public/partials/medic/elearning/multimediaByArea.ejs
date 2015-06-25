@@ -1,6 +1,6 @@
 <div class="col-md-12 multimediaView">
-    <div class="col-md-12 message" ng-if="multimedias[0].message"><h2>{{multimedias[0].message}}</h2></div>
-    <div ng-if="multimedias.length>=1 && !multimedias[0].message">
+    <div ng-cloak class="col-md-12 message" ng-if="!multimedias || multimedias.length==0"><h2>Nu exista materiale multimedia pentru grupul dumneavoastra!</h2></div>
+    <div ng-if="multimedias && multimedias.length>=1">
         <div class="col-xs-12 multimediaWrapper" ng-repeat="prod in multimedias | orderBy:'title'">
             <horizontal-content-list content="prod" image-path-attr="thumbnail_path" image-path-prefix="{{pathAmazonDev}}"
                                      default-image-path="{{prod.type==1?defaultVideoImage:defaultSlideImage}}"

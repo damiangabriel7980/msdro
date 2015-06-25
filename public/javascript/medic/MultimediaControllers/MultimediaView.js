@@ -15,10 +15,7 @@
 controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state','Utils', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state,Utils){
     window.scrollTo(0,0);
     multimediaService.multimedia.query({idArea:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-        if(result.message)
-            $scope.multimedias = result;
-        else
-            $scope.multimedias = result.success;
+        $scope.multimedias = result.success;
     });
     $scope.status = {
         isopen: false

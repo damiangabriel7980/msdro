@@ -4235,10 +4235,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         var findObj={};
             if(req.query.idArea!=0)
                 findObj['therapeutic-areasID'] = {$in: [req.query.idArea]};
-            if(req.user.groupsID.length==0)
-            {
-                res.json({message:"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"})
-            }
             else {
                 getNonSpecificUserGroupsIds(req.user).then(
                     function (nonSpecificGroupsIds) {
@@ -4263,12 +4259,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     if (err) {
                                         res.json({error:err});
                                     } else {
-
-                                        if (multimedia.length == 0) {
-                                            res.json({message: "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"})
-                                        }
-                                        else
-                                            res.json({success:multimedia});
+                                        res.json({success:multimedia});
                                     }
                                 });
                             }
@@ -4286,11 +4277,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                                     if (err) {
                                                         res.json({error:err});
                                                     } else {
-                                                        if (multimedia.length == 0) {
-                                                            res.json({message: "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"})
-                                                        }
-                                                        else
-                                                            res.json({success:multimedia});
+                                                        res.json({success:multimedia});
                                                     }
                                                 });
                                             })
@@ -4302,11 +4289,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             if (err) {
                                                 res.json({error:err});
                                             } else {
-                                                if (multimedia.length == 0) {
-                                                    res.json({"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"})
-                                                }
-                                                else
-                                                    res.json({success:multimedia});
+                                                res.json({success:multimedia});
                                             }
                                         });
                                     }
