@@ -7,7 +7,8 @@
         </div>
     </div>
     <div class="col-sm-12 noPadding" ng-if="isMobile(true)">
-        <mobile-content-list content="elearning" limit="contentLimit" image-prefix="pathAmazonDev" default-image="defaultArticleImage"></mobile-content-list>
+        <mobile-content-list content="elearning" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultSlideImage}}" title-attr="title"
+                             text-attr="description" navigate="navigateTo" limit="contentLimit" bold-text-function="getAuthor"></mobile-content-list>
     </div>
 </div>
 <div class="col-sm-12 text-center" ng-style="{'display':contentLimit<elearning.length?'initial':'none'}">

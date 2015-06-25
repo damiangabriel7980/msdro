@@ -13,7 +13,8 @@
             </div>
         </div>
         <div class="col-sm-12 noPadding" ng-if="isMobile(true)">
-            <mobile-content-list content="searchResults" image-prefix="pathAmazonDev" default-image="defaultArticleImage" show-type="true"></mobile-content-list>
+            <mobile-content-list content="searchResults" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultArticleImage}}" title-attr="title"
+                                 bold-text-function="getContentNamedType" text-attr="text" navigate="navigateTo"></mobile-content-list>
         </div>
     </div>
 </div>

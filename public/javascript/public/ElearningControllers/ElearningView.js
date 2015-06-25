@@ -18,6 +18,11 @@ controllers.controller('ElearningView', ['$scope', '$state', '$rootScope', 'Cont
 
     $scope.navigateToElearning = function (content) {
         $state.go('elearning.detail', {id: content._id});
-    }
+    };
+
+    $scope.getAuthor = function (content) {
+        return content.author;
+    };
+
 
 }]);

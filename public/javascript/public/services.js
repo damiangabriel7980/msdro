@@ -116,10 +116,10 @@ services.factory('StateService', ['$state', function ($state) {
     }
 }]);
 
-services.factory('PublicService', ['$resource', function () {
+services.factory('PublicService', function () {
     return {
-        getSref: function (content_type) {
-            switch(content_type){
+        getSref: function (content) {
+            switch(content.type){
                 case 1: return 'stiri.detail'; break;
                 case 2: return 'articole.detail'; break;
                 case 3: return 'elearning.detail'; break;
@@ -127,8 +127,8 @@ services.factory('PublicService', ['$resource', function () {
                 default: return ''; break;
             }
         },
-        getContentNamedType: function (int_type) {
-            switch(int_type){
+        getContentNamedType: function (content) {
+            switch(content.type){
                 case 1: return 'stire'; break;
                 case 2: return 'articol'; break;
                 case 3: return 'elearning'; break;
@@ -137,7 +137,7 @@ services.factory('PublicService', ['$resource', function () {
             }
         }
     }
-}]);
+});
 
 services.factory('RootService', ['$resource', function ($resource) {
     return {
