@@ -1,3 +1,8 @@
+.contentShadow {
+  -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
+  -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
+  box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
+}
 .widget-most-read {
   padding: 0 20px 0 0;
 }
