@@ -8,10 +8,10 @@ controllers.controller('ProductDetail', ['$scope','$rootScope' ,'ProductService'
         description: '',
         image_path: ''
     };
-     ProductService.getSingle.query({id:$stateParams.id,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-         if(result._id)
+     ProductService.products.query({idProduct:$stateParams.id,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
+         if(result.success._id)
          {
-             $scope.selectedProduct = result;
+             $scope.selectedProduct = result.success;
          }
          else
             $state.go('biblioteca.produse.productsByArea',{id:0});

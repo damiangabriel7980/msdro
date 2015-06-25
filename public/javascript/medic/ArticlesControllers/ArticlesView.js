@@ -12,8 +12,8 @@ controllers.controller('ArticlesView', ['$scope', '$rootScope', '$state', '$stat
     if($stateParams.articleType==3){
         $scope.title = "ARTICOLE STIINTIFICE";
     }
-    ContentService.getByType.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-        $scope.content = result;
+    ContentService.content.query({content_type: $stateParams.articleType, specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
+        $scope.content = result.success;
         if($scope.content.length===0){
             if($stateParams.articleType<3)
                 $scope.message="Nu exista stiri!";

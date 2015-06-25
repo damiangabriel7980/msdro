@@ -2,11 +2,8 @@ var services = angular.module('services', ['ngResource']);
 
 services.factory('ContentService', ['$resource', function($resource){
     return {
-        getById: $resource('api/content/articleDetails', {}, {
-            query: { method: 'POST', isArray: false }
-        }),
-        getByType: $resource('api/content/type', {}, {
-            query: { method: 'POST', isArray: true }
+        content: $resource('api/content', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
@@ -119,40 +116,28 @@ services.factory('ProfileService', ['$resource', function($resource){
 
 services.factory('HomeService', ['$resource', function($resource){
     return {
-        getUserEvents: $resource('api/userHomeEvents/', {}, {
-            query: { method: 'POST', isArray: true }
+        events: $resource('api/userHomeEvents/', {}, {
+            query: { method: 'GET', isArray: false }
         }),
-        getUserNews: $resource('api/userHomeNews', {}, {
-            query: { method: 'POST', isArray: true }
+        news: $resource('api/homeNews', {}, {
+            query: { method: 'GET', isArray: false }
         }),
-        getUserScientificNews: $resource('api/userHomeScientific', {}, {
-            query: { method: 'POST', isArray: true }
+        multimedia: $resource('api/userHomeMultimedia/', {}, {
+            query: { method: 'GET', isArray: false }
         }),
-        getUserMultimedia: $resource('api/userHomeMultimedia/', {}, {
-            query: { method: 'POST', isArray: true }
-        }),
-        getCarousel: $resource('api/userHomeCarousel/', {}, {
-            query: { method: 'POST', isArray: true }
+        carousel: $resource('api/userHomeCarousel/', {}, {
+            query: { method: 'GET', isArray: false }
         }),
         getSearchResults: $resource('api/userHomeSearch/', {}, {
             query: { method: 'POST', isArray: false }
-        }),
-        getUserImage: $resource('api/userImage/', {}, {
-            query: { method: 'GET', isArray: false }
         })
     }
 }]);
 
 services.factory('ProductService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/products/', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        getByArea: $resource('api/products/productsByArea', {}, {
-            query: { method: 'POST', isArray: true }
-        }),
-        getSingle: $resource('api/productsDetails', {}, {
-            query: { method: 'POST', isArray: false }
+        products: $resource('api/products', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

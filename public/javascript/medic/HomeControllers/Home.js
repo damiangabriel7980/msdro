@@ -45,24 +45,24 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
 
        //------------------------------------------------------------------------------------------------- get all content
 
-    HomeService.getUserEvents.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.events = resp;
+    HomeService.events.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
+        $scope.events = resp.success;
     });
-    HomeService.getUserNews.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.news = resp;
+    HomeService.news.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
+        $scope.news = resp.success;
     });
-    HomeService.getUserScientificNews.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.scientificNews = resp;
+    HomeService.news.query({scientific:true,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
+        $scope.scientificNews = resp.success;
     });
-    HomeService.getUserMultimedia.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.multimedia = resp;
+    HomeService.multimedia.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
+        $scope.multimedia = resp.success;
     });
 
-    HomeService.getCarousel.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
-        $scope.HomeCarousel=resp;
+    HomeService.carousel.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
+        $scope.HomeCarousel=resp.success;
         if($scope.HomeCarousel[0]){
-            $scope.firstIllusion=resp[$scope.HomeCarousel.length-1];
-            $scope.lastIllusion=resp[0];
+            $scope.firstIllusion=resp.success[$scope.HomeCarousel.length-1];
+            $scope.lastIllusion=resp.success[0];
         }
     });
     //------------------------------------------------------------------------------------------------ useful functions

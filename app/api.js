@@ -3589,57 +3589,40 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-
     router.route('/content')
-
         .get(function(req, res) {
-            Content.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        });
-
-    router.route('/content/articleDetails')
-
-        .post(function(req, res) {
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroup) {
-                        forGroups.push(req.body.specialGroup.toString());
-                    }
-
-                    Content.find({_id:req.body.content_id, groupsID: { $in: forGroups}}, function(err, cont) {
-                        if(err) {
-                            res.send(err);
+            if(req.query.content_id){
+                getNonSpecificUserGroupsIds(req.user).then(
+                    function (nonSpecificGroupsIds) {
+                        var forGroups = nonSpecificGroupsIds;
+                        if (req.query.specialGroup) {
+                            forGroups.push(req.query.specialGroup.toString());
                         }
-                        if(cont[0]){
-                            res.json(cont[0]);
-                        }else{
-                            res.json(null);
-                        }
-                    })
-                },
-                function (err) {
-                    res.send(err);
-                });
-        });
-
-    router.route('/content/type')
-
-        .post(function(req, res) {
-            var cType = req.body.content_type;
-            var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, cType, specialGroupSelected, null, 'created').then(
-                function (content) {
-                    res.json(content);
-                },
-                function (err) {
-                    res.send(err);
-                });
+                        Content.find({_id:req.query.content_id, groupsID: { $in: forGroups}}, function(err, cont) {
+                            if(err) {
+                                res.send({error:err});
+                            }
+                            if(cont[0]){
+                                res.json({success:cont[0]});
+                            }else{
+                                res.json(null);
+                            }
+                        })
+                    },
+                    function (err) {
+                        res.send({error:err});
+                    });
+            }else{
+                var cType = req.query.content_type;
+                var specialGroupSelected = req.query.specialGroupSelected;
+                getUserContent(req.user, cType, specialGroupSelected, null, 'created').then(
+                    function (content) {
+                        res.json({success:content});
+                    },
+                    function (err) {
+                        res.send({error:err});
+                    });
+            }
         });
 
     router.route('/userdata')
@@ -3906,27 +3889,27 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/userHomeCarousel/')
-        .post(function (req,res) {
+        .get(function (req,res) {
             getNonSpecificUserGroupsIds(req.user).then(
                 function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
-                    if(req.body.specialGroupSelected){
-                        forGroups.push(req.body.specialGroupSelected.toString());
+                    if(req.query.specialGroupSelected){
+                        forGroups.push(req.query.specialGroupSelected.toString());
                     }
 
                     //get allowed articles for user
                     Content.find({groupsID: {$in: forGroups},enable:true}, {_id: 1}, function (err, content) {
                         if(err){
-                            res.send(err);
+                            res.send({error:err});
                         }else{
                             //get ids of allowed articles
                             getIds(content).then(function (ids) {
                                 //get carousel content within allowed articles
                                 Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
                                     if(err){
-                                        res.send(err);
+                                        res.send({error:err});
                                     }else{
-                                        res.send(images);
+                                        res.send({success:images});
                                     }
                                 })
                             });
@@ -3934,20 +3917,8 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
                 },
                 function (err) {
-                    res.send(err);
+                    res.send({error:err});
                 });
-        });
-    router.route('/userImage')
-        .get(function(req,res) {
-            User.findOne({username: {$regex: new RegExp("^" + req.user.username, "i")}},'image_path name', function (err, usr) {
-                if (err) {
-                    logger.error(err);
-                    res.send(err)
-                }
-                else {
-                    res.json(usr);
-                }
-            })
         });
     router.route('/userHomeSearch/')
         .post(function(req,res){
@@ -4022,179 +3993,157 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 });
         });
     router.route('/userHomeEvents')
-        .post(function (req,res) {
+        .get(function (req,res) {
             getNonSpecificUserGroupsIds(req.user).then(
                 function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroupSelected) {
-                        forGroups.push(req.body.specialGroupSelected);
+                    if (req.query.specialGroupSelected) {
+                        forGroups.push(req.query.specialGroupSelected);
                     }
                     Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: true}).sort({start: 1}).exec(function (err, events) {
                         if(err){
-                            res.send(err);
+                            res.send({error:err});
                         }else{
-                            res.json(events);
+                            res.json({success:events});
                         }
                     });
                 },
                 function (err) {
-                    res.send(err);
+                    res.send({error:err});
                 });
         });
 
     router.route('/userHomeMultimedia')
-        .post(function (req,res) {
+        .get(function (req,res) {
             getNonSpecificUserGroupsIds(req.user).then(
                 function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroupSelected) {
-                        forGroups.push(req.body.specialGroupSelected);
+                    if (req.query.specialGroupSelected) {
+                        forGroups.push(req.query.specialGroupSelected);
                     }
                     Multimedia.find({groupsID: {$in: forGroups}, enable: {$ne: false}}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
                         if(err){
-                            res.send(err);
+                            res.send({error:err});
                         }else{
-                            res.json(multimedia);
+                            res.json({success:multimedia});
                         }
                     });
                 },
                 function (err) {
-                    res.send(err);
+                    res.send({error:err});
                 });
         });
 
-    router.route('/userHomeNews')
-
-        .post(function(req, res) {
-            var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "created").then(
-                function (cont) {
-                    res.json(cont);
-                },
-                function (err) {
-                    res.send(err);
-                });
-        });
-
-    router.route('/userHomeScientific')
-
-        .post(function(req, res) {
-            var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, 3, specialGroupSelected, 4, "created").then(
-                function (cont) {
-                    res.json(cont);
-                },
-                function (err) {
-                    res.send(err);
-                });
-        });
-
-    router.route('/products')
-
-    .get(function(req, res) {
-        Products.find(function(err, cont) {
-            if(err) {
-                res.send(err);
-            }
-
-            res.json(cont);
-        });
-    });
-
-    router.route('/productsDetails')
-
-        .post(function(req, res) {
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroup) {
-                        forGroups.push(req.body.specialGroup);
-                    }
-                    Products.find({_id:req.body.id,groupsID: {$in: forGroups}}, function(err, cont) {
-                        if(err) {
-                            res.send(err);
-                        }
-                        else
-                            res.json(cont[0]);
-                    })
-                },
-                function (err) {
-                    res.send(err);
-                });
-        });
-
-    router.route('/products/productsByArea')
-
-        .post(function(req, res) {
-
-            var test = req.body.id.toString();
-            if(test!=0)
-            {
-                getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
-                        var forGroups = nonSpecificGroupsIds;
-                        if (req.body.specialGroup) {
-                            forGroups.push(req.body.specialGroup);
-                        }
-                        Therapeutic_Area.find({_id:test}).exec(function(err,response){
-                            var TArea= response[0];
-                            if(TArea.has_children==true)
-                            {
-                                Therapeutic_Area.find({$or: [{_id:req.body.id},{"therapeutic-areasID": {$in :[test]}}]}).exec(function(err,response){
-                                    getIds(response, true).then(function(ids){
-                                        Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
-                                            if(err) {
-                                                res.send(err);
-                                            }
-                                            else
-                                            {
-                                                res.json(cont);
-                                            }
-                                        })
-                                    })
-                                });
-
-                            }
-                            else
-                            {
-                                Products.find({"therapeutic-areasID": {$in :[test]},groupsID: {$in: forGroups}}, function(err, cont) {
-                                    if(err) {
-                                        res.send(err);
-                                    }
-                                    else
-                                    {
-                                        res.json(cont);
-                                    }
-                                })
-                            }
-                        });
-                        //get allowed articles for user
+    router.route('/homeNews')
+        .get(function(req, res) {
+            var specialGroupSelected = req.query.specialGroupSelected;
+            if(req.query.scientific){
+                getUserContent(req.user, 3, specialGroupSelected, 4, "created").then(
+                    function (cont) {
+                        res.json({success:cont});
                     },
                     function (err) {
-                        res.send(err);
+                        res.send({error:err});
+                    });
+            }else{
+                getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "created").then(
+                    function (cont) {
+                        res.json({success:cont});
+                    },
+                    function (err) {
+                        res.send({error:err});
                     });
             }
-            else
-            {
+        });
+    router.route('/products')
+        .get(function(req, res) {
+            if(req.query.idProduct){
                 getNonSpecificUserGroupsIds(req.user).then(
                     function (nonSpecificGroupsIds) {
                         var forGroups = nonSpecificGroupsIds;
-                        if (req.body.specialGroup) {
-                            forGroups.push(req.body.specialGroup);
+                        if (req.query.specialGroup) {
+                            forGroups.push(req.query.specialGroup);
                         }
-                        //get allowed articles for user
-                        Products.find({groupsID: {$in: forGroups}}, function(err, cont) {
+                        Products.find({_id:req.query.idProduct,groupsID: {$in: forGroups}}, function(err, cont) {
                             if(err) {
-                                res.send(err);
+                                res.json({error:err});
                             }
                             else
-                            {
-                                res.json(cont);
-                            }
+                                res.json({success: cont[0]});
                         })
                     },
                     function (err) {
-                        res.send(err);
+                        res.send({error:err});
                     });
+            }else{
+                var test = req.query.idArea.toString();
+                if(test!=0)
+                {
+                    getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
+                            var forGroups = nonSpecificGroupsIds;
+                            if (req.query.specialGroup) {
+                                forGroups.push(req.query.specialGroup);
+                            }
+                            Therapeutic_Area.find({_id:test}).exec(function(err,response){
+                                var TArea= response[0];
+                                if(TArea.has_children==true)
+                                {
+                                    Therapeutic_Area.find({$or: [{_id:req.query.idArea},{"therapeutic-areasID": {$in :[test]}}]}).exec(function(err,response){
+                                        getIds(response, true).then(function(ids){
+                                            Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
+                                                if(err) {
+                                                    res.json({error:err});
+                                                }
+                                                else
+                                                {
+                                                    res.json({success:cont});
+                                                }
+                                            })
+                                        })
+                                    });
+
+                                }
+                                else
+                                {
+                                    Products.find({"therapeutic-areasID": {$in :[test]},groupsID: {$in: forGroups}}, function(err, cont) {
+                                        if(err) {
+                                            res.json({error:err});
+                                        }
+                                        else
+                                        {
+                                            res.json({success:cont});
+                                        }
+                                    })
+                                }
+                            });
+                        },
+                        function (err) {
+                            res.send({error:err});
+                        });
+                }
+                else
+                {
+                    getNonSpecificUserGroupsIds(req.user).then(
+                        function (nonSpecificGroupsIds) {
+                            var forGroups = nonSpecificGroupsIds;
+                            if (req.query.specialGroup) {
+                                forGroups.push(req.query.specialGroup);
+                            }
+                            //get allowed articles for user
+                            Products.find({groupsID: {$in: forGroups}}, function(err, cont) {
+                                if(err) {
+                                    res.send({error:err});
+                                }
+                                else
+                                {
+                                    res.json({success:cont});
+                                }
+                            })
+                        },
+                        function (err) {
+                            res.send({error:err});
+                        });
+                }
             }
         });
 

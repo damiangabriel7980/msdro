@@ -19,8 +19,8 @@ controllers.controller('ProductsView', ['$scope', '$state', '$rootScope' ,'Produ
     $scope.firstLetters={};
     $scope.allLetters = {};
 
-    ProductService.getByArea.query({id:$stateParams.id, specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-        $scope.products = result;
+    ProductService.products.query({idArea:$stateParams.id, specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
+        $scope.products = result.success;
         $scope.allLetters['A-Z'] = $scope.products;
         $scope.products.forEach(function (item) {
             var firstLetter = item.name.charAt(0);

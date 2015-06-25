@@ -11,11 +11,11 @@ controllers.controller('ArticleDetail', ['$scope', '$rootScope', '$stateParams',
         else
             $state.go('biblioteca.articoleStiintifice.listaArticole',{articleType:$stateParams.articleType});
     };
-    ContentService.getById.query({content_id: $stateParams.articleId,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        if(resp._id)
+    ContentService.content.query({content_id: $stateParams.articleId,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
+        if(resp.success._id)
         {
-            $scope.currentArticle = resp;
-            $scope.date = FormatService.formatMongoDate(resp.last_updated);
+            $scope.currentArticle = resp.success;
+            $scope.date = FormatService.formatMongoDate(resp.success.last_updated);
         }
        else
         {
