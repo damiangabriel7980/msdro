@@ -60,13 +60,21 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('home.cmcArticole',{
             url: '/home/cmcArticole',
-            templateUrl: 'partials/public/home/cmcArticole.html',
-            controller: 'HomeMostRead'
+            views: {
+                desktop: {
+                    templateUrl: 'partials/public/home/cmcArticole.html',
+                    controller: 'HomeMostRead'
+                }
+            }
         })
         .state('home.downloads',{
             url: '/home/downloads',
-            templateUrl: 'partials/public/home/downloads.html',
-            controller: 'HomeDownloads'
+            views: {
+                desktop: {
+                    templateUrl: 'partials/public/home/downloads.html',
+                    controller: 'HomeDownloads'
+                }
+            }
         })
         .state('stiri', {
             abstract: true,
