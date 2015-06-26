@@ -317,31 +317,15 @@ services.factory('CarouselPublicService', ['$resource', function($resource){
 }]);
 services.factory('CarouselMedicService', ['$resource', function($resource){
     return {
-        getAllImages: $resource('api/admin/users/carouselMedic/getAllImages', {}, {
+        carouselMedic: $resource('api/admin/users/carouselMedic', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
+        }),
+        attachedContent: $resource('api/admin/users/carouselMedic/contentByType', {}, {
             query: { method: 'GET', isArray: true }
-        }),
-        getContentByType: $resource('api/admin/users/carouselMedic/contentByType/:type', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        addImage: $resource('api/admin/users/carouselMedic/addImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        toggleImage: $resource('api/admin/users/carouselMedic/toggleImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        deleteImage: $resource('api/admin/users/carouselMedic/deleteImage/:id', {}, {
-            save: { method: 'POST', isArray: false}
-        }),
-        getById: $resource('api/admin/users/carouselMedic/getById/:id', {}, {
-            query: { method: 'GET', isArray: false }
-        }),
-        editImage: $resource('api/admin/users/carouselMedic/editImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        editImagePath: $resource('api/admin/users/carouselMedic/editImagePath:data', {}, {
-            save: { method: 'POST', isArray: false }
         })
-
     }
 }]);
 services.factory('ProductService', ['$resource', function($resource){

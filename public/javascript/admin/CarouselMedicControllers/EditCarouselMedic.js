@@ -12,7 +12,7 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
         console.log(newVal);
         //load all contents of this type
         if(newVal){
-            CarouselMedicService.getContentByType.query({type: newVal}).$promise.then(function (resp) {
+            CarouselMedicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
                 $scope.allContent = resp;
                 if($scope.toEdit.article_id){
                     var poz = findInContent($scope.toEdit.article_id);
@@ -36,9 +36,9 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
 
     //------------------------------------------------------------------------------------------------ get current data
 
-    CarouselMedicService.getById.query({id: idToEdit}).$promise.then(function (resp) {
+    CarouselMedicService.carouselMedic.query({id: idToEdit}).$promise.then(function (resp) {
         console.log(resp);
-        $scope.toEdit = resp;
+        $scope.toEdit = resp.success;
     });
 
     //------------------------------------------------------------------------------------------------- form submission
@@ -77,8 +77,8 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
     $scope.editImage = function () {
         //get selected content id
         $scope.toEdit.article_id = $scope.content.selected._id;
-        console.log($scope.toEdit);
-        CarouselMedicService.editImage.save({data: {toUpdate: $scope.toEdit, id: idToEdit}}).$promise.then(function (resp) {
+        $scope.toEdit.last_updated = new Date();
+        CarouselMedicService.carouselMedic.update({id: idToEdit},{data: {toUpdate: $scope.toEdit}}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.statusAlert.type = "danger";
             }else{
@@ -102,7 +102,7 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
                     $scope.uploadAlert.newAlert = true;
                     $scope.$apply();
                 } else {
-                    CarouselMedicService.editImagePath.save({data: {imagePath: key, id: idToEdit}}).$promise.then(function(resp){
+                    CarouselMedicService.carouselMedic.update({id: idToEdit},{data: {imagePath: key}}).$promise.then(function(resp){
                         $scope.uploadAlert.type = "success";
                         $scope.uploadAlert.message = "Upload reusit!";
                         $scope.uploadAlert.newAlert = true;

@@ -11,9 +11,8 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
     $scope.$watch('selectedType', function (newVal) {
         console.log(newVal);
         //load all contents of this type
-        CarouselMedicService.getContentByType.query({type: newVal}).$promise.then(function (resp) {
+        CarouselMedicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
             $scope.allContent = resp;
-            console.log(resp);
         });
     });
 
@@ -29,15 +28,13 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
             var extension = fileSelected.name.split('.').pop();
 
             //form object to add to database
-            var toSend = {};
-            toSend.title = this.titlu?this.titlu:"";
-            toSend.indexNumber = this.ordine?this.ordine:"";
-            toSend.type = $scope.selectedType;
-            toSend.article_id = $scope.content.selected._id;
-            toSend.redirect_to_href = this.redirect_to;
-
+            this.carouselImage.type = $scope.selectedType;
+            this.carouselImage.article_id = $scope.content.selected._id;
+            //form object to persist
+            this.carouselImage.enable = false;
+            this.carouselImage.last_updated = new Date();
             //send data to server
-            CarouselMedicService.addImage.save({data: {toAdd: toSend, extension: extension}}).$promise.then(function (resp) {
+            CarouselMedicService.carouselMedic.create({data: {toAdd: this.carouselImage, extension: extension}}).$promise.then(function (resp) {
                 $scope.statusAlert.newAlert = false;
                 $scope.uploadAlert.newAlert = false;
                 if(resp.error){
