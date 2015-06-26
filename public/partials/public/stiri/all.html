@@ -9,7 +9,8 @@
     <div class="col-sm-12 noPadding mobileArea" ng-if="isMobile(true)">
         <div class="col-xs-12 category">
             <div class="col-xs-12 name">STIRI</div>
-            <mobile-content-list content="news" limit="articlesLimit" image-prefix="pathAmazonDev" default-image="defaultArticleImage"></mobile-content-list>
+            <mobile-content-list content="news" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultArticleImage}}" title-attr="title"
+                                 text-attr="text" navigate="navigateTo" limit="articlesLimit"></mobile-content-list>
         </div>
     </div>
 </div>

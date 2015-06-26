@@ -6293,6 +6293,9 @@ button.close {
 body {
   font-size: 14px;
 }
+body a {
+  cursor: pointer;
+}
 @media (max-device-width: 767px) {
   body {
     font-size: 15px;
@@ -6383,41 +6386,6 @@ body {
 }
 .articlesStyles .articlesWrapper {
   padding: 0;
-}
-.articlesStyles .articlesWrapper .articlesMenu {
-  border-right: 1px solid #000000;
-  padding: 0;
-  padding-left: 21px;
-}
-.articlesStyles .articlesWrapper .articlesMenu .Title {
-  padding-left: 25px;
-  padding-right: 25px;
-}
-.articlesStyles .articlesWrapper .articlesMenu .articleBox {
-  padding: 5px 5px 5px 5px;
-  margin-bottom: 15px;
-}
-.articlesStyles .articlesWrapper .articlesMenu .articleBox .wrapper {
-  padding: 0;
-  padding-left: 5px;
-}
-.articlesStyles .articlesWrapper .articlesMenu .articleBox .wrapper .title {
-  font-size: 17px;
-  font-weight: bold;
-  padding-bottom: 10px;
-  cursor: pointer;
-  color: #009d97;
-}
-.articlesStyles .articlesWrapper .articlesMenu .articleBox .wrapper a {
-  cursor: pointer;
-  color: #009d97;
-}
-.articlesStyles .articlesWrapper .articlesMenu .articleBox .wrapper .trimmedArticle {
-  padding-bottom: 10px;
-  text-align: justify;
-}
-.articlesStyles .articlesWrapper .articlesMenu .articleBox .wrapper .author {
-  font-weight: bold;
 }
 .articlesStyles .articlesWrapper .articlesList .articlesMoreNews {
   clear: both;

@@ -9,7 +9,6 @@ controllers.controller('MultimediaDetail', ['$scope','multimediaService','$state
         title: '',
         description: ''
     };
-    $scope.isMobile = Utils.isMobile(true,false);
     multimediaService.multimedia.query({idMultimedia:idMultimedia}).$promise.then(function(result){
         $scope.selectedMultimedia = result.success;
     });

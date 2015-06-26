@@ -60,13 +60,21 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('home.cmcArticole',{
             url: '/home/cmcArticole',
-            templateUrl: 'partials/public/home/cmcArticole.html',
-            controller: 'HomeMostRead'
+            views: {
+                desktop: {
+                    templateUrl: 'partials/public/home/cmcArticole.html',
+                    controller: 'HomeMostRead'
+                }
+            }
         })
         .state('home.downloads',{
             url: '/home/downloads',
-            templateUrl: 'partials/public/home/downloads.html',
-            controller: 'HomeDownloads'
+            views: {
+                desktop: {
+                    templateUrl: 'partials/public/home/downloads.html',
+                    controller: 'HomeDownloads'
+                }
+            }
         })
         .state('stiri', {
             abstract: true,
@@ -136,8 +144,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location',
-        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location) {
+    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location', 'PublicService',
+        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location,   PublicService) {
 
             $rootScope.accessRoute = ACCESS_ROUTE;
 
@@ -172,6 +180,10 @@ app.run(
             $rootScope.createHeader = Utils.createHeader;
             $rootScope.trustAsHtml = Utils.trustAsHtml;
             $rootScope.isMobile = Utils.isMobile;
+            $rootScope.navigateTo = function (content) {
+                $state.go(PublicService.getSref(content), {id: content._id});
+            };
+            $rootScope.getContentNamedType = PublicService.getContentNamedType;
 
             //contact modal
             $rootScope.showContactModal = function(){

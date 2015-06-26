@@ -6785,6 +6785,9 @@ html body .rootView {
     margin-top: 0;
   }
 }
+.contentLayout .mostRead {
+  padding: 0 0 0 15px;
+}
 .contentLayout .articlesList .article {
   padding: 0;
 }
@@ -6922,7 +6925,7 @@ html body .rootView {
   }
 }
 .elearningLayout .categories {
-  padding: 0 15px 0 30px;
+  padding: 0 15px 0 15px;
 }
 .elearningLayout .categories .mainTitle {
   font-size: 22px;

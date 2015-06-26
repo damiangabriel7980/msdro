@@ -5,8 +5,8 @@
 </div>
 <div class="modal-body col-md-12">
     <div class="col-md-12 noPadding" ng-if="selectedMultimedia.type==1">
-        <div class="col-md-12" ng-class="{'noPadding':isMobile}" convert-special conver="selectedMultimedia.description" ng-bind-html="trustAsHtml(selectedMultimedia.description)"></div>
-        <div ng-class="{'noPadding':isMobile}" class="col-md-12 multimediaVideo">
+        <div class="col-md-12" ng-class="{'noPadding':isMobile(true)}" convert-special conver="selectedMultimedia.description" ng-bind-html="trustAsHtml(selectedMultimedia.description)"></div>
+        <div ng-class="{'noPadding':isMobile(true)}" class="col-md-12 multimediaVideo">
             <video class="video-js vjs-default-skin vjs-big-play-centered"
                    controls preload="auto" width="100%" height="100%">
                 <source ng-src="{{getVideoSrc(selectedMultimedia.file_path)}}" type='video/mp4' />
@@ -21,6 +21,6 @@
         </div>
     </div>
 </div>
-<div ng-class="{'modal-footer':!isMobile,'col-md-12 col-xs-12 text-center':isMobile}">
-    <a ng-class="{'pull-right':!isMobile}" class="btn btn-primary" ng-click="isMobile?goToMultimedia():$close();goToMultimedia()">{{isMobile?'Inapoi la multimedia':'Close'}}</a>
+<div ng-class="{'modal-footer':!isMobile(true),'col-md-12 col-xs-12 text-center':isMobile(true)}">
+    <a ng-class="{'pull-right':!isMobile(true)}" class="btn btn-primary" ng-click="isMobile(true)?goToMultimedia():$close();goToMultimedia()">{{isMobile(true)?'Inapoi la multimedia':'Close'}}</a>
 </div>

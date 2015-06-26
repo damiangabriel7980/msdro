@@ -21,10 +21,9 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
         isopen: false
         //open: false
     };
-    $scope.isMobile = Utils.isMobile(true,false);
     $scope.openMultimedia=function(multimedia) {
         if(multimedia._id) multimedia = multimedia._id;
-        if($scope.isMobile)
+        if(Utils.isMobile(true))
             $state.go('elearning.multimedia.multimediaMobile',{id: multimedia});
         else
         {
