@@ -9,10 +9,8 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
     $scope.content.selected = {};
 
     $scope.$watch('toEdit.type', function (newVal) {
-        console.log(newVal);
-        //load all contents of this type
         if(newVal){
-            CarouselPublicService.getContentByType.query({type: newVal}).$promise.then(function (resp) {
+            CarouselPublicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
                 $scope.allContent = resp;
                 if($scope.toEdit.content_id){
                     var poz = findInContent($scope.toEdit.content_id);
@@ -36,9 +34,8 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
 
     //------------------------------------------------------------------------------------------------ get current data
 
-    CarouselPublicService.getById.query({id: idToEdit}).$promise.then(function (resp) {
-        console.log(resp);
-        $scope.toEdit = resp;
+    CarouselPublicService.carouselPublic.query({id: idToEdit}).$promise.then(function (resp) {
+        $scope.toEdit = resp.success;
     });
 
     //------------------------------------------------------------------------------------------------- form submission
@@ -77,8 +74,8 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
     $scope.editImage = function () {
         //get selected content id
         $scope.toEdit.content_id = $scope.content.selected._id;
-        console.log($scope.toEdit);
-        CarouselPublicService.editImage.save({data: {toUpdate: $scope.toEdit, id: idToEdit}}).$promise.then(function (resp) {
+        $scope.toEdit.last_updated = new Date();
+        CarouselPublicService.carouselPublic.update({id: idToEdit},{data: {toUpdate: $scope.toEdit}}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.statusAlert.type = "danger";
             }else{
@@ -102,7 +99,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
                     $scope.uploadAlert.newAlert = true;
                     $scope.$apply();
                 } else {
-                    CarouselPublicService.editImagePath.save({data: {imagePath: key, id: idToEdit}}).$promise.then(function(resp){
+                    CarouselPublicService.carouselPublic.update({id: idToEdit},{data: {imagePath: key}}).$promise.then(function(resp){
                         $scope.uploadAlert.type = "success";
                         $scope.uploadAlert.message = "Upload reusit!";
                         $scope.uploadAlert.newAlert = true;

@@ -9,11 +9,9 @@ controllers.controller('AddCarouselPublic', ['$scope','$rootScope','$sce','Carou
     var fileSelected = null;
 
     $scope.$watch('selectedType', function (newVal) {
-        console.log(newVal);
         //load all contents of this type
-        CarouselPublicService.getContentByType.query({type: newVal}).$promise.then(function (resp) {
+        CarouselPublicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
             $scope.allContent = resp;
-            console.log(resp);
         });
     });
 
@@ -27,17 +25,13 @@ controllers.controller('AddCarouselPublic', ['$scope','$rootScope','$sce','Carou
         //check if image was selected
         if(fileSelected){
             var extension = fileSelected.name.split('.').pop();
-
-            //form object to add to database
-            var toSend = {};
-            toSend.title = this.titlu?this.titlu:"";
-            toSend.description = this.descriere?this.descriere:"";
-            toSend.order_index = this.ordine?this.ordine:"";
-            toSend.type = $scope.selectedType;
-            toSend.content_id = $scope.content.selected._id;
-
+            //var toSend = {};
+            this.carouselImage.type = $scope.selectedType;
+            this.carouselImage.content_id = $scope.content.selected._id;
+            this.carouselImage.enable = false;
+            this.carouselImage.last_updated = new Date();
             //send data to server
-            CarouselPublicService.addImage.save({data: {toAdd: toSend, extension: extension}}).$promise.then(function (resp) {
+            CarouselPublicService.carouselPublic.create({data: {toAdd: this.carouselImage, extension: extension}}).$promise.then(function (resp) {
                 $scope.statusAlert.newAlert = false;
                 $scope.uploadAlert.newAlert = false;
                 if(resp.error){

@@ -281,7 +281,7 @@ services.factory('publicContentService', ['$resource', function($resource){
             update: {method: 'PUT', isArray:false},
             delete: {method: 'DELETE', isArray: false}
         }),
-        getTherapeuticAreas: $resource('api/admin/therapeutic_areas', {}, {
+        therapeuticAreas: $resource('api/admin/therapeutic_areas', {}, {
             query: { method: 'GET', isArray: true }
         }),
         changeImageOrFile: $resource('api/admin/users/publicContent/changeImageOrFile/:data', {}, {
@@ -304,30 +304,15 @@ services.factory('therapeuticAreaService', ['$resource', function($resource){
 
 services.factory('CarouselPublicService', ['$resource', function($resource){
     return {
-        getAllImages: $resource('api/admin/users/carouselPublic/getAllImages', {}, {
+        carouselPublic: $resource('api/admin/users/carouselPublic', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
+        }),
+        attachedContent: $resource('api/admin/users/carouselPublic/contentByType', {}, {
             query: { method: 'GET', isArray: true }
-        }),
-        getContentByType: $resource('api/admin/users/carouselPublic/contentByType/:type', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        addImage: $resource('api/admin/users/carouselPublic/addImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        toggleImage: $resource('api/admin/users/carouselPublic/toggleImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        deleteImage: $resource('api/admin/users/carouselPublic/deleteImage/:id', {}, {
-            save: { method: 'POST', isArray: false}
-        }),
-        getById: $resource('api/admin/users/carouselPublic/getById/:id', {}, {
-            query: { method: 'GET', isArray: false }
-        }),
-        editImage: $resource('api/admin/users/carouselPublic/editImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        editImagePath: $resource('api/admin/users/carouselPublic/editImagePath:data', {}, {
-        save: { method: 'POST', isArray: false }
-    })
+        })
     }
 }]);
 services.factory('CarouselMedicService', ['$resource', function($resource){

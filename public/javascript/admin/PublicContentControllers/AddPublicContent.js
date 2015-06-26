@@ -26,7 +26,7 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
     //----------------------------------------------------------------------------------------------- therapeutic areas
 
     //get all
-    publicContentService.getTherapeuticAreas.query().$promise.then(function (resp) {
+    publicContentService.therapeuticAreas.query().$promise.then(function (resp) {
         var areasOrganised = [];
         areasOrganised.push({id:0, name:"Adauga arii terapeutice"});
         areasOrganised.push({id:1, name:"Toate"});

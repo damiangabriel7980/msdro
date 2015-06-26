@@ -41,7 +41,7 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         var areasIds = resp['therapeutic-areasID']?resp['therapeutic-areasID']:[];
 
         //get therapeutic areas
-        publicContentService.getTherapeuticAreas.query().$promise.then(function (resp) {
+        publicContentService.therapeuticAreas.query().$promise.then(function (resp) {
             var areasOrganised = [];
             areasOrganised.push({id:0, name:"Adauga arii terapeutice"});
             areasOrganised.push({id:1, name:"Toate"});

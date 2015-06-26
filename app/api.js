@@ -651,97 +651,135 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
         });
 
-    router.route('/admin/users/carouselPublic/getAllImages')
+    router.route('/admin/users/carouselPublic')
 
         .get(function(req, res) {
-            PublicCarousel.find({}, function(err, cont) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/carouselPublic/contentByType/:type')
-
-        .get(function(req, res) {
-            PublicContent.find({type: req.params.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/carouselPublic/addImage')
-
-        .post(function(req, res) {
+            if(req.query.id){
+                PublicCarousel.find({_id: req.query.id}, function (err, cont) {
+                    if(err){
+                        res.send({error:err});
+                    }else{
+                        if(cont[0]){
+                            res.send({success:cont[0]});
+                        }else{
+                            res.send({error:true,message: "No image found"});
+                        }
+                    }
+                })
+            }else{
+                PublicCarousel.find({}, function(err, cont) {
+                    if(err) {
+                        logger.error(err);
+                        res.send({error:err});
+                    }else
+                        res.json({success:cont});
+                });
+            }
+        })
+        .post(function(req,res){
             var data = req.body.data.toAdd;
             var ext = req.body.data.extension;
             var ans = {};
             //validate title and description
-                //validate type
-                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    ans.error = true;
-                    ans.message = "Verificati tipul";
-                    res.json(ans);
+            //validate type
+            if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                ans.error = true;
+                ans.message = "Verificati tipul";
+                res.json(ans);
+            }else{
+                //check if content_id exists
+                if(typeof data.content_id === "string" && data.content_id.length === 24){
+                    var img = new PublicCarousel(data);
+                    console.log(data);
+                    img.save(function (err, inserted) {
+                        if(err){
+                            ans.error = true;
+                            ans.message = "Eroare la salvare. Verificati campurile";
+                            res.json(ans);
+                        }else{
+                            //update image_path
+                            var imagePath = "generalCarousel/image_"+inserted._id+"."+ext;
+                            PublicCarousel.update({_id: inserted._id}, {$set:{image_path:imagePath}}, function (err, wRes) {
+                                if(err){
+                                    ans.error = true;
+                                    ans.message = "Eroare la salvare. Verificati campurile";
+                                    res.json(ans);
+                                }else{
+                                    ans.error = false;
+                                    ans.message = "Se incarca imaginea...";
+                                    ans.key = imagePath;
+                                    res.json(ans);
+                                }
+                            });
+                        }
+                    });
                 }else{
-                    //check if content_id exists
-                    if(typeof data.content_id === "string" && data.content_id.length === 24){
-                        //form object to persist
-                        data.enable = false;
-                        data.last_updated = new Date();
-                        //persist object
-                        var img = new PublicCarousel(data);
-                        img.save(function (err, inserted) {
-                            if(err){
-                                ans.error = true;
-                                ans.message = "Eroare la salvare. Verificati campurile";
-                                res.json(ans);
-                            }else{
-                                //update image_path
-                                var imagePath = "generalCarousel/image_"+inserted._id+"."+ext;
-                                PublicCarousel.update({_id: inserted._id}, {image_path: imagePath}, function (err, wRes) {
-                                    if(err){
-                                        ans.error = true;
-                                        ans.message = "Eroare la salvare. Verificati campurile";
-                                        res.json(ans);
-                                    }else{
-                                        ans.error = false;
-                                        ans.message = "Se incarca imaginea...";
-                                        ans.key = imagePath;
-                                        res.json(ans);
-                                    }
-                                });
-                            }
-                        });
+                    ans.error = true;
+                    ans.message = "Selectati un continut";
+                    res.json(ans);
+                }
+            }
+
+        })
+        .put(function(req,res){
+            if(req.body.info){
+                PublicCarousel.update({_id: req.query.id}, {$set:{enable: !req.body.info.isEnabled}}, function (err, wRes) {
+                    if(err){
+                        res.send({error: true});
                     }else{
+                        res.send({error: false});
+                    }
+                });
+            }else{
+                if(req.body.data.imagePath){
+                    var ans={};
+                    var data = req.body.data;
+                    PublicCarousel.update({_id: req.query.id}, {$set:{image_path: data.imagePath}}, function (err, wRes) {
+                        if(err){
+                            ans.error = true;
+                            ans.message = "Eroare la actualizare. Verificati API-ul";
+                            res.json(ans);
+                        }else{
+                            ans.error = false;
+                            ans.message = "Datele au fost modificate cu succes!";
+                            res.json(ans);
+                        }
+                    });
+                }else{
+                    var data = req.body.data.toUpdate;
+                    var id = req.query.id;
+                    var ans = {};
+                    //validate title and description
+                    //validate type
+                    if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
                         ans.error = true;
-                        ans.message = "Selectati un continut";
+                        ans.message = "Verificati tipul";
                         res.json(ans);
+                    }else{
+                        //check if content_id exists
+                        if(typeof data.content_id === "string" && data.content_id.length === 24){
+                            PublicCarousel.update({_id: id}, {$set:data}, function (err, wRes) {
+                                if(err){
+                                    ans.error = true;
+                                    ans.message = "Eroare la actualizare. Verificati campurile";
+                                    res.json(ans);
+                                }else{
+                                    ans.error = false;
+                                    ans.message = "Datele au fost modificate cu succes!";
+                                    res.json(ans);
+                                }
+                            });
+                        }else{
+                            ans.error = true;
+                            ans.message = "Selectati un continut";
+                            res.json(ans);
+                        }
                     }
                 }
-
-        });
-
-    router.route('/admin/users/carouselPublic/toggleImage')
-
-        .post(function(req, res) {
-            PublicCarousel.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
-                if(err){
-                    res.send({error: true});
-                }else{
-                    res.send({error: false});
-                }
-            });
-        });
-
-    router.route('/admin/users/carouselPublic/deleteImage')
-
-        .post(function (req, res) {
-            var image_id = req.body.id;
+            }
+        })
+        .delete(function(req,res){
+            var image_id = req.query.id;
             //find image to remove from amazon
             PublicCarousel.find({_id: image_id}, {image_path: 1}, function (err, image) {
                 if(err){
@@ -774,76 +812,16 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-
-    router.route('/admin/users/carouselPublic/editImage')
-
-        .post(function(req, res) {
-
-            var data = req.body.data.toUpdate;
-            var id = req.body.data.id;
-            var ans = {};
-            //validate title and description
-                //validate type
-                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    ans.error = true;
-                    ans.message = "Verificati tipul";
-                    res.json(ans);
-                }else{
-                    //check if content_id exists
-                    if(typeof data.content_id === "string" && data.content_id.length === 24){
-                        //refresh last_updated field
-                        data.last_updated = new Date();
-                        PublicCarousel.update({_id: id}, data, function (err, wRes) {
-                            if(err){
-                                ans.error = true;
-                                ans.message = "Eroare la actualizare. Verificati campurile";
-                                res.json(ans);
-                            }else{
-                                ans.error = false;
-                                ans.message = "Datele au fost modificate cu succes!";
-                                res.json(ans);
-                            }
-                        });
-                    }else{
-                        ans.error = true;
-                        ans.message = "Selectati un continut";
-                        res.json(ans);
-                    }
-                }
-
-        });
-    router.route('/admin/users/carouselPublic/editImagePath')
-        .post(function(req,res){
-            var ans={};
-            var data = req.body.data;
-            PublicCarousel.update({_id: data.id}, {image_path: data.imagePath}, function (err, wRes) {
-                if(err){
-                    ans.error = true;
-                    ans.message = "Eroare la actualizare. Verificati API-ul";
-                    res.json(ans);
-                }else{
-                    ans.error = false;
-                    ans.message = "Datele au fost modificate cu succes!";
-                    res.json(ans);
-                }
+    router.route('/admin/users/carouselPublic/contentByType')
+        .get(function(req, res) {
+            PublicContent.find({type: req.query.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
+                if(err) {
+                    logger.error(err);
+                    res.send(err);
+                }else
+                    res.json(cont);
             });
         });
-    router.route('/admin/users/carouselPublic/getById/:id')
-
-        .get(function(req, res) {
-            PublicCarousel.find({_id: req.params.id}, function (err, cont) {
-                if(err){
-                    res.send(err);
-                }else{
-                    if(cont[0]){
-                        res.send(cont[0]);
-                    }else{
-                        res.send({message: "No image found"});
-                    }
-                }
-            })
-        });
-
 
     //Carousel Medic
     //===============================================================================================
