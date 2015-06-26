@@ -6,7 +6,7 @@
     <div class="col-md-12 noPadding" ng-if="showManager">
         <div class="col-md-12 noPadding">
             <button class="btn btn-default" type="file" ng-file-select ng-file-change="s3ManagerFileSelected($files, $event)" multiple="false"
-                    ><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
+                    ><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca {{label?label:'imagine'}}</button>
         </div>
         <div class="col-md-12 noPadding" style="border:1px solid #f5f5f5" ng-repeat="key in keys track by $index">
             <div class="col-md-1 noPadding">

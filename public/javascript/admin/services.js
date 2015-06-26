@@ -305,7 +305,7 @@ services.factory('publicContentService', ['$resource', function($resource){
         deleteContent: $resource('api/admin/users/publicContent/deleteContent/:id', {}, {
             save: { method: 'POST', isArray: false}
         }),
-        getTherapeuticAreas: $resource('api/therapeutic_areas', {}, {
+        getTherapeuticAreas: $resource('api/admin/therapeutic_areas', {}, {
             query: { method: 'GET', isArray: true }
         }),
         changeImageOrFile: $resource('api/admin/users/publicContent/changeImageOrFile/:data', {}, {

@@ -9,7 +9,7 @@
             replace: true,
             link: function(scope, element, attrs) {
 
-                var path, nameAll;
+                var path, nameAll, label;
 
                 scope.keys = [];
 
@@ -26,6 +26,10 @@
                 attrs.$observe('path', function (newVal) {
                     path = newVal;
                     initialize();
+                });
+
+                attrs.$observe('label', function (newVal) {
+                    label = newVal;
                 });
 
                 attrs.$observe('nameAll', function (newVal) {
