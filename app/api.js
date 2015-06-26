@@ -446,49 +446,32 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }
         });
 
-    router.route('/admin/users/publicContent/getAllContent')
+    router.route('/admin/users/publicContent')
 
         .get(function(req, res) {
-            PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/publicContent/getById/:id')
-
-        .get(function(req, res) {
-            PublicContent.find({_id: req.params.id}, function (err, cont) {
-                if(err){
-                    res.send(err);
-                }else{
-                    if(cont[0]){
-                        res.send(cont[0]);
+            if(req.query.id){
+                PublicContent.find({_id: req.query.id}, function (err, cont) {
+                    if(err){
+                        res.send(err);
                     }else{
-                        res.send({message: "No content found"});
+                        if(cont[0]){
+                            res.send({success:cont[0]});
+                        }else{
+                            res.send({error:true,message: "No content found"});
+                        }
                     }
-                }
-            })
-        });
-
-    router.route('/admin/users/publicContent/toggleContent')
-
-        .post(function(req, res) {
-            PublicContent.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
-                if(err){
-                    res.send({error: true});
-                }else{
-                    res.send({error: false});
-                }
-            });
-        });
-
-    router.route('/admin/users/publicContent/addContent')
-
-        .post(function(req, res) {
+                })
+            }else{
+                PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
+                    if(err) {
+                        logger.error(err);
+                        res.send({error:err});
+                    }else
+                        res.json({success:cont});
+                });
+            }
+        })
+        .post(function(req,res){
             var data = req.body.data;
             var ans = {};
             //validate author and title
@@ -504,11 +487,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     ans.message = "Verificati tipul";
                     res.json(ans);
                 }else{
-                    //form object to persist
-                    data.enable = false;
-                    data.date_added = Date.now();
-                    data.last_updated = Date.now();
-                    //persist object
                     var content = new PublicContent(data);
                     content.save(function (err, inserted) {
                         if(err){
@@ -523,48 +501,51 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
                 }
             }
-        });
-
-    router.route('/admin/users/publicContent/editContent')
-
-        .post(function(req, res) {
-            var data = req.body.data.toUpdate;
-            var id = req.body.data.id;
-            var ans = {};
-            //validate author and title
-            var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
-            if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
-                ans.error = true;
-                ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
-                res.json(ans);
+        })
+        .put(function(req,res){
+            if(req.body.info){
+                PublicContent.update({_id: req.query.id}, {enable: !req.body.info.isEnabled}, function (err, wRes) {
+                    if(err){
+                        res.send({error: true});
+                    }else{
+                        res.send({error: false});
+                    }
+                });
             }else{
-                //validate type
-                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                var data = req.body.toUpdate;
+                var id = req.query.id;
+                var ans = {};
+                //validate author and title
+                var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
+                if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                     ans.error = true;
-                    ans.message = "Verificati tipul";
+                    ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
                     res.json(ans);
                 }else{
-                    //refresh last_updated field
-                    data.last_updated = new Date();
-                    PublicContent.update({_id: id}, data, function (err, wRes) {
-                        if(err){
-                            ans.error = true;
-                            ans.message = "Eroare la actualizare. Verificati campurile";
-                            res.json(ans);
-                        }else{
-                            ans.error = false;
-                            ans.message = "Continutul a fost modificat cu succes!";
-                            res.json(ans);
-                        }
-                    });
+                    //validate type
+                    if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                        ans.error = true;
+                        ans.message = "Verificati tipul";
+                        res.json(ans);
+                    }else{
+                        PublicContent.update({_id: id}, {$set: data}, function (err, wRes) {
+                            if(err){
+                                ans.error = true;
+                                ans.message = "Eroare la actualizare. Verificati campurile";
+                                res.json(ans);
+                            }else{
+                                ans.error = false;
+                                ans.message = "Continutul a fost modificat cu succes!";
+                                res.json(ans);
+                            }
+                        });
+                    }
                 }
             }
-        });
 
-    router.route('/admin/users/publicContent/deleteContent')
-
-        .post(function (req, res) {
-            var content_id = req.body.id;
+        })
+        .delete(function(req,res){
+            var content_id = req.query.id;
             PublicContent.remove({_id: content_id}, function (err, success) {
                 if(err){
                     res.json({error: true, message: "Eroare la stergerea continutului"});
@@ -573,7 +554,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-
     router.route('/admin/users/publicContent/changeImageOrFile')
         .post(function (req,res) {
             var data = req.body.data;

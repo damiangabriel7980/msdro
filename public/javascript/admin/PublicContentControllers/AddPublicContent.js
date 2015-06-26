@@ -101,8 +101,10 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
         //get content text
         toSend.text = this.contentText?this.contentText:"";
         //send data to server
-        console.log(toSend);
-        publicContentService.addContent.save({data: toSend}).$promise.then(function (resp) {
+        toSend.enable = false;
+        toSend.date_added = Date.now();
+        toSend.last_updated = Date.now();
+        publicContentService.publicContent.create({data: toSend}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.statusAlert.type = "danger";
             }else{

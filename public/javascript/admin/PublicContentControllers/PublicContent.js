@@ -1,8 +1,8 @@
 controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$filter', 'ngTableParams', '$modal', 'ActionModal', 'publicContentService', 'AmazonService', function($scope, $rootScope, $state, $filter, ngTableParams, $modal, ActionModal, publicContentService, AmazonService){
 
     $scope.refreshTable = function () {
-        publicContentService.getAllContent.query().$promise.then(function (resp) {
-            var data = resp;
+        publicContentService.publicContent.query().$promise.then(function (resp) {
+            var data = resp.success;
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -47,7 +47,6 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
     };
 
     $scope.deleteContent = function (id) {
-        console.log(id);
         ActionModal.show("Stergere continut", "Sunteti sigur ca doriti sa stergeti continutul?", function () {
             //remove images
             AmazonService.deleteFilesAtPath('generalContent/'+id, function (err, count) {
@@ -56,7 +55,7 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
                 }else{
                     console.log("S-au sters "+count+" imagini");
                     //remove content
-                    publicContentService.deleteContent.save({id: id}).$promise.then(function (resp) {
+                    publicContentService.publicContent.delete({id: id}).$promise.then(function (resp) {
                         console.log(resp);
                         $state.reload();
                     });
@@ -70,7 +69,7 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
             enabled?"Dezactiveaza continut":"Activeaza continut",
             enabled?"Sunteti sigur ca doriti sa dezactivati continutul?":"Sunteti sigur ca doriti sa activati continutul?",
             function () {
-                publicContentService.toggleContent.save({data: {isEnabled: enabled, id: id}}).$promise.then(function (resp) {
+                publicContentService.publicContent.update({id: id},{info: {isEnabled: enabled}}).$promise.then(function (resp) {
                     console.log(resp);
                     $state.reload();
                 });

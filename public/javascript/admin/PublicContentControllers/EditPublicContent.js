@@ -25,16 +25,16 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
     });
 
     //----------------------------------------------------------------------------------------------------- get content
-    publicContentService.getContentById.query({id: idToEdit}).$promise.then(function (resp) {
+    publicContentService.publicContent.query({id: idToEdit}).$promise.then(function (resp) {
         console.log(resp);
-        $scope.titlu = resp.title;
-        $scope.autor = resp.author;
-        $scope.descriere = resp.description;
-        $scope.selectedType = resp.type;
-        $scope.contentText = resp.text;
-        $scope.imagePath = resp.image_path;
-        $scope.filePath = resp.file_path;
-        $scope.selectedCategory = resp.category;
+        $scope.titlu = resp.success.title;
+        $scope.autor = resp.success.author;
+        $scope.descriere = resp.success.description;
+        $scope.selectedType = resp.success.type;
+        $scope.contentText = resp.success.text;
+        $scope.imagePath = resp.success.image_path;
+        $scope.filePath = resp.success.file_path;
+        $scope.selectedCategory = resp.success.category;
 
         contentDataLoaded = true;
 
@@ -257,8 +257,8 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         //get content text
         toUpdate.text = this.contentText?this.contentText:"";
         //send data to server
-        console.log(toUpdate);
-        publicContentService.editContent.save({data: {toUpdate: toUpdate, id: idToEdit}}).$promise.then(function (resp) {
+        toUpdate.last_updated = new Date();
+        publicContentService.publicContent.update({id: idToEdit},{toUpdate: toUpdate}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.statusAlert.type = "danger";
             }else{

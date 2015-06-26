@@ -275,23 +275,11 @@ services.factory('IntroService', ['$resource', function($resource){
 
 services.factory('publicContentService', ['$resource', function($resource){
     return {
-        getAllContent: $resource('api/admin/users/publicContent/getAllContent', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        getContentById: $resource('api/admin/users/publicContent/getById/:id', {}, {
-            query: { method: 'GET', isArray: false }
-        }),
-        addContent: $resource('api/admin/users/publicContent/addContent/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        editContent: $resource('api/admin/users/publicContent/editContent/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        toggleContent: $resource('api/admin/users/publicContent/toggleContent/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        deleteContent: $resource('api/admin/users/publicContent/deleteContent/:id', {}, {
-            save: { method: 'POST', isArray: false}
+        publicContent: $resource('api/admin/users/publicContent', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         }),
         getTherapeuticAreas: $resource('api/admin/therapeutic_areas', {}, {
             query: { method: 'GET', isArray: true }
