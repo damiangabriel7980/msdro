@@ -6,7 +6,7 @@ controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$
     $scope.selectedGroups = [];
     $scope.selectedAreas=[];
 
-    ProductService.getAll.query().$promise.then(function(resp){
+    ProductService.products.query().$promise.then(function(resp){
         $scope.groups = resp['groups'];
     });
 
@@ -21,11 +21,11 @@ controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$
             id_groups.push($scope.selectedGroups[i]._id);
         }
 
-        $scope.newProduct.groupsID=id_groups;
+        $scope.newProduct.groupsID = id_groups;
         $scope.newProduct['therapeutic-areasID'] = $scope.returnedAreas;
-
-        ProductService.getAll.save($scope.newProduct).$promise.then(function (resp) {
-            console.log(resp);
+        $scope.newProduct.last_updated = Date.now();
+        $scope.newProduct.enable = true;
+        ProductService.products.create({product:$scope.newProduct}).$promise.then(function (resp) {
             $state.reload();
             $modalInstance.close();
         });

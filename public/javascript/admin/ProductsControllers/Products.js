@@ -2,7 +2,7 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce','ngTableParams','$filter', '$modal', 'ActionModal','$q', function($scope, $state, ProductService,$sce,ngTableParams,$filter,$modal,ActionModal,$q){
-    ProductService.getAll.query().$promise.then(function(result){
+    ProductService.products.query().$promise.then(function(result){
         var products = result['productList'];
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
@@ -70,8 +70,7 @@ controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce',
     };
     $scope.deleteProduct = function (id) {
         ActionModal.show("Stergere produs", "Sunteti sigur ca doriti sa stergeti acest produs?", function () {
-            ProductService.deleteOrUpdateProduct.delete({id: id}).$promise.then(function(result){
-                console.log(result);
+            ProductService.products.delete({id: id}).$promise.then(function(result){
                 $state.reload();
             });
         }, "Sterge");

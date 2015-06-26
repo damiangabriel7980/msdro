@@ -994,90 +994,82 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     res.json(cont);
             });
         });
+
     router.route('/admin/products')
         .get(function(req, res) {
-            Products.find({}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                else{
-                    var products={};
-                    products['productList']=cont;
-                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                        if(err) {
-                            logger.error(err);
-                            res.send(err);
-                        }else{
-                            products['groups']=cont2;
-                            res.json(products);
-                        }
-                    });
-                }
-
-            });
+            if(req.query.id){
+                Products.findOne({_id: req.query.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                    if (err){
+                        res.send({error:err});
+                    }else{
+                        res.json({success:product});
+                    }
+                });
+            }else{
+                Products.find({}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, cont) {
+                    if(err) {
+                        res.send(err);
+                    }
+                    else{
+                        var products={};
+                        products['productList']=cont;
+                        UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
+                            if(err) {
+                                logger.error(err);
+                                res.send(err);
+                            }else{
+                                products['groups']=cont2;
+                                res.json(products);
+                            }
+                        });
+                    }
+                });
+            }
         })
         .post(function(req, res) {
-
-            var product = new Products();
-
-            if(req.body.name) product.name = req.body.name;
-            if(req.body.description) product.description=req.body.description;
-            if(req.body.enable) product.enable= req.body.enable;
-            if(req.body.file_path) product.file_path= req.body.file_path;
-            if(req.body.image_path) product.image_path= req.body.image_path;
-            if(req.body['therapeutic-areasID']) product['therapeutic-areasID']= req.body['therapeutic-areasID'];
-            if(req.body.groupsID) product.groupsID= req.body.groupsID;
-
-            product.last_updated=Date.now();
-
+            var product = new Products(req.body.product);
             product.save(function(err, saved) {
                 if (err)
                     res.send(err);
                 else
                     res.json({ message: 'Product created!' , saved: saved});
             });
-
-        });
-
-    router.route('/admin/products/:id')
-        .get(function(req, res) {
-            
-            Products.findOne({_id: req.params.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
-                if (err){
-                    res.send(err);
-                }else{
-                    res.json(product);
-                }
-            });
         })
-        .put(function(req, res) {
-
-            Products.findById(req.params.id, function(err, product) {
-                if (err){
-                    res.send(err);
+        .put(function(req,res){
+            if(req.body.info){
+                var info = req.body.info;
+                if(req.body.info.logo){
+                    Products.update({_id: req.query.id}, {$set:{image_path: info.path}}, function (err, wRes) {
+                        if (err) {
+                            logger.error("Error at product change logo. Product id = " + req.query.id + "; Key = " + info.path);
+                            res.json({error: true});
+                        } else {
+                            res.json({error: false, updated: wRes});
+                        }
+                    });
                 }else{
-                    if(req.body.name) product.name = req.body.name;
-                    if(req.body.description) product.description = req.body.description;
-                    if(typeof req.body.enable === "boolean") product.enable = req.body.enable;
-                    if(req.body.file_path) product.file_path = req.body.file_path;
-                    if(req.body.image_path) product.image_path = req.body.image_path;
-                    if(req.body['therapeutic-areasID']) product['therapeutic-areasID'] = req.body['therapeutic-areasID'];
-                    if(req.body.groupsID) product.groupsID = req.body.groupsID;
-
-                    product.last_updated = Date.now();
-
-                    product.save(function(err, saved) {
-                        if (err){
-                            res.send(err);
+                    Products.update({_id:req.query.id},{$set:{file_path: info.path}}, function (err, wRes) {
+                        if(err){
+                            logger.error("Error at product change RCP. Product id = "+req.query.id+"; Key = "+info.path);
+                            res.json({error:true});
                         }else{
-                            res.json({ message: 'Product updated!' , saved: saved});
+                            res.json({error:false, updated:wRes});
                         }
                     });
                 }
-            });
+            }else{
+                var data = req.body.product;
+                Products.update({_id:req.query.id},{$set:data}, function(err, product) {
+                    if (err){
+                        res.send(err);
+                    }else{
+                        res.json({ message: 'Product updated!' , saved: true});
+                    }
+                });
+            }
         })
-        .delete(function(req, res) {
-            var id = req.params.id;
+        .delete(function(req,res){
+            var id = req.query.id;
             Products.findOne({_id: id}, function (err, product) {
                 if(product){
                     var s3Image = product.image_path;
@@ -1114,30 +1106,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
                 }else{
                     res.json({message:'Product not found!'});
-                }
-            });
-        });
-    router.route('/admin/products/editImage')
-        .post(function(req,res) {
-            var data = req.body.data;
-            Products.update({_id: data.id}, {image_path: data.path}, function (err, wRes) {
-                if (err) {
-                    logger.error("Error at product change logo. Product id = " + data.id + "; Key = " + data.path);
-                    res.json({error: true});
-                } else {
-                    res.json({error: false, updated: wRes});
-                }
-            });
-        });
-    router.route('/admin/products/editRPC')
-        .post(function(req,res){
-            var data = req.body.data;
-            Products.update({_id:data.id}, {file_path: data.path}, function (err, wRes) {
-                if(err){
-                    logger.error("Error at product change RCP. Product id = "+data.id+"; Key = "+data.path);
-                    res.json({error:true});
-                }else{
-                    res.json({error:false, updated:wRes});
                 }
             });
         });

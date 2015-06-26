@@ -5,13 +5,13 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertRPC = {newAlert:false, type:"", message:""};
 
-    ProductService.deleteOrUpdateProduct.getProduct({id:idToEdit}).$promise.then(function(result){
-        $scope.product=result;
-        $scope.selectedAreas = result['therapeutic-areasID'];
-        $scope.selectedGroups = result['groupsID'];
+    ProductService.products.query({id:idToEdit}).$promise.then(function(result){
+        $scope.product=result.success;
+        $scope.selectedAreas = result.success['therapeutic-areasID'];
+        $scope.selectedGroups = result.success['groupsID'];
     });
 
-    ProductService.getAll.query().$promise.then(function(resp){
+    ProductService.products.query().$promise.then(function(resp){
         $scope.groups = resp['groups'];
     });
 
@@ -26,8 +26,9 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
         }
         $scope.product.groupsID = groups_id;
         $scope.product['therapeutic-areasID'] = $scope.returnedAreas;
+        $scope.product.last_updated = Date.now();
 
-        ProductService.deleteOrUpdateProduct.update({id:idToEdit},$scope.product).$promise.then(function (resp) {
+        ProductService.products.update({id:idToEdit},{product:$scope.product}).$promise.then(function (resp) {
             console.log(resp);
             $state.reload();
             $modalInstance.close();
@@ -46,7 +47,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
                     $scope.$apply();
                 } else {
                     //update database as well
-                    ProductService.editImage.save({data:{id:$scope.product._id, path:key}}).$promise.then(function (resp) {
+                    ProductService.products.update({id:$scope.product._id},{info:{path:key,logo:true}}).$promise.then(function (resp) {
                         if(resp.error){
                             $scope.uploadAlert.type = "danger";
                             $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
@@ -110,7 +111,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
                     $scope.$apply();
                 } else {
                     //update database as well
-                    ProductService.editRPC.save({data:{id:$scope.product._id, path:key}}).$promise.then(function (resp) {
+                    ProductService.products.update({id:$scope.product._id},{info:{path:key,rpc:true}}).$promise.then(function (resp) {
                         if(resp.error){
                             $scope.uploadAlertRPC.type = "danger";
                             $scope.uploadAlertRPC.message = "Eroare la actualizarea bazei de date!";

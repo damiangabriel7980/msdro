@@ -330,20 +330,11 @@ services.factory('CarouselMedicService', ['$resource', function($resource){
 }]);
 services.factory('ProductService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/admin/products/', {}, {
+        products: $resource('api/admin/products', {}, {
             query: { method: 'GET', isArray: false },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateProduct:$resource('api/admin/products/:id', {}, {
-            getProduct: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
-        }),
-        editImage: $resource('api/admin/products/editImage/:data', {}, {
-            save: { method: 'POST' }
-        }),
-        editRPC: $resource('api/admin/products/editRPC/:data', {}, {
-            save: { method: 'POST' }
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         })
     }
 }]);
