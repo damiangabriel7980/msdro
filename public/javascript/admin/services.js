@@ -261,26 +261,14 @@ services.factory('ManageAccountsService', ['$resource', function($resource){
 
 services.factory('IntroService', ['$resource', function($resource){
     return {
-        getIntros: $resource('api/admin/intros/', {}, {
+        intros: $resource('api/admin/intros/', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
+        }),
+        groups: $resource('api/admin/getAllGroups', {}, {
             query: { method: 'GET', isArray: true }
-        }),
-        getOneIntro: $resource('api/admin/oneIntro', {}, {
-            query: { method: 'POST', isArray: false }
-        }),
-        saveIntroChanges: $resource('api/admin/saveIntroChanges', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        deleteIntro: $resource('api/admin/deleteIntro', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        addIntro: $resource('api/admin/addIntro', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        getAllGroups: $resource('api/admin/getAllGroups', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        toggleIntro: $resource('api/admin/toggleIntro', {}, {
-            save: { method: 'POST', isArray: false }
         })
     }
 }]);

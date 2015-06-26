@@ -3328,31 +3328,72 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     router.route('/admin/intros')
         .get(function (req, res) {
-            Presentations.find({}).exec(function (err, presentations) {
+            if(req.query.id){
+                var presentations={};
+                Presentations.find({_id: req.query.id}).populate('groupsID').exec(function (err, presentation) {
+                    if(err){
+                        res.send({error:err});
+                    }else{
+                        presentations['onePresentation']=presentation[0];
+                        UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
+                            if(err) {
+                                logger.error(err);
+                                res.send({error:err});
+                            }else{
+                                presentations['groups']=cont2;
+                                res.json(presentations);
+                            }
+                        });
+                    }
+                });
+            }else{
+                Presentations.find({}).exec(function (err, presentations) {
+                    if(err){
+                        res.send({error:err});
+                    }else{
+                        res.send({success:presentations});
+                    }
+                });
+            }
+        })
+        .post(function(req,res){
+            var intro = new Presentations(req.body.intro);
+            intro.save(function (err, presentation) {
                 if(err){
-                    res.send(err);
+                    res.send({error: true,message:"Error occured!"});
                 }else{
-                    res.send(presentations);
+                    res.send({error: false,message:"Create successful!"});
                 }
             });
-        });
-    router.route('/admin/oneIntro')
-        .post(function (req, res) {
-            var presentations={};
-            Presentations.find({_id: req.body.id}).populate('groupsID').exec(function (err, presentation) {
+        })
+        .put(function(req,res){
+            if(req.body.isEnabled!=undefined){
+                Presentations.update({_id: req.query.id},{$set:{enabled: req.body.isEnabled}}).exec(function (err, presentation) {
+                    if(err){
+                        console.log(err);
+                        res.send({error: true,message:"Error occured!"});
+                    }else{
+                        res.send({error: false,message:"Update successful!"});
+                    }
+                });
+            }else{
+                var intro = req.body.intro;
+                Presentations.update({_id: req.query.id},{$set: intro},function (err, presentation) {
+                    if(err){
+                        res.send({error: true,message:"Error occured!"});
+                    }else{
+                        res.send({error: false,message:"Update successful!"});
+                    }
+                });
+            }
+        })
+        .delete(function(req,res){
+            Presentations.remove({_id: req.query.idToDelete}, function (err, count) {
                 if(err){
-                    res.send(err);
+                    console.log(err);
+                    res.send({error: true, message: "Eroare la stergerea produsului"});
                 }else{
-                    presentations['onePresentation']=presentation[0];
-                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                        if(err) {
-                            logger.error(err);
-                            res.send(err);
-                        }else{
-                            presentations['groups']=cont2;
-                            res.json(presentations);
-                        }
-                    });
+                    res.send({error: false, message: "S-au sters "+count+" prezentari!"});
                 }
             });
         });
@@ -3367,54 +3408,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-    router.route('/admin/saveIntroChanges')
-        .post(function (req, res) {
-            Presentations.update({_id: req.body.id},{$set:{description: req.body.description, article_content: req.body.article_content, groupsID: req.body.groupsID}}).exec(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
-
-                    res.send({message:"Update successful!"});
-                }
-            });
-        });
-    router.route('/admin/toggleIntro')
-        .post(function (req, res) {
-            Presentations.update({_id: req.body.id},{$set:{enabled: req.body.isEnabled}}).exec(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
-                    res.send({message:"Update successful!"});
-                }
-            });
-        });
-    router.route('/admin/addIntro')
-        .post(function (req, res) {
-            var presentation = new Presentations();
-            presentation.description= req.body.description;
-            presentation.article_content = req.body.article_content;
-            presentation.groupsID = req.body.groupsID;
-            presentation.enabled=false;
-            presentation.save(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
-                    res.send({message:"Create successful!"});
-                }
-            });
-        });
-    router.route('/admin/deleteIntro')
-        .post(function (req, res) {
-            Presentations.remove({_id: req.body.idToDelete}, function (err, count) {
-                if(err){
-                    console.log(err);
-                    res.send({error: true, message: "Eroare la stergerea produsului"});
-                }else{
-                    res.send({error: false, message: "S-au sters "+count+" prezentari!"});
-                }
-            });
-        });
-
     //==================================================================================================================================== USER ROUTES
 
     router.route('/user/addPhoto')

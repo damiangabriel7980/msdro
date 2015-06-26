@@ -2,6 +2,7 @@
     <div class="modal-title"><h3>Editeaza prezentare</h3></div>
 </div>
 <div class="modal-body col-xs-12">
+    <form>
     <div class="col-md-12" style="margin-bottom: 15px;">
         <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
     </div>
@@ -20,6 +21,7 @@
         <label>General description:</label>
         <textarea ui-tinymce="tinymceOptions" ng-model="intro.article_content"></textarea>
     </div>
+    </form>
 </div>
 <div class="modal-footer">
     <a class="btn pull-left btn-primary" ng-click="closeModal()">Close</a>

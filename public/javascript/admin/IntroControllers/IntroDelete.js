@@ -13,7 +13,7 @@ controllers.controller('IntroDelete', ['$scope','$rootScope' ,'IntroService','$s
                 $scope.statusAlert.message="Eroare la stergerea de pe Amazon!";
             }else{
                 //delete product and every menu items attached to it
-                IntroService.deleteIntro.save({idToDelete: idToEdit}).$promise.then(function(resp){
+                IntroService.intros.delete({idToDelete: idToEdit}).$promise.then(function(resp){
                     if(resp.error){
                         $scope.statusAlert.newAlert=true;
                         $scope.statusAlert.type="danger";

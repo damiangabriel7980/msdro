@@ -3,8 +3,7 @@ controllers.controller('IntroToggle', ['$scope','$rootScope' ,'IntroService','$s
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.toggleIntro=function(){
-        console.log(!status);
-                IntroService.toggleIntro.save({id: idToEdit,isEnabled: !status}).$promise.then(function(resp){
+                IntroService.intros.update({id: idToEdit},{isEnabled: !status}).$promise.then(function(resp){
                     if(resp.error){
                         $scope.statusAlert.newAlert=true;
                         $scope.statusAlert.type="danger";

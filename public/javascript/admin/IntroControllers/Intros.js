@@ -1,5 +1,5 @@
 controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','ngTableParams','$modal', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,ngTableParams,$modal){
-    IntroService.getIntros.query().$promise.then(function (data) {
+    IntroService.intros.query().$promise.then(function (data) {
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -10,10 +10,10 @@ controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$statePa
                 description: ''       // initial filter
             }
         }, {
-            total: data.length, // length of data
+            total: data.success.length, // length of data
             getData: function($defer, params) {
 
-                var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
+                var orderedData = $filter('orderBy')(($filter('filter')(data.success, params.filter())), params.orderBy());
 
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             }
