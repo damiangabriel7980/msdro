@@ -1,5 +1,4 @@
 //import our customizable variables
-@import '../globalVariables';
 @import 'medicVariables';
 
 //import stripped-from-variables version of bootstrap, which will use our custom variables
@@ -17,6 +16,9 @@ body{
   }
   a{
     cursor: pointer;
+  }
+  .btn{
+    .btn-sm;
   }
 }
 .filterByTherapeuticAreas{
@@ -39,11 +41,11 @@ body{
         cursor: pointer;
         border-radius: 4px !important;
         &:hover{
-          background-color: @MSDgreenDarker;
+          background-color: @green-darker;
           color:white;
         }
         &.active{
-          background-color: @MSDgreenDarker;
+          background-color: @green-darker;
           color:white;
         }
       }
@@ -113,16 +115,6 @@ body{
     .articlesList{
       .articlesMoreNews{
         clear: both;margin:0 auto;
-        .btn-news{
-          margin-top: 20px;
-          background-color: transparent;
-          color: black;
-          &:hover{
-            color: @body-bg;
-            background-color: #31b0d5;
-            border-color: #269abc;
-          }
-        }
       }
       .noArticles{
         padding: 0;
@@ -151,16 +143,6 @@ body{
       img{
         padding-right: 15px;
         padding-bottom: 15px;
-      }
-    }
-    .btn-news{
-      margin-top: 20px;
-      background-color: transparent;
-      color: black;
-      &:hover{
-        color: @body-bg;
-        background-color: #31b0d5;
-        border-color: #269abc;
       }
     }
     .date {
@@ -238,26 +220,17 @@ body{
     border: 1px solid rgba(51, 51, 51, 0.2);
     .contentShadow;
     .event{
-      border-left: 2px solid @MSDgreenDarker;
+      border-left: 2px solid @green-darker;
       .date{
         margin-top: -18px;
         .green{
-          color: @MSDgreenDarker;
+          color: @green-darker;
         }
       }
     }
     .buttonWrapper{
       padding-right: 0;
       padding-bottom: 0;
-      .btn-news{
-        background-color: transparent;
-        color: black;
-        &:hover{
-          color: @body-bg;
-          background-color: #31b0d5;
-          border-color: #269abc;
-        }
-      }
     }
     .category{
       padding-top: 5px;
@@ -267,15 +240,10 @@ body{
   .contentWrapper{
     padding-left: 0;
     .Title{
-      color: @MSDgreenDarker;
+      color: @green-darker;
       cursor: pointer;
     }
   }
-}
-
-.btn-transparent{
-  background-color: transparent;
-  color: black;
 }
 
 .link-footer{
@@ -658,6 +626,10 @@ body{
     @media(max-width: 768px){
       right: -15px;
     }
+    .btn{
+      .btn;
+      border-color: @gray;
+    }
   }
   .navbar-collapse{
     background-color: #ffffff;
@@ -705,7 +677,7 @@ body{
 #footer {
   border-top: 1px solid @grayLightest;
   //z-index: 1040;
-  background: @MSDgreenDarker;
+  background: @green-darker;
   padding: 5px 0;
   width: 100%;
   clear: both;
@@ -828,7 +800,7 @@ body{
     .specialProductTitle{
       margin-top: 20px;
       margin-bottom: 20px;
-      color: @MSDgreenDarker;
+      color: @green-darker;
       .fontXXL;
       font-weight: bold
     }
@@ -845,7 +817,7 @@ body{
         margin-top: 20px
       }
       .fileLinks{
-          color: @MSDgreenDarker !important;
+          color: @green-darker !important;
         &:focus
         {
           text-decoration: none !important;
@@ -853,7 +825,7 @@ body{
       }
       .glossary{
         font-weight: bold;
-        color: @MSDgreenDarker;
+        color: @green-darker;
         padding-bottom: 10px;
         .Description{
           padding-bottom: 10px;
@@ -876,11 +848,11 @@ body{
           padding: 0;
           line-height: 2em;
           cursor: pointer;
-          color: @MSDgreenDarker !important;
+          color: @green-darker !important;
         }
         .siteMapList{
           cursor: pointer;
-          color: @MSDgreenDarker !important;
+          color: @green-darker !important;
         }
       }
     }
@@ -949,7 +921,7 @@ body{
         text-overflow: ellipsis;
       }
       .name{
-        color: @MSDgreen;
+        color: @green;
         .fontS;
         font-weight: bold;
         line-height: 1.5em;
@@ -976,7 +948,7 @@ body{
     width: 100%;
   }
   .name{
-    color: @MSDgreen;
+    color: @green;
     .fontXL;
     font-weight: bold;
   }
@@ -1059,8 +1031,8 @@ body{
   user-select: none;
 }
 .noPadding{padding:0;}
-.MSDgreen{color: @MSDgreen;}
-.MSDgreenDarker{color: @MSDgreenDarker;}
+.MSDgreen{color: @green;}
+.MSDgreenDarker{color: @green-darker;}
 .handCursor{
   cursor: pointer;
 }
@@ -1120,7 +1092,7 @@ body{
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     color: white;
-    background-color: @MSDgreenDarker;
+    background-color: @green;
   }
 }
 a:focus{
@@ -1129,7 +1101,7 @@ a:focus{
 .cookieBar{
   position: fixed;
   z-index: 1060;
-  background-color: @MSDgreenDarker ;
+  background-color: @green ;
   bottom:0;
   line-height: 30px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

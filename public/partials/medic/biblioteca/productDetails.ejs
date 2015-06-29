@@ -4,7 +4,7 @@
     </div>
     <div class="col-md-3 col-xs-12 imageAndRCP">
         <a class="thumbnail"><img ng-src="{{selectedProduct.image_path?pathAmazonDev + selectedProduct.image_path:defaultProductImage}}" alt="{{selectedProduct.name}}"/></a>
-        <a ng-if="selectedProduct.file_path" ng-href="{{pathAmazonDev + selectedProduct.file_path}}" target="_blank" class="btn btn-info btn-transparent btn-block rcp">
+        <a ng-if="selectedProduct.file_path" ng-href="{{pathAmazonDev + selectedProduct.file_path}}" target="_blank" class="btn btn-default">
             <i class="glyphicon glyphicon-share"></i>&nbsp;Descarca RCP
         </a>
         <hr>
@@ -12,6 +12,6 @@
     <div class="col-md-9 col-xs-12" convert-special conver="selectedProduct.description" ng-bind-html="trustAsHtml(selectedProduct.description)">
     </div>
     <div class="col-xs-12 text-center" ng-if="isMobile(true)">
-        <button class="btn btn-sm btn-info btn-transparent" ui-sref="biblioteca.produse.productsByArea({id:selectedArea._id})">Inapoi la produse</button>
+        <button class="btn btn-default" ui-sref="biblioteca.produse.productsByArea({id:selectedArea._id})">Inapoi la produse</button>
     </div>
 </div>

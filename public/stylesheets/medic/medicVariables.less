@@ -1,3 +1,6 @@
+//import global variables
+@import "../globalVariables";
+
 //
 // Variables
 // --------------------------------------------------
@@ -17,7 +20,7 @@
 @gray-light:             lighten(@gray-base, 46.7%); // #777
 @gray-lighter:           lighten(@gray-base, 93.5%); // #eee
 
-@brand-primary:         @MSDgreenDarker;
+@brand-primary:         @green;
 @brand-success:         #5cb85c;
 @brand-info:            #5bc0de;
 @brand-warning:         #f0ad4e;
@@ -33,9 +36,9 @@
 @grayLighter: #dddddd;
 @grayLightest: #eeeeee;
 
-@MSDgreen: #1c9893;
-@MSDgreenDarker: #009d97;
-@MSDLightGreen: #17B3AD;
+@MSDgreen: @green;
+@MSDgreenDarker: @green-darker;
+@MSDLightGreen: @green-lighter;
 //== Scaffolding
 //
 //## Settings for some of the most global styles.
@@ -161,7 +164,7 @@
 
 @btn-default-color:              #333;
 @btn-default-bg:                 #fff;
-@btn-default-border:             #ccc;
+@btn-default-border:             @green-darker;
 
 @btn-primary-color:              #fff;
 @btn-primary-bg:                 @brand-primary;
@@ -375,9 +378,9 @@
 
 // Navbar links
 @navbar-default-link-color:                #777;
-@navbar-default-link-hover-color:          @MSDgreenDarker;
+@navbar-default-link-hover-color:          @green-darker;
 @navbar-default-link-hover-bg:             transparent;
-@navbar-default-link-active-color:         @MSDgreenDarker;
+@navbar-default-link-active-color:         @green-darker;
 @navbar-default-link-active-bg:            #ffffff;
 @navbar-default-link-disabled-color:       #ccc;
 @navbar-default-link-disabled-bg:          transparent;

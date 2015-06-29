@@ -1,5 +1,4 @@
 //import our customizable variables
-@import '../globalVariables';
 @import 'publicVariables';
 
 //import stripped-from-variables version of bootstrap, which will use our custom variables
@@ -15,6 +14,9 @@ html{
   body {
     height: 100%;
     .fontDefault;
+    .btn{
+      .btn-sm;
+    }
     #publicHeaderWrapper{
       left: 0;
       top: 0;
@@ -147,7 +149,7 @@ html{
     }
   }
   .navbar-nav>.active>a{
-    color: @greenDark;
+    color: @green-darker;
     font-weight: bold;
     background-color: #ffffff;
     @media (min-width: @grid-float-breakpoint) {
@@ -214,20 +216,20 @@ html{
   display: table;
   padding: 7px 14px 7px 14px;
   margin-top: 10px;
-  background-color: @greenLighter;
+  background-color: @green-lighter;
   color: #ffffff;
   font-weight: bold;
   cursor: pointer;
   .unselectable;
   &:hover{
-    background-color: @greenDark;
+    background-color: @green-darker;
   }
 }
 
 .evenimente{
   .fontXL;
   font-weight: bold;
-  color: @greenDark;
+  color: @green-darker;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -250,7 +252,7 @@ html{
 }
 
 .MSDgreen{
-  color: @MSDgreen;
+  color: @green;
 }
 
 //================================================================================================================ HOME
@@ -268,10 +270,10 @@ html{
     border: 1px solid @gray;
     cursor: pointer;
     &.active{
-      color: @greenDark;
+      color: @green-darker;
     }
     &:hover{
-      color: @greenDark;
+      color: @green-darker;
     }
   }
   .left{
@@ -518,7 +520,7 @@ html{
         padding: 0;
         margin-bottom: 5px;
         a{
-          color: @greenDark;
+          color: @green-darker;
           font-weight: bold;
           .fontL;
         }
@@ -619,7 +621,7 @@ html{
       width: 100%;
       display: block;
       a{
-        color: @greenDark;
+        color: @green-darker;
         font-weight: bold;
       }
     }
@@ -657,7 +659,7 @@ html{
       .fontS;
     }
     .videoWrapper{
-      border: 3px solid @greenDark;
+      border: 3px solid @green-darker;
       border-radius: 10px;
       padding: 5px;
       margin-top: 15px;
@@ -667,11 +669,11 @@ html{
           background-color: #ffffff;
           opacity: 1;
           .iconButton{
-            color: @greenDark;
+            color: @green-darker;
             font-size: 25px;
           }
           vg-time-display{
-            color: @greenDark;
+            color: @green-darker;
             font-weight: bold;
           }
           vg-scrub-bar{
@@ -681,7 +683,7 @@ html{
               background-color: #ccfffa;
               vg-scrub-bar-current-time{
                 height: 10px;
-                background-color: @greenDark;
+                background-color: @green-darker;
               }
             }
           }
@@ -717,16 +719,6 @@ html{
 }
 
 //============================================================================================================== SHARED
-
-.btnGreenBorder{
-  border-color: @greenDark;
-  &:hover{
-    border-color: @greenDark;
-  }
-  &:focus{
-    border-color: @greenDark;
-  }
-}
 
 a{
   &:focus{
@@ -805,7 +797,7 @@ a{
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     color: white;
-    background-color: @MSDgreenDarker;
+    background-color: @green;
   }
 }
 .loginInput{
