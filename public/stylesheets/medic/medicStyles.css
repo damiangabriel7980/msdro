@@ -6353,11 +6353,11 @@ body .btn {
   border-radius: 4px !important;
 }
 .filterByTherapeuticAreas .areas .menu .area:hover {
-  background-color: #006d69;
+  background-color: #01877b;
   color: white;
 }
 .filterByTherapeuticAreas .areas .menu .area.active {
-  background-color: #006d69;
+  background-color: #01877b;
   color: white;
 }
 .filterByTherapeuticAreas .viewport {
@@ -6856,7 +6856,7 @@ body .btn {
   background-color: orange;
 }
 .navbar-fixed-top .navbar-nav > .active > a {
-  color: #008780;
+  color: #006d69;
   font-weight: bold;
   background-color: #ffffff;
 }
@@ -6865,7 +6865,7 @@ body .btn {
   position: absolute;
   width: 40%;
   height: 0px;
-  border: 3px solid #bbbbbb;
+  border: 3px solid #aaaaaa;
   border-radius: 5px;
   left: 30%;
   top: 40px;
@@ -6877,7 +6877,7 @@ body .btn {
 }
 .navbarMedic {
   padding: 10px 25px 0 25px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #eeeeee;
 }
 .navbarMedic .container {
   padding: 0;
@@ -6886,10 +6886,10 @@ body .btn {
 }
 .navbarMedic .dropdown-menu {
   border-radius: 6px;
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 0;
+  padding-bottom: 0;
   min-width: 180px;
-  background-color: #F0F0F0;
+  background-color: #eeeeee;
 }
 .navbarMedic .dropdown-menu li {
   padding: 10px 5px 10px 5px;

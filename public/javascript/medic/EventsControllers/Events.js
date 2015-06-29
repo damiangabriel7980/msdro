@@ -23,14 +23,14 @@ var date = new Date();
            var today = new Date($scope.events[i].end);
            var tomorrow = new Date($scope.events[i].end);
            tomorrow.setDate(today.getDate()+1);
-           $scope.eventsS.push({id:$scope.events[i]._id, title:Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,true),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,false)});
+           $scope.eventsS.push({id:$scope.events[i]._id, title:Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,true),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#01877B', type: Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,false)});
        }
         for(var i = 0; i < $scope.events.length; i++)
         {
             var today = new Date($scope.events[i].end);
             var tomorrow = new Date($scope.events[i].end);
             tomorrow.setDate(today.getDate()+1);
-            $scope.eventsMob.push({id:$scope.events[i]._id, title:Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,true,true),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,false)});
+            $scope.eventsMob.push({id:$scope.events[i]._id, title:Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,true,true),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#01877B', type: Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,false)});
         }
 
          $scope.realEvents=[$scope.eventsS];
