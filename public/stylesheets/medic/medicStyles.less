@@ -91,12 +91,6 @@ body{
     padding: 0 0 25px 0;
   }
 }
-.paddingLeftMobile{
-  padding-left: 0;
-  @media(max-width: 768px){
-    padding-left: 15px;
-  }
-}
 .main-view-container {
   overflow-x: hidden;
   margin-top:20px !important;
@@ -171,9 +165,6 @@ body{
   }
   .nextEvents{
     padding-left: 40px;
-    //@media(max-width: 1277px){
-    //  padding-left: 0;
-    //}
     .paddingTop5{
       padding-top: 5px;
     }
@@ -585,9 +576,6 @@ body{
     padding: 9px 10px;
     border: 1px solid @gray-light;
     border-radius: 4px;
-    //@media (min-device-width: 480px) and (max-device-width: 767px) {
-    //  margin-left: 9px;
-    //}
   }
   .navbar-collapse{
     padding: 0;
@@ -626,12 +614,9 @@ body{
 .specialProductMainWrapper{
   margin-top: 20px;
   #menuDiv{
-    margin-left: 30px;
+    margin-left: 0;
     .menuMarginBottom{
     margin-bottom: 0;
-    }
-    @media(max-width: 1277px){
-      margin-left: 0px;
     }
     .panel-body{
       padding: 0;
@@ -934,10 +919,6 @@ body{
 .modal-responsive{
   .modal-dialog{
     height: 90%;
-    @media screen and (orientation:portrait){
-      height: auto;
-      width: 700px;
-    }
     .modal-content{
       height: 100%;
       .modal-header{
@@ -1014,15 +995,7 @@ body{
   height: 200px !important;
   image-orientation: from-image;
 }
-.margintop30px{
-  margin-top: 30px;
-}
 
-.paddingTop5{
-  @media(max-width: 768px){
-    padding-top: 5px;
-  }
-}
 .modal-dialog{
   .modal-header{
     border-top-left-radius: 5px;
@@ -1047,11 +1020,6 @@ a:focus{
 
 .profileImg{
   width: 100%;
-  @media (max-device-width: 480px) {
-    width: auto;
-    margin: auto;
-    image-orientation: from-image;
-  }
 }
 
 //=================================== calendar mobile responsive
@@ -1067,13 +1035,13 @@ a:focus{
 .fc-header-title{
   h2 {
     .fontXL;
-    @media (max-device-width: 480px) {
+    @media (max-device-width: @screen-xs) {
       padding-top: 3px;
     }
   }
 }
 .fc-button-today{
-  @media (max-device-width: 480px) {
+  @media (max-device-width: @screen-xs) {
     display: none !important;
   }
 }

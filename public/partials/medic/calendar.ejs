@@ -15,7 +15,7 @@
             <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
         </div>
         <div ng-repeat="eventim in eventsFiltered">
-            <div class="col-md-12 col-xs-12 col-sm-12 noPadding" ng-class="$index==0?'paddingTop5':''">
+            <div class="col-md-12 col-xs-12 col-sm-12 noPadding">
                 <div class="col-md-2 col-xs-2 col-sm-1 noPadding Date">
                     <h3 class="day">{{eventim.start | filter: asDate | date:'dd'}}</h3>
                     <h5 class="month">{{eventim.start | filter: asDate | date:'MMM'}}</h5>
@@ -39,7 +39,7 @@
                 <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
             </div>
              <div ng-repeat="eventim in eventsFiltered">
-                    <div class="col-md-12 col-xs-12 noPadding" ng-class="$index==0?'paddingTop5':''">
+                    <div class="col-md-12 col-xs-12 noPadding">
                         <div ng-cloak class="col-md-2 col-xs-2 noPadding Date">
                             <h3 class="day">{{eventim.start | filter: asDate | date:'dd'}}</h3>
                             <h5 class="month">{{eventim.start | filter: asDate | date:'MMM'}}</h5>

@@ -6395,14 +6395,6 @@ body .btn {
 .multimediaView .multimediaWrapper {
   padding: 0 0 25px 0;
 }
-.paddingLeftMobile {
-  padding-left: 0;
-}
-@media (max-width: 768px) {
-  .paddingLeftMobile {
-    padding-left: 15px;
-  }
-}
 .main-view-container {
   overflow-x: hidden;
   margin-top: 20px !important;
@@ -6965,15 +6957,10 @@ fieldset[disabled] .navbarMedic .profile .btn {
   margin-top: 20px;
 }
 .specialProductMainWrapper #menuDiv {
-  margin-left: 30px;
+  margin-left: 0;
 }
 .specialProductMainWrapper #menuDiv .menuMarginBottom {
   margin-bottom: 0;
-}
-@media (max-width: 1277px) {
-  .specialProductMainWrapper #menuDiv {
-    margin-left: 0px;
-  }
 }
 .specialProductMainWrapper #menuDiv .panel-body {
   padding: 0;
@@ -7264,12 +7251,6 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .modal-responsive .modal-dialog {
   height: 90%;
 }
-@media screen and (orientation: portrait) {
-  .modal-responsive .modal-dialog {
-    height: auto;
-    width: 700px;
-  }
-}
 .modal-responsive .modal-dialog .modal-content {
   height: 100%;
 }
@@ -7343,14 +7324,6 @@ fieldset[disabled] .navbarMedic .profile .btn {
   height: 200px !important;
   image-orientation: from-image;
 }
-.margintop30px {
-  margin-top: 30px;
-}
-@media (max-width: 768px) {
-  .paddingTop5 {
-    padding-top: 5px;
-  }
-}
 .modal-dialog .modal-header {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -7372,13 +7345,6 @@ a:focus {
 }
 .profileImg {
   width: 100%;
-}
-@media (max-device-width: 480px) {
-  .profileImg {
-    width: auto;
-    margin: auto;
-    image-orientation: from-image;
-  }
 }
 .popover {
   z-index: 1000 ! important;
