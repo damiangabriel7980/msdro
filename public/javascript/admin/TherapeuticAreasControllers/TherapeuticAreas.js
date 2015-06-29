@@ -2,9 +2,9 @@
  * Created by miricaandrei23 on 26.11.2014.
  */
 controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'areasAdminService','$stateParams','$sce','ngTableParams','$filter', 'ActionModal', function($scope,$rootScope, $state, areasAdminService,$stateParams,$sce,ngTableParams,$filter, ActionModal){
-    areasAdminService.getAll.query().$promise.then(function(result){
-        var arii = result;
-        $scope.areasForFilter = result;
+    areasAdminService.areas.query().$promise.then(function(result){
+        var arii = result.success;
+        $scope.areasForFilter = result.success;
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -30,7 +30,7 @@ controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'ar
 
     $scope.deleteArea = function (id) {
         ActionModal.show("Stergere arie terapeutica", "Sunteti sigur ca doriti sa stergeti aria terapeutica?", function () {
-            areasAdminService.deleteOrUpdateareas.delete({id: id}).$promise.then(function(result){
+            areasAdminService.areas.delete({id: id}).$promise.then(function(result){
                 console.log(result);
                 $state.reload();
             });

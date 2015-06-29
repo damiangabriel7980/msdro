@@ -400,14 +400,11 @@ services.factory('MultimediaAdminService', ['$resource', function($resource){
 }]);
 services.factory('areasAdminService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/admin/areas/', {}, {
-            query: { method: 'GET', isArray: true },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateareas:$resource('api/admin/areas/:id', {}, {
-            getArea: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
+        areas: $resource('api/admin/areas', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         })
     }
 }]);

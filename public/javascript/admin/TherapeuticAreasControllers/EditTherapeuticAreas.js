@@ -6,42 +6,44 @@
  */
 controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService){
     $scope.therapeuticAlert = {newAlert:false, type:"", message:""};
-    $scope.arie = areasAdminService.deleteOrUpdateareas.getArea({id:$stateParams.id}).$promise.then(function(resp){
+    therapeuticAreaService.query().$promise.then(function (resp) {
+        $scope.areas = resp;
+    });
+    areasAdminService.areas.query({id:$stateParams.id}).$promise.then(function(resp){
         $scope.arie = resp['selectedArea'];
-        $scope.selectedAreas = resp['childrenAreas'];
-        $scope.arie.oldAreas = [];
+        $scope.selectedAreas = resp['childrenAreas'] ? resp['childrenAreas']: [];
+        $scope.oldAreas = [];
         if(resp['childrenAreas']){
             for ( var i = 0;i<resp['childrenAreas'].length;i++)
-                $scope.arie.oldAreas.push(resp['childrenAreas'][i]);
+                $scope.oldAreas.push(resp['childrenAreas'][i]);
         }
     });
 
 
     $scope.updateArie = function(){
         if($scope.arie && $scope.arie.name!=""){
-            $scope.arie['therapeutic-areasID'] = $scope.returnedAreas;
-            areasAdminService.deleteOrUpdateareas.update({id:$stateParams.id},$scope.arie).$promise.then(function(resp){
+            $scope.newAreas = $scope.returnedAreas;
+            $scope.arie.last_updated = new Date();
+            $scope.arie['therapeutic-areasID'] = [];
+            console.log($scope.arie);
+            areasAdminService.areas.update({id:$stateParams.id},{area:$scope.arie, oldAreas: $scope.oldAreas, newAreas: $scope.newAreas}).$promise.then(function(resp){
                 $scope.arie = {};
                 $modalInstance.close();
                 $state.go('ariiTerapeutice',{},{reload: true});
             });
         }
         else{
-
             $scope.therapeuticAlert.newAlert = true;
             $scope.therapeuticAlert.message = "Numele ariei terapeutice este obligatoriu!";
             $scope.therapeuticAlert.type = "danger";
         }
     };
-    therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp;
-    });
+
 
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
     $scope.okk = function () {
-        console.log(this);
         $modalInstance.close();
         $state.go('ariiTerapeutice',{},{reload: true});
     };
