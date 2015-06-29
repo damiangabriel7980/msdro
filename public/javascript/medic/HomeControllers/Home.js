@@ -42,6 +42,14 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
         $state.go('noutati.articol', {articleType: article.type, articleId: article._id, fromHome: 1});
     };
 
+    $scope.navigateToMultimedia = function (multimedia) {
+        if(Utils.isMobile){
+            $state.go("elearning.multimedia.multimediaByArea", {idArea:0, idMulti: multimedia._id});
+        }else{
+            $state.go("elearning.multimedia.multimediaMobile", {id: multimedia._id});
+        }
+    };
+
        //------------------------------------------------------------------------------------------------- get all content
 
     HomeService.events.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {

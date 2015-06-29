@@ -72,9 +72,13 @@
                         <i class="glyphicon" ng-class="{'glyphicon-picture':m.type==2,'glyphicon-film':m.type==1}"></i>&nbsp;
                     </div>
                     <div class="col-xs-12 Content">
-                        <a class="hidden-xs mediaTitle" ui-sref="elearning.multimedia.multimediaByArea({idArea:0,idMulti: m._id})"><b convert-special conver="m.title" ng-bind-html="trustAsHtml(m.title)"></b><b>&nbsp;(</b><b convert-special conver="m.author" ng-bind-html="trustAsHtml(m.author)"></b><b>)</b></a>
-                        <a class="hidden-sm hidden-lg mediaTitle" ui-sref="elearning.multimedia.multimediaMobile({id: m._id})"><b convert-special conver="m.title" ng-bind-html="trustAsHtml(m.title)"></b><b>&nbsp;(</b><b convert-special conver="m.author" ng-bind-html="trustAsHtml(m.author)"></b><b>)</b></a>
-                        <p ng-if="m.description != null" convert-special conver="m.description" ng-bind-html="convertAndTrustAsHtml(m.description)"></p>
+                        <div class="col-xs-12 mediaTitle" ng-click="navigateToMultimedia(m)">
+                            <span convert-special conver="m.title" ng-bind-html="trustAsHtml(m.title)"></span>
+                            <span>&nbsp;(</span>
+                            <span convert-special conver="m.author" ng-bind-html="trustAsHtml(m.author)"></span>
+                            <span>)</span>
+                        </div>
+                        <div class="col-xs-12 description" ng-if="m.description != null" convert-special conver="m.description" ng-bind-html="convertAndTrustAsHtml(m.description)"></div>
                     </div>
                 </div>
             </div>
@@ -89,10 +93,10 @@
                         <div class="col-xs-12 month">{{monthsArray[toDate(e.start).getMonth()]}}</div>
                     </div>
                     <div class="col-xs-12 Content">
-                        <div class="col-xs-12 MediaTitle" ng-if="e.type==2" ui-sref="calendar({id:e._id})"><b convert-special conver="e.name" ng-bind-html="trustAsHtml(iconLive + e.name)"></b></div>
-                        <div class="col-xs-12 MediaTitle" ng-if="e.type==1 || e.type==null" ui-sref="calendar({id:e._id})"><b convert-special conver="e.name" ng-bind-html="trustAsHtml(e.name)"></b></div>
-                        <div class="col-xs-12 Description" ng-if="e.description!='undefined'" convert-special conver="e.description" ng-bind-html="trimText(htmlToPlainText(e.description), 50)"></div>
-                        <div class="col-xs-12 Description" ng-if="e.description=='undefined'" convert-special conver="e.description">&nbsp;</div>
+                        <div class="col-xs-12 MediaTitle" ui-sref="calendar({id:e._id})"
+                             convert-special conver="e.name" ng-bind-html="trustAsHtml((e.type==2?iconLive:'') + e.name)">
+                        </div>
+                        <div class="col-xs-12 Description" ng-if="e.description" convert-special conver="e.description" ng-bind-html="trimText(htmlToPlainText(e.description), 50)"></div>
                     </div>
                 </div>
             </div>

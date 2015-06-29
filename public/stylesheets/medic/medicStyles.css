@@ -6576,8 +6576,14 @@ body .btn {
   padding: 0;
   text-align: justify;
 }
-.homeStyles .rightSection .leftColumn .Multimedia .Wrapper .Content b {
+.homeStyles .rightSection .leftColumn .Multimedia .Wrapper .Content .mediaTitle {
+  padding: 0;
+  font-weight: bold;
   color: #01877b;
+  cursor: pointer;
+}
+.homeStyles .rightSection .leftColumn .Multimedia .Wrapper .Content .description {
+  padding: 0;
 }
 .homeStyles .rightSection .leftColumn .Events .Title {
   padding: 0;
@@ -6615,6 +6621,7 @@ body .btn {
   color: #01877b;
   cursor: pointer;
   text-align: justify;
+  font-weight: bold;
 }
 .homeStyles .rightSection .leftColumn .Events .eventDisplay .Content .Description {
   padding: 0;
