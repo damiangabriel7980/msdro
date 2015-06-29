@@ -72,6 +72,6 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
 
     /* --- footer realign ---*/
 
-    $scope.iconLive='<i class="glyphicon glyphicon-facetime-video smallFontSize" ng-if="e.type==2"></i>&nbsp;';
+    $scope.iconLive='<i class="glyphicon glyphicon-facetime-video" ng-if="e.type==2"></i>&nbsp;';
 
 }]);

@@ -6311,13 +6311,17 @@ button.close {
 body {
   font-size: 14px;
 }
+body h2 {
+  font-size: 25px;
+}
+body h3 {
+  font-size: 20px;
+}
+body h4 {
+  font-size: 17px;
+}
 body a {
   cursor: pointer;
-}
-@media (max-device-width: 767px) {
-  body {
-    font-size: 15px;
-  }
 }
 .filterByTherapeuticAreas {
   padding: 0 0 25px 55px;
@@ -6649,11 +6653,6 @@ body a {
     left: -5%;
   }
 }
-@media (min-width: 768px) and (orientation: portrait) {
-  .homeStyles .rightSection .leftColumn .Multimedia .Wrapper .Content .mediaTitle {
-    font-size: 16px;
-  }
-}
 @media (max-width: 768px) {
   .homeStyles .rightSection .leftColumn .Events {
     padding-left: 15px;
@@ -6833,14 +6832,14 @@ body a {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   color: white;
   text-shadow: black 0.1em 0.1em 0.2em;
-  font-size: 30px;
+  font-size: 25px;
 }
 @media (max-width: 768px) {
   .carousel-container .main-carousel .carouselSlide .carousel-title .titleFont {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
     color: white;
     text-shadow: black 0.1em 0.1em 0.2em;
-    font-size: 18px;
+    font-size: 17px;
   }
 }
 .carousel-container .main-carousel .carouselSlide .imageCover {
@@ -7107,7 +7106,7 @@ body a {
 .specialProductMainWrapper #menuDiv .productPageMenu .child {
   color: #009d97;
   cursor: pointer;
-  font-size: smaller;
+  font-size: 12px;
   position: relative;
   display: block;
   padding: 10px 15px;
@@ -7126,9 +7125,6 @@ body a {
 }
 .specialProductMainWrapper #menuDiv .mobileDropdown .glyphicon-Special-Product {
   margin-top: 2px;
-}
-.specialProductMainWrapper #menuDiv .mobileDropdown .smallFontSize {
-  font-size: smaller;
 }
 .specialProductMainWrapper #menuDiv .mobileDropdown .my-dropdown-menu {
   padding: 0;
@@ -7156,7 +7152,7 @@ body a {
   margin-top: 20px;
   margin-bottom: 20px;
   color: #009d97;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
 }
 .specialProductMainWrapper #descriptionDiv .justify {
@@ -7273,7 +7269,7 @@ body a {
 }
 .viewSpeakers .speaker .descriptionFrame .name {
   color: #1c9893;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
   line-height: 1.5em;
   height: 3em;
@@ -7334,7 +7330,7 @@ body a {
   padding: 10px 15px;
 }
 .MyProfileModal .modal-header .modal-title h3 {
-  font-size: 22px;
+  font-size: 20px;
 }
 .MyProfileModal .modal-footer {
   padding: 10px 15px;
@@ -7432,21 +7428,11 @@ body a {
     padding-top: 5px;
   }
 }
-.smallFontSize {
-  font-size: smaller;
-}
-.mediumFont {
-  font-size: medium;
-}
 .modal-dialog .modal-header {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   color: white;
   background-color: #009d97;
-}
-.equalMarginModalTitle {
-  margin-top: 10px;
-  margin-bottom: 10px;
 }
 a:focus {
   text-decoration: none;
@@ -7459,18 +7445,6 @@ a:focus {
   line-height: 30px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
-}
-h3 {
-  font-size: 20px;
-}
-@media (max-device-width: 767px) {
-  h3 {
-    font-weight: bold;
-    font-family: "Helvetica Neue";
-  }
-}
-h4 {
-  font-size: 16px;
 }
 .profileImg {
   width: 100%;
@@ -7493,9 +7467,11 @@ h4 {
 .popover-content {
   color: black;
 }
+.fc-header-title h2 {
+  font-size: 20px;
+}
 @media (max-device-width: 480px) {
   .fc-header-title h2 {
-    font-size: 20px;
     padding-top: 3px;
   }
 }

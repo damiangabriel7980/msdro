@@ -5,12 +5,18 @@
 //import stripped-from-variables version of bootstrap, which will use our custom variables
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 body{
-  font-size: 14px;
+  .fontM;
+  h2{
+    .fontXXL;
+  }
+  h3{
+    .fontXL;
+  }
+  h4{
+    .fontL;
+  }
   a{
     cursor: pointer;
-  }
-  @media(max-device-width: 767px){
-    font-size: 15px;
   }
 }
 .filterByTherapeuticAreas{
@@ -136,7 +142,7 @@ body{
   }
   .articleDetail{
     .title{
-      font-size: 20px;
+      .fontXL;
       font-weight: bold;
       border-bottom: 1px solid lightgray;
     }
@@ -190,10 +196,6 @@ body{
     }
     .MainTitle{
       border-bottom: 1px solid @MSDTitle;
-      //@media(max-width: 1277px){
-      //  font-size: 20px;
-      //  font-weight: bold;
-      //}
     }
     .Date{
       padding-bottom: 10px;
@@ -358,11 +360,6 @@ body{
             {
               left: -5%;
             }
-            .mediaTitle{
-              @media(min-width: 768px) and (orientation: portrait){
-                font-size: 16px;
-              }
-            }
           }
         }
       }
@@ -384,7 +381,7 @@ body{
             color: @MSDTitle;
             .day{
               padding: 0;
-              font-size: 20px;
+              .fontXL;
             }
             .month{
               padding: 0;
@@ -531,12 +528,12 @@ body{
           font-family: "Trebuchet MS", Helvetica, sans-serif;
           color: white;
           text-shadow: black 0.1em 0.1em 0.2em;
-          font-size: 30px;
+          .fontXXL;
           @media(max-width: 768px){
             font-family: "Trebuchet MS", Helvetica, sans-serif;
             color: white;
             text-shadow: black 0.1em 0.1em 0.2em;
-            font-size: 18px;
+            .fontL;
           }
         }
       }
@@ -796,7 +793,7 @@ body{
         }
         .MSDgreenDarker;
         .handCursor;
-        .smallFontSize;
+        .fontS;
         position: relative;
         display: block;
         padding: 10px 15px;
@@ -812,9 +809,6 @@ body{
       padding-right: 0;
       .glyphicon-Special-Product{
         margin-top: 2px;
-      }
-      .smallFontSize{
-        font-size: smaller;
       }
       .my-dropdown-menu {
         padding: 0;
@@ -845,7 +839,7 @@ body{
       margin-top: 20px;
       margin-bottom: 20px;
       color: @MSDgreenDarker;
-      font-size: 30px;
+      .fontXXL;
       font-weight: bold
     }
     .justify{
@@ -966,7 +960,7 @@ body{
       }
       .name{
         color: @MSDgreen;
-        font-size: 13px;
+        .fontS;
         font-weight: bold;
         line-height: 1.5em;
         height: 3em;
@@ -979,7 +973,7 @@ body{
       }
       .cell{
         padding-top: 5px;
-        font-size: 12px;
+        .fontS;
         &.bold{
           font-weight: bold;
         }
@@ -993,17 +987,17 @@ body{
   }
   .name{
     color: @MSDgreen;
-    font-size: 20px;
+    .fontXL;
     font-weight: bold;
   }
   .country{
-    font-size: 20px;
+    .fontXL;
     margin-bottom: 10px;
   }
   .cell{
     text-align: justify;
     padding-top: 5px;
-    font-size: 12px;
+    .fontS;
     &.bold{
       font-weight: bold;
     }
@@ -1021,12 +1015,12 @@ body{
 //============================================================================================= MY PROFILE
 
 .MyProfileModal{
-  font-size: 12px;
+  .fontS;
   .modal-header{
     padding: 10px 15px;
     .modal-title{
       h3{
-        font-size: 22px;
+        .fontXL;
       }
     }
   }
@@ -1131,12 +1125,6 @@ body{
     padding-top: 5px;
   }
 }
-.smallFontSize{
-  font-size: smaller;
-}
-.mediumFont{
-  font-size: medium;
-}
 .modal-dialog{
   .modal-header{
     border-top-left-radius: 5px;
@@ -1144,10 +1132,6 @@ body{
     color: white;
     background-color: @MSDgreenDarker;
   }
-}
-.equalMarginModalTitle{
-  margin-top: 10px;
-  margin-bottom: 10px;
 }
 a:focus{
   text-decoration: none;
@@ -1160,16 +1144,6 @@ a:focus{
   line-height: 30px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:white;
-}
-h3{
-  font-size: 20px;
-  @media (max-device-width: 767px) {
-    font-weight: bold;
-    font-family: "Helvetica Neue";
-  }
-}
-h4{
-  font-size: 16px;
 }
 
 .profileImg{
@@ -1193,9 +1167,8 @@ h4{
 .popover-content{ color: black; }
 .fc-header-title{
   h2 {
+    .fontXL;
     @media (max-device-width: 480px) {
-
-      font-size: 20px;
       padding-top: 3px;
     }
   }
