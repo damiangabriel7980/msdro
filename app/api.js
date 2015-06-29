@@ -1110,107 +1110,103 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
         });
     router.route('/admin/content')
-
         .get(function(req, res) {
-            Content.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                else {
-                    var contents={};
-                    contents['content']=cont;
-                    UserGroup.find({}, {display_name: 1, profession: 1}).populate('profession').exec(function(err, cont2) {
-                        if(err) {
-                            logger.error(err);
-                            res.send(err);
-                        }
-                        contents['groups']=cont2;
-                        res.json(contents);
-                    });
-                }
-            });
+            if(req.query.id){
+                Content.find({_id:req.query.id}, function(err, cont) {
+                    if(err) {
+                        res.send({error:err});
+                    }
+                    if(cont.length == 1){
+                        res.json({success:cont[0]});
+                    }else{
+                        res.json(null);
+                    }
+                })
+            }else{
+                Content.find(function(err, cont) {
+                    if(err) {
+                        res.send(err);
+                    }
+                    else {
+                        var contents={};
+                        contents['content']=cont;
+                        UserGroup.find({}, {display_name: 1, profession: 1}).populate('profession').exec(function(err, cont2) {
+                            if(err) {
+                                logger.error(err);
+                                res.send(err);
+                            }else{
+                                contents['groups']=cont2;
+                                res.json(contents);
+                            }
+                        });
+                    }
+                });
+            }
         })
         .post(function(req, res) {
-            var content = new Content(req.body);
-            content.enable = false;
-            content.created = Date.now();
-            content.last_updated = Date.now();
+            var content = new Content(req.body.article);
             content.save(function(err,saved) {
                 if (err){
                     logger.error(err);
-                    res.send(err);
+                    res.send({error:err});
                 }else{
                     res.json({ message: 'Content created!' , saved: saved});
                 }
             });
-        });
-
-    router.route('/admin/content/groupsByIds')
-        .post(function (req, res) {
-            var ids = req.body.ids || [];
-            UserGroup.find({_id: {$in: ids}}).populate('profession').exec(function (err, groups) {
-                if(err){
-                    res.statusCode = 400;
-                    res.end();
-                }else{
-                    
-                    res.send(groups);
-                }
-            });
-        });
-
-    router.route('/admin/content/:id')
-
-        .get(function(req, res) {
-            Content.find({_id:req.params.id}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
-                }else{
-                    res.json(null);
-                }
-            })
         })
-        .put(function(req, res) {
-            Content.findById(req.params.id, function(err, content) {
-
-                if (err) {
-                    res.send(err);
-                }else{
-                    if(req.body.title) content.title = req.body.title;
-                    if(req.body.author) content.author = req.body.author;
-                    if(req.body.description) content.description = req.body.description;
-                    if(req.body.text) content.text = req.body.text;
-                    if(req.body.type) content.type = req.body.type;
-                    if(req.body.groupsID) content.groupsID = req.body.groupsID;
-                    if(typeof req.body.enable === "boolean") content.enable = req.body.enable;
-
-                    content.last_updated = Date.now();
-
-                    content.save(function(err, saved) {
-                        if (err){
-                            res.send(err);
+    .put(function(req, res) {
+            if(req.body.info){
+                var info = req.body.info;
+                if(info.image){
+                    Content.update({_id:req.query.id}, {$set:{image_path: info.image}}, function (err, wRes) {
+                        if(err){
+                            logger.error("Error at article change logo. Article id = "+data.id+"; Key = "+data.path);
+                            res.json({error:true});
                         }else{
-                            res.json({ message: 'Content updated!' , newContent: saved});
+                            res.json({error:false, updated:wRes});
+                        }
+                    });
+                }else{
+                    Content.update({_id:req.query.id}, {associated_images: info.associated_images}, function (err, wRes) {
+                        if(err){
+                            logger.error("Error at article change multimedia array. Article id = "+data.id+"; Key = "+data.associated_images);
+                            res.json({error:true});
+                        }else{
+                            res.json({error:false, updated:wRes});
                         }
                     });
                 }
-            });
-        })
+            }else{
+                if(req.body.enableArticle){
+                    Content.update({_id:req.query.id},{$set: {enable: req.body.enableArticle.enable}}, function(err, product) {
+                        if (err){
+                            res.send({error:err});
+                        }else{
+                            res.json({ message: 'Article updated!' , saved: true});
+                        }
+                    });
+                }else{
+                    var data = req.body.article;
+                    Content.update({_id:req.query.id},{$set:data}, function(err, product) {
+                        if (err){
+                            res.send({error:err});
+                        }else{
+                            res.json({ message: 'Article updated!' , saved: true});
+                        }
+                    });
+                }
+            }
+    })
         .delete(function(req, res) {
-            var id =req.params.id;
+            var id =req.query.id;
             Content.findOne({_id: id}, function (err, content) {
                 if(content){
                     var s3Key = content.image_path;
-                    //delete speaker
                     Content.remove({_id:id},function(err,cont) {
                         if (err){
                             res.json({message:'Could not delete article!'});
                         }
                         else{
-                            //speaker was deleted. Now delete image if there is one
                             if(s3Key){
                                 amazon.deleteObjectS3(s3Key, function (err, data) {
                                     if(err){
@@ -1230,31 +1226,26 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-    router.route('/admin/content/editImage')
-        .post(function(req,res){
-            
-            var data = req.body.data;
-            Content.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
+    router.route('/admin/content/groupsByIds')
+        .post(function (req, res) {
+            var ids = req.body.ids || [];
+            UserGroup.find({_id: {$in: ids}}).populate('profession').exec(function (err, groups) {
                 if(err){
-                    logger.error("Error at article change logo. Article id = "+data.id+"; Key = "+data.path);
-                    res.json({error:true});
+                    res.statusCode = 400;
+                    res.end();
                 }else{
-                    res.json({error:false, updated:wRes});
+                    res.json({success:groups});
                 }
             });
         });
+
+    router.route('/admin/content/editImage')
+        .post(function(req,res){
+
+        });
     router.route('/admin/content/editAssociatedImages')
         .post(function(req,res){
-            
-            var data = req.body.data;
-            Content.update({_id:data.id}, {associated_images: data.associated_images}, function (err, wRes) {
-                if(err){
-                    logger.error("Error at article change multimedia array. Article id = "+data.id+"; Key = "+data.associated_images);
-                    res.json({error:true});
-                }else{
-                    res.json({error:false, updated:wRes});
-                }
-            });
+
         });
 
     router.route('/admin/content/specialProducts/products')

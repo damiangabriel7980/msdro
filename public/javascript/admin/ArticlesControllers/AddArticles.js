@@ -18,7 +18,7 @@ controllers.controller('AddArticles', ['$scope', 'ContentService', '$modalInstan
 
     $scope.selectedGroups = [];
 
-    ContentService.getAll.query().$promise.then(function(result) {
+    ContentService.content.query().$promise.then(function(result) {
         $scope.groups = result['groups'];
     });
 
@@ -28,8 +28,10 @@ controllers.controller('AddArticles', ['$scope', 'ContentService', '$modalInstan
             id_groups.push($scope.selectedGroups[i]._id);
         }
         $scope.articolNou.groupsID=id_groups;
-
-        ContentService.getAll.save($scope.articolNou).$promise.then(function (resp) {
+        $scope.articolNou.enable = false;
+        $scope.articolNou.created = Date.now();
+        $scope.articolNou.last_updated = Date.now();
+        ContentService.content.create({article: $scope.articolNou}).$promise.then(function (resp) {
             $modalInstance.close();
             $state.go('content.articles',{},{reload: true});
         });

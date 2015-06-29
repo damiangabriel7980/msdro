@@ -18,19 +18,19 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertImages = {newAlert:false, type:"", message:""};
 
-    ContentService.deleteOrUpdateContent.getContent({id: idToEdit}).$promise.then(function(response){
-        $scope.article = response;
-        $scope.imagePath = $rootScope.pathAmazonDev+response.image_path;
+    ContentService.content.query({id: idToEdit}).$promise.then(function(response){
+        $scope.article = response.success;
+        $scope.imagePath = $rootScope.pathAmazonDev+response.success.image_path;
 
-        var userGroups = response.groupsID;
+        var userGroups = response.success.groupsID;
 
-        ContentService.getGroupsByIds.query({ids: userGroups}).$promise.then(function (groups) {
-            $scope.selectedGroups = groups;
+        ContentService.groupsByIds.query({ids: userGroups}).$promise.then(function (groups) {
+            $scope.selectedGroups = groups.success;
         });
 
     });
 
-    ContentService.getAll.query().$promise.then(function(result) {
+    ContentService.content.query().$promise.then(function(result) {
         $scope.groups = result['groups'];
     });
 
@@ -47,7 +47,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                     $scope.$apply();
                 } else {
                     //update database as well
-                    ContentService.editImage.save({data:{id:$scope.article._id, path:key}}).$promise.then(function (resp) {
+                    ContentService.content.update({id:$scope.article._id},{info:{image:key}}).$promise.then(function (resp) {
                         if(resp.error){
                             $scope.uploadAlert.type = "danger";
                             $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
@@ -115,7 +115,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                             $scope.uploadAlert.newAlert = true;
                             $scope.$apply();
                         }else{
-                            ContentService.editAssociatedImages.save({data:{id:$scope.article._id, associated_images:$scope.article.associated_images}}).$promise.then(function (resp) {
+                            ContentService.content.update({id:$scope.article._id}, {info:{associated_images:$scope.article.associated_images}}).$promise.then(function (resp) {
                                 if(resp.error){
                                     $scope.uploadAlertImages.type = "danger";
                                     $scope.uploadAlertImages.message = "Eroare la actualizarea bazei de date!";
@@ -162,7 +162,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                         $scope.$apply();
                     } else {
                         //update database as well
-                        ContentService.editAssociatedImages.save({data:{id:$scope.article._id, associated_images:$scope.article.associated_images}}).$promise.then(function (resp) {
+                        ContentService.content.update({id:$scope.article._id}, {info:{associated_images:$scope.article.associated_images}}).$promise.then(function (resp) {
                             if(resp.error){
                                 $scope.uploadAlertImages.type = "danger";
                                 $scope.uploadAlertImages.message = "Eroare la actualizarea bazei de date!";
@@ -196,7 +196,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                         $scope.$apply();
                     } else {
                         //update database as well
-                        ContentService.editAssociatedImages.save({data:{id:$scope.article._id, associated_images:$scope.article.associated_images}}).$promise.then(function (resp) {
+                        ContentService.content.update({id:$scope.article._id}, {info:{associated_images:$scope.article.associated_images}}).$promise.then(function (resp) {
                             if(resp.error){
                                 $scope.uploadAlertImages.type = "danger";
                                 $scope.uploadAlertImages.message = "Eroare la actualizarea bazei de date!";
@@ -239,10 +239,9 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
         for(var i=0;i<$scope.selectedGroups.length;i++){
             id_groups.push($scope.selectedGroups[i]._id);
         }
-
         $scope.article.groupsID=id_groups;
-
-        ContentService.deleteOrUpdateContent.update({id: idToEdit},$scope.article).$promise.then(function (resp) {
+        $scope.article.last_updated = Date.now();
+        ContentService.content.update({id: idToEdit},{article:$scope.article}).$promise.then(function (resp) {
             $scope.closeModal();
         });
     };

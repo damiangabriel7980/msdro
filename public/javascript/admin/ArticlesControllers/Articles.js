@@ -5,7 +5,7 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope, $rootScope, $state, ContentService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
-    ContentService.getAll.query().$promise.then(function(result){
+    ContentService.content.query().$promise.then(function(result){
         var contents = result['content'];
         $scope.grupe=result['groups'];
         $scope.groupMap={};
@@ -47,7 +47,7 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
 
     $scope.deleteArticle = function (id) {
         ActionModal.show("Stergere articol", "Sunteti sigur ca doriti sa stergeti articolul?", function () {
-            ContentService.deleteOrUpdateContent.delete({id: id}).$promise.then(function (resp) {
+            ContentService.content.delete({id: id}).$promise.then(function (resp) {
                 console.log(resp);
                 $state.reload();
             });
@@ -75,7 +75,7 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
             isEnabled?"Dezactiveaza articol":"Activeaza articol",
             isEnabled?"Sunteti sigur ca doriti sa dezactivati articolul?":"Sunteti sigur ca doriti sa activati articolul?",
             function () {
-                ContentService.deleteOrUpdateContent.update({id: id}, {enable: !isEnabled}).$promise.then(function (resp) {
+                ContentService.content.update({id: id}, {enableArticle: {enable: !isEnabled}}).$promise.then(function (resp) {
                     console.log(resp);
                     $state.reload();
                 });

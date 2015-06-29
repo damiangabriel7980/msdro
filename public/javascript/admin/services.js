@@ -340,23 +340,14 @@ services.factory('ProductService', ['$resource', function($resource){
 }]);
 services.factory('ContentService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/admin/content', {}, {
+        content: $resource('api/admin/content', {}, {
             query: { method: 'GET', isArray: false },
-            save: { method: 'POST'}
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         }),
-        getGroupsByIds: $resource('api/admin/content/groupsByIds', {}, {
-            query: { method: 'POST', isArray: true }
-        }),
-        deleteOrUpdateContent:$resource('api/admin/content/:id', {id: "@id"}, {
-            getContent: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
-        }),
-        editImage: $resource('api/admin/content/editImage/:data', {}, {
-            save: { method: 'POST' }
-        }),
-        editAssociatedImages: $resource('api/admin/content/editAssociatedImages/:data', {}, {
-            save: { method: 'POST' }
+        groupsByIds: $resource('api/admin/content/groupsByIds', {}, {
+            query: { method: 'POST', isArray: false }
         })
     }
 }]);
