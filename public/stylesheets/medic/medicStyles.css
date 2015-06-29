@@ -6341,7 +6341,8 @@ body a {
   list-style: none;
 }
 .filterByTherapeuticAreas .areas .menu .area {
-  border: 0px solid #dddddd;
+  border: 0;
+  padding: 5px;
   cursor: pointer;
   border-radius: 4px !important;
 }
@@ -6580,19 +6581,6 @@ body a {
 }
 .homeStyles .leftSection .lastNewsWrapper .content {
   padding: 0 15px 0 0;
-}
-.homeStyles .leftSection:after {
-  position: absolute;
-  content: '';
-  top: 0;
-  width: 0;
-  height: 100%;
-  border-right: 1px solid #000000;
-}
-@media (max-width: 1277px) {
-  .homeStyles .leftSection:after {
-    border-right: 0px solid #000000;
-  }
 }
 .homeStyles .rightSection {
   padding: 0;
