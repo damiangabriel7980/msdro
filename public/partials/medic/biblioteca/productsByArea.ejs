@@ -10,7 +10,7 @@
         <mobile-content-list content="products" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultProductImage}}" title-attr="name"
                              text-attr="description" navigate="navigateProductDetails" limit="lmt"></mobile-content-list>
     </div>
-    <div class="col-md-12 text-center">
+    <div class="col-xs-12 text-center">
         <button class="btn btn-default" ng-class="{'hidden': !products || products.length <= lmt}" ng-click="increaseLimit()">Mai multe produse</button>
     </div>
 </div>
