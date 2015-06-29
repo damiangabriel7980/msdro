@@ -6561,10 +6561,14 @@ body .btn {
   padding: 0;
 }
 .homeStyles .rightSection .leftColumn .Multimedia .Wrapper {
-  padding: 0;
+  padding: 0 0 0 40px;
   margin-top: 20px !important;
+  position: relative;
 }
 .homeStyles .rightSection .leftColumn .Multimedia .Wrapper .iconWrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
   padding: 0;
 }
 .homeStyles .rightSection .leftColumn .Multimedia .Wrapper .iconWrapper i {
@@ -6584,31 +6588,38 @@ body .btn {
   margin-bottom: 4%;
 }
 .homeStyles .rightSection .leftColumn .Events .eventDisplay {
-  padding: 0 0 30px 0;
+  padding: 0 0 30px 40px;
+  position: relative;
 }
 .homeStyles .rightSection .leftColumn .Events .eventDisplay .date {
-  padding: 0;
-  border-right: 0px solid #aaaaaa;
+  position: absolute;
+  left: 0;
+  top: 0;
   color: #01877b;
+  width: 35px;
+  border-right: 1px solid black;
 }
 .homeStyles .rightSection .leftColumn .Events .eventDisplay .date .day {
   padding: 0;
   font-size: 20px;
+  line-height: 1em;
 }
 .homeStyles .rightSection .leftColumn .Events .eventDisplay .date .month {
   padding: 0;
-  margin-top: -5px;
+  font-size: 14px;
+  line-height: 1em;
 }
 .homeStyles .rightSection .leftColumn .Events .eventDisplay .Content {
   padding: 0;
-  border-left: 1px solid #000000;
 }
 .homeStyles .rightSection .leftColumn .Events .eventDisplay .Content .MediaTitle {
+  padding: 0;
   color: #01877b;
   cursor: pointer;
   text-align: justify;
 }
 .homeStyles .rightSection .leftColumn .Events .eventDisplay .Content .Description {
+  padding: 0;
   margin-top: 5px;
   text-align: justify;
 }

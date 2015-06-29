@@ -275,9 +275,13 @@ body{
           padding:0;
         }
         .Wrapper{
-          padding: 0;
+          padding: 0 0 0 40px;
           margin-top:20px !important;
+          position: relative;
           .iconWrapper{
+            position: absolute;
+            left: 0;
+            top: 0;
             padding: 0;
             i{
               color: @gray;
@@ -300,29 +304,36 @@ body{
           }
         }
         .eventDisplay{
-          padding: 0 0 30px 0;
+          padding: 0 0 30px 40px;
+          position: relative;
           .date{
-            padding: 0;
-            border-right: 0px solid @gray;
+            position: absolute;
+            left: 0;
+            top: 0;
             color: @green;
+            width: 35px;
+            border-right: 1px solid black;
             .day{
               padding: 0;
               .fontXL;
+              line-height: 1em;
             }
             .month{
               padding: 0;
-              margin-top: -5px;
+              .fontM;
+              line-height: 1em;
             }
           }
           .Content{
             padding: 0;
-            border-left: 1px solid #000000;
             .MediaTitle{
+              padding: 0;
               color: @green;
               cursor: pointer;
               text-align: justify;
             }
             .Description{
+              padding: 0;
               margin-top: 5px;
               text-align: justify;
             }
