@@ -1,4 +1,5 @@
 //import our customizable variables
+@import '../globalVariables';
 @import 'publicVariables';
 
 //import stripped-from-variables version of bootstrap, which will use our custom variables
@@ -13,6 +14,7 @@ html{
   height: 100%;
   body {
     height: 100%;
+    .fontDefault;
     #publicHeaderWrapper{
       left: 0;
       top: 0;
@@ -223,7 +225,7 @@ html{
 }
 
 .evenimente{
-  font-size: 18px;
+  .fontXL;
   font-weight: bold;
   color: @greenDark;
   margin-top: 20px;
@@ -300,7 +302,7 @@ html{
       height: 100%;
       position: relative;
       .title{
-        font-size: 20px;
+        .fontXL;
         margin-bottom: 15px;
       }
       .text{
@@ -432,7 +434,7 @@ html{
     padding: 0;
     .name{
       padding: 10px 0 12px 0;
-      font-size: 18px;
+      .fontXL;
     }
   }
 }
@@ -441,7 +443,7 @@ html{
 .searchResults{
   .mainTitle{
     padding: 10px 0 12px 0;
-    font-size: 18px;
+    .fontXL;
     @media (min-width: @grid-float-breakpoint) {
       margin-top: 30px;
     }
@@ -476,7 +478,7 @@ html{
   .articleDetail{
     .title{
       padding: 0;
-      font-size: 20px;
+      .fontXL;
       font-weight: bold;
       border-bottom: 1px solid lightgray;
     }
@@ -506,7 +508,7 @@ html{
   .mostDownloaded{
     padding: 0 15px 0 30px;
     .mainTitle{
-      font-size: 22px;
+      .fontXL;
       margin-bottom: 15px;
       padding: 0;
     }
@@ -518,7 +520,7 @@ html{
         a{
           color: @greenDark;
           font-weight: bold;
-          font-size: 17px;
+          .fontL;
         }
         &:before{
           content: "\e025";
@@ -537,7 +539,7 @@ html{
       }
       .author{
         padding: 0;
-        font-size: 13px;
+        .fontS;
         font-weight: bold;
       }
       .divider{
@@ -573,7 +575,7 @@ html{
   .downloadsDetail{
     .title{
       padding: 0;
-      font-size: 20px;
+      .fontXL;
       font-weight: bold;
       border-bottom: 1px solid lightgray;
     }
@@ -609,7 +611,7 @@ html{
   .categories{
     padding: 0 15px 0 15px;
     .mainTitle{
-      font-size: 22px;
+      .fontXL;
       margin-bottom: 15px;
       padding: 0;
     }
@@ -647,12 +649,12 @@ html{
   .elearningDetail{
     .title{
       padding: 0;
-      font-size: 22px;
+      .fontXL;
       font-weight: bold;
     }
     .author{
       padding: 0;
-      font-size: 15px;
+      .fontS;
     }
     .videoWrapper{
       border: 3px solid @greenDark;
@@ -697,12 +699,12 @@ html{
 }
 
 #authModal{
-  font-size: 12px;
+  .fontS;
   .modal-header{
     padding: 10px 15px;
     .modal-title{
       h3{
-        font-size: 22px;
+        .fontXL;
       }
     }
   }
