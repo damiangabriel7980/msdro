@@ -5,7 +5,7 @@ controllers.controller('AddMultimedia', ['$scope','$rootScope' ,'MultimediaAdmin
     $scope.selectedGroups = [];
     $scope.selectedAreas=[];
 
-    MultimediaAdminService.getAll.query().$promise.then(function(resp){
+    MultimediaAdminService.multimedia.query().$promise.then(function(resp){
         $scope.groups = resp['groups'];
     });
 
@@ -14,16 +14,15 @@ controllers.controller('AddMultimedia', ['$scope','$rootScope' ,'MultimediaAdmin
     });
     $scope.createMultimedia=function(){
         var id_groups=[];
-        var id_areas=[];
         for(var i=0;i<$scope.selectedGroups.length;i++){
             id_groups.push($scope.selectedGroups[i]._id);
         }
 
-        $scope.newMultimedia.groupsID=id_groups;
+        $scope.newMultimedia.groupsID = id_groups;
         $scope.newMultimedia['therapeutic-areasID'] = $scope.returnedAreas;
-        $scope.newMultimedia.enable=true;
-        $scope.newMultimedia.last_updated=new Date();
-        MultimediaAdminService.getAll.save({newMultimedia: $scope.newMultimedia}).$promise.then(function (resp) {
+        $scope.newMultimedia.enable = true;
+        $scope.newMultimedia.last_updated = new Date();
+        MultimediaAdminService.multimedia.create({newMultimedia: $scope.newMultimedia}).$promise.then(function (resp) {
             console.log(resp);
             $modalInstance.close();
             $state.go('elearning.multimedia',{},{reload: true});

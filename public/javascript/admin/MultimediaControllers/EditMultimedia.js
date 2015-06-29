@@ -5,13 +5,13 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertVideo = {newAlert:false, type:"", message:""};
 
-    MultimediaAdminService.deleteOrUpdateMultimedia.getMultimedia({id:idToEdit}).$promise.then(function(result){
-        $scope.multimedia=result;
-        $scope.selectedAreas = result['therapeutic-areasID'];
-        $scope.selectedGroups = result['groupsID'];
+    MultimediaAdminService.multimedia.query({id:idToEdit}).$promise.then(function(result){
+        $scope.multimedia=result.success;
+        $scope.selectedAreas = result.success['therapeutic-areasID'];
+        $scope.selectedGroups = result.success['groupsID'];
     });
 
-    MultimediaAdminService.getAll.query().$promise.then(function(resp){
+    MultimediaAdminService.multimedia.query().$promise.then(function(resp){
         $scope.groups = resp['groups'];
     });
 
@@ -26,9 +26,9 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
         }
         $scope.multimedia.groupsID = groups_id;
         $scope.multimedia['therapeutic-areasID'] = $scope.returnedAreas;
-        $scope.multimedia.last_updated=new Date();
+        $scope.multimedia.last_updated = new Date();
 
-        MultimediaAdminService.deleteOrUpdateMultimedia.updateMultimedia({id:idToEdit},{multimedia: $scope.multimedia}).$promise.then(function (resp) {
+        MultimediaAdminService.multimedia.update({id:idToEdit},{multimedia: $scope.multimedia}).$promise.then(function (resp) {
             console.log(resp);
             $modalInstance.close();
             $state.go('elearning.multimedia',{},{reload: true});
@@ -47,7 +47,7 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
                     $scope.$apply();
                 } else {
                     //update database as well
-                    MultimediaAdminService.editImage.save({data:{id:$scope.multimedia._id, path:key}}).$promise.then(function (resp) {
+                    MultimediaAdminService.multimedia.update({id:$scope.multimedia._id},{info: {image:key}}).$promise.then(function (resp) {
                         if(resp.error){
                             $scope.uploadAlert.type = "danger";
                             $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
@@ -111,7 +111,7 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
                     $scope.$apply();
                 } else {
                     //update database as well
-                    MultimediaAdminService.editVideo.save({data:{id:$scope.multimedia._id, path:key}}).$promise.then(function (resp) {
+                    MultimediaAdminService.multimedia.update({id:$scope.multimedia._id},{info: {video:key}}).$promise.then(function (resp) {
                         if(resp.error){
                             $scope.uploadAlertVideo.type = "danger";
                             $scope.uploadAlertVideo.message = "Eroare la actualizarea bazei de date!";

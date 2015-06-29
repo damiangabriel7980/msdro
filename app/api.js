@@ -1167,7 +1167,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                     });
                 }else{
-                    Content.update({_id:req.query.id}, {associated_images: info.associated_images}, function (err, wRes) {
+                    Content.update({_id:req.query.id}, {$set:{associated_images: info.associated_images}}, function (err, wRes) {
                         if(err){
                             logger.error("Error at article change multimedia array. Article id = "+data.id+"; Key = "+data.associated_images);
                             res.json({error:true});
@@ -1237,15 +1237,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     res.json({success:groups});
                 }
             });
-        });
-
-    router.route('/admin/content/editImage')
-        .post(function(req,res){
-
-        });
-    router.route('/admin/content/editAssociatedImages')
-        .post(function(req,res){
-
         });
 
     router.route('/admin/content/specialProducts/products')
@@ -2106,32 +2097,39 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/multimedia')
-
         .get(function(req, res) {
-            Multimedia.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                else
-                {
-                    var multimedias={};
-                    multimedias['MultimediaList']=cont;
-                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                        if(err) {
-                            logger.error(err);
-                            res.send(err);
-                        }else{
-                            multimedias['groups']=cont2;
-                            res.json(multimedias);
-                        }
-                    });
-                }
-            });
+            if(req.query.id){
+                Multimedia.findOne({_id: req.query.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                    if (err){
+                        res.send({error:err});
+                    }else{
+                        res.json({success:product});
+                    }
+                });
+            }else{
+                Multimedia.find(function(err, cont) {
+                    if(err) {
+                        res.send(err);
+                    }
+                    else
+                    {
+                        var multimedias={};
+                        multimedias['MultimediaList']=cont;
+                        UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
+                            if(err) {
+                                logger.error(err);
+                                res.send(err);
+                            }else{
+                                multimedias['groups']=cont2;
+                                res.json(multimedias);
+                            }
+                        });
+                    }
+                });
+            }
         })
         .post(function (req, res) {
             var toCreate = new Multimedia(req.body.newMultimedia);
-            
-            
             toCreate.save(function (err, saved) {
                 if(err){
                     console.log(err);
@@ -2141,42 +2139,62 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     res.send({error: false, message: "Datele au fost salvate", justSaved: saved});
                 }
             });
-        });
-    router.route('/admin/multimedia/:id')
-        .get(function(req, res) {
-            
-            Multimedia.findOne({_id: req.params.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
-                if (err){
-                    res.send(err);
-                }else{
-                    
-                    res.json(product);
-                }
-            });
         })
         .put(function (req, res) {
-            
-            Multimedia.update({_id: req.params.id}, {$set: req.body.multimedia}, function (err, wRes) {
-                if(err){
-                    res.send({error: err, message: "A aparut o eroare pe server"});
+            if(req.body.info){
+                var data = req.body.info;
+                if(data.image){
+                    Multimedia.update({_id: req.query.id}, {thumbnail_path: data.image}, function (err, wRes) {
+                        if (err) {
+                            logger.error("Error at multimedia change logo. Multimedia id = " + data.id + "; Key = " + data.path);
+                            res.json({error: true});
+                        } else {
+                            res.json({error: false, updated: wRes});
+                        }
+                    });
                 }else{
-                    res.send({error: false, message: "Datele au fost actualizate"});
+                    Multimedia.update({_id:req.query.id}, {file_path: data.video}, function (err, wRes) {
+                        if(err){
+                            logger.error("Error at multimedia video change. Multimedia id = "+data.id+"; Key = "+data.path);
+                            res.json({error:true});
+                        }else{
+                            res.json({error:false, updated:wRes});
+                        }
+                    });
                 }
-            });
+            }else{
+                if(req.body.enableMultimedia){
+                    Multimedia.update({_id: req.query.id},{$set:{enable: req.body.enableMultimedia.isEnabled}}).exec(function (err, presentation) {
+                        if(err){
+                            res.send({message:"Error occured!"});
+                        }else{
+                            res.send({message:"Update successful!"});
+                        }
+                    });
+                }else{
+                    Multimedia.update({_id: req.query.id}, {$set: req.body.multimedia}, function (err, wRes) {
+                        if(err){
+                            res.send({error: err, message: "A aparut o eroare pe server"});
+                        }else{
+                            res.send({error: false, message: "Datele au fost actualizate"});
+                        }
+                    });
+                }
+            }
         })
         .delete(function(req, res) {
-            var id = req.params.id;
+            var id = req.query.id;
             Multimedia.findOne({_id: id}, function (err, multimedia) {
                 if(multimedia){
                     var s3Image = multimedia.thumbnail_path;
                     var s3File = multimedia.file_path;
-                    //delete product
+                    //delete multimedia
                     Multimedia.remove({_id:id},function(err,cont) {
                         if (err){
                             res.json({message:'Could not delete product!'});
                         }
                         else{
-                            //product was deleted. Now delete image and file if there is one
+                            //multimedia was deleted. Now delete image and file if there is one
                             if(s3Image || s3File){
                                 amazon.deleteObjectS3(s3Image, function (err, data) {
                                     if(err){
@@ -2202,41 +2220,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
                 }else{
                     res.json({message:'Multimedia not found!'});
-                }
-            });
-        });
-    router.route('/admin/multimedia/editImage')
-        .post(function(req,res) {
-            var data = req.body.data;
-            Multimedia.update({_id: data.id}, {thumbnail_path: data.path}, function (err, wRes) {
-                if (err) {
-                    logger.error("Error at multimedia change logo. Multimedia id = " + data.id + "; Key = " + data.path);
-                    res.json({error: true});
-                } else {
-                    res.json({error: false, updated: wRes});
-                }
-            });
-        });
-    router.route('/admin/multimedia/editVideo')
-        .post(function(req,res){
-            var data = req.body.data;
-            Multimedia.update({_id:data.id}, {file_path: data.path}, function (err, wRes) {
-                if(err){
-                    logger.error("Error at multimedia video change. Multimedia id = "+data.id+"; Key = "+data.path);
-                    res.json({error:true});
-                }else{
-                    res.json({error:false, updated:wRes});
-                }
-            });
-        });
-    router.route('/admin/multimedia/toggleVideo')
-        .post(function (req, res) {
-            
-            Multimedia.update({_id: req.body.id},{$set:{enable: req.body.isEnabled}}).exec(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
-                    res.send({message:"Update successful!"});
                 }
             });
         });
