@@ -6532,8 +6532,8 @@ body .btn {
   height: 100%;
   padding: 0 0 50px 0;
 }
-.homeStyles .leftSection .lastNewsWrapper {
-  padding-right: 0;
+.homeStyles .leftSection {
+  padding: 0;
 }
 .homeStyles .leftSection .lastNewsWrapper .Title {
   padding: 0 0 0 10px;
@@ -6542,27 +6542,23 @@ body .btn {
 .homeStyles .leftSection .lastNewsWrapper .content {
   padding: 0 15px 0 0;
 }
+.homeStyles .leftSection:after {
+  position: absolute;
+  content: '';
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 100%;
+  border-right: 1px solid black;
+}
 .homeStyles .rightSection {
   padding: 0;
 }
 .homeStyles .rightSection .leftColumn {
-  margin-left: -2%;
-  padding-left: 0;
-}
-.homeStyles .rightSection .leftColumn:before {
-  position: absolute;
-  content: '';
-  top: 0;
-  left: -16px;
-  width: 0;
-  height: 100%;
-  margin-left: -1%;
+  padding: 0;
 }
 .homeStyles .rightSection .leftColumn .Multimedia .Title {
   padding: 0;
-}
-.homeStyles .rightSection .leftColumn .Multimedia .Title h3 {
-  margin-bottom: -1%;
 }
 .homeStyles .rightSection .leftColumn .Multimedia .Wrapper {
   padding: 0;
@@ -6616,16 +6612,8 @@ body .btn {
   margin-top: 5px;
   text-align: justify;
 }
-.homeStyles .rightSection .leftColumn:after {
-  position: absolute;
-  content: '';
-  top: 0;
-  right: 0;
-  width: 0;
-  height: 100%;
-}
 .homeStyles .rightSection .rightColumn {
-  padding-left: 2%;
+  padding: 0;
 }
 .homeStyles .rightSection .rightColumn:before {
   position: absolute;
@@ -6634,13 +6622,22 @@ body .btn {
   left: -1px;
   width: 0;
   height: 100%;
-  border-left: 1px solid #000000;
+  border-left: 1px solid black;
+}
+.homeStyles .rightSection:before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: -1px;
+  width: 0;
+  height: 100%;
+  border-left: 1px solid black;
 }
 .widgets .subtitle {
   color: #01877b;
 }
 .widgets .glycemizerTextPadding {
-  padding: 0 0 30px 0;
+  padding-bottom: 30px;
 }
 .widgets .handCursor {
   cursor: pointer;
@@ -6669,8 +6666,6 @@ body .btn {
 .widgets .merckImageWrapper {
   vertical-align: middle;
   text-align: left;
-  padding-left: 0;
-  padding-right: 0;
 }
 .widgets .merckImageWrapper .merckImage {
   width: 70%;
