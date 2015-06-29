@@ -257,9 +257,6 @@ body{
   .leftSection{
     .lastNewsWrapper{
       padding-right: 0;
-      @media(min-width: 1278px) {
-        margin-left: 25px;
-      }
       .Title{
         padding: 0 0 0 10px;
         padding-bottom: 8px !important;
@@ -282,17 +279,8 @@ body{
         margin-left: -1%;
       }
       margin-left: -2%;
-      @media(max-width: 768px){
-        margin-left: 0;
-      }
       padding-left: 0;
-      @media(max-width: 768px){
-        padding-left: 15px !important;
-      }
       .Multimedia{
-        @media(max-width: 768px){
-          padding-left: 15px;
-        }
         .Title{
           padding:0;
           h3{
@@ -314,17 +302,10 @@ body{
             }
             padding: 0;
             text-align: justify;
-            @media(min-width: 768px) and (max-width: 1277px)
-            {
-              left: -5%;
-            }
           }
         }
       }
       .Events{
-        @media(max-width: 768px){
-          padding-left: 15px;
-        }
         .Title{
           padding: 0;
           h3{
@@ -347,19 +328,12 @@ body{
             }
           }
           .Content{
-            @media(min-width: 768px) and (max-width: 1277px)
-            {
-              left: -5%;
-            }
             padding: 0;
             border-left: 1px solid #000000;
             .MediaTitle{
               color: @green;
               cursor: pointer;
               text-align: justify;
-              @media(max-width: 768px){
-                padding-left: 15px;
-              }
             }
             .Description{
               margin-top: 5px;
@@ -379,9 +353,6 @@ body{
     }
     .rightColumn{
       padding-left: 2%;
-      @media(max-device-width: 768px){
-        padding-left: 3%;
-      }
       &:before{
         position: absolute;
         content: '';
@@ -409,34 +380,18 @@ body{
   }
   .title{
     text-align: left;
-    @media(max-width: 1277px),(orientation: portrait){
+    @media(max-width: @screen-sm-max),(orientation: portrait){
       text-align: center;
     }
   }
   .contentPadding{
     padding-top: 10%;
     padding-bottom: 10%;
-    @media(max-width: 1277px),(orientation: portrait){
-      padding-bottom: 1%;
-      padding-top: 1%;
-    }
-  }
-  .contentJustified{
-    text-align: left;
-    @media(max-width: 1277px),(orientation: portrait){
-      text-align: justify;
-    }
-  }
-  .contentPaddingMobile{
-    padding-left: 0;
-    @media(max-width: 768px){
-      padding-left: 15px;
-    }
   }
   .widgetImage{
     width: 100%;
     margin-bottom: 10px;
-    @media(max-device-width: 768px){
+    @media(max-device-width: @screen-xs-max){
       width: 50% !important;
     }
   }
@@ -448,10 +403,6 @@ body{
     .merckImage{
       width: 70%;
       cursor:pointer;
-      @media(max-width: 1277px),(orientation: portrait){
-        width: 30%;
-        cursor:pointer;
-      }
     }
   }
 }
@@ -487,7 +438,7 @@ body{
           color: white;
           text-shadow: black 0.1em 0.1em 0.2em;
           .fontXXL;
-          @media(max-width: 768px){
+          @media(max-width: @screen-xs-max){
             font-family: "Trebuchet MS", Helvetica, sans-serif;
             color: white;
             text-shadow: black 0.1em 0.1em 0.2em;
@@ -555,7 +506,7 @@ body{
   content: '';
   position: absolute;
   width: 40%;
-  height: 0px;
+  height: 0;
   border: 3px solid @gray;
   border-radius: 5px;
   left: 30%;
@@ -596,20 +547,19 @@ body{
     }
     &.myProfile{
       margin-top: 5px;
-      @media(max-width: 1279px){
+      @media(max-width: @grid-float-breakpoint-max){
         left: auto !important;
       }
     }
   }
   .navbar-brand{
-    padding: 0 0 0 35px;
-    margin-bottom: 6px;
-    @media(max-width: 767px){
-      padding: 0;
-    }
+    padding: 0;
     img{
       height: 50px;
-      @media (max-width: 1277px){
+      @media (min-width: @grid-float-breakpoint) {
+        padding-left: 25px;
+      }
+      @media (max-width: @grid-float-breakpoint-max){
         height: 40px;
         margin-top: 9px;
       }
@@ -618,52 +568,38 @@ body{
   .profile{
     position: absolute;
     right: 234px;
+    @media (max-width: @grid-float-breakpoint-max) {
+      right: 0;
+    }
     margin-top: 8px;
     margin-right: 10px;
-    @media(min-width: 769px) and (max-width: @grid-float-breakpoint-max){
-      right: 10px;
-    }
-    @media(max-width: 768px){
-      right: -15px;
-    }
     .btn{
       .btn;
       border-color: @gray;
     }
   }
-  .navbar-collapse{
-    background-color: #ffffff;
-    @media (max-width: @grid-float-breakpoint-max) {
-      border: 1px solid @gray-lighter;
-    }
-    overflow-x: hidden;
-    overflow-y: hidden !important;
-    max-height: 375px!important;
-    @media only screen and (orientation: landscape) {
-      overflow-y: visible !important;
-      max-height: 340px!important;
-    }
-  }
   .navbar-toggle {
     position: relative;
     float: left;
-    margin-left: 25px;
-    margin-right: 10px;
+    margin: 8px 10px 8px 20px;
     padding: 9px 10px;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    background-color: transparent;
-    background-image: none;
-    border: 1px solid transparent;
+    border: 1px solid @gray-light;
     border-radius: 4px;
     //@media (min-device-width: 480px) and (max-device-width: 767px) {
     //  margin-left: 9px;
     //}
   }
-  .navbar-nav{
-    &.navbarMenu{
-      padding-top: 4px;
-      padding-left: 4px;
+  .navbar-collapse{
+    padding: 0;
+    .navbar-nav{
+      margin: 0;
+      .navbar-form{
+        margin-left: 0;
+        margin-right: 0;
+      }
+      &.navbarMenu{
+        padding-top: 4px;
+      }
     }
   }
   .userDropdown{
