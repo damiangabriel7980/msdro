@@ -7045,8 +7045,8 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 #footer {
   border-top: 1px solid #eeeeee;
-  background: #006d69;
-  padding: 5px 0;
+  background: #01877b;
+  padding: 5px 0 5px 0;
   width: 100%;
   clear: both;
   height: 35px;
@@ -7460,6 +7460,7 @@ a:focus {
   line-height: 30px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
+  padding: 5px;
 }
 .profileImg {
   width: 100%;

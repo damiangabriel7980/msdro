@@ -6531,7 +6531,7 @@ html body .rootView {
 .evenimente {
   font-size: 20px;
   font-weight: bold;
-  color: #006d69;
+  color: #01877b;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -6844,7 +6844,7 @@ html body .rootView {
   margin-bottom: 5px;
 }
 .downloadsLayout .mostDownloaded .entry .title a {
-  color: #006d69;
+  color: #01877b;
   font-weight: bold;
   font-size: 17px;
 }
@@ -6939,7 +6939,7 @@ html body .rootView {
   display: block;
 }
 .elearningLayout .categories .therapeuticArea a {
-  color: #006d69;
+  color: #01877b;
   font-weight: bold;
 }
 .elearningLayout .categories:after {
@@ -7096,6 +7096,18 @@ a:focus {
   border-top-right-radius: 5px;
   color: white;
   background-color: #01877b;
+  padding: 10px 15px;
+}
+.modal-dialog .modal-header h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+.modal-dialog .modal-header h3 i {
+  font-size: 17px;
+}
+.modal-dialog .modal-footer {
+  padding: 10px 15px;
 }
 .loginInput {
   margin-left: 26px;
