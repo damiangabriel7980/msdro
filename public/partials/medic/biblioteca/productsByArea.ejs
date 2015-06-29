@@ -1,14 +1,20 @@
-<div class="col-md-11 productsView">
+<div class="col-sm-11 productsView">
     <div class="col-md-12 noProducts" ng-if="products.length == 0"><h4>Nu exista produse conform criteriilor selectate</h4></div>
-    <div class="col-md-3 product" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
-        <vertical-content-list content="prod" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
-                               title-attr="name" text-attr="description" navigate="navigateProductDetails" with-background></vertical-content-list>
+    <div class="col-xs-12 noPadding" ng-if="!isMobile(true)">
+        <div class="col-md-3 col-sm-4 product" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
+            <vertical-content-list content="prod" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
+                                   title-attr="name" text-attr="description" navigate="navigateProductDetails" with-background></vertical-content-list>
+        </div>
+    </div>
+    <div class="col-xs-12 noPadding" ng-if="isMobile(true)">
+        <mobile-content-list content="products" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultProductImage}}" title-attr="name"
+                             text-attr="description" navigate="navigateProductDetails" limit="lmt"></mobile-content-list>
     </div>
     <div class="col-md-12 text-center">
         <button class="btn btn-default" ng-class="{'hidden': !products || products.length <= lmt}" ng-click="increaseLimit()">Mai multe produse</button>
     </div>
 </div>
-<div class="col-md-1 noPadding text-center">
+<div class="col-sm-1 noPadding text-center" ng-if="!isMobile(true)">
     <ul class="nav nav-list MSDgreen">
         <li ng-click="filterResults('A-Z')">A-Z</li>
         <li ng-repeat="(key, value) in firstLetters" ng-click="filterResults(key)">

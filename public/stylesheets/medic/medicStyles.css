@@ -6329,22 +6329,21 @@ body .btn {
   line-height: 1.5;
   border-radius: 3px;
 }
-.filterByTherapeuticAreas {
-  padding: 0 0 25px 55px;
-}
 .filterByTherapeuticAreas .areasMobile {
-  margin-left: 25px;
+  padding: 0;
+  margin-bottom: 25px;
 }
 .filterByTherapeuticAreas .areas {
-  padding: 0;
-  margin-right: 65px;
+  padding: 0 30px 0 0;
 }
 .filterByTherapeuticAreas .areas .title {
-  margin-top: 0;
+  padding: 0;
+  margin-bottom: 25px;
+  font-size: 20px;
 }
 .filterByTherapeuticAreas .areas .menu {
+  padding: 0;
   color: #01877b;
-  list-style: none;
 }
 .filterByTherapeuticAreas .areas .menu .area {
   border: 0;
@@ -6367,7 +6366,6 @@ body .btn {
   padding: 0;
 }
 .productsView .noProducts {
-  padding: 0;
   text-align: center;
 }
 .productsView .product {
