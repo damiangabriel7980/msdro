@@ -13,7 +13,7 @@
                     <div class="child" ng-repeat="subItem in parent.children_ids"
                          ui-sref="groupSpecialProduct.menuItem({menuId: parent._id, childId: subItem._id})"
                          ng-class="{'active':$state.includes('groupSpecialProduct.menuItem') && $state.params.childId==subItem._id}">
-                        &nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right smallFontSize"></i>&nbsp;&nbsp;{{subItem.title}}
+                        &nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right fontS"></i>&nbsp;&nbsp;{{subItem.title}}
                     </div>
                 </div>
             </accordion-group>
@@ -51,7 +51,7 @@
                             <div class="child" ng-repeat="subItem in parent.children_ids"
                                  ng-click="goToMenuItemWithChildren(parent,subItem)"
                                  ng-class="{'active':$state.includes('groupSpecialProduct.menuItem') && $state.params.childId==subItem._id}">
-                                &nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right smallFontSize"></i>&nbsp;&nbsp;{{subItem.title}}
+                                &nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right fontS"></i>&nbsp;&nbsp;{{subItem.title}}
                             </div>
                         </div>
                     </accordion-group>

@@ -12,8 +12,8 @@
         <ng-include src="modalData.template2"></ng-include>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-sm btn-default pull-left" ng-click="closeModal()">Inchide</a>
-        <button class="btn btn-sm btn-primary pull-right" ng-click="createAccount()" ng-disabled="lockSubmitting">Creaza cont</button>
+        <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
+        <button class="btn btn-primary pull-right" ng-click="createAccount()" ng-disabled="lockSubmitting">Creaza cont</button>
         <img ng-src="{{pathAmazonResources+'page-loader.gif'}}" style="width: 28px" ng-if="lockSubmitting">
     </div>
 </div>

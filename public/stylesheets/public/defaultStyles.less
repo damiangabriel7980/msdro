@@ -13,6 +13,10 @@ html{
   height: 100%;
   body {
     height: 100%;
+    .fontDefault;
+    .btn{
+      .btn-sm;
+    }
     #publicHeaderWrapper{
       left: 0;
       top: 0;
@@ -145,7 +149,7 @@ html{
     }
   }
   .navbar-nav>.active>a{
-    color: @greenDark;
+    color: @green-darker;
     font-weight: bold;
     background-color: #ffffff;
     @media (min-width: @grid-float-breakpoint) {
@@ -212,20 +216,20 @@ html{
   display: table;
   padding: 7px 14px 7px 14px;
   margin-top: 10px;
-  background-color: @greenLighter;
+  background-color: @green-lighter;
   color: #ffffff;
   font-weight: bold;
   cursor: pointer;
   .unselectable;
   &:hover{
-    background-color: @greenDark;
+    background-color: @green-darker;
   }
 }
 
 .evenimente{
-  font-size: 18px;
+  .fontXL;
   font-weight: bold;
-  color: @greenDark;
+  color: @green;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -248,7 +252,7 @@ html{
 }
 
 .MSDgreen{
-  color: @MSDgreen;
+  color: @green;
 }
 
 //================================================================================================================ HOME
@@ -266,10 +270,10 @@ html{
     border: 1px solid @gray;
     cursor: pointer;
     &.active{
-      color: @greenDark;
+      color: @green-darker;
     }
     &:hover{
-      color: @greenDark;
+      color: @green-darker;
     }
   }
   .left{
@@ -300,7 +304,7 @@ html{
       height: 100%;
       position: relative;
       .title{
-        font-size: 20px;
+        .fontXL;
         margin-bottom: 15px;
       }
       .text{
@@ -432,7 +436,7 @@ html{
     padding: 0;
     .name{
       padding: 10px 0 12px 0;
-      font-size: 18px;
+      .fontXL;
     }
   }
 }
@@ -441,7 +445,7 @@ html{
 .searchResults{
   .mainTitle{
     padding: 10px 0 12px 0;
-    font-size: 18px;
+    .fontXL;
     @media (min-width: @grid-float-breakpoint) {
       margin-top: 30px;
     }
@@ -476,7 +480,7 @@ html{
   .articleDetail{
     .title{
       padding: 0;
-      font-size: 20px;
+      .fontXL;
       font-weight: bold;
       border-bottom: 1px solid lightgray;
     }
@@ -506,7 +510,7 @@ html{
   .mostDownloaded{
     padding: 0 15px 0 30px;
     .mainTitle{
-      font-size: 22px;
+      .fontXL;
       margin-bottom: 15px;
       padding: 0;
     }
@@ -516,9 +520,9 @@ html{
         padding: 0;
         margin-bottom: 5px;
         a{
-          color: @greenDark;
+          color: @green;
           font-weight: bold;
-          font-size: 17px;
+          .fontL;
         }
         &:before{
           content: "\e025";
@@ -537,7 +541,7 @@ html{
       }
       .author{
         padding: 0;
-        font-size: 13px;
+        .fontS;
         font-weight: bold;
       }
       .divider{
@@ -573,7 +577,7 @@ html{
   .downloadsDetail{
     .title{
       padding: 0;
-      font-size: 20px;
+      .fontXL;
       font-weight: bold;
       border-bottom: 1px solid lightgray;
     }
@@ -609,7 +613,7 @@ html{
   .categories{
     padding: 0 15px 0 15px;
     .mainTitle{
-      font-size: 22px;
+      .fontXL;
       margin-bottom: 15px;
       padding: 0;
     }
@@ -617,7 +621,7 @@ html{
       width: 100%;
       display: block;
       a{
-        color: @greenDark;
+        color: @green;
         font-weight: bold;
       }
     }
@@ -647,15 +651,15 @@ html{
   .elearningDetail{
     .title{
       padding: 0;
-      font-size: 22px;
+      .fontXL;
       font-weight: bold;
     }
     .author{
       padding: 0;
-      font-size: 15px;
+      .fontS;
     }
     .videoWrapper{
-      border: 3px solid @greenDark;
+      border: 3px solid @green-darker;
       border-radius: 10px;
       padding: 5px;
       margin-top: 15px;
@@ -665,11 +669,11 @@ html{
           background-color: #ffffff;
           opacity: 1;
           .iconButton{
-            color: @greenDark;
+            color: @green-darker;
             font-size: 25px;
           }
           vg-time-display{
-            color: @greenDark;
+            color: @green-darker;
             font-weight: bold;
           }
           vg-scrub-bar{
@@ -679,7 +683,7 @@ html{
               background-color: #ccfffa;
               vg-scrub-bar-current-time{
                 height: 10px;
-                background-color: @greenDark;
+                background-color: @green-darker;
               }
             }
           }
@@ -697,12 +701,12 @@ html{
 }
 
 #authModal{
-  font-size: 12px;
+  .fontS;
   .modal-header{
     padding: 10px 15px;
     .modal-title{
       h3{
-        font-size: 22px;
+        .fontXL;
       }
     }
   }
@@ -715,16 +719,6 @@ html{
 }
 
 //============================================================================================================== SHARED
-
-.btnGreenBorder{
-  border-color: @greenDark;
-  &:hover{
-    border-color: @greenDark;
-  }
-  &:focus{
-    border-color: @greenDark;
-  }
-}
 
 a{
   &:focus{
@@ -803,7 +797,19 @@ a{
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     color: white;
-    background-color: @MSDgreenDarker;
+    background-color: @green;
+    padding: 10px 15px;
+    h3{
+      margin-top: 10px;
+      margin-bottom: 10px;
+      .fontXL;
+      i{
+        .fontL;
+      }
+    }
+  }
+  .modal-footer{
+    padding: 10px 15px;
   }
 }
 .loginInput{

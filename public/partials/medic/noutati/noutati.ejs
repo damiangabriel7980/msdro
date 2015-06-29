@@ -1,10 +1,10 @@
 <div class="articlesStyles">
     <div class="col-md-12 articlesWrapper">
-        <div class="col-md-4">
+        <div class="col-md-4" ng-show="!isMobile()">
             <widget-most-read objects-array="mostRead" objects-limit="3" widget-title="{{'CELE MAI CITITE ' + title}}"
                               title-attr="title" text-attr="text" link-text="Citeste mai mult" navigate="navigateToContent"
                               delimiter-right></widget-most-read>
         </div>
-        <div class="col-md-8 articlesList" ui-view></div>
+        <div class="col-md-8 col-sm-12 articlesList" ui-view></div>
     </div>
 </div>

@@ -1,3 +1,21 @@
+.fontS {
+  font-size: 12px;
+}
+.fontM {
+  font-size: 14px;
+}
+.fontL {
+  font-size: 17px;
+}
+.fontXL {
+  font-size: 20px;
+}
+.fontXXL {
+  font-size: 25px;
+}
+.fontDefault {
+  font-size: 14px;
+}
 .contentShadow {
   -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
   -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
@@ -20,7 +38,7 @@
   overflow: hidden;
 }
 .vertical-content-list .TextWrapper a {
-  color: #006d69;
+  color: #01877b;
   cursor: pointer;
 }
 .vertical-content-list .TextWrapper .Description {
@@ -39,15 +57,6 @@
 .vertical-content-list .buttonWrapper {
   padding: 0;
   margin-top: 15px;
-}
-.vertical-content-list .buttonWrapper .btn-news {
-  background-color: transparent;
-  color: black;
-}
-.vertical-content-list .buttonWrapper .btn-news:hover {
-  color: #ffffff;
-  background-color: #31b0d5;
-  border-color: #269abc;
 }
 .vertical-content-list.withBackground {
   background-color: #f5f5f5;

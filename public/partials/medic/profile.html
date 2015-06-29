@@ -1,5 +1,5 @@
 <div class="modal-header modalTitleStyles">
-    <div class="modal-title"><h3 class="equalMarginModalTitle">{{userData.name}}</h3></div>
+    <div class="modal-title"><h3>{{userData.name}}</h3></div>
 </div>
 <div class="modal-body noPaddingBottom col-md-12 col-sm-12">
     <accordion close-others="true">
@@ -213,5 +213,5 @@
     </accordion>
 </div>
 <div class="modal-footer noPaddingTop noPaddingBottom">
-    <a class="btn btn-default btnCloseProfile" ng-click="deviceWidth < 768? goHomeMobile() : $close()">Inchide</a>
+    <a class="btn btn-default" ng-click="deviceWidth < 768? goHomeMobile() : $close()">Inchide</a>
 </div>

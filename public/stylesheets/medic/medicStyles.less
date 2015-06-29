@@ -1,16 +1,24 @@
 //import our customizable variables
-@import '../globalVariables';
 @import 'medicVariables';
 
 //import stripped-from-variables version of bootstrap, which will use our custom variables
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 body{
-  font-size: 14px;
+  .fontM;
+  h2{
+    .fontXXL;
+  }
+  h3{
+    .fontXL;
+  }
+  h4{
+    .fontL;
+  }
   a{
     cursor: pointer;
   }
-  @media(max-device-width: 767px){
-    font-size: 15px;
+  .btn{
+    .btn-sm;
   }
 }
 .filterByTherapeuticAreas{
@@ -28,15 +36,16 @@ body{
       .MSDgreen;
       list-style: none;
       .area{
-        border: 0px solid @grayLighter;
+        border: 0;
+        padding: 5px;
         cursor: pointer;
         border-radius: 4px !important;
         &:hover{
-          background-color: @MSDgreenDarker;
+          background-color: @green;
           color:white;
         }
         &.active{
-          background-color: @MSDgreenDarker;
+          background-color: @green;
           color:white;
         }
       }
@@ -106,16 +115,6 @@ body{
     .articlesList{
       .articlesMoreNews{
         clear: both;margin:0 auto;
-        .btn-news{
-          margin-top: 20px;
-          background-color: transparent;
-          color: black;
-          &:hover{
-            color: @body-bg;
-            background-color: #31b0d5;
-            border-color: #269abc;
-          }
-        }
       }
       .noArticles{
         padding: 0;
@@ -136,7 +135,7 @@ body{
   }
   .articleDetail{
     .title{
-      font-size: 20px;
+      .fontXL;
       font-weight: bold;
       border-bottom: 1px solid lightgray;
     }
@@ -144,16 +143,6 @@ body{
       img{
         padding-right: 15px;
         padding-bottom: 15px;
-      }
-    }
-    .btn-news{
-      margin-top: 20px;
-      background-color: transparent;
-      color: black;
-      &:hover{
-        color: @body-bg;
-        background-color: #31b0d5;
-        border-color: #269abc;
       }
     }
     .date {
@@ -189,21 +178,17 @@ body{
       padding-top: 5px;
     }
     .MainTitle{
-      border-bottom: 1px solid @MSDTitle;
-      //@media(max-width: 1277px){
-      //  font-size: 20px;
-      //  font-weight: bold;
-      //}
+      border-bottom: 1px solid @green;
     }
     .Date{
       padding-bottom: 10px;
       margin-top: -25px;
       .day{
-        color: #006d69;
+        color: @green-darker;
         margin-bottom: 0;
       }
       .month{
-        color: #006d69;
+        color: @green-darker;
         margin-top: 0;
       }
     }
@@ -235,26 +220,17 @@ body{
     border: 1px solid rgba(51, 51, 51, 0.2);
     .contentShadow;
     .event{
-      border-left: 2px solid @MSDgreenDarker;
+      border-left: 2px solid @green-darker;
       .date{
         margin-top: -18px;
         .green{
-          color: @MSDgreenDarker;
+          color: @green-darker;
         }
       }
     }
     .buttonWrapper{
       padding-right: 0;
       padding-bottom: 0;
-      .btn-news{
-        background-color: transparent;
-        color: black;
-        &:hover{
-          color: @body-bg;
-          background-color: #31b0d5;
-          border-color: #269abc;
-        }
-      }
     }
     .category{
       padding-top: 5px;
@@ -264,15 +240,10 @@ body{
   .contentWrapper{
     padding-left: 0;
     .Title{
-      color: @MSDgreenDarker;
+      color: @green-darker;
       cursor: pointer;
     }
   }
-}
-
-.btn-transparent{
-  background-color: transparent;
-  color: black;
 }
 
 .link-footer{
@@ -286,26 +257,12 @@ body{
   .leftSection{
     .lastNewsWrapper{
       padding-right: 0;
-      @media(min-width: 1278px) {
-        margin-left: 25px;
-      }
       .Title{
         padding: 0 0 0 10px;
         padding-bottom: 8px !important;
       }
       .content{
         padding: 0 15px 0 0;
-      }
-    }
-    &:after{
-      position: absolute;
-      content: '';
-      top: 0;
-      width: 0;
-      height: 100%;
-      border-right: 1px solid #000000;
-      @media(max-width: 1277px){
-        border-right: 0px solid #000000;
       }
     }
   }
@@ -322,17 +279,8 @@ body{
         margin-left: -1%;
       }
       margin-left: -2%;
-      @media(max-width: 768px){
-        margin-left: 0;
-      }
       padding-left: 0;
-      @media(max-width: 768px){
-        padding-left: 15px !important;
-      }
       .Multimedia{
-        @media(max-width: 768px){
-          padding-left: 15px;
-        }
         .Title{
           padding:0;
           h3{
@@ -350,26 +298,14 @@ body{
           }
           .Content{
             b{
-              color: @MSDTitle;
+              color: @green;
             }
             padding: 0;
             text-align: justify;
-            @media(min-width: 768px) and (max-width: 1277px)
-            {
-              left: -5%;
-            }
-            .mediaTitle{
-              @media(min-width: 768px) and (orientation: portrait){
-                font-size: 16px;
-              }
-            }
           }
         }
       }
       .Events{
-        @media(max-width: 768px){
-          padding-left: 15px;
-        }
         .Title{
           padding: 0;
           h3{
@@ -381,10 +317,10 @@ body{
           .date{
             padding: 0;
             border-right: 0px solid @gray;
-            color: @MSDTitle;
+            color: @green;
             .day{
               padding: 0;
-              font-size: 20px;
+              .fontXL;
             }
             .month{
               padding: 0;
@@ -392,19 +328,12 @@ body{
             }
           }
           .Content{
-            @media(min-width: 768px) and (max-width: 1277px)
-            {
-              left: -5%;
-            }
             padding: 0;
             border-left: 1px solid #000000;
             .MediaTitle{
-              color: @MSDTitle;
+              color: @green;
               cursor: pointer;
               text-align: justify;
-              @media(max-width: 768px){
-                padding-left: 15px;
-              }
             }
             .Description{
               margin-top: 5px;
@@ -424,9 +353,6 @@ body{
     }
     .rightColumn{
       padding-left: 2%;
-      @media(max-device-width: 768px){
-        padding-left: 3%;
-      }
       &:before{
         position: absolute;
         content: '';
@@ -444,7 +370,7 @@ body{
 .widgets{
   .subtitle
   {
-    color: @MSDTitle;
+    color: @green;
   }
   .glycemizerTextPadding{
     padding: 0 0 30px 0;
@@ -454,34 +380,18 @@ body{
   }
   .title{
     text-align: left;
-    @media(max-width: 1277px),(orientation: portrait){
+    @media(max-width: @screen-sm-max),(orientation: portrait){
       text-align: center;
     }
   }
   .contentPadding{
     padding-top: 10%;
     padding-bottom: 10%;
-    @media(max-width: 1277px),(orientation: portrait){
-      padding-bottom: 1%;
-      padding-top: 1%;
-    }
-  }
-  .contentJustified{
-    text-align: left;
-    @media(max-width: 1277px),(orientation: portrait){
-      text-align: justify;
-    }
-  }
-  .contentPaddingMobile{
-    padding-left: 0;
-    @media(max-width: 768px){
-      padding-left: 15px;
-    }
   }
   .widgetImage{
     width: 100%;
     margin-bottom: 10px;
-    @media(max-device-width: 768px){
+    @media(max-device-width: @screen-xs-max){
       width: 50% !important;
     }
   }
@@ -493,10 +403,6 @@ body{
     .merckImage{
       width: 70%;
       cursor:pointer;
-      @media(max-width: 1277px),(orientation: portrait){
-        width: 30%;
-        cursor:pointer;
-      }
     }
   }
 }
@@ -531,12 +437,12 @@ body{
           font-family: "Trebuchet MS", Helvetica, sans-serif;
           color: white;
           text-shadow: black 0.1em 0.1em 0.2em;
-          font-size: 30px;
-          @media(max-width: 768px){
+          .fontXXL;
+          @media(max-width: @screen-xs-max){
             font-family: "Trebuchet MS", Helvetica, sans-serif;
             color: white;
             text-shadow: black 0.1em 0.1em 0.2em;
-            font-size: 18px;
+            .fontL;
           }
         }
       }
@@ -592,7 +498,7 @@ body{
 
 //===================================================================================================== HEADER / FOOTER
 .navbar-fixed-top .navbar-nav > .active > a {
-  color: #008780;
+  color: @green-darker;
   font-weight: bold;
   background-color: #ffffff;
 }
@@ -600,8 +506,8 @@ body{
   content: '';
   position: absolute;
   width: 40%;
-  height: 0px;
-  border: 3px solid #bbbbbb;
+  height: 0;
+  border: 3px solid @gray;
   border-radius: 5px;
   left: 30%;
   top: 40px;
@@ -611,7 +517,7 @@ body{
 }
 .navbarMedic {
   padding: 10px 25px 0 25px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid @gray-lighter;
   .container{
     padding: 0;
     width: 100%;
@@ -619,20 +525,20 @@ body{
   }
   .dropdown-menu{
     border-radius: 6px;
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding-top: 0;
+    padding-bottom: 0;
     min-width: 180px;
-    background-color: #F0F0F0;
+    background-color: @gray-lighter;
     li{
       padding: 10px 5px 10px 5px;
       min-width: 180px;
       height: 50px;
       &:hover{
         border-radius: 3px;
-        background-color: @MSDTitle;
+        background-color: @green;
         a {
           color: #ffffff;
-          background-color: @MSDTitle;
+          background-color: @green;
           .glyphicon{
            color:darkgrey;
           }
@@ -641,20 +547,19 @@ body{
     }
     &.myProfile{
       margin-top: 5px;
-      @media(max-width: 1279px){
+      @media(max-width: @grid-float-breakpoint-max){
         left: auto !important;
       }
     }
   }
   .navbar-brand{
-    padding: 0 0 0 35px;
-    margin-bottom: 6px;
-    @media(max-width: 767px){
-      padding: 0;
-    }
+    padding: 0;
     img{
       height: 50px;
-      @media (max-width: 1277px){
+      @media (min-width: @grid-float-breakpoint) {
+        padding-left: 25px;
+      }
+      @media (max-width: @grid-float-breakpoint-max){
         height: 40px;
         margin-top: 9px;
       }
@@ -663,48 +568,38 @@ body{
   .profile{
     position: absolute;
     right: 234px;
+    @media (max-width: @grid-float-breakpoint-max) {
+      right: 0;
+    }
     margin-top: 8px;
     margin-right: 10px;
-    @media(min-width: 769px) and (max-width: @grid-float-breakpoint-max){
-      right: 10px;
-    }
-    @media(max-width: 768px){
-      right: -15px;
-    }
-  }
-  .navbar-collapse{
-    background-color: #ffffff;
-    @media (max-width: @grid-float-breakpoint-max) {
-      border: 1px solid @gray-lighter;
-    }
-    overflow-x: hidden;
-    overflow-y: hidden !important;
-    max-height: 375px!important;
-    @media only screen and (orientation: landscape) {
-      overflow-y: visible !important;
-      max-height: 340px!important;
+    .btn{
+      .btn;
+      border-color: @gray;
     }
   }
   .navbar-toggle {
     position: relative;
     float: left;
-    margin-left: 25px;
-    margin-right: 10px;
+    margin: 8px 10px 8px 20px;
     padding: 9px 10px;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    background-color: transparent;
-    background-image: none;
-    border: 1px solid transparent;
+    border: 1px solid @gray-light;
     border-radius: 4px;
     //@media (min-device-width: 480px) and (max-device-width: 767px) {
     //  margin-left: 9px;
     //}
   }
-  .navbar-nav{
-    &.navbarMenu{
-      padding-top: 4px;
-      padding-left: 4px;
+  .navbar-collapse{
+    padding: 0;
+    .navbar-nav{
+      margin: 0;
+      .navbar-form{
+        margin-left: 0;
+        margin-right: 0;
+      }
+      &.navbarMenu{
+        padding-top: 4px;
+      }
     }
   }
   .userDropdown{
@@ -718,8 +613,8 @@ body{
 #footer {
   border-top: 1px solid @grayLightest;
   //z-index: 1040;
-  background: @MSDgreenDarker;
-  padding: 5px 0;
+  background: @green;
+  padding: 5px 0 5px 0;
   width: 100%;
   clear: both;
   height: 35px;
@@ -779,10 +674,10 @@ body{
         .noPaddingBottom;
         .parentBorderTop;
         &.active{
-          background-color: @MSDTitle;
+          background-color: @green;
           color: white;
           .panel-heading{
-            background-color: @MSDTitle;
+            background-color: @green;
             color: white !important;
             .MSDgreenDarker{
               color: @body-bg !important;
@@ -796,7 +691,7 @@ body{
         }
         .MSDgreenDarker;
         .handCursor;
-        .smallFontSize;
+        .fontS;
         position: relative;
         display: block;
         padding: 10px 15px;
@@ -812,9 +707,6 @@ body{
       padding-right: 0;
       .glyphicon-Special-Product{
         margin-top: 2px;
-      }
-      .smallFontSize{
-        font-size: smaller;
       }
       .my-dropdown-menu {
         padding: 0;
@@ -844,8 +736,8 @@ body{
     .specialProductTitle{
       margin-top: 20px;
       margin-bottom: 20px;
-      color: @MSDgreenDarker;
-      font-size: 30px;
+      color: @green-darker;
+      .fontXXL;
       font-weight: bold
     }
     .justify{
@@ -861,7 +753,7 @@ body{
         margin-top: 20px
       }
       .fileLinks{
-          color: @MSDgreenDarker !important;
+          color: @green-darker !important;
         &:focus
         {
           text-decoration: none !important;
@@ -869,7 +761,7 @@ body{
       }
       .glossary{
         font-weight: bold;
-        color: @MSDgreenDarker;
+        color: @green-darker;
         padding-bottom: 10px;
         .Description{
           padding-bottom: 10px;
@@ -892,11 +784,11 @@ body{
           padding: 0;
           line-height: 2em;
           cursor: pointer;
-          color: @MSDgreenDarker !important;
+          color: @green-darker !important;
         }
         .siteMapList{
           cursor: pointer;
-          color: @MSDgreenDarker !important;
+          color: @green-darker !important;
         }
       }
     }
@@ -965,8 +857,8 @@ body{
         text-overflow: ellipsis;
       }
       .name{
-        color: @MSDgreen;
-        font-size: 13px;
+        color: @green;
+        .fontS;
         font-weight: bold;
         line-height: 1.5em;
         height: 3em;
@@ -979,7 +871,7 @@ body{
       }
       .cell{
         padding-top: 5px;
-        font-size: 12px;
+        .fontS;
         &.bold{
           font-weight: bold;
         }
@@ -992,18 +884,18 @@ body{
     width: 100%;
   }
   .name{
-    color: @MSDgreen;
-    font-size: 20px;
+    color: @green;
+    .fontXL;
     font-weight: bold;
   }
   .country{
-    font-size: 20px;
+    .fontXL;
     margin-bottom: 10px;
   }
   .cell{
     text-align: justify;
     padding-top: 5px;
-    font-size: 12px;
+    .fontS;
     &.bold{
       font-weight: bold;
     }
@@ -1021,12 +913,12 @@ body{
 //============================================================================================= MY PROFILE
 
 .MyProfileModal{
-  font-size: 12px;
+  .fontS;
   .modal-header{
     padding: 10px 15px;
     .modal-title{
       h3{
-        font-size: 22px;
+        .fontXL;
       }
     }
   }
@@ -1075,8 +967,8 @@ body{
   user-select: none;
 }
 .noPadding{padding:0;}
-.MSDgreen{color: @MSDgreen;}
-.MSDgreenDarker{color: @MSDgreenDarker;}
+.MSDgreen{color: @green;}
+.MSDgreenDarker{color: @green-darker;}
 .handCursor{
   cursor: pointer;
 }
@@ -1131,23 +1023,13 @@ body{
     padding-top: 5px;
   }
 }
-.smallFontSize{
-  font-size: smaller;
-}
-.mediumFont{
-  font-size: medium;
-}
 .modal-dialog{
   .modal-header{
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     color: white;
-    background-color: @MSDgreenDarker;
+    background-color: @green;
   }
-}
-.equalMarginModalTitle{
-  margin-top: 10px;
-  margin-bottom: 10px;
 }
 a:focus{
   text-decoration: none;
@@ -1155,21 +1037,12 @@ a:focus{
 .cookieBar{
   position: fixed;
   z-index: 1060;
-  background-color: @MSDgreenDarker ;
+  background-color: @green ;
   bottom:0;
   line-height: 30px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:white;
-}
-h3{
-  font-size: 20px;
-  @media (max-device-width: 767px) {
-    font-weight: bold;
-    font-family: "Helvetica Neue";
-  }
-}
-h4{
-  font-size: 16px;
+  padding: 5px;
 }
 
 .profileImg{
@@ -1187,15 +1060,14 @@ h4{
   width: 376px !important;
   }
 .popover-title{
-  background: @MSDTitle;
+  background: @green;
   color: white;
 }
 .popover-content{ color: black; }
 .fc-header-title{
   h2 {
+    .fontXL;
     @media (max-device-width: 480px) {
-
-      font-size: 20px;
       padding-top: 3px;
     }
   }

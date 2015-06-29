@@ -12,7 +12,7 @@
         <div class="col-sm-12 boldAttr" ng-bind-html="trustAsHtml(boldAttrHardcoded)"></div>
         <div class="col-sm-12 footer">
             <div class="date">{{content[dateAttr] | date:'dd/MM/yyyy'}}</div>
-            <div class="readMore"><a class="btn btn-default btn-sm btnGreenBorder" ng-click="navigate(content)">{{buttonLabel}}</a></div>
+            <div class="readMore"><a class="btn btn-default" ng-click="navigate(content)">{{buttonLabel}}</a></div>
         </div>
     </div>
     <div class="col-sm-12 divider" ng-if="showDivider"></div>

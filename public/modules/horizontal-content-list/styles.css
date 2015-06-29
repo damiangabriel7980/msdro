@@ -1,3 +1,21 @@
+.fontS {
+  font-size: 12px;
+}
+.fontM {
+  font-size: 14px;
+}
+.fontL {
+  font-size: 17px;
+}
+.fontXL {
+  font-size: 20px;
+}
+.fontXXL {
+  font-size: 25px;
+}
+.fontDefault {
+  font-size: 14px;
+}
 .contentShadow {
   -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
   -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
@@ -26,21 +44,20 @@
   margin-bottom: 10px;
 }
 .horizontal-content-list .details .title a {
-  color: #006d69;
-  font-size: 20px;
+  color: #01877b;
+  font-size: 17px;
   font-weight: bold;
 }
 .horizontal-content-list .details .excerpt {
   padding: 0;
   margin-bottom: 15px;
-  font-size: 15px;
 }
 .horizontal-content-list .details .excerpt img {
   visibility: hidden;
   display: none;
 }
 .horizontal-content-list .details .boldAttr {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
   padding: 0;
 }
@@ -48,7 +65,7 @@
   padding: 0;
 }
 .horizontal-content-list .details .footer .date {
-  font-size: 13px;
+  font-size: 12px;
   float: left;
 }
 .horizontal-content-list .details .footer .readMore {
