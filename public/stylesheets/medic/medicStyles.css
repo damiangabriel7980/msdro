@@ -6427,6 +6427,19 @@ body .btn {
   margin-bottom: 25px;
   padding: 0 25px 0 0;
 }
+.pickLetter .letter {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #01877b;
+}
+.pickLetter .letter:hover {
+  background-color: #01877b;
+  color: white;
+}
 .productDetails .imageAndRCP img {
   width: 100%;
 }

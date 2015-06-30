@@ -14,11 +14,8 @@
         <button class="btn btn-default" ng-class="{'hidden': !products || products.length <= lmt}" ng-click="increaseLimit()">Mai multe produse</button>
     </div>
 </div>
-<div class="col-sm-1 noPadding text-center" ng-if="!isMobile(true)">
-    <ul class="nav nav-list MSDgreen">
-        <li ng-click="filterResults('A-Z')">A-Z</li>
-        <li ng-repeat="(key, value) in firstLetters" ng-click="filterResults(key)">
-            {{key}}
-        </li>
-    </ul>
+<div class="col-sm-1 pickLetter" ng-if="!isMobile(true)">
+    <div class="col-xs-12 letter" ng-repeat="(key, value) in firstLetters" ng-click="filterResults(key)">
+        {{key}}
+    </div>
 </div>
