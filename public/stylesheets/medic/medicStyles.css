@@ -6427,9 +6427,11 @@ body .btn {
   margin-bottom: 25px;
   padding: 0 25px 0 0;
 }
+.pickLetter {
+  padding: 0;
+}
 .pickLetter .letter {
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px;
   cursor: pointer;
   text-align: center;
   border-radius: 4px;

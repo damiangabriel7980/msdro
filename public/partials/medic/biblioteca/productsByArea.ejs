@@ -15,6 +15,7 @@
     </div>
 </div>
 <div class="col-sm-1 pickLetter" ng-if="!isMobile(true)">
+    <div class="col-xs-12 letter" ng-click="getProducts()">A-Z</div>
     <div class="col-xs-12 letter" ng-repeat="(key, value) in firstLetters" ng-click="getProducts(key)">
         {{key}}
     </div>
