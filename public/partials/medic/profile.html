@@ -1,7 +1,7 @@
 <div class="modal-header modalTitleStyles">
     <div class="modal-title"><h3>{{userData.name}}</h3></div>
 </div>
-<div class="modal-body noPaddingBottom col-md-12 col-sm-12">
+<div class="modal-body">
     <accordion close-others="true">
         <accordion-group class="no-text-decoration" is-open="openFirst">
             <accordion-heading class="no-text-decoration" ><p class="no-text-decoration"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Profilul meu</p></accordion-heading>
@@ -212,6 +212,6 @@
         </accordion-group>
     </accordion>
 </div>
-<div class="modal-footer noPaddingTop noPaddingBottom">
-    <a class="btn btn-default" ng-click="deviceWidth < 768? goHomeMobile() : $close()">Inchide</a>
+<div class="modal-footer">
+    <a class="btn btn-default positionMiddle right" ng-click="$state.includes('profileMobile')? goHome() : $close()">Inchide</a>
 </div>

@@ -30,7 +30,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
         {number: 3, name: "Policlinica"},
         {number: 4, name: "Farmacie"}
     ];
-    $scope.goHomeMobile=function(){
+    $scope.goHome=function(){
         $state.go('home');
     };
     $scope.practices = [

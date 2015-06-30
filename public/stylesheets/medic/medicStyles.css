@@ -7151,7 +7151,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
   border-top: 1px solid #dddddd !important;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .parent {
-  padding-bottom: 0px;
+  padding-bottom: 0;
   border-top: 1px solid #dddddd !important;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .parent a {
@@ -7515,12 +7515,6 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .justify {
   text-align: justify;
-}
-.noPaddingBottom {
-  padding-bottom: 0px;
-}
-.noPaddingTop {
-  padding-top: 0px;
 }
 .noMarginTop {
   margin-top: 0px;
