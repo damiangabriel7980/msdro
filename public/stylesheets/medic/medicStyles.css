@@ -7036,6 +7036,28 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .navbarMedic .navbar-collapse .navbar-nav.navbarMenu {
   padding-top: 4px;
 }
+@media (min-width: 768px) {
+  .navbarMedic .navbar-collapse .navbar-nav li.mobileLink {
+    visibility: hidden;
+    display: none;
+  }
+}
+.navbarMedic .navbar-collapse .navbar-nav li.mobileLink.dividerTop:after {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  top: 0;
+  content: '';
+  border-bottom: 1px solid #eeeeee;
+}
+.navbarMedic .navbar-collapse .navbar-nav li .divider:after {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  top: 0;
+  content: '';
+  border-bottom: 1px solid #eeeeee;
+}
 @media (min-width: 1280px) {
   .navbarMedic .userDropdown {
     display: none;

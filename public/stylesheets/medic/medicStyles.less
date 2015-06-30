@@ -635,6 +635,34 @@ body{
       &.navbarMenu{
         padding-top: 4px;
       }
+      li{
+        &.mobileLink{
+          @media (min-width: @screen-sm-min) {
+            visibility: hidden;
+            display: none;
+          }
+          &.dividerTop{
+            &:after{
+              position: absolute;
+              left: 15px;
+              right: 15px;
+              top: 0;
+              content: '';
+              border-bottom: 1px solid @gray-lighter;
+            }
+          }
+        }
+        .divider{
+          &:after{
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            top: 0;
+            content: '';
+            border-bottom: 1px solid @gray-lighter;
+          }
+        }
+      }
     }
   }
   .userDropdown{
