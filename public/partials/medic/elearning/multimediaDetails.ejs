@@ -21,6 +21,8 @@
         </div>
     </div>
 </div>
-<div ng-class="{'modal-footer':!isMobile(true),'col-md-12 col-xs-12 text-center':isMobile(true)}">
-    <a ng-class="{'pull-right':!isMobile(true)}" class="btn btn-primary" ng-click="isMobile(true)?goToMultimedia():$close();goToMultimedia()">{{isMobile(true)?'Inapoi la multimedia':'Close'}}</a>
+<div class="modal-footer">
+    <div class="col-md-12 text-center">
+        <a class="btn btn-default" ng-class="{'pull-right':!isMobile(true)}" ng-click="isMobile(true)?goToMultimedia():$close();goToMultimedia()">{{isMobile(true)?'Inapoi la multimedia':'Close'}}</a>
+    </div>
 </div>
