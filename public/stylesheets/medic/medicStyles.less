@@ -237,11 +237,6 @@ body{
   }
 }
 
-.link-footer{
-  color:white !important;
-  cursor:hand ;
-}
-
 .homeStyles{
   height: 100%;
   padding: 0 0 50px 0;
@@ -616,11 +611,31 @@ body{
   //z-index: 1040;
   background: @green;
   padding: 5px 0 5px 0;
+  display: block;
   width: 100%;
-  clear: both;
-  height: 35px;
-  bottom: 0;
-  left: 0;
+  float: left;
+  position: relative;
+  min-height: 35px;
+  .leftSection{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80px;
+    img{
+      width: 65px;
+      float: right;
+      padding: 5px 0 5px 0;
+    }
+  }
+  .rightSection{
+    padding: 0 0 0 80px;
+    .link{
+      display: block;
+      float: right;
+      padding: 0 15px 0 0;
+      color: white;
+    }
+  }
 }
 
 //============================================================================================= PRODUCT PAGE
@@ -734,7 +749,7 @@ body{
     .specialProductTitle{
       margin-top: 20px;
       margin-bottom: 20px;
-      color: @green-darker;
+      color: @green;
       .fontXXL;
       font-weight: bold
     }
@@ -782,11 +797,11 @@ body{
           padding: 0;
           line-height: 2em;
           cursor: pointer;
-          color: @green-darker !important;
+          color: @green !important;
         }
         .siteMapList{
           cursor: pointer;
-          color: @green-darker !important;
+          color: @green !important;
         }
       }
     }

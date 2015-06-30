@@ -7,12 +7,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     $scope.logoutUser=function(){
         $window.location.href='logout';
     };
-    $scope.goToPharma=function(){
-        $window.open($rootScope.Pharma,'_tab');
-    };
-    $scope.goToTerms=function(){
-        $window.open($rootScope.Terms,'_tab');
-    };
 
     //===================================================================== user accepts cookies
     var acceptedCookies = CookiesService.getCookie("MSDCookies");
@@ -84,11 +78,15 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     };
 
     $scope.showContactModal = function(){
-        $modal.open({
-            templateUrl: 'partials/medic/modals/contact.html',
-            size: 'lg',
-            windowClass: 'fade'
-        });
+        if(Utils.isMobile(false,true)['iosDetect']){
+            window.open($rootScope.Pharma);
+        }else{
+            $modal.open({
+                templateUrl: 'partials/medic/modals/contact.html',
+                size: 'lg',
+                windowClass: 'fade'
+            });
+        }
     };
 
     $scope.showTermsModal = function(){
@@ -118,9 +116,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                 windowClass: 'fade modal-responsive'
             });
         }
-    };
-    $scope.goToMerckManual=function(){
-        window.open($rootScope.MerckManual,'_blank');
     };
 
     //============================================ profile modal

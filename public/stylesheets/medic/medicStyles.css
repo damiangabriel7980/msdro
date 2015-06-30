@@ -6522,10 +6522,6 @@ body .btn {
   color: #006d69;
   cursor: pointer;
 }
-.link-footer {
-  color: white !important;
-  cursor: hand ;
-}
 .homeStyles {
   height: 100%;
   padding: 0 0 50px 0;
@@ -6958,11 +6954,31 @@ fieldset[disabled] .navbarMedic .profile .btn {
   border-top: 1px solid #eeeeee;
   background: #01877b;
   padding: 5px 0 5px 0;
+  display: block;
   width: 100%;
-  clear: both;
-  height: 35px;
-  bottom: 0;
+  float: left;
+  position: relative;
+  min-height: 35px;
+}
+#footer .leftSection {
+  position: absolute;
   left: 0;
+  top: 0;
+  width: 80px;
+}
+#footer .leftSection img {
+  width: 65px;
+  float: right;
+  padding: 5px 0 5px 0;
+}
+#footer .rightSection {
+  padding: 0 0 0 80px;
+}
+#footer .rightSection .link {
+  display: block;
+  float: right;
+  padding: 0 15px 0 0;
+  color: white;
 }
 .specialProductMainWrapper {
   margin-top: 20px;
@@ -7072,7 +7088,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .specialProductMainWrapper #descriptionDiv .specialProductTitle {
   margin-top: 20px;
   margin-bottom: 20px;
-  color: #006d69;
+  color: #01877b;
   font-size: 25px;
   font-weight: bold;
 }
@@ -7119,11 +7135,11 @@ fieldset[disabled] .navbarMedic .profile .btn {
   padding: 0;
   line-height: 2em;
   cursor: pointer;
-  color: #006d69 !important;
+  color: #01877b !important;
 }
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .siteMap .siteMapList {
   cursor: pointer;
-  color: #006d69 !important;
+  color: #01877b !important;
 }
 @media print {
   #menuDiv {
