@@ -133,12 +133,12 @@
 <div class="navbar navbar-default navbar-fixed-top navbarMedic" role="navigation" ng-controller="SpecialGroupsMenu">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" ng-click="openNavbar()">
+            <a class="navbar-toggle" ng-click="openNavbar()">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </button>
+            </a>
             <special-dropdown class="specialDropdown" default-styles=true generic-object="specialGroupSelected" array-of-objects="specialGroups" amazon-path="pathAmazonDev" default-image-url="defaultGroupPhoto" on-item-select="selectSpecialGroup">
             </special-dropdown>
             <ul class="profile nav navbar-nav pull-right dropdown">

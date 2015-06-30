@@ -11,7 +11,7 @@
                              text-attr="description" navigate="navigateProductDetails" limit="lmt"></mobile-content-list>
     </div>
     <div class="col-xs-12 text-center">
-        <button class="btn btn-default" ng-class="{'hidden': !products || products.length <= lmt}" ng-click="increaseLimit()">Mai multe produse</button>
+        <a class="btn btn-default" ng-class="{'hidden': !products || products.length <= lmt}" ng-click="increaseLimit()">Mai multe produse</a>
     </div>
 </div>
 <div class="col-sm-1 pickLetter" ng-if="!isMobile(true)">
