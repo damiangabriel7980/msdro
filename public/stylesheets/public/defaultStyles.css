@@ -13,9 +13,6 @@
 .fontXXL {
   font-size: 25px;
 }
-.fontDefault {
-  font-size: 14px;
-}
 .contentShadow {
   -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
   -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
@@ -6308,6 +6305,31 @@ button.close {
     display: none !important;
   }
 }
+@media (max-width: 767px) {
+  .fontS {
+    font-size: 11px;
+  }
+}
+@media (max-width: 767px) {
+  .fontM {
+    font-size: 13px;
+  }
+}
+@media (max-width: 767px) {
+  .fontL {
+    font-size: 15px;
+  }
+}
+@media (max-width: 767px) {
+  .fontXL {
+    font-size: 17px;
+  }
+}
+@media (max-width: 767px) {
+  .fontXXL {
+    font-size: 20px;
+  }
+}
 a {
   cursor: pointer;
 }
@@ -6318,6 +6340,11 @@ html body {
   height: 100%;
   font-size: 14px;
   line-height: 1.5em;
+}
+@media (max-width: 767px) {
+  html body {
+    font-size: 13px;
+  }
 }
 html body .btn {
   padding: 5px 10px;
@@ -6535,6 +6562,11 @@ html body .rootView {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+@media (max-width: 767px) {
+  .evenimente {
+    font-size: 17px;
+  }
+}
 .footer {
   width: 100%;
   margin-top: 20px;
@@ -6612,6 +6644,11 @@ html body .rootView {
 .homeNewsDisplay .largeDisplay .left .title {
   font-size: 20px;
   margin-bottom: 15px;
+}
+@media (max-width: 767px) {
+  .homeNewsDisplay .largeDisplay .left .title {
+    font-size: 17px;
+  }
 }
 .homeNewsDisplay .largeDisplay .left .text {
   position: relative;
@@ -6769,9 +6806,19 @@ html body .rootView {
   padding: 10px 0 12px 0;
   font-size: 20px;
 }
+@media (max-width: 767px) {
+  .mobileArea .category .name {
+    font-size: 17px;
+  }
+}
 .searchResults .mainTitle {
   padding: 10px 0 12px 0;
   font-size: 20px;
+}
+@media (max-width: 767px) {
+  .searchResults .mainTitle {
+    font-size: 17px;
+  }
 }
 @media (min-width: 1024px) {
   .searchResults .mainTitle {
@@ -6807,6 +6854,11 @@ html body .rootView {
   font-weight: bold;
   border-bottom: 1px solid lightgray;
 }
+@media (max-width: 767px) {
+  .contentLayout .articleDetail .title {
+    font-size: 17px;
+  }
+}
 .contentLayout .articleDetail .articleContent {
   padding: 30px 0 0 0;
 }
@@ -6836,6 +6888,11 @@ html body .rootView {
   margin-bottom: 15px;
   padding: 0;
 }
+@media (max-width: 767px) {
+  .downloadsLayout .mostDownloaded .mainTitle {
+    font-size: 17px;
+  }
+}
 .downloadsLayout .mostDownloaded .entry {
   padding: 0;
 }
@@ -6847,6 +6904,11 @@ html body .rootView {
   color: #01877b;
   font-weight: bold;
   font-size: 17px;
+}
+@media (max-width: 767px) {
+  .downloadsLayout .mostDownloaded .entry .title a {
+    font-size: 15px;
+  }
 }
 .downloadsLayout .mostDownloaded .entry .title:before {
   content: "\e025";
@@ -6866,6 +6928,11 @@ html body .rootView {
   padding: 0;
   font-size: 12px;
   font-weight: bold;
+}
+@media (max-width: 767px) {
+  .downloadsLayout .mostDownloaded .entry .author {
+    font-size: 11px;
+  }
 }
 .downloadsLayout .mostDownloaded .entry .divider {
   border-bottom: 1px solid #eeeeee;
@@ -6898,6 +6965,11 @@ html body .rootView {
   font-size: 20px;
   font-weight: bold;
   border-bottom: 1px solid lightgray;
+}
+@media (max-width: 767px) {
+  .downloadsLayout .downloadsDetail .title {
+    font-size: 17px;
+  }
 }
 .downloadsLayout .downloadsDetail .content {
   padding: 30px 0 0 0;
@@ -6934,6 +7006,11 @@ html body .rootView {
   margin-bottom: 15px;
   padding: 0;
 }
+@media (max-width: 767px) {
+  .elearningLayout .categories .mainTitle {
+    font-size: 17px;
+  }
+}
 .elearningLayout .categories .therapeuticArea {
   width: 100%;
   display: block;
@@ -6967,9 +7044,19 @@ html body .rootView {
   font-size: 20px;
   font-weight: bold;
 }
+@media (max-width: 767px) {
+  .elearningLayout .elearningDetail .title {
+    font-size: 17px;
+  }
+}
 .elearningLayout .elearningDetail .author {
   padding: 0;
   font-size: 12px;
+}
+@media (max-width: 767px) {
+  .elearningLayout .elearningDetail .author {
+    font-size: 11px;
+  }
 }
 .elearningLayout .elearningDetail .videoWrapper {
   border: 3px solid #006d69;
@@ -7007,11 +7094,21 @@ html body .rootView {
 #authModal {
   font-size: 12px;
 }
+@media (max-width: 767px) {
+  #authModal {
+    font-size: 11px;
+  }
+}
 #authModal .modal-header {
   padding: 10px 15px;
 }
 #authModal .modal-header .modal-title h3 {
   font-size: 20px;
+}
+@media (max-width: 767px) {
+  #authModal .modal-header .modal-title h3 {
+    font-size: 17px;
+  }
 }
 #authModal .modal-footer {
   padding: 10px 15px;
@@ -7103,8 +7200,18 @@ a:focus {
   margin-bottom: 10px;
   font-size: 20px;
 }
+@media (max-width: 767px) {
+  .modal-dialog .modal-header h3 {
+    font-size: 17px;
+  }
+}
 .modal-dialog .modal-header h3 i {
   font-size: 17px;
+}
+@media (max-width: 767px) {
+  .modal-dialog .modal-header h3 i {
+    font-size: 15px;
+  }
 }
 .modal-dialog .modal-footer {
   padding: 10px 15px;

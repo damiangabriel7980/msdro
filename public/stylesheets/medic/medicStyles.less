@@ -3,6 +3,35 @@
 
 //import stripped-from-variables version of bootstrap, which will use our custom variables
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
+
+//adjust fonts for phones and tablets
+.fontS{
+  @media (max-width: @screen-xs-max){
+    font-size: 11px;
+  }
+}
+.fontM{
+  @media (max-width: @screen-xs-max){
+    font-size: 13px;
+  }
+}
+.fontL{
+  @media (max-width: @screen-xs-max){
+    font-size: 15px;
+  }
+}
+.fontXL{
+  @media (max-width: @screen-xs-max){
+    font-size: 17px;
+  }
+}
+.fontXXL{
+  @media (max-width: @screen-xs-max){
+    font-size: 20px;
+  }
+}
+
+
 body{
   .fontM;
   h2{
@@ -19,8 +48,10 @@ body{
   }
   .btn{
     .btn-sm;
+    .fontS;
   }
 }
+
 .filterByTherapeuticAreas{
   .areasMobile{
     padding: 0;
