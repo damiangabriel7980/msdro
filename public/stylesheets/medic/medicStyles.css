@@ -6852,10 +6852,16 @@ body .btn {
     padding-left: 25px;
   }
 }
-@media (max-width: 1279px) {
+@media (min-width: 768px) and (max-width: 1279px) {
   .navbarMedic .navbar-brand img {
     height: 40px;
     margin-top: 9px;
+  }
+}
+@media (max-width: 767px) {
+  .navbarMedic .navbar-brand img {
+    height: 26px;
+    margin-top: 12px;
   }
 }
 .navbarMedic .profile {
@@ -6867,6 +6873,12 @@ body .btn {
 @media (max-width: 1279px) {
   .navbarMedic .profile {
     right: 0;
+  }
+}
+@media (max-width: 767px) {
+  .navbarMedic .profile {
+    display: none;
+    visibility: hidden;
   }
 }
 .navbarMedic .profile .btn {
@@ -6926,7 +6938,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .navbarMedic .navbar-toggle {
   position: relative;
   float: left;
-  margin: 8px 10px 8px 20px;
+  margin: 8px 10px 8px 0;
   padding: 9px 10px;
   border: 1px solid #777777;
   border-radius: 4px;
@@ -6948,6 +6960,11 @@ fieldset[disabled] .navbarMedic .profile .btn {
   .navbarMedic .userDropdown {
     display: none;
     visibility: hidden;
+  }
+}
+@media (max-width: 767px) {
+  .navbarMedic .specialDropdown {
+    margin-top: 3px;
   }
 }
 #footer {

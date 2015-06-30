@@ -24,14 +24,14 @@
   background-clip: padding-box;
 }
 .specialGroupDropdown {
-  padding: 5px 13px;
+  padding: 5px 10px;
 }
 .specialGroupDropdown img {
   width: 180px;
 }
-@media (max-width: 540px) {
+@media (max-width: 768px) {
   .specialGroupDropdown img {
-    width: 135px;
+    width: 119px;
     margin-top: 7px;
   }
 }
@@ -48,12 +48,12 @@
 }
 @media (max-width: 768px) {
   .specialMenu {
-    right: 55px;
+    right: 10px;
   }
 }
 @media (min-width: 769px) and (max-width: 1279px) {
   .specialMenu {
-    right: 70px;
+    right: 65px;
   }
 }
 .subitems {
