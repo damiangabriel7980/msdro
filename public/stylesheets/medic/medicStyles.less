@@ -1036,18 +1036,38 @@ body{
     height: 90%;
     .modal-content{
       height: 100%;
+      position: relative;
       .modal-header{
         height: 10%;
       }
       .modal-body{
-        height: 80%;
+        position: absolute;
+        bottom: 10%;
+        top: 10%;
+        left: 0;
+        right: 0;
         overflow-y: scroll;
         .multimediaVideo{
           height: 80%;
         }
       }
       .modal-footer{
+        position: absolute;
         height: 10%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        .positionMiddle{
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          &.right{
+            right: 15px;
+          }
+          &.left{
+            left: 15px;
+          }
+        }
       }
     }
   }
