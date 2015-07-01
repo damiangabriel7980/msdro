@@ -3,7 +3,7 @@
  */
 controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', 'ActionModal','$q','$state', function($scope,$rootScope,MultimediaAdminService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal,$q,$state){
     MultimediaAdminService.multimedia.query().$promise.then(function(result){
-        var multimedias = result['MultimediaList'];
+        var multimedias = result.success;
         console.log(result);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page

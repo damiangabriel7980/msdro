@@ -11,7 +11,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
     $scope.$watch('toEdit.type', function (newVal) {
         if(newVal){
             CarouselPublicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
-                $scope.allContent = resp;
+                $scope.allContent = resp.success;
                 if($scope.toEdit.content_id){
                     var poz = findInContent($scope.toEdit.content_id);
                     if(poz > -1){
@@ -78,10 +78,11 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         CarouselPublicService.carouselPublic.update({id: idToEdit},{data: {toUpdate: $scope.toEdit}}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.statusAlert.type = "danger";
+                $scope.statusAlert.message = resp.message;
             }else{
                 $scope.statusAlert.type = "success";
+                $scope.statusAlert.message = resp.success.message;
             }
-            $scope.statusAlert.message = resp.message;
             $scope.statusAlert.newAlert = true;
         });
     };

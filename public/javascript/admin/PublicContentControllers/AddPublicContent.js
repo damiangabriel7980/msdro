@@ -30,17 +30,17 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
         var areasOrganised = [];
         areasOrganised.push({id:0, name:"Adauga arii terapeutice"});
         areasOrganised.push({id:1, name:"Toate"});
-        for(var i=0; i<resp.length; i++){
-            var thisArea = resp[i];
+        for(var i=0; i<resp.success.length; i++){
+            var thisArea = resp.success[i];
             if(thisArea['therapeutic-areasID'].length == 0){
                 //it's a parent. Add it
                 areasOrganised.push({id: thisArea._id, name:thisArea.name});
                 if(thisArea.has_children){
                     //find all it's children
-                    for(var j=0; j < resp.length; j++){
-                        if(resp[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
+                    for(var j=0; j < resp.success.length; j++){
+                        if(resp.success[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
                             //found one children. Add it
-                            areasOrganised.push({id: resp[j]._id, name:"0"+resp[j].name});
+                            areasOrganised.push({id: resp.success[j]._id, name:"0"+resp.success[j].name});
                         }
                     }
                 }
@@ -107,10 +107,11 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
         publicContentService.publicContent.create({data: toSend}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.statusAlert.type = "danger";
+                $scope.statusAlert.message = resp.error;
             }else{
                 $scope.statusAlert.type = "success";
+                $scope.statusAlert.message = resp.success.message;
             }
-            $scope.statusAlert.message = resp.message;
             $scope.statusAlert.newAlert = true;
         });
     };

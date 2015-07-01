@@ -12,11 +12,11 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
     });
 
     ProductService.products.query().$promise.then(function(resp){
-        $scope.groups = resp['groups'];
+        $scope.groups = resp.success['groups'];
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp;
+        $scope.areas = resp.success;
     });
 
     $scope.updateProduct = function(){

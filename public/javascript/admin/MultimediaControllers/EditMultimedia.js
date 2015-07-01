@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 18.05.2015.
  */
-controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','AmazonService','idToEdit', function($scope,$rootScope,MultimediaAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,AmazonService,idToEdit){
+controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','GroupsService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','AmazonService','idToEdit', function($scope,$rootScope,MultimediaAdminService,GroupsService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,AmazonService,idToEdit){
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertVideo = {newAlert:false, type:"", message:""};
 
@@ -11,8 +11,8 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
         $scope.selectedGroups = result.success['groupsID'];
     });
 
-    MultimediaAdminService.multimedia.query().$promise.then(function(resp){
-        $scope.groups = resp['groups'];
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups = resp.success;
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {

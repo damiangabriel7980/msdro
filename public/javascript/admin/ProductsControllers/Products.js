@@ -3,7 +3,7 @@
  */
 controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce','ngTableParams','$filter', '$modal', 'ActionModal','$q', function($scope, $state, ProductService,$sce,ngTableParams,$filter,$modal,ActionModal,$q){
     ProductService.products.query().$promise.then(function(result){
-        var products = result['productList'];
+        var products = result.success['productList'];
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page

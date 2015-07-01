@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 27.11.2014.
  */
-controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit){
+controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', 'GroupsService', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit,GroupsService){
 
     $scope.tinymceOptions = {
         plugins: [
@@ -30,9 +30,10 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
 
     });
 
-    ContentService.content.query().$promise.then(function(result) {
-        $scope.groups = result['groups'];
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups=resp.success;
     });
+
 
     var putLogoS3 = function (body) {
         AmazonService.getClient(function (s3) {

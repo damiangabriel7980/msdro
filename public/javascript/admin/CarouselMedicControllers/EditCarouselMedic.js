@@ -13,7 +13,7 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
         //load all contents of this type
         if(newVal){
             CarouselMedicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
-                $scope.allContent = resp;
+                $scope.allContent = resp.success;
                 if($scope.toEdit.article_id){
                     var poz = findInContent($scope.toEdit.article_id);
                     if(poz > -1){
@@ -81,10 +81,11 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
         CarouselMedicService.carouselMedic.update({id: idToEdit},{data: {toUpdate: $scope.toEdit}}).$promise.then(function (resp) {
             if(resp.error){
                 $scope.statusAlert.type = "danger";
+                $scope.statusAlert.message = resp.message;
             }else{
                 $scope.statusAlert.type = "success";
+                $scope.statusAlert.message = resp.success.message;
             }
-            $scope.statusAlert.message = resp.message;
             $scope.statusAlert.newAlert = true;
         });
     };

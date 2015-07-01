@@ -4,11 +4,11 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
     //$scope.resetAlert("success", "works");
 
     SpecialProductsService.products.query({id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
-        $scope.newProductPage = resp[0];
-        $scope.selectedGroups = resp[0].groups;
+        $scope.newProductPage = resp.success[0];
+        $scope.selectedGroups = resp.success[0].groups;
         //get available groups (a group can have only one special product)
         SpecialProductsService.groupsAvailable.query().$promise.then(function (resp) {
-            $scope.groupsAvailable = resp;
+            $scope.groupsAvailable = resp.success;
         });
     });
 

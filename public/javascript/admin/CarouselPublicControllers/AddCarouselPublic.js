@@ -11,7 +11,7 @@ controllers.controller('AddCarouselPublic', ['$scope','$rootScope','$sce','Carou
     $scope.$watch('selectedType', function (newVal) {
         //load all contents of this type
         CarouselPublicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
-            $scope.allContent = resp;
+            $scope.allContent = resp.success;
         });
     });
 
@@ -40,11 +40,11 @@ controllers.controller('AddCarouselPublic', ['$scope','$rootScope','$sce','Carou
                     $scope.statusAlert.newAlert = true;
                 }else{
                     $scope.statusAlert.type = "success";
-                    $scope.statusAlert.message = resp.message;
+                    $scope.statusAlert.message = resp.success.message;
                     $scope.statusAlert.newAlert = true;
                     //upload image to Amazon
                     AmazonService.getClient(function (s3) {
-                        var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: resp.key, Body: fileSelected, ACL:'public-read'}, function (err, data) {
+                        var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: resp.success.key, Body: fileSelected, ACL:'public-read'}, function (err, data) {
                             if (err) {
                                 console.log(err);
                                 $scope.uploadAlert.type = "danger";

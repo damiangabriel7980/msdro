@@ -1,12 +1,12 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('AddMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', function($scope,$rootScope,MultimediaAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService){
+controllers.controller('AddMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','GroupsService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', function($scope,$rootScope,MultimediaAdminService,GroupsService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService){
     $scope.selectedGroups = [];
     $scope.selectedAreas=[];
 
-    MultimediaAdminService.multimedia.query().$promise.then(function(resp){
-        $scope.groups = resp['groups'];
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups = resp.success;
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {

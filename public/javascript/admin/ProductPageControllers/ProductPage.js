@@ -2,7 +2,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
 
     $scope.refreshTable = function () {
         SpecialProductsService.products.query().$promise.then(function (resp) {
-            var data = resp;
+            var data = resp.success;
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -26,7 +26,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
     };
 
     SpecialProductsService.groups.query().$promise.then(function (resp) {
-        $scope.groups = resp;
+        $scope.groups = resp.success;
     });
 
     $scope.refreshTable();

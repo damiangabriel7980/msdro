@@ -165,7 +165,7 @@ services.factory('GroupsService', ['$resource', function($resource){
 services.factory('SpecialProductsService', ['$resource', function($resource){
     return {
         products: $resource('api/admin/content/specialProducts/products', {}, {
-            query: { method: 'GET', isArray: true },
+            query: { method: 'GET', isArray: false },
             create: { method: 'POST', isArray: false },
             update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
@@ -180,10 +180,10 @@ services.factory('SpecialProductsService', ['$resource', function($resource){
             update: { method: 'PUT', isArray: false }
         }),
         groups: $resource('api/admin/content/specialProducts/groups', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         groupsAvailable: $resource('api/admin/content/specialProducts/groupsAvailable', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         glossary: $resource('api/admin/content/specialProducts/glossary', {}, {
             query: { method: 'GET', isArray: false },
@@ -282,7 +282,7 @@ services.factory('publicContentService', ['$resource', function($resource){
             delete: {method: 'DELETE', isArray: false}
         }),
         therapeuticAreas: $resource('api/admin/therapeutic_areas', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         changeImageOrFile: $resource('api/admin/users/publicContent/changeImageOrFile/:data', {}, {
             save: { method: 'POST'}
@@ -298,7 +298,7 @@ services.factory('publicContentService', ['$resource', function($resource){
 
 services.factory('therapeuticAreaService', ['$resource', function($resource){
     return $resource('api/admin/therapeutic_areas', {}, {
-        query: { method: 'GET', isArray: true }
+        query: { method: 'GET', isArray: false }
     });
 }]);
 
@@ -311,7 +311,7 @@ services.factory('CarouselPublicService', ['$resource', function($resource){
             delete: {method: 'DELETE', isArray: false}
         }),
         attachedContent: $resource('api/admin/users/carouselPublic/contentByType', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
@@ -324,7 +324,7 @@ services.factory('CarouselMedicService', ['$resource', function($resource){
             delete: {method: 'DELETE', isArray: false}
         }),
         attachedContent: $resource('api/admin/users/carouselMedic/contentByType', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

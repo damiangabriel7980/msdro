@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('AddArticles', ['$scope', 'ContentService', '$modalInstance', '$state', function($scope, ContentService, $modalInstance, $state){
+controllers.controller('AddArticles', ['$scope', 'ContentService', 'GroupsService', '$modalInstance', '$state', function($scope, ContentService, GroupsService, $modalInstance, $state){
 
     $scope.tinymceOptions = {
         plugins: [
@@ -18,8 +18,8 @@ controllers.controller('AddArticles', ['$scope', 'ContentService', '$modalInstan
 
     $scope.selectedGroups = [];
 
-    ContentService.content.query().$promise.then(function(result) {
-        $scope.groups = result['groups'];
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups=resp.success;
     });
 
     $scope.createArticle=function(){
