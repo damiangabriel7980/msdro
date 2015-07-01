@@ -8,13 +8,13 @@
   padding: 10px;
   position: relative;
   display: inline-flex;
-  .picture{
+  .wrapper{
     width: 100%;
     max-width: 180px;
     &.smallerPicture{
       max-width: 120px;
     }
-    div{
+    .picture{
       border: 5px solid @pictureFrame;
       border-radius: 10px;
       img{
@@ -22,9 +22,22 @@
         border-radius: 5px;
       }
     }
+    .event{
+      border-left: 2px solid @green;
+      padding-left: 10px;
+      .day{
+        .fontXXL;
+        color: @green;
+      }
+      .month{
+        .fontL;
+        color: @green;
+      }
+    }
   }
   .details{
     padding: 5px 0 0 15px;
+    width: 100%;
     .title{
       padding: 0;
       cursor: pointer;

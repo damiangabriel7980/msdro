@@ -7,6 +7,7 @@
             restrict: 'E',
             templateUrl: currentScriptPath.replace('directive.js', 'template.html'),
             scope: {
+                contentType: '@',
                 content: '=',
                 imagePathAttr: '@',
                 imagePathPrefix: '@',

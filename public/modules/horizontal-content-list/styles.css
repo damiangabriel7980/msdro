@@ -23,23 +23,36 @@
   position: relative;
   display: inline-flex;
 }
-.horizontal-content-list .picture {
+.horizontal-content-list .wrapper {
   width: 100%;
   max-width: 180px;
 }
-.horizontal-content-list .picture.smallerPicture {
+.horizontal-content-list .wrapper.smallerPicture {
   max-width: 120px;
 }
-.horizontal-content-list .picture div {
+.horizontal-content-list .wrapper .picture {
   border: 5px solid #eeeeee;
   border-radius: 10px;
 }
-.horizontal-content-list .picture div img {
+.horizontal-content-list .wrapper .picture img {
   width: 100%;
   border-radius: 5px;
 }
+.horizontal-content-list .wrapper .event {
+  border-left: 2px solid #01877b;
+  padding-left: 10px;
+}
+.horizontal-content-list .wrapper .event .day {
+  font-size: 25px;
+  color: #01877b;
+}
+.horizontal-content-list .wrapper .event .month {
+  font-size: 17px;
+  color: #01877b;
+}
 .horizontal-content-list .details {
   padding: 5px 0 0 15px;
+  width: 100%;
 }
 .horizontal-content-list .details .title {
   padding: 0;
