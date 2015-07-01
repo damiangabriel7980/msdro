@@ -3747,96 +3747,57 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
             }
         });
+
     router.route('/products')
         .get(function(req, res) {
-            if(req.query.idProduct){
-                getNonSpecificUserGroupsIds(req.user).then(
-                    function (nonSpecificGroupsIds) {
-                        var forGroups = nonSpecificGroupsIds;
-                        if (req.query.specialGroup) {
-                            forGroups.push(req.query.specialGroup);
-                        }
-                        Products.find({_id:req.query.idProduct,groupsID: {$in: forGroups}}, function(err, cont) {
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (groups) {
+                    if (req.query.specialGroup) {
+                        groups.push(req.query.specialGroup);
+                    }
+                    if(req.query.idProduct){
+                        Products.findOne({_id: req.query.idProduct, groupsID: {$in: groups}}, function(err, cont) {
                             if(err) {
-                                res.json({error:err});
+                                res.send({error: err});
+                            }else{
+                                res.send({success: cont});
                             }
-                            else
-                                res.json({success: cont[0]});
                         })
-                    },
-                    function (err) {
-                        res.send({error:err});
-                    });
-            }else{
-                var test = req.query.idArea.toString();
-                if(test!=0)
-                {
-                    getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
-                            var forGroups = nonSpecificGroupsIds;
-                            if (req.query.specialGroup) {
-                                forGroups.push(req.query.specialGroup);
+                    }else if(req.query.idArea && req.query.idArea != 0){
+                        Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function(err, areas){
+                            if(err){
+                                logger.error(err);
+                                res.send({error: true});
+                            }else{
+                                var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}};
+                                if(req.query.firstLetter) q["name"] = new XRegExp("^"+req.query.firstLetter, "i");
+                                Products.find(q, function(err, cont) {
+                                    if(err) {
+                                        res.send({error: err});
+                                    }else{
+                                        res.send({success: cont});
+                                    }
+                                })
                             }
-                            Therapeutic_Area.find({_id:test}).exec(function(err,response){
-                                var TArea= response[0];
-                                if(TArea.has_children==true)
-                                {
-                                    Therapeutic_Area.find({$or: [{_id:req.query.idArea},{"therapeutic-areasID": {$in :[test]}}]}).exec(function(err,response){
-                                        getIds(response, true).then(function(ids){
-                                            Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
-                                                if(err) {
-                                                    res.json({error:err});
-                                                }
-                                                else
-                                                {
-                                                    res.json({success:cont});
-                                                }
-                                            })
-                                        })
-                                    });
-
-                                }
-                                else
-                                {
-                                    Products.find({"therapeutic-areasID": {$in :[test]},groupsID: {$in: forGroups}}, function(err, cont) {
-                                        if(err) {
-                                            res.json({error:err});
-                                        }
-                                        else
-                                        {
-                                            res.json({success:cont});
-                                        }
-                                    })
-                                }
-                            });
-                        },
-                        function (err) {
-                            res.send({error:err});
                         });
-                }
-                else
-                {
-                    getNonSpecificUserGroupsIds(req.user).then(
-                        function (nonSpecificGroupsIds) {
-                            var forGroups = nonSpecificGroupsIds;
-                            if (req.query.specialGroup) {
-                                forGroups.push(req.query.specialGroup);
+                    }else{
+                        //get allowed articles for user
+                        var q = {groupsID: {$in: groups}};
+                        if(req.query.firstLetter) q["name"] = new XRegExp("^"+req.query.firstLetter, "i");
+                        Products.find(q, function(err, cont) {
+                            if(err){
+                                res.send({error:err});
+                            }else{
+                                res.send({success:cont});
                             }
-                            //get allowed articles for user
-                            Products.find({groupsID: {$in: forGroups}}, function(err, cont) {
-                                if(err) {
-                                    res.send({error:err});
-                                }
-                                else
-                                {
-                                    res.json({success:cont});
-                                }
-                            })
-                        },
-                        function (err) {
-                            res.send({error:err});
-                        });
+                        })
+                    }
+                },
+                function (err) {
+                    logger.error(err);
+                    res.send({error: true});
                 }
-            }
+            );
         });
 
     router.route('/calendar')

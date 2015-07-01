@@ -3,6 +3,35 @@
 
 //import stripped-from-variables version of bootstrap, which will use our custom variables
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
+
+//adjust fonts for phones and tablets
+.fontS{
+  @media (max-width: @screen-xs-max){
+    font-size: 11px;
+  }
+}
+.fontM{
+  @media (max-width: @screen-xs-max){
+    font-size: 13px;
+  }
+}
+.fontL{
+  @media (max-width: @screen-xs-max){
+    font-size: 15px;
+  }
+}
+.fontXL{
+  @media (max-width: @screen-xs-max){
+    font-size: 17px;
+  }
+}
+.fontXXL{
+  @media (max-width: @screen-xs-max){
+    font-size: 20px;
+  }
+}
+
+
 body{
   .fontM;
   h2{
@@ -19,22 +48,25 @@ body{
   }
   .btn{
     .btn-sm;
+    .fontS;
   }
 }
+
 .filterByTherapeuticAreas{
-  padding: 0 0 25px 55px;
   .areasMobile{
-    margin-left: 25px;
+    padding: 0;
+    margin-bottom: 25px;
   }
   .areas{
-    padding: 0;
-    margin-right: 65px;
+    padding: 0 30px 0 0;
     .title{
-      margin-top: 0;
+      padding: 0;
+      margin-bottom: 25px;
+      .fontXL;
     }
     .menu{
+      padding: 0;
       .MSDgreen;
-      list-style: none;
       .area{
         border: 0;
         padding: 5px;
@@ -58,12 +90,26 @@ body{
 .productsView{
   padding: 0;
   .noProducts{
-    padding: 0;
     text-align: center
   }
   .product{
     margin-bottom: 25px;
     padding: 0 25px 0 0;
+  }
+}
+.pickLetter{
+  padding: 0;
+  .letter{
+    padding: 5px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: bold;
+    color: @green;
+    &:hover{
+      background-color: @green;
+      color: white;
+    }
   }
 }
 .productDetails{
@@ -89,12 +135,6 @@ body{
   }
   .multimediaWrapper{
     padding: 0 0 25px 0;
-  }
-}
-.paddingLeftMobile{
-  padding-left: 0;
-  @media(max-width: 768px){
-    padding-left: 15px;
   }
 }
 .main-view-container {
@@ -171,9 +211,6 @@ body{
   }
   .nextEvents{
     padding-left: 40px;
-    //@media(max-width: 1277px){
-    //  padding-left: 0;
-    //}
     .paddingTop5{
       padding-top: 5px;
     }
@@ -201,62 +238,51 @@ body{
     }
   }
 }
+.eventDetails{
+  .modal-title{
+    .fontXL;
+  }
+  .modal-body{
+    padding: 20px;
+    width: 100%;
+    .details{
+      width: 100%;
+      .location{
+        width: 50%;
+        float: left;
+      }
+      .date{
+        .fontM;
+        width: 50%;
+        float: left;
+        text-align: right;
+      }
+      .description{
+        width: 100%;
+        float: left;
+      }
+    }
+  }
+}
 
 //=======================================SEARCH
 .homeSearchWrapper{
   .mainTitle{
     margin-top: 20px;
+    .fontXL;
   }
   .result{
     padding: 0;
     margin-bottom: 20px;
   }
-  .eventWrapper {
-    border-radius: 4px;
-    position: relative;
-    margin-bottom: 20px;
-    padding: 5px;
-    background: @table-bg-accent;
-    border: 1px solid rgba(51, 51, 51, 0.2);
-    .contentShadow;
-    .event{
-      border-left: 2px solid @green-darker;
-      .date{
-        margin-top: -18px;
-        .green{
-          color: @green-darker;
-        }
-      }
-    }
-    .buttonWrapper{
-      padding-right: 0;
-      padding-bottom: 0;
-    }
-    .category{
-      padding-top: 5px;
-      font-weight: bolder;
-    }
-  }
-  .contentWrapper{
-    padding-left: 0;
-    .Title{
-      color: @green-darker;
-      cursor: pointer;
-    }
-  }
-}
-
-.link-footer{
-  color:white !important;
-  cursor:hand ;
 }
 
 .homeStyles{
   height: 100%;
   padding: 0 0 50px 0;
   .leftSection{
+    padding: 0;
     .lastNewsWrapper{
-      padding-right: 0;
       .Title{
         padding: 0 0 0 10px;
         padding-bottom: 8px !important;
@@ -265,43 +291,49 @@ body{
         padding: 0 15px 0 0;
       }
     }
+    &:after{
+      position: absolute;
+      content: '';
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 100%;
+      border-right: 1px solid black;
+    }
   }
   .rightSection{
     padding: 0;
     .leftColumn{
-      &:before{
-        position: absolute;
-        content: '';
-        top: 0;
-        left: -16px;
-        width: 0;
-        height: 100%;
-        margin-left: -1%;
-      }
-      margin-left: -2%;
-      padding-left: 0;
+      padding: 0;
       .Multimedia{
         .Title{
           padding:0;
-          h3{
-            margin-bottom: -1%;
-          }
         }
         .Wrapper{
-          padding: 0;
+          padding: 0 0 0 40px;
           margin-top:20px !important;
+          position: relative;
           .iconWrapper{
+            position: absolute;
+            left: 0;
+            top: 0;
             padding: 0;
             i{
               color: @gray;
             }
           }
           .Content{
-            b{
-              color: @green;
-            }
             padding: 0;
             text-align: justify;
+            .mediaTitle{
+              padding: 0;
+              font-weight: bold;
+              color: @green;
+              cursor: pointer;
+            }
+            .description{
+              padding: 0;
+            }
           }
         }
       }
@@ -313,46 +345,46 @@ body{
           }
         }
         .eventDisplay{
-          padding: 0 0 30px 0;
+          padding: 0 0 30px 40px;
+          position: relative;
           .date{
-            padding: 0;
-            border-right: 0px solid @gray;
+            position: absolute;
+            left: 0;
+            top: 0;
             color: @green;
+            width: 35px;
+            border-right: 1px solid black;
             .day{
               padding: 0;
               .fontXL;
+              line-height: 1em;
             }
             .month{
               padding: 0;
-              margin-top: -5px;
+              .fontM;
+              line-height: 1em;
             }
           }
           .Content{
             padding: 0;
-            border-left: 1px solid #000000;
             .MediaTitle{
+              padding: 0;
               color: @green;
               cursor: pointer;
               text-align: justify;
+              font-weight: bold;
             }
             .Description{
+              padding: 0;
               margin-top: 5px;
               text-align: justify;
             }
           }
         }
       }
-      &:after{
-        position: absolute;
-        content: '';
-        top: 0;
-        right: 0;
-        width: 0;
-        height: 100%;
-      }
     }
     .rightColumn{
-      padding-left: 2%;
+      padding: 0;
       &:before{
         position: absolute;
         content: '';
@@ -360,8 +392,17 @@ body{
         left: -1px;
         width: 0;
         height: 100%;
-        border-left: 1px solid #000000;
+        border-left: 1px solid black;
       }
+    }
+    &:before{
+      position: absolute;
+      content: '';
+      top: 0;
+      left: -1px;
+      width: 0;
+      height: 100%;
+      border-left: 1px solid black;
     }
   }
 }
@@ -373,7 +414,7 @@ body{
     color: @green;
   }
   .glycemizerTextPadding{
-    padding: 0 0 30px 0;
+    padding-bottom: 30px;
   }
   .handCursor{
     cursor: pointer;
@@ -396,10 +437,8 @@ body{
     }
   }
   .merckImageWrapper{
-      vertical-align: middle;
-      text-align: left;
-    padding-left: 0;
-    padding-right: 0;
+    vertical-align: middle;
+    text-align: left;
     .merckImage{
       width: 70%;
       cursor:pointer;
@@ -559,9 +598,13 @@ body{
       @media (min-width: @grid-float-breakpoint) {
         padding-left: 25px;
       }
-      @media (max-width: @grid-float-breakpoint-max){
+      @media (min-width: @screen-sm-min) and (max-width: @grid-float-breakpoint-max){
         height: 40px;
         margin-top: 9px;
+      }
+      @media (max-width: @screen-xs-max){
+        height: 26px;
+        margin-top: 12px;
       }
     }
   }
@@ -570,6 +613,10 @@ body{
     right: 234px;
     @media (max-width: @grid-float-breakpoint-max) {
       right: 0;
+    }
+    @media (max-width: @screen-xs-max) {
+      display: none;
+      visibility: hidden;
     }
     margin-top: 8px;
     margin-right: 10px;
@@ -581,13 +628,10 @@ body{
   .navbar-toggle {
     position: relative;
     float: left;
-    margin: 8px 10px 8px 20px;
+    margin: 8px 10px 8px 0;
     padding: 9px 10px;
     border: 1px solid @gray-light;
     border-radius: 4px;
-    //@media (min-device-width: 480px) and (max-device-width: 767px) {
-    //  margin-left: 9px;
-    //}
   }
   .navbar-collapse{
     padding: 0;
@@ -600,12 +644,45 @@ body{
       &.navbarMenu{
         padding-top: 4px;
       }
+      li{
+        &.mobileLink{
+          @media (min-width: @screen-sm-min) {
+            visibility: hidden;
+            display: none;
+          }
+          &.dividerTop{
+            &:after{
+              position: absolute;
+              left: 15px;
+              right: 15px;
+              top: 0;
+              content: '';
+              border-bottom: 1px solid @gray-lighter;
+            }
+          }
+        }
+        .divider{
+          &:after{
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            top: 0;
+            content: '';
+            border-bottom: 1px solid @gray-lighter;
+          }
+        }
+      }
     }
   }
   .userDropdown{
     @media (min-width: @grid-float-breakpoint) {
       display: none;
       visibility: hidden;
+    }
+  }
+  .specialDropdown{
+    @media (max-width: @screen-xs-max){
+      margin-top: 3px;
     }
   }
 }
@@ -615,23 +692,40 @@ body{
   //z-index: 1040;
   background: @green;
   padding: 5px 0 5px 0;
+  display: block;
   width: 100%;
-  clear: both;
-  height: 35px;
-  bottom: 0;
-  left: 0;
+  float: left;
+  position: relative;
+  min-height: 35px;
+  .leftSection{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80px;
+    img{
+      width: 65px;
+      float: right;
+      padding: 5px 0 5px 0;
+    }
+  }
+  .rightSection{
+    padding: 0 0 0 80px;
+    .link{
+      display: block;
+      float: right;
+      padding: 0 15px 0 0;
+      color: white;
+    }
+  }
 }
 
 //============================================================================================= PRODUCT PAGE
 .specialProductMainWrapper{
   margin-top: 20px;
   #menuDiv{
-    margin-left: 30px;
+    margin-left: 0;
     .menuMarginBottom{
     margin-bottom: 0;
-    }
-    @media(max-width: 1277px){
-      margin-left: 0px;
     }
     .panel-body{
       padding: 0;
@@ -671,7 +765,7 @@ body{
             font-size: inherit;
           }
         }
-        .noPaddingBottom;
+        padding-bottom: 0;
         .parentBorderTop;
         &.active{
           background-color: @green;
@@ -736,7 +830,7 @@ body{
     .specialProductTitle{
       margin-top: 20px;
       margin-bottom: 20px;
-      color: @green-darker;
+      color: @green;
       .fontXXL;
       font-weight: bold
     }
@@ -784,11 +878,11 @@ body{
           padding: 0;
           line-height: 2em;
           cursor: pointer;
-          color: @green-darker !important;
+          color: @green !important;
         }
         .siteMapList{
           cursor: pointer;
-          color: @green-darker !important;
+          color: @green !important;
         }
       }
     }
@@ -913,6 +1007,10 @@ body{
 //============================================================================================= MY PROFILE
 
 .MyProfileModal{
+  //styles to show just when the profile is opened inside a modal
+}
+
+.medicProfile{
   .fontS;
   .modal-header{
     padding: 10px 15px;
@@ -922,11 +1020,19 @@ body{
       }
     }
   }
+  .modal-body{
+    .panel-title{
+      .fontL;
+      p{
+        margin: 0;
+      }
+    }
+    .form-group-sm{
+      margin-top: 10px;
+    }
+  }
   .modal-footer{
     padding: 10px 15px;
-  }
-  .form-group-sm{
-    padding-bottom: 8px;
   }
 }
 
@@ -934,24 +1040,40 @@ body{
 .modal-responsive{
   .modal-dialog{
     height: 90%;
-    @media screen and (orientation:portrait){
-      height: auto;
-      width: 700px;
-    }
     .modal-content{
       height: 100%;
+      position: relative;
       .modal-header{
         height: 10%;
       }
       .modal-body{
-        height: 80%;
+        position: absolute;
+        bottom: 10%;
+        top: 10%;
+        left: 0;
+        right: 0;
         overflow-y: scroll;
         .multimediaVideo{
           height: 80%;
         }
       }
       .modal-footer{
+        position: absolute;
         height: 10%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        .positionMiddle{
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          &.right{
+            right: 15px;
+          }
+          &.left{
+            left: 15px;
+          }
+        }
       }
     }
   }
@@ -974,12 +1096,6 @@ body{
 }
 .justify{
   text-align: justify;
-}
-.noPaddingBottom{
-  padding-bottom: 0px;
-}
-.noPaddingTop{
-  padding-top: 0px;
 }
 .noMarginTop{
   margin-top: 0px;
@@ -1014,15 +1130,7 @@ body{
   height: 200px !important;
   image-orientation: from-image;
 }
-.margintop30px{
-  margin-top: 30px;
-}
 
-.paddingTop5{
-  @media(max-width: 768px){
-    padding-top: 5px;
-  }
-}
 .modal-dialog{
   .modal-header{
     border-top-left-radius: 5px;
@@ -1047,11 +1155,6 @@ a:focus{
 
 .profileImg{
   width: 100%;
-  @media (max-device-width: 480px) {
-    width: auto;
-    margin: auto;
-    image-orientation: from-image;
-  }
 }
 
 //=================================== calendar mobile responsive
@@ -1067,13 +1170,20 @@ a:focus{
 .fc-header-title{
   h2 {
     .fontXL;
-    @media (max-device-width: 480px) {
+    @media (max-device-width: @screen-xs) {
       padding-top: 3px;
     }
   }
 }
 .fc-button-today{
-  @media (max-device-width: 480px) {
+  @media (max-device-width: @screen-xs) {
     display: none !important;
+  }
+}
+
+//=================================================================================================== TINY MCE CLASSES
+.specialText{
+  @media (max-width: @screen-xs-max) {
+    width: 100% !important;
   }
 }

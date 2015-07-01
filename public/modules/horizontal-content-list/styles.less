@@ -6,9 +6,15 @@
 
 .horizontal-content-list{
   padding: 10px;
-  .picture{
-    padding: 0;
-    div{
+  position: relative;
+  display: inline-flex;
+  .wrapper{
+    width: 100%;
+    max-width: 180px;
+    &.smallerPicture{
+      max-width: 120px;
+    }
+    .picture{
       border: 5px solid @pictureFrame;
       border-radius: 10px;
       img{
@@ -16,9 +22,22 @@
         border-radius: 5px;
       }
     }
+    .event{
+      border-left: 2px solid @green;
+      padding-left: 10px;
+      .day{
+        .fontXXL;
+        color: @green;
+      }
+      .month{
+        .fontL;
+        color: @green;
+      }
+    }
   }
   .details{
     padding: 5px 0 0 15px;
+    width: 100%;
     .title{
       padding: 0;
       cursor: pointer;
@@ -42,22 +61,10 @@
       font-weight: bold;
       padding: 0;
     }
-    .footer{
+    .date{
       padding: 0;
-      .date{
-        .fontS;
-        float: left;
-      }
-      .readMore{
-        float: right;
-      }
+      .fontS;
     }
-  }
-  .divider{
-    border-bottom: 1px solid @pictureFrame;
-    padding: 0;
-    margin: 15px 20%;
-    width: 60%;
   }
   &.withBackground{
     background-color: @bgColor;
@@ -66,5 +73,22 @@
   }
   &.dropShadow{
     .contentShadow;
+  }
+  .readMore{
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+    float: right;
+  }
+  &.showDivider{
+    margin-bottom: 30px;
+    &:after{
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 10%;
+      width: 80%;
+      border-bottom: 1px solid @pictureFrame;
+    }
   }
 }

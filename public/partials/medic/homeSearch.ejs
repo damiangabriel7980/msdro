@@ -1,6 +1,6 @@
 <div class="col-md-8 col-md-offset-2 col-xs-12 homeSearchWrapper">
 
-    <h4 class="mainTitle">Cautare Continut</h4>
+    <div class="mainTitle">Cautare Continut</div>
     <div ng-if="answer" class="col-md-12">
         <h4>{{answer}}</h4>
     </div>
@@ -9,31 +9,9 @@
                                  title-attr="name" text-attr="description" bold-attr-hardcoded="Categorie: Produs" button-label="Vezi detalii"
                                  navigate="navigateToProduct" smaller-image with-background drop-shadow></horizontal-content-list>
     </div>
-    <div ng-show="calendarEv && calendarEv.length>0" ng-repeat="calendar in calendarEv track by $index" ng-if="calendar" class="col-md-12 col-xs-12 col-sm-12 eventWrapper noPadding">
-        <div class="col-md-12 col-xs-12 col-sm-12 event">
-
-            <div class="col-md-1 col-xs-2 col-sm-1 date">
-                <h2 class="green">{{calendar.start | filter: asDate | date:'dd'}}</h2>
-                <h5 class="green">{{calendar.start | filter: asDate | date:'MMM'}}</h5>
-            </div>
-            <div class="col-md-11 col-xs-10 col-sm-11">
-                <div class="col-md-12 contentWrapper">
-                    <div class="col-md-11">
-                        <h4 class="Title" ui-sref="calendar({id:calendar._id})" convert-special conver="calendar.name" ng-bind-html="trimText(htmlToPlainText(calendar.name), 100)">
-                        </h4>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div convert-special conver="calendar.description" ng-bind-html="trimText(htmlToPlainText(calendar.description), 100)">
-                    </div>
-                </div>
-                <div class="col-md-12 category">
-                    Categorie: Eveniment
-                </div>
-            </div>
-
-        </div>
-
+    <div ng-show="calendarEv && calendarEv.length>0" ng-repeat="calendar in calendarEv track by $index" ng-if="calendar" class="col-md-12 col-xs-12 col-sm-12 result">
+        <horizontal-content-list content-type="event" content="calendar" title-attr="name" text-attr="description" date-attr="start" bold-attr-hardcoded="Categorie: Eveniment"
+                                 button-label="Vezi detalii" navigate="navigateToEvent" smaller-image with-background drop-shadow></horizontal-content-list>
     </div>
     <div ng-show="articles && articles.length>0" ng-repeat="article in articles track by $index" ng-if="article" class="col-md-12 col-xs-12 col-sm-12 result">
         <horizontal-content-list content="article" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"

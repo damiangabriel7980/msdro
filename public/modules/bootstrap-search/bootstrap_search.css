@@ -5,11 +5,9 @@
   border: 0px solid #cccccc;
   -webkit-animation-direction: reverse;
   /* Chrome, Safari, Opera */
-
   animation-direction: reverse;
   -webkit-transition: all 1s ease;
   /* Safari */
-
   transition: all 1s ease;
 }
 .btnSearchBefore {

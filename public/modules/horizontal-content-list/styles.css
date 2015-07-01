@@ -13,9 +13,6 @@
 .fontXXL {
   font-size: 25px;
 }
-.fontDefault {
-  font-size: 14px;
-}
 .contentShadow {
   -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
   -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
@@ -23,20 +20,39 @@
 }
 .horizontal-content-list {
   padding: 10px;
+  position: relative;
+  display: inline-flex;
 }
-.horizontal-content-list .picture {
-  padding: 0;
+.horizontal-content-list .wrapper {
+  width: 100%;
+  max-width: 180px;
 }
-.horizontal-content-list .picture div {
+.horizontal-content-list .wrapper.smallerPicture {
+  max-width: 120px;
+}
+.horizontal-content-list .wrapper .picture {
   border: 5px solid #eeeeee;
   border-radius: 10px;
 }
-.horizontal-content-list .picture div img {
+.horizontal-content-list .wrapper .picture img {
   width: 100%;
   border-radius: 5px;
 }
+.horizontal-content-list .wrapper .event {
+  border-left: 2px solid #01877b;
+  padding-left: 10px;
+}
+.horizontal-content-list .wrapper .event .day {
+  font-size: 25px;
+  color: #01877b;
+}
+.horizontal-content-list .wrapper .event .month {
+  font-size: 17px;
+  color: #01877b;
+}
 .horizontal-content-list .details {
   padding: 5px 0 0 15px;
+  width: 100%;
 }
 .horizontal-content-list .details .title {
   padding: 0;
@@ -61,21 +77,9 @@
   font-weight: bold;
   padding: 0;
 }
-.horizontal-content-list .details .footer {
+.horizontal-content-list .details .date {
   padding: 0;
-}
-.horizontal-content-list .details .footer .date {
   font-size: 12px;
-  float: left;
-}
-.horizontal-content-list .details .footer .readMore {
-  float: right;
-}
-.horizontal-content-list .divider {
-  border-bottom: 1px solid #eeeeee;
-  padding: 0;
-  margin: 15px 20%;
-  width: 60%;
 }
 .horizontal-content-list.withBackground {
   background-color: #f5f5f5;
@@ -86,4 +90,21 @@
   -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
   -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
   box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
+}
+.horizontal-content-list .readMore {
+  position: absolute;
+  right: 15px;
+  bottom: 10px;
+  float: right;
+}
+.horizontal-content-list.showDivider {
+  margin-bottom: 30px;
+}
+.horizontal-content-list.showDivider:after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 10%;
+  width: 80%;
+  border-bottom: 1px solid #eeeeee;
 }

@@ -12,6 +12,6 @@
     <div class="col-md-9 col-xs-12" convert-special conver="selectedProduct.description" ng-bind-html="trustAsHtml(selectedProduct.description)">
     </div>
     <div class="col-xs-12 text-center" ng-if="isMobile(true)">
-        <button class="btn btn-default" ui-sref="biblioteca.produse.productsByArea({id:selectedArea._id})">Inapoi la produse</button>
+        <a class="btn btn-default" ui-sref="biblioteca.produse.productsByArea({id:selectedArea._id})">Inapoi la produse</a>
     </div>
 </div>

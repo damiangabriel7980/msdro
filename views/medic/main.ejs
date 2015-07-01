@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MSD Be Well</title>
-    <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=0.7,user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <!--Get amazon bucket-->
     <script>
         const DEFAULT_AMAZON_BUCKET = "<%=amazonBucket%>";
@@ -133,13 +133,13 @@
 <div class="navbar navbar-default navbar-fixed-top navbarMedic" role="navigation" ng-controller="SpecialGroupsMenu">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" ng-click="openNavbar()">
+            <a class="navbar-toggle" ng-click="openNavbar()">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </button>
-            <special-dropdown default-styles=true generic-object="specialGroupSelected" array-of-objects="specialGroups" amazon-path="pathAmazonDev" default-image-url="defaultGroupPhoto" on-item-select="selectSpecialGroup">
+            </a>
+            <special-dropdown class="specialDropdown" default-styles=true generic-object="specialGroupSelected" array-of-objects="specialGroups" amazon-path="pathAmazonDev" default-image-url="defaultGroupPhoto" on-item-select="selectSpecialGroup">
             </special-dropdown>
             <ul class="profile nav navbar-nav pull-right dropdown">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -203,7 +203,8 @@
 
                     </ul>
                 </li>
-
+                <li class="mobileLink dividerTop" ng-class="{'active': $state.includes('profileMobile')}" ng-click="showProfile();closeNavbar()"><a>Contul meu</a></li>
+                <li class="mobileLink" ng-click="logoutUser()"><a>Sign out</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
                 <bootstrap-search is-in-dropdown=false on-search="searchText" default-style=true>
