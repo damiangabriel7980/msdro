@@ -146,7 +146,7 @@ module.exports = function(app, logger, router) {
                 }else{
                     //console.log(results.hits.hits);
                     if(!results || !results.hits || !results.hits.hits){
-                        handleError(res,null,422,"Invalid response format");
+                        handleError(res,null,500);
                     }else{
                         handleSuccess(res,results.hits.hits);
                     }
@@ -183,7 +183,7 @@ module.exports = function(app, logger, router) {
                     }
                 })
             }else{
-                handleError(res,null,400,"Missing query param: type");
+                handleError(res,null,400,6);
             }
 
         });
