@@ -6552,6 +6552,40 @@ body .btn {
 .calendarWrapper .nextEvents .Title h4 {
   cursor: pointer;
 }
+.eventDetails .modal-title {
+  font-size: 20px;
+}
+@media (max-width: 767px) {
+  .eventDetails .modal-title {
+    font-size: 17px;
+  }
+}
+.eventDetails .modal-body {
+  padding: 20px;
+  width: 100%;
+}
+.eventDetails .modal-body .details {
+  width: 100%;
+}
+.eventDetails .modal-body .details .location {
+  width: 50%;
+  float: left;
+}
+.eventDetails .modal-body .details .date {
+  font-size: 14px;
+  width: 50%;
+  float: left;
+  text-align: right;
+}
+@media (max-width: 767px) {
+  .eventDetails .modal-body .details .date {
+    font-size: 13px;
+  }
+}
+.eventDetails .modal-body .details .description {
+  width: 100%;
+  float: left;
+}
 .homeSearchWrapper .mainTitle {
   margin-top: 20px;
   font-size: 20px;
