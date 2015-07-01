@@ -7,15 +7,15 @@
 controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService){
     $scope.therapeuticAlert = {newAlert:false, type:"", message:""};
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp;
+        $scope.areas = resp.success;
     });
     areasAdminService.areas.query({id:$stateParams.id}).$promise.then(function(resp){
-        $scope.arie = resp['selectedArea'];
-        $scope.selectedAreas = resp['childrenAreas'] ? resp['childrenAreas']: [];
+        $scope.arie = resp.success['selectedArea'];
+        $scope.selectedAreas = resp.success['childrenAreas'] ? resp.success['childrenAreas']: [];
         $scope.oldAreas = [];
-        if(resp['childrenAreas']){
-            for ( var i = 0;i<resp['childrenAreas'].length;i++)
-                $scope.oldAreas.push(resp['childrenAreas'][i]);
+        if(resp.success['childrenAreas']){
+            for ( var i = 0;i<resp.success['childrenAreas'].length;i++)
+                $scope.oldAreas.push(resp.success['childrenAreas'][i]);
         }
     });
 

@@ -266,9 +266,6 @@ services.factory('IntroService', ['$resource', function($resource){
             create: {method: 'POST', isArray: false},
             update: {method: 'PUT', isArray:false},
             delete: {method: 'DELETE', isArray: false}
-        }),
-        groups: $resource('api/admin/getAllGroups', {}, {
-            query: { method: 'GET', isArray: true }
         })
     }
 }]);

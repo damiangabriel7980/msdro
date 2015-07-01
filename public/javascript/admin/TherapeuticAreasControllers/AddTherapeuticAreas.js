@@ -8,7 +8,7 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
     $scope.selectedAreas=[];
     $scope.therapeuticAlert = {newAlert:false, type:"", message:""};
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp;
+        $scope.areas = resp.success;
     });
 
     $scope.addArie = function(){

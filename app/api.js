@@ -1454,10 +1454,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var product_id = ObjectId(req.query.product_id);
             specialProduct.update({_id: product_id}, {$pull: {speakers: speaker_id}}, function (err, wres) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: wres});
+                    handleSuccess(res, wres);
                 }
             });
         });
@@ -1467,19 +1466,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 specialApps.findOne({_id: req.query.id}).deepPopulate('groups.profession').exec(function (err, app) {
                     if(err || !app){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: app});
+                        handleSuccess(res, app);
                     }
                 });
             }else{
                 specialApps.find({}).deepPopulate('groups.profession').exec(function (err, apps) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: apps});
+                        handleSuccess(res, apps);
                     }
                 });
             }
@@ -1488,10 +1485,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var toSave = new specialApps(req.body);
             toSave.save(function (err, saved) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -1499,10 +1495,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToEdit = ObjectId(req.query.id);
             specialApps.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: wres});
+                    handleSuccess(res, wres);
                 }
             });
         })
@@ -1510,10 +1505,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToDelete = ObjectId(req.query.id);
             specialApps.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: wres});
+                    handleSuccess(res, wres);
                 }
             });
         });
@@ -1522,10 +1516,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             UserGroup.find({content_specific: true}).populate('profession').exec(function (err, groups) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: groups});
+                    handleSuccess(res, groups);
                 }
             });
         });
@@ -2084,7 +2077,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         {
                             Therapeutic_Area.find({'therapeutic-areasID':{$in : [cont[0]._id]}}).exec(function(err,response){
                                 objectToSend['childrenAreas'] = response;
-                                res.json(objectToSend);
+                                handleSuccess(res, objectToSend);
                             })
                         }
                         else{
@@ -2108,7 +2101,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var therapeutic = new Therapeutic_Area(req.body.area); 		// create a new instance of the Bear model;
             therapeutic.save(function(err,saved) {
                 if (err)
-                    res.send(err);
+                    handleError(res,err,500);
                         else{
                     async.each(req.body.area['therapeutic-areasID'], function (item, callback) {
                         Therapeutic_Area.findById(item, function (err, foundArea) {
@@ -2118,7 +2111,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 foundArea['therapeutic-areasID'] = [saved._id];
                                 foundArea.save(function(error){
                                     if(error)
-                                        res.json(err);
+                                        handleError(res,err,500);
                                     else
                                         callback();
                                 })
@@ -2133,7 +2126,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
                 }
             });
-
         })
     .put(function(req, res) {
             var area = req.body.area;
@@ -2153,7 +2145,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             foundArea['therapeutic-areasID'] = [];
                                             foundArea.save(function (error) {
                                                 if (error)
-                                                    res.json(err);
+                                                    handleError(res,err,500);
                                                 else
                                                     callback();
                                             })
@@ -2171,7 +2163,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                                     foundArea['therapeutic-areasID'] = [req.query.id];
                                                     foundArea.save(function (error) {
                                                         if (error)
-                                                            res.json(err);
+                                                            handleError(res,err,500);
                                                         else
                                                             callback();
                                                     })
@@ -2196,7 +2188,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             foundArea['therapeutic-areasID'] = [req.query.id];
                                             foundArea.save(function (error) {
                                                 if (error)
-                                                    res.json(err);
+                                                    handleError(res,err,500);
                                                 else
                                                     callback();
                                             })
@@ -3083,17 +3075,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     handleError(res,err,500);
                 }else{
                     handleSuccess(res, {count: count}, 4);
-                }
-            });
-        });
-    router.route('/admin/getAllGroups')
-        .get(function(req,res){
-            UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }else{
-                    res.json(cont2);
                 }
             });
         });
