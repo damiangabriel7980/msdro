@@ -21,9 +21,14 @@
 .horizontal-content-list {
   padding: 10px;
   position: relative;
+  display: inline-flex;
 }
 .horizontal-content-list .picture {
-  padding: 0;
+  width: 100%;
+  max-width: 180px;
+}
+.horizontal-content-list .picture.smallerPicture {
+  max-width: 120px;
 }
 .horizontal-content-list .picture div {
   border: 5px solid #eeeeee;
