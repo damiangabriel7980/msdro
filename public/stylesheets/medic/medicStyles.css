@@ -7431,30 +7431,41 @@ fieldset[disabled] .navbarMedic .profile .btn {
   width: 100%;
   height: 100%;
 }
-.MyProfileModal {
+.medicProfile {
   font-size: 12px;
 }
 @media (max-width: 767px) {
-  .MyProfileModal {
+  .medicProfile {
     font-size: 11px;
   }
 }
-.MyProfileModal .modal-header {
+.medicProfile .modal-header {
   padding: 10px 15px;
 }
-.MyProfileModal .modal-header .modal-title h3 {
+.medicProfile .modal-header .modal-title h3 {
   font-size: 20px;
 }
 @media (max-width: 767px) {
-  .MyProfileModal .modal-header .modal-title h3 {
+  .medicProfile .modal-header .modal-title h3 {
     font-size: 17px;
   }
 }
-.MyProfileModal .modal-footer {
-  padding: 10px 15px;
+.medicProfile .modal-body .panel-title {
+  font-size: 17px;
 }
-.MyProfileModal .form-group-sm {
-  padding-bottom: 8px;
+@media (max-width: 767px) {
+  .medicProfile .modal-body .panel-title {
+    font-size: 15px;
+  }
+}
+.medicProfile .modal-body .panel-title p {
+  margin: 0;
+}
+.medicProfile .modal-body .form-group-sm {
+  margin-top: 10px;
+}
+.medicProfile .modal-footer {
+  padding: 10px 15px;
 }
 .modal-responsive .modal-dialog {
   height: 90%;
