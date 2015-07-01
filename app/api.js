@@ -395,7 +395,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 if(err){
                                     handleError(res,err,500);
                                 }else{
-                                    handleSuccess(res,{}, {message: "Group was deleted."});
+                                    handleSuccess(res, {}, 4);
                                 }
                             });
                         }
@@ -442,12 +442,12 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                PublicContent.find({_id: req.query.id}, function (err, cont) {
+                PublicContent.findOne({_id: req.query.id}, function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        if(cont[0]){
-                            handleSuccess(res,cont[0]);
+                        if(cont){
+                            handleSuccess(res,cont);
                         }else{
                             handleError(res,err,422,"No content found");
                         }
@@ -464,7 +464,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         })
         .post(function(req,res){
             var data = req.body.data;
-            var ans = {};
             //validate author and title
             var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
@@ -479,9 +478,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            ans.error = false;
-                            ans.message = "Continutul a fost salvat cu succes!";
-                            handleSuccess(res,ans);
+                            handleSuccess(res, {}, 2);
                         }
                     });
                 }
@@ -493,13 +490,12 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{message: 'Successful update!'});
+                        handleSuccess(res, {}, 3);
                     }
                 });
             }else{
                 var data = req.body.toUpdate;
                 var id = req.query.id;
-                var ans = {};
                 //validate author and title
                 var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
                 if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
@@ -513,9 +509,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
-                                ans.error = false;
-                                ans.message = "Continutul a fost modificat cu succes!";
-                                handleSuccess(res,ans);
+                                handleSuccess(res, {}, 3);
                             }
                         });
                     }
@@ -529,7 +523,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false, message: "Continutul a fost sters."});
+                    handleSuccess(res, {}, 4);
                 }
             });
         });
@@ -553,7 +547,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{updated:wRes});
+                        handleSuccess(res, {updated: wRes}, 3);
                     }
                 });
             }
@@ -565,7 +559,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,categories);
+                    handleSuccess(res, categories);
                 }
             });
         })
@@ -581,7 +575,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         handleError(res,err,500);
                     }
                 }else{
-                    handleSuccess(res,true);
+                    handleSuccess(res);
                 }
             });
         })
@@ -602,7 +596,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 handleError(res,err,500);
                             }
                         }else{
-                            handleSuccess(res,true);
+                            handleSuccess(res);
                         }
                     });
                 }
@@ -618,7 +612,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,true);
+                            handleSuccess(res);
                         }
                     });
                 }
@@ -629,12 +623,12 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                PublicCarousel.find({_id: req.query.id}, function (err, cont) {
+                PublicCarousel.findOne({_id: req.query.id}, function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        if(cont[0]){
-                            handleSuccess(res,cont[0]);
+                        if(cont){
+                            handleSuccess(res, cont);
                         }else{
                             handleError(res,null,422,"No image found");
                         }
@@ -645,14 +639,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err) {
                         handleError(res,err,500);
                     }else
-                        handleSuccess(res,cont);
+                        handleSuccess(res, cont);
                 });
             }
         })
         .post(function(req,res){
             var data = req.body.data.toAdd;
             var ext = req.body.data.extension;
-            var ans = {};
             //validate title and description
             //validate type
             if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
@@ -672,10 +665,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 if(err){
                                     handleError(res,null,422,"Eroare la salvare. Verificati campurile");
                                 }else{
-                                    ans.error = false;
-                                    ans.message = "Se incarca imaginea...";
-                                    ans.key = imagePath;
-                                    handleSuccess(res,ans);
+                                    handleSuccess(res, {key: imagePath}, 2);
                                 }
                             });
                         }
@@ -692,26 +682,22 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{error: false});
+                        handleSuccess(res);
                     }
                 });
             }else{
                 if(req.body.data.imagePath){
-                    var ans={};
                     var data = req.body.data;
                     PublicCarousel.update({_id: req.query.id}, {$set:{image_path: data.imagePath}}, function (err, wRes) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            ans.error = false;
-                            ans.message = "Datele au fost modificate cu succes!";
-                            handleSuccess(res,ans);
+                            handleSuccess(res, {}, 3);
                         }
                     });
                 }else{
                     var data = req.body.data.toUpdate;
                     var id = req.query.id;
-                    var ans = {};
                     //validate title and description
                     //validate type
                     if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
@@ -723,9 +709,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 if(err){
                                     handleError(res,null,422,"Eroare la actualizare. Verificati campurile");
                                 }else{
-                                    ans.error = false;
-                                    ans.message = "Datele au fost modificate cu succes!";
-                                    handleSuccess(res,ans);
+                                    handleSuccess(res, {}, 3);
                                 }
                             });
                         }else{
@@ -755,11 +739,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                         if(err){
                                             handleError(res,null,422,"Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon");
                                         }else{
-                                            handleSuccess(res,{message:"Imaginea a fost stearsa din baza de date si de pe Amazon."});
+                                            handleSuccess(res, {}, 5);
                                         }
                                     });
                                 }else{
-                                    handleSuccess(res,{error: false, message: "Imaginea a fost stearsa din baza de date."});
+                                    handleSuccess(res, {}, 6);
                                 }
                             }
                         });
@@ -775,7 +759,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err) {
                     handleError(res,err,500);
                 }else
-                    handleSuccess(res,cont);
+                    handleSuccess(res, cont);
             });
         });
 
@@ -786,12 +770,12 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                Carousel.find({_id: req.query.id}, function (err, cont) {
+                Carousel.findOne({_id: req.query.id}, function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        if(cont[0]){
-                            handleSuccess(res,cont[0]);
+                        if(cont){
+                            handleSuccess(res, cont);
                         }else{
                             handleError(res,null,422,"Nu s-a gasit imaginea");
                         }
@@ -802,14 +786,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err) {
                         handleError(res,err,500);
                     }else
-                        handleSuccess(res,cont);
+                        handleSuccess(res, cont);
                 });
             }
         })
         .post(function(req,res){
             var data = req.body.data.toAdd;
             var ext = req.body.data.extension;
-            var ans = {};
             //validate type
             if(!(typeof data.type === "number" && data.type>0 && data.type<4)){
                 handleError(res,null,422,"Verificati tipul!");
@@ -827,10 +810,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 if(err){
                                     handleError(res,err,500);
                                 }else{
-                                    ans.error = false;
-                                    ans.message = "Se incarca imaginea...";
-                                    ans.key = imagePath;
-                                    handleSuccess(res,ans);
+                                    handleSuccess(res, {key: imagePath}, 2);
                                 }
                             });
                         }
@@ -846,24 +826,22 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{message: 'Update successful!'});
+                        handleSuccess(res, {}, 3);
                     }
                 });
             }else{
                 if(req.body.data.imagePath){
-                    var ans = {};
                     var data = req.body.data;
                     Carousel.update({_id: req.query.id}, {$set:{image_path: data.imagePath}}, function (err, wRes) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,{message: 'Update successful!'});
+                            handleSuccess(res, {}, 3);
                         }
                     });
                 }else{
                     var data = req.body.data.toUpdate;
                     var id = req.query.id;
-                    var ans = {};
                     //validate type
                     if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
                         handleError(res,null,422,"Verificati tipul!");
@@ -874,7 +852,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 if(err){
                                     handleError(res,err,500);
                                 }else{
-                                    handleSuccess(res,{message : "Datele au fost modificate cu succes!"});
+                                    handleSuccess(res, {}, 3);
                                 }
                             });
                         }else{
@@ -904,11 +882,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                         if(err){
                                             handleError(res,null,422,"Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon");
                                         }else{
-                                            handleSuccess(res,{message: "Imaginea a fost stearsa din baza de date si de pe Amazon."});
+                                            handleSuccess(res, {}, 5);
                                         }
                                     });
                                 }else{
-                                    handleSuccess(res,{message: "Imaginea a fost stearsa din baza de date."});
+                                    handleSuccess(res, {}, 6);
                                 }
                             }
                         });
@@ -925,7 +903,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err) {
                     handleError(res,err,500);
                 }else
-                    handleSuccess(res,cont);
+                    handleSuccess(res, cont);
             });
         });
 
@@ -936,7 +914,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if (err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,product);
+                        handleSuccess(res, product);
                     }
                 });
             }else{
@@ -952,7 +930,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 handleError(res,err,500);
                             }else{
                                 products['groups']=cont2;
-                                handleSuccess(res,products);
+                                handleSuccess(res, products);
                             }
                         });
                     }
@@ -965,7 +943,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if (err)
                     handleError(res,err,500);
                 else
-                    handleSuccess(res,{ message: 'Product created!' , saved: saved});
+                    handleSuccess(res, {saved: saved}, 2);
             });
         })
         .put(function(req,res){
@@ -976,7 +954,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if (err) {
                             handleError(res,err,500);
                         } else {
-                            handleSuccess(res,{error: false, updated: wRes});
+                            handleSuccess(res, {updated: wRes}, 3);
                         }
                     });
                 }else{
@@ -984,7 +962,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,{error:false, updated:wRes});
+                            handleSuccess(res, {updated:wRes}, 3);
                         }
                     });
                 }
@@ -994,7 +972,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if (err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{ message: 'Product updated!' , saved: true});
+                        handleSuccess(res, {}, 3);
                     }
                 });
             }
@@ -1024,13 +1002,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             }
                                             else
                                             {
-                                                handleSuccess(res,{message: "Product was deleted. All files and images associated with were also deleted!"});
+                                                handleSuccess(res, {}, 7);
                                             }
                                         });
                                     }
                                 })
                             }else{
-                                handleSuccess(res,{message:'Product was deleted!'});
+                                handleSuccess(res, {}, 4);
                             }
                         }
                     });
@@ -1042,11 +1020,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/admin/content')
         .get(function(req, res) {
             if(req.query.id){
-                Content.find({_id:req.query.id}, function(err, cont) {
+                Content.findOne({_id:req.query.id}, function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,cont[0]);
+                        handleSuccess(res, cont);
                     }
                 })
             }else{
@@ -1055,7 +1033,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         handleError(res,err,500);
                     }
                     else {
-                        handleSuccess(res,cont);
+                        handleSuccess(res, cont);
                     }
                 });
             }
@@ -1066,7 +1044,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if (err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{ message: 'Content created!' , saved: saved});
+                    handleSuccess(res, {saved: saved}, 2);
                 }
             });
         })
@@ -1078,7 +1056,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,{error:false, updated:wRes});
+                            handleSuccess(res, {updated: wRes});
                         }
                     });
                 }else{
@@ -1086,7 +1064,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,{error:false, updated:wRes});
+                            handleSuccess(res, {updated: wRes});
                         }
                     });
                 }
@@ -1096,7 +1074,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if (err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,{ message: 'Article updated!' , saved: true});
+                            handleSuccess(res, {}, 3);
                         }
                     });
                 }else{
@@ -1105,7 +1083,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if (err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,{ message: 'Article updated!' , saved: true});
+                            handleSuccess(res, {}, 3);
                         }
                     });
                 }
@@ -1126,11 +1104,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     if(err){
                                         handleError(res,err,422,"Article was deleted. Image could not be deleted");
                                     }else{
-                                        handleSuccess(res,{message: "Article was deleted. Image was deleted"});
+                                        handleSuccess(res, {}, 7);
                                     }
                                 });
                             }else{
-                                handleSuccess(res,{message:'Article was deleted!'});
+                                handleSuccess(res, {}, 4);
                             }
                         }
                     });
@@ -1146,7 +1124,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,groups);
+                    handleSuccess(res, groups);
                 }
             });
         });
@@ -1161,7 +1139,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,products);
+                    handleSuccess(res, products);
                 }
             })
         })
@@ -1171,7 +1149,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false, message: "Datele au fost salvate", justSaved: saved});
+                    handleSuccess(res, {justSaved: saved}, 2);
                 }
             });
         })
@@ -1180,7 +1158,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false, message: "Datele au fost actualizate"});
+                    handleSuccess(res, {}, 3);
                 }
             });
         })
@@ -1206,7 +1184,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,{error: false, message: "S-au sters "+count+" produse si "+attachedCount+" documente atasate. "});
+                            handleSuccess(res, {deletedProducts: count, deletedConnections: attachedCount}, 4);
                         }
                     });
                 }
@@ -1219,7 +1197,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,groups);
+                    handleSuccess(res, groups);
                 }
             })
         });
@@ -1232,7 +1210,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{error: false, menuItem: menuItem});
+                        handleSuccess(res, {menuItem: menuItem});
                     }
                 });
             }else if(req.query.product_id){
@@ -1248,7 +1226,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 handleError(res,err,500);
                             }else{
                                 //now you got the full menu nicely organised
-                                handleSuccess(res,menuItems);
+                                handleSuccess(res, menuItems);
                             }
                         });
                     }
@@ -1263,7 +1241,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false, saved: saved});
+                    handleSuccess(res, {saved: saved});
                 }
             })
         })
@@ -1272,7 +1250,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{message: 'Update successful!'});
+                    handleSuccess(res, {}, 3);
                 }
             })
         })
@@ -1298,7 +1276,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 if(err){
                                     handleError(res,err,500);
                                 }else{
-                                    handleSuccess(res,{error: false, message: "S-au sters "+deleteCount+" documente. S-au updatat "+wRes+" documente"});
+                                    handleSuccess(res, {deleteCount: deleteCount, updateCount: wRes}, 4);
                                 }
                             });
                         }
@@ -1313,7 +1291,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{message: 'Special product menu updated!'});
+                    handleSuccess(res, {}, 3);
                 }
             })
         });
@@ -1324,7 +1302,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,groups);
+                            handleSuccess(res, groups);
                         }
                     })
         });
@@ -1339,7 +1317,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,glossary);
+                    handleSuccess(res, glossary);
                 }
             })
         })
@@ -1349,7 +1327,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false, saved: saved});
+                    handleSuccess(res, {saved: saved});
                 }
             });
         })
@@ -1362,7 +1340,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{error: false, message: "Updated "+wRes+" documents"});
+                        handleSuccess(res, {updateCount: wRes}, 3);
                     }
                 });
             }
@@ -1376,7 +1354,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{error: false, message: "Removed "+wRes+" documents"});
+                        handleSuccess(res, {removeCount: wRes}, 4);
                     }
                 });
             }
@@ -1392,7 +1370,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false, resources: resources});
+                    handleSuccess(res, {resources: resources});
                 }
             })
         })
@@ -1402,7 +1380,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false, saved: saved});
+                    handleSuccess(res, {saved: saved}, 2);
                 }
             });
         })
@@ -1415,7 +1393,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{error: false, message: "S-au actualizat "+wres+" documente"});
+                        handleSuccess(res, {updateCount: wres}, 3);
                     }
                 });
             }
@@ -1425,7 +1403,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false, message: "Removed "+wres+" documents"});
+                    handleSuccess(res, {removeCount: wres}, 4);
                 }
             });
         });
@@ -1439,7 +1417,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }else if(!product){
                         handleError(res,err,204,"Eroare la gasire produs");
                     }else{
-                        handleSuccess(res,product.speakers);
+                        handleSuccess(res, product.speakers);
                     }
                 });
             }else if(req.query.id){
@@ -1447,7 +1425,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,speaker);
+                        handleSuccess(res, speaker);
                     }
                 });
             }else{
@@ -1455,7 +1433,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,speakers);
+                        handleSuccess(res, speakers);
                     }
                 });
             }
@@ -1987,7 +1965,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if (err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,product);
+                        handleSuccess(res, product);
                     }
                 });
             }else{
@@ -1997,7 +1975,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                     else
                     {
-                        handleSuccess(res,cont);
+                        handleSuccess(res, cont);
                     }
                 });
             }
@@ -2008,7 +1986,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false, message: "Datele au fost salvate", justSaved: saved});
+                    handleSuccess(res, {justSaved: saved}, 2);
                 }
             });
         })
@@ -2020,7 +1998,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if (err) {
                             handleError(res,err,500);
                         } else {
-                            handleSuccess(res,{error: false, updated: wRes});
+                            handleSuccess(res, {updated: wRes}, 3);
                         }
                     });
                 }else{
@@ -2028,7 +2006,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,{error:false, updated:wRes});
+                            handleSuccess(res, {updated:wRes}, 3);
                         }
                     });
                 }
@@ -2038,7 +2016,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,{message:"Update successful!"});
+                            handleSuccess(res, {}, 3);
                         }
                     });
                 }else{
@@ -2046,7 +2024,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            handleSuccess(res,{message: "Datele au fost actualizate"});
+                            handleSuccess(res, {}, 3);
                         }
                     });
                 }
@@ -2076,13 +2054,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             }
                                             else
                                             {
-                                                handleSuccess(res,{message: "Multimedia was deleted. All files and images associated with were also deleted!"});
+                                                handleSuccess(res, {}, 7);
                                             }
                                         });
                                     }
                                 })
                             }else{
-                                handleSuccess(res,{message:'Multimedia was deleted!'});
+                                handleSuccess(res, {}, 4);
                             }
                         }
                     });
@@ -2110,7 +2088,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             })
                         }
                         else{
-                            handleSuccess(res,objectToSend);
+                            handleSuccess(res, objectToSend);
                         }
                     }else{
                         handleError(res,err,204,'Multimedia not found!');
@@ -2122,7 +2100,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         handleError(res,err,500);
                     }
                     else
-                        handleSuccess(res,cont);
+                        handleSuccess(res, cont);
                 });
             }
         })
@@ -2150,7 +2128,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
                         }else{
-                            handleSuccess(res,{message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                            handleSuccess(res, {}, 2);
                         }
                     });
                 }
@@ -2203,7 +2181,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             if (err) {
                                                 handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
                                             } else {
-                                                handleSuccess(res,{message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                                                handleSuccess(res, {}, 2);
                                             }
                                         });
                                     }
@@ -2228,7 +2206,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     if (err) {
                                         handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
                                     } else {
-                                        handleSuccess(res,{message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                                        handleSuccess(res, {}, 2);
                                     }
                                 });
                             }
@@ -2245,7 +2223,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     if (err)
                                         handleError(res,err,500);
                                     else {
-                                        handleSuccess(res,{message: 'Update successful'});
+                                        handleSuccess(res, {}, 3);
                                     }});
                             }
                         });
@@ -2255,7 +2233,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             if (err)
                                 handleError(res,err,500);
                             else {
-                                handleSuccess(res,{message: 'Update successful'});
+                                handleSuccess(res, {}, 3);
                         }});
                     }
                 }
@@ -2282,7 +2260,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if (err)
                             handleError(res,err,500);
                         else
-                            handleSuccess(res,{ message: 'Aria a fost stearsa cu succes!' });
+                            handleSuccess(res, {}, 4);
                     });
                 }
             });
@@ -2294,7 +2272,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err) {
                     handleError(res,err,500);
                 }else
-                    handleSuccess(res,cont);
+                    handleSuccess(res, cont);
             });
         });
 
@@ -2839,7 +2817,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,OneUser);
+                        handleSuccess(res, OneUser);
                     }
                 })
             }else{
@@ -2847,7 +2825,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,users);
+                        handleSuccess(res, users);
                     }
                 })
             }
@@ -2861,7 +2839,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,true);
+                        handleSuccess(res);
                     }
                 });
             };
@@ -2871,7 +2849,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else if(user){
-                        handleSuccess(res,{userExists: true});
+                        handleSuccess(res, {userExists: true});
                     }else{
                         updateUser();
                     }
@@ -2887,7 +2865,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,professions);
+                    handleSuccess(res, professions);
                 }
             });
         });
@@ -2898,7 +2876,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,groups);
+                    handleSuccess(res, groups);
                 }
             });
         });
@@ -2909,7 +2887,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,users);
+                    handleSuccess(res, users);
                 }
             })
         })
@@ -2976,7 +2954,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             'Activare cont MSD'
                                         ).then(
                                             function (success) {
-                                                handleSuccess(res,{message: "Updated "+wres+" user. Email sent"});
+                                                handleSuccess(res, {updateCount: wres}, 8);
                                             },
                                             function (err) {
                                                 handleError(res,err,500);
@@ -3009,7 +2987,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                         'Activare cont MSD'
                                     ).then(
                                         function (success) {
-                                            handleSuccess(res,{message: "Updated "+wres+" user. Email sent"});
+                                            handleSuccess(res, {updateCount: wres}, 8);
                                         },
                                         function (err) {
                                             handleError(res,err,500);
@@ -3018,7 +2996,8 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 }
                             });
                         }else{
-                            handleSuccess(res,{message: "Updated "+wres+" user. Email not sent"});
+                            //TODO: handle this as error
+                            handleSuccess(res, {updateCount: wres}, 9);
                         }
                     }
                 });
@@ -3035,7 +3014,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,result);
+                    handleSuccess(res, result);
                 }
             });
         });
@@ -3053,7 +3032,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             if(err) {
                                 handleError(res,err,500);
                             }else{
-                                handleSuccess(res,presentations);
+                                handleSuccess(res, presentations);
                             }
                         });
                     }
@@ -3063,7 +3042,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,presentations);
+                        handleSuccess(res, presentations);
                     }
                 });
             }
@@ -3074,7 +3053,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false,message:"Create successful!"});
+                    handleSuccess(res, {}, 2);
                 }
             });
         })
@@ -3084,7 +3063,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{error: false,message:"Update successful!"});
+                        handleSuccess(res, {}, 3);
                     }
                 });
             }else{
@@ -3093,7 +3072,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res,{error: false,message:"Update successful!"});
+                        handleSuccess(res, {}, 3);
                     }
                 });
             }
@@ -3103,7 +3082,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,{error: false, message: "S-au sters "+count+" prezentari!"});
+                    handleSuccess(res, {count: count}, 4);
                 }
             });
         });
