@@ -5,7 +5,7 @@ controllers.controller('AddProductPage', ['$scope', 'SpecialProductsService', 'A
 
     //get available groups (a group can have only one special product)
     SpecialProductsService.groupsAvailable.query().$promise.then(function (resp) {
-        $scope.groupsAvailable = resp;
+        $scope.groupsAvailable = resp.success;
     });
 
     $scope.selectedGroups = [];
@@ -31,7 +31,7 @@ controllers.controller('AddProductPage', ['$scope', 'SpecialProductsService', 'A
             if(resp.error){
                 $scope.resetAlert("danger", error.message);
             }else{
-                var idSaved = resp.justSaved._id;
+                var idSaved = resp.success.justSaved._id;
                 //generate Amazon keys and extensions for logo and header image
                 var extension;
                 var toUpload = [];

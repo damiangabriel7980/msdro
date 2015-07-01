@@ -12,7 +12,7 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
     };
 
     ManageAccountsService.professions.query().$promise.then(function (response) {
-        $scope.professions = response;
+        $scope.professions = response.success;
     });
 
     ManageAccountsService.users.query({id: idToView}).$promise.then(function(resp){

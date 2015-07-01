@@ -9,7 +9,7 @@ controllers.controller('ProductPageResources', ['$scope', 'SpecialProductsServic
                 $scope.resetAlert("danger", "Eroare la gasire glosar");
             }else{
                 console.log(resp);
-                var data = resp.resources;
+                var data = resp.success.resources;
                 $scope.resourcesTableParams = new ngTableParams({
                     page: 1,            // show first page
                     count: 10,          // count per page

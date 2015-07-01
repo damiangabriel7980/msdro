@@ -70,7 +70,7 @@ controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsSer
                         if(resp.error){
                             callback(resp.message, null);
                         }else{
-                            callback(null, resp.message);
+                            callback(null, resp.success.message);
                         }
                     });
                 }

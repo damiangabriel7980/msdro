@@ -31,7 +31,7 @@ controllers.controller('DeleteProductPage', ['$scope', 'SpecialProductsService',
                         resetAlert("danger", resp.message);
                     }else{
                         $scope.actionCompleted = true;
-                        resetAlert("success", resp.message+"S-au sters "+imageDeleteCount+" imagini");
+                        resetAlert("success", resp.success.message+"S-au sters "+imageDeleteCount+" imagini");
                     }
                 });
             }

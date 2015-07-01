@@ -1,12 +1,12 @@
 /**
  * Created by miricaandrei23 on 27.02.2015.
  */
-controllers.controller('IntroAdd', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','$modalInstance', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,$modalInstance){
+controllers.controller('IntroAdd', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','$modalInstance', 'GroupsService',function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,$modalInstance,GroupsService){
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.selectedGroups = [];
-    IntroService.groups.query().$promise.then(function(resp){
-        $scope.groups=resp;
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups = resp.success;
     });
     $scope.saveIntro=function(){
         var groups_id = [];
@@ -17,7 +17,7 @@ controllers.controller('IntroAdd', ['$scope','$rootScope' ,'IntroService','$stat
         this.intro.enabled = false;
         IntroService.intros.create({intro: this.intro}).$promise.then(function(resp){
             $scope.statusAlert.newAlert=true;
-            $scope.statusAlert.message=resp.message;
+            $scope.statusAlert.message=resp.success.message;
         })
     };
     $scope.tinymceOptions = {

@@ -6,7 +6,7 @@ controllers.controller('ProductPageMenu', ['$scope', 'SpecialProductsService', '
     var refreshMenuItems = function () {
         SpecialProductsService.menu.query({product_id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
             console.log(resp);
-            $scope.menuItems = resp.menuItems;
+            $scope.menuItems = resp.success;
         });
     };
 

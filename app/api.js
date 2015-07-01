@@ -1996,7 +1996,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                     else
                     {
-                        ResponseModule.handleSuccess(res,product);
+                        ResponseModule.handleSuccess(res,cont);
                     }
                 });
             }
@@ -2836,19 +2836,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 User.findOne({_id: req.query.id}).select('+enabled +phone').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        ResponseModule.handleError(res,err,500);
                     }else{
-                        res.send({success: OneUser});
+                        ResponseModule.handleSuccess(res,OneUser);
                     }
                 })
             }else{
                 User.find({state:"ACCEPTED"}).select('+enabled +phone').populate('profession').exec(function (err, users) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        ResponseModule.handleError(res,err,500);
                     }else{
-                        res.send({success: users});
+                        ResponseModule.handleSuccess(res,users);
                     }
                 })
             }
@@ -2860,10 +2858,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var updateUser = function () {
                 User.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        ResponseModule.handleError(res,err,500);
                     }else{
-                        res.send({success: true});
+                        ResponseModule.handleSuccess(res,true);
                     }
                 });
             };
@@ -2871,10 +2868,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(dataToUpdate.username){
                 User.findOne({username:{$regex: "^"+dataToUpdate.username.replace(/\+/g,"\\+")+"$", $options: "i"}, _id:{$ne: idToUpdate}}, function (err, user) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        ResponseModule.handleError(res,err,500);
                     }else if(user){
-                        res.send({userExists: true});
+                        ResponseModule.handleSuccess(res,{userExists: true});
                     }else{
                         updateUser();
                     }
@@ -2888,9 +2884,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             Professions.find({}).exec(function (err, professions) {
                 if(err){
-                    res.send(err);
+                    ResponseModule.handleError(res,err,500);
                 }else{
-                    res.send(professions);
+                    ResponseModule.handleSuccess(res,professions);
                 }
             });
         });
@@ -2899,10 +2895,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             UserGroup.find({}).populate('profession').exec(function (err, groups) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    ResponseModule.handleError(res,err,500);
                 }else{
-                    res.send({success: groups});
+                    ResponseModule.handleSuccess(res,groups);
                 }
             });
         });
@@ -2911,10 +2906,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             User.find({state: req.params.type}).select('+state +proof_path').populate('profession').exec(function (err, users) {
                 if(err){
-                    console.log(err);
-                    res.send(err);
+                    ResponseModule.handleError(res,err,500);
                 }else{
-                    res.send(users);
+                    ResponseModule.handleSuccess(res,users);
                 }
             })
         })
@@ -2922,13 +2916,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.params.type && req.body.id){
                 User.update({_id: req.body.id}, {$set: {state: req.params.type}}, function (err, wres) {
                     if(err){
-                        res.send(err);
+                        ResponseModule.handleError(res,err,500);
                     }else{
                         if(req.params.type == "ACCEPTED" && wres==1){
                             //email user
                             User.findOne({_id: req.body.id}).select('+title +enabled').exec(function (err, user) {
                                 if(err){
-                                    res.send(err);
+                                    ResponseModule.handleError(res,err,500);
                                 }else{
                                     var generateToken = function (callback) {
                                         if(user.enabled){
@@ -2981,11 +2975,10 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             'Activare cont MSD'
                                         ).then(
                                             function (success) {
-                                                res.send({message: "Updated "+wres+" user. Email sent"});
+                                                ResponseModule.handleSuccess(res,{message: "Updated "+wres+" user. Email sent"});
                                             },
                                             function (err) {
-                                                logger.error(err);
-                                                res.send(err);
+                                                ResponseModule.handleError(res,err,500);
                                             }
                                         );
                                     });
@@ -2995,7 +2988,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             //email user
                             User.findOne({_id: req.body.id}).select('+title').exec(function (err, user) {
                                 if(err){
-                                    res.send(err);
+                                    ResponseModule.handleError(res,err,500);
                                 }else{
                                     var emailTo = [{email: user.username, name: user.name}];
                                     var templateContent = [
@@ -3015,22 +3008,21 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                         'Activare cont MSD'
                                     ).then(
                                         function (success) {
-                                            res.send({message: "Updated "+wres+" user. Email sent"});
+                                            ResponseModule.handleSuccess(res,{message: "Updated "+wres+" user. Email sent"});
                                         },
                                         function (err) {
-                                            logger.error(err);
-                                            res.send(err);
+                                            ResponseModule.handleError(res,err,500);
                                         }
                                     );
                                 }
                             });
                         }else{
-                            res.send({message: "Updated "+wres+" user. Email not sent"});
+                            ResponseModule.handleSuccess(res,{message: "Updated "+wres+" user. Email not sent"});
                         }
                     }
                 });
             }else{
-                res.send({message: "Invalid params"});
+                ResponseModule.handleError(res,null,412,"Invalid params");
             }
         });
 
@@ -3040,9 +3032,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 {$group: {_id: "$state", total: {$sum: 1}}}
             ], function (err, result) {
                 if(err){
-                    res.send(err);
+                    ResponseModule.handleError(res,err,500);
                 }else{
-                    res.send(result);
+                    ResponseModule.handleSuccess(res,result);
                 }
             });
         });
@@ -3053,16 +3045,14 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 var presentations={};
                 Presentations.find({_id: req.query.id}).populate('groupsID').exec(function (err, presentation) {
                     if(err){
-                        res.send({error:err});
+                        ResponseModule.handleError(res,err,500);
                     }else{
                         presentations['onePresentation']=presentation[0];
                         UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
                             if(err) {
-                                logger.error(err);
-                                res.send({error:err});
+                                ResponseModule.handleError(res,err,500);
                             }else{
-                                presentations['groups']=cont2;
-                                res.json(presentations);
+                                ResponseModule.handleSuccess(res,presentations);
                             }
                         });
                     }
@@ -3070,9 +3060,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }else{
                 Presentations.find({}).exec(function (err, presentations) {
                     if(err){
-                        res.send({error:err});
+                        ResponseModule.handleError(res,err,500);
                     }else{
-                        res.send({success:presentations});
+                        ResponseModule.handleSuccess(res,presentations);
                     }
                 });
             }
@@ -3081,9 +3071,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var intro = new Presentations(req.body.intro);
             intro.save(function (err, presentation) {
                 if(err){
-                    res.send({error: true,message:"Error occured!"});
+                    ResponseModule.handleError(res,err,500);
                 }else{
-                    res.send({error: false,message:"Create successful!"});
+                    ResponseModule.handleSuccess(res,{error: false,message:"Create successful!"});
                 }
             });
         })
@@ -3091,19 +3081,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.body.isEnabled!=undefined){
                 Presentations.update({_id: req.query.id},{$set:{enabled: req.body.isEnabled}}).exec(function (err, presentation) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true,message:"Error occured!"});
+                        ResponseModule.handleError(res,err,500);
                     }else{
-                        res.send({error: false,message:"Update successful!"});
+                        ResponseModule.handleSuccess(res,{error: false,message:"Update successful!"});
                     }
                 });
             }else{
                 var intro = req.body.intro;
                 Presentations.update({_id: req.query.id},{$set: intro},function (err, presentation) {
                     if(err){
-                        res.send({error: true,message:"Error occured!"});
+                        ResponseModule.handleError(res,err,500);
                     }else{
-                        res.send({error: false,message:"Update successful!"});
+                        ResponseModule.handleSuccess(res,{error: false,message:"Update successful!"});
                     }
                 });
             }
@@ -3111,10 +3100,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .delete(function(req,res){
             Presentations.remove({_id: req.query.idToDelete}, function (err, count) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true, message: "Eroare la stergerea produsului"});
+                    ResponseModule.handleError(res,err,500);
                 }else{
-                    res.send({error: false, message: "S-au sters "+count+" prezentari!"});
+                    ResponseModule.handleSuccess(res,{error: false, message: "S-au sters "+count+" prezentari!"});
                 }
             });
         });

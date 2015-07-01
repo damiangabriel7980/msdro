@@ -10,7 +10,7 @@ controllers.controller('AddMultimedia', ['$scope','$rootScope' ,'MultimediaAdmin
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp;
+        $scope.areas = resp.success;
     });
     $scope.createMultimedia=function(){
         var id_groups=[];

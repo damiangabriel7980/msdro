@@ -5,7 +5,7 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
 
     //get menu info
     SpecialProductsService.menu.query({id: $scope.sessionData.editMenuId}).$promise.then(function (resp) {
-        $scope.currentItem = resp.menuItem;
+        $scope.currentItem = resp.success.menuItem;
     });
 
     $scope.headerImageBody = null;

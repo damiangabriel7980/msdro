@@ -22,7 +22,7 @@ controllers.controller('IntroDelete', ['$scope','$rootScope' ,'IntroService','$s
                         $scope.actionCompleted = true;
                         $scope.statusAlert.newAlert=true;
                         $scope.statusAlert.type="success";
-                        $scope.statusAlert.message=resp.message;
+                        $scope.statusAlert.message=resp.success.message;
                         $timeout(function(){
                             $modalInstance.close();
                             $state.reload();

@@ -7,8 +7,8 @@ controllers.controller('NewAccounts', ['$scope', 'NewAccountsService', function(
     };
 
     NewAccountsService.count.query().$promise.then(function (resp) {
-        for(var i=0; i<resp.length; i++){
-            $scope.count[resp[i]._id] = resp[i].total;
+        for(var i=0; i<resp.success.length; i++){
+            $scope.count[resp.success[i]._id] = resp.success[i].total;
         }
         console.log($scope.count);
     });

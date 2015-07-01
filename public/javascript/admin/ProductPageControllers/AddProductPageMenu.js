@@ -27,7 +27,7 @@ controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService'
                         callback("Eroare la adaugare");
                     }else{
                         //attach to parent if it has one
-                        var savedId = resp.saved._id;
+                        var savedId = resp.success.saved._id;
                         if($scope.sessionData.parentId){
                             SpecialProductsService.addMenuChild.update({id: $scope.sessionData.parentId}, {child_id: savedId}).$promise.then(function (resp) {
                                 if(resp.error){

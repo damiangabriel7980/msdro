@@ -8,7 +8,7 @@ controllers.controller('ProductPageGlossary', ['$scope', 'SpecialProductsService
             if(resp.error){
                 $scope.resetAlert("danger", "Eroare la gasire glosar");
             }else{
-                var data = resp.glossary;
+                var data = resp.success;
                 $scope.glossaryTableParams = new ngTableParams({
                     page: 1,            // show first page
                     count: 10,          // count per page

@@ -1,11 +1,14 @@
 /**
  * Created by miricaandrei23 on 27.02.2015.
  */
-controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToView','$modalInstance', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToView,$modalInstance){
+controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToView','$modalInstance','GroupsService', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToView,$modalInstance,GroupsService){
     IntroService.intros.query({id: idToView}).$promise.then(function(resp){
-        $scope.intro = resp['onePresentation'];
-        $scope.groups = resp['groups'];
+        $scope.intro = resp.success['onePresentation'];
         $scope.selectedGroups = $scope.intro['groupsID'];
+    });
+
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups = resp.success;
     });
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
@@ -17,8 +20,8 @@ controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$
         }
         $scope.intro.groupsID = groups_id;
         IntroService.intros.update({id: idToView},{intro: $scope.intro}).$promise.then(function(resp){
-            $scope.statusAlert.newAlert=true;
-            $scope.statusAlert.message=resp.message;
+            $scope.statusAlert.newAlert = true;
+            $scope.statusAlert.message = resp.success.message;
         })
     };
     $scope.tinymceOptions = {
