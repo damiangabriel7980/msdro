@@ -449,7 +449,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(cont){
                             handleSuccess(res,cont);
                         }else{
-                            handleError(res,err,422,"No content found");
+                            handleError(res,err,404,1);
                         }
                     }
                 })
@@ -467,11 +467,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             //validate author and title
             var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
-                handleError(res,null,422,"Autorul si titlul sunt obligatorii (minim 3 caractere)");
+                handleError(res,null,400,20);
             }else{
                 //validate type
                 if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    handleError(res,null,422,"Verificati tipul");
+                    handleError(res,null,400,21);
                 }else{
                     var content = new PublicContent(data);
                     content.save(function (err, inserted) {
@@ -499,11 +499,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 //validate author and title
                 var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
                 if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
-                    handleError(res,null,422,"Autorul si titlul sunt obligatorii (minim 3 caractere)");
+                    handleError(res,null,400,20);
                 }else{
                     //validate type
                     if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                        handleError(res,null,422,"Verificati tipul");
+                        handleError(res,null,400,21);
                     }else{
                         PublicContent.update({_id: id}, {$set: data}, function (err, wRes) {
                             if(err){
@@ -539,7 +539,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     qry['file_path'] = data.path;
                 }else{
                     ok = false;
-                    handleError(res,null,422,"Tipul fisierului lipseste!");
+                    handleError(res,null,400,22);
                 }
             }
             if(ok){
@@ -568,9 +568,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             category.save(function (err, saved) {
                 if(err){
                     if(err.code == 11000 || err.code == 11001){
-                        handleError(res,null,422,"O categorie cu acelasi nume exista deja");
+                        handleError(res,null,400,23);
                     }else if(err.name == "ValidationError"){
-                        handleError(res,null,422,"Numele este obligatoriu");
+                        handleError(res,null,400,24);
                     }else{
                         handleError(res,err,500);
                     }
@@ -589,9 +589,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     category.save(function (err, saved) {
                         if(err){
                             if(err.code == 11000 || err.code == 11001){
-                                handleError(res,null,422,"O categorie cu acelasi nume exista deja");
+                                handleError(res,null,400,23);
                             }else if(err.name == "ValidationError"){
-                                handleError(res,null,422,"Numele este obligatoriu");
+                                handleError(res,null,400,24);
                             }else{
                                 handleError(res,err,500);
                             }
@@ -630,7 +630,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(cont){
                             handleSuccess(res, cont);
                         }else{
-                            handleError(res,null,422,"No image found");
+                            handleError(res,null,404,1);
                         }
                     }
                 })
@@ -649,7 +649,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             //validate title and description
             //validate type
             if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                handleError(res,null,422,"Verificati tipul");
+                handleError(res,null,400,21);
             }else{
                 //check if content_id exists
                 if(typeof data.content_id === "string" && data.content_id.length === 24){
@@ -657,13 +657,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     console.log(data);
                     img.save(function (err, inserted) {
                         if(err){
-                            handleError(res,null,422,"Eroare la salvare. Verificati campurile");
+                            handleError(res,null,400,2);
                         }else{
                             //update image_path
                             var imagePath = "generalCarousel/image_"+inserted._id+"."+ext;
                             PublicCarousel.update({_id: inserted._id}, {$set:{image_path:imagePath}}, function (err, wRes) {
                                 if(err){
-                                    handleError(res,null,422,"Eroare la salvare. Verificati campurile");
+                                    handleError(res,null,400,2);
                                 }else{
                                     handleSuccess(res, {key: imagePath}, 2);
                                 }
@@ -671,7 +671,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                     });
                 }else{
-                    handleError(res,null,422,"Selectati un continut");
+                    handleError(res,null,400,3);
                 }
             }
 
@@ -701,19 +701,19 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     //validate title and description
                     //validate type
                     if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                        handleError(res,null,422,"Verificati tipul");
+                        handleError(res,null,400,21);
                     }else{
                         //check if content_id exists
                         if(typeof data.content_id === "string" && data.content_id.length === 24){
                             PublicCarousel.update({_id: id}, {$set:data}, function (err, wRes) {
                                 if(err){
-                                    handleError(res,null,422,"Eroare la actualizare. Verificati campurile");
+                                    handleError(res,null,400,2);
                                 }else{
                                     handleSuccess(res, {}, 3);
                                 }
                             });
                         }else{
-                            handleError(res,null,422,"Selectati un continut");
+                            handleError(res,null,400,3);
                         }
                     }
                 }
@@ -737,7 +737,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 if(imageS3){
                                     amazon.deleteObjectS3(imageS3, function (err, data) {
                                         if(err){
-                                            handleError(res,null,422,"Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon");
+                                            handleError(res,null,409,4);
                                         }else{
                                             handleSuccess(res, {}, 5);
                                         }
@@ -748,7 +748,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             }
                         });
                     }else{
-                        handleError(res,null,422,"Nu s-a gasit imaginea");
+                        handleError(res,null,404,1);
                     }
                 }
             });
@@ -777,7 +777,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(cont){
                             handleSuccess(res, cont);
                         }else{
-                            handleError(res,null,422,"Nu s-a gasit imaginea");
+                            handleError(res,null,404,1);
                         }
                     }
                 })
@@ -795,7 +795,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var ext = req.body.data.extension;
             //validate type
             if(!(typeof data.type === "number" && data.type>0 && data.type<4)){
-                handleError(res,null,422,"Verificati tipul!");
+                handleError(res,null,400,21);
             }else{
                 //check if content_id exists
                 if(typeof data.article_id === "string" && data.article_id.length === 24){
@@ -816,7 +816,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                     });
                 }else{
-                    handleError(res,null,422,"Selectati un continut");
+                    handleError(res,null,400,3);
                 }
             }
         })
@@ -844,7 +844,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     var id = req.query.id;
                     //validate type
                     if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                        handleError(res,null,422,"Verificati tipul!");
+                        handleError(res,null,400,21);
                     }else{
                         //check if content_id exists
                         if(typeof data.article_id === "string" && data.article_id.length === 24){
@@ -856,7 +856,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 }
                             });
                         }else{
-                            handleError(res,null,422,"Selectati un continut");
+                            handleError(res,null,400,3);
                         }
                     }
                 }
@@ -880,7 +880,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 if(imageS3){
                                     amazon.deleteObjectS3(imageS3, function (err, data) {
                                         if(err){
-                                            handleError(res,null,422,"Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon");
+                                            handleError(res,null,409,4);
                                         }else{
                                             handleSuccess(res, {}, 5);
                                         }
@@ -891,7 +891,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             }
                         });
                     }else{
-                        handleError(res,null,422,"Nu s-a gasit imaginea!");
+                        handleError(res,null,404,1);
                     }
                 }
             });
@@ -994,11 +994,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 amazon.deleteObjectS3(s3Image, function (err, data) {
                                     if(err){
                                         logger.error(err);
-                                        handleError(res,null,422,"Product was deleted. Image could not be deleted");
+                                        handleError(res,null,409,4);
                                     }else{
                                         amazon.deleteObjectS3(s3File, function (err, data) {
                                             if(err) {
-                                                handleError(res,null,422,"Product was deleted. RPC could not be deleted!");
+                                                handleError(res,null,409,4);
                                             }
                                             else
                                             {
@@ -1102,7 +1102,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             if(s3Key){
                                 amazon.deleteObjectS3(s3Key, function (err, data) {
                                     if(err){
-                                        handleError(res,err,422,"Article was deleted. Image could not be deleted");
+                                        handleError(res,err,409,4);
                                     }else{
                                         handleSuccess(res, {}, 7);
                                     }
@@ -1113,7 +1113,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                     });
                 }else{
-                    handleError(res,err,422,'Article not found!');
+                    handleError(res,err,404,1);
                 }
             });
         });
@@ -1177,7 +1177,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 })
             }, function (err) {
                 if(err){
-                    handleError(res,err,422,"Eroare la stergerea entitatilor atasate produsului");
+                    handleError(res,err,409,5);
                 }else{
                     //remove product
                     specialProduct.remove({_id: idToDelete}, function (err, count) {
@@ -1232,7 +1232,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                handleError(res,err,422,"Invalid params");
+                handleError(res,err,400,6);
             }
         })
         .post(function (req, res) {
@@ -1334,7 +1334,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .put(function (req, res) {
             var idToUpdate = req.query.id;
             if(!idToUpdate){
-                handleError(res,err,412,"Invalid query params");
+                handleError(res,err,400,6);
             }else{
                 specialProductGlossary.update({_id: idToUpdate}, {$set: req.body}, function (err, wRes) {
                     if(err){
@@ -1348,7 +1348,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .delete(function (req, res) {
             var idToDelete = req.query.id;
             if(!idToDelete){
-                handleError(res,err,412,"Invalid query params");
+                handleError(res,err,400,6);
             }else{
                 specialProductGlossary.remove({_id: idToDelete}, function (err, wRes) {
                     if(err){
@@ -1387,7 +1387,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             if(!idToUpdate){
-                handleError(res,err,412,"Invalid query params");
+                handleError(res,err,400,6);
             }else{
                 specialProductFiles.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                     if(err){
@@ -1415,7 +1415,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err) {
                         handleError(res,err,500);
                     }else if(!product){
-                        handleError(res,err,204,"Eroare la gasire produs");
+                        handleError(res,err,404,1);
                     }else{
                         handleSuccess(res, product.speakers);
                     }
@@ -2046,11 +2046,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             if(s3Image || s3File){
                                 amazon.deleteObjectS3(s3Image, function (err, data) {
                                     if(err){
-                                        handleError(res,err,422,"Multimedia was deleted. Image could not be deleted");
+                                        handleError(res,err,409,4);
                                     }else{
                                         amazon.deleteObjectS3(s3File, function (err, data) {
                                             if(err) {
-                                                handleError(res,err,422,"Multimedia was deleted. Video could not be deleted!");
+                                                handleError(res,err,409,4);
                                             }
                                             else
                                             {
@@ -2065,7 +2065,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                     });
                 }else{
-                    handleError(res,err,204,'Multimedia not found!');
+                    handleError(res,err,404,1);
                 }
             });
         });
@@ -2091,7 +2091,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             handleSuccess(res, objectToSend);
                         }
                     }else{
-                        handleError(res,err,204,'Multimedia not found!');
+                        handleError(res,err,404,1);
                     }
                 })
             }else{
@@ -2126,7 +2126,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         })
                     }, function (err) {
                         if(err){
-                            handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
+                            handleError(res,err,409,7);
                         }else{
                             handleSuccess(res, {}, 2);
                         }
@@ -2161,7 +2161,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     })
                                 }, function (err) {
                                     if (err) {
-                                        handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
+                                        handleError(res,err,409,7);
                                     } else {
                                         async.each(therapeuticArray, function (item, callback) {
                                             Therapeutic_Area.findById(item, function (err, foundArea) {
@@ -2179,7 +2179,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             })
                                         }, function (err) {
                                             if (err) {
-                                                handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
+                                                handleError(res,err,409,7);
                                             } else {
                                                 handleSuccess(res, {}, 2);
                                             }
@@ -2204,7 +2204,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     })
                                 }, function (err) {
                                     if (err) {
-                                        handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
+                                        handleError(res,err,409,7);
                                     } else {
                                         handleSuccess(res, {}, 2);
                                     }
@@ -2252,7 +2252,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
             },function(err){
                 if(err){
-                    handleError(res,err,422,"Nu s-a putut efectua stergerea asincrona!");
+                    handleError(res,err,409,5);
                 }
                 else
                 {
@@ -3002,7 +3002,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                handleError(res,null,412,"Invalid params");
+                handleError(res,null,400,6);
             }
         });
 
