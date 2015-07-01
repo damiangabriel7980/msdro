@@ -6,9 +6,13 @@ controllers.controller('DownloadsView', ['$scope', '$state', '$rootScope', 'Cont
 
     ContentService.content.query({type: 4, withFile: true}).$promise.then(function (resp) {
         $scope.downloads = resp.success;
+    }).catch(function(errDownloads){
+        console.log(errDownloads.data.error);
     });
     ContentService.mostRead.query({type: 4, withFile: true}).$promise.then(function (resp) {
         $scope.mostDownloads = resp.success;
+    }).catch(function(errMostDownloads){
+        console.log(errMostDownloads.data.error);
     });
 
     $scope.navigateToDownloads = function (content) {

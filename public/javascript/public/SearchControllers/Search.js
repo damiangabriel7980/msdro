@@ -7,6 +7,8 @@ controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce',
         if(data.success){
             $scope.searchResults = data.success;
         }
+    }).catch(function(err){
+        console.log(err.data.error);
     });
 
     $scope.getCategory = function(type){

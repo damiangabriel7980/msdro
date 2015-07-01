@@ -2,6 +2,8 @@ controllers.controller('ArticlesDetail', ['$scope', '$rootScope', 'ContentServic
 
     ContentService.content.query({id: $stateParams.id}).$promise.then(function (resp) {
         $scope.currentArticle = resp.success;
+    }).catch(function(err){
+        console.log(err.data.error);
     });
 
 }]);
