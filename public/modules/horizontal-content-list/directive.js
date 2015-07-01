@@ -28,6 +28,11 @@
                 scope.withBackground = attrs.hasOwnProperty("withBackground");
                 scope.smallerPicture = attrs.hasOwnProperty("smallerImage");
                 scope.dropShadow = attrs.hasOwnProperty("dropShadow");
+
+                //avoid overlapping of button and excerpt
+                var safetyPadding = "";
+                for(var i=0; i<20; i++) safetyPadding += "&nbsp;";
+                scope.safetyPadding = safetyPadding;
             }
         };
     }]);
