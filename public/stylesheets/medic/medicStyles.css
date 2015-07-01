@@ -13,9 +13,6 @@
 .fontXXL {
   font-size: 25px;
 }
-.specialText {
-  width: 100% !important;
-}
 .contentShadow {
   -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
   -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
@@ -7593,5 +7590,10 @@ a:focus {
 @media (max-device-width: 480px) {
   .fc-button-today {
     display: none !important;
+  }
+}
+@media (max-width: 767px) {
+  .specialText {
+    width: 100% !important;
   }
 }
