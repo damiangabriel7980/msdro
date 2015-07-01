@@ -24,6 +24,10 @@ controllers.controller('Search', ['$scope', '$state', '$rootScope', 'HomeService
         $state.go('biblioteca.produse.prodById', {id:product._id});
     };
 
+    $scope.navigateToEvent = function (event) {
+        $state.go('calendar', ({id: event._id}));
+    };
+
     $scope.navigateToArticle = function (article) {
         if(article.type == 3){
             $state.go("biblioteca.articoleStiintifice.articol", {articleType: article.type, articleId: article._id});
