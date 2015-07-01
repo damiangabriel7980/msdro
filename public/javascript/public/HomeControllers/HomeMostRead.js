@@ -13,6 +13,8 @@ controllers.controller('HomeMostRead', ['$scope', '$rootScope', 'ContentService'
             var endSlice = beginSlice + $scope.resultsPerPage;
             $scope.articoleFiltered = $scope.articole.slice(beginSlice, endSlice);
         });
+    }).catch(function(err){
+        console.log(err.data.error);
     });
 
 }]);

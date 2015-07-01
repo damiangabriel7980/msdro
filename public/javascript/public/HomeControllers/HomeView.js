@@ -22,10 +22,14 @@ controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce
 
     HomeService.CarouselData.query().$promise.then(function(resp){
         $scope.carouselSlides = resp.success;
+    }).catch(function(errCarousel){
+        console.log(errCarousel.data.error);
     });
 
     HomeService.events.query().$promise.then(function (resp) {
         $scope.events = resp.success;
+    }).catch(function(errEvents){
+        console.log(errEvents.data.error);
     });
 
     $scope.carouselLearnMore = function (slide) {

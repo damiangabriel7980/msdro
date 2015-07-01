@@ -17,6 +17,8 @@ controllers.controller('HomeMobileNews', ['$scope', 'ContentService', function($
             });
             $scope.categories = categories;
         }
+    }).catch(function(err){
+        console.log(err.data.error);
     });
 
 }]);
