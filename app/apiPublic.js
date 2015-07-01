@@ -17,16 +17,16 @@ var getIds = function (documentsArray) {
 };
 
 module.exports = function(app, logger, router) {
-    var ResponseModule = require('./modules/responseHandler')(logger);
+    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
+    var handleError = require('./modules/responseHandler/error.js')(logger);
 
     router.route('/getCarouselData')
         .get(function (req, res) {
             PublicCarousel.find({enable: true}).sort({order_index: 1}).exec(function (err, resp) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    res.send({success:resp});
-                    ResponseModule.handleSuccess(res,resp);
+                    handleSuccess(res,resp);
                 }
             })
         });
@@ -36,9 +36,9 @@ module.exports = function(app, logger, router) {
             if(req.query.id){
                 PublicContent.findOne({_id: req.query.id, enable: true}, function (err, resp) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,resp);
+                        handleSuccess(res,resp);
                     }
                 })
             }else if(req.query.type && req.query.area){
@@ -55,9 +55,9 @@ module.exports = function(app, logger, router) {
                     }
                     PublicContent.find(q).sort({date_added: -1}).exec(function (err, content) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,content);
+                            handleSuccess(res,content);
                         }
                     });
                 };
@@ -66,7 +66,7 @@ module.exports = function(app, logger, router) {
                     //form an array of this area's id and all it's children id's
                     TherapeuticAreas.find({$or: [{_id: ObjectId(params.area)}, {'therapeutic-areasID': {$in: [params.area.toString()]}}]}, function (err, areas) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
                             var areasIds = getIds(areas);
                             getDocuments(areasIds);
@@ -83,17 +83,17 @@ module.exports = function(app, logger, router) {
                 }
                 PublicContent.find(q).sort({date_added: -1}).exec(function (err, resp) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,resp);
+                        handleSuccess(res,resp);
                     }
                 })
             }else if(req.query.category){
                 PublicContent.find({type:2, category: req.query.category, enable: true}).sort({date_added: -1}).exec(function (err, content) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,content);
+                        handleSuccess(res,content);
                     }
                 })
             }
@@ -123,9 +123,9 @@ module.exports = function(app, logger, router) {
                 })
             }, function (err) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,ret);
+                    handleSuccess(res,ret);
                 }
             });
         });
@@ -142,13 +142,13 @@ module.exports = function(app, logger, router) {
                 }
             },{ hydrate: true, hydrateOptions: {find: {enable:true}}}, function(err, results) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
                     //console.log(results.hits.hits);
                     if(!results || !results.hits || !results.hits.hits){
-                        ResponseModule.handleError(res,null,422,"Invalid response format");
+                        handleError(res,null,422,"Invalid response format");
                     }else{
-                        ResponseModule.handleSuccess(res,results.hits.hits);
+                        handleSuccess(res,results.hits.hits);
                     }
 
                 }
@@ -160,9 +160,9 @@ module.exports = function(app, logger, router) {
         .get(function (req, res) {
             TherapeuticAreas.find({enabled: true}).sort({name: 1}).exec(function (err, resp) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,resp);
+                    handleSuccess(res,resp);
                 }
             })
         });
@@ -177,13 +177,13 @@ module.exports = function(app, logger, router) {
                 }
                 PublicContent.find(q).sort({date_added: -1}).limit(3).exec(function (err, resp) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,resp);
+                        handleSuccess(res,resp);
                     }
                 })
             }else{
-                ResponseModule.handleError(res,null,400,"Missing query param: type");
+                handleError(res,null,400,"Missing query param: type");
             }
 
         });
@@ -196,9 +196,9 @@ module.exports = function(app, logger, router) {
             var endDate = new Date(new Date().setDate(new Date().getDate()+(daysToReturn/2)));
             Events.find({enable: {$exists: true, $ne: false}, start: {$gt: startDate, $lt: endDate}, isPublic: true}).exec(function (err, resp) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,resp);
+                    handleSuccess(res,resp);
                 }
             });
         });
@@ -208,17 +208,17 @@ module.exports = function(app, logger, router) {
             if(req.query.id){
                 PublicCategories.findOne({_id: req.query.id}, function (err, category) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,category);
+                        handleSuccess(res,category);
                     }
                 });
             }else{
                 PublicCategories.find({isEnabled: true}, function (err, categories) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,categories);
+                        handleSuccess(res,categories);
                     }
                 });
             }

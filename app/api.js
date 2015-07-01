@@ -199,7 +199,8 @@ var getIds = function (arr, convertToString) {
 module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     //=============================================Define variables
-    var ResponseModule = require('./modules/responseHandler')(logger);
+    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
+    var handleError = require('./modules/responseHandler/error.js')(logger);
 
 
 //======================================================================================================= secure routes
@@ -303,17 +304,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 UserGroup.findOne({_id: req.query.id}).populate('profession').exec(function(err, cont) {
                     if(err || !cont) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,cont);
+                        handleSuccess(res,cont);
                     }
                 });
             }else{
                 UserGroup.find({}, {display_name: 1, description: 1, profession: 1, restrict_CRUD: 1}).populate('profession').exec(function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,cont);
+                        handleSuccess(res,cont);
                     }
                 });
             }
@@ -325,13 +326,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             
             toCreate.save(function (err, saved) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
                     User.update({_id: {$in: users}}, {$addToSet: {groupsID: saved._id}}, {multi: true}, function (err, wRes) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{created: saved, updated: wRes});
+                            handleSuccess(res,{created: saved, updated: wRes});
                         }
                     });
                 }
@@ -340,7 +341,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .put(function (req, res) {
             UserGroup.findOne({_id: req.query.id}, function (err, oldGroup) {
                 if(err || !oldGroup){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
                     var dataToUpdate = req.body.toUpdate;
                     
@@ -352,25 +353,25 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     var users = req.body.users || [];
                     UserGroup.update({_id: req.query.id}, {$set: dataToUpdate}, function (err, wRes) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else if(users.length != 0){
                             //disconnect previous users
                             User.update({}, {$pull: {groupsID: req.query.id}}, {multi: true}, function (err, wres) {
                                 if(err){
-                                    ResponseModule.handleError(res,err,500);
+                                    handleError(res,err,500);
                                 }else{
                                     //connect new users
                                     User.update({_id: {$in: users}}, {$addToSet: {groupsID: req.query.id}}, {multi: true}, function (err, wres) {
                                         if(err){
-                                            ResponseModule.handleError(res,err,500);
+                                            handleError(res,err,500);
                                         }else{
-                                            ResponseModule.handleSuccess(res,{connectedUsers: wres});
+                                            handleSuccess(res,{connectedUsers: wres});
                                         }
                                     });
                                 }
                             });
                         }else{
-                            ResponseModule.handleSuccess(res,{connectedUsers: 0});
+                            handleSuccess(res,{connectedUsers: 0});
                         }
                     });
                 }
@@ -380,21 +381,21 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToDelete = ObjectId(req.query.id);
             UserGroup.findOne({_id: idToDelete}, function (err, group) {
                 if(err || !group){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else if(group.restrict_CRUD){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
                     //disconnect users from group
                     User.update({}, {$pull: {groupsID: idToDelete}}, {multi: true}, function (err, wres) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
                             //remove group
                             UserGroup.remove({_id: idToDelete}, function (err, wres) {
                                 if(err){
-                                    ResponseModule.handleError(res,err,500);
+                                    handleError(res,err,500);
                                 }else{
-                                    ResponseModule.handleSuccess(res,{message: "Group was deleted."});
+                                    handleSuccess(res,{}, {message: "Group was deleted."});
                                 }
                             });
                         }
@@ -408,9 +409,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function(req, res) {
             Professions.find({}, function(err, cont) {
                 if(err) {
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else
-                    ResponseModule.handleSuccess(res,cont);
+                    handleSuccess(res,cont);
             });
         });
 
@@ -421,17 +422,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 var id = req.query.group;
                 User.find({groupsID: {$in:[id]}}, {username: 1}).limit(0).exec(function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,cont);
+                        handleSuccess(res,cont);
                     }
                 });
             }else{
                 User.find({}, {username: 1}).limit(0).exec(function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,cont);
+                        handleSuccess(res,cont);
                     }
                 });
             }
@@ -443,21 +444,21 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 PublicContent.find({_id: req.query.id}, function (err, cont) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
                         if(cont[0]){
-                            ResponseModule.handleSuccess(res,cont[0]);
+                            handleSuccess(res,cont[0]);
                         }else{
-                            ResponseModule.handleError(res,err,422,"No content found");
+                            handleError(res,err,422,"No content found");
                         }
                     }
                 })
             }else{
                 PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else
-                        ResponseModule.handleSuccess(res,cont);
+                        handleSuccess(res,cont);
                 });
             }
         })
@@ -467,20 +468,20 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             //validate author and title
             var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
-                ResponseModule.handleError(res,null,422,"Autorul si titlul sunt obligatorii (minim 3 caractere)");
+                handleError(res,null,422,"Autorul si titlul sunt obligatorii (minim 3 caractere)");
             }else{
                 //validate type
                 if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    ResponseModule.handleError(res,null,422,"Verificati tipul");
+                    handleError(res,null,422,"Verificati tipul");
                 }else{
                     var content = new PublicContent(data);
                     content.save(function (err, inserted) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
                             ans.error = false;
                             ans.message = "Continutul a fost salvat cu succes!";
-                            ResponseModule.handleSuccess(res,ans);
+                            handleSuccess(res,ans);
                         }
                     });
                 }
@@ -490,9 +491,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.body.info){
                 PublicContent.update({_id: req.query.id}, {enable: !req.body.info.isEnabled}, function (err, wRes) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{message: 'Successful update!'});
+                        handleSuccess(res,{message: 'Successful update!'});
                     }
                 });
             }else{
@@ -502,19 +503,19 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 //validate author and title
                 var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
                 if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
-                    ResponseModule.handleError(res,null,422,"Autorul si titlul sunt obligatorii (minim 3 caractere)");
+                    handleError(res,null,422,"Autorul si titlul sunt obligatorii (minim 3 caractere)");
                 }else{
                     //validate type
                     if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                        ResponseModule.handleError(res,null,422,"Verificati tipul");
+                        handleError(res,null,422,"Verificati tipul");
                     }else{
                         PublicContent.update({_id: id}, {$set: data}, function (err, wRes) {
                             if(err){
-                                ResponseModule.handleError(res,err,500);
+                                handleError(res,err,500);
                             }else{
                                 ans.error = false;
                                 ans.message = "Continutul a fost modificat cu succes!";
-                                ResponseModule.handleSuccess(res,ans);
+                                handleSuccess(res,ans);
                             }
                         });
                     }
@@ -526,9 +527,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var content_id = req.query.id;
             PublicContent.remove({_id: content_id}, function (err, success) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false, message: "Continutul a fost sters."});
+                    handleSuccess(res,{error: false, message: "Continutul a fost sters."});
                 }
             });
         });
@@ -544,15 +545,15 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     qry['file_path'] = data.path;
                 }else{
                     ok = false;
-                    ResponseModule.handleError(res,null,422,"Tipul fisierului lipseste!");
+                    handleError(res,null,422,"Tipul fisierului lipseste!");
                 }
             }
             if(ok){
                 PublicContent.update({_id:data.id}, qry, function (err, wRes) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{updated:wRes});
+                        handleSuccess(res,{updated:wRes});
                     }
                 });
             }
@@ -562,9 +563,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             PublicCategories.find(function (err, categories) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,categories);
+                    handleSuccess(res,categories);
                 }
             });
         })
@@ -573,35 +574,35 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             category.save(function (err, saved) {
                 if(err){
                     if(err.code == 11000 || err.code == 11001){
-                        ResponseModule.handleError(res,null,422,"O categorie cu acelasi nume exista deja");
+                        handleError(res,null,422,"O categorie cu acelasi nume exista deja");
                     }else if(err.name == "ValidationError"){
-                        ResponseModule.handleError(res,null,422,"Numele este obligatoriu");
+                        handleError(res,null,422,"Numele este obligatoriu");
                     }else{
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }
                 }else{
-                    ResponseModule.handleSuccess(res,true);
+                    handleSuccess(res,true);
                 }
             });
         })
         .put(function (req, res) {
             PublicCategories.findOne({_id: req.query.id}, function (err, category) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
                     if(req.body.name) category.name = req.body.name;
                     if(typeof req.body.isEnabled === "boolean") category.isEnabled = req.body.isEnabled;
                     category.save(function (err, saved) {
                         if(err){
                             if(err.code == 11000 || err.code == 11001){
-                                ResponseModule.handleError(res,null,422,"O categorie cu acelasi nume exista deja");
+                                handleError(res,null,422,"O categorie cu acelasi nume exista deja");
                             }else if(err.name == "ValidationError"){
-                                ResponseModule.handleError(res,null,422,"Numele este obligatoriu");
+                                handleError(res,null,422,"Numele este obligatoriu");
                             }else{
-                                ResponseModule.handleError(res,err,500);
+                                handleError(res,err,500);
                             }
                         }else{
-                            ResponseModule.handleSuccess(res,true);
+                            handleSuccess(res,true);
                         }
                     });
                 }
@@ -611,13 +612,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToDelete = ObjectId(req.query.id);
             PublicCategories.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
                     PublicContent.update({category: idToDelete}, {$set: {category: null}}, function (err, wres) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,true);
+                            handleSuccess(res,true);
                         }
                     });
                 }
@@ -630,21 +631,21 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 PublicCarousel.find({_id: req.query.id}, function (err, cont) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
                         if(cont[0]){
-                            ResponseModule.handleSuccess(res,cont[0]);
+                            handleSuccess(res,cont[0]);
                         }else{
-                            ResponseModule.handleError(res,null,422,"No image found");
+                            handleError(res,null,422,"No image found");
                         }
                     }
                 })
             }else{
                 PublicCarousel.find({}, function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else
-                        ResponseModule.handleSuccess(res,cont);
+                        handleSuccess(res,cont);
                 });
             }
         })
@@ -655,7 +656,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             //validate title and description
             //validate type
             if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                ResponseModule.handleError(res,null,422,"Verificati tipul");
+                handleError(res,null,422,"Verificati tipul");
             }else{
                 //check if content_id exists
                 if(typeof data.content_id === "string" && data.content_id.length === 24){
@@ -663,24 +664,24 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     console.log(data);
                     img.save(function (err, inserted) {
                         if(err){
-                            ResponseModule.handleError(res,null,422,"Eroare la salvare. Verificati campurile");
+                            handleError(res,null,422,"Eroare la salvare. Verificati campurile");
                         }else{
                             //update image_path
                             var imagePath = "generalCarousel/image_"+inserted._id+"."+ext;
                             PublicCarousel.update({_id: inserted._id}, {$set:{image_path:imagePath}}, function (err, wRes) {
                                 if(err){
-                                    ResponseModule.handleError(res,null,422,"Eroare la salvare. Verificati campurile");
+                                    handleError(res,null,422,"Eroare la salvare. Verificati campurile");
                                 }else{
                                     ans.error = false;
                                     ans.message = "Se incarca imaginea...";
                                     ans.key = imagePath;
-                                    ResponseModule.handleSuccess(res,ans);
+                                    handleSuccess(res,ans);
                                 }
                             });
                         }
                     });
                 }else{
-                    ResponseModule.handleError(res,null,422,"Selectati un continut");
+                    handleError(res,null,422,"Selectati un continut");
                 }
             }
 
@@ -689,9 +690,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.body.info){
                 PublicCarousel.update({_id: req.query.id}, {$set:{enable: !req.body.info.isEnabled}}, function (err, wRes) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{error: false});
+                        handleSuccess(res,{error: false});
                     }
                 });
             }else{
@@ -700,11 +701,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     var data = req.body.data;
                     PublicCarousel.update({_id: req.query.id}, {$set:{image_path: data.imagePath}}, function (err, wRes) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
                             ans.error = false;
                             ans.message = "Datele au fost modificate cu succes!";
-                            ResponseModule.handleSuccess(res,ans);
+                            handleSuccess(res,ans);
                         }
                     });
                 }else{
@@ -714,21 +715,21 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     //validate title and description
                     //validate type
                     if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                        ResponseModule.handleError(res,null,422,"Verificati tipul");
+                        handleError(res,null,422,"Verificati tipul");
                     }else{
                         //check if content_id exists
                         if(typeof data.content_id === "string" && data.content_id.length === 24){
                             PublicCarousel.update({_id: id}, {$set:data}, function (err, wRes) {
                                 if(err){
-                                    ResponseModule.handleError(res,null,422,"Eroare la actualizare. Verificati campurile");
+                                    handleError(res,null,422,"Eroare la actualizare. Verificati campurile");
                                 }else{
                                     ans.error = false;
                                     ans.message = "Datele au fost modificate cu succes!";
-                                    ResponseModule.handleSuccess(res,ans);
+                                    handleSuccess(res,ans);
                                 }
                             });
                         }else{
-                            ResponseModule.handleError(res,null,422,"Selectati un continut");
+                            handleError(res,null,422,"Selectati un continut");
                         }
                     }
                 }
@@ -739,31 +740,31 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             //find image to remove from amazon
             PublicCarousel.find({_id: image_id}, {image_path: 1}, function (err, image) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
                     if(image[0]){
                         var imageS3 = image[0].image_path;
                         //remove from database
                         PublicCarousel.remove({_id: image_id}, function (err, success) {
                             if(err){
-                                ResponseModule.handleError(res,err,500);
+                                handleError(res,err,500);
                             }else{
                                 //remove image from amazon
                                 if(imageS3){
                                     amazon.deleteObjectS3(imageS3, function (err, data) {
                                         if(err){
-                                            ResponseModule.handleError(res,null,422,"Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon");
+                                            handleError(res,null,422,"Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon");
                                         }else{
-                                            ResponseModule.handleSuccess(res,{message:"Imaginea a fost stearsa din baza de date si de pe Amazon."});
+                                            handleSuccess(res,{message:"Imaginea a fost stearsa din baza de date si de pe Amazon."});
                                         }
                                     });
                                 }else{
-                                    ResponseModule.handleSuccess(res,{error: false, message: "Imaginea a fost stearsa din baza de date."});
+                                    handleSuccess(res,{error: false, message: "Imaginea a fost stearsa din baza de date."});
                                 }
                             }
                         });
                     }else{
-                        ResponseModule.handleError(res,null,422,"Nu s-a gasit imaginea");
+                        handleError(res,null,422,"Nu s-a gasit imaginea");
                     }
                 }
             });
@@ -772,9 +773,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function(req, res) {
             PublicContent.find({type: req.query.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
                 if(err) {
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else
-                    ResponseModule.handleSuccess(res,cont);
+                    handleSuccess(res,cont);
             });
         });
 
@@ -787,21 +788,21 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 Carousel.find({_id: req.query.id}, function (err, cont) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
                         if(cont[0]){
-                            ResponseModule.handleSuccess(res,cont[0]);
+                            handleSuccess(res,cont[0]);
                         }else{
-                            ResponseModule.handleError(res,null,422,"Nu s-a gasit imaginea");
+                            handleError(res,null,422,"Nu s-a gasit imaginea");
                         }
                     }
                 })
             }else{
                 Carousel.find({}, function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else
-                        ResponseModule.handleSuccess(res,cont);
+                        handleSuccess(res,cont);
                 });
             }
         })
@@ -811,31 +812,31 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var ans = {};
             //validate type
             if(!(typeof data.type === "number" && data.type>0 && data.type<4)){
-                ResponseModule.handleError(res,null,422,"Verificati tipul!");
+                handleError(res,null,422,"Verificati tipul!");
             }else{
                 //check if content_id exists
                 if(typeof data.article_id === "string" && data.article_id.length === 24){
                     var img = new Carousel(data);
                     img.save(function (err, inserted) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
                             //update image_path
                             var imagePath = "carousel/medic/image_"+inserted._id+"."+ext;
                             Carousel.update({_id: inserted._id}, {$set:{image_path: imagePath}}, function (err, wRes) {
                                 if(err){
-                                    ResponseModule.handleError(res,err,500);
+                                    handleError(res,err,500);
                                 }else{
                                     ans.error = false;
                                     ans.message = "Se incarca imaginea...";
                                     ans.key = imagePath;
-                                    ResponseModule.handleSuccess(res,ans);
+                                    handleSuccess(res,ans);
                                 }
                             });
                         }
                     });
                 }else{
-                    ResponseModule.handleError(res,null,422,"Selectati un continut");
+                    handleError(res,null,422,"Selectati un continut");
                 }
             }
         })
@@ -843,9 +844,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.body.info){
                 Carousel.update({_id: req.query.id}, {$set:{enable: !req.body.info.isEnabled}}, function (err, wRes) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{message: 'Update successful!'});
+                        handleSuccess(res,{message: 'Update successful!'});
                     }
                 });
             }else{
@@ -854,9 +855,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     var data = req.body.data;
                     Carousel.update({_id: req.query.id}, {$set:{image_path: data.imagePath}}, function (err, wRes) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{message: 'Update successful!'});
+                            handleSuccess(res,{message: 'Update successful!'});
                         }
                     });
                 }else{
@@ -865,19 +866,19 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     var ans = {};
                     //validate type
                     if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                        ResponseModule.handleError(res,null,422,"Verificati tipul!");
+                        handleError(res,null,422,"Verificati tipul!");
                     }else{
                         //check if content_id exists
                         if(typeof data.article_id === "string" && data.article_id.length === 24){
                             Carousel.update({_id: id}, {$set:data}, function (err, wRes) {
                                 if(err){
-                                    ResponseModule.handleError(res,err,500);
+                                    handleError(res,err,500);
                                 }else{
-                                    ResponseModule.handleSuccess(res,{message : "Datele au fost modificate cu succes!"});
+                                    handleSuccess(res,{message : "Datele au fost modificate cu succes!"});
                                 }
                             });
                         }else{
-                            ResponseModule.handleError(res,null,422,"Selectati un continut");
+                            handleError(res,null,422,"Selectati un continut");
                         }
                     }
                 }
@@ -888,31 +889,31 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             //find image to remove from amazon
             Carousel.find({_id: image_id}, {image_path: 1}, function (err, image) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
                     if(image[0]){
                         var imageS3 = image[0].image_path;
                         //remove from database
                         Carousel.remove({_id: image_id}, function (err, success) {
                             if(err){
-                                ResponseModule.handleError(res,err,500);
+                                handleError(res,err,500);
                             }else{
                                 //remove image from amazon
                                 if(imageS3){
                                     amazon.deleteObjectS3(imageS3, function (err, data) {
                                         if(err){
-                                            ResponseModule.handleError(res,null,422,"Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon");
+                                            handleError(res,null,422,"Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon");
                                         }else{
-                                            ResponseModule.handleSuccess(res,{message: "Imaginea a fost stearsa din baza de date si de pe Amazon."});
+                                            handleSuccess(res,{message: "Imaginea a fost stearsa din baza de date si de pe Amazon."});
                                         }
                                     });
                                 }else{
-                                    ResponseModule.handleSuccess(res,{message: "Imaginea a fost stearsa din baza de date."});
+                                    handleSuccess(res,{message: "Imaginea a fost stearsa din baza de date."});
                                 }
                             }
                         });
                     }else{
-                        ResponseModule.handleError(res,null,422,"Nu s-a gasit imaginea!");
+                        handleError(res,null,422,"Nu s-a gasit imaginea!");
                     }
                 }
             });
@@ -922,9 +923,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function(req, res) {
             Content.find({type: req.query.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
                 if(err) {
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else
-                    ResponseModule.handleSuccess(res,cont);
+                    handleSuccess(res,cont);
             });
         });
 
@@ -933,25 +934,25 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 Products.findOne({_id: req.query.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
                     if (err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,product);
+                        handleSuccess(res,product);
                     }
                 });
             }else{
                 Products.find({}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }
                     else{
                         var products={};
                         products['productList']=cont;
                         UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
                             if(err) {
-                                ResponseModule.handleError(res,err,500);
+                                handleError(res,err,500);
                             }else{
                                 products['groups']=cont2;
-                                ResponseModule.handleSuccess(res,products);
+                                handleSuccess(res,products);
                             }
                         });
                     }
@@ -962,9 +963,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var product = new Products(req.body.product);
             product.save(function(err, saved) {
                 if (err)
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 else
-                    ResponseModule.handleSuccess(res,{ message: 'Product created!' , saved: saved});
+                    handleSuccess(res,{ message: 'Product created!' , saved: saved});
             });
         })
         .put(function(req,res){
@@ -973,17 +974,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(req.body.info.logo){
                     Products.update({_id: req.query.id}, {$set:{image_path: info.path}}, function (err, wRes) {
                         if (err) {
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         } else {
-                            ResponseModule.handleSuccess(res,{error: false, updated: wRes});
+                            handleSuccess(res,{error: false, updated: wRes});
                         }
                     });
                 }else{
                     Products.update({_id:req.query.id},{$set:{file_path: info.path}}, function (err, wRes) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{error:false, updated:wRes});
+                            handleSuccess(res,{error:false, updated:wRes});
                         }
                     });
                 }
@@ -991,9 +992,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 var data = req.body.product;
                 Products.update({_id:req.query.id},{$set:data}, function(err, product) {
                     if (err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{ message: 'Product updated!' , saved: true});
+                        handleSuccess(res,{ message: 'Product updated!' , saved: true});
                     }
                 });
             }
@@ -1007,7 +1008,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     //delete product
                     Products.remove({_id:id},function(err,cont) {
                         if (err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }
                         else{
                             //product was deleted. Now delete image and file if there is one
@@ -1015,26 +1016,26 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 amazon.deleteObjectS3(s3Image, function (err, data) {
                                     if(err){
                                         logger.error(err);
-                                        ResponseModule.handleError(res,null,422,"Product was deleted. Image could not be deleted");
+                                        handleError(res,null,422,"Product was deleted. Image could not be deleted");
                                     }else{
                                         amazon.deleteObjectS3(s3File, function (err, data) {
                                             if(err) {
-                                                ResponseModule.handleError(res,null,422,"Product was deleted. RPC could not be deleted!");
+                                                handleError(res,null,422,"Product was deleted. RPC could not be deleted!");
                                             }
                                             else
                                             {
-                                                ResponseModule.handleSuccess(res,{message: "Product was deleted. All files and images associated with were also deleted!"});
+                                                handleSuccess(res,{message: "Product was deleted. All files and images associated with were also deleted!"});
                                             }
                                         });
                                     }
                                 })
                             }else{
-                                ResponseModule.handleSuccess(res,{message:'Product was deleted!'});
+                                handleSuccess(res,{message:'Product was deleted!'});
                             }
                         }
                     });
                 }else{
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }
             });
         });
@@ -1043,18 +1044,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 Content.find({_id:req.query.id}, function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,cont[0]);
+                        handleSuccess(res,cont[0]);
                     }
                 })
             }else{
                 Content.find(function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }
                     else {
-                        ResponseModule.handleSuccess(res,cont);
+                        handleSuccess(res,cont);
                     }
                 });
             }
@@ -1063,9 +1064,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var content = new Content(req.body.article);
             content.save(function(err,saved) {
                 if (err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{ message: 'Content created!' , saved: saved});
+                    handleSuccess(res,{ message: 'Content created!' , saved: saved});
                 }
             });
         })
@@ -1075,17 +1076,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(info.image){
                     Content.update({_id:req.query.id}, {$set:{image_path: info.image}}, function (err, wRes) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{error:false, updated:wRes});
+                            handleSuccess(res,{error:false, updated:wRes});
                         }
                     });
                 }else{
                     Content.update({_id:req.query.id}, {$set:{associated_images: info.associated_images}}, function (err, wRes) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{error:false, updated:wRes});
+                            handleSuccess(res,{error:false, updated:wRes});
                         }
                     });
                 }
@@ -1093,18 +1094,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(req.body.enableArticle){
                     Content.update({_id:req.query.id},{$set: {enable: req.body.enableArticle.enable}}, function(err, product) {
                         if (err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{ message: 'Article updated!' , saved: true});
+                            handleSuccess(res,{ message: 'Article updated!' , saved: true});
                         }
                     });
                 }else{
                     var data = req.body.article;
                     Content.update({_id:req.query.id},{$set:data}, function(err, product) {
                         if (err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{ message: 'Article updated!' , saved: true});
+                            handleSuccess(res,{ message: 'Article updated!' , saved: true});
                         }
                     });
                 }
@@ -1117,24 +1118,24 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     var s3Key = content.image_path;
                     Content.remove({_id:id},function(err,cont) {
                         if (err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }
                         else{
                             if(s3Key){
                                 amazon.deleteObjectS3(s3Key, function (err, data) {
                                     if(err){
-                                        ResponseModule.handleError(res,err,422,"Article was deleted. Image could not be deleted");
+                                        handleError(res,err,422,"Article was deleted. Image could not be deleted");
                                     }else{
-                                        ResponseModule.handleSuccess(res,{message: "Article was deleted. Image was deleted"});
+                                        handleSuccess(res,{message: "Article was deleted. Image was deleted"});
                                     }
                                 });
                             }else{
-                                ResponseModule.handleSuccess(res,{message:'Article was deleted!'});
+                                handleSuccess(res,{message:'Article was deleted!'});
                             }
                         }
                     });
                 }else{
-                    ResponseModule.handleError(res,err,422,'Article not found!');
+                    handleError(res,err,422,'Article not found!');
                 }
             });
         });
@@ -1143,9 +1144,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var ids = req.body.ids || [];
             UserGroup.find({_id: {$in: ids}}).populate('profession').exec(function (err, groups) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,groups);
+                    handleSuccess(res,groups);
                 }
             });
         });
@@ -1158,9 +1159,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }
             specialProduct.find(q).deepPopulate('groups.profession').exec(function (err, products) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,products);
+                    handleSuccess(res,products);
                 }
             })
         })
@@ -1168,18 +1169,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var toCreate = new specialProduct(req.body.toCreate);
             toCreate.save(function (err, saved) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false, message: "Datele au fost salvate", justSaved: saved});
+                    handleSuccess(res,{error: false, message: "Datele au fost salvate", justSaved: saved});
                 }
             });
         })
         .put(function (req, res) {
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false, message: "Datele au fost actualizate"});
+                    handleSuccess(res,{error: false, message: "Datele au fost actualizate"});
                 }
             });
         })
@@ -1198,14 +1199,14 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 })
             }, function (err) {
                 if(err){
-                    ResponseModule.handleError(res,err,422,"Eroare la stergerea entitatilor atasate produsului");
+                    handleError(res,err,422,"Eroare la stergerea entitatilor atasate produsului");
                 }else{
                     //remove product
                     specialProduct.remove({_id: idToDelete}, function (err, count) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{error: false, message: "S-au sters "+count+" produse si "+attachedCount+" documente atasate. "});
+                            handleSuccess(res,{error: false, message: "S-au sters "+count+" produse si "+attachedCount+" documente atasate. "});
                         }
                     });
                 }
@@ -1216,9 +1217,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             UserGroup.find({}, {display_name: 1, profession: 1}).populate('profession').exec(function (err, groups) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,groups);
+                    handleSuccess(res,groups);
                 }
             })
         });
@@ -1229,9 +1230,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 //find one by id
                 specialProductMenu.findOne({_id: req.query.id}, function (err, menuItem) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{error: false, menuItem: menuItem});
+                        handleSuccess(res,{error: false, menuItem: menuItem});
                     }
                 });
             }else if(req.query.product_id){
@@ -1239,39 +1240,39 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 //first, find all children
                 specialProductMenu.distinct("children_ids", function (err, children_ids) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
                         //next, get all menu items that are not children; populate their children_ids attribute
                         specialProductMenu.find({product: req.query.product_id, _id: {$nin: children_ids}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function (err, menuItems) {
                             if(err){
-                                ResponseModule.handleError(res,err,500);
+                                handleError(res,err,500);
                             }else{
                                 //now you got the full menu nicely organised
-                                ResponseModule.handleSuccess(res,menuItems);
+                                handleSuccess(res,menuItems);
                             }
                         });
                     }
                 });
             }else{
-                ResponseModule.handleError(res,err,422,"Invalid params");
+                handleError(res,err,422,"Invalid params");
             }
         })
         .post(function (req, res) {
             var menu = new specialProductMenu(req.body);
             menu.save(function (err, saved) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false, saved: saved});
+                    handleSuccess(res,{error: false, saved: saved});
                 }
             })
         })
         .put(function (req, res) {
             specialProductMenu.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{message: 'Update successful!'});
+                    handleSuccess(res,{message: 'Update successful!'});
                 }
             })
         })
@@ -1280,7 +1281,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToDelete = ObjectId(req.query.id);
             specialProductMenu.findOne({_id: idToDelete}, function (err, item) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
                     var arrayIdsToDelete = [idToDelete];
                     if(item.children_ids){
@@ -1289,15 +1290,15 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                     specialProductMenu.remove({_id: {$in: arrayIdsToDelete}}, function (err, wRes) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
                             deleteCount = wRes;
                             //disconnect from parent
                             specialProductMenu.update({}, {$pull: {children_ids: idToDelete}}, function (err, wRes) {
                                 if(err){
-                                    ResponseModule.handleError(res,err,500);
+                                    handleError(res,err,500);
                                 }else{
-                                    ResponseModule.handleSuccess(res,{error: false, message: "S-au sters "+deleteCount+" documente. S-au updatat "+wRes+" documente"});
+                                    handleSuccess(res,{error: false, message: "S-au sters "+deleteCount+" documente. S-au updatat "+wRes+" documente"});
                                 }
                             });
                         }
@@ -1310,9 +1311,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .put(function (req, res) {
             specialProductMenu.update({_id: req.query.id}, {$addToSet: {children_ids: req.body.child_id}}, function (err, wRes) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{message: 'Special product menu updated!'});
+                    handleSuccess(res,{message: 'Special product menu updated!'});
                 }
             })
         });
@@ -1321,9 +1322,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
                     UserGroup.find({}).populate('profession').exec(function (err, groups) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,groups);
+                            handleSuccess(res,groups);
                         }
                     })
         });
@@ -1336,9 +1337,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }
             specialProductGlossary.find(q, function (err, glossary) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,glossary);
+                    handleSuccess(res,glossary);
                 }
             })
         })
@@ -1346,22 +1347,22 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var toAdd = new specialProductGlossary(req.body);
             toAdd.save(function (err, saved) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false, saved: saved});
+                    handleSuccess(res,{error: false, saved: saved});
                 }
             });
         })
         .put(function (req, res) {
             var idToUpdate = req.query.id;
             if(!idToUpdate){
-                ResponseModule.handleError(res,err,412,"Invalid query params");
+                handleError(res,err,412,"Invalid query params");
             }else{
                 specialProductGlossary.update({_id: idToUpdate}, {$set: req.body}, function (err, wRes) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{error: false, message: "Updated "+wRes+" documents"});
+                        handleSuccess(res,{error: false, message: "Updated "+wRes+" documents"});
                     }
                 });
             }
@@ -1369,13 +1370,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .delete(function (req, res) {
             var idToDelete = req.query.id;
             if(!idToDelete){
-                ResponseModule.handleError(res,err,412,"Invalid query params");
+                handleError(res,err,412,"Invalid query params");
             }else{
                 specialProductGlossary.remove({_id: idToDelete}, function (err, wRes) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{error: false, message: "Removed "+wRes+" documents"});
+                        handleSuccess(res,{error: false, message: "Removed "+wRes+" documents"});
                     }
                 });
             }
@@ -1389,9 +1390,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }
             specialProductFiles.find(q, function (err, resources) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false, resources: resources});
+                    handleSuccess(res,{error: false, resources: resources});
                 }
             })
         })
@@ -1399,22 +1400,22 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var toAdd = new specialProductFiles(req.body);
             toAdd.save(function (err, saved) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false, saved: saved});
+                    handleSuccess(res,{error: false, saved: saved});
                 }
             });
         })
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             if(!idToUpdate){
-                ResponseModule.handleError(res,err,412,"Invalid query params");
+                handleError(res,err,412,"Invalid query params");
             }else{
                 specialProductFiles.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{error: false, message: "S-au actualizat "+wres+" documente"});
+                        handleSuccess(res,{error: false, message: "S-au actualizat "+wres+" documente"});
                     }
                 });
             }
@@ -1422,9 +1423,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .delete(function (req, res) {
             specialProductFiles.remove({_id: req.query.id}, function (err, wres) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false, message: "Removed "+wres+" documents"});
+                    handleSuccess(res,{error: false, message: "Removed "+wres+" documents"});
                 }
             });
         });
@@ -1434,27 +1435,27 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.product){
                 specialProduct.findOne({_id: req.query.product}).populate('speakers').exec(function (err, product) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else if(!product){
-                        ResponseModule.handleError(res,err,204,"Eroare la gasire produs");
+                        handleError(res,err,204,"Eroare la gasire produs");
                     }else{
-                        ResponseModule.handleSuccess(res,product.speakers);
+                        handleSuccess(res,product.speakers);
                     }
                 });
             }else if(req.query.id){
                 Speakers.findOne({_id: req.query.id}, function (err, speaker) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,speaker);
+                        handleSuccess(res,speaker);
                     }
                 });
             }else{
                 Speakers.find({}).sort({last_name: 1, first_name: 1}).exec(function (err, speakers) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,speakers);
+                        handleSuccess(res,speakers);
                     }
                 });
             }
@@ -1464,9 +1465,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var product_id = ObjectId(req.body.product_id);
             specialProduct.update({_id: product_id}, {$addToSet: {speakers: speaker_id}}, function (err, wres) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res, wres);
+                    handleSuccess(res, wres);
                 }
             });
         })
@@ -1984,19 +1985,19 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 Multimedia.findOne({_id: req.query.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
                     if (err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,product);
+                        handleSuccess(res,product);
                     }
                 });
             }else{
                 Multimedia.find(function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }
                     else
                     {
-                        ResponseModule.handleSuccess(res,cont);
+                        handleSuccess(res,cont);
                     }
                 });
             }
@@ -2005,9 +2006,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var toCreate = new Multimedia(req.body.newMultimedia);
             toCreate.save(function (err, saved) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false, message: "Datele au fost salvate", justSaved: saved});
+                    handleSuccess(res,{error: false, message: "Datele au fost salvate", justSaved: saved});
                 }
             });
         })
@@ -2017,17 +2018,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(data.image){
                     Multimedia.update({_id: req.query.id}, {thumbnail_path: data.image}, function (err, wRes) {
                         if (err) {
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         } else {
-                            ResponseModule.handleSuccess(res,{error: false, updated: wRes});
+                            handleSuccess(res,{error: false, updated: wRes});
                         }
                     });
                 }else{
                     Multimedia.update({_id:req.query.id}, {file_path: data.video}, function (err, wRes) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{error:false, updated:wRes});
+                            handleSuccess(res,{error:false, updated:wRes});
                         }
                     });
                 }
@@ -2035,17 +2036,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(req.body.enableMultimedia){
                     Multimedia.update({_id: req.query.id},{$set:{enable: req.body.enableMultimedia.isEnabled}}).exec(function (err, presentation) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{message:"Update successful!"});
+                            handleSuccess(res,{message:"Update successful!"});
                         }
                     });
                 }else{
                     Multimedia.update({_id: req.query.id}, {$set: req.body.multimedia}, function (err, wRes) {
                         if(err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }else{
-                            ResponseModule.handleSuccess(res,{message: "Datele au fost actualizate"});
+                            handleSuccess(res,{message: "Datele au fost actualizate"});
                         }
                     });
                 }
@@ -2060,33 +2061,33 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     //delete multimedia
                     Multimedia.remove({_id:id},function(err,cont) {
                         if (err){
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         }
                         else{
                             //multimedia was deleted. Now delete image and file if there is one
                             if(s3Image || s3File){
                                 amazon.deleteObjectS3(s3Image, function (err, data) {
                                     if(err){
-                                        ResponseModule.handleError(res,err,422,"Multimedia was deleted. Image could not be deleted");
+                                        handleError(res,err,422,"Multimedia was deleted. Image could not be deleted");
                                     }else{
                                         amazon.deleteObjectS3(s3File, function (err, data) {
                                             if(err) {
-                                                ResponseModule.handleError(res,err,422,"Multimedia was deleted. Video could not be deleted!");
+                                                handleError(res,err,422,"Multimedia was deleted. Video could not be deleted!");
                                             }
                                             else
                                             {
-                                                ResponseModule.handleSuccess(res,{message: "Multimedia was deleted. All files and images associated with were also deleted!"});
+                                                handleSuccess(res,{message: "Multimedia was deleted. All files and images associated with were also deleted!"});
                                             }
                                         });
                                     }
                                 })
                             }else{
-                                ResponseModule.handleSuccess(res,{message:'Multimedia was deleted!'});
+                                handleSuccess(res,{message:'Multimedia was deleted!'});
                             }
                         }
                     });
                 }else{
-                    ResponseModule.handleError(res,err,204,'Multimedia not found!');
+                    handleError(res,err,204,'Multimedia not found!');
                 }
             });
         });
@@ -2097,7 +2098,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 Therapeutic_Area.find({_id:req.query.id}).populate('therapeutic-areasID').exec(function(err, cont) {
                     var objectToSend = {};
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }
                     if(cont.length == 1){
                         objectToSend['selectedArea'] = cont[0];
@@ -2109,19 +2110,19 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             })
                         }
                         else{
-                            ResponseModule.handleSuccess(res,objectToSend);
+                            handleSuccess(res,objectToSend);
                         }
                     }else{
-                        ResponseModule.handleError(res,err,204,'Multimedia not found!');
+                        handleError(res,err,204,'Multimedia not found!');
                     }
                 })
             }else{
                 Therapeutic_Area.find(function(err, cont) {
                     if(err) {
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }
                     else
-                        ResponseModule.handleSuccess(res,cont);
+                        handleSuccess(res,cont);
                 });
             }
         })
@@ -2147,9 +2148,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         })
                     }, function (err) {
                         if(err){
-                            ResponseModule.handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
+                            handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
                         }else{
-                            ResponseModule.handleSuccess(res,{message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                            handleSuccess(res,{message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
                         }
                     });
                 }
@@ -2163,7 +2164,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if (area.has_children == true) {
                     Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
                         if (err)
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         else {
                             if(oldAreas.length > 0){
                                 async.each(oldAreas, function (item1, callback) {
@@ -2182,7 +2183,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     })
                                 }, function (err) {
                                     if (err) {
-                                        ResponseModule.handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
+                                        handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
                                     } else {
                                         async.each(therapeuticArray, function (item, callback) {
                                             Therapeutic_Area.findById(item, function (err, foundArea) {
@@ -2200,9 +2201,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             })
                                         }, function (err) {
                                             if (err) {
-                                                ResponseModule.handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
+                                                handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
                                             } else {
-                                                ResponseModule.handleSuccess(res,{message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                                                handleSuccess(res,{message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
                                             }
                                         });
                                     }
@@ -2225,9 +2226,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     })
                                 }, function (err) {
                                     if (err) {
-                                        ResponseModule.handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
+                                        handleError(res,err,422,"Eroare la adaugarea sub-ariilor");
                                     } else {
-                                        ResponseModule.handleSuccess(res,{message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                                        handleSuccess(res,{message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
                                     }
                                 });
                             }
@@ -2238,13 +2239,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if (therapeuticArray.length > 0) {
                         Therapeutic_Area.update({'therapeutic-areasID':{$in : [req.query.id]}}, {$set: {'therapeutic-areasID': []}}, function (err, wres) {
                             if(err){
-                                ResponseModule.handleError(res,err,500);
+                                handleError(res,err,500);
                             }else{
                                 Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
                                     if (err)
-                                        ResponseModule.handleError(res,err,500);
+                                        handleError(res,err,500);
                                     else {
-                                        ResponseModule.handleSuccess(res,{message: 'Update successful'});
+                                        handleSuccess(res,{message: 'Update successful'});
                                     }});
                             }
                         });
@@ -2252,9 +2253,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     else {
                         Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
                             if (err)
-                                ResponseModule.handleError(res,err,500);
+                                handleError(res,err,500);
                             else {
-                                ResponseModule.handleSuccess(res,{message: 'Update successful'});
+                                handleSuccess(res,{message: 'Update successful'});
                         }});
                     }
                 }
@@ -2273,15 +2274,15 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
             },function(err){
                 if(err){
-                    ResponseModule.handleError(res,err,422,"Nu s-a putut efectua stergerea asincrona!");
+                    handleError(res,err,422,"Nu s-a putut efectua stergerea asincrona!");
                 }
                 else
                 {
                     Therapeutic_Area.remove({$or :[{_id: data},{'therapeutic-areasID': {$in: dataArray}}]}, function(err,cont) {
                         if (err)
-                            ResponseModule.handleError(res,err,500);
+                            handleError(res,err,500);
                         else
-                            ResponseModule.handleSuccess(res,{ message: 'Aria a fost stearsa cu succes!' });
+                            handleSuccess(res,{ message: 'Aria a fost stearsa cu succes!' });
                     });
                 }
             });
@@ -2291,9 +2292,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function(req, res) {
             Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
                 if(err) {
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else
-                    ResponseModule.handleSuccess(res,cont);
+                    handleSuccess(res,cont);
             });
         });
 
@@ -2836,17 +2837,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 User.findOne({_id: req.query.id}).select('+enabled +phone').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,OneUser);
+                        handleSuccess(res,OneUser);
                     }
                 })
             }else{
                 User.find({state:"ACCEPTED"}).select('+enabled +phone').populate('profession').exec(function (err, users) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,users);
+                        handleSuccess(res,users);
                     }
                 })
             }
@@ -2858,9 +2859,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var updateUser = function () {
                 User.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,true);
+                        handleSuccess(res,true);
                     }
                 });
             };
@@ -2868,9 +2869,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(dataToUpdate.username){
                 User.findOne({username:{$regex: "^"+dataToUpdate.username.replace(/\+/g,"\\+")+"$", $options: "i"}, _id:{$ne: idToUpdate}}, function (err, user) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else if(user){
-                        ResponseModule.handleSuccess(res,{userExists: true});
+                        handleSuccess(res,{userExists: true});
                     }else{
                         updateUser();
                     }
@@ -2884,9 +2885,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             Professions.find({}).exec(function (err, professions) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,professions);
+                    handleSuccess(res,professions);
                 }
             });
         });
@@ -2895,9 +2896,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             UserGroup.find({}).populate('profession').exec(function (err, groups) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,groups);
+                    handleSuccess(res,groups);
                 }
             });
         });
@@ -2906,9 +2907,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             User.find({state: req.params.type}).select('+state +proof_path').populate('profession').exec(function (err, users) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,users);
+                    handleSuccess(res,users);
                 }
             })
         })
@@ -2916,13 +2917,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.params.type && req.body.id){
                 User.update({_id: req.body.id}, {$set: {state: req.params.type}}, function (err, wres) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
                         if(req.params.type == "ACCEPTED" && wres==1){
                             //email user
                             User.findOne({_id: req.body.id}).select('+title +enabled').exec(function (err, user) {
                                 if(err){
-                                    ResponseModule.handleError(res,err,500);
+                                    handleError(res,err,500);
                                 }else{
                                     var generateToken = function (callback) {
                                         if(user.enabled){
@@ -2975,10 +2976,10 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                             'Activare cont MSD'
                                         ).then(
                                             function (success) {
-                                                ResponseModule.handleSuccess(res,{message: "Updated "+wres+" user. Email sent"});
+                                                handleSuccess(res,{message: "Updated "+wres+" user. Email sent"});
                                             },
                                             function (err) {
-                                                ResponseModule.handleError(res,err,500);
+                                                handleError(res,err,500);
                                             }
                                         );
                                     });
@@ -2988,7 +2989,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             //email user
                             User.findOne({_id: req.body.id}).select('+title').exec(function (err, user) {
                                 if(err){
-                                    ResponseModule.handleError(res,err,500);
+                                    handleError(res,err,500);
                                 }else{
                                     var emailTo = [{email: user.username, name: user.name}];
                                     var templateContent = [
@@ -3008,21 +3009,21 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                         'Activare cont MSD'
                                     ).then(
                                         function (success) {
-                                            ResponseModule.handleSuccess(res,{message: "Updated "+wres+" user. Email sent"});
+                                            handleSuccess(res,{message: "Updated "+wres+" user. Email sent"});
                                         },
                                         function (err) {
-                                            ResponseModule.handleError(res,err,500);
+                                            handleError(res,err,500);
                                         }
                                     );
                                 }
                             });
                         }else{
-                            ResponseModule.handleSuccess(res,{message: "Updated "+wres+" user. Email not sent"});
+                            handleSuccess(res,{message: "Updated "+wres+" user. Email not sent"});
                         }
                     }
                 });
             }else{
-                ResponseModule.handleError(res,null,412,"Invalid params");
+                handleError(res,null,412,"Invalid params");
             }
         });
 
@@ -3032,9 +3033,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 {$group: {_id: "$state", total: {$sum: 1}}}
             ], function (err, result) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,result);
+                    handleSuccess(res,result);
                 }
             });
         });
@@ -3045,14 +3046,14 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 var presentations={};
                 Presentations.find({_id: req.query.id}).populate('groupsID').exec(function (err, presentation) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
                         presentations['onePresentation']=presentation[0];
                         UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
                             if(err) {
-                                ResponseModule.handleError(res,err,500);
+                                handleError(res,err,500);
                             }else{
-                                ResponseModule.handleSuccess(res,presentations);
+                                handleSuccess(res,presentations);
                             }
                         });
                     }
@@ -3060,9 +3061,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }else{
                 Presentations.find({}).exec(function (err, presentations) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,presentations);
+                        handleSuccess(res,presentations);
                     }
                 });
             }
@@ -3071,9 +3072,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var intro = new Presentations(req.body.intro);
             intro.save(function (err, presentation) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false,message:"Create successful!"});
+                    handleSuccess(res,{error: false,message:"Create successful!"});
                 }
             });
         })
@@ -3081,18 +3082,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.body.isEnabled!=undefined){
                 Presentations.update({_id: req.query.id},{$set:{enabled: req.body.isEnabled}}).exec(function (err, presentation) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{error: false,message:"Update successful!"});
+                        handleSuccess(res,{error: false,message:"Update successful!"});
                     }
                 });
             }else{
                 var intro = req.body.intro;
                 Presentations.update({_id: req.query.id},{$set: intro},function (err, presentation) {
                     if(err){
-                        ResponseModule.handleError(res,err,500);
+                        handleError(res,err,500);
                     }else{
-                        ResponseModule.handleSuccess(res,{error: false,message:"Update successful!"});
+                        handleSuccess(res,{error: false,message:"Update successful!"});
                     }
                 });
             }
@@ -3100,9 +3101,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .delete(function(req,res){
             Presentations.remove({_id: req.query.idToDelete}, function (err, count) {
                 if(err){
-                    ResponseModule.handleError(res,err,500);
+                    handleError(res,err,500);
                 }else{
-                    ResponseModule.handleSuccess(res,{error: false, message: "S-au sters "+count+" prezentari!"});
+                    handleSuccess(res,{error: false, message: "S-au sters "+count+" prezentari!"});
                 }
             });
         });
