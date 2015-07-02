@@ -212,6 +212,10 @@ app.run(
             $rootScope.defaultProductImage = $rootScope.pathAmazonResources+ "piles-of-pills.jpg";
             $rootScope.defaultUserImage = $rootScope.pathAmazonResources+ "avatar_unknown.png";
 
+            $rootScope.defaultProductIcon = $rootScope.pathAmazonResources + "icons/pill.png";
+            $rootScope.defaultArticleIcon = $rootScope.pathAmazonResources + "icons/article.png";
+            $rootScope.defaultMultimediaIcon = $rootScope.pathAmazonResources + "icons/film.png";
+
             $rootScope.defaultGroupPhoto = $rootScope.pathAmazonResources + 'customGroups/grup_logo2.png';
             $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.png";
             $rootScope.Terms = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf";

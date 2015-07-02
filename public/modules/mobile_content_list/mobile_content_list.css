@@ -28,9 +28,48 @@
   border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
+  position: relative;
 }
 .mobile-content-list .image img {
   width: 100%;
+}
+.mobile-content-list .image .category {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 30%;
+  border-right: 1px solid #000000;
+  border-top: 1px solid #000000;
+  background-color: darkgray;
+  padding: 5px;
+  border-top-right-radius: 5px;
+}
+.mobile-content-list .event {
+  padding: 0;
+  position: relative;
+}
+.mobile-content-list .event img {
+  width: 100%;
+}
+.mobile-content-list .event .date {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: #ffffff;
+  font-weight: bold;
+}
+.mobile-content-list .event .date .day {
+  font-size: 10vw;
+  text-align: center;
+  width: 100%;
+}
+.mobile-content-list .event .date .month {
+  font-size: 6vw;
+  text-align: center;
+  width: 100%;
+  margin-top: -8%;
 }
 .mobile-content-list .description {
   padding-right: 0;
