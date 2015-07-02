@@ -5,10 +5,10 @@ controllers.controller('Search', ['$scope', '$state', '$rootScope', 'HomeService
     HomeService.getSearchResults.query({data:$stateParams.textToSearch.toString(),specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(response){
         $scope.answer="";
         if(!response.answer) {
-            $scope.products = response.products;
-            $scope.multimedia = response.multimedia;
-            $scope.articles= response.articles;
-            $scope.calendarEv= response['calendar-events'];
+            $scope.products = response.success.products;
+            $scope.multimedia = response.success.multimedia;
+            $scope.articles= response.success.articles;
+            $scope.calendarEv= response.success['calendar-events'];
         }
         else
             $scope.answer=response.answer;

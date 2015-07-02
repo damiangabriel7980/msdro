@@ -10,11 +10,11 @@ services.factory('ContentService', ['$resource', function($resource){
 
 services.factory('SpecialFeaturesService', ['$resource', 'StorageService', function($resource, StorageService){
     return {
-        getSpecialGroups: $resource('api/specialFeatures/specialGroups', {}, {
-            query: { method: 'GET', isArray: true }
+        SpecialGroups: $resource('api/specialFeatures/specialGroups', {}, {
+            query: { method: 'GET', isArray: false }
         }),
-        getSpecialProducts: $resource('api/specialFeatures/groupSpecialProducts', {}, {
-            query: { method: 'POST', isArray: true }
+        SpecialProducts: $resource('api/specialFeatures/groupSpecialProducts', {}, {
+            query: { method: 'GET', isArray: false }
         }),
         specialApps: $resource('api/specialFeatures/specialApps', {}, {
             query: { method: 'GET', isArray: false }
@@ -87,19 +87,19 @@ services.factory('specialProductService', ['$resource', function($resource){
 
 services.factory('ProfileService', ['$resource', function($resource){
     return {
-        getUserData: $resource('api/userdata/', {}, {
+        UserData: $resource('api/userdata/', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        getCounties: $resource('api/counties/', {}, {
-            query: { method: 'GET', isArray: true }
+        Counties: $resource('api/counties/', {}, {
+            query: { method: 'GET', isArray: false }
         }),
-        getCities: $resource('api/cities/:county_name', {}, {
-            query: { method: 'GET', isArray: true }
+        Cities: $resource('api/cities/:county_name', {}, {
+            query: { method: 'GET', isArray: false }
         }),
         uploadProfile: $resource('api/userProfile/:newData', {}, {
             save: { method: 'POST'}
         }),
-        saveUserPhoto: $resource('api/user/addPhoto/:data',{},{
+        saveUserPhoto: $resource('api/user/addPhoto',{},{
             save: {method:'POST'}
         }),
         uploadJob: $resource('api/userJob/:job', {}, {

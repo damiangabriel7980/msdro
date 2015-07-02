@@ -1,11 +1,11 @@
-controllers.controller('HomeNews', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
+controllers.controller('HomeNews', ['$scope', '$rootScope', 'ContentService', '$sce', 'Error', 'Success', function($scope, $rootScope, ContentService, $sce, Error, Success) {
 
     ContentService.content.query({type: 1}).$promise.then(function (resp) {
-        $scope.noutati = resp.success;
+        $scope.noutati = Success.getObject(resp);
 
         //pagination
         $scope.maxSize = 3;
-        $scope.totalItems = resp.success.length;
+        $scope.totalItems = $scope.noutati.length;
         $scope.currentPage = 1;
         $scope.resultsPerPage = 5;
         $scope.$watch('currentPage', function () {
@@ -14,7 +14,7 @@ controllers.controller('HomeNews', ['$scope', '$rootScope', 'ContentService', '$
             $scope.noutatiFiltered = $scope.noutati.slice(beginSlice, endSlice);
         });
     }).catch(function(err){
-        console.log(err.data.error);
+        console.log(Error.getMessage(err.data));
     });
 
 }]);

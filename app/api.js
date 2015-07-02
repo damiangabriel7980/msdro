@@ -3088,14 +3088,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(imageBody && imageExtension){
                 UserModule.updateUserImage(req.user._id, imageBody, imageExtension).then(
                     function (image_path) {
-                        res.json({"type":"success", "message": "Fotografia a fost actualizata cu succes!"});
+                        handleSuccess(res,{type:success}, 11);
                     },
                     function (err) {
-                        logger.error(err);
-                        res.json({"type":"danger", "message":"A aparut o eroare la modificarea fotografiei"});
+                        handleError(res,err,500);
                     });
             }else{
-                res.json({"type":"danger", "message":"Parametrii invalizi"});
+                handleError(res,null,400,6);
             }
         });
 
@@ -3104,26 +3103,25 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function(req, res) {
             UserGroup.find({_id: {$in: req.user.groupsID}, content_specific: {$exists:true, $ne: false}}, function(err, groups) {
                 if(err) {
-                    res.send(err);
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.json(groups);
+                    handleSuccess(res,groups);
                 }
 
             });
         });
     router.route('/specialFeatures/groupSpecialProducts')
-        .post(function(req, res) {
-            var data = [mongoose.Types.ObjectId(req.body.specialGroup.toString())];
-            
+        .get(function(req, res) {
+            var data = [mongoose.Types.ObjectId(req.query.specialGroup.toString())];
             specialProduct.find({groups: {$in: data}, enabled: true}, function(err, product) {
                 if(err) {
-                    res.send(err);
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.json(product);
+                    handleSuccess(res,product);
                 }
             });
         });
@@ -3134,22 +3132,22 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 var group = ObjectId(req.query.group);
                 specialApps.find({groups: {$in: [group]}, isEnabled: true}).exec(function (err, apps) {
                     if(err){
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: apps});
+                        handleSuccess(res,apps);
                     }
                 });
             }else if(req.query.id){
                 var id = ObjectId(req.query.id);
                 specialApps.findOne({_id: id}).exec(function (err, app) {
                     if(err){
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: app});
+                        handleSuccess(res,app);
                     }
                 });
             }else{
-                res.send({error: "Invalid query params"});
+                handleError(res,null,400,6);
             }
         });
 
@@ -3158,12 +3156,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function(req, res) {
             specialProduct.findOne({_id: req.query.id}).populate('speakers').exec(function(err, product) {
                 if(err || !product) {
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.send({success: product});
+                    handleSuccess(res,product);
                 }
             });
         });
@@ -3173,16 +3170,16 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             specialProductMenu.distinct('children_ids', function (err,allChildren) {
                 if(err)
                 {
-                    res.send({error:err});
+                    handleError(res,err,500);
                 }
                 else{
                     specialProductMenu.find({product: id,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
                         if(err) {
-                            res.send({error:err});
+                            handleError(res,err,500);
                         }
                         else
                         {
-                            res.json({success:details});
+                            handleSuccess(res,details);
                         }
                     });
                 }
@@ -3194,11 +3191,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var id = mongoose.Types.ObjectId(req.query.id.toString());
             specialProductMenu.findOne({_id: id}).exec(function(err, details) {
                 if(err) {
-                    res.send({error:err});
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.json({success:details});
+                    handleSuccess(res,details);
                 }
             });
         });
@@ -3207,11 +3204,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var id = mongoose.Types.ObjectId(req.query.id.toString());
             specialProductFiles.find({product: id}).exec(function(err, details) {
                 if(err) {
-                    res.send({error:err});
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.json({success:details});
+                    handleSuccess(res,details);
                 }
             });
         });
@@ -3220,11 +3217,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var id = mongoose.Types.ObjectId(req.query.id.toString());
             specialProductGlossary.find({product: id}).exec(function(err, details) {
                 if(err) {
-                    res.send({error:err});
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.json({success:details});
+                    handleSuccess(res,details);
                 }
             });
         });
@@ -3234,10 +3231,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var speaker_id = ObjectId(req.query.speaker_id);
             Speakers.findOne({_id: speaker_id}, function (err, speaker) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: speaker});
+                    handleSuccess(res,speaker);
                 }
             });
         });
@@ -3252,27 +3248,27 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                         Content.find({_id:req.query.content_id, groupsID: { $in: forGroups}}, function(err, cont) {
                             if(err) {
-                                res.send({error:err});
+                                handleError(res,err,500);
                             }
                             if(cont[0]){
-                                res.json({success:cont[0]});
+                                handleSuccess(res,cont[0]);
                             }else{
-                                res.json(null);
+                                handleError(res,null,404,1);
                             }
                         })
                     },
                     function (err) {
-                        res.send({error:err});
+                        handleError(res,err,500);
                     });
             }else{
                 var cType = req.query.content_type;
                 var specialGroupSelected = req.query.specialGroupSelected;
                 getUserContent(req.user, cType, specialGroupSelected, null, 'created').then(
                     function (content) {
-                        res.json({success:content});
+                        handleSuccess(res,content);
                     },
                     function (err) {
-                        res.send({error:err});
+                        handleError(res,err,500);
                     });
             }
         });
@@ -3282,7 +3278,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function(req, res) {
             User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID +address +practiceType +title").populate('therapeutic-areasID').exec(function (err, user) {
                 if(err){
-                    res.send(err);
+                    handleError(res,err,500);
                 }else{
                     var userCopy = JSON.parse(JSON.stringify(user));
                     async.parallel([
@@ -3326,11 +3322,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                     ], function (err, results) {
                         if(err){
-                            console.log(err);
-                            res.send(err);
+                            handleError(res,err,500);
                         }else{
-                            
-                            res.json(userCopy);
+                            handleSuccess(res,userCopy);
                         }
                     });
                 }
@@ -3342,9 +3336,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function(req, res) {
             Counties.find({$query:{}, $orderby: {name: 1}}, {name: 1}, function (err, cont) {
                 if(err) {
-                    res.send(err);
-                }
-                res.json(cont);
+                    handleError(res,err,500);
+                }else
+                    handleSuccess(res,cont);
             });
         });
 
@@ -3353,13 +3347,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function(req, res) {
             Counties.find({name: req.params.county_name}, function (err, counties) {
                 if(err) {
-                    res.send(err);
+                    handleError(res,err,500);
                 }
                 Cities.find({_id: {$in: counties[0].citiesID}}, function (err, cities) {
                     if(err) {
-                        res.send(err);
-                    }
-                    res.json(cities);
+                        handleError(res,err,500);
+                    }else
+                        handleSuccess(res,cities);
                 });
             });
         });
@@ -3374,29 +3368,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$');
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
             if((!namePatt.test(newData.name))){ //check name
-                ans.error = true;
-                ans.message = "Numele trebuie sa contina doar caractere, minim 3";
-                res.json(ans);
+                handleError(res,null,400,26);
             }else if(newData.phone && !phonePatt.test(newData.phone)){ //check phone number
-                ans.error = true;
-                ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
-                res.json(ans);
+                handleError(res,null,400,27);
             }else if(!newData.address){
-                ans.error = true;
-                ans.message = "Adresa este obligatorie";
-                res.json(ans);
+                handleError(res,null,400,28);
             }else{
-                
                 User.update({_id: req.user._id}, {$set: newData}, function (err, wres) {
                     if(err){
-                        logger.error(err);
-                        ans.error = true;
-                        ans.message = "Eroare la actualizare. Verificati datele";
+                        handleError(res,err,500);
                     }else{
-                        ans.error = false;
-                        ans.message = "Datele au fost modificate";
+                        handleSuccess(res, {}, 12);
                     }
-                    res.json(ans);
                 });
             }
         });
@@ -3404,7 +3387,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/userJob')
 
         .post(function (req, res) {
-            var ans = {error:false};
             var job = req.body.job;
             var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$');
             var numberPatt = new XRegExp('^[a-zA-Z0-9-\\s]{1,5}$');
@@ -3422,16 +3404,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             //}
             if(!isNaN(parseInt(job.job_type))){
                 if(parseInt(job.job_type)<1 || parseInt(job.job_type>4)){
-                    ans.error = true;
-                    ans.message = "Selectati un tip de loc de munca";
+                    handleError(res,null,400,29);
                 }
             }else{
-                ans.error = true;
-                ans.message = "Selectati un tip de loc de munca";
+                handleError(res,null,400,29);
             }
-            if(ans.error){
-                res.json(ans);
-            }else{
                 if(job._id==0){
                     //create new
                     var newJob = new Job({
@@ -3444,21 +3421,16 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
                     newJob.save(function (err, inserted) {
                         if(err){
-                            ans.error = true;
-                            ans.message = "Eroare la crearea locului de munca. Va rugam verificati campurile!";
-                            res.json(ans);
+                            handleError(res,null,400,2);
                         }else{
                             //update user to point to new job
                             var idInserted = inserted._id.toString();
                             var upd = User.update({_id:req.user._id}, {jobsID: [idInserted]}, function () {
                                 if(!upd._castError){
-                                    ans.error = false;
-                                    ans.message = "Locul de munca a fost salvat";
+                                    handleSuccess(res, {}, 12);
                                 }else{
-                                    ans.error = true;
-                                    ans.message = "Eroare la adaugarea locului de munca. Va rugam sa verificati datele!";
+                                    handleError(res,null,400,2);
                                 }
-                                res.json(ans);
                             });
                         }
                     });
@@ -3473,16 +3445,12 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         job_address: job.job_address
                     }, function () {
                         if(!upd._castError){
-                            ans.error = false;
-                            ans.message = "Locul de munca a fost adaugat";
+                            handleSuccess(res, {}, 12);
                         }else{
-                            ans.error = true;
-                            ans.message = "Eroare la adaugarea locului de munca. Va rugam sa verificati datele";
+                            handleError(res,null,400,2);
                         }
-                        res.json(ans);
                     });
                 }
-            }
         });
 
     router.route('/changePassword')
@@ -3491,45 +3459,31 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var userData = req.body.userData;
             User.findOne({_id: req.user._id}).select("+password").exec(function (err, user) {
                 if(err || !user){
-                    ans.error = true;
-                    ans.message = "Utilizatorul nu a fost gasit!";
-                    res.json(ans);
+                    handleError(res,err,500);
                 }else{
                     //check if password is correct
                     if(SHA256(userData.oldPass).toString() !== user.password){
-                        ans.error = true;
-                        ans.message = "Parola nu este corecta!";
-                        res.json(ans);
+                        handleError(res,null,400,8);
                     }else{
                         if(SHA256(userData.newPass).toString() === user.password)
                         {
-                            ans.error = true;
-                            ans.message = "Introduceti o parola diferita fata de cea veche!";
-                            res.json(ans);
+                            handleError(res,null,400,9);
                         }
                         else
                         {
                             if(userData.newPass.toString().length < 6 || userData.newPass.toString.length > 32){
-                                ans.error = true;
-                                ans.message = "Parola noua trebuie sa contina intre 6 si 32 de caractere";
-                                res.json(ans);
+                                handleError(res,null,400,10);
                             }else{
                                 //check if passwords match
                                 if(userData.newPass !== userData.confirmPass){
-                                    ans.error = true;
-                                    ans.message = "Parolele nu corespund";
-                                    res.json(ans);
+                                    handleError(res,null,400,11);
                                 }else{
                                     //change password
                                     var upd = User.update({_id: user._id}, {password: SHA256(userData.newPass).toString()}, function (err, wres) {
                                         if(!err){
-                                            ans.error = false;
-                                            ans.message = "Parola a fost schimbata";
-                                            res.json(ans);
+                                            handleSuccess(res, {}, 13);
                                         }else{
-                                            ans.error = true;
-                                            ans.message = "Eroare la schimbarea parolei";
-                                            res.json(ans);
+                                            handleError(res,err,500);
                                         }
                                     });
                                 }
@@ -3548,21 +3502,19 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(req.query.specialGroupSelected){
                         forGroups.push(req.query.specialGroupSelected.toString());
                     }
-
                     //get allowed articles for user
                     Content.find({groupsID: {$in: forGroups},enable:true}, {_id: 1}, function (err, content) {
                         if(err){
-                            res.send({error:err});
+                            handleError(res,err,500);
                         }else{
                             //get ids of allowed articles
                             getIds(content).then(function (ids) {
                                 //get carousel content within allowed articles
                                 Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
                                     if(err){
-                                        res.send({error:err});
+                                        handleError(res,err,500);
                                     }else{
-                                        console.log(res.statusCode);
-                                        res.send({success:images});
+                                        handleSuccess(res, images);
                                     }
                                 })
                             });
@@ -3570,7 +3522,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
                 },
                 function (err) {
-                    res.send({error:err});
+                    handleError(res,err,500);
                 });
         });
     router.route('/userHomeSearch/')
@@ -3608,8 +3560,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
                             if(err)
                             {
-                                res.json(err);
-                                return;
+                                handleError(res,err,500);
                             }
                             else
                             {
@@ -3628,13 +3579,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
                     }, function (err) {
                         if(err)
-                            res.json(err);
+                            handleError(res,err,500);
                         else
                         {
                             if(checker===4)
-                                res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
+                                handleSuccess(res,{},14);
                             else{
-                                res.json(ObjectOfResults);
+                                handleSuccess(res, ObjectOfResults);
                             }
 
                         }
@@ -3642,7 +3593,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     })
                 },
                 function (err) {
-                    res.send(err);
+                    handleError(res,err,500);
                 });
         });
     router.route('/userHomeEvents')
@@ -3655,14 +3606,14 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                     Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: true}).sort({start: 1}).exec(function (err, events) {
                         if(err){
-                            res.send({error:err});
+                            handleError(res,err,500);
                         }else{
-                            res.json({success:events});
+                            handleSuccess(res, events);
                         }
                     });
                 },
                 function (err) {
-                    res.send({error:err});
+                    handleError(res,err,500);
                 });
         });
 
@@ -3676,14 +3627,14 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                     Multimedia.find({groupsID: {$in: forGroups}, enable: {$ne: false}}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
                         if(err){
-                            res.send({error:err});
+                            handleError(res,err,500);
                         }else{
-                            res.json({success:multimedia});
+                            handleSuccess(res, multimedia);
                         }
                     });
                 },
                 function (err) {
-                    res.send({error:err});
+                    handleError(res,err,500);
                 });
         });
 
@@ -3693,18 +3644,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.scientific){
                 getUserContent(req.user, 3, specialGroupSelected, 4, "created").then(
                     function (cont) {
-                        res.json({success:cont});
+                        handleSuccess(res, cont);
                     },
                     function (err) {
-                        res.send({error:err});
+                        handleError(res,err,500);
                     });
             }else{
                 getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "created").then(
                     function (cont) {
-                        res.json({success:cont});
+                        handleSuccess(res, cont);
                     },
                     function (err) {
-                        res.send({error:err});
+                        handleError(res,err,500);
                     });
             }
         });
@@ -3719,24 +3670,23 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(req.query.idProduct){
                         Products.findOne({_id: req.query.idProduct, groupsID: {$in: groups}}, function(err, cont) {
                             if(err) {
-                                res.send({error: err});
+                                handleError(res,err,500);
                             }else{
-                                res.send({success: cont});
+                                handleSuccess(res, cont);
                             }
                         })
                     }else if(req.query.idArea && req.query.idArea != 0){
                         Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function(err, areas){
                             if(err){
-                                logger.error(err);
-                                res.send({error: true});
+                                handleError(res,err,500);
                             }else{
                                 var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}};
                                 if(req.query.firstLetter) q["name"] = new XRegExp("^"+req.query.firstLetter, "i");
                                 Products.find(q, function(err, cont) {
                                     if(err) {
-                                        res.send({error: err});
+                                        handleError(res,err,500);
                                     }else{
-                                        res.send({success: cont});
+                                        handleSuccess(res, cont);
                                     }
                                 })
                             }
@@ -3747,16 +3697,15 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(req.query.firstLetter) q["name"] = new XRegExp("^"+req.query.firstLetter, "i");
                         Products.find(q, function(err, cont) {
                             if(err){
-                                res.send({error:err});
+                                handleError(res,err,500);
                             }else{
-                                res.send({success:cont});
+                                handleSuccess(res, cont);
                             }
                         })
                     }
                 },
                 function (err) {
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }
             );
         });
@@ -3771,26 +3720,26 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(req.query.id){
                     Events.findById(req.query.id,function(err, cont) {
                         if(err) {
-                            res.send({error:err});
+                            handleError(res,err,500);
                         }else{
-                            res.json({success: cont});
+                            handleSuccess(res, cont);
                         }
                     });
                 }
                 else{
                     Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
                         if (err) {
-                            res.send({error:err});
+                            handleError(res,err,500);
                         }
                         else
                         {
-                            res.json({success: cont});
+                            handleSuccess(res, cont);
                         }
 
                     })
                 }
             }, function (err) {
-                res.send(err);
+                handleError(res,err,500);
             })
         });
     router.route('/multimedia')
@@ -3810,12 +3759,10 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         if(req.query.idMultimedia){
                             Multimedia.findById(req.query.idMultimedia,function(err, cont) {
                                 if(err) {
-                                    console.log(err);
-                                    res.json({error:err});
+                                    handleError(res,err,500);
                                 }
                                 else{
-                                    console.log(cont);
-                                    res.json({success:cont});
+                                    handleSuccess(res, cont);
                                 }
                             });
                         }else{
@@ -3823,9 +3770,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             {
                                 Multimedia.find(findObj, function (err, multimedia) {
                                     if (err) {
-                                        res.json({error:err});
+                                        handleError(res,err,500);
                                     } else {
-                                        res.json({success:multimedia});
+                                        handleSuccess(res, multimedia);
                                     }
                                 });
                             }
@@ -3841,9 +3788,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                                 findObj['therapeutic-areasID'] = {$in: ids};
                                                 Multimedia.find(findObj, function (err, multimedia) {
                                                     if (err) {
-                                                        res.json({error:err});
+                                                        handleError(res,err,500);
                                                     } else {
-                                                        res.json({success:multimedia});
+                                                        handleSuccess(res, multimedia);
                                                     }
                                                 });
                                             })
@@ -3853,9 +3800,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     {
                                         Multimedia.find(findObj, function (err, multimedia) {
                                             if (err) {
-                                                res.json({error:err});
+                                                handleError(res,err,500);
                                             } else {
-                                                res.json({success:multimedia});
+                                                handleSuccess(res, multimedia);
                                             }
                                         });
                                     }
@@ -3864,39 +3811,10 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                     },
                     function (err) {
-                        res.send({error:err});
+                        handleError(res,err,500);
                     })
             }
         });
-    router.route('/user')
-        .get(function(req,res){
-            User.find(function (error, result) {
-                if (error) {
-                    res.send(error);
-                    return ;
-                } else {
-                    //
-                    res.json(result);
-                }
-            });
-        })
-        .put(function(req, res) {
-        User.findOne({ username :  {$regex: "^"+req.user.username.replace(/\+/g,"\\+")+"$", $options: "i"}},function(err,usr){
-            if(err) {
-                logger.error(err);
-                res.send(err)
-            }
-            else {
-                //
-                usr.points += req.body.score;
-                req.user.points=usr.points;
-                usr.save(function(err){
-                    if(err)
-                        res.send(err);
-                })
-            }
-        }) ;
-    });
 
     //============================================ intro presentations
 
@@ -3904,10 +3822,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: true}).exec(function (err, presentation) {
                 if(err){
-                    console.log(err);
-                    res.send({error: err});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: presentation});
+                    handleSuccess(res, presentation);
                 }
             });
         });
@@ -3915,11 +3832,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/rememberIntroView')
         .get(function(req,res){
             var viewStatus = SessionStorage.getElement(req, "viewedIntroPresentations") || {};
-            res.send({
-                success: {
-                    isViewed: viewStatus[req.query.groupID]
-                }
-            });
+            handleSuccess(res,{isViewed: viewStatus[req.query.groupID]});
         })
         .post(function(req,res){
             var viewStatus = SessionStorage.getElement(req, "viewedIntroPresentations") || {};
@@ -3932,10 +3845,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: true}).exec(function (err, presentation) {
                 if(err){
-                    console.log(err);
-                    res.send({error: err});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: presentation});
+                    handleSuccess(res, presentation);
                 }
             });
         });

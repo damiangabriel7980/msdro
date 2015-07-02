@@ -1,17 +1,17 @@
 controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', '$timeout', 'CollectionsService', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state, $timeout, CollectionsService){
 
-    SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
-        if (resp.length != 0) {
-            $rootScope.specialGroups = resp;
+    SpecialFeaturesService.SpecialGroups.query().$promise.then(function (resp) {
+        if (resp.success.length != 0) {
+            $rootScope.specialGroups = resp.success;
             var selectedGroup = SpecialFeaturesService.specialGroups.getSelected();
             if (selectedGroup) {
-                if(CollectionsService.findById(selectedGroup._id, resp)){
+                if(CollectionsService.findById(selectedGroup._id, resp.success)){
                     $scope.selectSpecialGroup(selectedGroup);
                 }else{
-                    $scope.selectSpecialGroup(resp[0]);
+                    $scope.selectSpecialGroup(resp.success[0]);
                 }
             } else {
-                $scope.selectSpecialGroup(resp[0]);
+                $scope.selectSpecialGroup(resp.success[0]);
             }
         }else{
             $scope.unselectSpecialGroup();
@@ -27,9 +27,9 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
             SpecialFeaturesService.specialGroups.setSelected(group);
 
             //load group's product page
-            SpecialFeaturesService.getSpecialProducts.query({specialGroup: group._id}).$promise.then(function(result){
-                if(result.length!=0){
-                    $scope.groupProduct = result;
+            SpecialFeaturesService.SpecialProducts.query({specialGroup: group._id}).$promise.then(function(result){
+                if(result.success.length!=0){
+                    $scope.groupProduct = result.success;
                 }else{
                     $scope.groupProduct = null;
                 }

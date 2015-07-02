@@ -1,9 +1,9 @@
-controllers.controller('ArticlesDetail', ['$scope', '$rootScope', 'ContentService', '$sce', '$stateParams', function($scope, $rootScope, ContentService, $sce, $stateParams) {
+controllers.controller('ArticlesDetail', ['$scope', '$rootScope', 'ContentService', '$sce', '$stateParams', 'Error', 'Success', function($scope, $rootScope, ContentService, $sce, $stateParams, Error, Success) {
 
     ContentService.content.query({id: $stateParams.id}).$promise.then(function (resp) {
-        $scope.currentArticle = resp.success;
+        $scope.currentArticle = Success.getObject(resp);
     }).catch(function(err){
-        console.log(err.data.error);
+        console.log(Error.getMessage(err.data));
     });
 
 }]);
