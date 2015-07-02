@@ -7057,10 +7057,14 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .navbarMedic .navbar-collapse .navbar-nav.navbarMenu {
   padding-top: 4px;
 }
-@media (min-width: 768px) {
+.navbarMedic .navbar-collapse .navbar-nav li.mobileLink {
+  visibility: hidden;
+  display: none;
+}
+@media (max-width: 768px) {
   .navbarMedic .navbar-collapse .navbar-nav li.mobileLink {
-    visibility: hidden;
-    display: none;
+    visibility: visible;
+    display: block;
   }
 }
 .navbarMedic .navbar-collapse .navbar-nav li.mobileLink.dividerTop:after {

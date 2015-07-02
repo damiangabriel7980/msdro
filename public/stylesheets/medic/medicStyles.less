@@ -650,9 +650,11 @@ body{
       }
       li{
         &.mobileLink{
-          @media (min-width: @screen-sm-min) {
-            visibility: hidden;
-            display: none;
+          visibility: hidden;
+          display: none;
+          @media (max-width: @screen-sm) {
+            visibility: visible;
+            display: block;
           }
           &.dividerTop{
             &:after{
