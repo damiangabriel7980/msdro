@@ -6444,6 +6444,7 @@ body .btn {
 }
 .productDetails .imageAndRCP .btn {
   margin-top: 10px;
+  width: 100%;
 }
 .productDetails .imageAndRCP hr {
   margin-top: 10px;
