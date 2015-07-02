@@ -232,6 +232,12 @@ app.run(
                 $rootScope.$apply();
             };
 
+            //state events
+            $rootScope.$on('$stateChangeSuccess',
+                function(){
+                    window.scrollTo(0,0);
+                });
+
             //============================================================================= expose global functions
             $rootScope.trustAsHtml = Utils.trustAsHtml;
             $rootScope.htmlToPlainText = Utils.htmlToPlainText;

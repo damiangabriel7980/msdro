@@ -214,6 +214,12 @@ app.run(
                     });
             };
 
+            //state events
+            $rootScope.$on('$stateChangeSuccess',
+                function(){
+                    window.scrollTo(0,0);
+                });
+
 //            $rootScope.$on('$locationChangeStart', function (event) {
 //                console.log("change");
 //                console.log($location.host());
