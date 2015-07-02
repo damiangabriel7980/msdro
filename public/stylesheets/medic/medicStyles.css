@@ -6582,6 +6582,9 @@ body .btn {
     font-size: 13px;
   }
 }
+.eventDetails .modal-body .details .date .label {
+  padding: 0.2em 0.6em;
+}
 .eventDetails .modal-body .details .description {
   width: 100%;
   float: left;
