@@ -1,10 +1,12 @@
-controllers.controller('DisplayFeatures', ['$scope', '$rootScope', '$stateParams', '$sce', 'SpecialFeaturesService', function($scope, $rootScope, $stateParams, $sce, SpecialFeaturesService){
+controllers.controller('DisplayFeatures', ['$scope', '$rootScope', '$stateParams', '$sce', 'SpecialFeaturesService', 'Success', 'Error', function($scope, $rootScope, $stateParams, $sce, SpecialFeaturesService, Success, Error){
 
     //get feature url
     SpecialFeaturesService.specialApps.query({id: $stateParams.specialApp}).$promise.then(function (resp) {
-        if(resp.success){
-            $scope.featureSrc = $sce.trustAsResourceUrl(resp.success.url);
+        if(Success.getObject(resp)){
+            $scope.featureSrc = $sce.trustAsResourceUrl(Success.getObject(resp).url);
         }
-    })
+    }).catch(function(err){
+       console.log(Error.getMessage(err.data));
+    });
 
 }]);

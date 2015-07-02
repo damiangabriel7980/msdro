@@ -3583,7 +3583,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         else
                         {
                             if(checker===4)
-                                handleSuccess(res,{},14);
+                                handleSuccess(res,{isEmpty: true},14);
                             else{
                                 handleSuccess(res, ObjectOfResults);
                             }

@@ -1,17 +1,19 @@
 /**
  * Created by miricaandrei23 on 07.01.2015.
  */
-controllers.controller('Search', ['$scope', '$state', '$rootScope', 'HomeService', '$sce','$animate','$stateParams','$window','$timeout', function($scope, $state, $rootScope, HomeService, $sce,$animate,$stateParams,$window,$timeout) {
+controllers.controller('Search', ['$scope', '$state', '$rootScope', 'HomeService', '$sce','$animate','$stateParams','$window','$timeout', 'Success', 'Error', function($scope, $state, $rootScope, HomeService, $sce,$animate,$stateParams,$window,$timeout,Success,Error) {
     HomeService.getSearchResults.query({data:$stateParams.textToSearch.toString(),specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(response){
-        $scope.answer="";
-        if(!response.answer) {
-            $scope.products = response.success.products;
-            $scope.multimedia = response.success.multimedia;
-            $scope.articles= response.success.articles;
-            $scope.calendarEv= response.success['calendar-events'];
+        $scope.answer = "";
+        if(!Success.getObject(response).isEmpty) {
+            $scope.products = Success.getObject(response).products;
+            $scope.multimedia = Success.getObject(response).multimedia;
+            $scope.articles= Success.getObject(response).articles;
+            $scope.calendarEv= Success.getObject(response)['calendar-events'];
         }
         else
-            $scope.answer=response.answer;
+            $scope.answer = Success.getMessage(response);
+    }).catch(function(err){
+        console.log(Error.getMessage(err.data));
     });
     $scope.sref=function(artType){
         if(artType < 3)

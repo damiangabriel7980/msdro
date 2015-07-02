@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce','$upload','$timeout', '$state', 'Utils', 'IntroService', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce,$upload,$timeout,$state, Utils, IntroService){
+controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce','$upload','$timeout', '$state', 'Utils', 'IntroService', 'Success', 'Error', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce,$upload,$timeout,$state, Utils, IntroService, Success, Error){
 
     //===================================================================== init variables
     var imagePre = $rootScope.pathAmazonDev;
@@ -76,13 +76,15 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
                     $scope.resetAlert("Fotografia se incarca...", "warning");
                     Utils.fileToBase64($files[0], function (result) {
                         ProfileService.saveUserPhoto.save({data:{Body: result, extension: extension}}).$promise.then(function (response) {
-                            if(response.message){
-                                $scope.resetAlert(response.message, response.success.type);
+                                $scope.resetAlert(Success.getMessage(result), Success.getObject(result).type);
                                 $scope.imageUser = "";
                                 ProfileService.UserData.query().$promise.then(function (resp) {
-                                    $scope.imageUser = imagePre + resp.success.image_path;
+                                    $scope.imageUser = imagePre + Success.getObject(result).image_path;
+                                }).catch(function(err){
+                                    console.log(Error.getMessage(err.data));
                                 });
-                            }
+                        }).catch(function(err){
+                            console.log(Error.getMessage(err.data));
                         });
                     });
                 }
@@ -108,13 +110,15 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
         $scope.$watch('county.selected', function () {
             if($scope.county.selected!==undefined){
                 ProfileService.Cities.query({county_name:$scope.county.selected.name}).$promise.then(function (resp) {
-                    $scope.cities = resp.success.sort(function(a,b){
+                    $scope.cities = Success.getObject(resp).sort(function(a,b){
                         if ( a.name < b.name )
                             return -1;
                         if ( a.name > b.name )
                             return 1;
                         return 0;
                     });
+                }).catch(function(errCities){
+                    console.log(Error.getMessage(errCities.data));
                 });
                 if(!cityDefault) $scope.city.selected = undefined;
                 cityDefault = false;
@@ -122,16 +126,22 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
             }
         });
 
+    }).catch(function(errUserData){
+        console.log(Error.getMessage(errUserData.data));
     });
 
     // get counties and cities
     ProfileService.Counties.query().$promise.then(function (counties) {
-        $scope.counties = counties.success;
+        $scope.counties = Success.getObject(counties);
+    }).catch(function(errCounties){
+        console.log(Error.getMessage(errCounties.data));
     });
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
     therapeuticAreas.areas.query().$promise.then(function (resp) {
-        $scope.allAreas = resp.success;
+        $scope.allAreas = Success.getObject(resp);
+    }).catch(function(errAreas){
+        console.log(Error.getMessage(errAreas.data));
     });
 
     //------------------------------------------------------------------------------------------------ form submissions
@@ -153,13 +163,13 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
             toSend.subscriptions = this.userData.subscriptions;
             toSend.practiceType = this.userData.practiceType;
             ProfileService.uploadProfile.save({newData:toSend}).$promise.then(function (resp) {
-                $scope.userProfileAlert.message = resp.message;
+                $scope.userProfileAlert.message = Success.getMessage(resp);
                 $scope.userProfileAlert.type = "success";
                 $scope.userProfileAlert.newAlert = true;
             }).catch(function(err){
                 $scope.userProfileAlert.type = "danger";
                 $scope.userProfileAlert.newAlert = true;
-                $scope.userProfileAlert.message = err.data.error;
+                $scope.userProfileAlert.message = Error.getMessage(err.data);
             });
         }
         else
@@ -176,13 +186,13 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
         if(isValid){
             this.job['job_type'] = this.selectedJob;
             ProfileService.uploadJob.save({job: this.job}).$promise.then(function (resp) {
-                $scope.userJobAlert.message = resp.message;
-                if(resp.error){
-                    $scope.userJobAlert.type = "danger";
-                }else{
-                    $scope.userJobAlert.type = "success";
-                }
+                $scope.userJobAlert.message = Success.getMessage(resp);
+                 $scope.userJobAlert.type = "success";
                 $scope.userJobAlert.newAlert = true;
+            }).catch(function(errJob){
+                $scope.userJobAlert.type = "danger";
+                $scope.userJobAlert.newAlert = true;
+                $scope.userJobAlert.message = Error.getMessage(errJob.data);
             });
         }
         else
@@ -201,13 +211,13 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
             toSend.mail = $scope.username;
             toSend.pass = this.changePass;
             ProfileService.changeEmail.save({userData: toSend}).$promise.then(function (resp) {
-                $scope.userChangeMailAlert.message = resp.message;
-                if(resp.error){
-                    $scope.userChangeMailAlert.type = "danger";
-                }else{
-                    $scope.userChangeMailAlert.type = "success";
-                }
+                $scope.userChangeMailAlert.message = Success.getMessage(resp);
+                $scope.userChangeMailAlert.type = "success";
                 $scope.userChangeMailAlert.newAlert = true;
+            }).catch(function(errEmail){
+                $scope.userChangeMailAlert.type = "danger";
+                $scope.userChangeMailAlert.newAlert = true;
+                $scope.userChangeMailAlert.message = Error.getMessage(errEmail.data);
             });
         }
         else
@@ -228,13 +238,13 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
             toSend.newPass = this.newPass;
             toSend.confirmPass = this.confirmPass;
             ProfileService.changePassword.save({userData: toSend}).$promise.then(function (resp) {
-                $scope.userChangePassAlert.message = resp.message;
-                if(resp.error){
-                    $scope.userChangePassAlert.type = "danger";
-                }else{
-                    $scope.userChangePassAlert.type = "success";
-                }
+                $scope.userChangePassAlert.message = Success.getMessage(resp);
+                $scope.userChangePassAlert.type = "success";
                 $scope.userChangePassAlert.newAlert = true;
+            }).catch(function(errPass){
+                $scope.userChangePassAlert.type = "danger";
+                $scope.userChangePassAlert.newAlert = true;
+                $scope.userChangePassAlert.message = Error.getMessage(errPass.data);
             });
         }
         else

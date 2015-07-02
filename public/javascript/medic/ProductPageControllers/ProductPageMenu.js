@@ -1,4 +1,4 @@
-controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce', '$timeout', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce, $timeout){
+controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce', '$timeout', 'Success', 'Error', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce, $timeout,Success,Error){
     var loadData = function () {
         if($scope.$parent){
             if(!$scope.$parent.specialProductPage || !$scope.$parent.specialProductMenu){
@@ -8,8 +8,10 @@ controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams
                     $scope.selectFirstMenuItem();
                 }else{
                     specialProductService.SpecialProductDescription.query({id:$stateParams.childId?$stateParams.childId:$stateParams.menuId}).$promise.then(function(resp){
-                        $scope.specialProductDescription = resp.success;
-                        $scope.$parent.mobileMenuTitle= resp.success.title;
+                        $scope.specialProductDescription = Success.getObject(resp);
+                        $scope.$parent.mobileMenuTitle= Success.getObject(resp).title;
+                    }).catch(function(err){
+                        console.log(Error.getMessage(err.data));
                     });
                 }
             }

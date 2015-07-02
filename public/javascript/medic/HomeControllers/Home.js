@@ -1,4 +1,4 @@
-controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state','$anchorScroll', 'Utils', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state,$anchorScroll, Utils) {
+controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state','$anchorScroll', 'Utils', 'Success', 'Error', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state,$anchorScroll, Utils,Success,Error) {
 
     $scope.monthsArray = Utils.getMonthsArray();
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
@@ -53,24 +53,34 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
        //------------------------------------------------------------------------------------------------- get all content
 
     HomeService.events.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.events = resp.success;
+        $scope.events = Success.getObject(resp);
+    }).catch(function(errEvents){
+        console.log(Error.getMessage(errEvents.data));
     });
     HomeService.news.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.news = resp.success;
+        $scope.news = Success.getObject(resp);
+    }).catch(function(errNews){
+        console.log(Error.getMessage(errNews.data));
     });
     HomeService.news.query({scientific:true,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.scientificNews = resp.success;
+        $scope.scientificNews = Success.getObject(resp);
+    }).catch(function(errScience){
+        console.log(Error.getMessage(errScience.data));
     });
     HomeService.multimedia.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.multimedia = resp.success;
+        $scope.multimedia = Success.getObject(resp);
+    }).catch(function(errMultimedia){
+        console.log(Error.getMessage(errMultimedia.data));
     });
 
     HomeService.carousel.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
-        $scope.HomeCarousel=resp.success;
+        $scope.HomeCarousel = Success.getObject(resp);
         if($scope.HomeCarousel[0]){
-            $scope.firstIllusion=resp.success[$scope.HomeCarousel.length-1];
-            $scope.lastIllusion=resp.success[0];
+            $scope.firstIllusion=Success.getObject(resp)[$scope.HomeCarousel.length-1];
+            $scope.lastIllusion=Success.getObject(resp)[0];
         }
+    }).catch(function(errCarousel){
+        console.log(Error.getMessage(errCarousel.data));
     });
     //------------------------------------------------------------------------------------------------ useful functions
 

@@ -7,7 +7,7 @@
  *
  * @requires $scope
  * */
-controllers.controller('ProductsView', ['$scope', '$state', '$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', function($scope, $state, $rootScope,ProductService,$stateParams,$sce,$window,$timeout){
+controllers.controller('ProductsView', ['$scope', '$state', '$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', 'Success', 'Error', function($scope, $state, $rootScope,ProductService,$stateParams,$sce,$window,$timeout,Success,Error){
     window.scrollTo(0,0);
     $scope.lmt=8;
     $scope.status = {
@@ -34,8 +34,10 @@ controllers.controller('ProductsView', ['$scope', '$state', '$rootScope' ,'Produ
                 firstLetter: letter
             })
             .$promise.then(function(result){
-                $scope.products = result.success;
-                if(!letter) refreshLetters(result.success);
+                $scope.products = Success.getObject(result);
+                if(!letter) refreshLetters(Success.getObject(result));
+            }).catch(function(err){
+                console.log(Error.getMessage(err.data));
             });
     };
     $scope.getProducts();

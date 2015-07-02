@@ -1,7 +1,9 @@
-controllers.controller('PresentationModal', ['$scope', '$rootScope', '$sce', '$modal','$timeout','$state','$modalInstance','IntroService', 'groupID', function($scope, $rootScope, $sce, $modal,$timeout,$state,$modalInstance,IntroService,groupID) {
+controllers.controller('PresentationModal', ['$scope', '$rootScope', '$sce', '$modal','$timeout','$state','$modalInstance','IntroService', 'groupID', 'Success', 'Error', function($scope, $rootScope, $sce, $modal,$timeout,$state,$modalInstance,IntroService,groupID,Success,Error) {
 
     IntroService.presentation.query({groupID: groupID}).$promise.then(function (resp) {
-        $scope.presentation = resp.success;
+        $scope.presentation = Success.getObject(resp);
+    }).catch(function(err){
+        console.log(Error.getMessage(err.data));
     });
 
     $scope.changeStatus=function(){
