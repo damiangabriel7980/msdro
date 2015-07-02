@@ -1528,18 +1528,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 Events.findOne({_id: req.query.id}).select('-listconferences').populate('groupsID').exec(function (err, event) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: event});
+                        handleSuccess(res, event);
                     }
                 });
             }else{
                 Events.find({}, function (err, events) {
                     if(err){
-                        res.send({error: "Could not find events"});
+                        handleError(res,err);
                     }else{
-                        res.send({success: events});
+                        handleSuccess(res, events);
                     }
                 });
             }
@@ -1549,10 +1548,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             toCreate.last_updated = Date.now();
             toCreate.save(function (err, saved) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -1560,10 +1558,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToUpdate = ObjectId(req.query.id);
             Events.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res,err);
                 }else{
-                    res.send({success: "Updated "+wres+" events"});
+                    handleSuccess(res,{updateCount: wres},3);
                 }
             });
         })
@@ -1571,8 +1568,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             //get event details
             Events.findOne({_id: req.query.id}, function (err, event) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res,err);
                 }else{
                     var conferencesIds = event.listconferences || [];
                     //delete conferences for this event
@@ -1602,10 +1598,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                     ], function (err) {
                         if(err) {
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res,err);
                         }else{
-                            res.send({success: true});
+                            handleSuccess(res);
                         }
                     });
                 }
@@ -1617,17 +1612,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 Speakers.findOne({_id: req.query.id}, function (err, speaker) {
                     if(err){
-                        res.send({error: "Could not find speakers"});
+                        handleError(res,err);
                     }else{
-                        res.send({success: speaker});
+                        handleSuccess(res, speaker);
                     }
                 });
             }else{
                 Speakers.find({}).sort({last_name: 1, first_name: 1}).exec(function (err, speakers) {
                     if(err){
-                        res.send({error: "Could not find speakers"});
+                        handleError(res, err);
                     }else{
-                        res.send({success: speakers});
+                        handleSuccess(res, speakers);
                     }
                 });
             }
@@ -1636,9 +1631,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var toCreate = new Speakers(req.body);
             toCreate.save(function (err, saved) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -1646,9 +1641,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToEdit = ObjectId(req.query.id);
             Speakers.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Updated "+wres+" speakers"});
+                    handleSuccess(res, {updateCount: wres}, 3);
                 }
             });
         })
@@ -1656,14 +1651,14 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToDelete = ObjectId(req.query.id);
             Speakers.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    res.send({error: "Error removing speaker"});
+                    handleError(res, err);
                 }else{
                     //remove speaker from talks
                     Talks.update({}, {$pull: {speakers: idToDelete}}, function (err, wres) {
                         if(err){
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: "Removed speaker."});
+                            handleSuccess(res,{},4);
                         }
                     });
                 }
@@ -1675,28 +1670,25 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.event){
                 Events.findOne({_id: req.query.event}).populate('listconferences').exec(function (err, event) {
                     if(err || !event){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: event.listconferences || []});
+                        handleSuccess(res, event.listconferences||[]);
                     }
                 });
             }else if(req.query.id){
                 Conferences.findOne({_id: req.query.id}).exec(function (err, conference) {
                     if(err || !conference){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: conference});
+                        handleSuccess(res,conference);
                     }
                 });
             }else{
                 Conferences.find({}, function (err, conferences) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: conferences});
+                        handleSuccess(res, conferences);
                     }
                 });
             }
@@ -1706,8 +1698,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             toCreate.last_updated = Date.now();
             toCreate.save(function (err, saved) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
                     //create qr_code
                     saved.qr_code = {
@@ -1717,10 +1708,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     };
                     saved.save(function (err, saved) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: saved});
+                            handleSuccess(res, saved);
                         }
                     });
                 }
@@ -1732,10 +1722,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             dataToUpdate.last_updated = Date.now();
             Conferences.update({_id: idToUpdate}, {$set: dataToUpdate}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Updated "+wres+" conferences"});
+                    handleSuccess(res,{updateCount: wres},3);
                 }
             });
         })
@@ -1774,9 +1763,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             ], function (err) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res);
                 }
             });
         });
@@ -1787,31 +1776,28 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 var idEvent = ObjectId(req.query.event);
                 Rooms.find({event: idEvent}).exec(function (err, rooms) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: rooms});
+                        handleSuccess(res, rooms);
                     }
                 });
             }else if(req.query.id){
                 Rooms.findOne({_id: req.query.id}).exec(function (err, room) {
                     if(err || !room){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: room});
+                        handleSuccess(res, room);
                     }
                 });
             }else{
-                res.send({error: "Invalid query params"});
+                handleError(res,false,400,6);
             }
         })
         .post(function (req, res) {
             var toCreate = new Rooms(req.body);
             toCreate.save(function (err, saved) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
                     //create qr_code
                     saved.qr_code = {
@@ -1821,10 +1807,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     };
                     saved.save(function (err, saved) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: saved});
+                            handleSuccess(res, saved);
                         }
                     });
                 }
@@ -1835,10 +1820,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var dataToUpdate = req.body;
             Rooms.update({_id: idToUpdate}, {$set: dataToUpdate}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Updated "+wres+" rooms"});
+                    handleSuccess(res,{updateCount: wres},3);
                 }
             });
         })
@@ -1880,24 +1864,22 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 var idConference = ObjectId(req.query.conference);
                 Talks.find({conference: idConference}).exec(function (err, talks) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: talks});
+                        handleSuccess(res,talks);
                     }
                 });
             }else if(req.query.id){
                 var idTalk = ObjectId(req.query.id);
                 Talks.findOne({_id: idTalk}).populate('speakers').exec(function (err, talk) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: talk});
+                        handleSuccess(res, talk);
                     }
                 });
             }else{
-                res.send({error: "Missing query params"});
+                handleError(res,true,400,6);
             }
         })
         .post(function (req, res) {
@@ -1905,10 +1887,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             toCreate.last_updated = Date.now();
             toCreate.save(function (err, saved) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -1918,10 +1899,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             dataToUpdate.last_updated = Date.now();
             Talks.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Updated "+wres+" talks"});
+                    handleSuccess(res,{updateCount: wres},3);
                 }
             });
         })
@@ -1929,10 +1909,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToDelete = ObjectId(req.query.id);
             Talks.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Removed "+wres+" talks"});
+                    handleSuccess(res, {deleteCount: wres}, 4);
                 }
             });
         });
@@ -1943,10 +1922,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var conferenceToAdd = ObjectId(req.body.idConference);
             Events.update({_id: eventToUpdate}, {$addToSet: {listconferences: conferenceToAdd}}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Updated "+wres+" events"});
+                    handleSuccess(res, {updateCount: wres}, 3);
                 }
             });
         });

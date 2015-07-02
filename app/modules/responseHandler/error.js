@@ -17,6 +17,6 @@ var errorCodes = {
 module.exports = function(logger){
     return function(res, error ,status, code){
         if(error) logger.log(error);
-        res.send(status, {error: errorCodes[code || 0]})
+        res.send(status || 500, {error: errorCodes[code || 0]})
     };
 };
