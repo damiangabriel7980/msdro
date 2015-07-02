@@ -3926,7 +3926,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             }else{
                                 var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}};
                                 if(req.query.firstLetter) q["name"] = new XRegExp("^"+req.query.firstLetter, "i");
-                                Products.find(q, function(err, cont) {
+                                Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                                     if(err) {
                                         res.send({error: err});
                                     }else{
@@ -3939,7 +3939,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         //get allowed articles for user
                         var q = {groupsID: {$in: groups}};
                         if(req.query.firstLetter) q["name"] = new XRegExp("^"+req.query.firstLetter, "i");
-                        Products.find(q, function(err, cont) {
+                        Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                             if(err){
                                 res.send({error:err});
                             }else{
