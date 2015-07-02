@@ -1,11 +1,11 @@
-controllers.controller('HomeMostRead', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
+controllers.controller('HomeMostRead', ['$scope', '$rootScope', 'ContentService', '$sce', 'Success', 'Error', function($scope, $rootScope, ContentService, $sce, Success, Error) {
 
     ContentService.content.query({type: 2}).$promise.then(function (resp) {
-        $scope.articole = resp.success;
+        $scope.articole = Success.getObject(resp);
 
         //pagination
         $scope.maxSize = 3;
-        $scope.totalItems = resp.success.length;
+        $scope.totalItems = $scope.articole.length;
         $scope.currentPage = 1;
         $scope.resultsPerPage = 5;
         $scope.$watch('currentPage', function () {
@@ -14,7 +14,7 @@ controllers.controller('HomeMostRead', ['$scope', '$rootScope', 'ContentService'
             $scope.articoleFiltered = $scope.articole.slice(beginSlice, endSlice);
         });
     }).catch(function(err){
-        console.log(err.data.error);
+        console.log(Error.getMessage(err.data));
     });
 
 }]);

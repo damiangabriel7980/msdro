@@ -1,18 +1,18 @@
-controllers.controller('ArticlesView', ['$scope', '$state', '$rootScope', '$stateParams', 'ContentService', function($scope, $state, $rootScope, $stateParams, ContentService) {
+controllers.controller('ArticlesView', ['$scope', '$state', '$rootScope', '$stateParams', 'ContentService', 'Error', 'Success', function($scope, $state, $rootScope, $stateParams, ContentService, Error, Success) {
 
     $scope.articlesLimit = 3;
 
     //------------------------------------------------------------------------------------------------- get all content
 
     ContentService.content.query({category: $stateParams.category}).$promise.then(function (resp) {
-        $scope.news = resp.success;
+        $scope.news = Success.getObject(resp);
     }).catch(function(errNews){
-        console.log(errNews.data.error);
+        console.log(Error.getMessage(errNews.data));
     });
     ContentService.mostRead.query({type: 2}).$promise.then(function (resp) {
-        $scope.mostRead = resp.success;
+        $scope.mostRead = Success.getObject(resp);
     }).catch(function(errMostRead){
-        console.log(errMostRead.data.error);
+        console.log(Error.getMessage(errMostRead.data));
     });
 
     //------------ get category name

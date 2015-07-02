@@ -7,11 +7,20 @@ var errorCodes = {
     5: "Eroare la stergerea entitatilor atasate continutului",
     6: "Parametrii invalizi",
     7: "Eroare la adaugarea entitatilor atasate",
+    8: "Parola nu este corecta!",
+    9: "Introduceti o parola diferita fata de cea veche!",
+    10: "Parola noua trebuie sa contina intre 6 si 32 de caractere!",
+    11: "Parolele nu corespund",
     20: "Autorul si titlul sunt obligatorii (minim 3 caractere)",
     21: "Verificati tipul",
     22: "Tipul fisierului lipseste",
     23: "O categorie cu acelasi nume exista deja",
-    24: "Numele este obligatoriu"
+    24: "Numele este obligatoriu",
+    25: "A aparut o eroare la modificarea fotografiei",
+    26: "Numele trebuie sa contina doar caractere, minim 3",
+    27: "Numarul de telefon trebuie sa contina doar cifre, minim 10",
+    28: "Adresa este obligatorie!",
+    29: "Selectati un tip de loc de munca"
 };
 
 module.exports = function(logger){

@@ -318,3 +318,20 @@ services.factory('StorageService', function () {
         }
     }
 });
+services.factory('Error', function() {
+    return {
+        getMessage: function(serverResponse) {
+            return serverResponse.error;
+        }
+    }
+});
+services.factory('Success', function() {
+    return {
+        getMessage: function(serverResponse) {
+            return serverResponse.message;
+        },
+        getObject: function(serverResponse) {
+            return serverResponse.success;
+        }
+    }
+});
