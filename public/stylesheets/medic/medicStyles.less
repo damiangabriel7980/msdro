@@ -566,6 +566,20 @@ body{
     width: 100%;
     padding-bottom: 8px !important;
   }
+  .specialDropdownImage{
+    @media(max-width: @screen-xs-max){
+      width: 119px !important;
+    }
+  }
+  .groupsDropdown{
+    @media (max-width: @screen-xs-max){
+      right: 10px;
+      margin-top: 5px;
+    }
+    @media (min-width: @screen-xs-max) and (max-width: @grid-float-breakpoint) {
+      right: 65px;
+    }
+  }
   .dropdown-menu{
     border-radius: 6px;
     padding-top: 0;
@@ -684,11 +698,6 @@ body{
     @media (min-width: @grid-float-breakpoint) {
       display: none;
       visibility: hidden;
-    }
-  }
-  .specialDropdown{
-    @media (max-width: @screen-xs-max){
-      margin-top: 3px;
     }
   }
 }

@@ -12,12 +12,12 @@
             scope: {
                 dropdownClass: '@',
                 itemClass: '@',
+                imageClass: '@',
                 onItemSelect: '=',
                 genericObject: '=',
                 amazonPath: '=',
                 defaultImageUrl: '=',
-                arrayOfObjects: '=',
-                defaultStyles: '='
+                arrayOfObjects: '='
             },
             link: function(scope, element, attrs) {
                 scope.callSelect = function (genericObject) {
