@@ -7621,3 +7621,18 @@ a:focus {
     width: 100% !important;
   }
 }
+@media (max-width: 767px) {
+  .width100 {
+    width: 100% !important;
+  }
+}
+@media (max-width: 767px) {
+  .width50 {
+    width: 50% !important;
+  }
+}
+@media (max-width: 767px) {
+  .width30 {
+    width: 30% !important;
+  }
+}
