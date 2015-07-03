@@ -3369,7 +3369,10 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }else{
                 handleError(res,null,400,29);
             }
-                if(job._id==0){
+            if(ans.error){
+                res.json(ans);
+            }else{
+                if(!job._id){
                     //create new
                     var newJob = new Job({
                         job_type: job.job_type,
@@ -3642,7 +3645,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             }else{
                                 var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}};
                                 if(req.query.firstLetter) q["name"] = new XRegExp("^"+req.query.firstLetter, "i");
-                                Products.find(q, function(err, cont) {
+                                Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                                     if(err) {
                                         handleError(res,err,500);
                                     }else{
@@ -3655,7 +3658,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         //get allowed articles for user
                         var q = {groupsID: {$in: groups}};
                         if(req.query.firstLetter) q["name"] = new XRegExp("^"+req.query.firstLetter, "i");
-                        Products.find(q, function(err, cont) {
+                        Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
@@ -3707,7 +3710,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         var findObj={};
             if(req.query.idArea && req.query.idArea!=0)
                 findObj['therapeutic-areasID'] = {$in: [req.query.idArea]};
-            else {
                 getNonSpecificUserGroupsIds(req.user).then(
                     function (nonSpecificGroupsIds) {
                         var forGroups = nonSpecificGroupsIds;
@@ -3773,7 +3775,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     function (err) {
                         handleError(res,err,500);
                     })
-            }
         });
 
     //============================================ intro presentations

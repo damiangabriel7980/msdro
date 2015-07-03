@@ -119,6 +119,7 @@ body{
     }
     .btn{
       margin-top: 10px;
+      width: 100%;
     }
     hr{
       margin-top: 10px;
@@ -256,6 +257,9 @@ body{
         width: 50%;
         float: left;
         text-align: right;
+        .label{
+          padding: 0.2em 0.6em;
+        }
       }
       .description{
         width: 100%;
@@ -284,7 +288,7 @@ body{
     padding: 0;
     .lastNewsWrapper{
       .Title{
-        padding: 0 0 0 10px;
+        padding: 0;
         padding-bottom: 8px !important;
       }
       .content{
@@ -646,9 +650,11 @@ body{
       }
       li{
         &.mobileLink{
-          @media (min-width: @screen-sm-min) {
-            visibility: hidden;
-            display: none;
+          visibility: hidden;
+          display: none;
+          @media (max-width: @screen-sm) {
+            visibility: visible;
+            display: block;
           }
           &.dividerTop{
             &:after{
@@ -1185,5 +1191,20 @@ a:focus{
 .specialText{
   @media (max-width: @screen-xs-max) {
     width: 100% !important;
+  }
+}
+.width100{
+  @media (max-width: @screen-xs-max) {
+    width: 100% !important;
+  }
+}
+.width50{
+  @media (max-width: @screen-xs-max) {
+    width: 50% !important;
+  }
+}
+.width30{
+  @media (max-width: @screen-xs-max) {
+    width: 30% !important;
   }
 }

@@ -6444,6 +6444,7 @@ body .btn {
 }
 .productDetails .imageAndRCP .btn {
   margin-top: 10px;
+  width: 100%;
 }
 .productDetails .imageAndRCP hr {
   margin-top: 10px;
@@ -6582,6 +6583,9 @@ body .btn {
     font-size: 13px;
   }
 }
+.eventDetails .modal-body .details .date .label {
+  padding: 0.2em 0.6em;
+}
 .eventDetails .modal-body .details .description {
   width: 100%;
   float: left;
@@ -6607,7 +6611,7 @@ body .btn {
   padding: 0;
 }
 .homeStyles .leftSection .lastNewsWrapper .Title {
-  padding: 0 0 0 10px;
+  padding: 0;
   padding-bottom: 8px !important;
 }
 .homeStyles .leftSection .lastNewsWrapper .content {
@@ -7053,10 +7057,14 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .navbarMedic .navbar-collapse .navbar-nav.navbarMenu {
   padding-top: 4px;
 }
-@media (min-width: 768px) {
+.navbarMedic .navbar-collapse .navbar-nav li.mobileLink {
+  visibility: hidden;
+  display: none;
+}
+@media (max-width: 768px) {
   .navbarMedic .navbar-collapse .navbar-nav li.mobileLink {
-    visibility: hidden;
-    display: none;
+    visibility: visible;
+    display: block;
   }
 }
 .navbarMedic .navbar-collapse .navbar-nav li.mobileLink.dividerTop:after {
@@ -7611,5 +7619,20 @@ a:focus {
 @media (max-width: 767px) {
   .specialText {
     width: 100% !important;
+  }
+}
+@media (max-width: 767px) {
+  .width100 {
+    width: 100% !important;
+  }
+}
+@media (max-width: 767px) {
+  .width50 {
+    width: 50% !important;
+  }
+}
+@media (max-width: 767px) {
+  .width30 {
+    width: 30% !important;
   }
 }
