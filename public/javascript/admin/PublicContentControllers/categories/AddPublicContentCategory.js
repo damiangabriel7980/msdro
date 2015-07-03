@@ -1,4 +1,4 @@
-controllers.controller('AddPublicContentCategory', ['$scope', '$state', '$modalInstance', 'publicContentService', function ($scope, $state, $modalInstance, publicContentService) {
+controllers.controller('AddPublicContentCategory', ['$scope', '$state', '$modalInstance', 'publicContentService', 'Success', 'Error', function ($scope, $state, $modalInstance, publicContentService,Success,Error) {
 
     var resetAlert = function (type, text) {
         $scope.alert = {
@@ -11,12 +11,10 @@ controllers.controller('AddPublicContentCategory', ['$scope', '$state', '$modalI
     $scope.addCategory = function () {
         console.log(this.category);
         publicContentService.categories.create(this.category).$promise.then(function (resp) {
-            if(resp.error){
-                resetAlert("danger", resp.error);
-            }else{
                 $state.reload();
                 $modalInstance.close();
-            }
+        }).catch(function(err){
+            resetAlert("danger", Error.getMessage(err.data));
         });
     };
 

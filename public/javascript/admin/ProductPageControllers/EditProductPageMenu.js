@@ -1,11 +1,13 @@
-controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', function($scope, SpecialProductsService, AmazonService) {
+controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService,Success,Error) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
     //get menu info
     SpecialProductsService.menu.query({id: $scope.sessionData.editMenuId}).$promise.then(function (resp) {
-        $scope.currentItem = resp.success.menuItem;
+        $scope.currentItem = Success.getObject(resp).menuItem;
+    }).catch(function(err){
+        $scope.resetAlert("danger", Error.getMessage(err.data));
     });
 
     $scope.headerImageBody = null;
@@ -19,9 +21,6 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
     $scope.removeHeaderImage = function () {
         $scope.resetAlert("warning", "Se sterge imaginea...");
         SpecialProductsService.menu.update({id: $scope.sessionData.editMenuId}, {header_image: null}).$promise.then(function (resp) {
-            if(resp.error){
-                $scope.resetAlert("error", "Eroare la stergerea imaginii din baza de date");
-            }else{
                 if($scope.currentItem.header_image){
                     AmazonService.deleteFile($scope.currentItem.header_image, function (err, success) {
                         if(err){
@@ -37,7 +36,8 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
                     $scope.headerImageBody = null;
                     $scope.resetAlert("success", "Imaginea a fost stearsa");
                 }
-            }
+        }).catch(function(err){
+            $scope.resetAlert("danger", Error.getMessage(err.data));
         });
     };
 
@@ -77,12 +77,11 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
                 $scope.resetAlert("warning", "Se salveaza datele...");
                 //update the menu
                 SpecialProductsService.menu.update({id:toAdd._id}, toAdd).$promise.then(function (resp) {
-                    if(resp.error){
-                        callback("Eroare la salvare");
-                    }else{
                         //proceed down the waterfall
                         callback();
-                    }
+                }).catch(function(err){
+                    callback("Eroare la salvare");
+                    $scope.resetAlert("danger", Error.getMessage(err.data));
                 });
             }
         ], function (err) {

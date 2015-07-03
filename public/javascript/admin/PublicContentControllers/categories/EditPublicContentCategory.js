@@ -1,4 +1,4 @@
-controllers.controller('EditPublicContentCategory', ['$scope', '$state', '$modalInstance', 'publicContentService', 'category', function ($scope, $state, $modalInstance, publicContentService, category) {
+controllers.controller('EditPublicContentCategory', ['$scope', '$state', '$modalInstance', 'publicContentService', 'category', 'Success', 'Error', function ($scope, $state, $modalInstance, publicContentService, category, Success, Error) {
 
     $scope.category = category;
 
@@ -13,12 +13,10 @@ controllers.controller('EditPublicContentCategory', ['$scope', '$state', '$modal
     $scope.editCategory = function () {
         console.log(this.category);
         publicContentService.categories.update({id: this.category._id}, this.category).$promise.then(function (resp) {
-            if(resp.error){
-                resetAlert("danger", resp.error);
-            }else{
                 $state.reload();
                 $modalInstance.close();
-            }
+        }).catch(function(err){
+            resetAlert("danger", Error.getMessage(err.data));
         });
     };
 

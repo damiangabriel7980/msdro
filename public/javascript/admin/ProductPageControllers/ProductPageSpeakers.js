@@ -1,20 +1,19 @@
-controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', function($scope, SpecialProductsService, ngTableParams, $filter) {
+controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', 'Success', 'Error', function($scope, SpecialProductsService, ngTableParams, $filter, Success, Error) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
     //get all speakers
     SpecialProductsService.speakers.query().$promise.then(function (resp) {
-        $scope.allSpeakers = resp.success;
+        $scope.allSpeakers = Success.getObject(resp);
+    }).catch(function(err){
+        $scope.resetAlert("danger", Error.getMessage(err.data));
     });
 
     //get selected speakers
     var refreshTable = function () {
         SpecialProductsService.speakers.query({product: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
-            if(resp.error){
-                $scope.resetAlert("danger", "Eroare la gasire speakeri");
-            }else{
-                var data = resp.success;
+                var data = Success.getObject(resp);
                 //console.log(data);
                 $scope.tableParams = new ngTableParams({
                     page: 1,            // show first page
@@ -34,7 +33,8 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
                         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                     }
                 });
-            }
+        }).catch(function(err){
+            $scope.resetAlert("danger", Error.getMessage(err.data));
         });
     };
 
@@ -46,6 +46,8 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
         if(speaker && speaker._id && product_id){
             SpecialProductsService.speakers.create({product_id: product_id, speaker_id: speaker._id}).$promise.then(function (resp) {
                 refreshTable();
+            }).catch(function(err){
+                $scope.resetAlert("danger", Error.getMessage(err.data));
             });
         }
     };
@@ -56,6 +58,8 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
         if(speaker && speaker._id && product_id){
             SpecialProductsService.speakers.delete({product_id: product_id, speaker_id: speaker._id}).$promise.then(function (resp) {
                 refreshTable();
+            }).catch(function(err){
+                $scope.resetAlert("danger", Error.getMessage(err.data));
             });
         }
     };

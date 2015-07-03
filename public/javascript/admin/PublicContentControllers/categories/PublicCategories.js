@@ -1,8 +1,8 @@
-controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$filter', 'ngTableParams', '$modal', 'ActionModal', 'publicContentService', function($scope, $rootScope, $state, $filter, ngTableParams, $modal, ActionModal, publicContentService){
+controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$filter', 'ngTableParams', '$modal', 'ActionModal', 'publicContentService', 'Success', 'Error', function($scope, $rootScope, $state, $filter, ngTableParams, $modal, ActionModal, publicContentService, Success, Error){
 
     $scope.refreshTable = function () {
         publicContentService.categories.query().$promise.then(function (resp) {
-            var data = resp.success;
+            var data = Success.getObject(resp);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -22,6 +22,8 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
+        }).catch(function(err){
+            console.log(Error.getMessage(err.data));
         });
     };
 
@@ -41,6 +43,8 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
             publicContentService.categories.delete({id: id}).$promise.then(function (resp) {
                 console.log(resp);
                 $state.reload();
+            }).catch(function(err){
+                console.log(Error.getMessage(err.data));
             });
         }, "Sterge");
     };
@@ -53,6 +57,8 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
                 publicContentService.categories.update({id: id}, {isEnabled: !isEnabled}).$promise.then(function (resp) {
                     console.log(resp);
                     $state.reload();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err.data));
                 });
             },
             "Da"

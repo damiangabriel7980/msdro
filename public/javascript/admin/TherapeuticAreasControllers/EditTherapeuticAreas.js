@@ -4,19 +4,27 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService){
+controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','Success','Error', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,Success,Error){
     $scope.therapeuticAlert = {newAlert:false, type:"", message:""};
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp.success;
+        $scope.areas = Success.getObject(resp)
+    }).catch(function(err){
+        $scope.therapeuticAlert.newAlert = true;
+        $scope.therapeuticAlert.message = Error.getMessage(err.data);
+        $scope.therapeuticAlert.type = "danger";
     });
     areasAdminService.areas.query({id:$stateParams.id}).$promise.then(function(resp){
-        $scope.arie = resp.success['selectedArea'];
-        $scope.selectedAreas = resp.success['childrenAreas'] ? resp.success['childrenAreas']: [];
+        $scope.arie = Success.getObject(resp)['selectedArea'];
+        $scope.selectedAreas = Success.getObject(resp)['childrenAreas'] ? Success.getObject(resp)['childrenAreas']: [];
         $scope.oldAreas = [];
-        if(resp.success['childrenAreas']){
-            for ( var i = 0;i<resp.success['childrenAreas'].length;i++)
-                $scope.oldAreas.push(resp.success['childrenAreas'][i]);
+        if(Success.getObject(resp)['childrenAreas']){
+            for ( var i = 0;i<Success.getObject(resp)['childrenAreas'].length;i++)
+                $scope.oldAreas.push(Success.getObject(resp)['childrenAreas'][i]);
         }
+    }).catch(function(err){
+        $scope.therapeuticAlert.newAlert = true;
+        $scope.therapeuticAlert.message = Error.getMessage(err.data);
+        $scope.therapeuticAlert.type = "danger";
     });
 
 
@@ -30,6 +38,10 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdm
                 $scope.arie = {};
                 $modalInstance.close();
                 $state.go('ariiTerapeutice',{},{reload: true});
+            }).catch(function(err){
+                $scope.therapeuticAlert.newAlert = true;
+                $scope.therapeuticAlert.message = Error.getMessage(err.data);
+                $scope.therapeuticAlert.type = "danger";
             });
         }
         else{

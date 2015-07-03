@@ -1,4 +1,4 @@
-controllers.controller('IntroDelete', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToEdit','$modalInstance','AmazonService','$timeout', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToEdit,$modalInstance,AmazonService,$timeout){
+controllers.controller('IntroDelete', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToEdit','$modalInstance','AmazonService','$timeout', 'Success', 'Error', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToEdit,$modalInstance,AmazonService,$timeout,Success,Error){
 
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
@@ -14,21 +14,18 @@ controllers.controller('IntroDelete', ['$scope','$rootScope' ,'IntroService','$s
             }else{
                 //delete product and every menu items attached to it
                 IntroService.intros.delete({idToDelete: idToEdit}).$promise.then(function(resp){
-                    if(resp.error){
-                        $scope.statusAlert.newAlert=true;
-                        $scope.statusAlert.type="danger";
-                        $scope.statusAlert.message=imageDeleteCount.message;
-                    }else{
                         $scope.actionCompleted = true;
                         $scope.statusAlert.newAlert=true;
                         $scope.statusAlert.type="success";
-                        $scope.statusAlert.message=resp.success.message;
+                        $scope.statusAlert.message = Success.getMessage(resp);
                         $timeout(function(){
                             $modalInstance.close();
                             $state.reload();
                         },5000);
-                    }
-
+                }).catch(function(err){
+                    $scope.statusAlert.type = "danger";
+                    $scope.statusAlert.message = Error.getMessage(err.data);
+                    $scope.statusAlert.newAlert = true;
                 });
             }
         });

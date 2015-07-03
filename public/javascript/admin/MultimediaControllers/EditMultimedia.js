@@ -1,22 +1,34 @@
 /**
  * Created by miricaandrei23 on 18.05.2015.
  */
-controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','GroupsService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','AmazonService','idToEdit', function($scope,$rootScope,MultimediaAdminService,GroupsService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,AmazonService,idToEdit){
+controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','GroupsService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','AmazonService','idToEdit', 'Success', 'Error', function($scope,$rootScope,MultimediaAdminService,GroupsService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,AmazonService,idToEdit,Success,Error){
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertVideo = {newAlert:false, type:"", message:""};
 
     MultimediaAdminService.multimedia.query({id:idToEdit}).$promise.then(function(result){
-        $scope.multimedia=result.success;
-        $scope.selectedAreas = result.success['therapeutic-areasID'];
-        $scope.selectedGroups = result.success['groupsID'];
+        $scope.multimedia = Success.getObject(result);
+        $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
+        $scope.selectedGroups = Success.getObject(result)['groupsID'];
+    }).catch(function(err){
+        $scope.uploadAlert.type = "danger";
+        $scope.uploadAlert.message = Error.getMessage(err.data);
+        $scope.uploadAlert.newAlert = true;
     });
 
     GroupsService.groups.query().$promise.then(function(resp){
-        $scope.groups = resp.success;
+        $scope.groups = Success.getObject(resp);
+    }).catch(function(err){
+        $scope.uploadAlert.type = "danger";
+        $scope.uploadAlert.message = Error.getMessage(err.data);
+        $scope.uploadAlert.newAlert = true;
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp;
+        $scope.areas = Success.getObject(resp);
+    }).catch(function(err){
+        $scope.uploadAlert.type = "danger";
+        $scope.uploadAlert.message = Error.getMessage(err.data);
+        $scope.uploadAlert.newAlert = true;
     });
 
     $scope.updateMultimedia = function(){
@@ -32,6 +44,10 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
             console.log(resp);
             $modalInstance.close();
             $state.go('elearning.multimedia',{},{reload: true});
+        }).catch(function(err){
+            $scope.uploadAlert.type = "danger";
+            $scope.uploadAlert.message = Error.getMessage(err.data);
+            $scope.uploadAlert.newAlert = true;
         });
     };
     var putLogoS3 = function (body) {
@@ -48,18 +64,16 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
                 } else {
                     //update database as well
                     MultimediaAdminService.multimedia.update({id:$scope.multimedia._id},{info: {image:key}}).$promise.then(function (resp) {
-                        if(resp.error){
-                            $scope.uploadAlert.type = "danger";
-                            $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
-                            $scope.uploadAlert.newAlert = true;
-                        }else{
                             $scope.logo = key;
                             $scope.uploadAlert.type = "success";
                             $scope.uploadAlert.message = "Image updated!";
                             $scope.uploadAlert.newAlert = true;
                             console.log("Upload complete");
                             $scope.multimedia.thumbnail_path = key;
-                        }
+                    }).catch(function(err){
+                        $scope.uploadAlert.type = "danger";
+                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.newAlert = true;
                     });
                 }
             });
@@ -112,18 +126,16 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
                 } else {
                     //update database as well
                     MultimediaAdminService.multimedia.update({id:$scope.multimedia._id},{info: {video:key}}).$promise.then(function (resp) {
-                        if(resp.error){
-                            $scope.uploadAlertVideo.type = "danger";
-                            $scope.uploadAlertVideo.message = "Eroare la actualizarea bazei de date!";
-                            $scope.uploadAlertVideo.newAlert = true;
-                        }else{
                             $scope.logo = key;
                             $scope.uploadAlertVideo.type = "success";
                             $scope.uploadAlertVideo.message = "Video updated!";
                             $scope.uploadAlertVideo.newAlert = true;
                             console.log("Upload complete");
                             $scope.multimedia.file_path = key;
-                        }
+                    }).catch(function(err){
+                        $scope.uploadAlertVideo.type = "danger";
+                        $scope.uploadAlertVideo.message = Error.getMessage(err.data);
+                        $scope.uploadAlertVideo.newAlert = true;
                     });
                 }
             });

@@ -1,4 +1,4 @@
-controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsService', 'AmazonService','$timeout', function($scope, SpecialProductsService, AmazonService,$timeout) {
+controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsService', 'AmazonService','$timeout', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService,$timeout,Success,Error) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
@@ -67,11 +67,10 @@ controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsSer
                     //upload document
                     $scope.resetAlert("warning", "Se actualizeaza baza de date...");
                     SpecialProductsService.resources.update({id: $scope.currentItem._id}, $scope.currentItem).$promise.then(function (resp) {
-                        if(resp.error){
-                            callback(resp.message, null);
-                        }else{
-                            callback(null, resp.success.message);
-                        }
+                            callback(null, Success.getMessage(resp));
+                    }).catch(function(err){
+                        callback(Error.getMessage(err.data), null);
+                        $scope.resetAlert("danger", Error.getMessage(err.data));
                     });
                 }
             ], function (err, success) {

@@ -1,4 +1,4 @@
-controllers.controller('NewAccounts', ['$scope', 'NewAccountsService', function($scope, NewAccountsService){
+controllers.controller('NewAccounts', ['$scope', 'NewAccountsService', 'Success', 'Error', function($scope, NewAccountsService, Success, Error){
 
     $scope.count = {
         ACCEPTED: 0,
@@ -7,10 +7,12 @@ controllers.controller('NewAccounts', ['$scope', 'NewAccountsService', function(
     };
 
     NewAccountsService.count.query().$promise.then(function (resp) {
-        for(var i=0; i<resp.success.length; i++){
-            $scope.count[resp.success[i]._id] = resp.success[i].total;
+        for(var i=0; i<Success.getObject(resp).length; i++){
+            $scope.count[Success.getObject(resp)[i]._id] = Success.getObject(resp)[i].total;
         }
         console.log($scope.count);
+    }).catch(function(err){
+        console.log(Error.getMessage(err.data));
     });
 
 }]);

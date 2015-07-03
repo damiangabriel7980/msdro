@@ -1,15 +1,11 @@
-controllers.controller('ProductPageResources', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', 'AmazonService', function($scope, SpecialProductsService, ngTableParams, $filter, AmazonService) {
+controllers.controller('ProductPageResources', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', 'AmazonService', 'Success', 'Error', function($scope, SpecialProductsService, ngTableParams, $filter, AmazonService,Success,Error) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
     var refreshTable = function () {
         SpecialProductsService.resources.query({product: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
-            if(resp.error){
-                $scope.resetAlert("danger", "Eroare la gasire glosar");
-            }else{
-                console.log(resp);
-                var data = resp.success.resources;
+                var data = Success.getObject(resp).resources;
                 $scope.resourcesTableParams = new ngTableParams({
                     page: 1,            // show first page
                     count: 10,          // count per page
@@ -28,7 +24,8 @@ controllers.controller('ProductPageResources', ['$scope', 'SpecialProductsServic
                         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                     }
                 });
-            }
+        }).catch(function(err){
+            $scope.resetAlert("danger", Error.getMessage(err.data));
         });
     };
 
@@ -53,12 +50,10 @@ controllers.controller('ProductPageResources', ['$scope', 'SpecialProductsServic
                 //now remove collection
                 $scope.resetAlert("warning", "Se sterge din baza de date...");
                 SpecialProductsService.resources.delete({id: item._id}).$promise.then(function (resp) {
-                    if(resp.error){
-                        $scope.resetAlert("danger", resp.message);
-                    }else{
                         $scope.resetAlert();
                         refreshTable();
-                    }
+                }).catch(function(err){
+                    $scope.resetAlert("danger", Error.getMessage(err.data));
                 });
             }
         })

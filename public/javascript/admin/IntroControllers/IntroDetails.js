@@ -1,15 +1,24 @@
 /**
  * Created by miricaandrei23 on 27.02.2015.
  */
-controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToView','$modalInstance','GroupsService', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToView,$modalInstance,GroupsService){
+controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToView','$modalInstance','GroupsService', 'Success', 'Error', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToView,$modalInstance,GroupsService,Success,Error){
     IntroService.intros.query({id: idToView}).$promise.then(function(resp){
-        $scope.intro = resp.success['onePresentation'];
+        $scope.intro = Success.getObject(resp)['onePresentation'];
         $scope.selectedGroups = $scope.intro['groupsID'];
+    }).catch(function(err){
+        $scope.statusAlert.type = "danger";
+        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.newAlert = true;
     });
 
     GroupsService.groups.query().$promise.then(function(resp){
-        $scope.groups = resp.success;
+        $scope.groups = Success.getObject(resp);
+    }).catch(function(err){
+        $scope.statusAlert.type = "danger";
+        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.newAlert = true;
     });
+
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
 
@@ -21,8 +30,12 @@ controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$
         $scope.intro.groupsID = groups_id;
         IntroService.intros.update({id: idToView},{intro: $scope.intro}).$promise.then(function(resp){
             $scope.statusAlert.newAlert = true;
-            $scope.statusAlert.message = resp.success.message;
-        })
+            $scope.statusAlert.message = Success.getMessage(resp);
+        }).catch(function(err){
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.newAlert = true;
+        });
     };
     $scope.tinymceOptions = {
         plugins: [

@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-controllers.controller('AddGroup', ['$scope','GroupsService', '$modalInstance', '$state', 'AmazonService', function($scope, GroupsService, $modalInstance, $state, AmazonService){
+controllers.controller('AddGroup', ['$scope','GroupsService', '$modalInstance', '$state', 'AmazonService', 'Success', 'Error', function($scope, GroupsService, $modalInstance, $state, AmazonService, Success, Error){
 
     $scope.selectedUsers = [];
 
@@ -17,11 +17,15 @@ controllers.controller('AddGroup', ['$scope','GroupsService', '$modalInstance', 
 
     GroupsService.users.query().$promise.then(function (resp) {
         console.log(resp);
-        $scope.users = resp.success;
+        $scope.users = Success.getObject(resp);
+    }).catch(function(err){
+        resetAlert('danger',Error.getMessage(err.data));
     });
 
     GroupsService.professions.query().$promise.then(function (resp) {
-        $scope.professions = resp.success;
+        $scope.professions = Success.getObject(resp);
+    }).catch(function(err){
+        resetAlert('danger',Error.getMessage(err.data));
     });
 
     $scope.fileSelected = function ($files) {
@@ -38,13 +42,11 @@ controllers.controller('AddGroup', ['$scope','GroupsService', '$modalInstance', 
                 //add group
                 resetAlert("warning", "Se creaza grupul...");
                 GroupsService.groups.create({toCreate: thiz.newGroup, users: thiz.arrayUsers}).$promise.then(function (resp) {
-                    if(resp.success){
-                        console.log(resp.success);
-                        var idAdded = resp.success.created._id;
+                        var idAdded = Success.getObject(resp).created._id;
                         callback(null, idAdded);
-                    }else{
-                        callback("Eroare la adaugare");
-                    }
+                }).catch(function(err){
+                    callback("Eroare la adaugare");
+                    resetAlert('danger',Error.getMessage(err.data));
                 });
             },
             function (idAdded, callback) {
@@ -59,11 +61,10 @@ controllers.controller('AddGroup', ['$scope','GroupsService', '$modalInstance', 
                         }else{
                             //update database
                             GroupsService.groups.update({id: idAdded}, {toUpdate: {image_path: key}}).$promise.then(function (resp) {
-                                if(resp.error){
-                                    callback("Eroare la update baza de date dupa salvarea imaginii");
-                                }else{
                                     callback();
-                                }
+                            }).catch(function(err){
+                                callback("Eroare la update baza de date dupa salvarea imaginii");
+                                resetAlert('danger',Error.getMessage(err.data));
                             });
                         }
                     });

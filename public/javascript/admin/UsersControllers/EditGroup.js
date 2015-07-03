@@ -1,4 +1,4 @@
-controllers.controller('EditGroup', ['$scope','GroupsService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', '$rootScope', function($scope, GroupsService, $modalInstance, $state, idToEdit, AmazonService, $rootScope){
+controllers.controller('EditGroup', ['$scope','GroupsService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', '$rootScope', 'Success', 'Error', function($scope, GroupsService, $modalInstance, $state, idToEdit, AmazonService, $rootScope, Success, Error){
 
     $scope.fileBody = null;
 
@@ -13,14 +13,20 @@ controllers.controller('EditGroup', ['$scope','GroupsService', '$modalInstance',
     var groupDataLoaded = false;
 
     GroupsService.groups.query({id: idToEdit}).$promise.then(function (resp) {
-        $scope.toUpdate = resp.success;
+        $scope.toUpdate = Success.getObject(resp);
         GroupsService.users.query().$promise.then(function (resp) {
-            $scope.users = resp.success;
+            $scope.users = Success.getObject(resp);
             GroupsService.users.query({group: idToEdit}).$promise.then(function (resp) {
-                $scope.selectedUsers = resp.success;
+                $scope.selectedUsers = Success.getObject(resp);
                 groupDataLoaded = true;
+            }).catch(function(err){
+                resetAlert('danger',Error.getMessage(err.data));
             });
+        }).catch(function(err){
+            resetAlert('danger',Error.getMessage(err.data));
         });
+    }).catch(function(err){
+        resetAlert('danger',Error.getMessage(err.data));
     });
 
     $scope.editGroup = function () {
@@ -57,11 +63,10 @@ controllers.controller('EditGroup', ['$scope','GroupsService', '$modalInstance',
                 resetAlert("warning","Se actualizeaza datele...");
                 //update group
                 GroupsService.groups.update({id: thiz.toUpdate._id}, {toUpdate: thiz.toUpdate, users: thiz.newUsers}).$promise.then(function (resp) {
-                    if(resp.error){
-                        callback("Eroare la update");
-                    }else{
                         callback();
-                    }
+                }).catch(function(err){
+                    callback('Eroare la update');
+                    resetAlert('danger',Error.getMessage(err.data));
                 });
             }
         ], function (err) {

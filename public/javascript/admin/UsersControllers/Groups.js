@@ -1,11 +1,11 @@
 /**
  * Created by andrei on 25.11.2014.
  */
-controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', 'InfoModal', 'ActionModal', 'AmazonService', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, GroupsService, $modal, InfoModal, ActionModal, AmazonService){
+controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'GroupsService', '$modal', 'InfoModal', 'ActionModal', 'AmazonService', 'Success', 'Error', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, GroupsService, $modal, InfoModal, ActionModal, AmazonService, Success, Error){
 
     $scope.refreshTable = function () {
         GroupsService.groups.query().$promise.then(function (resp) {
-            var data = resp.success;
+            var data = Success.getObject(resp);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -25,6 +25,8 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
+        }).catch(function(err){
+            console.log(Error.getMessage(err.data));
         });
     };
 
@@ -40,7 +42,6 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
     };
 
     $scope.deleteGroup = function (group) {
-        console.log(group);
         if(group.restrict_CRUD){
             InfoModal.show("Operatie nepermisa", "Nu aveti voie sa stergeti acest grup");
         }else{
@@ -52,6 +53,8 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
                         GroupsService.groups.delete({id: group._id}).$promise.then(function (resp) {
                             console.log(resp);
                             $state.reload();
+                        }).catch(function(err){
+                            console.log(Error.getMessage(err.data));
                         });
                     }
                 });

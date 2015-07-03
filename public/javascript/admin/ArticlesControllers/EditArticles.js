@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 27.11.2014.
  */
-controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', 'GroupsService', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit,GroupsService){
+controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', 'GroupsService', 'Success', 'Error', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit,GroupsService,Success,Error){
 
     $scope.tinymceOptions = {
         plugins: [
@@ -19,19 +19,31 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
     $scope.uploadAlertImages = {newAlert:false, type:"", message:""};
 
     ContentService.content.query({id: idToEdit}).$promise.then(function(response){
-        $scope.article = response.success;
-        $scope.imagePath = $rootScope.pathAmazonDev+response.success.image_path;
+        $scope.article = Success.getObject(response);
+        $scope.imagePath = $rootScope.pathAmazonDev+Success.getObject(response).image_path;
 
-        var userGroups = response.success.groupsID;
+        var userGroups = Success.getObject(response).groupsID;
 
         ContentService.groupsByIds.query({ids: userGroups}).$promise.then(function (groups) {
-            $scope.selectedGroups = groups.success;
+            $scope.selectedGroups = Success.getObject(groups);
+        }).catch(function(err){
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.newAlert = true;
         });
 
+    }).catch(function(err){
+        $scope.statusAlert.type = "danger";
+        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.newAlert = true;
     });
 
     GroupsService.groups.query().$promise.then(function(resp){
-        $scope.groups=resp.success;
+        $scope.groups = Success.getObject(resp);
+    }).catch(function(err){
+        $scope.statusAlert.type = "danger";
+        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.newAlert = true;
     });
 
 
@@ -49,18 +61,16 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                 } else {
                     //update database as well
                     ContentService.content.update({id:$scope.article._id},{info:{image:key}}).$promise.then(function (resp) {
-                        if(resp.error){
-                            $scope.uploadAlert.type = "danger";
-                            $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
-                            $scope.uploadAlert.newAlert = true;
-                        }else{
                             $scope.logo = key;
                             $scope.uploadAlert.type = "success";
                             $scope.uploadAlert.message = "Logo updated!";
                             $scope.uploadAlert.newAlert = true;
                             console.log("Upload complete");
                             $scope.imagePath = $rootScope.pathAmazonDev+key;
-                        }
+                    }).catch(function(err){
+                        $scope.uploadAlert.type = "danger";
+                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.newAlert = true;
                     });
                 }
             });
@@ -117,17 +127,15 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                             $scope.$apply();
                         }else{
                             ContentService.content.update({id:$scope.article._id}, {info:{associated_images:$scope.article.associated_images}}).$promise.then(function (resp) {
-                                if(resp.error){
-                                    $scope.uploadAlertImages.type = "danger";
-                                    $scope.uploadAlertImages.message = "Eroare la actualizarea bazei de date!";
-                                    $scope.uploadAlertImages.newAlert = true;
-                                }else{
                                     $scope.logo = key;
                                     $scope.uploadAlertImages.type = "success";
                                     $scope.uploadAlertImages.message = "Multimedia for articles updated!";
                                     $scope.uploadAlertImages.newAlert = true;
                                     console.log("Upload complete");
-                                }
+                            }).catch(function(err){
+                                $scope.uploadAlertImages.type = "danger";
+                                $scope.uploadAlertImages.message = Error.getMessage(err.data);
+                                $scope.uploadAlertImages.newAlert = true;
                             });
                         }
                     });
@@ -164,17 +172,15 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                     } else {
                         //update database as well
                         ContentService.content.update({id:$scope.article._id}, {info:{associated_images:$scope.article.associated_images}}).$promise.then(function (resp) {
-                            if(resp.error){
-                                $scope.uploadAlertImages.type = "danger";
-                                $scope.uploadAlertImages.message = "Eroare la actualizarea bazei de date!";
-                                $scope.uploadAlertImages.newAlert = true;
-                            }else{
                                 $scope.logo = key;
                                 $scope.uploadAlertImages.type = "success";
                                 $scope.uploadAlertImages.message = "Multimedia for articles updated!";
                                 $scope.uploadAlertImages.newAlert = true;
                                 console.log("Upload complete");
-                            }
+                        }).catch(function(err){
+                            $scope.uploadAlertImages.type = "danger";
+                            $scope.uploadAlertImages.message = Error.getMessage(err.data);
+                            $scope.uploadAlertImages.newAlert = true;
                         });
                     }
                 });
@@ -198,17 +204,15 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                     } else {
                         //update database as well
                         ContentService.content.update({id:$scope.article._id}, {info:{associated_images:$scope.article.associated_images}}).$promise.then(function (resp) {
-                            if(resp.error){
-                                $scope.uploadAlertImages.type = "danger";
-                                $scope.uploadAlertImages.message = "Eroare la actualizarea bazei de date!";
-                                $scope.uploadAlertImages.newAlert = true;
-                            }else{
                                 $scope.logo = key;
                                 $scope.uploadAlertImages.type = "success";
                                 $scope.uploadAlertImages.message = "Multimedia for articles updated!";
                                 $scope.uploadAlertImages.newAlert = true;
                                 console.log("Upload complete");
-                            }
+                        }).catch(function(err){
+                            $scope.uploadAlertImages.type = "danger";
+                            $scope.uploadAlertImages.message = Error.getMessage(err.data);
+                            $scope.uploadAlertImages.newAlert = true;
                         });
                     }
                 });
@@ -244,6 +248,10 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
         $scope.article.last_updated = Date.now();
         ContentService.content.update({id: idToEdit},{article:$scope.article}).$promise.then(function (resp) {
             $scope.closeModal();
+        }).catch(function(err){
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.newAlert = true;
         });
     };
 

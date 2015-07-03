@@ -1,4 +1,4 @@
-controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','CarouselMedicService','$modalInstance', '$state', 'AmazonService', function($scope, $rootScope, $sce, CarouselMedicService, $modalInstance, $state, AmazonService){
+controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','CarouselMedicService','$modalInstance', '$state', 'AmazonService', 'Success', 'Error', function($scope, $rootScope, $sce, CarouselMedicService, $modalInstance, $state, AmazonService, Success, Error){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
@@ -12,7 +12,11 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
         console.log(newVal);
         //load all contents of this type
         CarouselMedicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
-            $scope.allContent = resp.success;
+            $scope.allContent = Success.getObject(resp);
+        }).catch(function(err){
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.newAlert = true;
         });
     });
 
@@ -37,13 +41,8 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
             CarouselMedicService.carouselMedic.create({data: {toAdd: this.carouselImage, extension: extension}}).$promise.then(function (resp) {
                 $scope.statusAlert.newAlert = false;
                 $scope.uploadAlert.newAlert = false;
-                if(resp.error){
-                    $scope.statusAlert.type = "danger";
-                    $scope.statusAlert.message = resp.message;
-                    $scope.statusAlert.newAlert = true;
-                }else{
                     $scope.statusAlert.type = "success";
-                    $scope.statusAlert.message = resp.success.message;
+                    $scope.statusAlert.message = Success.getMessage(resp);
                     $scope.statusAlert.newAlert = true;
                     //upload image to Amazon
                     AmazonService.getClient(function (s3) {
@@ -68,7 +67,10 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
                             })
                         });
                     });
-                }
+            }).catch(function(err){
+                $scope.statusAlert.type = "danger";
+                $scope.statusAlert.message = Error.getMessage(err.data);
+                $scope.statusAlert.newAlert = true;
             });
         }else{
             $scope.statusAlert.type = "danger";

@@ -1,22 +1,28 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', function($scope,ProductService,idToEdit,$modalInstance,$state,therapeuticAreaService,AmazonService,$rootScope){
+controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'Success', 'Error', function($scope,ProductService,idToEdit,$modalInstance,$state,therapeuticAreaService,AmazonService,$rootScope,Success,Error){
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertRPC = {newAlert:false, type:"", message:""};
 
     ProductService.products.query({id:idToEdit}).$promise.then(function(result){
-        $scope.product=result.success;
-        $scope.selectedAreas = result.success['therapeutic-areasID'];
-        $scope.selectedGroups = result.success['groupsID'];
+        $scope.product=Success.getObject(result);
+        $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
+        $scope.selectedGroups = Success.getObject(result)['groupsID'];
+    }).catch(function(err){
+        console.log(Error.getMessage(err.data));
     });
 
     ProductService.products.query().$promise.then(function(resp){
-        $scope.groups = resp.success['groups'];
+        $scope.groups = Success.getObject(resp)['groups'];
+    }).catch(function(err){
+        console.log(Error.getMessage(err.data));
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp.success;
+        $scope.areas = Success.getObject(resp);
+    }).catch(function(err){
+        console.log(Error.getMessage(err.data));
     });
 
     $scope.updateProduct = function(){
@@ -32,6 +38,8 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
             console.log(resp);
             $state.reload();
             $modalInstance.close();
+        }).catch(function(err){
+            console.log(Error.getMessage(err.data));
         });
     };
     var putLogoS3 = function (body) {
@@ -48,18 +56,16 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
                 } else {
                     //update database as well
                     ProductService.products.update({id:$scope.product._id},{info:{path:key,logo:true}}).$promise.then(function (resp) {
-                        if(resp.error){
-                            $scope.uploadAlert.type = "danger";
-                            $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
-                            $scope.uploadAlert.newAlert = true;
-                        }else{
                             $scope.logo = key;
                             $scope.uploadAlert.type = "success";
                             $scope.uploadAlert.message = "Image updated!";
                             $scope.uploadAlert.newAlert = true;
                             console.log("Upload complete");
                             $scope.imagePath = $rootScope.pathAmazonDev+key;
-                        }
+                    }).catch(function(err){
+                        $scope.uploadAlert.type = "danger";
+                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.newAlert = true;
                     });
                 }
             });
@@ -112,18 +118,16 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
                 } else {
                     //update database as well
                     ProductService.products.update({id:$scope.product._id},{info:{path:key,rpc:true}}).$promise.then(function (resp) {
-                        if(resp.error){
-                            $scope.uploadAlertRPC.type = "danger";
-                            $scope.uploadAlertRPC.message = "Eroare la actualizarea bazei de date!";
-                            $scope.uploadAlertRPC.newAlert = true;
-                        }else{
                             $scope.logo = key;
                             $scope.uploadAlertRPC.type = "success";
                             $scope.uploadAlertRPC.message = "RPC updated!";
                             $scope.uploadAlertRPC.newAlert = true;
                             console.log("Upload complete");
                             $scope.imagePath = $rootScope.pathAmazonDev+key;
-                        }
+                    }).catch(function(err){
+                        $scope.uploadAlert.type = "danger";
+                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.newAlert = true;
                     });
                 }
             });

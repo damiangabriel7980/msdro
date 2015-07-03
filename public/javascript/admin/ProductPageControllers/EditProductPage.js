@@ -1,15 +1,19 @@
-controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', function($scope, SpecialProductsService, AmazonService) {
+controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService, Success,Error) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
     SpecialProductsService.products.query({id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
-        $scope.newProductPage = resp.success[0];
-        $scope.selectedGroups = resp.success[0].groups;
+        $scope.newProductPage = Success.getObject(resp)[0];
+        $scope.selectedGroups = Success.getObject(resp)[0].groups;
         //get available groups (a group can have only one special product)
         SpecialProductsService.groupsAvailable.query().$promise.then(function (resp) {
-            $scope.groupsAvailable = resp.success;
+            $scope.groupsAvailable = Success.getObject(resp);
+        }).catch(function(err){
+            $scope.resetAlert("danger", Error.getMessage(err.data));
         });
+    }).catch(function(err){
+        $scope.resetAlert("danger", Error.getMessage(err.data));
     });
 
     $scope.logoImageBody = null;
@@ -58,17 +62,15 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
                         }else{
                             //update database
                             SpecialProductsService.products.update({id: $scope.newProductPage._id}, toUpdate).$promise.then(function (resp) {
-                                if(resp.error){
-                                    $scope.resetAlert("danger", "Datele au fost salvate, dar a aparut o eroare la salvarea imaginilor in baza de date");
-                                }else{
                                     console.log(resp);
                                     if(redirectToMenu){
                                         $scope.renderView("editProductMenu");
                                     }else{
                                         $scope.closeModal(true);
                                     }
-                                }
-                            })
+                            }).catch(function(err){
+                                $scope.resetAlert("danger", Error.getMessage(err.data));
+                            });
                         }
                     });
                 }else{

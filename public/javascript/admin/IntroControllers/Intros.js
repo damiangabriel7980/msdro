@@ -1,4 +1,4 @@
-controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','ngTableParams','$modal', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,ngTableParams,$modal){
+controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','ngTableParams','$modal', 'Success', 'Error', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,ngTableParams,$modal,Success,Error){
     IntroService.intros.query().$promise.then(function (data) {
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
@@ -10,14 +10,16 @@ controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$statePa
                 description: ''       // initial filter
             }
         }, {
-            total: data.success.length, // length of data
+            total: Success.getObject(data).length, // length of data
             getData: function($defer, params) {
 
-                var orderedData = $filter('orderBy')(($filter('filter')(data.success, params.filter())), params.orderBy());
+                var orderedData = $filter('orderBy')(($filter('filter')(Success.getObject(data), params.filter())), params.orderBy());
 
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             }
         });
+    }).catch(function(err){
+        console.log(Error.getMessage(err.data));
     });
     $scope.viewIntro= function(id){
         $modal.open({
