@@ -3627,7 +3627,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(ans.error){
                 res.json(ans);
             }else{
-                if(job._id==0){
+                if(!job._id){
                     //create new
                     var newJob = new Job({
                         job_type: job.job_type,
