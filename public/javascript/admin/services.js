@@ -1,11 +1,12 @@
 var services = angular.module('services', ['ngResource']);
-services.factory('AmazonService', ['$resource', '$rootScope', function($resource, $rootScope){
+services.factory('AmazonService', ['$resource', '$rootScope', 'Success', function($resource, $rootScope, Success){
     var getCredentialsFromServer = $resource('api/admin/s3tc', {}, {
         query: { method: 'GET', isArray: false }
     });
     var getClient = function (callback) {
         getCredentialsFromServer.query().$promise.then(function (resp) {
-            AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
+            var credentials = Success.getObject(resp);
+            AWS.config.update({accessKeyId: credentials.AccessKeyId, secretAccessKey: credentials.SecretAccessKey, sessionToken: credentials.SessionToken});
             callback(new AWS.S3());
         });
     };
@@ -16,12 +17,7 @@ services.factory('AmazonService', ['$resource', '$rootScope', function($resource
         getBucketUrl: function () {
             return $rootScope.pathAmazonDev;
         },
-        getClient: function (callback) {
-            getCredentialsFromServer.query().$promise.then(function (resp) {
-                AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
-                callback(new AWS.S3());
-            });
-        },
+        getClient: getClient,
         uploadFile: function (fileBody, key, callback) {
             getClient(function (s3) {
                 console.log("upload file");

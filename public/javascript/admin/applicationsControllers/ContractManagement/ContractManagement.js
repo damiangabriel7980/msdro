@@ -1,7 +1,7 @@
-controllers.controller('ContractManagement', ['$scope', '$state', 'ContractManagementService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'AmazonService', function ($scope, $state, ContractManagementService, ngTableParams, $filter, $modal, InfoModal, ActionModal, AmazonService) {
+controllers.controller('ContractManagement', ['$scope', '$state', 'ContractManagementService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'AmazonService', 'Success', function ($scope, $state, ContractManagementService, ngTableParams, $filter, $modal, InfoModal, ActionModal, AmazonService, Success) {
     var refreshTemplates = function (sortByDate) {
         ContractManagementService.templates.query().$promise.then(function(resp){
-            var events = resp.success;
+            var events = Success.getObject(resp);
             var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -29,17 +29,15 @@ controllers.controller('ContractManagement', ['$scope', '$state', 'ContractManag
     refreshTemplates();
 
     $scope.addTemplate = function () {
-        ContractManagementService.templates.create({}).$promise.then(function (resp) {
-            if(resp.error){
-                InfoModal.show("Eroare la adaugare", "A aparut o eroare la adaugarea template-ului");
+        ContractManagementService.templates.create({}).$promise.then(function () {
+            console.log($scope.tableParams.total());
+            if($scope.tableParams.total() == 0){
+                $state.reload();
             }else{
-                console.log($scope.tableParams.total());
-                if($scope.tableParams.total() == 0){
-                    $state.reload();
-                }else{
-                    refreshTemplates(true);
-                }
+                refreshTemplates(true);
             }
+        }).catch(function () {
+            InfoModal.show("Eroare la adaugare", "A aparut o eroare la adaugarea template-ului");
         });
     };
 
@@ -48,7 +46,7 @@ controllers.controller('ContractManagement', ['$scope', '$state', 'ContractManag
             template.isEnabled?"Dezactiveaza template":"Activeaza template",
             template.isEnabled?"Sunteti sigur ca doriti sa dezactivati template-ul?":"Sunteti sigur ca doriti sa activati template-ul?",
             function () {
-                ContractManagementService.templates.update({id: template._id}, {isEnabled: !template.isEnabled}).$promise.then(function (resp) {
+                ContractManagementService.templates.update({id: template._id}, {isEnabled: !template.isEnabled}).$promise.then(function () {
                     refreshTemplates();
                 });
             }
@@ -85,12 +83,10 @@ controllers.controller('ContractManagement', ['$scope', '$state', 'ContractManag
                 },
                 function (callback) {
                     //remove from db
-                    ContractManagementService.templates.delete({id: id}).$promise.then(function (resp) {
-                        if(resp.error){
-                            callback("Eroare la stergerea din baza de date");
-                        }else{
-                            callback();
-                        }
+                    ContractManagementService.templates.delete({id: id}).$promise.then(function () {
+                        callback();
+                    }).catch(function () {
+                        callback("Eroare la stergerea din baza de date");
                     });
                 }
             ], function (err) {

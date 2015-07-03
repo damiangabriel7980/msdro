@@ -1,4 +1,4 @@
-controllers.controller('EditTemplate', ['$scope', '$modalInstance', '$state', 'idToEdit', 'ContractManagementService', function($scope, $modalInstance, $state, idToEdit, ContractManagementService){
+controllers.controller('EditTemplate', ['$scope', '$modalInstance', '$state', 'idToEdit', 'ContractManagementService', 'Success', function($scope, $modalInstance, $state, idToEdit, ContractManagementService, Success){
 
     var resetAlert = function (type, text) {
         $scope.alert = {
@@ -9,22 +9,18 @@ controllers.controller('EditTemplate', ['$scope', '$modalInstance', '$state', 'i
     };
 
     ContractManagementService.templates.query({id: idToEdit}).$promise.then(function (resp) {
-        if(resp.success){
-            $scope.template = resp.success;
-        }else{
-            resetAlert("danger", "Eroare la gasirea template-ului");
-        }
+        Success.getObject(resp);
+    }).catch(function () {
+        resetAlert("danger", "Eroare la gasirea template-ului");
     });
     
     $scope.updateTemplate = function () {
         var template = this.template;
-        ContractManagementService.templates.update({id: template._id}, template).$promise.then(function (resp) {
-            if(resp.success){
-                $state.reload();
-                $modalInstance.close();
-            }else{
-                resetAlert("danger", "Eroare la update");
-            }
+        ContractManagementService.templates.update({id: template._id}, template).$promise.then(function () {
+            $state.reload();
+            $modalInstance.close();
+        }).catch(function () {
+            resetAlert("danger", "Eroare la update");
         });
     };
 
