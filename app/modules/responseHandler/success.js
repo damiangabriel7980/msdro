@@ -12,7 +12,8 @@ var successCodes = {
     11: "Fotografia a fost actualizata cu succes!",
     12: "Datele au fost modificate!",
     13: "Parola a fost schimbata",
-    14: "Cautarea nu a returnat nici un rezultat!"
+    14: "Cautarea nu a returnat nici un rezultat!",
+    15: "Successfully unsubscribed from push notifications"
 };
 
 module.exports = function(logger){

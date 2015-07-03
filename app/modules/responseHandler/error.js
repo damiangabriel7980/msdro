@@ -23,7 +23,8 @@ var errorCodes = {
     26: "Numele trebuie sa contina doar caractere, minim 3",
     27: "Numarul de telefon trebuie sa contina doar cifre, minim 10",
     28: "Adresa este obligatorie!",
-    29: "Selectati un tip de loc de munca"
+    29: "Selectati un tip de loc de munca",
+    30: "Error unsubscibing from push notifications"
 };
 
 module.exports = function(logger){
