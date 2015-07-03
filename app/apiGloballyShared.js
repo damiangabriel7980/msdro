@@ -43,6 +43,10 @@ var mergeKeys = function (obj1, obj2){
 
 module.exports = function(app, env, globals, logger, amazon, router) {
 
+    //=============================================Define variables
+    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
+    var handleError = require('./modules/responseHandler/error.js')(logger);
+
     //access control allow origin *
     app.all("/apiGloballyShared/*", function(req, res, next) {
         res.setHeader("Access-Control-Allow-Origin", "*");
@@ -59,14 +63,14 @@ module.exports = function(app, env, globals, logger, amazon, router) {
         if (req.isAuthenticated()){
             return next();
         }else{
-            res.status(403).end();
+            handleError(res, null, 403, 13);
         }
     }
 
     //route for retrieving environment info; CAREFUL NOT TO INCLUDE SENSIBLE DATA
     router.route('/appSettings')
         .get(function (req, res) {
-            res.send({
+            handleSuccess(res, {
                 amazonPrefix: env.amazonPrefix + env.amazonBucket + "/"
             });
         });
@@ -107,36 +111,25 @@ module.exports = function(app, env, globals, logger, amazon, router) {
 
         //validate data
         if(!globals.validateEmail(email)){
-            info.message = "Adresa de e-mail nu este valida";
-            res.json(info);
-//        }else if(typeof title !== "number"){
-//            info.message = "Titlul este obligatoriu";
-//            res.json(info);
+            handleError(res, null, 400, 31);
         }else if(!namePatt.test(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''))){
-            info.message = "Numele trebuie sa contina minim 3 litere si doar caracterele speciale '-', '.'";
-            res.json(info);
+            handleError(res, null, 400, 261);
         }else if(password.length < 6 || password.length > 32){
-            info.message = "Parola trebuie sa contina intre 6 si 32 de caractere";
-            res.json(info);
+            handleError(res, null, 400, 10);
         }else{
             User.findOne({username: {$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}, function(err, user) {
                 //if there are any errors, return the error
                 if(err){
-                    logger.error(err);
-                    info.message = "A aparut o eroare pe server";
-                    res.json(info);
+                    handleError(res, err);
                 }else if(user) {
                     // check to see if there's already a user with that email
-                    info.message = "Acest e-mail este deja folosit";
-                    res.send(info);
+                    handleError(res ,null, 400, 32);
                 }else{
                     //data is valid
                     //get default role
                     Roles.findOne({'authority': 'ROLE_FARMACIST'}, function (err, role) {
                         if(err || !role){
-                            logger.error(err);
-                            info.message = "A aparut o eroare pe server";
-                            res.json(info);
+                            handleError(res, err);
                         }else{
                             req.staywellUser = {
                                 rolesID: [role._id.toString()],
@@ -162,7 +155,6 @@ module.exports = function(app, env, globals, logger, amazon, router) {
     var validateCompleteProfile = function (req, res, next) {
         var staywellUser = req.staywellUser || {};
 
-        var info = {error: true, type:"danger"};
         try{
             var activation = req.body.activation || {};
             //make sure only the info provided in the form is updated
@@ -173,36 +165,26 @@ module.exports = function(app, env, globals, logger, amazon, router) {
             var phonePatt = new XRegExp('^[0-9]{10,20}$');
 
             if(activation.type !== "code" && activation.type !== "file"){
-                info.message = "Tipul de activare nu este valid";
-                res.json(info);
+                handleError(res, null, 400, 33);
             }else if(activation.type === "file" && !(activation.value.extension && activation.value.file)){
-                info.message = "Eroare la citirea fisierului";
-                res.json(info);
+                handleError(res, null, 400, 34);
             }else if(activation.type === "code" && !activation.value){
-                info.message = "Eroare la citirea codului";
-                res.json(info);
+                handleError(res, null, 400, 35);
             }else if(!userData.profession){
-                info.message = "Profesia este obligatorie";
-                res.json(info);
+                handleError(res, null, 400, 36);
             }else if(!userData.groupsID[0]){
-                info.message = "Selectati un grup preferat";
-                res.json(info);
+                handleError(res, null, 400, 37);
             }else if(!userData.address){
-                info.message = "Adresa este obligatorie";
-                res.json(info);
+                handleError(res, null, 400, 28);
             }else if(!userData.citiesID){
-                info.message = "Selectati un oras";
-                res.json(info);
+                handleError(res, null, 400, 38);
             }else if(userData.phone && !phonePatt.test(userData.phone)){
-                info.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
-                res.json(info);
+                handleError(res, null, 400, 27);
             }else{
                 //establish default user group
                 UserGroup.findOne({profession: userData.profession, display_name: "Default"}, function (err, group) {
                     if(err || !group){
-                        logger.error(err);
-                        info.message = "A aparut o eroare pe server";
-                        res.json(info);
+                        handleError(res, err);
                     }else{
                         //establish groups ids
                         userData.groupsID.push(group._id.toString());
@@ -211,13 +193,10 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                             //validate code
                             ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
                                 if(err || !code){
-                                    logger.error(err);
-                                    info.message = "A aparut o eroare pe server";
-                                    res.json(info);
+                                    handleError(res, err);
                                 }else{
                                     if(SHA512(activation.value).toString() !== code.value){
-                                        info.message = "Codul de activare nu este valid";
-                                        res.json(info);
+                                        handleError(res, null, 403, 351);
                                     }else{
                                         staywellUser.state = "ACCEPTED";
                                         req.staywellUser = mergeKeys(staywellUser, userData);
@@ -233,16 +212,14 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                                 req.staywellProof = activation.value;
                                 next();
                             }else{
-                                info.message = "Dovada nu a putut fi incarcata";
-                                res.json(info);
+                                handleError(res, null, 500, 39);
                             }
                         }
                     }
                 });
             }
         }catch(ex){
-            info.message = "A aparut o eroare pe server";
-            res.json(info);
+            handleError(res, err);
         }
     };
 
@@ -257,30 +234,22 @@ module.exports = function(app, env, globals, logger, amazon, router) {
         if(staywellUser.state === "ACCEPTED"){
             next();
         }else if(!staywellProof){
-            info.message = "A aparut o eroare la incarcarea dovezii";
-            res.json(info);
+            handleError(res, null, 500, 39);
         }else if(!userEmail){
-            info.message = "A aparut o eroare la incarcarea dovezii";
-            res.json(info);
+            handleError(res, null, 500, 39);
         }else{
             User.findOne({username: {$regex: "^"+userEmail.replace(/\+/g,"\\+")+"$", $options: "i"}}).exec(function (err, user) {
                 if(err || !user){
-                    logger.error(err);
-                    info.message = "A aparut o eroare la incarcarea dovezii";
-                    res.json(info);
+                    handleError(res, err);
                 }else{
                     var key = "user/"+user._id+"/proof."+staywellProof.extension;
                     amazon.addObjectS3(key, staywellProof.file, function (err) {
                         if (err){
-                            logger.error(err);
-                            info.message = "Dovada nu a putut fi incarcata";
-                            res.json(info);
+                            handleError(res, null, 500, 39);
                         }else{
                             User.update({_id: user._id}, {$set: {proof_path: key}}, function (err, wres) {
                                 if(err){
-                                    logger.error(err);
-                                    info.message = "A aparut o eroare la incarcarea dovezii";
-                                    res.json(info);
+                                    handleError(res, null, 500, 39);
                                 }else{
                                     next();
                                 }
@@ -298,9 +267,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
         var user = new User(req.staywellUser);
         user.save(function (err, saved) {
             if(err){
-                logger.error(err);
-                info.message = "A aparut o eroare la salvarea datelor";
-                res.json(info);
+                handleError(res, err);
             }else{
                 req.staywellUser._id = saved._id;
                 next();
@@ -309,13 +276,10 @@ module.exports = function(app, env, globals, logger, amazon, router) {
     };
 
     var completeProfile = function (req, res, next) {
-        var info = {error: true, type:"danger"};
 
         User.update({_id: req.user._id}, {$set: req.staywellUser}, function (err, wres) {
             if(err){
-                logger.error(err);
-                info.message = "A aparut o eroare la salvarea datelor";
-                res.json(info);
+                handleError(res, err);
             }else{
                 next();
             }
@@ -353,7 +317,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 user: req.staywellUser.username,
                 state: req.staywellUser.state
             };
-            res.send(info);
+            handleSuccess(res, info);
             notifyAdmin(req.staywellUser._id);
 
             if(req.staywellUser.state === "ACCEPTED"){
@@ -399,7 +363,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 user: req.user.username,
                 state: req.staywellUser.state
             };
-            res.send(info);
+            handleSuccess(res, info);
             notifyAdmin(req.user._id);
         });
 
@@ -411,7 +375,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 user: req.staywellUser.username,
                 state: req.staywellUser.state
             };
-            res.json(info);
+            handleSuccess(res, info);
 
             generateToken(req.staywellUser.username, function (err, activationToken) {
                 if(err){
@@ -454,9 +418,9 @@ module.exports = function(app, env, globals, logger, amazon, router) {
         .get(function (req, res) {
             Professions.find({}).exec(function (err, professions) {
                 if(err){
-                    res.send(err);
+                    handleError(res, err);
                 }else{
-                    res.send(professions);
+                    handleSuccess(res, professions);
                 }
             });
         });
@@ -468,13 +432,13 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 profession = mongoose.Types.ObjectId(profession.toString());
                 UserGroup.find({show_at_signup: true, profession: profession}).sort({display_name: 1}).exec(function (err, groups) {
                     if(err){
-                        res.send(err);
+                        handleError(res, err);
                     }else{
-                        res.send(groups);
+                        handleSuccess(res, groups);
                     }
                 });
             }else{
-                res.send([]);
+                handleSuccess(res, []);
             }
         });
 
@@ -482,10 +446,9 @@ module.exports = function(app, env, globals, logger, amazon, router) {
         .get(function (req, res) {
             Counties.find({}).sort({name: 1}).exec(function (err, counties) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true})
+                    handleError(res, err);
                 }else{
-                    res.send({success: counties});
+                    handleSuccess(res, counties);
                 }
             });
         });
@@ -493,16 +456,15 @@ module.exports = function(app, env, globals, logger, amazon, router) {
     router.route('/accountActivation/cities')
         .get(function (req, res) {
             if(!req.query.county){
-                res.send({error: true});
+                handleError(res, null, 400);
             }else{
                 Counties.findOne({_id: req.query.county}).populate('citiesID').exec(function (err, county) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else if(!county){
-                        res.send({error: true});
+                        handleError(res, null, 400);
                     }else{
-                        res.send({success: county.citiesID});
+                        handleSuccess(res, county.citiesID);
                     }
                 });
             }
@@ -526,7 +488,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                     //find user
                     User.findOne({ username: {$regex: "^"+req.body.email.replace(/\+/g,"\\+")+"$", $options: "i"} }).select('+title').exec(function(err, user) {
                         if (!user) {
-                            res.send({message : {hasError: true, text: 'Nu a fost gasit un cont pentru acest e-mail.'}});
+                            handleError(res, null, 400, 311);
                         }else{
                             //set token for user - expires in one hour
                             User.update({_id: user._id.toString()}, {
@@ -561,7 +523,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                         emailTo,
                         'Resetare parola MSD'
                     ).then(
-                        function (success) {
+                        function () {
                             done(false, user.username);
                         },
                         function (err) {
@@ -571,10 +533,11 @@ module.exports = function(app, env, globals, logger, amazon, router) {
                 }
             ], function(err, user) {
                 if (err){
-                    logger.error(err);
-                    res.send({message : {hasError: true, text: 'A aparut o eroare. Va rugam verificati datele'}});
+                    handleError(res, err);
                 }else{
-                    res.send({message : {hasError: false, text: 'Un email cu instructiuni a fost trimis catre ' + user + '.', type: 'info'}});
+                    handleSuccess(res, {
+                        mailto: user
+                    });
                 }
             });
         });
