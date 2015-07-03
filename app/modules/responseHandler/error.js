@@ -11,6 +11,9 @@ var errorCodes = {
     9: "Introduceti o parola diferita fata de cea veche!",
     10: "Parola noua trebuie sa contina intre 6 si 32 de caractere!",
     11: "Parolele nu corespund",
+    12: "Continutul a fost procesat cu erori",
+    13: "Nu sunteti autentificat",
+    14: "Nu aveti drepul de accesa aceasta resursa",
     20: "Autorul si titlul sunt obligatorii (minim 3 caractere)",
     21: "Verificati tipul",
     22: "Tipul fisierului lipseste",
@@ -24,8 +27,8 @@ var errorCodes = {
 };
 
 module.exports = function(logger){
-    return function(res, error ,status, code){
+    return function(res, error ,status, code, data){
         if(error) logger.log(error);
-        res.send(status || 500, {error: errorCodes[code || 0]})
+        res.send(status || 500, {error: errorCodes[code || 0], data: data});
     };
 };

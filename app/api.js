@@ -211,7 +211,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         if (req.isAuthenticated()){
             return next();
         }else{
-            res.status(403).end();
+            handleError(res,true,403,13);
         }
     }
 
@@ -236,14 +236,14 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 User.find({_id: userID}, {rolesID :1}).select("+rolesID").exec(function (err, data) {
                     if(err){
                         logger.error(err);
-                        res.status(403).end();
+                        handleError(res, err);
                     }else{
                         var roles = data[0].rolesID;
                         //now get roles
                         Roles.find({_id: {$in: roles}}, function (err, data) {
                             if(err){
                                 logger.error(err);
-                                res.status(403).end();
+                                handleError(res, err);
                             }else{
                                 var admin = false;
                                 for(var i=0; i<data.length; i++){
@@ -252,18 +252,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 if(admin === true){
                                     next();
                                 }else{
-                                    res.status(403).end();
+                                    handleError(res, true, 403, 14);
                                 }
                             }
                         });
                     }
                 });
             }else{
-                res.status(403).end();
+                handleError(res,true,403,13);
             }
         }catch(e){
-            logger.error(e);
-            res.status(403).end();
+            handleError(res, e);
         }
 
     }
@@ -288,10 +287,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             amazon.getS3Credentials(req.user.username, function(err, data){
                 if(err){
-                    logger.error(err);
-                    res.status(404).end();
+                    handleError(res, err);
                 }else{
-                    res.json(data);
+                    handleSuccess(res, data);
                 }
             });
         });
@@ -1850,9 +1848,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             ], function (err) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res);
                 }
             });
 
@@ -2507,19 +2505,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 CM_templates.findOne({_id: req.query.id}, function (err, template) {
                     if(err || !template){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: template});
+                        handleSuccess(res, template);
                     }
                 });
             }else{
                 CM_templates.find({}, function (err, templates) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: templates});
+                        handleSuccess(res, templates);
                     }
                 });
             }
@@ -2533,10 +2529,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
             template.save(function (err, saved) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -2544,10 +2539,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToUpdate = ObjectId(req.query.id);
             CM_templates.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res, true, 3);
                 }
             });
         })
@@ -2555,10 +2549,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToDelete = ObjectId(req.query.id);
             CM_templates.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res, true, 4);
                 }
             });
         });
@@ -2651,19 +2644,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 DPOC_Devices.findOne({_id: req.query.id}, {name: 1}, function (err, device) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: device});
+                        handleSuccess(res, device);
                     }
                 });
             }else{
                 DPOC_Devices.find({}, {name: 1}, function (err, devices) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: devices});
+                        handleSuccess(res, devices);
                     }
                 });
             }
@@ -2672,10 +2663,10 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             
             addDeviceDPOC(req.body.name, req.body.email).then(
                 function () {
-                    res.send({success: "Un email a fost trimis catre utilizatorul adaugat"});
+                    handleSuccess(res, true, 81);
                 },
                 function (err) {
-                    res.send({error: err});
+                    handleError(res, err);
                 }
             );
         })
@@ -2683,9 +2674,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToDelete = ObjectId(req.query.id);
             DPOC_Devices.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res);
                 }
             });
         });
@@ -2709,9 +2700,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 );
             }, function () {
                 if(processedWithErrors.length == 0){
-                    res.send({success: true});
+                    handleSuccess(res);
                 }else{
-                    res.send({error: processedWithErrors});
+                    handleError(res, true, 409, 12, processedWithErrors);
                 }
             })
         });
@@ -2720,10 +2711,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             ActivationCodes.find({}).populate('profession').exec(function (err, codes) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: codes});
+                    handleSuccess(res, codes);
                 }
             });
         })
@@ -2731,15 +2721,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToUpdate = ObjectId(req.query.id);
             ActivationCodes.findOne({_id: idToUpdate}).select('+value').exec(function (err, code) {
                 if(err || !code){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
                     ActivationCodes.update({_id: idToUpdate}, {$set: {value: SHA512(req.body.new).toString()}}, function (err, wres) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: true});
+                            handleSuccess(res);
                         }
                     });
                 }
@@ -2750,30 +2738,24 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             Parameters.find({}).exec(function (err, params) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: params});
+                    handleSuccess(params);
                 }
             });
         })
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             Parameters.findOne({_id: idToUpdate}).exec(function (err, parameter) {
-                if(err) {
-                    logger.error(err);
-                    res.send({error: true});
-                }else if(!parameter){
-                    logger.error("Update parameter - not found");
-                    res.send({error: true});
+                if(err || !parameter) {
+                    handleError(res, err);
                 }else{
                     UtilsModule.allowFields(req.body, ["default_value", "value"]);
                     Parameters.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: true});
+                            handleSuccess(res);
                         }
                     });
                 }
@@ -3816,7 +3798,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var viewStatus = SessionStorage.getElement(req, "viewedIntroPresentations") || {};
             viewStatus[req.body.groupID] = true;
             SessionStorage.setElement(req, "viewedIntroPresentations", viewStatus);
-            res.send(200, "View remembered");
+            handleSuccess(res);
         });
 
     router.route('/introPresentation')
