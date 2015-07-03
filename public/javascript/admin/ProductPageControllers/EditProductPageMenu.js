@@ -7,7 +7,7 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
     SpecialProductsService.menu.query({id: $scope.sessionData.editMenuId}).$promise.then(function (resp) {
         $scope.currentItem = Success.getObject(resp).menuItem;
     }).catch(function(err){
-        $scope.resetAlert("danger", Error.getMessage(err.data));
+        $scope.resetAlert("danger", Error.getMessage(err));
     });
 
     $scope.headerImageBody = null;
@@ -37,7 +37,7 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
                     $scope.resetAlert("success", "Imaginea a fost stearsa");
                 }
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 
@@ -81,7 +81,7 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
                         callback();
                 }).catch(function(err){
                     callback("Eroare la salvare");
-                    $scope.resetAlert("danger", Error.getMessage(err.data));
+                    $scope.resetAlert("danger", Error.getMessage(err));
                 });
             }
         ], function (err) {

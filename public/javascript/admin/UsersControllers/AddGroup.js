@@ -19,13 +19,13 @@ controllers.controller('AddGroup', ['$scope','GroupsService', '$modalInstance', 
         console.log(resp);
         $scope.users = Success.getObject(resp);
     }).catch(function(err){
-        resetAlert('danger',Error.getMessage(err.data));
+        resetAlert('danger',Error.getMessage(err));
     });
 
     GroupsService.professions.query().$promise.then(function (resp) {
         $scope.professions = Success.getObject(resp);
     }).catch(function(err){
-        resetAlert('danger',Error.getMessage(err.data));
+        resetAlert('danger',Error.getMessage(err));
     });
 
     $scope.fileSelected = function ($files) {
@@ -46,7 +46,7 @@ controllers.controller('AddGroup', ['$scope','GroupsService', '$modalInstance', 
                         callback(null, idAdded);
                 }).catch(function(err){
                     callback("Eroare la adaugare");
-                    resetAlert('danger',Error.getMessage(err.data));
+                    resetAlert('danger',Error.getMessage(err));
                 });
             },
             function (idAdded, callback) {
@@ -64,7 +64,7 @@ controllers.controller('AddGroup', ['$scope','GroupsService', '$modalInstance', 
                                     callback();
                             }).catch(function(err){
                                 callback("Eroare la update baza de date dupa salvarea imaginii");
-                                resetAlert('danger',Error.getMessage(err.data));
+                                resetAlert('danger',Error.getMessage(err));
                             });
                         }
                     });

@@ -7,7 +7,7 @@ controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$
         $scope.selectedGroups = $scope.intro['groupsID'];
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
 
@@ -15,7 +15,7 @@ controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$
         $scope.groups = Success.getObject(resp);
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
 
@@ -33,7 +33,7 @@ controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$
             $scope.statusAlert.message = Success.getMessage(resp);
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     };

@@ -7,12 +7,12 @@ controllers.controller('NewsView', ['$scope', '$state', '$rootScope', 'ContentSe
     ContentService.content.query({type: 1}).$promise.then(function (resp) {
         $scope.news = Success.getObject(resp);
     }).catch(function(errNews){
-        console.log(Error.getMessage(errNews.data));
+        console.log(Error.getMessage(errNews));
     });
     ContentService.mostRead.query({type: 1}).$promise.then(function (resp) {
         $scope.mostRead = resp.success;
     }).catch(function(errMostRead){
-        console.log(Error.getMessage(errMostRead.data));
+        console.log(Error.getMessage(errMostRead));
     });
     $scope.navigateToNews = function (content) {
         $state.go('stiri.detail', {id: content._id});

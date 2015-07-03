@@ -20,7 +20,7 @@ controllers.controller('EnableProductPage', ['$scope', 'SpecialProductsService',
                 $state.reload();
                 $modalInstance.close();
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 

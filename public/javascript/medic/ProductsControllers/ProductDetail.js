@@ -16,7 +16,7 @@ controllers.controller('ProductDetail', ['$scope','$rootScope' ,'ProductService'
          else
             $state.go('biblioteca.produse.productsByArea',{id:0});
      }).catch(function(err){
-         console.log(Error.getMessage(err.data));
+         console.log(Error.getMessage(err));
      });
 
 }]);

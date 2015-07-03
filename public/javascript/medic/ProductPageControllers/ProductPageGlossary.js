@@ -2,7 +2,7 @@ controllers.controller('ProductPageGlossary', ['$scope', '$rootScope', '$statePa
     specialProductService.SpecialProductGlossary.query({id:$stateParams.product_id}).$promise.then(function(result){
             $scope.specialProductGlossary = Success.getObject(result);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 }]);
 /**

@@ -6,7 +6,7 @@ controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce',
     HomeService.searchResults.query({term: $rootScope.textToSearch.toString()}).$promise.then(function(data){
             $scope.searchResults = Success.getObject(data);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.getCategory = function(type){

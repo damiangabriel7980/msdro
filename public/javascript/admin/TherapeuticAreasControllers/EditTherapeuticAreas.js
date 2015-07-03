@@ -10,7 +10,7 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdm
         $scope.areas = Success.getObject(resp)
     }).catch(function(err){
         $scope.therapeuticAlert.newAlert = true;
-        $scope.therapeuticAlert.message = Error.getMessage(err.data);
+        $scope.therapeuticAlert.message = Error.getMessage(err);
         $scope.therapeuticAlert.type = "danger";
     });
     areasAdminService.areas.query({id:$stateParams.id}).$promise.then(function(resp){
@@ -23,7 +23,7 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdm
         }
     }).catch(function(err){
         $scope.therapeuticAlert.newAlert = true;
-        $scope.therapeuticAlert.message = Error.getMessage(err.data);
+        $scope.therapeuticAlert.message = Error.getMessage(err);
         $scope.therapeuticAlert.type = "danger";
     });
 
@@ -40,7 +40,7 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdm
                 $state.go('ariiTerapeutice',{},{reload: true});
             }).catch(function(err){
                 $scope.therapeuticAlert.newAlert = true;
-                $scope.therapeuticAlert.message = Error.getMessage(err.data);
+                $scope.therapeuticAlert.message = Error.getMessage(err);
                 $scope.therapeuticAlert.type = "danger";
             });
         }

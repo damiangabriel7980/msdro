@@ -14,7 +14,7 @@ controllers.controller('AddSpecialApp', ['$scope','$rootScope' ,'SpecialAppsServ
         console.log(resp);
         $scope.specialGroups = Success.getObject(resp);
     }).catch(function(err){
-        resetAlert("Eroare", Error.getMessage(err.data));
+        resetAlert("Eroare", Error.getMessage(err));
     });
 
     var resetAlert = function (type, message) {
@@ -32,7 +32,7 @@ controllers.controller('AddSpecialApp', ['$scope','$rootScope' ,'SpecialAppsServ
                 $state.reload();
                 $modalInstance.close();
         }).catch(function(err){
-            resetAlert("Eroare", Error.getMessage(err.data));
+            resetAlert("Eroare", Error.getMessage(err));
         });
     };
 

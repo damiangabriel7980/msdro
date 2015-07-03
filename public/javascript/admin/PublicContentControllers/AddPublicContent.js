@@ -23,7 +23,7 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
         }
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
 
@@ -55,7 +55,7 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
 
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
     var findInUserAreas = function (id) {
@@ -118,7 +118,7 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
             $scope.statusAlert.newAlert = true;
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     };

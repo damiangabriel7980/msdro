@@ -28,13 +28,13 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
             $scope.selectedGroups = Success.getObject(groups);
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
 
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
 
@@ -42,7 +42,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
         $scope.groups = Success.getObject(resp);
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
 
@@ -69,7 +69,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                             $scope.imagePath = $rootScope.pathAmazonDev+key;
                     }).catch(function(err){
                         $scope.uploadAlert.type = "danger";
-                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.message = Error.getMessage(err);
                         $scope.uploadAlert.newAlert = true;
                     });
                 }
@@ -134,7 +134,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                                     console.log("Upload complete");
                             }).catch(function(err){
                                 $scope.uploadAlertImages.type = "danger";
-                                $scope.uploadAlertImages.message = Error.getMessage(err.data);
+                                $scope.uploadAlertImages.message = Error.getMessage(err);
                                 $scope.uploadAlertImages.newAlert = true;
                             });
                         }
@@ -179,7 +179,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                                 console.log("Upload complete");
                         }).catch(function(err){
                             $scope.uploadAlertImages.type = "danger";
-                            $scope.uploadAlertImages.message = Error.getMessage(err.data);
+                            $scope.uploadAlertImages.message = Error.getMessage(err);
                             $scope.uploadAlertImages.newAlert = true;
                         });
                     }
@@ -211,7 +211,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
                                 console.log("Upload complete");
                         }).catch(function(err){
                             $scope.uploadAlertImages.type = "danger";
-                            $scope.uploadAlertImages.message = Error.getMessage(err.data);
+                            $scope.uploadAlertImages.message = Error.getMessage(err);
                             $scope.uploadAlertImages.newAlert = true;
                         });
                     }
@@ -250,7 +250,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
             $scope.closeModal();
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     };

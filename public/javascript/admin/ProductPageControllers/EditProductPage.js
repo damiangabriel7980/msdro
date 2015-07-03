@@ -10,10 +10,10 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
         SpecialProductsService.groupsAvailable.query().$promise.then(function (resp) {
             $scope.groupsAvailable = Success.getObject(resp);
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     }).catch(function(err){
-        $scope.resetAlert("danger", Error.getMessage(err.data));
+        $scope.resetAlert("danger", Error.getMessage(err));
     });
 
     $scope.logoImageBody = null;
@@ -69,7 +69,7 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
                                         $scope.closeModal(true);
                                     }
                             }).catch(function(err){
-                                $scope.resetAlert("danger", Error.getMessage(err.data));
+                                $scope.resetAlert("danger", Error.getMessage(err));
                             });
                         }
                     });

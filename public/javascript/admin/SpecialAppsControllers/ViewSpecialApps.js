@@ -23,7 +23,7 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
                 }
             });
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
     };
 
@@ -70,7 +70,7 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
                 SpecialAppsService.apps.update({id: app._id}, {isEnabled: !app.isEnabled}).$promise.then(function (resp) {
                         refreshTable();
                 }).catch(function(err){
-                    InfoModal.show("Eroare", Error.getMessage(err.data));
+                    InfoModal.show("Eroare", Error.getMessage(err));
                 });
             },
             "Da"

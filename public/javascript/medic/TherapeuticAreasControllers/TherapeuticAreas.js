@@ -16,7 +16,7 @@ controllers.controller('TherapeuticAreas', ['$scope', 'therapeuticAreas','$sce',
     therapeuticAreas.areas.query().$promise.then(function(areas){
        $scope.therapeuticAreas = therapeuticAreas.formatAreas(areas);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
     $scope.selectArea = function(id){
         $scope.selectedArea = id;

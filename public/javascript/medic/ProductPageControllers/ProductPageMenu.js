@@ -11,7 +11,7 @@ controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams
                         $scope.specialProductDescription = Success.getObject(resp);
                         $scope.$parent.mobileMenuTitle= Success.getObject(resp).title;
                     }).catch(function(err){
-                        console.log(Error.getMessage(err.data));
+                        console.log(Error.getMessage(err));
                     });
                 }
             }

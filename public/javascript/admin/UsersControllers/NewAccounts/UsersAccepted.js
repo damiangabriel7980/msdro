@@ -18,7 +18,7 @@ controllers.controller('UsersAccepted', ['$scope', '$rootScope', '$filter', 'ngT
             }
         });
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
 }]);

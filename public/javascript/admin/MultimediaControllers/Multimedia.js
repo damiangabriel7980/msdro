@@ -24,7 +24,7 @@ controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminSer
             }
         });
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.renderHtml = function (htmlCode) {
@@ -51,7 +51,7 @@ controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminSer
                 console.log(result);
                 $state.go('elearning.multimedia',{},{reload: true});
             }).catch(function(err){
-                console.log(Error.getMessage(err.data));
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     };
@@ -64,7 +64,7 @@ controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminSer
                     console.log(resp);
                     $state.go('elearning.multimedia',{},{reload: true});
                 }).catch(function(err){
-                    console.log(Error.getMessage(err.data));
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

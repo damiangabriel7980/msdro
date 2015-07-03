@@ -14,7 +14,7 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
     ManageAccountsService.professions.query().$promise.then(function (response) {
         $scope.professions = Success.getObject(response);
     }).catch(function(err){
-        resetAlert('danger',Error.getMessage(err.data));
+        resetAlert('danger',Error.getMessage(err));
     });
 
     ManageAccountsService.users.query({id: idToView}).$promise.then(function(resp){
@@ -22,13 +22,13 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
         $scope.user = user;
         if(user.profession) $scope.selectedProfession = user.profession._id;
     }).catch(function(err){
-        resetAlert('danger',Error.getMessage(err.data));
+        resetAlert('danger',Error.getMessage(err));
     });
 
     ManageAccountsService.groups.query().$promise.then(function (resp) {
         $scope.groups = Success.getObject(resp);
     }).catch(function(err){
-        resetAlert('danger',Error.getMessage(err.data));
+        resetAlert('danger',Error.getMessage(err));
     });
 
     $scope.saveSuccess = false;
@@ -49,7 +49,7 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
                 },2000);
             }
         }).catch(function(err){
-            resetAlert('danger',Error.getMessage(err.data));
+            resetAlert('danger',Error.getMessage(err));
         });
     };
 

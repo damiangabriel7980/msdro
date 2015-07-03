@@ -7,7 +7,7 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
     SpecialProductsService.speakers.query().$promise.then(function (resp) {
         $scope.allSpeakers = Success.getObject(resp);
     }).catch(function(err){
-        $scope.resetAlert("danger", Error.getMessage(err.data));
+        $scope.resetAlert("danger", Error.getMessage(err));
     });
 
     //get selected speakers
@@ -34,7 +34,7 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
                     }
                 });
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 
@@ -47,7 +47,7 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
             SpecialProductsService.speakers.create({product_id: product_id, speaker_id: speaker._id}).$promise.then(function (resp) {
                 refreshTable();
             }).catch(function(err){
-                $scope.resetAlert("danger", Error.getMessage(err.data));
+                $scope.resetAlert("danger", Error.getMessage(err));
             });
         }
     };
@@ -59,7 +59,7 @@ controllers.controller('ProductPageSpeakers', ['$scope', 'SpecialProductsService
             SpecialProductsService.speakers.delete({product_id: product_id, speaker_id: speaker._id}).$promise.then(function (resp) {
                 refreshTable();
             }).catch(function(err){
-                $scope.resetAlert("danger", Error.getMessage(err.data));
+                $scope.resetAlert("danger", Error.getMessage(err));
             });
         }
     };

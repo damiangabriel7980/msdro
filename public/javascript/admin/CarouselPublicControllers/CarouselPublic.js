@@ -23,7 +23,7 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
                 }
             });
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
     };
 
@@ -54,7 +54,7 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
             CarouselPublicService.carouselPublic.delete({id: id}).$promise.then(function (resp) {
                 $state.reload();
             }).catch(function(err){
-                console.log(Error.getMessage(err.data));
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     };
@@ -67,7 +67,7 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
                 CarouselPublicService.carouselPublic.update({id: id},{info: {isEnabled: enabled}}).$promise.then(function (resp) {
                     $state.reload();
                 }).catch(function(err){
-                    console.log(Error.getMessage(err.data));
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

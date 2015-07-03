@@ -30,7 +30,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
                 }
             }).catch(function(err){
                 $scope.statusAlert.type = "danger";
-                $scope.statusAlert.message = Error.getMessage(err.data);
+                $scope.statusAlert.message = Error.getMessage(err);
                 $scope.statusAlert.newAlert = true;
             });
         }
@@ -42,7 +42,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         $scope.toEdit = Success.getObject(resp);
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
 
@@ -90,7 +90,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         }).catch(function(err){
             $scope.statusAlert.newAlert = true;
             $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     };
@@ -117,7 +117,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
                     }).catch(function(err){
                         $scope.uploadAlert.newAlert = true;
                         $scope.uploadAlert.type = "danger";
-                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.message = Error.getMessage(err);
                     });
                 }
             });

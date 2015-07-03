@@ -23,14 +23,14 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
                 }
             });
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
     };
 
     SpecialProductsService.groups.query().$promise.then(function (resp) {
         $scope.groups = Success.getObject(resp);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.refreshTable();

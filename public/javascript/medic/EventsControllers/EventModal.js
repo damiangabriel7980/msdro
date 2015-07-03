@@ -6,7 +6,7 @@ controllers.controller('EventModal',['$scope','eventsService','$stateParams','$m
     eventsService.calendar.query({id:idEvent}).$promise.then(function(resp){
        $scope.itemsEvent = Success.getObject(resp);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.closeModal = function () {

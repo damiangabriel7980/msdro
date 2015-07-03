@@ -14,7 +14,7 @@ controllers.controller('HomeNews', ['$scope', '$rootScope', 'ContentService', '$
             $scope.noutatiFiltered = $scope.noutati.slice(beginSlice, endSlice);
         });
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
 }]);

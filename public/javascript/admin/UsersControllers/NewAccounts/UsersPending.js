@@ -20,7 +20,7 @@ controllers.controller('UsersPending', ['$scope', '$rootScope', '$filter', 'ngTa
             }
         });
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.accept = function (id) {

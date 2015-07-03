@@ -16,7 +16,7 @@ controllers.controller('EditPublicContentCategory', ['$scope', '$state', '$modal
                 $state.reload();
                 $modalInstance.close();
         }).catch(function(err){
-            resetAlert("danger", Error.getMessage(err.data));
+            resetAlert("danger", Error.getMessage(err));
         });
     };
 

@@ -17,7 +17,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
             $scope.unselectSpecialGroup();
         }
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
     $scope.selectSpecialGroup = function(group){
         var idSelected = 0;
@@ -36,7 +36,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
                     $scope.groupProduct = null;
                 }
             }).catch(function(err){
-                console.log(Error.getMessage(err.data));
+                console.log(Error.getMessage(err));
             });
 
             //load group's special features (apps)
@@ -47,7 +47,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
                     $scope.specialApps = null;
                 }
             }).catch(function(err){
-                console.log(Error.getMessage(err.data));
+                console.log(Error.getMessage(err));
             });
             if($state.includes('groupFeatures') || $state.includes('groupSpecialProduct')){
                 //if user changed his group while being on a feature page or product page, redirect him to home

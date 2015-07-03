@@ -26,7 +26,7 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
                 }
             });
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
     };
 
@@ -54,7 +54,7 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
                             console.log(resp);
                             $state.reload();
                         }).catch(function(err){
-                            console.log(Error.getMessage(err.data));
+                            console.log(Error.getMessage(err));
                         });
                     }
                 });

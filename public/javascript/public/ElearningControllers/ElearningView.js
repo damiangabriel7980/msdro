@@ -12,12 +12,12 @@ controllers.controller('ElearningView', ['$scope', '$state', '$rootScope', 'Cont
             ContentService.content.query({type: 3, area: $stateParams.area, withFile: true}).$promise.then(function (resp) {
                 $scope.elearning = Success.getObject(resp);
             }).catch(function(errElearning){
-                console.log(Error.getMessage(errElearning.data));
+                console.log(Error.getMessage(errElearning));
             });
         });
 
     }).catch(function(errTherap){
-        console.log(Error.getMessage(errTherap.data));
+        console.log(Error.getMessage(errTherap));
     });
 
     $scope.navigateToElearning = function (content) {

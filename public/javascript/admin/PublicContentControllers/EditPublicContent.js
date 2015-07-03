@@ -24,7 +24,7 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         }
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
 
@@ -78,12 +78,12 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
             $scope.selectedTherapeuticAreas = formattedAreas;
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
 
@@ -158,7 +158,7 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
                             if(type === "file") $scope.filePath = key;
                     }).catch(function(err){
                         $scope.uploadAlert.type = "danger";
-                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.message = Error.getMessage(err);
                         $scope.uploadAlert.newAlert = true;
                     });
                 }
@@ -275,7 +275,7 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
             $scope.statusAlert.newAlert = true;
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     };

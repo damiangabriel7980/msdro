@@ -25,7 +25,7 @@ controllers.controller('ProductPageGlossary', ['$scope', 'SpecialProductsService
                     }
                 });
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 
@@ -45,7 +45,7 @@ controllers.controller('ProductPageGlossary', ['$scope', 'SpecialProductsService
         SpecialProductsService.glossary.delete({id: id}).$promise.then(function (resp) {
                 refreshGlossaryTable();
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 

@@ -30,7 +30,7 @@ controllers.controller('DeleteProductPage', ['$scope', 'SpecialProductsService',
                         $scope.actionCompleted = true;
                         resetAlert("success", Success.getMessage(resp) + "S-au sters "+imageDeleteCount+" imagini");
                 }).catch(function(err){
-                    $scope.resetAlert("danger", Error.getMessage(err.data));
+                    $scope.resetAlert("danger", Error.getMessage(err));
                 });
             }
         });

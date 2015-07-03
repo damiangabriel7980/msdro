@@ -3,7 +3,7 @@ controllers.controller('ArticlesDetail', ['$scope', '$rootScope', 'ContentServic
     ContentService.content.query({id: $stateParams.id}).$promise.then(function (resp) {
         $scope.currentArticle = Success.getObject(resp);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
 }]);

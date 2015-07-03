@@ -19,7 +19,7 @@ controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$statePa
             }
         });
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
     $scope.viewIntro= function(id){
         $modal.open({

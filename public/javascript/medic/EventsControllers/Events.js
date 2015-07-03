@@ -116,7 +116,7 @@ var date = new Date();
              });
          }
      }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
     $scope.goToEvent=function(eventId) {
         $modal.open({

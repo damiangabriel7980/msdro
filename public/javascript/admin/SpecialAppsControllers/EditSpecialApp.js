@@ -9,7 +9,7 @@ controllers.controller('EditSpecialApp', ['$scope','$rootScope' ,'SpecialAppsSer
     SpecialAppsService.apps.query({id: idToEdit}).$promise.then(function (resp) {
         $scope.app = Success.getObject(resp);
     }).catch(function(err){
-        resetAlert("Eroare", Error.getMessage(err.data));
+        resetAlert("Eroare", Error.getMessage(err));
     });
 
     //get special groups
@@ -17,7 +17,7 @@ controllers.controller('EditSpecialApp', ['$scope','$rootScope' ,'SpecialAppsSer
         console.log(resp);
         $scope.specialGroups = Success.getObject(resp);
     }).catch(function(err){
-        resetAlert("Eroare", Error.getMessage(err.data));
+        resetAlert("Eroare", Error.getMessage(err));
     });
 
     var resetAlert = function (type, message) {
@@ -36,7 +36,7 @@ controllers.controller('EditSpecialApp', ['$scope','$rootScope' ,'SpecialAppsSer
                 $state.reload();
                 $modalInstance.close();
         }).catch(function(err){
-            resetAlert("Eroare", Error.getMessage(err.data));
+            resetAlert("Eroare", Error.getMessage(err));
         });
     };
 

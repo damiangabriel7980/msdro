@@ -20,13 +20,13 @@ controllers.controller('EditGroup', ['$scope','GroupsService', '$modalInstance',
                 $scope.selectedUsers = Success.getObject(resp);
                 groupDataLoaded = true;
             }).catch(function(err){
-                resetAlert('danger',Error.getMessage(err.data));
+                resetAlert('danger',Error.getMessage(err));
             });
         }).catch(function(err){
-            resetAlert('danger',Error.getMessage(err.data));
+            resetAlert('danger',Error.getMessage(err));
         });
     }).catch(function(err){
-        resetAlert('danger',Error.getMessage(err.data));
+        resetAlert('danger',Error.getMessage(err));
     });
 
     $scope.editGroup = function () {
@@ -66,7 +66,7 @@ controllers.controller('EditGroup', ['$scope','GroupsService', '$modalInstance',
                         callback();
                 }).catch(function(err){
                     callback('Eroare la update');
-                    resetAlert('danger',Error.getMessage(err.data));
+                    resetAlert('danger',Error.getMessage(err));
                 });
             }
         ], function (err) {

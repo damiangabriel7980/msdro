@@ -41,7 +41,7 @@ controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce',
             }
         });
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.addProduct = function () {
@@ -75,7 +75,7 @@ controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce',
             ProductService.products.delete({id: id}).$promise.then(function(result){
                 $state.reload();
             }).catch(function(err){
-                console.log(Error.getMessage(err.data));
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     };

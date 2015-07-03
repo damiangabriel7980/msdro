@@ -11,7 +11,7 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
         $scope.areas = Success.getObject(resp)
     }).catch(function(err){
         $scope.therapeuticAlert.newAlert = true;
-        $scope.therapeuticAlert.message = Error.getMessage(err.data);
+        $scope.therapeuticAlert.message = Error.getMessage(err);
         $scope.therapeuticAlert.type = "danger";
     });
 
@@ -28,7 +28,7 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
                 $state.go('ariiTerapeutice',{},{reload: true});
             }).catch(function(err){
                 $scope.therapeuticAlert.newAlert = true;
-                $scope.therapeuticAlert.message = Error.getMessage(err.data);
+                $scope.therapeuticAlert.message = Error.getMessage(err);
                 $scope.therapeuticAlert.type = "danger";
             });
         }

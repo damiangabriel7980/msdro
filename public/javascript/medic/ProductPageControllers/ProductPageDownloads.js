@@ -5,6 +5,6 @@ controllers.controller('ProductPageDownloads', ['$scope', '$rootScope', '$stateP
     specialProductService.SpecialProductFiles.query({id:$stateParams.product_id}).$promise.then(function(files){
         $scope.specialProductFiles = Success.getObject(files);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 }]);

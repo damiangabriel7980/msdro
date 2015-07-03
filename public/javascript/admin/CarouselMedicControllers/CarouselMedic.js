@@ -23,7 +23,7 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
                 }
             });
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
     };
 
@@ -55,7 +55,7 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
                 console.log(resp);
                 $state.reload();
             }).catch(function(err){
-                console.log(Error.getMessage(err.data));
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     };
@@ -69,7 +69,7 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
                     console.log(resp);
                     $state.reload();
                 }).catch(function(err){
-                    console.log(Error.getMessage(err.data));
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

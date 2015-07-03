@@ -23,7 +23,7 @@ controllers.controller('ArticlesView', ['$scope', '$rootScope', '$state', '$stat
         }
 
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
     $scope.navigateToContent = function (content) {
         var stateName;

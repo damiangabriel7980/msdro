@@ -11,7 +11,7 @@ controllers.controller('ElearningDetail', ['$scope', '$rootScope', 'ContentServi
             autoPlay: true
         };
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
 }]);

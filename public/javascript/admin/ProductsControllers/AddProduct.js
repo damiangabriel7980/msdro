@@ -9,13 +9,13 @@ controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$
     ProductService.products.query().$promise.then(function(resp){
         $scope.groups = Success.getObject(resp)['groups'];
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
         $scope.areas = Success.getObject(resp);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.createProduct=function(){
@@ -33,7 +33,7 @@ controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$
             $state.reload();
             $modalInstance.close();
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
 
     };

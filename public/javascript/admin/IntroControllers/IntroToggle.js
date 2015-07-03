@@ -14,7 +14,7 @@ controllers.controller('IntroToggle', ['$scope','$rootScope' ,'IntroService','$s
                         },3000);
                 }).catch(function(err){
                     $scope.statusAlert.type = "danger";
-                    $scope.statusAlert.message = Error.getMessage(err.data);
+                    $scope.statusAlert.message = Error.getMessage(err);
                     $scope.statusAlert.newAlert = true;
                 });
 

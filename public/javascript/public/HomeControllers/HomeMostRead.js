@@ -14,7 +14,7 @@ controllers.controller('HomeMostRead', ['$scope', '$rootScope', 'ContentService'
             $scope.articoleFiltered = $scope.articole.slice(beginSlice, endSlice);
         });
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
 }]);

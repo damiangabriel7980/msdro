@@ -37,7 +37,7 @@ controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService'
                                     callback(null, savedId);
                                 }
                             }).catch(function(err){
-                                $scope.resetAlert("danger", Error.getMessage(err.data));
+                                $scope.resetAlert("danger", Error.getMessage(err));
                             });
                         }else{
                             //proceed down the waterfall
@@ -67,7 +67,7 @@ controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService'
                                     callback(null, menu_id);
                                 }
                             }).catch(function(err){
-                                $scope.resetAlert("danger", Error.getMessage(err.data));
+                                $scope.resetAlert("danger", Error.getMessage(err));
                             });
                         }
                     });

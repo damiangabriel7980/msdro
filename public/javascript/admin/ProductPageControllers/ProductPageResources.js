@@ -25,7 +25,7 @@ controllers.controller('ProductPageResources', ['$scope', 'SpecialProductsServic
                     }
                 });
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 
@@ -53,7 +53,7 @@ controllers.controller('ProductPageResources', ['$scope', 'SpecialProductsServic
                         $scope.resetAlert();
                         refreshTable();
                 }).catch(function(err){
-                    $scope.resetAlert("danger", Error.getMessage(err.data));
+                    $scope.resetAlert("danger", Error.getMessage(err));
                 });
             }
         })

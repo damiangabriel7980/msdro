@@ -14,7 +14,7 @@ controllers.controller('HomeDownloads', ['$scope', '$rootScope', 'ContentService
             $scope.downloadsFiltered = $scope.downloads.slice(beginSlice, endSlice);
         });
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
 }]);

@@ -69,8 +69,8 @@ controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsSer
                     SpecialProductsService.resources.update({id: $scope.currentItem._id}, $scope.currentItem).$promise.then(function (resp) {
                             callback(null, Success.getMessage(resp));
                     }).catch(function(err){
-                        callback(Error.getMessage(err.data), null);
-                        $scope.resetAlert("danger", Error.getMessage(err.data));
+                        callback(Error.getMessage(err), null);
+                        $scope.resetAlert("danger", Error.getMessage(err));
                     });
                 }
             ], function (err, success) {

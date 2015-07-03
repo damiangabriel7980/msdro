@@ -34,7 +34,7 @@ controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'ar
                 console.log(result);
                 $state.reload();
             }).catch(function(err){
-                console.log(Error.getMessage(err.data));
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     }

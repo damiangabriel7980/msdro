@@ -81,10 +81,10 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
                                 ProfileService.UserData.query().$promise.then(function (resp) {
                                     $scope.imageUser = imagePre + Success.getObject(result).image_path;
                                 }).catch(function(err){
-                                    console.log(Error.getMessage(err.data));
+                                    console.log(Error.getMessage(err));
                                 });
                         }).catch(function(err){
-                            console.log(Error.getMessage(err.data));
+                            console.log(Error.getMessage(err));
                         });
                     });
                 }
@@ -118,7 +118,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
                         return 0;
                     });
                 }).catch(function(errCities){
-                    console.log(Error.getMessage(errCities.data));
+                    console.log(Error.getMessage(errCities));
                 });
                 if(!cityDefault) $scope.city.selected = undefined;
                 cityDefault = false;
@@ -127,21 +127,21 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
         });
 
     }).catch(function(errUserData){
-        console.log(Error.getMessage(errUserData.data));
+        console.log(Error.getMessage(errUserData));
     });
 
     // get counties and cities
     ProfileService.Counties.query().$promise.then(function (counties) {
         $scope.counties = Success.getObject(counties);
     }).catch(function(errCounties){
-        console.log(Error.getMessage(errCounties.data));
+        console.log(Error.getMessage(errCounties));
     });
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
     therapeuticAreas.areas.query().$promise.then(function (resp) {
         $scope.allAreas = Success.getObject(resp);
     }).catch(function(errAreas){
-        console.log(Error.getMessage(errAreas.data));
+        console.log(Error.getMessage(errAreas));
     });
 
     //------------------------------------------------------------------------------------------------ form submissions
@@ -169,7 +169,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
             }).catch(function(err){
                 $scope.userProfileAlert.type = "danger";
                 $scope.userProfileAlert.newAlert = true;
-                $scope.userProfileAlert.message = Error.getMessage(err.data);
+                $scope.userProfileAlert.message = Error.getMessage(err);
             });
         }
         else
@@ -192,7 +192,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
             }).catch(function(errJob){
                 $scope.userJobAlert.type = "danger";
                 $scope.userJobAlert.newAlert = true;
-                $scope.userJobAlert.message = Error.getMessage(errJob.data);
+                $scope.userJobAlert.message = Error.getMessage(errJob);
             });
         }
         else
@@ -217,7 +217,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
             }).catch(function(errEmail){
                 $scope.userChangeMailAlert.type = "danger";
                 $scope.userChangeMailAlert.newAlert = true;
-                $scope.userChangeMailAlert.message = Error.getMessage(errEmail.data);
+                $scope.userChangeMailAlert.message = Error.getMessage(errEmail);
             });
         }
         else
@@ -244,7 +244,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
             }).catch(function(errPass){
                 $scope.userChangePassAlert.type = "danger";
                 $scope.userChangePassAlert.newAlert = true;
-                $scope.userChangePassAlert.message = Error.getMessage(errPass.data);
+                $scope.userChangePassAlert.message = Error.getMessage(errPass);
             });
         }
         else

@@ -7,7 +7,7 @@ controllers.controller('AddProductPage', ['$scope', 'SpecialProductsService', 'A
     SpecialProductsService.groupsAvailable.query().$promise.then(function (resp) {
         $scope.groupsAvailable = Success.getObject(resp);
     }).catch(function(err){
-        $scope.resetAlert("danger", Error.getMessage(err.data));
+        $scope.resetAlert("danger", Error.getMessage(err));
     });
 
     $scope.selectedGroups = [];
@@ -59,7 +59,7 @@ controllers.controller('AddProductPage', ['$scope', 'SpecialProductsService', 'A
                                     $scope.setSessionData({idToEdit: idSaved});
                                     $scope.renderView('specialProductEdit');
                             }).catch(function(err){
-                                $scope.resetAlert("danger", Error.getMessage(err.data));
+                                $scope.resetAlert("danger", Error.getMessage(err));
                             });
                         }
                     });
@@ -68,7 +68,7 @@ controllers.controller('AddProductPage', ['$scope', 'SpecialProductsService', 'A
                     $scope.renderView('specialProductEdit');
                 }
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 

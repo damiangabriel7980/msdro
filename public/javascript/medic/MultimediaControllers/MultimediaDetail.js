@@ -12,7 +12,7 @@ controllers.controller('MultimediaDetail', ['$scope','multimediaService','$state
     multimediaService.multimedia.query({idMultimedia:idMultimedia}).$promise.then(function(result){
         $scope.selectedMultimedia = Success.getObject(result);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
     $scope.getVideoSrc = function(filepath){
         return $sce.trustAsResourceUrl($rootScope.pathAmazonDev+filepath)

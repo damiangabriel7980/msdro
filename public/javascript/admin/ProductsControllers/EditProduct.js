@@ -10,19 +10,19 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
         $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
         $scope.selectedGroups = Success.getObject(result)['groupsID'];
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     ProductService.products.query().$promise.then(function(resp){
         $scope.groups = Success.getObject(resp)['groups'];
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
         $scope.areas = Success.getObject(resp);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.updateProduct = function(){
@@ -39,7 +39,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
             $state.reload();
             $modalInstance.close();
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
     };
     var putLogoS3 = function (body) {
@@ -64,7 +64,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
                             $scope.imagePath = $rootScope.pathAmazonDev+key;
                     }).catch(function(err){
                         $scope.uploadAlert.type = "danger";
-                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.message = Error.getMessage(err);
                         $scope.uploadAlert.newAlert = true;
                     });
                 }
@@ -126,7 +126,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
                             $scope.imagePath = $rootScope.pathAmazonDev+key;
                     }).catch(function(err){
                         $scope.uploadAlert.type = "danger";
-                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.message = Error.getMessage(err);
                         $scope.uploadAlert.newAlert = true;
                     });
                 }

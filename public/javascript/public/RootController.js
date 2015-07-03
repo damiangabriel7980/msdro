@@ -4,7 +4,7 @@ controllers.controller('RootController', ['$scope', '$rootScope', 'RootService',
     RootService.categories.query().$promise.then(function (resp) {
         $scope.navCategories = Success.getObject(resp);
     }).catch(function(errNavCategories){
-        console.log(Error.getMessage(errNavCategories.data));
+        console.log(Error.getMessage(errNavCategories));
     });
 
     $rootScope.getNavCategoryName = function (category_id) {

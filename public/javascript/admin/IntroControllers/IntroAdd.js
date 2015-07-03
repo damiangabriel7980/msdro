@@ -9,7 +9,7 @@ controllers.controller('IntroAdd', ['$scope','$rootScope' ,'IntroService','$stat
         $scope.groups = Success.getObject(resp);
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
     $scope.saveIntro=function(){
@@ -24,7 +24,7 @@ controllers.controller('IntroAdd', ['$scope','$rootScope' ,'IntroService','$stat
             $scope.statusAlert.message = Success.getMessage(resp);
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     };

@@ -55,11 +55,11 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                                 }
                             }
                         }).catch(function(err){
-                            console.log(Error.getMessage(err.data));
+                            console.log(Error.getMessage(err));
                         });
                     }
                 }).catch(function(err){
-                    console.log(Error.getMessage(err.data));
+                    console.log(Error.getMessage(err));
                 });
             }
         }

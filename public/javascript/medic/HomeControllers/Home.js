@@ -55,22 +55,22 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
     HomeService.events.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         $scope.events = Success.getObject(resp);
     }).catch(function(errEvents){
-        console.log(Error.getMessage(errEvents.data));
+        console.log(Error.getMessage(errEvents));
     });
     HomeService.news.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         $scope.news = Success.getObject(resp);
     }).catch(function(errNews){
-        console.log(Error.getMessage(errNews.data));
+        console.log(Error.getMessage(errNews));
     });
     HomeService.news.query({scientific:true,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         $scope.scientificNews = Success.getObject(resp);
     }).catch(function(errScience){
-        console.log(Error.getMessage(errScience.data));
+        console.log(Error.getMessage(errScience));
     });
     HomeService.multimedia.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
         $scope.multimedia = Success.getObject(resp);
     }).catch(function(errMultimedia){
-        console.log(Error.getMessage(errMultimedia.data));
+        console.log(Error.getMessage(errMultimedia));
     });
 
     HomeService.carousel.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
@@ -80,7 +80,7 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
             $scope.lastIllusion=Success.getObject(resp)[0];
         }
     }).catch(function(errCarousel){
-        console.log(Error.getMessage(errCarousel.data));
+        console.log(Error.getMessage(errCarousel));
     });
     //------------------------------------------------------------------------------------------------ useful functions
 

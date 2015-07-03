@@ -32,7 +32,7 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
                 }
             }).catch(function(err){
                 $scope.statusAlert.type = "danger";
-                $scope.statusAlert.message = Error.getMessage(err.data);
+                $scope.statusAlert.message = Error.getMessage(err);
                 $scope.statusAlert.newAlert = true;
             });
         }
@@ -45,7 +45,7 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
         $scope.toEdit = Success.getObject(resp);
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err.data);
+        $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
 
@@ -92,7 +92,7 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
             $scope.statusAlert.newAlert = true;
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err.data);
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     };
@@ -118,7 +118,7 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
                         console.log("Upload complete");
                     }).catch(function(err){
                         $scope.uploadAlert.type = "danger";
-                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.message = Error.getMessage(err);
                         $scope.uploadAlert.newAlert = true;
                     });
 

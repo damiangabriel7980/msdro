@@ -42,7 +42,7 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
                 ManageAccountsService.users.update({id: id}, {enabled: !enabledUser}).$promise.then(function (resp) {
                     $state.reload();
                 }).catch(function(err){
-                    console.log(Error.getMessage(err.data));
+                    console.log(Error.getMessage(err));
                 });
             }, "Da"
         );

@@ -8,7 +8,7 @@ controllers.controller('ProductPageMenu', ['$scope', 'SpecialProductsService', '
             console.log(resp);
             $scope.menuItems = Success.getObject(resp);
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 
@@ -66,7 +66,7 @@ controllers.controller('ProductPageMenu', ['$scope', 'SpecialProductsService', '
                         $scope.resetAlert("success", "Au fost sterse "+filesCount+" imagini. "+Success.getMessage(resp));
                         refreshMenuItems();
                 }).catch(function(err){
-                    $scope.resetAlert("danger", Error.getMessage(err.data));
+                    $scope.resetAlert("danger", Error.getMessage(err));
                 });
             }
         })

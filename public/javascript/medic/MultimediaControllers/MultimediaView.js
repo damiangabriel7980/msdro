@@ -17,7 +17,7 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
     multimediaService.multimedia.query({idArea:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.multimedias = Success.getObject(result);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
     $scope.status = {
         isopen: false

@@ -23,7 +23,7 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
                 }
             });
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
     };
 
@@ -61,7 +61,7 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
                         console.log(resp);
                         $state.reload();
                     }).catch(function(err){
-                        console.log(Error.getMessage(err.data));
+                        console.log(Error.getMessage(err));
                     });
                 }
             });
@@ -77,7 +77,7 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
                     console.log(resp);
                     $state.reload();
                 }).catch(function(err){
-                    console.log(Error.getMessage(err.data));
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

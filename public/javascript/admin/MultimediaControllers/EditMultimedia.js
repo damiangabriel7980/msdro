@@ -11,7 +11,7 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
         $scope.selectedGroups = Success.getObject(result)['groupsID'];
     }).catch(function(err){
         $scope.uploadAlert.type = "danger";
-        $scope.uploadAlert.message = Error.getMessage(err.data);
+        $scope.uploadAlert.message = Error.getMessage(err);
         $scope.uploadAlert.newAlert = true;
     });
 
@@ -19,7 +19,7 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
         $scope.groups = Success.getObject(resp);
     }).catch(function(err){
         $scope.uploadAlert.type = "danger";
-        $scope.uploadAlert.message = Error.getMessage(err.data);
+        $scope.uploadAlert.message = Error.getMessage(err);
         $scope.uploadAlert.newAlert = true;
     });
 
@@ -27,7 +27,7 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
         $scope.areas = Success.getObject(resp);
     }).catch(function(err){
         $scope.uploadAlert.type = "danger";
-        $scope.uploadAlert.message = Error.getMessage(err.data);
+        $scope.uploadAlert.message = Error.getMessage(err);
         $scope.uploadAlert.newAlert = true;
     });
 
@@ -46,7 +46,7 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
             $state.go('elearning.multimedia',{},{reload: true});
         }).catch(function(err){
             $scope.uploadAlert.type = "danger";
-            $scope.uploadAlert.message = Error.getMessage(err.data);
+            $scope.uploadAlert.message = Error.getMessage(err);
             $scope.uploadAlert.newAlert = true;
         });
     };
@@ -72,7 +72,7 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
                             $scope.multimedia.thumbnail_path = key;
                     }).catch(function(err){
                         $scope.uploadAlert.type = "danger";
-                        $scope.uploadAlert.message = Error.getMessage(err.data);
+                        $scope.uploadAlert.message = Error.getMessage(err);
                         $scope.uploadAlert.newAlert = true;
                     });
                 }
@@ -134,7 +134,7 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
                             $scope.multimedia.file_path = key;
                     }).catch(function(err){
                         $scope.uploadAlertVideo.type = "danger";
-                        $scope.uploadAlertVideo.message = Error.getMessage(err.data);
+                        $scope.uploadAlertVideo.message = Error.getMessage(err);
                         $scope.uploadAlertVideo.newAlert = true;
                     });
                 }

@@ -14,7 +14,7 @@ controllers.controller('AcceptUser', ['$scope','NewAccountsService', '$modalInst
             $state.reload();
             $modalInstance.close();
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
     };
 

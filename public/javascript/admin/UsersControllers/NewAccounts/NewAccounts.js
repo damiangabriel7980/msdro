@@ -12,7 +12,7 @@ controllers.controller('NewAccounts', ['$scope', 'NewAccountsService', 'Success'
         }
         console.log($scope.count);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
 }]);

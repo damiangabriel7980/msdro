@@ -8,13 +8,13 @@ controllers.controller('AddMultimedia', ['$scope','$rootScope' ,'MultimediaAdmin
     GroupsService.groups.query().$promise.then(function(resp){
         $scope.groups = Success.getObject(resp);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
         $scope.areas = Success.getObject(resp);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.createMultimedia=function(){
@@ -32,7 +32,7 @@ controllers.controller('AddMultimedia', ['$scope','$rootScope' ,'MultimediaAdmin
             $modalInstance.close();
             $state.go('elearning.multimedia',{},{reload: true});
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
 
     };

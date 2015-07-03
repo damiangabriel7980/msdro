@@ -26,7 +26,7 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
             }
         });
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     GroupsService.groups.query().$promise.then(function(resp){
@@ -35,7 +35,7 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
         for(var i =0;i<$scope.grupe.length;i++)
             $scope.groupMap[$scope.grupe[i]._id]=$scope.grupe[i].display_name;
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.renderHtml = function (htmlCode) {
@@ -59,7 +59,7 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
                 console.log(resp);
                 $state.reload();
             }).catch(function(err){
-                console.log(Error.getMessage(err.data));
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     };
@@ -89,7 +89,7 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
                     console.log(resp);
                     $state.reload();
                 }).catch(function(err){
-                    console.log(Error.getMessage(err.data));
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

@@ -20,7 +20,7 @@ controllers.controller('UsersRejected', ['$scope', '$rootScope', '$filter', 'ngT
             }
         });
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.accept = function (id) {

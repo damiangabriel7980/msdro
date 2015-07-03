@@ -23,7 +23,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
                 }
             });
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
     };
 
@@ -44,7 +44,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
                 console.log(resp);
                 $state.reload();
             }).catch(function(err){
-                console.log(Error.getMessage(err.data));
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     };
@@ -58,7 +58,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
                     console.log(resp);
                     $state.reload();
                 }).catch(function(err){
-                    console.log(Error.getMessage(err.data));
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

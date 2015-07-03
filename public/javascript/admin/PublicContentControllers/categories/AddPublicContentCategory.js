@@ -14,7 +14,7 @@ controllers.controller('AddPublicContentCategory', ['$scope', '$state', '$modalI
                 $state.reload();
                 $modalInstance.close();
         }).catch(function(err){
-            resetAlert("danger", Error.getMessage(err.data));
+            resetAlert("danger", Error.getMessage(err));
         });
     };
 

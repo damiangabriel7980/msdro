@@ -21,7 +21,7 @@ controllers.controller('AddArticles', ['$scope', 'ContentService', 'GroupsServic
     GroupsService.groups.query().$promise.then(function(resp){
         $scope.groups = Success.getObject(resp);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
     $scope.createArticle=function(){
@@ -37,7 +37,7 @@ controllers.controller('AddArticles', ['$scope', 'ContentService', 'GroupsServic
             $modalInstance.close();
             $state.go('content.articles',{},{reload: true});
         }).catch(function(err){
-            console.log(Error.getMessage(err.data));
+            console.log(Error.getMessage(err));
         });
     };
 

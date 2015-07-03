@@ -18,7 +18,7 @@ controllers.controller('CrudProductPageGlossary', ['$scope', 'SpecialProductsSer
         SpecialProductsService.glossary.create(this.newItem).$promise.then(function (resp) {
                 $scope.renderView("viewGlossary");
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 
@@ -30,7 +30,7 @@ controllers.controller('CrudProductPageGlossary', ['$scope', 'SpecialProductsSer
             SpecialProductsService.glossary.update({id: id}, $scope.currentItem).$promise.then(function (resp) {
                     $scope.renderView("viewGlossary");
             }).catch(function(err){
-                $scope.resetAlert("danger", Error.getMessage(err.data));
+                $scope.resetAlert("danger", Error.getMessage(err));
             });
         }
     };

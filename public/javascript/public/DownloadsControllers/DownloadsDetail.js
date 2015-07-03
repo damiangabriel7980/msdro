@@ -2,7 +2,7 @@ controllers.controller('DownloadsDetail', ['$scope', '$rootScope', 'ContentServi
     ContentService.content.query({id: $stateParams.id}).$promise.then(function (resp) {
         $scope.currentDownload = Success.getObject(resp);
     }).catch(function(err){
-        console.log(Error.getMessage(err.data));
+        console.log(Error.getMessage(err));
     });
 
 }]);

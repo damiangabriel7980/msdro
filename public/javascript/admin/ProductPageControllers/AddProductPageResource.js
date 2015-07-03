@@ -10,7 +10,7 @@ controllers.controller('AddProductPageResource', ['$scope', 'SpecialProductsServ
                 $scope.sessionData.resourceToEdit = Success.getObject(resp).saved;
                 $scope.renderView("editResource");
         }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err.data));
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     }
 
