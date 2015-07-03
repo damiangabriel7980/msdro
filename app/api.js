@@ -2713,10 +2713,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             ActivationCodes.find({}).populate('profession').exec(function (err, codes) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: codes});
+                    handleSuccess(res, codes);
                 }
             });
         })
@@ -2724,15 +2723,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToUpdate = ObjectId(req.query.id);
             ActivationCodes.findOne({_id: idToUpdate}).select('+value').exec(function (err, code) {
                 if(err || !code){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
                     ActivationCodes.update({_id: idToUpdate}, {$set: {value: SHA512(req.body.new).toString()}}, function (err, wres) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: true});
+                            handleSuccess(res);
                         }
                     });
                 }
@@ -2743,30 +2740,24 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             Parameters.find({}).exec(function (err, params) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: params});
+                    handleSuccess(params);
                 }
             });
         })
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             Parameters.findOne({_id: idToUpdate}).exec(function (err, parameter) {
-                if(err) {
-                    logger.error(err);
-                    res.send({error: true});
-                }else if(!parameter){
-                    logger.error("Update parameter - not found");
-                    res.send({error: true});
+                if(err || !parameter) {
+                    handleError(res, err);
                 }else{
                     UtilsModule.allowFields(req.body, ["default_value", "value"]);
                     Parameters.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: true});
+                            handleSuccess(res);
                         }
                     });
                 }
