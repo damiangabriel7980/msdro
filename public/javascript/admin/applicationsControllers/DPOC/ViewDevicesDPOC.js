@@ -1,7 +1,7 @@
-controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', function ($scope, $state, DPOCService, ngTableParams, $filter, $modal, InfoModal, ActionModal) {
+controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', function ($scope, $state, DPOCService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success) {
     var refreshDevices = function (sortByDate) {
         DPOCService.devices.query().$promise.then(function(resp){
-            var devices = resp.success;
+            var devices = Success.getObject(resp);
             var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page

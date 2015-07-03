@@ -12,11 +12,10 @@ controllers.controller('ImportDevicesDPOC', ['$scope', '$state', '$modalInstance
 
     $scope.importAll = function () {
         $scope.importedWithErrors = false;
-        DPOCService.importDevices.create(parsedCSV.body).$promise.then(function (resp) {
+        DPOCService.importDevices.create(parsedCSV.body).$promise.then(function () {
             $state.reload();
             $modalInstance.close();
         }).catch(function (resp) {
-            console.log(resp.error);
             resetAlert("danger", "Urmatoarele device-uri au suferit erori la import:");
             $scope.importedWithErrors = Error.getData(resp);
             $state.reload();
