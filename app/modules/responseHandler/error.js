@@ -5,6 +5,7 @@ var errorCodes = {
     3: "Selectati un continut",
     4: "Continutul a fost sters din baza de date, dar nu s-a putut sterge de pe Amazon",
     5: "Eroare la stergerea entitatilor atasate continutului",
+    51: "Eroare la stergerea continutului",
     6: "Parametrii invalizi",
     7: "Eroare la adaugarea entitatilor atasate",
     8: "Parola nu este corecta!",
