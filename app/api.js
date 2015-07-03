@@ -3414,6 +3414,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                     });
                 }
+            }
         });
 
     router.route('/changePassword')
