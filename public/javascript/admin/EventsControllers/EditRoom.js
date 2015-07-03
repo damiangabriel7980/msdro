@@ -1,8 +1,8 @@
-controllers.controller('EditRoom', ['$scope', '$rootScope', '$state', '$stateParams', 'EventsService', '$modal', 'InfoModal', 'ActionModal', function ($scope, $rootScope, $state, $stateParams, EventsService, $modal, InfoModal, ActionModal) {
+controllers.controller('EditRoom', ['$scope', '$rootScope', '$state', '$stateParams', 'EventsService', '$modal', 'InfoModal', 'ActionModal', 'Success', function ($scope, $rootScope, $state, $stateParams, EventsService, $modal, InfoModal, ActionModal, Success) {
 
     //get room
     EventsService.rooms.query({id: $stateParams.idRoom}).$promise.then(function (resp) {
-        $scope.room = resp.success;
+        $scope.room = Success.getObject(resp);
     });
 
     //============================================== QR functions
@@ -26,16 +26,14 @@ controllers.controller('EditRoom', ['$scope', '$rootScope', '$state', '$statePar
         var room = this.room;
         console.log(room);
         var notification = this.notification || {};
-        EventsService.rooms.update({id: room._id}, room).$promise.then(function (resp) {
-            if(resp.error){
-                InfoModal.show("Update esuat", "A aparut o eroare la update");
+        EventsService.rooms.update({id: room._id}, room).$promise.then(function () {
+            if(notification.send){
+                //TODO: send notification.text
             }else{
-                if(notification.send){
-                    //TODO: send notification.text
-                }else{
-                    InfoModal.show("Camera actualizata", "Camera a fost actualizata cu succes");
-                }
+                InfoModal.show("Camera actualizata", "Camera a fost actualizata cu succes");
             }
+        }).catch(function () {
+            InfoModal.show("Update esuat", "A aparut o eroare la update");
         });
     };
 

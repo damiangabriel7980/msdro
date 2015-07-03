@@ -1,8 +1,8 @@
-controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', 'AmazonService', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal, AmazonService){
+controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', 'AmazonService', 'Success', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal, AmazonService, Success){
 
     $scope.refreshSpeakers = function () {
         EventsService.speakers.query().$promise.then(function(resp){
-            var speakers = resp.success;
+            var speakers = Success.getObject(resp);
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -50,24 +50,16 @@ controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ng
 
     $scope.deleteSpeaker = function (speaker) {
         ActionModal.show("Stergere speaker", "Sunteti sigur ca doriti sa stergeti speaker-ul?", function () {
-            EventsService.speakers.delete({id: speaker._id}).$promise.then(function (resp) {
-                if(resp.error){
-                    console.log("Eroare la stergere");
-                }else{
-                    if(speaker.image_path){
-                        AmazonService.deleteFile(speaker.image_path, function (err, success) {
-                            if(err){
-                                console.log("Eroare la stergere imagine");
-                            }else{
-                                console.log(resp.success+" Imaginea a fost stearsa");
-                                $scope.refreshSpeakers();
-                            }
-                        });
-                    }else{
-                        console.log(resp.success);
+            EventsService.speakers.delete({id: speaker._id}).$promise.then(function () {
+                if(speaker.image_path){
+                    AmazonService.deleteFile(speaker.image_path, function () {
                         $scope.refreshSpeakers();
-                    }
+                    });
+                }else{
+                    $scope.refreshSpeakers();
                 }
+            }).catch(function () {
+                console.log("Eroare la stergere");
             });
         }, "Sterge");
     }

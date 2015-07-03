@@ -1,7 +1,7 @@
-controllers.controller('UpdateSpeaker', ['$scope','$rootScope' ,'EventsService', '$state', '$modalInstance', 'AmazonService', 'idToUpdate', function($scope, $rootScope, EventsService, $state, $modalInstance, AmazonService, idToUpdate){
+controllers.controller('UpdateSpeaker', ['$scope','$rootScope' ,'EventsService', '$state', '$modalInstance', 'AmazonService', 'idToUpdate', 'Success', function($scope, $rootScope, EventsService, $state, $modalInstance, AmazonService, idToUpdate, Success){
 
     EventsService.speakers.query({id: idToUpdate}).$promise.then(function (resp) {
-        $scope.speaker = resp.success;
+        $scope.speaker = Success.getObject(resp);
     });
 
     $scope.modal = {
@@ -66,12 +66,10 @@ controllers.controller('UpdateSpeaker', ['$scope','$rootScope' ,'EventsService',
             function (callback) {
                 //now, update speaker
                 resetAlert("warning", "Se actualizeaza baza de date...");
-                EventsService.speakers.update({id: speaker._id}, speaker).$promise.then(function (resp) {
-                    if(resp.error){
-                        callback("Eroare la actualizarea bazei de date");
-                    }else{
-                        callback();
-                    }
+                EventsService.speakers.update({id: speaker._id}, speaker).$promise.then(function () {
+                    callback();
+                }).catch(function () {
+                    callback("Eroare la actualizarea bazei de date");
                 });
             }
         ], function (err) {
