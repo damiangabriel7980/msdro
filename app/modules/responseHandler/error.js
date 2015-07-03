@@ -12,6 +12,8 @@ var errorCodes = {
     10: "Parola noua trebuie sa contina intre 6 si 32 de caractere!",
     11: "Parolele nu corespund",
     12: "Continutul a fost procesat cu erori",
+    13: "Nu sunteti autentificat",
+    14: "Nu aveti drepul de accesa aceasta resursa",
     20: "Autorul si titlul sunt obligatorii (minim 3 caractere)",
     21: "Verificati tipul",
     22: "Tipul fisierului lipseste",

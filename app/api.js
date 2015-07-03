@@ -211,7 +211,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         if (req.isAuthenticated()){
             return next();
         }else{
-            res.status(403).end();
+            handleError(res,true,403,13);
         }
     }
 
@@ -236,14 +236,14 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 User.find({_id: userID}, {rolesID :1}).select("+rolesID").exec(function (err, data) {
                     if(err){
                         logger.error(err);
-                        res.status(403).end();
+                        handleError(res, err);
                     }else{
                         var roles = data[0].rolesID;
                         //now get roles
                         Roles.find({_id: {$in: roles}}, function (err, data) {
                             if(err){
                                 logger.error(err);
-                                res.status(403).end();
+                                handleError(res, err);
                             }else{
                                 var admin = false;
                                 for(var i=0; i<data.length; i++){
@@ -252,18 +252,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 if(admin === true){
                                     next();
                                 }else{
-                                    res.status(403).end();
+                                    handleError(res, true, 403, 14);
                                 }
                             }
                         });
                     }
                 });
             }else{
-                res.status(403).end();
+                handleError(res,true,403,13);
             }
         }catch(e){
-            logger.error(e);
-            res.status(403).end();
+            handleError(res, e);
         }
 
     }
@@ -288,10 +287,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .get(function (req, res) {
             amazon.getS3Credentials(req.user.username, function(err, data){
                 if(err){
-                    logger.error(err);
-                    res.status(404).end();
+                    handleError(res, err);
                 }else{
-                    res.json(data);
+                    handleSuccess(res, data);
                 }
             });
         });
@@ -1850,9 +1848,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             ], function (err) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res);
                 }
             });
 
@@ -3800,7 +3798,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var viewStatus = SessionStorage.getElement(req, "viewedIntroPresentations") || {};
             viewStatus[req.body.groupID] = true;
             SessionStorage.setElement(req, "viewedIntroPresentations", viewStatus);
-            res.send(200, "View remembered");
+            handleSuccess(res);
         });
 
     router.route('/introPresentation')
