@@ -2507,19 +2507,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 CM_templates.findOne({_id: req.query.id}, function (err, template) {
                     if(err || !template){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: template});
+                        handleSuccess(res, template);
                     }
                 });
             }else{
                 CM_templates.find({}, function (err, templates) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: templates});
+                        handleSuccess(res, templates);
                     }
                 });
             }
@@ -2533,10 +2531,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
             template.save(function (err, saved) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -2544,10 +2541,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToUpdate = ObjectId(req.query.id);
             CM_templates.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res, true, 3);
                 }
             });
         })
@@ -2555,10 +2551,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToDelete = ObjectId(req.query.id);
             CM_templates.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res, true, 4);
                 }
             });
         });
