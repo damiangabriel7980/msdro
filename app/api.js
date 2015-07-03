@@ -3364,56 +3364,52 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             //}
             if(!isNaN(parseInt(job.job_type))){
                 if(parseInt(job.job_type)<1 || parseInt(job.job_type>4)){
-                    handleError(res,null,400,29);
+                    return handleError(res,null,400,29);
                 }
             }else{
-                handleError(res,null,400,29);
+                return handleError(res,null,400,29);
             }
-            if(ans.error){
-                res.json(ans);
+            if(!job._id){
+                //create new
+                var newJob = new Job({
+                    job_type: job.job_type,
+                    job_name: job.job_name,
+                    street_name: job.street_name,
+                    street_number: job.street_number,
+                    postal_code: job.postal_code,
+                    job_address: job.job_address
+                });
+                newJob.save(function (err, inserted) {
+                    if(err){
+                        handleError(res,null,400,2);
+                    }else{
+                        //update user to point to new job
+                        var idInserted = inserted._id.toString();
+                        var upd = User.update({_id:req.user._id}, {jobsID: [idInserted]}, function () {
+                            if(!upd._castError){
+                                handleSuccess(res, {}, 12);
+                            }else{
+                                handleError(res,null,400,2);
+                            }
+                        });
+                    }
+                });
             }else{
-                if(!job._id){
-                    //create new
-                    var newJob = new Job({
-                        job_type: job.job_type,
-                        job_name: job.job_name,
-                        street_name: job.street_name,
-                        street_number: job.street_number,
-                        postal_code: job.postal_code,
-                        job_address: job.job_address
-                    });
-                    newJob.save(function (err, inserted) {
-                        if(err){
-                            handleError(res,null,400,2);
-                        }else{
-                            //update user to point to new job
-                            var idInserted = inserted._id.toString();
-                            var upd = User.update({_id:req.user._id}, {jobsID: [idInserted]}, function () {
-                                if(!upd._castError){
-                                    handleSuccess(res, {}, 12);
-                                }else{
-                                    handleError(res,null,400,2);
-                                }
-                            });
-                        }
-                    });
-                }else{
-                    //update existing
-                    var upd = Job.update({_id:job._id}, {
-                        job_type: job.job_type,
-                        job_name: job.job_name,
-                        street_name: job.street_name,
-                        street_number: job.street_number,
-                        postal_code: job.postal_code,
-                        job_address: job.job_address
-                    }, function () {
-                        if(!upd._castError){
-                            handleSuccess(res, {}, 12);
-                        }else{
-                            handleError(res,null,400,2);
-                        }
-                    });
-                }
+                //update existing
+                var upd = Job.update({_id:job._id}, {
+                    job_type: job.job_type,
+                    job_name: job.job_name,
+                    street_name: job.street_name,
+                    street_number: job.street_number,
+                    postal_code: job.postal_code,
+                    job_address: job.job_address
+                }, function () {
+                    if(!upd._castError){
+                        handleSuccess(res, {}, 12);
+                    }else{
+                        handleError(res,null,400,2);
+                    }
+                });
             }
         });
 
