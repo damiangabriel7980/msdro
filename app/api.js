@@ -3992,7 +3992,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         var findObj={};
             if(req.query.idArea && req.query.idArea!=0)
                 findObj['therapeutic-areasID'] = {$in: [req.query.idArea]};
-            else {
                 getNonSpecificUserGroupsIds(req.user).then(
                     function (nonSpecificGroupsIds) {
                         var forGroups = nonSpecificGroupsIds;
@@ -4060,7 +4059,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     function (err) {
                         res.send({error:err});
                     })
-            }
         });
     router.route('/user')
         .get(function(req,res){
