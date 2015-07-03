@@ -321,7 +321,10 @@ services.factory('StorageService', function () {
 services.factory('Error', function() {
     return {
         getMessage: function(serverResponse) {
-            return serverResponse.error;
+            return serverResponse.data.error;
+        },
+        getData: function (serverResponse) {
+            return serverResponse.data.data;
         }
     }
 });

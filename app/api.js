@@ -2646,19 +2646,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 DPOC_Devices.findOne({_id: req.query.id}, {name: 1}, function (err, device) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: device});
+                        handleSuccess(res, device);
                     }
                 });
             }else{
                 DPOC_Devices.find({}, {name: 1}, function (err, devices) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: devices});
+                        handleSuccess(res, devices);
                     }
                 });
             }
@@ -2667,10 +2665,10 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             
             addDeviceDPOC(req.body.name, req.body.email).then(
                 function () {
-                    res.send({success: "Un email a fost trimis catre utilizatorul adaugat"});
+                    handleSuccess(res, true, 81);
                 },
                 function (err) {
-                    res.send({error: err});
+                    handleError(res, err);
                 }
             );
         })
@@ -2678,9 +2676,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var idToDelete = ObjectId(req.query.id);
             DPOC_Devices.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res);
                 }
             });
         });
@@ -2704,9 +2702,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 );
             }, function () {
                 if(processedWithErrors.length == 0){
-                    res.send({success: true});
+                    handleSuccess(res);
                 }else{
-                    res.send({error: processedWithErrors});
+                    handleError(res, true, 409, 12, processedWithErrors);
                 }
             })
         });

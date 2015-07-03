@@ -1,4 +1,4 @@
-controllers.controller('ImportDevicesDPOC', ['$scope', '$state', '$modalInstance', 'parsedCSV', 'DPOCService', function ($scope, $state, $modalInstance, parsedCSV, DPOCService) {
+controllers.controller('ImportDevicesDPOC', ['$scope', '$state', '$modalInstance', 'parsedCSV', 'DPOCService', 'Error', function ($scope, $state, $modalInstance, parsedCSV, DPOCService, Error) {
 
     $scope.parsedCSV = parsedCSV;
 
@@ -13,17 +13,13 @@ controllers.controller('ImportDevicesDPOC', ['$scope', '$state', '$modalInstance
     $scope.importAll = function () {
         $scope.importedWithErrors = false;
         DPOCService.importDevices.create(parsedCSV.body).$promise.then(function (resp) {
-            if(resp.success){
-                $state.reload();
-                $modalInstance.close();
-            }else if(resp.error){
-                console.log(resp.error);
-                resetAlert("danger", "Urmatoarele device-uri au suferit erori la import:");
-                $scope.importedWithErrors = resp.error;
-                $state.reload();
-            }else{
-                resetAlert("danger", "A aparut o eroare pe server");
-            }
+            $state.reload();
+            $modalInstance.close();
+        }).catch(function (resp) {
+            console.log(resp.error);
+            resetAlert("danger", "Urmatoarele device-uri au suferit erori la import:");
+            $scope.importedWithErrors = Error.getData(resp);
+            $state.reload();
         });
         console.log(parsedCSV.body);
     }
