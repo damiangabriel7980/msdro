@@ -156,14 +156,15 @@
         </div>
 
         <div class="collapse navbar-collapse" collapse="navCollapsed" off-click="closeNavbar()" off-click-if="!navCollapsed">
-
             <ul class="nav navbar-nav navbarMenu">
-                <li>
-                    <ul class="nav navbar-nav navbar-right">
-                       <bootstrap-search is-in-dropdown=true on-search="searchText" default-style=true>
-                       </bootstrap-search>
-                    </ul>
-                </li>
+                <!--<li>-->
+                    <!--<bootstrap-search is-in-dropdown=true on-search="searchText" search-width-class="mySearch" input-width-class="mySearchWidth">-->
+                    <!--</bootstrap-search>-->
+                <!--</li>-->
+                <!--<div class="item">-->
+                    <!--<bootstrap-search is-in-dropdown=true on-search="searchText" search-width-class="mySearch" input-width-class="mySearchWidth">-->
+                    <!--</bootstrap-search>-->
+                <!--</div>-->
                 <li class="dropdown" ng-class="{'active': $state.includes('noutati')}">
                     <a class="dropdown-toggle " data-toggle="dropdown">
                        Noutati <b class="caret"></b>
@@ -203,12 +204,12 @@
 
                     </ul>
                 </li>
+                <!--<ul class="nav navbar-nav navbar-right">-->
+                     <bootstrap-search is-in-dropdown=true on-search="searchText" search-width-class="mySearch" input-width-class="mySearchWidth">
+                     </bootstrap-search>
+                <!--</ul>-->
                 <li class="mobileLink dividerTop" ng-class="{'active': $state.includes('profileMobile')}" ng-click="showProfile();closeNavbar()"><a>Contul meu</a></li>
                 <li class="mobileLink" ng-click="logoutUser()"><a>Sign out</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
-                <bootstrap-search is-in-dropdown=false on-search="searchText" default-style=true>
-                </bootstrap-search>
             </ul>
 
         </div>

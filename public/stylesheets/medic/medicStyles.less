@@ -580,6 +580,41 @@ body{
       right: 65px;
     }
   }
+
+  //============================= Custom search styles
+  .mySearch{
+    right: 290px;
+    top: 18px;
+    @media(max-width: @grid-float-breakpoint){
+      bottom: 15px;
+      top: auto;
+      right: auto;
+    }
+    @media(min-width: @screen-xs-max + 1)and(max-width: @grid-float-breakpoint){
+      left: 15px;
+      right: auto;
+      margin-top: -19px;
+    }
+    @media(max-width: @screen-xs-max){
+      margin-right: 25px;
+      margin-left: 25px;
+      right: 0;
+      bottom: 95px;
+    }
+    @media(max-device-width: @screen-xs-max) and(orientation: landscape){
+      right: initial;
+      left: 13px;
+    }
+    .mySearchWidth {
+      @media(max-width: @grid-float-breakpoint){
+        width: 230px !important;
+      }
+      @media(max-width: @screen-xs-max){
+        width: 100% !important;
+      }
+    }
+  }
+
   .dropdown-menu{
     border-radius: 6px;
     padding-top: 0;
