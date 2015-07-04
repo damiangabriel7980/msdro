@@ -921,16 +921,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         handleError(res,err,500);
                     }
                     else{
-                        var products={};
-                        products['productList']=cont;
-                        UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                            if(err) {
-                                handleError(res,err,500);
-                            }else{
-                                products['groups']=cont2;
-                                handleSuccess(res, products);
-                            }
-                        });
+                        handleSuccess(res, cont);
                     }
                 });
             }

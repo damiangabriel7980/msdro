@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'Success', 'Error', function($scope,ProductService,idToEdit,$modalInstance,$state,therapeuticAreaService,AmazonService,$rootScope,Success,Error){
+controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error', function($scope,ProductService,idToEdit,$modalInstance,$state,therapeuticAreaService,AmazonService,$rootScope,GroupsService,Success,Error){
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertRPC = {newAlert:false, type:"", message:""};
 
@@ -13,8 +13,8 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
         console.log(Error.getMessage(err));
     });
 
-    ProductService.products.query().$promise.then(function(resp){
-        $scope.groups = Success.getObject(resp)['groups'];
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups = Success.getObject(resp);
     }).catch(function(err){
         console.log(Error.getMessage(err));
     });

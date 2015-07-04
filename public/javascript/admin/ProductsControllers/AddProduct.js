@@ -1,13 +1,13 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$filter','$modalInstance','therapeuticAreaService','$state', 'Success', 'Error', function($scope,$rootScope,ProductService,$stateParams,$sce,$filter,$modalInstance,therapeuticAreaService,$state,Success, Error){
+controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$filter','$modalInstance','therapeuticAreaService','$state', 'GroupsService', 'Success', 'Error', function($scope,$rootScope,ProductService,$stateParams,$sce,$filter,$modalInstance,therapeuticAreaService,$state,GroupsService,Success, Error){
 
     $scope.selectedGroups = [];
     $scope.selectedAreas=[];
 
-    ProductService.products.query().$promise.then(function(resp){
-        $scope.groups = Success.getObject(resp)['groups'];
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups = Success.getObject(resp);
     }).catch(function(err){
         console.log(Error.getMessage(err));
     });
