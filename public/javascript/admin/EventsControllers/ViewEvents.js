@@ -1,8 +1,8 @@
-controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', 'AmazonService', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal, AmazonService){
+controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', 'AmazonService', 'Success', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal, AmazonService, Success){
 
     var refreshEvents = function (sortByDate) {
         EventsService.events.query().$promise.then(function(resp){
-            var events = resp.success;
+            var events = Success.getObject(resp);
             var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -35,8 +35,8 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
             name: "untitled",
             start: Date.now(),
             end: Date.now()
-        }).$promise.then(function (resp) {
-                if(resp.success) refreshEvents(true);
+        }).$promise.then(function () {
+                refreshEvents(true);
             });
     };
 
@@ -45,8 +45,7 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
             enable?"Dezactiveaza eveniment":"Activeaza eveniment",
             enable?"Sunteti sigur ca doriti sa dezactivati evenimentul?":"Sunteti sigur ca doriti sa activati evenimentul?",
             function () {
-                EventsService.events.update({id: id}, {enable: !enable}).$promise.then(function (resp) {
-                    console.log(resp);
+                EventsService.events.update({id: id}, {enable: !enable}).$promise.then(function () {
                     refreshEvents();
                 });
             },
@@ -80,11 +79,9 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
                 function (callback) {
                     //remove this event
                     EventsService.events.delete({id: event._id}).$promise.then(function (resp) {
-                        if(resp.error){
-                            callback("Eroare la stergerea evenimentului");
-                        }else{
-                            callback();
-                        }
+                        callback();
+                    }).catch(function () {
+                        callback("Eroare la stergerea evenimentului");
                     });
                 }
             ], function (err) {

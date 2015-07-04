@@ -1,4 +1,4 @@
-controllers.controller('AddDeviceDPOC', ['$scope', '$state', '$modalInstance', 'DPOCService', function ($scope, $state, $modalInstance, DPOCService) {
+controllers.controller('AddDeviceDPOC', ['$scope', '$state', '$modalInstance', 'DPOCService', 'Error', function ($scope, $state, $modalInstance, DPOCService, Error) {
 
     $scope.modal = {
         title: "Adauga device",
@@ -16,13 +16,11 @@ controllers.controller('AddDeviceDPOC', ['$scope', '$state', '$modalInstance', '
 
     $scope.action = function () {
         console.log(this.device);
-        DPOCService.devices.create(this.device).$promise.then(function (resp) {
-            if(resp.error){
-                resetAlert("danger", resp.error);
-            }else{
-                $state.reload();
-                $modalInstance.close();
-            }
+        DPOCService.devices.create(this.device).$promise.then(function () {
+            $state.reload();
+            $modalInstance.close();
+        }).catch(function (resp) {
+            resetAlert("danger", Error.getMessage(resp));
         });
     };
 

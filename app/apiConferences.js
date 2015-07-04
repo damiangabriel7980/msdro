@@ -20,6 +20,10 @@ var PushService = require('./modules/pushNotifications');
 
 module.exports = function(app, logger, tokenSecret, router) {
 
+    //=============================================Define variables
+    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
+    var handleError = require('./modules/responseHandler/error.js')(logger);
+
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
         var token;
@@ -150,7 +154,7 @@ module.exports = function(app, logger, tokenSecret, router) {
     //route for retrieving user's profile info
     router.route('/userProfile')
         .get(function (req, res) {
-            res.json(getUserData(req));
+            handleSuccess(res, getUserData(req));
         });
 
     //=========================================================================================== unsubscribe from push notifications
@@ -160,10 +164,10 @@ module.exports = function(app, logger, tokenSecret, router) {
             var token = req.body.token;
             PushService.unsubscribe(token).then(
                 function () {
-                    res.json({hasError: false, message:"Successfully unsubscribed from push notifications"});
+                    handleSuccess(res, true, 15);
                 },
                 function () {
-                    res.json({hasError: true, message:"Error unsubscibing from push notifications"});
+                    handleError(res, true, 500, 30);
                 }
             );
         });
@@ -176,13 +180,13 @@ module.exports = function(app, logger, tokenSecret, router) {
             if(user._id){
                 getConferencesForUser(user._id, function (err, resp) {
                     if(err){
-                        res.send(err);
+                        handleError(res, err);
                     }else{
-                        res.send(resp);
+                        handleSuccess(res, resp);
                     }
                 });
             }else{
-                res.send([]);
+                handleSuccess(res, []);
             }
         });
 
@@ -193,26 +197,26 @@ module.exports = function(app, logger, tokenSecret, router) {
             //check if conference exists
             Conferences.findOne({_id: idConf}, function (err, conference) {
                 if(err){
-                    res.send(err);
+                    handleError(res, err);
                 }else{
                     if(conference){
                         //add conference id to user
                         addConferenceToUser(idConf, thisUser._id, function (err, resp) {
                             if(err){
-                                res.send(err);
+                                handleError(res, err);
                             }else{
                                 //return scanned conference
                                 getConference(idConf, function (err, conference) {
                                     if(err){
-                                        res.send(err);
+                                        handleError(res, err);
                                     }else{
-                                        res.send(conference);
+                                        handleSuccess(res, conference);
                                     }
                                 });
                             }
                         })
                     }else{
-                        res.send({hasError: true, message: "Conference not found"});
+                        handleError(res, true, 404, 1);
                     }
                 }
             });
@@ -224,27 +228,27 @@ module.exports = function(app, logger, tokenSecret, router) {
             //get id of conference
             Talks.findOne({room: idRoom}, function (err, talk) {
                 if(err){
-                    res.send(err);
+                    handleError(res, err);
                 }else{
                     if(talk){
                         var idConf = talk.conference;
                         var thisUser = getUserData(req);
                         addConferenceToUser(idConf, thisUser._id, function (err, resp) {
                             if(err){
-                                res.send(err);
+                                handleError(res, err);
                             }else{
                                 //return scanned conference
                                 getConference(idConf, function (err, conference) {
                                     if(err){
-                                        res.send(err);
+                                        handleError(res, err);
                                     }else{
-                                        res.send(conference);
+                                        handleSuccess(res, conference);
                                     }
                                 });
                             }
                         });
                     }else{
-                        res.send({hasError: true, message: "Room not found"});
+                        handleError(res, true, 404, 1);
                     }
                 }
             });

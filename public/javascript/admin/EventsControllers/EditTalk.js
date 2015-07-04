@@ -1,19 +1,20 @@
-controllers.controller('EditTalk', ['$scope', '$rootScope', '$state', '$stateParams', 'EventsService', '$modal', 'InfoModal', 'ActionModal', function ($scope, $rootScope, $state, $stateParams, EventsService, $modal, InfoModal, ActionModal) {
+controllers.controller('EditTalk', ['$scope', '$rootScope', '$state', '$stateParams', 'EventsService', '$modal', 'InfoModal', 'ActionModal', 'Success', function ($scope, $rootScope, $state, $stateParams, EventsService, $modal, InfoModal, ActionModal, Success) {
 
     //get talk
     EventsService.talks.query({id: $stateParams.idTalk}).$promise.then(function (resp) {
-        $scope.talk = resp.success;
-        $scope.selectedSpeakers = resp.success.speakers || [];
+        var talk = Success.getObject(resp);
+        $scope.talk = talk;
+        $scope.selectedSpeakers = talk.speakers || [];
     });
 
     //get speakers
     EventsService.speakers.query().$promise.then(function (resp) {
-        $scope.speakers = resp.success;
+        $scope.speakers = Success.getObject(resp);
     });
 
     //get rooms
     EventsService.rooms.query({event: $stateParams.idEvent}).$promise.then(function (resp) {
-        $scope.rooms = resp.success;
+        $scope.rooms = Success.getObject(resp);
     });
 
     //set types
@@ -29,16 +30,14 @@ controllers.controller('EditTalk', ['$scope', '$rootScope', '$state', '$statePar
         talk.speakers = getIds($scope.selectedSpeakers);
         console.log(talk);
         var notification = this.notification || {};
-        EventsService.talks.update({id: talk._id}, talk).$promise.then(function (resp) {
-            if(resp.error){
-                InfoModal.show("Update esuat", "A aparut o eroare la update");
+        EventsService.talks.update({id: talk._id}, talk).$promise.then(function () {
+            if(notification.send){
+                //TODO: send notification.text
             }else{
-                if(notification.send){
-                    //TODO: send notification.text
-                }else{
-                    InfoModal.show("Talk actualizat", "Talk-ul a fost actualizat cu succes");
-                }
+                InfoModal.show("Talk actualizat", "Talk-ul a fost actualizat cu succes");
             }
+        }).catch(function () {
+            InfoModal.show("Update esuat", "A aparut o eroare la update");
         });
     };
 
