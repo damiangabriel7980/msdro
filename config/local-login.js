@@ -28,16 +28,16 @@ module.exports = function(passport, logger) {
 
                     // if no user is found, return the message
                     if (!user)
-                        return done(null, false, {error: true, message: 'Utilizator sau parola gresite'});
+                        return done(null, false, {code: 16});
 
                     if (!user.validPassword(password))
-                        return done(null, false, {error: true, message: 'Utilizator sau parola gresite'});
+                        return done(null, false, {code: 16});
 
                     if(!user.enabled || user.account_locked || user.account_expired || user.state === "REJECTED")
-                        return done(null, false, {error: true, message: 'Contul nu este activat sau a expirat'});
+                        return done(null, false, {code: 17});
 
                     if(user.state === "PENDING" && user.proof_path){
-                        return done(null, false, {error: true, message: 'Contul nu este activat'});
+                        return done(null, false, {code: 18});
                     }
 
                     // all is well, return user

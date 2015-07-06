@@ -9,14 +9,12 @@
  * */
 
 
-controllers.controller('TherapeuticAreas', ['$scope', 'therapeuticAreas','$sce','$state', function($scope, therapeuticAreas,$sce,$state){
+controllers.controller('TherapeuticAreas', ['$scope', 'therapeuticAreas','$sce','$state', 'Success', function($scope, therapeuticAreas,$sce,$state, Success){
 
     $scope.selectedArea = 0;
 
-    therapeuticAreas.areas.query().$promise.then(function(areas){
-       $scope.therapeuticAreas = therapeuticAreas.formatAreas(areas);
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
+    therapeuticAreas.areas.query().$promise.then(function(resp){
+        $scope.therapeuticAreas = therapeuticAreas.formatAreas(Success.getObject(resp));
     });
     $scope.selectArea = function(id){
         $scope.selectedArea = id;

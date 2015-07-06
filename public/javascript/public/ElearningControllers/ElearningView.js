@@ -5,7 +5,7 @@ controllers.controller('ElearningView', ['$scope', '$state', '$rootScope', 'Cont
     //------------------------------------------------------------------------------------------------- get all content
 
     therapeuticAreas.areas.query().$promise.then(function (resp) {
-        $scope.tpa = therapeuticAreas.formatAreas(resp);
+        $scope.tpa = therapeuticAreas.formatAreas(Success.getObject(resp));
 
         $scope.$watch('$stateParams', function (val) {
             $scope.selectedArea = $stateParams.area;

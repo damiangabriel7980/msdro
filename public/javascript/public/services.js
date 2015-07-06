@@ -173,7 +173,7 @@ services.factory('ContentService', ['$resource', function($resource){
         })
     }
 }]);
-services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils){
+services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', function($resource, Utils, Error, Success){
     var getFormData = function (thiz) {
         var temp = thiz.user.temp;
         var data = {
@@ -276,10 +276,10 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
             query: { method: 'POST', isArray: false }
         }),
         professions: $resource('apiGloballyShared/accountActivation/professions', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         signupGroups: $resource('apiGloballyShared/accountActivation/signupGroups/:profession', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         counties: $resource('apiGloballyShared/accountActivation/counties', {}, {
             query: { method: 'GET', isArray: false }
@@ -299,12 +299,10 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
                         }else{
                             getActivationData(formData, function (activationData) {
                                 createAccount.save({user: formData.user, activation: activationData}).$promise.then(function (resp) {
-                                    if(resp.error){
-                                        callback(resp.message);
-                                    }else{
-                                        callback(null, resp);
-                                    }
-                                })
+                                    callback(null, Success.getObject(resp));
+                                }).catch(function (resp) {
+                                    callback(Error.getMessage(resp));
+                                });
                             });
                         }
                     });
@@ -319,7 +317,7 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
                 }else{
                     getActivationData(formData, function (activationData) {
                         completeProfile.save({user: formData.user, activation: activationData}).$promise.then(function (resp) {
-                            callback(null, resp);
+                            callback(null, Success.getObject(resp));
                         });
                     });
                 }

@@ -53,19 +53,20 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
 
     //------------------------------------------------------------------------------ retrieve personal info
     ProfileService.UserData.query().$promise.then(function (resp) {
-        $scope.username=resp.success.username;
-        $scope.userData = resp.success;
-        $scope.fullname = resp.success.name;
-        $scope.phone = resp.success.phone;
-        $scope.subscriptions = resp.success.subscriptions;
-        $scope.imageUser = imagePre + resp.success.image_path;
+        var userData = Success.getObject(resp);
+        $scope.username = userData.username;
+        $scope.userData = userData;
+        $scope.fullname = userData.name;
+        $scope.phone = userData.phone;
+        $scope.subscriptions = userData.subscriptions;
+        $scope.imageUser = imagePre + userData.image_path;
         $scope.hideImg="show";
-        $scope.selectedAreas = resp.success['therapeutic-areasID'] || [];
-        $scope.address = resp.success.address;
+        $scope.selectedAreas = userData['therapeutic-areasID'] || [];
+        $scope.address = userData.address;
 
-        if(resp.success.job){
-            $scope.job = resp.success.job[0];
-            $scope.selectedJob = resp.success.job[0].job_type;
+        if(userData.job){
+            $scope.job = userData.job[0];
+            $scope.selectedJob = userData.job[0].job_type;
         }else{
             $scope.selectedJob = 1;
         }
@@ -76,15 +77,13 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
                     $scope.resetAlert("Fotografia se incarca...", "warning");
                     Utils.fileToBase64($files[0], function (result) {
                         ProfileService.saveUserPhoto.save({data:{Body: result, extension: extension}}).$promise.then(function (response) {
-                                $scope.resetAlert(Success.getMessage(result), Success.getObject(result).type);
+                                $scope.resetAlert(Success.getMessage(response), "success");
                                 $scope.imageUser = "";
                                 ProfileService.UserData.query().$promise.then(function (resp) {
-                                    $scope.imageUser = imagePre + Success.getObject(result).image_path;
-                                }).catch(function(err){
-                                    console.log(Error.getMessage(err));
+                                    $scope.imageUser = imagePre + Success.getObject(resp).image_path;
                                 });
                         }).catch(function(err){
-                            console.log(Error.getMessage(err));
+                            $scope.resetAlert(Error.getMessage(err), "danger");
                         });
                     });
                 }
@@ -94,14 +93,14 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
         //---------------------------------------------- counties / cities
         $scope.county = {
             selected: {
-                name: resp.success.county_name,
-                _id: resp.success.county_id
+                name: userData.county_name,
+                _id: userData.county_id
             }
         };
         $scope.city = {
             selected: {
-                name: resp.success.city_name,
-                _id: resp.success.city_id
+                name: userData.city_name,
+                _id: userData.city_id
             }
         };
 
