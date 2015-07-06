@@ -57,9 +57,6 @@ var Q = require('q');
 var Config = require('../config/environment.js'),
     my_config = new Config();
 
-//used to sign cookies based on session secret
-var cookieSig = require('express-session/node_modules/cookie-signature');
-
 //=========================================================================================== functions for user groups
 
 var getNonSpecificUserGroupsIds = function(user){
@@ -117,83 +114,20 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 
 module.exports = function(app, sessionSecret, logger, amazon, router) {
 
-    //=============================================Define variables
+    //============================================= Define injection dependent modules
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
     var handleError = require('./modules/responseHandler/error.js')(logger);
+    var Auth = require('./modules/auth')(logger, sessionSecret);
 
 
-//======================================================================================================= secure routes
-
-// middleware to ensure user is logged in
-    function isLoggedIn(req, res, next) {
-        
-        if (req.isAuthenticated()){
-            return next();
-        }else{
-            handleError(res,true,403,13);
-        }
-    }
-
-//middleware to ensure a user has admin rights
-    function hasAdminRights(req, res, next) {
-        
-        try{
-            //get encripted session id from cookie
-            var esidc = req.cookies['connect.sid'];
-            //get node session id from request
-            var sid = req.sessionID;
-            //encrypt sid using session secret
-            var esid = "s:"+cookieSig.sign(sid, sessionSecret);
-            //if esid matches esidc then user is authentic
-            if(esid === esidc){
-                //get session store info for this session
-                var ssi = req.sessionStore.sessions[req.sessionID];
-                ssi = JSON.parse(ssi);
-                //now get user id
-                var userID = ssi['passport']['user'];
-                //now get user's roles
-                User.find({_id: userID}, {rolesID :1}).select("+rolesID").exec(function (err, data) {
-                    if(err){
-                        logger.error(err);
-                        handleError(res, err);
-                    }else{
-                        var roles = data[0].rolesID;
-                        //now get roles
-                        Roles.find({_id: {$in: roles}}, function (err, data) {
-                            if(err){
-                                logger.error(err);
-                                handleError(res, err);
-                            }else{
-                                var admin = false;
-                                for(var i=0; i<data.length; i++){
-                                    if(data[i].authority === "ROLE_ADMIN") admin=true;
-                                }
-                                if(admin === true){
-                                    next();
-                                }else{
-                                    handleError(res, true, 403, 14);
-                                }
-                            }
-                        });
-                    }
-                });
-            }else{
-                handleError(res,true,403,13);
-            }
-        }catch(e){
-            handleError(res, e);
-        }
-
-    }
-
-//only logged in users can access a route
-    app.all("/api/*", isLoggedIn, function(req, res, next) {
+    //only logged in users can access a route
+    app.all("/api/*", Auth.isLoggedIn, function(req, res, next) {
         next(); // if the middleware allowed us to get here,
         // just move on to the next route handler
     });
 
-//only admin can access "/admin" routes
-    app.all("/api/admin/*", hasAdminRights, function(req, res, next) {
+    //only admin can access "/admin" routes
+    app.all("/api/admin/*", Auth.hasAdminRights, function(req, res, next) {
         next(); // if the middleware allowed us to get here,
         // just move on to the next route handler
     });
