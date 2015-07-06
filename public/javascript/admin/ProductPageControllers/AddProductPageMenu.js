@@ -1,4 +1,4 @@
-controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService,Success,Error) {
+controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', function($scope, SpecialProductsService, AmazonService, Success) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
@@ -23,27 +23,21 @@ controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService'
                 $scope.resetAlert("warning", "Se adauga meniul...");
                 //first, create the menu with no picture added
                 SpecialProductsService.menu.create(toAdd).$promise.then(function (resp) {
-                    if(resp.error){
-                        callback("Eroare la adaugare");
-                    }else{
-                        //attach to parent if it has one
-                        var savedId = Success.getObject(resp).saved._id;
-                        if($scope.sessionData.parentId){
-                            SpecialProductsService.addMenuChild.update({id: $scope.sessionData.parentId}, {child_id: savedId}).$promise.then(function (resp) {
-                                if(resp.error){
-                                    callback("Eroare la update parinte");
-                                }else{
-                                    //proceed down the waterfall
-                                    callback(null, savedId);
-                                }
-                            }).catch(function(err){
-                                $scope.resetAlert("danger", Error.getMessage(err));
-                            });
-                        }else{
+                    //attach to parent if it has one
+                    var savedId = Success.getObject(resp).saved._id;
+                    if($scope.sessionData.parentId){
+                        SpecialProductsService.addMenuChild.update({id: $scope.sessionData.parentId}, {child_id: savedId}).$promise.then(function () {
                             //proceed down the waterfall
                             callback(null, savedId);
-                        }
+                        }).catch(function () {
+                            callback("Eroare la update parinte");
+                        });
+                    }else{
+                        //proceed down the waterfall
+                        callback(null, savedId);
                     }
+                }).catch(function () {
+                    callback("Eroare la adaugare");
                 });
             },
             function (menu_id, callback) {
@@ -59,15 +53,11 @@ controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService'
                         }else{
                             $scope.resetAlert("warning", "Se actualizeaza baza de date...");
                             //update database
-                            SpecialProductsService.menu.update({id: menu_id}, {header_image: key}).$promise.then(function (resp) {
-                                if(resp.error){
-                                    callback("Eroare la update imagine in baza de date");
-                                }else{
-                                    //proceed down the waterfall
-                                    callback(null, menu_id);
-                                }
-                            }).catch(function(err){
-                                $scope.resetAlert("danger", Error.getMessage(err));
+                            SpecialProductsService.menu.update({id: menu_id}, {header_image: key}).$promise.then(function () {
+                                //proceed down the waterfall
+                                callback(null, menu_id);
+                            }).catch(function () {
+                                callback("Eroare la update imagine in baza de date");
                             });
                         }
                     });

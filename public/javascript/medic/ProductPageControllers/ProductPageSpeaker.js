@@ -2,8 +2,6 @@ controllers.controller('ProductPageSpeaker', ['$scope', '$stateParams', 'special
 
     specialProductService.speakers.query({speaker_id: $stateParams.speaker_id}).$promise.then(function(resp){
         $scope.speaker = Success.getObject(resp);
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
     });
 
 }]);

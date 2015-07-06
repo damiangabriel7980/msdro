@@ -2,8 +2,6 @@ controllers.controller('PresentationModal', ['$scope', '$rootScope', '$sce', '$m
 
     IntroService.presentation.query({groupID: groupID}).$promise.then(function (resp) {
         $scope.presentation = Success.getObject(resp);
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
     });
 
     $scope.changeStatus=function(){

@@ -1,4 +1,4 @@
-controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'SpecialAppsService', '$modal', 'ActionModal', 'InfoModal', 'Success', 'Error', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, SpecialAppsService, $modal, ActionModal, InfoModal,Success,Error){
+controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'SpecialAppsService', '$modal', 'ActionModal', 'InfoModal', 'Success', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, SpecialAppsService, $modal, ActionModal, InfoModal, Success){
 
     var refreshTable = function () {
         SpecialAppsService.apps.query().$promise.then(function (resp) {
@@ -22,8 +22,6 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
-        }).catch(function(err){
-            console.log(Error.getMessage(err));
         });
     };
 
@@ -54,9 +52,9 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
 
     $scope.deleteSpecialApp = function (id) {
         ActionModal.show("Stergere aplicatie", "Sunteti sigur ca doriti sa stergeti aplicatia?", function () {
-            SpecialAppsService.apps.delete({id: id}).$promise.then(function (resp) {
-                    refreshTable();
-            }).catch(function(err){
+            SpecialAppsService.apps.delete({id: id}).$promise.then(function () {
+                refreshTable();
+            }).catch(function () {
                 InfoModal.show("Eroare", "Eroare la stergerea aplicatiei");
             });
         }, "Da");
@@ -68,9 +66,9 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
             app.isEnabled?"Sunteti sigur ca doriti sa dezactivati aplicatia?":"Sunteti sigur ca doriti sa activati aplicatia?",
             function () {
                 SpecialAppsService.apps.update({id: app._id}, {isEnabled: !app.isEnabled}).$promise.then(function (resp) {
-                        refreshTable();
-                }).catch(function(err){
-                    InfoModal.show("Eroare", Error.getMessage(err));
+                    refreshTable();
+                }).catch(function () {
+                    InfoModal.show("Eroare", "Eroare la modificarea aplicatiei");
                 });
             },
             "Da"

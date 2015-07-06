@@ -1,4 +1,4 @@
-controllers.controller('EnableProductPage', ['$scope', 'SpecialProductsService', '$modalInstance', 'idToToggle', 'isEnabled', '$state', 'Success', 'Error', function($scope, SpecialProductsService, $modalInstance, idToToggle, isEnabled, $state, Success, Error){
+controllers.controller('EnableProductPage', ['$scope', 'SpecialProductsService', '$modalInstance', 'idToToggle', 'isEnabled', '$state', function($scope, SpecialProductsService, $modalInstance, idToToggle, isEnabled, $state){
 
     $scope.modal = {
         title: isEnabled?"Ascunde pagina produs":"Publica pagina produs",
@@ -16,11 +16,11 @@ controllers.controller('EnableProductPage', ['$scope', 'SpecialProductsService',
     };
 
     $scope.modalAction = function () {
-        SpecialProductsService.products.update({id: idToToggle}, {enabled: !isEnabled}).$promise.then(function (resp) {
-                $state.reload();
-                $modalInstance.close();
-        }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err));
+        SpecialProductsService.products.update({id: idToToggle}, {enabled: !isEnabled}).$promise.then(function () {
+            $state.reload();
+            $modalInstance.close();
+        }).catch(function () {
+            resetAlert("danger","A aparut o eroare pe server");
         });
     };
 

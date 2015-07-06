@@ -1,13 +1,11 @@
-controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService,Success,Error) {
+controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', function($scope, SpecialProductsService, AmazonService, Success) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
     //get menu info
     SpecialProductsService.menu.query({id: $scope.sessionData.editMenuId}).$promise.then(function (resp) {
-        $scope.currentItem = Success.getObject(resp).menuItem;
-    }).catch(function(err){
-        $scope.resetAlert("danger", Error.getMessage(err));
+        $scope.currentItem = Success.getObject(resp);
     });
 
     $scope.headerImageBody = null;
@@ -20,24 +18,24 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
 
     $scope.removeHeaderImage = function () {
         $scope.resetAlert("warning", "Se sterge imaginea...");
-        SpecialProductsService.menu.update({id: $scope.sessionData.editMenuId}, {header_image: null}).$promise.then(function (resp) {
-                if($scope.currentItem.header_image){
-                    AmazonService.deleteFile($scope.currentItem.header_image, function (err, success) {
-                        if(err){
-                            $scope.resetAlert("error", "Eroare la stergerea imaginii");
-                        }else{
-                            $scope.headerImageBody = null;
-                            $scope.currentItem.header_image = null;
-                            $scope.resetAlert("success", "Imaginea a fost stearsa");
-                            $scope.$apply();
-                        }
-                    });
-                }else{
-                    $scope.headerImageBody = null;
-                    $scope.resetAlert("success", "Imaginea a fost stearsa");
-                }
-        }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err));
+        SpecialProductsService.menu.update({id: $scope.sessionData.editMenuId}, {header_image: null}).$promise.then(function () {
+            if($scope.currentItem.header_image){
+                AmazonService.deleteFile($scope.currentItem.header_image, function (err, success) {
+                    if(err){
+                        $scope.resetAlert("error", "Eroare la stergerea imaginii");
+                    }else{
+                        $scope.headerImageBody = null;
+                        $scope.currentItem.header_image = null;
+                        $scope.resetAlert("success", "Imaginea a fost stearsa");
+                        $scope.$apply();
+                    }
+                });
+            }else{
+                $scope.headerImageBody = null;
+                $scope.resetAlert("success", "Imaginea a fost stearsa");
+            }
+        }).catch(function () {
+            $scope.resetAlert("error", "Eroare la stergerea imaginii din baza de date");
         });
     };
 
@@ -76,12 +74,11 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
             function (callback) {
                 $scope.resetAlert("warning", "Se salveaza datele...");
                 //update the menu
-                SpecialProductsService.menu.update({id:toAdd._id}, toAdd).$promise.then(function (resp) {
-                        //proceed down the waterfall
-                        callback();
-                }).catch(function(err){
+                SpecialProductsService.menu.update({id:toAdd._id}, toAdd).$promise.then(function () {
+                    //proceed down the waterfall
+                    callback();
+                }).catch(function () {
                     callback("Eroare la salvare");
-                    $scope.resetAlert("danger", Error.getMessage(err));
                 });
             }
         ], function (err) {

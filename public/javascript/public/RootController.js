@@ -3,8 +3,6 @@ controllers.controller('RootController', ['$scope', '$rootScope', 'RootService',
     //navbar "despre" categories
     RootService.categories.query().$promise.then(function (resp) {
         $scope.navCategories = Success.getObject(resp);
-    }).catch(function(errNavCategories){
-        console.log(Error.getMessage(errNavCategories));
     });
 
     $rootScope.getNavCategoryName = function (category_id) {

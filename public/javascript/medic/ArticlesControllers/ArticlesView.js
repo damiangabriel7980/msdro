@@ -22,8 +22,6 @@ controllers.controller('ArticlesView', ['$scope', '$rootScope', '$state', '$stat
                 $scope.message="Nu exista articole stiintifice!";
         }
 
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
     });
     $scope.navigateToContent = function (content) {
         var stateName;

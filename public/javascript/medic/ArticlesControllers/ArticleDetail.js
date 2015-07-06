@@ -11,16 +11,15 @@ controllers.controller('ArticleDetail', ['$scope', '$rootScope', '$stateParams',
             $state.go('biblioteca.articoleStiintifice.listaArticole',{articleType:$stateParams.articleType});
     };
     ContentService.content.query({content_id: $stateParams.articleId,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        if(Success.getObject(resp)._id)
+        var article = Success.getObject(resp);
+        if(article._id)
         {
-            $scope.currentArticle = Success.getObject(resp);
-            $scope.date = FormatService.formatMongoDate(resp.success.last_updated);
+            $scope.currentArticle = article;
+            $scope.date = FormatService.formatMongoDate(article.last_updated);
         }
        else
         {
             $scope.backToArticles();
         }
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
     });
 }]);

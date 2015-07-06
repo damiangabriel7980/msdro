@@ -5,8 +5,6 @@ controllers.controller('DisplayFeatures', ['$scope', '$rootScope', '$stateParams
         if(Success.getObject(resp)){
             $scope.featureSrc = $sce.trustAsResourceUrl(Success.getObject(resp).url);
         }
-    }).catch(function(err){
-       console.log(Error.getMessage(err));
     });
 
 }]);

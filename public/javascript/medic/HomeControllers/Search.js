@@ -12,8 +12,6 @@ controllers.controller('Search', ['$scope', '$state', '$rootScope', 'HomeService
         }
         else
             $scope.answer = Success.getMessage(response);
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
     });
     $scope.sref=function(artType){
         if(artType < 3)

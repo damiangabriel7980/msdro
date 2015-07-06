@@ -54,12 +54,8 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                                     IntroService.rememberIntroView.save({groupID: idSelected});
                                 }
                             }
-                        }).catch(function(err){
-                            console.log(Error.getMessage(err));
                         });
                     }
-                }).catch(function(err){
-                    console.log(Error.getMessage(err));
                 });
             }
         }
@@ -150,7 +146,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     };
     $scope.navCollapsed = true;
     $scope.searchText = function(data){
-        console.log(data);
         if(data==="")
             return;
         else{

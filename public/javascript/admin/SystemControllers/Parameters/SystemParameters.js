@@ -1,8 +1,8 @@
-controllers.controller('SystemParameters', ['$scope', 'SystemService', 'ngTableParams', '$filter', '$modal', function ($scope, SystemService, ngTableParams, $filter, $modal) {
+controllers.controller('SystemParameters', ['$scope', 'SystemService', 'ngTableParams', '$filter', '$modal', 'Success', function ($scope, SystemService, ngTableParams, $filter, $modal, Success) {
 
     var refreshTable = function () {
         SystemService.parameters.query().$promise.then(function (resp) {
-            var data = resp.success;
+            var data = Success.getObject(resp);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page

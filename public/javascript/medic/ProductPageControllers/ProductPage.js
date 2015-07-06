@@ -5,13 +5,9 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         //open: false
     };
     specialProductService.SpecialProduct.query({id: $stateParams.product_id}).$promise.then(function(result){
-        if(result.success){
-            $scope.specialProductPage=result.success;
-        }else{
-            $state.reload();
-        }
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
+        $scope.specialProductPage = Success.getObject(result);
+    }).catch(function(){
+        $state.reload();
     });
     $scope.mobileMenuTitle="";
     $scope.goToMenuItemWithNoChildren=function(parent,event){
@@ -46,9 +42,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
     };
 
     specialProductService.SpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
-        $scope.specialProductMenu = resp.success;
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
+        $scope.specialProductMenu = Success.getObject(resp);
     });
 
     $scope.selectFirstMenuItem = function () {
