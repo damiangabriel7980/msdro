@@ -1,14 +1,11 @@
-controllers.controller('ProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService,Success,Error) {
+controllers.controller('ProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', function($scope, SpecialProductsService, AmazonService, Success) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
     var refreshMenuItems = function () {
         SpecialProductsService.menu.query({product_id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
-            console.log(resp);
             $scope.menuItems = Success.getObject(resp);
-        }).catch(function(err){
-            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 
@@ -63,10 +60,10 @@ controllers.controller('ProductPageMenu', ['$scope', 'SpecialProductsService', '
             }else{
                 //remove menu item
                 SpecialProductsService.menu.delete({id: item._id}).$promise.then(function (resp) {
-                        $scope.resetAlert("success", "Au fost sterse "+filesCount+" imagini. "+Success.getMessage(resp));
-                        refreshMenuItems();
-                }).catch(function(err){
-                    $scope.resetAlert("danger", Error.getMessage(err));
+                    $scope.resetAlert("success", "Au fost sterse "+filesCount+" imagini. "+ Success.getMessage(resp));
+                    refreshMenuItems();
+                }).catch(function () {
+                    $scope.resetAlert("danger", "Au fost sterse "+filesCount+" imagini, insa a aparut o eroare la stergerea din baza de date");
                 });
             }
         })

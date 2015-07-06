@@ -1,4 +1,4 @@
-controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', 'Success', 'Error', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal,Success,Error){
+controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', 'Success', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal, Success){
 
     $scope.refreshTable = function () {
         SpecialProductsService.products.query().$promise.then(function (resp) {
@@ -22,15 +22,11 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
-        }).catch(function(err){
-            console.log(Error.getMessage(err));
         });
     };
 
     SpecialProductsService.groups.query().$promise.then(function (resp) {
         $scope.groups = Success.getObject(resp);
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
     });
 
     $scope.refreshTable();
@@ -84,7 +80,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
             }
         });
     };
-    
+
     $scope.toggleSpecialProduct = function (id, enabled) {
         $modal.open({
             templateUrl: 'partials/admin/content/specialProducts/toggleOrDelete.html',

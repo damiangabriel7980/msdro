@@ -1,4 +1,4 @@
-controllers.controller('DeleteProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', '$modalInstance', 'idToDelete', '$state', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService, $modalInstance, idToDelete, $state, Success,Error){
+controllers.controller('DeleteProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', '$modalInstance', 'idToDelete', '$state', 'Error', 'Success', function($scope, SpecialProductsService, AmazonService, $modalInstance, idToDelete, $state, Error, Success){
 
     $scope.modal = {
         title: "Sterge pagina produs",
@@ -27,10 +27,10 @@ controllers.controller('DeleteProductPage', ['$scope', 'SpecialProductsService',
                 //delete product and every menu items attached to it
                 resetAlert("warning", "Se sterge produsul...");
                 SpecialProductsService.products.delete({id: idToDelete}).$promise.then(function (resp) {
-                        $scope.actionCompleted = true;
-                        resetAlert("success", Success.getMessage(resp) + "S-au sters "+imageDeleteCount+" imagini");
-                }).catch(function(err){
-                    $scope.resetAlert("danger", Error.getMessage(err));
+                    $scope.actionCompleted = true;
+                    resetAlert("success", Success.getMessage(resp) + "S-au sters "+imageDeleteCount+" imagini");
+                }).catch(function (resp) {
+                    resetAlert("danger", Error.getMessage(resp));
                 });
             }
         });

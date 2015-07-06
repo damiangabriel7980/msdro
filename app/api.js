@@ -1134,7 +1134,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     if(err){
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res, {menuItem: menuItem});
+                        handleSuccess(res, menuItem);
                     }
                 });
             }else if(req.query.product_id){

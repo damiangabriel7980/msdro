@@ -1,4 +1,4 @@
-controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsService', 'AmazonService','$timeout', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService,$timeout,Success,Error) {
+controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsService', 'AmazonService','$timeout', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService,$timeout, Success, Error) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
@@ -24,7 +24,7 @@ controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsSer
 
     $scope.editResource = function () {
         if(!$scope.currentItem._id){
-
+            $scope.resetAlert("danger","Resource not found");
         }else{
             $scope.resetAlert("warning", "Va rugam asteptati");
             var amazonKey;
@@ -67,10 +67,9 @@ controllers.controller('EditProductPageResource', ['$scope', 'SpecialProductsSer
                     //upload document
                     $scope.resetAlert("warning", "Se actualizeaza baza de date...");
                     SpecialProductsService.resources.update({id: $scope.currentItem._id}, $scope.currentItem).$promise.then(function (resp) {
-                            callback(null, Success.getMessage(resp));
-                    }).catch(function(err){
-                        callback(Error.getMessage(err), null);
-                        $scope.resetAlert("danger", Error.getMessage(err));
+                        callback(null, Success.getMessage(resp));
+                    }).catch(function (resp) {
+                        callback(Error.getMessage(resp), null);
                     });
                 }
             ], function (err, success) {
