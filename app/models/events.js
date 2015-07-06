@@ -13,12 +13,12 @@ var EventsSchema		= new Schema({
     description:  {type:String, es_indexed:true},
     enable:         Boolean,
     end:        Date,
-    groupsID: [{type: String, ref: 'UserGroup'}],
+    groupsID: [{type: String, ref: 'UserGroup', index: true}],
     last_updated: Date,
     name:      {type:String,es_indexed:true},
     place:       String,
     isPublic:   Boolean,
-    start: Date,
+    start: {type: Date, index: true},
     type: Number,
     listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
 });
@@ -26,6 +26,15 @@ EventsSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.el
 
 module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');
 var Event = mongoose.model('calendar-events', EventsSchema,'calendar-events');
+EventsSchema.index({start: 1});
+Event.ensureIndexes(function (err) {
+    if (err)
+        console.log(err);
+});
+Event.on('index', function (err) {
+    if (err)
+        console.log(err); // error occurred during index creation
+});
 var stream = Event.synchronize();
 var count = 0;
 stream.on('data', function(err, doc){

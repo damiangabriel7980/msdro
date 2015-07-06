@@ -13,6 +13,15 @@ var specialProductFilesSchema		= new Schema({
     type: String,
     description: String,
     file_path:String,
-    product:{type: Schema.Types.ObjectId,ref: 'specialProducts'}
+    product:{type: Schema.Types.ObjectId,ref: 'specialProducts', index: true}
 });
 module.exports = mongoose.model('specialProducts_files', specialProductFilesSchema,'specialProducts_files');
+var specialProductFiles = mongoose.model('specialProducts_files', specialProductFilesSchema,'specialProducts_files');
+specialProductFiles.ensureIndexes(function (err) {
+    if (err)
+        console.log(err);
+});
+specialProductFiles.on('index', function (err) {
+    if (err)
+        console.log(err); // error occurred during index creation
+});

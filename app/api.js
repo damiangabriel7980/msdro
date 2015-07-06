@@ -3153,13 +3153,14 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             Counties.find({name: req.params.county_name}, function (err, counties) {
                 if(err) {
                     handleError(res,err,500);
+                }else{
+                    Cities.find({_id: {$in: counties[0].citiesID}}, function (err, cities) {
+                        if(err) {
+                            handleError(res,err,500);
+                        }else
+                            handleSuccess(res,cities);
+                    });
                 }
-                Cities.find({_id: {$in: counties[0].citiesID}}, function (err, cities) {
-                    if(err) {
-                        handleError(res,err,500);
-                    }else
-                        handleSuccess(res,cities);
-                });
             });
         });
 
@@ -3344,12 +3345,12 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
 
                     var date = new Date();
-
+                    var hydrateOp;
                     async.each(arr_of_items, function (item, callback) {
                         if(item==Events)
-                            var hydrateOp = {find: {groupsID:{$in:forGroups},enable:true,start:{$gt: date}}};
+                            hydrateOp= {find: {groupsID:{$in:forGroups},enable:true,start:{$gt: date}}};
                         else
-                            var hydrateOp = {find: { $and: [ { groupsID: { $in: forGroups } }, { enable:true } ] } };
+                            hydrateOp = {find: { $and: [ { groupsID: { $in: forGroups } }, { enable:true } ] } };
 
                         item.search({
 
