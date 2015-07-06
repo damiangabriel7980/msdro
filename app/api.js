@@ -112,22 +112,6 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
     return deferred.promise;
 };
 
-//================================================================================ find id's of users associated to conferences, rooms, talks
-
-//receives an array of documents and returns an array with only the id's of those documents
-var getIds = function (arr, convertToString) {
-    var deferred = Q.defer();
-    var ret = [];
-    async.each(arr, function (item, callback) {
-        if(item._id){
-            convertToString?ret.push(item._id.toString()):ret.push(item._id);
-        }
-        callback();
-    }, function (err) {
-        deferred.resolve(ret);
-    });
-    return deferred.promise;
-};
 
 //======================================================================================================================================= routes for admin
 
@@ -3395,7 +3379,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             handleError(res,err,500);
                         }else{
                             //get ids of allowed articles
-                            getIds(content).then(function (ids) {
+                            UtilsModule.getIds(content).then(function (ids) {
                                 //get carousel content within allowed articles
                                 Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
                                     if(err){
@@ -3670,7 +3654,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     {
                                         Therapeutic_Area.find({"therapeutic-areasID": {$in :[req.query.idArea]}}).exec(function(err,response){
                                             var children=response;
-                                            getIds(children, true).then(function(ids){
+                                            UtilsModule.getIds(children, true).then(function(ids){
                                                 findObj['therapeutic-areasID'] = {$in: ids};
                                                 Multimedia.find(findObj, function (err, multimedia) {
                                                     if (err) {

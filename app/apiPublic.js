@@ -8,13 +8,7 @@ var UserGroup = require('./models/userGroup');
 var ObjectId = require('mongoose').Types.ObjectId;
 var async = require('async');
 
-var getIds = function (documentsArray) {
-    var ret = [];
-    for(var i=0; i<documentsArray.length; i++){
-        ret.push(documentsArray[i]._id.toString());
-    }
-    return ret;
-};
+var Utils = require('./modules/utils');
 
 module.exports = function(app, logger, router) {
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
@@ -68,8 +62,9 @@ module.exports = function(app, logger, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            var areasIds = getIds(areas);
-                            getDocuments(areasIds);
+                            Utils.getIds(areas, true).then(function (areasIds) {
+                                getDocuments(areasIds);
+                            });
                         }
                     })
                 }else{
