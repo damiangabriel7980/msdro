@@ -1,11 +1,11 @@
-<ul id="specialMenuId" class="specialMenu {{dropdownClass}} list-group noMarginBottom" ng-if="currentObject" off-click="collapseAndStyle(true)">
+<ul id="specialMenuId" class="specialMenu list-group noMarginBottom" ng-if="currentObject" off-click="collapseAndStyle(true)">
     <div class="noMarginBottom">
         <a class="text-center specialGroupDropdown no-text-decoration groups-list-group-item" ng-click="collapseAndStyle()">
-            <img class="imageDropdown {{imageClass}}" ng-if="currentObject" style="border-right: 1px solid #cccccc;padding-right: 10px" ng-src="{{currentObject.image_path?amazonPath+currentObject.image_path:defaultImageUrl}}">
+            <img class="imageDropdown" ng-if="currentObject" style="border-right: 1px solid #cccccc;padding-right: 10px" ng-src="{{currentObject.image_path?amazonPath+currentObject.image_path:defaultImageUrl}}">
             &nbsp;<i class="top5px glyphicon glyphicon-chevron-down"></i>
         </a>
         <div collapse="specialCollapsed">
-            <li class="subitems {{itemClass}} my-list-group-item" ng-repeat="objectItem in allGroups" style="cursor: pointer;" ng-click="collapseAndStyle(true);callSelect(objectItem)">
+            <li class="subitems my-list-group-item" ng-repeat="objectItem in allGroups" style="cursor: pointer;" ng-click="collapseAndStyle(true);callSelect(objectItem)">
                 {{objectItem.display_name}}
             </li>
         </div>

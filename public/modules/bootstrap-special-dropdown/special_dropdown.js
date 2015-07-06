@@ -10,9 +10,6 @@
             templateUrl: currentScriptPath.replace('special_dropdown.js', 'special_dropdown.html'),
             replace: true,
             scope: {
-                dropdownClass: '@',
-                itemClass: '@',
-                imageClass: '@',
                 onItemSelect: '=',
                 genericObject: '=',
                 amazonPath: '=',
