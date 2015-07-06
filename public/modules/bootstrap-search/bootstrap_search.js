@@ -18,7 +18,7 @@
                     scope.onSearch(term);
                 };
                 scope.animateInput=function(){
-                    angular.element('.popSearch').toggleClass(scope.inputWidthClass?scope.inputWidthClass:'newWidthPopSearch');
+                    angular.element('.popSearch').toggleClass(scope.inputWidthClass?scope.inputWidthClass + ' newWidthPopSearch':'newWidthPopSearch');
                     angular.element('.input-group-addon').toggleClass('btnSearchBefore');
                 };
             }

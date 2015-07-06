@@ -205,7 +205,7 @@
                     </ul>
                 </li>
                 <ul class="nav navbar-nav navbar-right">
-                    <bootstrap-search is-in-dropdown=true on-search="searchText" search-width-class="mySearch" input-width-class="mySearchWidth">
+                    <bootstrap-search is-in-dropdown=!navCollapsed on-search="searchText" search-width-class="mySearch" input-width-class="mySearchWidth">
                     </bootstrap-search>
                 </ul>
                 <li class="mobileLink dividerTop" ng-class="{'active': $state.includes('profileMobile')}" ng-click="showProfile();closeNavbar()"><a>Contul meu</a></li>
