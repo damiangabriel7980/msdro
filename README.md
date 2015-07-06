@@ -15,9 +15,8 @@ REQUIREMENTS
 INSTALL
 
 1. Clone the repository: 'git clone git@bitbucket.org:qualitance/msd-new.git'
-2. start docker containers: fig up -d
-3. Install all plug-ins: 'npm install'
-4. Run: 'npm start'
+2. Install all plug-ins: 'npm install'
+3. Run: 'npm start'
 
 
 CONFIG
