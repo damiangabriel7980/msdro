@@ -14,13 +14,22 @@ var ProductSchema		= new Schema({
     file_path:   String,
     image_path:  String,
     last_updated: Date,
-    name: {type:String,es_indexed:true},
-    groupsID: [{type: String, ref: 'UserGroup'}],
-    'therapeutic-areasID': [{type: String, ref: 'therapeutic-areas'}]
+    name: {type:String,es_indexed:true, index: true},
+    groupsID: [{type: String, ref: 'UserGroup', index: true}],
+    'therapeutic-areasID': [{type: String, ref: 'therapeutic-areas', index: true}]
 });
 ProductSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 module.exports = mongoose.model('products', ProductSchema);
 var Product = mongoose.model('products', ProductSchema);
+ProductSchema.index({name: 1});
+Product.ensureIndexes(function (err) {
+    if (err)
+        console.log(err);
+});
+Product.on('index', function (err) {
+    if (err)
+        console.log(err); // error occurred during index creation
+});
 var stream = Product.synchronize();
 var count = 0;
 stream.on('data', function(err, doc){

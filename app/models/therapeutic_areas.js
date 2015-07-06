@@ -12,7 +12,17 @@ var therapeuticAreaSchema		= new Schema({
     last_updated: Date,
     name: String,
     enabled:      Boolean,
-    "therapeutic-areasID": [{type: String, ref: 'therapeutic-areas'}]
+    "therapeutic-areasID": [{type: String, ref: 'therapeutic-areas', index: true}]
 });
 
 module.exports = mongoose.model('therapeutic-areas', therapeuticAreaSchema,'therapeutic-areas');
+var Areas = mongoose.model('therapeutic-areas', therapeuticAreaSchema,'therapeutic-areas');
+therapeuticAreaSchema.index({name: 1});
+Areas.ensureIndexes(function (err) {
+    if (err)
+        console.log(err);
+});
+Areas.on('index', function (err) {
+    if (err)
+        console.log(err); // error occurred during index creation
+});

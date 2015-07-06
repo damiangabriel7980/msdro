@@ -15,7 +15,7 @@ var specialProductSchema		= new Schema({
     general_description:String,
     site_map_description: String,
     job_id: String,
-    groups: [{type: Schema.Types.ObjectId,ref: 'UserGroup'}],
+    groups: [{type: Schema.Types.ObjectId,ref: 'UserGroup', index: true}],
     speakers: [{type: Schema.Types.ObjectId,ref: 'speakers'}],
     enabled: Boolean,
     show_safety_info_for: {
@@ -31,3 +31,12 @@ specialProductSchema.plugin(deepPopulate, {
 });
 
 module.exports = mongoose.model('specialProducts', specialProductSchema,'specialProducts');
+var specialProduct = mongoose.model('specialProducts', specialProductSchema,'specialProducts');
+specialProduct.ensureIndexes(function (err) {
+    if (err)
+        console.log(err);
+});
+specialProduct.on('index', function (err) {
+    if (err)
+        console.log(err); // error occurred during index creation
+});

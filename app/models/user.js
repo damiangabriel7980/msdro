@@ -21,11 +21,11 @@ var userSchema = new Schema({
     rolesID: {type: [{type: String, ref: 'Role'}], select: false},
     birthday: {type: Date, select: false},
     show_welcome_screen: Boolean,
-    state: {type: String, select: false},
+    state: {type: String, select: false, index: true},
     description: {type: String, select: false},
     password     : {type: String, select: false},
-    username     : String,
-    groupsID     : [{type: String, ref: 'UserGroup'}],
+    username     : {type: String, index: true},
+    groupsID     : [{type: String, ref: 'UserGroup', index: true}],
     profession: {type: Schema.Types.ObjectId,ref: 'professions'},
     'therapeutic-areasID': [{type: String, ref: 'therapeutic-areas'}],
     resetPasswordToken: {type: String, select: false},
@@ -69,3 +69,14 @@ userSchema.methods.getEmailTitle = function () {
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('User', userSchema);
+
+
+var usr = mongoose.model('User', userSchema);
+usr.ensureIndexes(function (err) {
+    if (err)
+        console.log(err);
+});
+usr.on('index', function (err) {
+    if (err)
+        console.log(err); // error occurred during index creation
+});
