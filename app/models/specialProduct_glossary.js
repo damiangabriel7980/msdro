@@ -6,6 +6,7 @@
  */
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var specialProductGlossarySchema		= new Schema({
     keyword: String,
@@ -14,11 +15,4 @@ var specialProductGlossarySchema		= new Schema({
 });
 module.exports = mongoose.model('specialProducts_glossary', specialProductGlossarySchema,'specialProducts_glossary');
 var specialProductGlossary = mongoose.model('specialProducts_glossary', specialProductGlossarySchema,'specialProducts_glossary');
-specialProductGlossary.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-specialProductGlossary.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
+mongoDbIndex.mongooseIndex(specialProductGlossary);

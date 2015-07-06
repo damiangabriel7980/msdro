@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var presentationSchema = new Schema({
     description: String,
@@ -10,11 +11,4 @@ var presentationSchema = new Schema({
 
 module.exports = mongoose.model('presentations', presentationSchema,'presentations');
 var Presentation = mongoose.model('presentations', presentationSchema,'presentations');
-Presentation.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-Presentation.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
+mongoDbIndex.mongooseIndex(Presentation);

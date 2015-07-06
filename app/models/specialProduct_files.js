@@ -6,6 +6,7 @@
  */
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var specialProductFilesSchema		= new Schema({
     filename: String,
@@ -17,11 +18,4 @@ var specialProductFilesSchema		= new Schema({
 });
 module.exports = mongoose.model('specialProducts_files', specialProductFilesSchema,'specialProducts_files');
 var specialProductFiles = mongoose.model('specialProducts_files', specialProductFilesSchema,'specialProducts_files');
-specialProductFiles.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-specialProductFiles.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
+mongoDbIndex.mongooseIndex(specialProductFiles);

@@ -4,6 +4,8 @@
 var mongoose		= require('mongoose');
 var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
+var searchIndex = require('../modules/mongoosasticIndex/index');
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var Config = require('../../config/environment.js'),
     my_config = new Config();
@@ -22,22 +24,5 @@ ProductSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.e
 module.exports = mongoose.model('products', ProductSchema);
 var Product = mongoose.model('products', ProductSchema);
 ProductSchema.index({name: 1});
-Product.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-Product.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
-var stream = Product.synchronize();
-var count = 0;
-stream.on('data', function(err, doc){
-    count++;
-});
-stream.on('close', function(){
-    console.log('indexed ' + count + ' documents!');
-});
-stream.on('error', function(err){
-    console.log(err);
-});
+searchIndex.mongoosasticIndex(Product);
+mongoDbIndex.mongooseIndex(Product);

@@ -1,6 +1,8 @@
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 var mongoosastic = require('mongoosastic');
+var searchIndex = require('../modules/mongoosasticIndex/index');
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var Config = require('../../config/environment.js'),
     my_config = new Config();
@@ -28,22 +30,5 @@ module.exports = mongoose.model('public-content', publicContentSchema, 'public-c
 var PublicContent = mongoose.model('public-content', publicContentSchema, 'public-content');
 
 publicContentSchema.index({title: 1});
-PublicContent.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-PublicContent.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
-var stream = PublicContent.synchronize();
-var count = 0;
-stream.on('data', function(err, doc){
-    count++;
-});
-stream.on('close', function(){
-    console.log('indexed ' + count + ' documents!');
-});
-stream.on('error', function(err){
-    console.log(err);
-});
+searchIndex.mongoosasticIndex(PublicContent);
+mongoDbIndex.mongooseIndex(PublicContent);

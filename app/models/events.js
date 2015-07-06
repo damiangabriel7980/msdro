@@ -5,6 +5,8 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 var mongoosastic = require('mongoosastic');
 var Conferences=require('./conferences');
+var searchIndex = require('../modules/mongoosasticIndex/index');
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var Config = require('../../config/environment.js'),
     my_config = new Config();
@@ -27,25 +29,8 @@ EventsSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.el
 module.exports = mongoose.model('calendar-events', EventsSchema,'calendar-events');
 var Event = mongoose.model('calendar-events', EventsSchema,'calendar-events');
 EventsSchema.index({start: 1});
-Event.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-Event.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
-var stream = Event.synchronize();
-var count = 0;
-stream.on('data', function(err, doc){
-    count++;
-});
-stream.on('close', function(){
-    console.log('indexed ' + count + ' documents!');
-});
-stream.on('error', function(err){
-    console.log(err);
-});
+searchIndex.mongoosasticIndex(Event);
+mongoDbIndex.mongooseIndex(Event);
 
 EventsSchema.pre('remove', function(next) {
     // 'this' is the client being removed. Provide callbacks here if you want

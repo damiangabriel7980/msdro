@@ -1,6 +1,8 @@
 var mongoose		= require('mongoose');
 var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
+var searchIndex = require('../modules/mongoosasticIndex/index');
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var Config = require('../../config/environment.js'),
     my_config = new Config();
@@ -27,22 +29,5 @@ articlesSchema.plugin(mongoosastic,{host:my_config.elasticServer, port:my_config
 module.exports = mongoose.model('articles', articlesSchema);
 var Article = mongoose.model('articles', articlesSchema);
 articlesSchema.index({title: 1});
-Article.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-Article.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
-var stream = Article.synchronize();
-    var count = 0;
-stream.on('data', function(err, doc){
-    count++;
-});
-stream.on('close', function(){
-    console.log('indexed ' + count + ' documents!');
-});
-stream.on('error', function(err){
-    console.log(err);
-});
+searchIndex.mongoosasticIndex(Article);
+mongoDbIndex.mongooseIndex(Article);

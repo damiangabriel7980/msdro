@@ -3,6 +3,7 @@
  */
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var specialProductDetailsSchema		= new Schema({
     title: String,
@@ -18,11 +19,4 @@ var specialProductDetailsSchema		= new Schema({
 module.exports = mongoose.model('specialProducts_Menu', specialProductDetailsSchema,'specialProducts_Menu');
 var specialProductMenu = mongoose.model('specialProducts_Menu', specialProductDetailsSchema,'specialProducts_Menu');
 specialProductDetailsSchema.index({order_index: 1});
-specialProductMenu.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-specialProductMenu.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
+mongoDbIndex.mongooseIndex(specialProductMenu);

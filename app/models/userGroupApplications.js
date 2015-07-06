@@ -1,6 +1,7 @@
 var mongoose		= require('mongoose');
 var deepPopulate = require('mongoose-deep-populate');
 var Schema			= mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var schema		= new Schema({
     name: String,
@@ -15,11 +16,4 @@ schema.plugin(deepPopulate, {
 
 module.exports = mongoose.model('groupsApplications', schema, 'groupsApplications');
 var specialApps = mongoose.model('groupsApplications', schema,'groupsApplications');
-specialApps.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-specialApps.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
+mongoDbIndex.mongooseIndex(specialApps);

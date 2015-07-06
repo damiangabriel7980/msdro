@@ -3,6 +3,7 @@
  */
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var TalksSchema		= new Schema({
     description:  String,
@@ -21,11 +22,4 @@ var TalksSchema		= new Schema({
 module.exports = mongoose.model('talks',TalksSchema,'talks');
 
 var talks = mongoose.model('talks', TalksSchema,'talks');
-talks.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-talks.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
+mongoDbIndex.mongooseIndex(talks);

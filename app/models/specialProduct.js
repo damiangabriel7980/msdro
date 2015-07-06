@@ -4,6 +4,7 @@
 var mongoose		= require('mongoose');
 var deepPopulate = require('mongoose-deep-populate');
 var Schema			= mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var specialProductSchema		= new Schema({
     prescription: String,
@@ -32,11 +33,4 @@ specialProductSchema.plugin(deepPopulate, {
 
 module.exports = mongoose.model('specialProducts', specialProductSchema,'specialProducts');
 var specialProduct = mongoose.model('specialProducts', specialProductSchema,'specialProducts');
-specialProduct.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-specialProduct.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
+mongoDbIndex.mongooseIndex(specialProduct);

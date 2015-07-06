@@ -3,6 +3,7 @@
  */
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var RoomsSchema = new Schema({
     room_name:  String,
@@ -13,11 +14,4 @@ var RoomsSchema = new Schema({
 
 module.exports = mongoose.model('rooms',RoomsSchema,'rooms');
 var room = mongoose.model('rooms', RoomsSchema,'rooms');
-room.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-room.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
+mongoDbIndex.mongooseIndex(room);

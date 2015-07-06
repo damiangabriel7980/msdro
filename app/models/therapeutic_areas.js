@@ -6,6 +6,7 @@
  */
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var therapeuticAreaSchema		= new Schema({
     has_children: Boolean,
@@ -18,11 +19,4 @@ var therapeuticAreaSchema		= new Schema({
 module.exports = mongoose.model('therapeutic-areas', therapeuticAreaSchema,'therapeutic-areas');
 var Areas = mongoose.model('therapeutic-areas', therapeuticAreaSchema,'therapeutic-areas');
 therapeuticAreaSchema.index({name: 1});
-Areas.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-Areas.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
+mongoDbIndex.mongooseIndex(Areas);

@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 var deepPopulate = require('mongoose-deep-populate');
 var crypto   = require('crypto-js/sha256');
 var Schema			= mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
+
 // define the schema for our user model
 var userSchema = new Schema({
     account_expired: {type: Boolean, select: false},
@@ -72,11 +74,4 @@ module.exports = mongoose.model('User', userSchema);
 
 
 var usr = mongoose.model('User', userSchema);
-usr.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-usr.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
+mongoDbIndex.mongooseIndex(usr);

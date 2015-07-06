@@ -4,6 +4,8 @@
 var mongoose		= require('mongoose');
 var mongoosastic = require('mongoosastic');
 var Schema			= mongoose.Schema;
+var searchIndex = require('../modules/mongoosasticIndex/index');
+var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var Config = require('../../config/environment.js'),
     my_config = new Config();
@@ -28,22 +30,5 @@ multimediaSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_confi
 module.exports = mongoose.model('multimedia', multimediaSchema,'multimedia');
 var Multimedia = mongoose.model('multimedia', multimediaSchema,'multimedia');
 multimediaSchema.index({last_updated: -1});
-Multimedia.ensureIndexes(function (err) {
-    if (err)
-        console.log(err);
-});
-Multimedia.on('index', function (err) {
-    if (err)
-        console.log(err); // error occurred during index creation
-});
-var stream = Multimedia.synchronize();
-var count = 0;
-stream.on('data', function(err, doc){
-    count++;
-});
-stream.on('close', function(){
-    console.log('indexed ' + count + ' documents!');
-});
-stream.on('error', function(err){
-    console.log(err);
-});
+searchIndex.mongoosasticIndex(Multimedia);
+mongoDbIndex.mongooseIndex(Multimedia);
