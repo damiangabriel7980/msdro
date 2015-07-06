@@ -4,13 +4,9 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', function($scope, $rootScope, $state, ContentService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal){
+controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentService','GroupsService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', 'Success', 'Error', function($scope, $rootScope, $state, ContentService, GroupsService, $stateParams,$sce,ngTableParams,$filter,$modal,ActionModal, Success, Error){
     ContentService.content.query().$promise.then(function(result){
-        var contents = result['content'];
-        $scope.grupe=result['groups'];
-        $scope.groupMap={};
-        for(var i =0;i<$scope.grupe.length;i++)
-            $scope.groupMap[$scope.grupe[i]._id]=$scope.grupe[i].display_name;
+        var contents = Success.getObject(result);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -29,7 +25,19 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             }
         });
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
+
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.grupe = Success.getObject(resp);
+        $scope.groupMap={};
+        for(var i =0;i<$scope.grupe.length;i++)
+            $scope.groupMap[$scope.grupe[i]._id]=$scope.grupe[i].display_name;
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
+    });
+
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
@@ -50,6 +58,8 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
             ContentService.content.delete({id: id}).$promise.then(function (resp) {
                 console.log(resp);
                 $state.reload();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     };
@@ -78,6 +88,8 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
                 ContentService.content.update({id: id}, {enableArticle: {enable: !isEnabled}}).$promise.then(function (resp) {
                     console.log(resp);
                     $state.reload();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

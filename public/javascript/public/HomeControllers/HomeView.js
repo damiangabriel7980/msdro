@@ -1,4 +1,4 @@
-controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', 'Utils', function($scope, $rootScope, HomeService, $sce, $state, StateService, Utils) {
+controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', 'Utils', 'Error', 'Success', function($scope, $rootScope, HomeService, $sce, $state, StateService, Utils, Error, Success) {
 
     if($rootScope.accessRoute){
         var state = StateService.getStateFromUrl($rootScope.accessRoute);
@@ -21,11 +21,15 @@ controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce
     //------------------------------------------------------------------------------------------------- get all content
 
     HomeService.CarouselData.query().$promise.then(function(resp){
-        $scope.carouselSlides = resp.success;
+        $scope.carouselSlides = Success.getObject(resp);
+    }).catch(function(errCarousel){
+        console.log(Error.getMessage(errCarousel));
     });
 
     HomeService.events.query().$promise.then(function (resp) {
-        $scope.events = resp.success;
+        $scope.events = Success.getObject(resp);
+    }).catch(function(errEvents){
+        console.log(Error.getMessage(errEvents));
     });
 
     $scope.carouselLearnMore = function (slide) {

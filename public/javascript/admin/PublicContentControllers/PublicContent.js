@@ -1,8 +1,8 @@
-controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$filter', 'ngTableParams', '$modal', 'ActionModal', 'publicContentService', 'AmazonService', function($scope, $rootScope, $state, $filter, ngTableParams, $modal, ActionModal, publicContentService, AmazonService){
+controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$filter', 'ngTableParams', '$modal', 'ActionModal', 'publicContentService', 'AmazonService', 'Success', 'Error', function($scope, $rootScope, $state, $filter, ngTableParams, $modal, ActionModal, publicContentService, AmazonService, Success, Error){
 
     $scope.refreshTable = function () {
         publicContentService.publicContent.query().$promise.then(function (resp) {
-            var data = resp.success;
+            var data = Success.getObject(resp);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -22,6 +22,8 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 
@@ -58,6 +60,8 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
                     publicContentService.publicContent.delete({id: id}).$promise.then(function (resp) {
                         console.log(resp);
                         $state.reload();
+                    }).catch(function(err){
+                        console.log(Error.getMessage(err));
                     });
                 }
             });
@@ -72,6 +76,8 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
                 publicContentService.publicContent.update({id: id},{info: {isEnabled: enabled}}).$promise.then(function (resp) {
                     console.log(resp);
                     $state.reload();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

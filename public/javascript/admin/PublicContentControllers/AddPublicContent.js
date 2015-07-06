@@ -1,4 +1,4 @@
-controllers.controller('AddPublicContent', ['$scope','publicContentService','$modalInstance', '$state', 'AmazonService', function($scope, publicContentService, $modalInstance, $state, AmazonService){
+controllers.controller('AddPublicContent', ['$scope','publicContentService','$modalInstance', '$state', 'AmazonService', 'Success', 'Error', function($scope, publicContentService, $modalInstance, $state, AmazonService, Success, Error){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.selectedTherapeuticAreas = [];
@@ -17,10 +17,14 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
     //----------------------------------------------------------------------------------------------- categories
 
     publicContentService.categories.query().$promise.then(function (resp) {
-        if(resp.success){
-            $scope.categories = resp.success;
-            if(resp.success.length > 0) $scope.selectedCategory = resp.success[0]._id;
+        if(Success.getObject(resp)){
+            $scope.categories = Success.getObject(resp);
+            if(Success.getObject(resp).length > 0) $scope.selectedCategory = Success.getObject(resp)[0]._id;
         }
+    }).catch(function(err){
+        $scope.statusAlert.type = "danger";
+        $scope.statusAlert.message = Error.getMessage(err);
+        $scope.statusAlert.newAlert = true;
     });
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
@@ -30,17 +34,17 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
         var areasOrganised = [];
         areasOrganised.push({id:0, name:"Adauga arii terapeutice"});
         areasOrganised.push({id:1, name:"Toate"});
-        for(var i=0; i<resp.length; i++){
-            var thisArea = resp[i];
+        for(var i=0; i<Success.getObject(resp).length; i++){
+            var thisArea = Success.getObject(resp)[i];
             if(thisArea['therapeutic-areasID'].length == 0){
                 //it's a parent. Add it
                 areasOrganised.push({id: thisArea._id, name:thisArea.name});
                 if(thisArea.has_children){
                     //find all it's children
-                    for(var j=0; j < resp.length; j++){
-                        if(resp[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
+                    for(var j=0; j < Success.getObject(resp).length; j++){
+                        if(Success.getObject(resp)[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
                             //found one children. Add it
-                            areasOrganised.push({id: resp[j]._id, name:"0"+resp[j].name});
+                            areasOrganised.push({id: Success.getObject(resp)[j]._id, name:"0"+Success.getObject(resp)[j].name});
                         }
                     }
                 }
@@ -49,6 +53,10 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
         $scope.allAreas = areasOrganised;
         $scope.selectedArea = $scope.allAreas[0];
 
+    }).catch(function(err){
+        $scope.statusAlert.type = "danger";
+        $scope.statusAlert.message = Error.getMessage(err);
+        $scope.statusAlert.newAlert = true;
     });
     var findInUserAreas = function (id) {
         var index = -1;
@@ -105,12 +113,12 @@ controllers.controller('AddPublicContent', ['$scope','publicContentService','$mo
         toSend.date_added = Date.now();
         toSend.last_updated = Date.now();
         publicContentService.publicContent.create({data: toSend}).$promise.then(function (resp) {
-            if(resp.error){
-                $scope.statusAlert.type = "danger";
-            }else{
                 $scope.statusAlert.type = "success";
-            }
-            $scope.statusAlert.message = resp.message;
+                $scope.statusAlert.message = Success.getMessage(resp);
+            $scope.statusAlert.newAlert = true;
+        }).catch(function(err){
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     };

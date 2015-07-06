@@ -1,11 +1,11 @@
-controllers.controller('HomeDownloads', ['$scope', '$rootScope', 'ContentService', '$sce', function($scope, $rootScope, ContentService, $sce) {
+controllers.controller('HomeDownloads', ['$scope', '$rootScope', 'ContentService', '$sce', 'Error', 'Success', function($scope, $rootScope, ContentService, $sce, Error, Success) {
 
     ContentService.content.query({type: 4, withFile: true}).$promise.then(function (resp) {
-        $scope.downloads = resp.success;
+        $scope.downloads = Success.getObject(resp);
 
         //pagination
         $scope.maxSize = 3;
-        $scope.totalItems = resp.success.length;
+        $scope.totalItems = $scope.downloads.length;
         $scope.currentPage = 1;
         $scope.resultsPerPage = 8;
         $scope.$watch('currentPage', function () {
@@ -13,6 +13,8 @@ controllers.controller('HomeDownloads', ['$scope', '$rootScope', 'ContentService
             var endSlice = beginSlice + $scope.resultsPerPage;
             $scope.downloadsFiltered = $scope.downloads.slice(beginSlice, endSlice);
         });
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 
 }]);

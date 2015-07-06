@@ -1,4 +1,4 @@
-controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window','PrintService', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window,PrintService){
+controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window','PrintService', 'Success', 'Error', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window,PrintService,Success,Error){
     $scope.oneAtATime = true; //open accordion groups one at a time
     $scope.isCollapsed = {
         isFirstOpen: false
@@ -10,6 +10,8 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
         }else{
             $state.reload();
         }
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
     $scope.mobileMenuTitle="";
     $scope.goToMenuItemWithNoChildren=function(parent,event){
@@ -45,6 +47,8 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
 
     specialProductService.SpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
         $scope.specialProductMenu = resp.success;
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 
     $scope.selectFirstMenuItem = function () {

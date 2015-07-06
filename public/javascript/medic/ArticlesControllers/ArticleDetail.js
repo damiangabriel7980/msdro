@@ -1,5 +1,4 @@
-controllers.controller('ArticleDetail', ['$scope', '$rootScope', '$stateParams', 'ContentService', 'FormatService', '$sce','$state','$window','$timeout', function($scope, $rootScope, $stateParams, ContentService, FormatService, $sce,$state,$window,$timeout){
-    var imagePre = $rootScope.pathAmazonDev;
+controllers.controller('ArticleDetail', ['$scope', '$rootScope', '$stateParams', 'ContentService', 'FormatService', '$sce','$state','$window','$timeout', 'Success', 'Error', function($scope, $rootScope, $stateParams, ContentService, FormatService, $sce,$state,$window,$timeout,Success,Error){
     $scope.currentArticle={
       title: '',
         author: '',
@@ -12,14 +11,16 @@ controllers.controller('ArticleDetail', ['$scope', '$rootScope', '$stateParams',
             $state.go('biblioteca.articoleStiintifice.listaArticole',{articleType:$stateParams.articleType});
     };
     ContentService.content.query({content_id: $stateParams.articleId,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        if(resp.success._id)
+        if(Success.getObject(resp)._id)
         {
-            $scope.currentArticle = resp.success;
+            $scope.currentArticle = Success.getObject(resp);
             $scope.date = FormatService.formatMongoDate(resp.success.last_updated);
         }
        else
         {
             $scope.backToArticles();
         }
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 }]);

@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-controllers.controller('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce','Utils','Diacritics', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce,Utils,Diacritics){
+controllers.controller('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce','Utils','Diacritics', 'Success', 'Error', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce,Utils,Diacritics,Success,Error){
 var date = new Date();
     $scope.realEvents=[];
     $scope.realEventsMob=[];
@@ -10,7 +10,7 @@ var date = new Date();
     $scope.eventIconCalendar='<i class="glyphicon glyphicon-facetime-video verySmallFont"></i>&nbsp;';
 
     eventsService.calendar.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-        $scope.events = result.success;
+        $scope.events = Success.getObject(result);
         $scope.eventsFiltered = [];
         for (var i = 0; i < $scope.events.length; i++) {
             if (new Date($scope.events[i].end) > date)
@@ -115,7 +115,9 @@ var date = new Date();
                  $scope.goToEvent($stateParams.id);
              });
          }
-     });
+     }).catch(function(err){
+        console.log(Error.getMessage(err));
+    });
     $scope.goToEvent=function(eventId) {
         $modal.open({
             templateUrl: 'partials/medic/calendarDetails.ejs',

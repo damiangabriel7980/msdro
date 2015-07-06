@@ -1,4 +1,4 @@
-controllers.controller('ElearningView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', '$stateParams', 'therapeuticAreas', function($scope, $state, $rootScope, ContentService, $sce, $stateParams, therapeuticAreas) {
+controllers.controller('ElearningView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', '$stateParams', 'therapeuticAreas', 'Error', 'Success', function($scope, $state, $rootScope, ContentService, $sce, $stateParams, therapeuticAreas, Error, Success) {
 
     $scope.contentLimit = 3;
 
@@ -10,10 +10,14 @@ controllers.controller('ElearningView', ['$scope', '$state', '$rootScope', 'Cont
         $scope.$watch('$stateParams', function (val) {
             $scope.selectedArea = $stateParams.area;
             ContentService.content.query({type: 3, area: $stateParams.area, withFile: true}).$promise.then(function (resp) {
-                $scope.elearning = resp.success;
+                $scope.elearning = Success.getObject(resp);
+            }).catch(function(errElearning){
+                console.log(Error.getMessage(errElearning));
             });
         });
 
+    }).catch(function(errTherap){
+        console.log(Error.getMessage(errTherap));
     });
 
     $scope.navigateToElearning = function (content) {

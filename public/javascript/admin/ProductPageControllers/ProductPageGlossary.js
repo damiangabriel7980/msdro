@@ -1,14 +1,11 @@
-controllers.controller('ProductPageGlossary', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', function($scope, SpecialProductsService, ngTableParams, $filter) {
+controllers.controller('ProductPageGlossary', ['$scope', 'SpecialProductsService', 'ngTableParams', '$filter', 'Success', 'Error', function($scope, SpecialProductsService, ngTableParams, $filter,Success,Error) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
     var refreshGlossaryTable = function () {
         SpecialProductsService.glossary.query({product: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
-            if(resp.error){
-                $scope.resetAlert("danger", "Eroare la gasire glosar");
-            }else{
-                var data = resp.glossary;
+                var data = Success.getObject(resp);
                 $scope.glossaryTableParams = new ngTableParams({
                     page: 1,            // show first page
                     count: 10,          // count per page
@@ -27,7 +24,8 @@ controllers.controller('ProductPageGlossary', ['$scope', 'SpecialProductsService
                         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                     }
                 });
-            }
+        }).catch(function(err){
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 
@@ -45,11 +43,9 @@ controllers.controller('ProductPageGlossary', ['$scope', 'SpecialProductsService
 
     $scope.deleteTerm = function (id) {
         SpecialProductsService.glossary.delete({id: id}).$promise.then(function (resp) {
-            if(resp.error){
-                $scope.resetAlert("danger", resp.message);
-            }else{
                 refreshGlossaryTable();
-            }
+        }).catch(function(err){
+            $scope.resetAlert("danger", Error.getMessage(err));
         });
     };
 

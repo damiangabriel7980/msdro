@@ -10,7 +10,7 @@
   border-bottom: 1px solid #dddddd;
 }
 .noMarginBottom {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 .groups-list-group-item {
   position: relative;
@@ -26,14 +26,8 @@
 .specialGroupDropdown {
   padding: 5px 10px;
 }
-.specialGroupDropdown img {
+.specialGroupDropdown .imageDropdown {
   width: 180px;
-}
-@media (max-width: 768px) {
-  .specialGroupDropdown img {
-    width: 119px;
-    margin-top: 7px;
-  }
 }
 .specialGroupDropdown:hover .my-dropdown-menu {
   display: block;
@@ -45,16 +39,6 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.175);
   background-clip: padding-box;
   top: 13px;
-}
-@media (max-width: 768px) {
-  .specialMenu {
-    right: 10px;
-  }
-}
-@media (min-width: 769px) and (max-width: 1279px) {
-  .specialMenu {
-    right: 65px;
-  }
 }
 .subitems {
   color: #009d97;

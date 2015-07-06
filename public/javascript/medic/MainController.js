@@ -1,4 +1,4 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', 'IntroService', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService, IntroService) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', 'IntroService', 'Success', 'Error', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService, IntroService, Success, Error) {
 
     //===================================================================== navigation
     $scope.goToMerckSite=function(){
@@ -43,20 +43,23 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             if(!hideVideo){
                 //if not, check if this intro video is enabled
                 IntroService.checkIntroEnabled.query({groupID: idSelected}).$promise.then(function (resp) {
-                    if(resp.success){
+                    if(Success.getObject(resp)){
                         //if so, check if user already viewed the video in this log in session
                         IntroService.rememberIntroView.query({groupID: idSelected}).$promise.then(function (resp) {
-                            if(resp.success){
-                                console.log(resp.success.isViewed);
-                                if(!resp.success.isViewed){
+                            if(Success.getObject(resp)){
+                                if(!Success.getObject(resp).isViewed){
                                     //if not, show it
                                     showIntroPresentation(idSelected);
                                     //and mark as viewed (async)
                                     IntroService.rememberIntroView.save({groupID: idSelected});
                                 }
                             }
+                        }).catch(function(err){
+                            console.log(Error.getMessage(err));
                         });
                     }
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
                 });
             }
         }

@@ -1,4 +1,4 @@
-controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', function($scope, SpecialProductsService, AmazonService) {
+controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService,Success,Error) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
@@ -27,7 +27,7 @@ controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService'
                         callback("Eroare la adaugare");
                     }else{
                         //attach to parent if it has one
-                        var savedId = resp.saved._id;
+                        var savedId = Success.getObject(resp).saved._id;
                         if($scope.sessionData.parentId){
                             SpecialProductsService.addMenuChild.update({id: $scope.sessionData.parentId}, {child_id: savedId}).$promise.then(function (resp) {
                                 if(resp.error){
@@ -36,7 +36,9 @@ controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService'
                                     //proceed down the waterfall
                                     callback(null, savedId);
                                 }
-                            })
+                            }).catch(function(err){
+                                $scope.resetAlert("danger", Error.getMessage(err));
+                            });
                         }else{
                             //proceed down the waterfall
                             callback(null, savedId);
@@ -64,6 +66,8 @@ controllers.controller('AddProductPageMenu', ['$scope', 'SpecialProductsService'
                                     //proceed down the waterfall
                                     callback(null, menu_id);
                                 }
+                            }).catch(function(err){
+                                $scope.resetAlert("danger", Error.getMessage(err));
                             });
                         }
                     });

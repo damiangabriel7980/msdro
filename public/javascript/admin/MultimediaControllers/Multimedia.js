@@ -1,9 +1,9 @@
 /**
  * Created by miricaandrei23 on 26.11.2014.
  */
-controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', 'ActionModal','$q','$state', function($scope,$rootScope,MultimediaAdminService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal,$q,$state){
+controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', 'ActionModal','$q','$state', 'Success', 'Error', function($scope,$rootScope,MultimediaAdminService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal,$q,$state,Success,Error){
     MultimediaAdminService.multimedia.query().$promise.then(function(result){
-        var multimedias = result['MultimediaList'];
+        var multimedias = Success.getObject(result);
         console.log(result);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
@@ -23,7 +23,10 @@ controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminSer
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             }
         });
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
+
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
@@ -47,6 +50,8 @@ controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminSer
             MultimediaAdminService.multimedia.delete({id: id}).$promise.then(function(result){
                 console.log(result);
                 $state.go('elearning.multimedia',{},{reload: true});
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     };
@@ -58,6 +63,8 @@ controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminSer
                 MultimediaAdminService.multimedia.update({id: id},{enableMultimedia:{isEnabled: !isEnabled}}).$promise.then(function (resp) {
                     console.log(resp);
                     $state.go('elearning.multimedia',{},{reload: true});
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

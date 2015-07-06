@@ -1,4 +1,4 @@
-controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', function($scope, $rootScope, publicContentService, $modalInstance, $state, idToEdit, AmazonService){
+controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', 'Success', 'Error', function($scope, $rootScope, publicContentService, $modalInstance, $state, idToEdit, AmazonService, Success, Error){
 
     $scope.idToEdit = idToEdit;
     var contentDataLoaded = false;
@@ -19,43 +19,47 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
     //----------------------------------------------------------------------------------------------- categories
 
     publicContentService.categories.query().$promise.then(function (resp) {
-        if(resp.success){
-            $scope.categories = resp.success;
+        if(Success.getObject(resp)){
+            $scope.categories = Success.getObject(resp);
         }
+    }).catch(function(err){
+        $scope.statusAlert.type = "danger";
+        $scope.statusAlert.message = Error.getMessage(err);
+        $scope.statusAlert.newAlert = true;
     });
 
     //----------------------------------------------------------------------------------------------------- get content
     publicContentService.publicContent.query({id: idToEdit}).$promise.then(function (resp) {
         console.log(resp);
-        $scope.titlu = resp.success.title;
-        $scope.autor = resp.success.author;
-        $scope.descriere = resp.success.description;
-        $scope.selectedType = resp.success.type;
-        $scope.contentText = resp.success.text;
-        $scope.imagePath = resp.success.image_path;
-        $scope.filePath = resp.success.file_path;
-        $scope.selectedCategory = resp.success.category;
+        $scope.titlu = Success.getObject(resp).title;
+        $scope.autor = Success.getObject(resp).author;
+        $scope.descriere = Success.getObject(resp).description;
+        $scope.selectedType = Success.getObject(resp).type;
+        $scope.contentText = Success.getObject(resp).text;
+        $scope.imagePath = Success.getObject(resp).image_path;
+        $scope.filePath = Success.getObject(resp).file_path;
+        $scope.selectedCategory = Success.getObject(resp).category;
 
         contentDataLoaded = true;
 
-        var areasIds = resp['therapeutic-areasID']?resp['therapeutic-areasID']:[];
+        var areasIds = Success.getObject(resp)['therapeutic-areasID']?Success.getObject(resp)['therapeutic-areasID']:[];
 
         //get therapeutic areas
         publicContentService.therapeuticAreas.query().$promise.then(function (resp) {
             var areasOrganised = [];
             areasOrganised.push({id:0, name:"Adauga arii terapeutice"});
             areasOrganised.push({id:1, name:"Toate"});
-            for(var i=0; i<resp.length; i++){
-                var thisArea = resp[i];
+            for(var i=0; i<Success.getObject(resp).length; i++){
+                var thisArea = Success.getObject(resp)[i];
                 if(thisArea['therapeutic-areasID'].length == 0){
                     //it's a parent. Add it
                     areasOrganised.push({id: thisArea._id, name:thisArea.name});
                     if(thisArea.has_children){
                         //find all it's children
-                        for(var j=0; j < resp.length; j++){
-                            if(resp[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
+                        for(var j=0; j < Success.getObject(resp).length; j++){
+                            if(Success.getObject(resp)[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
                                 //found one children. Add it
-                                areasOrganised.push({id: resp[j]._id, name:"0"+resp[j].name});
+                                areasOrganised.push({id: Success.getObject(resp)[j]._id, name:"0"+Success.getObject(resp)[j].name});
                             }
                         }
                     }
@@ -72,7 +76,15 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
                 if(area) formattedAreas.push(area);
             }
             $scope.selectedTherapeuticAreas = formattedAreas;
+        }).catch(function(err){
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.message = Error.getMessage(err);
+            $scope.statusAlert.newAlert = true;
         });
+    }).catch(function(err){
+        $scope.statusAlert.type = "danger";
+        $scope.statusAlert.message = Error.getMessage(err);
+        $scope.statusAlert.newAlert = true;
     });
 
     //--------------------------------------------------------------------------------- functions for therapeutic areas
@@ -137,11 +149,6 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
                 } else {
                     //update database as well
                     publicContentService.changeImageOrFile.save({data:{id:idToEdit, path:key, type: type}}).$promise.then(function (resp) {
-                        if(resp.error){
-                            $scope.uploadAlert.type = "danger";
-                            $scope.uploadAlert.message = "Eroare la actualizarea bazei de date!";
-                            $scope.uploadAlert.newAlert = true;
-                        }else{
                             $scope.uploadAlert.type = "success";
                             $scope.uploadAlert.message = "Upload reusit!";
                             $scope.uploadAlert.newAlert = true;
@@ -149,7 +156,10 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
                             //update view
                             if(type === "image") $scope.imagePath = key;
                             if(type === "file") $scope.filePath = key;
-                        }
+                    }).catch(function(err){
+                        $scope.uploadAlert.type = "danger";
+                        $scope.uploadAlert.message = Error.getMessage(err);
+                        $scope.uploadAlert.newAlert = true;
                     });
                 }
             });
@@ -258,13 +268,14 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         toUpdate.text = this.contentText?this.contentText:"";
         //send data to server
         toUpdate.last_updated = new Date();
+        console.log(toUpdate)
         publicContentService.publicContent.update({id: idToEdit},{toUpdate: toUpdate}).$promise.then(function (resp) {
-            if(resp.error){
-                $scope.statusAlert.type = "danger";
-            }else{
                 $scope.statusAlert.type = "success";
-            }
-            $scope.statusAlert.message = resp.message;
+                $scope.statusAlert.message = Success.getMessage(resp);
+            $scope.statusAlert.newAlert = true;
+        }).catch(function(err){
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     };

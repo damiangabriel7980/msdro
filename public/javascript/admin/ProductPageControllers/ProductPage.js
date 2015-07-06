@@ -1,8 +1,8 @@
-controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal){
+controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', 'Success', 'Error', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal,Success,Error){
 
     $scope.refreshTable = function () {
         SpecialProductsService.products.query().$promise.then(function (resp) {
-            var data = resp;
+            var data = Success.getObject(resp);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -22,11 +22,15 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 
     SpecialProductsService.groups.query().$promise.then(function (resp) {
-        $scope.groups = resp;
+        $scope.groups = Success.getObject(resp);
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 
     $scope.refreshTable();

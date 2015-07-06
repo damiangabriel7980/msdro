@@ -1,4 +1,4 @@
-controllers.controller('UsersAccepted', ['$scope', '$rootScope', '$filter', 'ngTableParams', '$modal', 'NewAccountsService', function($scope, $rootScope, $filter, ngTableParams, $modal, NewAccountsService){
+controllers.controller('UsersAccepted', ['$scope', '$rootScope', '$filter', 'ngTableParams', '$modal', 'NewAccountsService', 'Success', 'Error', function($scope, $rootScope, $filter, ngTableParams, $modal, NewAccountsService, Success, Error){
 
     NewAccountsService.state.query({type: "ACCEPTED"}).$promise.then(function (data) {
         $scope.tableParams = new ngTableParams({
@@ -11,14 +11,14 @@ controllers.controller('UsersAccepted', ['$scope', '$rootScope', '$filter', 'ngT
                 username: ''       // initial filter
             }
         }, {
-            total: data.length, // length of data
+            total: Success.getObject(data).length, // length of data
             getData: function($defer, params) {
-
-                var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
-
+                var orderedData = $filter('orderBy')(($filter('filter')(Success.getObject(data), params.filter())), params.orderBy());
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             }
         });
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 
 }]);

@@ -4,11 +4,15 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService){
+controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', 'Success', 'Error', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,Success,Error){
     $scope.selectedAreas=[];
     $scope.therapeuticAlert = {newAlert:false, type:"", message:""};
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp;
+        $scope.areas = Success.getObject(resp)
+    }).catch(function(err){
+        $scope.therapeuticAlert.newAlert = true;
+        $scope.therapeuticAlert.message = Error.getMessage(err);
+        $scope.therapeuticAlert.type = "danger";
     });
 
     $scope.addArie = function(){
@@ -22,6 +26,10 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
                 $scope.arie = {};
                 $modalInstance.close();
                 $state.go('ariiTerapeutice',{},{reload: true});
+            }).catch(function(err){
+                $scope.therapeuticAlert.newAlert = true;
+                $scope.therapeuticAlert.message = Error.getMessage(err);
+                $scope.therapeuticAlert.type = "danger";
             });
         }
         else{

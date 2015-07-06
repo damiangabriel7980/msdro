@@ -237,23 +237,23 @@ services.factory('CollectionsService', function () {
 services.factory('therapeuticAreas', ['$resource', function($resource){
     return {
         areas: $resource('apiPublic/therapeuticAreas/', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         formatAreas: function (areas) {
             var areasOrganised = [];
             areasOrganised.push({_id:0, name:"Toate", has_children:false});
-            for(var i=0; i<areas.length; i++){
-                var thisArea = areas[i];
+            for(var i=0; i<areas.success.length; i++){
+                var thisArea = areas.success[i];
                 if(thisArea['therapeutic-areasID'].length == 0){
                     //it's a parent. Add it
                     areasOrganised.push(thisArea);
                     if(thisArea.has_children){
                         //find all it's children
-                        for(var j=0; j < areas.length; j++){
-                            if(areas[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
+                        for(var j=0; j < areas.success.length; j++){
+                            if(areas.success[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
                                 //found one children. Add it
-                                areas[j]['ident']=true;
-                                areasOrganised.push(areas[j]);
+                                areas.success[j]['ident']=true;
+                                areasOrganised.push(areas.success[j]);
                             }
                         }
                     }
@@ -315,6 +315,26 @@ services.factory('StorageService', function () {
             getElement: getLocalStorageElement,
             setElement: setLocalStorageElement,
             removeElement: removeLocalStorageElement
+        }
+    }
+});
+services.factory('Error', function() {
+    return {
+        getMessage: function(serverResponse) {
+            return serverResponse.data.error;
+        },
+        getData: function (serverResponse) {
+            return serverResponse.data.data;
+        }
+    }
+});
+services.factory('Success', function() {
+    return {
+        getMessage: function(serverResponse) {
+            return serverResponse.message;
+        },
+        getObject: function(serverResponse) {
+            return serverResponse.success;
         }
     }
 });

@@ -1,4 +1,4 @@
-controllers.controller('AcceptUser', ['$scope','NewAccountsService', '$modalInstance', 'idToAccept', '$state', function($scope, NewAccountsService, $modalInstance, idToAccept, $state){
+controllers.controller('AcceptUser', ['$scope','NewAccountsService', '$modalInstance', 'idToAccept', '$state', 'Success', 'Error', function($scope, NewAccountsService, $modalInstance, idToAccept, $state, Success, Error){
 
     $scope.modal = {
         title: "Accepta utilizator",
@@ -13,6 +13,8 @@ controllers.controller('AcceptUser', ['$scope','NewAccountsService', '$modalInst
             console.log(resp);
             $state.reload();
             $modalInstance.close();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 

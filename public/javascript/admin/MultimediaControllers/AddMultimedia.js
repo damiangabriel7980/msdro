@@ -1,17 +1,22 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('AddMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', function($scope,$rootScope,MultimediaAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService){
+controllers.controller('AddMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','GroupsService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', 'Success', 'Error', function($scope,$rootScope,MultimediaAdminService,GroupsService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,Success,Error){
     $scope.selectedGroups = [];
     $scope.selectedAreas=[];
 
-    MultimediaAdminService.multimedia.query().$promise.then(function(resp){
-        $scope.groups = resp['groups'];
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups = Success.getObject(resp);
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp;
+        $scope.areas = Success.getObject(resp);
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
+
     $scope.createMultimedia=function(){
         var id_groups=[];
         for(var i=0;i<$scope.selectedGroups.length;i++){
@@ -26,6 +31,8 @@ controllers.controller('AddMultimedia', ['$scope','$rootScope' ,'MultimediaAdmin
             console.log(resp);
             $modalInstance.close();
             $state.go('elearning.multimedia',{},{reload: true});
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
 
     };

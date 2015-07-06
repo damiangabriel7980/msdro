@@ -1,22 +1,24 @@
-controllers.controller('HomeMobileNews', ['$scope', 'ContentService', function($scope, ContentService) {
+controllers.controller('HomeMobileNews', ['$scope', 'ContentService', 'Error', 'Success', function($scope, ContentService, Error, Success) {
 
     ContentService.mobileContent.query().$promise.then(function (resp) {
-        if(resp.success){
+        if(Success.getObject(resp)){
             var categories = [];
             categories.push({
                 name: "ULTIMELE NOUTATI",
-                content: resp.success.news
+                content: Success.getObject(resp).news
             });
             categories.push({
                 name: "CELE MAI CITITE ARTICOLE",
-                content: resp.success.articles
+                content: Success.getObject(resp).articles
             });
             categories.push({
                 name: "DOWNLOADS",
-                content: resp.success.downloads
+                content: Success.getObject(resp).downloads
             });
             $scope.categories = categories;
         }
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 
 }]);

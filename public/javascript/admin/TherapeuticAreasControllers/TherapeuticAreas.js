@@ -1,10 +1,10 @@
 /**
  * Created by miricaandrei23 on 26.11.2014.
  */
-controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'areasAdminService','$stateParams','$sce','ngTableParams','$filter', 'ActionModal', function($scope,$rootScope, $state, areasAdminService,$stateParams,$sce,ngTableParams,$filter, ActionModal){
+controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'areasAdminService','$stateParams','$sce','ngTableParams','$filter', 'ActionModal', 'Success', 'Error', function($scope,$rootScope, $state, areasAdminService,$stateParams,$sce,ngTableParams,$filter, ActionModal, Success, Error){
     areasAdminService.areas.query().$promise.then(function(result){
-        var arii = result.success;
-        $scope.areasForFilter = result.success;
+        var arii = Success.getObject(result);
+        $scope.areasForFilter = Success.getObject(result);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -33,6 +33,8 @@ controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'ar
             areasAdminService.areas.delete({id: id}).$promise.then(function(result){
                 console.log(result);
                 $state.reload();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     }

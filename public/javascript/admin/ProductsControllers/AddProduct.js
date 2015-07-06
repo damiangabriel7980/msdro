@@ -1,17 +1,21 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$filter','$modalInstance','therapeuticAreaService','$state', function($scope,$rootScope,ProductService,$stateParams,$sce,$filter,$modalInstance,therapeuticAreaService,$state){
+controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$filter','$modalInstance','therapeuticAreaService','$state', 'Success', 'Error', function($scope,$rootScope,ProductService,$stateParams,$sce,$filter,$modalInstance,therapeuticAreaService,$state,Success, Error){
 
     $scope.selectedGroups = [];
     $scope.selectedAreas=[];
 
     ProductService.products.query().$promise.then(function(resp){
-        $scope.groups = resp['groups'];
+        $scope.groups = Success.getObject(resp)['groups'];
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp;
+        $scope.areas = Success.getObject(resp);
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 
     $scope.createProduct=function(){
@@ -28,6 +32,8 @@ controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$
         ProductService.products.create({product:$scope.newProduct}).$promise.then(function (resp) {
             $state.reload();
             $modalInstance.close();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
 
     };
