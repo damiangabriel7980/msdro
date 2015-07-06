@@ -1,4 +1,4 @@
-controllers.controller('AddSpecialApp', ['$scope','$rootScope' ,'SpecialAppsService', '$state', '$modalInstance', 'Success', 'Error', function($scope, $rootScope, SpecialAppsService, $state, $modalInstance, Success, Error){
+controllers.controller('AddSpecialApp', ['$scope','$rootScope' ,'SpecialAppsService', '$state', '$modalInstance', 'Success', function($scope, $rootScope, SpecialAppsService, $state, $modalInstance, Success){
 
     $scope.modal = {
         title: "Adauga aplicatie",
@@ -11,10 +11,7 @@ controllers.controller('AddSpecialApp', ['$scope','$rootScope' ,'SpecialAppsServ
 
     //get special groups
     SpecialAppsService.groups.query().$promise.then(function (resp) {
-        console.log(resp);
         $scope.specialGroups = Success.getObject(resp);
-    }).catch(function(err){
-        resetAlert("Eroare", Error.getMessage(err));
     });
 
     var resetAlert = function (type, message) {
@@ -28,11 +25,11 @@ controllers.controller('AddSpecialApp', ['$scope','$rootScope' ,'SpecialAppsServ
     $scope.finalize = function(){
         var toAdd = this.app;
         toAdd.groups = this.selectedSpecialGroups;
-        SpecialAppsService.apps.create(toAdd).$promise.then(function (resp) {
-                $state.reload();
-                $modalInstance.close();
-        }).catch(function(err){
-            resetAlert("Eroare", Error.getMessage(err));
+        SpecialAppsService.apps.create(toAdd).$promise.then(function () {
+            $state.reload();
+            $modalInstance.close();
+        }).catch(function () {
+            resetAlert("danger", "Eroare la cerarea aplicatiei");
         });
     };
 
