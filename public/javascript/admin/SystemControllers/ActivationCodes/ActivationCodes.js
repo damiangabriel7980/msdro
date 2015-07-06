@@ -1,8 +1,8 @@
-controllers.controller('ActivationCodes', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'SystemService', '$modal', 'ActionModal', 'InfoModal', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, SystemService, $modal, ActionModal, InfoModal){
+controllers.controller('ActivationCodes', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'SystemService', '$modal', 'Success', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, SystemService, $modal, Success){
 
     var refreshTable = function () {
         SystemService.codes.query().$promise.then(function (resp) {
-            var data = resp.success;
+            var data = Success.getObject(resp);
             console.log(data);
 
             $scope.tableParams = new ngTableParams({

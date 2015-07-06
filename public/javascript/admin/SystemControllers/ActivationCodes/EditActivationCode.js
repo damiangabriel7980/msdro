@@ -23,12 +23,10 @@ controllers.controller('EditActivationCode', ['$scope', '$state', '$modalInstanc
         }else if(this.changeCode.new != this.changeCode.confirm){
             resetAlert("danger", "Codurile nu corespund");
         }else{
-            SystemService.codes.update({id: code._id}, this.changeCode).$promise.then(function (resp) {
-                if(resp.error){
-                    resetAlert("danger", "Eroare la schimbarea codului");
-                }else{
-                    resetAlert("success", "Codul a fost modificat");
-                }
+            SystemService.codes.update({id: code._id}, this.changeCode).$promise.then(function () {
+                resetAlert("success", "Codul a fost modificat");
+            }).catch(function () {
+                resetAlert("danger", "Eroare la schimbarea codului");
             });
         }
     }
