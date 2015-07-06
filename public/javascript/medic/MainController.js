@@ -156,6 +156,9 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     $scope.closeNavbar = function () {
         $scope.navCollapsed = true;
     };
+    $scope.toggleNavbar = function () {
+        $scope.navCollapsed = !$scope.navCollapsed;
+    };
     $scope.openNavbar = function () {
         $scope.navCollapsed = false;
     };

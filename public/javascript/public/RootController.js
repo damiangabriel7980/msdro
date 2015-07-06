@@ -20,6 +20,9 @@ controllers.controller('RootController', ['$scope', '$rootScope', 'RootService',
     $scope.closeNavbar = function () {
         $scope.navCollapsed = true;
     };
+    $scope.toggleNavbar = function () {
+        $scope.navCollapsed = !$scope.navCollapsed;
+    };
     $scope.openNavbar = function () {
         $scope.navCollapsed = false;
     };
