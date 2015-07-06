@@ -41,11 +41,12 @@ var mergeKeys = function (obj1, obj2){
     return obj3;
 };
 
-module.exports = function(app, env, globals, logger, amazon, router) {
+module.exports = function(app, env, globals, logger, amazon, sessionSecret, router) {
 
     //=============================================Define variables
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
     var handleError = require('./modules/responseHandler/error.js')(logger);
+    var Auth = require('./modules/auth')(logger, sessionSecret);
 
     //access control allow origin *
     app.all("/apiGloballyShared/*", function(req, res, next) {
@@ -56,16 +57,6 @@ module.exports = function(app, env, globals, logger, amazon, router) {
         res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Authorization");
         next();
     });
-
-    // middleware to ensure user is logged in
-    function isLoggedIn(req, res, next) {
-        
-        if (req.isAuthenticated()){
-            return next();
-        }else{
-            handleError(res, null, 403, 13);
-        }
-    }
 
     //route for retrieving environment info; CAREFUL NOT TO INCLUDE SENSIBLE DATA
     router.route('/appSettings')
@@ -356,7 +347,7 @@ module.exports = function(app, env, globals, logger, amazon, router) {
         });
 
     router.route('/completeProfile')
-        .post(isLoggedIn, validateCompleteProfile, completeProfile, uploadProof, function (req,res) {
+        .post(Auth.isLoggedIn, validateCompleteProfile, completeProfile, uploadProof, function (req,res) {
             var info = {
                 error: false,
                 type: "success",
