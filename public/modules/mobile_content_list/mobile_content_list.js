@@ -24,9 +24,14 @@
                 scope.trustAsHtml = $sce.trustAsHtml;
                 scope.htmlToPlainText = Utils.htmlToPlainText;
 
-                scope.defaultProductIcon = $rootScope.defaultProductIcon;
-                scope.defaultArticleIcon = $rootScope.defaultArticleIcon;
-                scope.defaultMultimediaIcon = $rootScope.defaultMultimediaIcon;
+                var months = Utils.getMonthsArray();
+                scope.getMonth = function (date) {
+                    return months[new Date(date).getMonth()];
+                };
+
+                scope.defaultProductIcon = $rootScope.pathAmazonResources + "icons/product.png";
+                scope.defaultArticleIcon = $rootScope.pathAmazonResources + "icons/article.png";
+                scope.defaultMultimediaIcon = $rootScope.pathAmazonResources + "icons/film.png";
 
                 scope.calendarBg = $rootScope.pathAmazonResources + "calendar_bg.png";
             }
