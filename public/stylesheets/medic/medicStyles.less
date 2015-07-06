@@ -31,7 +31,6 @@
   }
 }
 
-
 body{
   .fontM;
   h2{
@@ -561,10 +560,25 @@ body{
 .navbarMedic {
   padding: 10px 25px 0 25px;
   border-bottom: 1px solid @gray-lighter;
+  .paddedForm{
+    form{
+      padding: 5px 15px 0 15px;
+    }
+  }
   .container{
     padding: 0;
     width: 100%;
     padding-bottom: 8px !important;
+  }
+  .hideOnMobile{ //show on phones and tablets
+    @media (max-width: @grid-float-breakpoint-max) {
+      .hide;
+    }
+  }
+  .hideOnDesktop{ //show on Desktop
+    @media (min-width: @grid-float-breakpoint) {
+      .hide;
+    }
   }
   .specialDropdownImage{
     @media(max-width: @screen-xs-max){

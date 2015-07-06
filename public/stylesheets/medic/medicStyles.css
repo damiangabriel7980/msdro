@@ -6906,10 +6906,23 @@ body .btn {
   padding: 10px 25px 0 25px;
   border-bottom: 1px solid #eeeeee;
 }
+.navbarMedic .paddedForm form {
+  padding: 5px 15px 0 15px;
+}
 .navbarMedic .container {
   padding: 0;
   width: 100%;
   padding-bottom: 8px !important;
+}
+@media (max-width: 1279px) {
+  .navbarMedic .hideOnMobile {
+    display: none !important;
+  }
+}
+@media (min-width: 1280px) {
+  .navbarMedic .hideOnDesktop {
+    display: none !important;
+  }
 }
 @media (max-width: 767px) {
   .navbarMedic .specialDropdownImage {

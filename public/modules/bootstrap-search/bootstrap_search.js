@@ -7,7 +7,7 @@
             templateUrl: currentScriptPath.replace('bootstrap_search.js', 'bootstrap_search.html'),
             replace: true,
             scope: {
-                isInDropdown: '=',
+                animatedInput: '=',
                 inputWidthClass: '@',
                 searchWidthClass: '@',
                 onSearch: '=',

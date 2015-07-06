@@ -1,6 +1,6 @@
 <form class="navbar-form navbar-right" role="search" ng-submit="callSearch(searchTerm);">
     <div class="input-group searchDefault {{searchWidthClass}}">
       <input type="text" class="newWidthPopSearch {{inputWidthClass}} popSearch form-control" placeholder="Search" name="srch-term" ng-model="searchTerm">
-      <span class="input-group-addon" ng-click="isInDropdown?callSearch(searchTerm):animateInput()"><i class="glyphicon glyphicon-search"></i></span>
+      <span class="input-group-addon" ng-click="animatedInput?animateInput():callSearch(searchTerm)"><i class="glyphicon glyphicon-search"></i></span>
     </div>
 </form>
