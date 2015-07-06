@@ -60,71 +60,6 @@ var Config = require('../config/environment.js'),
 //used to sign cookies based on session secret
 var cookieSig = require('express-session/node_modules/cookie-signature');
 
-//================================================================================== useful db administration functions
-
-//returns ONLY id's of entities connected to specified document in array
-var findConnectedEntitiesIds = function(connected_to_entity, connection_name, connected_to_id){
-    var qry = {};
-    var deferred = Q.defer();
-    qry[connection_name] = {$in: [connected_to_id]};
-    connected_to_entity.find(qry, function (err, documents) {
-        if(err){
-            deferred.reject("Error finding connecting entities");
-        }else{
-            var ret = [];
-            for(var i=0; i<documents.length; i++){
-                ret.push(documents[i]._id);
-            }
-            deferred.resolve(ret);
-        }
-    });
-    return deferred.promise;
-};
-
-var disconnectEntitiesFromEntity = function (array_of_ids_to_disconnect, connectedEntity, connection_name, id_document_to_disconnect_from) {
-    //convert string id's to ObjectId's
-    var deferred = Q.defer();
-    var format_connecting_array = [];
-    for(var i=0; i<array_of_ids_to_disconnect.length; i++){
-        if(typeof array_of_ids_to_disconnect[i] === "string"){
-            format_connecting_array.push(mongoose.Types.ObjectId(array_of_ids_to_disconnect[i]));
-        }else{
-            format_connecting_array.push(array_of_ids_to_disconnect[i]);
-        }
-    }
-    //insert only strings in connections array
-    if(typeof id_document_to_disconnect_from !== "string") id_document_to_disconnect_from = id_document_to_disconnect_from.toString();
-    //use $addToSet to avoid inserting duplicates
-    var upd = {};
-    upd[connection_name] = id_document_to_disconnect_from;
-    connectedEntity.update({_id:{$in: format_connecting_array}}, {$pull: upd}, {multi: true}, function (err, res) {
-        if(err){
-            deferred.reject(err);
-        }else{
-            deferred.resolve(res);
-        }
-    });
-    return deferred.promise;
-};
-
-var disconnectAllEntitiesFromEntity = function (connectedEntity, connection_name, id_document_to_disconnect_from) {
-    var deferred = Q.defer();
-    findConnectedEntitiesIds(connectedEntity, connection_name, id_document_to_disconnect_from).then(
-        function (array_of_ids) {
-            disconnectEntitiesFromEntity(array_of_ids, connectedEntity, connection_name, id_document_to_disconnect_from).then(
-                function (success) {
-                    deferred.resolve("Entities disconnected: "+success);
-                },
-                function (err) {
-                    deferred.reject("Error at disconnecting entities");
-                });
-        },
-        function (err) {
-            deferred.reject(err);
-        });
-    return deferred.promise;
-};
-
 //=========================================================================================== functions for user groups
 
 var getNonSpecificUserGroupsIds = function(user){
@@ -2033,25 +1968,26 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                Therapeutic_Area.find({_id:req.query.id}).populate('therapeutic-areasID').exec(function(err, cont) {
+                Therapeutic_Area.findById(req.query.id).populate('therapeutic-areasID').exec(function(err, cont) {
                     var objectToSend = {};
                     if(err) {
                         handleError(res,err,500);
-                    }
-                    if(cont.length == 1){
-                        objectToSend['selectedArea'] = cont[0];
-                        if(cont[0].has_children==true)
-                        {
-                            Therapeutic_Area.find({'therapeutic-areasID':{$in : [cont[0]._id]}}).exec(function(err,response){
-                                objectToSend['childrenAreas'] = response;
-                                handleSuccess(res, objectToSend);
-                            })
-                        }
-                        else{
-                            handleSuccess(res, objectToSend);
-                        }
                     }else{
-                        handleError(res,err,404,1);
+                        if(cont){
+                            objectToSend['selectedArea'] = cont;
+                            if(cont.has_children==true)
+                            {
+                                Therapeutic_Area.find({'therapeutic-areasID':{$in : [cont._id]}}).exec(function(err,response){
+                                    objectToSend['childrenAreas'] = response;
+                                    handleSuccess(res, objectToSend);
+                                })
+                            }
+                            else{
+                                handleSuccess(res, objectToSend);
+                            }
+                        }else{
+                            handleError(res,err,404,1);
+                        }
                     }
                 })
             }else{
@@ -2097,7 +2033,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     .put(function(req, res) {
             var area = req.body.area;
             var therapeuticArray = req.body.newAreas;
-            var oldAreas = req.body.oldAreas;
+            //var oldAreas = req.body.oldAreas;
                 if (area.has_children == true) {
                     Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
                         if (err)
@@ -2202,13 +2138,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var dataArray = [req.query.id];
             var connEntities=[Products,Multimedia];
             async.each(connEntities,function(item,callback){
-                disconnectAllEntitiesFromEntity(item, 'therapeutic-areasID', data).then(
-                    function(){
-                        callback();
-                    },
-                    function (err) {
+                item.update({},{$pull: {'therapeutic-areasID': dataArray}}, {multi: true}, function(err,wRes){
+                    if(err){
                         callback(err);
-                    });
+                    }else{
+                        callback();
+                    }
+                })
             },function(err){
                 if(err){
                     handleError(res,err,409,5);
