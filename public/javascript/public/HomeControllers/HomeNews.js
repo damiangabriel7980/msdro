@@ -13,8 +13,6 @@ controllers.controller('HomeNews', ['$scope', '$rootScope', 'ContentService', '$
             var endSlice = beginSlice + $scope.resultsPerPage;
             $scope.noutatiFiltered = $scope.noutati.slice(beginSlice, endSlice);
         });
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
     });
 
 }]);

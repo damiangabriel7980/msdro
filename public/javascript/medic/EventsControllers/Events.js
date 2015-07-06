@@ -115,9 +115,7 @@ var date = new Date();
                  $scope.goToEvent($stateParams.id);
              });
          }
-     }).catch(function(err){
-        console.log(Error.getMessage(err));
-    });
+     });
     $scope.goToEvent=function(eventId) {
         $modal.open({
             templateUrl: 'partials/medic/calendarDetails.ejs',

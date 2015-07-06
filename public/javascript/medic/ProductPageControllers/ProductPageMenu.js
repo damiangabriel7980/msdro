@@ -10,8 +10,6 @@ controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams
                     specialProductService.SpecialProductDescription.query({id:$stateParams.childId?$stateParams.childId:$stateParams.menuId}).$promise.then(function(resp){
                         $scope.specialProductDescription = Success.getObject(resp);
                         $scope.$parent.mobileMenuTitle= Success.getObject(resp).title;
-                    }).catch(function(err){
-                        console.log(Error.getMessage(err));
                     });
                 }
             }

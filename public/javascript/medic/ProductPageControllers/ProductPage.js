@@ -43,8 +43,6 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams', '
 
     specialProductService.SpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
         $scope.specialProductMenu = Success.getObject(resp);
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
     });
 
     $scope.selectFirstMenuItem = function () {

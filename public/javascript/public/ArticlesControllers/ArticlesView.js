@@ -6,13 +6,9 @@ controllers.controller('ArticlesView', ['$scope', '$state', '$rootScope', '$stat
 
     ContentService.content.query({category: $stateParams.category}).$promise.then(function (resp) {
         $scope.news = Success.getObject(resp);
-    }).catch(function(errNews){
-        console.log(Error.getMessage(errNews));
     });
     ContentService.mostRead.query({type: 2}).$promise.then(function (resp) {
         $scope.mostRead = Success.getObject(resp);
-    }).catch(function(errMostRead){
-        console.log(Error.getMessage(errMostRead));
     });
 
     //------------ get category name

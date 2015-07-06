@@ -116,8 +116,6 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
                             return 1;
                         return 0;
                     });
-                }).catch(function(errCities){
-                    console.log(Error.getMessage(errCities));
                 });
                 if(!cityDefault) $scope.city.selected = undefined;
                 cityDefault = false;
@@ -125,22 +123,16 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
             }
         });
 
-    }).catch(function(errUserData){
-        console.log(Error.getMessage(errUserData));
     });
 
     // get counties and cities
     ProfileService.Counties.query().$promise.then(function (counties) {
         $scope.counties = Success.getObject(counties);
-    }).catch(function(errCounties){
-        console.log(Error.getMessage(errCounties));
     });
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
     therapeuticAreas.areas.query().$promise.then(function (resp) {
         $scope.allAreas = Success.getObject(resp);
-    }).catch(function(errAreas){
-        console.log(Error.getMessage(errAreas));
     });
 
     //------------------------------------------------------------------------------------------------ form submissions

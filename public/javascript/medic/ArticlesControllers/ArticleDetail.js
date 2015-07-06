@@ -21,7 +21,5 @@ controllers.controller('ArticleDetail', ['$scope', '$rootScope', '$stateParams',
         {
             $scope.backToArticles();
         }
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
     });
 }]);

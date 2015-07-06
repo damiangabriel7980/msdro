@@ -13,8 +13,6 @@ controllers.controller('HomeDownloads', ['$scope', '$rootScope', 'ContentService
             var endSlice = beginSlice + $scope.resultsPerPage;
             $scope.downloadsFiltered = $scope.downloads.slice(beginSlice, endSlice);
         });
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
     });
 
 }]);

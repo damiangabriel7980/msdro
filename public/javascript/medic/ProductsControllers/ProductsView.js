@@ -35,8 +35,6 @@ controllers.controller('ProductsView', ['$scope', '$state', '$rootScope' ,'Produ
             .$promise.then(function(result){
                 $scope.products = Success.getObject(result);
                 if(!letter) refreshLetters(Success.getObject(result));
-            }).catch(function(err){
-                console.log(Error.getMessage(err));
             });
     };
     $scope.getProducts();
