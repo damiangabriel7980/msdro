@@ -77,15 +77,11 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     };
 
     $scope.showContactModal = function(){
-        if(Utils.isMobile(false,true)['iosDetect']){
-            window.open($rootScope.Pharma);
-        }else{
-            $modal.open({
-                templateUrl: 'partials/medic/modals/contact.html',
-                size: 'lg',
-                windowClass: 'fade'
-            });
-        }
+        $modal.open({
+            templateUrl: 'partials/medic/modals/contact.html',
+            size: 'lg',
+            windowClass: 'fade'
+        });
     };
 
     $scope.showTermsModal = function(){
