@@ -6906,10 +6906,81 @@ body .btn {
   padding: 10px 25px 0 25px;
   border-bottom: 1px solid #eeeeee;
 }
+.navbarMedic .paddedForm form {
+  padding: 5px 15px 0 15px;
+}
 .navbarMedic .container {
   padding: 0;
   width: 100%;
   padding-bottom: 8px !important;
+}
+@media (max-width: 1279px) {
+  .navbarMedic .hideOnMobile {
+    display: none !important;
+  }
+}
+@media (min-width: 1280px) {
+  .navbarMedic .hideOnDesktop {
+    display: none !important;
+  }
+}
+@media (max-width: 767px) {
+  .navbarMedic .imageDropdown {
+    width: 119px !important;
+  }
+}
+@media (max-width: 767px) {
+  .navbarMedic .specialMenu {
+    right: 10px;
+    margin-top: 5px;
+  }
+}
+@media (min-width: 767px) and (max-width: 1280px) {
+  .navbarMedic .specialMenu {
+    right: 65px;
+  }
+}
+.navbarMedic .mySearch {
+  right: 290px;
+  top: 18px;
+}
+@media (max-width: 1280px) {
+  .navbarMedic .mySearch {
+    bottom: 15px;
+    top: auto;
+    right: auto;
+  }
+}
+@media (min-width: 767px + 1) and (max-width: 1280px) {
+  .navbarMedic .mySearch {
+    left: 15px;
+    right: auto;
+    margin-top: -19px;
+  }
+}
+@media (max-width: 767px) {
+  .navbarMedic .mySearch {
+    margin-right: 25px;
+    margin-left: 25px;
+    right: 0;
+    bottom: 95px;
+  }
+}
+@media (max-device-width: 767px) and (orientation: landscape) {
+  .navbarMedic .mySearch {
+    right: initial;
+    left: 13px;
+  }
+}
+.navbarMedic .mySearch .mySearchWidth {
+  width: 165px !important;
+  padding: 6px 12px;
+  border: 1px solid #cccccc;
+}
+@media (max-width: 767px) {
+  .navbarMedic .mySearch .mySearchWidth {
+    width: 100% !important;
+  }
 }
 .navbarMedic .dropdown-menu {
   border-radius: 6px;
@@ -7087,11 +7158,6 @@ fieldset[disabled] .navbarMedic .profile .btn {
   .navbarMedic .userDropdown {
     display: none;
     visibility: hidden;
-  }
-}
-@media (max-width: 767px) {
-  .navbarMedic .specialDropdown {
-    margin-top: 3px;
   }
 }
 #footer {

@@ -10,14 +10,11 @@
             templateUrl: currentScriptPath.replace('special_dropdown.js', 'special_dropdown.html'),
             replace: true,
             scope: {
-                dropdownClass: '@',
-                itemClass: '@',
                 onItemSelect: '=',
                 genericObject: '=',
                 amazonPath: '=',
                 defaultImageUrl: '=',
-                arrayOfObjects: '=',
-                defaultStyles: '='
+                arrayOfObjects: '='
             },
             link: function(scope, element, attrs) {
                 scope.callSelect = function (genericObject) {

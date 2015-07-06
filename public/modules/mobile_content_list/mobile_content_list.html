@@ -12,7 +12,7 @@
             <img ng-src="{{calendarBg}}">
             <div class="date">
                 <div class="day">{{content[dateAttr] | filter: asDate | date:'dd'}}</div>
-                <div class="month">{{content[dateAttr] | filter: asDate | date:'MMM'}}</div>
+                <div class="month">{{getMonth(content[dateAttr])}}</div>
             </div>
         </div>
         <div class="col-xs-8 description">

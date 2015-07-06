@@ -7,7 +7,7 @@
             templateUrl: currentScriptPath.replace('bootstrap_search.js', 'bootstrap_search.html'),
             replace: true,
             scope: {
-                isInDropdown: '=',
+                animatedInput: '=',
                 inputWidthClass: '@',
                 searchWidthClass: '@',
                 onSearch: '=',
@@ -18,7 +18,7 @@
                     scope.onSearch(term);
                 };
                 scope.animateInput=function(){
-                    angular.element('.popSearch').toggleClass(scope.inputWidthClass?scope.inputWidthClass:'newWidthPopSearch');
+                    angular.element('.popSearch').toggleClass(scope.inputWidthClass?scope.inputWidthClass + ' newWidthPopSearch':'newWidthPopSearch');
                     angular.element('.input-group-addon').toggleClass('btnSearchBefore');
                 };
             }
