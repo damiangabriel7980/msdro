@@ -3411,52 +3411,54 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     router.route('/products')
         .get(function(req, res) {
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (groups) {
-                    if (req.query.specialGroup) {
-                        groups.push(req.query.specialGroup);
-                    }
-                    if(req.query.idProduct){
-                        Products.findOne({_id: req.query.idProduct, groupsID: {$in: groups}}, function(err, cont) {
-                            if(err) {
-                                handleError(res,err,500);
-                            }else{
-                                handleSuccess(res, cont);
-                            }
-                        })
-                    }else if(req.query.idArea && req.query.idArea != 0){
-                        Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function(err, areas){
-                            if(err){
-                                handleError(res,err,500);
-                            }else{
-                                var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}};
-                                if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
-                                Products.find(q).sort({"name": 1}).exec(function(err, cont) {
-                                    if(err) {
-                                        handleError(res,err,500);
-                                    }else{
-                                        handleSuccess(res, cont);
-                                    }
-                                })
-                            }
-                        });
+            if(req.query.idProduct){
+                Products.findOne({_id: req.query.idProduct}, function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
                     }else{
-                        //get allowed articles for user
-                        var q = {groupsID: {$in: groups}};
-                        if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
-                        Products.find(q).sort({"name": 1}).exec(function(err, cont) {
-                            if(err){
-                                handleError(res,err,500);
-                            }else{
-                                handleSuccess(res, cont);
-                            }
-                        })
+                        handleSuccess(res, cont);
                     }
-                },
-                function (err) {
-                    handleError(res,err,500);
-                }
-            );
+                })
+            }else{
+                getNonSpecificUserGroupsIds(req.user).then(
+                    function (groups) {
+                        if (req.query.specialGroup) {
+                            groups.push(req.query.specialGroup);
+                        }
+                        if(req.query.idArea && req.query.idArea != 0){
+                            Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function(err, areas){
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}};
+                                    if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                                    Products.find(q).sort({"name": 1}).exec(function(err, cont) {
+                                        if(err) {
+                                            handleError(res,err,500);
+                                        }else{
+                                            handleSuccess(res, cont);
+                                        }
+                                    })
+                                }
+                            });
+                        }else{
+                            //get allowed articles for user
+                            var q = {groupsID: {$in: groups}};
+                            if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                            Products.find(q).sort({"name": 1}).exec(function(err, cont) {
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    handleSuccess(res, cont);
+                                }
+                            })
+                        }
+                    },
+                    function (err) {
+                        handleError(res,err,500);
+                    }
+                );
+            }
         });
 
     router.route('/calendar')
