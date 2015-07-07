@@ -2913,8 +2913,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         });
     router.route('/specialFeatures/groupSpecialProducts')
         .get(function(req, res) {
-            var data = [mongoose.Types.ObjectId(req.query.specialGroup.toString())];
-            specialProduct.find({groups: {$in: data}, enabled: true}, function(err, product) {
+            specialProduct.find({groups: {$in: [req.query.specialGroup]}, enabled: true}, function(err, product) {
                 if(err) {
                     handleError(res,err,500);
                 }
@@ -2928,8 +2927,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/specialFeatures/specialApps')
         .get(function (req, res) {
             if(req.query.group){
-                var group = ObjectId(req.query.group);
-                specialApps.find({groups: {$in: [group]}, isEnabled: true}).exec(function (err, apps) {
+                specialApps.find({groups: {$in: [req.query.group]}, isEnabled: true}).exec(function (err, apps) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -2937,8 +2935,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else if(req.query.id){
-                var id = ObjectId(req.query.id);
-                specialApps.findOne({_id: id}).exec(function (err, app) {
+                specialApps.findOne({_id: req.query.id}).exec(function (err, app) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -2965,14 +2962,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         });
     router.route('/specialProductMenu')
         .get(function(req, res) {
-            var id = mongoose.Types.ObjectId(req.query.id.toString());
             specialProductMenu.distinct('children_ids', function (err,allChildren) {
                 if(err)
                 {
                     handleError(res,err,500);
                 }
                 else{
-                    specialProductMenu.find({product: id,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
+                    specialProductMenu.find({product: req.query.id,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
                         if(err) {
                             handleError(res,err,500);
                         }
@@ -2987,8 +2983,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         });
     router.route('/specialProductDescription')
         .get(function(req, res) {
-            var id = mongoose.Types.ObjectId(req.query.id.toString());
-            specialProductMenu.findOne({_id: id}).exec(function(err, details) {
+            specialProductMenu.findOne({_id: req.query.id}).exec(function(err, details) {
                 if(err) {
                     handleError(res,err,500);
                 }
@@ -3000,8 +2995,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         });
     router.route('/specialProductFiles')
         .get(function(req, res) {
-            var id = mongoose.Types.ObjectId(req.query.id.toString());
-            specialProductFiles.find({product: id}).exec(function(err, details) {
+            specialProductFiles.find({product: req.query.id}).exec(function(err, details) {
                 if(err) {
                     handleError(res,err,500);
                 }
@@ -3013,8 +3007,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         });
     router.route('/specialProductGlossary')
         .get(function(req, res) {
-            var id = mongoose.Types.ObjectId(req.query.id.toString());
-            specialProductGlossary.find({product: id}).exec(function(err, details) {
+            specialProductGlossary.find({product: req.query.id}).exec(function(err, details) {
                 if(err) {
                     handleError(res,err,500);
                 }
@@ -3027,8 +3020,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     router.route('/specialProduct/speakers')
         .get(function (req, res) {
-            var speaker_id = ObjectId(req.query.speaker_id);
-            Speakers.findOne({_id: speaker_id}, function (err, speaker) {
+            Speakers.findOne({_id: req.query.speaker_id}, function (err, speaker) {
                 if(err){
                     handleError(res,err,500);
                 }else{
