@@ -3119,6 +3119,30 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
                 }
             });
+        })
+        .put(function (req, res) {
+            var ans = {};
+
+            var newData = req.body.newData;
+            UtilsModule.allowFields(newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
+
+            var namePatt = UtilsModule.regexes.name;
+            var phonePatt = UtilsModule.regexes.phone;
+            if((!namePatt.test(newData.name))){ //check name
+                handleError(res,null,400,26);
+            }else if(newData.phone && !phonePatt.test(newData.phone)){ //check phone number
+                handleError(res,null,400,27);
+            }else if(!newData.address){
+                handleError(res,null,400,28);
+            }else{
+                User.update({_id: req.user._id}, {$set: newData}, function (err, wres) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, {}, 12);
+                    }
+                });
+            }
         });
 
     router.route('/counties')
@@ -3147,33 +3171,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     });
                 }
             });
-        });
-
-    router.route('/userProfile')
-
-        .post(function (req, res) {
-            var ans = {};
-
-            var newData = req.body.newData;
-            UtilsModule.allowFields(newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
-
-            var namePatt = UtilsModule.regexes.name;
-            var phonePatt = UtilsModule.regexes.phone;
-            if((!namePatt.test(newData.name))){ //check name
-                handleError(res,null,400,26);
-            }else if(newData.phone && !phonePatt.test(newData.phone)){ //check phone number
-                handleError(res,null,400,27);
-            }else if(!newData.address){
-                handleError(res,null,400,28);
-            }else{
-                User.update({_id: req.user._id}, {$set: newData}, function (err, wres) {
-                    if(err){
-                        handleError(res,err,500);
-                    }else{
-                        handleSuccess(res, {}, 12);
-                    }
-                });
-            }
         });
 
     router.route('/userJob')

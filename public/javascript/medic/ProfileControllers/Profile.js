@@ -153,7 +153,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
             toSend.address = this.address;
             toSend.subscriptions = this.userData.subscriptions;
             toSend.practiceType = this.userData.practiceType;
-            ProfileService.uploadProfile.save({newData:toSend}).$promise.then(function (resp) {
+            ProfileService.UserData.save({newData:toSend}).$promise.then(function (resp) {
                 $scope.userProfileAlert.message = Success.getMessage(resp);
                 $scope.userProfileAlert.type = "success";
                 $scope.userProfileAlert.newAlert = true;

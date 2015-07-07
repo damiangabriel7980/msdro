@@ -88,7 +88,8 @@ services.factory('specialProductService', ['$resource', function($resource){
 services.factory('ProfileService', ['$resource', function($resource){
     return {
         UserData: $resource('api/userdata/', {}, {
-            query: { method: 'GET', isArray: false }
+            query: { method: 'GET', isArray: false },
+            save:  { method: 'PUT', isArray: false}
         }),
         Counties: $resource('api/counties/', {}, {
             query: { method: 'GET', isArray: false }
@@ -96,19 +97,16 @@ services.factory('ProfileService', ['$resource', function($resource){
         Cities: $resource('api/cities', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        uploadProfile: $resource('api/userProfile/:newData', {}, {
-            save: { method: 'POST'}
-        }),
         saveUserPhoto: $resource('api/user/addPhoto',{},{
             save: {method:'POST'}
         }),
-        uploadJob: $resource('api/userJob/:job', {}, {
+        uploadJob: $resource('api/userJob', {}, {
             save: { method: 'POST'}
         }),
-        changeEmail: $resource('api/changeEmail/:userData', {}, {
+        changeEmail: $resource('api/changeEmail', {}, {
             save: { method: 'POST'}
         }),
-        changePassword: $resource('api/changePassword/:userData', {}, {
+        changePassword: $resource('api/changePassword', {}, {
             save: { method: 'POST'}
         })
     }
