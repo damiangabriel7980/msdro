@@ -43,16 +43,14 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             if(!hideVideo){
                 //if not, check if this intro video is enabled
                 IntroService.checkIntroEnabled.query({groupID: idSelected}).$promise.then(function (resp) {
-                    if(Success.getObject(resp)){
+                    if(Success.getObject(resp).enabled){
                         //if so, check if user already viewed the video in this log in session
                         IntroService.rememberIntroView.query({groupID: idSelected}).$promise.then(function (resp) {
-                            if(Success.getObject(resp)){
-                                if(!Success.getObject(resp).isViewed){
-                                    //if not, show it
-                                    showIntroPresentation(idSelected);
-                                    //and mark as viewed (async)
-                                    IntroService.rememberIntroView.save({groupID: idSelected});
-                                }
+                            if(!Success.getObject(resp).isViewed){
+                                //if not, show it
+                                showIntroPresentation(idSelected);
+                                //and mark as viewed (async)
+                                IntroService.rememberIntroView.save({groupID: idSelected});
                             }
                         });
                     }
