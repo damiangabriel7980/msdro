@@ -33,7 +33,7 @@
                 <h3>ULTIMELE NOUTATI</h3>
             </div>
             <div ng-if="!isMobile()">
-                <div class="col-xs-4 content" ng-repeat="n in news | limitTo: 3">
+                <div class="col-xs-4 content" ng-repeat="n in news">
                     <vertical-content-list content="n" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
                                            title-attr="title" text-attr="text" navigate="navigateToNews"></vertical-content-list>
                 </div>
@@ -49,7 +49,7 @@
                 <h3>ULTIMELE NOUTATI STIINTIFICE</h3>
             </div>
             <div ng-if="!isMobile()">
-                <div class="col-xs-4 content" ng-repeat="n in scientificNews | limitTo: 3">
+                <div class="col-xs-4 content" ng-repeat="n in scientificNews">
                     <vertical-content-list content="n" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
                                            title-attr="title" text-attr="text" navigate="navigateToArticles"></vertical-content-list>
                 </div>

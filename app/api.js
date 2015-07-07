@@ -3396,24 +3396,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     router.route('/homeNews')
         .get(function(req, res) {
-            var specialGroupSelected = req.query.specialGroupSelected;
-            if(req.query.scientific){
-                getUserContent(req.user, 3, specialGroupSelected, 4, "created").then(
-                    function (cont) {
-                        handleSuccess(res, cont);
-                    },
-                    function (err) {
-                        handleError(res,err,500);
-                    });
-            }else{
-                getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "created").then(
-                    function (cont) {
-                        handleSuccess(res, cont);
-                    },
-                    function (err) {
-                        handleError(res,err,500);
-                    });
-            }
+            //establish content type
+            var contentType = {$in: [1, 2]};
+            if(req.query.scientific) contentType = 3;
+            //get content
+            getUserContent(req.user, contentType, req.query.specialGroupSelected, 3, "created").then(
+                function (cont) {
+                    handleSuccess(res, cont);
+                },
+                function (err) {
+                    handleError(res,err,500);
+                });
         });
 
     router.route('/products')
