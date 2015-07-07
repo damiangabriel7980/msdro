@@ -6592,6 +6592,7 @@ body .btn {
 }
 .homeSearchWrapper .mainTitle {
   margin-top: 20px;
+  margin-bottom: 20px;
   font-size: 20px;
 }
 @media (max-width: 767px) {

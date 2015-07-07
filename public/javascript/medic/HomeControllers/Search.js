@@ -3,15 +3,12 @@
  */
 controllers.controller('Search', ['$scope', '$state', '$rootScope', 'HomeService', '$sce','$animate','$stateParams','$window','$timeout', 'Success', 'Error', function($scope, $state, $rootScope, HomeService, $sce,$animate,$stateParams,$window,$timeout,Success,Error) {
     HomeService.getSearchResults.query({data:$stateParams.textToSearch.toString(),specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(response){
-        $scope.answer = "";
-        if(!Success.getObject(response).isEmpty) {
-            $scope.products = Success.getObject(response).products;
-            $scope.multimedia = Success.getObject(response).multimedia;
-            $scope.articles= Success.getObject(response).articles;
-            $scope.calendarEv= Success.getObject(response)['calendar-events'];
-        }
-        else
-            $scope.answer = Success.getMessage(response);
+        var results = Success.getObject(response);
+        $scope.products = results.products;
+        $scope.multimedia = results.multimedia;
+        $scope.articles= results.articles;
+        $scope.calendarEv= results['calendar-events'];
+        $scope.resultsCount = results.products.length + results.multimedia.length + results.articles.length + results['calendar-events'].length;
     });
     $scope.sref=function(artType){
         if(artType < 3)

@@ -127,7 +127,7 @@ services.factory('HomeService', ['$resource', function($resource){
             query: { method: 'GET', isArray: false }
         }),
         getSearchResults: $resource('api/userHomeSearch/', {}, {
-            query: { method: 'POST', isArray: false }
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

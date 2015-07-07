@@ -3307,25 +3307,24 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 });
         });
     router.route('/userHomeSearch/')
-        .post(function(req,res){
-            var data=req.body.data;
+        .get(function(req,res){
+            var data=req.query.data;
             var arr_of_items=[Products,Multimedia,Content,Events];
             var ObjectOfResults={};
-            var checker=0;
             getNonSpecificUserGroupsIds(req.user).then(
                 function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroupSelected) {
-                        forGroups.push(req.body.specialGroupSelected);
+                    if (req.query.specialGroupSelected) {
+                        forGroups.push(req.query.specialGroupSelected);
                     }
 
-                    var date = new Date();
-                    var hydrateOp;
                     async.each(arr_of_items, function (item, callback) {
-                        if(item==Events)
-                            hydrateOp= {find: {groupsID:{$in:forGroups},enable:true,start:{$gt: date}}};
-                        else
-                            hydrateOp = {find: { $and: [ { groupsID: { $in: forGroups } }, { enable:true } ] } };
+                        var hydrateOp;
+                        if(item == Events){
+                            hydrateOp = {find: {groupsID:{$in:forGroups},enable:true,start:{$gt: new Date()}}};
+                        }else{
+                            hydrateOp = {find: {groupsID:{$in:forGroups},enable:true }};
+                        }
 
                         item.search({
 
@@ -3339,38 +3338,22 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             }
 
                         },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
-                            if(err)
-                            {
-                                handleError(res,err,500);
-                            }
-                            else
-                            {
-                                if(results.hits.hits.length===0)
-                                    checker+=1;
-                                else
-                                {
+                            if(err){
+                                callback(err);
+                            }else{
+                                if(results && results.hits && results.hits.hits){
                                     ObjectOfResults[item.modelName]=results.hits.hits;
                                 }
-
+                                callback();
                             }
-
-
-                            callback();
                         });
 
                     }, function (err) {
                         if(err)
                             handleError(res,err,500);
-                        else
-                        {
-                            if(checker===4)
-                                handleSuccess(res,{isEmpty: true},14);
-                            else{
-                                handleSuccess(res, ObjectOfResults);
-                            }
-
+                        else{
+                            handleSuccess(res, ObjectOfResults);
                         }
-
                     })
                 },
                 function (err) {
