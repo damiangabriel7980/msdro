@@ -65,6 +65,7 @@ var date = new Date();
                     center: 'title',
                     right: 'today prev,next'
                 },
+                timeFormat: '',
                 eventMouseover: $scope.eventRender,
                 eventClick:function(event){
                     $modal.open({
@@ -92,6 +93,7 @@ var date = new Date();
                     center: 'title',
                     right: 'today prev,next'
                 },
+                timeFormat: '',
                 eventMouseover: $scope.eventRender,
                 eventClick:function(event){
                     $modal.open({

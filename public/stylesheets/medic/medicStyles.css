@@ -7682,6 +7682,9 @@ a:focus {
     display: none !important;
   }
 }
+.fc-event-time {
+  display: none;
+}
 @media (max-width: 767px) {
   .specialText {
     width: 100% !important;

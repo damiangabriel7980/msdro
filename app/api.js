@@ -1924,7 +1924,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if (err)
                     handleError(res,err,500);
                         else{
-                    async.each(req.body.area['therapeutic-areasID'], function (item, callback) {
+                    async.each(req.body.subareas, function (item, callback) {
                         Therapeutic_Area.findById(item, function (err, foundArea) {
                             if(err){
                                 callback(err);
@@ -1951,7 +1951,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     .put(function(req, res) {
             var area = req.body.area;
             var therapeuticArray = req.body.newAreas;
-            //var oldAreas = req.body.oldAreas;
+            var oldAreas = req.body.oldAreas;
                 if (area.has_children == true) {
                     Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
                         if (err)
