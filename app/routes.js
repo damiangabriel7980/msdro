@@ -8,6 +8,7 @@ var User = require('./models/user');
 var Roles = require('./models/roles');
 
 var MailerModule = require('./modules/mailer');
+var UtilsModule = require('./modules/utils');
 var SessionStorage = require('./modules/sessionStorage');
 
 var crypto   = require('crypto');
@@ -293,7 +294,7 @@ module.exports = function(app, logger, passport) {
 
     //check if there is a user already registered wih email
     app.post('/checkEmailExists', function (req, res) {
-        User.findOne({'username': {$regex: "^"+req.body.email.replace(/\+/g,"\\+")+"$", $options: "i"}}, function (err, user) {
+        User.findOne({'username': UtilsModule.regexes.emailQuery(req.body.email)}, function (err, user) {
             if(err){
                 handleError(res, err);
             }else{

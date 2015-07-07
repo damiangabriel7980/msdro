@@ -7,6 +7,8 @@ var crypto   = require('crypto');
 var User       = require('../app/models/user');
 var Roles = require('../app/models/roles');
 
+var Utils = require('../app/modules/utils');
+
 module.exports = function(passport) {
     var namePatt = new XRegExp('^[a-zA-Z\\s]{3,100}$');
     // =========================================================================
@@ -71,7 +73,7 @@ module.exports = function(passport) {
                     }
 
 
-                    User.findOne({'username' : {$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}, function(err, user) {
+                    User.findOne({'username' : Utils.regexes.emailQuery(email)}, function(err, user) {
                         // if there are any errors, return the error
                         if (err)
                             return done(err);

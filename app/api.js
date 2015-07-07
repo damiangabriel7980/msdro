@@ -42,7 +42,6 @@ var specialProductGlossary = require('./models/specialProduct_glossary');
 var specialProductFiles = require('./models/specialProduct_files');
 var specialApps = require('./models/userGroupApplications');
 
-var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
 var SHA512   = require('crypto-js/sha512');
 var mongoose = require('mongoose');
@@ -316,7 +315,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .post(function(req,res){
             var data = req.body.data;
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
+            var patt = UtilsModule.regexes.authorAndTitle;
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                 handleError(res,null,400,20);
             }else{
@@ -348,7 +347,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 var data = req.body.toUpdate;
                 var id = req.query.id;
                 //validate author and title
-                var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
+                var patt = UtilsModule.regexes.authorAndTitle;
                 if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
                     handleError(res,null,400,20);
                 }else{
@@ -2103,7 +2102,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .post(function (req, res) {
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
+            var namePatt = UtilsModule.regexes.streetName;
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2133,7 +2132,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var id = req.body.id;
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
+            var namePatt = UtilsModule.regexes.streetName;
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2219,7 +2218,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 res.send({message: {type: 'danger', text:'Eroare la validare. Verificati daca medicul este deja adaugat'}});
                             }else{
                                 //check nickname format
-                                var nickPatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
+                                var nickPatt = UtilsModule.regexes.nickname;
                                 if(!nickPatt.test(req.body.nickname.toString())){
                                     res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
                                 }else{
@@ -2252,7 +2251,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .put(function (req, res) {
             var nickname = req.body.nickname?req.body.nickname.toString():"";
             //validate nickname format
-            var nickPatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
+            var nickPatt = UtilsModule.regexes.nickname;
             if(!nickPatt.test(nickname)){
                 res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -2642,7 +2641,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             };
 
             if(dataToUpdate.username){
-                User.findOne({username:{$regex: "^"+dataToUpdate.username.replace(/\+/g,"\\+")+"$", $options: "i"}, _id:{$ne: idToUpdate}}, function (err, user) {
+                User.findOne({username: UtilsModule.regexes.emailQuery(dataToUpdate.username), _id:{$ne: idToUpdate}}, function (err, user) {
                     if(err){
                         handleError(res,err,500);
                     }else if(user){
@@ -2709,7 +2708,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                                     callback(err);
                                                 }else{
                                                     var activationToken = buf.toString('hex');
-                                                    User.update({username: {$regex: "^"+user.username.replace(/\+/g,"\\+")+"$", $options: "i"}}, {$set: {activationToken: activationToken}}, function (err, wres) {
+                                                    User.update({_id: user._id}, {$set: {activationToken: activationToken}}, function (err, wres) {
                                                         if(err){
                                                             callback(err);
                                                         }else{
@@ -2893,7 +2892,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(imageBody && imageExtension){
                 UserModule.updateUserImage(req.user._id, imageBody, imageExtension).then(
                     function (image_path) {
-                        handleSuccess(res,{type:success}, 11);
+                        handleSuccess(res, null, 11);
                     },
                     function (err) {
                         handleError(res,err,500);
@@ -3037,30 +3036,15 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/content')
         .get(function(req, res) {
             if(req.query.content_id){
-                getNonSpecificUserGroupsIds(req.user).then(
-                    function (nonSpecificGroupsIds) {
-                        var forGroups = nonSpecificGroupsIds;
-                        if (req.query.specialGroup) {
-                            forGroups.push(req.query.specialGroup.toString());
-                        }
-                        Content.find({_id:req.query.content_id, groupsID: { $in: forGroups}}, function(err, cont) {
-                            if(err) {
-                                handleError(res,err,500);
-                            }
-                            if(cont[0]){
-                                handleSuccess(res,cont[0]);
-                            }else{
-                                handleError(res,null,404,1);
-                            }
-                        })
-                    },
-                    function (err) {
-                        handleError(res,err,500);
-                    });
+                Content.findOne({_id: req.query.content_id}, function(err, cont) {
+                    if(err || !cont) {
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, cont);
+                    }
+                })
             }else{
-                var cType = req.query.content_type;
-                var specialGroupSelected = req.query.specialGroupSelected;
-                getUserContent(req.user, cType, specialGroupSelected, null, 'created').then(
+                getUserContent(req.user, req.query.content_type, req.query.specialGroupSelected, null, 'created').then(
                     function (content) {
                         handleSuccess(res,content);
                     },
@@ -3080,48 +3064,49 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     var userCopy = JSON.parse(JSON.stringify(user));
                     async.parallel([
                         function (callback) {
-                            if(user['jobsID']){
-                                if(user['jobsID'][0]){
-                                    var jobId = user.jobsID[0];
-                                    Job.find({_id:jobId}, function (err, job) {
-                                        if(err){
-                                            callback(err, null);
-                                        }else{
-                                            userCopy.job = job;
-                                        }
-                                    });
-                                }
+                            if(user['jobsID'] && user['jobsID'][0]){
+                                Job.findOne({_id: user.jobsID[0]}, function (err, job) {
+                                    if(err){
+                                        callback(err);
+                                    }else{
+                                        userCopy.job = job;
+                                        callback();
+                                    }
+                                });
+                            }else{
+                                callback();
                             }
-                            callback(null, null);
                         },
                         function (callback) {
-                            Cities.find({_id:user.citiesID[0]}, function (err, city) {
+                            Cities.findOne({_id: user.citiesID[0]}, function (err, city) {
                                 if (err) {
-                                    callback(err, null);
-                                }
-                                if (city[0]) {
-                                    Counties.find({citiesID: {$in: [city[0]._id.toString()]}}, function (err, county) {
-                                        if(err){
-                                            callback(err, null);
-                                        }
-                                        if(county[0]){
-                                            userCopy['city_id'] = city[0]._id;
-                                            userCopy['city_name'] = city[0].name;
-                                            userCopy['county_id'] = county[0]._id;
-                                            userCopy['county_name'] = county[0].name;
-                                        }
-                                        callback(null, null);
-                                    });
+                                    callback(err);
                                 }else{
-                                    callback(null, null);
+                                    if(city) {
+                                        Counties.findOne({citiesID: {$in: [city._id]}}, function (err, county) {
+                                            if(err){
+                                                callback(err);
+                                            }else{
+                                                if(county){
+                                                    userCopy['city_id'] = city._id;
+                                                    userCopy['city_name'] = city.name;
+                                                    userCopy['county_id'] = county._id;
+                                                    userCopy['county_name'] = county.name;
+                                                }
+                                                callback();
+                                            }
+                                        });
+                                    }else{
+                                        callback();
+                                    }
                                 }
                             });
                         }
-                    ], function (err, results) {
+                    ], function (err) {
                         if(err){
-                            handleError(res,err,500);
+                            handleError(res, err);
                         }else{
-                            handleSuccess(res,userCopy);
+                            handleSuccess(res, userCopy);
                         }
                     });
                 }
@@ -3139,18 +3124,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
         });
 
-    router.route('/cities/:county_name')
+    router.route('/cities')
 
         .get(function(req, res) {
-            Counties.find({name: req.params.county_name}, function (err, counties) {
-                if(err) {
-                    handleError(res,err,500);
+            Counties.findOne({name: req.query.county_name}, function (err, county) {
+                if(err || !county) {
+                    handleError(res, err);
                 }else{
-                    Cities.find({_id: {$in: counties[0].citiesID}}, function (err, cities) {
+                    Cities.find({_id: {$in: county.citiesID}}, function (err, cities) {
                         if(err) {
-                            handleError(res,err,500);
+                            handleError(res, err);
                         }else
-                            handleSuccess(res,cities);
+                            handleSuccess(res, cities);
                     });
                 }
             });
@@ -3160,11 +3145,12 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .post(function (req, res) {
             var ans = {};
-            UtilsModule.allowFields(req.body.newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
-            var newData = req.body.newData;
 
-            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$');
-            var phonePatt = new XRegExp('^[0-9]{10,20}$');
+            var newData = req.body.newData;
+            UtilsModule.allowFields(newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
+
+            var namePatt = UtilsModule.regexes.name;
+            var phonePatt = UtilsModule.regexes.phone;
             if((!namePatt.test(newData.name))){ //check name
                 handleError(res,null,400,26);
             }else if(newData.phone && !phonePatt.test(newData.phone)){ //check phone number
@@ -3186,8 +3172,8 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .post(function (req, res) {
             var job = req.body.job;
-            var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$');
-            var numberPatt = new XRegExp('^[a-zA-Z0-9-\\s]{1,5}$');
+            //var namePatt = UtilsModule.regexes.jobName;
+            //var numberPatt = UtilsModule.regexes.jobNumber;
             //if(!numberPatt.test(job.street_number.toString())) {
             //    ans.error = true;
             //    ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
@@ -3479,7 +3465,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                 handleError(res,err,500);
                             }else{
                                 var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}};
-                                if(req.query.firstLetter) q["name"] = new XRegExp("^"+req.query.firstLetter, "i");
+                                if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
                                 Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                                     if(err) {
                                         handleError(res,err,500);
@@ -3492,7 +3478,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }else{
                         //get allowed articles for user
                         var q = {groupsID: {$in: groups}};
-                        if(req.query.firstLetter) q["name"] = new XRegExp("^"+req.query.firstLetter, "i");
+                        if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
                         Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                             if(err){
                                 handleError(res,err,500);

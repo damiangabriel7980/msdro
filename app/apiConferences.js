@@ -9,7 +9,6 @@ var Speakers = require('./models/speakers');
 var User = require('./models/user');
 var Roles=require('./models/roles');
 var jwt = require('jsonwebtoken');
-var XRegExp  = require('xregexp').XRegExp;
 var validator = require('validator');
 var crypto   = require('crypto');
 var expressJwt = require('express-jwt');

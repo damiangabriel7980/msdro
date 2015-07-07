@@ -27,7 +27,7 @@ var updateUserImage = function (user_id, imageBody, imageExtension) {
                         }else{
                             deferred.resolve(user.image_path);
                             //remove old image if any; careful not to delete the newly uploaded one
-                            if(oldImage && oldImage != key) amazon.deleteObject(oldImage);
+                            if(oldImage && oldImage != key) amazon.deleteObjectS3(oldImage);
                         }
                     });
                 }
