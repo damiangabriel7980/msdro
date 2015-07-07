@@ -8,8 +8,6 @@
             replace: true,
             scope: {
                 animatedInput: '=',
-                inputWidthClass: '@',
-                searchWidthClass: '@',
                 onSearch: '=',
                 defaultStyle: '='
             },
@@ -18,7 +16,7 @@
                     scope.onSearch(term);
                 };
                 scope.animateInput=function(){
-                    angular.element('.popSearch').toggleClass(scope.inputWidthClass?scope.inputWidthClass + ' newWidthPopSearch':'newWidthPopSearch');
+                    angular.element('.popSearch').toggleClass('newWidthPopSearch');
                     angular.element('.input-group-addon').toggleClass('btnSearchBefore');
                 };
             }

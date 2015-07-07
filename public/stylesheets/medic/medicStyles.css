@@ -6940,26 +6940,26 @@ body .btn {
     right: 65px;
   }
 }
-.navbarMedic .mySearch {
+.navbarMedic .searchDefault {
   right: 290px;
   top: 18px;
 }
 @media (max-width: 1280px) {
-  .navbarMedic .mySearch {
+  .navbarMedic .searchDefault {
     bottom: 15px;
     top: auto;
     right: auto;
   }
 }
 @media (min-width: 767px + 1) and (max-width: 1280px) {
-  .navbarMedic .mySearch {
+  .navbarMedic .searchDefault {
     left: 15px;
     right: auto;
     margin-top: -19px;
   }
 }
 @media (max-width: 767px) {
-  .navbarMedic .mySearch {
+  .navbarMedic .searchDefault {
     margin-right: 25px;
     margin-left: 25px;
     right: 0;
@@ -6967,18 +6967,18 @@ body .btn {
   }
 }
 @media (max-device-width: 767px) and (orientation: landscape) {
-  .navbarMedic .mySearch {
+  .navbarMedic .searchDefault {
     right: initial;
     left: 13px;
   }
 }
-.navbarMedic .mySearch .mySearchWidth {
+.navbarMedic .searchDefault .newWidthPopSearch {
   width: 165px !important;
   padding: 6px 12px;
   border: 1px solid #cccccc;
 }
 @media (max-width: 767px) {
-  .navbarMedic .mySearch .mySearchWidth {
+  .navbarMedic .searchDefault .newWidthPopSearch {
     width: 100% !important;
   }
 }
