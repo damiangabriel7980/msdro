@@ -2893,7 +2893,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             if(imageBody && imageExtension){
                 UserModule.updateUserImage(req.user._id, imageBody, imageExtension).then(
                     function (image_path) {
-                        handleSuccess(res,{type:success}, 11);
+                        handleSuccess(res, null, 11);
                     },
                     function (err) {
                         handleError(res,err,500);
@@ -3045,30 +3045,15 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/content')
         .get(function(req, res) {
             if(req.query.content_id){
-                getNonSpecificUserGroupsIds(req.user).then(
-                    function (nonSpecificGroupsIds) {
-                        var forGroups = nonSpecificGroupsIds;
-                        if (req.query.specialGroup) {
-                            forGroups.push(req.query.specialGroup.toString());
-                        }
-                        Content.find({_id:req.query.content_id, groupsID: { $in: forGroups}}, function(err, cont) {
-                            if(err) {
-                                handleError(res,err,500);
-                            }
-                            if(cont[0]){
-                                handleSuccess(res,cont[0]);
-                            }else{
-                                handleError(res,null,404,1);
-                            }
-                        })
-                    },
-                    function (err) {
-                        handleError(res,err,500);
-                    });
+                Content.findOne({_id: req.query.content_id}, function(err, cont) {
+                    if(err || !cont) {
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, cont);
+                    }
+                })
             }else{
-                var cType = req.query.content_type;
-                var specialGroupSelected = req.query.specialGroupSelected;
-                getUserContent(req.user, cType, specialGroupSelected, null, 'created').then(
+                getUserContent(req.user, req.query.content_type, req.query.specialGroupSelected, null, 'created').then(
                     function (content) {
                         handleSuccess(res,content);
                     },
