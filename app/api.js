@@ -3463,21 +3463,20 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     router.route('/calendar')
         .get(function(req,res) {
-            getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
-                var forGroups = nonSpecificGroupsIds;
-                if(req.query.specialGroup){
-                    forGroups.push(req.query.specialGroup);
-                }
-                if(req.query.id){
-                    Events.findById(req.query.id,function(err, cont) {
-                        if(err) {
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, cont);
-                        }
-                    });
-                }
-                else{
+            if(req.query.id){
+                Events.findById(req.query.id,function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, cont);
+                    }
+                });
+            }else{
+                getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
+                    var forGroups = nonSpecificGroupsIds;
+                    if(req.query.specialGroup){
+                        forGroups.push(req.query.specialGroup);
+                    }
                     Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
                         if (err) {
                             handleError(res,err,500);
@@ -3488,10 +3487,10 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
 
                     })
-                }
-            }, function (err) {
-                handleError(res,err,500);
-            })
+                }, function (err) {
+                    handleError(res,err,500);
+                })
+            }
         });
     router.route('/multimedia')
         .get(function(req,res){
