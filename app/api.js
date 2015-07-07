@@ -3494,9 +3494,17 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         });
     router.route('/multimedia')
         .get(function(req,res){
-        var findObj={};
-            if(req.query.idArea && req.query.idArea!=0)
-                findObj['therapeutic-areasID'] = {$in: [req.query.idArea]};
+            if(req.query.idMultimedia){
+                Multimedia.findById(req.query.idMultimedia,function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else{
+                        handleSuccess(res, cont);
+                    }
+                });
+            }else{
+                var findObj={};
                 getNonSpecificUserGroupsIds(req.user).then(
                     function (nonSpecificGroupsIds) {
                         var forGroups = nonSpecificGroupsIds;
@@ -3505,63 +3513,35 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                         findObj['groupsID']={$in:forGroups};
                         findObj['enable']={$ne: false};
-                        if(req.query.idMultimedia){
-                            Multimedia.findById(req.query.idMultimedia,function(err, cont) {
-                                if(err) {
+                        if(req.query.idArea==0){
+                            Multimedia.find(findObj, function (err, multimedia) {
+                                if (err) {
                                     handleError(res,err,500);
-                                }
-                                else{
-                                    handleSuccess(res, cont);
+                                } else {
+                                    handleSuccess(res, multimedia);
                                 }
                             });
                         }else{
-                            if(req.query.idArea==0)
-                            {
-                                Multimedia.find(findObj, function (err, multimedia) {
-                                    if (err) {
-                                        handleError(res,err,500);
-                                    } else {
-                                        handleSuccess(res, multimedia);
-                                    }
-                                });
-                            }
-                            else
-                            {
-                                Therapeutic_Area.find({_id:req.query.idArea}).exec(function(err,response){
-                                    var TArea=response[0];
-                                    if(TArea.has_children==true)
-                                    {
-                                        Therapeutic_Area.find({"therapeutic-areasID": {$in :[req.query.idArea]}}).exec(function(err,response){
-                                            var children=response;
-                                            UtilsModule.getIds(children, true).then(function(ids){
-                                                findObj['therapeutic-areasID'] = {$in: ids};
-                                                Multimedia.find(findObj, function (err, multimedia) {
-                                                    if (err) {
-                                                        handleError(res,err,500);
-                                                    } else {
-                                                        handleSuccess(res, multimedia);
-                                                    }
-                                                });
-                                            })
-                                        });
-                                    }
-                                    else
-                                    {
-                                        Multimedia.find(findObj, function (err, multimedia) {
-                                            if (err) {
-                                                handleError(res,err,500);
-                                            } else {
-                                                handleSuccess(res, multimedia);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
+                            Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function (err, ids) {
+                                if(err){
+                                    handleError(res, err);
+                                }else{
+                                    findObj['therapeutic-areasID'] = {$in: ids};
+                                    Multimedia.find(findObj, function (err, multimedia) {
+                                        if (err) {
+                                            handleError(res,err,500);
+                                        } else {
+                                            handleSuccess(res, multimedia);
+                                        }
+                                    });
+                                }
+                            });
                         }
                     },
                     function (err) {
                         handleError(res,err,500);
                     })
+            }
         });
 
     //============================================ intro presentations
