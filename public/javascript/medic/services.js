@@ -93,7 +93,7 @@ services.factory('ProfileService', ['$resource', function($resource){
         Counties: $resource('api/counties/', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        Cities: $resource('api/cities/:county_name', {}, {
+        Cities: $resource('api/cities', {}, {
             query: { method: 'GET', isArray: false }
         }),
         uploadProfile: $resource('api/userProfile/:newData', {}, {

@@ -3133,18 +3133,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
         });
 
-    router.route('/cities/:county_name')
+    router.route('/cities')
 
         .get(function(req, res) {
-            Counties.find({name: req.params.county_name}, function (err, counties) {
-                if(err) {
-                    handleError(res,err,500);
+            Counties.findOne({name: req.query.county_name}, function (err, county) {
+                if(err || !county) {
+                    handleError(res, err);
                 }else{
-                    Cities.find({_id: {$in: counties[0].citiesID}}, function (err, cities) {
+                    Cities.find({_id: {$in: county.citiesID}}, function (err, cities) {
                         if(err) {
-                            handleError(res,err,500);
+                            handleError(res, err);
                         }else
-                            handleSuccess(res,cities);
+                            handleSuccess(res, cities);
                     });
                 }
             });
