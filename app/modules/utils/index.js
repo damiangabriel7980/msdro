@@ -1,6 +1,8 @@
 var Q = require('q');
 var async = require('async');
 
+var XRegExp  = require('xregexp').XRegExp;
+
 exports.discardFields = function(obj, fieldsArray) {
     fieldsArray = fieldsArray || [];
     for(var key in obj){
@@ -36,4 +38,20 @@ exports.getIds = function (arr, convertToString) {
         deferred.resolve(ret);
     });
     return deferred.promise;
+};
+
+exports.regexes = {
+    name: new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$'),
+    phone: new XRegExp('^[0-9]{10,20}$'),
+    jobName: new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$'),
+    jobNumber: new XRegExp('^[a-zA-Z0-9-\\s]{1,5}$'),
+    authorAndTitle: new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$'),
+    streetName: new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i'),
+    nickname: new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i'),
+    emailQuery: function (email) {
+        return {$regex: "^" + (email || "").replace(/\+/g,"\\+") + "$", $options: "i"};
+    },
+    startsWithLetter: function (letter) {
+        return new XRegExp("^" + letter, "i");
+    }
 };

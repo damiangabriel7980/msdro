@@ -7,7 +7,6 @@ var Counties = require('./models/counties');
 var Parameters = require('./models/parameters');
 
 var mongoose = require('mongoose');
-var XRegExp  = require('xregexp').XRegExp;
 var validator = require('validator');
 var crypto   = require('crypto');
 var async = require('async');
@@ -73,7 +72,7 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
                 callback(err);
             }else{
                 var activationToken = buf.toString('hex');
-                User.update({username: {$regex: "^"+username.replace(/\+/g,"\\+")+"$", $options: "i"}}, {$set: {activationToken: activationToken}}, function (err, wres) {
+                User.update({username: UtilsModule.regexes.emailQuery(username)}, {$set: {activationToken: activationToken}}, function (err, wres) {
                     if(err){
                         callback(err);
                     }else{
@@ -87,7 +86,7 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
 //===================================================================================================================== create account
 
     var validateCreateAccount = function (req, res, next) {
-        var namePatt = new XRegExp('^[a-zA-Z]{3,100}$');
+        var namePatt = UtilsModule.regexes.name;
 
         var user = req.body.user || {};
 
@@ -103,12 +102,12 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
         //validate data
         if(!globals.validateEmail(email)){
             handleError(res, null, 400, 31);
-        }else if(!namePatt.test(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''))){
+        }else if(!namePatt.test(name)){
             handleError(res, null, 400, 261);
         }else if(password.length < 6 || password.length > 32){
             handleError(res, null, 400, 10);
         }else{
-            User.findOne({username: {$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}, function(err, user) {
+            User.findOne({username: UtilsModule.regexes.emailQuery(email)}, function(err, user) {
                 //if there are any errors, return the error
                 if(err){
                     handleError(res, err);
@@ -153,7 +152,7 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
             var userData = req.body.user;
             userData.groupsID = userData.groupsID || [];
 
-            var phonePatt = new XRegExp('^[0-9]{10,20}$');
+            var phonePatt = UtilsModule.regexes.phone;
 
             if(activation.type !== "code" && activation.type !== "file"){
                 handleError(res, null, 400, 33);
@@ -229,7 +228,7 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
         }else if(!userEmail){
             handleError(res, null, 500, 39);
         }else{
-            User.findOne({username: {$regex: "^"+userEmail.replace(/\+/g,"\\+")+"$", $options: "i"}}).exec(function (err, user) {
+            User.findOne({username: UtilsModule.regexes.emailQuery(userEmail)}).exec(function (err, user) {
                 if(err || !user){
                     handleError(res, err);
                 }else{
@@ -477,7 +476,7 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
                 },
                 function(token, done) {
                     //find user
-                    User.findOne({ username: {$regex: "^"+req.body.email.replace(/\+/g,"\\+")+"$", $options: "i"} }).select('+title').exec(function(err, user) {
+                    User.findOne({ username: UtilsModule.regexes.emailQuery(req.body.email)}).select('+title').exec(function(err, user) {
                         if (!user) {
                             handleError(res, null, 400, 311);
                         }else{

@@ -3,6 +3,8 @@ var LocalStrategy    = require('passport-local').Strategy;
 // load up the user model
 var User       = require('../app/models/user');
 
+var Utils = require('../app/modules/utils');
+
 module.exports = function(passport, logger) {
     // =========================================================================
     // LOCAL LOGIN =============================================================
@@ -20,7 +22,7 @@ module.exports = function(passport, logger) {
             // asynchronous
             process.nextTick(function() {
                 logger.warn("local auth - email: ", email);
-                User.findOne({username:{$regex: "^"+email.replace(/\+/g,"\\+")+"$", $options: "i"}}).select("+enabled +password +account_locked +account_expired +state +proof_path").exec(function(err, user) {
+                User.findOne({username: Utils.regexes.emailQuery(email)}).select("+enabled +password +account_locked +account_expired +state +proof_path").exec(function(err, user) {
 
                     // if there are any errors, return the error
                     if (err)
