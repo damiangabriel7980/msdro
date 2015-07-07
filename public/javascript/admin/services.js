@@ -5,7 +5,7 @@ services.factory('AmazonService', ['$resource', '$rootScope', 'Success', functio
     });
     var getClient = function (callback) {
         getCredentialsFromServer.query().$promise.then(function (resp) {
-            var credentials = Success.getObject(resp);
+            var credentials = Success.getObject(resp).Credentials;
             AWS.config.update({accessKeyId: credentials.AccessKeyId, secretAccessKey: credentials.SecretAccessKey, sessionToken: credentials.SessionToken});
             callback(new AWS.S3());
         });
