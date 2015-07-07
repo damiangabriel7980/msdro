@@ -65,8 +65,8 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
         $scope.address = userData.address;
 
         if(userData.job){
-            $scope.job = userData.job[0];
-            $scope.selectedJob = userData.job[0].job_type;
+            $scope.job = userData.job;
+            $scope.selectedJob = userData.job.job_type;
         }else{
             $scope.selectedJob = 1;
         }

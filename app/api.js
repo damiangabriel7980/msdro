@@ -3073,48 +3073,49 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     var userCopy = JSON.parse(JSON.stringify(user));
                     async.parallel([
                         function (callback) {
-                            if(user['jobsID']){
-                                if(user['jobsID'][0]){
-                                    var jobId = user.jobsID[0];
-                                    Job.find({_id:jobId}, function (err, job) {
-                                        if(err){
-                                            callback(err, null);
-                                        }else{
-                                            userCopy.job = job;
-                                        }
-                                    });
-                                }
+                            if(user['jobsID'] && user['jobsID'][0]){
+                                Job.findOne({_id: user.jobsID[0]}, function (err, job) {
+                                    if(err){
+                                        callback(err);
+                                    }else{
+                                        userCopy.job = job;
+                                        callback();
+                                    }
+                                });
+                            }else{
+                                callback();
                             }
-                            callback(null, null);
                         },
                         function (callback) {
-                            Cities.find({_id:user.citiesID[0]}, function (err, city) {
+                            Cities.findOne({_id: user.citiesID[0]}, function (err, city) {
                                 if (err) {
-                                    callback(err, null);
-                                }
-                                if (city[0]) {
-                                    Counties.find({citiesID: {$in: [city[0]._id.toString()]}}, function (err, county) {
-                                        if(err){
-                                            callback(err, null);
-                                        }
-                                        if(county[0]){
-                                            userCopy['city_id'] = city[0]._id;
-                                            userCopy['city_name'] = city[0].name;
-                                            userCopy['county_id'] = county[0]._id;
-                                            userCopy['county_name'] = county[0].name;
-                                        }
-                                        callback(null, null);
-                                    });
+                                    callback(err);
                                 }else{
-                                    callback(null, null);
+                                    if(city) {
+                                        Counties.findOne({citiesID: {$in: [city._id]}}, function (err, county) {
+                                            if(err){
+                                                callback(err);
+                                            }else{
+                                                if(county){
+                                                    userCopy['city_id'] = city._id;
+                                                    userCopy['city_name'] = city.name;
+                                                    userCopy['county_id'] = county._id;
+                                                    userCopy['county_name'] = county.name;
+                                                }
+                                                callback();
+                                            }
+                                        });
+                                    }else{
+                                        callback();
+                                    }
                                 }
                             });
                         }
-                    ], function (err, results) {
+                    ], function (err) {
                         if(err){
-                            handleError(res,err,500);
+                            handleError(res, err);
                         }else{
-                            handleSuccess(res,userCopy);
+                            handleSuccess(res, userCopy);
                         }
                     });
                 }
