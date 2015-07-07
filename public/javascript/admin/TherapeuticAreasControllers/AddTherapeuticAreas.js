@@ -17,12 +17,12 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
 
     $scope.addArie = function(){
         if($scope.arie && $scope.arie.name!=""){
-            $scope.arie['therapeutic-areasID'] = $scope.returnedAreas;
+            $scope.arie['therapeutic-areasID'] = [];
             $scope.arie.has_children = false;
             $scope.arie.last_updated = new Date();
             $scope.arie.enabled = true;
             console.log($scope.arie);
-            areasAdminService.areas.create({area:$scope.arie}).$promise.then(function(resp){
+            areasAdminService.areas.create({area:$scope.arie, subareas: $scope.returnedAreas}).$promise.then(function(resp){
                 $scope.arie = {};
                 $modalInstance.close();
                 $state.go('ariiTerapeutice',{},{reload: true});
