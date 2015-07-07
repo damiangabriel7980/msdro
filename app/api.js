@@ -61,16 +61,11 @@ var Config = require('../config/environment.js'),
 var getNonSpecificUserGroupsIds = function(user){
     var deferred = Q.defer();
     //find all group ids with non-specific content for user
-    UserGroup.find({_id: {$in: user.groupsID}, content_specific: {$ne: true}}, {_id:1}, function (err, groups) {
+    UserGroup.distinct("_id", {_id: {$in: user.groupsID}, content_specific: {$ne: true}}).exec(function (err, ids) {
         if(err){
             deferred.reject(err);
         }else{
-            //now make an array of those id's
-            var arr = [];
-            for(var i=0; i<groups.length; i++){
-                arr.push(groups[i]._id.toString());
-            }
-            deferred.resolve(arr);
+            deferred.resolve(ids);
         }
     });
     return deferred.promise;
@@ -3268,7 +3263,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                                     handleError(res,null,400,11);
                                 }else{
                                     //change password
-                                    var upd = User.update({_id: user._id}, {password: SHA256(userData.newPass).toString()}, function (err, wres) {
+                                    User.update({_id: user._id}, {password: SHA256(userData.newPass).toString()}, function (err) {
                                         if(!err){
                                             handleSuccess(res, {}, 13);
                                         }else{
@@ -3292,21 +3287,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         forGroups.push(req.query.specialGroupSelected.toString());
                     }
                     //get allowed articles for user
-                    Content.find({groupsID: {$in: forGroups},enable:true}, {_id: 1}, function (err, content) {
+                    Content.distinct("_id", {groupsID: {$in: forGroups}, enable:true}).exec(function (err, ids) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            //get ids of allowed articles
-                            UtilsModule.getIds(content).then(function (ids) {
-                                //get carousel content within allowed articles
-                                Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
-                                    if(err){
-                                        handleError(res,err,500);
-                                    }else{
-                                        handleSuccess(res, images);
-                                    }
-                                })
-                            });
+                            //get carousel content within allowed articles
+                            Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    handleSuccess(res, images);
+                                }
+                            })
                         }
                     });
                 },
