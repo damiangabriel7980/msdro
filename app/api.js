@@ -3247,7 +3247,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                         }
                         else
                         {
-                            if(userData.newPass.toString().length < 6 || userData.newPass.toString.length > 32){
+                            if(userData.newPass.toString().length < 6 || userData.newPass.toString().length > 32){
                                 handleError(res,null,400,10);
                             }else{
                                 //check if passwords match
