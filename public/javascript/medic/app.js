@@ -53,6 +53,14 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Products',
+                files: [
+                    'javascript/medic/TherapeuticAreasControllers/TherapeuticAreas.js',
+                    'javascript/medic/ProductsControllers/ProductsView.js',
+                    'javascript/medic/ProductsControllers/ProductDetail.js'
+                ]
+            },
+            {
                 name: 'PDFModal',
                 files: [
                     'javascript/medic/ModalControllers/PDFModal.js'
@@ -157,7 +165,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('biblioteca.produse',{
             url: '/produse',
             templateUrl: 'partials/medic/filterByTherapeuticAreas.html',
-            controller: 'TherapeuticAreas'
+            controller: 'TherapeuticAreas',
+            resolve: {
+                loadDeps: loadStateDeps(['Products'])
+            }
         })
         .state('biblioteca.produse.productsByArea',{
             url: '/productsByArea/:id',
