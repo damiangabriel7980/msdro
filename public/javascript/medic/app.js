@@ -34,6 +34,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Intro',
+                files: [
+                    'javascript/medic/ModalControllers/PresentationModal.js'
+                ]
+            },
+            {
                 name: 'Carousel',
                 files: [
                     'components/requestAnimationFrame/app/requestAnimationFrame.js',
@@ -291,6 +297,23 @@ app.run(
                 function(){
                     window.scrollTo(0,0);
                 });
+
+            //========================================================================================= intro modals
+            $rootScope.showIntroPresentation = function (groupID) {
+                $modal.open({
+                    templateUrl: 'partials/medic/modals/presentationModal.html',
+                    keyboard: false,
+                    backdrop: 'static',
+                    windowClass: 'fade',
+                    controller: 'PresentationModal',
+                    resolve: {
+                        groupID: function () {
+                            return groupID;
+                        },
+                        loadDeps: loadStateDeps(['Intro'])
+                    }
+                });
+            };
 
             //============================================================================= expose global functions
             $rootScope.trustAsHtml = Utils.trustAsHtml;

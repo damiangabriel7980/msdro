@@ -17,22 +17,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         $scope.isCollapsed=true;
     };
 
-    //========================================================================================= intro modals
-    var showIntroPresentation = function (groupID) {
-        $modal.open({
-            templateUrl: 'partials/medic/modals/presentationModal.html',
-            keyboard: false,
-            backdrop: 'static',
-            windowClass: 'fade',
-            controller: 'PresentationModal',
-            resolve: {
-                groupID: function () {
-                    return groupID;
-                }
-            }
-        });
-    };
-
     //==================================================================== watch group selection
     $rootScope.$watch('specialGroupSelected',function(){
         if($rootScope.specialGroupSelected)
@@ -47,10 +31,11 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                         //if so, check if user already viewed the video in this log in session
                         IntroService.rememberIntroView.query({groupID: idSelected}).$promise.then(function (resp) {
                             if(!Success.getObject(resp).isViewed){
-                                //if not, show it
-                                showIntroPresentation(idSelected);
-                                //and mark as viewed (async)
-                                IntroService.rememberIntroView.save({groupID: idSelected});
+                                //if not, mark as viewed
+                                IntroService.rememberIntroView.save({groupID: idSelected}).$promise.then(function () {
+                                    //then show it
+                                    $rootScope.showIntroPresentation(idSelected);
+                                });
                             }
                         });
                     }
