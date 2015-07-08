@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 20.02.2015.
  */
-controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'Error', 'Success', function($scope, $rootScope, HomeService, $sce, $state, Error, Success) {
+app.controllerProvider.register('Search', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'Error', 'Success', function($scope, $rootScope, HomeService, $sce, $state, Error, Success) {
 
     HomeService.searchResults.query({term: $rootScope.textToSearch.toString()}).$promise.then(function(data){
             $scope.searchResults = Success.getObject(data);

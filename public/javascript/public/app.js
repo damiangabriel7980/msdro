@@ -96,6 +96,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Search',
+                files: [
+                    'javascript/public/SearchControllers/Search.js'
+                ]
+            },
+            {
                 name: 'Ui-select',
                 files: [
                     'components/angular-ui-select/dist/select.min.css',
@@ -264,7 +270,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('publicSearch',{
             url: '/publicSearchResults',
             templateUrl: 'partials/public/publicSearch.html',
-            controller: 'Search'
+            controller: 'Search',
+            resolve: {
+                loadDeps: loadStateDeps(['Search'])
+            }
         })
 }]);
 
