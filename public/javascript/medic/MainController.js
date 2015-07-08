@@ -45,18 +45,15 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     });
 
     //==================================================================== special groups drop-down
-    $scope.showFarmaModal = function() {
-        if(Utils.isMobile(false,true)['iosDetect'])
-            window.open($rootScope.Pharma);
-        else {
-            var modalInstance = $modal.open({
-                templateUrl: 'partials/medic/modals/Farma.html',
-                keyboard: false,
-                size: 'lg',
-                windowClass: 'fade modal-responsive',
-                backdrop: 'static'
-            });
-        }
+
+    $scope.showFarmaModal = function () {
+        return $rootScope.showPDFModal('Pharma');
+    };
+    $scope.showTermsModal = function () {
+        return $rootScope.showPDFModal('Terms');
+    };
+    $scope.showMerckManual = function () {
+        return $rootScope.showPDFModal('MerckManual');
     };
 
     $scope.showContactModal = function(){
@@ -65,35 +62,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             size: 'lg',
             windowClass: 'fade'
         });
-    };
-
-    $scope.showTermsModal = function(){
-        if(Utils.isMobile(false,true)['iosDetect'])
-            window.open($rootScope.Terms);
-        else {
-            $modal.open({
-                templateUrl: 'partials/medic/modals/Terms.html',
-                size: 'lg',
-                windowClass: 'fade modal-responsive',
-                backdrop: 'static',
-                keyboard: false
-            });
-        }
-    };
-
-    //merck modal
-    $scope.showMerckManual = function(){
-        if(Utils.isMobile(false,true)['iosDetect'])
-            window.open($rootScope.MerckManual);
-        else{
-            $modal.open({
-                templateUrl: 'partials/medic/modals/merckManual.html',
-                size: 'lg',
-                keyboard: false,
-                backdrop: 'static',
-                windowClass: 'fade modal-responsive'
-            });
-        }
     };
 
     //============================================ profile modal

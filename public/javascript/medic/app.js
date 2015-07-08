@@ -53,13 +53,19 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'PDFModal',
+                files: [
+                    'javascript/medic/ModalControllers/PDFModal.js'
+                ]
+            },
+            {
                 name: 'Carousel',
                 files: [
                     'components/requestAnimationFrame/app/requestAnimationFrame.js',
                     'components/es5-shim/es5-shim.min.js',
                     'components/shifty/dist/shifty.min.js',
                     'components/angular-carousel/dist/angular-carousel.min.css',
-                    'components/angular-carousel/dist/angular-carousel.min.js',
+                    'components/angular-carousel/dist/angular-carousel.min.js'
                 ]
             },
             {
@@ -74,6 +80,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 name: 'FileUpload',
                 files: [
                     'components/ng-file-upload/angular-file-upload.min.js'
+                ]
+            },
+            {
+                name: 'PDFModule',
+                files: [
+                    'modules/angular-pdf-custom/angular-pdf-custom.js'
                 ]
             },
             {
@@ -94,9 +106,9 @@ app.config(['$locationProvider', function($location) {
     $location.hashPrefix('!');
 }]);
 
-var loadStateDeps = function (deps) {
+var loadStateDeps = function (deps, loadInSeries) {
     return ['$ocLazyLoad', function ($ocLazyLoad) {
-        return $ocLazyLoad.load(deps);
+        return $ocLazyLoad.load(deps, {serie: loadInSeries || false});
     }]
 };
 
@@ -281,14 +293,15 @@ app.run(
             $rootScope.defaultUserImage = $rootScope.pathAmazonResources+ "avatar_unknown.png";
 
             $rootScope.defaultGroupPhoto = $rootScope.pathAmazonResources + 'customGroups/grup_logo2.png';
+
             $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.png";
-            $rootScope.Terms = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf";
-            $rootScope.Pharma = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf";
-            $rootScope.MerckManual = "/merckManual";
+
             $rootScope.loaderForSlowConn = "https://s3-eu-west-1.amazonaws.com/msddev-test/resources/page-loader.gif";
+
             $rootScope.deviceWidth= window.innerWidth
                 || document.documentElement.clientWidth
                 || document.body.clientWidth;
+
             $rootScope.printPage = function(){
                 PrintService.printWindow();
             };
@@ -306,7 +319,7 @@ app.run(
                     window.scrollTo(0,0);
                 });
 
-            //========================================================================================= intro modals
+            //============================================================================================= intro modal
             $rootScope.showIntroPresentation = function (groupID) {
                 $modal.open({
                     templateUrl: 'partials/medic/modals/presentationModal.html',
@@ -321,6 +334,43 @@ app.run(
                         loadDeps: loadStateDeps(['Intro'])
                     }
                 });
+            };
+
+            //=============================================================================================== PDF modal
+            var pdfResources = {
+                Pharma: {
+                    link: "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf",
+                    title: "Farmacovigilenta"
+                },
+                Terms: {
+                    link: "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf",
+                    title: "Termeni si conditii"
+                },
+                MerckManual: {
+                    link: "/merckManual",
+                    title: "Manualul Merck"
+                }
+            };
+
+            $rootScope.showPDFModal = function(resource) {
+                if(Utils.isMobile(false,true)['iosDetect'])
+                    window.open(pdfResources[resource].link);
+                else {
+                    $modal.open({
+                        templateUrl: 'partials/medic/modals/PDFModal.html',
+                        keyboard: false,
+                        size: 'lg',
+                        windowClass: 'fade modal-responsive',
+                        backdrop: 'static',
+                        controller: 'PDFModal',
+                        resolve: {
+                            pdfResource: function () {
+                                return pdfResources[resource];
+                            },
+                            loadDeps: loadStateDeps(['PDFModule', 'PDFModal'])
+                        }
+                    });
+                }
             };
 
             //============================================================================= expose global functions
