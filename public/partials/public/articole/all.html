@@ -1,3 +1,6 @@
+<div ng-cloak class="col-md-12 text-center" ng-if="!news || news.length==0">
+    <h4>Nu exista articole conform criteriilor selectate!</h4>
+</div>
 <div class="col-sm-12 articlesList">
     <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
         <div class="col-sm-12 article" ng-repeat="n in news | limitTo:articlesLimit track by $index">
