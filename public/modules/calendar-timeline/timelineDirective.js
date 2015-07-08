@@ -4,7 +4,10 @@
 
 (function() {
     var scripts = document.getElementsByTagName("script");
-    var currentScriptPath = scripts[scripts.length-1].src;
+    var currentScriptPath;
+    for(var i=0; i<scripts.length; i++){
+        if(scripts[i].src.indexOf("timelineDirective.js") > -1) currentScriptPath = scripts[i].src;
+    }
 
     angular.module('calendarTimeline', []).directive('calendarTimeline', ['$sce', function($sce) {
         return {

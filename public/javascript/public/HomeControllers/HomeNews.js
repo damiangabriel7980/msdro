@@ -1,4 +1,4 @@
-controllers.controller('HomeNews', ['$scope', '$rootScope', 'ContentService', '$sce', 'Error', 'Success', function($scope, $rootScope, ContentService, $sce, Error, Success) {
+app.controllerProvider.register('HomeNews', ['$scope', '$rootScope', 'ContentService', '$sce', 'Error', 'Success', function($scope, $rootScope, ContentService, $sce, Error, Success) {
 
     ContentService.content.query({type: 1}).$promise.then(function (resp) {
         $scope.noutati = Success.getObject(resp);

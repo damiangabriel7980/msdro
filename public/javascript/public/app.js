@@ -1,26 +1,68 @@
-var app = angular.module('app',
-    [
-        'ui.router',
-        'ui.bootstrap',
-        'controllers',
-        'services',
-        'ngTouch',
-        'angular-carousel',
-        'calendarTimeline',
-        'ngSanitize',
-        'ui.select',
-        'com.2fdevs.videogular',
-        'com.2fdevs.videogular.plugins.controls',
-        'com.2fdevs.videogular.plugins.overlayplay',
-        'com.2fdevs.videogular.plugins.poster',
-        'angularFileUpload',
-        'mobileContentList',
-        'offClick',
-        'fancyCarousel',
-        'footerResponsive',
-        'horizontalContentList',
-        'widgetMostRead'
-    ]);
+//var app = angular.module('app',
+//    [
+//        'ui.select',
+//        'com.2fdevs.videogular',
+//        'com.2fdevs.videogular.plugins.controls',
+//        'com.2fdevs.videogular.plugins.overlayplay',
+//        'com.2fdevs.videogular.plugins.poster',
+//        'angularFileUpload',
+//    ]);
+
+var app = angular.module('app', [
+    'oc.lazyLoad',
+    'ui.router',
+    'ui.bootstrap',
+    'controllers',
+    'services',
+    'ngSanitize',
+    'offClick',
+    'mobileContentList',
+    'footerResponsive',
+    'horizontalContentList',
+    'widgetMostRead'
+]);
+
+app.config(['$controllerProvider', function ($controllerProvider) {
+    app.controllerProvider = $controllerProvider;
+}]);
+
+app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
+    $ocLazyLoadProvider.config({
+        debug: true,
+        modules: [
+            {
+                name: 'Home',
+                files: [
+                    'javascript/public/HomeControllers/HomeView.js',
+                    'javascript/public/HomeControllers/HomeMobileNews.js',
+                    'javascript/public/HomeControllers/HomeMostRead.js',
+                    'javascript/public/HomeControllers/HomeNews.js',
+                    'javascript/public/HomeControllers/HomeDownloads.js'
+                ]
+            },
+            {
+                name: 'fancyCarousel',
+                files: [
+                    'components/requestAnimationFrame/app/requestAnimationFrame.js',
+                    'components/es5-shim/es5-shim.min.js',
+                    'components/shifty/dist/shifty.min.js',
+                    'components/angular-carousel/dist/angular-carousel.min.css',
+                    'components/angular-carousel/dist/angular-carousel.min.js',
+                    'modules/fancy-carousel/styles.css',
+                    'modules/fancy-carousel/directive.js'
+                ]
+            },
+            {
+                name: 'calendarTimeline',
+                files: [
+                    'modules/calendar-timeline/timelineStyles.css',
+                    'modules/calendar-timeline/timelineDirective.js'
+                ]
+
+            }
+        ]
+    });
+}]);
 
 app.config(['$locationProvider', function($locationProvider) {
     $locationProvider.hashPrefix(HASH_PREFIX);
@@ -43,7 +85,15 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
     $stateProvider
         .state('home',{
             templateUrl: 'partials/public/home.html',
-            controller: 'HomeView'
+            controller: 'HomeView',
+            resolve: {
+                loadControllers: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load('Home');
+                }],
+                loadModules: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load(['calendarTimeline', 'fancyCarousel']);
+                }]
+            }
         })
         .state('home.noutati',{
             url: '/home/noutati',

@@ -1,4 +1,4 @@
-controllers.controller('HomeDownloads', ['$scope', '$rootScope', 'ContentService', '$sce', 'Error', 'Success', function($scope, $rootScope, ContentService, $sce, Error, Success) {
+app.controllerProvider.register('HomeDownloads', ['$scope', '$rootScope', 'ContentService', '$sce', 'Error', 'Success', function($scope, $rootScope, ContentService, $sce, Error, Success) {
 
     ContentService.content.query({type: 4, withFile: true}).$promise.then(function (resp) {
         $scope.downloads = Success.getObject(resp);

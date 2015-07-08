@@ -1,4 +1,4 @@
-controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', 'Utils', 'Error', 'Success', function($scope, $rootScope, HomeService, $sce, $state, StateService, Utils, Error, Success) {
+app.controllerProvider.register('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', 'Utils', 'Error', 'Success', function($scope, $rootScope, HomeService, $sce, $state, StateService, Utils, Error, Success) {
 
     if($rootScope.accessRoute){
         var state = StateService.getStateFromUrl($rootScope.accessRoute);
