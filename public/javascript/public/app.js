@@ -68,6 +68,12 @@ app.config(['$locationProvider', function($locationProvider) {
     $locationProvider.hashPrefix(HASH_PREFIX);
 }]);
 
+var loadStateDeps = function (deps) {
+    return ['$ocLazyLoad', function ($ocLazyLoad) {
+        return $ocLazyLoad.load(deps);
+    }]
+};
+
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.rule(function ($injector, $location) {
         //console.log($location.url());
@@ -87,12 +93,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/public/home.html',
             controller: 'HomeView',
             resolve: {
-                loadControllers: ['$ocLazyLoad', function($ocLazyLoad) {
-                    return $ocLazyLoad.load('Home');
-                }],
-                loadModules: ['$ocLazyLoad', function($ocLazyLoad) {
-                    return $ocLazyLoad.load(['calendarTimeline', 'fancyCarousel']);
-                }]
+                loadDeps: loadStateDeps(['Home', 'calendarTimeline', 'fancyCarousel'])
             }
         })
         .state('home.noutati',{
