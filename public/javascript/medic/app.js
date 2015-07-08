@@ -1,19 +1,11 @@
 var app = angular.module('app',
     [
+        'oc.lazyLoad',
         'ui.router',
         'controllers',
         'services',
-        'ui.calendar',
-        'ui.select',
-        'pdfCustom',
-        'timer',
-        'mySlider',
-        'angular-growl',
-        'angular-carousel',
-        'angularFileUpload',
         'ui.bootstrap',
         'ngCookies',
-        'therapeuticSelect',
         'angulartics',
         'angulartics.google.analytics',
         'offClick',
@@ -26,9 +18,68 @@ var app = angular.module('app',
         'mobileContentList'
     ]);
 
+app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {
+    app.controllerProvider = $controllerProvider;
+    app.filterProvider = $filterProvider;
+}]);
+
+app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
+    $ocLazyLoadProvider.config({
+        debug: true,
+        modules: [
+            {
+                name: 'Home',
+                files: [
+                    'javascript/medic/HomeControllers/Home.js'
+                ]
+            },
+            {
+                name: 'Carousel',
+                files: [
+                    'components/requestAnimationFrame/app/requestAnimationFrame.js',
+                    'components/es5-shim/es5-shim.min.js',
+                    'components/shifty/dist/shifty.min.js',
+                    'components/angular-carousel/dist/angular-carousel.min.css',
+                    'components/angular-carousel/dist/angular-carousel.min.js',
+                ]
+            },
+            {
+                name: 'Ui-select',
+                files: [
+                    'components/angular-ui-select/dist/select.min.css',
+                    'components/select2/select2.css',
+                    'components/angular-ui-select/dist/select.min.js'
+                ]
+            },
+            {
+                name: 'FileUpload',
+                files: [
+                    'components/ng-file-upload/angular-file-upload.min.js'
+                ]
+            },
+            {
+                name: 'Videogular',
+                files: [
+                    'components/videogular/videogular.min.js',
+                    'components/videogular-controls/vg-controls.min.js',
+                    'components/videogular-overlay-play/vg-overlay-play.min.js',
+                    'components/videogular-poster/vg-poster.min.js',
+                    'components/videogular-buffering/vg-buffering.min.js'
+                ]
+            }
+        ]
+    });
+}]);
+
 app.config(['$locationProvider', function($location) {
     $location.hashPrefix('!');
 }]);
+
+var loadStateDeps = function (deps) {
+    return ['$ocLazyLoad', function ($ocLazyLoad) {
+        return $ocLazyLoad.load(deps);
+    }]
+};
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
@@ -36,7 +87,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('home',{
             url: '/',
             templateUrl: 'partials/medic/home.ejs',
-            controller: 'Home'
+            controller: 'Home',
+            resolve: {
+                loadDeps: loadStateDeps(['Home', 'Carousel'])
+            }
         })
         .state('homeSearch',{
             url: '/searchResults/:textToSearch',

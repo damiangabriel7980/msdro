@@ -1,4 +1,4 @@
-controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state','$anchorScroll', 'Utils', 'Success', 'Error', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state,$anchorScroll, Utils,Success,Error) {
+app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state','$anchorScroll', 'Utils', 'Success', 'Error', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state,$anchorScroll, Utils,Success,Error) {
 
     $scope.monthsArray = Utils.getMonthsArray();
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
