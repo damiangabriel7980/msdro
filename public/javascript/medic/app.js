@@ -60,6 +60,15 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'javascript/medic/ProductsControllers/ProductDetail.js'
                 ]
             },
+
+            {
+                name: 'Calendar',
+                files: [
+                    'javascript/medic/EventsControllers/Events.js',
+                    'javascript/medic/EventsControllers/EventModal.js',
+                    'components/angular-ui-calendar/src/calendar.js'
+                ]
+            },
             {
                 name: 'PDFModal',
                 files: [
@@ -200,7 +209,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
        .state('calendar',{
             url: '/calendar/:id',
             templateUrl: 'partials/medic/calendar.ejs',
-            controller: 'Events'
+            controller: 'Events',
+            resolve: {
+                loadDeps: loadStateDeps(['Calendar'])
+            }
         })
         .state('elearning', {
             abstract: true,
