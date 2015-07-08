@@ -82,6 +82,13 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Downloads',
+                files: [
+                    'javascript/public/DownloadsControllers/DownloadsView.js',
+                    'javascript/public/DownloadsControllers/DownloadsDetail.js'
+                ]
+            },
+            {
                 name: 'Videogular',
                 files: [
                     'components/videogular/videogular.min.js',
@@ -219,7 +226,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/downloads',
             templateUrl: 'partials/public/downloads/root.html',
-            controller: 'DownloadsView'
+            controller: 'DownloadsView',
+            resolve: {
+                loadDeps: loadStateDeps(['Downloads'])
+            }
         })
         .state('downloads.all',{
             url: '/all',
