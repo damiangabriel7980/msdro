@@ -46,6 +46,13 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Articles',
+                files: [
+                    'javascript/medic/ArticlesControllers/ArticlesView.js',
+                    'javascript/medic/ArticlesControllers/ArticleDetail.js'
+                ]
+            },
+            {
                 name: 'Carousel',
                 files: [
                     'components/requestAnimationFrame/app/requestAnimationFrame.js',
@@ -116,7 +123,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             //abstract: true,
             url: '/noutati/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
-            controller: 'ArticlesView'
+            controller: 'ArticlesView',
+            resolve: {
+                loadDeps: loadStateDeps(['Articles'])
+            }
         })
         .state('noutati.listaArticole',{
             url: '/listaArticole',
@@ -150,7 +160,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
-            controller: 'ArticlesView'
+            controller: 'ArticlesView',
+            resolve: {
+                loadDeps: loadStateDeps(['Articles'])
+            }
         })
         .state('biblioteca.articoleStiintifice.listaArticole',{
             url: '/listaArticole',
