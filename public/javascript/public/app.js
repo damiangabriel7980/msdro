@@ -59,6 +59,20 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'modules/calendar-timeline/timelineDirective.js'
                 ]
 
+            },
+            {
+                name: 'News',
+                files: [
+                    'javascript/public/NewsControllers/NewsView.js',
+                    'javascript/public/ArticlesControllers/ArticlesDetail.js'
+                ]
+            },
+            {
+                name: 'Articles',
+                files: [
+                    'javascript/public/ArticlesControllers/ArticlesView.js',
+                    'javascript/public/ArticlesControllers/ArticlesDetail.js'
+                ]
             }
         ]
     });
@@ -131,7 +145,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/stiri',
             templateUrl: 'partials/public/stiri/root.html',
-            controller: 'NewsView'
+            controller: 'NewsView',
+            resolve: {
+                loadDeps: loadStateDeps(['News'])
+            }
         })
         .state('stiri.all',{
             url: '/all',
@@ -146,7 +163,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/articole/:category',
             templateUrl: 'partials/public/articole/root.html',
-            controller: 'ArticlesView'
+            controller: 'ArticlesView',
+            resolve: {
+                loadDeps: loadStateDeps(['Articles'])
+            }
         })
         .state('articole.all',{
             url: '/all',
