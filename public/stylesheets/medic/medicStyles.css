@@ -7555,7 +7555,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .modal-responsive .modal-dialog .modal-content .modal-body {
   position: absolute;
   bottom: 10%;
-  top: 10%;
+  top: 90px;
   left: 0;
   right: 0;
   overflow-y: scroll;
