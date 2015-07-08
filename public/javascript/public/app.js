@@ -12,8 +12,9 @@ var app = angular.module('app', [
     'widgetMostRead'
 ]);
 
-app.config(['$controllerProvider', function ($controllerProvider) {
+app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {
     app.controllerProvider = $controllerProvider;
+    app.filterProvider = $filterProvider;
 }]);
 
 app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {

@@ -1,4 +1,4 @@
-controllers.controller('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce', 'AuthService', '$window', 'Utils', 'Success', 'Error', function($scope, $modalInstance, intent, $sce, AuthService, $window, Utils, Success, Error) {
+app.controllerProvider.register('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce', 'AuthService', '$window', 'Utils', 'Success', 'Error', function($scope, $modalInstance, intent, $sce, AuthService, $window, Utils, Success, Error) {
 
     $scope.resetAlert = function (type, text) {
         if(Utils.isMobile() && text){
