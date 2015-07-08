@@ -89,6 +89,27 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Auth',
+                files: [
+                    'javascript/public/AuthControllers/AuthModal.js',
+                    'javascript/public/AuthControllers/Signup.js'
+                ]
+            },
+            {
+                name: 'Ui-select',
+                files: [
+                    'components/angular-ui-select/dist/select.min.css',
+                    'components/select2/select2.css',
+                    'components/angular-ui-select/dist/select.min.js'
+                ]
+            },
+            {
+                name: 'FileUpload',
+                files: [
+                    'components/ng-file-upload/angular-file-upload.min.js'
+                ]
+            },
+            {
                 name: 'Videogular',
                 files: [
                     'components/videogular/videogular.min.js',
@@ -300,18 +321,20 @@ app.run(
 
             //auth modal
             $rootScope.showAuthModal = function(intent){
-                $modal.open({
-                    templateUrl: 'partials/public/auth/baseModal.html',
-                    size: 'lg',
-                    backdrop: 'static',
-                    windowClass: 'fade',
-                    controller: 'AuthModal',
-                    resolve:{
-                        intent: function () {
-                            return intent;
+                $modal
+                    .open({
+                        templateUrl: 'partials/public/auth/baseModal.html',
+                        size: 'lg',
+                        backdrop: 'static',
+                        windowClass: 'fade',
+                        controller: 'AuthModal',
+                        resolve:{
+                            intent: function () {
+                                return intent;
+                            },
+                            loadDeps: loadStateDeps(['Auth', 'Ui-select', 'FileUpload'])
                         }
-                    }
-                })
+                    })
                     .result.finally(function () {
                         //console.log("modal closed");
                         REDIRECT_AFTER_LOGIN = null;
