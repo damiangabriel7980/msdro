@@ -112,20 +112,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['Search'])
             }
         })
-        .state('contact',{
-            parent:'home',
-            url: '',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/medic/contact.ejs',
-                    backdrop: true,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller: 'Contact'
-                })
-            }]
-
-        })
         .state('noutati', {
             //abstract: true,
             url: '/noutati/:articleType',
