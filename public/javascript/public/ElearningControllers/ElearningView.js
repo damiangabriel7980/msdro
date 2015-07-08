@@ -1,4 +1,4 @@
-controllers.controller('ElearningView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', '$stateParams', 'therapeuticAreas', 'Error', 'Success', function($scope, $state, $rootScope, ContentService, $sce, $stateParams, therapeuticAreas, Error, Success) {
+app.controllerProvider.register('ElearningView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', '$stateParams', 'therapeuticAreas', 'Error', 'Success', function($scope, $state, $rootScope, ContentService, $sce, $stateParams, therapeuticAreas, Error, Success) {
 
     $scope.contentLimit = 3;
 

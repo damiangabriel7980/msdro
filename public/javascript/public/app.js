@@ -73,6 +73,23 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'javascript/public/ArticlesControllers/ArticlesView.js',
                     'javascript/public/ArticlesControllers/ArticlesDetail.js'
                 ]
+            },
+            {
+                name: 'Elearning',
+                files: [
+                    'javascript/public/ElearningControllers/ElearningView.js',
+                    'javascript/public/ElearningControllers/ElearningDetail.js'
+                ]
+            },
+            {
+                name: 'Videogular',
+                files: [
+                    'components/videogular/videogular.min.js',
+                    'components/videogular-controls/vg-controls.min.js',
+                    'components/videogular-overlay-play/vg-overlay-play.min.js',
+                    'components/videogular-poster/vg-poster.min.js',
+                    'components/videogular-buffering/vg-buffering.min.js'
+                ]
             }
         ]
     });
@@ -181,7 +198,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/elearning/:area',
             templateUrl: 'partials/public/elearning/root.html',
-            controller: 'ElearningView'
+            controller: 'ElearningView',
+            resolve: {
+                loadDeps: loadStateDeps(['Elearning'])
+            }
         })
         .state('elearning.all',{
             url: '/all',
@@ -190,7 +210,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/elearning/detail.html',
-            controller: 'ElearningDetail'
+            controller: 'ElearningDetail',
+            resolve: {
+                loadDeps: loadStateDeps(['Videogular'])
+            }
         })
         .state('downloads', {
             abstract: true,
