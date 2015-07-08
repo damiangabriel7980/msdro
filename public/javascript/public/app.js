@@ -1,13 +1,3 @@
-//var app = angular.module('app',
-//    [
-//        'ui.select',
-//        'com.2fdevs.videogular',
-//        'com.2fdevs.videogular.plugins.controls',
-//        'com.2fdevs.videogular.plugins.overlayplay',
-//        'com.2fdevs.videogular.plugins.poster',
-//        'angularFileUpload',
-//    ]);
-
 var app = angular.module('app', [
     'oc.lazyLoad',
     'ui.router',
@@ -28,7 +18,7 @@ app.config(['$controllerProvider', function ($controllerProvider) {
 
 app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
     $ocLazyLoadProvider.config({
-        debug: true,
+        //debug: true,
         modules: [
             {
                 name: 'Home',
