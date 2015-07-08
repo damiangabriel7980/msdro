@@ -21,12 +21,10 @@
     "angular-ui-select": "latest",
     "select2": "<4.0.0",
     "angular-ui-calendar": "0.8.1",
-    "angular-timer": "latest",
     "qtip2": "latest",
     "perfect-tooltip": "latest",
     "video-js": "latest",
     "requestAnimationFrame": "latest",
-    "angular-growl": "latest",
     "aws-sdk": "latest",
     "ng-table": "0.4.2",
     "ng-file-upload": "<4.0.0",
@@ -45,7 +43,6 @@
     "he": "latest",
     "async": "latest",
     "angulartics": "latest",
-    "exif-js": "latest",
     "tinymce": "latest"
   },
   "devDependencies": {
