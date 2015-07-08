@@ -34,6 +34,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Search',
+                files: [
+                    'javascript/medic/HomeControllers/Search.js'
+                ]
+            },
+            {
                 name: 'Intro',
                 files: [
                     'javascript/medic/ModalControllers/PresentationModal.js'
@@ -101,7 +107,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('homeSearch',{
             url: '/searchResults/:textToSearch',
             templateUrl: 'partials/medic/homeSearch.ejs',
-            controller: 'Search'
+            controller: 'Search',
+            resolve: {
+                loadDeps: loadStateDeps(['Search'])
+            }
         })
         .state('contact',{
             parent:'home',
