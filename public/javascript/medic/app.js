@@ -53,14 +53,30 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'TherapeuticAreas',
+                files: [
+                    'javascript/medic/TherapeuticAreasControllers/TherapeuticAreas.js'
+                ]
+            },
+            {
                 name: 'Products',
                 files: [
-                    'javascript/medic/TherapeuticAreasControllers/TherapeuticAreas.js',
                     'javascript/medic/ProductsControllers/ProductsView.js',
                     'javascript/medic/ProductsControllers/ProductDetail.js'
                 ]
             },
-
+            {
+                name: 'MultimediaView',
+                files: [
+                    'javascript/medic/MultimediaControllers/MultimediaView.js'
+                ]
+            },
+            {
+                name: 'MultimediaDetail',
+                files: [
+                    'javascript/medic/MultimediaControllers/MultimediaDetail.js'
+                ]
+            },
             {
                 name: 'Calendar',
                 files: [
@@ -116,6 +132,13 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'components/videogular-overlay-play/vg-overlay-play.min.js',
                     'components/videogular-poster/vg-poster.min.js',
                     'components/videogular-buffering/vg-buffering.min.js'
+                ]
+            },
+            {
+                name: 'VideoJS',
+                files: [
+                    'components/video-js/dist/video-js/video-js.min.css',
+                    'components/video-js/dist/video-js/video.js'
                 ]
             }
         ]
@@ -179,7 +202,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/filterByTherapeuticAreas.html',
             controller: 'TherapeuticAreas',
             resolve: {
-                loadDeps: loadStateDeps(['Products'])
+                loadDeps: loadStateDeps(['TherapeuticAreas', 'Products'])
             }
         })
         .state('biblioteca.produse.productsByArea',{
@@ -225,7 +248,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.multimedia',{
             url: '/multimedia',
             templateUrl: 'partials/medic/filterByTherapeuticAreas.html' ,
-            controller: 'TherapeuticAreas'
+            controller: 'TherapeuticAreas',
+            resolve: {
+                loadDeps: loadStateDeps(['TherapeuticAreas'])
+            }
         })
         .state('elearning.multimedia.multimediaMobile',{
             url: '/multimedia/mobile/:id',
@@ -233,14 +259,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             resolve:{
                 idMultimedia: function ($stateParams) {
                     return $stateParams.id;
-                }
+                },
+                loadDeps: loadStateDeps(['MultimediaDetail', 'VideoJS'])
             },
             controller: 'MultimediaDetail'
         })
         .state('elearning.multimedia.multimediaByArea',{
             url: '/multimedia/:idArea/:idMulti',
             templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
-            controller: 'MultimediaView'
+            controller: 'MultimediaView',
+            resolve: {
+                loadDeps: loadStateDeps(['MultimediaView'])
+            }
         })
         .state('elearning.transmisii',{
             url: '/transmisii',
@@ -406,6 +436,7 @@ app.run(
             $rootScope.trimText = Utils.trimText;
             $rootScope.trimWords = Utils.trimWords;
             $rootScope.isMobile = Utils.isMobile;
+            $rootScope.loadStateDeps = loadStateDeps;
         }
     ]
 );

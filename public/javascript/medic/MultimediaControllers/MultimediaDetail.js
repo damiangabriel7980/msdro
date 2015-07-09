@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 03.11.2014.
  */
-controllers.controller('MultimediaDetail', ['$scope','multimediaService','$stateParams','$modal','$log','$rootScope','$sce','$state','idMultimedia','$window','$timeout','Utils', 'Success', 'Error', function ($scope,multimediaService,$stateParams, $modal, $log,$rootScope,$sce,$state,idMultimedia,$window,$timeout,Utils,Success,Error) {
+app.controllerProvider.register('MultimediaDetail', ['$scope','multimediaService','$stateParams','$modal','$log','$rootScope','$sce','$state','idMultimedia','$window','$timeout','Utils', 'Success', 'Error', function ($scope,multimediaService,$stateParams, $modal, $log,$rootScope,$sce,$state,idMultimedia,$window,$timeout,Utils,Success,Error) {
     $scope.selectedMultimedia={
         title: '',
         description: ''
