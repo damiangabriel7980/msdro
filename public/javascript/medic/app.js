@@ -78,6 +78,16 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'ProductPage',
+                files: [
+                    'javascript/medic/ProductPageControllers/ProductPage.js',
+                    'javascript/medic/ProductPageControllers/ProductPageMenu.js',
+                    'javascript/medic/ProductPageControllers/ProductPageDownloads.js',
+                    'javascript/medic/ProductPageControllers/ProductPageGlossary.js',
+                    'javascript/medic/ProductPageControllers/ProductPageSpeaker.js'
+                ]
+            },
+            {
                 name: 'Calendar',
                 files: [
                     'components/fullcalendar/fullcalendar.css',
@@ -296,7 +306,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('groupSpecialProduct', {
             url: '/groupSpecialProduct/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
-            controller: 'ProductPage'
+            controller: 'ProductPage',
+            resolve: {
+                loadDeps: loadStateDeps(['ProductPage'])
+            }
         })
         .state('groupSpecialProduct.menuItem', {
             url: '/menuItem/:menuId/:childId',
