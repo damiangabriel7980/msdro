@@ -14,8 +14,8 @@
                 <input type="text" class="form-control" ng-model="currentItem.description">
             </div>
             <div class="col-md-12 noPadding">
-                <button class="btn btn-default" type="file" ng-file-select ng-file-change="resourceFileSelected($files, $event)" multiple="false"
-                        accept="application/pdf"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca resursa</button>
+                <button class="btn btn-default" type="file" ngf-select ngf-change="resourceFileSelected($files, $event)" ngf-multiple="false"
+                        ngf-accept="'application/pdf'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca resursa</button>
                 <span ng-if="resourceFileBody">{{resourceFileBody.name}}</span>
                 <span ng-if="!resourceFileBody">{{currentItem.file_path}}</span>
                 <span ng-if="currentItem.file_path">&nbsp;({{currentItem.size}},&nbsp;{{currentItem.type}})</span>

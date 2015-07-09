@@ -73,7 +73,10 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             backdrop: 'static',
             keyboard: false,
             windowClass: 'fade modal-responsive MyProfileModal',
-            controller: 'Profile'
+            controller: 'Profile',
+            resolve: {
+                loadDeps: loadStateDeps(['Profile', 'Ui-select', 'FileUpload', 'TherapeuticSelect'])
+            }
         });
     };
     $scope.showProfile = function(){

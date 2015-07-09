@@ -6,7 +6,7 @@ var app = angular.module('app',
         'services',
         'ngSanitize',
         'ui.select',
-        'angularFileUpload'
+        'ngFileUpload'
     ]);
 
 app.config(['$locationProvider', function($locationProvider) {

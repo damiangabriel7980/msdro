@@ -1,6 +1,9 @@
 (function() {
     var scripts = document.getElementsByTagName("script");
-    var currentScriptPath = scripts[scripts.length-1].src;
+    var currentScriptPath;
+    for(var i=0; i<scripts.length; i++){
+        if(scripts[i].src.indexOf("therapeutic_select.js") > -1) currentScriptPath = scripts[i].src;
+    }
     angular.module('therapeuticSelect', []).directive('therapeuticSelect', function() {
         return {
             restrict: 'E',

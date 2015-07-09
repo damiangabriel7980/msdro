@@ -30,14 +30,14 @@
                     <input type="text" class="form-control" ng-model="newProductPage.job_id">
                 </div>
                 <div class="col-md-12 noPadding">
-                    <button class="btn btn-default" type="file" ng-file-select ng-file-change="headerSelected($files, $event)" multiple="false"
-                            accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca header</button>
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="headerSelected($files, $event)" ngf-multiple="false"
+                            ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca header</button>
                     <span ng-if="headerImageBody">{{headerImageBody.name}}</span>
                     <span ng-if="!headerImageBody">{{newProductPage.header_image}}</span>
                 </div>
                 <div class="col-md-12 noPadding" style="margin-top: 10px">
-                    <button class="btn btn-default" type="file" ng-file-select ng-file-change="logoSelected($files, $event)" multiple="false"
-                            accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca logo</button>
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="logoSelected($files, $event)" ngf-multiple="false"
+                            ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca logo</button>
                     <span ng-if="logoImageBody">{{logoImageBody.name}}</span>
                     <span ng-if="!logoImageBody">{{newProductPage.logo_path}}</span>
                 </div>

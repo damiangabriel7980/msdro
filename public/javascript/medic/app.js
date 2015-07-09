@@ -25,7 +25,7 @@ app.config(['$controllerProvider', '$filterProvider', function ($controllerProvi
 
 app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
     $ocLazyLoadProvider.config({
-        debug: true,
+        //debug: true,
         modules: [
             {
                 name: 'Home',
@@ -88,6 +88,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Profile',
+                files: [
+                    'javascript/medic/ProfileControllers/Profile.js'
+                ]
+            },
+            {
                 name: 'Calendar',
                 files: [
                     'components/fullcalendar/fullcalendar.css',
@@ -133,7 +139,14 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: 'FileUpload',
                 files: [
-                    'components/ng-file-upload/angular-file-upload.min.js'
+                    'components/ng-file-upload/ng-file-upload.min.js'
+                ]
+            },
+            {
+                name: 'TherapeuticSelect',
+                files: [
+                    'modules/therapeutic_select/therapeutic_select.css',
+                    'modules/therapeutic_select/therapeutic_select.js'
                 ]
             },
             {
@@ -342,7 +355,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('profileMobile',{
             url: '/profileMobile',
             templateUrl: 'partials/medic/profile.html',
-            controller: 'Profile'
+            controller: 'Profile',
+            resolve: {
+                loadDeps: loadStateDeps(['Profile', 'Ui-select', 'TherapeuticSelect', 'FileUpload'])
+            }
         })
 }]);
 

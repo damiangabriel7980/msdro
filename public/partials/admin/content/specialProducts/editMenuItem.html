@@ -15,8 +15,8 @@
             <input type="text" class="form-control" ng-model="currentItem.header_title">
         </div>
         <div class="col-md-6" style="padding-top: 25px;">
-            <button class="btn btn-default" type="file" ng-file-select ng-file-change="headerImageSelected($files, $event)" multiple="false"
-                    accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine header</button>
+            <button class="btn btn-default" type="file" ngf-select ngf-change="headerImageSelected($files, $event)" ngf-multiple="false"
+                    ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine header</button>
             <button ng-if="headerImageBody || currentItem.header_image" class="btn btn-default" ng-click="removeHeaderImage()">Sterge imagine header</button>
             <span ng-if="headerImageBody">{{headerImageBody.name}}</span>
             <span ng-if="!headerImageBody">{{currentItem.header_image?currentItem.header_image.split('/').pop():''}}</span>

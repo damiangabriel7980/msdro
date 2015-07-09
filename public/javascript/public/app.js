@@ -103,7 +103,7 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: 'FileUpload',
                 files: [
-                    'components/ng-file-upload/angular-file-upload.min.js'
+                    'components/ng-file-upload/ng-file-upload.min.js'
                 ]
             },
             {

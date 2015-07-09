@@ -40,8 +40,8 @@
         <div class="col-md-9 noPadding">
             <div class="form-group col-md-12">
                 <label>Modifica poza</label>
-                <button class="btn btn-default form-control" type="file" ng-file-select ng-file-change="fileSelected($files, $event)"
-                        multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
+                <button class="btn btn-default form-control" type="file" ngf-select ngf-change="fileSelected($files, $event)"
+                        ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
             </div>
             <div class="col-md-12">
                 <alert ng-if="uploadAlert.show" type="{{uploadAlert.type}}" close="uploadAlert.show=false">{{uploadAlert.text}}</alert>
