@@ -52,7 +52,7 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
     ];
 
     //------------------------------------------------------------------------------ retrieve personal info
-    ProfileService.UserData.query().$promise.then(function (resp) {
+    ProfileService.UserData.query({cache: new Date()}).$promise.then(function (resp) {
         var userData = Success.getObject(resp);
         $scope.username = userData.username;
         $scope.userData = userData;
