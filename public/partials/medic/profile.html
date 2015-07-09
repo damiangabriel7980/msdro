@@ -71,7 +71,7 @@
                             </div>
                             <div class="form-group-sm" ng-show="isIpad">
                                 <label>Judet<sup>*</sup>: </label>
-                                <select class="form-control" ng-model="county.selected" ng-options="county as county.name for county in counties"></select>
+                                <select class="form-control" ng-model="county.selected" ng-options="county as county.name for county in counties track by county._id"></select>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12">
@@ -86,7 +86,7 @@
                             </div>
                             <div class="form-group-sm" ng-show="isIpad">
                                 <label>Oras<sup>*</sup>: </label>
-                                <select class="form-control" ng-model="city.selected" ng-options="city as city.name for city in cities"></select>
+                                <select class="form-control" ng-model="city.selected" ng-options="city as city.name for city in cities track by city._id"></select>
                             </div>
                             <p class="" ng-show="profileForm.oras.$invalid && !profileForm.oras.$pristine">Orasul nu este valid!</p>
                         </div>
