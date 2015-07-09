@@ -2022,7 +2022,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
                 else {
                     if (therapeuticArray.length > 0) {
-                        Therapeutic_Area.update({'therapeutic-areasID':{$in : [req.query.id]}}, {$set: {'therapeutic-areasID': []}}, function (err, wres) {
+                        Therapeutic_Area.update({'therapeutic-areasID':{$in : [req.query.id]}}, {$set: {'therapeutic-areasID': []}}, {multi: true}, function (err, wres) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
