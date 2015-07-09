@@ -3164,20 +3164,19 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .post(function (req, res) {
             var job = req.body.job;
-            //var namePatt = UtilsModule.regexes.jobName;
+            var streetPatt = UtilsModule.regexes.streetName;
+            var namePatt = UtilsModule.regexes.jobName;
             //var numberPatt = UtilsModule.regexes.jobNumber;
             //if(!numberPatt.test(job.street_number.toString())) {
             //    ans.error = true;
             //    ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
             //}
-            //if(!namePatt.test(job.street_name.toString())) {
-            //    ans.error = true;
-            //    ans.message = "Numele strazii trebuie sa contina doar litere, minim 3";
-            //}
-            //if(!namePatt.test(job.job_name.toString())) {
-            //    ans.error = true;
-            //    ans.message = "Locul de munca trebuie sa contina doar litere, minim 3";
-            //}
+            if(!streetPatt.test(job.street_name.toString())) {
+                return handleError(res,null,400,40);
+            }
+            if(!namePatt.test(job.job_name.toString())) {
+                return handleError(res,null,400,41);
+            }
             if(!isNaN(parseInt(job.job_type))){
                 if(parseInt(job.job_type)<1 || parseInt(job.job_type>4)){
                     return handleError(res,null,400,29);
