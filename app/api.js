@@ -2579,7 +2579,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res, err);
                 }else{
-                    handleSuccess(params);
+                    handleSuccess(res, params);
                 }
             });
         })
