@@ -1,4 +1,4 @@
-controllers.controller('ProductPageMenu', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce', '$timeout', 'Success', 'Error', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce, $timeout,Success,Error){
+app.controllerProvider.register('ProductPageMenu', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce', '$timeout', 'Success', 'Error', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce, $timeout,Success,Error){
     var loadData = function () {
         if($scope.$parent){
             if(!$scope.$parent.specialProductPage || !$scope.$parent.specialProductMenu){

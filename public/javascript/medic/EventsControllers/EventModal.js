@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 29.10.2014.
  */
-controllers.controller('EventModal',['$scope','eventsService','$stateParams','$modal','$log','$modalInstance','$state','idEvent','$sce','$timeout', 'Success', 'Error', function ($scope,eventsService,$stateParams, $modal, $log,$modalInstance,$state,idEvent,$sce,$timeout,Success,Error) {
+app.controllerProvider.register('EventModal',['$scope','eventsService','$stateParams','$modal','$log','$modalInstance','$state','idEvent','$sce','$timeout', 'Success', 'Error', function ($scope,eventsService,$stateParams, $modal, $log,$modalInstance,$state,idEvent,$sce,$timeout,Success,Error) {
 
     eventsService.calendar.query({id:idEvent}).$promise.then(function(resp){
        $scope.itemsEvent = Success.getObject(resp);
@@ -11,8 +11,8 @@ controllers.controller('EventModal',['$scope','eventsService','$stateParams','$m
         $modalInstance.close();
         $stateParams.id=null;
     };
-}])
-.filter("asDate", function () {
+}]);
+app.filterProvider.register("asDate", function () {
     return function (input) {
         return new Date(input);
     }

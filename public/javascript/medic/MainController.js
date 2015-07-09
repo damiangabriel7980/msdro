@@ -17,22 +17,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         $scope.isCollapsed=true;
     };
 
-    //========================================================================================= intro modals
-    var showIntroPresentation = function (groupID) {
-        $modal.open({
-            templateUrl: 'partials/medic/modals/presentationModal.html',
-            keyboard: false,
-            backdrop: 'static',
-            windowClass: 'fade',
-            controller: 'PresentationModal',
-            resolve: {
-                groupID: function () {
-                    return groupID;
-                }
-            }
-        });
-    };
-
     //==================================================================== watch group selection
     $rootScope.$watch('specialGroupSelected',function(){
         if($rootScope.specialGroupSelected)
@@ -47,10 +31,11 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
                         //if so, check if user already viewed the video in this log in session
                         IntroService.rememberIntroView.query({groupID: idSelected}).$promise.then(function (resp) {
                             if(!Success.getObject(resp).isViewed){
-                                //if not, show it
-                                showIntroPresentation(idSelected);
-                                //and mark as viewed (async)
-                                IntroService.rememberIntroView.save({groupID: idSelected});
+                                //if not, mark as viewed
+                                IntroService.rememberIntroView.save({groupID: idSelected}).$promise.then(function () {
+                                    //then show it
+                                    $rootScope.showIntroPresentation(idSelected);
+                                });
                             }
                         });
                     }
@@ -60,18 +45,15 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     });
 
     //==================================================================== special groups drop-down
-    $scope.showFarmaModal = function() {
-        if(Utils.isMobile(false,true)['iosDetect'])
-            window.open($rootScope.Pharma);
-        else {
-            var modalInstance = $modal.open({
-                templateUrl: 'partials/medic/modals/Farma.html',
-                keyboard: false,
-                size: 'lg',
-                windowClass: 'fade modal-responsive',
-                backdrop: 'static'
-            });
-        }
+
+    $scope.showFarmaModal = function () {
+        return $rootScope.showPDFModal('Pharma');
+    };
+    $scope.showTermsModal = function () {
+        return $rootScope.showPDFModal('Terms');
+    };
+    $scope.showMerckManual = function () {
+        return $rootScope.showPDFModal('MerckManual');
     };
 
     $scope.showContactModal = function(){
@@ -80,35 +62,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             size: 'lg',
             windowClass: 'fade'
         });
-    };
-
-    $scope.showTermsModal = function(){
-        if(Utils.isMobile(false,true)['iosDetect'])
-            window.open($rootScope.Terms);
-        else {
-            $modal.open({
-                templateUrl: 'partials/medic/modals/Terms.html',
-                size: 'lg',
-                windowClass: 'fade modal-responsive',
-                backdrop: 'static',
-                keyboard: false
-            });
-        }
-    };
-
-    //merck modal
-    $scope.showMerckManual = function(){
-        if(Utils.isMobile(false,true)['iosDetect'])
-            window.open($rootScope.MerckManual);
-        else{
-            $modal.open({
-                templateUrl: 'partials/medic/modals/merckManual.html',
-                size: 'lg',
-                keyboard: false,
-                backdrop: 'static',
-                windowClass: 'fade modal-responsive'
-            });
-        }
     };
 
     //============================================ profile modal
@@ -120,7 +73,10 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             backdrop: 'static',
             keyboard: false,
             windowClass: 'fade modal-responsive MyProfileModal',
-            controller: 'Profile'
+            controller: 'Profile',
+            resolve: {
+                loadDeps: loadStateDeps(['Profile', 'Ui-select', 'FileUpload', 'TherapeuticSelect'])
+            }
         });
     };
     $scope.showProfile = function(){

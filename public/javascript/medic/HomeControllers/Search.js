@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 07.01.2015.
  */
-controllers.controller('Search', ['$scope', '$state', '$rootScope', 'HomeService', '$sce','$animate','$stateParams','$window','$timeout', 'Success', 'Error', function($scope, $state, $rootScope, HomeService, $sce,$animate,$stateParams,$window,$timeout,Success,Error) {
+app.controllerProvider.register('Search', ['$scope', '$state', '$rootScope', 'HomeService', '$sce','$animate','$stateParams','$window','$timeout', 'Success', 'Error', function($scope, $state, $rootScope, HomeService, $sce,$animate,$stateParams,$window,$timeout,Success,Error) {
     HomeService.getSearchResults.query({data:$stateParams.textToSearch.toString(),specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(response){
         var results = Success.getObject(response);
         $scope.products = results.products;

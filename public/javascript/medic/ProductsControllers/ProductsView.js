@@ -7,7 +7,7 @@
  *
  * @requires $scope
  * */
-controllers.controller('ProductsView', ['$scope', '$state', '$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', 'Success', 'Error', function($scope, $state, $rootScope,ProductService,$stateParams,$sce,$window,$timeout,Success,Error){
+app.controllerProvider.register('ProductsView', ['$scope', '$state', '$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', 'Success', 'Error', function($scope, $state, $rootScope,ProductService,$stateParams,$sce,$window,$timeout,Success,Error){
     $scope.lmt=8;
     $scope.status = {
         isopen: false

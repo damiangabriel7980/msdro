@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce','$upload','$timeout', '$state', 'Utils', 'IntroService', 'Success', 'Error', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce,$upload,$timeout,$state, Utils, IntroService, Success, Error){
+app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce', '$timeout', '$state', 'Utils', 'IntroService', 'Success', 'Error', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce, $timeout,$state, Utils, IntroService, Success, Error){
 
     //===================================================================== init variables
     var imagePre = $rootScope.pathAmazonDev;
@@ -251,7 +251,8 @@ controllers.controller('Profile', ['$scope', '$rootScope', 'ProfileService', 'th
     //open first accordion group by default
     $scope.openFirst = true;
 
-}]).filter('propsFilter', function() {
+}]);
+app.filterProvider.register('propsFilter', function() {
     //used for select2
     return function(items, props) {
         var out = [];

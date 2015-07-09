@@ -1,30 +1,134 @@
-var app = angular.module('app',
-    [
-        'ui.router',
-        'ui.bootstrap',
-        'controllers',
-        'services',
-        'ngTouch',
-        'angular-carousel',
-        'calendarTimeline',
-        'ngSanitize',
-        'ui.select',
-        'com.2fdevs.videogular',
-        'com.2fdevs.videogular.plugins.controls',
-        'com.2fdevs.videogular.plugins.overlayplay',
-        'com.2fdevs.videogular.plugins.poster',
-        'angularFileUpload',
-        'mobileContentList',
-        'offClick',
-        'fancyCarousel',
-        'footerResponsive',
-        'horizontalContentList',
-        'widgetMostRead'
-    ]);
+var app = angular.module('app', [
+    'oc.lazyLoad',
+    'ui.router',
+    'ui.bootstrap',
+    'controllers',
+    'services',
+    'ngSanitize',
+    'offClick',
+    'mobileContentList',
+    'footerResponsive',
+    'horizontalContentList',
+    'widgetMostRead'
+]);
+
+app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {
+    app.controllerProvider = $controllerProvider;
+    app.filterProvider = $filterProvider;
+}]);
+
+app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
+    $ocLazyLoadProvider.config({
+        //debug: true,
+        modules: [
+            {
+                name: 'Home',
+                files: [
+                    'javascript/public/HomeControllers/HomeView.js',
+                    'javascript/public/HomeControllers/HomeMobileNews.js',
+                    'javascript/public/HomeControllers/HomeMostRead.js',
+                    'javascript/public/HomeControllers/HomeNews.js',
+                    'javascript/public/HomeControllers/HomeDownloads.js'
+                ]
+            },
+            {
+                name: 'fancyCarousel',
+                files: [
+                    'components/requestAnimationFrame/app/requestAnimationFrame.js',
+                    'components/es5-shim/es5-shim.min.js',
+                    'components/shifty/dist/shifty.min.js',
+                    'components/angular-carousel/dist/angular-carousel.min.css',
+                    'components/angular-carousel/dist/angular-carousel.min.js',
+                    'modules/fancy-carousel/styles.css',
+                    'modules/fancy-carousel/directive.js'
+                ]
+            },
+            {
+                name: 'calendarTimeline',
+                files: [
+                    'modules/calendar-timeline/timelineStyles.css',
+                    'modules/calendar-timeline/timelineDirective.js'
+                ]
+
+            },
+            {
+                name: 'News',
+                files: [
+                    'javascript/public/NewsControllers/NewsView.js',
+                    'javascript/public/ArticlesControllers/ArticlesDetail.js'
+                ]
+            },
+            {
+                name: 'Articles',
+                files: [
+                    'javascript/public/ArticlesControllers/ArticlesView.js',
+                    'javascript/public/ArticlesControllers/ArticlesDetail.js'
+                ]
+            },
+            {
+                name: 'Elearning',
+                files: [
+                    'javascript/public/ElearningControllers/ElearningView.js',
+                    'javascript/public/ElearningControllers/ElearningDetail.js'
+                ]
+            },
+            {
+                name: 'Downloads',
+                files: [
+                    'javascript/public/DownloadsControllers/DownloadsView.js',
+                    'javascript/public/DownloadsControllers/DownloadsDetail.js'
+                ]
+            },
+            {
+                name: 'Auth',
+                files: [
+                    'javascript/public/AuthControllers/AuthModal.js',
+                    'javascript/public/AuthControllers/Signup.js'
+                ]
+            },
+            {
+                name: 'Search',
+                files: [
+                    'javascript/public/SearchControllers/Search.js'
+                ]
+            },
+            {
+                name: 'Ui-select',
+                files: [
+                    'components/angular-ui-select/dist/select.min.css',
+                    'components/select2/select2.css',
+                    'components/angular-ui-select/dist/select.min.js'
+                ]
+            },
+            {
+                name: 'FileUpload',
+                files: [
+                    'components/ng-file-upload/ng-file-upload.min.js'
+                ]
+            },
+            {
+                name: 'Videogular',
+                files: [
+                    'components/videogular/videogular.min.js',
+                    'components/videogular-controls/vg-controls.min.js',
+                    'components/videogular-overlay-play/vg-overlay-play.min.js',
+                    'components/videogular-poster/vg-poster.min.js',
+                    'components/videogular-buffering/vg-buffering.min.js'
+                ]
+            }
+        ]
+    });
+}]);
 
 app.config(['$locationProvider', function($locationProvider) {
     $locationProvider.hashPrefix(HASH_PREFIX);
 }]);
+
+var loadStateDeps = function (deps) {
+    return ['$ocLazyLoad', function ($ocLazyLoad) {
+        return $ocLazyLoad.load(deps);
+    }]
+};
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.rule(function ($injector, $location) {
@@ -43,7 +147,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
     $stateProvider
         .state('home',{
             templateUrl: 'partials/public/home.html',
-            controller: 'HomeView'
+            controller: 'HomeView',
+            resolve: {
+                loadDeps: loadStateDeps(['Home', 'calendarTimeline', 'fancyCarousel'])
+            }
         })
         .state('home.noutati',{
             url: '/home/noutati',
@@ -80,7 +187,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/stiri',
             templateUrl: 'partials/public/stiri/root.html',
-            controller: 'NewsView'
+            controller: 'NewsView',
+            resolve: {
+                loadDeps: loadStateDeps(['News'])
+            }
         })
         .state('stiri.all',{
             url: '/all',
@@ -95,7 +205,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/articole/:category',
             templateUrl: 'partials/public/articole/root.html',
-            controller: 'ArticlesView'
+            controller: 'ArticlesView',
+            resolve: {
+                loadDeps: loadStateDeps(['Articles'])
+            }
         })
         .state('articole.all',{
             url: '/all',
@@ -110,7 +223,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/elearning/:area',
             templateUrl: 'partials/public/elearning/root.html',
-            controller: 'ElearningView'
+            controller: 'ElearningView',
+            resolve: {
+                loadDeps: loadStateDeps(['Elearning'])
+            }
         })
         .state('elearning.all',{
             url: '/all',
@@ -119,13 +235,19 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.detail',{
             url: '/detail/:id',
             templateUrl: 'partials/public/elearning/detail.html',
-            controller: 'ElearningDetail'
+            controller: 'ElearningDetail',
+            resolve: {
+                loadDeps: loadStateDeps(['Videogular'])
+            }
         })
         .state('downloads', {
             abstract: true,
             url: '/downloads',
             templateUrl: 'partials/public/downloads/root.html',
-            controller: 'DownloadsView'
+            controller: 'DownloadsView',
+            resolve: {
+                loadDeps: loadStateDeps(['Downloads'])
+            }
         })
         .state('downloads.all',{
             url: '/all',
@@ -139,7 +261,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('publicSearch',{
             url: '/publicSearchResults',
             templateUrl: 'partials/public/publicSearch.html',
-            controller: 'Search'
+            controller: 'Search',
+            resolve: {
+                loadDeps: loadStateDeps(['Search'])
+            }
         })
 }]);
 
@@ -196,18 +321,20 @@ app.run(
 
             //auth modal
             $rootScope.showAuthModal = function(intent){
-                $modal.open({
-                    templateUrl: 'partials/public/auth/baseModal.html',
-                    size: 'lg',
-                    backdrop: 'static',
-                    windowClass: 'fade',
-                    controller: 'AuthModal',
-                    resolve:{
-                        intent: function () {
-                            return intent;
+                $modal
+                    .open({
+                        templateUrl: 'partials/public/auth/baseModal.html',
+                        size: 'lg',
+                        backdrop: 'static',
+                        windowClass: 'fade',
+                        controller: 'AuthModal',
+                        resolve:{
+                            intent: function () {
+                                return intent;
+                            },
+                            loadDeps: loadStateDeps(['Auth', 'Ui-select', 'FileUpload'])
                         }
-                    }
-                })
+                    })
                     .result.finally(function () {
                         //console.log("modal closed");
                         REDIRECT_AFTER_LOGIN = null;

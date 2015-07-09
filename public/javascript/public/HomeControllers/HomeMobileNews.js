@@ -1,4 +1,4 @@
-controllers.controller('HomeMobileNews', ['$scope', 'ContentService', 'Error', 'Success', function($scope, ContentService, Error, Success) {
+app.controllerProvider.register('HomeMobileNews', ['$scope', 'ContentService', 'Error', 'Success', function($scope, ContentService, Error, Success) {
 
     ContentService.mobileContent.query().$promise.then(function (resp) {
         resp = Success.getObject(resp);

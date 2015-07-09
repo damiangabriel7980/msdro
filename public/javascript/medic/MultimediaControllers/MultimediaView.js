@@ -12,7 +12,7 @@
  * */
 
 
-controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state','Utils', 'Success', 'Error', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state,Utils,Success,Error){
+app.controllerProvider.register('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state','Utils', 'Success', 'Error', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state,Utils,Success,Error){
     multimediaService.multimedia.query({idArea:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
         $scope.multimedias = Success.getObject(result);
     });
@@ -36,7 +36,8 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
                 resolve:{
                     idMultimedia: function () {
                         return multimedia;
-                    }
+                    },
+                    loadDeps: $rootScope.loadStateDeps(['MultimediaDetail', 'VideoJS'])
                 }
             });
         }

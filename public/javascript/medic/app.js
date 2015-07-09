@@ -1,19 +1,11 @@
 var app = angular.module('app',
     [
+        'oc.lazyLoad',
         'ui.router',
         'controllers',
         'services',
-        'ui.calendar',
-        'ui.select',
-        'pdfCustom',
-        'timer',
-        'mySlider',
-        'angular-growl',
-        'angular-carousel',
-        'angularFileUpload',
         'ui.bootstrap',
         'ngCookies',
-        'therapeuticSelect',
         'angulartics',
         'angulartics.google.analytics',
         'offClick',
@@ -26,9 +18,173 @@ var app = angular.module('app',
         'mobileContentList'
     ]);
 
+app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {
+    app.controllerProvider = $controllerProvider;
+    app.filterProvider = $filterProvider;
+}]);
+
+app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
+    $ocLazyLoadProvider.config({
+        //debug: true,
+        modules: [
+            {
+                name: 'Home',
+                files: [
+                    'javascript/medic/HomeControllers/Home.js'
+                ]
+            },
+            {
+                name: 'Search',
+                files: [
+                    'javascript/medic/HomeControllers/Search.js'
+                ]
+            },
+            {
+                name: 'Intro',
+                files: [
+                    'javascript/medic/ModalControllers/PresentationModal.js'
+                ]
+            },
+            {
+                name: 'Articles',
+                files: [
+                    'javascript/medic/ArticlesControllers/ArticlesView.js',
+                    'javascript/medic/ArticlesControllers/ArticleDetail.js'
+                ]
+            },
+            {
+                name: 'TherapeuticAreas',
+                files: [
+                    'javascript/medic/TherapeuticAreasControllers/TherapeuticAreas.js'
+                ]
+            },
+            {
+                name: 'Products',
+                files: [
+                    'javascript/medic/ProductsControllers/ProductsView.js',
+                    'javascript/medic/ProductsControllers/ProductDetail.js'
+                ]
+            },
+            {
+                name: 'MultimediaView',
+                files: [
+                    'javascript/medic/MultimediaControllers/MultimediaView.js'
+                ]
+            },
+            {
+                name: 'MultimediaDetail',
+                files: [
+                    'javascript/medic/MultimediaControllers/MultimediaDetail.js'
+                ]
+            },
+            {
+                name: 'ProductPage',
+                files: [
+                    'javascript/medic/ProductPageControllers/ProductPage.js',
+                    'javascript/medic/ProductPageControllers/ProductPageMenu.js',
+                    'javascript/medic/ProductPageControllers/ProductPageDownloads.js',
+                    'javascript/medic/ProductPageControllers/ProductPageGlossary.js',
+                    'javascript/medic/ProductPageControllers/ProductPageSpeaker.js'
+                ]
+            },
+            {
+                name: 'Profile',
+                files: [
+                    'javascript/medic/ProfileControllers/Profile.js'
+                ]
+            },
+            {
+                name: 'Calendar',
+                files: [
+                    'components/fullcalendar/fullcalendar.css',
+                    'components/fullcalendar/fullcalendar.js',
+                    'components/fullcalendar/gcal.js',
+                    'javascript/medic/EventsControllers/Events.js',
+                    'javascript/medic/EventsControllers/EventModal.js',
+                    'components/angular-ui-calendar/src/calendar.js'
+                ]
+            },
+            {
+                name: 'LiveTransmission',
+                files: [
+                    'javascript/medic/LiveTransmissionsControllers/swfobject.js',
+                    'javascript/medic/LiveTransmissionsControllers/require.js',
+                    'javascript/medic/LiveTransmissionsControllers/LiveTransmission.js'
+                ]
+            },
+            {
+                name: 'PDFModal',
+                files: [
+                    'javascript/medic/ModalControllers/PDFModal.js'
+                ]
+            },
+            {
+                name: 'Carousel',
+                files: [
+                    'components/requestAnimationFrame/app/requestAnimationFrame.js',
+                    'components/es5-shim/es5-shim.min.js',
+                    'components/shifty/dist/shifty.min.js',
+                    'components/angular-carousel/dist/angular-carousel.min.css',
+                    'components/angular-carousel/dist/angular-carousel.min.js'
+                ]
+            },
+            {
+                name: 'Ui-select',
+                files: [
+                    'components/angular-ui-select/dist/select.min.css',
+                    'components/select2/select2.css',
+                    'components/angular-ui-select/dist/select.min.js'
+                ]
+            },
+            {
+                name: 'FileUpload',
+                files: [
+                    'components/ng-file-upload/ng-file-upload.min.js'
+                ]
+            },
+            {
+                name: 'TherapeuticSelect',
+                files: [
+                    'modules/therapeutic_select/therapeutic_select.css',
+                    'modules/therapeutic_select/therapeutic_select.js'
+                ]
+            },
+            {
+                name: 'PDFModule',
+                files: [
+                    'modules/angular-pdf-custom/angular-pdf-custom.js'
+                ]
+            },
+            {
+                name: 'Videogular',
+                files: [
+                    'components/videogular/videogular.min.js',
+                    'components/videogular-controls/vg-controls.min.js',
+                    'components/videogular-overlay-play/vg-overlay-play.min.js',
+                    'components/videogular-poster/vg-poster.min.js',
+                    'components/videogular-buffering/vg-buffering.min.js'
+                ]
+            },
+            {
+                name: 'VideoJS',
+                files: [
+                    'components/video-js/dist/video-js/video-js.min.css',
+                    'components/video-js/dist/video-js/video.js'
+                ]
+            }
+        ]
+    });
+}]);
+
 app.config(['$locationProvider', function($location) {
     $location.hashPrefix('!');
 }]);
+
+var loadStateDeps = function (deps, loadInSeries) {
+    return ['$ocLazyLoad', function ($ocLazyLoad) {
+        return $ocLazyLoad.load(deps, {serie: loadInSeries || false});
+    }]
+};
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
@@ -36,32 +192,27 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('home',{
             url: '/',
             templateUrl: 'partials/medic/home.ejs',
-            controller: 'Home'
+            controller: 'Home',
+            resolve: {
+                loadDeps: loadStateDeps(['Home', 'Carousel'])
+            }
         })
         .state('homeSearch',{
             url: '/searchResults/:textToSearch',
             templateUrl: 'partials/medic/homeSearch.ejs',
-            controller: 'Search'
-        })
-        .state('contact',{
-            parent:'home',
-            url: '',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/medic/contact.ejs',
-                    backdrop: true,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller: 'Contact'
-                })
-            }]
-
+            controller: 'Search',
+            resolve: {
+                loadDeps: loadStateDeps(['Search'])
+            }
         })
         .state('noutati', {
             //abstract: true,
             url: '/noutati/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
-            controller: 'ArticlesView'
+            controller: 'ArticlesView',
+            resolve: {
+                loadDeps: loadStateDeps(['Articles'])
+            }
         })
         .state('noutati.listaArticole',{
             url: '/listaArticole',
@@ -80,7 +231,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('biblioteca.produse',{
             url: '/produse',
             templateUrl: 'partials/medic/filterByTherapeuticAreas.html',
-            controller: 'TherapeuticAreas'
+            controller: 'TherapeuticAreas',
+            resolve: {
+                loadDeps: loadStateDeps(['TherapeuticAreas', 'Products'])
+            }
         })
         .state('biblioteca.produse.productsByArea',{
             url: '/productsByArea/:id',
@@ -95,7 +249,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('biblioteca.articoleStiintifice',{
             url: '/articoleStiintifice/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
-            controller: 'ArticlesView'
+            controller: 'ArticlesView',
+            resolve: {
+                loadDeps: loadStateDeps(['Articles'])
+            }
         })
         .state('biblioteca.articoleStiintifice.listaArticole',{
             url: '/listaArticole',
@@ -109,7 +266,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
        .state('calendar',{
             url: '/calendar/:id',
             templateUrl: 'partials/medic/calendar.ejs',
-            controller: 'Events'
+            controller: 'Events',
+            resolve: {
+                loadDeps: loadStateDeps(['Calendar'])
+            }
         })
         .state('elearning', {
             abstract: true,
@@ -119,7 +279,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.multimedia',{
             url: '/multimedia',
             templateUrl: 'partials/medic/filterByTherapeuticAreas.html' ,
-            controller: 'TherapeuticAreas'
+            controller: 'TherapeuticAreas',
+            resolve: {
+                loadDeps: loadStateDeps(['TherapeuticAreas'])
+            }
         })
         .state('elearning.multimedia.multimediaMobile',{
             url: '/multimedia/mobile/:id',
@@ -127,19 +290,26 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             resolve:{
                 idMultimedia: function ($stateParams) {
                     return $stateParams.id;
-                }
+                },
+                loadDeps: loadStateDeps(['MultimediaDetail', 'VideoJS'])
             },
             controller: 'MultimediaDetail'
         })
         .state('elearning.multimedia.multimediaByArea',{
             url: '/multimedia/:idArea/:idMulti',
             templateUrl: 'partials/medic/elearning/multimediaByArea.ejs',
-            controller: 'MultimediaView'
+            controller: 'MultimediaView',
+            resolve: {
+                loadDeps: loadStateDeps(['MultimediaView'])
+            }
         })
         .state('elearning.transmisii',{
             url: '/transmisii',
             templateUrl: 'partials/medic/elearning/transmisii.ejs',
-            controller: 'LiveTransmission'
+            controller: 'LiveTransmission',
+            resolve: {
+                loadDeps: loadStateDeps(['LiveTransmission'])
+            }
         })
         .state('groupFeatures', {
             url: '/groupFeatures/:specialApp',
@@ -149,7 +319,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('groupSpecialProduct', {
             url: '/groupSpecialProduct/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
-            controller: 'ProductPage'
+            controller: 'ProductPage',
+            resolve: {
+                loadDeps: loadStateDeps(['ProductPage'])
+            }
         })
         .state('groupSpecialProduct.menuItem', {
             url: '/menuItem/:menuId/:childId',
@@ -182,7 +355,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('profileMobile',{
             url: '/profileMobile',
             templateUrl: 'partials/medic/profile.html',
-            controller: 'Profile'
+            controller: 'Profile',
+            resolve: {
+                loadDeps: loadStateDeps(['Profile', 'Ui-select', 'TherapeuticSelect', 'FileUpload'])
+            }
         })
 }]);
 
@@ -213,14 +389,15 @@ app.run(
             $rootScope.defaultUserImage = $rootScope.pathAmazonResources+ "avatar_unknown.png";
 
             $rootScope.defaultGroupPhoto = $rootScope.pathAmazonResources + 'customGroups/grup_logo2.png';
+
             $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.png";
-            $rootScope.Terms = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf";
-            $rootScope.Pharma = "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf";
-            $rootScope.MerckManual = "/merckManual";
+
             $rootScope.loaderForSlowConn = "https://s3-eu-west-1.amazonaws.com/msddev-test/resources/page-loader.gif";
+
             $rootScope.deviceWidth= window.innerWidth
                 || document.documentElement.clientWidth
                 || document.body.clientWidth;
+
             $rootScope.printPage = function(){
                 PrintService.printWindow();
             };
@@ -238,6 +415,60 @@ app.run(
                     window.scrollTo(0,0);
                 });
 
+            //============================================================================================= intro modal
+            $rootScope.showIntroPresentation = function (groupID) {
+                $modal.open({
+                    templateUrl: 'partials/medic/modals/presentationModal.html',
+                    keyboard: false,
+                    backdrop: 'static',
+                    windowClass: 'fade',
+                    controller: 'PresentationModal',
+                    resolve: {
+                        groupID: function () {
+                            return groupID;
+                        },
+                        loadDeps: loadStateDeps(['Intro'])
+                    }
+                });
+            };
+
+            //=============================================================================================== PDF modal
+            var pdfResources = {
+                Pharma: {
+                    link: "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf",
+                    title: "Farmacovigilenta"
+                },
+                Terms: {
+                    link: "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf",
+                    title: "Termeni si conditii"
+                },
+                MerckManual: {
+                    link: "/merckManual",
+                    title: "Manualul Merck"
+                }
+            };
+
+            $rootScope.showPDFModal = function(resource) {
+                if(Utils.isMobile(false,true)['iosDetect'])
+                    window.open(pdfResources[resource].link);
+                else {
+                    $modal.open({
+                        templateUrl: 'partials/medic/modals/PDFModal.html',
+                        keyboard: false,
+                        size: 'lg',
+                        windowClass: 'fade modal-responsive',
+                        backdrop: 'static',
+                        controller: 'PDFModal',
+                        resolve: {
+                            pdfResource: function () {
+                                return pdfResources[resource];
+                            },
+                            loadDeps: loadStateDeps(['PDFModule', 'PDFModal'])
+                        }
+                    });
+                }
+            };
+
             //============================================================================= expose global functions
             $rootScope.trustAsHtml = Utils.trustAsHtml;
             $rootScope.htmlToPlainText = Utils.htmlToPlainText;
@@ -245,6 +476,7 @@ app.run(
             $rootScope.trimText = Utils.trimText;
             $rootScope.trimWords = Utils.trimWords;
             $rootScope.isMobile = Utils.isMobile;
+            $rootScope.loadStateDeps = loadStateDeps;
         }
     ]
 );

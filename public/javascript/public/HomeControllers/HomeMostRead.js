@@ -1,4 +1,4 @@
-controllers.controller('HomeMostRead', ['$scope', '$rootScope', 'ContentService', '$sce', 'Success', 'Error', function($scope, $rootScope, ContentService, $sce, Success, Error) {
+app.controllerProvider.register('HomeMostRead', ['$scope', '$rootScope', 'ContentService', '$sce', 'Success', 'Error', function($scope, $rootScope, ContentService, $sce, Success, Error) {
 
     ContentService.content.query({type: 2}).$promise.then(function (resp) {
         $scope.articole = Success.getObject(resp);

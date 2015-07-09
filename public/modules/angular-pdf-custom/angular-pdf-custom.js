@@ -4,7 +4,10 @@
     'use strict';
 
     var scripts = document.getElementsByTagName("script");
-    var currentScriptPath = scripts[scripts.length-1].src;
+    var currentScriptPath;
+    for(var i=0; i<scripts.length; i++){
+        if(scripts[i].src.indexOf("angular-pdf-custom") > -1) currentScriptPath = scripts[i].src;
+    }
 
     angular.module('pdfCustom', []).directive('ngPdfCustom', ['$window', function($window) {
         return {
@@ -31,7 +34,6 @@
                     });
                 });
 
-                PDFJS.disableWorker = true;
                 scope.pageNum = pageNum;
 
                 scope.renderPage = function(num) {
@@ -137,6 +139,7 @@
                     canvasEl.addClass('rotate'+rotation);
                 };
 
+                PDFJS.disableWorker = true;
                 PDFJS.getDocument(url).then(function(_pdfDoc) {
                     pdfDoc = _pdfDoc;
                     scope.renderPage(scope.pageToDisplay);

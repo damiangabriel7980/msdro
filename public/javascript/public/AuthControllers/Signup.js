@@ -1,4 +1,4 @@
-app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', 'Success', function($scope, AuthService, $window, Utils, Success) {
+app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', 'Utils', 'Success', function($scope, AuthService, $window, Utils, Success) {
 
     //================================================================================================== init variables
     $scope.user = {
@@ -198,7 +198,8 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', 'Success'
         });
     };
 
-}]).filter('propsFilter', function() {
+}]);
+app.filterProvider.register('propsFilter', function() {
     //used for select2
     return function(items, props) {
         var out = [];

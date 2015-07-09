@@ -9,7 +9,7 @@
  * */
 
 
-controllers.controller('TherapeuticAreas', ['$scope', 'therapeuticAreas','$sce','$state', 'Success', function($scope, therapeuticAreas,$sce,$state, Success){
+app.controllerProvider.register('TherapeuticAreas', ['$scope', 'therapeuticAreas','$sce','$state', 'Success', function($scope, therapeuticAreas,$sce,$state, Success){
 
     $scope.selectedArea = 0;
 

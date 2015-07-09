@@ -1,4 +1,4 @@
-controllers.controller('DownloadsView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', 'Error', 'Success', function($scope, $state, $rootScope, ContentService, $sce, Error, Success) {
+app.controllerProvider.register('DownloadsView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', 'Error', 'Success', function($scope, $state, $rootScope, ContentService, $sce, Error, Success) {
 
     $scope.contentLimit = 3;
 

@@ -32,94 +32,59 @@
         <!--});-->
     <!--</script>-->
 
-    <!--Stylesheets-->
+    <!--Core-->
+    <script src="components/jquery/dist/jquery.min.js"></script>
+    <script src="components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script src="components/angular/angular.js"></script>
+    <script src="components/oclazyload/dist/ocLazyLoad.js"></script>
 
-    <link href="components/angular-carousel/dist/angular-carousel.css" rel="stylesheet" type="text/css" />
-    <link rel='stylesheet' href='components/angular-ui-select/dist/select.min.css' />
-    <link rel='stylesheet' href='components/select2/select2.css' />
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <!--Global styles-->
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">-->
     <link rel="stylesheet" href="stylesheets/style.css">
     <link rel="stylesheet" href="stylesheets/medic/medicStyles.css">
     <link rel="stylesheet" href="stylesheets/stylesThatReignSupreme.css">
 
-<!--Core-modules-->
-    <script src="components/jquery/dist/jquery.min.js"></script>
-    <script src="components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
-    <script src="components/angular/angular.js"></script>
+    <!--Core-modules-->
     <script src="components/angular-touch/angular-touch.min.js"></script>
     <script src="components/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="components/angular-resource/angular-resource.min.js"></script>
     <script src="components/angular-route/angular-route.min.js"></script>
     <script src="components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="components/angular-ui-select/dist/select.min.js"></script>
-    <script src="components/ng-file-upload/angular-file-upload.min.js"></script>
-    <script src="components/requestAnimationFrame/app/requestAnimationFrame.js"></script>
-    <script src="components/es5-shim/es5-shim.min.js"></script>
+    <script src="components/angular-off-click/offClick.js"></script>
     <script src="components/angulartics/dist/angulartics.min.js"></script>
     <script src="components/angulartics/dist/angulartics-ga.min.js"></script>
-
-
-<!--Controllers-->
-    <script src="javascript/medic/app.js"></script>
-    <script src="javascript/medic/controllers.js"></script>
-    <script src="javascript/medic/services.js"></script>
-    <script src="javascript/shared/services.js"></script>
-    <script src="javascript/medic/customDirectives.js"></script>
-    <script src="javascript/medic/MainController.js"></script>
-    <script src="javascript/medic/LiveTransmissionsControllers/swfobject.js"></script>
-    <script src="javascript/medic/LiveTransmissionsControllers/require.js"></script>
-    <script src="javascript/medic/LiveTransmissionsControllers/LiveTransmission.js"></script>
-    <script src="javascript/medic/EventsControllers/Events.js"></script>
-    <script src="javascript/medic/EventsControllers/EventModal.js"></script>
-    <script src="javascript/medic/ModalControllers/PresentationModal.js"></script>
-    <script src="javascript/medic/ProductsControllers/ProductsView.js"></script>
-    <script src="javascript/medic/ProductsControllers/ProductDetail.js"></script>
-    <script src="javascript/medic/MultimediaControllers/MultimediaView.js"></script>
-    <script src="javascript/medic/MultimediaControllers/MultimediaDetail.js"></script>
-    <script src="javascript/medic/HomeControllers/Home.js"></script>
-    <script src="javascript/medic/HomeControllers/Search.js"></script>
-    <script src="javascript/medic/TherapeuticAreasControllers/TherapeuticAreas.js"></script>
-    <script src="javascript/medic/ArticlesControllers/ArticlesView.js"></script>
-    <script src="javascript/medic/ArticlesControllers/ArticleDetail.js"></script>
-    <script src="javascript/medic/ProfileControllers/Profile.js"></script>
-    <script src="javascript/medic/SpecialGroupsControllers/DisplayFeatures.js"></script>
-    <script src="javascript/medic/SpecialGroupsControllers/SpecialGroupsMenu.js"></script>
-    <script src="javascript/medic/ProductPageControllers/ProductPage.js"></script>
-    <script src="javascript/medic/ProductPageControllers/ProductPageMenu.js"></script>
-    <script src="javascript/medic/ProductPageControllers/ProductPageDownloads.js"></script>
-    <script src="javascript/medic/ProductPageControllers/ProductPageGlossary.js"></script>
-    <script src="javascript/medic/ProductPageControllers/ProductPageSpeaker.js"></script>
-
-
-    <!--Plug-ins-->
-    <script src="components/exif-js/exif.js"></script>
-    <script src="components/shifty/dist/shifty.min.js"></script>
-    <script src="components/angular-carousel/dist/angular-carousel.min.js"></script>
-    <script src="modules/angular-pdf-custom/pdf.js"></script>
-    <script src="modules/angular-pdf-custom/angular-pdf-custom.js"></script>
-    <script src="components/angular-ui-calendar/src/calendar.js"></script>
-    <script src="components/angular-growl/build/angular-growl.min.js"></script>
-    <script src="modules/my_slider/slider.js"></script>
-    <script src="components/angular-timer/dist/angular-timer.min.js"></script>
-    <script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="components/angular-cookies/angular-cookies.js"></script>
-    <script src="modules/therapeutic_select/therapeutic_select.js"></script>
-    <link rel="stylesheet" href="modules/therapeutic_select/therapeutic_select.css">
-    <script src="components/angular-off-click/offClick.js"></script>
-    <link rel="stylesheet" href="modules/bootstrap-search/bootstrap_search.css">
-    <script src="modules/bootstrap-search/bootstrap_search.js"></script>
-    <link rel="stylesheet" href="modules/bootstrap-special-dropdown/special_dropdown.css">
-    <script src="modules/bootstrap-special-dropdown/special_dropdown.js"></script>
+
+    <!--Widgets-->
+    <link rel="stylesheet" href="modules/mobile_content_list/mobile_content_list.css">
+    <script src="modules/mobile_content_list/mobile_content_list.js"></script>
     <script src="modules/sticky-footer/footer_responsive.js"></script>
-    <link rel="stylesheet" href="modules/vertical-content-list/styles.css">
-    <script src="modules/vertical-content-list/directive.js"></script>
     <link rel="stylesheet" href="modules/horizontal-content-list/styles.css">
     <script src="modules/horizontal-content-list/directive.js"></script>
     <link rel="stylesheet" href="modules/widget-most-read/styles.css">
     <script src="modules/widget-most-read/directive.js"></script>
-    <link rel="stylesheet" href="modules/mobile_content_list/mobile_content_list.css">
-    <script src="modules/mobile_content_list/mobile_content_list.js"></script>
+    <link rel="stylesheet" href="modules/vertical-content-list/styles.css">
+    <script src="modules/vertical-content-list/directive.js"></script>
+
+    <!--Global controllers, services, directives-->
+    <script src="javascript/medic/app.js"></script>
+    <script src="javascript/medic/controllers.js"></script>
+    <script src="javascript/shared/controllers.js"></script>
+    <script src="javascript/medic/services.js"></script>
+    <script src="javascript/shared/services.js"></script>
+    <script src="javascript/medic/customDirectives.js"></script>
+    <script src="javascript/medic/MainController.js"></script>
+    <script src="javascript/medic/SpecialGroupsControllers/DisplayFeatures.js"></script>
+    <script src="javascript/medic/SpecialGroupsControllers/SpecialGroupsMenu.js"></script>
+    <link rel="stylesheet" href="modules/bootstrap-search/bootstrap_search.css">
+    <script src="modules/bootstrap-search/bootstrap_search.js"></script>
+    <link rel="stylesheet" href="modules/bootstrap-special-dropdown/special_dropdown.css">
+    <script src="modules/bootstrap-special-dropdown/special_dropdown.js"></script>
+
+    <!--TODO: find a way to lazy load theese files:-->
+    <script src="modules/angular-pdf-custom/pdf.js"></script>
 
 </head>
 <body ng-controller="MainController">

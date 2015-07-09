@@ -1,4 +1,4 @@
-controllers.controller('NewsView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', 'Error', 'Success', function($scope, $state, $rootScope, ContentService, $sce, Error, Success) {
+app.controllerProvider.register('NewsView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', 'Error', 'Success', function($scope, $state, $rootScope, ContentService, $sce, Error, Success) {
 
     $scope.articlesLimit = 3;
 

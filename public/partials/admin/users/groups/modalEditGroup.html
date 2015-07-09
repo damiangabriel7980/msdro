@@ -21,7 +21,7 @@
                                 <span ng-if="fileBody">{{fileBody.name}}</span>
                             </div>
                             <div class="col-md-12">
-                                <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
+                                <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
                             </div>
                         </div>
                         <div class="col-md-6" style="padding: 0; text-align: right;">

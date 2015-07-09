@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-controllers.controller('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce','Utils','Diacritics', 'Success', 'Error', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce,Utils,Diacritics,Success,Error){
+app.controllerProvider.register('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce','Utils','Diacritics', 'Success', 'Error', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce,Utils,Diacritics,Success,Error){
 var date = new Date();
     $scope.realEvents=[];
     $scope.realEventsMob=[];
@@ -132,9 +132,9 @@ var date = new Date();
             }
         });
     };
-}])
-    .filter("asDate", function () {
-        return function (input) {
-            return new Date(input);
-        }
-    });
+}]);
+app.filterProvider.register("asDate", function () {
+    return function (input) {
+        return new Date(input);
+    }
+});
