@@ -89,6 +89,14 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'LiveTransmission',
+                files: [
+                    'javascript/medic/LiveTransmissionsControllers/swfobject.js',
+                    'javascript/medic/LiveTransmissionsControllers/require.js',
+                    'javascript/medic/LiveTransmissionsControllers/LiveTransmission.js'
+                ]
+            },
+            {
                 name: 'PDFModal',
                 files: [
                     'javascript/medic/ModalControllers/PDFModal.js'
@@ -275,7 +283,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('elearning.transmisii',{
             url: '/transmisii',
             templateUrl: 'partials/medic/elearning/transmisii.ejs',
-            controller: 'LiveTransmission'
+            controller: 'LiveTransmission',
+            resolve: {
+                loadDeps: loadStateDeps(['LiveTransmission'])
+            }
         })
         .state('groupFeatures', {
             url: '/groupFeatures/:specialApp',
