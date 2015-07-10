@@ -3579,5 +3579,12 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
         });
 
+    //============================================ regexp object
+    router.route('/regexp')
+        .get(function(req,res){
+            var regexp = UtilsModule.validationStrings;
+            handleSuccess(res,regexp);
+        });
+
     app.use('/api', router);
 };

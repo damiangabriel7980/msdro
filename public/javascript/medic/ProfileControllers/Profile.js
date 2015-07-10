@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce', '$timeout', '$state', 'Utils', 'IntroService', 'Success', 'Error', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce, $timeout,$state, Utils, IntroService, Success, Error){
+app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce', '$timeout', '$state', 'Utils', 'IntroService', 'Success', 'Error', 'Validations', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce, $timeout,$state, Utils, IntroService, Success, Error, Validations){
 
     //===================================================================== init variables
     var imagePre = $rootScope.pathAmazonDev;
@@ -19,6 +19,17 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
             type: type || "danger"
         };
     };
+
+    Validations.regexp.query().$promise.then(function(resp){
+       $scope.validationsObject = Success.getObject(resp);
+        $scope.nameValidator = new RegExp($scope.validationsObject.name.str);
+            $scope.phoneValidator = new RegExp($scope.validationsObject.phone.str);
+            $scope.jobNameValidator = new RegExp($scope.validationsObject.jobName.str);
+            $scope.jobNumberValidator = new RegExp($scope.validationsObject.jobNumber.str);
+            $scope.authorAndTitleValidator = new RegExp($scope.validationsObject.authorAndTitle.str);
+            $scope.streetNameValidator = new RegExp($scope.validationsObject.streetName.str,'i');
+            $scope.nicknameValidator = new RegExp($scope.validationsObject.nickname.str,'i');
+    });
 
     //================================================================================================================== PERSONAL INFO
 

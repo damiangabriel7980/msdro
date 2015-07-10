@@ -263,6 +263,13 @@ services.factory('therapeuticAreas', ['$resource', function($resource){
         }
     }
 }]);
+services.factory('Validations', ['$resource', function($resource){
+    return {
+        regexp: $resource('api/regexp/', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
 services.factory('CookiesService', function () {
     return {
         setCookie: function(cname, cvalue, expires) {

@@ -39,15 +39,42 @@ exports.getIds = function (arr, convertToString) {
     });
     return deferred.promise;
 };
+var validationStrings = {
+    name: {
+        str: '^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$'
+    },
+    phone: {
+        str: '^[0-9]{10,20}$'
+    },
+    jobName: {
+        str: '^[a-z\\sA-Z\\s0-9\\sĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$'
+    },
+    jobNumber: {
+        str: '^[a-z\\sA-Z\\s0-9-\\s]{1,5}$'
+    },
+    authorAndTitle: {
+        str: '^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$'
+    },
+    streetName: {
+        str: '^[a-z\\sA-Z\\s0-9\\sĂă\\sÂâ\\sÎî\\sȘșŞş\\sȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/]{1}[a-z\\sA-Z\\s0-9\\sĂăÂâ\\sÎî\\sȘșŞş\\sȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/]{1,50}$',
+        options: "i"
+    },
+    nickname: {
+        str: '^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$',
+        options: "i"
+    }
+};
+
+exports.validationStrings  = validationStrings;
 
 exports.regexes = {
-    name: new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$'),
-    phone: new XRegExp('^[0-9]{10,20}$'),
-    jobName: new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$'),
-    jobNumber: new XRegExp('^[a-zA-Z0-9-\\s]{1,5}$'),
-    authorAndTitle: new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$'),
-    streetName: new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/]{1}[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/]{1,50}$','i'),
-    nickname: new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i'),
+    name: new XRegExp(validationStrings.name),
+    phone: new XRegExp(validationStrings.phone),
+    jobName: new XRegExp(validationStrings.jobName),
+    jobNumber: new XRegExp(validationStrings.jobNumber),
+    authorAndTitle: new XRegExp(validationStrings.authorAndTitle),
+    streetName: new XRegExp(validationStrings.streetName,'i'),
+    nickname: new XRegExp(validationStrings.nickname,'i'),
     emailQuery: function (email) {
         return {$regex: "^" + (email || "").replace(/\+/g,"\\+") + "$", $options: "i"};
     },

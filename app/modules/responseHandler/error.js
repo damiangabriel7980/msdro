@@ -42,7 +42,7 @@ var errorCodes = {
     37: "Selectati un grup preferat",
     38: "Selectati un oras",
     39: "Dovada nu a putut fi incarcata",
-    40: "Numele strazii trebuie sa contina doar litere si cifre, minim 3",
+    40: "Numele strazii trebuie sa contina doar litere si cifre, minim 5",
     41: "Locul de munca trebuie sa contina doar litere si cifre, minim 3"
 };
 
