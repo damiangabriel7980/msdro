@@ -449,7 +449,7 @@ app.run(
             };
 
             $rootScope.showPDFModal = function(resource) {
-                if(Utils.isMobile(false,true)['iosDetect'])
+                if(Utils.isMobile(false,false))
                     window.open(pdfResources[resource].link);
                 else {
                     $modal.open({
