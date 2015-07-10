@@ -7631,6 +7631,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .imgFix {
   height: 200px !important;
   image-orientation: from-image;
+  object-fit: cover;
 }
 .modal-dialog .modal-header {
   border-top-left-radius: 5px;
