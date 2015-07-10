@@ -145,7 +145,29 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/admin/appVersion')
 
         .get(function (req, res) {
-            handleSuccess(res, "v0.0.0");
+            var spawn   = require('child_process').spawn,
+                tag_cmd = spawn('git', ['tag']);
+
+            var tags = [];
+
+            tag_cmd.stdout.on('data', function (data) {
+                tags = data.toString().split('\n');
+            });
+
+            tag_cmd.stderr.on('data', function (err) {
+                handleError(res, err);
+            });
+
+            tag_cmd.on('close', function (code) {
+                if(code === 0) {
+                    try{
+                        handleSuccess(res, tags[tags.length - 2]);
+                    }catch(ex){
+                        handleError(res, ex);
+                    }
+                }
+            });
+
         });
     //======================================
 
