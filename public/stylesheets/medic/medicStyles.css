@@ -7549,6 +7549,12 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .medicProfile .modal-body .form-group-sm {
   margin-top: 10px;
 }
+@media (orientation: portrait) and (min-width: 480px) and (max-width: 991px) {
+  .medicProfile .modal-body .centerImage {
+    margin-left: 25%;
+    width: 50%;
+  }
+}
 .medicProfile .modal-footer {
   padding: 10px 15px;
 }
