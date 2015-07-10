@@ -219,7 +219,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/noutati/listaArticole.ejs'
         })
         .state('noutati.articol',{
-            url: '/articol/:articleId',
+            url: '/articol/:articleId/:searchTerm',
             templateUrl: 'partials/medic/noutati/articol.ejs',
             controller: 'ArticleDetail'
         })
@@ -259,7 +259,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/noutati/listaArticole.ejs'
         })
         .state('biblioteca.articoleStiintifice.articol',{
-            url: '/articol/:articleId',
+            url: '/articol/:articleId/:searchTerm',
             templateUrl: 'partials/medic/noutati/articol.ejs',
             controller: 'ArticleDetail'
         })
@@ -475,6 +475,7 @@ app.run(
             $rootScope.convertAndTrustAsHtml = Utils.convertAndTrustAsHtml;
             $rootScope.trimText = Utils.trimText;
             $rootScope.trimWords = Utils.trimWords;
+            $rootScope.createHeader = Utils.createHeader;
             $rootScope.isMobile = Utils.isMobile;
             $rootScope.loadStateDeps = loadStateDeps;
         }

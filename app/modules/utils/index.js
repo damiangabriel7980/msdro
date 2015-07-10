@@ -41,22 +41,22 @@ exports.getIds = function (arr, convertToString) {
 };
 var validationStrings = {
     name: {
-        str: '^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$'
+        str: '^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\-\\s]{3,100}$'
     },
     phone: {
         str: '^[0-9]{10,20}$'
     },
     jobName: {
-        str: '^[a-z\\sA-Z\\s0-9\\sĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$'
+        str: '^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$'
     },
     jobNumber: {
-        str: '^[a-z\\sA-Z\\s0-9-\\s]{1,5}$'
+        str: '^[a-zA-Z0-9\\-\\s]{1,5}$'
     },
     authorAndTitle: {
         str: '^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$'
     },
     streetName: {
-        str: '^[a-z\\sA-Z\\s0-9\\sĂă\\sÂâ\\sÎî\\sȘșŞş\\sȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/]{1}[a-z\\sA-Z\\s0-9\\sĂăÂâ\\sÎî\\sȘșŞş\\sȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/]{1,50}$',
+        str: '^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/]{1}[a-zA-Zs0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/\\s]{1,50}$',
         options: "i"
     },
     nickname: {
@@ -68,13 +68,13 @@ var validationStrings = {
 exports.validationStrings  = validationStrings;
 
 exports.regexes = {
-    name: new XRegExp(validationStrings.name),
-    phone: new XRegExp(validationStrings.phone),
-    jobName: new XRegExp(validationStrings.jobName),
-    jobNumber: new XRegExp(validationStrings.jobNumber),
-    authorAndTitle: new XRegExp(validationStrings.authorAndTitle),
-    streetName: new XRegExp(validationStrings.streetName,'i'),
-    nickname: new XRegExp(validationStrings.nickname,'i'),
+    name: new XRegExp(validationStrings.name.str),
+    phone: new XRegExp(validationStrings.phone.str),
+    jobName: new XRegExp(validationStrings.jobName.str),
+    jobNumber: new XRegExp(validationStrings.jobNumber.str),
+    authorAndTitle: new XRegExp(validationStrings.authorAndTitle.str),
+    streetName: new XRegExp(validationStrings.streetName.str,validationStrings.streetName.options),
+    nickname: new XRegExp(validationStrings.nickname.str,validationStrings.nickname.options),
     emailQuery: function (email) {
         return {$regex: "^" + (email || "").replace(/\+/g,"\\+") + "$", $options: "i"};
     },

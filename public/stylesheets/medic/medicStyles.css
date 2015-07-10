@@ -6771,9 +6771,19 @@ body .btn {
   vertical-align: middle;
   text-align: left;
 }
+@media (max-width: 991px) {
+  .widgets .merckImageWrapper {
+    text-align: center;
+  }
+}
 .widgets .merckImageWrapper .merckImage {
   width: 70%;
   cursor: pointer;
+}
+@media (min-width: 480px) and (max-width: 991px) {
+  .widgets .merckImageWrapper .merckImage {
+    width: 35% !important;
+  }
 }
 .carousel-container {
   margin-bottom: 1%;

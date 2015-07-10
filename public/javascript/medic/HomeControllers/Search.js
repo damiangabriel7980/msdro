@@ -12,9 +12,9 @@ app.controllerProvider.register('Search', ['$scope', '$state', '$rootScope', 'Ho
     });
     $scope.sref=function(artType){
         if(artType < 3)
-            return "noutati.articol({articleType:article.type,articleId:article._id})";
+            return "noutati.articol({articleType:article.type,articleId:article._id,searchTerm:$stateParams.textToSearch})";
         else
-            return "biblioteca.articoleStiintifice.articol({articleType:article.type,articleId:article._id})";
+            return "biblioteca.articoleStiintifice.articol({articleType:article.type,articleId:article._id,})";
     };
 
     $scope.navigateToProduct = function (product) {
@@ -27,9 +27,9 @@ app.controllerProvider.register('Search', ['$scope', '$state', '$rootScope', 'Ho
 
     $scope.navigateToArticle = function (article) {
         if(article.type == 3){
-            $state.go("biblioteca.articoleStiintifice.articol", {articleType: article.type, articleId: article._id});
+            $state.go("biblioteca.articoleStiintifice.articol", {articleType: article.type, articleId: article._id, searchTerm: $stateParams.textToSearch.toString()});
         }else{
-            $state.go("noutati.articol", {articleType: article.type, articleId: article._id});
+            $state.go("noutati.articol", {articleType: article.type, articleId: article._id, searchTerm: $stateParams.textToSearch.toString()});
         }
     };
 

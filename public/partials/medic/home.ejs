@@ -3,7 +3,7 @@
         <li ng-repeat="carouselItem in HomeCarousel track by $index" class="carouselMargins">
             <div class="carouselSlide">
                 <div class="carousel-title">
-                    <h3 class="titleFont" ng-click="carouselNavigate(carouselItem)" convert-special conver="carouselItem.title" ng-bind-html="trustAsHtml(trimWords(htmlToPlainText(carouselItem.title), 3))"></h3>
+                    <h3 class="titleFont" ng-click="carouselNavigate(carouselItem)" convert-special conver="carouselItem.title" ng-bind-html="trustAsHtml(createHeader(htmlToPlainText(carouselItem.title), 60))"></h3>
                 </div>
                 <div class="imageWrapper firstTrimmedImage" ng-if="$index===0">
                     <img ondragstart="return false;" ng-src="{{pathAmazonDev+firstIllusion.image_path}}"/>
