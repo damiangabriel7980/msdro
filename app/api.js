@@ -146,12 +146,12 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function (req, res) {
             var spawn   = require('child_process').spawn,
-                tag_cmd = spawn('git', ['tag']);
+                tag_cmd = spawn('git', ['describe', '--tags']);
 
-            var tags = [];
+            var tag;
 
             tag_cmd.stdout.on('data', function (data) {
-                tags = data.toString().split('\n');
+                tag = data.toString();
             });
 
             tag_cmd.stderr.on('data', function (err) {
@@ -159,13 +159,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
 
             tag_cmd.on('close', function (code) {
-                if(code === 0) {
-                    try{
-                        handleSuccess(res, tags[tags.length - 2]);
-                    }catch(ex){
-                        handleError(res, ex);
-                    }
-                }
+                if(code === 0) handleSuccess(res, tag);
             });
 
         });
