@@ -21,11 +21,12 @@
   padding: 30px 15px 35px 70px;
   background-color: rgba(250, 250, 250, 0.7);
   box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
-  box-sizing: border-box;
 }
 @media (max-width: 1160px) {
   .carouselWrapper .fixedBox {
     padding: 20px 15px 35px 40px;
+    box-shadow: none;
+    background-color: rgba(250, 250, 250, 0.6);
   }
 }
 .carouselWrapper .fixedBox .textWrapper {
