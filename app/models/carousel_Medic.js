@@ -9,7 +9,7 @@ var carouselSchema		= new Schema({
     enable:       Boolean,
     last_updated: Date,
     type: Number,
-    article_id:   {type:String,ref:'articles', index: true},
+    article_id:   {type: Schema.Types.ObjectId, ref:'articles', index: true},
     redirect_to_href: String
 });
 

@@ -4,7 +4,7 @@ var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var countiesSchema		= new Schema({
     name:        {type: String, index: true},
-    citiesID:     [{type: String, ref: 'cities', index: true}]
+    citiesID:     [{type: Schema.Types.ObjectId, ref: 'cities', index: true}]
 });
 
 module.exports = mongoose.model('counties', countiesSchema);

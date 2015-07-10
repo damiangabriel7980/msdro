@@ -20,8 +20,8 @@ var multimediaSchema		= new Schema({
     last_updated : Date,
     points : Number,
     run_time: Number,
-    groupsID: [{type: String, ref: 'UserGroup', index: true}],
-    'therapeutic-areasID': [{type: String, ref: 'therapeutic-areas',index: true}],
+    groupsID: [{type: Schema.Types.ObjectId, ref: 'UserGroup', index: true}],
+    'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas',index: true}],
     thumbnail_path : String,
     title : {type:String,es_indexed:true},
     type : Number

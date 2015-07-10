@@ -178,3 +178,106 @@ gulp.task('run_production_no_min', function () {
         }
     })
 });
+
+gulp.task('toObjectId', function () {
+
+    var dbAddress = "localhost:27017/msd";
+
+    var mongoose = require('mongoose');
+    var Utils = require('./app/modules/utils');
+    mongoose.connect(dbAddress);
+    console.log("connected");
+
+    var toConvert = {
+        articles: {
+            refs: ['groupsID'],
+            model: require('./app/models/articles')
+        },
+        carousel_Medic: {
+            refs: ["article_id"],
+            model: require('./app/models/carousel_Medic'),
+            log: false
+        },
+        counties: {
+            refs: ["citiesID"],
+            model: require('./app/models/counties')
+        },
+        events: {
+            refs: ["groupsID"],
+            model: require('./app/models/events')
+        },
+        multimedia: {
+            refs: ["groupsID", "therapeutic-areasID"],
+            model: require('./app/models/multimedia')
+        },
+        presentations: {
+            refs: ["groupsID"],
+            model: require('./app/models/presentations')
+        },
+        products: {
+            refs: ["groupsID", "therapeutic-areasID"],
+            model: require('./app/models/products')
+        },
+        therapeutic_areas: {
+            refs: ["therapeutic-areasID"],
+            model: require('./app/models/therapeutic_areas')
+        },
+        user: {
+            refs: ["citiesID", "jobsID", "rolesID", "groupsID", "therapeutic-areasID"],
+            model: require('./app/models/user'),
+            select: "+citiesID +rolesID +jobsID"
+        }
+    };
+
+    async.each(Object.keys(toConvert), function (key, callback) {
+        var model = toConvert[key].model;
+        var refs = toConvert[key].refs;
+        var select = toConvert[key].select;
+        var log = toConvert[key].log;
+        var cursor = model.find();
+        if(select) cursor.select(select);
+        cursor.exec(function (err, docs) {
+            if(err){
+                callback(err);
+            }else{
+                async.each(docs, function (doc, cbDoc) {
+                    async.each(refs, function (ref, cbRef) {
+                        if(log){
+                            console.log(doc[ref]);
+                            console.log(typeof doc[ref]);
+                            console.log("====================");
+                        }
+                        var upd = {};
+                        if(!doc[ref] || doc[ref] == ""){
+                            cbRef();
+                        }else{
+                            if(Utils.isArray(doc[ref])){
+                                var arr = [];
+                                for(var i=0; i<doc[ref].length; i++){
+                                    arr.push(mongoose.Types.ObjectId(doc[ref][i]));
+                                }
+                                upd[ref] = arr;
+                            }else{
+                                upd[ref] = mongoose.Types.ObjectId(doc[ref]);
+                            }
+                            model.update({_id: doc._id}, {$set: upd}, function (err, wres) {
+                                cbRef(err)
+                            });
+                        }
+                    }, function (err) {
+                        cbDoc(err);
+                    });
+                }, function (err) {
+                    callback(err);
+                });
+            }
+        });
+    }, function (err) {
+        if(err){
+            console.log(err);
+        }else{
+            console.log("done");
+        }
+    })
+
+});

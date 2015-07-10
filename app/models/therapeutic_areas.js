@@ -13,7 +13,7 @@ var therapeuticAreaSchema		= new Schema({
     last_updated: Date,
     name: String,
     enabled:      Boolean,
-    "therapeutic-areasID": [{type: String, ref: 'therapeutic-areas', index: true}]
+    "therapeutic-areasID": [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas', index: true}]
 });
 
 module.exports = mongoose.model('therapeutic-areas', therapeuticAreaSchema,'therapeutic-areas');

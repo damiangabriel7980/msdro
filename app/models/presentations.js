@@ -5,7 +5,7 @@ var mongoDbIndex = require('../modules/mongooseIndex/index');
 var presentationSchema = new Schema({
     description: String,
     article_content: String,
-    groupsID: [{type: String, ref: 'UserGroup', index: true}],
+    groupsID: [{type: Schema.Types.ObjectId, ref: 'UserGroup', index: true}],
     enabled:Boolean
 });
 

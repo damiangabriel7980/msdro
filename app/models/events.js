@@ -15,7 +15,7 @@ var EventsSchema		= new Schema({
     description:  {type:String, es_indexed:true},
     enable:         Boolean,
     end:        Date,
-    groupsID: [{type: String, ref: 'UserGroup', index: true}],
+    groupsID: [{type: Schema.Types.ObjectId, ref: 'UserGroup', index: true}],
     last_updated: Date,
     name:      {type:String,es_indexed:true},
     place:       String,
