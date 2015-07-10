@@ -7550,7 +7550,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
   position: relative;
 }
 .modal-responsive .modal-dialog .modal-content .modal-header {
-  height: 10%;
+  height: 80px;
 }
 .modal-responsive .modal-dialog .modal-content .modal-body {
   position: absolute;
