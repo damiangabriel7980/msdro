@@ -475,6 +475,7 @@ app.run(
             $rootScope.convertAndTrustAsHtml = Utils.convertAndTrustAsHtml;
             $rootScope.trimText = Utils.trimText;
             $rootScope.trimWords = Utils.trimWords;
+            $rootScope.createHeader = Utils.createHeader;
             $rootScope.isMobile = Utils.isMobile;
             $rootScope.loadStateDeps = loadStateDeps;
         }
