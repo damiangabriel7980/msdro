@@ -3138,9 +3138,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
             var namePatt = UtilsModule.regexes.name;
             var phonePatt = UtilsModule.regexes.phone;
-            if((!namePatt.test(newData.name))){ //check name
+            if((!namePatt.test(newData.name.toString()))){ //check name
                 handleError(res,null,400,26);
-            }else if(newData.phone && !phonePatt.test(newData.phone)){ //check phone number
+            }else if(newData.phone && !phonePatt.test(newData.phone.toString())){ //check phone number
                 handleError(res,null,400,27);
             }else if(!newData.address){
                 handleError(res,null,400,28);
@@ -3189,11 +3189,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             var job = req.body.job;
             var streetPatt = UtilsModule.regexes.streetName;
             var namePatt = UtilsModule.regexes.jobName;
-            //var numberPatt = UtilsModule.regexes.jobNumber;
-            //if(!numberPatt.test(job.street_number.toString())) {
-            //    ans.error = true;
-            //    ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
-            //}
+            var numberPatt = UtilsModule.regexes.jobNumber;
+            if(!numberPatt.test(job.street_number.toString())) {
+                ans.error = true;
+                ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
+            }
             if(!streetPatt.test(job.street_name.toString())) {
                 return handleError(res,null,400,40);
             }
