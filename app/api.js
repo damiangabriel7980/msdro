@@ -130,7 +130,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     //===== get temporary credentials for S3
     router.route('/admin/s3tc')
-
         .get(function (req, res) {
             amazon.getS3Credentials(req.user.username, function(err, data){
                 if(err){
@@ -140,8 +139,32 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-
     //======================================
+
+    //===== get app version
+    router.route('/admin/appVersion')
+
+        .get(function (req, res) {
+            var spawn   = require('child_process').spawn,
+                tag_cmd = spawn('git', ['describe', '--tags']);
+
+            var tag;
+
+            tag_cmd.stdout.on('data', function (data) {
+                tag = data.toString();
+            });
+
+            tag_cmd.stderr.on('data', function (err) {
+                handleError(res, err);
+            });
+
+            tag_cmd.on('close', function (code) {
+                if(code === 0) handleSuccess(res, tag);
+            });
+
+        });
+    //======================================
+
 
     router.route('/admin/users/groups')
 

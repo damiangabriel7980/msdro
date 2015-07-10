@@ -141,6 +141,13 @@ services.factory('AmazonService', ['$resource', '$rootScope', 'Success', functio
         }
     }
 }]);
+
+services.factory('VersionService', ['$resource', function($resource){
+    return $resource('api/admin/appVersion', {}, {
+        query: { method: 'GET', isArray: false }
+    })
+}]);
+
 services.factory('GroupsService', ['$resource', function($resource){
     return {
         groups: $resource('api/admin/users/groups', {}, {
