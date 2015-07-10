@@ -443,9 +443,15 @@ body{
   .merckImageWrapper{
     vertical-align: middle;
     text-align: left;
+    @media(max-width: @screen-sm-max){
+      text-align: center;
+    }
     .merckImage{
       width: 70%;
       cursor:pointer;
+      @media (min-width: @screen-xs-min) and (max-width: @screen-sm-max){
+        width: 35% !important;
+      }
     }
   }
 }
