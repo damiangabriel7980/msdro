@@ -130,7 +130,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     //===== get temporary credentials for S3
     router.route('/admin/s3tc')
-
         .get(function (req, res) {
             amazon.getS3Credentials(req.user.username, function(err, data){
                 if(err){
@@ -140,8 +139,16 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-
     //======================================
+
+    //===== get app version
+    router.route('/admin/appVersion')
+
+        .get(function (req, res) {
+            handleSuccess(res, "v0.0.0");
+        });
+    //======================================
+
 
     router.route('/admin/users/groups')
 
