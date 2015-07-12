@@ -7549,12 +7549,6 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .medicProfile .modal-body .form-group-sm {
   margin-top: 10px;
 }
-@media (orientation: portrait) and (min-width: 480px) and (max-width: 991px) {
-  .medicProfile .modal-body .centerImage {
-    margin-left: 25%;
-    width: 50%;
-  }
-}
 .medicProfile .modal-footer {
   padding: 10px 15px;
 }
@@ -7590,6 +7584,14 @@ fieldset[disabled] .navbarMedic .profile .btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+}
+@media (min-width: 767px) and (max-width: 991px) {
+  .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle {
+    position: relative;
+    right: 0 !important;
+    top: 0;
+    transform: none;
+  }
 }
 .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle.right {
   right: 15px;

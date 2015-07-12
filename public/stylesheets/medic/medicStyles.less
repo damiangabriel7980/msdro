@@ -1101,12 +1101,6 @@ body{
     .form-group-sm{
       margin-top: 10px;
     }
-    .centerImage{
-      @media(orientation: portrait) and (min-width: @screen-xs-min) and (max-width: @screen-sm-max){
-        margin-left: 25%;
-        width: 50%;
-      }
-    }
   }
   .modal-footer{
     padding: 10px 15px;
@@ -1144,6 +1138,13 @@ body{
           position: absolute;
           top: 50%;
           transform: translateY(-50%);
+          @media (min-width: @screen-xs-max) and (max-width: @screen-sm-max)
+          {
+            position: relative;
+            right: 0 !important;
+            top: 0;
+            transform: none;
+          }
           &.right{
             right: 15px;
           }
