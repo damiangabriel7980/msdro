@@ -650,7 +650,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                Carousel.find({}, function(err, cont) {
+                Carousel.find({}).deepPopulate('article_id.groupsID').exec(function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }else

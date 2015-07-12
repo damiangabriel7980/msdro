@@ -14,6 +14,11 @@
             <td data-title="'Tip'" sortable="'type'">
                 {{typeDisplay(image.type)}}
             </td>
+            <td data-title="'Groups'" filter="{ 'article_id': 'text' }" sortable="'article_id.groupsID'">
+                <li ng-repeat="group in image.article_id.groupsID">
+                    {{group.display_name}}
+                </li>
+            </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
                     <div class="btn btn-default" ng-click="editImage(image._id)"><i class="glyphicon glyphicon-cog"></i></div>
