@@ -6967,7 +6967,7 @@ body .btn {
 }
 @media (min-width: 767px) and (max-width: 1280px) {
   .navbarMedic .specialMenu {
-    right: 65px;
+    right: 60px;
   }
 }
 .navbarMedic .searchDefault {
@@ -6978,7 +6978,6 @@ body .btn {
   .navbarMedic .searchDefault {
     bottom: 15px;
     top: auto;
-    right: auto;
   }
 }
 @media (min-width: 767px + 1) and (max-width: 1280px) {
