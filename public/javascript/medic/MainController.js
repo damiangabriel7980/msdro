@@ -1,4 +1,4 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', 'IntroService', 'SpecialFeaturesService', 'Success', 'Error', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService, IntroService, SpecialFeaturesService, Success, Error) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService) {
 
     //===================================================================== navigation
     $scope.goToMerckSite=function(){
@@ -15,60 +15,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     $scope.setCookie=function(){
         CookiesService.setCookie('MSDCookies','yes');
         $scope.isCollapsed=true;
-    };
-
-    //==================================================================== get special groups related content
-    SpecialFeaturesService.specialGroups.getSelected().then(function (specialGroupSelected) {
-        if(specialGroupSelected){
-            var idSelected = specialGroupSelected._id;
-            handleIntro(idSelected);
-            loadSpecialProductPage(idSelected);
-            loadSpecialGroupFeatures(idSelected);
-        }
-    });
-
-    var handleIntro = function (idSelected) {
-        //check if user opted to hide this intro video
-        var hideVideo = IntroService.hideNextTime.getStatus(idSelected);
-        if(!hideVideo){
-            //if not, check if this intro video is enabled
-            IntroService.checkIntroEnabled.query({groupID: idSelected}).$promise.then(function (resp) {
-                if(Success.getObject(resp).enabled){
-                    //if so, check if user already viewed the video in this log in session
-                    IntroService.rememberIntroView.query({groupID: idSelected}).$promise.then(function (resp) {
-                        if(!Success.getObject(resp).isViewed){
-                            //if not, mark as viewed
-                            IntroService.rememberIntroView.save({groupID: idSelected}).$promise.then(function () {
-                                //then show it
-                                $rootScope.showIntroPresentation(idSelected);
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    };
-
-    var loadSpecialProductPage = function (idSelected) {
-        //load group's product page
-        SpecialFeaturesService.SpecialProducts.query({specialGroup: idSelected}).$promise.then(function(result){
-            if(Success.getObject(result).length!=0){
-                $scope.groupProduct = Success.getObject(result);
-            }else{
-                $scope.groupProduct = null;
-            }
-        });
-    };
-
-    var loadSpecialGroupFeatures = function (idSelected) {
-        //load group's special features (apps)
-        SpecialFeaturesService.specialApps.query({group: idSelected}).$promise.then(function (resp) {
-            if(Success.getObject(resp) && Success.getObject(resp).length > 0){
-                $scope.specialApps = Success.getObject(resp);
-            }else{
-                $scope.specialApps = null;
-            }
-        });
     };
 
     //==================================================================== special groups drop-down
