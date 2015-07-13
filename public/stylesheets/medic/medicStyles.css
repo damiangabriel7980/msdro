@@ -6780,9 +6780,14 @@ body .btn {
   width: 70%;
   cursor: pointer;
 }
-@media (min-width: 480px) and (max-width: 991px) {
+@media (max-width: 991px) {
   .widgets .merckImageWrapper .merckImage {
-    width: 35% !important;
+    width: 35%;
+  }
+}
+@media (max-width: 480px) {
+  .widgets .merckImageWrapper .merckImage {
+    width: 50%;
   }
 }
 .carousel-container {
@@ -7194,6 +7199,11 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 #footer .rightSection {
   padding: 0 0 0 80px;
+}
+@media (max-width: 480px) {
+  #footer .rightSection {
+    padding: 0 0 0 60%;
+  }
 }
 #footer .rightSection .link {
   display: block;

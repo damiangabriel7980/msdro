@@ -449,8 +449,11 @@ body{
     .merckImage{
       width: 70%;
       cursor:pointer;
-      @media (min-width: @screen-xs-min) and (max-width: @screen-sm-max){
-        width: 35% !important;
+      @media (max-width: @screen-sm-max){
+        width: 35%;
+      }
+      @media (max-width: @screen-xs-min){
+        width: 50%;
       }
     }
   }
@@ -781,6 +784,9 @@ body{
   }
   .rightSection{
     padding: 0 0 0 80px;
+    @media(max-width: @screen-xs-min){
+      padding: 0 0 0 60%;
+    }
     .link{
       display: block;
       float: right;
