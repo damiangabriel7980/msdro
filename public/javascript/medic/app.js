@@ -363,8 +363,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils',
-        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils) {
+    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService',
+        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -394,19 +394,8 @@ app.run(
 
             $rootScope.loaderForSlowConn = "https://s3-eu-west-1.amazonaws.com/msddev-test/resources/page-loader.gif";
 
-            $rootScope.deviceWidth= window.innerWidth
-                || document.documentElement.clientWidth
-                || document.body.clientWidth;
-
             $rootScope.printPage = function(){
                 PrintService.printWindow();
-            };
-
-            window.onresize = function(){
-                $rootScope.deviceWidth= window.innerWidth
-                    || document.documentElement.clientWidth
-                    || document.body.clientWidth;
-                $rootScope.$apply();
             };
 
             //state events

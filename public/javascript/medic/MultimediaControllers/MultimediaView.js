@@ -12,10 +12,18 @@
  * */
 
 
-app.controllerProvider.register('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state','Utils', 'Success', 'Error', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state,Utils,Success,Error){
-    multimediaService.multimedia.query({idArea:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-        $scope.multimedias = Success.getObject(result);
+app.controllerProvider.register('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state','Utils', 'Success', 'SpecialFeaturesService', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state,Utils,Success,SpecialFeaturesService){
+
+    SpecialFeaturesService.specialGroups.getSelected().then(function (specialGroupSelected) {
+        getMultimedia(specialGroupSelected);
     });
+
+    var getMultimedia = function (specialGroupSelected) {
+        multimediaService.multimedia.query({idArea:$stateParams.idArea,specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function(result){
+            $scope.multimedias = Success.getObject(result);
+        });
+    };
+
     $scope.status = {
         isopen: false
         //open: false

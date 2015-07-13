@@ -7,7 +7,7 @@ app.controllerProvider.register('ProductDetail', ['$scope','$rootScope' ,'Produc
         description: '',
         image_path: ''
     };
-     ProductService.products.query({idProduct:$stateParams.id,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
+     ProductService.products.query({idProduct:$stateParams.id}).$promise.then(function(result){
          if(Success.getObject(result)._id)
          {
              $scope.selectedProduct = Success.getObject(result);
