@@ -6352,6 +6352,16 @@ html body .btn {
   line-height: 1.5;
   border-radius: 3px;
 }
+@media (max-width: 991px) {
+  html body .btn.btn-default:hover {
+    background-color: #ffffff;
+  }
+}
+@media (max-width: 991px) {
+  html body .btn.btn-primary:hover {
+    background-color: #01877b;
+  }
+}
 html body #publicHeaderWrapper {
   left: 0;
   top: 0;
@@ -6442,6 +6452,11 @@ html body .rootView {
 .navbar-fixed-top .navbar-toggle {
   float: left;
   margin-left: 15px;
+}
+@media (max-width: 991px) {
+  .navbar-fixed-top .navbar-toggle:hover {
+    background-color: #ffffff;
+  }
 }
 .navbar-fixed-top .navbar-brand {
   padding: 0px 15px;

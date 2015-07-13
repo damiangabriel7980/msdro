@@ -6376,6 +6376,16 @@ body .btn {
     font-size: 11px;
   }
 }
+@media (max-width: 991px) {
+  body .btn.btn-default:hover {
+    background-color: #ffffff;
+  }
+}
+@media (max-width: 991px) {
+  body .btn.btn-primary:hover {
+    background-color: #01877b;
+  }
+}
 .filterByTherapeuticAreas .areasMobile {
   padding: 0;
   margin-bottom: 25px;
@@ -6403,9 +6413,11 @@ body .btn {
   cursor: pointer;
   border-radius: 4px !important;
 }
-.filterByTherapeuticAreas .areas .menu .area:hover {
-  background-color: #01877b;
-  color: white;
+@media (min-width: 992px) {
+  .filterByTherapeuticAreas .areas .menu .area:hover {
+    background-color: #01877b;
+    color: white;
+  }
 }
 .filterByTherapeuticAreas .areas .menu .area.active {
   background-color: #01877b;
@@ -6435,9 +6447,11 @@ body .btn {
   font-weight: bold;
   color: #01877b;
 }
-.pickLetter .letter:hover {
-  background-color: #01877b;
-  color: white;
+@media (min-width: 992px) {
+  .pickLetter .letter:hover {
+    background-color: #01877b;
+    color: white;
+  }
 }
 .productDetails .imageAndRCP img {
   width: 100%;
@@ -7130,6 +7144,11 @@ fieldset[disabled] .navbarMedic .profile .btn {
   padding: 9px 10px;
   border: 1px solid #777777;
   border-radius: 4px;
+}
+@media (max-width: 991px) {
+  .navbarMedic .navbar-toggle:hover {
+    background-color: #ffffff;
+  }
 }
 .navbarMedic .navbar-collapse {
   padding: 0;
