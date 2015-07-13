@@ -71,7 +71,6 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
         $scope.phone = userData.phone;
         $scope.subscriptions = userData.subscriptions;
         $scope.imageUser = imagePre + userData.image_path;
-        $scope.hideImg="show";
         $scope.selectedAreas = userData['therapeutic-areasID'] || [];
         $scope.address = userData.address;
 

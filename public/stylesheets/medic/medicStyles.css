@@ -7578,6 +7578,26 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .medicProfile .modal-body .form-group-sm {
   margin-top: 10px;
 }
+.medicProfile .modal-body .profileImg .wrapper {
+  padding: 0;
+  overflow: hidden;
+  border: 3px solid #eeeeee;
+  border-radius: 4px;
+}
+.medicProfile .modal-body .profileImg .wrapper .align {
+  margin-top: 50%;
+  transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.medicProfile .modal-body .profileImg .wrapper .align img {
+  width: 100%;
+}
+@media (max-width: 767px) {
+  .medicProfile .modal-body .profileImg .wrapper .align {
+    margin-top: 25%;
+  }
+}
 .medicProfile .modal-footer {
   padding: 10px 15px;
 }
@@ -7675,11 +7695,6 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .no-text-decoration:focus {
   text-decoration: none !important;
 }
-.imgFix {
-  height: 200px !important;
-  image-orientation: from-image;
-  object-fit: cover;
-}
 .modal-dialog .modal-header {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -7698,9 +7713,6 @@ a:focus {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
   padding: 5px;
-}
-.profileImg {
-  width: 100%;
 }
 .popover {
   z-index: 1000 ! important;

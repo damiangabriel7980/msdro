@@ -1130,6 +1130,26 @@ body{
     .form-group-sm{
       margin-top: 10px;
     }
+    .profileImg{
+      .wrapper{
+        padding: 0;
+        overflow: hidden;
+        border: 3px solid @gray-lighter;
+        border-radius: 4px;
+        .align{
+          margin-top: 50%;
+          transform: translateY(-50%);
+          -ms-transform: translateY(-50%);
+          -webkit-transform: translateY(-50%);
+          img{
+            width: 100%;
+          }
+          @media (max-width: @screen-xs-max) {
+            margin-top: 25%;
+          }
+        }
+      }
+    }
   }
   .modal-footer{
     padding: 10px 15px;
@@ -1233,11 +1253,6 @@ body{
 .no-text-decoration:focus{
   text-decoration: none !important;
 }
-.imgFix{
-  height: 200px !important;
-  image-orientation: from-image;
-  object-fit: cover;
-}
 
 .modal-dialog{
   .modal-header{
@@ -1259,10 +1274,6 @@ a:focus{
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:white;
   padding: 5px;
-}
-
-.profileImg{
-  width: 100%;
 }
 
 //=================================== calendar mobile responsive

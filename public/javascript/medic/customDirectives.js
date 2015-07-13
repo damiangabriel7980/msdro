@@ -12,6 +12,44 @@ app.directive('noCacheSrc', ['$window', function($window) {
             });
         }
     }
+}]).directive('resizable', ['$window', function($window) {
+    return {
+        restrict: 'A',
+        scope: {
+            'altIf': '='
+        },
+        link: function ($scope, $element, attrs) {
+
+            var ratio = attrs.ratio?attrs.ratio:1;
+            var elem = angular.element($element);
+            var elemWidth;
+
+            var initializeElementSize = function () {
+                elemWidth = elem[0].offsetWidth;
+                if($scope.altIf){
+                    elem.css('height', elemWidth/ratio+'px');
+                }else{
+                    if(attrs.altRatio){
+                        elem.css('height', elemWidth/attrs.altRatio+'px');
+                    }else{
+                        elem.css('height', '100%');
+                    }
+                }
+            };
+
+            angular.element($window).bind('resize', function () {
+                initializeElementSize();
+                $scope.$apply();
+            });
+
+            // Initiate the resize function default values
+            angular.element(document).ready(function () {
+                initializeElementSize();
+                //$scope.$apply();
+            });
+
+        }
+    }
 }]).directive('carouselResizable', ['$window', function($window) {
     return {
         restrict: 'A',
