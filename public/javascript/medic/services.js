@@ -32,7 +32,7 @@ services.factory('SpecialFeaturesService', ['$resource', '$rootScope', 'StorageS
         getSpecialGroups().then(
             function (groups) {
                 groups = groups || [];
-                var selectedGroup = StorageService.local.getElement("selectedGroup");
+                var selectedGroup = StorageService.local.getElement("selectedGroup") || "0";
                 var found = CollectionsService.findById(selectedGroup, groups);
                 if(found){
                     deferred.resolve(found);
