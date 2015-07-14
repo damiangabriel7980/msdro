@@ -48,7 +48,8 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
             IntroService.checkIntroEnabled.query({groupID: idSelected}).$promise.then(function (resp) {
                 if(Success.getObject(resp).enabled){
                     //if so, check if user already viewed the video in this log in session
-                    IntroService.rememberIntroView.query({groupID: idSelected}).$promise.then(function (resp) {
+                    IntroService.rememberIntroView.query({groupID: idSelected, cache: new Date()}).$promise.then(function (resp) {
+                        console.log(resp);
                         console.log(Success.getObject(resp));
                         if(!Success.getObject(resp).isViewed){
                             //if not, mark as viewed
