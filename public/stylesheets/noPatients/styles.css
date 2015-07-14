@@ -9,6 +9,7 @@
 }
 .authModalNoPatients {
   background-color: #ffffff;
+  -webkit-overflow-scrolling: auto;
 }
 .authModalNoPatients .modal-content {
   -webkit-box-shadow: none;
