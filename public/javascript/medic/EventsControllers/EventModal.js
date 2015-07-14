@@ -8,6 +8,7 @@ app.controllerProvider.register('EventModal',['$scope','eventsService','$statePa
     });
 
     $scope.closeModal = function () {
+        $state.go('calendar',{id: null}, {}, {reload: true});
         $modalInstance.close();
         $stateParams.id=null;
     };
