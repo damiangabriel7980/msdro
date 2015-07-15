@@ -14,7 +14,7 @@ app.controllerProvider.register('ArticleDetail', ['$scope', '$rootScope', '$stat
         }
         else
         {
-            $scope.backToArticles();
+            $state.go('home',{},{reload: true});
         }
     });
 

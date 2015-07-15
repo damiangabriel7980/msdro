@@ -3054,8 +3054,8 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/content')
         .get(function(req, res) {
             if(req.query.content_id){
-                Content.findOne({_id: req.query.content_id}, function(err, cont) {
-                    if(err || !cont) {
+                Content.findOne({_id: req.query.content_id, enable: true}, function(err, cont) {
+                    if(err) {
                         handleError(res, err);
                     }else{
                         handleSuccess(res, cont);
