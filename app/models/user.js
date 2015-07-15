@@ -3,14 +3,16 @@ var mongoose = require('mongoose');
 var deepPopulate = require('mongoose-deep-populate');
 var crypto   = require('crypto-js/sha256');
 var Schema			= mongoose.Schema;
+var mongoDbIndex = require('../modules/mongooseIndex/index');
+
 // define the schema for our user model
 var userSchema = new Schema({
     account_expired: {type: Boolean, select: false},
     account_locked: {type: Boolean, select: false},
-    citiesID: {type: [{type: String, ref: 'cities'}], select: false},
+    citiesID: {type: [{type: Schema.Types.ObjectId, ref: 'cities'}], select: false},
     enabled: {type: Boolean, select: false},
     image_path: String,
-    jobsID: {type: Array, select: false},
+    jobsID: {type: [{type: Schema.Types.ObjectId, ref: 'Job'}], select: false},
     language: String,
     last_updated: Date,
     name: String,
@@ -18,16 +20,16 @@ var userSchema = new Schema({
     phone: {type: String, select: false},
     points: {type: Number, select: false},
     proof_path: {type: String, select: false},
-    rolesID: {type: [{type: String, ref: 'Role'}], select: false},
+    rolesID: {type: [{type: Schema.Types.ObjectId, ref: 'Role'}], select: false},
     birthday: {type: Date, select: false},
     show_welcome_screen: Boolean,
-    state: {type: String, select: false},
+    state: {type: String, select: false, index: true},
     description: {type: String, select: false},
     password     : {type: String, select: false},
-    username     : String,
-    groupsID     : [{type: String, ref: 'UserGroup'}],
+    username     : {type: String, index: true},
+    groupsID     : [{type: Schema.Types.ObjectId, ref: 'UserGroup', index: true}],
     profession: {type: Schema.Types.ObjectId,ref: 'professions'},
-    'therapeutic-areasID': [{type: String, ref: 'therapeutic-areas'}],
+    'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas'}],
     resetPasswordToken: {type: String, select: false},
     resetPasswordExpires: {type: Date, select: false},
     activationToken: {type: String, select: false},
@@ -69,3 +71,7 @@ userSchema.methods.getEmailTitle = function () {
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('User', userSchema);
+
+
+var usr = mongoose.model('User', userSchema);
+mongoDbIndex.mongooseIndex(usr);

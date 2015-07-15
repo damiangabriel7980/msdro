@@ -1,8 +1,8 @@
-controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filter', 'ngTableParams', '$modal', 'ActionModal', 'CarouselMedicService' ,function($scope, $state, $rootScope, $filter, ngTableParams, $modal, ActionModal, CarouselMedicService){
+controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filter', 'ngTableParams', '$modal', 'ActionModal', 'CarouselMedicService' , 'Success', 'Error', function($scope, $state, $rootScope, $filter, ngTableParams, $modal, ActionModal, CarouselMedicService,Success,Error){
 
     $scope.refreshTable = function () {
-        CarouselMedicService.getAllImages.query().$promise.then(function (resp) {
-            var data = resp;
+        CarouselMedicService.carouselMedic.query().$promise.then(function (resp) {
+            var data = Success.getObject(resp);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -22,6 +22,8 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 
@@ -49,9 +51,11 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
 
     $scope.deleteImage = function (id) {
         ActionModal.show("Stergere imagine", "Sunteti sigur ca doriti sa stergeti imaginea?", function () {
-            CarouselMedicService.deleteImage.save({id: id}).$promise.then(function (resp) {
+            CarouselMedicService.carouselMedic.delete({id: id}).$promise.then(function (resp) {
                 console.log(resp);
                 $state.reload();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     };
@@ -61,9 +65,11 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
             enabled?"Dezactiveaza imagine":"Activeaza imagine",
             enabled?"Sunteti sigur ca doriti sa dezactivati imaginea?":"Sunteti sigur ca doriti sa activati imaginea?",
             function () {
-                CarouselMedicService.toggleImage.save({data: {isEnabled: enabled, id: id}}).$promise.then(function (resp) {
+                CarouselMedicService.carouselMedic.update({id: id},{info: {isEnabled: enabled}}).$promise.then(function (resp) {
                     console.log(resp);
                     $state.reload();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

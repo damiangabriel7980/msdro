@@ -1,69 +1,50 @@
-controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', '$timeout', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state, $timeout){
+controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', '$state', '$timeout', 'CollectionsService', 'Success', 'Error', function($scope, $rootScope, $stateParams, SpecialFeaturesService, $state, $timeout, CollectionsService, Success, Error){
 
-    SpecialFeaturesService.getSpecialGroups.query().$promise.then(function (resp) {
-        if (resp.length != 0) {
-            $rootScope.specialGroups = resp;
-            if (localStorage.specialGroupSelected) {
-                var specialGroup;
-                try{
-                    specialGroup = angular.fromJson(localStorage.specialGroupSelected);
-                }catch(ex){
-                    specialGroup = null;
-                }
-                if(checkGroupInGroups(specialGroup, resp)){
-
-                    $scope.selectSpecialGroup(specialGroup);
+    SpecialFeaturesService.SpecialGroups.query().$promise.then(function (resp) {
+        var groups = Success.getObject(resp);
+        if (groups.length != 0) {
+            $rootScope.specialGroups = groups;
+            var selectedGroup = SpecialFeaturesService.specialGroups.getSelected();
+            if (selectedGroup) {
+                if(CollectionsService.findById(selectedGroup._id, groups)){
+                    $scope.selectSpecialGroup(selectedGroup);
                 }else{
-
-                    $scope.selectSpecialGroup(resp[0]);
+                    $scope.selectSpecialGroup(groups[0]);
                 }
             } else {
-
-                $scope.selectSpecialGroup(resp[0]);
+                $scope.selectSpecialGroup(groups[0]);
             }
-        } else {
-
-            $rootScope.specialGroupSelected = null;
-            localStorage.removeItem('specialGroupSelected');
+        }else{
+            $scope.unselectSpecialGroup();
         }
     });
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
     $scope.selectSpecialGroup = function(group){
-        if(!$rootScope.specialGroupSelected)
-            $rootScope.specialGroupSelected={_id:0};
-        if(group._id!= $rootScope.specialGroupSelected._id){
+        var idSelected = 0;
+        if($rootScope.specialGroupSelected && $rootScope.specialGroupSelected._id) idSelected = $rootScope.specialGroupSelected._id;
+        if(group._id != idSelected){
 
             //select special group and add it to local storage
             $rootScope.specialGroupSelected = group;
-            localStorage.specialGroupSelected = angular.toJson(group);
+            SpecialFeaturesService.specialGroups.setSelected(group);
 
             //load group's product page
-            SpecialFeaturesService.getSpecialProducts.query({specialGroup: group._id}).$promise.then(function(result){
-                if(result.length!=0)
-                    $scope.groupProduct = result;
-                else
-                    $scope.groupProduct=null;
+            SpecialFeaturesService.SpecialProducts.query({specialGroup: group._id}).$promise.then(function(result){
+                if(Success.getObject(result).length!=0){
+                    $scope.groupProduct = Success.getObject(result);
+                }else{
+                    $scope.groupProduct = null;
+                }
             });
 
             //load group's special features (apps)
             SpecialFeaturesService.specialApps.query({group: group._id}).$promise.then(function (resp) {
-                if(resp.success){
-                    if(resp.success.length > 0){
-                        $scope.specialApps = resp.success;
-                    }else{
-                        $scope.specialApps = null;
-                    }
+                if(Success.getObject(resp) && Success.getObject(resp).length > 0){
+                    $scope.specialApps = Success.getObject(resp);
                 }else{
                     $scope.specialApps = null;
                 }
             });
-            if($state.includes('groupFeatures')||$state.includes('groupSpecialProduct')){
+            if($state.includes('groupFeatures') || $state.includes('groupSpecialProduct')){
                 //if user changed his group while being on a feature page or product page, redirect him to home
                 $state.go('home');
             }else{
@@ -80,22 +61,9 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         }
 
     };
-
-    var checkGroupInGroups = function (group, groups) {
-        var i=0;
-        try{
-            while(i<groups.length){
-                if(groups[i]._id == group._id){
-                    return true;
-                }
-                i++;
-            }
-            return false;
-        }catch(ex){
-            return false;
-        }
+    $scope.unselectSpecialGroup = function () {
+        $rootScope.specialGroupSelected = null;
+        SpecialFeaturesService.specialGroups.setSelected(null);
     };
-
-
 
 }]);

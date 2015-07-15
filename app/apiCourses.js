@@ -8,6 +8,10 @@ var courses = require('./models/courses');
 
 module.exports = function(app, logger, tokenSecret, router) {
 
+    //=============================================Define variables
+    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
+    var handleError = require('./modules/responseHandler/error.js')(logger);
+
     //access control allow origin *
     app.all("/apiCourses/*", function(req, res, next) {
         res.setHeader("Access-Control-Allow-Origin", "*");
@@ -31,10 +35,7 @@ module.exports = function(app, logger, tokenSecret, router) {
             var userData = jwt.decode(token);
             User.findOne({_id: userData._id}, {rolesID: 1}).populate('rolesID').exec(function (err, user) {
                 if(err || !user){
-                    logger.error(err);
-                    console.log(err);
-                    res.statusCode = 403;
-                    res.end();
+                    handleError(res, err, 403);
                 }else{
                     var roles = [];
                     for(var i=0; i<user.rolesID.length; i++){
@@ -43,16 +44,12 @@ module.exports = function(app, logger, tokenSecret, router) {
                     if(roles.indexOf("ROLE_ADMIN") > -1){
                         next();
                     }else{
-                        res.statusCode = 403;
-                        res.end();
+                        handleError(res, null, 403);
                     }
                 }
             });
         }catch(ex){
-            
-            logger.error(ex);
-            res.statusCode = 403;
-            res.end();
+            handleError(res, ex, 403);
         }
     };
 
@@ -63,19 +60,17 @@ module.exports = function(app, logger, tokenSecret, router) {
             if(req.query.id){
                 courses.findOne({_id: req.query.id}, function (err, course) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: "Error retrieving course"});
+                        handleError(res, err);
                     }else{
-                        res.send({success: course});
+                        handleSuccess(res, course);
                     }
                 });
             }else{
                 courses.find({}, function (err, courses) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: "Error retrieving courses"});
+                        handleError(res, err);
                     }else{
-                        res.send({success: courses});
+                        handleSuccess(res, courses);
                     }
                 });
             }
@@ -84,7 +79,7 @@ module.exports = function(app, logger, tokenSecret, router) {
             var name = req.body.name;
             var content = req.body.content;
             if(!name || !content){
-                res.send({error: "Could not find name and content attributes on request body. These are mandatory"});
+                handleError(res, null, 400, 6);
             }else{
                 try{
                     content = JSON.parse(content);
@@ -95,46 +90,40 @@ module.exports = function(app, logger, tokenSecret, router) {
                     });
                     toAdd.save(function (err, saved) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: "Error at saving course"});
+                            handleError(res, err);
                         }else{
-                            res.send({success: saved});
+                            handleSuccess(res, saved);
                         }
                     });
                 }catch(ex){
-                    res.send({error: "Error parsing content"});
+                    handleError(res, ex);
                 }
             }
         })
         .put(isAdmin, function (req, res) {
             var id = req.query.id;
             var data = req.body;
-            if(!id) {
-                res.send({error: "Invalid query params. Missing id"});
-            }else if(!data.content) {
-                res.send({error: "Invalid request body. Missing content attribute, which is mandatory"});
+            if(!id || !data.content) {
+                handleError(res, null, 400, 6);
             }else{
                 try{
                     data.content = JSON.parse(data.content);
                     data.last_updated = Date.now();
                     courses.update({_id: req.query.id}, {$set: data}, function (err, wres) {
                         if(err){
-                            console.log(err);
-                            logger.error(err);
-                            res.send({error: "Error updating course"});
+                            handleError(res, err);
                         }else{
                             courses.findOne({_id: req.query.id}, function (err, course) {
                                 if(err){
-                                    logger.error(err);
-                                    res.send({error: "Error retrieving course"});
+                                    handleError(res, err);
                                 }else{
-                                    res.send({success: course});
+                                    handleSuccess(res, course);
                                 }
                             });
                         }
                     });
                 }catch(ex){
-                    res.send({error: "Error parsing content"});
+                    handleError(res, ex);
                 }
             }
         })
@@ -143,16 +132,15 @@ module.exports = function(app, logger, tokenSecret, router) {
             if(idToDelete){
                 courses.remove({_id: idToDelete}, function (err, wRes) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: "Error removing course"});
+                        handleError(res, err);
                     }else if(wRes == 0){
-                        res.send({error: "No document found matching the id"});
+                        handleError(res, null, 404, 51);
                     }else{
-                        res.send({success: "Removed "+wRes+" course"});
+                        handleSuccess(res);
                     }
                 });
             }else{
-                res.send({error: "Invalid query params. Missing id"});
+                handleError(res, null, 400, 6);
             }
         });
 

@@ -1,0 +1,49 @@
+//import stripped-from-variables version of bootstrap, which will use our custom variables
+@import '../../stylesheets/globalVariables';
+
+.widget-most-read{
+  padding: 0 20px 0 0;
+  .mainTitle{
+    .fontXL;
+    margin-bottom: 15px;
+    padding: 0;
+  }
+  .article{
+    padding: 0;
+    .title{
+      padding: 0;
+      margin-bottom: 5px;
+      a{
+        color: @green;
+        font-weight: bold;
+        .fontL;
+      }
+    }
+    .excerpt{
+      padding: 0;
+      margin-bottom: 10px;
+    }
+    .readMore{
+      padding: 0;
+      a{
+        .fontS;
+        color: @green-darker;
+      }
+    }
+    .divider{
+      border-bottom: 1px solid @separatorColor;
+      padding: 0;
+      margin: 10px 20%;
+      width: 60%;
+    }
+  }
+  &.delimiterRight:after{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 100%;
+    border-right: 1px solid #000000;
+  }
+}

@@ -9,41 +9,20 @@
  * */
 
 
-controllers.controller('TherapeuticAreas', ['$scope', 'therapeuticAreaService','$sce','$state', function($scope, therapeuticAreaService,$sce,$state){
+app.controllerProvider.register('TherapeuticAreas', ['$scope', 'therapeuticAreas','$sce','$state', 'Success', function($scope, therapeuticAreas,$sce,$state, Success){
 
-   therapeuticAreaService.query().$promise.then(function(correctResults){
-       $scope.therapeuticAreas = correctResults;
-       $scope.therapeuticAreas.push($scope.allAreas);
-       $scope.therapeuticAreasMobile = JSON.parse(JSON.stringify($scope.therapeuticAreas));
-       $scope.selectedArea=$scope.therapeuticAreasMobile.last();
+    $scope.selectedArea = 0;
+
+    therapeuticAreas.areas.query().$promise.then(function(resp){
+        $scope.therapeuticAreas = therapeuticAreas.formatAreas(Success.getObject(resp));
     });
-    Array.prototype.last = function() {
-        return this[this.length-1];
+    $scope.selectArea = function(id){
+        $scope.selectedArea = id;
+        if($state.includes('biblioteca')){
+            $state.go('biblioteca.produse.productsByArea', {id: id});
+        }else{
+            $state.go('elearning.multimedia.multimediaByArea', {idArea: id});
+        }
     };
-    $scope.selectArea = function(){
-        $state.go('biblioteca.produse.productsByArea',{id:$scope.selectedArea._id});
-    };
-    $scope.selectAreaMultimedia=function(){
-      $state.go('elearning.multimedia.multimediaByArea',{idArea: $scope.selectedArea._id});
-    };
-    $scope.allAreas={
-        name: "Toate ariile terapeutice",
-        _id: 0
-    };
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
-    //
-    //$scope.toggleActive = function(){
-    //    $('.list-group li').removeClass('active');
-    //    $(this).addClass('active');
-    //}
 
- }]);
-
-
-
+}]);

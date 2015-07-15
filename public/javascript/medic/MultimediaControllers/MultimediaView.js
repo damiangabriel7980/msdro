@@ -12,18 +12,18 @@
  * */
 
 
-controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state){
-    window.scrollTo(0,0);
-    multimediaService.getByArea.query({id:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-        $scope.multimedias = result;
+app.controllerProvider.register('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state','Utils', 'Success', 'Error', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state,Utils,Success,Error){
+    multimediaService.multimedia.query({idArea:$stateParams.idArea,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
+        $scope.multimedias = Success.getObject(result);
     });
     $scope.status = {
         isopen: false
         //open: false
     };
-    $scope.openMultimedia=function(idMultimedia) {
-        if($rootScope.deviceWidth<=700)
-            $state.go('elearning.multimedia.multimediaMobile',{id: idMultimedia});
+    $scope.openMultimedia=function(multimedia) {
+        if(multimedia._id) multimedia = multimedia._id;
+        if(Utils.isMobile(true))
+            $state.go('elearning.multimedia.multimediaMobile',{id: multimedia});
         else
         {
             $modal.open({
@@ -34,50 +34,18 @@ controllers.controller('MultimediaView', ['$scope','$rootScope' ,'multimediaServ
                 windowClass: 'fade',
                 controller: 'MultimediaDetail',
                 resolve:{
-                    idd: function () {
-                        return idMultimedia;
-                    }
+                    idMultimedia: function () {
+                        return multimedia;
+                    },
+                    loadDeps: $rootScope.loadStateDeps(['MultimediaDetail', 'VideoJS'])
                 }
             });
         }
 
-    };
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data,limit) {
-        if(limit!=0)
-            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').substring(0,limit) + '...';
-        else
-            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
     };
     if($stateParams.idMulti)
     {
-        var idM = $stateParams.idMulti;
-        if($rootScope.deviceWidth<=700)
-            $state.go('elearning.multimedia.multimediaMobile',{id: idM});
-        else{
-            $modal.open({
-                templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
-                backdrop: 'static',
-                keyboard: false,
-                size: 'lg',
-                windowClass: 'fade',
-                controller: 'MultimediaDetail',
-                resolve:{
-                    idd: function () {
-                        return idM;
-                    }
-                }
-            });
-        }
+        $scope.openMultimedia($stateParams.idMulti);
     }
-    $scope.amazonPre = $rootScope.pathAmazonDev;
 
-}])
-    .filter('htmlToPlaintext', function() {
-        return function(text) {
-            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');
-        }
-    });
+}]);

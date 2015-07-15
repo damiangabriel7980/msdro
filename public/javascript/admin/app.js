@@ -4,12 +4,11 @@ var app = angular.module('app',
         'controllers',
         'services',
         'ngTable',
-        'angularFileUpload',
+        'ngFileUpload',
         'ui.tinymce',
         'ui.select',
         'ja.qr',
         'ui.bootstrap.datetimepicker',
-        'angular-growl',
         'myMultipleSelect',
         'therapeuticSelect',
         's3UploadManager'
@@ -191,25 +190,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                     size: 'lg',
                     windowClass: 'fade',
                     controller:"AddMultimedia"
-                })
-            }]
-        })
-        .state('elearning.testeInteractive',{
-            url: '/testeInteractive',
-            templateUrl: 'partials/admin/elearning/testeInteractive.html',
-            controller: 'testeInteractiveCtrl'
-        })
-        .state('elearning.testeInteractive.adaugaTest',{
-            parent:'elearning.testeInteractive',
-            url: '',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/elearning/testeInteractiveAdd.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"testeAddCtrl"
                 })
             }]
         })

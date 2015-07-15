@@ -1,15 +1,16 @@
-controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$stateParams', 'EventsService', 'AmazonService', '$modal', 'InfoModal', 'ActionModal', function ($scope, $rootScope, $state, $stateParams, EventsService, AmazonService, $modal, InfoModal, ActionModal) {
+controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$stateParams', 'EventsService', 'AmazonService', '$modal', 'InfoModal', 'ActionModal', 'Success', function ($scope, $rootScope, $state, $stateParams, EventsService, AmazonService, $modal, InfoModal, ActionModal, Success) {
 
     //get conference
     EventsService.conferences.query({id: $stateParams.idConference}).$promise.then(function (resp) {
-        $scope.conference = resp.success;
-        if(resp.success.image_path) setImage(resp.success.image_path);
+        var conference = Success.getObject(resp);
+        $scope.conference = conference;
+        if(conference.image_path) setImage(conference.image_path);
     });
 
     //get talks
     var refreshTalks = function () {
         EventsService.talks.query({conference: $stateParams.idConference}).$promise.then(function (resp) {
-            $scope.talks = resp.success;
+            $scope.talks = Success.getObject(resp);
         });
     };
     refreshTalks();
@@ -77,15 +78,13 @@ controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$st
                 }else{
                     //update database
                     EventsService.conferences.update({id: $scope.conference._id}, {image_path: key}).$promise.then(function (resp) {
-                        if(resp.error){
-                            uploadAlert("danger", "Eroare la actualizarea imaginii in baza de date");
-                        }else{
-                            //update model
-                            $scope.conference.image_path = key;
-                            //update view
-                            setImage(key);
-                            uploadAlert("success", "Imaginea a fost salvata");
-                        }
+                        //update model
+                        $scope.conference.image_path = key;
+                        //update view
+                        setImage(key);
+                        uploadAlert("success", "Imaginea a fost salvata");
+                    }).catch(function () {
+                        uploadAlert("danger", "Eroare la actualizarea imaginii in baza de date");
                     });
                 }
             });
@@ -100,16 +99,14 @@ controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$st
         if(conference.image_path) delete conference.image_path;
         console.log(conference);
         var notification = this.notification || {};
-        EventsService.conferences.update({id: conference._id}, conference).$promise.then(function (resp) {
-            if(resp.error){
-                InfoModal.show("Update esuat", "A aparut o eroare la update");
+        EventsService.conferences.update({id: conference._id}, conference).$promise.then(function () {
+            if(notification.send){
+                //TODO: send notification.text
             }else{
-                if(notification.send){
-                    //TODO: send notification.text
-                }else{
-                    InfoModal.show("Conferinta actualizata", "Conferinta a fost actualizata cu succes");
-                }
+                InfoModal.show("Conferinta actualizata", "Conferinta a fost actualizata cu succes");
             }
+        }).catch(function () {
+            InfoModal.show("Update esuat", "A aparut o eroare la update");
         });
     };
 
@@ -119,22 +116,18 @@ controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$st
             title: "untitled",
             conference: $stateParams.idConference
         }).$promise.then(function (resp) {
-            if(resp.error){
-                InfoModal.show("Creare esuata", "A aparut o eroare la crearea talk-ului");
-            }else{
                 refreshTalks();
-            }
-        });
+        }).catch(function () {
+                InfoModal.show("Creare esuata", "A aparut o eroare la crearea talk-ului");
+            });
     };
 
     $scope.removeTalk = function (id) {
         ActionModal.show("Stergere talk", "Sunteti sigur ca doriti sa stergeti talk-ul?", function () {
             EventsService.talks.delete({id: id}).$promise.then(function (resp) {
-                if(resp.error){
-                    InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea talk-ului");
-                }else{
-                    refreshTalks();
-                }
+                refreshTalks();
+            }).catch(function () {
+                InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea talk-ului");
             });
         }, "Da");
     };

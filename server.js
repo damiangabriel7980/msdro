@@ -67,7 +67,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 //token auth ===================================================================
-require('./config/tokenAuth')(app,  logger, tokenSecret, pushServerAddr);
+require('./config/tokenAuth')(app,  logger);
 
 app.use(express.static(path.join(__dirname, my_config.publicFolder)));
 
@@ -79,11 +79,11 @@ var secureServer = https.createServer(certificateOptions, app);
 var devServer = http.createServer(app);
 
 // api ======================================================================
-require('./app/api.js')(app, sessionSecret, logger, pushServerAddr, amazon, express.Router()); // load our private routes and pass in our app and session secret
+require('./app/api.js')(app, sessionSecret, logger, amazon, express.Router()); // load our private routes and pass in our app and session secret
 require('./app/apiPublic.js')(app, logger, express.Router()); // load our public routes and pass in our app
-require('./app/apiGloballyShared.js')(app, my_config, globals, logger, amazon, express.Router());
-require('./app/apiMobileShared.js')(app, logger, tokenSecret, pushServerAddr, express.Router());
-require('./app/apiConferences.js')(app, logger, tokenSecret, pushServerAddr, express.Router());
+require('./app/apiGloballyShared.js')(app, my_config, globals, logger, amazon, sessionSecret, express.Router());
+require('./app/apiMobileShared.js')(app, logger, tokenSecret, express.Router());
+require('./app/apiConferences.js')(app, logger, tokenSecret, express.Router());
 require('./app/apiMSDDoc.js')(app, my_config, logger, tokenSecret, secureServer, express.Router());
 require('./app/apiDPOC.js')(app, logger, express.Router());
 require('./app/apiCourses.js')(app, logger, tokenSecret, express.Router());

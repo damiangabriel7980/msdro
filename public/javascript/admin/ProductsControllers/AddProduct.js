@@ -1,17 +1,21 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$filter','$modalInstance','therapeuticAreaService','$state', function($scope,$rootScope,ProductService,$stateParams,$sce,$filter,$modalInstance,therapeuticAreaService,$state){
+controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$filter','$modalInstance','therapeuticAreaService','$state', 'GroupsService', 'Success', 'Error', function($scope,$rootScope,ProductService,$stateParams,$sce,$filter,$modalInstance,therapeuticAreaService,$state,GroupsService,Success, Error){
 
     $scope.selectedGroups = [];
     $scope.selectedAreas=[];
 
-    ProductService.getAll.query().$promise.then(function(resp){
-        $scope.groups = resp['groups'];
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups = Success.getObject(resp);
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = resp;
+        $scope.areas = Success.getObject(resp);
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
     });
 
     $scope.createProduct=function(){
@@ -21,13 +25,15 @@ controllers.controller('AddProduct', ['$scope','$rootScope' ,'ProductService','$
             id_groups.push($scope.selectedGroups[i]._id);
         }
 
-        $scope.newProduct.groupsID=id_groups;
+        $scope.newProduct.groupsID = id_groups;
         $scope.newProduct['therapeutic-areasID'] = $scope.returnedAreas;
-
-        ProductService.getAll.save($scope.newProduct).$promise.then(function (resp) {
-            console.log(resp);
+        $scope.newProduct.last_updated = Date.now();
+        $scope.newProduct.enable = true;
+        ProductService.products.create({product:$scope.newProduct}).$promise.then(function (resp) {
             $state.reload();
             $modalInstance.close();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
 
     };

@@ -1,35 +1,22 @@
-<div class="col-md-11 col-xs-12
- noPadding">
-    <div class="row noPadding">
-        <div class="row noPadding" style="text-align: center" ng-if="message!=''"><h4 ng-class="{'noMarginTop':deviceWidth<=1278}">{{message}}</h4></div>
-        <div ng-class="{'col-md-3 col-xs-12 productsPadding noPadding':deviceWidth>1278,'col-md-3 col-xs-12 noPadding padd25Bottom':deviceWidth<=1278}" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
-            <div ng-class="{'col-md-12 col-xs-12 well productMinHeight':deviceWidth>1278,'col-md-12 col-xs-12 noPadding':deviceWidth<=1278}">
-                <div ng-class="{'col-md-12 col-xs-12 noPadding text-center':deviceWidth>1278,'col-md-12 col-xs-4 col-sm-2 noPadding text-center':deviceWidth<=1278}">
-                    <img ng-class="{'img-responsive img-back img-thumbnail width100Percent':deviceWidth>1278,'img-responsive my-img-thumbnail':deviceWidth<=1278}" src="{{prod.image_path?amazon + prod.image_path:defaultProductImage}}" alt="{{prod.name}}"/>
-                </div>
-                <div ng-class="{'col-md-12 col-xs-12 noPadding contentBlockProducts textProduct productMinHeight':deviceWidth>1278,'col-md-12 col-xs-8 col-sm-10 padd25Left noPadding textHome':deviceWidth<=1278}">
-                    <div class="col-md-12 col-xs-12 noPadding MSDgreen hidden-xs hidden-sm handCursor" ui-sref="biblioteca.produse.prodById({id:prod._id})"><h4 ng-class="{'noMarginTop':deviceWidth<=1278}"><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
-                    <div class="col-md-12 col-xs-12 noPadding MSDgreen hidden-lg hidden-md " ui-sref="biblioteca.produse.prodById({id:prod._id})"><h4 ng-class="{'noMarginTop':deviceWidth<=1278}"><b convert-special conver="prod.name" ng-bind-html="convertAndTrustAsHtml(prod.name)"></b></h4></div>
-                    <div class="col-md-12 col-xs-12 noPadding " convert-special conver="prod.description" ng-bind-html="convertAndTrustAsHtml(prod.description)"></div>
-                </div>
-                <div class="col-md-12 col-xs-12 noPadding">
-                    <button class="btn btn-sm btn-info hidden-xs hidden-sm pull-right btn-more-news" ui-sref="biblioteca.produse.prodById({id:prod._id})">Detalii produs</button>
-                </div>
-            </div>
+<div class="col-sm-11 productsView">
+    <div class="col-md-12 noProducts" ng-if="products.length == 0"><h4>Nu exista produse conform criteriilor selectate</h4></div>
+    <div class="col-xs-12 noPadding" ng-if="!isMobile(true)">
+        <div class="col-md-3 col-sm-4 product" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
+            <vertical-content-list content="prod" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
+                                   title-attr="name" text-attr="description" navigate="navigateProductDetails" with-background></vertical-content-list>
         </div>
     </div>
-    <div style="clear: both;margin:0 auto;" align="center">
-        <button class="btn btn-sm btn-info btn-more-news" ng-class="showMoreProd" ng-click="increaseLimit()">Mai multe produse</button>
+    <div class="col-xs-12 noPadding" ng-if="isMobile(true)">
+        <mobile-content-list content="products" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultProductImage}}" title-attr="name"
+                             text-attr="description" navigate="navigateProductDetails" limit="lmt"></mobile-content-list>
+    </div>
+    <div class="col-xs-12 text-center">
+        <a class="btn btn-default" ng-class="{'hidden': !products || products.length <= lmt}" ng-click="increaseLimit()">Mai multe produse</a>
     </div>
 </div>
-<div class="col-md-1 hidden-xs hidden-sm noPadding" style="text-align: center">
-    <ul class="nav nav-list MSDgreen">
-        <li class="active" ng-click="reset()">A - Z</li>
-        <li class="divider"></li>
-
-        <li ng-repeat="letter in firstLetters | mySort" ng-click="filterResults($index)">
-            {{letter}}
-        </li>
-
-    </ul>
+<div class="col-sm-1 pickLetter" ng-if="!isMobile(true)">
+    <div class="col-xs-12 letter" ng-click="getProducts()">A-Z</div>
+    <div class="col-xs-12 letter" ng-repeat="(key, value) in firstLetters" ng-click="getProducts(key)">
+        {{key}}
+    </div>
 </div>

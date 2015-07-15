@@ -8,9 +8,6 @@ var Cities = require('./models/cities');
 var Multimedia = require('./models/multimedia');
 var User = require('./models/user');
 var Job = require('./models/jobs');
-var Quizes=require('./models/quizes');
-var Questions=require('./models/questions');
-var Answers = require('./models/answers');
 var Slides = require('./models/slides');
 var Roles=require('./models/roles');
 var PublicContent = require('./models/publicContent');
@@ -36,22 +33,15 @@ var Parameters = require('./models/parameters');
 var UserModule = require('./modules/user');
 var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
-
-//live Streaming
-var socketio = require('socket.io'),
-    uuid = require('node-uuid'),
-    rooms = {},
-    userIds = {};
+var SessionStorage = require('./modules/sessionStorage');
 
 //special Products
 var specialProduct = require('./models/specialProduct');
 var specialProductMenu = require('./models/specialProduct_Menu');
 var specialProductGlossary = require('./models/specialProduct_glossary');
 var specialProductFiles = require('./models/specialProduct_files');
-var specialProductQa = require('./models/specialProduct_qa');
 var specialApps = require('./models/userGroupApplications');
 
-var XRegExp  = require('xregexp').XRegExp;
 var SHA256   = require('crypto-js/sha256');
 var SHA512   = require('crypto-js/sha512');
 var mongoose = require('mongoose');
@@ -66,138 +56,29 @@ var Q = require('q');
 var Config = require('../config/environment.js'),
     my_config = new Config();
 
-//used to sign cookies based on session secret
-var cookieSig = require('express-session/node_modules/cookie-signature');
-
-//================================================================================== useful db administration functions
-
-//returns ONLY id's of entities connected to specified document in array
-var findConnectedEntitiesIds = function(connected_to_entity, connection_name, connected_to_id, callback){
-    var qry = {};
-    qry[connection_name] = {$in: [connected_to_id]};
-    connected_to_entity.find(qry, function (err, documents) {
-        if(err){
-            callback("Error finding connecting entities", null);
-        }else{
-            var ret = [];
-            for(var i=0; i<documents.length; i++){
-                ret.push(documents[i]._id);
-            }
-            callback(false, ret);
-        }
-    });
-};
-
-//returns entities connected to specified document
-var findConnectedEntities = function(connected_to_entity, connection_name, connected_to_id, callback){
-    var qry = {};
-    qry[connection_name] = {$in: [connected_to_id]};
-    connected_to_entity.find(qry, function (err, documents) {
-        if(err){
-            callback("Error finding connecting entities", null);
-        }else{
-            callback(false, documents);
-        }
-    });
-};
-
-//returns entities connected to specified document,
-//but only returns the attributes specified in projection
-var findConnectedEntitiesWithProjection = function(connected_to_entity, connection_name, connected_to_id, projection, callback){
-    var qry = {};
-    qry[connection_name] = {$in: [connected_to_id]};
-    connected_to_entity.find(qry, projection, function (err, documents) {
-        if(err){
-            callback("Error finding connecting entities", null);
-        }else{
-            callback(false, documents);
-        }
-    });
-};
-
-var connectEntitiesToEntity = function (connecting_array_of_ids, connectedEntity, connection_name, id_document_to_connect_to, callback) {
-    //convert string id's to ObjectId's
-    var format_connecting_array = [];
-    for(var i=0; i<connecting_array_of_ids.length; i++){
-        if(typeof connecting_array_of_ids[i] === "string"){
-            format_connecting_array.push(mongoose.Types.ObjectId(connecting_array_of_ids[i]));
-        }else{
-            format_connecting_array.push(connecting_array_of_ids[i]);
-        }
-    }
-    //insert only strings in connections array
-    if(typeof id_document_to_connect_to !== "string") id_document_to_connect_to = id_document_to_connect_to.toString();
-    //use $addToSet to avoid inserting duplicates
-    var upd = {};
-    upd[connection_name] = id_document_to_connect_to;
-    connectedEntity.update({_id:{$in: format_connecting_array}}, {$addToSet: upd}, {multi: true}, function (err, res) {
-        callback(err, res);
-    });
-};
-
-var disconnectEntitiesFromEntity = function (array_of_ids_to_disconnect, connectedEntity, connection_name, id_document_to_disconnect_from, callback) {
-    //convert string id's to ObjectId's
-    var format_connecting_array = [];
-    for(var i=0; i<array_of_ids_to_disconnect.length; i++){
-        if(typeof array_of_ids_to_disconnect[i] === "string"){
-            format_connecting_array.push(mongoose.Types.ObjectId(array_of_ids_to_disconnect[i]));
-        }else{
-            format_connecting_array.push(array_of_ids_to_disconnect[i]);
-        }
-    }
-    //insert only strings in connections array
-    if(typeof id_document_to_disconnect_from !== "string") id_document_to_disconnect_from = id_document_to_disconnect_from.toString();
-    //use $addToSet to avoid inserting duplicates
-    var upd = {};
-    upd[connection_name] = id_document_to_disconnect_from;
-    connectedEntity.update({_id:{$in: format_connecting_array}}, {$pull: upd}, {multi: true}, function (err, res) {
-        callback(err, res);
-    });
-};
-
-var disconnectAllEntitiesFromEntity = function (connectedEntity, connection_name, id_document_to_disconnect_from, callback) {
-    findConnectedEntitiesIds(connectedEntity, connection_name, id_document_to_disconnect_from, function (err, array_of_ids) {
-        if(err){
-            callback("Error finding connected entities", null);
-        }else{
-            disconnectEntitiesFromEntity(array_of_ids, connectedEntity, connection_name, id_document_to_disconnect_from, function (err, success) {
-                if(err){
-                    callback("Error at disconnecting entities", null);
-                }else{
-                    callback(null, "Entities disconnected: "+success);
-                }
-            });
-        }
-    });
-};
-
 //=========================================================================================== functions for user groups
 
-var getNonSpecificUserGroupsIds = function(user, callback){
+var getNonSpecificUserGroupsIds = function(user){
+    var deferred = Q.defer();
     //find all group ids with non-specific content for user
-    UserGroup.find({_id: {$in: user.groupsID}, content_specific: {$ne: true}}, {_id:1}, function (err, groups) {
+    UserGroup.distinct("_id", {_id: {$in: user.groupsID}, content_specific: {$ne: true}}).exec(function (err, ids) {
         if(err){
-            callback(err, null);
+            deferred.reject(err);
         }else{
-            //now make an array of those id's
-            var arr = [];
-            for(var i=0; i<groups.length; i++){
-                arr.push(groups[i]._id.toString());
-            }
-            callback(null, arr);
+            deferred.resolve(ids);
         }
     });
+    return deferred.promise;
 };
 
 //get content for all non content_specific groups plus one content_specific group
 //if specific content group is null, get non specific content only
 //tip: content_type can be injected; ex: {$in: [1,3]}
-var getUserContent = function (user, content_type, specific_content_group_id, limit, sortDescendingByAttribute, callback) {
+var getUserContent = function (user, content_type, specific_content_group_id, limit, sortDescendingByAttribute) {
+    var deferred = Q.defer();
     //first get non specific content groups only
-    getNonSpecificUserGroupsIds(user, function(err, arrayOfGroupsIds){
-        if(err){
-            callback(err, null);
-        }else{
+    getNonSpecificUserGroupsIds(user).then(
+        function(arrayOfGroupsIds){
             //if we have specific content group id, add it to our array
             if(specific_content_group_id) arrayOfGroupsIds.push(specific_content_group_id.toString());
             //now get user content for our array of groups
@@ -210,224 +91,37 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
             if(limit) myCursor=myCursor.limit(limit);
             myCursor.exec(function (err, content) {
                 if(err){
-                    callback(err, null);
+                    deferred.reject(err);
                 }else{
-                    //
-                    callback(null, content);
+                    deferred.resolve(content);
                 }
             });
-        }
-    });
-};
-
-//================================================================================ find id's of users associated to conferences, rooms, talks
-
-//receives an array of documents and returns an array with only the id's of those documents
-var getIds = function (arr, cb) {
-    var ret = [];
-    async.each(arr, function (item, callback) {
-        if(item._id) ret.push(item._id);
-        callback();
-    }, function (err) {
-        cb(ret);
-    });
-};
-var getStringIds = function (arr, cb) {
-    var ret = [];
-    async.each(arr, function (item, callback) {
-        if(item._id) ret.push(item._id.toString());
-        callback();
-    }, function (err) {
-        cb(ret);
-    });
-};
-
-// get user ids
-// return array like ["MSD"+idAsString]
-var encodeNotificationsIds = function (ids, cb) {
-    var ret = [];
-    async.each(ids, function (id, callback) {
-        ret.push("MSD"+id.toString());
-        callback();
-    }, function (err) {
-        cb(ret);
-    });
-};
-
-var getUsersForConference = function (id_conference, callback) {
-    User.find({conferencesID: {$in: [id_conference]}}, function (err, users) {
-        if(err){
-            callback(err, null);
-        }else{
-            getIds(users, function (ids) {
-                callback(null, ids);
-            });
-        }
-    });
-};
-
-var getUsersForRoom = function (id_room, callback) {
-    //find conference for room
-    Talks.findOne({room: id_room}, function (err, talk) {
-        if(err){
-            callback(err, null);
-        }else{
-            if(talk){
-                getUsersForConference(talk.conference, function (err, ids) {
-                    if(err){
-                        callback(err, null);
-                    }else{
-                        callback(null, ids);
-                    }
-                });
-            }else{
-                callback({hasError: true, message: "No connecting room"});
-            }
-        }
-    });
-};
-
-var getUsersForTalk = function (id_talk, callback) {
-    //find talk
-    Talks.findOne({_id: id_talk}, function (err, talk) {
-        if(err){
-            callback(err, null);
-        }else{
-            if(talk){
-                getUsersForConference(talk.conference, function (err, ids) {
-                    if(err){
-                        callback(err, null);
-                    }else{
-                        callback(null, ids);
-                    }
-                });
-            }else{
-                callback({hasError: true, message: "No talk found"});
-            }
-        }
-    });
-};
-
-var getUsersForConferences = function (conferences_ids, callback) {
-    User.find({conferencesID: {$in: conferences_ids}}, function (err, users) {
-        if(err){
-            callback(err, null);
-        }else{
-            getIds(users, function (ids) {
-                callback(null, ids);
-            });
-        }
-    });
-};
-
-//================================================================================================= send push notifications
-
-var sendPushNotification = function (message, arrayUsersIds, callback) {
-    encodeNotificationsIds(arrayUsersIds, function (usersToSendTo) {
-        var data = {
-            "users": usersToSendTo,
-            "android": {
-                "collapseKey": "optional",
-                "data": {
-                    "message": message
-                }
-            },
-            "ios": {
-                "badge": 0,
-                "alert": message,
-                "sound": "soundName"
-            }
-        };
-
-        request({
-            url: pushServerAddr+"/send",
-            method: 'POST',
-            json: true,
-            body: data,
-            strictSSL: false
-        }, function (error, message, response) {
-            callback(error, response);
+        },
+        function (err) {
+            deferred.reject(err);
         });
-    });
+    return deferred.promise;
 };
+
 
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, router) {
+module.exports = function(app, sessionSecret, logger, amazon, router) {
 
-//======================================================================================================= secure routes
+    //============================================= Define injection dependent modules
+    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
+    var handleError = require('./modules/responseHandler/error.js')(logger);
+    var Auth = require('./modules/auth')(logger, sessionSecret);
 
-// middleware to ensure user is logged in
-    function isLoggedIn(req, res, next) {
-        
-        if (req.isAuthenticated()){
-            return next();
-        }else{
-            res.status(403).end();
-        }
-    }
 
-//middleware to ensure a user has admin rights
-    function hasAdminRights(req, res, next) {
-        
-        try{
-            //get encripted session id from cookie
-            var esidc = req.cookies['connect.sid'];
-            //get node session id from request
-            var sid = req.sessionID;
-            //encrypt sid using session secret
-            var esid = "s:"+cookieSig.sign(sid, sessionSecret);
-            //if esid matches esidc then user is authentic
-            if(esid === esidc){
-                //get session store info for this session
-                var ssi = req.sessionStore.sessions[req.sessionID];
-                ssi = JSON.parse(ssi);
-                //now get user id
-                var userID = ssi['passport']['user'];
-                //now get user's roles
-                User.find({_id: userID}, {rolesID :1}).select("+rolesID").exec(function (err, data) {
-                    if(err){
-                        logger.error(err);
-                        res.status(403).end();
-                    }else{
-                        var roles = data[0].rolesID;
-                        //now get roles
-                        Roles.find({_id: {$in: roles}}, function (err, data) {
-                            if(err){
-                                logger.error(err);
-                                res.status(403).end();
-                            }else{
-                                var admin = false;
-                                for(var i=0; i<data.length; i++){
-                                    if(data[i].authority === "ROLE_ADMIN") admin=true;
-                                }
-                                if(admin === true){
-                                    next();
-                                }else{
-                                    res.status(403).end();
-                                }
-                            }
-                        });
-                    }
-                });
-            }else{
-                res.status(403).end();
-            }
-        }catch(e){
-            logger.error(e);
-            res.status(403).end();
-        }
-
-    }
-
-//only logged in users can access a route
-    app.all("/api/*", isLoggedIn, function(req, res, next) {
+    //only logged in users can access a route
+    app.all("/api/*", Auth.isLoggedIn, function(req, res, next) {
         next(); // if the middleware allowed us to get here,
         // just move on to the next route handler
     });
 
-//only admin can access "/admin" routes
-    app.all("/api/admin/*", hasAdminRights, function(req, res, next) {
+    //only admin can access "/admin" routes
+    app.all("/api/admin/*", Auth.hasAdminRights, function(req, res, next) {
         next(); // if the middleware allowed us to get here,
         // just move on to the next route handler
     });
@@ -436,19 +130,41 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
 
     //===== get temporary credentials for S3
     router.route('/admin/s3tc')
-
         .get(function (req, res) {
             amazon.getS3Credentials(req.user.username, function(err, data){
                 if(err){
-                    logger.error(err);
-                    res.status(404).end();
+                    handleError(res, err);
                 }else{
-                    res.json(data);
+                    handleSuccess(res, data);
                 }
             });
         });
-
     //======================================
+
+    //===== get app version
+    router.route('/admin/appVersion')
+
+        .get(function (req, res) {
+            var spawn   = require('child_process').spawn,
+                tag_cmd = spawn('git', ['describe', '--tags']);
+
+            var tag;
+
+            tag_cmd.stdout.on('data', function (data) {
+                tag = data.toString();
+            });
+
+            tag_cmd.stderr.on('data', function (err) {
+                handleError(res, err);
+            });
+
+            tag_cmd.on('close', function (code) {
+                if(code === 0) handleSuccess(res, tag);
+            });
+
+        });
+    //======================================
+
 
     router.route('/admin/users/groups')
 
@@ -456,19 +172,17 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(req.query.id){
                 UserGroup.findOne({_id: req.query.id}).populate('profession').exec(function(err, cont) {
                     if(err || !cont) {
-                        logger.error(err);
-                        res.send({error: "Error finding group"});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: cont});
+                        handleSuccess(res,cont);
                     }
                 });
             }else{
                 UserGroup.find({}, {display_name: 1, description: 1, profession: 1, restrict_CRUD: 1}).populate('profession').exec(function(err, cont) {
                     if(err) {
-                        logger.error(err);
-                        res.send({error: "Error finding groups"});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: cont});
+                        handleSuccess(res,cont);
                     }
                 });
             }
@@ -480,15 +194,13 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             
             toCreate.save(function (err, saved) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: "Error at saving group"});
+                    handleError(res,err,500);
                 }else{
                     User.update({_id: {$in: users}}, {$addToSet: {groupsID: saved._id}}, {multi: true}, function (err, wRes) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: "Error at adding users"});
+                            handleError(res,err,500);
                         }else{
-                            res.send({success: {created: saved, updated: wRes}});
+                            handleSuccess(res,{created: saved, updated: wRes});
                         }
                     });
                 }
@@ -497,8 +209,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .put(function (req, res) {
             UserGroup.findOne({_id: req.query.id}, function (err, oldGroup) {
                 if(err || !oldGroup){
-                    logger.error(err);
-                    res.send({error: "Error finding group"});
+                    handleError(res,err,500);
                 }else{
                     var dataToUpdate = req.body.toUpdate;
                     
@@ -510,28 +221,25 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                     var users = req.body.users || [];
                     UserGroup.update({_id: req.query.id}, {$set: dataToUpdate}, function (err, wRes) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: "Error at update"});
+                            handleError(res,err,500);
                         }else if(users.length != 0){
                             //disconnect previous users
                             User.update({}, {$pull: {groupsID: req.query.id}}, {multi: true}, function (err, wres) {
                                 if(err){
-                                    logger.error(err);
-                                    res.send({error: "Error at disconnecting old users"});
+                                    handleError(res,err,500);
                                 }else{
                                     //connect new users
                                     User.update({_id: {$in: users}}, {$addToSet: {groupsID: req.query.id}}, {multi: true}, function (err, wres) {
                                         if(err){
-                                            logger.error(err);
-                                            res.send({error: "Error adding new users"});
+                                            handleError(res,err,500);
                                         }else{
-                                            res.send({success: {connectedUsers: wres}});
+                                            handleSuccess(res,{connectedUsers: wres});
                                         }
                                     });
                                 }
                             });
                         }else{
-                            res.send({success: {connectedUsers: 0}});
+                            handleSuccess(res,{connectedUsers: 0});
                         }
                     });
                 }
@@ -541,23 +249,21 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToDelete = ObjectId(req.query.id);
             UserGroup.findOne({_id: idToDelete}, function (err, group) {
                 if(err || !group){
-                    res.send({error: "Error finding group"});
+                    handleError(res,err,500);
                 }else if(group.restrict_CRUD){
-                    res.send({error: "Not allowed to delete this group"});
+                    handleError(res,err,500);
                 }else{
                     //disconnect users from group
                     User.update({}, {$pull: {groupsID: idToDelete}}, {multi: true}, function (err, wres) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: "Error disconnecting users from group"});
+                            handleError(res,err,500);
                         }else{
                             //remove group
                             UserGroup.remove({_id: idToDelete}, function (err, wres) {
                                 if(err){
-                                    logger.error(err);
-                                    res.send({error: "Error deleting group"});
+                                    handleError(res,err,500);
                                 }else{
-                                    res.send({success: "Group was deleted."});
+                                    handleSuccess(res, {}, 4);
                                 }
                             });
                         }
@@ -571,10 +277,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function(req, res) {
             Professions.find({}, function(err, cont) {
                 if(err) {
-                    logger.error(err);
-                    res.send({error: "Error finding professions"});
-                }
-                res.json({success: cont});
+                    handleError(res,err,500);
+                }else
+                    handleSuccess(res,cont);
             });
         });
 
@@ -585,152 +290,111 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 var id = req.query.group;
                 User.find({groupsID: {$in:[id]}}, {username: 1}).limit(0).exec(function(err, cont) {
                     if(err) {
-                        logger.error(err);
-                        res.send({error: "Error finding users by group"});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: cont});
+                        handleSuccess(res,cont);
                     }
                 });
             }else{
                 User.find({}, {username: 1}).limit(0).exec(function(err, cont) {
                     if(err) {
-                        logger.error(err);
-                        res.send({error: "Error finding users"});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: cont});
+                        handleSuccess(res,cont);
                     }
                 });
             }
         });
 
-    router.route('/admin/users/publicContent/getAllContent')
+    router.route('/admin/users/publicContent')
 
         .get(function(req, res) {
-            PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/publicContent/getById/:id')
-
-        .get(function(req, res) {
-            PublicContent.find({_id: req.params.id}, function (err, cont) {
-                if(err){
-                    res.send(err);
-                }else{
-                    if(cont[0]){
-                        res.send(cont[0]);
+            if(req.query.id){
+                PublicContent.findOne({_id: req.query.id}, function (err, cont) {
+                    if(err){
+                        handleError(res,err,500);
                     }else{
-                        res.send({message: "No content found"});
+                        if(cont){
+                            handleSuccess(res,cont);
+                        }else{
+                            handleError(res,err,404,1);
+                        }
                     }
-                }
-            })
-        });
-
-    router.route('/admin/users/publicContent/toggleContent')
-
-        .post(function(req, res) {
-            PublicContent.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
-                if(err){
-                    res.send({error: true});
-                }else{
-                    res.send({error: false});
-                }
-            });
-        });
-
-    router.route('/admin/users/publicContent/addContent')
-
-        .post(function(req, res) {
+                })
+            }else{
+                PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else
+                        handleSuccess(res,cont);
+                });
+            }
+        })
+        .post(function(req,res){
             var data = req.body.data;
-            var ans = {};
             //validate author and title
-            var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
+            var patt = UtilsModule.regexes.authorAndTitle;
             if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
-                ans.error = true;
-                ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
-                res.json(ans);
+                handleError(res,null,400,20);
             }else{
                 //validate type
                 if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    ans.error = true;
-                    ans.message = "Verificati tipul";
-                    res.json(ans);
+                    handleError(res,null,400,21);
                 }else{
-                    //form object to persist
-                    data.enable = false;
-                    data.date_added = Date.now();
-                    data.last_updated = Date.now();
-                    //persist object
                     var content = new PublicContent(data);
                     content.save(function (err, inserted) {
                         if(err){
-                            ans.error = true;
-                            ans.message = "Eroare la salvare. Verificati campurile";
-                            res.json(ans);
+                            handleError(res,err,500);
                         }else{
-                            ans.error = false;
-                            ans.message = "Continutul a fost salvat cu succes!";
-                            res.json(ans);
+                            handleSuccess(res, {}, 2);
                         }
                     });
                 }
             }
-        });
-
-    router.route('/admin/users/publicContent/editContent')
-
-        .post(function(req, res) {
-            var data = req.body.data.toUpdate;
-            var id = req.body.data.id;
-            var ans = {};
-            //validate author and title
-            var patt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$');
-            if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
-                ans.error = true;
-                ans.message = "Autorul si titlul sunt obligatorii (minim 3 caractere)";
-                res.json(ans);
+        })
+        .put(function(req,res){
+            if(req.body.info){
+                PublicContent.update({_id: req.query.id}, {enable: !req.body.info.isEnabled}, function (err, wRes) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, {}, 3);
+                    }
+                });
             }else{
-                //validate type
-                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    ans.error = true;
-                    ans.message = "Verificati tipul";
-                    res.json(ans);
+                var data = req.body.toUpdate;
+                var id = req.query.id;
+                //validate author and title
+                var patt = UtilsModule.regexes.authorAndTitle;
+                if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
+                    handleError(res,null,400,20);
                 }else{
-                    //refresh last_updated field
-                    data.last_updated = new Date();
-                    PublicContent.update({_id: id}, data, function (err, wRes) {
-                        if(err){
-                            ans.error = true;
-                            ans.message = "Eroare la actualizare. Verificati campurile";
-                            res.json(ans);
-                        }else{
-                            ans.error = false;
-                            ans.message = "Continutul a fost modificat cu succes!";
-                            res.json(ans);
-                        }
-                    });
+                    //validate type
+                    if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                        handleError(res,null,400,21);
+                    }else{
+                        PublicContent.update({_id: id}, {$set: data}, function (err, wRes) {
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                handleSuccess(res, {}, 3);
+                            }
+                        });
+                    }
                 }
             }
-        });
 
-    router.route('/admin/users/publicContent/deleteContent')
-
-        .post(function (req, res) {
-            var content_id = req.body.id;
+        })
+        .delete(function(req,res){
+            var content_id = req.query.id;
             PublicContent.remove({_id: content_id}, function (err, success) {
                 if(err){
-                    res.json({error: true, message: "Eroare la stergerea continutului"});
+                    handleError(res,err,500);
                 }else{
-                    res.json({error: false, message: "Continutul a fost sters."});
+                    handleSuccess(res, {}, 4);
                 }
             });
         });
-
     router.route('/admin/users/publicContent/changeImageOrFile')
         .post(function (req,res) {
             var data = req.body.data;
@@ -743,16 +407,15 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                     qry['file_path'] = data.path;
                 }else{
                     ok = false;
-                    res.json({error:true});
+                    handleError(res,null,400,22);
                 }
             }
             if(ok){
                 PublicContent.update({_id:data.id}, qry, function (err, wRes) {
                     if(err){
-                        logger.error("Error at content "+data.type+"_path; id = "+data.id+"; Key = "+data.path);
-                        res.json({error:true});
+                        handleError(res,err,500);
                     }else{
-                        res.json({error:false, updated:wRes});
+                        handleSuccess(res, {updated: wRes}, 3);
                     }
                 });
             }
@@ -762,10 +425,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function (req, res) {
             PublicCategories.find(function (err, categories) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: categories});
+                    handleSuccess(res, categories);
                 }
             });
         })
@@ -774,38 +436,35 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             category.save(function (err, saved) {
                 if(err){
                     if(err.code == 11000 || err.code == 11001){
-                        res.send({error: "O categorie cu acelasi nume exista deja"});
+                        handleError(res,null,400,23);
                     }else if(err.name == "ValidationError"){
-                        res.send({error: "Numele este obligatoriu"});
+                        handleError(res,null,400,24);
                     }else{
-                        logger.error(err);
-                        res.send({error: "Eroare la creare"});
+                        handleError(res,err,500);
                     }
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res);
                 }
             });
         })
         .put(function (req, res) {
             PublicCategories.findOne({_id: req.query.id}, function (err, category) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
                     if(req.body.name) category.name = req.body.name;
                     if(typeof req.body.isEnabled === "boolean") category.isEnabled = req.body.isEnabled;
                     category.save(function (err, saved) {
                         if(err){
                             if(err.code == 11000 || err.code == 11001){
-                                res.send({error: "O categorie cu acelasi nume exista deja"});
+                                handleError(res,null,400,23);
                             }else if(err.name == "ValidationError"){
-                                res.send({error: "Numele este obligatoriu"});
+                                handleError(res,null,400,24);
                             }else{
-                                logger.error(err);
-                                res.send({error: "Eroare la salvare"});
+                                handleError(res,err,500);
                             }
                         }else{
-                            res.send({success: true});
+                            handleSuccess(res);
                         }
                     });
                 }
@@ -815,491 +474,370 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToDelete = ObjectId(req.query.id);
             PublicCategories.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
                     PublicContent.update({category: idToDelete}, {$set: {category: null}}, function (err, wres) {
                         if(err){
-                            res.send({error: true});
+                            handleError(res,err,500);
                         }else{
-                            res.send({success: true});
+                            handleSuccess(res);
                         }
                     });
                 }
             });
         });
 
-    router.route('/admin/users/carouselPublic/getAllImages')
+    router.route('/admin/users/carouselPublic')
 
         .get(function(req, res) {
-            PublicCarousel.find({}, function(err, cont) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/carouselPublic/contentByType/:type')
-
-        .get(function(req, res) {
-            PublicContent.find({type: req.params.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/carouselPublic/addImage')
-
-        .post(function(req, res) {
+            if(req.query.id){
+                PublicCarousel.findOne({_id: req.query.id}, function (err, cont) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        if(cont){
+                            handleSuccess(res, cont);
+                        }else{
+                            handleError(res,null,404,1);
+                        }
+                    }
+                })
+            }else{
+                PublicCarousel.find({}, function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else
+                        handleSuccess(res, cont);
+                });
+            }
+        })
+        .post(function(req,res){
             var data = req.body.data.toAdd;
             var ext = req.body.data.extension;
-            var ans = {};
             //validate title and description
-                //validate type
-                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    ans.error = true;
-                    ans.message = "Verificati tipul";
-                    res.json(ans);
+            //validate type
+            if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                handleError(res,null,400,21);
+            }else{
+                //check if content_id exists
+                if(typeof data.content_id === "string" && data.content_id.length === 24){
+                    var img = new PublicCarousel(data);
+                    console.log(data);
+                    img.save(function (err, inserted) {
+                        if(err){
+                            handleError(res,null,400,2);
+                        }else{
+                            //update image_path
+                            var imagePath = "generalCarousel/image_"+inserted._id+"."+ext;
+                            PublicCarousel.update({_id: inserted._id}, {$set:{image_path:imagePath}}, function (err, wRes) {
+                                if(err){
+                                    handleError(res,null,400,2);
+                                }else{
+                                    handleSuccess(res, {key: imagePath}, 2);
+                                }
+                            });
+                        }
+                    });
                 }else{
-                    //check if content_id exists
-                    if(typeof data.content_id === "string" && data.content_id.length === 24){
-                        //form object to persist
-                        data.enable = false;
-                        data.last_updated = new Date();
-                        //persist object
-                        var img = new PublicCarousel(data);
-                        img.save(function (err, inserted) {
-                            if(err){
-                                ans.error = true;
-                                ans.message = "Eroare la salvare. Verificati campurile";
-                                res.json(ans);
-                            }else{
-                                //update image_path
-                                var imagePath = "generalCarousel/image_"+inserted._id+"."+ext;
-                                PublicCarousel.update({_id: inserted._id}, {image_path: imagePath}, function (err, wRes) {
-                                    if(err){
-                                        ans.error = true;
-                                        ans.message = "Eroare la salvare. Verificati campurile";
-                                        res.json(ans);
-                                    }else{
-                                        ans.error = false;
-                                        ans.message = "Se incarca imaginea...";
-                                        ans.key = imagePath;
-                                        res.json(ans);
-                                    }
-                                });
-                            }
-                        });
+                    handleError(res,null,400,3);
+                }
+            }
+
+        })
+        .put(function(req,res){
+            if(req.body.info){
+                PublicCarousel.update({_id: req.query.id}, {$set:{enable: !req.body.info.isEnabled}}, function (err, wRes) {
+                    if(err){
+                        handleError(res,err,500);
                     }else{
-                        ans.error = true;
-                        ans.message = "Selectati un continut";
-                        res.json(ans);
+                        handleSuccess(res);
+                    }
+                });
+            }else{
+                if(req.body.data.imagePath){
+                    var data = req.body.data;
+                    PublicCarousel.update({_id: req.query.id}, {$set:{image_path: data.imagePath}}, function (err, wRes) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {}, 3);
+                        }
+                    });
+                }else{
+                    var data = req.body.data.toUpdate;
+                    var id = req.query.id;
+                    //validate title and description
+                    //validate type
+                    if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                        handleError(res,null,400,21);
+                    }else{
+                        //check if content_id exists
+                        if(typeof data.content_id === "string" && data.content_id.length === 24){
+                            PublicCarousel.update({_id: id}, {$set:data}, function (err, wRes) {
+                                if(err){
+                                    handleError(res,null,400,2);
+                                }else{
+                                    handleSuccess(res, {}, 3);
+                                }
+                            });
+                        }else{
+                            handleError(res,null,400,3);
+                        }
                     }
                 }
-
-        });
-
-    router.route('/admin/users/carouselPublic/toggleImage')
-
-        .post(function(req, res) {
-            PublicCarousel.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
-                if(err){
-                    res.send({error: true});
-                }else{
-                    res.send({error: false});
-                }
-            });
-        });
-
-    router.route('/admin/users/carouselPublic/deleteImage')
-
-        .post(function (req, res) {
-            var image_id = req.body.id;
+            }
+        })
+        .delete(function(req,res){
+            var image_id = req.query.id;
             //find image to remove from amazon
             PublicCarousel.find({_id: image_id}, {image_path: 1}, function (err, image) {
                 if(err){
-                    res.json({error: true, message: err});
+                    handleError(res,err,500);
                 }else{
                     if(image[0]){
                         var imageS3 = image[0].image_path;
                         //remove from database
                         PublicCarousel.remove({_id: image_id}, function (err, success) {
                             if(err){
-                                res.json({error: true, message: "Eroare la stergerea imaginii"});
+                                handleError(res,err,500);
                             }else{
                                 //remove image from amazon
                                 if(imageS3){
                                     amazon.deleteObjectS3(imageS3, function (err, data) {
                                         if(err){
-                                            res.json({error: true, message: "Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon"});
+                                            handleError(res,null,409,4);
                                         }else{
-                                            res.json({error: false, message: "Imaginea a fost stearsa din baza de date si de pe Amazon."});
+                                            handleSuccess(res, {}, 5);
                                         }
                                     });
                                 }else{
-                                    res.json({error: false, message: "Imaginea a fost stearsa din baza de date."});
+                                    handleSuccess(res, {}, 6);
                                 }
                             }
                         });
                     }else{
-                        res.json({error: true, message: "Nu s-a gasit imaginea"});
+                        handleError(res,null,404,1);
                     }
                 }
             });
         });
-
-    router.route('/admin/users/carouselPublic/editImage')
-
-        .post(function(req, res) {
-
-            var data = req.body.data.toUpdate;
-            var id = req.body.data.id;
-            var ans = {};
-            //validate title and description
-                //validate type
-                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    ans.error = true;
-                    ans.message = "Verificati tipul";
-                    res.json(ans);
-                }else{
-                    //check if content_id exists
-                    if(typeof data.content_id === "string" && data.content_id.length === 24){
-                        //refresh last_updated field
-                        data.last_updated = new Date();
-                        PublicCarousel.update({_id: id}, data, function (err, wRes) {
-                            if(err){
-                                ans.error = true;
-                                ans.message = "Eroare la actualizare. Verificati campurile";
-                                res.json(ans);
-                            }else{
-                                ans.error = false;
-                                ans.message = "Datele au fost modificate cu succes!";
-                                res.json(ans);
-                            }
-                        });
-                    }else{
-                        ans.error = true;
-                        ans.message = "Selectati un continut";
-                        res.json(ans);
-                    }
-                }
-
-        });
-    router.route('/admin/users/carouselPublic/editImagePath')
-        .post(function(req,res){
-            var ans={};
-            var data = req.body.data;
-            PublicCarousel.update({_id: data.id}, {image_path: data.imagePath}, function (err, wRes) {
-                if(err){
-                    ans.error = true;
-                    ans.message = "Eroare la actualizare. Verificati API-ul";
-                    res.json(ans);
-                }else{
-                    ans.error = false;
-                    ans.message = "Datele au fost modificate cu succes!";
-                    res.json(ans);
-                }
-            });
-        });
-    router.route('/admin/users/carouselPublic/getById/:id')
-
+    router.route('/admin/users/carouselPublic/contentByType')
         .get(function(req, res) {
-            PublicCarousel.find({_id: req.params.id}, function (err, cont) {
-                if(err){
-                    res.send(err);
-                }else{
-                    if(cont[0]){
-                        res.send(cont[0]);
-                    }else{
-                        res.send({message: "No image found"});
-                    }
-                }
-            })
+            PublicContent.find({type: req.query.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
+                if(err) {
+                    handleError(res,err,500);
+                }else
+                    handleSuccess(res, cont);
+            });
         });
-
 
     //Carousel Medic
     //===============================================================================================
 
-    router.route('/admin/users/carouselMedic/getAllImages')
+    router.route('/admin/users/carouselMedic')
 
         .get(function(req, res) {
-            Carousel.find({}, function(err, cont) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/carouselMedic/contentByType/:type')
-
-        .get(function(req, res) {
-            Content.find({type: req.params.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/admin/users/carouselMedic/addImage')
-
-        .post(function(req, res) {
+            if(req.query.id){
+                Carousel.findOne({_id: req.query.id}, function (err, cont) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        if(cont){
+                            handleSuccess(res, cont);
+                        }else{
+                            handleError(res,null,404,1);
+                        }
+                    }
+                })
+            }else{
+                Carousel.find({}).deepPopulate('article_id.groupsID').exec(function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else
+                        handleSuccess(res, cont);
+                });
+            }
+        })
+        .post(function(req,res){
             var data = req.body.data.toAdd;
             var ext = req.body.data.extension;
-            var ans = {};
-                //validate type
-                if(!(typeof data.type === "number" && data.type>0 && data.type<4)){
-                    ans.error = true;
-                    ans.message = "Verificati tipul!";
-                    res.json(ans);
+            //validate type
+            if(!(typeof data.type === "number" && data.type>0 && data.type<4)){
+                handleError(res,null,400,21);
+            }else{
+                //check if content_id exists
+                if(typeof data.article_id === "string" && data.article_id.length === 24){
+                    var img = new Carousel(data);
+                    img.save(function (err, inserted) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            //update image_path
+                            var imagePath = "carousel/medic/image_"+inserted._id+"."+ext;
+                            Carousel.update({_id: inserted._id}, {$set:{image_path: imagePath}}, function (err, wRes) {
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    handleSuccess(res, {key: imagePath}, 2);
+                                }
+                            });
+                        }
+                    });
                 }else{
-                    //check if content_id exists
-                    if(typeof data.article_id === "string" && data.article_id.length === 24){
-                        //form object to persist
-                        data.enable = false;
-                        data.last_updated = new Date();
-                        //persist object
-                        var img = new Carousel(data);
-                        img.save(function (err, inserted) {
-                            if(err){
-                                ans.error = true;
-                                ans.message = "Eroare la salvare. Verificati campurile";
-                                res.json(ans);
-                            }else{
-                                //update image_path
-                                var imagePath = "carousel/medic/image_"+inserted._id+"."+ext;
-                                Carousel.update({_id: inserted._id}, {image_path: imagePath}, function (err, wRes) {
-                                    if(err){
-                                        ans.error = true;
-                                        ans.message = "Eroare la salvare. Verificati campurile";
-                                        res.json(ans);
-                                    }else{
-                                        ans.error = false;
-                                        ans.message = "Se incarca imaginea...";
-                                        ans.key = imagePath;
-                                        res.json(ans);
-                                    }
-                                });
-                            }
-                        });
+                    handleError(res,null,400,3);
+                }
+            }
+        })
+        .put(function(req,res){
+            if(req.body.info){
+                Carousel.update({_id: req.query.id}, {$set:{enable: !req.body.info.isEnabled}}, function (err, wRes) {
+                    if(err){
+                        handleError(res,err,500);
                     }else{
-                        ans.error = true;
-                        ans.message = "Selectati un continut";
-                        res.json(ans);
+                        handleSuccess(res, {}, 3);
+                    }
+                });
+            }else{
+                if(req.body.data.imagePath){
+                    var data = req.body.data;
+                    Carousel.update({_id: req.query.id}, {$set:{image_path: data.imagePath}}, function (err, wRes) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {}, 3);
+                        }
+                    });
+                }else{
+                    var data = req.body.data.toUpdate;
+                    var id = req.query.id;
+                    //validate type
+                    if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
+                        handleError(res,null,400,21);
+                    }else{
+                        //check if content_id exists
+                        if(typeof data.article_id === "string" && data.article_id.length === 24){
+                            Carousel.update({_id: id}, {$set:data}, function (err, wRes) {
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    handleSuccess(res, {}, 3);
+                                }
+                            });
+                        }else{
+                            handleError(res,null,400,3);
+                        }
                     }
                 }
-
-        });
-
-    router.route('/admin/users/carouselMedic/toggleImage')
-
-        .post(function(req, res) {
-            Carousel.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
-                if(err){
-                    res.send({error: true});
-                }else{
-                    res.send({error: false});
-                }
-            });
-        });
-
-    router.route('/admin/users/carouselMedic/deleteImage')
-
-        .post(function (req, res) {
-            var image_id = req.body.id;
+            }
+        })
+        .delete(function(req,res){
+            var image_id = req.query.id;
             //find image to remove from amazon
             Carousel.find({_id: image_id}, {image_path: 1}, function (err, image) {
                 if(err){
-                    res.json({error: true, message: err});
+                    handleError(res,err,500);
                 }else{
                     if(image[0]){
                         var imageS3 = image[0].image_path;
                         //remove from database
                         Carousel.remove({_id: image_id}, function (err, success) {
                             if(err){
-                                res.json({error: true, message: "Eroare la stergerea imaginii"});
+                                handleError(res,err,500);
                             }else{
                                 //remove image from amazon
                                 if(imageS3){
                                     amazon.deleteObjectS3(imageS3, function (err, data) {
                                         if(err){
-                                            res.json({error: true, message: "Imaginea a fost stearsa din baza de date. Nu s-a putut sterge de pe Amazon"});
+                                            handleError(res,null,409,4);
                                         }else{
-                                            res.json({error: false, message: "Imaginea a fost stearsa din baza de date si de pe Amazon."});
+                                            handleSuccess(res, {}, 5);
                                         }
                                     });
                                 }else{
-                                    res.json({error: false, message: "Imaginea a fost stearsa din baza de date."});
+                                    handleSuccess(res, {}, 6);
                                 }
                             }
                         });
                     }else{
-                        res.json({error: true, message: "Nu s-a gasit imaginea!"});
+                        handleError(res,null,404,1);
                     }
                 }
             });
         });
 
-    router.route('/admin/users/carouselMedic/editImage')
-
-        .post(function(req, res) {
-            var data = req.body.data.toUpdate;
-            
-            var id = req.body.data.id;
-            var ans = {};
-                //validate type
-                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    ans.error = true;
-                    ans.message = "Verificati tipul";
-                    res.json(ans);
-                }else{
-                    //check if content_id exists
-                    if(typeof data.article_id === "string" && data.article_id.length === 24){
-                        //refresh last_updated field
-                        data.last_updated = new Date();
-                        Carousel.update({_id: id}, data, function (err, wRes) {
-                            if(err){
-                                ans.error = true;
-                                ans.message = "Eroare la actualizare. Verificati campurile";
-                                res.json(ans);
-                            }else{
-                                ans.error = false;
-                                ans.message = "Datele au fost modificate cu succes!";
-                                res.json(ans);
-                            }
-                        });
-                    }else{
-                        ans.error = true;
-                        ans.message = "Selectati un continut";
-                        res.json(ans);
-                    }
-                }
-
-        });
-    router.route('/admin/users/carouselMedic/editImagePath')
-        .post(function(req,res){
-            var ans = {};
-            var data = req.body.data;
-            Carousel.update({_id: data.id}, {image_path: data.imagePath}, function (err, wRes) {
-                if(err){
-                    ans.error = true;
-                    ans.message = "Eroare la actualizare. Verificati API-ul";
-                    res.json(ans);
-                }else{
-                    ans.error = false;
-                    ans.message = "Datele au fost modificate cu succes!";
-                    res.json(ans);
-                }
-            });
-        });
-    router.route('/admin/users/carouselMedic/getById/:id')
-
+    router.route('/admin/users/carouselMedic/contentByType')
         .get(function(req, res) {
-            Carousel.find({_id: req.params.id}, function (err, cont) {
-                if(err){
-                    res.send(err);
-                }else{
-                    if(cont[0]){
-                        res.send(cont[0]);
-                    }else{
-                        res.send({message: "No image found"});
-                    }
-                }
-            })
+            Content.find({type: req.query.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
+                if(err) {
+                    handleError(res,err,500);
+                }else
+                    handleSuccess(res, cont);
+            });
         });
 
     router.route('/admin/products')
         .get(function(req, res) {
-            Products.find({}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                else{
-                    var products={};
-                    products['productList']=cont;
-                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                        if(err) {
-                            logger.error(err);
-                            res.send(err);
-                        }else{
-                            products['groups']=cont2;
-                            res.json(products);
-                        }
-                    });
-                }
-
-            });
+            if(req.query.id){
+                Products.findOne({_id: req.query.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                    if (err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, product);
+                    }
+                });
+            }else{
+                Products.find({}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else{
+                        handleSuccess(res, cont);
+                    }
+                });
+            }
         })
         .post(function(req, res) {
-
-            var product = new Products();
-
-            if(req.body.name) product.name = req.body.name;
-            if(req.body.description) product.description=req.body.description;
-            if(req.body.enable) product.enable= req.body.enable;
-            if(req.body.file_path) product.file_path= req.body.file_path;
-            if(req.body.image_path) product.image_path= req.body.image_path;
-            if(req.body['therapeutic-areasID']) product['therapeutic-areasID']= req.body['therapeutic-areasID'];
-            if(req.body.groupsID) product.groupsID= req.body.groupsID;
-
-            product.last_updated=Date.now();
-
+            var product = new Products(req.body.product);
             product.save(function(err, saved) {
                 if (err)
-                    res.send(err);
+                    handleError(res,err,500);
                 else
-                    res.json({ message: 'Product created!' , saved: saved});
-            });
-
-        });
-
-    router.route('/admin/products/:id')
-        .get(function(req, res) {
-            
-            Products.findOne({_id: req.params.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
-                if (err){
-                    res.send(err);
-                }else{
-                    res.json(product);
-                }
+                    handleSuccess(res, {saved: saved}, 2);
             });
         })
-        .put(function(req, res) {
-
-            Products.findById(req.params.id, function(err, product) {
-                if (err){
-                    res.send(err);
+        .put(function(req,res){
+            if(req.body.info){
+                var info = req.body.info;
+                if(req.body.info.logo){
+                    Products.update({_id: req.query.id}, {$set:{image_path: info.path}}, function (err, wRes) {
+                        if (err) {
+                            handleError(res,err,500);
+                        } else {
+                            handleSuccess(res, {updated: wRes}, 3);
+                        }
+                    });
                 }else{
-                    if(req.body.name) product.name = req.body.name;
-                    if(req.body.description) product.description = req.body.description;
-                    if(typeof req.body.enable === "boolean") product.enable = req.body.enable;
-                    if(req.body.file_path) product.file_path = req.body.file_path;
-                    if(req.body.image_path) product.image_path = req.body.image_path;
-                    if(req.body['therapeutic-areasID']) product['therapeutic-areasID'] = req.body['therapeutic-areasID'];
-                    if(req.body.groupsID) product.groupsID = req.body.groupsID;
-
-                    product.last_updated = Date.now();
-
-                    product.save(function(err, saved) {
-                        if (err){
-                            res.send(err);
+                    Products.update({_id:req.query.id},{$set:{file_path: info.path}}, function (err, wRes) {
+                        if(err){
+                            handleError(res,err,500);
                         }else{
-                            res.json({ message: 'Product updated!' , saved: saved});
+                            handleSuccess(res, {updated:wRes}, 3);
                         }
                     });
                 }
-            });
+            }else{
+                var data = req.body.product;
+                Products.update({_id:req.query.id},{$set:data}, function(err, product) {
+                    if (err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, {}, 3);
+                    }
+                });
+            }
         })
-        .delete(function(req, res) {
-            var id = req.params.id;
+        .delete(function(req,res){
+            var id = req.query.id;
             Products.findOne({_id: id}, function (err, product) {
                 if(product){
                     var s3Image = product.image_path;
@@ -1307,7 +845,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                     //delete product
                     Products.remove({_id:id},function(err,cont) {
                         if (err){
-                            res.json({message:'Could not delete product!'});
+                            handleError(res,err,500);
                         }
                         else{
                             //product was deleted. Now delete image and file if there is one
@@ -1315,199 +853,137 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                 amazon.deleteObjectS3(s3Image, function (err, data) {
                                     if(err){
                                         logger.error(err);
-                                        res.json({message: "Product was deleted. Image could not be deleted"});
+                                        handleError(res,null,409,4);
                                     }else{
                                         amazon.deleteObjectS3(s3File, function (err, data) {
                                             if(err) {
-                                                logger.error(err);
-                                                res.json({message: "Product was deleted. RPC could not be deleted!"});
+                                                handleError(res,null,409,4);
                                             }
                                             else
                                             {
-                                                res.json({message: "Product was deleted. All files and images associated with were also deleted!"});
+                                                handleSuccess(res, {}, 7);
                                             }
                                         });
                                     }
                                 })
                             }else{
-                                res.json({message:'Product was deleted!'});
+                                handleSuccess(res, {}, 4);
                             }
                         }
                     });
                 }else{
-                    res.json({message:'Product not found!'});
-                }
-            });
-        });
-    router.route('/admin/products/editImage')
-        .post(function(req,res) {
-            var data = req.body.data;
-            Products.update({_id: data.id}, {image_path: data.path}, function (err, wRes) {
-                if (err) {
-                    logger.error("Error at product change logo. Product id = " + data.id + "; Key = " + data.path);
-                    res.json({error: true});
-                } else {
-                    res.json({error: false, updated: wRes});
-                }
-            });
-        });
-    router.route('/admin/products/editRPC')
-        .post(function(req,res){
-            var data = req.body.data;
-            Products.update({_id:data.id}, {file_path: data.path}, function (err, wRes) {
-                if(err){
-                    logger.error("Error at product change RCP. Product id = "+data.id+"; Key = "+data.path);
-                    res.json({error:true});
-                }else{
-                    res.json({error:false, updated:wRes});
+                    handleError(res,err,500);
                 }
             });
         });
     router.route('/admin/content')
-
         .get(function(req, res) {
-            Content.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                else {
-                    var contents={};
-                    contents['content']=cont;
-                    UserGroup.find({}, {display_name: 1, profession: 1}).populate('profession').exec(function(err, cont2) {
-                        if(err) {
-                            logger.error(err);
-                            res.send(err);
-                        }
-                        contents['groups']=cont2;
-                        res.json(contents);
-                    });
+            if(req.query.id){
+                Content.findOne({_id:req.query.id}, function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, cont);
+                    }
+                })
+            }else{
+                Content.find(function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else {
+                        handleSuccess(res, cont);
+                    }
+                });
+            }
+        })
+        .post(function(req, res) {
+            var content = new Content(req.body.article);
+            content.save(function(err,saved) {
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, {saved: saved}, 2);
                 }
             });
         })
-        .post(function(req, res) {
-            var content = new Content(req.body);
-            content.enable = false;
-            content.created = Date.now();
-            content.last_updated = Date.now();
-            content.save(function(err,saved) {
-                if (err){
-                    logger.error(err);
-                    res.send(err);
+    .put(function(req, res) {
+            if(req.body.info){
+                var info = req.body.info;
+                if(info.image){
+                    Content.update({_id:req.query.id}, {$set:{image_path: info.image}}, function (err, wRes) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {updated: wRes});
+                        }
+                    });
                 }else{
-                    res.json({ message: 'Content created!' , saved: saved});
+                    Content.update({_id:req.query.id}, {$set:{associated_images: info.associated_images}}, function (err, wRes) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {updated: wRes});
+                        }
+                    });
+                }
+            }else{
+                if(req.body.enableArticle){
+                    Content.update({_id:req.query.id},{$set: {enable: req.body.enableArticle.enable}}, function(err, product) {
+                        if (err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {}, 3);
+                        }
+                    });
+                }else{
+                    var data = req.body.article;
+                    Content.update({_id:req.query.id},{$set:data}, function(err, product) {
+                        if (err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {}, 3);
+                        }
+                    });
+                }
+            }
+    })
+        .delete(function(req, res) {
+            var id =req.query.id;
+            Content.findOne({_id: id}, function (err, content) {
+                if(content){
+                    var s3Key = content.image_path;
+                    Content.remove({_id:id},function(err,cont) {
+                        if (err){
+                            handleError(res,err,500);
+                        }
+                        else{
+                            if(s3Key){
+                                amazon.deleteObjectS3(s3Key, function (err, data) {
+                                    if(err){
+                                        handleError(res,err,409,4);
+                                    }else{
+                                        handleSuccess(res, {}, 7);
+                                    }
+                                });
+                            }else{
+                                handleSuccess(res, {}, 4);
+                            }
+                        }
+                    });
+                }else{
+                    handleError(res,err,404,1);
                 }
             });
         });
-
     router.route('/admin/content/groupsByIds')
         .post(function (req, res) {
             var ids = req.body.ids || [];
             UserGroup.find({_id: {$in: ids}}).populate('profession').exec(function (err, groups) {
                 if(err){
-                    res.statusCode = 400;
-                    res.end();
+                    handleError(res,err,500);
                 }else{
-                    
-                    res.send(groups);
-                }
-            });
-        });
-
-    router.route('/admin/content/:id')
-
-        .get(function(req, res) {
-            Content.find({_id:req.params.id}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
-                }else{
-                    findConnectedEntitiesWithProjection();
-                    res.json(null);
-                }
-            })
-        })
-        .put(function(req, res) {
-            Content.findById(req.params.id, function(err, content) {
-
-                if (err) {
-                    res.send(err);
-                }else{
-                    if(req.body.title) content.title = req.body.title;
-                    if(req.body.author) content.author = req.body.author;
-                    if(req.body.description) content.description = req.body.description;
-                    if(req.body.text) content.text = req.body.text;
-                    if(req.body.type) content.type = req.body.type;
-                    if(req.body.groupsID) content.groupsID = req.body.groupsID;
-                    if(typeof req.body.enable === "boolean") content.enable = req.body.enable;
-
-                    content.last_updated = Date.now();
-
-                    content.save(function(err, saved) {
-                        if (err){
-                            res.send(err);
-                        }else{
-                            res.json({ message: 'Content updated!' , newContent: saved});
-                        }
-                    });
-                }
-            });
-        })
-        .delete(function(req, res) {
-            var id =req.params.id;
-            Content.findOne({_id: id}, function (err, content) {
-                if(content){
-                    var s3Key = content.image_path;
-                    //delete speaker
-                    Content.remove({_id:id},function(err,cont) {
-                        if (err){
-                            res.json({message:'Could not delete article!'});
-                        }
-                        else{
-                            //speaker was deleted. Now delete image if there is one
-                            if(s3Key){
-                                amazon.deleteObjectS3(s3Key, function (err, data) {
-                                    if(err){
-                                        logger.error(err);
-                                        res.json({message: "Article was deleted. Image could not be deleted"});
-                                    }else{
-                                        res.json({message: "Article was deleted. Image was deleted"});
-                                    }
-                                });
-                            }else{
-                                res.json({message:'Article was deleted!'});
-                            }
-                        }
-                    });
-                }else{
-                    res.json({message:'Article not found!'});
-                }
-            });
-        });
-    router.route('/admin/content/editImage')
-        .post(function(req,res){
-            
-            var data = req.body.data;
-            Content.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
-                if(err){
-                    logger.error("Error at article change logo. Article id = "+data.id+"; Key = "+data.path);
-                    res.json({error:true});
-                }else{
-                    res.json({error:false, updated:wRes});
-                }
-            });
-        });
-    router.route('/admin/content/editAssociatedImages')
-        .post(function(req,res){
-            
-            var data = req.body.data;
-            Content.update({_id:data.id}, {associated_images: data.associated_images}, function (err, wRes) {
-                if(err){
-                    logger.error("Error at article change multimedia array. Article id = "+data.id+"; Key = "+data.associated_images);
-                    res.json({error:true});
-                }else{
-                    res.json({error:false, updated:wRes});
+                    handleSuccess(res, groups);
                 }
             });
         });
@@ -1520,9 +996,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             }
             specialProduct.find(q).deepPopulate('groups.profession').exec(function (err, products) {
                 if(err){
-                    res.send(err);
+                    handleError(res,err,500);
                 }else{
-                    res.json(products);
+                    handleSuccess(res, products);
                 }
             })
         })
@@ -1530,20 +1006,18 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var toCreate = new specialProduct(req.body.toCreate);
             toCreate.save(function (err, saved) {
                 if(err){
-                    console.log(err);
-                    logger.error(err);
-                    res.send({error: err, message: "A aparut o eroare pe server"});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false, message: "Datele au fost salvate", justSaved: saved});
+                    handleSuccess(res, {justSaved: saved}, 2);
                 }
             });
         })
         .put(function (req, res) {
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
-                    res.send({error: err, message: "A aparut o eroare pe server"});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false, message: "Datele au fost actualizate"});
+                    handleSuccess(res, {}, 3);
                 }
             });
         })
@@ -1562,16 +1036,14 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 })
             }, function (err) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true, message: "Eroare la stergerea entitatilor atasate produsului"});
+                    handleError(res,err,409,5);
                 }else{
                     //remove product
                     specialProduct.remove({_id: idToDelete}, function (err, count) {
                         if(err){
-                            console.log(err);
-                            res.send({error: true, message: "Eroare la stergerea produsului"});
+                            handleError(res,err,500);
                         }else{
-                            res.send({error: false, message: "S-au sters "+count+" produse si "+attachedCount+" documente atasate. "});
+                            handleSuccess(res, {deletedProducts: count, deletedConnections: attachedCount}, 4);
                         }
                     });
                 }
@@ -1582,9 +1054,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function (req, res) {
             UserGroup.find({}, {display_name: 1, profession: 1}).populate('profession').exec(function (err, groups) {
                 if(err){
-                    res.send(err);
+                    handleError(res,err,500);
                 }else{
-                    res.send(groups);
+                    handleSuccess(res, groups);
                 }
             })
         });
@@ -1595,10 +1067,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 //find one by id
                 specialProductMenu.findOne({_id: req.query.id}, function (err, menuItem) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({error: false, menuItem: menuItem});
+                        handleSuccess(res, menuItem);
                     }
                 });
             }else if(req.query.product_id){
@@ -1606,43 +1077,39 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 //first, find all children
                 specialProductMenu.distinct("children_ids", function (err, children_ids) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
                         //next, get all menu items that are not children; populate their children_ids attribute
                         specialProductMenu.find({product: req.query.product_id, _id: {$nin: children_ids}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function (err, menuItems) {
                             if(err){
-                                console.log(err);
-                                res.send({error: true});
+                                handleError(res,err,500);
                             }else{
                                 //now you got the full menu nicely organised
-                                res.send({menuItems: menuItems});
+                                handleSuccess(res, menuItems);
                             }
                         });
                     }
                 });
             }else{
-                res.send({error: true, message: "Invalid params"});
+                handleError(res,err,400,6);
             }
         })
         .post(function (req, res) {
             var menu = new specialProductMenu(req.body);
             menu.save(function (err, saved) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false, saved: saved});
+                    handleSuccess(res, {saved: saved});
                 }
             })
         })
         .put(function (req, res) {
             specialProductMenu.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false});
+                    handleSuccess(res, {}, 3);
                 }
             })
         })
@@ -1651,8 +1118,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToDelete = ObjectId(req.query.id);
             specialProductMenu.findOne({_id: idToDelete}, function (err, item) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
                     var arrayIdsToDelete = [idToDelete];
                     if(item.children_ids){
@@ -1661,17 +1127,15 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                     }
                     specialProductMenu.remove({_id: {$in: arrayIdsToDelete}}, function (err, wRes) {
                         if(err){
-                            console.log(err);
-                            res.send({error: true});
+                            handleError(res,err,500);
                         }else{
                             deleteCount = wRes;
                             //disconnect from parent
                             specialProductMenu.update({}, {$pull: {children_ids: idToDelete}}, function (err, wRes) {
                                 if(err){
-                                    console.log(err);
-                                    res.send({error: true});
+                                    handleError(res,err,500);
                                 }else{
-                                    res.send({error: false, message: "S-au sters "+deleteCount+" documente. S-au updatat "+wRes+" documente"});
+                                    handleSuccess(res, {deleteCount: deleteCount, updateCount: wRes}, 4);
                                 }
                             });
                         }
@@ -1684,25 +1148,22 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .put(function (req, res) {
             specialProductMenu.update({_id: req.query.id}, {$addToSet: {children_ids: req.body.child_id}}, function (err, wRes) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false});
+                    handleSuccess(res, {}, 3);
                 }
             })
         });
 
     router.route('/admin/content/specialProducts/groupsAvailable')
         .get(function (req, res) {
-
                     UserGroup.find({}).populate('profession').exec(function (err, groups) {
                         if(err){
-                            res.send(err);
+                            handleError(res,err,500);
                         }else{
-                            res.send(groups);
+                            handleSuccess(res, groups);
                         }
                     })
-
         });
 
     router.route('/admin/content/specialProducts/glossary')
@@ -1713,10 +1174,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             }
             specialProductGlossary.find(q, function (err, glossary) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false, glossary: glossary});
+                    handleSuccess(res, glossary);
                 }
             })
         })
@@ -1724,24 +1184,22 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var toAdd = new specialProductGlossary(req.body);
             toAdd.save(function (err, saved) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false, saved: saved});
+                    handleSuccess(res, {saved: saved});
                 }
             });
         })
         .put(function (req, res) {
             var idToUpdate = req.query.id;
             if(!idToUpdate){
-                res.send({error: true, message:"Invalid query params"});
+                handleError(res,err,400,6);
             }else{
                 specialProductGlossary.update({_id: idToUpdate}, {$set: req.body}, function (err, wRes) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true, message: "A aparut o eroare pe server"});
+                        handleError(res,err,500);
                     }else{
-                        res.send({error: false, message: "Updated "+wRes+" documents"});
+                        handleSuccess(res, {updateCount: wRes}, 3);
                     }
                 });
             }
@@ -1749,14 +1207,13 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .delete(function (req, res) {
             var idToDelete = req.query.id;
             if(!idToDelete){
-                res.send({error: true, message: "Invalid params"});
+                handleError(res,err,400,6);
             }else{
                 specialProductGlossary.remove({_id: idToDelete}, function (err, wRes) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({error: false, message: "Removed "+wRes+" documents"});
+                        handleSuccess(res, {removeCount: wRes}, 4);
                     }
                 });
             }
@@ -1770,10 +1227,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             }
             specialProductFiles.find(q, function (err, resources) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false, resources: resources});
+                    handleSuccess(res, {resources: resources});
                 }
             })
         })
@@ -1781,24 +1237,22 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var toAdd = new specialProductFiles(req.body);
             toAdd.save(function (err, saved) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true, message: "Eroare la salvare"});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false, saved: saved});
+                    handleSuccess(res, {saved: saved}, 2);
                 }
             });
         })
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             if(!idToUpdate){
-                res.send({error: true, message: "Invalid params"});
+                handleError(res,err,400,6);
             }else{
                 specialProductFiles.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true, message: "Eroare la update"});
+                        handleError(res,err,500);
                     }else{
-                        res.send({error: false, message: "S-au actualizat "+wres+" documente"});
+                        handleSuccess(res, {updateCount: wres}, 3);
                     }
                 });
             }
@@ -1806,10 +1260,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .delete(function (req, res) {
             specialProductFiles.remove({_id: req.query.id}, function (err, wres) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true, message: "Eroare la stergere"});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false, message: "Removed "+wres+" documents"});
+                    handleSuccess(res, {removeCount: wres}, 4);
                 }
             });
         });
@@ -1819,31 +1272,27 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(req.query.product){
                 specialProduct.findOne({_id: req.query.product}).populate('speakers').exec(function (err, product) {
                     if(err) {
-                        console.log(err);
-                        res.send({error: true, message: "Erare la gasire speakeri"});
+                        handleError(res,err,500);
                     }else if(!product){
-                        console.log(err);
-                        res.send({error: true, message: "Erare la gasire produs"});
+                        handleError(res,err,404,1);
                     }else{
-                        res.send({success: product.speakers});
+                        handleSuccess(res, product.speakers);
                     }
                 });
             }else if(req.query.id){
                 Speakers.findOne({_id: req.query.id}, function (err, speaker) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: speaker});
+                        handleSuccess(res, speaker);
                     }
                 });
             }else{
                 Speakers.find({}).sort({last_name: 1, first_name: 1}).exec(function (err, speakers) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: speakers});
+                        handleSuccess(res, speakers);
                     }
                 });
             }
@@ -1853,10 +1302,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var product_id = ObjectId(req.body.product_id);
             specialProduct.update({_id: product_id}, {$addToSet: {speakers: speaker_id}}, function (err, wres) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: wres});
+                    handleSuccess(res, wres);
                 }
             });
         })
@@ -1865,10 +1313,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var product_id = ObjectId(req.query.product_id);
             specialProduct.update({_id: product_id}, {$pull: {speakers: speaker_id}}, function (err, wres) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: wres});
+                    handleSuccess(res, wres);
                 }
             });
         });
@@ -1878,19 +1325,17 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(req.query.id){
                 specialApps.findOne({_id: req.query.id}).deepPopulate('groups.profession').exec(function (err, app) {
                     if(err || !app){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: app});
+                        handleSuccess(res, app);
                     }
                 });
             }else{
                 specialApps.find({}).deepPopulate('groups.profession').exec(function (err, apps) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: apps});
+                        handleSuccess(res, apps);
                     }
                 });
             }
@@ -1899,10 +1344,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var toSave = new specialApps(req.body);
             toSave.save(function (err, saved) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -1910,10 +1354,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToEdit = ObjectId(req.query.id);
             specialApps.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: wres});
+                    handleSuccess(res, wres);
                 }
             });
         })
@@ -1921,10 +1364,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToDelete = ObjectId(req.query.id);
             specialApps.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: wres});
+                    handleSuccess(res, wres);
                 }
             });
         });
@@ -1933,10 +1375,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function (req, res) {
             UserGroup.find({content_specific: true}).populate('profession').exec(function (err, groups) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: groups});
+                    handleSuccess(res, groups);
                 }
             });
         });
@@ -1946,18 +1387,17 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(req.query.id){
                 Events.findOne({_id: req.query.id}).select('-listconferences').populate('groupsID').exec(function (err, event) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: event});
+                        handleSuccess(res, event);
                     }
                 });
             }else{
                 Events.find({}, function (err, events) {
                     if(err){
-                        res.send({error: "Could not find events"});
+                        handleError(res,err);
                     }else{
-                        res.send({success: events});
+                        handleSuccess(res, events);
                     }
                 });
             }
@@ -1967,10 +1407,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             toCreate.last_updated = Date.now();
             toCreate.save(function (err, saved) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -1978,10 +1417,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToUpdate = ObjectId(req.query.id);
             Events.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res,err);
                 }else{
-                    res.send({success: "Updated "+wres+" events"});
+                    handleSuccess(res,{updateCount: wres},3);
                 }
             });
         })
@@ -1989,8 +1427,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             //get event details
             Events.findOne({_id: req.query.id}, function (err, event) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res,err);
                 }else{
                     var conferencesIds = event.listconferences || [];
                     //delete conferences for this event
@@ -2020,10 +1457,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                         }
                     ], function (err) {
                         if(err) {
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res,err);
                         }else{
-                            res.send({success: true});
+                            handleSuccess(res);
                         }
                     });
                 }
@@ -2035,17 +1471,17 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(req.query.id){
                 Speakers.findOne({_id: req.query.id}, function (err, speaker) {
                     if(err){
-                        res.send({error: "Could not find speakers"});
+                        handleError(res,err);
                     }else{
-                        res.send({success: speaker});
+                        handleSuccess(res, speaker);
                     }
                 });
             }else{
                 Speakers.find({}).sort({last_name: 1, first_name: 1}).exec(function (err, speakers) {
                     if(err){
-                        res.send({error: "Could not find speakers"});
+                        handleError(res, err);
                     }else{
-                        res.send({success: speakers});
+                        handleSuccess(res, speakers);
                     }
                 });
             }
@@ -2054,9 +1490,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var toCreate = new Speakers(req.body);
             toCreate.save(function (err, saved) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -2064,9 +1500,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToEdit = ObjectId(req.query.id);
             Speakers.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Updated "+wres+" speakers"});
+                    handleSuccess(res, {updateCount: wres}, 3);
                 }
             });
         })
@@ -2074,14 +1510,14 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToDelete = ObjectId(req.query.id);
             Speakers.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    res.send({error: "Error removing speaker"});
+                    handleError(res, err);
                 }else{
                     //remove speaker from talks
                     Talks.update({}, {$pull: {speakers: idToDelete}}, function (err, wres) {
                         if(err){
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: "Removed speaker."});
+                            handleSuccess(res,{},4);
                         }
                     });
                 }
@@ -2093,28 +1529,25 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(req.query.event){
                 Events.findOne({_id: req.query.event}).populate('listconferences').exec(function (err, event) {
                     if(err || !event){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: event.listconferences || []});
+                        handleSuccess(res, event.listconferences||[]);
                     }
                 });
             }else if(req.query.id){
                 Conferences.findOne({_id: req.query.id}).exec(function (err, conference) {
                     if(err || !conference){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: conference});
+                        handleSuccess(res,conference);
                     }
                 });
             }else{
                 Conferences.find({}, function (err, conferences) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: conferences});
+                        handleSuccess(res, conferences);
                     }
                 });
             }
@@ -2124,8 +1557,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             toCreate.last_updated = Date.now();
             toCreate.save(function (err, saved) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
                     //create qr_code
                     saved.qr_code = {
@@ -2135,10 +1567,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                     };
                     saved.save(function (err, saved) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: saved});
+                            handleSuccess(res, saved);
                         }
                     });
                 }
@@ -2150,10 +1581,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             dataToUpdate.last_updated = Date.now();
             Conferences.update({_id: idToUpdate}, {$set: dataToUpdate}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Updated "+wres+" conferences"});
+                    handleSuccess(res,{updateCount: wres},3);
                 }
             });
         })
@@ -2192,9 +1622,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 }
             ], function (err) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res);
                 }
             });
         });
@@ -2205,31 +1635,28 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 var idEvent = ObjectId(req.query.event);
                 Rooms.find({event: idEvent}).exec(function (err, rooms) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: rooms});
+                        handleSuccess(res, rooms);
                     }
                 });
             }else if(req.query.id){
                 Rooms.findOne({_id: req.query.id}).exec(function (err, room) {
                     if(err || !room){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: room});
+                        handleSuccess(res, room);
                     }
                 });
             }else{
-                res.send({error: "Invalid query params"});
+                handleError(res,false,400,6);
             }
         })
         .post(function (req, res) {
             var toCreate = new Rooms(req.body);
             toCreate.save(function (err, saved) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
                     //create qr_code
                     saved.qr_code = {
@@ -2239,10 +1666,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                     };
                     saved.save(function (err, saved) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: saved});
+                            handleSuccess(res, saved);
                         }
                     });
                 }
@@ -2253,10 +1679,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var dataToUpdate = req.body;
             Rooms.update({_id: idToUpdate}, {$set: dataToUpdate}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Updated "+wres+" rooms"});
+                    handleSuccess(res,{updateCount: wres},3);
                 }
             });
         })
@@ -2284,9 +1709,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 }
             ], function (err) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res);
                 }
             });
 
@@ -2298,24 +1723,22 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 var idConference = ObjectId(req.query.conference);
                 Talks.find({conference: idConference}).exec(function (err, talks) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: talks});
+                        handleSuccess(res,talks);
                     }
                 });
             }else if(req.query.id){
                 var idTalk = ObjectId(req.query.id);
                 Talks.findOne({_id: idTalk}).populate('speakers').exec(function (err, talk) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: talk});
+                        handleSuccess(res, talk);
                     }
                 });
             }else{
-                res.send({error: "Missing query params"});
+                handleError(res,true,400,6);
             }
         })
         .post(function (req, res) {
@@ -2323,10 +1746,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             toCreate.last_updated = Date.now();
             toCreate.save(function (err, saved) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -2336,10 +1758,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             dataToUpdate.last_updated = Date.now();
             Talks.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Updated "+wres+" talks"});
+                    handleSuccess(res,{updateCount: wres},3);
                 }
             });
         })
@@ -2347,10 +1768,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToDelete = ObjectId(req.query.id);
             Talks.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Removed "+wres+" talks"});
+                    handleSuccess(res, {deleteCount: wres}, 4);
                 }
             });
         });
@@ -2361,880 +1781,167 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var conferenceToAdd = ObjectId(req.body.idConference);
             Events.update({_id: eventToUpdate}, {$addToSet: {listconferences: conferenceToAdd}}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: "Updated "+wres+" events"});
+                    handleSuccess(res, {updateCount: wres}, 3);
                 }
             });
         });
 
-//    router.route('/admin/events')
-//
-//        .get(function(req, res) {
-//            Events.find().populate('listconferences').exec(function(err, cont) {
-//                if(err) {
-//                    res.send(err);
-//                }
-//
-//                res.json(cont);
-//            });
-//        })
-//        .post(function(req, res) {
-//
-//            var event = new Events();
-//
-//            if(req.body.description) event.description = req.body.description;
-//            if(typeof req.body.enable === "boolean"){
-//                event.enable = req.body.enable;
-//            }else{
-//                event.enable = false;
-//            }
-//            if(req.body.end) event.end= req.body.end;
-//            if(req.body.name) event.name=req.body.name;
-//            if(req.body.place) event.place= req.body.place;
-//            if(req.body.start) event.start=req.body.start;
-//            if(req.body.type) event.type=req.body.type;
-//
-//            if(req.body.listconferences) event.listconferences = req.body.listconferences;
-//            if(req.body.groupsID) event.groupsID= req.body.groupsID;
-//
-//            event.last_updated = Date.now();
-//
-//            event.save(function(err, saved) {
-//                if (err){
-//                    res.send(err);
-//                }else{
-//                    res.json({ message: 'Event created!' , saved: saved});
-//                }
-//            });
-//
-//        });
-//    router.route('/admin/events/toggleEvent')
-//        .post(function(req, res) {
-//        Events.update({_id: req.body.data.id}, {enable: !req.body.data.isEnabled}, function (err, wRes) {
-//            if(err){
-//                res.send({error: true});
-//            }else{
-//                res.send({error: false});
-//            }
-//        });
-//    });
-//    router.route('/admin/events/:id')
-//
-//        .get(function(req, res) {
-//            Events.findOne({_id:req.params.id}).populate('listconferences').populate('groupsID').exec(function(err, cont) {
-//                if(err) {
-//                    res.send(err);
-//                }else{
-//                    res.json(cont);
-//                }
-//            })
-//        })
-//        .put(function(req, res) {
-//
-//            Events.findById(req.params.id, function(err, event) {
-//
-//                if (err){
-//                    res.send(err);
-//                }else{
-//                    event.description = req.body.description;
-//                    if(typeof req.body.enable === "boolean"){
-//                        event.enable = req.body.enable;
-//                    }else{
-//                        event.enable = false;
-//                    }
-//                    if(req.body.end) event.end= req.body.end;
-//                    if(req.body.name) event.name=req.body.name;
-//                    if(req.body.place) event.place= req.body.place;
-//                    if(req.body.start) event.start=req.body.start;
-//                    if(req.body.type) event.type=req.body.type;
-//
-//                    if(req.body.listconferences) event.listconferences = req.body.listconferences;
-//                    if(req.body.groupsID) event.groupsID= req.body.groupsID;
-//
-//                    event.last_updated= Date.now();
-//
-//                    event.save(function(err, eventSaved) {
-//                        if (err){
-//                            res.send(err);
-//                        }else{
-//                            //send notification
-//                            if(req.body.notificationText){
-//                                getUsersForConferences(eventSaved.listconferences, function (err, id_users) {
-//                                    if(err){
-//                                        res.json({ message: 'Event updated! Error sending notification' });
-//                                    }else{
-//                                        if(id_users.length != 0){
-//                                            sendPushNotification(req.body.notificationText, id_users, function (err, success) {
-//                                                if(err){
-//                                                    console.log(err);
-//                                                    logger.error(err);
-//                                                    res.json({ message: 'Event updated! Error notifying users' });
-//                                                }else{
-//                                                    res.json({ message: 'Event updated! Notification was sent' });
-//                                                }
-//                                            });
-//                                        }else{
-//                                            res.json({ message: 'Event updated! No users found to notify' });
-//                                        }
-//                                    }
-//                                });
-//                            }else{
-//                                res.json({ message: 'Event updated! No notification sent' });
-//                            }
-//                        }
-//                    });
-//                }
-//            });
-//        })
-//        .delete(function(req, res) {
-//            Events.findOne({_id:req.params.id},function(err,resp){
-//                resp.remove(function(err,cont) {
-//                    if (err)
-//                        res.send(err);
-//
-//                    res.json({ message: 'Successfully deleted!' });
-//                });
-//            })
-//
-//        });
-//
-//    router.route('/admin/speakers')
-//        .get(function(req,res){
-//            Speakers.find().sort({first_name: 1}).exec(function (err, speakers) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(speakers);
-//                    return;
-//                }
-//            })
-//        })
-//    .post(function(req, res) {
-//
-//        var speaker = new Speakers(); 		// create a new instance of the Bear model
-//            speaker.first_name = req.body.first_name;  // set the bears name (comes from the request)
-//            speaker.last_name=req.body.last_name ;
-//            speaker.profession= req.body.profession     ;
-//            speaker.last_updated= req.body.last_updated ;
-//            speaker.workplace=req.body.workplace;
-//            speaker.short_description= req.body.short_description ;
-//            speaker.image_path=req.body.image_path;
-//            speaker.save(function(err) {
-//            if (err)
-//                res.send(err);
-//            else
-//                res.json({ message: 'Speaker created!' });
-//        });
-//
-//    });
-//    router.route('/admin/speakers/changeSpeakerLogo')
-//        .post(function(req,res){
-//            var data = req.body.data;
-//            Speakers.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
-//                if(err){
-//                    logger.error("Error at speaker change logo. Speaker id = "+data.id+"; Key = "+data.path);
-//                    res.json({error:true});
-//                }else{
-//                    res.json({error:false, updated:wRes});
-//                }
-//            });
-//        });
-//    router.route('/admin/speakers/:id')
-//        .get(function(req,res){
-//            Speakers.findById(req.params.id).exec(function (err, speaker) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(speaker);
-//                    return;
-//                }
-//            })
-//        })
-//    .put(function(req, res) {
-//
-//        Speakers.findById(req.params.id, function(err, speaker) {
-//
-//            if (err)
-//                res.send(err);
-//
-//            speaker.first_name = req.body.first_name;  // set the bears name (comes from the request)
-//            speaker.last_name=req.body.last_name ;
-//            speaker.profession= req.body.profession     ;
-//            speaker.last_updated= req.body.last_updated ;
-//            speaker.workplace=req.body.workplace;
-//            speaker.short_description= req.body.short_description ;
-//            speaker.save(function(err) {
-//                if (err) {
-//                    logger.error(err);
-//                    res.send(err);
-//                    return;
-//                }
-//                res.json({ message: 'Speaker updated!' });
-//            });
-//
-//        });
-//    })
-//        .delete(function(req, res) {
-//            var id= req.params.id;
-//            disconnectAllEntitiesFromEntity(Talks, "speakers", id, function (err, result){
-//                if(err){
-//                    res.send(err);
-//                }else{
-//                    //get speaker to find out image path
-//                    Speakers.findOne({_id: id}, function (err, speaker) {
-//                        if(speaker){
-//                            var s3Key = speaker.image_path;
-//                            //delete speaker
-//                            Speakers.remove({_id:id},function(err,cont) {
-//                                if (err){
-//                                    res.json({message:'Could not delete speaker!'});
-//                                }
-//                                else{
-//                                    //speaker was deleted. Now delete image if there is one
-//                                    if(s3Key){
-//                                        s3.deleteObject({Bucket: amazonBucket, Key: s3Key}, function (err, data) {
-//                                            if(err){
-//                                                logger.error(err);
-//                                                res.json({message: "Speaker was deleted. Image could not be deleted"});
-//                                            }else{
-//                                                res.json({message: "Speaker was deleted. Image was deleted"});
-//                                            }
-//                                        });
-//                                    }else{
-//                                        res.json({message:'Speaker was deleted!'});
-//                                    }
-//                                }
-//                            });
-//                        }else{
-//                            res.json({message:'Speaker not found!'});
-//                        }
-//                    });
-//                }
-//            });
-//
-//
-//
-//        });
-//    router.route('/admin/conferences')
-//        .get(function(req,res){
-//            Conferences.find().exec(function (err, conf) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(conf);
-//                    return;
-//                }
-//            })
-//        })
-//    .post(function(req, res) {
-//
-//        var conferences = new Conferences(); 		// create a new instance of the Bear model
-//            conferences.title = req.body.title;  // set the bears name (comes from the request)
-//            conferences.enable=req.body.enable ;
-//            conferences.begin_date= req.body.begin_date     ;
-//            conferences.end_date= req.body.end_date     ;
-//            conferences.last_updated= req.body.last_updated ;
-//            conferences.description=req.body.description;
-//            conferences.qr_code=req.body.qr_code;
-//            conferences.topicsID=req.body.topicsID;
-//            conferences.image_path=req.body.image_path;
-//            conferences.save(function(err,saved) {
-//            if (err)
-//                res.send(err);
-//            else
-//            {
-//                var conf = new Conferences();
-//                conf = saved;
-//                var newQR = new Object();
-//                newQR.type = 2;
-//                newQR.message = saved.qr_code.message;
-//                newQR.conference_id = saved._id;
-//                conf.qr_code=newQR;
-//                conf.save(function(err){
-//                    if(err)
-//                        res.send(err);
-//                    else
-//                        res.json({ message: 'Conference created!' });
-//                })
-//
-//            }
-//
-//        });
-//
-//    });
-//    router.route('/admin/conferences/:id')
-//        .get(function(req,res){
-//            Conferences.findById(req.params.id).exec(function (err, conf) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//
-//                    res.json(conf);
-//                    return;
-//                }
-//            })
-//        })
-//        .put(function(req, res) {
-//
-//            Conferences.findById(req.params.id, function(err, conferences) {
-//
-//                if (err){
-//                    res.send(err);
-//                }else{
-//                    conferences.title = req.body.title;  // set the bears name (comes from the request)
-//                    conferences.enable=req.body.enable;
-//                    conferences.begin_date= req.body.begin_date;
-//                    conferences.end_date= req.body.end_date;
-//                    conferences.last_updated= req.body.last_updated;
-//                    conferences.description=req.body.description;
-//                    conferences.topicsID=req.body.topicsID;
-//                    conferences.qr_code=req.body.qr_code;
-//                    conferences.save(function(err, conferenceSaved) {
-//                        if (err){
-//                            res.send(err);
-//                        }else{
-//                            //send notification
-//                            if(req.body.notificationText){
-//                                getUsersForConference(conferenceSaved._id, function (err, users) {
-//                                    if(err){
-//                                        res.json({ message: 'Conference updated! Error at sending notification' });
-//                                    }else{
-//                                        if(users.length != 0){
-//                                            sendPushNotification(req.body.notificationText, users, function (err, success) {
-//                                                if(err){
-//                                                    res.json({ message: 'Conference updated! Error notifying users' });
-//                                                }else{
-//                                                    res.json({ message: 'Conference updated! Notification was sent' });
-//                                                }
-//                                            });
-//                                        }else{
-//                                            res.json({ message: 'Conference updated! No users found to notify' });
-//                                        }
-//                                    }
-//                                });
-//                            }else{
-//                                res.json({ message: 'Conference updated! No notification sent' });
-//                            }
-//                        }
-//                    });
-//                }
-//            });
-//        })
-//        .delete(function(req, res) {
-//            var id = req.params.id;
-//            disconnectAllEntitiesFromEntity(Events, "listconferences", id, function (err, result){
-//                if(err)
-//                    res.send(err);
-//                else
-//                {
-//
-//                    disconnectAllEntitiesFromEntity(User, "conferencesID", id, function (err, result) {
-//                        if (err)
-//                            res.send(err);
-//                        else
-//                        {
-//                            Conferences.findOne({_id: id}, function (err, resp) {
-//                                if (resp) {
-//                                    resp.remove(function (err, cont) {
-//                                        if (err)
-//                                            res.send(err);
-//                                        else
-//                                            res.json({message: 'Successfully deleted!'});
-//                                    });
-//                                }
-//                                else
-//                                    res.send(err);
-//                            });
-//                        }
-//
-//
-//                    })
-//
-//                }
-//            });
-//
-//
-//        });
-//    router.route('/admin/conferences/changeConferenceLogo')
-//        .post(function(req,res){
-//            var data = req.body.data;
-//            Conferences.update({_id:data.id}, {image_path: data.path}, function (err, wRes) {
-//                if(err){
-//                    logger.error("Error at conference change logo. Conference id = "+data.id+"; Key = "+data.path);
-//                    res.json({error:true});
-//                }else{
-//                    res.json({error:false, updated:wRes});
-//                }
-//            });
-//        });
-//     router.route('/admin/talks')
-//        .get(function(req,res){
-//            Talks.find().populate('conference room speakers').exec(function (err, talks) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(talks);
-//                    return;
-//                }
-//
-//
-//            })
-//
-//        })
-//         .post(function(req, res) {
-//             var talk = new Talks(req.body.data);
-//             talk.enable = true;
-//             talk.last_updated = Date.now();
-//             talk.save(function (err, savedTalk) {
-//                 if(err){
-//                     res.send(err);
-//                 }else{
-//                     res.json({ message: 'Talk created!' });
-//                 }
-//             });
-//         });
-//    router.route('/admin/talks/:id')
-//        .get(function(req,res){
-//            Talks.findById(req.params.id).populate('speakers room conference').exec(function (err, talk) {
-//                if (err)
-//                {
-//                    logger.error(err);
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(talk);
-//                    return;
-//                }
-//            })
-//        })
-//        .put(function(req, res) {
-//
-//            var toUpdate = req.body.talk;
-//            delete toUpdate._id;
-//
-//            Talks.update({_id: req.params.id}, toUpdate, function (err, wRes) {
-//                if(err){
-//                    res.send(err);
-//                }else{
-//                    //send notification
-//                    if(req.body.notification){
-//                        getUsersForTalk(req.params.id, function (err, id_users) {
-//                            if(err){
-//                                res.json({ message: 'Talk updated! Error sending notification' });
-//                            }else{
-//                                if(id_users.length != 0){
-//                                    sendPushNotification(req.body.notification, id_users, function (err, success) {
-//                                        if(err){
-//                                            res.json({ message: 'Talk updated! Error notifying users' });
-//                                        }else{
-//                                            res.json({ message: 'Talk updated! Notification was sent' });
-//                                        }
-//                                    });
-//                                }else{
-//                                    res.json({ message: 'Talk updated! No users found to notify' });
-//                                }
-//                            }
-//                        });
-//                    }else{
-//                        res.json({ message: 'Talk updated! No notification sent' });
-//                    }
-//                }
-//            });
-//        })
-//        .delete(function(req, res) {
-//            var id = req.params.id;
-//            Talks.remove({_id: id}, function(err,cont) {
-//                if (err)
-//                    res.send(err);
-//                else
-//                    res.json({ message: 'Successfully deleted!' });
-//            });
-//
-//        });
-//    router.route('/admin/rooms')
-//        .get(function(req,res){
-//            Rooms.find().exec(function (err, rooms) {
-//                if (err)
-//                {
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(rooms);
-//                    return;
-//                }
-//
-//
-//            })
-//
-//        })
-//        .post(function(req, res) {
-//            var data = req.body.data;
-//
-//            var rooms = new Rooms();
-//            rooms.room_name = data.room_name;
-//            rooms.qr_code = {
-//                message: data.qrMessage,
-//                room_id: "",
-//                type: 1
-//            };
-//            rooms.save(function (err, roomSaved) {
-//                if (err)
-//                    res.send(err);
-//                else {
-//                    var newQR = new Object();
-//                    newQR.type = roomSaved.qr_code.type;
-//                    newQR.message = roomSaved.qr_code.message;
-//                    newQR.room_id = mongoose.Types.ObjectId(roomSaved._id.toString());
-//                    roomSaved.qr_code = newQR;
-//                    roomSaved.save(function (err) {
-//                        if (err)
-//                            res.send(err);
-//                        else
-//                            res.json({message: 'Room created!'});
-//                    });
-//                }
-//            });
-//        });
-//    router.route('/admin/rooms/:id')
-//        .get(function(req,res){
-//            Rooms.findById(req.params.id).exec(function (err, room) {
-//                if (err)
-//                {
-//                    logger.error(err);
-//                    res.json(err);
-//                    return;
-//                }
-//                else
-//                {
-//                    res.json(room);
-//                    return;
-//                }
-//            })
-//        })
-//        .put(function(req, res) {
-//
-//            var room = req.body.room;
-//            Rooms.update({_id: room._id}, room,  function (err, writeConcern) {
-//                if(err){
-//                    console.log(err);
-//                    res.send(err);
-//                }else{
-//                    //send notification
-//                        if(req.body.notification){
-//                            getUsersForRoom(room._id, function (err, id_users) {
-//                                if(err){
-//                                    res.json({ message: 'Room updated! Error sending notification' });
-//                                }else{
-//                                    if(id_users.length != 0){
-//                                        sendPushNotification(req.body.notification, id_users, function (err, success) {
-//                                            if(err){
-//                                                res.json({ message: 'Room updated! Error notifying users' });
-//                                            }else{
-//                                                res.json({ message: 'Room updated! Notification was sent' });
-//                                            }
-//                                        });
-//                                    }else{
-//                                        res.json({ message: 'Room updated! No users found to notify' });
-//                                    }
-//                                }
-//                            });
-//                        }else{
-//                            res.json({ message: 'Room updated! No notification sent' });
-//                        }
-//                }
-//            });
-//        })
-//        .delete(function(req, res) {
-//            var id = req.params.id;
-//            disconnectAllEntitiesFromEntity(Talks, "room", id, function (err, result){
-//                if(err)
-//                    res.send(err);
-//                else {
-//                    Rooms.remove({_id: req.params.id}, function (err, cont) {
-//                        if (err)
-//                            res.send(err);
-//                        else
-//                            res.json({message: 'Successfully deleted!'});
-//                    });
-//                }});
-//
-//        });
-
     router.route('/admin/multimedia')
-
         .get(function(req, res) {
-            Multimedia.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                else
-                {
-                    var multimedias={};
-                    multimedias['MultimediaList']=cont;
-                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                        if(err) {
-                            logger.error(err);
-                            res.send(err);
-                        }else{
-                            multimedias['groups']=cont2;
-                            res.json(multimedias);
-                        }
-                    });
-                }
-            });
+            if(req.query.id){
+                Multimedia.findOne({_id: req.query.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                    if (err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, product);
+                    }
+                });
+            }else{
+                Multimedia.find(function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else
+                    {
+                        handleSuccess(res, cont);
+                    }
+                });
+            }
         })
         .post(function (req, res) {
             var toCreate = new Multimedia(req.body.newMultimedia);
-            
-            
             toCreate.save(function (err, saved) {
                 if(err){
-                    console.log(err);
-                    logger.error(err);
-                    res.send({error: err, message: "A aparut o eroare pe server"});
+                    handleError(res,err,500);
                 }else{
-                    res.send({error: false, message: "Datele au fost salvate", justSaved: saved});
-                }
-            });
-        });
-    router.route('/admin/multimedia/:id')
-        .get(function(req, res) {
-            
-            Multimedia.findOne({_id: req.params.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
-                if (err){
-                    res.send(err);
-                }else{
-                    
-                    res.json(product);
+                    handleSuccess(res, {justSaved: saved}, 2);
                 }
             });
         })
         .put(function (req, res) {
-            
-            Multimedia.update({_id: req.params.id}, {$set: req.body.multimedia}, function (err, wRes) {
-                if(err){
-                    res.send({error: err, message: "A aparut o eroare pe server"});
+            if(req.body.info){
+                var data = req.body.info;
+                if(data.image){
+                    Multimedia.update({_id: req.query.id}, {thumbnail_path: data.image}, function (err, wRes) {
+                        if (err) {
+                            handleError(res,err,500);
+                        } else {
+                            handleSuccess(res, {updated: wRes}, 3);
+                        }
+                    });
                 }else{
-                    res.send({error: false, message: "Datele au fost actualizate"});
+                    Multimedia.update({_id:req.query.id}, {file_path: data.video}, function (err, wRes) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {updated:wRes}, 3);
+                        }
+                    });
                 }
-            });
+            }else{
+                if(req.body.enableMultimedia){
+                    Multimedia.update({_id: req.query.id},{$set:{enable: req.body.enableMultimedia.isEnabled}}).exec(function (err, presentation) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {}, 3);
+                        }
+                    });
+                }else{
+                    Multimedia.update({_id: req.query.id}, {$set: req.body.multimedia}, function (err, wRes) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {}, 3);
+                        }
+                    });
+                }
+            }
         })
         .delete(function(req, res) {
-            var id = req.params.id;
+            var id = req.query.id;
             Multimedia.findOne({_id: id}, function (err, multimedia) {
                 if(multimedia){
                     var s3Image = multimedia.thumbnail_path;
                     var s3File = multimedia.file_path;
-                    //delete product
+                    //delete multimedia
                     Multimedia.remove({_id:id},function(err,cont) {
                         if (err){
-                            res.json({message:'Could not delete product!'});
+                            handleError(res,err,500);
                         }
                         else{
-                            //product was deleted. Now delete image and file if there is one
+                            //multimedia was deleted. Now delete image and file if there is one
                             if(s3Image || s3File){
                                 amazon.deleteObjectS3(s3Image, function (err, data) {
                                     if(err){
-                                        logger.error(err);
-                                        res.json({message: "Multimedia was deleted. Image could not be deleted"});
+                                        handleError(res,err,409,4);
                                     }else{
                                         amazon.deleteObjectS3(s3File, function (err, data) {
                                             if(err) {
-                                                logger.error(err);
-                                                res.json({message: "Multimedia was deleted. Video could not be deleted!"});
+                                                handleError(res,err,409,4);
                                             }
                                             else
                                             {
-                                                res.json({message: "Multimedia was deleted. All files and images associated with were also deleted!"});
+                                                handleSuccess(res, {}, 7);
                                             }
                                         });
                                     }
                                 })
                             }else{
-                                res.json({message:'Multimedia was deleted!'});
+                                handleSuccess(res, {}, 4);
                             }
                         }
                     });
                 }else{
-                    res.json({message:'Multimedia not found!'});
+                    handleError(res,err,404,1);
                 }
             });
         });
-    router.route('/admin/multimedia/editImage')
-        .post(function(req,res) {
-            var data = req.body.data;
-            Multimedia.update({_id: data.id}, {thumbnail_path: data.path}, function (err, wRes) {
-                if (err) {
-                    logger.error("Error at multimedia change logo. Multimedia id = " + data.id + "; Key = " + data.path);
-                    res.json({error: true});
-                } else {
-                    res.json({error: false, updated: wRes});
-                }
-            });
-        });
-    router.route('/admin/multimedia/editVideo')
-        .post(function(req,res){
-            var data = req.body.data;
-            Multimedia.update({_id:data.id}, {file_path: data.path}, function (err, wRes) {
-                if(err){
-                    logger.error("Error at multimedia video change. Multimedia id = "+data.id+"; Key = "+data.path);
-                    res.json({error:true});
-                }else{
-                    res.json({error:false, updated:wRes});
-                }
-            });
-        });
-    router.route('/admin/multimedia/toggleVideo')
-        .post(function (req, res) {
-            
-            Multimedia.update({_id: req.body.id},{$set:{enable: req.body.isEnabled}}).exec(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
-                    res.send({message:"Update successful!"});
-                }
-            });
-        });
-    router.route('/admin/quizes')
-
-        .get(function(req, res) {
-            Quizes.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        })
-        .post(function(req, res) {
-
-            var test = new Quizes(); 		// create a new instance of the Bear model
-            test.description = req.body.description;  // set the bears name (comes from the request)
-            test.enabled=req.body.enabled ;
-            test.entity= req.body.entity   ;
-            test.expired= req.body.expired  ;
-            test.expiry_date= req.body.expiry_date ;
-            test.last_updated=req.body.last_updated;
-            test.no_of_exam_questions= req.body.no_of_exam_questions ;
-            test.points=req.body.points;
-            test.questionsID=req.body.questionsID;
-            test.time=req.body.time;
-            test.times=req.body.times;
-            test.title=req.body.title;
-            test.treshhold=req.body.treshhold;
-
-            test.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Test created!' });
-            });
-
-        });
-    router.route('/admin/quizes/:id')
-
-        .get(function(req, res) {
-            Quizes.find({_id:req.params.id}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                if(cont.length == 1){
-                    res.json(cont[0]);
-                }else{
-                    res.json(null);
-                }
-            })
-        })
-        .put(function(req, res) {
-
-            Quizes.findById(req.params.id, function(err, test) {
-
-                if (err)
-                    res.send(err);
-
-                test.description = req.body.description;  // set the bears name (comes from the request)
-                test.enabled=req.body.enabled ;
-                test.entity= req.body.entity   ;
-                test.expired= req.body.expired  ;
-                test.expiry_date= req.body.expiry_date ;
-                test.last_updated=req.body.last_updated;
-                test.no_of_exam_questions= req.body.no_of_exam_questions ;
-                test.points=req.body.points;
-                test.questionsID=req.body.questionsID;
-                test.time=req.body.time;
-                test.times=req.body.times;
-                test.title=req.body.title;
-                test.treshhold=req.body.treshhold;
-                test.save(function(err) {
-                    if (err)
-                        res.send(err);
-
-                    res.json({ message: 'Test updated!' });
-                });
-
-            });
-        })
-        .delete(function(req, res) {
-            Quizes.remove({
-                _id: req.params.id
-            }, function(err,cont) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Successfully deleted!' });
-            });
-        });
-
-
     router.route('/admin/areas')
 
         .get(function(req, res) {
-            Therapeutic_Area.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                else
-                    res.json(cont);
-            });
+            if(req.query.id){
+                Therapeutic_Area.findById(req.query.id).populate('therapeutic-areasID').exec(function(err, cont) {
+                    var objectToSend = {};
+                    if(err) {
+                        handleError(res,err,500);
+                    }else{
+                        if(cont){
+                            objectToSend['selectedArea'] = cont;
+                            if(cont.has_children==true)
+                            {
+                                Therapeutic_Area.find({'therapeutic-areasID':{$in : [cont._id]}}).exec(function(err,response){
+                                    objectToSend['childrenAreas'] = response;
+                                    handleSuccess(res, objectToSend);
+                                })
+                            }
+                            else{
+                                handleSuccess(res, objectToSend);
+                            }
+                        }else{
+                            handleError(res,err,404,1);
+                        }
+                    }
+                })
+            }else{
+                Therapeutic_Area.find(function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else
+                        handleSuccess(res, cont);
+                });
+            }
         })
         .post(function(req, res) {
-
-            var therapeutic = new Therapeutic_Area(); 		// create a new instance of the Bear model
-            therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
-            therapeutic.last_updated=req.body.last_updated ;
-            therapeutic.name= req.body.name   ;
-            therapeutic.enabled= req.body.enabled  ;
+            var therapeutic = new Therapeutic_Area(req.body.area); 		// create a new instance of the Bear model;
             therapeutic.save(function(err,saved) {
                 if (err)
-                    res.send(err);
+                    handleError(res,err,500);
                         else{
-                    async.each(req.body['therapeutic-areasID'], function (item, callback) {
+                    async.each(req.body.subareas, function (item, callback) {
                         Therapeutic_Area.findById(item, function (err, foundArea) {
                             if(err){
                                 callback(err);
@@ -3242,7 +1949,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                 foundArea['therapeutic-areasID'] = [saved._id];
                                 foundArea.save(function(error){
                                     if(error)
-                                        res.json(err);
+                                        handleError(res,err,500);
                                     else
                                         callback();
                                 })
@@ -3250,194 +1957,152 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                         })
                     }, function (err) {
                         if(err){
-                            console.log(err);
-                            res.send({message: "Eroare la adaugarea sub-ariilor"});
+                            handleError(res,err,409,7);
                         }else{
-                            res.send({message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                            handleSuccess(res, {}, 2);
                         }
                     });
                 }
             });
-
-        });
-    router.route('/admin/areas/:id')
-
-        .get(function(req, res) {
-            Therapeutic_Area.find({_id:req.params.id}).populate('therapeutic-areasID').exec(function(err, cont) {
-                var objectToSend = {};
-                if(err) {
-                    res.send(err);
-                }
-                if(cont.length == 1){
-                    objectToSend['selectedArea'] = cont[0];
-                    if(cont[0].has_children==true)
-                    {
-                        Therapeutic_Area.find({'therapeutic-areasID':{$in : [cont[0]._id]}}).exec(function(err,response){
-                            objectToSend['childrenAreas'] = response;
-                            res.json(objectToSend);
-                        })
-                    }
-                    else{
-                        res.json(objectToSend);
-                    }
-                }else{
-                    res.json(null);
-                }
-            })
         })
-        .put(function(req, res) {
-            Therapeutic_Area.findById(req.params.id, function (err, therapeutic) {
-                if (err)
-                    res.send(err);
-                else {
-                    console.log(req.body);
-                    if (req.body.has_children == true) {
-                        therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
-                        therapeutic.last_updated = req.body.last_updated;
-                        therapeutic.name = req.body.name;
-                        therapeutic.enabled = req.body.enabled;
-                        therapeutic['therapeutic-areasID'] = [];
-                        therapeutic.save(function (err, newTherapeutic) {
-                            if (err)
-                                res.json(err);
-                            else {
-                                if(req.body.oldAreas.length > 0){
-                                    async.each(req.body.oldAreas, function (item1, callback) {
-                                        Therapeutic_Area.findById(item1._id, function (err, foundArea) {
-                                            if (err) {
-                                                callback(err);
-                                            } else {
-                                                foundArea['therapeutic-areasID'] = [];
-                                                foundArea.save(function (error) {
-                                                    if (error)
-                                                        res.json(err);
-                                                    else
-                                                        callback();
-                                                })
-                                            }
-                                        })
-                                    }, function (err) {
+    .put(function(req, res) {
+            var area = req.body.area;
+            var therapeuticArray = req.body.newAreas;
+            var oldAreas = req.body.oldAreas;
+                if (area.has_children == true) {
+                    Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
+                        if (err)
+                            handleError(res,err,500);
+                        else {
+                            if(oldAreas.length > 0){
+                                async.each(oldAreas, function (item1, callback) {
+                                    Therapeutic_Area.findById(item1._id, function (err, foundArea) {
                                         if (err) {
-                                            console.log(err);
-                                            res.send({message: "Eroare la adaugarea sub-ariilor"});
+                                            callback(err);
                                         } else {
-                                            async.each(req.body['therapeutic-areasID'], function (item, callback) {
-                                                Therapeutic_Area.findById(item, function (err, foundArea) {
-                                                    if (err) {
-                                                        callback(err);
-                                                    } else {
-                                                        foundArea['therapeutic-areasID'] = [therapeutic._id];
-                                                        foundArea.save(function (error) {
-                                                            if (error)
-                                                                res.json(err);
-                                                            else
-                                                                callback();
-                                                        })
-                                                    }
-                                                })
-                                            }, function (err) {
+                                            foundArea['therapeutic-areasID'] = [];
+                                            foundArea.save(function (error) {
+                                                if (error)
+                                                    handleError(res,err,500);
+                                                else
+                                                    callback();
+                                            })
+                                        }
+                                    })
+                                }, function (err) {
+                                    if (err) {
+                                        handleError(res,err,409,7);
+                                    } else {
+                                        async.each(therapeuticArray, function (item, callback) {
+                                            Therapeutic_Area.findById(item, function (err, foundArea) {
                                                 if (err) {
-                                                    console.log(err);
-                                                    res.send({message: "Eroare la adaugarea sub-ariilor"});
+                                                    callback(err);
                                                 } else {
-                                                    res.send({message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
+                                                    foundArea['therapeutic-areasID'] = [req.query.id];
+                                                    foundArea.save(function (error) {
+                                                        if (error)
+                                                            handleError(res,err,500);
+                                                        else
+                                                            callback();
+                                                    })
                                                 }
-                                            });
-                                        }
-                                    });
-                                }
-                                else{
-                                    async.each(req.body['therapeutic-areasID'], function (item, callback) {
-                                        Therapeutic_Area.findById(item, function (err, foundArea) {
+                                            })
+                                        }, function (err) {
                                             if (err) {
-                                                callback(err);
+                                                handleError(res,err,409,7);
                                             } else {
-                                                foundArea['therapeutic-areasID'] = [therapeutic._id];
-                                                foundArea.save(function (error) {
-                                                    if (error)
-                                                        res.json(err);
-                                                    else
-                                                        callback();
-                                                })
+                                                handleSuccess(res, {}, 2);
                                             }
-                                        })
-                                    }, function (err) {
-                                        if (err) {
-                                            console.log(err);
-                                            res.send({message: "Eroare la adaugarea sub-ariilor"});
-                                        } else {
-                                            res.send({message: "Adaugarea sub-ariilor a fost efectuata cu succes!"});
-                                        }
-                                    });
-                                }
+                                        });
+                                    }
+                                });
                             }
-                        })
+                            else{
+                                async.each(therapeuticArray, function (item, callback) {
+                                    Therapeutic_Area.findById(item, function (err, foundArea) {
+                                        if (err) {
+                                            callback(err);
+                                        } else {
+                                            foundArea['therapeutic-areasID'] = [req.query.id];
+                                            foundArea.save(function (error) {
+                                                if (error)
+                                                    handleError(res,err,500);
+                                                else
+                                                    callback();
+                                            })
+                                        }
+                                    })
+                                }, function (err) {
+                                    if (err) {
+                                        handleError(res,err,409,7);
+                                    } else {
+                                        handleSuccess(res, {}, 2);
+                                    }
+                                });
+                            }
+                        }
+                    })
+                }
+                else {
+                    if (therapeuticArray.length > 0) {
+                        Therapeutic_Area.update({'therapeutic-areasID':{$in : [req.query.id]}}, {$set: {'therapeutic-areasID': []}}, {multi: true}, function (err, wres) {
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
+                                    if (err)
+                                        handleError(res,err,500);
+                                    else {
+                                        handleSuccess(res, {}, 3);
+                                    }});
+                            }
+                        });
                     }
                     else {
-                        if (req.body['therapeutic-areasID']) {
-                            Therapeutic_Area.update({'therapeutic-areasID':{$in : [therapeutic._id]}}, {$set: {'therapeutic-areasID': []}}, function (err, wres) {
-                                if(err){
-                                    logger.error(err);
-                                    res.send({error: true});
-                                }else{
-                                    res.json({message: 'Update successful'});
-                                }
-                            });
-                        }
-                        else {
-                            therapeutic.has_children = req.body.has_children;  // set the bears name (comes from the request)
-                            therapeutic.last_updated = req.body.last_updated;
-                            therapeutic.name = req.body.name;
-                            therapeutic.enabled = req.body.enabled;
-                            therapeutic['therapeutic-areasID'] = [];
-                            therapeutic.save(function (err) {
-                                if (err)
-                                    res.json(err);
-                                else
-                                    res.json({message: 'Update successful'});
-                            });
-                        }
+                        Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
+                            if (err)
+                                handleError(res,err,500);
+                            else {
+                                handleSuccess(res, {}, 3);
+                        }});
                     }
                 }
-            })
         })
         .delete(function(req, res) {
-            var data = req.params.id;
-            var dataArray = [req.params.id];
+            var data = req.query.id;
+            var dataArray = [req.query.id];
             var connEntities=[Products,Multimedia];
             async.each(connEntities,function(item,callback){
-                disconnectAllEntitiesFromEntity(item,'therapeutic-areasID',data,function(err,result){
-                    if(err)
-                        res.json({ message: 'Eroare la stergerea ariei din entitatile conectate!' });
-                    else
+                item.update({},{$pull: {'therapeutic-areasID': dataArray}}, {multi: true}, function(err,wRes){
+                    if(err){
+                        callback(err);
+                    }else{
                         callback();
-                });
+                    }
+                })
             },function(err){
                 if(err){
-                    res.json({ message: 'Nu s-a putut efectua stergerea asincrona!' });
+                    handleError(res,err,409,5);
                 }
                 else
                 {
                     Therapeutic_Area.remove({$or :[{_id: data},{'therapeutic-areasID': {$in: dataArray}}]}, function(err,cont) {
                         if (err)
-                            res.send(err);
+                            handleError(res,err,500);
                         else
-                            res.json({ message: 'Aria a fost stearsa cu succes!' });
+                            handleSuccess(res, {}, 4);
                     });
                 }
             });
-
-
         });
-
     router.route('/admin/therapeutic_areas')
 
         .get(function(req, res) {
             Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
                 if(err) {
-                    res.send(err);
-                }
-                res.json(cont);
+                    handleError(res,err,500);
+                }else
+                    handleSuccess(res, cont);
             });
         });
 
@@ -3455,7 +2120,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .post(function (req, res) {
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
+            var namePatt = UtilsModule.regexes.streetName;
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -3485,7 +2150,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var id = req.body.id;
             var name = req.body.name;
             //validate name
-            var namePatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
+            var namePatt = UtilsModule.regexes.streetName;
             if(!namePatt.test(name)){
                 res.send({message: {type: 'danger', text: 'Numele este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -3571,7 +2236,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                 res.send({message: {type: 'danger', text:'Eroare la validare. Verificati daca medicul este deja adaugat'}});
                             }else{
                                 //check nickname format
-                                var nickPatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
+                                var nickPatt = UtilsModule.regexes.nickname;
                                 if(!nickPatt.test(req.body.nickname.toString())){
                                     res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
                                 }else{
@@ -3604,7 +2269,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .put(function (req, res) {
             var nickname = req.body.nickname?req.body.nickname.toString():"";
             //validate nickname format
-            var nickPatt = new XRegExp('^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$','i');
+            var nickPatt = UtilsModule.regexes.nickname;
             if(!nickPatt.test(nickname)){
                 res.send({message: {type: 'danger', text: 'Nickname-ul este obligatoriu (minim 2 caractere) si trebuie sa contina doar litere, cifre si caracterele "-", "_", insa poate incepe doar cu o litera sau cifra'}});
             }else{
@@ -3702,19 +2367,17 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(req.query.id){
                 CM_templates.findOne({_id: req.query.id}, function (err, template) {
                     if(err || !template){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: template});
+                        handleSuccess(res, template);
                     }
                 });
             }else{
                 CM_templates.find({}, function (err, templates) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: templates});
+                        handleSuccess(res, templates);
                     }
                 });
             }
@@ -3728,10 +2391,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             });
             template.save(function (err, saved) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: saved});
+                    handleSuccess(res, saved);
                 }
             });
         })
@@ -3739,10 +2401,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToUpdate = ObjectId(req.query.id);
             CM_templates.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res, true, 3);
                 }
             });
         })
@@ -3750,10 +2411,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToDelete = ObjectId(req.query.id);
             CM_templates.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res, true, 4);
                 }
             });
         });
@@ -3846,19 +2506,17 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(req.query.id){
                 DPOC_Devices.findOne({_id: req.query.id}, {name: 1}, function (err, device) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: device});
+                        handleSuccess(res, device);
                     }
                 });
             }else{
                 DPOC_Devices.find({}, {name: 1}, function (err, devices) {
                     if(err){
-                        logger.error(err);
-                        res.send({error: true});
+                        handleError(res, err);
                     }else{
-                        res.send({success: devices});
+                        handleSuccess(res, devices);
                     }
                 });
             }
@@ -3867,10 +2525,10 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             
             addDeviceDPOC(req.body.name, req.body.email).then(
                 function () {
-                    res.send({success: "Un email a fost trimis catre utilizatorul adaugat"});
+                    handleSuccess(res, true, 81);
                 },
                 function (err) {
-                    res.send({error: err});
+                    handleError(res, err);
                 }
             );
         })
@@ -3878,9 +2536,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToDelete = ObjectId(req.query.id);
             DPOC_Devices.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: true});
+                    handleSuccess(res);
                 }
             });
         });
@@ -3904,9 +2562,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 );
             }, function () {
                 if(processedWithErrors.length == 0){
-                    res.send({success: true});
+                    handleSuccess(res);
                 }else{
-                    res.send({error: processedWithErrors});
+                    handleError(res, true, 409, 12, processedWithErrors);
                 }
             })
         });
@@ -3915,10 +2573,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function (req, res) {
             ActivationCodes.find({}).populate('profession').exec(function (err, codes) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: codes});
+                    handleSuccess(res, codes);
                 }
             });
         })
@@ -3926,15 +2583,13 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var idToUpdate = ObjectId(req.query.id);
             ActivationCodes.findOne({_id: idToUpdate}).select('+value').exec(function (err, code) {
                 if(err || !code){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
                     ActivationCodes.update({_id: idToUpdate}, {$set: {value: SHA512(req.body.new).toString()}}, function (err, wres) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: true});
+                            handleSuccess(res);
                         }
                     });
                 }
@@ -3945,30 +2600,24 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function (req, res) {
             Parameters.find({}).exec(function (err, params) {
                 if(err){
-                    logger.error(err);
-                    res.send({error: true});
+                    handleError(res, err);
                 }else{
-                    res.send({success: params});
+                    handleSuccess(res, params);
                 }
             });
         })
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             Parameters.findOne({_id: idToUpdate}).exec(function (err, parameter) {
-                if(err) {
-                    logger.error(err);
-                    res.send({error: true});
-                }else if(!parameter){
-                    logger.error("Update parameter - not found");
-                    res.send({error: true});
+                if(err || !parameter) {
+                    handleError(res, err);
                 }else{
                     UtilsModule.allowFields(req.body, ["default_value", "value"]);
                     Parameters.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                         if(err){
-                            logger.error(err);
-                            res.send({error: true});
+                            handleError(res, err);
                         }else{
-                            res.send({success: true});
+                            handleSuccess(res);
                         }
                     });
                 }
@@ -3980,19 +2629,17 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(req.query.id){
                 User.findOne({_id: req.query.id}).select('+enabled +phone').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: OneUser});
+                        handleSuccess(res, OneUser);
                     }
                 })
             }else{
                 User.find({state:"ACCEPTED"}).select('+enabled +phone').populate('profession').exec(function (err, users) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: users});
+                        handleSuccess(res, users);
                     }
                 })
             }
@@ -4004,21 +2651,19 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var updateUser = function () {
                 User.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: true});
+                        handleSuccess(res);
                     }
                 });
             };
 
             if(dataToUpdate.username){
-                User.findOne({username:{$regex: "^"+dataToUpdate.username.replace(/\+/g,"\\+")+"$", $options: "i"}, _id:{$ne: idToUpdate}}, function (err, user) {
+                User.findOne({username: UtilsModule.regexes.emailQuery(dataToUpdate.username), _id:{$ne: idToUpdate}}, function (err, user) {
                     if(err){
-                        console.log(err);
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else if(user){
-                        res.send({userExists: true});
+                        handleSuccess(res, {userExists: true});
                     }else{
                         updateUser();
                     }
@@ -4032,9 +2677,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function (req, res) {
             Professions.find({}).exec(function (err, professions) {
                 if(err){
-                    res.send(err);
+                    handleError(res,err,500);
                 }else{
-                    res.send(professions);
+                    handleSuccess(res, professions);
                 }
             });
         });
@@ -4043,10 +2688,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function (req, res) {
             UserGroup.find({}).populate('profession').exec(function (err, groups) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: groups});
+                    handleSuccess(res, groups);
                 }
             });
         });
@@ -4055,10 +2699,9 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function (req, res) {
             User.find({state: req.params.type}).select('+state +proof_path').populate('profession').exec(function (err, users) {
                 if(err){
-                    console.log(err);
-                    res.send(err);
+                    handleError(res,err,500);
                 }else{
-                    res.send(users);
+                    handleSuccess(res, users);
                 }
             })
         })
@@ -4066,13 +2709,13 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(req.params.type && req.body.id){
                 User.update({_id: req.body.id}, {$set: {state: req.params.type}}, function (err, wres) {
                     if(err){
-                        res.send(err);
+                        handleError(res,err,500);
                     }else{
                         if(req.params.type == "ACCEPTED" && wres==1){
                             //email user
                             User.findOne({_id: req.body.id}).select('+title +enabled').exec(function (err, user) {
                                 if(err){
-                                    res.send(err);
+                                    handleError(res,err,500);
                                 }else{
                                     var generateToken = function (callback) {
                                         if(user.enabled){
@@ -4083,7 +2726,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                                     callback(err);
                                                 }else{
                                                     var activationToken = buf.toString('hex');
-                                                    User.update({username: {$regex: "^"+user.username.replace(/\+/g,"\\+")+"$", $options: "i"}}, {$set: {activationToken: activationToken}}, function (err, wres) {
+                                                    User.update({_id: user._id}, {$set: {activationToken: activationToken}}, function (err, wres) {
                                                         if(err){
                                                             callback(err);
                                                         }else{
@@ -4125,11 +2768,10 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                             'Activare cont MSD'
                                         ).then(
                                             function (success) {
-                                                res.send({message: "Updated "+wres+" user. Email sent"});
+                                                handleSuccess(res, {updateCount: wres}, 8);
                                             },
                                             function (err) {
-                                                logger.error(err);
-                                                res.send(err);
+                                                handleError(res,err,500);
                                             }
                                         );
                                     });
@@ -4139,7 +2781,7 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                             //email user
                             User.findOne({_id: req.body.id}).select('+title').exec(function (err, user) {
                                 if(err){
-                                    res.send(err);
+                                    handleError(res,err,500);
                                 }else{
                                     var emailTo = [{email: user.username, name: user.name}];
                                     var templateContent = [
@@ -4159,22 +2801,22 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                                         'Activare cont MSD'
                                     ).then(
                                         function (success) {
-                                            res.send({message: "Updated "+wres+" user. Email sent"});
+                                            handleSuccess(res, {updateCount: wres}, 8);
                                         },
                                         function (err) {
-                                            logger.error(err);
-                                            res.send(err);
+                                            handleError(res,err,500);
                                         }
                                     );
                                 }
                             });
                         }else{
-                            res.send({message: "Updated "+wres+" user. Email not sent"});
+                            //TODO: handle this as error
+                            handleSuccess(res, {updateCount: wres}, 9);
                         }
                     }
                 });
             }else{
-                res.send({message: "Invalid params"});
+                handleError(res,null,400,6);
             }
         });
 
@@ -4184,13 +2826,80 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
                 {$group: {_id: "$state", total: {$sum: 1}}}
             ], function (err, result) {
                 if(err){
-                    res.send(err);
+                    handleError(res,err,500);
                 }else{
-                    res.send(result);
+                    handleSuccess(res, result);
                 }
             });
         });
 
+    router.route('/admin/intros')
+        .get(function (req, res) {
+            if(req.query.id){
+                var presentations={};
+                Presentations.find({_id: req.query.id}).populate('groupsID').exec(function (err, presentation) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        presentations['onePresentation']=presentation[0];
+                        UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
+                            if(err) {
+                                handleError(res,err,500);
+                            }else{
+                                handleSuccess(res, presentations);
+                            }
+                        });
+                    }
+                });
+            }else{
+                Presentations.find({}).exec(function (err, presentations) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, presentations);
+                    }
+                });
+            }
+        })
+        .post(function(req,res){
+            var intro = new Presentations(req.body.intro);
+            intro.save(function (err, presentation) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, {}, 2);
+                }
+            });
+        })
+        .put(function(req,res){
+            if(req.body.isEnabled!=undefined){
+                Presentations.update({_id: req.query.id},{$set:{enabled: req.body.isEnabled}}).exec(function (err, presentation) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, {}, 3);
+                    }
+                });
+            }else{
+                var intro = req.body.intro;
+                Presentations.update({_id: req.query.id},{$set: intro},function (err, presentation) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, {}, 3);
+                    }
+                });
+            }
+        })
+        .delete(function(req,res){
+            Presentations.remove({_id: req.query.idToDelete}, function (err, count) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, {count: count}, 4);
+                }
+            });
+        });
     //==================================================================================================================================== USER ROUTES
 
     router.route('/user/addPhoto')
@@ -4201,14 +2910,13 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             if(imageBody && imageExtension){
                 UserModule.updateUserImage(req.user._id, imageBody, imageExtension).then(
                     function (image_path) {
-                        res.json({"type":"success", "message": "Fotografia a fost actualizata cu succes!"});
+                        handleSuccess(res, null, 11);
                     },
                     function (err) {
-                        logger.error(err);
-                        res.json({"type":"danger", "message":"A aparut o eroare la modificarea fotografiei"});
+                        handleError(res,err,500);
                     });
             }else{
-                res.json({"type":"danger", "message":"Parametrii invalizi"});
+                handleError(res,null,400,6);
             }
         });
 
@@ -4217,26 +2925,24 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function(req, res) {
             UserGroup.find({_id: {$in: req.user.groupsID}, content_specific: {$exists:true, $ne: false}}, function(err, groups) {
                 if(err) {
-                    res.send(err);
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.json(groups);
+                    handleSuccess(res,groups);
                 }
 
             });
         });
     router.route('/specialFeatures/groupSpecialProducts')
-        .post(function(req, res) {
-            var data = [mongoose.Types.ObjectId(req.body.specialGroup.toString())];
-            
-            specialProduct.find({groups: {$in: data}, enabled: true}, function(err, product) {
+        .get(function(req, res) {
+            specialProduct.find({groups: {$in: [req.query.specialGroup]}, enabled: true}, function(err, product) {
                 if(err) {
-                    res.send(err);
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.json(product);
+                    handleSuccess(res,product);
                 }
             });
         });
@@ -4244,179 +2950,126 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
     router.route('/specialFeatures/specialApps')
         .get(function (req, res) {
             if(req.query.group){
-                var group = ObjectId(req.query.group);
-                specialApps.find({groups: {$in: [group]}, isEnabled: true}).exec(function (err, apps) {
+                specialApps.find({groups: {$in: [req.query.group]}, isEnabled: true}).exec(function (err, apps) {
                     if(err){
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: apps});
+                        handleSuccess(res,apps);
                     }
                 });
             }else if(req.query.id){
-                var id = ObjectId(req.query.id);
-                specialApps.findOne({_id: id}).exec(function (err, app) {
+                specialApps.findOne({_id: req.query.id}).exec(function (err, app) {
                     if(err){
-                        res.send({error: true});
+                        handleError(res,err,500);
                     }else{
-                        res.send({success: app});
+                        handleSuccess(res,app);
                     }
                 });
             }else{
-                res.send({error: "Invalid query params"});
+                handleError(res,null,400,6);
             }
         });
 
 
     router.route('/specialProduct')
-
         .get(function(req, res) {
             specialProduct.findOne({_id: req.query.id}).populate('speakers').exec(function(err, product) {
                 if(err || !product) {
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.send({success: product});
+                    handleSuccess(res,product);
                 }
             });
         });
     router.route('/specialProductMenu')
-        .post(function(req, res) {
-            var id = mongoose.Types.ObjectId(req.body.id.toString());
+        .get(function(req, res) {
             specialProductMenu.distinct('children_ids', function (err,allChildren) {
                 if(err)
                 {
-                    res.send(err);
+                    handleError(res,err,500);
                 }
                 else{
-                    specialProductMenu.find({product: id,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
+                    specialProductMenu.find({product: req.query.id,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
                         if(err) {
-                            res.send(err);
+                            handleError(res,err,500);
                         }
                         else
                         {
-                            res.json(details);
+                            handleSuccess(res,details);
                         }
                     });
                 }
 
             });
-
-                    //get allowed articles for user;
         });
-    router.route('/specialProductDescription/:id')
+    router.route('/specialProductDescription')
         .get(function(req, res) {
-            var id = mongoose.Types.ObjectId(req.params.id.toString());
-            
-            specialProductMenu.findOne({_id: id}).exec(function(err, details) {
+            specialProductMenu.findOne({_id: req.query.id}).exec(function(err, details) {
                 if(err) {
-                    console.log(err);
-                    res.send(err);
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    
-                    res.json(details);
+                    handleSuccess(res,details);
                 }
             });
         });
     router.route('/specialProductFiles')
-        .post(function(req, res) {
-            
-            var id = mongoose.Types.ObjectId(req.body.id.toString());
-            
-            specialProductFiles.find({product: id}).exec(function(err, details) {
+        .get(function(req, res) {
+            specialProductFiles.find({product: req.query.id}).exec(function(err, details) {
                 if(err) {
-                    res.send(err);
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.json(details);
+                    handleSuccess(res,details);
                 }
             });
-            //get allowed articles for user;
         });
     router.route('/specialProductGlossary')
-        .post(function(req, res) {
-            var id = mongoose.Types.ObjectId(req.body.id.toString());
-            
-            specialProductGlossary.find({product: id}).exec(function(err, details) {
+        .get(function(req, res) {
+            specialProductGlossary.find({product: req.query.id}).exec(function(err, details) {
                 if(err) {
-                    res.send(err);
+                    handleError(res,err,500);
                 }
                 else
                 {
-                    res.json(details);
+                    handleSuccess(res,details);
                 }
             });
-            //get allowed articles for user;
         });
 
     router.route('/specialProduct/speakers')
         .get(function (req, res) {
-            var speaker_id = ObjectId(req.query.speaker_id);
-            Speakers.findOne({_id: speaker_id}, function (err, speaker) {
+            Speakers.findOne({_id: req.query.speaker_id}, function (err, speaker) {
                 if(err){
-                    console.log(err);
-                    res.send({error: true});
+                    handleError(res,err,500);
                 }else{
-                    res.send({success: speaker});
+                    handleSuccess(res,speaker);
                 }
             });
         });
-
     router.route('/content')
-
         .get(function(req, res) {
-            Content.find(function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-
-                res.json(cont);
-            });
-        });
-
-    router.route('/content/articleDetails')
-
-        .post(function(req, res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroup) {
-                        forGroups.push(req.body.specialGroup.toString());
+            if(req.query.content_id){
+                Content.findOne({_id: req.query.content_id}, function(err, cont) {
+                    if(err || !cont) {
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, cont);
                     }
-                    
-                    Content.find({_id:req.body.content_id, groupsID: { $in: forGroups}}, function(err, cont) {
-                        if(err) {
-                            res.send(err);
-                        }
-                        if(cont[0]){
-                            res.json(cont[0]);
-                        }else{
-                            res.json(null);
-                        }
-                    })
-                }});
-
-
-        });
-
-    router.route('/content/type')
-
-        .post(function(req, res) {
-            var cType = req.body.content_type;
-            var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, cType, specialGroupSelected, null, 'created', function (err, content) {
-                if(err){
-                    res.send(err);
-                }else{
-                    res.json(content);
-                }
-            });
+                })
+            }else{
+                getUserContent(req.user, req.query.content_type, req.query.specialGroupSelected, null, 'created').then(
+                    function (content) {
+                        handleSuccess(res,content);
+                    },
+                    function (err) {
+                        handleError(res,err,500);
+                    });
+            }
         });
 
     router.route('/userdata')
@@ -4424,59 +3077,82 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function(req, res) {
             User.findOne({_id: req.user._id}).select("+phone +points +citiesID +jobsID +address +practiceType +title").populate('therapeutic-areasID').exec(function (err, user) {
                 if(err){
-                    res.send(err);
+                    handleError(res,err,500);
                 }else{
                     var userCopy = JSON.parse(JSON.stringify(user));
                     async.parallel([
                         function (callback) {
-                            if(user['jobsID']){
-                                if(user['jobsID'][0]){
-                                    var jobId = user.jobsID[0];
-                                    Job.find({_id:jobId}, function (err, job) {
-                                        if(err){
-                                            callback(err, null);
-                                        }else{
-                                            userCopy.job = job;
-                                        }
-                                    });
-                                }
+                            if(user['jobsID'] && user['jobsID'][0]){
+                                Job.findOne({_id: user.jobsID[0]}, function (err, job) {
+                                    if(err){
+                                        callback(err);
+                                    }else{
+                                        userCopy.job = job;
+                                        callback();
+                                    }
+                                });
+                            }else{
+                                callback();
                             }
-                            callback(null, null);
                         },
                         function (callback) {
-                            Cities.find({_id:user.citiesID[0]}, function (err, city) {
+                            Cities.findOne({_id: user.citiesID[0]}, function (err, city) {
                                 if (err) {
-                                    callback(err, null);
-                                }
-                                if (city[0]) {
-                                    Counties.find({citiesID: {$in: [city[0]._id.toString()]}}, function (err, county) {
-                                        if(err){
-                                            callback(err, null);
-                                        }
-                                        if(county[0]){
-                                            userCopy['city_id'] = city[0]._id;
-                                            userCopy['city_name'] = city[0].name;
-                                            userCopy['county_id'] = county[0]._id;
-                                            userCopy['county_name'] = county[0].name;
-                                        }
-                                        callback(null, null);
-                                    });
+                                    callback(err);
                                 }else{
-                                    callback(null, null);
+                                    if(city) {
+                                        Counties.findOne({citiesID: {$in: [city._id]}}, function (err, county) {
+                                            if(err){
+                                                callback(err);
+                                            }else{
+                                                if(county){
+                                                    userCopy['city_id'] = city._id;
+                                                    userCopy['city_name'] = city.name;
+                                                    userCopy['county_id'] = county._id;
+                                                    userCopy['county_name'] = county.name;
+                                                }
+                                                callback();
+                                            }
+                                        });
+                                    }else{
+                                        callback();
+                                    }
                                 }
                             });
                         }
-                    ], function (err, results) {
+                    ], function (err) {
                         if(err){
-                            console.log(err);
-                            res.send(err);
+                            handleError(res, err);
                         }else{
-                            
-                            res.json(userCopy);
+                            handleSuccess(res, userCopy);
                         }
                     });
                 }
             });
+        })
+        .put(function (req, res) {
+            var ans = {};
+
+            var newData = req.body.newData;
+            UtilsModule.allowFields(newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
+
+            var namePatt = UtilsModule.regexes.name;
+            var phonePatt = UtilsModule.regexes.phone;
+            if((!namePatt.test(newData.name.toString()))){ //check name
+                handleError(res,null,400,26);
+            }else if(newData.phone && !phonePatt.test(newData.phone.toString())){ //check phone number
+                handleError(res,null,400,27);
+            }else if(!newData.address){
+                handleError(res,null,400,28);
+            }else{
+                User.update({_id: req.user._id}, {$set: newData}, function (err, wres) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, {}, 12);
+                    }
+                });
+            }
         });
 
     router.route('/counties')
@@ -4484,195 +3160,96 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         .get(function(req, res) {
             Counties.find({$query:{}, $orderby: {name: 1}}, {name: 1}, function (err, cont) {
                 if(err) {
-                    res.send(err);
-                }
-                res.json(cont);
+                    handleError(res,err,500);
+                }else
+                    handleSuccess(res,cont);
             });
         });
 
-    router.route('/cities/:county_name')
+    router.route('/cities')
 
         .get(function(req, res) {
-            Counties.find({name: req.params.county_name}, function (err, counties) {
-                if(err) {
-                    res.send(err);
+            Counties.findOne({name: req.query.county_name}, function (err, county) {
+                if(err || !county) {
+                    handleError(res, err);
+                }else{
+                    Cities.find({_id: {$in: county.citiesID}}, function (err, cities) {
+                        if(err) {
+                            handleError(res, err);
+                        }else
+                            handleSuccess(res, cities);
+                    });
                 }
-                Cities.find({_id: {$in: counties[0].citiesID}}, function (err, cities) {
-                    if(err) {
-                        res.send(err);
-                    }
-                    res.json(cities);
-                });
             });
-        });
-
-    router.route('/userProfile')
-
-        .post(function (req, res) {
-            var ans = {};
-            UtilsModule.allowFields(req.body.newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
-            var newData = req.body.newData;
-
-            var namePatt = new XRegExp('^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\\s]{3,100}$');
-            var phonePatt = new XRegExp('^[0-9]{10,20}$');
-            if((!namePatt.test(newData.name))){ //check name
-                ans.error = true;
-                ans.message = "Numele trebuie sa contina doar caractere, minim 3";
-                res.json(ans);
-            }else if(newData.phone && !phonePatt.test(newData.phone)){ //check phone number
-                ans.error = true;
-                ans.message = "Numarul de telefon trebuie sa contina doar cifre, minim 10";
-                res.json(ans);
-            }else if(!newData.address){
-                ans.error = true;
-                ans.message = "Adresa este obligatorie";
-                res.json(ans);
-            }else{
-                
-                User.update({_id: req.user._id}, {$set: newData}, function (err, wres) {
-                    if(err){
-                        logger.error(err);
-                        ans.error = true;
-                        ans.message = "Eroare la actualizare. Verificati datele";
-                    }else{
-                        ans.error = false;
-                        ans.message = "Datele au fost modificate";
-                    }
-                    res.json(ans);
-                });
-            }
         });
 
     router.route('/userJob')
 
         .post(function (req, res) {
-            var ans = {error:false};
             var job = req.body.job;
-            var namePatt = new XRegExp('^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$');
-            var numberPatt = new XRegExp('^[a-zA-Z0-9-\\s]{1,5}$');
-            //if(!numberPatt.test(job.street_number.toString())) {
-            //    ans.error = true;
-            //    ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
-            //}
-            //if(!namePatt.test(job.street_name.toString())) {
-            //    ans.error = true;
-            //    ans.message = "Numele strazii trebuie sa contina doar litere, minim 3";
-            //}
-            //if(!namePatt.test(job.job_name.toString())) {
-            //    ans.error = true;
-            //    ans.message = "Locul de munca trebuie sa contina doar litere, minim 3";
-            //}
+            var streetPatt = UtilsModule.regexes.streetName;
+            var namePatt = UtilsModule.regexes.jobName;
+            var numberPatt = UtilsModule.regexes.jobNumber;
+            if(!numberPatt.test(job.street_number.toString())) {
+                ans.error = true;
+                ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
+            }
+            if(!streetPatt.test(job.street_name.toString())) {
+                return handleError(res,null,400,40);
+            }
+            if(!namePatt.test(job.job_name.toString())) {
+                return handleError(res,null,400,41);
+            }
             if(!isNaN(parseInt(job.job_type))){
                 if(parseInt(job.job_type)<1 || parseInt(job.job_type>4)){
-                    ans.error = true;
-                    ans.message = "Selectati un tip de loc de munca";
+                    return handleError(res,null,400,29);
                 }
             }else{
-                ans.error = true;
-                ans.message = "Selectati un tip de loc de munca";
+                return handleError(res,null,400,29);
             }
-            if(ans.error){
-                res.json(ans);
+            if(!job._id){
+                //create new
+                var newJob = new Job({
+                    job_type: job.job_type,
+                    job_name: job.job_name,
+                    street_name: job.street_name,
+                    street_number: job.street_number,
+                    postal_code: job.postal_code,
+                    job_address: job.job_address
+                });
+                newJob.save(function (err, inserted) {
+                    if(err){
+                        handleError(res,null,400,2);
+                    }else{
+                        //update user to point to new job
+                        var idInserted = inserted._id.toString();
+                        var upd = User.update({_id:req.user._id}, {jobsID: [idInserted]}, function () {
+                            if(!upd._castError){
+                                handleSuccess(res, {}, 12);
+                            }else{
+                                handleError(res,null,400,2);
+                            }
+                        });
+                    }
+                });
             }else{
-                if(job._id==0){
-                    //create new
-                    var newJob = new Job({
-                        job_type: job.job_type,
-                        job_name: job.job_name,
-                        street_name: job.street_name,
-                        street_number: job.street_number,
-                        postal_code: job.postal_code,
-                        job_address: job.job_address
-                    });
-                    newJob.save(function (err, inserted) {
-                        if(err){
-                            ans.error = true;
-                            ans.message = "Eroare la crearea locului de munca. Va rugam verificati campurile!";
-                            res.json(ans);
-                        }else{
-                            //update user to point to new job
-                            var idInserted = inserted._id.toString();
-                            var upd = User.update({_id:req.user._id}, {jobsID: [idInserted]}, function () {
-                                if(!upd._castError){
-                                    ans.error = false;
-                                    ans.message = "Locul de munca a fost salvat";
-                                }else{
-                                    ans.error = true;
-                                    ans.message = "Eroare la adaugarea locului de munca. Va rugam sa verificati datele!";
-                                }
-                                res.json(ans);
-                            });
-                        }
-                    });
-                }else{
-                    //update existing
-                    var upd = Job.update({_id:job._id}, {
-                        job_type: job.job_type,
-                        job_name: job.job_name,
-                        street_name: job.street_name,
-                        street_number: job.street_number,
-                        postal_code: job.postal_code,
-                        job_address: job.job_address
-                    }, function () {
-                        if(!upd._castError){
-                            ans.error = false;
-                            ans.message = "Locul de munca a fost adaugat";
-                        }else{
-                            ans.error = true;
-                            ans.message = "Eroare la adaugarea locului de munca. Va rugam sa verificati datele";
-                        }
-                        res.json(ans);
-                    });
-                }
+                //update existing
+                var upd = Job.update({_id:job._id}, {
+                    job_type: job.job_type,
+                    job_name: job.job_name,
+                    street_name: job.street_name,
+                    street_number: job.street_number,
+                    postal_code: job.postal_code,
+                    job_address: job.job_address
+                }, function () {
+                    if(!upd._castError){
+                        handleSuccess(res, {}, 12);
+                    }else{
+                        handleError(res,null,400,2);
+                    }
+                });
             }
         });
-
-//    router.route('/changeEmail')
-//        .post(function (req, res) {
-//            var ans = {error: true, message:"Server error"};
-//            var userData = req.body.userData;
-//            //check if mail is valid
-//            var mailPatt = new XRegExp('^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$', 'i');
-//            if(!mailPatt.test(userData.mail.toString())){
-//                ans.error = true;
-//                ans.message = "E-mail invalid";
-//                res.json(ans);
-//            }else{
-//                //check if mail already exists
-//                User.find({username: userData.mail}, function(err, result){
-//                    if(err){
-//                        ans.error = true;
-//                        ans.message = "Eroare la schimbarea adresei de e-mail";
-//                        res.json(ans);
-//                    }else{
-//                        if(result.length == 0){
-//                            //check password
-//                            if(SHA256(userData.pass).toString() === req.user.password){
-//                                var upd = User.update({_id:req.user._id}, {username: userData.mail}, function () {
-//                                    if(!upd._castError){
-//                                        ans.error = false;
-//                                        ans.message = "Adresa de e-mail a fost modificata";
-//                                        res.json(ans);
-//                                    }else{
-//                                        ans.error = true;
-//                                        ans.message = "Eroare la schimbarea adresei de e-mail";
-//                                        res.json(ans);
-//                                    }
-//                                });
-//                            }else{
-//                                ans.error = true;
-//                                ans.message = "Parola incorecta";
-//                                res.json(ans);
-//                            }
-//                        }else{
-//                            ans.error = true;
-//                            ans.message = "Acest e-mail este deja folosit";
-//                            res.json(ans);
-//                        }
-//                    }
-//                });
-//            }
-//        });
 
     router.route('/changePassword')
         .post(function (req, res) {
@@ -4680,45 +3257,31 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
             var userData = req.body.userData;
             User.findOne({_id: req.user._id}).select("+password").exec(function (err, user) {
                 if(err || !user){
-                    ans.error = true;
-                    ans.message = "Utilizatorul nu a fost gasit!";
-                    res.json(ans);
+                    handleError(res,err,500);
                 }else{
                     //check if password is correct
                     if(SHA256(userData.oldPass).toString() !== user.password){
-                        ans.error = true;
-                        ans.message = "Parola nu este corecta!";
-                        res.json(ans);
+                        handleError(res,null,400,8);
                     }else{
                         if(SHA256(userData.newPass).toString() === user.password)
                         {
-                            ans.error = true;
-                            ans.message = "Introduceti o parola diferita fata de cea veche!";
-                            res.json(ans);
+                            handleError(res,null,400,9);
                         }
                         else
                         {
-                            if(userData.newPass.toString().length < 6 || userData.newPass.toString.length > 32){
-                                ans.error = true;
-                                ans.message = "Parola noua trebuie sa contina intre 6 si 32 de caractere";
-                                res.json(ans);
+                            if(userData.newPass.toString().length < 6 || userData.newPass.toString().length > 32){
+                                handleError(res,null,400,10);
                             }else{
                                 //check if passwords match
                                 if(userData.newPass !== userData.confirmPass){
-                                    ans.error = true;
-                                    ans.message = "Parolele nu corespund";
-                                    res.json(ans);
+                                    handleError(res,null,400,11);
                                 }else{
                                     //change password
-                                    var upd = User.update({_id: user._id}, {password: SHA256(userData.newPass).toString()}, function (err, wres) {
+                                    User.update({_id: user._id}, {password: SHA256(userData.newPass).toString()}, function (err) {
                                         if(!err){
-                                            ans.error = false;
-                                            ans.message = "Parola a fost schimbata";
-                                            res.json(ans);
+                                            handleSuccess(res, {}, 13);
                                         }else{
-                                            ans.error = true;
-                                            ans.message = "Eroare la schimbarea parolei";
-                                            res.json(ans);
+                                            handleError(res,err,500);
                                         }
                                     });
                                 }
@@ -4730,791 +3293,321 @@ module.exports = function(app, sessionSecret, logger, pushServerAddr, amazon, ro
         });
 
     router.route('/userHomeCarousel/')
-        .post(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else{
+        .get(function (req,res) {
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
-                    if(req.body.specialGroupSelected){
-                        forGroups.push(req.body.specialGroupSelected.toString());
+                    if(req.query.specialGroupSelected){
+                        forGroups.push(req.query.specialGroupSelected.toString());
                     }
-                    
                     //get allowed articles for user
-                    Content.find({groupsID: {$in: forGroups},enable:true}, {_id: 1}, function (err, content) {
+                    Content.distinct("_id", {groupsID: {$in: forGroups}, enable:true}).exec(function (err, ids) {
                         if(err){
-                            res.send(err);
+                            handleError(res,err,500);
                         }else{
-                            //get ids of allowed articles
-                            getIds(content, function (ids) {
-                                //get carousel content within allowed articles
-                                Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
-                                    if(err){
-                                        res.send(err);
-                                    }else{
-                                        res.send(images);
-                                    }
-                                })
-                            });
+                            //get carousel content within allowed articles
+                            Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    handleSuccess(res, images);
+                                }
+                            })
                         }
                     });
-                }
-            });
-        });
-    router.route('/userImage')
-        .get(function(req,res) {
-            User.findOne({username: {$regex: new RegExp("^" + req.user.username, "i")}},'image_path name', function (err, usr) {
-                if (err) {
-                    logger.error(err);
-                    res.send(err)
-                }
-                else {
-                    res.json(usr);
-                }
-            })
+                },
+                function (err) {
+                    handleError(res,err,500);
+                });
         });
     router.route('/userHomeSearch/')
-        .post(function(req,res){
-            var data=req.body.data;
-            var arr_of_items=[Products,Multimedia,Quizes,Content,Events];
+        .get(function(req,res){
+            var data=req.query.data;
+            var arr_of_items=[Products,Multimedia,Content,Events];
             var ObjectOfResults={};
-            var checker=0;
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroupSelected) {
-                        forGroups.push(req.body.specialGroupSelected);
+                    if (req.query.specialGroupSelected) {
+                        forGroups.push(req.query.specialGroupSelected);
                     }
-                    
-                    var date = new Date();
 
                     async.each(arr_of_items, function (item, callback) {
-                        if(item==Events)
-                            var hydrateOp = {find: {groupsID:{$in:forGroups},enable:true,start:{$gt: date}}};
-                        else
-                            var hydrateOp = {find: { $and: [ { groupsID: { $in: forGroups } }, { enable:true } ] } };
+                        var hydrateOp;
+                        if(item == Events){
+                            hydrateOp = {find: {groupsID:{$in:forGroups},enable:true,start:{$gt: new Date()}}};
+                        }else{
+                            hydrateOp = {find: {groupsID:{$in:forGroups},enable:true }};
+                        }
 
-                            item.search({
+                        item.search({
 
-                                query_string: {
-                                    query: data,
-                                    default_operator: 'OR',
-                                    lowercase_expanded_terms: true
-                                    //phrase_slop: 50,
-                                    //analyze_wildcard: true
+                            query_string: {
+                                query: data,
+                                default_operator: 'OR',
+                                lowercase_expanded_terms: true
+                                //phrase_slop: 50,
+                                //analyze_wildcard: true
 
+                            }
+
+                        },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
+                            if(err){
+                                callback(err);
+                            }else{
+                                if(results && results.hits && results.hits.hits){
+                                    ObjectOfResults[item.modelName]=results.hits.hits;
                                 }
-
-                            },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
-                                if(err)
-                                {
-                                    res.json(err);
-                                    return;
-                                }
-                                else
-                                {
-                                    if(results.hits.hits.length===0)
-                                        checker+=1;
-                                    else
-                                    {
-                                        ObjectOfResults[item.modelName]=results.hits.hits;
-                                    }
-
-                                }
-
-
                                 callback();
-                            });
+                            }
+                        });
 
                     }, function (err) {
                         if(err)
-                            res.json(err);
-                        else
-                        {
-                            if(checker===5)
-                                res.json({answer:"Cautarea nu a returnat nici un rezultat!"});
-                            else{
-                                res.json(ObjectOfResults);
-                            }
-
+                            handleError(res,err,500);
+                        else{
+                            handleSuccess(res, ObjectOfResults);
                         }
-
                     })
-                }
-            });
+                },
+                function (err) {
+                    handleError(res,err,500);
+                });
         });
     router.route('/userHomeEvents')
-        .post(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
+        .get(function (req,res) {
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroupSelected) {
-                        forGroups.push(req.body.specialGroupSelected);
+                    if (req.query.specialGroupSelected) {
+                        forGroups.push(req.query.specialGroupSelected);
                     }
                     Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: true}).sort({start: 1}).exec(function (err, events) {
                         if(err){
-                            res.send(err);
+                            handleError(res,err,500);
                         }else{
-                            res.json(events);
+                            handleSuccess(res, events);
                         }
                     });
-                }
-            });
-
-        });
-
-    router.route('/userHomeModalPresentation')
-        .post(function (req,res) {
-                getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                    if(err){
-                        res.send(err);
-                    }else {
-                        var forGroups = nonSpecificGroupsIds;
-                        var specialgroup=[];
-                        if (req.body.specialGroupSelected) {
-                            specialgroup.push(req.body.specialGroupSelected);
-                            Presentations.find({groupsID: {$in: specialgroup}, enabled: true}).exec(function (err, presentation) {
-                                if(err){
-                                    console.log(err);
-                                    res.send(err);
-                                }else{
-                                    
-                                    res.json(presentation[0]);
-                                }
-                            });
-                        }
-                        else
-                        {
-                            
-                            Presentations.find({groupsID: {$in: forGroups}, enabled: true}).exec(function (err, presentation) {
-                                if(err){
-                                    console.log(err);
-                                    res.send(err);
-                                }else{
-                                    
-                                    res.json(presentation[0]);
-                                }
-                            });
-                        }
-
-                    }
+                },
+                function (err) {
+                    handleError(res,err,500);
                 });
         });
-    router.route('/checkIntroEnabled')
-        .post(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
-                    var forGroups = nonSpecificGroupsIds;
-                    var specialgroup=[];
-                    if (req.body.specialGroupSelected) {
-                        specialgroup.push(req.body.specialGroupSelected);
-                        Presentations.find({groupsID: {$in: specialgroup}, enabled: true}).exec(function (err, presentation) {
-                            if(err){
-                                console.log(err);
-                                res.send(err);
-                            }else{
-                                res.json(presentation[0]);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        Presentations.find({groupsID: {$in: forGroups}, enabled: true}).exec(function (err, presentation) {
-                            if(err){
-                                console.log(err);
-                                res.send(err);
-                            }else{
-                                res.json(presentation[0]);
-                            }
-                        });
-                    }
 
-                }
-            });
-        });
-    router.route('/getDefaultGroupID')
-        .post(function(req,res){
-                getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                    if(err){
-                        res.send(err);
-                    }else {
-                        var forGroups = nonSpecificGroupsIds;
-                        
-                        res.json({defaultGroup:forGroups[0]});
-                    }
-                });
-
-
-        });
     router.route('/userHomeMultimedia')
-        .post(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
+        .get(function (req,res) {
+            getNonSpecificUserGroupsIds(req.user).then(
+                function (nonSpecificGroupsIds) {
                     var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroupSelected) {
-                        forGroups.push(req.body.specialGroupSelected);
+                    if (req.query.specialGroupSelected) {
+                        forGroups.push(req.query.specialGroupSelected);
                     }
                     Multimedia.find({groupsID: {$in: forGroups}, enable: {$ne: false}}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
                         if(err){
-                            res.send(err);
+                            handleError(res,err,500);
                         }else{
-                            res.json(multimedia);
+                            handleSuccess(res, multimedia);
                         }
                     });
-                }
-            });
-
+                },
+                function (err) {
+                    handleError(res,err,500);
+                });
         });
 
-    router.route('/userHomeNews')
-
-        .post(function(req, res) {
-            var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, {$in: [1,2]}, specialGroupSelected, 4, "created", function (err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/userHomeScientific')
-
-        .post(function(req, res) {
-            var specialGroupSelected = req.body.specialGroupSelected;
-            getUserContent(req.user, 3, specialGroupSelected, 4, "created", function (err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                res.json(cont);
-            });
+    router.route('/homeNews')
+        .get(function(req, res) {
+            //establish content type
+            var contentType = {$in: [1, 2]};
+            if(req.query.scientific) contentType = 3;
+            //get content
+            getUserContent(req.user, contentType, req.query.specialGroupSelected, 3, "created").then(
+                function (cont) {
+                    handleSuccess(res, cont);
+                },
+                function (err) {
+                    handleError(res,err,500);
+                });
         });
 
     router.route('/products')
-
-    .get(function(req, res) {
-        Products.find(function(err, cont) {
-            if(err) {
-                res.send(err);
-            }
-
-            res.json(cont);
-        });
-    });
-
-    router.route('/productsDetails')
-
-        .post(function(req, res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.body.specialGroup) {
-                        forGroups.push(req.body.specialGroup);
+        .get(function(req, res) {
+            if(req.query.idProduct){
+                Products.findOne({_id: req.query.idProduct}, function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, cont);
                     }
-                    Products.find({_id:req.body.id,groupsID: {$in: forGroups}}, function(err, cont) {
-                        if(err) {
-                            res.send(err);
+                })
+            }else{
+                getNonSpecificUserGroupsIds(req.user).then(
+                    function (groups) {
+                        if (req.query.specialGroup) {
+                            groups.push(req.query.specialGroup);
                         }
-                        else
-                            res.json(cont[0]);
-                    })
-                }});
-
-        });
-
-    router.route('/products/productsByArea')
-
-        .post(function(req, res) {
-
-            var test = req.body.id.toString();
-            if(test!=0)
-            {
-                getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                    if(err){
-                        res.send(err);
-                    }else {
-                        var forGroups = nonSpecificGroupsIds;
-                        if (req.body.specialGroup) {
-                            forGroups.push(req.body.specialGroup);
-                        }
-                        Therapeutic_Area.find({_id:test}).exec(function(err,response){
-                            var TArea= response[0];
-                            if(TArea.has_children==true)
-                            {
-                                Therapeutic_Area.find({$or: [{_id:req.body.id},{"therapeutic-areasID": {$in :[test]}}]}).exec(function(err,response){
-                                    getStringIds(response, function(ids){
-                                    Products.find({"therapeutic-areasID": {$in :ids},groupsID: {$in: forGroups}}, function(err, cont) {
+                        if(req.query.idArea && req.query.idArea != 0){
+                            Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function(err, areas){
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}};
+                                    if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                                    Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                                         if(err) {
-                                            res.send(err);
-                                        }
-                                        else
-                                        {
-                                            res.json(cont);
+                                            handleError(res,err,500);
+                                        }else{
+                                            handleSuccess(res, cont);
                                         }
                                     })
-                                })
-                                });
-
-                            }
-                            else
-                            {
-                                Products.find({"therapeutic-areasID": {$in :[test]},groupsID: {$in: forGroups}}, function(err, cont) {
-                                    if(err) {
-                                        res.send(err);
-                                    }
-                                    else
-                                    {
-                                        res.json(cont);
-                                    }
-                                })
-                            }
-                        });
-                        //get allowed articles for user
-
-                    }});
-            }
-            else
-            {
-                getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                    if(err){
-                        res.send(err);
-                    }else {
-                        var forGroups = nonSpecificGroupsIds;
-                        if (req.body.specialGroup) {
-                            forGroups.push(req.body.specialGroup);
+                                }
+                            });
+                        }else{
+                            //get allowed articles for user
+                            var q = {groupsID: {$in: groups}};
+                            if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                            Products.find(q).sort({"name": 1}).exec(function(err, cont) {
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    handleSuccess(res, cont);
+                                }
+                            })
                         }
-                        //get allowed articles for user
-                        Products.find({groupsID: {$in: forGroups}}, function(err, cont) {
-                            if(err) {
-                                res.send(err);
-                            }
-                            else
-                            {
-                                res.json(cont);
-                            }
-                        })
-                    }});
+                    },
+                    function (err) {
+                        handleError(res,err,500);
+                    }
+                );
             }
         });
 
-    router.route('/therapeutic_areas')
-
-        .get(function(req, res) {
-            Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-        });
-
-    router.route('/calendar/getEvents/')
-        .post(function(req,res) {
-            getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                if(err){
-                    res.send(err);
-                }else{
-                    var forGroups = nonSpecificGroupsIds;
-                    if(req.body.specialGroup){
-                        forGroups.push(req.body.specialGroup);
+    router.route('/calendar')
+        .get(function(req,res) {
+            if(req.query.id){
+                Events.findById(req.query.id,function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, cont);
                     }
-                    //get allowed articles for user
-                        Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
-                            if (err) {
-                                res.send(err);
-                            }
-                            else
-                            {
-                               res.json(cont);
-                            }
+                });
+            }else{
+                getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
+                    var forGroups = nonSpecificGroupsIds;
+                    if(req.query.specialGroup){
+                        forGroups.push(req.query.specialGroup);
+                    }
+                    Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
+                        if (err) {
+                            handleError(res,err,500);
+                        }
+                        else
+                        {
+                            handleSuccess(res, cont);
+                        }
 
-                        })
-                }
-            })
-        });
-    router.route('/calendar/:id')
-        .get(function(req,res){
-            Events.findById(req.params.id,function(err, cont) {
-                if(err) {
-                    res.send(err);
-                }
-                res.json(cont);
-            });
-
-        });
-    router.route('/multimedia2/:idd')
-        .get(function(req,res){
-            Multimedia.findById(req.params.idd,function(err, cont) {
-                if(err) {
-                    res.json(err);
-                }
-                else
-                res.json(cont);
-            });
-
+                    })
+                }, function (err) {
+                    handleError(res,err,500);
+                })
+            }
         });
     router.route('/multimedia')
-        .get(function(req,res) {
-            Multimedia.find({groupsID: {$in: req.user.groupsID}}).exec(function (err, responses) {
-                if (responses.length == 0)
-                    res.send([{"message": "Nu ai acces la materiale!"}]);
-                else {
-                    res.json(responses);
-
-                }
-            })
-        });
-    router.route('/multimedia/multimediaByArea')
-        .post(function(req,res){
-            
-        var findObj={};
-            if(req.body.id!=0)
-                findObj['therapeutic-areasID'] = {$in: [req.body.id]};
-            //find all by area
-
-            if(req.user.groupsID.length==0)
-            {
-                res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}])
-            }
-            else {
-                getNonSpecificUserGroupsIds(req.user, function (err, nonSpecificGroupsIds) {
-                    if(err){
-                        res.send(err);
-                    }else {
+        .get(function(req,res){
+            if(req.query.idMultimedia){
+                Multimedia.findById(req.query.idMultimedia,function(err, cont) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else{
+                        handleSuccess(res, cont);
+                    }
+                });
+            }else{
+                var findObj={};
+                getNonSpecificUserGroupsIds(req.user).then(
+                    function (nonSpecificGroupsIds) {
                         var forGroups = nonSpecificGroupsIds;
-                        if (req.body.specialGroupSelected) {
-                            forGroups.push(req.body.specialGroupSelected);
+                        if (req.query.specialGroupSelected) {
+                            forGroups.push(req.query.specialGroupSelected);
                         }
                         findObj['groupsID']={$in:forGroups};
                         findObj['enable']={$ne: false};
-                        
-                        if(req.body.id==0)
-                        {
+                        if(req.query.idArea==0){
                             Multimedia.find(findObj, function (err, multimedia) {
                                 if (err) {
-                                    console.log(err);
-                                    res.json(err);
+                                    handleError(res,err,500);
                                 } else {
-                                    
-                                    if (multimedia.length == 0) {
-                                        res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
-                                    }
-                                    else
-                                        res.json(multimedia);
+                                    handleSuccess(res, multimedia);
                                 }
                             });
-                        }
-                        else
-                        {
-                            Therapeutic_Area.find({_id:req.body.id}).exec(function(err,response){
-                                var TArea=response[0];
-                                if(TArea.has_children==true)
-                                {
-                                    Therapeutic_Area.find({"therapeutic-areasID": {$in :[req.body.id]}}).exec(function(err,response){
-                                        var children=response;
-                                        getStringIds(children, function(ids){
-                                            
-                                            
-                                            findObj['therapeutic-areasID'] = {$in: ids};
-                                            Multimedia.find(findObj, function (err, multimedia) {
-                                                if (err) {
-                                                    console.log(err);
-                                                    res.json(err);
-                                                } else {
-                                                    
-                                                    if (multimedia.length == 0) {
-                                                        res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
-                                                    }
-                                                    else
-                                                        res.json(multimedia);
-                                                }
-                                            });
-                                        })
-                                    });
-
-                                }
-                                else
-                                {
+                        }else{
+                            Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function (err, ids) {
+                                if(err){
+                                    handleError(res, err);
+                                }else{
+                                    findObj['therapeutic-areasID'] = {$in: ids};
                                     Multimedia.find(findObj, function (err, multimedia) {
                                         if (err) {
-                                            console.log(err);
-                                            res.json(err);
+                                            handleError(res,err,500);
                                         } else {
-                                            
-                                            if (multimedia.length == 0) {
-                                                res.json([{"message": "Nu exista materiale multimedia disponibile pentru grupul dumneavoastra!"}])
-                                            }
-                                            else
-                                                res.json(multimedia);
+                                            handleSuccess(res, multimedia);
                                         }
                                     });
                                 }
                             });
                         }
-
-                        //get allowed articles for user
-
-
-                    }})
-
-            }
-        });
-
-    router.route('/slidesByMultimediaId/:multimedia_id')
-        .get(function(req,res){
-            Multimedia.find({_id: req.params.multimedia_id, groupsID: {$in: req.user.groupsID}, enable: {$ne: false}}, function (err, multimedia) {
-                if(err){
-                    res.send(err);
-                }else{
-                    if(multimedia[0]){
-                        Slides.find({_id: {$in: multimedia[0]._doc.slidesID}}).sort({no_of_order: 1}).exec(function (err, slides) {
-                            if(err){
-                                res.send(err);
-                            }else{
-                                res.json(slides);
-                            }
-                        });
-                    }else{
-                        res.send(err);
-                    }
-
-            }
-
-        })});
-    var getQuizesIds = function (arr, cb) {
-        var ret = [];
-        async.each(arr, function (item, callback) {
-            if(item.quizesID[0])
-                ret.push(item.quizesID[0]);
-            callback();
-        }, function (err) {
-            cb(ret);
-        });
-    };
-
-   router.route('/quizes')
-
-        .get(function(req,res){
-            var resp = [];
-            Multimedia.find({groupsID: {$in: req.user.groupsID}}).exec(function(err,responses){
-                if(responses.length==0)
-                    res.json([{"message":"Pentru a putea vedea materialele va rugam frumos sa va accesati profilul si sa adaugati o poza cu dovada ca sunteti medic!"}]);
-                else {
-                    getQuizesIds(responses,function(arrayIdQuizes){
-                        Quizes.find({_id:{$in:arrayIdQuizes}}, function (err, quizes) {
-                            if(err){
-                                res.send(err);
-                            }else{
-                                res.send(quizes);
-                            }
-                        });
-                    });
-                }
-            });
-        });
-    router.route('/quizes/:id/questions/:idd')
-        .get(function(req,res) {
-            Quizes.find({_id: req.params.id}, function (err, testR) {
-                //
-                if (err) {
-                    logger.error(err);
-                    res.send(err);
-                    return;
-                }
-                else {
-                    var qa = {};
-                    qa["test"] = testR;
-                    Questions.find({_id: req.params.idd}, function (err2, cont) {
-                        if (err) {
-                            logger.error(err);
-                            res.send(err);
-                            return;
-                        }
-                        else {
-                            qa["questions"] = cont;
-                            Answers.find({_id: {$in:qa["questions"][0].answersID}},function(err,cont2) {
-                                if(err)
-                                {
-                                    res.send(err);
-                                    return;
-                                }
-                                else {
-                                    qa["answers"] = cont2;
-                                    res.send(qa);
-                                }
-                            });
-                        }
+                    },
+                    function (err) {
+                        handleError(res,err,500);
                     })
-                }
-            })
-        });
-    router.route('/quizes/:id')
-        .get(function(req,res) {
-            Quizes.find({_id: req.params.id}, function (err, testR) {
-                //
-                if (err) {
-                    logger.error(err);
-                    res.send(err);
-                    return;
-                }
-                else
-                    res.json(testR[0]);
-            })
-        });
-    router.route('/multimediaBefore/:id')
-        .get(function(req,res){
-            var id=[];
-            id.push(req.params.id);
-            Multimedia.find({quizesID: {$in:id}},function(err, cont) {
-                if(err) {
-                    console.log(err);
-                    res.json(err);
-                }
-                else
-                {
-                    res.json(cont[0]);
-                }
-
-            });
-
-        });
-    router.route('/user')
-        .get(function(req,res){
-            User.find(function (error, result) {
-                if (error) {
-                    res.send(error);
-                    return ;
-                } else {
-                    //
-                    res.json(result);
-                }
-            });
-        })
-
-        .put(function(req, res) {
-        //
-        User.findOne({ username :  {$regex: "^"+req.user.username.replace(/\+/g,"\\+")+"$", $options: "i"}},function(err,usr){
-            if(err) {
-                logger.error(err);
-                res.send(err)
             }
-            else {
-                //
-                usr.points += req.body.score;
-                req.user.points=usr.points;
-                usr.save(function(err){
-                    if(err)
-                        res.send(err);
-                })
-            }
-        }) ;
-    });
+        });
 
-    router.route('/admin/intros')
+    //============================================ intro presentations
+
+    router.route('/checkIntroEnabled')
         .get(function (req, res) {
-            Presentations.find({}).exec(function (err, presentations) {
+            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: true}).exec(function (err, presentation) {
                 if(err){
-                    res.send(err);
+                    handleError(res,err,500);
                 }else{
-                    res.send(presentations);
+                    handleSuccess(res, presentation);
                 }
             });
         });
-    router.route('/admin/oneIntro')
-        .post(function (req, res) {
-            var presentations={};
-            Presentations.find({_id: req.body.id}).populate('groupsID').exec(function (err, presentation) {
-                if(err){
-                    res.send(err);
-                }else{
-                    presentations['onePresentation']=presentation[0];
-                    UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                        if(err) {
-                            logger.error(err);
-                            res.send(err);
-                        }else{
-                            presentations['groups']=cont2;
-                            res.json(presentations);
-                        }
-                    });
-                }
-            });
-        });
-    router.route('/admin/getAllGroups')
-        .get(function(req,res){
-            UserGroup.find({}, {display_name: 1, profession:1}).populate('profession').exec(function(err, cont2) {
-                if(err) {
-                    logger.error(err);
-                    res.send(err);
-                }else{
-                    res.json(cont2);
-                }
-            });
-        });
-    router.route('/admin/saveIntroChanges')
-        .post(function (req, res) {
-            Presentations.update({_id: req.body.id},{$set:{description: req.body.description, article_content: req.body.article_content, groupsID: req.body.groupsID}}).exec(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
 
-                    res.send({message:"Update successful!"});
-                }
-            });
-        });
-    router.route('/admin/toggleIntro')
-        .post(function (req, res) {
-            Presentations.update({_id: req.body.id},{$set:{enabled: req.body.isEnabled}}).exec(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
-                    res.send({message:"Update successful!"});
-                }
-            });
-        });
-    router.route('/admin/addIntro')
-        .post(function (req, res) {
-            var presentation = new Presentations();
-            presentation.description= req.body.description;
-            presentation.article_content = req.body.article_content;
-            presentation.groupsID = req.body.groupsID;
-            presentation.enabled=false;
-            presentation.save(function (err, presentation) {
-                if(err){
-                    res.send({message:"Error occured!"});
-                }else{
-                    res.send({message:"Create successful!"});
-                }
-            });
-        });
-    router.route('/admin/deleteIntro')
-        .post(function (req, res) {
-            Presentations.remove({_id: req.body.idToDelete}, function (err, count) {
-                if(err){
-                    console.log(err);
-                    res.send({error: true, message: "Eroare la stergerea produsului"});
-                }else{
-                    res.send({error: false, message: "S-au sters "+count+" prezentari!"});
-                }
-            });
-        });
-    router.route('/alterIntroSession')
+    router.route('/rememberIntroView')
         .get(function(req,res){
-           res.json(req.session.statusModalGroups);
+            var viewStatus = SessionStorage.getElement(req, "viewedIntroPresentations") || {};
+            handleSuccess(res,{isViewed: viewStatus[req.query.groupID]});
         })
         .post(function(req,res){
-            req.session.statusModalGroups[req.body.groupID]=false;
-            res.json(req.session.statusModalGroups);
+            var viewStatus = SessionStorage.getElement(req, "viewedIntroPresentations") || {};
+            viewStatus[req.body.groupID] = true;
+            SessionStorage.setElement(req, "viewedIntroPresentations", viewStatus);
+            handleSuccess(res);
         });
+
+    router.route('/introPresentation')
+        .get(function (req, res) {
+            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: true}).exec(function (err, presentation) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, presentation);
+                }
+            });
+        });
+
+    //============================================ regexp object
+    router.route('/regexp')
+        .get(function(req,res){
+            var regexp = UtilsModule.validationStrings;
+            handleSuccess(res,regexp);
+        });
+
     app.use('/api', router);
 };

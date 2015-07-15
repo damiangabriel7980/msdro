@@ -1,36 +1,20 @@
 <div class="col-sm-12 searchResults">
     <div class="col-sm-12 mainTitle">REZULTATE CAUTARE</div>
 
-    <div class="col-sm-12" ng-if="!isMobile(true)"></div>
-
     <div class="col-sm-12 noPadding" ng-if="!searchResults || searchResults.length == 0">
         Cautarea nu a returnat nici un rezultat
     </div>
     <div class="col-sm-12 noPadding" ng-if="searchResults && searchResults.length > 0">
         <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
-            <div ng-repeat="item in searchResults track by $index" ng-if="item" class="col-sm-12 article">
-                <div class="col-sm-2 picture">
-                    <div>
-                        <img ng-src="{{item.image_path?pathAmazonDev+item.image_path:defaultArticleImage}}">
-                    </div>
-                </div>
-                <div class="col-sm-10 details">
-                    <div class="col-sm-12 title">
-                        <a ng-click="sref(item)" convert-special to-convert="item.title" ng-bind-html="trustAsHtml(item.title)"></a>
-                    </div>
-                    <div class="col-sm-12 excerpt" convert-special to-convert="item.text" ng-bind-html="trustAsHtml(createHeader(item.text, 300))"></div>
-                    <div class="col-sm-12 author" convert-special to-convert="item.author" ng-bind-html="trustAsHtml(item.author)"></div>
-                    <div class="col-sm-12 author">Categorie: {{getCategory(item.type)}}</div>
-                    <div class="col-sm-12 footer">
-                        <div class="date">{{item.date_added | date:'dd/MM/yyyy'}}</div>
-                        <div class="readMore"><a class="btn btn-default btn-sm btnGreenBorder" ng-click="sref(item)">Vizualizeaza</a></div>
-                    </div>
-                </div>
-                <div class="col-sm-12 divider" ng-if="$index!=articlesLimit-1 && $index!=searchResults.length-1"></div>
+            <div ng-repeat="item in searchResults track by $index" class="col-sm-12 noPadding">
+                <horizontal-content-list content="item" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
+                                         title-attr="title" text-attr="text" bold-attr-1="author" date-attr="date_added" button-label="Vizualizeaza"
+                                         show-divider="$index!=articlesLimit-1 && $index!=searchResults.length-1" navigate="sref"></horizontal-content-list>
             </div>
         </div>
         <div class="col-sm-12 noPadding" ng-if="isMobile(true)">
-            <mobile-content-list content="searchResults" image-prefix="pathAmazonDev" default-image="defaultArticleImage" show-type="true"></mobile-content-list>
+            <mobile-content-list content="searchResults" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultArticleImage}}" title-attr="title"
+                                 bold-text-function="getContentNamedType" text-attr="text" navigate="navigateTo"></mobile-content-list>
         </div>
     </div>
 </div>

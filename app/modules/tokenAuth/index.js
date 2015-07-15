@@ -6,6 +6,8 @@ var AnswerGivers = require('../../models/qa_answerGivers');
 var Q = require('q');
 var UserService = require('../user');
 
+var UtilsModule = require('../utils');
+
 var Config = require('../../../config/environment.js'),
     my_config = new Config();
 
@@ -39,7 +41,7 @@ var formatTokenProfile = function (user) {
 var authenticateToken = function (username, password) {
     var deferred = Q.defer();
     //find user in database
-    User.findOne({ 'username' :  {$regex: "^"+(username || "").replace(/\+/g,"\\+")+"$", $options: "i"}}).select("+account_expired +account_locked +enabled +password +state").exec(function(err, user) {
+    User.findOne({ 'username' :  UtilsModule.regexes.emailQuery(username)}).select("+account_expired +account_locked +enabled +password +state").exec(function(err, user) {
         // if there are any errors, return error status
         if (err){
             deferred.reject({status: 403, message: "Forbidden"});

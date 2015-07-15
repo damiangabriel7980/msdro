@@ -1,6 +1,7 @@
-@MSDgreen: #1c9893;
+//import stripped-from-variables version of bootstrap, which will use our custom variables
+@import '../../stylesheets/globalVariables';
 
-.content{
+.mobile-content-list{
   padding: 0;
   margin-bottom: 20px;
   overflow: hidden;
@@ -9,8 +10,45 @@
     border-radius: 6px;
     overflow: hidden;
     cursor: pointer;
+    position: relative;
     img{
       width: 100%;
+    }
+    .category{
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40%;
+      padding: 5px;
+    }
+  }
+  .event{
+    padding: 0;
+    position: relative;
+    img{
+      width: 100%;
+    }
+    .date{
+      position: absolute;
+      top: 28%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      color: #ffffff;
+      font-weight: bold;
+      .day{
+        font-size: 9vw;
+        text-align: center;
+        width: 100%;
+        color: @green;
+      }
+      .month{
+        font-size: 5vw;
+        text-align: center;
+        width: 100%;
+        margin-top: -8%;
+        color: @green;
+      }
     }
   }
   .description{
@@ -22,7 +60,7 @@
       display: none;
     }
     .title{
-      color: @MSDgreen;
+      color: @MSDTitle;
       cursor: pointer;
       padding: 0;
       font-weight: bold;

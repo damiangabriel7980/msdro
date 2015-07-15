@@ -5,6 +5,7 @@
             <h3 class="modal-title">Adauga imagine</h3>
         </div>
         <div class="col-md-12 modal-body">
+            <form>
             <div class="col-md-12" style="margin-bottom: 10px;">
                 <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
             </div>
@@ -14,13 +15,13 @@
             <div class="col-md-12">
                 <div class="form-group col-md-12">
                     <label for="titlu">Titlu:</label>
-                    <input type="text" class="form-control" id="titlu" ng-model="titlu">
+                    <input type="text" class="form-control" id="titlu" ng-model="carouselImage.title">
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group col-md-6">
                     <label for="ordine">Ordine:</label>
-                    <input type="text" class="form-control" id="ordine" ng-model="ordine">
+                    <input type="text" class="form-control" id="ordine" ng-model="carouselImage.order_index">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="type">Tip continut:</label>
@@ -43,14 +44,15 @@
             <div class="col-md-12">
                 <div class="form-group col-md-12">
                     <label for="descriere">Descriere:</label>
-                    <textarea ui-tinymce ng-model="descriere" id="descriere"></textarea>
+                    <textarea ui-tinymce ng-model="carouselImage.description" id="descriere"></textarea>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="col-md-12">
-                    <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
                 </div>
             </div>
+            </form>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" ng-click="closeModal()">Inchide</button>

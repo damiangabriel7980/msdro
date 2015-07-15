@@ -1,4 +1,4 @@
-app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function($scope, AuthService, $window, Utils) {
+app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', 'Utils', 'Success', function($scope, AuthService, $window, Utils, Success) {
 
     //================================================================================================== init variables
     $scope.user = {
@@ -62,12 +62,14 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
 
     $scope.selectProfession = function () {
         AuthService.signupGroups.query({profession: $scope.user.profession}).$promise.then(function (response) {
+            response = Success.getObject(response);
             $scope.groups = response;
             if(response[0]) $scope.user.groupsID = response[0]._id;
         });
     };
 
     AuthService.professions.query().$promise.then(function (response) {
+        response = Success.getObject(response);
         $scope.professions = response;
         $scope.user.profession = response[0]._id;
         $scope.selectProfession();
@@ -94,22 +96,20 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
         if($scope.county.selected){
             resetCities();
             AuthService.cities.query({county: $scope.county.selected._id}).$promise.then(function (resp) {
-                if(resp.success){
-                    $scope.cities = resp.success.sort(function(a,b){
-                        if ( a.name < b.name )
-                            return -1;
-                        if ( a.name > b.name )
-                            return 1;
-                        return 0;
-                    });
-                }
+                $scope.cities = Success.getObject(resp).sort(function(a,b){
+                    if ( a.name < b.name )
+                        return -1;
+                    if ( a.name > b.name )
+                        return 1;
+                    return 0;
+                });
             });
         }
     });
 
     // get counties and cities
     AuthService.counties.query().$promise.then(function (resp) {
-        $scope.counties = resp.success;
+        $scope.counties = Success.getObject(resp);
     });
 
     //====================================================================================================== load proof
@@ -198,7 +198,8 @@ app.controller('Signup', ['$scope', 'AuthService', '$window', 'Utils', function(
         });
     };
 
-}]).filter('propsFilter', function() {
+}]);
+app.filterProvider.register('propsFilter', function() {
     //used for select2
     return function(items, props) {
         var out = [];

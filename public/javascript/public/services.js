@@ -116,10 +116,10 @@ services.factory('StateService', ['$state', function ($state) {
     }
 }]);
 
-services.factory('PublicService', ['$resource', function () {
+services.factory('PublicService', function () {
     return {
-        getSref: function (content_type) {
-            switch(content_type){
+        getSref: function (content) {
+            switch(content.type){
                 case 1: return 'stiri.detail'; break;
                 case 2: return 'articole.detail'; break;
                 case 3: return 'elearning.detail'; break;
@@ -127,8 +127,8 @@ services.factory('PublicService', ['$resource', function () {
                 default: return ''; break;
             }
         },
-        getContentNamedType: function (int_type) {
-            switch(int_type){
+        getContentNamedType: function (content) {
+            switch(content.type){
                 case 1: return 'stire'; break;
                 case 2: return 'articol'; break;
                 case 3: return 'elearning'; break;
@@ -137,7 +137,7 @@ services.factory('PublicService', ['$resource', function () {
             }
         }
     }
-}]);
+});
 
 services.factory('RootService', ['$resource', function ($resource) {
     return {
@@ -149,14 +149,14 @@ services.factory('RootService', ['$resource', function ($resource) {
 
 services.factory('HomeService', ['$resource', function($resource){
     return {
-        getCarouselData: $resource('apiPublic/getCarouselData/', {}, {
-            query: { method: 'GET', isArray: true }
+        CarouselData: $resource('apiPublic/getCarouselData/', {}, {
+            query: { method: 'GET', isArray: false }
         }),
         searchResults: $resource('apiPublic/publicSearch', {}, {
             query: { method: 'GET', isArray: false }
         }),
         events: $resource('apiPublic/events', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
@@ -170,13 +170,10 @@ services.factory('ContentService', ['$resource', function($resource){
         }),
         mostRead: $resource('apiPublic/mostRead', {}, {
             query: { method: 'GET', isArray: false }
-        }),
-        therapeuticAreas: $resource('apiPublic/therapeuticAreas/', {}, {
-            query: { method: 'GET', isArray: true }
         })
     }
 }]);
-services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils){
+services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', function($resource, Utils, Error, Success){
     var getFormData = function (thiz) {
         var temp = thiz.user.temp;
         var data = {
@@ -279,10 +276,10 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
             query: { method: 'POST', isArray: false }
         }),
         professions: $resource('apiGloballyShared/accountActivation/professions', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         signupGroups: $resource('apiGloballyShared/accountActivation/signupGroups/:profession', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         counties: $resource('apiGloballyShared/accountActivation/counties', {}, {
             query: { method: 'GET', isArray: false }
@@ -302,12 +299,10 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
                         }else{
                             getActivationData(formData, function (activationData) {
                                 createAccount.save({user: formData.user, activation: activationData}).$promise.then(function (resp) {
-                                    if(resp.error){
-                                        callback(resp.message);
-                                    }else{
-                                        callback(null, resp);
-                                    }
-                                })
+                                    callback(null, Success.getObject(resp));
+                                }).catch(function (resp) {
+                                    callback(Error.getMessage(resp));
+                                });
                             });
                         }
                     });
@@ -322,7 +317,7 @@ services.factory('AuthService', ['$resource', 'Utils', function($resource, Utils
                 }else{
                     getActivationData(formData, function (activationData) {
                         completeProfile.save({user: formData.user, activation: activationData}).$promise.then(function (resp) {
-                            callback(null, resp);
+                            callback(null, Success.getObject(resp));
                         });
                     });
                 }

@@ -21,7 +21,7 @@
         <textarea ui-tinymce="tinymceOptions" ng-model="intro.article_content"></textarea>
     </div>
     <div class="col-md-12">
-        <s3-upload-manager bucket="{{amazonBucket}}" path="{{'presentations/'+intro._id+'/resources/'}}"></s3-upload-manager>
+        <s3-upload-manager bucket="{{amazonBucket}}" path="{{'presentations/'+intro._id+'/resources/'}}" label="prezentare"></s3-upload-manager>
     </div>
 </div>
 <div class="modal-footer">

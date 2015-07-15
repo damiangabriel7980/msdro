@@ -1,12 +1,10 @@
 /**
  * Created by miricaandrei23 on 20.02.2015.
  */
-controllers.controller('Search', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', function($scope, $rootScope, HomeService, $sce, $state) {
+app.controllerProvider.register('Search', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'Error', 'Success', function($scope, $rootScope, HomeService, $sce, $state, Error, Success) {
 
     HomeService.searchResults.query({term: $rootScope.textToSearch.toString()}).$promise.then(function(data){
-        if(data.success){
-            $scope.searchResults = data.success;
-        }
+            $scope.searchResults = Success.getObject(data);
     });
 
     $scope.getCategory = function(type){

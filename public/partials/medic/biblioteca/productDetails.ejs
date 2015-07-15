@@ -1,20 +1,17 @@
-<div class="col-md-11 col-xs-12 well well-content">
-    <div class="row">
-
-        <div class="col-md-12 col-xs-12">
-            <div class="col-md-12 col-xs-12">
-                <h3 class="MSDgreen"><b>{{selectedProduct.name}}</b></h3>
-            </div>
-            <div class="col-md-3 col-xs-12">
-                <a class="thumbnail"><img src="{{selectedProduct.image_path!=null || selectedProduct.image_path!=undefined?amazon + selectedProduct.image_path:defaultProductImage}}" alt="{{selectedProduct.name}}" height="300" width="300"/></a>
-                <a ng-href="{{amazon + selectedProduct.file_path}}" target="_blank" class="btn btn-info btn-more-news btn-block margintop10px"><i class="icon-share icon-white"></i>&nbsp;Descarca RCP</a>
-                <hr class="margintop10px marginbottom0">
-            </div>
-            <div class="col-md-9 col-xs-12" convert-special conver="selectedProduct.description" ng-bind-html="trustAsHtml(selectedProduct.description)">
-            </div>
-            <div class="visible-xs col-xs-12 text-center">
-                <button class="btn btn-sm btn-info btn-more-news" ui-sref="biblioteca.produse.productsByArea({id:selectedArea._id})">Inapoi la produse</button>
-            </div>
-        </div>
+<div class="col-md-11 col-xs-12 well well-content productDetails">
+    <div class="col-sm-12">
+        <h3 class="MSDgreen"><b>{{selectedProduct.name}}</b></h3>
+    </div>
+    <div class="col-md-3 col-sm-4 imageAndRCP">
+        <a class="thumbnail"><img ng-src="{{selectedProduct.image_path?pathAmazonDev + selectedProduct.image_path:defaultProductImage}}" alt="{{selectedProduct.name}}"/></a>
+        <a ng-if="selectedProduct.file_path" ng-href="{{pathAmazonDev + selectedProduct.file_path}}" target="_blank" class="btn btn-default">
+            <i class="glyphicon glyphicon-share"></i>&nbsp;Descarca RCP
+        </a>
+        <hr>
+    </div>
+    <div class="col-md-9 col-sm-8" convert-special conver="selectedProduct.description" ng-bind-html="trustAsHtml(selectedProduct.description)">
+    </div>
+    <div class="col-xs-12 text-center" ng-if="isMobile(true)">
+        <a class="btn btn-default" ui-sref="biblioteca.produse.productsByArea({id:selectedArea._id})">Inapoi la produse</a>
     </div>
 </div>

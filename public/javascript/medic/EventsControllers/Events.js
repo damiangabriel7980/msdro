@@ -1,24 +1,21 @@
 /**
  * Created by miricaandrei23 on 28.10.2014.
  */
-controllers.controller('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce){
+app.controllerProvider.register('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce','Utils','Diacritics', 'Success', 'Error', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce,Utils,Diacritics,Success,Error){
 var date = new Date();
     $scope.realEvents=[];
     $scope.realEventsMob=[];
     var y=$(date);
-    $scope.trustAsHtml = function (data) {
-        var newName=$sce.trustAsHtml(data);
-        return newName;
-    };
     $scope.eventIcon='<i class="glyphicon glyphicon-facetime-video verySmallFont" ng-if="eventim.type==2"></i>&nbsp;';
     $scope.eventIconCalendar='<i class="glyphicon glyphicon-facetime-video verySmallFont"></i>&nbsp;';
 
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
-    eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-        $scope.events =result;
+    eventsService.calendar.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
+        $scope.events = Success.getObject(result);
+        $scope.eventsFiltered = [];
+        for (var i = 0; i < $scope.events.length; i++) {
+            if (new Date($scope.events[i].end) > date)
+                $scope.eventsFiltered.push($scope.events[i]);
+        }
        $scope.eventsS=[];
         $scope.eventsMob=[];
        for(var i = 0; i < $scope.events.length; i++)
@@ -26,14 +23,14 @@ var date = new Date();
            var today = new Date($scope.events[i].end);
            var tomorrow = new Date($scope.events[i].end);
            tomorrow.setDate(today.getDate()+1);
-           $scope.eventsS.push({id:$scope.events[i]._id, title:trimTitle($scope.events[i].name),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: popOverTitle($scope.events[i].name)});
+           $scope.eventsS.push({id:$scope.events[i]._id, title:Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,true),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#01877B', type: Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,false)});
        }
         for(var i = 0; i < $scope.events.length; i++)
         {
             var today = new Date($scope.events[i].end);
             var tomorrow = new Date($scope.events[i].end);
             tomorrow.setDate(today.getDate()+1);
-            $scope.eventsMob.push({id:$scope.events[i]._id, title:trimTitleMobile($scope.events[i].name),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#006d69', type: popOverTitle($scope.events[i].name)});
+            $scope.eventsMob.push({id:$scope.events[i]._id, title:Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,true,true),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#01877B', type: Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,false)});
         }
 
          $scope.realEvents=[$scope.eventsS];
@@ -48,7 +45,7 @@ var date = new Date();
                 var endDate=tomorrow;
              else
                  var endDate=today;
-             angular.element('.fc-event-hori').attr("data-original-title",newDate(data.start)  + " - " +  newDate(endDate));
+             angular.element('.fc-event-hori').attr("data-original-title",Utils.customDateFormat(data.start)  + " - " +  Utils.customDateFormat(endDate));
 
              var options = {
                  trigger:"hover",
@@ -56,7 +53,6 @@ var date = new Date();
                  container:'body',
                  delay: 500
              };
-             //options.title=newDate(data.start)  + " - " + newDate(data.end);
                  $('[data-toggle="popover"]').popover(options);
          };
         $scope.uiConfig = {
@@ -69,6 +65,7 @@ var date = new Date();
                     center: 'title',
                     right: 'today prev,next'
                 },
+                timeFormat: '',
                 eventMouseover: $scope.eventRender,
                 eventClick:function(event){
                     $modal.open({
@@ -96,6 +93,7 @@ var date = new Date();
                     center: 'title',
                     right: 'today prev,next'
                 },
+                timeFormat: '',
                 eventMouseover: $scope.eventRender,
                 eventClick:function(event){
                     $modal.open({
@@ -116,30 +114,10 @@ var date = new Date();
          if($stateParams.id)
          {
              angular.element($document).ready(function(){
-                 $modal.open({
-                     templateUrl: 'partials/medic/calendarDetails.ejs',
-                     backdrop: true,
-                     size: 'lg',
-                     windowClass: 'fade',
-                     controller: 'EventModal',
-                     resolve:{
-                         idEvent: function () {
-                             return $stateParams.id;
-                         }
-                     }
-                 });
+                 $scope.goToEvent($stateParams.id);
              });
          }
-     })
-    ;
-    eventsService.query({specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result) {
-        $scope.events2 = result;
-        $scope.events2Filtered = [];
-        for (var i = 0; i < $scope.events2.length; i++) {
-            if (new Date($scope.events2[i].end) > date)
-                $scope.events2Filtered.push($scope.events2[i]);
-        }
-    });
+     });
     $scope.goToEvent=function(eventId) {
         $modal.open({
             templateUrl: 'partials/medic/calendarDetails.ejs',
@@ -154,76 +132,9 @@ var date = new Date();
             }
         });
     };
-    var newDate=function(input){
-        var data = input;
-        return data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
-    };
-    var trimTitle=function(str) {
-        var newEventName=String(str)
-            .replace('Ă','A')
-            .replace('ă','a')
-            .replace('Â','A')
-            .replace('â','a')
-            .replace('Î','I')
-            .replace('î','i')
-            .replace('Ș','S')
-            .replace('ș','s')
-            .replace('Ş','S')
-            .replace('ş','s')
-            .replace('Ț','T')
-            .replace('ț','t')
-            .replace('Ţ','T')
-            .replace('ţ','t');
-        newEventName=newEventName.split(/\s+/).slice(0,3).join(" ");
-        return newEventName;
-    };
-    var trimTitleMobile=function(str) {
-        var newEventName=String(str)
-            .replace('Ă','A')
-            .replace('ă','a')
-            .replace('Â','A')
-            .replace('â','a')
-            .replace('Î','I')
-            .replace('î','i')
-            .replace('Ș','S')
-            .replace('ș','s')
-            .replace('Ş','S')
-            .replace('ş','s')
-            .replace('Ț','T')
-            .replace('ț','t')
-            .replace('Ţ','T')
-            .replace('ţ','t');
-        newEventName=newEventName.split(/\s+/).join(" ");
-        newEventName=newEventName.substr(0,10)+"...";
-        return newEventName;
-    };
-    var popOverTitle=function(str) {
-        var newEventName=String(str)
-            .replace('Ă','A')
-            .replace('ă','a')
-            .replace('Â','A')
-            .replace('â','a')
-            .replace('Î','I')
-            .replace('î','i')
-            .replace('Ș','S')
-            .replace('ș','s')
-            .replace('Ş','S')
-            .replace('ş','s')
-            .replace('Ț','T')
-            .replace('ț','t')
-            .replace('Ţ','T')
-            .replace('ţ','t');
-        return newEventName;
-    };
-
-}])
-    .filter('htmlToPlaintext', function() {
-        return function(text) {
-            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');
-        }
-    })
-    .filter("asDate", function () {
-        return function (input) {
-            return new Date(input);
-        }
-    });
+}]);
+app.filterProvider.register("asDate", function () {
+    return function (input) {
+        return new Date(input);
+    }
+});

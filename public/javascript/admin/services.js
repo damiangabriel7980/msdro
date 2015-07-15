@@ -1,11 +1,12 @@
 var services = angular.module('services', ['ngResource']);
-services.factory('AmazonService', ['$resource', '$rootScope', function($resource, $rootScope){
+services.factory('AmazonService', ['$resource', '$rootScope', 'Success', function($resource, $rootScope, Success){
     var getCredentialsFromServer = $resource('api/admin/s3tc', {}, {
         query: { method: 'GET', isArray: false }
     });
     var getClient = function (callback) {
         getCredentialsFromServer.query().$promise.then(function (resp) {
-            AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
+            var credentials = Success.getObject(resp).Credentials;
+            AWS.config.update({accessKeyId: credentials.AccessKeyId, secretAccessKey: credentials.SecretAccessKey, sessionToken: credentials.SessionToken});
             callback(new AWS.S3());
         });
     };
@@ -16,12 +17,7 @@ services.factory('AmazonService', ['$resource', '$rootScope', function($resource
         getBucketUrl: function () {
             return $rootScope.pathAmazonDev;
         },
-        getClient: function (callback) {
-            getCredentialsFromServer.query().$promise.then(function (resp) {
-                AWS.config.update({accessKeyId: resp.Credentials.AccessKeyId, secretAccessKey: resp.Credentials.SecretAccessKey, sessionToken: resp.Credentials.SessionToken});
-                callback(new AWS.S3());
-            });
-        },
+        getClient: getClient,
         uploadFile: function (fileBody, key, callback) {
             getClient(function (s3) {
                 console.log("upload file");
@@ -145,6 +141,13 @@ services.factory('AmazonService', ['$resource', '$rootScope', function($resource
         }
     }
 }]);
+
+services.factory('VersionService', ['$resource', function($resource){
+    return $resource('api/admin/appVersion', {}, {
+        query: { method: 'GET', isArray: false }
+    })
+}]);
+
 services.factory('GroupsService', ['$resource', function($resource){
     return {
         groups: $resource('api/admin/users/groups', {}, {
@@ -165,7 +168,7 @@ services.factory('GroupsService', ['$resource', function($resource){
 services.factory('SpecialProductsService', ['$resource', function($resource){
     return {
         products: $resource('api/admin/content/specialProducts/products', {}, {
-            query: { method: 'GET', isArray: true },
+            query: { method: 'GET', isArray: false },
             create: { method: 'POST', isArray: false },
             update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
@@ -180,10 +183,10 @@ services.factory('SpecialProductsService', ['$resource', function($resource){
             update: { method: 'PUT', isArray: false }
         }),
         groups: $resource('api/admin/content/specialProducts/groups', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         groupsAvailable: $resource('api/admin/content/specialProducts/groupsAvailable', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         glossary: $resource('api/admin/content/specialProducts/glossary', {}, {
             query: { method: 'GET', isArray: false },
@@ -235,11 +238,11 @@ services.factory('SystemService', ['$resource', function($resource){
 services.factory('NewAccountsService', ['$resource', function($resource){
     return {
         state: $resource('api/admin/users/newAccounts/state/:type', {}, {
-            query: { method: 'GET', isArray: true },
+            query: { method: 'GET', isArray: false },
             save: { method: 'PUT', isArray: false }
         }),
         count: $resource('api/admin/users/newAccounts/count', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
@@ -251,7 +254,7 @@ services.factory('ManageAccountsService', ['$resource', function($resource){
             update: { method: 'PUT', isArray: false }
         }),
         professions: $resource('api/admin/users/ManageAccounts/professions', {}, {
-            query: { method: 'GET', isArray: true }
+            query: { method: 'GET', isArray: false }
         }),
         groups: $resource('api/admin/users/ManageAccounts/groups', {}, {
             query: { method: 'GET', isArray: false }
@@ -261,52 +264,25 @@ services.factory('ManageAccountsService', ['$resource', function($resource){
 
 services.factory('IntroService', ['$resource', function($resource){
     return {
-        getIntros: $resource('api/admin/intros/', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        getOneIntro: $resource('api/admin/oneIntro', {}, {
-            query: { method: 'POST', isArray: false }
-        }),
-        saveIntroChanges: $resource('api/admin/saveIntroChanges', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        deleteIntro: $resource('api/admin/deleteIntro', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        addIntro: $resource('api/admin/addIntro', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        getAllGroups: $resource('api/admin/getAllGroups', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        toggleIntro: $resource('api/admin/toggleIntro', {}, {
-            save: { method: 'POST', isArray: false }
+        intros: $resource('api/admin/intros/', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         })
     }
 }]);
 
 services.factory('publicContentService', ['$resource', function($resource){
     return {
-        getAllContent: $resource('api/admin/users/publicContent/getAllContent', {}, {
-            query: { method: 'GET', isArray: true }
+        publicContent: $resource('api/admin/users/publicContent', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         }),
-        getContentById: $resource('api/admin/users/publicContent/getById/:id', {}, {
+        therapeuticAreas: $resource('api/admin/therapeutic_areas', {}, {
             query: { method: 'GET', isArray: false }
-        }),
-        addContent: $resource('api/admin/users/publicContent/addContent/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        editContent: $resource('api/admin/users/publicContent/editContent/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        toggleContent: $resource('api/admin/users/publicContent/toggleContent/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        deleteContent: $resource('api/admin/users/publicContent/deleteContent/:id', {}, {
-            save: { method: 'POST', isArray: false}
-        }),
-        getTherapeuticAreas: $resource('api/therapeutic_areas', {}, {
-            query: { method: 'GET', isArray: true }
         }),
         changeImageOrFile: $resource('api/admin/users/publicContent/changeImageOrFile/:data', {}, {
             save: { method: 'POST'}
@@ -322,105 +298,56 @@ services.factory('publicContentService', ['$resource', function($resource){
 
 services.factory('therapeuticAreaService', ['$resource', function($resource){
     return $resource('api/admin/therapeutic_areas', {}, {
-        query: { method: 'GET', isArray: true }
+        query: { method: 'GET', isArray: false }
     });
 }]);
 
 services.factory('CarouselPublicService', ['$resource', function($resource){
     return {
-        getAllImages: $resource('api/admin/users/carouselPublic/getAllImages', {}, {
-            query: { method: 'GET', isArray: true }
+        carouselPublic: $resource('api/admin/users/carouselPublic', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         }),
-        getContentByType: $resource('api/admin/users/carouselPublic/contentByType/:type', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        addImage: $resource('api/admin/users/carouselPublic/addImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        toggleImage: $resource('api/admin/users/carouselPublic/toggleImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        deleteImage: $resource('api/admin/users/carouselPublic/deleteImage/:id', {}, {
-            save: { method: 'POST', isArray: false}
-        }),
-        getById: $resource('api/admin/users/carouselPublic/getById/:id', {}, {
+        attachedContent: $resource('api/admin/users/carouselPublic/contentByType', {}, {
             query: { method: 'GET', isArray: false }
-        }),
-        editImage: $resource('api/admin/users/carouselPublic/editImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        editImagePath: $resource('api/admin/users/carouselPublic/editImagePath:data', {}, {
-        save: { method: 'POST', isArray: false }
-    })
+        })
     }
 }]);
 services.factory('CarouselMedicService', ['$resource', function($resource){
     return {
-        getAllImages: $resource('api/admin/users/carouselMedic/getAllImages', {}, {
-            query: { method: 'GET', isArray: true }
+        carouselMedic: $resource('api/admin/users/carouselMedic', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         }),
-        getContentByType: $resource('api/admin/users/carouselMedic/contentByType/:type', {}, {
-            query: { method: 'GET', isArray: true }
-        }),
-        addImage: $resource('api/admin/users/carouselMedic/addImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        toggleImage: $resource('api/admin/users/carouselMedic/toggleImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        deleteImage: $resource('api/admin/users/carouselMedic/deleteImage/:id', {}, {
-            save: { method: 'POST', isArray: false}
-        }),
-        getById: $resource('api/admin/users/carouselMedic/getById/:id', {}, {
+        attachedContent: $resource('api/admin/users/carouselMedic/contentByType', {}, {
             query: { method: 'GET', isArray: false }
-        }),
-        editImage: $resource('api/admin/users/carouselMedic/editImage/:data', {}, {
-            save: { method: 'POST', isArray: false }
-        }),
-        editImagePath: $resource('api/admin/users/carouselMedic/editImagePath:data', {}, {
-            save: { method: 'POST', isArray: false }
         })
-
     }
 }]);
 services.factory('ProductService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/admin/products/', {}, {
+        products: $resource('api/admin/products', {}, {
             query: { method: 'GET', isArray: false },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateProduct:$resource('api/admin/products/:id', {}, {
-            getProduct: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
-        }),
-        editImage: $resource('api/admin/products/editImage/:data', {}, {
-            save: { method: 'POST' }
-        }),
-        editRPC: $resource('api/admin/products/editRPC/:data', {}, {
-            save: { method: 'POST' }
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         })
     }
 }]);
 services.factory('ContentService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/admin/content', {}, {
+        content: $resource('api/admin/content', {}, {
             query: { method: 'GET', isArray: false },
-            save: { method: 'POST'}
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         }),
-        getGroupsByIds: $resource('api/admin/content/groupsByIds', {}, {
-            query: { method: 'POST', isArray: true }
-        }),
-        deleteOrUpdateContent:$resource('api/admin/content/:id', {id: "@id"}, {
-            getContent: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
-        }),
-        editImage: $resource('api/admin/content/editImage/:data', {}, {
-            save: { method: 'POST' }
-        }),
-        editAssociatedImages: $resource('api/admin/content/editAssociatedImages/:data', {}, {
-            save: { method: 'POST' }
+        groupsByIds: $resource('api/admin/content/groupsByIds', {}, {
+            query: { method: 'POST', isArray: false }
         })
     }
 }]);
@@ -463,49 +390,21 @@ services.factory('EventsService', ['$resource', function($resource){
 }]);
 services.factory('MultimediaAdminService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/admin/multimedia/', {}, {
+        multimedia: $resource('api/admin/multimedia', {}, {
             query: { method: 'GET', isArray: false },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateMultimedia:$resource('api/admin/multimedia/:id', {}, {
-            getMultimedia: {method: 'GET', isArray: false},
-            deleteMultimedia: { method: 'DELETE'},
-            updateMultimedia: { method: 'PUT'}
-        }),
-        editImage: $resource('api/admin/multimedia/editImage/:data', {}, {
-            save: { method: 'POST' }
-        }),
-        editVideo: $resource('api/admin/multimedia/editVideo/:data', {}, {
-            save: { method: 'POST' }
-        }),
-        toggleVideo: $resource('api/admin/multimedia/toggleVideo', {}, {
-            save: { method: 'POST' }
-        })
-    }
-}]);
-services.factory('quizesAdminService', ['$resource', function($resource){
-    return {
-        getAll: $resource('api/admin/quizes/', {}, {
-            query: { method: 'GET', isArray: true },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateQuizes:$resource('api/admin/quizes/:id', {}, {
-            getTest: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         })
     }
 }]);
 services.factory('areasAdminService', ['$resource', function($resource){
     return {
-        getAll: $resource('api/admin/areas/', {}, {
-            query: { method: 'GET', isArray: true },
-            save: { method: 'POST'}
-        }),
-        deleteOrUpdateareas:$resource('api/admin/areas/:id', {}, {
-            getArea: {method: 'GET', isArray: false},
-            delete: { method: 'DELETE'},
-            update: { method: 'PUT'}
+        areas: $resource('api/admin/areas', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
         })
     }
 }]);

@@ -1,8 +1,8 @@
-controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal){
+controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', 'Success', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal, Success){
 
     $scope.refreshTable = function () {
         SpecialProductsService.products.query().$promise.then(function (resp) {
-            var data = resp;
+            var data = Success.getObject(resp);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -26,7 +26,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
     };
 
     SpecialProductsService.groups.query().$promise.then(function (resp) {
-        $scope.groups = resp;
+        $scope.groups = Success.getObject(resp);
     });
 
     $scope.refreshTable();
@@ -80,7 +80,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
             }
         });
     };
-    
+
     $scope.toggleSpecialProduct = function (id, enabled) {
         $modal.open({
             templateUrl: 'partials/admin/content/specialProducts/toggleOrDelete.html',

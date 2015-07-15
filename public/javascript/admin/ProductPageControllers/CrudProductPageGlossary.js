@@ -1,4 +1,4 @@
-controllers.controller('CrudProductPageGlossary', ['$scope', 'SpecialProductsService', function($scope, SpecialProductsService) {
+controllers.controller('CrudProductPageGlossary', ['$scope', 'SpecialProductsService', 'Error', function($scope, SpecialProductsService, Error) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
@@ -15,12 +15,10 @@ controllers.controller('CrudProductPageGlossary', ['$scope', 'SpecialProductsSer
 
     $scope.addGlossaryTerm = function () {
         console.log(this.newItem);
-        SpecialProductsService.glossary.create(this.newItem).$promise.then(function (resp) {
-            if(resp.error){
-                $scope.resetAlert("danger", resp.error);
-            }else{
-                $scope.renderView("viewGlossary");
-            }
+        SpecialProductsService.glossary.create(this.newItem).$promise.then(function () {
+            $scope.renderView("viewGlossary");
+        }).catch(function (resp) {
+            $scope.resetAlert("danger", Error.getMessage(resp));
         });
     };
 
@@ -29,12 +27,10 @@ controllers.controller('CrudProductPageGlossary', ['$scope', 'SpecialProductsSer
         if(!id){
             $scope.resetAlert("Nu a fost gasit termenul");
         }else{
-            SpecialProductsService.glossary.update({id: id}, $scope.currentItem).$promise.then(function (resp) {
-                if(resp.error){
-                    $scope.resetAlert("danger", resp.error);
-                }else{
-                    $scope.renderView("viewGlossary");
-                }
+            SpecialProductsService.glossary.update({id: id}, $scope.currentItem).$promise.then(function () {
+                $scope.renderView("viewGlossary");
+            }).catch(function (resp) {
+                $scope.resetAlert("danger", Error.getMessage(resp));
             });
         }
     };

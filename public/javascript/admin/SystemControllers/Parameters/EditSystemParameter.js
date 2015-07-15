@@ -16,12 +16,10 @@ controllers.controller('EditSystemParameter', ['$scope', '$state', '$modalInstan
     };
 
     $scope.updateParameter = function () {
-        SystemService.parameters.update({id: this.parameter._id}, this.parameter).$promise.then(function (resp) {
-            if(resp.error){
-                resetAlert("danger", "Eroare la schimbarea parametrului");
-            }else{
-                resetAlert("success", "Parametrul a fost modificat");
-            }
+        SystemService.parameters.update({id: this.parameter._id}, this.parameter).$promise.then(function () {
+            resetAlert("success", "Parametrul a fost modificat");
+        }).catch(function () {
+            resetAlert("danger", "Eroare la schimbarea parametrului");
         });
     }
 

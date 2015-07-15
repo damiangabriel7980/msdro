@@ -40,68 +40,44 @@
     <!--});-->
     <!--</script>-->
 
-    <!--Stylesheets-->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="components/angular-carousel/dist/angular-carousel.min.css">
-    <link rel='stylesheet' href='components/angular-ui-select/dist/select.min.css' />
-    <link rel='stylesheet' href='components/select2/select2.css' />
+    <!--Core-->
+    <script src="components/jquery/dist/jquery.min.js"></script>
+    <script src="components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script src="components/angular/angular.js"></script>
+    <script src="components/oclazyload/dist/ocLazyLoad.js"></script>
+
+    <!--Global styles-->
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">-->
     <link rel="stylesheet" href="stylesheets/public/defaultStyles.css">
     <link rel="stylesheet" href="stylesheets/stylesThatReignSupreme.css">
 
     <!--Core-modules-->
-    <script src="components/jquery/dist/jquery.min.js"></script>
-    <script src="components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
-    <script src="components/angular/angular.js"></script>
+    <script src="components/angular-touch/angular-touch.min.js"></script>
     <script src="components/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="components/angular-resource/angular-resource.min.js"></script>
     <script src="components/angular-route/angular-route.min.js"></script>
     <script src="components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="components/ng-file-upload/angular-file-upload.min.js"></script>
-    <script src="components/angular-ui-select/dist/select.min.js"></script>
+    <script src="components/angular-off-click/offClick.js"></script>
 
+    <!--Widgets-->
+    <link rel="stylesheet" href="modules/mobile_content_list/mobile_content_list.css">
+    <script src="modules/mobile_content_list/mobile_content_list.js"></script>
+    <script src="modules/sticky-footer/footer_responsive.js"></script>
+    <link rel="stylesheet" href="modules/horizontal-content-list/styles.css">
+    <script src="modules/horizontal-content-list/directive.js"></script>
+    <link rel="stylesheet" href="modules/widget-most-read/styles.css">
+    <script src="modules/widget-most-read/directive.js"></script>
 
-    <!--Controllers-->
+    <!--Global controllers, services, directives-->
     <script src="javascript/public/app.js"></script>
     <script src="javascript/public/controllers.js"></script>
-    <script src="javascript/public/services.js"></script>
-    <script src="javascript/public/publicDirectives.js"></script>
-    <script src="javascript/shared/services.js"></script>
     <script src="javascript/shared/controllers.js"></script>
+    <script src="javascript/public/services.js"></script>
+    <script src="javascript/shared/services.js"></script>
+    <script src="javascript/public/publicDirectives.js"></script>
     <script src="javascript/public/RootController.js"></script>
-    <script src="javascript/public/SearchControllers/Search.js"></script>
-    <script src="javascript/public/HomeControllers/HomeView.js"></script>
-    <script src="javascript/public/HomeControllers/HomeNews.js"></script>
-    <script src="javascript/public/HomeControllers/HomeMobileNews.js"></script>
-    <script src="javascript/public/HomeControllers/HomeMostRead.js"></script>
-    <script src="javascript/public/HomeControllers/HomeDownloads.js"></script>
-    <script src="javascript/public/ModalControllers/ContactModal.js"></script>
-    <script src="javascript/public/NewsControllers/NewsView.js"></script>
-    <script src="javascript/public/ArticlesControllers/ArticlesView.js"></script>
-    <script src="javascript/public/ArticlesControllers/ArticlesDetail.js"></script>
-    <script src="javascript/public/DownloadsControllers/DownloadsView.js"></script>
-    <script src="javascript/public/DownloadsControllers/DownloadsDetail.js"></script>
-    <script src="javascript/public/ElearningControllers/ElearningView.js"></script>
-    <script src="javascript/public/ElearningControllers/ElearningDetail.js"></script>
-    <script src="javascript/public/AuthControllers/AuthModal.js"></script>
-    <script src="javascript/public/AuthControllers/Signup.js"></script>
 
-    <!--Plug-ins-->
-    <script src="components/requestAnimationFrame/app/requestAnimationFrame.js"></script>
-    <script src="components/es5-shim/es5-shim.min.js"></script>
-    <script src="components/shifty/dist/shifty.min.js"></script>
-    <script src="components/angular-touch/angular-touch.min.js"></script>
-    <script src="components/angular-carousel/dist/angular-carousel.min.js"></script>
-    <script src="modules/custom_timeline/timelineDirective.js"></script>
-    <link rel="stylesheet" href="modules/custom_timeline/timelineStyles.css">
-    <script src="components/videogular/videogular.min.js"></script>
-    <script src="components/videogular-controls/vg-controls.min.js"></script>
-    <script src="components/videogular-overlay-play/vg-overlay-play.min.js"></script>
-    <script src="components/videogular-poster/vg-poster.min.js"></script>
-    <script src="components/videogular-buffering/vg-buffering.min.js"></script>
-    <script src="modules/mobile_content_list/mobile_content_list.js"></script>
-    <link rel="stylesheet" href="modules/mobile_content_list/mobile_content_list.css">
-    <script src="components/angular-off-click/offClick.js"></script>
 </head>
 <body ng-controller="RootController">
 
@@ -112,12 +88,12 @@
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" ng-click="openNavbar()">
+                    <a class="navbar-toggle" ng-click="toggleNavbar()" id="nav-toggle">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                    </button>
+                    </a>
                     <div class="headerSearchAndLinks">
                         <div class="item">
                             <ul class="showOnTD">
@@ -152,7 +128,7 @@
                     <a class="navbar-brand" ui-sref="home.noutati"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}"></a>
                 </div>
 
-                <div class="collapse navbar-collapse" collapse="navCollapsed" off-click="closeNavbar()" off-click-if="!navCollapsed">
+                <div class="collapse navbar-collapse" collapse="navCollapsed" off-click="closeNavbar()" off-click-if="!navCollapsed" off-click-filter="'#nav-toggle'">
 
                     <ul class="nav navbar-nav">
                         <li class="collapsedForm showOnPsT">
@@ -205,18 +181,11 @@
     </div>
 </div>
 
-<div id="publicContentWrapper" footer-bottom>
+<div id="publicContentWrapper">
     <div class="container" id="publicContent">
         <div ui-view class="view-container rootView"></div>
     </div>
-
-    <div class="footer text-center">
-        <hr>
-        <a ui-sref="home.noutati">Home</a>&nbsp;|&nbsp;
-        <a href="http://www.merckmanuals.com" target="_blank">Manualul Merck</a>&nbsp;|&nbsp;
-        <a style="cursor: pointer" ng-click="showContactModal()">Contact</a>
-    </div>
+    <footer-responsive stick-below-id="publicContent" template-link="partials/public/footer.html"></footer-responsive>
 </div>
-
 </body>
 </html>

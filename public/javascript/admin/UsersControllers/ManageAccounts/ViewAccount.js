@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 25.02.2015.
  */
-controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modalInstance', '$state','idToView','$timeout', function($scope, ManageAccountsService, $modalInstance, $state,idToView,$timeout){
+controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modalInstance', '$state','idToView','$timeout', 'Success', 'Error', function($scope, ManageAccountsService, $modalInstance, $state,idToView,$timeout,Success,Error){
 
     var resetAlert = function (type, text) {
         $scope.myAlert = {
@@ -12,17 +12,23 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
     };
 
     ManageAccountsService.professions.query().$promise.then(function (response) {
-        $scope.professions = response;
+        $scope.professions = Success.getObject(response);
+    }).catch(function(err){
+        resetAlert('danger',Error.getMessage(err));
     });
 
     ManageAccountsService.users.query({id: idToView}).$promise.then(function(resp){
-        var user = resp.success;
+        var user = Success.getObject(resp);
         $scope.user = user;
         if(user.profession) $scope.selectedProfession = user.profession._id;
+    }).catch(function(err){
+        resetAlert('danger',Error.getMessage(err));
     });
 
     ManageAccountsService.groups.query().$promise.then(function (resp) {
-        $scope.groups = resp.success;
+        $scope.groups = Success.getObject(resp);
+    }).catch(function(err){
+        resetAlert('danger',Error.getMessage(err));
     });
 
     $scope.saveSuccess = false;
@@ -32,9 +38,7 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
         user.profession = this.selectedProfession;
         user.groupsID = this.selectedGroups;
         ManageAccountsService.users.update({id: user._id}, user).$promise.then(function (resp) {
-            if(resp.error){
-                resetAlert("danger", "Eroare la update");
-            }else if(resp.userExists) {
+            if(Success.getObject(resp).userExists) {
                 resetAlert("warning", "Un utilizator cu acelasi e-mail exista deja");
             }else{
                 resetAlert("success", "Update efectuat!");
@@ -44,6 +48,8 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
                     $state.reload();
                 },2000);
             }
+        }).catch(function(err){
+            resetAlert('danger',Error.getMessage(err));
         });
     };
 

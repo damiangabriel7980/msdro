@@ -1,33 +1,19 @@
 <div class="col-sm-12 downloadsList">
     <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
         <div class="col-sm-12 entry" ng-repeat="n in downloads | limitTo:contentLimit track by $index">
-            <div class="col-sm-2 picture">
-                <div>
-                    <img ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
-                </div>
-            </div>
-            <div class="col-sm-10 details">
-                <div class="col-sm-12 title">
-                    <a ui-sref="downloads.detail({id: n._id})" convert-special to-convert="n.title"
-                       ng-bind-html="trustAsHtml(n.title)"></a>
-                </div>
-                <div class="col-sm-12 excerpt" convert-special to-convert="n.text" ng-bind-html="trustAsHtml(createHeader(n.text, 200))"></div>
-                <div class="col-sm-12 author" convert-special to-convert="n.author" ng-bind-html='trustAsHtml(n.author)'></div>
-                <div class="col-sm-12 footer">
-                    <div class="date">{{n.date_added | date:'dd/MM/yyyy'}}</div>
-                    <div class="readMore"><a class="btn btn-default btn-sm btnGreenBorder" ui-sref="downloads.detail({id: n._id})">Vizualizeaza</a></div>
-                </div>
-            </div>
-            <div class="col-sm-12 divider" ng-if="$index!=contentLimit-1 && $index!=downloads.length-1"></div>
+            <horizontal-content-list content="n" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
+                                     title-attr="title" text-attr="text" bold-attr-1="author" date-attr="date_added" button-label="Vizualizeaza"
+                                     show-divider="$index!=contentLimit-1 && $index!=downloads.length-1" navigate="navigateToDownloads"></horizontal-content-list>
         </div>
     </div>
     <div class="col-sm-12 noPadding mobileArea" ng-if="isMobile(true)">
         <div class="col-xs-12 category">
             <div class="col-xs-12 name">DOWNLOADS</div>
-            <mobile-content-list content="downloads" limit="contentLimit" image-prefix="pathAmazonDev" default-image="defaultArticleImage"></mobile-content-list>
+            <mobile-content-list content="downloads" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultArticleImage}}" title-attr="title"
+                                 text-attr="text" navigate="navigateTo" limit="contentLimit"></mobile-content-list>
         </div>
     </div>
 </div>
 <div class="col-sm-12 text-center" ng-style="{'display':contentLimit<downloads.length?'initial':'none'}">
-    <a class="btn btn-default btnGreenBorder" ng-click="contentLimit=contentLimit+3">Mai multe</a>
+    <a class="btn btn-default" ng-click="contentLimit=contentLimit+3">Mai multe</a>
 </div>

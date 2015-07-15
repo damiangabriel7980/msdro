@@ -1,308 +1,119 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','alterIntroService','$window','$cookies', function ($scope, $state, $modal,$rootScope,alterIntroService,$window,$cookies) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', 'IntroService', 'Success', 'Error', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService, IntroService, Success, Error) {
 
-    var openIntro = function () {
-        $modal.open({
-            templateUrl: 'partials/medic/modals/presentationModal.html',
-            keyboard: false,
-            backdrop: 'static',
-            windowClass: 'fade',
-            controller: 'PresentationModal'
-        });
-    };
-
-    var changeLocalGroupModalStatus= function(groupID,value){
-        var retrievedObject = localStorage.getItem('statusModalGroups');
-        var statusModals = JSON.parse(retrievedObject);
-        statusModals[groupID] = value;
-        localStorage.setItem('statusModalGroups',JSON.stringify(statusModals));
-    };
+    //===================================================================== navigation
     $scope.goToMerckSite=function(){
-      $window.open('http://www.merckmanuals.com/','_blank');
+        $window.open('http://www.merckmanuals.com/','_blank');
     };
     $scope.logoutUser=function(){
         $window.location.href='logout';
     };
-    $scope.goToPharma=function(){
-        $window.open($rootScope.Pharma,'_tab');
-    };
-    $scope.goToTerms=function(){
-        $window.open($rootScope.Terms,'_tab');
-    };
-    function setCookie(cname, cvalue) {
-        var now = new Date(),
-        // this will set the expiration to 6 months
-            exp = new Date(now.getFullYear(), now.getMonth()+6, now.getDate());
-        var expires = "expires="+exp.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires;
-    }
-    function getCookie(cname) {
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0; i<ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1);
-            if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-        }
-        return "";
-    }
 
-        var MSDCookie=getCookie("MSDCookies");
-        if (MSDCookie!="") {
-            if(MSDCookie=='yes')
-                $scope.isCollapsed=true;
-            else
-                $scope.isCollapsed=false;
-        }else{
-            $scope.isCollapsed=false;
-        }
+    //===================================================================== user accepts cookies
+    var acceptedCookies = CookiesService.getCookie("MSDCookies");
+    $scope.isCollapsed = (acceptedCookies == 'yes');
+
     $scope.setCookie=function(){
-        setCookie('MSDCookies','yes');
+        CookiesService.setCookie('MSDCookies','yes');
         $scope.isCollapsed=true;
     };
 
-    $rootScope.$watch('specialGroupSelected',function(oldVal,newVal){
-        if($rootScope.specialGroupSelected!=undefined || $rootScope.specialGroupSelected===null)
+    //==================================================================== watch group selection
+    $rootScope.$watch('specialGroupSelected',function(){
+        if($rootScope.specialGroupSelected)
         {
-            if(!localStorage.statusModalGroups)
-            {
-                var modalGroups={};
-                if($rootScope.specialGroups===undefined)
-                {
-                    alterIntroService.getDefaultGroupID.query().$promise.then(function(group){
-                        var defaultGroupArray=[];
-                        defaultGroupArray.push(group.defaultGroup);
-                        for(var i=0;i<defaultGroupArray.length;i++)
-                        {
-                            modalGroups[defaultGroupArray[i]]=true;
-                        }
-                        localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
-                        alterIntroService.checkIntroEnabled.query({specialGroupSelected:null}).$promise.then(function(resp){
-                            if(resp._id)
-                            {
-                                openIntro();
+            var idSelected = $rootScope.specialGroupSelected._id;
+            //check if user opted to hide this intro video
+            var hideVideo = IntroService.hideNextTime.getStatus(idSelected);
+            if(!hideVideo){
+                //if not, check if this intro video is enabled
+                IntroService.checkIntroEnabled.query({groupID: idSelected}).$promise.then(function (resp) {
+                    if(Success.getObject(resp).enabled){
+                        //if so, check if user already viewed the video in this log in session
+                        IntroService.rememberIntroView.query({groupID: idSelected}).$promise.then(function (resp) {
+                            if(!Success.getObject(resp).isViewed){
+                                //if not, mark as viewed
+                                IntroService.rememberIntroView.save({groupID: idSelected}).$promise.then(function () {
+                                    //then show it
+                                    $rootScope.showIntroPresentation(idSelected);
+                                });
                             }
                         });
-
-                    });
-
-                }
-                else
-                {
-                    for(var i=0;i<$rootScope.specialGroups.length;i++)
-                    {
-                        modalGroups[$rootScope.specialGroups[i]._id]=true;
                     }
-                    localStorage.setItem('statusModalGroups',JSON.stringify(modalGroups));
-                    alterIntroService.checkIntroEnabled.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
-                        if(resp._id)
-                        {
-                            openIntro();
-                        }
-                    });
-                }
-
-            }
-            else
-            {
-               if($rootScope.specialGroupSelected===null)
-                {
-                    alterIntroService.alterIntro.query().$promise.then(function(resp){
-
-                        $scope.introSession=resp;
-                      alterIntroService.getDefaultGroupID.query().$promise.then(function(group){
-                            if($scope.introSession[group.defaultGroup]===true)
-                        {
-                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[group.defaultGroup]==undefined)
-                                changeLocalGroupModalStatus(group.defaultGroup,true);
-                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[group.defaultGroup]===true && $state.includes('home'))
-                            {
-                                alterIntroService.checkIntroEnabled.query({specialGroupSelected:null}).$promise.then(function(resp){
-                                    if(resp._id)
-                                    {
-                                        openIntro();
-                                    }
-                                });
-                            }
-                        }
-                        });
-                    });
-                }
-                else{
-                    alterIntroService.alterIntro.query().$promise.then(function(resp){
-
-                        $scope.introSession=resp;
-                        if($scope.introSession[$rootScope.specialGroupSelected._id]===true)
-                        {
-                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]==undefined)
-                                changeLocalGroupModalStatus($rootScope.specialGroupSelected._id,true);
-                            if(JSON.parse(localStorage.getItem('statusModalGroups'))[$rootScope.specialGroupSelected._id]===true && $state.includes('home'))
-                            {
-                                alterIntroService.checkIntroEnabled.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
-                                    if(resp._id)
-                                    {
-                                        openIntro();
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
+                });
             }
         }
-
     });
-    $scope.specialCollapsed = true;
-    $scope.collapseAndStyle = function(){
-        if(angular.element('#normalMenu').hasClass('menuShadow'))
-            {
-                angular.element('#normalMenu').removeClass('menuShadow');
-                $scope.specialCollapsed = true;
-            }
-        else{
-            angular.element('#normalMenu').addClass('menuShadow');
-            $scope.specialCollapsed = false;
-        }
+
+    //==================================================================== special groups drop-down
+
+    $scope.showFarmaModal = function () {
+        return $rootScope.showPDFModal('Pharma');
     };
-    $scope.collapseFinal=function(){
-        if(angular.element('#normalMenu').hasClass('menuShadow'))
-        {
-            angular.element('#normalMenu').removeClass('menuShadow');
-            $scope.specialCollapsed = true;
-        }
+    $scope.showTermsModal = function () {
+        return $rootScope.showPDFModal('Terms');
     };
-    $scope.collapseAndStyleMobile = function(){
-        if(angular.element('#normalMenuMobile').hasClass('menuShadow'))
-        {
-            angular.element('#normalMenuMobile').removeClass('menuShadow');
-            $scope.specialCollapsed = true;
-        }
-        else{
-            angular.element('#normalMenuMobile').addClass('menuShadow');
-            $scope.specialCollapsed = false;
-        }
-    };
-    $scope.collapseFinalMobile=function(){
-        if(angular.element('#normalMenuMobile').hasClass('menuShadow'))
-        {
-            angular.element('#normalMenuMobile').removeClass('menuShadow');
-            $scope.specialCollapsed = true;
-        }
-    };
-    $scope.showFarmaModal = function() {
-        if($rootScope.iosDetect)
-            window.open($rootScope.Pharma);
-        else {
-            var modalInstance = $modal.open({
-                templateUrl: 'partials/medic/modals/Farma.html',
-                keyboard: false,
-                controller: 'Pharmacovigilance',
-                size: 'lg',
-                windowClass: 'fade modal-responsive',
-                backdrop: 'static'
-            });
-        }
+    $scope.showMerckManual = function () {
+        return $rootScope.showPDFModal('MerckManual');
     };
 
     $scope.showContactModal = function(){
         $modal.open({
             templateUrl: 'partials/medic/modals/contact.html',
             size: 'lg',
-            windowClass: 'fade',
-            controller: 'Contact'
+            windowClass: 'fade'
         });
     };
 
-    $scope.showTermsModal = function(){
-        if($rootScope.iosDetect)
-            window.open($rootScope.Terms);
-        else {
-            $modal.open({
-                templateUrl: 'partials/medic/modals/Terms.html',
-                size: 'lg',
-                windowClass: 'fade modal-responsive',
-                backdrop: 'static',
-                controller: 'Terms',
-                keyboard: false
-            });
-        }
-    };
+    //============================================ profile modal
 
-    //merck modal
-    $scope.showMerckManual = function(){
-        if($rootScope.iosDetect)
-            window.open($rootScope.MerckManual);
-        else{
-            $modal.open({
-                templateUrl: 'partials/medic/modals/merckManual.html',
-                size: 'lg',
-                keyboard: false,
-                backdrop: 'static',
-                windowClass: 'fade modal-responsive',
-                controller: 'MerckManual'
-            });
-        }
+    var openProfileModal = function () {
+        $modal.open({
+            templateUrl: 'partials/medic/profile.html',
+            size: 'lg',
+            backdrop: 'static',
+            keyboard: false,
+            windowClass: 'fade modal-responsive MyProfileModal',
+            controller: 'Profile',
+            resolve: {
+                loadDeps: loadStateDeps(['Profile', 'Ui-select', 'FileUpload', 'TherapeuticSelect'])
+            }
+        });
     };
-    $scope.goToMerckManual=function(){
-        window.open($rootScope.MerckManual,'_blank');
-    };
-
-    //profile modal
     $scope.showProfile = function(){
-        if($rootScope.iosDev || $rootScope.androidDetect)
+        if(Utils.isMobile(false,true)['iosDev'] || Utils.isMobile(false,true)['androidDetect'])
         {
-            if($rootScope.isIpad || $rootScope.androidTab)
+            if(Utils.isMobile(false,true)['isIpad'] || Utils.isMobile(false,true)['androidTab'])
             {
-                $modal.open({
-                    templateUrl: 'partials/medic/profile.html',
-                    size: 'lg',
-                    backdrop: 'static',
-                    keyboard: false,
-                    windowClass: 'fade modal-responsive MyProfileModal',
-                    controller: 'Profile'
-                });
+                openProfileModal();
             }
             else{
                     $state.go('profileMobile');
             }
         }
         else{
-            $modal.open({
-                templateUrl: 'partials/medic/profile.html',
-                size: 'lg',
-                backdrop: 'static',
-                keyboard: false,
-                windowClass: 'fade modal-responsive MyProfileModal',
-                controller: 'Profile'
-            });
+            openProfileModal();
         }
     };
-    //$scope.animateInput=function(){
-    //    angular.element('.form-control').removeClass('popSearch');
-    //};
-    $scope.textToSearch="";
-    $scope.getInput = function(){
-        var x = document.getElementById("upperSearch");
-        $scope.textToSearch = x.value;
-    };
-
-    $scope.searchText=function(data){
+    $scope.navCollapsed = true;
+    $scope.searchText = function(data){
         if(data==="")
             return;
-        else
-            $state.go('homeSearch',{textToSearch: data},{reload: true});
-    };
-    $scope.showInput=false;
-    $scope.animateInput=function(){
-        angular.element('.popSearch').toggleClass('newWidthPopSearch');
-        angular.element('.input-group-addon').toggleClass('btnSearchBefore');
-    };
-    angular.element(document).click(function (event) {
-        var clickover = angular.element(event.target);
-        var $navbar = angular.element(".navbar-collapse");
-        var _opened = $navbar.hasClass("in");
-        if (_opened === true && !clickover.hasClass("navbar-toggle")&& !clickover.hasClass("mySearchInDropdown")) {
-            angular.element("button.navbar-toggle").click();
+        else{
+            $state.go('homeSearch',{textToSearch : data},{reload: true});
+            $scope.closeNavbar();
         }
+    };
+    $scope.closeNavbar = function () {
+        $scope.navCollapsed = true;
+    };
+    $scope.toggleNavbar = function () {
+        $scope.navCollapsed = !$scope.navCollapsed;
+    };
+    $scope.openNavbar = function () {
+        $scope.navCollapsed = false;
+    };
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        $scope.closeNavbar();
     });
 
 }]);

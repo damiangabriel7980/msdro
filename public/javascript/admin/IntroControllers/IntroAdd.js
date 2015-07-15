@@ -1,28 +1,32 @@
 /**
  * Created by miricaandrei23 on 27.02.2015.
  */
-controllers.controller('IntroAdd', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','$modalInstance', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,$modalInstance){
+controllers.controller('IntroAdd', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','$modalInstance', 'GroupsService', 'Success', 'Error', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,$modalInstance,GroupsService,Success,Error){
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
-    $scope.intro={
-      description:"",
-        article_content:""
-    };
     $scope.selectedGroups = [];
-    IntroService.getAllGroups.query().$promise.then(function(resp){
-        $scope.groups=resp;
+    GroupsService.groups.query().$promise.then(function(resp){
+        $scope.groups = Success.getObject(resp);
+    }).catch(function(err){
+        $scope.statusAlert.type = "danger";
+        $scope.statusAlert.message = Error.getMessage(err);
+        $scope.statusAlert.newAlert = true;
     });
     $scope.saveIntro=function(){
-        console.log($scope.intro);
         var groups_id = [];
         for(var i=0; i<$scope.selectedGroups.length; i++){
             groups_id.push($scope.selectedGroups[i]._id);
         }
-        $scope.intro.groupsID = groups_id;
-        IntroService.addIntro.save({description: $scope.intro.description,article_content: $scope.intro.article_content, groupsID: $scope.intro.groupsID}).$promise.then(function(resp){
-            $scope.statusAlert.newAlert=true;
-            $scope.statusAlert.message=resp.message;
-        })
+        this.intro.groupsID = groups_id;
+        this.intro.enabled = false;
+        IntroService.intros.create({intro: this.intro}).$promise.then(function(resp){
+            $scope.statusAlert.newAlert = true;
+            $scope.statusAlert.message = Success.getMessage(resp);
+        }).catch(function(err){
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.message = Error.getMessage(err);
+            $scope.statusAlert.newAlert = true;
+        });
     };
     $scope.tinymceOptions = {
         plugins: [

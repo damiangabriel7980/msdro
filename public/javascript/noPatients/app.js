@@ -1,17 +1,56 @@
 var app = angular.module('app',
     [
+        'oc.lazyLoad',
         'ui.router',
         'ui.bootstrap',
         'controllers',
         'services',
-        'ngSanitize',
-        'ui.select',
-        'angularFileUpload'
+        'ngSanitize'
     ]);
+
+app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {
+    app.controllerProvider = $controllerProvider;
+    app.filterProvider = $filterProvider;
+}]);
+
+app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
+    $ocLazyLoadProvider.config({
+        //debug: true,
+        modules: [
+            {
+                name: 'Auth',
+                files: [
+                    'javascript/public/AuthControllers/AuthModal.js',
+                    'javascript/public/AuthControllers/Signup.js'
+                ]
+            },
+            {
+                name: 'Ui-select',
+                files: [
+                    'components/angular-ui-select/dist/select.min.css',
+                    'components/select2/select2.css',
+                    'components/angular-ui-select/dist/select.min.js'
+                ]
+            },
+            {
+                name: 'FileUpload',
+                files: [
+                    'components/ng-file-upload/ng-file-upload.min.js'
+                ]
+            }
+        ]
+    });
+}]);
 
 app.config(['$locationProvider', function($locationProvider) {
     $locationProvider.hashPrefix(HASH_PREFIX);
 }]);
+
+var loadStateDeps = function (deps) {
+    return ['$ocLazyLoad', function ($ocLazyLoad) {
+        return $ocLazyLoad.load(deps);
+    }]
+};
 
 app.run(
     [            '$rootScope', '$modal', '$sce', '$location',
@@ -61,7 +100,8 @@ app.run(
                     resolve:{
                         intent: function () {
                             return intent;
-                        }
+                        },
+                        loadDeps: loadStateDeps(['Auth', 'Ui-select', 'FileUpload'])
                     }
                 });
             };

@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <div class="modal-title"><h3>{{title}}</h3></div>
+</div>
+<div class="modal-body" style="overflow: hidden">
+    <div class="col-md-12 noPadding" style="height: 100%;">
+        <ng-pdf-custom scale="4" pdf-url="pdfLink"></ng-pdf-custom>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn btn-default positionMiddle right" ng-click="$close()">Inchide</a>
+</div>

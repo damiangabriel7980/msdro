@@ -1,4 +1,4 @@
-controllers.controller('CreateSpeaker', ['$scope','$rootScope' ,'EventsService', '$state', '$modalInstance', 'AmazonService', function($scope, $rootScope, EventsService, $state, $modalInstance, AmazonService){
+controllers.controller('CreateSpeaker', ['$scope','$rootScope' ,'EventsService', '$state', '$modalInstance', 'AmazonService', 'Success', function($scope, $rootScope, EventsService, $state, $modalInstance, AmazonService, Success){
 
     $scope.modal = {
         title: "Adauga speaker",
@@ -28,11 +28,9 @@ controllers.controller('CreateSpeaker', ['$scope','$rootScope' ,'EventsService',
                 resetAlert("warning", "Se adauga in baza de date...");
                 //first, add speaker to database
                 EventsService.speakers.create(speaker).$promise.then(function (resp) {
-                    if(resp.error){
-                        callback("Eroare la crearea speaker-ului");
-                    }else{
-                        callback(null, resp.success._id); //send created id in callback
-                    }
+                    callback(null, Success.getObject(resp)._id); //send created id in callback
+                }).catch(function () {
+                    callback("Eroare la crearea speaker-ului");
                 });
             },
             function (idCreated, callback) {
@@ -47,11 +45,9 @@ controllers.controller('CreateSpeaker', ['$scope','$rootScope' ,'EventsService',
                         }else{
                             //update database
                             EventsService.speakers.update({id: idCreated}, {image_path: key}).$promise.then(function (resp) {
-                                if(resp.error){
-                                    callback("Eroare la adaugarea imaginii in baza de date");
-                                }else{
-                                    callback();
-                                }
+                                callback();
+                            }).catch(function () {
+                                callback("Eroare la adaugarea imaginii in baza de date");
                             });
                         }
                     });

@@ -1,0 +1,14 @@
+<div class="col-md-12" style="padding: 0">
+    <a class="btn btn-default" ng-click="goPrevious()" tooltip="Pagina precedenta" tooltip-placement="bottom"><i class="glyphicon glyphicon-chevron-left"></i></a>
+    <a class="btn btn-default" ng-click="goNext()" tooltip="Pagina urmatoare" tooltip-placement="bottom"><i class="glyphicon glyphicon-chevron-right"></i></a>
+    <a class="btn btn-default" ng-click="rotateLeft()" tooltip="Rotire pagina la stanga" tooltip-placement="bottom"><i class="glyphicon glyphicon-circle-arrow-left"></i></a>
+    <a class="btn btn-default" ng-click="rotateRight()" tooltip="Rotire pagina la dreapta" tooltip-placement="bottom"><i class="glyphicon glyphicon-circle-arrow-right"></i></a>
+    <a class="btn btn-default" ng-click="zoomIn()" tooltip="Mareste pagina" tooltip-placement="bottom"><i class="glyphicon glyphicon-plus"></i></a>
+    <a class="btn btn-default" ng-click="zoomOut()" tooltip="Micsoreaza pagina" tooltip-placement="bottom"><i class="glyphicon glyphicon-minus"></i></a>
+    <a class="btn btn-default" ng-click="fitToScreen()" tooltip="Revenire la dimensiunea initiala" tooltip-placement="bottom" style="margin-right: 10px"><i class="glyphicon glyphicon-fullscreen"></i></a>
+    <span>Page:&nbsp;{{pageToDisplay}}&nbsp;/&nbsp;{{pageCount}}</span>
+</div>
+<div class="col-md-12" style="height: 95%; overflow: scroll; padding: 0">
+    <!--IMPORTANT - zoom in/out uses the style attribute in this form-->
+    <canvas id="pdf-canvas" style="width:100%;" class="rotate0"></canvas>
+</div>

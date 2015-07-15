@@ -1,32 +1,25 @@
+<div ng-cloak class="col-sm-12 text-center" ng-if="news && news.length==0 && !isMobile(true)">
+    <h4>Nu exista articole conform criteriilor selectate!</h4>
+</div>
 <div class="col-sm-12 articlesList">
     <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
         <div class="col-sm-12 article" ng-repeat="n in news | limitTo:articlesLimit track by $index">
-            <div class="col-sm-3 picture">
-                <div>
-                    <img ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
-                </div>
-            </div>
-            <div class="col-sm-9 details">
-                <div class="col-sm-12 title"><a ui-sref="articole.detail({id: n._id})" convert-special to-convert="n.title"
-                                                ng-bind-html="trustAsHtml(n.title)"></a></div>
-                <div class="col-sm-12 excerpt" convert-special to-convert="n.text" ng-bind-html="trustAsHtml(createHeader(n.text, 300))"></div>
-                <div class="col-sm-12 author" convert-special to-convert="n.author"
-                     ng-bind-html="trustAsHtml(n.author)"></div>
-                <div class="col-sm-12 footer">
-                    <div class="date">{{n.date_added | date:'dd/MM/yyyy'}}</div>
-                    <div class="readMore"><a class="btn btn-default btn-sm btnGreenBorder" ui-sref="articole.detail({id: n._id})">Vezi articol</a></div>
-                </div>
-            </div>
-            <div class="col-sm-12 divider" ng-if="$index!=articlesLimit-1 && $index!=news.length-1"></div>
+            <horizontal-content-list content="n" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
+                                     title-attr="title" text-attr="text" bold-attr-1="author" date-attr="date_added" button-label="Vezi articol"
+                                     show-divider="$index!=articlesLimit-1 && $index!=news.length-1" navigate="navigateToArticles"></horizontal-content-list>
         </div>
     </div>
     <div class="col-sm-12 noPadding mobileArea" ng-if="isMobile(true)">
         <div class="col-xs-12 category">
             <div class="col-xs-12 name">DESPRE - {{categoryName}}</div>
-            <mobile-content-list content="news" limit="articlesLimit" image-prefix="pathAmazonDev" default-image="defaultArticleImage"></mobile-content-list>
+            <div ng-cloak class="col-sm-12 text-center" ng-if="news && news.length==0">
+                <h4>Nu exista articole conform criteriilor selectate!</h4>
+            </div>
+            <mobile-content-list content="news" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultArticleImage}}" title-attr="title"
+                                 text-attr="text" navigate="navigateTo" limit="articlesLimit"></mobile-content-list>
         </div>
     </div>
 </div>
 <div class="col-sm-12 text-center" ng-style="{'display':articlesLimit<news.length?'initial':'none'}">
-    <a class="btn btn-default btnGreenBorder" ng-click="articlesLimit=articlesLimit+3">Mai multe articole</a>
+    <a class="btn btn-default" ng-click="articlesLimit=articlesLimit+3">Mai multe articole</a>
 </div>

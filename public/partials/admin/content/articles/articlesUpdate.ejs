@@ -13,7 +13,7 @@
             <input ng-model="article.author" type="text" class="form-control col-xs-12">
         </div>
         <div class="col-md-12 marginTop5px">
-            <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileAssociatedSelected($files, $event)" multiple="false" accept="image/*,video/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca multimedia</button>
+            <button class="btn btn-default" type="file" ngf-select ngf-change="fileAssociatedSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*,video/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca multimedia</button>
         </div>
         <div class="col-md-12">
             <alert ng-if="uploadAlertImages.newAlert" type="{{uploadAlertImages.type}}" close="uploadAlertImages.newAlert=false">{{uploadAlertImages.message}}</alert>
@@ -49,7 +49,7 @@
                 <img no-cache-src="{{imagePath}}" ng-if="article.image_path" style="width:100px;">
             </div>
             <div class="col-md-12">
-                <button class="btn btn-default" type="file" ng-file-select ng-file-change="fileSelected($files, $event)" multiple="false" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
+                <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
             </div>
             <div class="col-xs-12" ng-if="article.image_path">
                 <label>Link thumbnail:</label>

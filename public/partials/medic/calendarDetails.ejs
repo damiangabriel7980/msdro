@@ -1,17 +1,20 @@
-<div>
+<div class="eventDetails">
         <div class="modal-header">
-            <h3 class="modal-title equalMarginModalTitle"><i class="glyphicon glyphicon-facetime-video mediumFont" ng-if="itemsEvent.type==2"></i>&nbsp;{{itemsEvent['name']}}
-            </h3>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <div class="col-md-8"><p class="medium-lineheight"><strong>Locatie: </strong><strong convert-special conver="itemsEvent.place" ng-bind-html="trustAsHtml(itemsEvent.place)"></strong></p></div>
-                <div class="col-md-4"><span class="label label-info pull-right"><i ng-if="itemsEvent.type==2" class="glyphicon glyphicon-facetime-video"></i>&nbsp;{{itemsEvent.start | asDate | date: 'dd/MM/yyyy'}} - {{itemsEvent.end | asDate | date: 'dd/MM/yyyy'}}</span></div>
-                <div class="col-xs-12" convert-special conver="itemsEvent.description" ng-bind-html="trustAsHtml(itemsEvent.description)"></div>
+            <div class="modal-title"><i class="glyphicon glyphicon-facetime-video fontM" ng-if="itemsEvent.type==2"></i>&nbsp;{{itemsEvent['name']}}
             </div>
-
+        </div>
+        <div class="modal-body container">
+            <div class="details">
+                <div class="location">
+                    <strong>Locatie:&nbsp;</strong><strong convert-special conver="itemsEvent.place" ng-bind-html="trustAsHtml(itemsEvent.place)"></strong>
+                </div>
+                <div class="date">
+                    <span class="label label-primary">&nbsp;{{itemsEvent.start | asDate | date: 'dd/MM/yyyy'}}&nbsp;-&nbsp;{{itemsEvent.end | asDate | date: 'dd/MM/yyyy'}}</span>
+                </div>
+                <div class="description" convert-special conver="itemsEvent.description" ng-bind-html="trustAsHtml(itemsEvent.description + '&nbsp;')"></div>
+            </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-default float-left" ng-click="cancell()">Inchide</button>
+            <a class="btn btn-default float-left" ng-click="closeModal()">Inchide</a>
         </div>
 </div>

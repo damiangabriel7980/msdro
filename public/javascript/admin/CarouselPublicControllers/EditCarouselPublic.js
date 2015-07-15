@@ -1,4 +1,4 @@
-controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'CarouselPublicService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', function($scope, $rootScope, $sce, CarouselPublicService, $modalInstance, $state, idToEdit, AmazonService){
+controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'CarouselPublicService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', 'Success', 'Error', function($scope, $rootScope, $sce, CarouselPublicService, $modalInstance, $state, idToEdit, AmazonService,Success,Error){
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
@@ -9,11 +9,9 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
     $scope.content.selected = {};
 
     $scope.$watch('toEdit.type', function (newVal) {
-        console.log(newVal);
-        //load all contents of this type
         if(newVal){
-            CarouselPublicService.getContentByType.query({type: newVal}).$promise.then(function (resp) {
-                $scope.allContent = resp;
+            CarouselPublicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
+                $scope.allContent = Success.getObject(resp);
                 if($scope.toEdit.content_id){
                     var poz = findInContent($scope.toEdit.content_id);
                     if(poz > -1){
@@ -30,15 +28,22 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
                         $scope.content.selected.title = null;
                     }
                 }
+            }).catch(function(err){
+                $scope.statusAlert.type = "danger";
+                $scope.statusAlert.message = Error.getMessage(err);
+                $scope.statusAlert.newAlert = true;
             });
         }
     });
 
     //------------------------------------------------------------------------------------------------ get current data
 
-    CarouselPublicService.getById.query({id: idToEdit}).$promise.then(function (resp) {
-        console.log(resp);
-        $scope.toEdit = resp;
+    CarouselPublicService.carouselPublic.query({id: idToEdit}).$promise.then(function (resp) {
+        $scope.toEdit = Success.getObject(resp);
+    }).catch(function(err){
+        $scope.statusAlert.type = "danger";
+        $scope.statusAlert.message = Error.getMessage(err);
+        $scope.statusAlert.newAlert = true;
     });
 
     //------------------------------------------------------------------------------------------------- form submission
@@ -77,14 +82,15 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
     $scope.editImage = function () {
         //get selected content id
         $scope.toEdit.content_id = $scope.content.selected._id;
-        console.log($scope.toEdit);
-        CarouselPublicService.editImage.save({data: {toUpdate: $scope.toEdit, id: idToEdit}}).$promise.then(function (resp) {
-            if(resp.error){
-                $scope.statusAlert.type = "danger";
-            }else{
+        $scope.toEdit.last_updated = new Date();
+        CarouselPublicService.carouselPublic.update({id: idToEdit},{data: {toUpdate: $scope.toEdit}}).$promise.then(function (resp) {
                 $scope.statusAlert.type = "success";
-            }
-            $scope.statusAlert.message = resp.message;
+                $scope.statusAlert.message = Success.getMessage(resp);
+            $scope.statusAlert.newAlert = true;
+        }).catch(function(err){
+            $scope.statusAlert.newAlert = true;
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.message = Error.getMessage(err);
             $scope.statusAlert.newAlert = true;
         });
     };
@@ -102,12 +108,16 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
                     $scope.uploadAlert.newAlert = true;
                     $scope.$apply();
                 } else {
-                    CarouselPublicService.editImagePath.save({data: {imagePath: key, id: idToEdit}}).$promise.then(function(resp){
+                    CarouselPublicService.carouselPublic.update({id: idToEdit},{data: {imagePath: key}}).$promise.then(function(resp){
                         $scope.uploadAlert.type = "success";
                         $scope.uploadAlert.message = "Upload reusit!";
                         $scope.uploadAlert.newAlert = true;
                         $scope.$apply();
                         console.log("Upload complete");
+                    }).catch(function(err){
+                        $scope.uploadAlert.newAlert = true;
+                        $scope.uploadAlert.type = "danger";
+                        $scope.uploadAlert.message = Error.getMessage(err);
                     });
                 }
             });

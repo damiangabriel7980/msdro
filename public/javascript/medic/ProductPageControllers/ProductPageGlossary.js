@@ -1,14 +1,7 @@
-controllers.controller('ProductPageGlossary', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window){
-    specialProductService.getSpecialProductGlossary.query({id:$stateParams.product_id}).$promise.then(function(result){
-            $scope.specialProductGlossary=result;
+app.controllerProvider.register('ProductPageGlossary', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window', 'Success', 'Error', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window,Success,Error){
+    specialProductService.SpecialProductGlossary.query({id:$stateParams.product_id}).$promise.then(function(result){
+            $scope.specialProductGlossary = Success.getObject(result);
     });
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-
-    $scope.printPage=function(){
-        window.print();
-    };
 }]);
 /**
  * Created by miricaandrei23 on 16.02.2015.

@@ -1,38 +1,28 @@
-controllers.controller('ElearningView', ['$scope', '$rootScope', 'ContentService', '$sce', '$stateParams', function($scope, $rootScope, ContentService, $sce, $stateParams) {
+app.controllerProvider.register('ElearningView', ['$scope', '$state', '$rootScope', 'ContentService', '$sce', '$stateParams', 'therapeuticAreas', 'Error', 'Success', function($scope, $state, $rootScope, ContentService, $sce, $stateParams, therapeuticAreas, Error, Success) {
 
     $scope.contentLimit = 3;
 
     //------------------------------------------------------------------------------------------------- get all content
 
-    ContentService.therapeuticAreas.query().$promise.then(function (resp) {
-        var areasOrganised = [];
-        areasOrganised.push({_id:0, name:"Toate", has_children:false});
-        for(var i=0; i<resp.length; i++){
-            var thisArea = resp[i];
-            if(thisArea['therapeutic-areasID'].length == 0){
-                //it's a parent. Add it
-                areasOrganised.push(thisArea);
-                if(thisArea.has_children){
-                    //find all it's children
-                    for(var j=0; j < resp.length; j++){
-                        if(resp[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
-                            //found one children. Add it
-                            resp[j]['ident']=true;
-                            areasOrganised.push(resp[j]);
-                        }
-                    }
-                }
-            }
-        }
-        $scope.tpa = areasOrganised;
+    therapeuticAreas.areas.query().$promise.then(function (resp) {
+        $scope.tpa = therapeuticAreas.formatAreas(Success.getObject(resp));
 
         $scope.$watch('$stateParams', function (val) {
             $scope.selectedArea = $stateParams.area;
             ContentService.content.query({type: 3, area: $stateParams.area, withFile: true}).$promise.then(function (resp) {
-                $scope.elearning = resp.success;
+                $scope.elearning = Success.getObject(resp);
             });
         });
 
     });
+
+    $scope.navigateToElearning = function (content) {
+        $state.go('elearning.detail', {id: content._id});
+    };
+
+    $scope.getAuthor = function (content) {
+        return content.author;
+    };
+
 
 }]);

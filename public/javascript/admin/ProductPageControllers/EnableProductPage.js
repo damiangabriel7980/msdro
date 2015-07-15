@@ -16,13 +16,11 @@ controllers.controller('EnableProductPage', ['$scope', 'SpecialProductsService',
     };
 
     $scope.modalAction = function () {
-        SpecialProductsService.products.update({id: idToToggle}, {enabled: !isEnabled}).$promise.then(function (resp) {
-            if(resp.error){
-                resetAlert("danger","A aparut o eroare pe server");
-            }else{
-                $state.reload();
-                $modalInstance.close();
-            }
+        SpecialProductsService.products.update({id: idToToggle}, {enabled: !isEnabled}).$promise.then(function () {
+            $state.reload();
+            $modalInstance.close();
+        }).catch(function () {
+            resetAlert("danger","A aparut o eroare pe server");
         });
     };
 

@@ -1,4 +1,4 @@
-controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', function($scope, $rootScope, HomeService, $sce, $state, StateService) {
+app.controllerProvider.register('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', 'Utils', 'Error', 'Success', function($scope, $rootScope, HomeService, $sce, $state, StateService, Utils, Error, Success) {
 
     if($rootScope.accessRoute){
         var state = StateService.getStateFromUrl($rootScope.accessRoute);
@@ -9,7 +9,7 @@ controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce
         }
     }
 
-    $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
+    $scope.monthsArray = Utils.getMonthsArray();
     $scope.carouselSlides = [{
         title: "",
         description: "",
@@ -17,34 +17,24 @@ controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce
         content_id: "",
         image_path: ""
     }];
-    $scope.selectedIndex = 0;
-    $scope.setSlide = function(index) {
-        $scope.selectedIndex = index;
-    };
-
 
     //------------------------------------------------------------------------------------------------- get all content
 
-    HomeService.getCarouselData.query().$promise.then(function(resp){
-        $scope.carouselSlides = resp;
-        $scope.selectedIndex = 1;
+    HomeService.CarouselData.query().$promise.then(function(resp){
+        $scope.carouselSlides = Success.getObject(resp);
     });
 
     HomeService.events.query().$promise.then(function (resp) {
-        $scope.events = resp;
+        $scope.events = Success.getObject(resp);
     });
 
-    $scope.getTooltip = function (slide) {
-        var src = $rootScope.pathAmazonDev + slide.image_path;
-        var tooltipContent = '<img src="'+src+'">'+$rootScope.createHeader(slide.title, 40);
-        return $sce.trustAsHtml(tooltipContent);
-    };
-
-    $scope.carouselLearnMore = function (type, id) {
+    $scope.carouselLearnMore = function (slide) {
+        var type = slide.type;
+        var id = slide.content_id;
         switch(type){
             case 1: $state.go('stiri.detail', {id: id}); break;
             case 2: $state.go('articole.detail', {id: id}); break;
-            case 3: $state.go('elearning.detail', {id: id}); break;
+            case 3: $state.go('elearning.detail', {area: 0, id: id}); break;
             case 4: $state.go('downloads.detail', {id: id}); break;
             default: break;
         }
@@ -67,8 +57,4 @@ controllers.controller('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce
         }
     }
 
-}]).filter('repeatReverse', function() {
-    return function(items) {
-        return items.slice().reverse();
-    };
-});
+}]);

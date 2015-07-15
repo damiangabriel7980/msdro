@@ -1,8 +1,8 @@
-controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$filter', 'ngTableParams', '$modal', 'ActionModal', 'CarouselPublicService' ,function($scope, $state, $rootScope, $filter, ngTableParams, $modal, ActionModal, CarouselPublicService){
+controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$filter', 'ngTableParams', '$modal', 'ActionModal', 'CarouselPublicService' , 'Success', 'Error', function($scope, $state, $rootScope, $filter, ngTableParams, $modal, ActionModal, CarouselPublicService,Success,Error){
 
     $scope.refreshTable = function () {
-        CarouselPublicService.getAllImages.query().$promise.then(function (resp) {
-            var data = resp;
+        CarouselPublicService.carouselPublic.query().$promise.then(function (resp) {
+            var data = Success.getObject(resp);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -22,6 +22,8 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 
@@ -49,9 +51,10 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
 
     $scope.deleteImage = function (id) {
         ActionModal.show("Sterge imagine", "Sunteti sigur ca doriti sa stergeti imaginea?", function () {
-            CarouselPublicService.deleteImage.save({id: id}).$promise.then(function (resp) {
-                console.log(resp);
+            CarouselPublicService.carouselPublic.delete({id: id}).$promise.then(function (resp) {
                 $state.reload();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
             });
         }, "Sterge");
     };
@@ -61,9 +64,10 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
             enabled?"Dezactiveaza imagine":"Activeaza imagine",
             enabled?"Sunteti sigur ca doriti sa dezactivati imaginea?":"Sunteti sigur ca doriti sa activati imaginea?",
             function () {
-                CarouselPublicService.toggleImage.save({data: {isEnabled: enabled, id: id}}).$promise.then(function (resp) {
-                    console.log(resp);
+                CarouselPublicService.carouselPublic.update({id: id},{info: {isEnabled: enabled}}).$promise.then(function (resp) {
                     $state.reload();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
                 });
             },
             "Da"

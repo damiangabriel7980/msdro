@@ -13,17 +13,15 @@ var Job = require('./models/jobs');
 var UtilsService = require('./modules/utils');
 var TokenService = require('./modules/tokenAuth');
 
-module.exports = function(app, logger, tokenSecret, pushServerAddr, router) {
+module.exports = function(app, logger, tokenSecret, router) {
+
+    //=============================================Define variables
+    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
+    var handleError = require('./modules/responseHandler/error.js')(logger);
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
         return TokenService.getUserData(req);
-    };
-
-    //handle errors
-    var handleError = function (res, err, msg) {
-        logger.error(err);
-        return res.send({error: msg || "Server error"});
     };
 
     //access control allow origin *
@@ -74,15 +72,15 @@ module.exports = function(app, logger, tokenSecret, pushServerAddr, router) {
 //========================================================================================================== USER PROFILE
     router.route('/userProfile')
         .get(function (req, res) {
-            res.json(getUserData(req));
+            handleSuccess(res, getUserData(req));
         })
         .put(function (req, res) {
             UtilsService.allowFields(req.body, ['citiesID', 'jobsID', 'name', 'phone', 'birthday', 'password', 'therapeutic-areasID', 'address', 'practiceType', 'title']);
             User.update({_id: getUserData(req)._id}, {$set: req.body}, function (err, wres) {
                 if(err){
-                    return handleError(res, err);
+                    handleError(res, err);
                 }else{
-                    res.send({});
+                    handleSuccess(res);
                 }
             });
         });

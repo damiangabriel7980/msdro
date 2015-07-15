@@ -7,117 +7,39 @@
  *
  * @requires $scope
  * */
-
-
-controllers.controller('ProductsView', ['$scope','$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', function($scope,$rootScope,ProductService,$stateParams,$sce,$window,$timeout){
-    window.scrollTo(0,0);
-    $scope.allAreas=1;
-    $scope.filtProd=[];
+app.controllerProvider.register('ProductsView', ['$scope', '$state', '$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', 'Success', 'Error', function($scope, $state, $rootScope,ProductService,$stateParams,$sce,$window,$timeout,Success,Error){
     $scope.lmt=8;
-    $scope.message="";
-    $scope.showMoreProd="show";
     $scope.status = {
         isopen: false
-        //open: false
     };
     $scope.increaseLimit=function(){
-
         $scope.lmt+=8;
-        if($scope.products.length<=$scope.lmt)
-            $scope.showMoreProd='hide';
     };
-    $scope.firstLetters=[];
-        ProductService.getByArea.query({id:$stateParams.id, specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(result){
-            $scope.products = result;
-            if($scope.products.length===0)
-            {
-                $scope.showMoreProd='hide';
-                $scope.message="Nu sunt produse disponibile!";
-            }
-            $scope.productsReserve=[];
-            $scope.productsFiltered=[];
-            if($scope.products.length>8)
-            {
-                $scope.showMoreProd='show';
-            }
-            else
-            {
-                $scope.showMoreProd='hide';
-            }
-            for (var i=0;i<$scope.products.length;i++)
-            {$scope.productsReserve.push($scope.products[i])}
-            $scope.products.forEach(function (item) {
-                var firstLetter = item.name.charAt(0);
-                if ($scope.firstLetters.indexOf(firstLetter) === -1) {
-                    $scope.firstLetters.push(firstLetter);
-                }
+
+    var refreshLetters = function (products) {
+        //keeping the letters in an object rather than an array will insure that they are alphabetically sorted
+        var firstLetters = {};
+        for(var i=0; i<products.length; i++){
+            firstLetters[products[i].name.charAt(0).toUpperCase()] = true;
+        }
+        $scope.firstLetters = firstLetters;
+    };
+
+    $scope.getProducts = function (letter) {
+        ProductService.products
+            .query({
+                idArea:$stateParams.id,
+                specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id:null,
+                firstLetter: letter
+            })
+            .$promise.then(function(result){
+                $scope.products = Success.getObject(result);
+                if(!letter) refreshLetters(Success.getObject(result));
             });
-        });
-
-
-    $scope.filterResults=function(index){
-        $scope.productsFiltered=[];
-        if($scope.products.length!=$scope.productsReserve.length)
-        {
-            $scope.products=[];
-            $scope.productsFiltered=[];
-            for (var i=0;i<$scope.productsReserve.length;i++)
-            {
-
-                $scope.products.push($scope.productsReserve[i])
-            }
-        }
-        var letter = $scope.firstLetters[index].toLowerCase();
-        for (var i=0;i<$scope.products.length;i++)
-        {
-            if ($scope.products[i].name[0].toLowerCase() == letter)
-            {
-                $scope.productsFiltered.push($scope.products[i])
-            }
-        }
-        $scope.products=$scope.productsFiltered;
-        if($scope.products.length===0)
-        {
-            $scope.showMoreProd='hide';
-            $scope.message="Nu sunt produse disponibile";
-        }
-        if($scope.products.length>8)
-        {
-            $scope.showMoreProd='show';
-        }
-        else
-        {
-            $scope.showMoreProd='hide';
-        }
-        if($scope.products.length<=$scope.lmt)
-            $scope.showMoreProd='hide';
-        else
-            $scope.showMoreProd='show';
     };
-    $scope.reset=function(){
-        $scope.products=$scope.productsReserve;
-    };
-    $scope.amazon = $rootScope.pathAmazonDev;
-    $scope.closeLi=$sce.trustAsHtml("ng-class='hide'<\/li>");
-    $scope.showElem ='{display: list-item}';
-    $scope.hideElem = function(){
-        $scope.showElem='{display: none}';
+    $scope.getProducts();
+
+    $scope.navigateProductDetails = function (product) {
+        $state.go('biblioteca.produse.prodById', {id:product._id});
     }
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtml=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
-  }])
-    .filter('htmlToPlaintext2', function() {
-        return function(text) {
-            return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        }
-    })
-    .filter('mySort', function() {
-        return function(input) {
-            return input.sort();
-        }
-    });
+}]);

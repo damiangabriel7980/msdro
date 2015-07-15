@@ -1,0 +1,20 @@
+<div class="col-xs-12 horizontal-content-list" ng-class="{'withBackground': withBackground, 'dropShadow': dropShadow, 'showDivider': showDivider}" ng-if="content">
+    <div class="wrapper" ng-class="{'smallerPicture': smallerPicture}">
+        <div ng-if="!contentType || contentType=='article'" class="picture">
+            <img ng-src="{{content[imagePathAttr]?imagePathPrefix+content[imagePathAttr]:defaultImagePath}}">
+        </div>
+        <div ng-if="contentType=='event'" class="event">
+            <div class="day">{{content[dateAttr] | filter: asDate | date:'dd'}}</div>
+            <div class="month">{{content[dateAttr] | filter: asDate | date:'MMM'}}</div>
+        </div>
+    </div>
+    <div class="details">
+        <div class="title"><a ng-click="navigate(content)" ng-bind-html="trustAsHtml(content[titleAttr])"></a></div>
+        <div class="excerpt" ng-if="content[textAttr]" ng-bind-html="trustAsHtml(createHeader(content[textAttr], 300) + safetyPadding)"></div>
+        <div class="boldAttr" ng-bind-html="trustAsHtml(content[boldAttr1])"></div>
+        <div class="boldAttr" ng-bind-html="trustAsHtml(content[boldAttr2])"></div>
+        <div class="boldAttr" ng-bind-html="trustAsHtml(boldAttrHardcoded)"></div>
+        <div class="date" ng-if="contentType!=='event'">{{content[dateAttr] | date:'dd/MM/yyyy'}}</div>
+    </div>
+    <div class="readMore"><a class="btn btn-default" ng-click="navigate(content)">{{buttonLabel}}</a></div>
+</div>

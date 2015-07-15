@@ -1,19 +1,20 @@
-controllers.controller('HomeMobileNews', ['$scope', 'ContentService', function($scope, ContentService) {
+app.controllerProvider.register('HomeMobileNews', ['$scope', 'ContentService', 'Error', 'Success', function($scope, ContentService, Error, Success) {
 
     ContentService.mobileContent.query().$promise.then(function (resp) {
-        if(resp.success){
+        resp = Success.getObject(resp);
+        if(resp){
             var categories = [];
             categories.push({
                 name: "ULTIMELE NOUTATI",
-                content: resp.success.news
+                content: resp.news
             });
             categories.push({
                 name: "CELE MAI CITITE ARTICOLE",
-                content: resp.success.articles
+                content: resp.articles
             });
             categories.push({
                 name: "DOWNLOADS",
-                content: resp.success.downloads
+                content: resp.downloads
             });
             $scope.categories = categories;
         }

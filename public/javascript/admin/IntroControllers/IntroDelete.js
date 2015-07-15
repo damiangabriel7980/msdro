@@ -1,4 +1,4 @@
-controllers.controller('IntroDelete', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToEdit','$modalInstance','AmazonService','$timeout', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToEdit,$modalInstance,AmazonService,$timeout){
+controllers.controller('IntroDelete', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToEdit','$modalInstance','AmazonService','$timeout', 'Success', 'Error', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToEdit,$modalInstance,AmazonService,$timeout,Success,Error){
 
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
@@ -13,22 +13,19 @@ controllers.controller('IntroDelete', ['$scope','$rootScope' ,'IntroService','$s
                 $scope.statusAlert.message="Eroare la stergerea de pe Amazon!";
             }else{
                 //delete product and every menu items attached to it
-                IntroService.deleteIntro.save({idToDelete: idToEdit}).$promise.then(function(resp){
-                    if(resp.error){
-                        $scope.statusAlert.newAlert=true;
-                        $scope.statusAlert.type="danger";
-                        $scope.statusAlert.message=imageDeleteCount.message;
-                    }else{
+                IntroService.intros.delete({idToDelete: idToEdit}).$promise.then(function(resp){
                         $scope.actionCompleted = true;
                         $scope.statusAlert.newAlert=true;
                         $scope.statusAlert.type="success";
-                        $scope.statusAlert.message=resp.message;
+                        $scope.statusAlert.message = Success.getMessage(resp);
                         $timeout(function(){
                             $modalInstance.close();
                             $state.reload();
                         },5000);
-                    }
-
+                }).catch(function(err){
+                    $scope.statusAlert.type = "danger";
+                    $scope.statusAlert.message = Error.getMessage(err);
+                    $scope.statusAlert.newAlert = true;
                 });
             }
         });

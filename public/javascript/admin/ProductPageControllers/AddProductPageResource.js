@@ -1,4 +1,4 @@
-controllers.controller('AddProductPageResource', ['$scope', 'SpecialProductsService', function($scope, SpecialProductsService) {
+controllers.controller('AddProductPageResource', ['$scope', 'SpecialProductsService', 'Success', function($scope, SpecialProductsService, Success) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
@@ -7,12 +7,10 @@ controllers.controller('AddProductPageResource', ['$scope', 'SpecialProductsServ
 
     $scope.addResource = function () {
         SpecialProductsService.resources.create($scope.newItem).$promise.then(function (resp) {
-            if(resp.error){
-                $scope.resetAlert("danger", "Eroare la adaugare");
-            }else{
-                $scope.sessionData.resourceToEdit = resp.saved;
-                $scope.renderView("editResource");
-            }
+            $scope.sessionData.resourceToEdit = Success.getObject(resp).saved;
+            $scope.renderView("editResource");
+        }).catch(function () {
+            $scope.resetAlert("danger", "Eroare la adaugare");
         });
     }
 

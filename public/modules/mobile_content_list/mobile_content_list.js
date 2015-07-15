@@ -2,7 +2,7 @@
     var scripts = document.getElementsByTagName("script");
     var currentScriptPath = scripts[scripts.length-1].src;
 
-    angular.module('mobileContentList', []).directive('mobileContentList', ['$sce', '$state', 'PublicService', function($sce, $state, PublicService) {
+    angular.module('mobileContentList', []).directive('mobileContentList', ['$sce', 'Utils', '$rootScope', function($sce, Utils, $rootScope) {
         return {
             restrict: 'E',
             templateUrl: currentScriptPath.replace('mobile_content_list.js', 'mobile_content_list.html'),
@@ -10,18 +10,30 @@
             scope: {
                 content: '=',
                 limit: '=',
-                imagePrefix: '=',
-                defaultImage: '=',
-                showType: '='
+                imageAttr: '@',
+                imagePrefix: '@',
+                defaultImage: '@',
+                titleAttr: '@',
+                boldTextFunction: '=',
+                textAttr: '@',
+                navigate: '=',
+                category: '@',
+                dateAttr: '@'
             },
             link: function(scope, element, attrs) {
                 scope.trustAsHtml = $sce.trustAsHtml;
-                scope.navigateTo = function (content) {
-                    $state.go(PublicService.getSref(content.type), {id: content._id});
+                scope.htmlToPlainText = Utils.htmlToPlainText;
+
+                var months = Utils.getMonthsArray();
+                scope.getMonth = function (date) {
+                    return months[new Date(date).getMonth()];
                 };
-                scope.getContentNamedType = function (int_type) {
-                    return PublicService.getContentNamedType(int_type);
-                };
+
+                scope.defaultProductIcon = $rootScope.pathAmazonResources + "icons/product.png";
+                scope.defaultArticleIcon = $rootScope.pathAmazonResources + "icons/article.png";
+                scope.defaultMultimediaIcon = $rootScope.pathAmazonResources + "icons/film.png";
+
+                scope.calendarBg = $rootScope.pathAmazonResources + "calendar_bg.png";
             }
         };
     }]);

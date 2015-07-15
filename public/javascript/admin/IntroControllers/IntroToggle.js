@@ -1,24 +1,21 @@
-controllers.controller('IntroToggle', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToEdit','$modalInstance','AmazonService','$timeout','status', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToEdit,$modalInstance,AmazonService,$timeout,status){
+controllers.controller('IntroToggle', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToEdit','$modalInstance','AmazonService','$timeout','status', 'Success', 'Error', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToEdit,$modalInstance,AmazonService,$timeout,status,Success,Error){
 
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.toggleIntro=function(){
-        console.log(!status);
-                IntroService.toggleIntro.save({id: idToEdit,isEnabled: !status}).$promise.then(function(resp){
-                    if(resp.error){
-                        $scope.statusAlert.newAlert=true;
-                        $scope.statusAlert.type="danger";
-                        $scope.statusAlert.message="Nu s-a putut modifica status-ul";
-                    }else{
+                IntroService.intros.update({id: idToEdit},{isEnabled: !status}).$promise.then(function(resp){
                         $scope.actionCompleted = true;
                         $scope.statusAlert.newAlert=true;
                         $scope.statusAlert.type="success";
-                        $scope.statusAlert.message=resp.message;
+                        $scope.statusAlert.message = Success.getMessage(resp);
                         $timeout(function(){
                             $modalInstance.close();
                             $state.reload();
                         },3000);
-                    }
+                }).catch(function(err){
+                    $scope.statusAlert.type = "danger";
+                    $scope.statusAlert.message = Error.getMessage(err);
+                    $scope.statusAlert.newAlert = true;
                 });
 
     };

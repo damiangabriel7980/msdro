@@ -1,4 +1,4 @@
-controllers.controller('EditSpecialApp', ['$scope','$rootScope' ,'SpecialAppsService', '$state', '$modalInstance', 'idToEdit', function($scope, $rootScope, SpecialAppsService, $state, $modalInstance, idToEdit){
+controllers.controller('EditSpecialApp', ['$scope','$rootScope' ,'SpecialAppsService', '$state', '$modalInstance', 'idToEdit', 'Success', function($scope, $rootScope, SpecialAppsService, $state, $modalInstance, idToEdit, Success){
 
     $scope.modal = {
         title: "Modifica aplicatie",
@@ -7,13 +7,12 @@ controllers.controller('EditSpecialApp', ['$scope','$rootScope' ,'SpecialAppsSer
 
     //get app
     SpecialAppsService.apps.query({id: idToEdit}).$promise.then(function (resp) {
-        $scope.app = resp.success;
+        $scope.app = Success.getObject(resp);
     });
 
     //get special groups
     SpecialAppsService.groups.query().$promise.then(function (resp) {
-        console.log(resp);
-        $scope.specialGroups = resp.success;
+        $scope.specialGroups = Success.getObject(resp);
     });
 
     var resetAlert = function (type, message) {
@@ -28,13 +27,11 @@ controllers.controller('EditSpecialApp', ['$scope','$rootScope' ,'SpecialAppsSer
         var toEdit = this.app;
         toEdit.groups = this.selectedSpecialGroups;
         console.log(toEdit);
-        SpecialAppsService.apps.update({id: toEdit._id}, toEdit).$promise.then(function (resp) {
-            if(resp.error){
-                resetAlert("danger", "Eroare la modificarea aplicatiei");
-            }else{
-                $state.reload();
-                $modalInstance.close();
-            }
+        SpecialAppsService.apps.update({id: toEdit._id}, toEdit).$promise.then(function () {
+            $state.reload();
+            $modalInstance.close();
+        }).catch(function () {
+            resetAlert("danger", "Eroare la modificarea aplicatiei");
         });
     };
 

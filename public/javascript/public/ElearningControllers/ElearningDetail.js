@@ -1,7 +1,7 @@
-controllers.controller('ElearningDetail', ['$scope', '$rootScope', 'ContentService', '$stateParams', '$sce', function($scope, $rootScope, ContentService, $stateParams, $sce) {
+app.controllerProvider.register('ElearningDetail', ['$scope', '$rootScope', 'ContentService', '$stateParams', '$sce', 'Error', 'Success', function($scope, $rootScope, ContentService, $stateParams, $sce, Error, Success) {
 
     ContentService.content.query({id: $stateParams.id}).$promise.then(function (resp) {
-        $scope.elearning = resp.success;
+        $scope.elearning = Success.getObject(resp);
         $scope.videoConfig = {
             sources: [{src: $sce.trustAsResourceUrl($rootScope.pathAmazonDev+$scope.elearning.file_path), type: "video/mp4"}],
             theme: "components/videogular-themes-default/videogular.css",

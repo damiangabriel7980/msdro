@@ -22,6 +22,10 @@ const defaultPageSize = 10;
 
 module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
 
+    //=============================================Define variables
+    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
+    var handleError = require('./modules/responseHandler/error.js')(logger);
+
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
         var token;
@@ -52,13 +56,6 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
         next();
     });
 
-    //handle errors
-    var handleError = function (res, error) {
-        logger.error(error);
-        res.status(500).send({error: "Server error"});
-    };
-
-
     //========================================================================================================================================== all routes
 
 
@@ -68,10 +65,11 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
             if(req.query.id){
                 var id=req.query.id;
                 NewsPost.findOne({_id: id}).populate('owner').exec(function(err,result){
-                    if(err)
-                        res.json(err);
-                    else
-                        res.json(result);
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, result);
+                    }
                 })
             }else{
                 var pageSize=req.query.pageSize || defaultPageSize;
@@ -82,10 +80,11 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                 }
                 NewsPost.find(q).sort({'created' : -1}).limit(pageSize).populate('owner')
                     .exec(function(err, result) {
-                        if(err)
-                            res.json(err);
-                        else
-                            res.json(result);
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res, result);
+                        }
                     });
             }
         })
@@ -97,16 +96,14 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
         MyNewsPost.owner=userData._id;
         MyNewsPost.created= Date.now();
         MyNewsPost.save(function(err,saved){
-            if(err)
-                res.json(err);
-            else
-            {
+            if(err){
+                handleError(res, err);
+            }else{
                 NewsPost.findOne({_id: saved._id}).populate('owner').exec(function (err, toReturn) {
                     if(err){
-                        res.json(err);
+                        handleError(res, err);
                     }else{
-                        res.statusCode = 201;
-                        res.send(toReturn);
+                        handleSuccess(res, toReturn, 0, 201);
                     }
                 });
             }
@@ -122,12 +119,11 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
             if(id){
                 User.findOne({_id: id, visible:true}, 'name username birthday phone description').exec(function (err, user) {
                     if(err){
-                        res.send(err);
+                        handleError(res, err);
                     }else if(user){
-                        res.send(user);
+                        handleSuccess(res, user);
                     }else{
-                        res.statusCode = 404;
-                        res.end();
+                        handleError(res, null, 404);
                     }
                 });
             }else{
@@ -158,10 +154,11 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                     } }
                 ]);
                 cursor.exec(function(err, result) {
-                    if(err)
-                        res.json(err);
-                    else
-                        res.json(result);
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, result);
+                    }
                 });
             }
         });
@@ -179,10 +176,11 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                 q['created'] = {$lt: new Date(created)};
             }
             Messages.find(q).sort({created: -1}).limit(pageSize).exec(function(err, result) {
-                if(err)
-                    res.json(err);
-                else
-                    res.json(result);
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, result);
+                }
             });
         })
         .post(function (req, res) {
@@ -195,9 +193,9 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
             });
             toSave.save(function (err, saved) {
                 if(err){
-                    res.send(err);
+                    handleError(res, err);
                 }else{
-                    res.send(saved);
+                    handleSuccess(res, saved);
                 }
             });
         });
@@ -222,10 +220,9 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
             }
             Chat.find(q).sort({'created': -1}).limit(pageSize).deepPopulate('participants last_message post.owner').exec(function(err, result) {
                 if(err){
-                    console.log(err);
-                    res.json(err);
+                    handleError(res, err);
                 }else{
-                    res.json(result);
+                    handleSuccess(res, result);
                 }
             });
         })
@@ -278,19 +275,19 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                 //check if a chat involving sender / receiver / post combination already exists
                 Chat.findOne(q).deepPopulate('participants last_message post.owner').exec(function (err, found) {
                     if(err){
-                        res.send(err);
+                        handleError(res, err);
                     }else if(found){
-                        res.send(found);
+                        handleSuccess(res, found);
                     }else{
                         toSave.save(function (err, saved) {
                             if(err){
-                                res.send(err);
+                                handleError(res, err);
                             }else{
                                 Chat.findOne({_id: saved._id}).deepPopulate('participants last_message post.owner').exec(function (err, toReturn) {
                                     if(err){
-                                        res.send(err);
+                                        handleError(res, err);
                                     }else{
-                                        res.send(toReturn);
+                                        handleSuccess(res, toReturn);
                                     }
                                 });
                             }
@@ -298,8 +295,7 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                     }
                 });
             }else{
-                res.statusCode = 400;
-                res.send({hasError: true, message: "invalid query params"});
+                handleError(res, null, 400);
             }
         })
         .put(function (req, res) {
@@ -318,14 +314,14 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                 upd = {$pull: {subscribers: userData._id}};
             }else{
                 keepGoing = false;
-                res.send({hasError: true, message: "Invalid params"});
+                handleError(res, null, 400);
             }
             if(keepGoing){
                 Chat.update({_id: chatId}, upd, function (err, wres) {
                     if(err){
-                        res.send(err);
+                        handleError(res, err);
                     }else{
-                        res.send({hasError: false, message: "Update succeeded"});
+                        handleSuccess(res);
                     }
                 });
             }
@@ -350,14 +346,14 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
             if(file){
                 UserModule.updateUserImage(req.user._id, file.buffer, file.extension).then(
                     function (image_path) {
-                        res.send({success: image_path});
+                        handleSuccess(res, image_path);
                     },
                     function (error) {
                         handleError(res, error);
                     }
                 );
             }else{
-                res.status(400).send({message: "File not found"});
+                handleError(res, null, 404);
             }
         });
 
@@ -372,7 +368,7 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                     if(err){
                         handleError(res, err);
                     }else if(!newspost){
-                        handleError(res, "Newspost not found");
+                        handleError(res, null, 404);
                     }else{
                         //memorise current image path for deleting it at the end
                         var oldImage = newspost.image_path;
@@ -389,7 +385,7 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                                     if(err){
                                         handleError(res, err);
                                     }else{
-                                        res.send({success: newspost.image_path});
+                                        handleSuccess(res, newspost.image_path);
                                         //remove old image; careful not to remove the newly added one
                                         if(oldImage && oldImage != key) amazon.deleteObjectS3(oldImage);
                                     }
@@ -399,7 +395,7 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                     }
                 });
             }else{
-                res.status(400).send({message: "File or id not found"});
+                handleError(res, null, 400);
             }
         });
 

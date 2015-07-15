@@ -1,0 +1,20 @@
+<div class="col-xs-12 filterByTherapeuticAreas" id="content">
+    <div class="col-xs-12 areasMobile" dropdown is-open="status.isopen" id="menuDiv" ng-if="isMobile(true)">
+        <select class="form-control" ng-options="area._id as (area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;':'')+area.name for area in therapeuticAreas"
+                ng-model="selectedArea" ng-change="selectArea(selectedArea)"></select>
+    </div>
+    <div class="col-sm-3 areas" ng-if="!isMobile(true)">
+        <div class="col-xs-12 title">ARII TERAPEUTICE</div>
+
+        <ul class="col-xs-12 menu">
+            <div class="col-xs-12 area" ng-repeat="area in therapeuticAreas" ng-class="{'active':area._id == selectedArea}" ng-click="selectArea(area._id)">
+                <b convert-special conver="area.name" ng-bind-html="trustAsHtml(area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;'+area.name:area.name)"></b>
+            </div>
+        </ul>
+        <hr ng-if="isMobile(true)">
+    </div>
+
+    <div class="col-sm-9 col-xs-12 noPadding viewport">
+        <ui-view></ui-view>
+    </div>
+</div>

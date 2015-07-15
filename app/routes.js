@@ -8,6 +8,8 @@ var User = require('./models/user');
 var Roles = require('./models/roles');
 
 var MailerModule = require('./modules/mailer');
+var UtilsModule = require('./modules/utils');
+var SessionStorage = require('./modules/sessionStorage');
 
 var crypto   = require('crypto');
 var async = require('async');
@@ -20,6 +22,9 @@ if(DISABLE_PATIENTS){
 }
 
 module.exports = function(app, logger, passport) {
+
+    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
+    var handleError = require('./modules/responseHandler/error.js')(logger);
 
     //access control origin
     app.all("/*", function(req, res, next) {
@@ -88,9 +93,11 @@ module.exports = function(app, logger, passport) {
 
 	// LOGOUT ==============================
 	app.get('/logout', function(req, res) {
-
+        //delete presentations viewed status from current session
+        SessionStorage.setElement(req, "viewedIntroPresentations", {});
+        //logout
 		req.logout();
-        //encrypt sid using session secret
+        //redirect to main
 		res.redirect('/');
 	});
 
@@ -202,19 +209,18 @@ module.exports = function(app, logger, passport) {
 		app.post('/login', function (req, res, next) {
             //middleware to allow flashing messages on empty user/password fields
             if(!req.body.email || !req.body.password){
-                return res.send({error: true, message: 'Campurile sunt obligatorii'});
+                return handleError(res, null, 400, 15);
             }else{
                 passport.authenticate('local-login', function (err, user, info) {
                     console.log(err);
                     if(err){
-                        logger.log(err);
-                        return res.send({error: true, message: "A aparut o eroare pe server"});
+                        return handleError(res, err);
                     }else if(!user){
-                        return res.send(info);
+                        return handleError(res, null, 403, info.code);
                     }else{
                         req.logIn(user, function (err) {
                             if(err){
-                                return res.send({error: true, message: "A aparut o eroare pe server"});
+                                return handleError(res, err);
                             }else{
                                 if(user.state === "ACCEPTED"){
                                     if (req.body.remember===true) {
@@ -232,10 +238,10 @@ module.exports = function(app, logger, passport) {
                                         }
                                         req.session.statusModalGroups=statusModalGroups;
 
-                                        return  res.send({error: false, accepted: true});
+                                        return handleSuccess(res, {accepted: true});
                                     }
                                 }else if(user.state === "PENDING"){
-                                    return res.send({error: false, accepted: false});
+                                    return handleSuccess(res, {accepted: false});
                                 }else{
                                     //this final else should never be reached
                                     req.logout();
@@ -288,14 +294,14 @@ module.exports = function(app, logger, passport) {
 
     //check if there is a user already registered wih email
     app.post('/checkEmailExists', function (req, res) {
-        User.findOne({'username': {$regex: "^"+req.body.email.replace(/\+/g,"\\+")+"$", $options: "i"}}, function (err, user) {
+        User.findOne({'username': UtilsModule.regexes.emailQuery(req.body.email)}, function (err, user) {
             if(err){
-                res.status(500).end();
+                handleError(res, err);
             }else{
                 if(!user){
-                    res.send({exists: false});
+                    handleSuccess(res, {exists: false});
                 }else{
-                    res.send({exists: true});
+                    handleSuccess(res, {exists: true});
                 }
             }
         })

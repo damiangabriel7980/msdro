@@ -1,9 +1,7 @@
-controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state','$anchorScroll', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state,$anchorScroll) {
+app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state','$anchorScroll', 'Utils', 'Success', 'Error', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state,$anchorScroll, Utils,Success,Error) {
 
-    $scope.imagePre = $rootScope.pathAmazonDev;
-    $scope.monthsArray = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
+    $scope.monthsArray = Utils.getMonthsArray();
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
-    $scope.merckManualImage = $rootScope.merckManualImage;
     $scope.myInterval = 10;
     $scope.HomeCarousel = [];
     $scope.selectedIndexCarousel = 0;
@@ -17,7 +15,6 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
         "Diabetes and Nutrition": "Glycemizer.html",
         "Immunology - Rheumatology":"Immunology.html"
     };
-    $scope.specialWidgetUrl = null;
 
     $scope.$watch($rootScope.specialGroupSelected, function () {
         //check if special group is selected
@@ -28,13 +25,8 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
             }
         }
     });
-    HomeService.getUserImage.query().$promise.then(function(resp){
-        $rootScope.imageForUser = resp.image_path;
-        $rootScope.userFullName=resp.name;
-    });
 
     $scope.carouselNavigate = function (carouselItem) {
-
         if(carouselItem.redirect_to_href){
             window.location.href = carouselItem.redirect_to_href;
         }else{
@@ -42,81 +34,52 @@ controllers.controller('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '
         }
     };
 
+    $scope.navigateToNews = function (article) {
+        $state.go('noutati.articol', {articleType: article.type, articleId: article._id, fromHome: 1});
+    };
+
+    $scope.navigateToArticles = function (article) {
+        $state.go('noutati.articol', {articleType: article.type, articleId: article._id, fromHome: 1});
+    };
+
+    $scope.navigateToMultimedia = function (multimedia) {
+        if(Utils.isMobile){
+            $state.go("elearning.multimedia.multimediaByArea", {idArea:0, idMulti: multimedia._id});
+        }else{
+            $state.go("elearning.multimedia.multimediaMobile", {id: multimedia._id});
+        }
+    };
+
        //------------------------------------------------------------------------------------------------- get all content
 
-    HomeService.getUserEvents.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.events = resp;
+    HomeService.events.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
+        $scope.events = Success.getObject(resp);
     });
-    HomeService.getUserNews.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.news = resp;
+    HomeService.news.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
+        $scope.news = Success.getObject(resp);
     });
-    HomeService.getUserScientificNews.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.scientificNews = resp;
+    HomeService.news.query({scientific:true,specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
+        $scope.scientificNews = Success.getObject(resp);
     });
-    HomeService.getUserMultimedia.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        $scope.multimedia = resp;
+    HomeService.multimedia.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
+        $scope.multimedia = Success.getObject(resp);
     });
 
-    HomeService.getCarousel.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
-        $scope.HomeCarousel=resp;
+    HomeService.carousel.query({specialGroupSelected: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function(resp){
+        $scope.HomeCarousel = Success.getObject(resp);
         if($scope.HomeCarousel[0]){
-            $scope.firstIllusion=resp[$scope.HomeCarousel.length-1];
-            $scope.lastIllusion=resp[0];
+            $scope.firstIllusion=Success.getObject(resp)[$scope.HomeCarousel.length-1];
+            $scope.lastIllusion=Success.getObject(resp)[0];
         }
     });
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-    $scope.convertAndTrustAsHtmlTrimmed=function (data) {
-        var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        var newText = convertedText.split(/\s+/).slice(0,3).join(" ");
-        newText += '...';
-        return $sce.trustAsHtml(newText);
-    };
-    $scope.convertAndTrustAsHtml=function (data,limit) {
-        if(limit!=0)
-            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').substring(0,limit) + '...';
-        else
-            var convertedText = String(data).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ');
-        return $sce.trustAsHtml(convertedText);
-    };
     //------------------------------------------------------------------------------------------------ useful functions
-    $scope.htmlToPlainText = function(text) {
-        return String(text).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g,' ').replace(/&acirc;/g,'â').replace(/&icirc;/g,'î').replace(/&#351;/g,'ş').replace(/&Acirc;/g,'Â').replace(/&Icirc;/g,'Î');
-    };
-
-    $scope.createHeader = function (text,length) {
-        return $scope.htmlToPlainText(text).substring(0,length)+"...";
-    };
 
     $scope.toDate = function (ISOdate) {
         return new Date(ISOdate);
     };
-    $scope.trustAsHtml = function (data) {
-        return $sce.trustAsHtml(data);
-    };
-
-    //$scope.deviceWidth = screen.availWidth;
-    /* --- carousel --- */
-
-
 
     /* --- footer realign ---*/
 
-    $scope.iconLive='<i class="glyphicon glyphicon-facetime-video smallFontSize" ng-if="e.type==2"></i>&nbsp;';
+    $scope.iconLive='<i class="glyphicon glyphicon-facetime-video" ng-if="e.type==2"></i>&nbsp;';
 
-}])
-    .directive('ngEnter', function () {
-        return function (scope, element, attrs) {
-            element.bind("keydown keypress", function (event) {
-                if (event.which === 13) {
-                    scope.$apply(function () {
-                        scope.$eval(attrs.ngEnter);
-                    });
-
-                    event.preventDefault();
-                }
-            });
-        };
-    });
-
+}]);

@@ -1,8 +1,8 @@
-controllers.controller('RootController', ['$scope', '$rootScope', 'RootService', function ($scope, $rootScope, RootService) {
+controllers.controller('RootController', ['$scope', '$rootScope', 'RootService', 'Error','Success', function ($scope, $rootScope, RootService, Error, Success) {
 
     //navbar "despre" categories
     RootService.categories.query().$promise.then(function (resp) {
-        $scope.navCategories = resp.success;
+        $scope.navCategories = Success.getObject(resp);
     });
 
     $rootScope.getNavCategoryName = function (category_id) {
@@ -19,6 +19,9 @@ controllers.controller('RootController', ['$scope', '$rootScope', 'RootService',
     $scope.navCollapsed = true;
     $scope.closeNavbar = function () {
         $scope.navCollapsed = true;
+    };
+    $scope.toggleNavbar = function () {
+        $scope.navCollapsed = !$scope.navCollapsed;
     };
     $scope.openNavbar = function () {
         $scope.navCollapsed = false;

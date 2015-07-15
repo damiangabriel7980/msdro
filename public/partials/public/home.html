@@ -1,28 +1,6 @@
-<div class="col-md-12 unselectable noPadding" style="overflow: hidden" ng-if="!isMobile(true)" carousel-resizable>
-    <div class="carouselWrapper" id="divToResize">
-        <div class="fixedBox">
-            <div class="textWrapper">
-                <p class="carouselTitle" convert-special to-convert="carouselSlides[selectedIndex].title" ng-bind-html="trustAsHtml(createHeader(carouselSlides[selectedIndex].title, 40))">
-                </p>
-                <p class="carouselDescription" convert-special to-convert="carouselSlides[selectedIndex].description" ng-bind-html="trustAsHtml(carouselSlides[selectedIndex].description)">
-                </p>
-            </div>
-            <div class="carouselLearnMore" ng-click="carouselLearnMore(carouselSlides[selectedIndex].type, carouselSlides[selectedIndex].content_id)">
-                Learn more <i class="fa fa-caret-right"></i>
-            </div>
-        </div>
-        <div class="carouselNavigation">
-            <div class="navSlide" ng-repeat="slide in carouselSlides | repeatReverse track by $index"  ng-class="{'active':(carouselSlides.length - $index - 1) == selectedIndex}" ng-click="setSlide(carouselSlides.length - $index - 1)">
-                <img ng-src="{{slide.image_path?pathAmazonDev+slide.image_path:''}}" tooltip-html-unsafe="{{getTooltip(slide)}}" tooltip-trigger="mouseenter">
-            </div>
-        </div>
-        <ul rn-carousel rn-carousel-index="selectedIndex" class="myCarousel" rn-carousel-auto-slide="8">
-            <li ng-repeat="slide in carouselSlides">
-                <img ng-src="{{slide.image_path?pathAmazonDev+slide.image_path:''}}" ondragstart="return false;">
-            </li>
-        </ul>
-    </div>
-</div>
+<fancy-carousel ng-if="!isMobile(true)" carousel-slides="carouselSlides"
+                carousel-action="carouselLearnMore" path-prefix="pathAmazonDev"
+                slide-seconds="8" w-h-ratio="0.3"></fancy-carousel>
 <div class="col-md-12 noPadding unselectable" ng-if="!isMobile(true)">
     <div class="myTabs">
         <div class="myTab left" ng-class="{'active': $state.includes('home.noutati')}" ui-sref="home.noutati">ULTIMELE NOUTATI</div>
@@ -32,7 +10,8 @@
 </div>
 <div class="col-md-12 noPadding" ui-view="desktop" ng-if="!isMobile(true)"></div>
 <div class="col-md-12 noPadding" ui-view="mobile" ng-if="isMobile(true)"></div>
-<div class="col-md-12 evenimente text-center" ng-if="events.length!=0 && !isMobile()"><i class="glyphicon glyphicon-calendar"></i>&nbsp;Evenimente</div>
-<div class="col-md-12 timelineContainer" ng-if="events.length!=0 && !isMobile()">
-    <ng-msd-timeline events="events" months="monthsArray"></ng-msd-timeline>
+<div class="col-md-12 evenimente text-center" ng-if="events.length!=0 && !isMobile(true)"><i class="glyphicon glyphicon-calendar"></i>&nbsp;Evenimente</div>
+<div class="col-md-12 noPadding" ng-if="events.length!=0 && !isMobile(true)">
+    <calendar-timeline events="events" months="monthsArray" date-attr="start" name-attr="name"
+                       day-width="15" event-safety-margin="4" show-today-box-line="false"></calendar-timeline>
 </div>
