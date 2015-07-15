@@ -288,9 +288,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/multimedia/mobile/:id',
             templateUrl: 'partials/medic/elearning/multimediaDetails.ejs' ,
             resolve:{
-                idMultimedia: function ($stateParams) {
+                idMultimedia: ['$stateParams', function ($stateParams) {
                     return $stateParams.id;
-                },
+                }],
                 loadDeps: loadStateDeps(['MultimediaDetail', 'VideoJS'])
             },
             controller: 'MultimediaDetail'
