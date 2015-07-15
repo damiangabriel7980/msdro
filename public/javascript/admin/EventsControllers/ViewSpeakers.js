@@ -17,7 +17,10 @@ controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ng
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(speakers, params.filter())), params.orderBy());
-
+                    params.total(orderedData.length);
+                    if(params.total() < (params.page() -1) * params.count()){
+                        params.page(1);
+                    }
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
