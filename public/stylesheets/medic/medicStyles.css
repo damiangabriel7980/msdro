@@ -7616,6 +7616,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .modal-responsive .modal-dialog {
   height: 90%;
+  min-height: 400px;
 }
 .modal-responsive .modal-dialog .modal-content {
   height: 100%;
@@ -7626,7 +7627,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .modal-responsive .modal-dialog .modal-content .modal-body {
   position: absolute;
-  bottom: 10%;
+  bottom: 60px;
   top: 90px;
   left: 0;
   right: 0;
@@ -7637,7 +7638,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .modal-responsive .modal-dialog .modal-content .modal-footer {
   position: absolute;
-  height: 10%;
+  height: 60px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -7645,15 +7646,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle {
   position: absolute;
   top: 50%;
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
-}
-@media (min-width: 767px) and (max-width: 991px) {
-  .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle {
-    position: relative;
-    right: 0 !important;
-    top: 0;
-    transform: none;
-  }
 }
 .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle.right {
   right: 15px;
