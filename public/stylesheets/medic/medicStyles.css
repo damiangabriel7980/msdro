@@ -6460,6 +6460,9 @@ body .btn {
   margin-top: 10px;
   width: 100%;
 }
+.productDetails .imageAndRCP .btn-default:focus {
+  background-color: #ffffff;
+}
 .productDetails .imageAndRCP hr {
   margin-top: 10px;
   margin-bottom: 0;
@@ -7596,6 +7599,14 @@ fieldset[disabled] .navbarMedic .profile .btn {
   .medicProfile .modal-body .profileImg .wrapper .align {
     margin-top: 25%;
   }
+}
+.medicProfile .modal-body .btn-primary:focus {
+  background-color: #01877b;
+  border-color: #016e64;
+}
+.medicProfile .modal-body .btn-danger:focus {
+  background-color: #d9534f;
+  border-color: #d43f3a;
 }
 .medicProfile .modal-footer {
   padding: 10px 15px;

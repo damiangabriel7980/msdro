@@ -138,6 +138,11 @@ body{
       margin-top: 10px;
       width: 100%;
     }
+    .btn-default{
+      &:focus{
+        background-color: @btn-default-bg;
+      }
+    }
     hr{
       margin-top: 10px;
       margin-bottom: 0;
@@ -1147,6 +1152,18 @@ body{
             margin-top: 25%;
           }
         }
+      }
+    }
+    .btn-primary{
+      &:focus{
+        background-color: @brand-primary;
+        border-color: @btn-primary-border;
+      }
+    }
+    .btn-danger{
+      &:focus{
+        background-color: @brand-danger;
+        border-color: @btn-danger-border;
       }
     }
   }
