@@ -12,7 +12,7 @@
  * */
 
 
-app.controllerProvider.register('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state','Utils', 'Success', 'SpecialFeaturesService', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state,Utils,Success,SpecialFeaturesService){
+app.controllerProvider.register('MultimediaView', ['$scope','$rootScope' ,'multimediaService','$stateParams','$sce','$modal','$window','$timeout','$document','$state','Utils', 'Success', 'SpecialFeaturesService', '$location', function($scope,$rootScope,multimediaService,$stateParams,$sce,$modal,$window,$timeout,$document,$state,Utils,Success,SpecialFeaturesService, $location){
 
     SpecialFeaturesService.specialGroups.getSelected().then(function (specialGroupSelected) {
         getMultimedia(specialGroupSelected);
@@ -30,26 +30,29 @@ app.controllerProvider.register('MultimediaView', ['$scope','$rootScope' ,'multi
     };
     $scope.openMultimedia=function(multimedia) {
         if(multimedia._id) multimedia = multimedia._id;
-        if(Utils.isMobile(true))
-            $state.go('elearning.multimedia.multimediaMobile',{id: multimedia});
-        else
-        {
-            $modal.open({
-                templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
-                backdrop: 'static',
-                keyboard: false,
-                size: 'lg',
-                windowClass: 'fade',
-                controller: 'MultimediaDetail',
-                resolve:{
-                    idMultimedia: function () {
-                        return multimedia;
-                    },
-                    loadDeps: $rootScope.loadStateDeps(['MultimediaDetail', 'VideoJS'])
-                }
-            });
+        if(!$stateParams.idMulti){
+            $state.go('elearning.multimedia.multimediaByArea',{idArea:0,idMulti: multimedia},{},{reload: true});
+        }else{
+            if(Utils.isMobile(true))
+                $state.go('elearning.multimedia.multimediaMobile',{id: multimedia});
+            else
+            {
+                $modal.open({
+                    templateUrl: 'partials/medic/elearning/multimediaDetails.ejs',
+                    backdrop: 'static',
+                    keyboard: false,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller: 'MultimediaDetail',
+                    resolve:{
+                        idMultimedia: function () {
+                            return multimedia;
+                        },
+                        loadDeps: $rootScope.loadStateDeps(['MultimediaDetail', 'VideoJS'])
+                    }
+                });
+            }
         }
-
     };
     if($stateParams.idMulti)
     {
