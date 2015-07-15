@@ -9,7 +9,7 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
     $scope.showerrorProf=false;
     $scope.showerrorPass=false;
 
-    $scope.isIpad = Utils.isMobile(false,true)['isIpad'];
+    $scope.isMobileDevice = Utils.isMobile(false,true)['iosDev'] || Utils.isMobile(false,true)['androidDetect'];
     
     //=============================================================================== alert
     $scope.resetAlert = function (message, type) {
