@@ -6539,6 +6539,9 @@ body .btn {
 .paddingTop10 {
   padding-top: 10px;
 }
+.calendarWrapper .fc-header {
+  font-size: smaller;
+}
 .calendarWrapper .noPadding {
   padding: 0;
 }

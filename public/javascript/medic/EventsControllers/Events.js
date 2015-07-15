@@ -94,7 +94,7 @@ var date = new Date();
                     height: 400,
                     editable: false,
                     header: {
-                        left: 'month basicWeek basicDay',
+                        left: 'month basicWeek',
                         center: 'title',
                         right: 'today prev,next'
                     },
