@@ -13,7 +13,12 @@ app.controllerProvider.register('HomeMobileNews', ['$scope', 'ContentService', '
                 content: resp.articles
             });
             categories.push({
-                name: "DOWNLOADS",
+                name: "CATEGORII",
+                isCategory: true,
+                content: resp.mobileCategories
+            });
+            categories.push({
+                name: "APLICATII",
                 content: resp.downloads
             });
             $scope.categories = categories;

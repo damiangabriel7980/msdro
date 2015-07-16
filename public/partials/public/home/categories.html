@@ -1,0 +1,23 @@
+<div class="col-md-12">
+    <div ng-repeat="category in categoriesFiltered track by $index" class="homeDownloadsDisplay">
+        <div>
+            <div class="item">
+                <div class="contentBlock image" resizable ratio="1.5">
+                    <img ng-src="{{category.image_path?pathAmazonDev+category.image_path:defaultArticleImage}}">
+                </div>
+                <div class="contentBlock excerpt">
+                    <p class="title" convert-special to-convert="category.name" ng-bind-html="trustAsHtml(category.name)"></p>
+                    <p class="text" convert-special to-convert="category.description" ng-bind-html="trustAsHtml(category.description)"></p>
+                </div>
+                <div class="contentBlock">
+                    <div class="btnGreen" ui-sref="articole.all({category: category._id})">Detalii</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12" style="text-align: center;">
+    <pagination total-items="totalItems" ng-model="currentPage" items-per-page="resultsPerPage" max-size="maxSize"
+                class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"
+                previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+</div>

@@ -100,22 +100,34 @@ module.exports = function(app, logger, router) {
                 "1": "news",
                 "2": "articles",
                 "3": "elearning",
-                "4": "downloads"
+                "4": "downloads",
+                "5": "mobileCategories"
             };
             var ret = {};
-            async.each([1,2,4], function (type, callback) {
+            async.each([1,2,4,5], function (type, callback) {
                 var q = {type: type, enable: true};
                 if(type == 4){
                     q['file_path'] = {$exists: true, $nin:[null,""]};
                 }
-                PublicContent.find(q).sort({date_added: -1}).limit(2).exec(function (err, resp) {
-                    if(err){
-                        callback(err);
-                    }else{
-                        ret[types[type]] = resp;
-                        callback();
-                    }
-                })
+                if(type == 5){
+                    PublicCategories.find({isEnabled: true}).limit(2).sort({name: 1}).exec(function (err, categories) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            ret[types[type]] = categories;
+                            callback();
+                        }
+                    });
+                }else{
+                    PublicContent.find(q).sort({date_added: -1}).limit(2).exec(function (err, resp) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            ret[types[type]] = resp;
+                            callback();
+                        }
+                    })
+                }
             }, function (err) {
                 if(err){
                     handleError(res,err,500);
@@ -209,7 +221,7 @@ module.exports = function(app, logger, router) {
                     }
                 });
             }else{
-                PublicCategories.find({isEnabled: true}, function (err, categories) {
+                PublicCategories.find({isEnabled: true}).sort({name: 1}).exec(function (err, categories) {
                     if(err){
                         handleError(res,err,500);
                     }else{

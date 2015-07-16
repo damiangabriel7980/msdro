@@ -28,7 +28,8 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'javascript/public/HomeControllers/HomeMobileNews.js',
                     'javascript/public/HomeControllers/HomeMostRead.js',
                     'javascript/public/HomeControllers/HomeNews.js',
-                    'javascript/public/HomeControllers/HomeDownloads.js'
+                    'javascript/public/HomeControllers/HomeDownloads.js',
+                    'javascript/public/HomeControllers/HomeCategories.js'
                 ]
             },
             {
@@ -183,6 +184,15 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 }
             }
         })
+        .state('home.categories',{
+            url: '/home/categories',
+            views: {
+                desktop: {
+                    templateUrl: 'partials/public/home/categories.html',
+                    controller: 'HomeCategories'
+                }
+            }
+        })
         .state('stiri', {
             abstract: true,
             url: '/stiri',
@@ -306,7 +316,10 @@ app.run(
             $rootScope.trustAsHtml = Utils.trustAsHtml;
             $rootScope.isMobile = Utils.isMobile;
             $rootScope.navigateTo = function (content) {
-                $state.go(PublicService.getSref(content), {id: content._id});
+                if(content.name)
+                    $state.go('articole.all', {category: content._id});
+                else
+                    $state.go(PublicService.getSref(content), {id: content._id});
             };
             $rootScope.getContentNamedType = PublicService.getContentNamedType;
 
