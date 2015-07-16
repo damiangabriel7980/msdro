@@ -50,15 +50,6 @@
 
             <div class="col-md-12" ng-show="toEdit.link_name === linkNames[1]">
                 <div class="form-group col-md-12">
-                    <label>Categorie:</label>
-                    <select ng-model="toEdit.links.category" ng-options="category._id as category.name for category in categories"
-                            class="form-control" style="width: 100%;">
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-md-12" ng-show="toEdit.link_name === linkNames[2]">
-                <div class="form-group col-md-12">
                     <label>URL:</label>
                     <input type="text" class="form-control" ng-model="toEdit.links.url">
                 </div>
