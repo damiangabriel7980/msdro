@@ -74,10 +74,10 @@
             </div>
             <div class="col-md-12">
                 <div class="col-md-6">
-                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Schimba imagine</button>
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
                 </div>
                 <div class="col-md-6">
-                    <a ng-if="toEdit.image_path" ng-href="{{pathAmazonDev+toEdit.image_path}}" target="_blank">
+                    <a ng-if="toEdit.image_path" ng-href="{{pathAmazonDev+toEdit.image_path+'?cacheDummy='+currentDate()}}" target="_blank">
                         <img ng-src="{{defaultSlideImage}}" style="width: 50px;">&nbsp;Descarca imagine
                     </a>
                 </div>

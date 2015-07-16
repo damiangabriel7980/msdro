@@ -55,23 +55,19 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
 
     //change amazon image
     $scope.fileSelected = function ($files, $event) {
-        if($files[0]){
+        if($files && $files[0]){
             $scope.resetAlert("Se incarca...", "warning");
-            $scope.$apply();
 
             var extension = $files[0].name.split('.').pop();
-            var key = "generalCarousel/image_"+idToEdit+"."+extension;
+            var key = "generalCarousel/image_" + $scope.toEdit._id + "." + extension;
             //if there already is an image, delete it. Then upload new
             if($scope.toEdit.image_path){
-                AmazonService.getClient(function (s3) {
-                    s3.deleteObject({Bucket: $rootScope.amazonBucket, Key:$scope.toEdit.image_path}, function (err, data) {
-                        if(err){
-                            $scope.resetAlert("Eroare la stergerea imaginii vechi!");
-                            $scope.$apply();
-                        }else{
-                            putFile($files[0], key);
-                        }
-                    });
+                AmazonService.deleteFile($scope.toEdit.image_path, function (err) {
+                    if(err){
+                        $scope.resetAlert("Eroare la stergerea imaginii vechi!");
+                    }else{
+                        putFile($files[0], key);
+                    }
                 });
             }else{
                 putFile($files[0], key);
@@ -79,8 +75,23 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         }
     };
 
-
     //------------------------------------------------------------------------------------------------ useful functions
+
+    var putFile = function (body, key) {
+        AmazonService.uploadFile(body, key, function (err) {
+            if (err) {
+                $scope.resetAlert("Upload esuat!");
+                console.log(err);
+            } else {
+                CarouselPublicService.carouselPublic.update({id: $scope.toEdit._id}, {image_path: key}).$promise.then(function(){
+                    $scope.toEdit.image_path = key;
+                    $scope.resetAlert("Upload reusit!", "success");
+                }).catch(function(err){
+                    $scope.resetAlert(Error.getMessage(err));
+                });
+            }
+        });
+    };
 
     $scope.resetAlert = function (message, type) {
         $scope.statusAlert = {
@@ -116,32 +127,6 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         });
     };
 
-    var putFile = function (body, key) {
-        AmazonService.getClient(function (s3) {
-            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
-                if (err) {
-                    $scope.resetAlert("Upload esuat!");
-                    console.log(err);
-                    $scope.$apply();
-                } else {
-                    CarouselPublicService.carouselPublic.update({id: idToEdit},{data: {imagePath: key}}).$promise.then(function(resp){
-                        $scope.resetAlert("Upload reusit!", "success");
-                        $scope.$apply();
-                        console.log("Upload complete");
-                    }).catch(function(err){
-                        $scope.resetAlert(Error.getMessage(err));
-                    });
-                }
-            });
-            req.on('httpUploadProgress', function (evt) {
-                var progress = parseInt(100.0 * evt.loaded / evt.total);
-                $scope.$apply(function() {
-                    console.log(progress);
-                })
-            });
-        });
-    };
-
     var findInContent = function(id){
         for(var i=0; i<$scope.allContent.length; i++){
             if($scope.allContent[i]._id === id) return i;
@@ -170,6 +155,10 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
             case 4: return "Download"; break;
             default: return "Necunoscut"; break;
         }
+    };
+
+    $scope.currentDate = function () {
+        return new Date();
     };
 
     $scope.closeModal = function(){
