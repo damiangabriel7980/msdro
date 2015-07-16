@@ -512,37 +512,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req,res){
-            var data = req.body.data.toAdd;
-            var ext = req.body.data.extension;
-            //validate title and description
-            //validate type
-            if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                handleError(res,null,400,21);
-            }else{
-                //check if content_id exists
-                if(typeof data.content_id === "string" && data.content_id.length === 24){
-                    var img = new PublicCarousel(data);
-                    console.log(data);
-                    img.save(function (err, inserted) {
-                        if(err){
-                            handleError(res,null,400,2);
-                        }else{
-                            //update image_path
-                            var imagePath = "generalCarousel/image_"+inserted._id+"."+ext;
-                            PublicCarousel.update({_id: inserted._id}, {$set:{image_path:imagePath}}, function (err, wRes) {
-                                if(err){
-                                    handleError(res,null,400,2);
-                                }else{
-                                    handleSuccess(res, {key: imagePath}, 2);
-                                }
-                            });
-                        }
-                    });
+            var img = new PublicCarousel({
+                title: "Untitled",
+                enable: false,
+                order_index: 0
+            });
+            img.save(function (err, inserted) {
+                if(err){
+                    handleError(res);
                 }else{
-                    handleError(res,null,400,3);
+                    handleSuccess(res, inserted);
                 }
-            }
-
+            });
         })
         .put(function(req,res){
             if(req.body.info){
@@ -590,14 +571,14 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .delete(function(req,res){
             var image_id = req.query.id;
             //find image to remove from amazon
-            PublicCarousel.find({_id: image_id}, {image_path: 1}, function (err, image) {
+            PublicCarousel.findOne({_id: image_id}, {image_path: 1}, function (err, image) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    if(image[0]){
-                        var imageS3 = image[0].image_path;
+                    if(image){
+                        var imageS3 = image.image_path;
                         //remove from database
-                        PublicCarousel.remove({_id: image_id}, function (err, success) {
+                        PublicCarousel.remove({_id: image._id}, function (err, success) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
@@ -3054,8 +3035,8 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/content')
         .get(function(req, res) {
             if(req.query.content_id){
-                Content.findOne({_id: req.query.content_id, enable: true}, function(err, cont) {
-                    if(err) {
+                Content.findOne({_id: req.query.content_id}, function(err, cont) {
+                    if(err || !cont) {
                         handleError(res, err);
                     }else{
                         handleSuccess(res, cont);
@@ -3306,7 +3287,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             handleError(res,err,500);
                         }else{
                             //get carousel content within allowed articles
-                            Carousel.find({enable:true, article_id: {$in: ids}}).sort({indexNumber: 1}).populate('article_id').exec(function (err, images) {
+                            Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
                                 if(err){
                                     handleError(res,err,500);
                                 }else{
