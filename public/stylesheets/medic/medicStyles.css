@@ -6333,6 +6333,11 @@ button.close {
 body {
   font-size: 14px;
 }
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
 @media (max-width: 767px) {
   body {
     font-size: 13px;
