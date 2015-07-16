@@ -345,3 +345,17 @@ services.factory('Success', function() {
         }
     }
 });
+services.factory('customOrder', function() {
+    return {
+        sortAscending: function(items, field) {
+            var filtered = [];
+            angular.forEach(items, function (item) {
+                filtered.push(item);
+            });
+            filtered.sort(function (a, b) {
+                return (a[field].toLowerCase() > b[field].toLowerCase() ? 1 : -1);
+            });
+            return filtered;
+        }
+    }
+});
