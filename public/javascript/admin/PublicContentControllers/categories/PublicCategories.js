@@ -36,6 +36,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
         $modal.open({
             templateUrl: 'partials/admin/content/publicContent/categories/modalAddCategory.html',
             windowClass: 'fade',
+            size: 'lg',
             controller: 'AddPublicContentCategory'
         });
     };
@@ -72,6 +73,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
         $modal.open({
             templateUrl: 'partials/admin/content/publicContent/categories/modalEditCategory.html',
             windowClass: 'fade',
+            size: 'lg',
             controller: 'EditPublicContentCategory',
             resolve: {
                 category: function () {

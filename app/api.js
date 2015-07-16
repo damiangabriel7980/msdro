@@ -452,37 +452,89 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    if(req.body.name) category.name = req.body.name;
-                    if(typeof req.body.isEnabled === "boolean") category.isEnabled = req.body.isEnabled;
-                    category.save(function (err, saved) {
-                        if(err){
-                            if(err.code == 11000 || err.code == 11001){
-                                handleError(res,null,400,23);
-                            }else if(err.name == "ValidationError"){
-                                handleError(res,null,400,24);
-                            }else{
-                                handleError(res,err,500);
-                            }
+                    if(req.body.data){
+                        var data = req.body.data;
+                        var qry = {};
+                        var ok = true;
+                        if(data.type === "image"){
+                            qry['image_path'] = data.path;
                         }else{
-                            handleSuccess(res);
+                           ok = false;
+                           handleError(res,null,400,22);
                         }
-                    });
+                        if(ok){
+                            PublicCategories.update({_id:data.id}, {$set: qry}, function (err, wRes) {
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    handleSuccess(res, {updated: wRes}, 3);
+                                }
+                            });
+                        }
+                    }else{
+                        if(req.body.name) category.name = req.body.name;
+                        if(typeof req.body.isEnabled === "boolean") category.isEnabled = req.body.isEnabled;
+                        category.description = req.body.description;
+                        category.save(function (err, saved) {
+                            if(err){
+                                if(err.code == 11000 || err.code == 11001){
+                                    handleError(res,null,400,23);
+                                }else if(err.name == "ValidationError"){
+                                    handleError(res,null,400,24);
+                                }else{
+                                    handleError(res,err,500);
+                                }
+                            }else{
+                                handleSuccess(res);
+                            }
+                        });
+                    }
                 }
             });
         })
         .delete(function (req, res) {
-            var idToDelete = ObjectId(req.query.id);
-            PublicCategories.remove({_id: idToDelete}, function (err, wres) {
+            var image_id = ObjectId(req.query.id);
+            //find image to remove from amazon
+            PublicCategories.find({_id: image_id}, {image_path: 1}, function (err, category) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    PublicContent.update({category: idToDelete}, {$set: {category: null}}, function (err, wres) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res);
-                        }
-                    });
+                    if(category[0]){
+                        var imageS3 = category[0].image_path;
+                        //remove from database
+                        PublicCategories.remove({_id: image_id}, function (err, success) {
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                //remove image from amazon
+                                if(imageS3){
+                                    amazon.deleteObjectS3(imageS3, function (err, data) {
+                                        if(err){
+                                            handleError(res,null,409,4);
+                                        }else{
+                                            PublicContent.update({category: image_id}, {$set: {category: null}}, function (err, wres) {
+                                                if(err){
+                                                    handleError(res,err,500);
+                                                }else{
+                                                    handleSuccess(res);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }else{
+                                    PublicContent.update({category: image_id}, {$set: {category: null}}, function (err, wres) {
+                                        if(err){
+                                            handleError(res,err,500);
+                                        }else{
+                                            handleSuccess(res);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }else{
+                        handleError(res,null,404,1);
+                    }
                 }
             });
         });
