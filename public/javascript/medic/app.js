@@ -363,8 +363,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService',
-        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService) {
+    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService','$modalStack',
+        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService, $modalStack) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -404,6 +404,11 @@ app.run(
                     window.scrollTo(0,0);
                 });
 
+            $rootScope.$on('$stateChangeStart',
+                function(event, toState, toParams, fromState, fromParams){
+                    if($modalStack)
+                        $modalStack.dismissAll();
+                });
             //============================================================================================= intro modal
             $rootScope.showIntroPresentation = function (groupID) {
                 $modal.open({
