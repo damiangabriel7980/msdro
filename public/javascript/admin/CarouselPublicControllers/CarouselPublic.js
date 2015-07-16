@@ -41,7 +41,7 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
 
 
     $scope.addImage = function(){
-        CarouselPublicService.carouselPublic.create({}).$promise.then(function (created) {
+        CarouselPublicService.carouselPublic.create({}).$promise.then(function () {
             $scope.refreshTable();
         });
     };
@@ -56,12 +56,12 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
         }, "Sterge");
     };
 
-    $scope.toggleImageEnable = function (id, enabled) {
+    $scope.toggleImageEnable = function (image) {
         ActionModal.show(
-            enabled?"Dezactiveaza imagine":"Activeaza imagine",
-            enabled?"Sunteti sigur ca doriti sa dezactivati imaginea?":"Sunteti sigur ca doriti sa activati imaginea?",
+            image.enable?"Dezactiveaza imagine":"Activeaza imagine",
+            image.enable?"Sunteti sigur ca doriti sa dezactivati imaginea?":"Sunteti sigur ca doriti sa activati imaginea?",
             function () {
-                CarouselPublicService.carouselPublic.update({id: id},{info: {isEnabled: enabled}}).$promise.then(function (resp) {
+                CarouselPublicService.carouselPublic.update({id: image._id}, {enable: !image.enable}).$promise.then(function () {
                     $state.reload();
                 }).catch(function(err){
                     console.log(Error.getMessage(err));

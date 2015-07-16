@@ -491,7 +491,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                PublicCarousel.findOne({_id: req.query.id}, function (err, cont) {
+                PublicCarousel.findOne({_id: req.query.id}).populate("links.content links.category").exec(function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -526,47 +526,13 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
         })
         .put(function(req,res){
-            if(req.body.info){
-                PublicCarousel.update({_id: req.query.id}, {$set:{enable: !req.body.info.isEnabled}}, function (err, wRes) {
-                    if(err){
-                        handleError(res,err,500);
-                    }else{
-                        handleSuccess(res);
-                    }
-                });
-            }else{
-                if(req.body.data.imagePath){
-                    var data = req.body.data;
-                    PublicCarousel.update({_id: req.query.id}, {$set:{image_path: data.imagePath}}, function (err, wRes) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, {}, 3);
-                        }
-                    });
+            PublicCarousel.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
+                if(err){
+                    handleError(res,err,500);
                 }else{
-                    var data = req.body.data.toUpdate;
-                    var id = req.query.id;
-                    //validate title and description
-                    //validate type
-                    if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                        handleError(res,null,400,21);
-                    }else{
-                        //check if content_id exists
-                        if(typeof data.content_id === "string" && data.content_id.length === 24){
-                            PublicCarousel.update({_id: id}, {$set:data}, function (err, wRes) {
-                                if(err){
-                                    handleError(res,null,400,2);
-                                }else{
-                                    handleSuccess(res, {}, 3);
-                                }
-                            });
-                        }else{
-                            handleError(res,null,400,3);
-                        }
-                    }
+                    handleSuccess(res);
                 }
-            }
+            });
         })
         .delete(function(req,res){
             var image_id = req.query.id;
