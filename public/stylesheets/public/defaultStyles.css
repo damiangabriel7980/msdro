@@ -6382,6 +6382,11 @@ html body #publicContentWrapper {
   top: 0;
   width: 100%;
 }
+@media (min-width: 1024px) {
+  html body #publicContentWrapper {
+    padding-top: 110px;
+  }
+}
 html body #publicContentWrapper .container {
   padding: 0;
 }
@@ -6425,6 +6430,12 @@ html body .rootView {
   position: relative;
   margin: 0;
 }
+@media (min-width: 1024px) {
+  .navbar-fixed-top {
+    height: 110px;
+    padding-top: 0;
+  }
+}
 .navbar-fixed-top .navbar-collapse {
   background-color: #ffffff;
   margin: 0;
@@ -6459,7 +6470,12 @@ html body .rootView {
   }
 }
 .navbar-fixed-top .navbar-brand {
-  padding: 0px 15px;
+  padding: 0 15px;
+}
+@media (min-width: 1024px) {
+  .navbar-fixed-top .navbar-brand {
+    padding-top: 43px;
+  }
 }
 .navbar-fixed-top .navbar-brand img {
   width: 125px;
@@ -6509,12 +6525,24 @@ html body .rootView {
   }
 }
 .navbar-fixed-top .searchAndLinks form {
-  padding-top: 2px;
+  margin-top: 13px;
   width: 210px;
+}
+.navbar-fixed-top .searchAndLinks form .input-group-sm input {
+  height: 24px;
+}
+.navbar-fixed-top .searchAndLinks form .input-group-sm .input-group-addon {
+  height: 24px;
+  padding: 2px 10px;
 }
 @media (max-width: 1023px) {
   .navbar-fixed-top .searchAndLinks {
     display: none;
+  }
+}
+@media (min-width: 1024px) {
+  .navbar-fixed-top .navigation {
+    min-width: 700px;
   }
 }
 .navbar-fixed-top .headerSearchAndLinks {

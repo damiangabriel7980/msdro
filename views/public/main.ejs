@@ -126,29 +126,6 @@
 
                 <div class="collapse navbar-collapse" collapse="navCollapsed" off-click="closeNavbar()" off-click-if="!navCollapsed" off-click-filter="'#nav-toggle'">
 
-                    <ul class="nav navbar-nav">
-                        <li class="collapsedForm showOnPsT">
-                            <form role="search" ng-submit="searchText(this.textToSearch)">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search" ng-model="textToSearch">
-                                    <span class="input-group-addon" ng-click="searchText(textToSearch)"><i class="glyphicon glyphicon-search"></i></span>
-                                </div>
-                                <button type="submit" class="btn btn-default sr-only">Submit</button>
-                            </form>
-                        </li>
-                        <li ng-class="{'active': $state.includes('home')}" ui-sref="home.noutati"><a>Home</a></li>
-                        <li ng-class="{'active': $state.includes('stiri')}" ui-sref="stiri.all"><a>Stiri</a></li>
-                        <li dropdown class="dropdown" ng-class="{'active': $state.includes('articole')}">
-                            <a dropdown-toggle class="dropdown-toggle" data-toggle="dropdown">
-                                Despre <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li ng-repeat="category in navCategories" ui-sref="articole.all({category: category._id})"><a>{{category.name}}</a></li>
-                            </ul>
-                        </li>
-                        <li ng-class="{'active': $state.includes('elearning')}" ui-sref="elearning.all({area: 0})"><a>Elearning</a></li>
-                        <li ng-class="{'active': $state.includes('downloads')}" ui-sref="downloads.all"><a>Downloads</a></li>
-                    </ul>
                     <ul class="nav navbar-nav navbar-right searchAndLinks">
                         <li>
                             <form class="navbar-form navbar-right" role="search" ng-submit="searchText(this.textToSearch)">
@@ -166,6 +143,30 @@
                         <li class="navbar-link">
                             <a ng-click="showAuthModal('login')">Log in</a>
                         </li>
+                    </ul>
+                    <ul class="nav navbar-nav navigation">
+                        <li class="collapsedForm showOnPsT">
+                            <form role="search" ng-submit="searchText(this.textToSearch)">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" ng-model="textToSearch">
+                                    <span class="input-group-addon" ng-click="searchText(textToSearch)"><i class="glyphicon glyphicon-search"></i></span>
+                                </div>
+                                <button type="submit" class="btn btn-default sr-only">Submit</button>
+                            </form>
+                        </li>
+                        <li ng-class="{'active': $state.includes('home')}" ui-sref="home.noutati"><a>Acasa</a></li>
+                        <li ng-class="{'active': $state.includes('stiri')}" ui-sref="stiri.all"><a>Noutati</a></li>
+                        <li dropdown class="dropdown" ng-class="{'active': $state.includes('articole')}">
+                            <a dropdown-toggle class="dropdown-toggle" data-toggle="dropdown">
+                                Despre <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li ng-repeat="category in navCategories" ui-sref="articole.all({category: category._id})"><a>{{category.name}}</a></li>
+                            </ul>
+                        </li>
+                        <li ng-class="{'active': $state.includes('elearning')}" ui-sref="elearning.all({area: 0})"><a>Biblioteca de resurse</a></li>
+                        <li ng-class="{'active': $state.includes('downloads')}" ui-sref="downloads.all"><a>Aplicatii</a></li>
+                        <li><a>Alimentatie</a></li>
                     </ul>
                 </div>
             </div>
