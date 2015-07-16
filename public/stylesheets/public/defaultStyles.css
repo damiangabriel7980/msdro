@@ -6508,6 +6508,10 @@ html body .rootView {
     top: 40px;
   }
 }
+.navbar-fixed-top .searchAndLinks form {
+  padding-top: 2px;
+  width: 210px;
+}
 @media (max-width: 1023px) {
   .navbar-fixed-top .searchAndLinks {
     display: none;
@@ -6541,8 +6545,8 @@ html body .rootView {
 }
 .navbar-fixed-top .headerSearchAndLinks .item form {
   margin: 0;
-  padding-top: 8px;
-  width: 250px;
+  padding-top: 9px;
+  width: 210px;
 }
 @media (max-width: 767px) {
   .navbar-fixed-top .headerSearchAndLinks form {
