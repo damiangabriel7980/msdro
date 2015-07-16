@@ -16,7 +16,7 @@ module.exports = function(app, logger, router) {
 
     router.route('/getCarouselData')
         .get(function (req, res) {
-            PublicCarousel.find({enable: true}).sort({order_index: 1}).exec(function (err, resp) {
+            PublicCarousel.find({enable: true}).sort({order_index: 1}).populate("links.content links.category").exec(function (err, resp) {
                 if(err){
                     handleError(res,err,500);
                 }else{
