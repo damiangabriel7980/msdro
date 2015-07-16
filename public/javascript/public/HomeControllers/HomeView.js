@@ -29,8 +29,14 @@ app.controllerProvider.register('HomeView', ['$scope', '$rootScope', 'HomeServic
     });
 
     $scope.carouselLearnMore = function (slide) {
-        var type = slide.type;
-        var id = slide.content_id;
+        switch(slide.link_name){
+            case "content": navigateToContent(slide.links.content.type, slide.links.content._id); break;
+            case "category": $state.go("articole.all", {category: slide.links.category._id}); break;
+            case "url": window.location.href = slide.links.url
+        }
+    };
+
+    var navigateToContent = function (type, id) {
         switch(type){
             case 1: $state.go('stiri.detail', {id: id}); break;
             case 2: $state.go('articole.detail', {id: id}); break;

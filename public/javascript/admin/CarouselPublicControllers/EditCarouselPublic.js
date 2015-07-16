@@ -1,76 +1,73 @@
-controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'CarouselPublicService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', 'Success', 'Error', function($scope, $rootScope, $sce, CarouselPublicService, $modalInstance, $state, idToEdit, AmazonService,Success,Error){
+controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'CarouselPublicService', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', 'Success', 'Error', function($scope, $rootScope, $sce, CarouselPublicService, publicContentService, $modalInstance, $state, idToEdit, AmazonService,Success,Error){
 
-    $scope.statusAlert = {newAlert:false, type:"", message:""};
-    $scope.uploadAlert = {newAlert:false, type:"", message:""};
-
+    //init variables
     $scope.toEdit = {};
 
     $scope.content = {};
     $scope.content.selected = {};
 
-    $scope.$watch('toEdit.type', function (newVal) {
-        if(newVal){
-            CarouselPublicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
-                $scope.allContent = Success.getObject(resp);
-                if($scope.toEdit.content_id){
-                    var poz = findInContent($scope.toEdit.content_id);
-                    if(poz > -1){
-                        if($scope.allContent[poz].type === newVal){
-                            $scope.content.selected._id = $scope.allContent[poz]._id;
-                            $scope.content.selected.title = $scope.allContent[poz].title;
-                            console.log($scope.content.selected);
-                        }else{
-                            $scope.content.selected._id = null;
-                            $scope.content.selected.title = null;
-                        }
-                    }else{
-                        $scope.content.selected._id = null;
-                        $scope.content.selected.title = null;
-                    }
-                }
-            }).catch(function(err){
-                $scope.statusAlert.type = "danger";
-                $scope.statusAlert.message = Error.getMessage(err);
-                $scope.statusAlert.newAlert = true;
-            });
-        }
-    });
+    $scope.linkNames = ["content", "category", "url"];
 
     //------------------------------------------------------------------------------------------------ get current data
 
+    //get carousel image
     CarouselPublicService.carouselPublic.query({id: idToEdit}).$promise.then(function (resp) {
-        $scope.toEdit = Success.getObject(resp);
+        var image = Success.getObject(resp);
+        if(image.links){
+            if(image.links.content){
+                $scope.content.selected = {
+                    _id: image.links.content._id,
+                    title: image.links.content.title
+                };
+                $scope.contentType = image.links.content.type;
+            }
+            if(image.links.category){
+                image.links.category = image.links.category._id;
+            }
+        }
+        $scope.toEdit = image;
+        //console.log($scope.toEdit);
     }).catch(function(err){
-        $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err);
-        $scope.statusAlert.newAlert = true;
+        $scope.resetAlert(Error.getMessage(err));
+    });
+    
+    //get categories
+    publicContentService.categories.query({}).$promise.then(function (resp) {
+        $scope.categories = Success.getObject(resp);
+        //console.log($scope.categories);
     });
 
     //------------------------------------------------------------------------------------------------- form submission
 
+    //change database info
+    $scope.editImage = function () {
+        var image = this.toEdit;
+        console.log(image);
+        if(!image.links) image.links = {};
+        image.links.content = this.content.selected._id;
+        $scope.toEdit.last_updated = new Date();
+        CarouselPublicService.carouselPublic.update({id: image._id}, image).$promise.then(function (resp) {
+            $scope.resetAlert(Success.getMessage(resp), "success");
+        }).catch(function(err){
+            $scope.resetAlert(Error.getMessage(err));
+        });
+    };
+
     //change amazon image
     $scope.fileSelected = function ($files, $event) {
-        if($files[0]){
-            $scope.uploadAlert.type = "warning";
-            $scope.uploadAlert.message = "Se incarca...";
-            $scope.uploadAlert.newAlert = true;
-            $scope.$apply();
+        if($files && $files[0]){
+            $scope.resetAlert("Se incarca...", "warning");
 
             var extension = $files[0].name.split('.').pop();
-            var key = "generalCarousel/image_"+idToEdit+"."+extension;
+            var key = "generalCarousel/image_" + $scope.toEdit._id + "." + extension;
             //if there already is an image, delete it. Then upload new
             if($scope.toEdit.image_path){
-                AmazonService.getClient(function (s3) {
-                    s3.deleteObject({Bucket: $rootScope.amazonBucket, Key:$scope.toEdit.image_path}, function (err, data) {
-                        if(err){
-                            $scope.uploadAlert.type = "danger";
-                            $scope.uploadAlert.message = "Eroare la stergerea imaginii vechi!";
-                            $scope.uploadAlert.newAlert = true;
-                            $scope.$apply();
-                        }else{
-                            putFile($files[0], key);
-                        }
-                    });
+                AmazonService.deleteFile($scope.toEdit.image_path, function (err) {
+                    if(err){
+                        $scope.resetAlert("Eroare la stergerea imaginii vechi!");
+                    }else{
+                        putFile($files[0], key);
+                    }
                 });
             }else{
                 putFile($files[0], key);
@@ -78,55 +75,55 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         }
     };
 
-    //change database info
-    $scope.editImage = function () {
-        //get selected content id
-        $scope.toEdit.content_id = $scope.content.selected._id;
-        $scope.toEdit.last_updated = new Date();
-        CarouselPublicService.carouselPublic.update({id: idToEdit},{data: {toUpdate: $scope.toEdit}}).$promise.then(function (resp) {
-                $scope.statusAlert.type = "success";
-                $scope.statusAlert.message = Success.getMessage(resp);
-            $scope.statusAlert.newAlert = true;
-        }).catch(function(err){
-            $scope.statusAlert.newAlert = true;
-            $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err);
-            $scope.statusAlert.newAlert = true;
-        });
-    };
-
-
     //------------------------------------------------------------------------------------------------ useful functions
 
     var putFile = function (body, key) {
-        AmazonService.getClient(function (s3) {
-            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
-                if (err) {
-                    console.log(err);
-                    $scope.uploadAlert.type = "danger";
-                    $scope.uploadAlert.message = "Upload esuat!";
-                    $scope.uploadAlert.newAlert = true;
-                    $scope.$apply();
-                } else {
-                    CarouselPublicService.carouselPublic.update({id: idToEdit},{data: {imagePath: key}}).$promise.then(function(resp){
-                        $scope.uploadAlert.type = "success";
-                        $scope.uploadAlert.message = "Upload reusit!";
-                        $scope.uploadAlert.newAlert = true;
-                        $scope.$apply();
-                        console.log("Upload complete");
-                    }).catch(function(err){
-                        $scope.uploadAlert.newAlert = true;
-                        $scope.uploadAlert.type = "danger";
-                        $scope.uploadAlert.message = Error.getMessage(err);
-                    });
+        AmazonService.uploadFile(body, key, function (err) {
+            if (err) {
+                $scope.resetAlert("Upload esuat!");
+                console.log(err);
+            } else {
+                CarouselPublicService.carouselPublic.update({id: $scope.toEdit._id}, {image_path: key}).$promise.then(function(){
+                    $scope.toEdit.image_path = key;
+                    $scope.resetAlert("Upload reusit!", "success");
+                }).catch(function(err){
+                    $scope.resetAlert(Error.getMessage(err));
+                });
+            }
+        });
+    };
+
+    $scope.resetAlert = function (message, type) {
+        $scope.statusAlert = {
+            message: message,
+            type: type || "danger",
+            show: message
+        };
+    };
+    $scope.resetAlert();
+
+    $scope.selectContentType = function (type) {
+        $scope.content.selected = {};
+        getContent(type);
+    };
+
+    var getContent = function (type) {
+        CarouselPublicService.attachedContent.query({type: type}).$promise.then(function (resp) {
+            $scope.allContent = Success.getObject(resp);
+            if($scope.toEdit.links && $scope.toEdit.links.content){
+                var poz = findInContent($scope.toEdit.links.content._id);
+                if(poz > -1){
+                    if($scope.allContent[poz].type === type){
+                        $scope.content.selected = {
+                            _id: $scope.allContent[poz]._id,
+                            title: $scope.allContent[poz].title
+                        };
+                        console.log($scope.content.selected);
+                    }
                 }
-            });
-            req.on('httpUploadProgress', function (evt) {
-                var progress = parseInt(100.0 * evt.loaded / evt.total);
-                $scope.$apply(function() {
-                    console.log(progress);
-                })
-            });
+            }
+        }).catch(function(err){
+            $scope.resetAlert(Error.getMessage(err));
         });
     };
 
@@ -141,7 +138,16 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         return $sce.trustAsHtml(val);
     };
 
-    $scope.typeDisplay = function (type) {
+    $scope.linkNameDisplay = function (name) {
+        switch(name){
+            case "content": return "Catre continut"; break;
+            case "category": return "Catre categorie"; break;
+            case "url": return "Catre URL"; break;
+            default: return "Necunoscut"; break;
+        }
+    };
+
+    $scope.contentTypeDisplay = function (type) {
         switch(type){
             case 1: return "Stire"; break;
             case 2: return "Articol"; break;
@@ -149,6 +155,10 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
             case 4: return "Download"; break;
             default: return "Necunoscut"; break;
         }
+    };
+
+    $scope.currentDate = function () {
+        return new Date();
     };
 
     $scope.closeModal = function(){

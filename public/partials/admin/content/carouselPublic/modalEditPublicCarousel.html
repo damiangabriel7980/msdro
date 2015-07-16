@@ -6,10 +6,7 @@
         </div>
         <div class="col-md-12 modal-body">
             <div class="col-md-12" style="margin-bottom: 10px;">
-                <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
-            </div>
-            <div class="col-md-12" style="margin-bottom: 10px;">
-                <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
+                <alert ng-if="statusAlert.message" type="{{statusAlert.type}}" close="resetAlert()">{{statusAlert.message}}</alert>
             </div>
             <div class="col-md-12">
                 <div class="form-group col-md-12">
@@ -22,14 +19,24 @@
                     <label for="ordine">Ordine:</label>
                     <input type="text" class="form-control" id="ordine" ng-model="toEdit.order_index">
                 </div>
+
+    <!--Begin link type selection            -->
+
                 <div class="form-group col-md-6">
-                    <label for="type">Tip continut:</label>
-                    <select ng-model="toEdit.type" ng-options="type as typeDisplay(type) for type in [1,2,3,4]"
-                            class="form-control" id="type" style="width: 100%;">
+                    <label for="linkType">Tip legatura:</label>
+                    <select ng-model="toEdit.link_name" ng-options="linkName as linkNameDisplay(linkName) for linkName in linkNames"
+                            class="form-control" id="linkType" style="width: 100%;">
                     </select>
                 </div>
             </div>
-            <div class="col-md-12">
+
+            <div class="col-md-12" ng-show="toEdit.link_name === linkNames[0]">
+                <div class="form-group col-md-12">
+                    <label>Tip continut:</label>
+                    <select ng-model="contentType" ng-options="contentType as contentTypeDisplay(contentType) for contentType in [1,2,3,4]"
+                            ng-init="contentType=contentType||1;selectContentType(1)" ng-change="selectContentType(contentType)" class="form-control" style="width: 100%;">
+                    </select>
+                </div>
                 <div class="form-group col-md-12">
                     <label>Continut: </label>
                     <ui-select ng-model="content.selected" theme="select2" ng-disabled="false" style="width: 100%;" id="content">
@@ -40,6 +47,25 @@
                     </ui-select>
                 </div>
             </div>
+
+            <div class="col-md-12" ng-show="toEdit.link_name === linkNames[1]">
+                <div class="form-group col-md-12">
+                    <label>Categorie:</label>
+                    <select ng-model="toEdit.links.category" ng-options="category._id as category.name for category in categories"
+                            class="form-control" style="width: 100%;">
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-12" ng-show="toEdit.link_name === linkNames[2]">
+                <div class="form-group col-md-12">
+                    <label>URL:</label>
+                    <input type="text" class="form-control" ng-model="toEdit.links.url">
+                </div>
+            </div>
+
+    <!--End link tyoe selection        -->
+
             <div class="col-md-12">
                 <div class="form-group col-md-12">
                     <label for="descriere">Descriere:</label>
@@ -48,10 +74,10 @@
             </div>
             <div class="col-md-12">
                 <div class="col-md-6">
-                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Schimba imagine</button>
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
                 </div>
                 <div class="col-md-6">
-                    <a ng-if="toEdit.image_path" ng-href="{{pathAmazonDev+toEdit.image_path}}" target="_blank">
+                    <a ng-if="toEdit.image_path" ng-href="{{pathAmazonDev+toEdit.image_path+'?cacheDummy='+currentDate()}}" target="_blank">
                         <img ng-src="{{defaultSlideImage}}" style="width: 50px;">&nbsp;Descarca imagine
                     </a>
                 </div>
