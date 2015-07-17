@@ -1,8 +1,8 @@
-controllers.controller('RootController', ['$scope', '$rootScope', 'RootService', 'Error','Success', function ($scope, $rootScope, RootService, Error, Success) {
+controllers.controller('RootController', ['$scope', '$rootScope', 'RootService', 'Error','Success', 'customOrder', function ($scope, $rootScope, RootService, Error, Success,customOrder) {
 
     //navbar "despre" categories
     RootService.categories.query().$promise.then(function (resp) {
-        $scope.navCategories = Success.getObject(resp);
+        $scope.navCategories = customOrder.sortAscending(Success.getObject(resp),'name');
     });
 
     $rootScope.getNavCategoryName = function (category_id) {

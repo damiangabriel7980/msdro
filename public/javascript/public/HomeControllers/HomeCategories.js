@@ -1,10 +1,10 @@
 /**
  * Created by andreimirica on 16.07.2015.
  */
-app.controllerProvider.register('HomeCategories', ['$scope', '$rootScope', 'RootService', '$sce', 'Error', 'Success', 'customOrder', function($scope, $rootScope, RootService, $sce, Error, Success, customOrder) {
+app.controllerProvider.register('HomeCategories', ['$scope', '$rootScope', 'RootService', '$sce', 'Error', 'Success', function($scope, $rootScope, RootService, $sce, Error, Success) {
 
     RootService.categories.query().$promise.then(function (resp) {
-        $scope.navCategories = customOrder.sortAscending(Success.getObject(resp),'name');
+        $scope.navCategories = Success.getObject(resp);
         //pagination
         $scope.maxSize = 3;
         $scope.totalItems = $scope.navCategories.length;

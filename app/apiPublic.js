@@ -221,7 +221,7 @@ module.exports = function(app, logger, router) {
                     }
                 });
             }else{
-                PublicCategories.find({isEnabled: true}).sort({name: 1}).exec(function (err, categories) {
+                PublicCategories.find({isEnabled: true}).sort({last_updated: -1}).exec(function (err, categories) {
                     if(err){
                         handleError(res,err,500);
                     }else{

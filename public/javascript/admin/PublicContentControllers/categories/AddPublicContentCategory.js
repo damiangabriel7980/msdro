@@ -19,6 +19,7 @@ controllers.controller('AddPublicContentCategory', ['$scope', '$state', '$modalI
 
     $scope.addCategory = function () {
         console.log(this.category);
+        this.category.last_updated = new Date();
         publicContentService.categories.create(this.category).$promise.then(function (resp) {
                 $state.reload();
                 $modalInstance.close();
