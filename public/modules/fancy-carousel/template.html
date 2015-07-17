@@ -7,7 +7,7 @@
                 <p class="carouselDescription" ng-bind-html="trustAsHtml(carouselSlides[selectedIndex].description)">
                 </p>
             </div>
-            <div class="carouselLearnMore" ng-click="carouselAction(carouselSlides[selectedIndex])">
+            <div class="carouselLearnMore" ng-click="carouselAction(carouselSlides[selectedIndex])" ng-if="carouselSlides[selectedIndex][actionIfSlideAttribute]">
                 Learn more <i class="fa fa-caret-right"></i>
             </div>
         </div>

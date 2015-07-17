@@ -19,6 +19,7 @@
                 scope: {
                     carouselSlides: '=',
                     carouselAction: '=',
+                    actionIfSlideAttribute: '@',
                     pathPrefix: '=',
                     slideSeconds: '=',
                     wHRatio: '='
