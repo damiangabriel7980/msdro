@@ -230,14 +230,6 @@ module.exports = function(app, logger, passport) {
                                     }
 
                                     {
-                                        var statusModalGroups={};
-                                        for(var i=0;i<user.groupsID.length;i++)
-                                        {
-                                            statusModalGroups[user.groupsID[i]]=true;
-
-                                        }
-                                        req.session.statusModalGroups=statusModalGroups;
-
                                         return handleSuccess(res, {accepted: true});
                                     }
                                 }else if(user.state === "PENDING"){
