@@ -1,4 +1,4 @@
-controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'CarouselPublicService', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', 'Success', 'Error', function($scope, $rootScope, $sce, CarouselPublicService, publicContentService, $modalInstance, $state, idToEdit, AmazonService,Success,Error){
+controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'CarouselPublicService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', 'Success', 'Error', function($scope, $rootScope, $sce, CarouselPublicService, $modalInstance, $state, idToEdit, AmazonService,Success,Error){
 
     //init variables
     $scope.toEdit = {};
@@ -6,7 +6,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
     $scope.content = {};
     $scope.content.selected = {};
 
-    $scope.linkNames = ["content", "category", "url"];
+    $scope.linkNames = ["content", "url"];
 
     //------------------------------------------------------------------------------------------------ get current data
 
@@ -21,20 +21,11 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
                 };
                 $scope.contentType = image.links.content.type;
             }
-            if(image.links.category){
-                image.links.category = image.links.category._id;
-            }
         }
         $scope.toEdit = image;
         //console.log($scope.toEdit);
     }).catch(function(err){
         $scope.resetAlert(Error.getMessage(err));
-    });
-    
-    //get categories
-    publicContentService.categories.query({}).$promise.then(function (resp) {
-        $scope.categories = Success.getObject(resp);
-        //console.log($scope.categories);
     });
 
     //------------------------------------------------------------------------------------------------- form submission
@@ -42,7 +33,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
     //change database info
     $scope.editImage = function () {
         var image = this.toEdit;
-        console.log(image);
+        //console.log(image);
         if(!image.links) image.links = {};
         image.links.content = this.content.selected._id;
         $scope.toEdit.last_updated = new Date();
@@ -140,9 +131,8 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
 
     $scope.linkNameDisplay = function (name) {
         switch(name){
-            case "content": return "Catre continut"; break;
-            case "category": return "Catre categorie"; break;
-            case "url": return "Catre URL"; break;
+            case "content": return "Continut"; break;
+            case "url": return "URL"; break;
             default: return "Necunoscut"; break;
         }
     };

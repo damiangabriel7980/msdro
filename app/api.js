@@ -543,7 +543,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                PublicCarousel.findOne({_id: req.query.id}).populate("links.content links.category").exec(function (err, cont) {
+                PublicCarousel.findOne({_id: req.query.id}).populate("links.content").exec(function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{

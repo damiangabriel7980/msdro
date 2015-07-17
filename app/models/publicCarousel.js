@@ -10,17 +10,11 @@ var publicCarouselSchema		= new Schema({
     title:        String,
     description:  String,
     order_index:  Number,
-    link_name:    {type: String, enum: ["content", "category", "url"]},
+    link_name:    {type: String, enum: ["content", "url"]},
     links: {
-        content: {
-            type: Schema.Types.ObjectId, ref: 'public-content'
-        },
-        category: {
-            type: Schema.Types.ObjectId, ref: 'public-categories'
-        },
+        content: {type: Schema.Types.ObjectId, ref: 'public-content'},
         url: String
     },
-    url:          String,
     image_path:   String,
     enable:       Boolean,
     last_updated: Date
