@@ -32,6 +32,7 @@ app.controllerProvider.register('HomeView', ['$scope', '$rootScope', 'HomeServic
         switch(slide.link_name){
             case "content": navigateToContent(slide.links.content.type, slide.links.content._id); break;
             case "url": $location.path(slide.links.url); break;
+            default: break;
         }
     };
 

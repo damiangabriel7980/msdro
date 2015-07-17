@@ -6,7 +6,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
     $scope.content = {};
     $scope.content.selected = {};
 
-    $scope.linkNames = ["content", "url"];
+    $scope.linkNames = ["content", "url", null];
 
     //------------------------------------------------------------------------------------------------ get current data
 
@@ -133,7 +133,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         switch(name){
             case "content": return "Continut"; break;
             case "url": return "URL"; break;
-            default: return "Necunoscut"; break;
+            default: return "Fara legatura"; break;
         }
     };
 
