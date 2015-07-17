@@ -747,6 +747,9 @@ body{
   }
   .navbar-collapse{
     padding: 0;
+    @media(max-width: @screen-xs-max) and (orientation: landscape){
+      max-height: 180px;
+    }
     .navbar-nav{
       margin: 0;
       .navbar-form{

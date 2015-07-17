@@ -6446,6 +6446,11 @@ html body .rootView {
     border-bottom: 1px solid #eeeeee;
   }
 }
+@media (max-width: 767px) and (orientation: landscape) {
+  .navbar-fixed-top .navbar-collapse {
+    max-height: 180px;
+  }
+}
 .navbar-fixed-top .navbar-collapse .collapsedForm form {
   padding: 5px 15px 0 15px;
 }
