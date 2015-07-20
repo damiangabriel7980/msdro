@@ -3306,7 +3306,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             handleError(res,err,500);
                         }else{
                             //get carousel content within allowed articles
-                            Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
+                            Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').sort({'indexNumber':1}).exec(function (err, images) {
                                 if(err){
                                     handleError(res,err,500);
                                 }else{
