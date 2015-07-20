@@ -10,6 +10,7 @@ var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var therapeuticAreaSchema		= new Schema({
     has_children: Boolean,
+    is_public: Boolean,
     last_updated: Date,
     name: String,
     enabled:      Boolean,
