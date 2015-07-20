@@ -188,44 +188,51 @@ gulp.task('toObjectId', function () {
     mongoose.connect(dbAddress);
     console.log("connected");
 
+    //var toConvert = {
+    //    articles: {
+    //        refs: ['groupsID'],
+    //        model: require('./app/models/articles')
+    //    },
+    //    carousel_Medic: {
+    //        refs: ["article_id"],
+    //        model: require('./app/models/carousel_Medic'),
+    //        log: false
+    //    },
+    //    counties: {
+    //        refs: ["citiesID"],
+    //        model: require('./app/models/counties')
+    //    },
+    //    events: {
+    //        refs: ["groupsID"],
+    //        model: require('./app/models/events')
+    //    },
+    //    multimedia: {
+    //        refs: ["groupsID", "therapeutic-areasID"],
+    //        model: require('./app/models/multimedia')
+    //    },
+    //    presentations: {
+    //        refs: ["groupsID"],
+    //        model: require('./app/models/presentations')
+    //    },
+    //    products: {
+    //        refs: ["groupsID", "therapeutic-areasID"],
+    //        model: require('./app/models/products')
+    //    },
+    //    therapeutic_areas: {
+    //        refs: ["therapeutic-areasID"],
+    //        model: require('./app/models/therapeutic_areas')
+    //    },
+    //    user: {
+    //        refs: ["citiesID", "jobsID", "rolesID", "groupsID", "therapeutic-areasID"],
+    //        model: require('./app/models/user'),
+    //        select: "+citiesID +rolesID +jobsID"
+    //    }
+    //};
+
     var toConvert = {
-        articles: {
-            refs: ['groupsID'],
-            model: require('./app/models/articles')
-        },
-        carousel_Medic: {
-            refs: ["article_id"],
-            model: require('./app/models/carousel_Medic'),
-            log: false
-        },
-        counties: {
-            refs: ["citiesID"],
-            model: require('./app/models/counties')
-        },
-        events: {
-            refs: ["groupsID"],
-            model: require('./app/models/events')
-        },
-        multimedia: {
-            refs: ["groupsID", "therapeutic-areasID"],
-            model: require('./app/models/multimedia')
-        },
-        presentations: {
-            refs: ["groupsID"],
-            model: require('./app/models/presentations')
-        },
-        products: {
-            refs: ["groupsID", "therapeutic-areasID"],
-            model: require('./app/models/products')
-        },
-        therapeutic_areas: {
+        'publicContent': {
             refs: ["therapeutic-areasID"],
-            model: require('./app/models/therapeutic_areas')
-        },
-        user: {
-            refs: ["citiesID", "jobsID", "rolesID", "groupsID", "therapeutic-areasID"],
-            model: require('./app/models/user'),
-            select: "+citiesID +rolesID +jobsID"
+            model: require('./app/models/publicContent')
         }
     };
 
