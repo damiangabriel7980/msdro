@@ -5,13 +5,24 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','Success','Error', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,Success,Error){
-    $scope.therapeuticAlert = {newAlert:false, type:"", message:""};
+
+    $scope.resetAlert = function (message, type) {
+        $scope.therapeuticAlert = {
+            newAlert: message,
+            type: type || "danger",
+            message: message};
+    };
+    $scope.resetAlert();
+
+    $scope.modal = {
+        title: "Adauga arie",
+        action: "Adauga"
+    };
+
     therapeuticAreaService.query().$promise.then(function (resp) {
         $scope.areas = Success.getObject(resp)
     }).catch(function(err){
-        $scope.therapeuticAlert.newAlert = true;
-        $scope.therapeuticAlert.message = Error.getMessage(err);
-        $scope.therapeuticAlert.type = "danger";
+        $scope.resetAlert(Error.getMessage(err));
     });
     areasAdminService.areas.query({id:$stateParams.id}).$promise.then(function(resp){
         $scope.arie = Success.getObject(resp)['selectedArea'];
@@ -22,9 +33,7 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdm
                 $scope.oldAreas.push(Success.getObject(resp)['childrenAreas'][i]);
         }
     }).catch(function(err){
-        $scope.therapeuticAlert.newAlert = true;
-        $scope.therapeuticAlert.message = Error.getMessage(err);
-        $scope.therapeuticAlert.type = "danger";
+        $scope.resetAlert(Error.getMessage(err));
     });
 
 
@@ -39,15 +48,11 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdm
                 $modalInstance.close();
                 $state.go('ariiTerapeutice',{},{reload: true});
             }).catch(function(err){
-                $scope.therapeuticAlert.newAlert = true;
-                $scope.therapeuticAlert.message = Error.getMessage(err);
-                $scope.therapeuticAlert.type = "danger";
+                $scope.resetAlert(Error.getMessage(err));
             });
         }
         else{
-            $scope.therapeuticAlert.newAlert = true;
-            $scope.therapeuticAlert.message = "Numele ariei terapeutice este obligatoriu!";
-            $scope.therapeuticAlert.type = "danger";
+            $scope.resetAlert("Numele ariei terapeutice este obligatoriu!");
         }
     };
 

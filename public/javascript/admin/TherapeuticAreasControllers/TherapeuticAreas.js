@@ -32,7 +32,7 @@ controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'th
 
     $scope.addArea = function () {
         $modal.open({
-            templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeAdd.html',
+            templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeEdit.html',
             backdrop: 'static',
             keyboard: false,
             windowClass: 'fade',

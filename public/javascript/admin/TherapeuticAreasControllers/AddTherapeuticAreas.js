@@ -5,8 +5,20 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', 'Success', 'Error', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,Success,Error){
-    $scope.selectedAreas=[];
-    $scope.therapeuticAlert = {newAlert:false, type:"", message:""};
+
+    $scope.resetAlert = function (message, type) {
+        $scope.therapeuticAlert = {
+            newAlert: message,
+            type: type || "danger",
+            message: message};
+    };
+    $scope.resetAlert();
+
+    $scope.modal = {
+        title: "Adauga arie",
+        action: "Adauga"
+    };
+
     therapeuticAreaService.query().$promise.then(function (resp) {
         var areas = Success.getObject(resp);
         areas = [
@@ -17,9 +29,7 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
         ].concat(areas);
         $scope.areas = areas;
     }).catch(function(err){
-        $scope.therapeuticAlert.newAlert = true;
-        $scope.therapeuticAlert.message = Error.getMessage(err);
-        $scope.therapeuticAlert.type = "danger";
+        $scope.resetAlert(Error.getMessage(err));
     });
 
     $scope.addArie = function(){
@@ -30,9 +40,7 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
             $state.reload();
             $modalInstance.close();
         }).catch(function(err){
-            $scope.therapeuticAlert.newAlert = true;
-            $scope.therapeuticAlert.message = Error.getMessage(err);
-            $scope.therapeuticAlert.type = "danger";
+            $scope.resetAlert(Error.getMessage(err));
         });
     };
 
