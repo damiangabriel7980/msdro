@@ -94,6 +94,7 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
         var name = req.body.name || user.name || "";
         var email = req.body.email || user.username || "";
         var password = req.body.password || user.password || "";
+        var registeredFrom = req.body.registeredFrom || user.registeredFrom || "";
 
         //console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
 
@@ -130,7 +131,8 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
                                 account_locked: false,
                                 enabled: false, //email verification status
                                 created: Date.now(),
-                                last_updated: Date.now()
+                                last_updated: Date.now(),
+                                registeredFrom: registeredFrom
                             };
                             next();
                         }

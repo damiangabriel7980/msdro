@@ -8,7 +8,8 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
         },
         temp: {
             proofFile: null
-        }
+        },
+        registeredFrom: "Staywell"
     };
 
     $scope.nonUser = {};

@@ -43,7 +43,8 @@ var userSchema = new Schema({
     },
     address: {type: String, select: false},
     practiceType: {type: Number, select: false}, // 1 = Public , 2 = Private
-    title: {type: Number, select: false} // 1 = Dl, 2 = Dna, 3 = Prof, 4 = Dr
+    title: {type: Number, select: false}, // 1 = Dl, 2 = Dna, 3 = Prof, 4 = Dr
+    registeredFrom: String
 });
 userSchema.plugin(deepPopulate, {
     whitelist: ['profession', 'groupsID.profession']

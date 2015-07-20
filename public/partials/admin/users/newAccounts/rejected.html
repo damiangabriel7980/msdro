@@ -9,11 +9,14 @@
         <td data-title="'Profesie'" sortable="'profession.display_name'">
             {{user.profession.display_name}}
         </td>
-        <td data-title="'Dovada'" sortable="'proof_path'">
-            <a ng-if="user.proof_path" ng-href="{{pathAmazonDev+user.proof_path}}">Descarca</a>
-        </td>
         <td data-title="'Ultima modificare'" sortable="'last_updated'">
             {{user.last_updated.substr(0,10)}}
+        </td>
+        <td data-title="'Creat din'" sortable="'registeredFrom'">
+            {{user.registeredFrom}}
+        </td>
+        <td data-title="'Dovada'" sortable="'proof_path'">
+            <a ng-if="user.proof_path" ng-href="{{pathAmazonDev+user.proof_path}}">Descarca</a>
         </td>
         <td data-title="'Actiuni'">
             <div class="btn-group">
