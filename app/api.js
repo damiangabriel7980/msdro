@@ -1936,32 +1936,12 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req, res) {
-            var therapeutic = new Therapeutic_Area(req.body.area); 		// create a new instance of the Bear model;
-            therapeutic.save(function(err,saved) {
-                if (err)
+            var therapeutic = new Therapeutic_Area(req.body);
+            therapeutic.save(function(err, saved) {
+                if(err){
                     handleError(res,err,500);
-                        else{
-                    async.each(req.body.subareas, function (item, callback) {
-                        Therapeutic_Area.findById(item, function (err, foundArea) {
-                            if(err){
-                                callback(err);
-                            }else{
-                                foundArea['therapeutic-areasID'] = [saved._id];
-                                foundArea.save(function(error){
-                                    if(error)
-                                        handleError(res,err,500);
-                                    else
-                                        callback();
-                                })
-                            }
-                        })
-                    }, function (err) {
-                        if(err){
-                            handleError(res,err,409,7);
-                        }else{
-                            handleSuccess(res, {}, 2);
-                        }
-                    });
+                }else{
+                    handleSuccess(res);
                 }
             });
         })

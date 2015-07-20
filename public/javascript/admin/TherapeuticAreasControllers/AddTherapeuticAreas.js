@@ -8,7 +8,14 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
     $scope.selectedAreas=[];
     $scope.therapeuticAlert = {newAlert:false, type:"", message:""};
     therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = Success.getObject(resp)
+        var areas = Success.getObject(resp);
+        areas = [
+            {
+                _id: null,
+                name: "Fara parinte"
+            }
+        ].concat(areas);
+        $scope.areas = areas;
     }).catch(function(err){
         $scope.therapeuticAlert.newAlert = true;
         $scope.therapeuticAlert.message = Error.getMessage(err);
@@ -16,35 +23,20 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
     });
 
     $scope.addArie = function(){
-        if($scope.arie && $scope.arie.name!=""){
-            $scope.arie['therapeutic-areasID'] = [];
-            $scope.arie.has_children = false;
-            $scope.arie.last_updated = new Date();
-            $scope.arie.enabled = true;
-            console.log($scope.arie);
-            areasAdminService.areas.create({area:$scope.arie, subareas: $scope.returnedAreas}).$promise.then(function(resp){
-                $scope.arie = {};
-                $modalInstance.close();
-                $state.go('ariiTerapeutice',{},{reload: true});
-            }).catch(function(err){
-                $scope.therapeuticAlert.newAlert = true;
-                $scope.therapeuticAlert.message = Error.getMessage(err);
-                $scope.therapeuticAlert.type = "danger";
-            });
-        }
-        else{
-                $scope.therapeuticAlert.newAlert = true;
-                $scope.therapeuticAlert.message = "Numele ariei terapeutice este obligatoriu!";
-                $scope.therapeuticAlert.type = "danger";
-        }
+        var area = this.arie;
+        if(area['therapeutic-areasID']) area['therapeutic-areasID'] = [area['therapeutic-areasID']];
+        //console.log(area);
+        areasAdminService.areas.create(area).$promise.then(function(){
+            $state.reload();
+            $modalInstance.close();
+        }).catch(function(err){
+            $scope.therapeuticAlert.newAlert = true;
+            $scope.therapeuticAlert.message = Error.getMessage(err);
+            $scope.therapeuticAlert.type = "danger";
+        });
     };
 
-
-    $scope.renderHtml = function (htmlCode) {
-        return $sce.trustAsHtml(htmlCode);
-    };
-    $scope.okk = function () {
+    $scope.closeModal = function () {
         $modalInstance.close();
-        $state.go('ariiTerapeutice',{},{reload: true});
     };
 }]);

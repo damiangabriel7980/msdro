@@ -14,17 +14,13 @@
             <input type="checkbox" ng-model="arie.is_public"/>
             <span>Este publica</span>
         </div>
-        <div class="col-md-12 form-group" style="padding-bottom: 0">
-            <input type="checkbox" ng-model="arie.has_children"/>
-            <span>Are sub-arii</span>
-        </div>
-        <div ng-show="arie.has_children===true" class="col-md-12 form-group">
-            <label>Sub-arii:</label>
-            <therapeutic-select all-areas="areas" selected-areas="selectedAreas" returned-areas="returnedAreas"></therapeutic-select>
+        <div class="col-md-12 form-group">
+            <label>Parinte:</label>
+            <select class="form-control" style="width: 100%" ng-model="arie['therapeutic-areasID']" ng-options="area._id as area.name for area in areas"></select>
         </div>
     </div>
 </div>
 <div class="modal-footer">
-    <a class="btn pull-left btn-primary" ng-click="okk()">Close</a>
+    <a class="btn pull-left btn-primary" ng-click="closeModal()">Close</a>
     <a class="btn pull-right btn-primary" ng-click="addArie()">Adauga arie</a>
 </div>
