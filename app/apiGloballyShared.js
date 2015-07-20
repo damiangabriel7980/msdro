@@ -95,8 +95,6 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
         var email = req.body.email || user.username || "";
         var password = req.body.password || user.password || "";
 
-        var info = {error: true, type:"danger"};
-
         //console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
 
         //validate data
@@ -214,7 +212,6 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
     };
 
     var uploadProof = function (req, res, next) {
-        var info = {error: true, type:"danger"};
 
         var staywellUser = req.staywellUser || {};
         var userEmail = staywellUser.username || req.user.username;
@@ -252,7 +249,6 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
     };
 
     var createAccount = function (req, res, next) {
-        var info = {error: true, type:"danger"};
 
         var user = new User(req.staywellUser);
         user.save(function (err, saved) {
@@ -360,8 +356,6 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
     router.route('/createAccountMobile')
         .post(validateCreateAccount, createAccount, function (req, res) {
             var info = {
-                error: false,
-                type: "success",
                 user: req.staywellUser.username,
                 state: req.staywellUser.state
             };
