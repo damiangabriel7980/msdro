@@ -322,7 +322,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
+                PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1, date_added: 1} ,function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }else

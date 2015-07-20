@@ -14,6 +14,9 @@
             <td data-title="'Tip'" sortable="'type'">
                 {{typeDisplay(content.type)}}
             </td>
+            <td data-title="'Data crearii'" sortable="'date_added'">
+                {{content.date_added.substr(0,10)}}
+            </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
                     <div class="btn btn-default" ng-click="editContent(content._id)"><i class="glyphicon glyphicon-cog"></i></div>
