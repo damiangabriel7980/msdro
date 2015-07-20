@@ -34,7 +34,13 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope', 'idToEdit
 
     areasAdminService.areas.query({id: idToEdit}).$promise.then(function(resp){
         var area = Success.getObject(resp);
-        if(area['therapeutic-areasID'] && area['therapeutic-areasID'][0]) area['therapeutic-areasID'] = area['therapeutic-areasID'][0];
+        if(area['therapeutic-areasID']){
+            if(area['therapeutic-areasID'][0]){
+                area['therapeutic-areasID'] = area['therapeutic-areasID'][0];
+            }else{
+                area['therapeutic-areasID'] = null;
+            }
+        }
         $scope.arie = area;
     }).catch(function(err){
         $scope.resetAlert(Error.getMessage(err));
