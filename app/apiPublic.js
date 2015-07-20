@@ -58,13 +58,11 @@ module.exports = function(app, logger, router) {
 
                 if(params.area != 0){
                     //form an array of this area's id and all it's children id's
-                    TherapeuticAreas.find({$or: [{_id: ObjectId(params.area)}, {'therapeutic-areasID': {$in: [params.area.toString()]}}]}, function (err, areas) {
+                    TherapeuticAreas.distinct("_id", {$or: [{_id: params.area}, {'therapeutic-areasID': {$in: [params.area]}}], enabled: true, is_public: true}, function (err, areas) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            Utils.getIds(areas, true).then(function (areasIds) {
-                                getDocuments(areasIds);
-                            });
+                            getDocuments(areas);
                         }
                     })
                 }else{
@@ -165,7 +163,7 @@ module.exports = function(app, logger, router) {
     router.route('/therapeuticAreas')
 
         .get(function (req, res) {
-            TherapeuticAreas.find({enabled: true}).sort({name: 1}).exec(function (err, resp) {
+            TherapeuticAreas.find({enabled: true, is_public: true}).sort({name: 1}).exec(function (err, resp) {
                 if(err){
                     handleError(res,err,500);
                 }else{
