@@ -235,32 +235,52 @@ services.factory('CollectionsService', function () {
     }
 });
 services.factory('therapeuticAreas', ['$resource', function($resource){
+    var indentChildren = function (areas) {
+        var areasOrganised = [];
+        areasOrganised.push({_id:0, name:"Toate", has_children:false});
+        for(var i=0; i<areas.length; i++){
+            var thisArea = areas[i];
+            if((thisArea['therapeutic-areasID'] || []).length == 0){
+                //it's a parent. Add it
+                areasOrganised.push(thisArea);
+                //find all it's children
+                for(var j=0; j < areas.length; j++){
+                    if((areas[j]['therapeutic-areasID'] || []).indexOf(thisArea._id)>-1){
+                        //found one children. Add it
+                        areas[j]['ident']=true;
+                        areasOrganised.push(areas[j]);
+                    }
+                }
+            }
+        }
+        return areasOrganised;
+    };
+    var organiseByParent = function (areas) {
+        var areasOrganised = [];
+        //areasOrganised.push({_id:0, name:"Toate", has_children:false});
+        for(var i=0; i<areas.length; i++){
+            var thisArea = areas[i];
+            if((thisArea['therapeutic-areasID'] || []).length == 0){
+                //it's a parent. Add it
+                areasOrganised.push(thisArea);
+                //find all it's children
+                thisArea.children = [];
+                for(var j=0; j < areas.length; j++){
+                    if((areas[j]['therapeutic-areasID'] || []).indexOf(thisArea._id)>-1){
+                        //found one children. Add it
+                        thisArea.children.push(areas[j]);
+                    }
+                }
+            }
+        }
+        return areasOrganised;
+    };
     return {
         areas: $resource('apiPublic/therapeuticAreas/', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        formatAreas: function (areas) {
-            var areasOrganised = [];
-            areasOrganised.push({_id:0, name:"Toate", has_children:false});
-            for(var i=0; i<areas.length; i++){
-                var thisArea = areas[i];
-                if(thisArea['therapeutic-areasID'].length == 0){
-                    //it's a parent. Add it
-                    areasOrganised.push(thisArea);
-                    if(thisArea.has_children){
-                        //find all it's children
-                        for(var j=0; j < areas.length; j++){
-                            if(areas[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
-                                //found one children. Add it
-                                areas[j]['ident']=true;
-                                areasOrganised.push(areas[j]);
-                            }
-                        }
-                    }
-                }
-            }
-            return areasOrganised;
-        }
+        formatAreas: indentChildren,
+        organiseByParent: organiseByParent
     }
 }]);
 services.factory('Validations', ['$resource', function($resource){
