@@ -1912,7 +1912,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 })
             }else{
                 var q = {};
-                if(req.query.parentsOnly) q['therapeutic-areasID'] = {$size: 0};
+                if(req.query.parentsOnly) q['$or'] = [{'therapeutic-areasID': {$size: 0}}, {'therapeutic-areasID': null}];
                 Therapeutic_Area.find(q, function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
@@ -1932,108 +1932,15 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         })
-    .put(function(req, res) {
-            var area = req.body.area;
-            var therapeuticArray = req.body.newAreas;
-            var oldAreas = req.body.oldAreas;
-                if (area.has_children == true) {
-                    Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
-                        if (err)
-                            handleError(res,err,500);
-                        else {
-                            if(oldAreas.length > 0){
-                                async.each(oldAreas, function (item1, callback) {
-                                    Therapeutic_Area.findById(item1._id, function (err, foundArea) {
-                                        if (err) {
-                                            callback(err);
-                                        } else {
-                                            foundArea['therapeutic-areasID'] = [];
-                                            foundArea.save(function (error) {
-                                                if (error)
-                                                    handleError(res,err,500);
-                                                else
-                                                    callback();
-                                            })
-                                        }
-                                    })
-                                }, function (err) {
-                                    if (err) {
-                                        handleError(res,err,409,7);
-                                    } else {
-                                        async.each(therapeuticArray, function (item, callback) {
-                                            Therapeutic_Area.findById(item, function (err, foundArea) {
-                                                if (err) {
-                                                    callback(err);
-                                                } else {
-                                                    foundArea['therapeutic-areasID'] = [req.query.id];
-                                                    foundArea.save(function (error) {
-                                                        if (error)
-                                                            handleError(res,err,500);
-                                                        else
-                                                            callback();
-                                                    })
-                                                }
-                                            })
-                                        }, function (err) {
-                                            if (err) {
-                                                handleError(res,err,409,7);
-                                            } else {
-                                                handleSuccess(res, {}, 2);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                            else{
-                                async.each(therapeuticArray, function (item, callback) {
-                                    Therapeutic_Area.findById(item, function (err, foundArea) {
-                                        if (err) {
-                                            callback(err);
-                                        } else {
-                                            foundArea['therapeutic-areasID'] = [req.query.id];
-                                            foundArea.save(function (error) {
-                                                if (error)
-                                                    handleError(res,err,500);
-                                                else
-                                                    callback();
-                                            })
-                                        }
-                                    })
-                                }, function (err) {
-                                    if (err) {
-                                        handleError(res,err,409,7);
-                                    } else {
-                                        handleSuccess(res, {}, 2);
-                                    }
-                                });
-                            }
-                        }
-                    })
+        .put(function(req, res) {
+            var area = req.body;
+            Therapeutic_Area.update({_id: area._id}, {$set: area}, function (err, wres) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res);
                 }
-                else {
-                    if (therapeuticArray.length > 0) {
-                        Therapeutic_Area.update({'therapeutic-areasID':{$in : [req.query.id]}}, {$set: {'therapeutic-areasID': []}}, {multi: true}, function (err, wres) {
-                            if(err){
-                                handleError(res,err,500);
-                            }else{
-                                Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
-                                    if (err)
-                                        handleError(res,err,500);
-                                    else {
-                                        handleSuccess(res, {}, 3);
-                                    }});
-                            }
-                        });
-                    }
-                    else {
-                        Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
-                            if (err)
-                                handleError(res,err,500);
-                            else {
-                                handleSuccess(res, {}, 3);
-                        }});
-                    }
-                }
+            });
         })
         .delete(function(req, res) {
             var data = req.query.id;

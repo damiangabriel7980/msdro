@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','Success','Error', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,Success,Error){
+controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope', 'idToEdit', 'areasAdminService','$sce','$filter','$modalInstance','$state','Success','Error', function($scope,$rootScope, idToEdit, areasAdminService,$sce,$filter,$modalInstance,$state,Success,Error){
 
     $scope.resetAlert = function (message, type) {
         $scope.therapeuticAlert = {
@@ -15,53 +15,48 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope' ,'areasAdm
     $scope.resetAlert();
 
     $scope.modal = {
-        title: "Adauga arie",
-        action: "Adauga"
+        title: "Modifica arie",
+        action: "Modifica"
     };
 
-    therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = Success.getObject(resp)
-    }).catch(function(err){
-        $scope.resetAlert(Error.getMessage(err));
-    });
-    areasAdminService.areas.query({id:$stateParams.id}).$promise.then(function(resp){
-        $scope.arie = Success.getObject(resp)['selectedArea'];
-        $scope.selectedAreas = Success.getObject(resp)['childrenAreas'] ? Success.getObject(resp)['childrenAreas']: [];
-        $scope.oldAreas = [];
-        if(Success.getObject(resp)['childrenAreas']){
-            for ( var i = 0;i<Success.getObject(resp)['childrenAreas'].length;i++)
-                $scope.oldAreas.push(Success.getObject(resp)['childrenAreas'][i]);
-        }
+    areasAdminService.areas.query({parentsOnly: true}).$promise.then(function (resp) {
+        var areas = Success.getObject(resp);
+        areas = [
+            {
+                _id: null,
+                name: "Fara parinte"
+            }
+        ].concat(areas);
+        $scope.areas = areas;
     }).catch(function(err){
         $scope.resetAlert(Error.getMessage(err));
     });
 
+    areasAdminService.areas.query({id: idToEdit}).$promise.then(function(resp){
+        var area = Success.getObject(resp);
+        if(area['therapeutic-areasID'] && area['therapeutic-areasID'][0]) area['therapeutic-areasID'] = area['therapeutic-areasID'][0];
+        $scope.arie = area;
+    }).catch(function(err){
+        $scope.resetAlert(Error.getMessage(err));
+    });
 
-    $scope.updateArie = function(){
-        if($scope.arie && $scope.arie.name!=""){
-            $scope.newAreas = $scope.returnedAreas;
-            $scope.arie.last_updated = new Date();
-            $scope.arie['therapeutic-areasID'] = [];
-            console.log($scope.arie);
-            areasAdminService.areas.update({id:$stateParams.id},{area:$scope.arie, oldAreas: $scope.oldAreas, newAreas: $scope.newAreas}).$promise.then(function(resp){
-                $scope.arie = {};
+    $scope.takeAction = function(){
+        var area = this.arie || {};
+        if(area.name){
+            if(area['therapeutic-areasID']) area['therapeutic-areasID'] = [area['therapeutic-areasID']];
+            console.log(area);
+            areasAdminService.areas.update(area).$promise.then(function(){
+                $state.reload();
                 $modalInstance.close();
-                $state.go('ariiTerapeutice',{},{reload: true});
             }).catch(function(err){
                 $scope.resetAlert(Error.getMessage(err));
             });
-        }
-        else{
-            $scope.resetAlert("Numele ariei terapeutice este obligatoriu!");
+        }else{
+            $scope.resetAlert("Numele ariei terapeutice este obligatoriu");
         }
     };
 
-
-    $scope.renderHtml = function (htmlCode) {
-        return $sce.trustAsHtml(htmlCode);
-    };
-    $scope.okk = function () {
+    $scope.closeModal = function () {
         $modalInstance.close();
-        $state.go('ariiTerapeutice',{},{reload: true});
     };
 }]);

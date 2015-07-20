@@ -34,8 +34,8 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
 
     $scope.takeAction = function(){
         var area = this.arie || {};
-        if(area['therapeutic-areasID']) area['therapeutic-areasID'] = [area['therapeutic-areasID']];
         if(area.name){
+            if(area['therapeutic-areasID']) area['therapeutic-areasID'] = [area['therapeutic-areasID']];
             //console.log(area);
             areasAdminService.areas.create(area).$promise.then(function(){
                 $state.reload();
