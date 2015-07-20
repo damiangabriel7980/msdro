@@ -4,7 +4,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService', 'Success', 'Error', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,Success,Error){
+controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdminService','$stateParams','$sce','$filter','$modalInstance','$state', 'Success', 'Error', function($scope,$rootScope,areasAdminService,$stateParams,$sce,$filter,$modalInstance,$state,Success,Error){
 
     $scope.resetAlert = function (message, type) {
         $scope.therapeuticAlert = {
@@ -19,7 +19,7 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
         action: "Adauga"
     };
 
-    therapeuticAreaService.query().$promise.then(function (resp) {
+    areasAdminService.areas.query({parentsOnly: true}).$promise.then(function (resp) {
         var areas = Success.getObject(resp);
         areas = [
             {
@@ -32,7 +32,7 @@ controllers.controller('AddTherapeuticAreas', ['$scope','$rootScope' ,'areasAdmi
         $scope.resetAlert(Error.getMessage(err));
     });
 
-    $scope.addArie = function(){
+    $scope.takeAction = function(){
         var area = this.arie;
         if(area['therapeutic-areasID']) area['therapeutic-areasID'] = [area['therapeutic-areasID']];
         //console.log(area);

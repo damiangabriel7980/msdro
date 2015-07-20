@@ -1911,7 +1911,9 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                Therapeutic_Area.find(function(err, cont) {
+                var q = {};
+                if(req.query.parentsOnly) q['therapeutic-areasID'] = {$size: 0};
+                Therapeutic_Area.find(q, function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }else{
