@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 26.11.2014.
  */
-controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'therapeuticAreas', 'areasAdminService','$stateParams','$sce','ngTableParams','$filter', 'ActionModal', 'Success', 'Error', function($scope,$rootScope, $state, therapeuticAreas, areasAdminService,$stateParams,$sce,ngTableParams,$filter, ActionModal, Success, Error){
+controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'therapeuticAreas', 'areasAdminService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', 'Success', 'Error', function($scope,$rootScope, $state, therapeuticAreas, areasAdminService,$stateParams,$sce,ngTableParams,$filter, $modal, ActionModal, Success, Error){
     areasAdminService.areas.query().$promise.then(function(result){
         var areas = therapeuticAreas.organiseByParent(Success.getObject(result));
         $scope.tableParams = new ngTableParams({
@@ -28,6 +28,31 @@ controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'th
     });
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
+    };
+
+    $scope.addArea = function () {
+        $modal.open({
+            templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeAdd.html',
+            backdrop: 'static',
+            keyboard: false,
+            windowClass: 'fade',
+            controller: 'AddTherapeuticAreas'
+        });
+    };
+
+    $scope.editArea = function (id) {
+        $modal.open({
+            templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeEdit.html',
+            backdrop: 'static',
+            keyboard: false,
+            windowClass: 'fade',
+            controller: "EditTherapeuticAreas",
+            resolve: {
+                idToEdit: function () {
+                    return id;
+                }
+            }
+        })
     };
 
     $scope.deleteArea = function (id) {
