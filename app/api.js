@@ -1903,35 +1903,20 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                Therapeutic_Area.findById(req.query.id).populate('therapeutic-areasID').exec(function(err, cont) {
-                    var objectToSend = {};
-                    if(err) {
-                        handleError(res,err,500);
+                Therapeutic_Area.findById(req.query.id).exec(function(err, area) {
+                    if(err || !area) {
+                        handleError(res, err, 500);
                     }else{
-                        if(cont){
-                            objectToSend['selectedArea'] = cont;
-                            if(cont.has_children==true)
-                            {
-                                Therapeutic_Area.find({'therapeutic-areasID':{$in : [cont._id]}}).exec(function(err,response){
-                                    objectToSend['childrenAreas'] = response;
-                                    handleSuccess(res, objectToSend);
-                                })
-                            }
-                            else{
-                                handleSuccess(res, objectToSend);
-                            }
-                        }else{
-                            handleError(res,err,404,1);
-                        }
+                        handleSuccess(res, area);
                     }
                 })
             }else{
                 Therapeutic_Area.find(function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
-                    }
-                    else
+                    }else{
                         handleSuccess(res, cont);
+                    }
                 });
             }
         })
