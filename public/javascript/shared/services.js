@@ -235,9 +235,14 @@ services.factory('CollectionsService', function () {
     }
 });
 services.factory('therapeuticAreas', ['$resource', function($resource){
-    var indentChildren = function (areas) {
+    var indentChildren = function (areas, forDropdown) {
         var areasOrganised = [];
-        areasOrganised.push({_id:0, name:"Toate", has_children:false});
+        if(forDropdown){
+            areasOrganised.push({_id:0, name:"Adauga arii terapeutice"});
+            areasOrganised.push({_id:1, name:"Toate"});
+        }else{
+            areasOrganised.push({_id:0, name:"Toate", has_children:false});
+        }
         for(var i=0; i<areas.length; i++){
             var thisArea = areas[i];
             if((thisArea['therapeutic-areasID'] || []).length == 0){
