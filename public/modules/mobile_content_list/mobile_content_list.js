@@ -36,7 +36,6 @@
                 scope.defaultDownloadIcon = $rootScope.pathAmazonResources + "icons/download.png";
 
                 scope.calendarBg = $rootScope.pathAmazonResources + "calendar_bg.png";
-                console.log(scope.categoryFunc);
             }
         };
     }]);

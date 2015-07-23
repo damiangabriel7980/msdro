@@ -321,7 +321,6 @@ app.run(
                 else
                     $state.go(PublicService.getSref(content), {id: content._id});
             };
-            $rootScope.getContentNamedType = PublicService.getContentNamedType;
 
             //contact modal
             $rootScope.showContactModal = function(){
