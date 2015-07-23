@@ -1,0 +1,36 @@
+.fontS {
+  font-size: 12px;
+}
+.fontM {
+  font-size: 14px;
+}
+.fontL {
+  font-size: 17px;
+}
+.fontXL {
+  font-size: 20px;
+}
+.fontXXL {
+  font-size: 25px;
+}
+.contentShadow {
+  -webkit-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
+  -moz-box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
+  box-shadow: 2px 2px 10px rgba(55, 66, 74, 0.2);
+}
+.btn.btn-default:hover {
+  color: #333333;
+  background-color: #ffffff;
+  border-color: #006d69;
+}
+.btn.btn-primary:hover {
+  color: #ffffff;
+  background-color: #01877b;
+  border-color: #016e64;
+}
+a:hover {
+  text-decoration: none;
+}
+.navbar-fixed-top .navbar-toggle:hover {
+  background-color: #ffffff;
+}

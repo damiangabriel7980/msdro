@@ -279,8 +279,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location', 'PublicService',
-        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location,   PublicService) {
+    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location', 'PublicService', '$ocLazyLoad',
+        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location,   PublicService,   $ocLazyLoad) {
 
             $rootScope.accessRoute = ACCESS_ROUTE;
 
@@ -358,6 +358,19 @@ app.run(
                 function(){
                     window.scrollTo(0,0);
                 });
+
+            //load a special css file for mobile devices / tablets only
+            angular.element(document).ready(function () {
+                if(Utils.isMobile(false, true)["any"]){
+                    var mobileCssPath = 'stylesheets/public/mobileOnly.css';
+                    $ocLazyLoad.load(mobileCssPath).then(function () {
+                        var fileref = document.createElement("link");
+                        fileref.setAttribute("rel", "stylesheet");
+                        fileref.setAttribute("type", "text/css");
+                        fileref.setAttribute("href", mobileCssPath);
+                    });
+                }
+            });
 
 //            $rootScope.$on('$locationChangeStart', function (event) {
 //                console.log("change");

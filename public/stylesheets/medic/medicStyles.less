@@ -53,20 +53,6 @@ body{
   .btn{
     .btn-sm;
     .fontS;
-    &.btn-default{
-      @media (max-width: @screen-sm-max) {
-        &:hover{
-          background-color: @btn-default-bg;
-        }
-      }
-    }
-    &.btn-primary{
-      @media (max-width: @screen-sm-max) {
-        &:hover{
-          background-color: @btn-primary-bg;
-        }
-      }
-    }
   }
 }
 
@@ -126,11 +112,9 @@ body{
     border-radius: 4px;
     font-weight: bold;
     color: @green;
-    @media (min-width: @screen-md-min) {
-      &:hover{
-        background-color: @green;
-        color: white;
-      }
+    &:hover{
+      background-color: @green;
+      color: white;
     }
   }
 }
@@ -739,11 +723,6 @@ body{
     padding: 9px 10px;
     border: 1px solid @gray-light;
     border-radius: 4px;
-    @media (max-width: @screen-sm-max) {
-      &:hover{
-        background-color: @navbar-default-bg;
-      }
-    }
   }
   .navbar-collapse{
     padding: 0;

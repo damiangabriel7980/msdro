@@ -112,13 +112,13 @@ services.factory('Utils', ['$sce', function ($sce) {
                     ios = /iphone|ipod|ipad/.test( userAgent );
 
                 //============ check for generic device
-                var iosDetect = false;
-                mobileObject['iosDev'] = ios;
-                mobileObject['androidDetect'] = userAgent.indexOf("android") > -1;
+                var isIphone = false;
+                mobileObject['isIOSDevice'] = ios;
+                mobileObject['isAndroidDevice'] = userAgent.indexOf("android") > -1;
                 if(ios)
                 {
                     if ( !standalone && safari ) {
-                        iosDetect = true;
+                        isIphone = true;
                     }
                 }
 
@@ -128,8 +128,11 @@ services.factory('Utils', ['$sce', function ($sce) {
                     var ua = navigator.userAgent.toLowerCase();
                     return (ua.indexOf("android") > -1 && ua.indexOf("mobile")==-1);
                 };
-                mobileObject['androidTab'] = isAndroidTablet();
-                mobileObject['iosDetect'] = iosDetect;
+                mobileObject['isAndroidTab'] = isAndroidTablet();
+                mobileObject['isIphone'] = isIphone;
+
+                //================== detect if it's any kind of device
+                mobileObject['any'] = mobileObject['isIOSDevice'] || mobileObject['isAndroidDevice'];
                 return mobileObject;
             }
             else{

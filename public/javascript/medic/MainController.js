@@ -53,9 +53,9 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         });
     };
     $scope.showProfile = function(){
-        if(Utils.isMobile(false,true)['iosDev'] || Utils.isMobile(false,true)['androidDetect'])
+        if(Utils.isMobile(false,true)['isIOSDevice'] || Utils.isMobile(false,true)['isAndroidDevice'])
         {
-            if(Utils.isMobile(false,true)['isIpad'] || Utils.isMobile(false,true)['androidTab'])
+            if(Utils.isMobile(false,true)['isIpad'] || Utils.isMobile(false,true)['isAndroidTab'])
             {
                 openProfileModal();
             }
