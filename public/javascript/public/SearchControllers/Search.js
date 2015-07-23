@@ -7,6 +7,16 @@ app.controllerProvider.register('Search', ['$scope', '$rootScope', 'HomeService'
             $scope.searchResults = Success.getObject(data);
     });
 
+    $scope.getSearchCategory = function(content){
+        switch(content.type){
+            case 1: return "article"; break;
+            case 2: return "article"; break;
+            case 3: return "multimedia"; break;
+            case 4: return "download"; break;
+            default: return null;
+        }
+    };
+
     $scope.getCategory = function(type){
         switch(type){
             case 1: return "Stiri"; break;
