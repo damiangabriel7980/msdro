@@ -163,7 +163,9 @@ module.exports = function(app, logger, router) {
     router.route('/therapeuticAreas')
 
         .get(function (req, res) {
-            TherapeuticAreas.find({enabled: true, is_public: true}).sort({name: 1}).exec(function (err, resp) {
+            var q = {enabled: true};
+            if(!req.isAuthenticated()) q.is_public = true;
+            TherapeuticAreas.find(q).sort({name: 1}).exec(function (err, resp) {
                 if(err){
                     handleError(res,err,500);
                 }else{
