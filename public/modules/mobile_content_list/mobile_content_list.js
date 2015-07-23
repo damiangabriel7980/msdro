@@ -32,6 +32,7 @@
                 scope.defaultProductIcon = $rootScope.pathAmazonResources + "icons/product.png";
                 scope.defaultArticleIcon = $rootScope.pathAmazonResources + "icons/article.png";
                 scope.defaultMultimediaIcon = $rootScope.pathAmazonResources + "icons/film.png";
+                scope.defaultDownloadIcon = $rootScope.pathAmazonResources + "icons/download.png";
 
                 scope.calendarBg = $rootScope.pathAmazonResources + "calendar_bg.png";
             }
