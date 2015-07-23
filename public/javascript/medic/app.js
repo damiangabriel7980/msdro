@@ -25,7 +25,7 @@ app.config(['$controllerProvider', '$filterProvider', function ($controllerProvi
 
 app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
     $ocLazyLoadProvider.config({
-        debug: true,
+        //debug: true,
         modules: [
             {
                 name: 'Home',
