@@ -18,6 +18,7 @@
                 textAttr: '@',
                 navigate: '=',
                 category: '@',
+                categoryFunc: '=',
                 dateAttr: '@'
             },
             link: function(scope, element, attrs) {
