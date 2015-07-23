@@ -4,7 +4,7 @@ controllers.controller('AddProductPage', ['$scope', 'SpecialProductsService', 'A
     //$scope.resetAlert("success", "works");
 
     //get available groups (a group can have only one special product)
-    SpecialProductsService.groupsAvailable.query().$promise.then(function (resp) {
+    SpecialProductsService.groups.query().$promise.then(function (resp) {
         $scope.groupsAvailable = Success.getObject(resp);
     });
 

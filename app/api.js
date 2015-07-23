@@ -1155,17 +1155,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             })
         });
 
-    router.route('/admin/content/specialProducts/groupsAvailable')
-        .get(function (req, res) {
-                    UserGroup.find({}).populate('profession').exec(function (err, groups) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, groups);
-                        }
-                    })
-        });
-
     router.route('/admin/content/specialProducts/glossary')
         .get(function (req, res) {
             var q = {};

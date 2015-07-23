@@ -185,9 +185,6 @@ services.factory('SpecialProductsService', ['$resource', function($resource){
         groups: $resource('api/admin/content/specialProducts/groups', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        groupsAvailable: $resource('api/admin/content/specialProducts/groupsAvailable', {}, {
-            query: { method: 'GET', isArray: false }
-        }),
         glossary: $resource('api/admin/content/specialProducts/glossary', {}, {
             query: { method: 'GET', isArray: false },
             create: { method: 'POST', isArray: false },
