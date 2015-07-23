@@ -36,19 +36,23 @@ app.controllerProvider.register('AuthModal', ['$scope', '$modalInstance', 'inten
 
     $scope.login = function () {
 
-        AuthService.login.query({email: this.email, password: this.password,remember: this.remember}).$promise.then(function (resp) {
+        if(!this.email && this.password){
+            $scope.resetAlert("danger", "Adresa de e-mail nu este valida");
+        }else{
+            AuthService.login.query({email: this.email, password: this.password,remember: this.remember}).$promise.then(function (resp) {
 
-            //redirect to pro area or proof loading
-            if(Success.getObject(resp).accepted){
-                $window.location.href = AuthService.getProHref();
-            }else{
-                $scope.renderView("completeProfile", {
-                    template: $sce.trustAsResourceUrl('partials/public/auth/signup_step2.html')
-                });
-            }
-        }).catch(function (resp) {
-            $scope.resetAlert("danger", Error.getMessage(resp));
-        });
+                //redirect to pro area or proof loading
+                if(Success.getObject(resp).accepted){
+                    $window.location.href = AuthService.getProHref();
+                }else{
+                    $scope.renderView("completeProfile", {
+                        template: $sce.trustAsResourceUrl('partials/public/auth/signup_step2.html')
+                    });
+                }
+            }).catch(function (resp) {
+                $scope.resetAlert("danger", Error.getMessage(resp));
+            });
+        }
     };
 
     $scope.reset = function () {
