@@ -11,10 +11,10 @@
             <td data-title="'Ordine'" sortable="'indexNumber'">
                 {{image.indexNumber}}
             </td>
-            <td data-title="'Tip'" sortable="'type'">
-                {{typeDisplay(image.type)}}
+            <td data-title="'Tip'" sortable="'type_name'">
+                {{image.type_name}}
             </td>
-            <td data-title="'Groups'" filter="{ 'article_id': 'text' }" sortable="'article_id.groupsID'">
+            <td data-title="'Groups'" filter="{ 'article_id': 'text' }">
                 <li ng-repeat="group in image.article_id.groupsID">
                     {{group.display_name}}
                 </li>

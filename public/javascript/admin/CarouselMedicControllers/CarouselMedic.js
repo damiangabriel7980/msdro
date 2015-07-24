@@ -32,17 +32,6 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
 
     $scope.refreshTable();
 
-    $scope.typeDisplay = function (type) {
-        switch(type){
-            case 1: return "Stire"; break;
-            case 2: return "Articol"; break;
-            case 3: return "Elearning"; break;
-            case 4: return "Download"; break;
-            default: return "Necunoscut"; break;
-        }
-    };
-
-
     $scope.addImage = function(){
         $modal.open({
             templateUrl: 'partials/admin/content/carouselMedic/modalAddMedicCarousel.html',

@@ -146,9 +146,9 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
 
     $scope.typeDisplay = function (type) {
         switch(type){
-            case 1: return "Stire"; break;
-            case 2: return "Stire legislativa"; break;
-            case 3: return "Stire stiintifica"; break;
+            case 1: return "National"; break;
+            case 2: return "International"; break;
+            case 3: return "Stiintific"; break;
             default: return "Necunoscut"; break;
         }
     };
