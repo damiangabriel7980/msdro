@@ -29,13 +29,11 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
 
     $scope.refreshTable();
 
-    $scope.typeDisplay = function (type) {
-        switch(type){
-            case 1: return "Stire"; break;
-            case 2: return "Articol"; break;
-            case 3: return "Elearning"; break;
-            case 4: return "Download"; break;
-            default: return "Necunoscut"; break;
+    $scope.linkTypeDisplay = function (image) {
+        switch(image.link_name){
+            case "content": return "Continut"; break;
+            case "url": return "Link"; break;
+            default: return "-"; break;
         }
     };
 

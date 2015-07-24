@@ -1,11 +1,6 @@
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
-// link_type:
-// 1 = to content
-// 2 = to category
-// 3 = to URL
-
 var publicCarouselSchema		= new Schema({
     title:        String,
     description:  String,
