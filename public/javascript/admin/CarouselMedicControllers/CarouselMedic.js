@@ -3,6 +3,7 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
     $scope.refreshTable = function () {
         CarouselMedicService.carouselMedic.query().$promise.then(function (resp) {
             var data = Success.getObject(resp);
+            console.log(data);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -31,6 +32,10 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
     };
 
     $scope.refreshTable();
+
+    $scope.checkArticleDisabled = function (image) {
+        return image.article_id && !image.article_id.enable;
+    };
 
     $scope.addImage = function(){
         $modal.open({

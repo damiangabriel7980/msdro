@@ -6,7 +6,7 @@
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="image in $data">
             <td data-title="'Titlu'" filter="{ 'title': 'text' }" sortable="'title'">
-                {{image.title}}
+                {{image.title + (checkArticleDisabled(image)?" (article disabled)":"")}}
             </td>
             <td data-title="'Ordine'" sortable="'indexNumber'">
                 {{image.indexNumber}}

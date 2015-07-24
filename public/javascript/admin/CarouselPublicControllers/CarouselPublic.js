@@ -37,6 +37,10 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
         }
     };
 
+    $scope.checkArticleDisabled = function (image) {
+        return image.links && image.links.content && !image.links.content.enable;
+    };
+
 
     $scope.addImage = function(){
         CarouselPublicService.carouselPublic.create({}).$promise.then(function () {
