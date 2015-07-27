@@ -1,0 +1,7 @@
+<div class="selectAutocomplete">
+    <div class="desktop">
+        <input type="text" class="input form-control" ng-focus="showSelect()" ng-blur="hideSelect()" ng-model="inputText">
+        <select class="select" ng-model="selected" ng-options="opt as opt[titleAttr] for opt in filteredOptions"
+                multiple="multiple" ng-show="isSelectVisible" data-ng-attr-size="{{selectSize}}"></select>
+    </div>
+</div>
