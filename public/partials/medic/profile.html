@@ -79,19 +79,20 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12">
-                            <div class="form-group-sm" ng-show="!isMobileDevice">
+                            <div class="form-group-sm">
                                 <label>Oras<sup>*</sup>:</label>
-                                <ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" ng-required="true">
-                                    <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">
-                                        <div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>
-                                    </ui-select-choices>
-                                </ui-select>
+                                <!--<ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" ng-required="true">-->
+                                    <!--<ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>-->
+                                    <!--<ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">-->
+                                        <!--<div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>-->
+                                    <!--</ui-select-choices>-->
+                                <!--</ui-select>-->
+                                <angular-select-autocomplete options="cities" id-attr="_id" title-attr="name" is-mobile="true"></angular-select-autocomplete>
                             </div>
-                            <div class="form-group-sm" ng-show="isMobileDevice">
-                                <label>Oras<sup>*</sup>: </label>
-                                <select class="form-control" ng-model="city.selected" ng-options="city as city.name for city in cities track by city._id"></select>
-                            </div>
+                            <!--<div class="form-group-sm" ng-show="isMobileDevice">-->
+                                <!--<label>Oras<sup>*</sup>: </label>-->
+                                <!--<select class="form-control" ng-model="city.selected" ng-options="city as city.name for city in cities track by city._id"></select>-->
+                            <!--</div>-->
                             <p class="" ng-show="profileForm.oras.$invalid && !profileForm.oras.$pristine">Orasul nu este valid!</p>
                         </div>
                     </div>
