@@ -1902,6 +1902,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }else{
                 var q = {};
                 if(req.query.parentsOnly) q['$or'] = [{'therapeutic-areasID': {$size: 0}}, {'therapeutic-areasID': null}];
+                if(req.query.exclude) q = {$and: [q, {'_id': {$nin: [req.query.exclude]}}]};
                 Therapeutic_Area.find(q, function(err, cont) {
                     if(err) {
                         handleError(res,err,500);

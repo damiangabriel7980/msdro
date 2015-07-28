@@ -19,7 +19,7 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope', 'idToEdit
         action: "Modifica"
     };
 
-    areasAdminService.areas.query({parentsOnly: true}).$promise.then(function (resp) {
+    areasAdminService.areas.query({parentsOnly: true, exclude: idToEdit}).$promise.then(function (resp) {
         var areas = Success.getObject(resp);
         areas = [
             {
