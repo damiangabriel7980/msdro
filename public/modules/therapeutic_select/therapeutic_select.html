@@ -2,7 +2,7 @@
     <div class="col-md-12 noPadding">
         <div ng-class="{'form-group-sm':displayCompact, 'form-group': !displayCompact}">
             <label for="areas">Arii terapeutice:</label>
-            <select ng-model="selectedArea" ng-options="area as (area.indent?'&nbsp;&nbsp;&nbsp;&nbsp;':'')+area.name for area in areasOrganised"
+            <select ng-model="selectedArea" ng-options="area as (area.ident?'&nbsp;&nbsp;&nbsp;&nbsp;':'')+area.name for area in areasOrganised"
                     class="form-control" id="areas" style="width: 100%;" ng-change="selectArea()">
             </select>
         </div>
