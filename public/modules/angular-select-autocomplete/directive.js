@@ -17,63 +17,45 @@
             link: function(scope, element, attrs) {
 
                 var maxOptionsCount = 5;
-                scope.selectSize = maxOptionsCount;
+
+                //init variables
+                scope.maxOptionsCount = maxOptionsCount;
+                scope.showOptions = false;
+
+                //export functions to scope
                 scope.showSelect = showSelect;
                 scope.hideSelect = hideSelect;
-                scope.isSelectVisible = false;
+                scope.selectOption = selectOption;
 
                 scope.$watch("options", function (newVal) {
                     if(newVal) init();
                 });
 
                 var init = function () {
-                    watchSelection();
                     watchInput();
-                };
-
-                var watchSelection = function () {
-                    scope.$watch("selected", function (newVal, oldVal) {
-                        if(newVal){
-                            var selected;
-                            if(newVal.length === 0){
-                                //prevent selecting none
-                                selected = oldVal;
-                            }else if(newVal.length > 1){
-                                //prevent selecting multiple
-                                selected = oldVal.splice(0, 1);
-                            }else{
-                                selected = newVal;
-                            }
-                            scope.selected = selected;
-                            scope.inputText = selected[0][scope.titleAttr];
-                        }
-                    });
                 };
 
                 var watchInput = function () {
                     scope.$watch("inputText", function (newVal) {
                         if(newVal){
-                            var filtered = $filter('filter')(scope.options, {name: newVal});
-                            if(filtered.length > maxOptionsCount){
-                                scope.selectSize = maxOptionsCount;
-                            }else{
-                                scope.selectSize = filtered.length;
-                            }
-                            scope.filteredOptions = filtered;
+                            scope.filteredOptions = $filter('filter')(scope.options, {name: newVal});
                         }else{
                             scope.filteredOptions = scope.options.slice(0, maxOptionsCount);
-                            scope.selectSize = scope.filteredOptions.length;
                         }
                     });
                 };
 
                 function showSelect () {
-                    scope.isSelectVisible = true;
+                    scope.showOptions = true;
                 }
                 function hideSelect() {
                     $timeout(function () {
-                        scope.isSelectVisible = false;
+                        scope.showOptions = false;
                     }, 100);
+                }
+                function selectOption(option) {
+                    scope.selected = option;
+                    scope.inputText = option[scope.titleAttr];
                 }
             }
         };

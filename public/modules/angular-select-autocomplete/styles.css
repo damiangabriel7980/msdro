@@ -4,16 +4,21 @@
   height: 30px;
 }
 .selectAutocomplete .input {
+  width: 100%;
+}
+.selectAutocomplete .optionsWrapper {
+  position: relative;
+  width: 100%;
+}
+.selectAutocomplete .optionsWrapper .options {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
-}
-.selectAutocomplete .select {
-  position: absolute;
-  left: 0;
-  top: 30px;
-  width: 100%;
   z-index: 2000;
-  overflow: hidden;
+}
+.selectAutocomplete .optionsWrapper .options .option {
+  width: 100%;
+  padding: 5px;
+  cursor: pointer;
 }

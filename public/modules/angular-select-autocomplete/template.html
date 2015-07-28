@@ -1,5 +1,12 @@
 <div class="selectAutocomplete">
-    <input type="text" class="input form-control" ng-focus="showSelect()" ng-blur="hideSelect()" ng-model="inputText">
-    <select class="select" ng-model="selected" ng-options="opt as opt[titleAttr] for opt in filteredOptions"
-            multiple="multiple" ng-show="isSelectVisible" data-ng-attr-size="{{selectSize}}"></select>
+    <div class="input">
+        <input type="text" class="input form-control" ng-focus="showSelect()" ng-blur="hideSelect()" ng-model="inputText">
+    </div>
+    <div class="optionsWrapper">
+        <div class="options" ng-show="showOptions && inputText">
+            <div class="option" ng-repeat="option in filteredOptions | limitTo:maxOptionsCount" ng-click="selectOption(option)">
+                {{option[titleAttr]}}
+            </div>
+        </div>
+    </div>
 </div>
