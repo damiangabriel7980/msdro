@@ -1,57 +1,19 @@
 .selectAutocomplete {
-  width: 100%;
-}
-.selectAutocomplete .desktop {
   position: relative;
   width: 100%;
   height: 30px;
 }
-.selectAutocomplete .desktop .input {
+.selectAutocomplete .input {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
 }
-.selectAutocomplete .desktop .select {
+.selectAutocomplete .select {
   position: absolute;
   left: 0;
   top: 30px;
   width: 100%;
   z-index: 2000;
   overflow: hidden;
-}
-.selectAutocomplete .mobile .searchMode {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  position: fixed;
-  left: 0;
-  top: 0;
-  background-color: white;
-  z-index: 2000;
-}
-.selectAutocomplete .mobile .searchMode .searchBar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50px;
-  padding: 10px;
-}
-.selectAutocomplete .mobile .searchMode .searchBar .input-group-addon {
-  cursor: pointer;
-}
-.selectAutocomplete .mobile .searchMode .autocompletes {
-  position: fixed;
-  top: 50px;
-  left: 0;
-  width: 100%;
-  padding: 10px;
-}
-.selectAutocomplete .mobile .searchMode .autocompletes .option {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #eeeeee;
-  cursor: pointer;
 }

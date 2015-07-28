@@ -12,27 +12,15 @@
             scope: {
                 options: '=',
                 titleAttr: '@',
-                idAttr: '@',
-                isMobile: '='
+                idAttr: '@'
             },
             link: function(scope, element, attrs) {
 
                 var maxOptionsCount = 5;
                 scope.selectSize = maxOptionsCount;
-
-                scope.desktop = {
-                    showSelect: showSelect,
-                    hideSelect: hideSelect,
-                    isSelectVisible: false
-                };
-
-                scope.mobile = {
-                    showSearch: showSearch,
-                    hideSearch: hideSearch,
-                    selectOption: selectOption,
-                    isSearchVisible: false,
-                    initialScroll: 0
-                };
+                scope.showSelect = showSelect;
+                scope.hideSelect = hideSelect;
+                scope.isSelectVisible = false;
 
                 scope.$watch("options", function (newVal) {
                     if(newVal) init();
@@ -80,35 +68,12 @@
                 };
 
                 function showSelect () {
-                    scope.desktop.isSelectVisible = true;
+                    scope.isSelectVisible = true;
                 }
                 function hideSelect() {
                     $timeout(function () {
-                        scope.desktop.isSelectVisible = false;
+                        scope.isSelectVisible = false;
                     }, 100);
-                }
-                document.getElementById("mobileSelectAutocompleteIn").on('touchstart', function () {
-                    angular.element(this).focus();
-                });
-                function showSearch() {
-                    scope.mobile.initialScroll = getScrollPosition();
-                    scope.mobile.isSearchVisible = true;
-                    window.scrollTo(0, 0);
-                    document.getElementById("mobileSelectAutocompleteIn").trigger('touchstart');
-                    document.getElementById("mobileSelectAutocompleteIn").trigger('mousedown');
-                    document.getElementById("mobileSelectAutocompleteIn").trigger('click');
-                }
-                function hideSearch() {
-                    scope.mobile.isSearchVisible = false;
-                    window.scrollTo(0, scope.mobile.initialScroll);
-                }
-                function selectOption(option) {
-                    scope.selected = [option];
-                    hideSearch();
-                }
-                function getScrollPosition() {
-                    var doc = document.documentElement;
-                    return (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
                 }
             }
         };
