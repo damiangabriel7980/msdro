@@ -29,7 +29,7 @@
   cursor: pointer;
 }
 .selectAutocomplete .optionsWrapper .options .option:hover {
-  background-color: #369bff;
+  background-color: #6dbbff;
   color: white;
 }
 .selectAutocomplete .optionsWrapper .options .option.highlight {

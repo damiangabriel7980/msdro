@@ -39,6 +39,7 @@
                 var watchInput = function () {
                     scope.$watch("inputText", function (newVal) {
                         resetHightlight();
+                        unselectOption();
                         if(newVal){
                             scope.filteredOptions = $filter('filter')(scope.options, {name: newVal});
                         }else{
@@ -53,11 +54,16 @@
                 function hideSelect() {
                     $timeout(function () {
                         scope.showOptions = false;
+                        checkMatchingText();
                     }, 100);
                 }
                 function selectOption(option) {
                     scope.selected = option;
                     scope.inputText = option[scope.titleAttr];
+                    console.log("selected");
+                }
+                function unselectOption() {
+                    scope.selected = null;
                 }
                 function highlightPrevious() {
                     if(scope.highlighted > 0) {
@@ -78,6 +84,14 @@
                 }
                 function selectHighlighted() {
                     selectOption(scope.filteredOptions[scope.highlighted]);
+                }
+
+                function checkMatchingText() {
+                    var fo = scope.filteredOptions;
+                    var it = scope.inputText;
+                    if(it && fo && fo.length === 1 && fo[0][scope.titleAttr].toLowerCase() === it.toLowerCase()){
+                        selectOption(fo[0]);
+                    }
                 }
 
                 //event for up arrow / down arrow / enter (key codes: 38 / 40 / 13) on input
