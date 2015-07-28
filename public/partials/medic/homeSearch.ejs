@@ -8,7 +8,7 @@
         <div ng-show="products && products.length>0" ng-repeat="product in products track by $index" ng-if="product" class="col-md-12 col-xs-12 col-sm-12 result">
             <horizontal-content-list content="product" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
                                      title-attr="name" text-attr="description" bold-attr-hardcoded="Categorie: Produs" button-label="Vezi detalii"
-                                     navigate="navigateToProduct" smaller-image with-background drop-shadow></horizontal-content-list>
+                                     date-attr="last_updated" navigate="navigateToProduct" smaller-image with-background drop-shadow></horizontal-content-list>
         </div>
         <div ng-show="calendarEv && calendarEv.length>0" ng-repeat="calendar in calendarEv track by $index" ng-if="calendar" class="col-md-12 col-xs-12 col-sm-12 result">
             <horizontal-content-list content-type="event" content="calendar" title-attr="name" text-attr="description" date-attr="start" bold-attr-hardcoded="Categorie: Eveniment"
@@ -17,12 +17,12 @@
         <div ng-show="articles && articles.length>0" ng-repeat="article in articles track by $index" ng-if="article" class="col-md-12 col-xs-12 col-sm-12 result">
             <horizontal-content-list content="article" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
                                      title-attr="title" text-attr="text" bold-attr-hardcoded="Categorie: Articol" button-label="Vezi detalii"
-                                     navigate="navigateToArticle" smaller-image with-background drop-shadow></horizontal-content-list>
+                                     date-attr="last_updated" navigate="navigateToArticle" smaller-image with-background drop-shadow></horizontal-content-list>
         </div>
         <div ng-show="multimedia && multimedia.length>0" ng-repeat="media in multimedia track by $index" ng-if="media" class="col-md-12 col-xs-12 col-sm-12 noPadding">
             <horizontal-content-list content="media" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{media.type==1?defaultVideoImage:defaultSlideImage}}"
                                      title-attr="title" text-attr="description" bold-attr-hardcoded="Categorie: Multimedia" button-label="Vezi material"
-                                     navigate="navigateToMultimedia" smaller-image with-background drop-shadow></horizontal-content-list>
+                                     date-attr="last_updated" navigate="navigateToMultimedia" smaller-image with-background drop-shadow></horizontal-content-list>
         </div>
     </div>
     <div class="col-xs-12 noPadding" ng-if="isMobile(true)">
