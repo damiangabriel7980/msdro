@@ -1914,6 +1914,8 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         })
         .post(function(req, res) {
             var therapeutic = new Therapeutic_Area(req.body);
+            therapeutic.enabled = true;
+            therapeutic.last_updated = Date.now();
             therapeutic.save(function(err, saved) {
                 if(err){
                     handleError(res,err,500);
@@ -1924,6 +1926,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         })
         .put(function(req, res) {
             var area = req.body;
+            area.last_updated = Date.now();
             Therapeutic_Area.update({_id: area._id}, {$set: area}, function (err, wres) {
                 if(err){
                     handleError(res, err);
