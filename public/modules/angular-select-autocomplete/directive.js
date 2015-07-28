@@ -21,6 +21,7 @@
                 //init variables
                 scope.maxOptionsCount = maxOptionsCount;
                 scope.showOptions = false;
+                scope.highlighted = 0;
 
                 //export functions to scope
                 scope.showSelect = showSelect;
@@ -37,6 +38,7 @@
 
                 var watchInput = function () {
                     scope.$watch("inputText", function (newVal) {
+                        resetHightlight();
                         if(newVal){
                             scope.filteredOptions = $filter('filter')(scope.options, {name: newVal});
                         }else{
@@ -57,6 +59,38 @@
                     scope.selected = option;
                     scope.inputText = option[scope.titleAttr];
                 }
+                function highlightPrevious() {
+                    if(scope.highlighted > 0) {
+                        scope.$apply(function () {
+                            scope.highlighted --;
+                        });
+                    }
+                }
+                function highlightNext() {
+                    if(scope.highlighted < scope.filteredOptions.length - 1) {
+                        scope.$apply(function () {
+                            scope.highlighted ++;
+                        });
+                    }
+                }
+                function resetHightlight() {
+                    scope.highlighted = 0;
+                }
+                function selectHighlighted() {
+                    selectOption(scope.filteredOptions[scope.highlighted]);
+                }
+
+                //event for up arrow / down arrow / enter (key codes: 38 / 40 / 13) on input
+                angular.element(element[0].children[0].children[0].children[0]).on("keydown", function (event) {
+                    //console.log(event.keyCode);
+                    if([38, 40, 13].indexOf(event.keyCode) === -1) return;
+                    event.preventDefault();
+                    switch(event.keyCode){
+                        case 38: highlightPrevious(); break;
+                        case 40: highlightNext(); break;
+                        case 13: selectHighlighted(); break;
+                    }
+                });
             }
         };
     }]);
