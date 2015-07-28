@@ -39,7 +39,7 @@
                 var watchInput = function () {
                     scope.$watch("inputText", function (newVal) {
                         resetHightlight();
-                        unselectOption();
+                        checkMatchingText();
                         if(newVal){
                             scope.filteredOptions = $filter('filter')(scope.options, {name: newVal});
                         }else{
@@ -54,13 +54,11 @@
                 function hideSelect() {
                     $timeout(function () {
                         scope.showOptions = false;
-                        checkMatchingText();
                     }, 100);
                 }
                 function selectOption(option) {
                     scope.selected = option;
                     scope.inputText = option[scope.titleAttr];
-                    console.log("selected");
                 }
                 function unselectOption() {
                     scope.selected = null;
@@ -91,6 +89,8 @@
                     var it = scope.inputText;
                     if(it && fo && fo.length === 1 && fo[0][scope.titleAttr].toLowerCase() === it.toLowerCase()){
                         selectOption(fo[0]);
+                    }else{
+                        unselectOption();
                     }
                 }
 
