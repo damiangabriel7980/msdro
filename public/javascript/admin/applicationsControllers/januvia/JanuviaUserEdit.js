@@ -51,7 +51,11 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
         var user = $scope.user;
         var city = $scope.city;
         if(city && city.selected && city.selected._id) user.city = city.selected._id;
-        user.users_associated = $scope.selectedMedicsIds;
+        if(user.type === "reprezentant"){
+            user.users_associated = $scope.selectedMedicsIds;
+        }else{
+            user.users_associated = [];
+        }
         JanuviaService.users.update({id: user._id}, user).$promise.then(function () {
             $state.reload();
             $modalInstance.close();
