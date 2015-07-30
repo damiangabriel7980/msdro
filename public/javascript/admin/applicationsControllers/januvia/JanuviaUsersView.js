@@ -1,4 +1,4 @@
-controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', function ($scope, $state, JanuviaService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success) {
+controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', '$q', function ($scope, $state, JanuviaService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, $q) {
     var refreshUsers = function () {
         JanuviaService.users.query().$promise.then(function(resp){
             var users = Success.getObject(resp);
@@ -36,6 +36,13 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
             resolve: {
                 idToEdit: function () {
                     return id;
+                },
+                userTypes: function () {
+                    var deferred = $q.defer();
+                    JanuviaService.user_types.query().$promise.then(function (resp) {
+                        deferred.resolve(Success.getObject(resp));
+                    });
+                    return deferred.promise;
                 }
             }
         });

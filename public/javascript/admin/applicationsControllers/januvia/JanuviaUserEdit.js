@@ -1,6 +1,10 @@
-controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'JanuviaService', 'LocationService', 'Success', '$modalInstance', '$q', function ($scope, $state, idToEdit, JanuviaService, LocationService, Success, $modalInstance, $q) {
+controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'userTypes', 'JanuviaService', 'LocationService', 'Success', '$modalInstance', '$q', function ($scope, $state, idToEdit, userTypes, JanuviaService, LocationService, Success, $modalInstance, $q) {
 
     //===================================== init vars
+    $scope.user = {
+        type: "medic" //this fixes a weird bug where the last option in the userTypes array is not selected
+    };
+
     $scope.county = {
         selected: null
     };
@@ -8,6 +12,8 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'Janu
     $scope.city = {
         selected: null
     };
+
+    $scope.userTypes = userTypes;
 
     //===================================== get all the data from server
     JanuviaService.users.query({id: idToEdit}).$promise.then(function (resp) {
@@ -32,10 +38,6 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'Janu
 
     JanuviaService.users.query({type: "medic"}).$promise.then(function (resp) {
         $scope.medics = Success.getObject(resp);
-    });
-
-    JanuviaService.user_types.query().$promise.then(function (resp) {
-        $scope.userTypes = Success.getObject(resp);
     });
 
     LocationService.counties.query().$promise.then(function (resp) {
