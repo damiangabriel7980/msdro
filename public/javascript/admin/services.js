@@ -454,3 +454,14 @@ services.factory('DPOCService', ['$resource', function($resource){
         })
     }
 }]);
+
+services.factory('JanuviaService', ['$resource', function($resource){
+    return {
+        users: $resource('api/admin/applications/januvia/users', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            uodate: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        })
+    }
+}]);

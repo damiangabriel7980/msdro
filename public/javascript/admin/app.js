@@ -218,6 +218,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/applications/DPOC/viewDevices.html',
             controller: 'ViewDevicesDPOC'
         })
+        .state('applications.januvia',{
+            url: '/januvia',
+            templateUrl: 'partials/admin/applications/januvia/viewUsers.html',
+            controller: 'JanuviaUsersView'
+        })
         .state('system', {
             abstract: true,
             url: '/system',

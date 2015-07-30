@@ -28,6 +28,7 @@ var CM_templates =require('./models/CM_templates');
 var ActivationCodes =require('./models/activationCodes');
 var DPOC_Devices = require('./models/DPOC_Devices');
 var Parameters = require('./models/parameters');
+var JanuviaUsers = require('./models/januvia/januvia_users');
 
 //modules
 var UserModule = require('./modules/user');
@@ -2434,6 +2435,56 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     handleError(res, true, 409, 12, processedWithErrors);
                 }
             })
+        });
+
+    router.route('/admin/applications/januvia/users')
+        .get(function (req, res) {
+            if(req.query.id){
+                JanuviaUsers.findOne({_id: req.query.id}, function (err, user) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!user){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, user);
+                    }
+                });
+            }else{
+                JanuviaUsers.find({}, function (err, users) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, users);
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var user = new JanuviaUsers({
+                name: "Untitled",
+                date_created: Date.now()
+            });
+            user.save(function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, user);
+                }
+            });
+        })
+        .delete(function (req, res) {
+            try{
+                var idToDelete = ObjectId(req.query.id);
+            }catch(ex){
+                return handleError(res, ex);
+            }
+            JanuviaUsers.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res);
+                }
+            });
         });
 
     router.route('/admin/system/activationCodes/codes')
