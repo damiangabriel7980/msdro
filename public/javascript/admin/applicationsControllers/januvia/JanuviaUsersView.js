@@ -28,11 +28,16 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
         });
     };
 
-    $scope.editUser = function () {
+    $scope.editUser = function (id) {
         $modal.open({
             templateUrl: 'partials/admin/applications/januvia/modalEditUser.html',
             windowClass: 'fade',
-            controller: 'JanuviaUserEdit'
+            controller: 'JanuviaUserEdit',
+            resolve: {
+                idToEdit: function () {
+                    return id;
+                }
+            }
         });
     };
 

@@ -40,7 +40,8 @@
     "winston": "latest",
     "xregexp": "latest",
     "multer": "~0.1.x",
-    "q": "latest"
+    "q": "latest",
+    "underscore": "latest"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",

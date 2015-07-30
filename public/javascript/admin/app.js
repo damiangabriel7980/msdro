@@ -241,8 +241,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal',
-        function ($rootScope,   $state,   $stateParams, $modal) {
+    [            '$rootScope', '$state', '$stateParams', 'Utils',
+        function ($rootScope,   $state,   $stateParams,   Utils) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -260,6 +260,8 @@ app.run(
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
             $rootScope.defaultFileImage = $rootScope.pathAmazonResources+"file.png";
+
+            $rootScope.trustAsHtml = Utils.trustAsHtml;
         }
     ]
 );

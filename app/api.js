@@ -29,6 +29,7 @@ var ActivationCodes =require('./models/activationCodes');
 var DPOC_Devices = require('./models/DPOC_Devices');
 var Parameters = require('./models/parameters');
 var JanuviaUsers = require('./models/januvia/januvia_users');
+var _ = require('underscore');
 
 //modules
 var UserModule = require('./modules/user');
@@ -2440,7 +2441,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/admin/applications/januvia/users')
         .get(function (req, res) {
             if(req.query.id){
-                JanuviaUsers.findOne({_id: req.query.id}, function (err, user) {
+                JanuviaUsers.findOne({_id: req.query.id}).populate("city").exec(function (err, user) {
                     if(err){
                         handleError(res, err);
                     }else if(!user){
@@ -2472,6 +2473,30 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        .put(function (req, res) {
+            try{
+                var idToEdit = ObjectId(req.query.id);
+            }catch(ex){
+                return handleError(res, err);
+            }
+            var toEdit = req.body;
+            JanuviaUsers.findOne({_id: idToEdit}, function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else if(!user){
+                    handleError(res, false, 404, 1);
+                }else{
+                    _.extend(user, toEdit);
+                    user.save(function (err, user) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res, user);
+                        }
+                    });
+                }
+            })
+        })
         .delete(function (req, res) {
             try{
                 var idToDelete = ObjectId(req.query.id);
@@ -2485,6 +2510,77 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     handleSuccess(res);
                 }
             });
+        });
+
+    router.route('/admin/applications/januvia/user_types')
+        .get(function (req, res) {
+            handleSuccess(res, new JanuviaUsers().schema.path('type').enumValues);
+        });
+
+    router.route('/admin/location/counties')
+        .get(function (req, res) {
+            if(req.query.id){
+                Counties.findOne({_id: req.query.id}, function (err, county) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!county){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, county);
+                    }
+                });
+            }else if(req.query.city){
+                Counties.findOne({citiesID: {$in: [req.query.city]}}, function (err, county) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!county){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, county);
+                    }
+                });
+            }else{
+                Counties.find({}, function (err, counties) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, counties);
+                    }
+                });
+            }
+        });
+
+    router.route('/admin/location/cities')
+        .get(function (req, res) {
+            if(req.query.id){
+                Cities.findOne({_id: req.query.id}, function (err, city) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!city){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, city);
+                    }
+                });
+            }else if(req.query.county){
+                Counties.findOne({_id: req.query.county}).populate('citiesID').exec(function (err, county) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!county){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, county.citiesID);
+                    }
+                });
+            }else{
+                Counties.find({}, function (err, counties) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, counties);
+                    }
+                });
+            }
         });
 
     router.route('/admin/system/activationCodes/codes')

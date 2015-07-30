@@ -2,7 +2,7 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
 var schema		= new Schema({
-    "type": {type: String, enum: ["manager", "rep", "medic"]},
+    "type": {type: String, enum: ["manager", "reprezentant", "medic"]},
     name: String,
     city: {type: Schema.Types.ObjectId, ref: 'cities'},
     phone: String,

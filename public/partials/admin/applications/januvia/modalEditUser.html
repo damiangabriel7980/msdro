@@ -1,0 +1,41 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h3 class="modal-title">Modifica utilizator</h3>
+    </div>
+    <div class="modal-body">
+        <div style="margin-bottom: 15px;">
+            <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
+        </div>
+        <div class="form-group">
+            <label>Nume:</label>
+            <input type="text" class="form-control" ng-model="user.name">
+        </div>
+        <div class="form-group">
+            <label>Tip utilizator:</label>
+            <select class="form-control" ng-model="user.type" ng-options="type for type in userTypes"></select>
+        </div>
+        <div class="form-group">
+            <label>Judet:</label>
+            <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county">
+                <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="county in counties | propsFilter: {name: $select.search}">
+                    <div ng-bind-html="trustAsHtml((county.name | highlight: $select.search))"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group">
+            <label>Oras:</label>
+            <ui-select ng-model="city.selected" name="city" theme="select2" ng-disabled="false" style="width: 100%;" id="city">
+                <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">
+                    <div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
+        <button type="submit" class="btn btn-primary pull-right" ng-click="save()">Salveaza</button>
+    </div>
+</div>

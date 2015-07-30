@@ -460,8 +460,22 @@ services.factory('JanuviaService', ['$resource', function($resource){
         users: $resource('api/admin/applications/januvia/users', {}, {
             query: { method: 'GET', isArray: false },
             create: { method: 'POST', isArray: false },
-            uodate: { method: 'PUT', isArray: false },
+            update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
+        }),
+        user_types: $resource('api/admin/applications/januvia/user_types', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
+services.factory('LocationService', ['$resource', function($resource){
+    return {
+        counties: $resource('api/admin/location/counties', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        cities: $resource('api/admin/location/cities', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
