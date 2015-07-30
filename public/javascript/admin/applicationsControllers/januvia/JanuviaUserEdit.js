@@ -13,6 +13,7 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'Janu
     JanuviaService.users.query({id: idToEdit}).$promise.then(function (resp) {
         var user = Success.getObject(resp);
         $scope.user = user;
+        $scope.selectedMedics = user.users_associated;
         var city = user.city;
         if(city){
             getCounty(city._id).then(function () {
@@ -27,6 +28,10 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'Janu
         }else{
             watchCounties();
         }
+    });
+
+    JanuviaService.users.query({type: "medic"}).$promise.then(function (resp) {
+        $scope.medics = Success.getObject(resp);
     });
 
     JanuviaService.user_types.query().$promise.then(function (resp) {
@@ -44,6 +49,7 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'Janu
         var user = $scope.user;
         var city = $scope.city;
         if(city && city.selected && city.selected._id) user.city = city.selected._id;
+        user.users_associated = $scope.selectedMedicsIds;
         JanuviaService.users.update({id: user._id}, user).$promise.then(function () {
             $state.reload();
             $modalInstance.close();

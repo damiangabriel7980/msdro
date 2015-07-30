@@ -6,7 +6,7 @@ var schema		= new Schema({
     name: String,
     city: {type: Schema.Types.ObjectId, ref: 'cities'},
     phone: String,
-    users: {type: Schema.Types.ObjectId, ref: 'januvia_users'},
+    users_associated: [{type: Schema.Types.ObjectId, ref: 'januvia_users'}],
     date_created: Date,
     last_modified: Date
 });

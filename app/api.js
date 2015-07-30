@@ -2441,7 +2441,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/admin/applications/januvia/users')
         .get(function (req, res) {
             if(req.query.id){
-                JanuviaUsers.findOne({_id: req.query.id}).populate("city").exec(function (err, user) {
+                JanuviaUsers.findOne({_id: req.query.id}).populate("city users_associated").exec(function (err, user) {
                     if(err){
                         handleError(res, err);
                     }else if(!user){
@@ -2451,7 +2451,11 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                JanuviaUsers.find({}, function (err, users) {
+                var q = {};
+                if(req.query.type){
+                    q.type = req.query.type;
+                }
+                JanuviaUsers.find(q, function (err, users) {
                     if(err){
                         handleError(res, err);
                     }else{
