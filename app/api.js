@@ -2502,16 +2502,26 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             })
         })
         .delete(function (req, res) {
-            try{
-                var idToDelete = ObjectId(req.query.id);
-            }catch(ex){
-                return handleError(res, ex);
-            }
-            JanuviaUsers.remove({_id: idToDelete}, function (err, wres) {
+            JanuviaUsers.findOne({_id: req.query.id}, function (err, user) {
                 if(err){
                     handleError(res, err);
+                }else if(!user){
+                    handleError(res, false, 404, 1);
                 }else{
-                    handleSuccess(res);
+                    JanuviaUsers.remove({_id: user._id}, function (err, wres) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            //cascade delete associations
+                            JanuviaUsers.update({}, {$pull: {users_associated: user._id}}, {multi: true}).exec(function (err, wres) {
+                                if(err){
+                                    handleError(res, err);
+                                }else{
+                                    handleSuccess(res);
+                                }
+                            });
+                        }
+                    });
                 }
             });
         });
