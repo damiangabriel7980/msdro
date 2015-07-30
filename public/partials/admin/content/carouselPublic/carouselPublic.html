@@ -6,19 +6,19 @@
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="image in $data">
             <td data-title="'Titlu'" filter="{ 'title': 'text' }" sortable="'title'">
-                {{image.title}}
+                {{image.title + (checkArticleDisabled(image)?" (article disabled)":"")}}
             </td>
             <td data-title="'Ordine'" sortable="'order_index'">
                 {{image.order_index}}
             </td>
-            <td data-title="'Tip'" sortable="'type'">
-                {{typeDisplay(image.type)}}
+            <td data-title="'Tip'" sortable="'link_name'">
+                {{linkTypeDisplay(image)}}
             </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
                     <div class="btn btn-default" ng-click="editImage(image._id)"><i class="glyphicon glyphicon-cog"></i></div>
                     <div class="btn btn-danger" ng-click="deleteImage(image._id)"><i class="glyphicon glyphicon-trash"></i></div>
-                    <div class="btn " ng-class="{'btn-primary':image.enable===false,'btn-warning':image.enable===true}" ng-click="toggleImageEnable(image._id, image.enable)"><i class="glyphicon" ng-class="{'glyphicon-lock':image.enable===true,'glyphicon-share':image.enable===false}"></i></div>
+                    <div class="btn " ng-class="{'btn-primary':!image.enable,'btn-warning':image.enable}" ng-click="toggleImageEnable(image)"><i class="glyphicon" ng-class="{'glyphicon-lock':image.enable,'glyphicon-share':!image.enable}"></i></div>
                 </div>
             </td>
         </tr>

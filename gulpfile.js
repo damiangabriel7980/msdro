@@ -188,44 +188,51 @@ gulp.task('toObjectId', function () {
     mongoose.connect(dbAddress);
     console.log("connected");
 
+    //var toConvert = {
+    //    articles: {
+    //        refs: ['groupsID'],
+    //        model: require('./app/models/articles')
+    //    },
+    //    carousel_Medic: {
+    //        refs: ["article_id"],
+    //        model: require('./app/models/carousel_Medic'),
+    //        log: false
+    //    },
+    //    counties: {
+    //        refs: ["citiesID"],
+    //        model: require('./app/models/counties')
+    //    },
+    //    events: {
+    //        refs: ["groupsID"],
+    //        model: require('./app/models/events')
+    //    },
+    //    multimedia: {
+    //        refs: ["groupsID", "therapeutic-areasID"],
+    //        model: require('./app/models/multimedia')
+    //    },
+    //    presentations: {
+    //        refs: ["groupsID"],
+    //        model: require('./app/models/presentations')
+    //    },
+    //    products: {
+    //        refs: ["groupsID", "therapeutic-areasID"],
+    //        model: require('./app/models/products')
+    //    },
+    //    therapeutic_areas: {
+    //        refs: ["therapeutic-areasID"],
+    //        model: require('./app/models/therapeutic_areas')
+    //    },
+    //    user: {
+    //        refs: ["citiesID", "jobsID", "rolesID", "groupsID", "therapeutic-areasID"],
+    //        model: require('./app/models/user'),
+    //        select: "+citiesID +rolesID +jobsID"
+    //    }
+    //};
+
     var toConvert = {
-        articles: {
-            refs: ['groupsID'],
-            model: require('./app/models/articles')
-        },
-        carousel_Medic: {
-            refs: ["article_id"],
-            model: require('./app/models/carousel_Medic'),
-            log: false
-        },
-        counties: {
-            refs: ["citiesID"],
-            model: require('./app/models/counties')
-        },
-        events: {
-            refs: ["groupsID"],
-            model: require('./app/models/events')
-        },
-        multimedia: {
-            refs: ["groupsID", "therapeutic-areasID"],
-            model: require('./app/models/multimedia')
-        },
-        presentations: {
-            refs: ["groupsID"],
-            model: require('./app/models/presentations')
-        },
-        products: {
-            refs: ["groupsID", "therapeutic-areasID"],
-            model: require('./app/models/products')
-        },
-        therapeutic_areas: {
+        'publicContent': {
             refs: ["therapeutic-areasID"],
-            model: require('./app/models/therapeutic_areas')
-        },
-        user: {
-            refs: ["citiesID", "jobsID", "rolesID", "groupsID", "therapeutic-areasID"],
-            model: require('./app/models/user'),
-            select: "+citiesID +rolesID +jobsID"
+            model: require('./app/models/publicContent')
         }
     };
 
@@ -279,5 +286,64 @@ gulp.task('toObjectId', function () {
             console.log("done");
         }
     })
+
+});
+
+gulp.task("tpaCleanup", function () {
+
+    var dbAddress = "mongodb://msddev:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/MSDdev";
+
+    var mongoose = require('mongoose');
+    mongoose.connect(dbAddress);
+    console.log("connected");
+
+    var Utils = require('./app/modules/utils');
+
+    var TPA = require('./app/models/therapeutic_areas');
+
+    TPA.find({}, function (err, areas) {
+        if(err){
+            console.log(err);
+        }else{
+            Utils.getIds(areas, true).then(function (areasIds) {
+                var circularRefs = [];
+                var lostRefs = [];
+                var area;
+                var ref;
+                for(var i=0; i<areas.length; i++){
+                    area = areas[i];
+                    ref = area['therapeutic-areasID'];
+                    if(ref && ref[0]){
+                        if(area._id.toString() == ref[0].toString()){
+                            circularRefs.push(area._id);
+                        }
+                        if(areasIds.indexOf(ref[0].toString()) == -1){
+                            lostRefs.push(ref[0]);
+                        }
+                    }
+                }
+                //console.log(circularRefs);
+                //console.log(lostRefs);
+                var damagedRefs = circularRefs.concat(lostRefs);
+                TPA.find({$or: [{_id: {$in: damagedRefs}}, {'therapeutic-areasID': {$in: damagedRefs}}]}, {name: 1}).exec(function (err, areas) {
+                    if(err){
+                        console.log(err);
+                    }else{
+                        console.log(areas);
+                        Utils.getIds(areas).then(function (ids) {
+                            //console.log(ids);
+                            TPA.remove({_id: {$in: ids}}).exec(function (err, wres) {
+                                if(err){
+                                    console.log(err);
+                                }else{
+                                    console.log("Removed "+wres+" areas");
+                                }
+                            });
+                        });
+                    }
+                });
+            });
+        }
+    });
 
 });

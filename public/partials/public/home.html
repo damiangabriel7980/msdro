@@ -1,16 +1,17 @@
 <fancy-carousel ng-if="!isMobile(true)" carousel-slides="carouselSlides"
-                carousel-action="carouselLearnMore" path-prefix="pathAmazonDev"
+                carousel-action="carouselLearnMore" action-if-slide-attribute="link_name" path-prefix="pathAmazonDev"
                 slide-seconds="8" w-h-ratio="0.3"></fancy-carousel>
 <div class="col-md-12 noPadding unselectable" ng-if="!isMobile(true)">
     <div class="myTabs">
         <div class="myTab left" ng-class="{'active': $state.includes('home.noutati')}" ui-sref="home.noutati">ULTIMELE NOUTATI</div>
         <div class="myTab" ng-class="{'active': $state.includes('home.cmcArticole')}" ui-sref="home.cmcArticole">CELE MAI CITITE ARTICOLE</div>
-        <div class="myTab right" ng-class="{'active': $state.includes('home.downloads')}" ui-sref="home.downloads">DOWNLOADS</div>
+        <div class="myTab" ng-class="{'active': $state.includes('home.categories')}" ui-sref="home.categories">CATEGORII</div>
+        <div class="myTab right" ng-class="{'active': $state.includes('home.downloads')}" ui-sref="home.downloads">APLICATII</div>
     </div>
 </div>
 <div class="col-md-12 noPadding" ui-view="desktop" ng-if="!isMobile(true)"></div>
-<div class="col-md-12 noPadding" ui-view="mobile" ng-if="isMobile(true)"></div>
-<div class="col-md-12 evenimente text-center" ng-if="events.length!=0 && !isMobile(true)"><i class="glyphicon glyphicon-calendar"></i>&nbsp;Evenimente</div>
+<div class="col-md-12 col-sm-12 col-xs-12 noPadding" ui-view="mobile" ng-if="isMobile(true)"></div>
+<div class="col-md-12 col-sm-12 col-xs-12 evenimente text-center" ng-if="events.length!=0 && !isMobile(true)"><i class="glyphicon glyphicon-calendar"></i>&nbsp;Evenimente</div>
 <div class="col-md-12 noPadding" ng-if="events.length!=0 && !isMobile(true)">
     <calendar-timeline events="events" months="monthsArray" date-attr="start" name-attr="name"
                        day-width="15" event-safety-margin="4" show-today-box-line="false"></calendar-timeline>

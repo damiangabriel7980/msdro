@@ -42,7 +42,7 @@
     "videogular-themes-default": "1.2.0",
     "he": "latest",
     "async": "latest",
-    "angulartics": "latest",
+    "angulartics": "~0.19.x",
     "tinymce": "latest"
   },
   "devDependencies": {

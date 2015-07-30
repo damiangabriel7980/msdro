@@ -7,8 +7,8 @@ var mongoDbIndex = require('../modules/mongooseIndex/index');
 var Config = require('../../config/environment.js'),
     my_config = new Config();
 
-//type: 1 = stire
-//      2 = articol
+//type: 1 = stire (noutati)
+//      2 = articol (despre)
 //      3 = elearning
 //      4 = download
 var publicContentSchema		= new Schema({
@@ -22,7 +22,7 @@ var publicContentSchema		= new Schema({
     enable:       Boolean,
     image_path:   String,
     file_path:   String,
-    'therapeutic-areasID': Array,
+    'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas'}],
     category: {type: Schema.Types.ObjectId, ref: 'public-categories', index: true}
 });
 publicContentSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});

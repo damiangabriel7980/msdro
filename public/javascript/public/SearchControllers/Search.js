@@ -7,12 +7,22 @@ app.controllerProvider.register('Search', ['$scope', '$rootScope', 'HomeService'
             $scope.searchResults = Success.getObject(data);
     });
 
+    $scope.getSearchCategory = function(content){
+        switch(content.type){
+            case 1: return "article"; break;
+            case 2: return "article"; break;
+            case 3: return "multimedia"; break;
+            case 4: return "download"; break;
+            default: return null;
+        }
+    };
+
     $scope.getCategory = function(type){
         switch(type){
-            case 1: return "Stiri"; break;
-            case 2: return "Articole"; break;
-            case 3: return "Elearning"; break;
-            case 4: return "Downloads"; break;
+            case 1: return "Categorie: Noutati"; break;
+            case 2: return "Categorie: Articole"; break;
+            case 3: return "Categorie: Bibilioteca de resurse"; break;
+            case 4: return "Categorie: Aplicatii"; break;
             default: break;
         }
     };

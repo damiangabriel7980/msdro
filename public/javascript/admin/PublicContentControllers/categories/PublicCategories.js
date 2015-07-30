@@ -18,7 +18,10 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
-
+                    params.total(orderedData.length);
+                    if(params.total() < (params.page() -1) * params.count()){
+                        params.page(1);
+                    }
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
@@ -33,6 +36,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
         $modal.open({
             templateUrl: 'partials/admin/content/publicContent/categories/modalAddCategory.html',
             windowClass: 'fade',
+            size: 'lg',
             controller: 'AddPublicContentCategory'
         });
     };
@@ -69,6 +73,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
         $modal.open({
             templateUrl: 'partials/admin/content/publicContent/categories/modalEditCategory.html',
             windowClass: 'fade',
+            size: 'lg',
             controller: 'EditPublicContentCategory',
             resolve: {
                 category: function () {

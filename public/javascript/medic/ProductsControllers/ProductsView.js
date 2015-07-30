@@ -7,7 +7,7 @@
  *
  * @requires $scope
  * */
-app.controllerProvider.register('ProductsView', ['$scope', '$state', '$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', 'Success', 'Error', function($scope, $state, $rootScope,ProductService,$stateParams,$sce,$window,$timeout,Success,Error){
+app.controllerProvider.register('ProductsView', ['$scope', '$state', '$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', 'Success', 'SpecialFeaturesService', function($scope, $state, $rootScope,ProductService,$stateParams,$sce,$window,$timeout,Success,SpecialFeaturesService){
     $scope.lmt=8;
     $scope.status = {
         isopen: false
@@ -26,16 +26,18 @@ app.controllerProvider.register('ProductsView', ['$scope', '$state', '$rootScope
     };
 
     $scope.getProducts = function (letter) {
-        ProductService.products
-            .query({
-                idArea:$stateParams.id,
-                specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id:null,
-                firstLetter: letter
-            })
-            .$promise.then(function(result){
-                $scope.products = Success.getObject(result);
-                if(!letter) refreshLetters(Success.getObject(result));
-            });
+        SpecialFeaturesService.specialGroups.getSelected().then(function (specialGroupSelected) {
+            ProductService.products
+                .query({
+                    idArea:$stateParams.id,
+                    specialGroup: specialGroupSelected?specialGroupSelected._id:null,
+                    firstLetter: letter
+                })
+                .$promise.then(function(result){
+                    $scope.products = Success.getObject(result);
+                    if(!letter) refreshLetters(Success.getObject(result));
+                });
+        });
     };
     $scope.getProducts();
 

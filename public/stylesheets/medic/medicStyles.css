@@ -6333,6 +6333,11 @@ button.close {
 body {
   font-size: 14px;
 }
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
 @media (max-width: 767px) {
   body {
     font-size: 13px;
@@ -6374,16 +6379,6 @@ body .btn {
 @media (max-width: 767px) {
   body .btn {
     font-size: 11px;
-  }
-}
-@media (max-width: 991px) {
-  body .btn.btn-default:hover {
-    background-color: #ffffff;
-  }
-}
-@media (max-width: 991px) {
-  body .btn.btn-primary:hover {
-    background-color: #01877b;
   }
 }
 .filterByTherapeuticAreas .areasMobile {
@@ -6447,11 +6442,9 @@ body .btn {
   font-weight: bold;
   color: #01877b;
 }
-@media (min-width: 992px) {
-  .pickLetter .letter:hover {
-    background-color: #01877b;
-    color: white;
-  }
+.pickLetter .letter:hover {
+  background-color: #01877b;
+  color: white;
 }
 .productDetails .imageAndRCP img {
   width: 100%;
@@ -6459,6 +6452,9 @@ body .btn {
 .productDetails .imageAndRCP .btn {
   margin-top: 10px;
   width: 100%;
+}
+.productDetails .imageAndRCP .btn-default:focus {
+  background-color: #ffffff;
 }
 .productDetails .imageAndRCP hr {
   margin-top: 10px;
@@ -6535,6 +6531,9 @@ body .btn {
 }
 .paddingTop10 {
   padding-top: 10px;
+}
+.calendarWrapper .fc-header {
+  font-size: smaller;
 }
 .calendarWrapper .noPadding {
   padding: 0;
@@ -6791,7 +6790,7 @@ body .btn {
   }
 }
 .widgets .merckImageWrapper .merckImage {
-  width: 70%;
+  width: 60%;
   cursor: pointer;
 }
 @media (max-width: 991px) {
@@ -6959,15 +6958,15 @@ body .btn {
     width: 119px !important;
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 1280px) {
+  .navbarMedic .specialMenu {
+    right: 60px;
+  }
+}
+@media (max-width: 768px) {
   .navbarMedic .specialMenu {
     right: 10px;
     margin-top: 5px;
-  }
-}
-@media (min-width: 767px) and (max-width: 1280px) {
-  .navbarMedic .specialMenu {
-    right: 60px;
   }
 }
 .navbarMedic .searchDefault {
@@ -7076,7 +7075,7 @@ body .btn {
     right: 0;
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .navbarMedic .profile {
     display: none;
     visibility: hidden;
@@ -7144,13 +7143,13 @@ fieldset[disabled] .navbarMedic .profile .btn {
   border: 1px solid #777777;
   border-radius: 4px;
 }
-@media (max-width: 991px) {
-  .navbarMedic .navbar-toggle:hover {
-    background-color: #ffffff;
-  }
-}
 .navbarMedic .navbar-collapse {
   padding: 0;
+}
+@media (max-width: 767px) and (orientation: landscape) {
+  .navbarMedic .navbar-collapse {
+    max-height: 180px;
+  }
 }
 .navbarMedic .navbar-collapse .navbar-nav {
   margin: 0;
@@ -7602,6 +7601,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .modal-responsive .modal-dialog {
   height: 90%;
+  min-height: 400px;
 }
 .modal-responsive .modal-dialog .modal-content {
   height: 100%;
@@ -7612,7 +7612,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .modal-responsive .modal-dialog .modal-content .modal-body {
   position: absolute;
-  bottom: 10%;
+  bottom: 60px;
   top: 90px;
   left: 0;
   right: 0;
@@ -7623,7 +7623,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .modal-responsive .modal-dialog .modal-content .modal-footer {
   position: absolute;
-  height: 10%;
+  height: 60px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -7631,15 +7631,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle {
   position: absolute;
   top: 50%;
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
-}
-@media (min-width: 767px) and (max-width: 991px) {
-  .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle {
-    position: relative;
-    right: 0 !important;
-    top: 0;
-    transform: none;
-  }
 }
 .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle.right {
   right: 15px;

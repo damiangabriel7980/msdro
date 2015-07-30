@@ -75,6 +75,7 @@
     <script src="javascript/medic/services.js"></script>
     <script src="javascript/shared/services.js"></script>
     <script src="javascript/medic/customDirectives.js"></script>
+    <script src="javascript/shared/directives.js"></script>
     <script src="javascript/medic/MainController.js"></script>
     <script src="javascript/medic/SpecialGroupsControllers/DisplayFeatures.js"></script>
     <script src="javascript/medic/SpecialGroupsControllers/SpecialGroupsMenu.js"></script>
@@ -147,7 +148,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li ui-sref="biblioteca.produse.productsByArea({id:0})" ng-click="closeNavbar()" href="#/produse"><a><i class="glyphicon glyphicon-th-large"></i>&nbspProduse </a></li>
                         <li ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-file"></i>&nbspArticole stiintifice </a></li>
-                        <li ng-click="goToMerckSite()"><a ng-click="closeNavbar()"><i class="glyphicon glyphicon-th-large"></i>&nbspManualul Merck</a></li>
+                        <li ng-click="goToMerckSite()"><a ng-click="closeNavbar()"><i class="glyphicon glyphicon-th-large"></i>&nbspManualul MSD</a></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar" ng-click="closeNavbar()">Calendar</a></li>

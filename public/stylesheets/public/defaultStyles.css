@@ -6352,16 +6352,6 @@ html body .btn {
   line-height: 1.5;
   border-radius: 3px;
 }
-@media (max-width: 991px) {
-  html body .btn.btn-default:hover {
-    background-color: #ffffff;
-  }
-}
-@media (max-width: 991px) {
-  html body .btn.btn-primary:hover {
-    background-color: #01877b;
-  }
-}
 html body #publicHeaderWrapper {
   left: 0;
   top: 0;
@@ -6381,6 +6371,11 @@ html body #publicContentWrapper {
   left: 0;
   top: 0;
   width: 100%;
+}
+@media (min-width: 1024px) {
+  html body #publicContentWrapper {
+    padding-top: 110px;
+  }
 }
 html body #publicContentWrapper .container {
   padding: 0;
@@ -6425,6 +6420,12 @@ html body .rootView {
   position: relative;
   margin: 0;
 }
+@media (min-width: 1024px) {
+  .navbar-fixed-top {
+    height: 110px;
+    padding-top: 0;
+  }
+}
 .navbar-fixed-top .navbar-collapse {
   background-color: #ffffff;
   margin: 0;
@@ -6433,6 +6434,11 @@ html body .rootView {
 @media (max-width: 1023px) {
   .navbar-fixed-top .navbar-collapse {
     border-bottom: 1px solid #eeeeee;
+  }
+}
+@media (max-width: 767px) and (orientation: landscape) {
+  .navbar-fixed-top .navbar-collapse {
+    max-height: 180px;
   }
 }
 .navbar-fixed-top .navbar-collapse .collapsedForm form {
@@ -6453,13 +6459,13 @@ html body .rootView {
   float: left;
   margin-left: 15px;
 }
-@media (max-width: 991px) {
-  .navbar-fixed-top .navbar-toggle:hover {
-    background-color: #ffffff;
-  }
-}
 .navbar-fixed-top .navbar-brand {
-  padding: 0px 15px;
+  padding: 0 15px;
+}
+@media (min-width: 1024px) {
+  .navbar-fixed-top .navbar-brand {
+    padding-top: 43px;
+  }
 }
 .navbar-fixed-top .navbar-brand img {
   width: 125px;
@@ -6508,9 +6514,25 @@ html body .rootView {
     top: 40px;
   }
 }
+.navbar-fixed-top .searchAndLinks form {
+  margin-top: 13px;
+  width: 210px;
+}
+.navbar-fixed-top .searchAndLinks form .input-group-sm input {
+  height: 24px;
+}
+.navbar-fixed-top .searchAndLinks form .input-group-sm .input-group-addon {
+  height: 24px;
+  padding: 2px 10px;
+}
 @media (max-width: 1023px) {
   .navbar-fixed-top .searchAndLinks {
     display: none;
+  }
+}
+@media (min-width: 1024px) {
+  .navbar-fixed-top .navigation {
+    min-width: 700px;
   }
 }
 .navbar-fixed-top .headerSearchAndLinks {
@@ -6541,8 +6563,8 @@ html body .rootView {
 }
 .navbar-fixed-top .headerSearchAndLinks .item form {
   margin: 0;
-  padding-top: 8px;
-  width: 250px;
+  padding-top: 9px;
+  width: 210px;
 }
 @media (max-width: 767px) {
   .navbar-fixed-top .headerSearchAndLinks form {

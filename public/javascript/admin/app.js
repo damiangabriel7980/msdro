@@ -198,48 +198,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeutice.html',
             controller: 'TherapeuticAreas'
         })
-        .state('ariiTerapeutice.adaugaArie',{
-            parent:'ariiTerapeutice',
-            url: '',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeAdd.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"AddTherapeuticAreas"
-                })
-            }]
-        })
-        .state('ariiTerapeutice.editArie',{
-            parent:'ariiTerapeutice',
-            url: '/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeEdit.ejs',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"EditTherapeuticAreas"
-                })
-            }]
-        })
-        .state('ariiTerapeutice.deleteArie',{
-            parent:'ariiTerapeutice',
-            url: '/deleteArea/:id',
-            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
-                $modal.open({
-                    templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeDelete.html',
-                    backdrop: 'static',
-                    keyboard: false,
-                    size: 'lg',
-                    windowClass: 'fade',
-                    controller:"ariiTerapeuticeDeleteCtrl"
-                })
-            }]
-        })
         .state('applications', {
             abstract: true,
             url: '/applications',

@@ -126,15 +126,6 @@ services.factory('PublicService', function () {
                 case 4: return 'downloads.detail'; break;
                 default: return ''; break;
             }
-        },
-        getContentNamedType: function (content) {
-            switch(content.type){
-                case 1: return 'stire'; break;
-                case 2: return 'articol'; break;
-                case 3: return 'elearning'; break;
-                case 4: return 'download'; break;
-                default: break;
-            }
         }
     }
 });

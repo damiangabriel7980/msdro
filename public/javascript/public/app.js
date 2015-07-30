@@ -28,7 +28,8 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'javascript/public/HomeControllers/HomeMobileNews.js',
                     'javascript/public/HomeControllers/HomeMostRead.js',
                     'javascript/public/HomeControllers/HomeNews.js',
-                    'javascript/public/HomeControllers/HomeDownloads.js'
+                    'javascript/public/HomeControllers/HomeDownloads.js',
+                    'javascript/public/HomeControllers/HomeCategories.js'
                 ]
             },
             {
@@ -183,6 +184,15 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 }
             }
         })
+        .state('home.categories',{
+            url: '/home/categories',
+            views: {
+                desktop: {
+                    templateUrl: 'partials/public/home/categories.html',
+                    controller: 'HomeCategories'
+                }
+            }
+        })
         .state('stiri', {
             abstract: true,
             url: '/stiri',
@@ -269,8 +279,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location', 'PublicService',
-        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location,   PublicService) {
+    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location', 'PublicService', '$ocLazyLoad',
+        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location,   PublicService,   $ocLazyLoad) {
 
             $rootScope.accessRoute = ACCESS_ROUTE;
 
@@ -306,9 +316,11 @@ app.run(
             $rootScope.trustAsHtml = Utils.trustAsHtml;
             $rootScope.isMobile = Utils.isMobile;
             $rootScope.navigateTo = function (content) {
-                $state.go(PublicService.getSref(content), {id: content._id});
+                if(content.name)
+                    $state.go('articole.all', {category: content._id});
+                else
+                    $state.go(PublicService.getSref(content), {id: content._id});
             };
-            $rootScope.getContentNamedType = PublicService.getContentNamedType;
 
             //contact modal
             $rootScope.showContactModal = function(){
@@ -346,6 +358,19 @@ app.run(
                 function(){
                     window.scrollTo(0,0);
                 });
+
+            //load a special css file for mobile devices / tablets only
+            angular.element(document).ready(function () {
+                if(Utils.isMobile(false, true)["any"]){
+                    var mobileCssPath = 'stylesheets/public/mobileOnly.css';
+                    $ocLazyLoad.load(mobileCssPath).then(function () {
+                        var fileref = document.createElement("link");
+                        fileref.setAttribute("rel", "stylesheet");
+                        fileref.setAttribute("type", "text/css");
+                        fileref.setAttribute("href", mobileCssPath);
+                    });
+                }
+            });
 
 //            $rootScope.$on('$locationChangeStart', function (event) {
 //                console.log("change");

@@ -322,7 +322,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1} ,function(err, cont) {
+                PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1, date_added: 1} ,function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }else
@@ -452,37 +452,90 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    if(req.body.name) category.name = req.body.name;
-                    if(typeof req.body.isEnabled === "boolean") category.isEnabled = req.body.isEnabled;
-                    category.save(function (err, saved) {
-                        if(err){
-                            if(err.code == 11000 || err.code == 11001){
-                                handleError(res,null,400,23);
-                            }else if(err.name == "ValidationError"){
-                                handleError(res,null,400,24);
-                            }else{
-                                handleError(res,err,500);
-                            }
+                    if(req.body.data){
+                        var data = req.body.data;
+                        var qry = {};
+                        var ok = true;
+                        if(data.type === "image"){
+                            qry['image_path'] = data.path;
                         }else{
-                            handleSuccess(res);
+                           ok = false;
+                           handleError(res,null,400,22);
                         }
-                    });
+                        if(ok){
+                            PublicCategories.update({_id:data.id}, {$set: qry}, function (err, wRes) {
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    handleSuccess(res, {updated: wRes}, 3);
+                                }
+                            });
+                        }
+                    }else{
+                        if(req.body.name) category.name = req.body.name;
+                        if(typeof req.body.isEnabled === "boolean") category.isEnabled = req.body.isEnabled;
+                        category.description = req.body.description;
+                        category.last_updated = new Date();
+                        category.save(function (err, saved) {
+                            if(err){
+                                if(err.code == 11000 || err.code == 11001){
+                                    handleError(res,null,400,23);
+                                }else if(err.name == "ValidationError"){
+                                    handleError(res,null,400,24);
+                                }else{
+                                    handleError(res,err,500);
+                                }
+                            }else{
+                                handleSuccess(res);
+                            }
+                        });
+                    }
                 }
             });
         })
         .delete(function (req, res) {
-            var idToDelete = ObjectId(req.query.id);
-            PublicCategories.remove({_id: idToDelete}, function (err, wres) {
+            var image_id = ObjectId(req.query.id);
+            //find image to remove from amazon
+            PublicCategories.find({_id: image_id}, {image_path: 1}, function (err, category) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    PublicContent.update({category: idToDelete}, {$set: {category: null}}, function (err, wres) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res);
-                        }
-                    });
+                    if(category[0]){
+                        var imageS3 = category[0].image_path;
+                        //remove from database
+                        PublicCategories.remove({_id: image_id}, function (err, success) {
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                //remove image from amazon
+                                if(imageS3){
+                                    amazon.deleteObjectS3(imageS3, function (err, data) {
+                                        if(err){
+                                            handleError(res,null,409,4);
+                                        }else{
+                                            PublicContent.update({category: image_id}, {$set: {category: null}}, function (err, wres) {
+                                                if(err){
+                                                    handleError(res,err,500);
+                                                }else{
+                                                    handleSuccess(res);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }else{
+                                    PublicContent.update({category: image_id}, {$set: {category: null}}, function (err, wres) {
+                                        if(err){
+                                            handleError(res,err,500);
+                                        }else{
+                                            handleSuccess(res);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }else{
+                        handleError(res,null,404,1);
+                    }
                 }
             });
         });
@@ -491,7 +544,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                PublicCarousel.findOne({_id: req.query.id}, function (err, cont) {
+                PublicCarousel.findOne({_id: req.query.id}).populate("links.content").exec(function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -503,7 +556,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                PublicCarousel.find({}, function(err, cont) {
+                PublicCarousel.find({}).populate('links.content').exec(function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }else
@@ -512,92 +565,39 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req,res){
-            var data = req.body.data.toAdd;
-            var ext = req.body.data.extension;
-            //validate title and description
-            //validate type
-            if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                handleError(res,null,400,21);
-            }else{
-                //check if content_id exists
-                if(typeof data.content_id === "string" && data.content_id.length === 24){
-                    var img = new PublicCarousel(data);
-                    console.log(data);
-                    img.save(function (err, inserted) {
-                        if(err){
-                            handleError(res,null,400,2);
-                        }else{
-                            //update image_path
-                            var imagePath = "generalCarousel/image_"+inserted._id+"."+ext;
-                            PublicCarousel.update({_id: inserted._id}, {$set:{image_path:imagePath}}, function (err, wRes) {
-                                if(err){
-                                    handleError(res,null,400,2);
-                                }else{
-                                    handleSuccess(res, {key: imagePath}, 2);
-                                }
-                            });
-                        }
-                    });
+            var img = new PublicCarousel({
+                title: "Untitled",
+                enable: false,
+                order_index: 0
+            });
+            img.save(function (err, inserted) {
+                if(err){
+                    handleError(res);
                 }else{
-                    handleError(res,null,400,3);
+                    handleSuccess(res, inserted);
                 }
-            }
-
+            });
         })
         .put(function(req,res){
-            if(req.body.info){
-                PublicCarousel.update({_id: req.query.id}, {$set:{enable: !req.body.info.isEnabled}}, function (err, wRes) {
-                    if(err){
-                        handleError(res,err,500);
-                    }else{
-                        handleSuccess(res);
-                    }
-                });
-            }else{
-                if(req.body.data.imagePath){
-                    var data = req.body.data;
-                    PublicCarousel.update({_id: req.query.id}, {$set:{image_path: data.imagePath}}, function (err, wRes) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, {}, 3);
-                        }
-                    });
+            PublicCarousel.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
+                if(err){
+                    handleError(res,err,500);
                 }else{
-                    var data = req.body.data.toUpdate;
-                    var id = req.query.id;
-                    //validate title and description
-                    //validate type
-                    if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                        handleError(res,null,400,21);
-                    }else{
-                        //check if content_id exists
-                        if(typeof data.content_id === "string" && data.content_id.length === 24){
-                            PublicCarousel.update({_id: id}, {$set:data}, function (err, wRes) {
-                                if(err){
-                                    handleError(res,null,400,2);
-                                }else{
-                                    handleSuccess(res, {}, 3);
-                                }
-                            });
-                        }else{
-                            handleError(res,null,400,3);
-                        }
-                    }
+                    handleSuccess(res);
                 }
-            }
+            });
         })
         .delete(function(req,res){
             var image_id = req.query.id;
             //find image to remove from amazon
-            PublicCarousel.find({_id: image_id}, {image_path: 1}, function (err, image) {
+            PublicCarousel.findOne({_id: image_id}, {image_path: 1}, function (err, image) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    if(image[0]){
-                        var imageS3 = image[0].image_path;
+                    if(image){
+                        var imageS3 = image.image_path;
                         //remove from database
-                        PublicCarousel.remove({_id: image_id}, function (err, success) {
+                        PublicCarousel.remove({_id: image._id}, function (err, success) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
@@ -1153,17 +1153,6 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     handleSuccess(res, {}, 3);
                 }
             })
-        });
-
-    router.route('/admin/content/specialProducts/groupsAvailable')
-        .get(function (req, res) {
-                    UserGroup.find({}).populate('profession').exec(function (err, groups) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, groups);
-                        }
-                    })
         });
 
     router.route('/admin/content/specialProducts/glossary')
@@ -1903,170 +1892,48 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                Therapeutic_Area.findById(req.query.id).populate('therapeutic-areasID').exec(function(err, cont) {
-                    var objectToSend = {};
-                    if(err) {
-                        handleError(res,err,500);
+                Therapeutic_Area.findById(req.query.id).exec(function(err, area) {
+                    if(err || !area) {
+                        handleError(res, err, 500);
                     }else{
-                        if(cont){
-                            objectToSend['selectedArea'] = cont;
-                            if(cont.has_children==true)
-                            {
-                                Therapeutic_Area.find({'therapeutic-areasID':{$in : [cont._id]}}).exec(function(err,response){
-                                    objectToSend['childrenAreas'] = response;
-                                    handleSuccess(res, objectToSend);
-                                })
-                            }
-                            else{
-                                handleSuccess(res, objectToSend);
-                            }
-                        }else{
-                            handleError(res,err,404,1);
-                        }
+                        handleSuccess(res, area);
                     }
                 })
             }else{
-                Therapeutic_Area.find(function(err, cont) {
+                var q = {};
+                if(req.query.parentsOnly) q['$or'] = [{'therapeutic-areasID': {$size: 0}}, {'therapeutic-areasID': null}];
+                if(req.query.exclude) q = {$and: [q, {'_id': {$nin: [req.query.exclude]}}]};
+                Therapeutic_Area.find(q, function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
-                    }
-                    else
+                    }else{
                         handleSuccess(res, cont);
+                    }
                 });
             }
         })
         .post(function(req, res) {
-            var therapeutic = new Therapeutic_Area(req.body.area); 		// create a new instance of the Bear model;
-            therapeutic.save(function(err,saved) {
-                if (err)
+            var therapeutic = new Therapeutic_Area(req.body);
+            therapeutic.enabled = true;
+            therapeutic.last_updated = Date.now();
+            therapeutic.save(function(err, saved) {
+                if(err){
                     handleError(res,err,500);
-                        else{
-                    async.each(req.body.subareas, function (item, callback) {
-                        Therapeutic_Area.findById(item, function (err, foundArea) {
-                            if(err){
-                                callback(err);
-                            }else{
-                                foundArea['therapeutic-areasID'] = [saved._id];
-                                foundArea.save(function(error){
-                                    if(error)
-                                        handleError(res,err,500);
-                                    else
-                                        callback();
-                                })
-                            }
-                        })
-                    }, function (err) {
-                        if(err){
-                            handleError(res,err,409,7);
-                        }else{
-                            handleSuccess(res, {}, 2);
-                        }
-                    });
+                }else{
+                    handleSuccess(res);
                 }
             });
         })
-    .put(function(req, res) {
-            var area = req.body.area;
-            var therapeuticArray = req.body.newAreas;
-            var oldAreas = req.body.oldAreas;
-                if (area.has_children == true) {
-                    Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
-                        if (err)
-                            handleError(res,err,500);
-                        else {
-                            if(oldAreas.length > 0){
-                                async.each(oldAreas, function (item1, callback) {
-                                    Therapeutic_Area.findById(item1._id, function (err, foundArea) {
-                                        if (err) {
-                                            callback(err);
-                                        } else {
-                                            foundArea['therapeutic-areasID'] = [];
-                                            foundArea.save(function (error) {
-                                                if (error)
-                                                    handleError(res,err,500);
-                                                else
-                                                    callback();
-                                            })
-                                        }
-                                    })
-                                }, function (err) {
-                                    if (err) {
-                                        handleError(res,err,409,7);
-                                    } else {
-                                        async.each(therapeuticArray, function (item, callback) {
-                                            Therapeutic_Area.findById(item, function (err, foundArea) {
-                                                if (err) {
-                                                    callback(err);
-                                                } else {
-                                                    foundArea['therapeutic-areasID'] = [req.query.id];
-                                                    foundArea.save(function (error) {
-                                                        if (error)
-                                                            handleError(res,err,500);
-                                                        else
-                                                            callback();
-                                                    })
-                                                }
-                                            })
-                                        }, function (err) {
-                                            if (err) {
-                                                handleError(res,err,409,7);
-                                            } else {
-                                                handleSuccess(res, {}, 2);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                            else{
-                                async.each(therapeuticArray, function (item, callback) {
-                                    Therapeutic_Area.findById(item, function (err, foundArea) {
-                                        if (err) {
-                                            callback(err);
-                                        } else {
-                                            foundArea['therapeutic-areasID'] = [req.query.id];
-                                            foundArea.save(function (error) {
-                                                if (error)
-                                                    handleError(res,err,500);
-                                                else
-                                                    callback();
-                                            })
-                                        }
-                                    })
-                                }, function (err) {
-                                    if (err) {
-                                        handleError(res,err,409,7);
-                                    } else {
-                                        handleSuccess(res, {}, 2);
-                                    }
-                                });
-                            }
-                        }
-                    })
+        .put(function(req, res) {
+            var area = req.body;
+            area.last_updated = Date.now();
+            Therapeutic_Area.update({_id: area._id}, {$set: area}, function (err, wres) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res);
                 }
-                else {
-                    if (therapeuticArray.length > 0) {
-                        Therapeutic_Area.update({'therapeutic-areasID':{$in : [req.query.id]}}, {$set: {'therapeutic-areasID': []}}, {multi: true}, function (err, wres) {
-                            if(err){
-                                handleError(res,err,500);
-                            }else{
-                                Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
-                                    if (err)
-                                        handleError(res,err,500);
-                                    else {
-                                        handleSuccess(res, {}, 3);
-                                    }});
-                            }
-                        });
-                    }
-                    else {
-                        Therapeutic_Area.update({_id:req.query.id},{$set: area},function (err, newTherapeutic) {
-                            if (err)
-                                handleError(res,err,500);
-                            else {
-                                handleSuccess(res, {}, 3);
-                        }});
-                    }
-                }
+            });
         })
         .delete(function(req, res) {
             var data = req.query.id;
@@ -3306,7 +3173,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             handleError(res,err,500);
                         }else{
                             //get carousel content within allowed articles
-                            Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').exec(function (err, images) {
+                            Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').sort({'indexNumber':1}).exec(function (err, images) {
                                 if(err){
                                     handleError(res,err,500);
                                 }else{

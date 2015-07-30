@@ -1,0 +1,33 @@
+//import our customizable variables
+@import 'medicVariables';
+
+.btn{
+  &.btn-default:hover{
+    color: @btn-default-color;
+    background-color: @btn-default-bg;
+    border-color: @btn-default-border;
+  }
+  &.btn-primary:hover{
+    color: @btn-primary-color;
+    background-color: @btn-primary-bg;
+    border-color: @btn-primary-border;
+  }
+}
+a{
+  &:hover{
+    text-decoration: none;
+  }
+}
+.navbarMedic{
+  .navbar-toggle:hover{
+    background-color: #ffffff;
+  }
+}
+.pickLetter{
+  .letter{
+    &:hover{
+      background-color: white;
+      color: @green;
+    }
+  }
+}

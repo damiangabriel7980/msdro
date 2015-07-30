@@ -43,20 +43,6 @@ html{
     .fontM;
     .btn{
       .btn-sm;
-      &.btn-default{
-        @media (max-width: @screen-sm-max) {
-          &:hover{
-            background-color: @btn-default-bg;
-          }
-        }
-      }
-      &.btn-primary{
-        @media (max-width: @screen-sm-max) {
-          &:hover{
-            background-color: @btn-primary-bg;
-          }
-        }
-      }
     }
     #publicHeaderWrapper{
       left: 0;
@@ -74,6 +60,9 @@ html{
     #publicContentWrapper{
       position: absolute;
       padding: 70px 0 0 0;
+      @media (min-width: @grid-float-breakpoint) {
+        padding-top: 110px;
+      }
       left: 0;
       top: 0;
       width: 100%;
@@ -130,6 +119,10 @@ html{
 .navbar-fixed-top{
   height: 70px;
   padding-top: 10px;
+  @media (min-width: @grid-float-breakpoint) {
+    height: 110px;
+    padding-top: 0;
+  }
   position: relative;
   margin: 0;
   .navbar-collapse{
@@ -138,6 +131,9 @@ html{
     overflow-x: hidden;
     @media (max-width: @grid-float-breakpoint-max) {
       border-bottom: 1px solid @gray-lighter;
+    }
+    @media(max-width: @screen-xs-max) and (orientation: landscape){
+      max-height: 180px;
     }
     .collapsedForm{
       form{
@@ -157,14 +153,12 @@ html{
   .navbar-toggle{
     float: left;
     margin-left: 15px;
-    @media (max-width: @screen-sm-max) {
-      &:hover{
-        background-color: @navbar-default-bg;
-      }
-    }
   }
   .navbar-brand{
-    padding: 0px 15px;
+    padding: 0 15px;
+    @media (min-width: @grid-float-breakpoint) {
+      padding-top: 43px;
+    }
     img{
       width: 125px;
     }
@@ -213,8 +207,26 @@ html{
     }
   }
   .searchAndLinks{
+    form{
+      margin-top: 13px;
+      width: 210px;
+      .input-group-sm{
+        input{
+          height: 24px;
+        }
+        .input-group-addon{
+          height: 24px;
+          padding: 2px 10px;
+        }
+      }
+    }
     @media (max-width: @grid-float-breakpoint-max) {
       display: none;
+    }
+  }
+  .navigation{
+    @media (min-width: @grid-float-breakpoint) {
+      min-width: 700px; //this will make the nav links automatically go below the searchAndLinks, by forcing them to run out of space
     }
   }
   .headerSearchAndLinks{
@@ -241,8 +253,8 @@ html{
       }
       form{
         margin: 0;
-        padding-top: 8px;
-        width: 250px;
+        padding-top: 9px;
+        width: 210px;
       }
     }
     @media (max-width: @screen-xs-max) {
@@ -433,7 +445,7 @@ html{
   }
 }
 
-//================================ DOWNLOADS
+//================================ DOWNLOADS AND CATEGORIES
 .homeDownloadsDisplay{
   .item{
     float: left;

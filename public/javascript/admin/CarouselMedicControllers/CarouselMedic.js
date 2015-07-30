@@ -3,6 +3,7 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
     $scope.refreshTable = function () {
         CarouselMedicService.carouselMedic.query().$promise.then(function (resp) {
             var data = Success.getObject(resp);
+            console.log(data);
 
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -18,7 +19,10 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
-
+                    params.total(orderedData.length);
+                    if(params.total() < (params.page() -1) * params.count()){
+                        params.page(1);
+                    }
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
@@ -29,16 +33,9 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
 
     $scope.refreshTable();
 
-    $scope.typeDisplay = function (type) {
-        switch(type){
-            case 1: return "Stire"; break;
-            case 2: return "Articol"; break;
-            case 3: return "Elearning"; break;
-            case 4: return "Download"; break;
-            default: return "Necunoscut"; break;
-        }
+    $scope.checkArticleDisabled = function (image) {
+        return image.article_id && !image.article_id.enable;
     };
-
 
     $scope.addImage = function(){
         $modal.open({

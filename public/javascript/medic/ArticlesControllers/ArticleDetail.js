@@ -1,9 +1,22 @@
-app.controllerProvider.register('ArticleDetail', ['$scope', '$rootScope', '$stateParams', 'ContentService', 'FormatService', '$sce','$state','$window','$timeout', 'Success', 'Error', function($scope, $rootScope, $stateParams, ContentService, FormatService, $sce,$state,$window,$timeout,Success,Error){
+app.controllerProvider.register('ArticleDetail', ['$scope', '$rootScope', '$stateParams', 'ContentService', 'FormatService', '$sce','$state','$window','$timeout', 'Success', 'SpecialFeaturesService', function($scope, $rootScope, $stateParams, ContentService, FormatService, $sce,$state,$window,$timeout,Success,SpecialFeaturesService){
     $scope.currentArticle={
       title: '',
         author: '',
         text: ''
     };
+
+    ContentService.content.query({content_id: $stateParams.articleId}).$promise.then(function (resp) {
+        var article = Success.getObject(resp);
+        if(article._id)
+        {
+            $scope.currentArticle = article;
+            $scope.date = FormatService.formatMongoDate(article.last_updated);
+        }
+        else
+        {
+            $state.go('home',{},{reload: true});
+        }
+    });
 
     $scope.backToArticles=function(){
         if($stateParams.searchTerm){
@@ -15,16 +28,5 @@ app.controllerProvider.register('ArticleDetail', ['$scope', '$rootScope', '$stat
                 $state.go('biblioteca.articoleStiintifice.listaArticole',{articleType:$stateParams.articleType});
         }
     };
-    ContentService.content.query({content_id: $stateParams.articleId,specialGroup: $rootScope.specialGroupSelected?$rootScope.specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-        var article = Success.getObject(resp);
-        if(article._id)
-        {
-            $scope.currentArticle = article;
-            $scope.date = FormatService.formatMongoDate(article.last_updated);
-        }
-       else
-        {
-            $scope.backToArticles();
-        }
-    });
+
 }]);

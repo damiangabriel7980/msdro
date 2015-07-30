@@ -32,6 +32,11 @@
 }
 
 body{
+  &.modal-open{
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
   .fontM;
   h2{
     .fontXXL;
@@ -48,20 +53,6 @@ body{
   .btn{
     .btn-sm;
     .fontS;
-    &.btn-default{
-      @media (max-width: @screen-sm-max) {
-        &:hover{
-          background-color: @btn-default-bg;
-        }
-      }
-    }
-    &.btn-primary{
-      @media (max-width: @screen-sm-max) {
-        &:hover{
-          background-color: @btn-primary-bg;
-        }
-      }
-    }
   }
 }
 
@@ -121,11 +112,9 @@ body{
     border-radius: 4px;
     font-weight: bold;
     color: @green;
-    @media (min-width: @screen-md-min) {
-      &:hover{
-        background-color: @green;
-        color: white;
-      }
+    &:hover{
+      background-color: @green;
+      color: white;
     }
   }
 }
@@ -137,6 +126,11 @@ body{
     .btn{
       margin-top: 10px;
       width: 100%;
+    }
+    .btn-default{
+      &:focus{
+        background-color: @btn-default-bg;
+      }
     }
     hr{
       margin-top: 10px;
@@ -224,6 +218,9 @@ body{
 
 //===========================================================CALENDAR
 .calendarWrapper{
+  .fc-header{
+    font-size: smaller;
+  }
   .noPadding{
     padding: 0;
   }
@@ -465,7 +462,7 @@ body{
       text-align: center;
     }
     .merckImage{
-      width: 70%;
+      width: 60%;
       cursor:pointer;
       @media (max-width: @screen-sm-max){
         width: 35%;
@@ -614,12 +611,12 @@ body{
     }
   }
   .specialMenu{
-    @media (max-width: @screen-xs-max){
+    @media (max-width: @grid-float-breakpoint) {
+      right: 60px;
+    }
+    @media (max-width: @screen-sm-min){
       right: 10px;
       margin-top: 5px;
-    }
-    @media (min-width: @screen-xs-max) and (max-width: @grid-float-breakpoint) {
-      right: 60px;
     }
   }
 
@@ -708,7 +705,7 @@ body{
     @media (max-width: @grid-float-breakpoint) {
       right: 0;
     }
-    @media (max-width: @screen-xs-max) {
+    @media (max-width: @screen-sm-min) {
       display: none;
       visibility: hidden;
     }
@@ -726,14 +723,12 @@ body{
     padding: 9px 10px;
     border: 1px solid @gray-light;
     border-radius: 4px;
-    @media (max-width: @screen-sm-max) {
-      &:hover{
-        background-color: @navbar-default-bg;
-      }
-    }
   }
   .navbar-collapse{
     padding: 0;
+    @media(max-width: @screen-xs-max) and (orientation: landscape){
+      max-height: 180px;
+    }
     .navbar-nav{
       margin: 0;
       .navbar-form{
@@ -1159,6 +1154,7 @@ body{
 .modal-responsive{
   .modal-dialog{
     height: 90%;
+    min-height: 400px;
     .modal-content{
       height: 100%;
       position: relative;
@@ -1167,7 +1163,7 @@ body{
       }
       .modal-body{
         position: absolute;
-        bottom: 10%;
+        bottom: 60px;
         top: 90px;
         left: 0;
         right: 0;
@@ -1178,21 +1174,16 @@ body{
       }
       .modal-footer{
         position: absolute;
-        height: 10%;
+        height: 60px;
         left: 0;
         right: 0;
         bottom: 0;
         .positionMiddle{
           position: absolute;
           top: 50%;
+          -ms-transform: translateY(-50%);
+          -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
-          @media (min-width: @screen-xs-max) and (max-width: @screen-sm-max)
-          {
-            position: relative;
-            right: 0 !important;
-            top: 0;
-            transform: none;
-          }
           &.right{
             right: 15px;
           }

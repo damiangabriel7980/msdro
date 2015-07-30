@@ -112,13 +112,13 @@ services.factory('Utils', ['$sce', function ($sce) {
                     ios = /iphone|ipod|ipad/.test( userAgent );
 
                 //============ check for generic device
-                var iosDetect = false;
-                mobileObject['iosDev'] = ios;
-                mobileObject['androidDetect'] = userAgent.indexOf("android") > -1;
+                var isIphone = false;
+                mobileObject['isIOSDevice'] = ios;
+                mobileObject['isAndroidDevice'] = userAgent.indexOf("android") > -1;
                 if(ios)
                 {
                     if ( !standalone && safari ) {
-                        iosDetect = true;
+                        isIphone = true;
                     }
                 }
 
@@ -128,8 +128,11 @@ services.factory('Utils', ['$sce', function ($sce) {
                     var ua = navigator.userAgent.toLowerCase();
                     return (ua.indexOf("android") > -1 && ua.indexOf("mobile")==-1);
                 };
-                mobileObject['androidTab'] = isAndroidTablet();
-                mobileObject['iosDetect'] = iosDetect;
+                mobileObject['isAndroidTab'] = isAndroidTablet();
+                mobileObject['isIphone'] = isIphone;
+
+                //================== detect if it's any kind of device
+                mobileObject['any'] = mobileObject['isIOSDevice'] || mobileObject['isAndroidDevice'];
                 return mobileObject;
             }
             else{
@@ -235,32 +238,57 @@ services.factory('CollectionsService', function () {
     }
 });
 services.factory('therapeuticAreas', ['$resource', function($resource){
+    var indentChildren = function (areas, forDropdown) {
+        var areasOrganised = [];
+        if(forDropdown){
+            areasOrganised.push({_id:0, name:"Adauga arii terapeutice"});
+            areasOrganised.push({_id:1, name:"Toate"});
+        }else{
+            areasOrganised.push({_id:0, name:"Toate", has_children:false});
+        }
+        for(var i=0; i<areas.length; i++){
+            var thisArea = areas[i];
+            if((thisArea['therapeutic-areasID'] || []).length == 0){
+                //it's a parent. Add it
+                areasOrganised.push(thisArea);
+                //find all it's children
+                for(var j=0; j < areas.length; j++){
+                    if((areas[j]['therapeutic-areasID'] || []).indexOf(thisArea._id)>-1){
+                        //found one children. Add it
+                        areas[j]['ident']=true;
+                        areasOrganised.push(areas[j]);
+                    }
+                }
+            }
+        }
+        return areasOrganised;
+    };
+    var organiseByParent = function (areas) {
+        var areasOrganised = [];
+        //areasOrganised.push({_id:0, name:"Toate", has_children:false});
+        for(var i=0; i<areas.length; i++){
+            var thisArea = areas[i];
+            if((thisArea['therapeutic-areasID'] || []).length == 0){
+                //it's a parent. Add it
+                areasOrganised.push(thisArea);
+                //find all it's children
+                thisArea.children = [];
+                for(var j=0; j < areas.length; j++){
+                    if((areas[j]['therapeutic-areasID'] || []).indexOf(thisArea._id)>-1){
+                        //found one children. Add it
+                        thisArea.children.push(areas[j]);
+                    }
+                }
+            }
+        }
+        return areasOrganised;
+    };
     return {
         areas: $resource('apiPublic/therapeuticAreas/', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        formatAreas: function (areas) {
-            var areasOrganised = [];
-            areasOrganised.push({_id:0, name:"Toate", has_children:false});
-            for(var i=0; i<areas.length; i++){
-                var thisArea = areas[i];
-                if(thisArea['therapeutic-areasID'].length == 0){
-                    //it's a parent. Add it
-                    areasOrganised.push(thisArea);
-                    if(thisArea.has_children){
-                        //find all it's children
-                        for(var j=0; j < areas.length; j++){
-                            if(areas[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
-                                //found one children. Add it
-                                areas[j]['ident']=true;
-                                areasOrganised.push(areas[j]);
-                            }
-                        }
-                    }
-                }
-            }
-            return areasOrganised;
-        }
+        formatAreas: indentChildren,
+        organiseByParent: organiseByParent
     }
 }]);
 services.factory('Validations', ['$resource', function($resource){
@@ -342,6 +370,20 @@ services.factory('Success', function() {
         },
         getObject: function(serverResponse) {
             return serverResponse.success;
+        }
+    }
+});
+services.factory('customOrder', function() {
+    return {
+        sortAscending: function(items, field) {
+            var filtered = [];
+            angular.forEach(items, function (item) {
+                filtered.push(item);
+            });
+            filtered.sort(function (a, b) {
+                return (a[field].toLowerCase() > b[field].toLowerCase() ? 1 : -1);
+            });
+            return filtered;
         }
     }
 });

@@ -1,4 +1,4 @@
-app.controllerProvider.register('ElearningDetail', ['$scope', '$rootScope', 'ContentService', '$stateParams', '$sce', 'Error', 'Success', function($scope, $rootScope, ContentService, $stateParams, $sce, Error, Success) {
+app.controllerProvider.register('ElearningDetail', ['$scope', '$state', '$rootScope', 'ContentService', '$stateParams', '$sce', 'Error', 'Success', function($scope, $state, $rootScope, ContentService, $stateParams, $sce, Error, Success) {
 
     ContentService.content.query({id: $stateParams.id}).$promise.then(function (resp) {
         $scope.elearning = Success.getObject(resp);
@@ -11,5 +11,9 @@ app.controllerProvider.register('ElearningDetail', ['$scope', '$rootScope', 'Con
             autoPlay: true
         };
     });
+
+    $scope.goBack = function () {
+        $state.go("elearning.all", {area: $stateParams.area || 0});
+    }
 
 }]);

@@ -8,11 +8,52 @@ services.factory('ContentService', ['$resource', function($resource){
     }
 }]);
 
-services.factory('SpecialFeaturesService', ['$resource', 'StorageService', function($resource, StorageService){
-    return {
-        SpecialGroups: $resource('api/specialFeatures/specialGroups', {}, {
+services.factory('SpecialFeaturesService', ['$resource', '$rootScope', 'StorageService', '$q', 'Success', 'Error', 'CollectionsService', function($resource, $rootScope, StorageService, $q, Success, Error, CollectionsService){
+    var getSpecialGroups = function (id) {
+        var deferred = $q.defer();
+        var query = {};
+        if(id) query._id = id;
+        $resource('api/specialFeatures/specialGroups', {}, {
             query: { method: 'GET', isArray: false }
-        }),
+        }).query(query).$promise
+            .then(function (resp) {
+                deferred.resolve(Success.getObject(resp));
+            })
+            .catch(function () {
+                deferred.reject({});
+            });
+        return deferred.promise;
+    };
+    var setSpecialGroup = function (id) {
+        StorageService.local.setElement("selectedGroup", id || "");
+    };
+    var getSpecialGroup = function () {
+        var deferred = $q.defer();
+        getSpecialGroups().then(
+            function (groups) {
+                groups = groups || [];
+                var selectedGroup = StorageService.local.getElement("selectedGroup") || "0";
+                var found = CollectionsService.findById(selectedGroup, groups);
+                if(found){
+                    deferred.resolve(found);
+                }else{
+                    //something must have changed in groups config
+                    //set special group to first available in list; if list is empty set it null
+                    if(groups[0]){
+                        setSpecialGroup(groups[0]._id);
+                        deferred.resolve(groups[0]);
+                    }else{
+                        deferred.resolve();
+                    }
+                }
+            },
+            function (err) {
+                deferred.reject(Error.getMessage(err));
+            }
+        );
+        return deferred.promise;
+    };
+    return {
         SpecialProducts: $resource('api/specialFeatures/groupSpecialProducts', {}, {
             query: { method: 'GET', isArray: false }
         }),
@@ -20,12 +61,9 @@ services.factory('SpecialFeaturesService', ['$resource', 'StorageService', funct
             query: { method: 'GET', isArray: false }
         }),
         specialGroups: {
-            getSelected: function () {
-                return StorageService.local.getElement("selectedGroup");
-            },
-            setSelected: function (value) {
-                StorageService.local.setElement("selectedGroup", value);
-            }
+            getAll: getSpecialGroups,
+            getSelected: getSpecialGroup,
+            setSelected: setSpecialGroup
         }
     }
 }]);

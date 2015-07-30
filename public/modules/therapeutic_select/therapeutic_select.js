@@ -4,7 +4,7 @@
     for(var i=0; i<scripts.length; i++){
         if(scripts[i].src.indexOf("therapeutic_select.js") > -1) currentScriptPath = scripts[i].src;
     }
-    angular.module('therapeuticSelect', []).directive('therapeuticSelect', function() {
+    angular.module('therapeuticSelect', []).directive('therapeuticSelect', ['therapeuticAreas', function(therapeuticAreas) {
         return {
             restrict: 'E',
             templateUrl: currentScriptPath.replace('therapeutic_select.js', 'therapeutic_select.html'),
@@ -37,28 +37,7 @@
                 var initAllAreas = function () {
                     if(scope.allAreas){
                         var allAreas = scope.allAreas;
-                        var areasOrganised = [];
-                        areasOrganised.push({_id:0, name:"Adauga arii terapeutice"});
-                        areasOrganised.push({_id:1, name:"Toate"});
-                        for(var i=0; i<allAreas.length; i++){
-                            var thisArea = allAreas[i];
-                            if(thisArea['therapeutic-areasID']){
-                                if(thisArea['therapeutic-areasID'].length == 0){
-                                    //it's a parent. Add it
-                                    areasOrganised.push(thisArea);
-                                    if(thisArea.has_children){
-                                        //find all it's children
-                                        for(var j=0; j < allAreas.length; j++){
-                                            if(allAreas[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
-                                                //found one children. Mark for indenting and add it
-                                                allAreas[j].indent = true;
-                                                areasOrganised.push(allAreas[j]);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        var areasOrganised = therapeuticAreas.formatAreas(allAreas, true);
                         scope.areasOrganised = areasOrganised;
                         scope.selectedArea = areasOrganised[0];
                     }
@@ -99,5 +78,5 @@
                 }
             }
         };
-    });
+    }]);
 })();

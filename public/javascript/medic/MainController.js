@@ -1,4 +1,4 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', 'IntroService', 'Success', 'Error', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService, IntroService, Success, Error) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService) {
 
     //===================================================================== navigation
     $scope.goToMerckSite=function(){
@@ -16,33 +16,6 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         CookiesService.setCookie('MSDCookies','yes');
         $scope.isCollapsed=true;
     };
-
-    //==================================================================== watch group selection
-    $rootScope.$watch('specialGroupSelected',function(){
-        if($rootScope.specialGroupSelected)
-        {
-            var idSelected = $rootScope.specialGroupSelected._id;
-            //check if user opted to hide this intro video
-            var hideVideo = IntroService.hideNextTime.getStatus(idSelected);
-            if(!hideVideo){
-                //if not, check if this intro video is enabled
-                IntroService.checkIntroEnabled.query({groupID: idSelected}).$promise.then(function (resp) {
-                    if(Success.getObject(resp).enabled){
-                        //if so, check if user already viewed the video in this log in session
-                        IntroService.rememberIntroView.query({groupID: idSelected}).$promise.then(function (resp) {
-                            if(!Success.getObject(resp).isViewed){
-                                //if not, mark as viewed
-                                IntroService.rememberIntroView.save({groupID: idSelected}).$promise.then(function () {
-                                    //then show it
-                                    $rootScope.showIntroPresentation(idSelected);
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    });
 
     //==================================================================== special groups drop-down
 
@@ -80,9 +53,9 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
         });
     };
     $scope.showProfile = function(){
-        if(Utils.isMobile(false,true)['iosDev'] || Utils.isMobile(false,true)['androidDetect'])
+        if(Utils.isMobile(false,true)['isIOSDevice'] || Utils.isMobile(false,true)['isAndroidDevice'])
         {
-            if(Utils.isMobile(false,true)['isIpad'] || Utils.isMobile(false,true)['androidTab'])
+            if(Utils.isMobile(false,true)['isIpad'] || Utils.isMobile(false,true)['isAndroidTab'])
             {
                 openProfileModal();
             }

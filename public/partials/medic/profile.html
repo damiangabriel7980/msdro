@@ -63,7 +63,7 @@
                             <p ng-show="profileForm.address.$error.required">Adresa este obligatorie</p>
                         </div>
                         <div class="col-md-6 col-xs-12">
-                            <div class="form-group-sm" ng-show="!isIpad">
+                            <div class="form-group-sm" ng-show="!isMobileDevice">
                                 <label>Judet<sup>*</sup>:</label>
                                 <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county" ng-required="true">
                                     <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
@@ -73,13 +73,13 @@
                                 </ui-select>
                                 <p class="" ng-show="profileForm.judet.$invalid && !profileForm.judet.$pristine">Judetul nu este valid!</p>
                             </div>
-                            <div class="form-group-sm" ng-show="isIpad">
+                            <div class="form-group-sm" ng-show="isMobileDevice">
                                 <label>Judet<sup>*</sup>: </label>
                                 <select class="form-control" ng-model="county.selected" ng-options="county as county.name for county in counties track by county._id"></select>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12">
-                            <div class="form-group-sm" ng-show="!isIpad">
+                            <div class="form-group-sm" ng-show="!isMobileDevice">
                                 <label>Oras<sup>*</sup>:</label>
                                 <ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" ng-required="true">
                                     <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
@@ -88,7 +88,7 @@
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
-                            <div class="form-group-sm" ng-show="isIpad">
+                            <div class="form-group-sm" ng-show="isMobileDevice">
                                 <label>Oras<sup>*</sup>: </label>
                                 <select class="form-control" ng-model="city.selected" ng-options="city as city.name for city in cities track by city._id"></select>
                             </div>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="col-md-12 col-xs-12 form-group-sm" style="padding-bottom: 0">
                             <input type="checkbox" name="rememberOption" ng-model="rememberOption">
-                            <span>Afiseaza prezentarile initiale</span>
+                            <span>Afiseaza prezentarea initiala</span>
                         </div>
                     </div>
                     <div class="col-md-12 col-xs-12" style="margin-top: 15px">

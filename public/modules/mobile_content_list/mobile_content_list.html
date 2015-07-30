@@ -2,13 +2,14 @@
     <div class="col-xs-12 mobile-content-list" ng-repeat="content in content | limitTo:limit||content.length track by $index" ng-if="content">
         <div class="col-xs-4 image" ng-click="navigate(content)" ng-if="category!='event'">
             <img ng-src="{{content[imageAttr]?imagePrefix + content[imageAttr]:defaultImage}}">
-            <div class="category" ng-if="category">
-                <img ng-if="category=='product'" ng-src="{{defaultProductIcon}}">
-                <img ng-if="category=='article'" ng-src="{{defaultArticleIcon}}">
-                <img ng-if="category=='multimedia'" ng-src="{{defaultMultimediaIcon}}">
+            <div class="category" ng-if="categoryFunc || category">
+                <img ng-if="(categoryFunc && categoryFunc(content)==='product') || category==='product'" ng-src="{{defaultProductIcon}}">
+                <img ng-if="(categoryFunc && categoryFunc(content)==='article') || category==='article'" ng-src="{{defaultArticleIcon}}">
+                <img ng-if="(categoryFunc && categoryFunc(content)==='multimedia') || category==='multimedia'" ng-src="{{defaultMultimediaIcon}}">
+                <img ng-if="(categoryFunc && categoryFunc(content)==='download') || category==='download'" ng-src="{{defaultDownloadIcon}}">
             </div>
         </div>
-        <div class="col-xs-4 event" ng-if="category=='event'">
+        <div class="col-xs-4 event" ng-if="(categoryFunc && categoryFunc(content)==='event') || category==='event'">
             <img ng-src="{{calendarBg}}">
             <div class="date">
                 <div class="day">{{content[dateAttr] | filter: asDate | date:'dd'}}</div>
@@ -18,7 +19,7 @@
         <div class="col-xs-8 description">
             <div class="col-xs-12 title" ng-click="navigate(content)" ng-bind-html="trustAsHtml(content[titleAttr])"></div>
             <div class="col-xs-12 type">{{boldTextFunction?boldTextFunction(content):''}}</div>
-            <div class="col-xs-12 content" ng-bind-html="trustAsHtml(htmlToPlainText(content[textAttr]))"></div>
+            <div class="col-xs-12 content" ng-bind-html="trustAsHtml(htmlToPlainText(content[textAttr]?content[textAttr]:''))"></div>
         </div>
     </div>
 </div>

@@ -20,30 +20,8 @@
                 scope.callSelect = function (genericObject) {
                     scope.onItemSelect(genericObject);
                 };
-                scope.$watch('genericObject', function () {
-                    initObject();
-                });
-                scope.$watch('arrayOfObjects', function () {
-                    initArrayOfObjects();
-                });
+
                 scope.specialCollapsed = true;
-
-                var initObject = function(){
-                    var currentObject = {};
-                    if(scope.genericObject){
-                        currentObject = scope.genericObject;
-                    }
-                    scope.currentObject = currentObject;
-                };
-
-                var initArrayOfObjects = function(){
-                    if(scope.arrayOfObjects){
-                        var allGroups = [];
-                        for(var i=0; i< scope.arrayOfObjects.length; i++)
-                            allGroups.push(scope.arrayOfObjects[i]);
-                    }
-                    scope.allGroups = allGroups;
-                };
 
                 scope.collapseAndStyle = function(forClose){
                     if(!forClose)

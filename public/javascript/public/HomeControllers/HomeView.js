@@ -1,4 +1,4 @@
-app.controllerProvider.register('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', 'Utils', 'Error', 'Success', function($scope, $rootScope, HomeService, $sce, $state, StateService, Utils, Error, Success) {
+app.controllerProvider.register('HomeView', ['$scope', '$rootScope', 'HomeService', '$sce', '$state', 'StateService', 'Utils', 'Error', 'Success', '$location', function($scope, $rootScope, HomeService, $sce, $state, StateService, Utils, Error, Success, $location) {
 
     if($rootScope.accessRoute){
         var state = StateService.getStateFromUrl($rootScope.accessRoute);
@@ -29,8 +29,14 @@ app.controllerProvider.register('HomeView', ['$scope', '$rootScope', 'HomeServic
     });
 
     $scope.carouselLearnMore = function (slide) {
-        var type = slide.type;
-        var id = slide.content_id;
+        switch(slide.link_name){
+            case "content": navigateToContent(slide.links.content.type, slide.links.content._id); break;
+            case "url": $location.path(slide.links.url); break;
+            default: break;
+        }
+    };
+
+    var navigateToContent = function (type, id) {
         switch(type){
             case 1: $state.go('stiri.detail', {id: id}); break;
             case 2: $state.go('articole.detail', {id: id}); break;

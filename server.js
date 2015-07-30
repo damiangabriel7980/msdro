@@ -61,7 +61,7 @@ app.use(bodyParser.json({limit: '50mb'})); // get information from html forms
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
 app.set('view engine', 'ejs'); // set up ejs for templating
 // required for passport
-app.use(session({ secret: sessionSecret })); // session secret
+app.use(session({ secret: sessionSecret, resave: false, saveUninitialized: false })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session

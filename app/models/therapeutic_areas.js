@@ -9,11 +9,11 @@ var Schema			= mongoose.Schema;
 var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var therapeuticAreaSchema		= new Schema({
-    has_children: Boolean,
+    is_public: Boolean,
     last_updated: Date,
     name: String,
     enabled:      Boolean,
-    "therapeutic-areasID": [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas', index: true}]
+    "therapeutic-areasID": [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas', index: true}] //parent
 });
 
 module.exports = mongoose.model('therapeutic-areas', therapeuticAreaSchema,'therapeutic-areas');

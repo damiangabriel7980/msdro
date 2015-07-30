@@ -7,9 +7,9 @@ var mongoDbIndex = require('../modules/mongooseIndex/index');
 var Config = require('../../config/environment.js'),
     my_config = new Config();
 
-//type: 1 = normal
-//      2 = legislativ
-//      3 = stiintific
+//type: 1 = national
+//      2 = international
+//      3 = scientific
 var articlesSchema		= new Schema({
     title:        {type:String, es_indexed:true},
     author:       String,

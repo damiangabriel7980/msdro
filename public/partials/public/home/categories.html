@@ -1,16 +1,16 @@
 <div class="col-md-12">
-    <div ng-repeat="n in downloadsFiltered track by $index" class="homeDownloadsDisplay">
+    <div ng-repeat="category in categoriesFiltered track by $index" class="homeDownloadsDisplay">
         <div>
             <div class="item">
                 <div class="contentBlock image" resizable ratio="1.5">
-                    <img ng-src="{{n.image_path?pathAmazonDev+n.image_path:defaultArticleImage}}">
+                    <img ng-src="{{category.image_path?pathAmazonDev+category.image_path:defaultArticleImage}}">
                 </div>
                 <div class="contentBlock excerpt">
-                    <p class="title" convert-special to-convert="n.title" ng-bind-html="trustAsHtml(n.title)"></p>
-                    <p class="text" convert-special to-convert="n.text" ng-bind-html="trustAsHtml(n.text)"></p>
+                    <p class="title" convert-special to-convert="category.name" ng-bind-html="trustAsHtml(category.name)"></p>
+                    <p class="text" convert-special to-convert="category.description" ng-bind-html="trustAsHtml(category.description)"></p>
                 </div>
                 <div class="contentBlock">
-                    <div class="btnGreen" ui-sref="downloads.detail({id: n._id})">Detalii</div>
+                    <div class="btnGreen" ui-sref="articole.all({category: category._id})">Detalii</div>
                 </div>
             </div>
         </div>

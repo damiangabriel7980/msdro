@@ -10,7 +10,8 @@ app.controllerProvider.register('PresentationModal', ['$scope', '$rootScope', '$
     };
 
     $scope.closeModal=function(){
-        angular.element('video')[0].pause();
+        if(angular.element('video')[0])
+            angular.element('video')[0].pause();
         $modalInstance.close();
     };
 

@@ -16,7 +16,7 @@ module.exports = function(app, logger, router) {
 
     router.route('/getCarouselData')
         .get(function (req, res) {
-            PublicCarousel.find({enable: true}).sort({order_index: 1}).exec(function (err, resp) {
+            PublicCarousel.find({enable: true}).sort({order_index: 1}).populate("links.content").exec(function (err, resp) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -58,13 +58,11 @@ module.exports = function(app, logger, router) {
 
                 if(params.area != 0){
                     //form an array of this area's id and all it's children id's
-                    TherapeuticAreas.find({$or: [{_id: ObjectId(params.area)}, {'therapeutic-areasID': {$in: [params.area.toString()]}}]}, function (err, areas) {
+                    TherapeuticAreas.distinct("_id", {$or: [{_id: params.area}, {'therapeutic-areasID': {$in: [params.area]}}], enabled: true, is_public: true}, function (err, areas) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            Utils.getIds(areas, true).then(function (areasIds) {
-                                getDocuments(areasIds);
-                            });
+                            getDocuments(areas);
                         }
                     })
                 }else{
@@ -100,22 +98,34 @@ module.exports = function(app, logger, router) {
                 "1": "news",
                 "2": "articles",
                 "3": "elearning",
-                "4": "downloads"
+                "4": "downloads",
+                "5": "mobileCategories"
             };
             var ret = {};
-            async.each([1,2,4], function (type, callback) {
+            async.each([1,2,4,5], function (type, callback) {
                 var q = {type: type, enable: true};
                 if(type == 4){
                     q['file_path'] = {$exists: true, $nin:[null,""]};
                 }
-                PublicContent.find(q).sort({date_added: -1}).limit(2).exec(function (err, resp) {
-                    if(err){
-                        callback(err);
-                    }else{
-                        ret[types[type]] = resp;
-                        callback();
-                    }
-                })
+                if(type == 5){
+                    PublicCategories.find({isEnabled: true}).limit(2).sort({name: 1}).exec(function (err, categories) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            ret[types[type]] = categories;
+                            callback();
+                        }
+                    });
+                }else{
+                    PublicContent.find(q).sort({date_added: -1}).limit(2).exec(function (err, resp) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            ret[types[type]] = resp;
+                            callback();
+                        }
+                    })
+                }
             }, function (err) {
                 if(err){
                     handleError(res,err,500);
@@ -153,7 +163,9 @@ module.exports = function(app, logger, router) {
     router.route('/therapeuticAreas')
 
         .get(function (req, res) {
-            TherapeuticAreas.find({enabled: true}).sort({name: 1}).exec(function (err, resp) {
+            var q = {enabled: true};
+            if(!req.isAuthenticated()) q.is_public = true;
+            TherapeuticAreas.find(q).sort({name: 1}).exec(function (err, resp) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -209,7 +221,7 @@ module.exports = function(app, logger, router) {
                     }
                 });
             }else{
-                PublicCategories.find({isEnabled: true}, function (err, categories) {
+                PublicCategories.find({isEnabled: true}).sort({last_updated: -1}).exec(function (err, categories) {
                     if(err){
                         handleError(res,err,500);
                     }else{

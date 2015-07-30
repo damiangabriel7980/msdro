@@ -6,15 +6,15 @@
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="image in $data">
             <td data-title="'Titlu'" filter="{ 'title': 'text' }" sortable="'title'">
-                {{image.title}}
+                {{image.title + (checkArticleDisabled(image)?" (article disabled)":"")}}
             </td>
-            <td data-title="'Ordine'" sortable="'order_index'">
+            <td data-title="'Ordine'" sortable="'indexNumber'">
                 {{image.indexNumber}}
             </td>
-            <td data-title="'Tip'" sortable="'type'">
-                {{typeDisplay(image.type)}}
+            <td data-title="'Tip'" sortable="'type_name'">
+                {{image.type_name}}
             </td>
-            <td data-title="'Groups'" filter="{ 'article_id': 'text' }" sortable="'article_id.groupsID'">
+            <td data-title="'Groups'" filter="{ 'article_id': 'text' }">
                 <li ng-repeat="group in image.article_id.groupsID">
                     {{group.display_name}}
                 </li>

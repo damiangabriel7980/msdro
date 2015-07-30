@@ -1,7 +1,7 @@
 /**
  * Created by andrei on 12.11.2014.
  */
-app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce', '$timeout', '$state', 'Utils', 'IntroService', 'Success', 'Error', 'Validations', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce, $timeout,$state, Utils, IntroService, Success, Error, Validations){
+app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileService', 'therapeuticAreas' , '$sce', '$timeout', '$state', 'Utils', 'IntroService', 'Success', 'Error', 'Validations', 'SpecialFeaturesService', function($scope, $rootScope, ProfileService, therapeuticAreas, $sce, $timeout,$state, Utils, IntroService, Success, Error, Validations, SpecialFeaturesService){
 
     //===================================================================== init variables
     var imagePre = $rootScope.pathAmazonDev;
@@ -9,7 +9,7 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
     $scope.showerrorProf=false;
     $scope.showerrorPass=false;
 
-    $scope.isIpad = Utils.isMobile(false,true)['isIpad'];
+    $scope.isMobileDevice = Utils.isMobile(false,true)['isIOSDevice'] || Utils.isMobile(false,true)['isAndroidDevice'];
     
     //=============================================================================== alert
     $scope.resetAlert = function (message, type) {
@@ -152,7 +152,9 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
     $scope.submitProfileForm = function (isValid) {
         if(isValid){
             if(this.rememberOption){
-                IntroService.hideNextTime.resetStatus();
+                SpecialFeaturesService.specialGroups.getSelected().then(function (group) {
+                    IntroService.hideNextTime.setStatus(group._id, false);
+                });
             }
             var toSend = {};
             toSend.name = this.fullname;

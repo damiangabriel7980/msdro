@@ -13,7 +13,7 @@
     "ejs": "~0.8.5",
     "express": "~4.8.0",
     "express-jwt": "~0.3.0",
-    "express-session": "~1.0.0",
+    "express-session": "latest",
     "i18n": "~0.5.0",
     "jsonwebtoken": "~2.0.0",
     "mandrill-send": "latest",
@@ -39,7 +39,7 @@
     "validator": "latest",
     "winston": "latest",
     "xregexp": "latest",
-    "multer": "latest",
+    "multer": "~0.1.x",
     "q": "latest"
   },
   "scripts": {

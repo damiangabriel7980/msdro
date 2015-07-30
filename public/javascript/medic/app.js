@@ -363,8 +363,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils',
-        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils) {
+    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService','$modalStack', '$ocLazyLoad',
+        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService, $modalStack, $ocLazyLoad) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -394,19 +394,8 @@ app.run(
 
             $rootScope.loaderForSlowConn = "https://s3-eu-west-1.amazonaws.com/msddev-test/resources/page-loader.gif";
 
-            $rootScope.deviceWidth= window.innerWidth
-                || document.documentElement.clientWidth
-                || document.body.clientWidth;
-
             $rootScope.printPage = function(){
                 PrintService.printWindow();
-            };
-
-            window.onresize = function(){
-                $rootScope.deviceWidth= window.innerWidth
-                    || document.documentElement.clientWidth
-                    || document.body.clientWidth;
-                $rootScope.$apply();
             };
 
             //state events
@@ -415,6 +404,11 @@ app.run(
                     window.scrollTo(0,0);
                 });
 
+            $rootScope.$on('$stateChangeStart',
+                function(event, toState, toParams, fromState, fromParams){
+                    if($modalStack)
+                        $modalStack.dismissAll();
+                });
             //============================================================================================= intro modal
             $rootScope.showIntroPresentation = function (groupID) {
                 $modal.open({
@@ -449,7 +443,7 @@ app.run(
             };
 
             $rootScope.showPDFModal = function(resource) {
-                if(Utils.isMobile(false,true)['iosDev'] || Utils.isMobile(false,true)['androidDetect'])
+                if(Utils.isMobile(false,true)['isIOSDevice'] || Utils.isMobile(false,true)['isAndroidDevice'])
                     window.open(pdfResources[resource].link);
                 else {
                     $modal.open({
@@ -478,6 +472,21 @@ app.run(
             $rootScope.createHeader = Utils.createHeader;
             $rootScope.isMobile = Utils.isMobile;
             $rootScope.loadStateDeps = loadStateDeps;
+
+
+            //=========================================== load a special css file for mobile devices / tablets only
+            angular.element(document).ready(function () {
+                if(Utils.isMobile(false, true)["any"]){
+                    var mobileCssPath = 'stylesheets/medic/mobileOnly.css';
+                    $ocLazyLoad.load(mobileCssPath).then(function () {
+                        var fileref = document.createElement("link");
+                        fileref.setAttribute("rel", "stylesheet");
+                        fileref.setAttribute("type", "text/css");
+                        fileref.setAttribute("href", mobileCssPath);
+                        console.log("set");
+                    });
+                }
+            });
         }
     ]
 );

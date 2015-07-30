@@ -11,22 +11,20 @@
 }
 .carouselWrapper .fixedBox {
   position: absolute;
-  left: 0px;
-  top: 20%;
-  height: 65%;
-  width: 45%;
+  left: 0;
+  top: 13%;
+  height: 75%;
+  width: 55%;
   border-top-right-radius: 7px;
   border-bottom-right-radius: 7px;
   z-index: 100;
-  padding: 30px 15px 35px 70px;
+  padding: 30px 15px 35px 35px;
   background-color: rgba(250, 250, 250, 0.7);
   box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
 }
 @media (max-width: 1160px) {
   .carouselWrapper .fixedBox {
-    padding: 20px 15px 35px 40px;
-    box-shadow: none;
-    background-color: rgba(250, 250, 250, 0.6);
+    padding-top: 20px;
   }
 }
 .carouselWrapper .fixedBox .textWrapper {
@@ -37,16 +35,11 @@
 .carouselWrapper .fixedBox .textWrapper .carouselTitle {
   width: 100%;
   white-space: normal;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
   color: #028985;
   line-height: 1em;
   margin: 0;
-}
-@media (max-width: 1160px) {
-  .carouselWrapper .fixedBox .textWrapper .carouselTitle {
-    font-size: 30px;
-  }
 }
 .carouselWrapper .fixedBox .textWrapper .carouselDescription {
   color: #000000;

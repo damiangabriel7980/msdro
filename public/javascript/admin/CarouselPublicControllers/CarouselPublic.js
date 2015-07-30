@@ -8,7 +8,7 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    title: 'asc'     // initial sorting
+                    order_index: 'asc'     // initial sorting
                 },
                 filter: {
                     title: ''       // initial filter
@@ -29,23 +29,22 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
 
     $scope.refreshTable();
 
-    $scope.typeDisplay = function (type) {
-        switch(type){
-            case 1: return "Stire"; break;
-            case 2: return "Articol"; break;
-            case 3: return "Elearning"; break;
-            case 4: return "Download"; break;
-            default: return "Necunoscut"; break;
+    $scope.linkTypeDisplay = function (image) {
+        switch(image.link_name){
+            case "content": return "Continut"; break;
+            case "url": return "Link"; break;
+            default: return "-"; break;
         }
+    };
+
+    $scope.checkArticleDisabled = function (image) {
+        return image.links && image.links.content && !image.links.content.enable;
     };
 
 
     $scope.addImage = function(){
-        $modal.open({
-            templateUrl: 'partials/admin/content/carouselPublic/modalAddPublicCarousel.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'AddCarouselPublic'
+        CarouselPublicService.carouselPublic.create({}).$promise.then(function () {
+            $scope.refreshTable();
         });
     };
 
@@ -59,12 +58,12 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
         }, "Sterge");
     };
 
-    $scope.toggleImageEnable = function (id, enabled) {
+    $scope.toggleImageEnable = function (image) {
         ActionModal.show(
-            enabled?"Dezactiveaza imagine":"Activeaza imagine",
-            enabled?"Sunteti sigur ca doriti sa dezactivati imaginea?":"Sunteti sigur ca doriti sa activati imaginea?",
+            image.enable?"Dezactiveaza imagine":"Activeaza imagine",
+            image.enable?"Sunteti sigur ca doriti sa dezactivati imaginea?":"Sunteti sigur ca doriti sa activati imaginea?",
             function () {
-                CarouselPublicService.carouselPublic.update({id: id},{info: {isEnabled: enabled}}).$promise.then(function (resp) {
+                CarouselPublicService.carouselPublic.update({id: image._id}, {enable: !image.enable}).$promise.then(function () {
                     $state.reload();
                 }).catch(function(err){
                     console.log(Error.getMessage(err));

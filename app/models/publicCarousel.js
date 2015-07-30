@@ -1,17 +1,15 @@
 var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
-// type:
-// 1 = News
-// 2 = Articles
-// 3 = Elearning
-// 4 = Download
 var publicCarouselSchema		= new Schema({
     title:        String,
     description:  String,
     order_index:  Number,
-    type:         Number,
-    content_id:   String,
+    link_name:    {type: String, enum: ["content", "url"]},
+    links: {
+        content: {type: Schema.Types.ObjectId, ref: 'public-content'},
+        url: String
+    },
     image_path:   String,
     enable:       Boolean,
     last_updated: Date
