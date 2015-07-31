@@ -18,6 +18,6 @@ var successCodes = {
 
 module.exports = function(logger){
     return function(res, object, code, status){
-        res.send({success: object || true, message: successCodes[code || 0]});
+        res.send(status || 200, {success: object || true, message: successCodes[code || 0]});
     };
 };
