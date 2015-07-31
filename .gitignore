@@ -25,3 +25,4 @@ public/components
 
 public_min
 public/modules/bootstrap_noVariables/**/*.css
+public/stylesheets/**/*Variables.css
