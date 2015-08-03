@@ -129,14 +129,6 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
-                name: 'Ui-select',
-                files: [
-                    'components/angular-ui-select/dist/select.min.css',
-                    'components/select2/select2.css',
-                    'components/angular-ui-select/dist/select.min.js'
-                ]
-            },
-            {
                 name: 'selectAutocomplete',
                 files: [
                     'modules/angular-select-autocomplete/directive.js',
@@ -364,7 +356,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/profile.html',
             controller: 'Profile',
             resolve: {
-                loadDeps: loadStateDeps(['Profile', 'Ui-select', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
+                loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
             }
         })
 }]);
