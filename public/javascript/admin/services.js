@@ -278,9 +278,6 @@ services.factory('publicContentService', ['$resource', function($resource){
             update: {method: 'PUT', isArray:false},
             delete: {method: 'DELETE', isArray: false}
         }),
-        therapeuticAreas: $resource('api/admin/therapeutic_areas', {}, {
-            query: { method: 'GET', isArray: false }
-        }),
         changeImageOrFile: $resource('api/admin/users/publicContent/changeImageOrFile/:data', {}, {
             save: { method: 'POST'}
         }),

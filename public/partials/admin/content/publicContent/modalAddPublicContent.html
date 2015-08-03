@@ -39,20 +39,7 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group col-md-12">
-                    <label for="areas">Arii terapeutice:</label>
-                    <select ng-model="selectedArea" ng-options="area as area.name.replace('0','&nbsp;&nbsp;&nbsp;&nbsp;') for area in allAreas"
-                            class="form-control" id="areas" style="width: 100%;" ng-change="areaWasSelected(selectedArea)">
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="col-md-12">
-                    <div ng-repeat="userArea in selectedTherapeuticAreas">
-                        <div class="label label-primary" style="float: left; margin-right: 10px; margin-bottom: 10px;">
-                            {{userArea.name.replace('0','')}}&nbsp;
-                            <i class="glyphicon glyphicon-remove-sign" ng-click="removeUserArea(userArea.id)" style="cursor: pointer;"></i>
-                        </div>
-                    </div>
+                    <therapeutic-select all-areas="allAreas" selected-areas="selectedAreas" returned-areas="newAreas"></therapeutic-select>
                 </div>
             </div>
             <div class="col-md-12">

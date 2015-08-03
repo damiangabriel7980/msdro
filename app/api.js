@@ -312,7 +312,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                PublicContent.findOne({_id: req.query.id}, function (err, cont) {
+                PublicContent.findOne({_id: req.query.id}).populate('therapeutic-areasID').exec(function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{
