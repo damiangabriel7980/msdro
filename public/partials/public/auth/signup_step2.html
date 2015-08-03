@@ -38,33 +38,15 @@
         <input type="text" class="form-control" ng-model="user.address">
     </div>
     <div class="col-md-6">
-        <div class="form-group-sm showOnD">
+        <div class="form-group-sm">
             <label>Judet<sup>*</sup>: </label>
-            <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county">
-                <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="county in counties | propsFilter: {name: $select.search}">
-                    <div ng-bind-html="trustAsHtml((county.name | highlight: $select.search))"></div>
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div class="form-group-sm showOnPT">
-            <label>Judet<sup>*</sup>: </label>
-            <select class="form-control" ng-model="county.selected" ng-options="county as county.name for county in counties"></select>
+            <angular-select-autocomplete ng-model="selectedCounty" ng-options="counties" id-attr="_id" title-attr="name" on-option-select="countyWasSelected"></angular-select-autocomplete>
         </div>
     </div>
     <div class="col-md-6">
-        <div class="form-group-sm showOnD">
+        <div class="form-group-sm">
             <label>Oras<sup>*</sup>: </label>
-            <ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city">
-                <ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">
-                    <div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div class="form-group-sm showOnPT">
-            <label>Oras<sup>*</sup>: </label>
-            <select class="form-control" ng-model="city.selected" ng-options="city as city.name for city in cities"></select>
+            <angular-select-autocomplete ng-model="selectedCity" ng-options="cities" id-attr="_id" title-attr="name"></angular-select-autocomplete>
         </div>
     </div>
     <div class="form-group-sm col-md-6">

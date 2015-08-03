@@ -170,8 +170,8 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         var data = {
             user: thiz.user || {},
             nonUser: thiz.nonUser || {},
-            county: thiz.county,
-            city: thiz.city
+            county: thiz.selectedCounty,
+            city: thiz.selectedCity
         };
         data = JSON.parse(JSON.stringify(data));
         data.user.temp = temp;
@@ -196,8 +196,8 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
     };
     var validateUpdate = function (formData, callback) {
         var user = formData.user;
-        var county = formData.county.selected._id;
-        var city = formData.city.selected._id;
+        var county = formData.county._id;
+        var city = formData.city._id;
 
         if(!user.profession){
             callback("Va rugam selectati o profesie");
@@ -212,9 +212,9 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         }else if(!user.address){
             callback("Va rugam introduceti o adresa");
         }else if(!county){
-            callback("Va rugam selectati un judet");
+            callback("Va rugam introduceti un judet");
         }else if(!city){
-            callback("Va rugam selectati un oras");
+            callback("Va rugam introduceti un oras");
         }else if(!formData.nonUser.termsStaywell){
             callback("Trebuie sa acceptati termenii si conditiile Staywell pentru a continua");
         }else if(!formData.nonUser.termsMSD){

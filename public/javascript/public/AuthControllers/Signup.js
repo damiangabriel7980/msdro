@@ -78,40 +78,25 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
 
     //=================================================================================================== county / city
 
-    var resetCities = function () {
-        $scope.cities = [];
-        $scope.city = {
-            selected: {}
-        };
-    };
-    var resetCounties = function () {
-        $scope.counties = [];
-        $scope.county = {
-            selected: {}
-        };
-    };
-    resetCities();
-    resetCounties();
-
-    $scope.$watch('county.selected', function () {
-        if($scope.county.selected){
-            resetCities();
-            AuthService.cities.query({county: $scope.county.selected._id}).$promise.then(function (resp) {
-                $scope.cities = Success.getObject(resp).sort(function(a,b){
-                    if ( a.name < b.name )
-                        return -1;
-                    if ( a.name > b.name )
-                        return 1;
-                    return 0;
-                });
-            });
-        }
-    });
+    $scope.selectedCity = {};
+    $scope.selectedCounty = {};
 
     // get counties and cities
     AuthService.counties.query().$promise.then(function (resp) {
         $scope.counties = Success.getObject(resp);
     });
+
+    $scope.countyWasSelected = function (county) {
+        AuthService.cities.query({county: county._id}).$promise.then(function (resp) {
+            $scope.cities = Success.getObject(resp).sort(function(a,b){
+                if ( a.name < b.name )
+                    return -1;
+                if ( a.name > b.name )
+                    return 1;
+                return 0;
+            });
+        });
+    };
 
     //====================================================================================================== load proof
 
