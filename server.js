@@ -53,6 +53,9 @@ require('./config/passport')(passport, logger); // pass passport for configurati
 //globals
 var Globals = require('./config/globals.js'), globals = new Globals();
 
+//seed
+require('./app/modules/seed');
+
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)

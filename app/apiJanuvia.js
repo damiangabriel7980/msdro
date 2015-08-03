@@ -1,4 +1,5 @@
 var JanuviaUsers = require('./models/januvia/januvia_users');
+var ModelInfos = require('./modules/modelInfos');
 
 module.exports = function(app, logger, router) {
 
@@ -8,13 +9,9 @@ module.exports = function(app, logger, router) {
 
 	router.route('/users').get(function (req, res) {
 		var last_modified_client = req.query.last_modified;
-		JanuviaUsers.find({}, {last_modified: 1}).sort({last_modified: -1}).limit(1).exec(function (err, users) {
-			if(err){
-				handleError(res, err);
-			}else if(users.length === 0){
-				handleError(res, false, 404, 1);
-			}else{
-				var last_modified_db = users[0].last_modified.getTime().toString();
+		ModelInfos.getLastUpdate("januvia_users").then(
+			function (last_update) {
+				var last_modified_db = last_update.getTime().toString();
 				res.setHeader("last_modified", last_modified_db);
 				if(last_modified_db !== last_modified_client){
 					JanuviaUsers.find({}, function (err, users) {
@@ -27,10 +24,12 @@ module.exports = function(app, logger, router) {
 				}else{
 					handleSuccess(res, {}, 0, 304);
 				}
+			},
+			function (err) {
+				handleError(res, err);
 			}
-		});
-		
-	})
+		);
+	});
 
 	app.use('/apiJanuvia', router);
-}
+};

@@ -2508,7 +2508,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }else if(!user){
                     handleError(res, false, 404, 1);
                 }else{
-                    JanuviaUsers.remove({_id: user._id}, function (err, wres) {
+                    user.remove(function (err, wres) {
                         if(err){
                             handleError(res, err);
                         }else{
