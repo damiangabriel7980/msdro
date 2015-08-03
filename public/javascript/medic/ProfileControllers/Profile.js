@@ -73,6 +73,14 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
         $scope.imageUser = imagePre + userData.image_path;
         $scope.selectedAreas = userData['therapeutic-areasID'] || [];
         $scope.address = userData.address;
+        $scope.selectedCounty = {
+            name: userData.county_name,
+            _id: userData.county_id
+        };
+        $scope.selectedCity = {
+            name: userData.city_name,
+            _id: userData.city_id
+        };
 
         if(userData.job){
             $scope.job = userData.job;
@@ -98,47 +106,24 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
                     });
                 }
         };
-
-
-        //---------------------------------------------- counties / cities
-        $scope.county = {
-            selected: {
-                name: userData.county_name,
-                _id: userData.county_id
-            }
-        };
-        $scope.city = {
-            selected: {
-                name: userData.city_name,
-                _id: userData.city_id
-            }
-        };
-
-        var cityDefault = true;
-
-        $scope.$watch('county.selected', function () {
-            if($scope.county.selected!==undefined){
-                ProfileService.Cities.query({county_name:$scope.county.selected.name}).$promise.then(function (resp) {
-                    $scope.cities = Success.getObject(resp).sort(function(a,b){
-                        if ( a.name < b.name )
-                            return -1;
-                        if ( a.name > b.name )
-                            return 1;
-                        return 0;
-                    });
-                });
-                if(!cityDefault) $scope.city.selected = undefined;
-                cityDefault = false;
-                $scope.cities = [];
-            }
-        });
-
     });
 
     // get counties and cities
     ProfileService.Counties.query().$promise.then(function (counties) {
         $scope.counties = Success.getObject(counties);
     });
+
+    $scope.countyWasSelected = function (county) {
+        ProfileService.Cities.query({county_name: county.name}).$promise.then(function (resp) {
+            $scope.cities = Success.getObject(resp).sort(function(a,b){
+                if ( a.name < b.name )
+                    return -1;
+                if ( a.name > b.name )
+                    return 1;
+                return 0;
+            });
+        });
+    }
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
     therapeuticAreas.areas.query().$promise.then(function (resp) {
@@ -148,9 +133,18 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
     //------------------------------------------------------------------------------------------------ form submissions
 
     //user profile
-    $scope.userProfileAlert = {newAlert:false, type:"", message:""};
+    var resetProfileAlert = function (text, type) {
+        $scope.userProfileAlert = {
+            text: text,
+            type: type || "danger"
+        };
+    };
     $scope.submitProfileForm = function (isValid) {
-        if(isValid){
+        if(!this.selectedCounty || !this.selectedCounty._id){
+            resetProfileAlert("Va rugam selectati un judet");
+        }else if(!this.selectedCity || !this.selectedCity._id){
+            resetProfileAlert("Va rugam selectati un oras");
+        }else if(isValid){
             if(this.rememberOption){
                 SpecialFeaturesService.specialGroups.getSelected().then(function (group) {
                     IntroService.hideNextTime.setStatus(group._id, false);
@@ -161,25 +155,17 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
             toSend.title = this.userData.title;
             toSend.phone = this.phone;
             toSend['therapeutic-areasID'] = this.newAreas;
-            toSend.citiesID = [this.city.selected._id];
+            toSend.citiesID = [this.selectedCity._id];
             toSend.address = this.address;
             toSend.subscriptions = this.userData.subscriptions;
             toSend.practiceType = this.userData.practiceType;
             ProfileService.UserData.save({newData:toSend}).$promise.then(function (resp) {
-                $scope.userProfileAlert.message = Success.getMessage(resp);
-                $scope.userProfileAlert.type = "success";
-                $scope.userProfileAlert.newAlert = true;
+                resetProfileAlert(Success.getMessage(resp), "success");
             }).catch(function(err){
-                $scope.userProfileAlert.type = "danger";
-                $scope.userProfileAlert.newAlert = true;
-                $scope.userProfileAlert.message = Error.getMessage(err);
+                resetProfileAlert(Error.getMessage(err));
             });
-        }
-        else
-        {
-            $scope.userProfileAlert.newAlert = true;
-            $scope.userProfileAlert.message = "Exista campuri goale/ce contin caractere invalide! Verificati formularul inca o data!";
-            $scope.userProfileAlert.type = "danger";
+        }else{
+            resetProfileAlert("Exista campuri goale/ce contin caractere invalide! Verificati formularul inca o data!");
         }
     };
 

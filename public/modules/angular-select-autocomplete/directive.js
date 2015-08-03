@@ -10,11 +10,15 @@
             restrict: 'E',
             templateUrl: currentScriptPath.replace('directive.js', 'template.html'),
             scope: {
-                options: '=',
+                ngModel: '=',
+                ngOptions: '=',
                 titleAttr: '@',
-                idAttr: '@'
+                idAttr: '@',
+                onOptionSelect: '=',
+                name: '@',
+                ngRequired: "="
             },
-            link: function(scope, element, attrs) {
+            link: function(scope, element, attrs, ctrl) {
 
                 var maxOptionsCount = 5;
 
@@ -28,12 +32,25 @@
                 scope.hideSelect = hideSelect;
                 scope.selectOption = selectOption;
 
-                scope.$watch("options", function (newVal) {
-                    if(newVal) init();
+                scope.$watch("ngOptions", function (newVal) {
+                    init();
+                });
+
+                scope.$watch("ngModel", function (newVal, oldVal) {
+                    if(!oldVal || oldVal[scope.idAttr] !== newVal[scope.idAttr]) init();
                 });
 
                 var init = function () {
-                    watchInput();
+                    if(scope.ngModel && scope.ngOptions){
+                        if(scope.ngModel[scope.idAttr]){
+                            if(findOptionById(scope.ngModel[scope.idAttr])){
+                                selectOption(scope.ngModel, true, false);
+                            }else{
+                                unselectOption(true, true);
+                            }
+                        }
+                        watchInput();
+                    }
                 };
 
                 var watchInput = function () {
@@ -41,12 +58,19 @@
                         resetHightlight();
                         checkMatchingText();
                         if(newVal){
-                            scope.filteredOptions = $filter('filter')(scope.options, {name: newVal});
+                            scope.filteredOptions = $filter('filter')(scope.ngOptions, {name: newVal});
                         }else{
-                            scope.filteredOptions = scope.options.slice(0, maxOptionsCount);
+                            scope.filteredOptions = scope.ngOptions.slice(0, maxOptionsCount);
                         }
                     });
                 };
+
+                function findOptionById (id) {
+                    for(var i=0; i<scope.ngOptions.length; i++){
+                        if(scope.ngOptions[i][scope.idAttr] === id) return scope.ngOptions[i];
+                    }
+                    return null;
+                }
 
                 function showSelect () {
                     scope.showOptions = true;
@@ -56,12 +80,16 @@
                         scope.showOptions = false;
                     }, 100);
                 }
-                function selectOption(option) {
+                function selectOption(option, updateInput, updateModel) {
                     scope.selected = option;
-                    scope.inputText = option[scope.titleAttr];
+                    if(updateModel) scope.ngModel = option;
+                    if(updateInput) scope.inputText = option[scope.titleAttr];
+                    if(scope.onOptionSelect) scope.onOptionSelect(option);
                 }
-                function unselectOption() {
+                function unselectOption(clearInput, updateModel) {
                     scope.selected = null;
+                    if(clearInput) scope.inputText = "";
+                    if(updateModel) scope.ngModel = {};
                 }
                 function highlightPrevious() {
                     if(scope.highlighted > 0) {
@@ -81,16 +109,16 @@
                     scope.highlighted = 0;
                 }
                 function selectHighlighted() {
-                    selectOption(scope.filteredOptions[scope.highlighted]);
+                    selectOption(scope.filteredOptions[scope.highlighted], true, true);
                 }
 
                 function checkMatchingText() {
                     var fo = scope.filteredOptions;
                     var it = scope.inputText;
                     if(it && fo && fo.length === 1 && fo[0][scope.titleAttr].toLowerCase() === it.toLowerCase()){
-                        selectOption(fo[0]);
+                        selectOption(fo[0], false, true);
                     }else{
-                        unselectOption();
+                        unselectOption(false, true);
                     }
                 }
 
