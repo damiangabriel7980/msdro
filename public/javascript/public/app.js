@@ -2,6 +2,7 @@ var app = angular.module('app', [
     'oc.lazyLoad',
     'ui.router',
     'ui.bootstrap',
+    'ngAnimate',
     'controllers',
     'services',
     'ngSanitize',

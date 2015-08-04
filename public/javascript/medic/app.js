@@ -5,6 +5,7 @@ var app = angular.module('app',
         'controllers',
         'services',
         'ui.bootstrap',
+        'ngAnimate',
         'ngCookies',
         'angulartics',
         'angulartics.google.analytics',
@@ -96,9 +97,9 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: 'Calendar',
                 files: [
-                    'components/fullcalendar/fullcalendar.css',
-                    'components/fullcalendar/fullcalendar.js',
-                    'components/fullcalendar/gcal.js',
+                    'components/fullcalendar/dist/fullcalendar.css',
+                    'components/fullcalendar/dist/fullcalendar.js',
+                    'components/fullcalendar/dist/gcal.js',
                     'javascript/medic/EventsControllers/Events.js',
                     'javascript/medic/EventsControllers/EventModal.js',
                     'components/angular-ui-calendar/src/calendar.js'
