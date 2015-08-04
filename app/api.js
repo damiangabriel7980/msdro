@@ -640,7 +640,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                Carousel.findOne({_id: req.query.id}, function (err, cont) {
+                Carousel.findOne({_id: req.query.id}).populate("article_id").exec(function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{

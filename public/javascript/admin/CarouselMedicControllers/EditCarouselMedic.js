@@ -5,31 +5,11 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
 
     $scope.toEdit = {};
 
-    $scope.content = {};
-    $scope.content.selected = {};
-
     $scope.$watch('toEdit.type', function (newVal) {
-        console.log(newVal);
         //load all contents of this type
         if(newVal){
             CarouselMedicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
                 $scope.allContent = Success.getObject(resp);
-                if($scope.toEdit.article_id){
-                    var poz = findInContent($scope.toEdit.article_id);
-                    if(poz > -1){
-                        if($scope.allContent[poz].type === newVal){
-                            $scope.content.selected._id = $scope.allContent[poz]._id;
-                            $scope.content.selected.title = $scope.allContent[poz].title;
-                            console.log($scope.content.selected);
-                        }else{
-                            $scope.content.selected._id = null;
-                            $scope.content.selected.title = null;
-                        }
-                    }else{
-                        $scope.content.selected._id = null;
-                        $scope.content.selected.title = null;
-                    }
-                }
             }).catch(function(err){
                 $scope.statusAlert.type = "danger";
                 $scope.statusAlert.message = Error.getMessage(err);
@@ -41,8 +21,8 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
     //------------------------------------------------------------------------------------------------ get current data
 
     CarouselMedicService.carouselMedic.query({id: idToEdit}).$promise.then(function (resp) {
-        console.log(resp);
         $scope.toEdit = Success.getObject(resp);
+        $scope.selectedContent = $scope.toEdit.article_id || {};
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
         $scope.statusAlert.message = Error.getMessage(err);
@@ -84,7 +64,7 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
     //change database info
     $scope.editImage = function () {
         //get selected content id
-        $scope.toEdit.article_id = $scope.content.selected._id;
+        if($scope.selectedContent && $scope.selectedContent._id) $scope.toEdit.article_id = $scope.selectedContent._id;
         $scope.toEdit.last_updated = new Date();
         CarouselMedicService.carouselMedic.update({id: idToEdit},{data: {toUpdate: $scope.toEdit}}).$promise.then(function (resp) {
                 $scope.statusAlert.type = "success";

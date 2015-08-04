@@ -54,11 +54,14 @@
                 };
 
                 var watchInput = function () {
+                    var filterObj;
                     scope.$watch("inputText", function (newVal) {
                         resetHightlight();
                         checkMatchingText();
                         if(newVal){
-                            scope.filteredOptions = $filter('filter')(scope.ngOptions, {name: newVal});
+                            filterObj = {};
+                            filterObj[scope.titleAttr] = newVal;
+                            scope.filteredOptions = $filter('filter')(scope.ngOptions, filterObj);
                         }else{
                             scope.filteredOptions = scope.ngOptions.slice(0, maxOptionsCount);
                         }

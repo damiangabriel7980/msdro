@@ -3,16 +3,15 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.selectedType = 1;
-    $scope.content = {};
-    $scope.content.selected = {};
+    $scope.selectedContent = {};
 
     var fileSelected = null;
 
     $scope.$watch('selectedType', function (newVal) {
-        console.log(newVal);
         //load all contents of this type
         CarouselMedicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
             $scope.allContent = Success.getObject(resp);
+            console.log($scope.allContent);
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
             $scope.statusAlert.message = Error.getMessage(err);
@@ -33,7 +32,7 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
 
             //form object to add to database
             this.carouselImage.type = $scope.selectedType;
-            this.carouselImage.article_id = $scope.content.selected._id;
+            if($scope.selectedContent && $scope.selectedContent._id) this.carouselImage.article_id = $scope.selectedContent._id;
             //form object to persist
             this.carouselImage.enable = false;
             this.carouselImage.last_updated = new Date();
