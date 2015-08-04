@@ -129,6 +129,8 @@
     <script src="javascript/admin/SystemControllers/ActivationCodes/EditActivationCode.js"></script>
     <script src="javascript/admin/SystemControllers/Parameters/SystemParameters.js"></script>
     <script src="javascript/admin/SystemControllers/Parameters/EditSystemParameter.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaigns.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterDistributionLists.js"></script>
 
 
     <!--Plug-ins-->
@@ -204,16 +206,7 @@
                         <li ui-sref="content.publicContent.content"><a > Continut Public </a></li>
                     </ul>
                 </li>
-                <li class="dropdown" ng-class="{'active': $state.includes('newsletter')}">
-                    <a class="dropdown-toggle" data-toggle="dropdown"> Newsletter <b class="caret"></b></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li ui-sref="newsletter.consolaNewsletter"><a > Consola Newsletter </a></li>
-                        <li class="divider"></li>
-                        <li ui-sref="newsletter.rapoarteUtilizare"><a > Rapoarte Utilizare </a></li>
-                        <li class="divider"></li>
-                        <li ui-sref="newsletter.rapoarteGlobale"><a > Rapoarte Globale </a></li>
-                    </ul>
-                </li>
+                <li ng-class="{'active': $state.includes('newsletter')}"><a ui-sref="newsletter.dashboard.campaigns"> Newsletter </a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('elearning')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Elearning <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">

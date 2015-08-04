@@ -157,17 +157,23 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/newsletter',
             templateUrl: '/partials/admin/newsletter/newsletter.html'
         })
-        .state('newsletter.consolaNewsletter',{
-            url: '/consolaNewsletter',
-            templateUrl: 'partials/admin/newsletter/consolaNewsletter.html'
+        .state('newsletter.dashboard',{
+            url: '/dashboard',
+            templateUrl: 'partials/admin/newsletter/dashboard.html'
         })
-        .state('newsletter.rapoarteUtilizare',{
-            url: '/rapoarteUtilizare',
-            templateUrl: 'partials/admin/newsletter/rapoarteUtilizare.html'
+        .state('newsletter.dashboard.campaigns',{
+            url: '/campaigns',
+            templateUrl: 'partials/admin/newsletter/campaigns/campaigns.html',
+            controller: 'NewsletterCampaigns'
         })
-        .state('newsletter.rapoarteGlobale',{
-            url: '/rapoarteGlobale',
-            templateUrl: 'partials/admin/newsletter/rapoarteGlobale.html'
+        .state('newsletter.dashboard.distributionLists',{
+            url: '/distributionLists',
+            templateUrl: 'partials/admin/newsletter/distributionLists/distributionLists.html',
+            controller: 'NewsletterDistributionLists'
+        })
+        .state('newsletter.dashboard.unsubscribedUsers',{
+            url: '/unsubscribedUsers',
+            templateUrl: 'partials/admin/newsletter/unsubscribedUsers/unsubscribedUsers.html'
         })
         .state('elearning', {
             abstract: true,

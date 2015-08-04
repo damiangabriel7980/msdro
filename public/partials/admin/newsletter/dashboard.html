@@ -1,0 +1,17 @@
+<div class="col-md-12 campaigns">
+    <div class="col-md-12 overallStats">Statistici aici</div>
+    <div class="newAccountsTabs">
+        <div class="tab" ng-class="{'active': $state.includes('newsletter.dashboard.campaigns')}" ui-sref="newsletter.dashboard.campaigns">
+            Campanii
+        </div>
+        <div class="tab" ng-class="{'active': $state.includes('newsletter.dashboard.distributionLists')}" ui-sref="newsletter.dashboard.distributionLists">
+            Liste de distributie
+        </div>
+        <div class="tab" ng-class="{'active': $state.includes('newsletter.dashboard.unsubscribedUsers')}" ui-sref="newsletter.dashboard.unsubscribedUsers">
+            Utilizatori neinscrisi
+        </div>
+    </div>
+    <div class="col-md-12 noPadding tabViewPanel">
+        <ui-view></ui-view>
+    </div>
+</div>

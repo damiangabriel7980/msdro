@@ -27,6 +27,7 @@ a{
 .newAccountsTabs{
   width: 100%;
   float: left;
+  border-bottom: 1px solid darkgray;
   .tab{
     cursor: pointer;
     float: left;
@@ -36,9 +37,17 @@ a{
       border-left: 1px solid darkgray;
       border-top: 1px solid darkgray;
       border-right: 1px solid darkgray;
-      //border-bottom: none;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
+      position: relative;
+      &:after{
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        border: 1px solid white;
+      }
     }
   }
 }
@@ -125,4 +134,15 @@ a{
 }
 .pointer{
   cursor: pointer;
+}
+
+.campaigns{
+  .overallStats{
+    height:100px;
+    border:1px solid gray;
+    margin-bottom: 15px;
+  }
+  .tabViewPanel{
+    margin-top: 15px;
+  }
 }

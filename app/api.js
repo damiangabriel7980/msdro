@@ -2928,6 +2928,82 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         });
+
+    //========================================================= NEWSLETTER
+
+    var Newsletter = {
+        distributionLists: require('./models/newsletter/distribution_lists'),
+        campaigns: require('./models/newsletter/campaigns')
+    };
+
+    router.route('/admin/newsletter/distribution_lists')
+        .get(function (req, res) {
+            Newsletter.distributionLists.find({}, function (err, distributionLists) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, distributionLists);
+                }
+            });
+        })
+        .post(function (req, res) {
+            var list = new Newsletter.distributionLists({
+                name: "Untitled",
+                date_created: Date.now()
+            });
+            list.save(function (err, saved) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, saved);
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Newsletter.distributionLists.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res);
+                }
+            });
+        });
+
+    router.route('/admin/newsletter/campaigns')
+        .get(function (req, res) {
+            Newsletter.campaigns.find({}, function (err, campaigns) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, campaigns);
+                }
+            });
+        })
+        .post(function (req, res) {
+            var campaign = new Newsletter.campaigns({
+                name: "Untitled",
+                date_created: Date.now()
+            });
+            campaign.save(function (err, saved) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, saved);
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Newsletter.campaigns.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res);
+                }
+            });
+        });
+
     //==================================================================================================================================== USER ROUTES
 
     router.route('/user/addPhoto')

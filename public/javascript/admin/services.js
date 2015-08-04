@@ -476,3 +476,20 @@ services.factory('LocationService', ['$resource', function($resource){
         })
     }
 }]);
+
+services.factory('NewsletterService', ['$resource', function($resource){
+    return {
+        campaigns: $resource('api/admin/newsletter/campaigns', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        distributionLists: $resource('api/admin/newsletter/distribution_lists', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        })
+    }
+}]);
