@@ -5,14 +5,6 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
         type: "medic" //this fixes a weird bug where the last option in the userTypes array is not selected
     };
 
-    $scope.county = {
-        selected: null
-    };
-
-    $scope.city = {
-        selected: null
-    };
-
     $scope.userTypes = userTypes;
 
     //===================================== get all the data from server
@@ -22,17 +14,20 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
         $scope.selectedMedics = user.users_associated;
         var city = user.city;
         if(city){
-            getCounty(city._id).then(function () {
-                $scope.city = {
-                    selected: {
-                        name: city.name,
-                        _id: city._id
-                    }
+            $scope.selectedCity = {
+                name: city.name,
+                _id: city._id
+            };
+            getCounty(city._id).then(function (county) {
+                getCities(county._id);
+                $scope.selectedCounty = {
+                    name: county.name,
+                    _id: county._id
                 };
-                watchCounties();
             });
         }else{
-            watchCounties();
+            $scope.selectedCity = {};
+            $scope.selectedCounty = {};
         }
     });
 
@@ -49,8 +44,8 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
     //form submission
     $scope.save = function () {
         var user = $scope.user;
-        var city = $scope.city;
-        if(city && city.selected && city.selected._id) user.city = city.selected._id;
+        var city = $scope.selectedCity;
+        if(city && city._id) user.city = city._id;
         if(user.type === "reprezentant"){
             user.users_associated = $scope.selectedMedicsIds;
         }else{
@@ -63,18 +58,13 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
     };
 
     //watch county change
-    function watchCounties() {
-        $scope.$watch('county.selected', function (newVal, oldVal) {
-            if(newVal){
-                getCities(newVal._id, oldVal && oldVal._id !== newVal._id);
-            }
-        });
-    }
+    $scope.countyWasSelected = function (county) {
+        getCities(county._id);
+    };
 
-    function getCities(county_id, resetSelected) {
+    function getCities(county_id) {
         var deferred = $q.defer();
         LocationService.cities.query({county: county_id}).$promise.then(function (resp) {
-            if(resetSelected) $scope.city = {};
             $scope.cities = Success.getObject(resp).sort(function(a,b){
                 if ( a.name < b.name )
                     return -1;
@@ -89,14 +79,7 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
     function getCounty(city_id) {
         var deferred = $q.defer();
         LocationService.counties.query({city: city_id}).$promise.then(function (resp) {
-            var county = Success.getObject(resp);
-            $scope.county = {
-                selected: {
-                    name: county.name,
-                    _id: county._id
-                }
-            };
-            deferred.resolve();
+            deferred.resolve(Success.getObject(resp));
         });
         return deferred.promise;
     }
@@ -112,34 +95,4 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
         $modalInstance.close();
     };
 
-}]).filter('propsFilter', function() {
-    //used for select2
-    return function(items, props) {
-        var out = [];
-
-        if (angular.isArray(items)) {
-            items.forEach(function(item) {
-                var itemMatches = false;
-
-                var keys = Object.keys(props);
-                for (var i = 0; i < keys.length; i++) {
-                    var prop = keys[i];
-                    var text = props[prop].toLowerCase();
-                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-                        itemMatches = true;
-                        break;
-                    }
-                }
-
-                if (itemMatches) {
-                    out.push(item);
-                }
-            });
-        } else {
-            // Let the output be the input untouched
-            out = items;
-        }
-
-        return out;
-    }
-});
+}]);

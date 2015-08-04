@@ -1,0 +1,38 @@
+.selectAutocomplete {
+  position: relative;
+  width: 100%;
+  height: 30px;
+}
+.selectAutocomplete .input {
+  width: 100%;
+}
+.selectAutocomplete .optionsWrapper {
+  position: relative;
+  width: 100%;
+}
+.selectAutocomplete .optionsWrapper .options {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 2000;
+  background-color: white;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.selectAutocomplete .optionsWrapper .options .option {
+  width: 100%;
+  padding: 5px;
+  cursor: pointer;
+}
+.selectAutocomplete .optionsWrapper .options .option:hover {
+  background-color: #6dbbff;
+  color: white;
+}
+.selectAutocomplete .optionsWrapper .options .option.highlight {
+  background-color: #3875d7;
+  color: white;
+}

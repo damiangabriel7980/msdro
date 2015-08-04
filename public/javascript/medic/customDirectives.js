@@ -12,28 +12,29 @@ app.directive('noCacheSrc', ['$window', function($window) {
             });
         }
     }
-}]).directive('resizable', ['$window', function($window) {
+}]).directive('resizable', ['$window', '$timeout', function($window, $timeout) {
     return {
         restrict: 'A',
         scope: {
-            'altIf': '='
+            'altIf': '=',
+            'altRatio': '@',
+            'ratio': '@'
         },
         link: function ($scope, $element, attrs) {
 
-            var ratio = attrs.ratio?attrs.ratio:1;
             var elem = angular.element($element);
             var elemWidth;
 
             var initializeElementSize = function () {
                 elemWidth = elem[0].offsetWidth;
-                if($scope.altIf){
-                    elem.css('height', elemWidth/ratio+'px');
+                if(elemWidth === 0){
+                    $timeout(initializeElementSize, 200);
+                }else if($scope.altIf){
+                    elem.css('height', elemWidth/$scope.altRatio+'px');
+                }else if($scope.ratio){
+                    elem.css('height', elemWidth/$scope.ratio+'px');
                 }else{
-                    if(attrs.altRatio){
-                        elem.css('height', elemWidth/attrs.altRatio+'px');
-                    }else{
-                        elem.css('height', '100%');
-                    }
+                    elem.css('height', '100%');
                 }
             };
 

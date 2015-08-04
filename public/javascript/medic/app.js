@@ -5,6 +5,7 @@ var app = angular.module('app',
         'controllers',
         'services',
         'ui.bootstrap',
+        'ngAnimate',
         'ngCookies',
         'angulartics',
         'angulartics.google.analytics',
@@ -96,9 +97,9 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: 'Calendar',
                 files: [
-                    'components/fullcalendar/fullcalendar.css',
-                    'components/fullcalendar/fullcalendar.js',
-                    'components/fullcalendar/gcal.js',
+                    'components/fullcalendar/dist/fullcalendar.css',
+                    'components/fullcalendar/dist/fullcalendar.js',
+                    'components/fullcalendar/dist/gcal.js',
                     'javascript/medic/EventsControllers/Events.js',
                     'javascript/medic/EventsControllers/EventModal.js',
                     'components/angular-ui-calendar/src/calendar.js'
@@ -129,11 +130,10 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
-                name: 'Ui-select',
+                name: 'selectAutocomplete',
                 files: [
-                    'components/angular-ui-select/dist/select.min.css',
-                    'components/select2/select2.css',
-                    'components/angular-ui-select/dist/select.min.js'
+                    'modules/angular-select-autocomplete/directive.js',
+                    'modules/angular-select-autocomplete/styles.css'
                 ]
             },
             {
@@ -357,7 +357,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/profile.html',
             controller: 'Profile',
             resolve: {
-                loadDeps: loadStateDeps(['Profile', 'Ui-select', 'TherapeuticSelect', 'FileUpload'])
+                loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
             }
         })
 }]);

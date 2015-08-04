@@ -8,7 +8,7 @@
             <alert ng-if="alert.show" type="{{alert.type}}" close="alert.show=false">{{alert.text}}</alert>
         </div>
 
-        <div ng-include="modalData.template"></div>
+        <div static-include="{{modalData.template}}"></div>
     </div>
     <div class="modal-footer" style="padding: 15px">
         <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>

@@ -78,40 +78,25 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
 
     //=================================================================================================== county / city
 
-    var resetCities = function () {
-        $scope.cities = [];
-        $scope.city = {
-            selected: {}
-        };
-    };
-    var resetCounties = function () {
-        $scope.counties = [];
-        $scope.county = {
-            selected: {}
-        };
-    };
-    resetCities();
-    resetCounties();
-
-    $scope.$watch('county.selected', function () {
-        if($scope.county.selected){
-            resetCities();
-            AuthService.cities.query({county: $scope.county.selected._id}).$promise.then(function (resp) {
-                $scope.cities = Success.getObject(resp).sort(function(a,b){
-                    if ( a.name < b.name )
-                        return -1;
-                    if ( a.name > b.name )
-                        return 1;
-                    return 0;
-                });
-            });
-        }
-    });
+    $scope.selectedCity = {};
+    $scope.selectedCounty = {};
 
     // get counties and cities
     AuthService.counties.query().$promise.then(function (resp) {
         $scope.counties = Success.getObject(resp);
     });
+
+    $scope.countyWasSelected = function (county) {
+        AuthService.cities.query({county: county._id}).$promise.then(function (resp) {
+            $scope.cities = Success.getObject(resp).sort(function(a,b){
+                if ( a.name < b.name )
+                    return -1;
+                if ( a.name > b.name )
+                    return 1;
+                return 0;
+            });
+        });
+    };
 
     //====================================================================================================== load proof
 
@@ -200,34 +185,3 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
     };
 
 }]);
-app.filterProvider.register('propsFilter', function() {
-    //used for select2
-    return function(items, props) {
-        var out = [];
-
-        if (angular.isArray(items)) {
-            items.forEach(function(item) {
-                var itemMatches = false;
-
-                var keys = Object.keys(props);
-                for (var i = 0; i < keys.length; i++) {
-                    var prop = keys[i];
-                    var text = props[prop].toLowerCase();
-                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-                        itemMatches = true;
-                        break;
-                    }
-                }
-
-                if (itemMatches) {
-                    out.push(item);
-                }
-            });
-        } else {
-            // Let the output be the input untouched
-            out = items;
-        }
-
-        return out;
-    }
-});

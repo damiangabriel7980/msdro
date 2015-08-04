@@ -50,7 +50,7 @@ var date = new Date();
                     var endDate=tomorrow;
                 else
                     var endDate=today;
-                angular.element('.fc-event-hori').attr("data-original-title",Utils.customDateFormat(data.start)  + " - " +  Utils.customDateFormat(endDate));
+                angular.element('.fc-event-hori').attr("data-original-title",Utils.customDateFormat(new Date(data.start))  + " - " +  Utils.customDateFormat(endDate));
 
                 var options = {
                     trigger:"hover",
