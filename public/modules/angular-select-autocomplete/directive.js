@@ -23,7 +23,6 @@
                 var maxOptionsCount = 5;
 
                 //init variables
-                scope.maxOptionsCount = maxOptionsCount;
                 scope.showOptions = false;
                 scope.highlighted = 0;
 
@@ -61,7 +60,7 @@
                         if(newVal){
                             filterObj = {};
                             filterObj[scope.titleAttr] = newVal;
-                            scope.filteredOptions = $filter('filter')(scope.ngOptions, filterObj);
+                            scope.filteredOptions = $filter('filter')(scope.ngOptions, filterObj).slice(0, maxOptionsCount);
                         }else{
                             scope.filteredOptions = scope.ngOptions.slice(0, maxOptionsCount);
                         }
