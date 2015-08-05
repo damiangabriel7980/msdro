@@ -82,7 +82,7 @@
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group-sm">
                                 <label>Oras<sup>*</sup>:</label>
-                                <angular-select-autocomplete ng-model="selectedCity" ng-options="cities" id-attr="_id" title-attr="name"></angular-select-autocomplete>
+                                <angular-select-autocomplete ng-model="selectedCity" ng-options="cities" id-attr="_id" title-attr="name" ng-disabled="!selectedCounty || !selectedCounty._id"></angular-select-autocomplete>
                                 <!--<ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" ng-required="true">-->
                                     <!--<ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>-->
                                     <!--<ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">-->

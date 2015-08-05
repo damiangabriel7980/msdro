@@ -79,7 +79,8 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
         };
         $scope.selectedCity = {
             name: userData.city_name,
-            _id: userData.city_id
+            _id: userData.city_id,
+            init: true
         };
 
         if(userData.job){
@@ -124,8 +125,11 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
                     return 0;
                 });
             });
+        }else if(!($scope.selectedCity && $scope.selectedCity.init)){
+            $scope.cities = [];
+            $scope.selectedCity = {};
         }else{
-            $scope.cities = [$scope.selectedCity];
+            $scope.selectedCity.init = false;
         }
     };
 
