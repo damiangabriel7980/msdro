@@ -11,7 +11,8 @@ var app = angular.module('app',
         'ui.bootstrap.datetimepicker',
         'myMultipleSelect',
         'therapeuticSelect',
-        's3UploadManager'
+        's3UploadManager',
+        'adminEditableSingleList'
     ]);
 
 app.config(['$locationProvider', function($location) {

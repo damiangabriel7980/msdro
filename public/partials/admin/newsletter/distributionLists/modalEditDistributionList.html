@@ -15,6 +15,9 @@
             <label>Grupuri de utilizatori:</label>
             <my-multiple-select all-objects="groups" selected-objects="selectedGroups" track-by="_id" display-by="display_name" split-by="profession.display_name" output="selectedGroupsIds"></my-multiple-select>
         </div>
+        <div>
+            <admin-editable-single-list ng-model="list.emails" title="Adrese suplimentare"></admin-editable-single-list>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>

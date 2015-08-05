@@ -1,0 +1,23 @@
+<div class="adminEditableSingleList">
+    <div>
+        <div>
+            <label>{{title}}</label>
+        </div>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Nume" ng-model="itemName">
+            <span class="input-group-addon addItem" ng-click="addItem()">
+                <i class="glyphicon glyphicon-plus"></i>
+            </span>
+        </div>
+    </div>
+    <div class="container items">
+        <div ng-repeat="item in ngModel" class="item">
+            <div class="name">{{item}}</div>
+            <div class="action">
+                <a class="btn btn-sm btn-danger" ng-click="removeItem(item)">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
