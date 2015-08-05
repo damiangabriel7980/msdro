@@ -2,6 +2,7 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
     var refreshUsers = function () {
         JanuviaService.users.query().$promise.then(function(resp){
             var users = Success.getObject(resp);
+            console.log(users);
             var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page

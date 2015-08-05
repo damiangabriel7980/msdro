@@ -17,6 +17,9 @@
             <td data-title="'Data adaugarii'" sortable="'date_created'">
                 {{user.date_created | date}}
             </td>
+            <td data-title="'Tip utilizator'" sortable="'type'">
+                {{user.type}}
+            </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
                     <div class="btn btn-primary" ng-click="editUser(user._id)"><i class="glyphicon glyphicon-cog"></i></div>
