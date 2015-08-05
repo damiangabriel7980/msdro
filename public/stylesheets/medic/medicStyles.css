@@ -6817,7 +6817,7 @@ body .btn {
 .carousel-container .main-carousel {
   width: 75%;
   margin: 0 auto;
-  overflow: visible!important;
+  overflow: visible !important;
 }
 .carousel-container .main-carousel .carouselMargins {
   margin-left: 10px;
@@ -7640,6 +7640,89 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle.left {
   left: 15px;
+}
+.calendarTabs {
+  margin-top: 20px;
+}
+.calendarTabs ul {
+  display: inline-block;
+}
+.calendarTabs .nav-tabs > li.active > a {
+  border: none !important;
+  color: #01877b !important;
+}
+.calendarTabs .nav > li.active {
+  border: none;
+}
+.calendarTabs .nav-tabs > li.active {
+  border: none;
+  border-bottom: 2px solid #01877b;
+}
+.calendarTabs .nav > li > a {
+  color: #aaaaaa;
+}
+.calendarTabs .tab-content {
+  text-align: left;
+  display: flex;
+  margin: 20px;
+  justify-content: flex-start;
+  flex-direction: row;
+}
+.calendarTabs .speakerContainer {
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+}
+.calendarTabs .speakerContainer .speaker {
+  width: 400px;
+  height: 150px;
+  padding-left: 85px;
+}
+.calendarTabs .speakerContainer .speaker .descriptionFrame {
+  cursor: pointer;
+  position: relative;
+  left: 0;
+  top: 0;
+  padding-left: 85px;
+}
+.calendarTabs .speakerContainer .speaker .descriptionFrame .cell {
+  padding-top: 5px;
+  font-size: 12px;
+}
+.calendarTabs .speakerContainer .speaker .descriptionFrame .title {
+  line-height: 1.4em;
+  height: 6em;
+  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.calendarTabs .speakerContainer .speaker .descriptionFrame .name {
+  color: #01877b;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.5em;
+}
+.calendarTabs .speakerContainer .speaker .descriptionFrame .speakerDescription {
+  color: #aaaaaa;
+}
+.calendarTabs .speakerContainer .speaker .imageInnerFrame {
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+  overflow: hidden;
+  margin-left: 4px;
+  margin-top: 4px;
+}
+.calendarTabs .speakerContainer .speaker .imageInnerFrame img {
+  width: 60px;
+  height: 60px;
+}
+.calendarTabs .programContainer .talkTitle {
+  color: #01877b;
 }
 .unselectable {
   -webkit-touch-callout: none;
