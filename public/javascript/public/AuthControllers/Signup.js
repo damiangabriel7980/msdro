@@ -98,7 +98,7 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
                 });
             });
         }else{
-            $scope.cities = [$scope.selectedCity];
+            $scope.cities = [];
         }
     };
 

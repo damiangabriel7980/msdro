@@ -16,7 +16,8 @@
                 idAttr: '@',
                 onOptionSelect: '=',
                 name: '@',
-                ngRequired: "="
+                ngRequired: "=",
+                ngDisabled: "="
             },
             link: function(scope, element, attrs, ctrl) {
 
