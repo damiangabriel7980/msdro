@@ -86,12 +86,13 @@
                     scope.selected = option;
                     if(updateModel) scope.ngModel = option;
                     if(updateInput) scope.inputText = option[scope.titleAttr];
-                    if(scope.onOptionSelect) scope.onOptionSelect(option);
+                    if(scope.onOptionSelect && updateModel) scope.onOptionSelect(option);
                 }
                 function unselectOption(clearInput, updateModel) {
                     scope.selected = null;
                     if(clearInput) scope.inputText = "";
                     if(updateModel) scope.ngModel = {};
+                    if(scope.onOptionSelect && updateModel) scope.onOptionSelect({});
                 }
                 function highlightPrevious() {
                     if(scope.highlighted > 0) {

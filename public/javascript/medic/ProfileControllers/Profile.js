@@ -114,16 +114,20 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
     });
 
     $scope.countyWasSelected = function (county) {
-        ProfileService.Cities.query({county_name: county.name}).$promise.then(function (resp) {
-            $scope.cities = Success.getObject(resp).sort(function(a,b){
-                if ( a.name < b.name )
-                    return -1;
-                if ( a.name > b.name )
-                    return 1;
-                return 0;
+        if(county && county._id){
+            ProfileService.Cities.query({county_name: county.name}).$promise.then(function (resp) {
+                $scope.cities = Success.getObject(resp).sort(function(a,b){
+                    if ( a.name < b.name )
+                        return -1;
+                    if ( a.name > b.name )
+                        return 1;
+                    return 0;
+                });
             });
-        });
-    }
+        }else{
+            $scope.cities = [$scope.selectedCity];
+        }
+    };
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
     therapeuticAreas.areas.query().$promise.then(function (resp) {

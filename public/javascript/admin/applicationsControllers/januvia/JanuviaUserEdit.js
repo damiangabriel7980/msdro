@@ -59,7 +59,12 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
 
     //watch county change
     $scope.countyWasSelected = function (county) {
-        getCities(county._id);
+        if(county && county._id){
+            getCities(county._id);
+        }else{
+            $scope.cities = [$scope.selectedCity];
+        }
+
     };
 
     function getCities(county_id) {

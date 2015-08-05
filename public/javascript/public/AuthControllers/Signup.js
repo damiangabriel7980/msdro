@@ -87,15 +87,19 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
     });
 
     $scope.countyWasSelected = function (county) {
-        AuthService.cities.query({county: county._id}).$promise.then(function (resp) {
-            $scope.cities = Success.getObject(resp).sort(function(a,b){
-                if ( a.name < b.name )
-                    return -1;
-                if ( a.name > b.name )
-                    return 1;
-                return 0;
+        if(county && county._id){
+            AuthService.cities.query({county: county._id}).$promise.then(function (resp) {
+                $scope.cities = Success.getObject(resp).sort(function(a,b){
+                    if ( a.name < b.name )
+                        return -1;
+                    if ( a.name > b.name )
+                        return 1;
+                    return 0;
+                });
             });
-        });
+        }else{
+            $scope.cities = [$scope.selectedCity];
+        }
     };
 
     //====================================================================================================== load proof
