@@ -36,6 +36,9 @@ controllers.controller('NewsletterDistributionLists', ['$scope', '$state', 'News
             resolve: {
                 idToEdit: function () {
                     return id;
+                },
+                refreshLists: function () {
+                    return refreshLists;
                 }
             }
         });

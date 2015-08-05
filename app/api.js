@@ -2938,13 +2938,23 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     router.route('/admin/newsletter/distribution_lists')
         .get(function (req, res) {
-            Newsletter.distributionLists.find({}, function (err, distributionLists) {
-                if(err){
-                    handleError(res, err);
-                }else{
-                    handleSuccess(res, distributionLists);
-                }
-            });
+            if(req.query.id){
+                Newsletter.distributionLists.findOne({_id: req.query.id}).populate('user_groups').exec(function (err, newsletter) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, newsletter);
+                    }
+                });
+            }else{
+                Newsletter.distributionLists.find({}, function (err, distributionLists) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, distributionLists);
+                    }
+                });
+            }
         })
         .post(function (req, res) {
             var list = new Newsletter.distributionLists({
@@ -2956,6 +2966,25 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     handleError(res, err);
                 }else{
                     handleSuccess(res, saved);
+                }
+            });
+        })
+        .put(function (req, res) {
+            UtilsModule.discardFields(req.body, ["_id"]);
+            Newsletter.distributionLists.findOne({_id: req.query.id}, function (err, list) {
+                if(err){
+                    handleError(res, err);
+                }else if(!list){
+                    handleError(res, null, 404, 1);
+                }else{
+                    _.extend(list, req.body);
+                    list.save(function (err, saved) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res, saved);
+                        }
+                    });
                 }
             });
         })

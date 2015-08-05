@@ -1,0 +1,23 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h3 class="modal-title">Modifica lista de distributie</h3>
+    </div>
+    <div class="modal-body">
+        <div style="margin-bottom: 15px;">
+            <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
+        </div>
+        <div class="form-group">
+            <label>Nume:</label>
+            <input type="text" class="form-control" ng-model="list.name">
+        </div>
+        <div>
+            <label>Grupuri de utilizatori:</label>
+            <my-multiple-select all-objects="groups" selected-objects="selectedGroups" track-by="_id" display-by="display_name" split-by="profession.display_name" output="selectedGroupsIds"></my-multiple-select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
+        <button type="submit" class="btn btn-primary pull-right" ng-click="save()">Salveaza</button>
+    </div>
+</div>
