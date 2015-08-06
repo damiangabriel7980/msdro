@@ -242,7 +242,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'ProductsView'
         })
         .state('biblioteca.produse.prodById',{
-            url: '/produse/:id',
+            url: '/produse/:id/:area',
             templateUrl: 'partials/medic/biblioteca/productDetails.ejs',
             controller: 'ProductDetail'
         })

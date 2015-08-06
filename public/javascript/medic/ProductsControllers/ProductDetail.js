@@ -16,4 +16,8 @@ app.controllerProvider.register('ProductDetail', ['$scope','$rootScope' ,'Produc
             $state.go('biblioteca.produse.productsByArea',{id:0});
      });
 
+    $scope.backToProducts = function () {
+        $state.go("biblioteca.produse.productsByArea", {id: $stateParams.area || 0});
+    }
+
 }]);

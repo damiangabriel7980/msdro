@@ -42,6 +42,6 @@ app.controllerProvider.register('ProductsView', ['$scope', '$state', '$rootScope
     $scope.getProducts();
 
     $scope.navigateProductDetails = function (product) {
-        $state.go('biblioteca.produse.prodById', {id:product._id});
+        $state.go('biblioteca.produse.prodById', {id:product._id, area: $stateParams.id || 0});
     }
 }]);
