@@ -496,3 +496,85 @@ services.factory('NewsletterService', ['$resource', function($resource){
         })
     }
 }]);
+
+services.factory('CSVParser', ['$q', function ($q) {
+    var parseContent = function (contents, headers, separator) {
+        console.log(contents);
+        //CSV config
+        separator = separator || ",";
+        //var headers = ["name", "email"];
+
+        //init variables
+        var headerPatts = [];
+        for(var h=0; h<headers.length; h++){
+            headerPatts.push(new RegExp("^"+headers[h]));
+        }
+        var columnsCount = headerPatts.length;
+
+        //handle errors
+        var parseError = function (err) {
+            return {
+                error: err
+            };
+        };
+
+        //begin parse
+        var lines = contents.split("\n");
+        console.log(lines);
+        if(lines && lines[0]){
+            var result = [];
+            var linesUnprocessed = [];
+            for(var i=0; i<lines.length; i++){
+                //get line
+                var line = lines[i].split(separator);
+                //check line length
+                if(line.length != columnsCount && i!=0) {
+                    if(lines[i] != "") linesUnprocessed.push(lines[i]);
+                }else if(i==0){
+                    //check headers
+                    console.log(line);
+                    console.log(headerPatts);
+                    for(var j=0; j<headerPatts.length; j++){
+                        if(!headerPatts[j].test(line[j])) {
+                            return parseError("headers");
+                        }
+                    }
+                }else{
+                    //add to result
+                    var lineObj = {};
+                    for(var l=0; l < columnsCount; l++){
+                        lineObj[headers[l]] = line[l];
+                    }
+                    result.push(lineObj);
+                }
+            }
+            return {
+                headers: headers,
+                body: result,
+                unprocessed: linesUnprocessed,
+                columns: columnsCount
+            };
+        }else{
+            return parseError("lines");
+        }
+    };
+    var getContent = function (file) {
+        var deferred = $q.defer();
+        var r = new FileReader();
+        r.onload = function(e) {
+            deferred.resolve(e.target.result);
+        };
+        r.readAsText(file);
+        return deferred.promise;
+    };
+    var parseCSV = function (file, headers, separator) {
+        var deferred = $q.defer();
+        getContent(file).then(function (content) {
+            deferred.resolve(parseContent(content, headers, separator));
+        });
+        return deferred.promise;
+    };
+    return {
+        parse: parseCSV
+    };
+}]);

@@ -22,3 +22,12 @@
   display: block;
   float: right;
 }
+.adminEditableSingleList .items .confirmItems {
+  display: block;
+  width: 100%;
+  float: left;
+  padding-top: 5px;
+}
+.adminEditableSingleList .items .confirmItems .btn {
+  float: right;
+}
