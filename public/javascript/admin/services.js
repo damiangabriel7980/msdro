@@ -490,6 +490,9 @@ services.factory('NewsletterService', ['$resource', function($resource){
             create: { method: 'POST', isArray: false },
             update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
+        }),
+        users: $resource('api/admin/newsletter/users', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

@@ -1,1 +1,10 @@
-lista utilizatori care nu vor sa primeasca
+<table ng-table="tableParams" show-filter="true" class="table table-bordered">
+    <tr ng-repeat="user in $data">
+        <td data-title="'Email'" filter="{ 'username': 'text' }" sortable="'username'">
+            {{user.username}}
+        </td>
+        <td data-title="'Nume'" sortable="'name'">
+            {{user.name}}
+        </td>
+    </tr>
+</table>

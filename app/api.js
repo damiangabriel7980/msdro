@@ -3033,6 +3033,21 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
         });
 
+    router.route('/admin/newsletter/users')
+        .get(function (req, res) {
+            if(req.query.unsubscribed){
+                User.find({"subscriptions.newsletterStaywell": {$ne: true}}, {username: 1, name: 1}).exec(function (err, users) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, users);
+                    }
+                });
+            }else{
+                handleError(res, false, 400, 6);
+            }
+        });
+
     //==================================================================================================================================== USER ROUTES
 
     router.route('/user/addPhoto')
