@@ -33,6 +33,7 @@ controllers.controller('NewsletterDistributionLists', ['$scope', '$state', 'News
             templateUrl: 'partials/admin/newsletter/distributionLists/modalEditDistributionList.html',
             windowClass: 'fade',
             controller: 'NewsletterDistributionListEdit',
+            size: 'lg',
             resolve: {
                 idToEdit: function () {
                     return id;
