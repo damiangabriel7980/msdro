@@ -17,6 +17,6 @@ app.controllerProvider.register('MultimediaDetail', ['$scope','multimediaService
     };
     $stateParams.idMulti=null;
     $scope.goToMultimedia = function () {
-        $state.go('elearning.multimedia.multimediaByArea',{idArea:0,idMulti: null},{},{reload: true});
+        $state.go('elearning.multimedia.multimediaByArea',{idArea:$stateParams.idArea||0, idMulti: null},{},{reload: true});
     };
 }]);
