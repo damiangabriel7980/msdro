@@ -35,7 +35,7 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
                         title: Diacritics.trimTextAndReplaceDiacritics(events[i].name, false, true),
                         start: dateStart,
                         end: dateEnd,
-                        allDay: false,
+                        allDay: true,
                         className: 'events',
                         color: '#01877B',
                         type: Diacritics.trimTextAndReplaceDiacritics(events[i].name, false, false)
