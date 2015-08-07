@@ -45,9 +45,9 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
                     height: 420,
                     editable: false,
                     header: {
-                        left: 'month basicWeek basicDay',
+                        left: Utils.isMobile()?'month basicWeek':'month basicWeek basicDay',
                         center: 'title',
-                        right: 'today prev,next'
+                        right: Utils.isMobile()?'prev,next':'today prev,next'
                     },
                     timeFormat: '',
                     eventMouseover: addPopover,
