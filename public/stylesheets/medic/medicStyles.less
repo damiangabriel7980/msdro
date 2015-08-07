@@ -1252,6 +1252,7 @@ body {
     justify-content: flex-start;
     flex-direction: row;
   }
+
   .speakerContainer {
     width: 100%;
     display: -webkit-box;
@@ -1308,12 +1309,25 @@ body {
 
     }
   }
-  .programContainer{
-  .talkTitle{
-    color:@green;
+  .programContainer {
+    .dayItem {
+      margin: 10px;
+
+      .conferenceItem {
+        margin: 15px;
+        .conferenceTitle {
+          color: @green;
+
+        }
+        .talkTitle {
+          margin: 10px 10px 10px 50px;
+        }
+      }
+    }
   }
-  }
+
 }
+
 
 //============================================================================================= USEFUL STYLES / MIX-INS
 .unselectable {

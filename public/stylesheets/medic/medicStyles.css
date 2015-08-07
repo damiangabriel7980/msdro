@@ -7721,8 +7721,17 @@ fieldset[disabled] .navbarMedic .profile .btn {
   width: 60px;
   height: 60px;
 }
-.calendarTabs .programContainer .talkTitle {
+.calendarTabs .programContainer .dayItem {
+  margin: 10px;
+}
+.calendarTabs .programContainer .dayItem .conferenceItem {
+  margin: 15px;
+}
+.calendarTabs .programContainer .dayItem .conferenceItem .conferenceTitle {
   color: #01877b;
+}
+.calendarTabs .programContainer .dayItem .conferenceItem .talkTitle {
+  margin: 10px 10px 10px 50px;
 }
 .unselectable {
   -webkit-touch-callout: none;
