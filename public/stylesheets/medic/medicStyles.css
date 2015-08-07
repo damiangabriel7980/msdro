@@ -6535,12 +6535,20 @@ body .btn {
 .calendarWrapper {
   padding: 0;
 }
+.calendarWrapper .fc-toolbar .fc-center {
+  padding-top: 6px;
+}
 .calendarWrapper .fc-toolbar .fc-center h2 {
   font-size: 20px;
 }
 @media (max-width: 767px) {
   .calendarWrapper .fc-toolbar .fc-center h2 {
     font-size: 17px;
+  }
+}
+@media (max-width: 991px) {
+  .calendarWrapper .fc-toolbar .fc-center {
+    display: block;
   }
 }
 .calendarWrapper .noPadding {

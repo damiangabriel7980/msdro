@@ -43,18 +43,17 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
                 }
             }
 
-            $scope.uiConfig = {
+            var calendarConfig = {
                 calendar: {
                     events: eventsFormatted,
                     height: 420,
                     editable: false,
                     header: {
-                        left: Utils.isMobile()?'month basicWeek':'month basicWeek basicDay',
+                        left: Utils.isMobile()?'':'month basicWeek basicDay',
                         center: 'title',
                         right: Utils.isMobile()?'prev,next':'today prev,next'
                     },
                     timeFormat: '',
-                    eventMouseover: addPopover,
                     eventClick:function(event){
                         $modal.open({
                             templateUrl: 'partials/medic/calendarDetails.ejs',
@@ -72,6 +71,10 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
 
                 }
             };
+            if(!Utils.isMobile()){
+                calendarConfig.calendar.eventMouseover = addPopover
+            }
+            $scope.uiConfig = calendarConfig;
 
             function addPopover (data, event, view){
                 var element = angular.element(event.currentTarget);
