@@ -32,13 +32,12 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
                 if(dateEnd.toString()!=="Invalid Date" && dateStart.toString()!=="Invalid Date"){
                     eventsFormatted.push({
                         id: events[i]._id,
-                        title: Diacritics.trimTextAndReplaceDiacritics(events[i].name, false, true),
+                        title: events[i].name,
                         start: dateStart,
                         end: dateEnd,
                         allDay: true,
                         className: 'events',
-                        color: '#01877B',
-                        type: Diacritics.trimTextAndReplaceDiacritics(events[i].name, false, false)
+                        color: '#01877B'
                     });
                 }
             }
@@ -79,7 +78,7 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
             function addPopover (data, event, view){
                 var element = angular.element(event.currentTarget);
                 element.attr("data-toggle", "popover");
-                element.attr("data-content", data.type);
+                element.attr("data-content", data.title);
                 var endDate = new Date(data.end);
                 if(endDate.getHours()===0) endDate.setDate(endDate.getDate()-1);
                 element.attr("data-original-title", Utils.customDateFormat(new Date(data.start))  + " - " +  Utils.customDateFormat(endDate));

@@ -160,38 +160,6 @@ services.factory('Utils', ['$sce', function ($sce) {
 }]);
 services.factory('Diacritics',function(){
     return{
-        trimTextAndReplaceDiacritics : function(input, isMobile,trimFlag){
-            var newEventName=String(input)
-                .replace('Ă','A')
-                .replace('ă','a')
-                .replace('Â','A')
-                .replace('â','a')
-                .replace('Î','I')
-                .replace('î','i')
-                .replace('Ș','S')
-                .replace('ș','s')
-                .replace('Ş','S')
-                .replace('ş','s')
-                .replace('Ț','T')
-                .replace('ț','t')
-                .replace('Ţ','T')
-                .replace('ţ','t');
-            if(trimFlag){
-                if(isMobile){
-                    newEventName=newEventName.split(/\s+/).join(" ");
-                    newEventName=newEventName.substr(0,10)+"...";
-                    return newEventName;
-                }
-                else{
-                    newEventName=newEventName.split(/\s+/).slice(0,3).join(" ");
-                    return newEventName;
-                }
-            }
-            else{
-                return newEventName;
-            }
-
-        },
         diacriticsToHtml : function(input){
               var text = String(input)
                 .replace(/Ă/g,'&#258;')
