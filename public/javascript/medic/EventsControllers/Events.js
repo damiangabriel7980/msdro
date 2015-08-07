@@ -23,20 +23,24 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
             $scope.eventsFiltered = eventsFiltered;
 
             var eventsFormatted = [];
+            var dateStart;
             var dateEnd;
             for(i=0; i<events.length; i++){
+                dateStart = new Date(events[i].start);
                 dateEnd = new Date(events[i].end);
                 if(dateEnd.getHours()===0) dateEnd.setDate(dateEnd.getDate + 1);
-                eventsFormatted.push({
-                    id: events[i]._id,
-                    title: Diacritics.trimTextAndReplaceDiacritics(events[i].name, false, true),
-                    start: new Date(events[i].start),
-                    end: dateEnd,
-                    allDay: false,
-                    className: 'events',
-                    color: '#01877B',
-                    type: Diacritics.trimTextAndReplaceDiacritics(events[i].name, false, false)
-                });
+                if(dateEnd.toString()!=="Invalid Date" && dateStart.toString()!=="Invalid Date"){
+                    eventsFormatted.push({
+                        id: events[i]._id,
+                        title: Diacritics.trimTextAndReplaceDiacritics(events[i].name, false, true),
+                        start: dateStart,
+                        end: dateEnd,
+                        allDay: false,
+                        className: 'events',
+                        color: '#01877B',
+                        type: Diacritics.trimTextAndReplaceDiacritics(events[i].name, false, false)
+                    });
+                }
             }
 
             $scope.uiConfig = {
