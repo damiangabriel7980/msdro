@@ -6532,14 +6532,19 @@ body .btn {
 .paddingTop10 {
   padding-top: 10px;
 }
-.calendarWrapper .fc-header {
-  font-size: smaller;
+.calendarWrapper {
+  padding: 0;
+}
+.calendarWrapper .fc-toolbar .fc-center h2 {
+  font-size: 20px;
+}
+@media (max-width: 767px) {
+  .calendarWrapper .fc-toolbar .fc-center h2 {
+    font-size: 17px;
+  }
 }
 .calendarWrapper .noPadding {
   padding: 0;
-}
-.calendarWrapper .nextEvents {
-  padding-left: 40px;
 }
 .calendarWrapper .nextEvents .paddingTop5 {
   padding-top: 5px;
