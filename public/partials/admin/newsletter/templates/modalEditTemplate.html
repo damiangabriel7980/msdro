@@ -21,6 +21,15 @@
             <label>Html:</label>
             <div ui-ace="aceOptions" ng-model="template.html"></div>
         </div>
+        <div class="col-md-12 variables" ng-if="template.variables.length>0">
+            <div class="col-md-12">
+                <label>Variabile:</label>
+            </div>
+            <div class="col-md-4" ng-repeat="variable in template.variables">
+                <label>{{variable.name}}</label>
+                <select class="form-control" ng-model="variable.type" ng-options="type as type for type in variableTypes"></select>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>

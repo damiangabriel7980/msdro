@@ -478,6 +478,31 @@ services.factory('LocationService', ['$resource', function($resource){
 }]);
 
 services.factory('NewsletterService', ['$resource', function($resource){
+    var getVariableType = function (variableName, variables) {
+        for(var i=0; i<variables.length; i++){
+            if(variables[i] && variables[i].name === variableName){
+                return variables[i].type;
+            }
+        }
+        return null;
+    };
+    var parseTemplateVariables = function (html, initialVariables) {
+        var matches = html.match(/\*\|[a-zA-Z0-9_]{0,100}\|\*/g);
+        var variables = [];
+        var variable;
+        if(matches){
+            for(var i=0; i<matches.length; i++){
+                variable = matches[i].replace(/\|/g,"").replace(/\*/g,"");
+                if(variable){
+                    variables.push({
+                        name: variable,
+                        type: getVariableType(variable, initialVariables)
+                    });
+                }
+            }
+        }
+        return variables;
+    };
     return {
         campaigns: $resource('api/admin/newsletter/campaigns', {}, {
             query: { method: 'GET', isArray: false },
@@ -491,12 +516,15 @@ services.factory('NewsletterService', ['$resource', function($resource){
             update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
         }),
-        templates: $resource('api/admin/newsletter/templates', {}, {
-            query: { method: 'GET', isArray: false },
-            create: { method: 'POST', isArray: false },
-            update: { method: 'PUT', isArray: false },
-            delete: { method: 'DELETE', isArray: false }
-        }),
+        templates: {
+            api: $resource('api/admin/newsletter/templates', {}, {
+                query: { method: 'GET', isArray: false },
+                create: { method: 'POST', isArray: false },
+                update: { method: 'PUT', isArray: false },
+                delete: { method: 'DELETE', isArray: false }
+            }),
+            parseVariables: parseTemplateVariables
+        },
         users: $resource('api/admin/newsletter/users', {}, {
             query: { method: 'GET', isArray: false }
         })

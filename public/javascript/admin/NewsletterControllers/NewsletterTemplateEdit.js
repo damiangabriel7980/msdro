@@ -1,6 +1,9 @@
 controllers.controller('NewsletterTemplateEdit', ['$scope', 'idToEdit', 'NewsletterService', 'Success', '$modalInstance', 'refreshTemplates', function ($scope, idToEdit, NewsletterService, Success, $modalInstance, refreshTemplates) {
 
-    NewsletterService.templates.query({id: idToEdit}).$promise.then(function (resp) {
+    $scope.variableTypes = ["text", "html", "system"];
+    $scope.template = {};
+
+    NewsletterService.templates.api.query({id: idToEdit}).$promise.then(function (resp) {
         resp = Success.getObject(resp);
         $scope.template = resp.template;
         $scope.types = resp.types;
@@ -12,7 +15,7 @@ controllers.controller('NewsletterTemplateEdit', ['$scope', 'idToEdit', 'Newslet
 
     $scope.save = function () {
         var toSave = $scope.template;
-        NewsletterService.templates.update({id: idToEdit}, toSave).$promise.then(function () {
+        NewsletterService.templates.api.update({id: idToEdit}, toSave).$promise.then(function () {
             refreshTemplates();
             $modalInstance.close();
         });
@@ -22,8 +25,8 @@ controllers.controller('NewsletterTemplateEdit', ['$scope', 'idToEdit', 'Newslet
         useWrapMode : true,
         showGutter: false,
         mode: 'xml',
-        onLoad: aceLoaded
-        //onChange: aceChanged
+        onLoad: aceLoaded,
+        onChange: aceChanged
     };
 
     function aceLoaded(_editor) {
@@ -34,6 +37,11 @@ controllers.controller('NewsletterTemplateEdit', ['$scope', 'idToEdit', 'Newslet
             enableSnippets: true,
             enableLiveAutocompletion: false
         });
+    }
+
+    function aceChanged(){
+        if(!$scope.template) $scope.template = {};
+        $scope.template.variables = NewsletterService.templates.parseVariables($scope.template.html, $scope.template.variables);
     }
 
 }]);

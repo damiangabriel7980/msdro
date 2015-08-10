@@ -8,7 +8,7 @@ var schema = new Schema({
     html: String,
     variables: [
         {
-            "type": {type: String, enum: ["text", "html", "list", "system"]},
+            "type": {type: String, enum: ["text", "html", "system"]},
             name: String
         }
     ]

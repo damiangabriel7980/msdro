@@ -1,6 +1,6 @@
 controllers.controller('NewsletterTemplates', ['$scope', '$state', 'NewsletterService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', '$q', function ($scope, $state, NewsletterService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, $q) {
     var refreshTemplates = function () {
-        NewsletterService.templates.query().$promise.then(function(resp){
+        NewsletterService.templates.api.query().$promise.then(function(resp){
             var templates = Success.getObject(resp);
             var params = {
                 page: 1,            // show first page
@@ -23,7 +23,7 @@ controllers.controller('NewsletterTemplates', ['$scope', '$state', 'NewsletterSe
     refreshTemplates();
 
     $scope.addTemplate = function () {
-        NewsletterService.templates.create({}).$promise.then(function () {
+        NewsletterService.templates.api.create({}).$promise.then(function () {
             refreshTemplates();
         });
     };
@@ -47,7 +47,7 @@ controllers.controller('NewsletterTemplates', ['$scope', '$state', 'NewsletterSe
 
     $scope.removeTemplate = function (id) {
         ActionModal.show("Stergere template", "Sunteti sigur ca doriti sa stergeti template-ul?", function () {
-            NewsletterService.templates.delete({id: id}).$promise.then(function () {
+            NewsletterService.templates.api.delete({id: id}).$promise.then(function () {
                 $state.reload();
             });
         }, "Sterge");
