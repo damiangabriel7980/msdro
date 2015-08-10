@@ -36,6 +36,9 @@ controllers.controller('NewsletterCampaigns', ['$scope', '$state', 'NewsletterSe
             resolve: {
                 idToEdit: function () {
                     return id;
+                },
+                refreshCampaigns: function () {
+                    return refreshCampaigns;
                 }
             }
         });
