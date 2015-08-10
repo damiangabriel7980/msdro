@@ -4,9 +4,11 @@ controllers.controller('NewsletterTemplateEdit', ['$scope', 'idToEdit', 'Newslet
     $scope.template = {};
 
     NewsletterService.templates.api.query({id: idToEdit}).$promise.then(function (resp) {
-        resp = Success.getObject(resp);
-        $scope.template = resp.template;
-        $scope.types = resp.types;
+        $scope.template = Success.getObject(resp);
+    });
+
+    NewsletterService.templates.api.query({returnTypes: true}).$promise.then(function (resp) {
+        $scope.types = Success.getObject(resp);
     });
 
     $scope.closeModal = function () {

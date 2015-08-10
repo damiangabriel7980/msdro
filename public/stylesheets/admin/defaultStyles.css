@@ -141,3 +141,23 @@ a {
 .newsletterTemplateEdit .variables {
   padding: 0 0 15px 0;
 }
+.templatesPreview .template {
+  border: 1px solid #eee;
+  margin-bottom: 15px;
+  cursor: pointer;
+  position: relative;
+}
+.templatesPreview .template.welded {
+  margin-bottom: 0;
+}
+.templatesPreview .template:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
+.templatesPreview .template:hover {
+  border: 1px solid #777;
+}

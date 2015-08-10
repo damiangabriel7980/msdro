@@ -31,6 +31,19 @@
             <label>Liste de distributie:</label>
             <my-multiple-select all-objects="distributionLists" selected-objects="selectedDistributionLists" track-by="_id" display-by="name" output="selectedDistributionListsIds"></my-multiple-select>
         </div>
+        <div class="col-md-12 noPadding" style="margin-top: 15px">
+            <div class="col-md-12">
+                <label>Structura email:</label>
+            </div>
+            <div class="col-md-12" style="margin-bottom: 15px">
+                <div class="btn btn-sm btn-primary" ng-click="addTemplate()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga template</div>
+            </div>
+            <div class="col-md-12 templatesPreview" style="margin-bottom: 15px">
+                <div class="col-md-12 noPadding template welded" ng-repeat="template in campaign.templates | orderBy:order:'asc' track by $index"
+                     ng-click="editTemplate($index)" ng-bind-html="trustAsHtml(templatesById[template.id].html)">
+                </div>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>

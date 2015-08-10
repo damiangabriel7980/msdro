@@ -3072,14 +3072,15 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     }else if(!template){
                         handleError(res, false, 404, 1);
                     }else{
-                        handleSuccess(res, {
-                            template: template,
-                            types: new Newsletter.templates().schema.path('type').enumValues
-                        });
+                        handleSuccess(res, template);
                     }
                 });
+            }else if(req.query.returnTypes){
+                handleSuccess(res, new Newsletter.templates().schema.path('type').enumValues);
             }else{
-                Newsletter.templates.find({}, function (err, templates) {
+                var q = {};
+                if(req.query.type) q.type = req.query.type;
+                Newsletter.templates.find(q, function (err, templates) {
                     if(err){
                         handleError(res, err);
                     }else{
