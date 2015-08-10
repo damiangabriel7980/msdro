@@ -3036,13 +3036,28 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     router.route('/admin/newsletter/templates')
         .get(function (req, res) {
-            Newsletter.templates.find({}, function (err, templates) {
-                if(err){
-                    handleError(res, err);
-                }else{
-                    handleSuccess(res, templates);
-                }
-            });
+            if(req.query.id){
+                Newsletter.templates.findOne({_id: req.query.id}, function (err, template) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!template){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, {
+                            template: template,
+                            types: new Newsletter.templates().schema.path('type').enumValues
+                        });
+                    }
+                });
+            }else{
+                Newsletter.templates.find({}, function (err, templates) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, templates);
+                    }
+                });
+            }
         })
         .post(function (req, res) {
             var template = new Newsletter.templates({
@@ -3054,6 +3069,25 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     handleError(res, err);
                 }else{
                     handleSuccess(res, saved);
+                }
+            });
+        })
+        .put(function (req, res) {
+            UtilsModule.discardFields(req.body, ["_id"]);
+            Newsletter.templates.findOne({_id: req.query.id}, function (err, template) {
+                if(err){
+                    handleError(res, err);
+                }else if(!template){
+                    handleError(res, null, 404, 1);
+                }else{
+                    _.extend(template, req.body);
+                    template.save(function (err, saved) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res, saved);
+                        }
+                    });
                 }
             });
         })

@@ -30,12 +30,15 @@ controllers.controller('NewsletterTemplates', ['$scope', '$state', 'NewsletterSe
 
     $scope.editTemplate = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/newsletter/campaigns/modalEditTemplate.html',
+            templateUrl: 'partials/admin/newsletter/templates/modalEditTemplate.html',
             windowClass: 'fade',
             controller: 'NewsletterTemplateEdit',
             resolve: {
                 idToEdit: function () {
                     return id;
+                },
+                refreshTemplates: function () {
+                    return refreshTemplates;
                 }
             }
         });
