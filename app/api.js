@@ -2933,7 +2933,8 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
     var Newsletter = {
         distributionLists: require('./models/newsletter/distribution_lists'),
-        campaigns: require('./models/newsletter/campaigns')
+        campaigns: require('./models/newsletter/campaigns'),
+        templates: require('./models/newsletter/templates')
     };
 
     router.route('/admin/newsletter/distribution_lists')
@@ -3025,6 +3026,40 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             Newsletter.campaigns.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res);
+                }
+            });
+        });
+
+    router.route('/admin/newsletter/templates')
+        .get(function (req, res) {
+            Newsletter.templates.find({}, function (err, templates) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, templates);
+                }
+            });
+        })
+        .post(function (req, res) {
+            var template = new Newsletter.templates({
+                name: "Untitled",
+                date_created: Date.now()
+            });
+            template.save(function (err, saved) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, saved);
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Newsletter.templates.remove({_id: idToDelete}, function (err, wres) {
                 if(err){
                     handleError(res, err);
                 }else{

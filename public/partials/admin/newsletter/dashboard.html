@@ -10,6 +10,9 @@
         <div class="tab" ng-class="{'active': $state.includes('newsletter.dashboard.unsubscribedUsers')}" ui-sref="newsletter.dashboard.unsubscribedUsers">
             Utilizatori neinscrisi
         </div>
+        <div class="tab" ng-class="{'active': $state.includes('newsletter.dashboard.templates')}" ui-sref="newsletter.dashboard.templates">
+            Template-uri
+        </div>
     </div>
     <div class="col-md-12 noPadding tabViewPanel">
         <ui-view></ui-view>

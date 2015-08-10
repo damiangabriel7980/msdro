@@ -177,6 +177,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/newsletter/unsubscribedUsers/unsubscribedUsers.html',
             controller: 'NewsletterUnsubscribedUsers'
         })
+        .state('newsletter.dashboard.templates',{
+            url: '/templates',
+            templateUrl: 'partials/admin/newsletter/templates/templates.html',
+            controller: 'NewsletterTemplates'
+        })
         .state('elearning', {
             abstract: true,
             url: '/elearning',
