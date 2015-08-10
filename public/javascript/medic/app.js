@@ -102,7 +102,8 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'components/fullcalendar/dist/gcal.js',
                     'javascript/medic/EventsControllers/Events.js',
                     'javascript/medic/EventsControllers/EventModal.js',
-                    'components/angular-ui-calendar/src/calendar.js'
+                    'components/angular-ui-calendar/src/calendar.js',
+                    'components/angular-utils-pagination/dirPagination.js'
                 ]
             },
             {

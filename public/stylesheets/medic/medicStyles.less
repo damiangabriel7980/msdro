@@ -1,198 +1,207 @@
 //import our customizable variables
 @import 'medicVariables';
-
 //import stripped-from-variables version of bootstrap, which will use our custom variables
 @import '../../modules/bootstrap_noVariables/less/bootstrap';
 
 //adjust fonts for phones and tablets
-.fontS{
-  @media (max-width: @screen-xs-max){
+.fontS {
+  @media (max-width: @screen-xs-max) {
     font-size: 11px;
   }
 }
-.fontM{
-  @media (max-width: @screen-xs-max){
+
+.fontM {
+  @media (max-width: @screen-xs-max) {
     font-size: 13px;
   }
 }
-.fontL{
-  @media (max-width: @screen-xs-max){
+
+.fontL {
+  @media (max-width: @screen-xs-max) {
     font-size: 15px;
   }
 }
-.fontXL{
-  @media (max-width: @screen-xs-max){
+
+.fontXL {
+  @media (max-width: @screen-xs-max) {
     font-size: 17px;
   }
 }
-.fontXXL{
-  @media (max-width: @screen-xs-max){
+
+.fontXXL {
+  @media (max-width: @screen-xs-max) {
     font-size: 20px;
   }
 }
 
-body{
-  &.modal-open{
+body {
+  &.modal-open {
     overflow: hidden;
     position: fixed;
     width: 100%;
   }
   .fontM;
-  h2{
+  h2 {
     .fontXXL;
   }
-  h3{
+  h3 {
     .fontXL;
   }
-  h4{
+  h4 {
     .fontL;
   }
-  a{
+  a {
     cursor: pointer;
   }
-  .btn{
+  .btn {
     .btn-sm;
     .fontS;
   }
 }
 
-.filterByTherapeuticAreas{
-  .areasMobile{
+.filterByTherapeuticAreas {
+  .areasMobile {
     padding: 0;
     margin-bottom: 25px;
   }
-  .areas{
+  .areas {
     padding: 0 30px 0 0;
-    .title{
+    .title {
       padding: 0;
       margin-bottom: 25px;
       .fontXL;
     }
-    .menu{
+    .menu {
       padding: 0;
       .MSDgreen;
-      .area{
+      .area {
         border: 0;
         padding: 5px;
         cursor: pointer;
         border-radius: 4px !important;
         @media (min-width: @screen-md-min) {
-          &:hover{
+          &:hover {
             background-color: @green;
-            color:white;
+            color: white;
           }
         }
-        &.active{
+        &.active {
           background-color: @green;
-          color:white;
+          color: white;
         }
       }
     }
   }
-  .viewport{
+  .viewport {
     margin-top: 0;
   }
 }
-.productsView{
+
+.productsView {
   padding: 0;
-  .noProducts{
+  .noProducts {
     text-align: center
   }
-  .product{
+  .product {
     margin-bottom: 25px;
     padding: 0 25px 0 0;
   }
 }
-.pickLetter{
+
+.pickLetter {
   padding: 0;
-  .letter{
+  .letter {
     padding: 5px;
     cursor: pointer;
     text-align: center;
     border-radius: 4px;
     font-weight: bold;
     color: @green;
-    &:hover{
+    &:hover {
       background-color: @green;
       color: white;
     }
   }
 }
-.productDetails{
-  .imageAndRCP{
-    img{
+
+.productDetails {
+  .imageAndRCP {
+    img {
       width: 100%;
     }
-    .btn{
+    .btn {
       margin-top: 10px;
       width: 100%;
     }
-    .btn-default{
-      &:focus{
+    .btn-default {
+      &:focus {
         background-color: @btn-default-bg;
       }
     }
-    hr{
+    hr {
       margin-top: 10px;
       margin-bottom: 0;
     }
   }
 }
-.multimediaView{
+
+.multimediaView {
   padding: 0;
-  .message{
+  .message {
     padding: 0 0 0 45px;
     margin-top: 20px;
     text-align: center;
   }
-  .multimediaWrapper{
+  .multimediaWrapper {
     padding: 0 0 25px 0;
   }
 }
+
 .main-view-container {
   overflow-x: hidden;
-  margin-top:20px !important;
+  margin-top: 20px !important;
   width: 100%;
-  position:relative;
+  position: relative;
   top: 0;
   left: 0;
   padding-top: 70px;
   padding-bottom: 50px;
 }
+
 //===========================================================ARTICLES
 
-.articlesStyles{
-  .articlesWrapper{
+.articlesStyles {
+  .articlesWrapper {
     padding: 0;
-    .articlesList{
-      .articlesMoreNews{
-        clear: both;margin:0 auto;
+    .articlesList {
+      .articlesMoreNews {
+        clear: both;
+        margin: 0 auto;
       }
-      .noArticles{
+      .noArticles {
         padding: 0;
       }
-      .articlesMobileMessage
-      {
+      .articlesMobileMessage {
         padding: 0;
         padding-bottom: 10px;
         text-align: left;
       }
-      .articlesListWrapper{
+      .articlesListWrapper {
         padding: 0;
-        .article{
+        .article {
           padding: 0;
         }
       }
     }
   }
-  .articleDetail{
-    .title{
+  .articleDetail {
+    .title {
       .fontXL;
       font-weight: bold;
       border-bottom: 1px solid lightgray;
     }
-    .articleContent{
-      img{
+    .articleContent {
+      img {
         padding-right: 15px;
         padding-bottom: 15px;
       }
@@ -200,19 +209,20 @@ body{
     .date {
       margin-top: 0%;
     }
-    .author{
+    .author {
       font-weight: bold;
     }
   }
-  .stretchHorizontal{
+  .stretchHorizontal {
     padding-left: 0px;
     padding-right: 0px;
   }
-  .paddingTop10{
+  .paddingTop10 {
     padding-top: 10px;
   }
 }
-.paddingTop10{
+
+.paddingTop10 {
   padding-top: 10px;
 }
 
@@ -246,53 +256,54 @@ body{
     .paddingTop5{
       padding-top: 5px;
     }
-    .MainTitle{
+    .MainTitle {
       border-bottom: 1px solid @green;
     }
-    .Date{
+    .Date {
       padding-bottom: 10px;
       margin-top: -25px;
-      .day{
+      .day {
         color: @green-darker;
         margin-bottom: 0;
       }
-      .month{
+      .month {
         color: @green-darker;
         margin-top: 0;
       }
     }
-    .Title{
+    .Title {
       margin-top: -10px;
       margin-left: -2%;
-      h4{
+      h4 {
         cursor: pointer;
       }
     }
   }
 }
-.eventDetails{
-  .modal-title{
+
+.eventDetails {
+  .modal-title {
     .fontXL;
   }
-  .modal-body{
+  .modal-body {
     padding: 20px;
     width: 100%;
-    .details{
+    .details {
       width: 100%;
-      .location{
+      .location {
         width: 50%;
         float: left;
       }
-      .date{
+      .date {
         .fontM;
         width: 50%;
         float: left;
         text-align: right;
-        .label{
+        .label {
           padding: 0.2em 0.6em;
         }
       }
-      .description{
+      .description {
         width: 100%;
         float: left;
       }
@@ -301,33 +312,33 @@ body{
 }
 
 //=======================================SEARCH
-.homeSearchWrapper{
-  .mainTitle{
+.homeSearchWrapper {
+  .mainTitle {
     margin-top: 20px;
     margin-bottom: 20px;
     .fontXL;
   }
-  .result{
+  .result {
     padding: 0;
     margin-bottom: 20px;
   }
 }
 
-.homeStyles{
+.homeStyles {
   height: 100%;
   padding: 0 0 50px 0;
-  .leftSection{
+  .leftSection {
     padding: 0;
-    .lastNewsWrapper{
-      .Title{
+    .lastNewsWrapper {
+      .Title {
         padding: 0;
         padding-bottom: 8px !important;
       }
-      .content{
+      .content {
         padding: 0 15px 0 0;
       }
     }
-    &:after{
+    &:after {
       position: absolute;
       content: '';
       top: 0;
@@ -337,80 +348,80 @@ body{
       border-right: 1px solid black;
     }
   }
-  .rightSection{
+  .rightSection {
     padding: 0;
-    .leftColumn{
+    .leftColumn {
       padding: 0;
-      .Multimedia{
-        .Title{
-          padding:0;
+      .Multimedia {
+        .Title {
+          padding: 0;
         }
-        .Wrapper{
+        .Wrapper {
           padding: 0 0 0 40px;
-          margin-top:20px !important;
+          margin-top: 20px !important;
           position: relative;
-          .iconWrapper{
+          .iconWrapper {
             position: absolute;
             left: 0;
             top: 0;
             padding: 0;
-            i{
+            i {
               color: @gray;
             }
           }
-          .Content{
+          .Content {
             padding: 0;
             text-align: justify;
-            .mediaTitle{
+            .mediaTitle {
               padding: 0;
               font-weight: bold;
               color: @green;
               cursor: pointer;
             }
-            .description{
+            .description {
               padding: 0;
             }
           }
         }
       }
-      .Events{
-        .Title{
+      .Events {
+        .Title {
           padding: 0;
-          h3{
+          h3 {
             margin-bottom: 4%;
           }
         }
-        .eventDisplay{
+        .eventDisplay {
           padding: 0 0 30px 40px;
           position: relative;
-          .date{
+          .date {
             position: absolute;
             left: 0;
             top: 0;
             color: @green;
             width: 35px;
             border-right: 1px solid black;
-            .day{
+            .day {
               padding: 0;
               .fontXL;
               line-height: 1em;
             }
-            .month{
+            .month {
               padding: 0;
               .fontM;
               line-height: 1em;
             }
           }
-          .Content{
+          .Content {
             padding: 0;
-            .MediaTitle{
+            .MediaTitle {
               padding: 0;
               color: @green;
               cursor: pointer;
               text-align: justify;
               font-weight: bold;
             }
-            .Description{
+            .Description {
               padding: 0;
               margin-top: 5px;
               text-align: justify;
@@ -419,9 +430,9 @@ body{
         }
       }
     }
-    .rightColumn{
+    .rightColumn {
       padding: 0;
-      &:before{
+      &:before {
         position: absolute;
         content: '';
         top: 0;
@@ -431,7 +442,7 @@ body{
         border-left: 1px solid black;
       }
     }
-    &:before{
+    &:before {
       position: absolute;
       content: '';
       top: 0;
@@ -444,56 +455,54 @@ body{
 }
 
 //===================================================WIDGETS
-.widgets{
-  .subtitle
-  {
+.widgets {
+  .subtitle {
     color: @green;
   }
-  .glycemizerTextPadding{
+  .glycemizerTextPadding {
     padding-bottom: 30px;
   }
-  .handCursor{
+  .handCursor {
     cursor: pointer;
   }
-  .title{
+  .title {
     text-align: left;
-    @media(max-width: @screen-sm-max),(orientation: portrait){
+    @media (max-width: @screen-sm-max),(orientation: portrait) {
       text-align: center;
     }
   }
-  .contentPadding{
+  .contentPadding {
     padding-top: 10%;
     padding-bottom: 10%;
   }
-  .widgetImage{
+  .widgetImage {
     width: 100%;
     margin-bottom: 10px;
-    @media(max-device-width: @screen-xs-max){
+    @media (max-device-width: @screen-xs-max) {
       width: 50% !important;
     }
   }
-  .merckImageWrapper{
+  .merckImageWrapper {
     vertical-align: middle;
     text-align: left;
-    @media(max-width: @screen-sm-max){
+    @media (max-width: @screen-sm-max) {
       text-align: center;
     }
-    .merckImage{
+    .merckImage {
       width: 60%;
-      cursor:pointer;
-      @media (max-width: @screen-sm-max){
+      cursor: pointer;
+      @media (max-width: @screen-sm-max) {
         width: 35%;
       }
-      @media (max-width: @screen-xs-min){
+      @media (max-width: @screen-xs-min) {
         width: 50%;
       }
     }
   }
 }
 
-
 //============================================================================================================ CAROUSEL
-.carousel-container{
+.carousel-container {
   margin-bottom: 1%;
   overflow-x: hidden;
   position: relative;
@@ -502,27 +511,27 @@ body{
   .main-carousel {
     width: 75%;
     margin: 0 auto;
-    overflow: visible!important;
-    .carouselMargins{
+    overflow: visible !important;
+    .carouselMargins {
       margin-left: 10px;
-      margin-right:10px
+      margin-right: 10px
     }
-    .carouselSlide{
+    .carouselSlide {
       height: 100%;
       position: relative;
-      .carousel-title{
+      .carousel-title {
         z-index: 1001;
         position: absolute;
         color: white;
         bottom: 10px;
         left: 3%;
         cursor: pointer;
-        .titleFont{
+        .titleFont {
           font-family: "Trebuchet MS", Helvetica, sans-serif;
           color: white;
           text-shadow: black 0.1em 0.1em 0.2em;
           .fontXXL;
-          @media(max-width: @screen-xs-max){
+          @media (max-width: @screen-xs-max) {
             font-family: "Trebuchet MS", Helvetica, sans-serif;
             color: white;
             text-shadow: black 0.1em 0.1em 0.2em;
@@ -530,16 +539,16 @@ body{
           }
         }
       }
-      .imageCover{
+      .imageCover {
         z-index: 1000;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0,0,0,0);
+        background-color: rgba(0, 0, 0, 0);
       }
-      .imageWrapper{
+      .imageWrapper {
         z-index: 999;
         position: absolute;
         overflow: hidden;
@@ -547,15 +556,21 @@ body{
         left: 0;
         width: 100%;
         height: 100%;
-        img{
+        img {
           width: 98%;
         }
       }
-      .firstTrimmedImage{
-        display: inline-block; -webkit-transform: translate3d(-100%, 0px, 0px);-moz-transform: translate3d(-100%, 0px, 0px); transform: translate3d(-100%, 0px, 0px);
+      .firstTrimmedImage {
+        display: inline-block;
+        -webkit-transform: translate3d(-100%, 0px, 0px);
+        -moz-transform: translate3d(-100%, 0px, 0px);
+        transform: translate3d(-100%, 0px, 0px);
       }
-      .lastTrimmedImage{
-        display: inline-block; -webkit-transform: translate3d(100%, 0px, 0px);-moz-transform: translate3d(100%, 0px, 0px); transform: translate3d(100%, 0px, 0px);
+      .lastTrimmedImage {
+        display: inline-block;
+        -webkit-transform: translate3d(100%, 0px, 0px);
+        -moz-transform: translate3d(100%, 0px, 0px);
+        transform: translate3d(100%, 0px, 0px);
       }
     }
   }
@@ -586,7 +601,8 @@ body{
   font-weight: bold;
   background-color: #ffffff;
 }
-.navbar-fixed-top .navbar-nav > .active > a:after{
+
+.navbar-fixed-top .navbar-nav > .active > a:after {
   content: '';
   position: absolute;
   width: 40%;
@@ -595,128 +611,131 @@ body{
   border-radius: 5px;
   left: 30%;
   top: 40px;
-  @media(max-width: @grid-float-breakpoint-max){
+  @media (max-width: @grid-float-breakpoint-max) {
     display: none;
   }
 }
+
 .navbarMedic {
   padding: 10px 25px 0 25px;
   border-bottom: 1px solid @gray-lighter;
-  .paddedForm{
-    form{
+  .paddedForm {
+    form {
       padding: 5px 15px 0 15px;
     }
   }
-  .container{
+  .container {
     padding: 0;
     width: 100%;
     padding-bottom: 8px !important;
   }
-  .hideOnMobile{ //show on phones and tablets
+  .hideOnMobile {
+    //show on phones and tablets
     @media (max-width: @grid-float-breakpoint-max) {
       .hide;
     }
   }
-  .hideOnDesktop{ //show on Desktop
+  .hideOnDesktop {
+    //show on Desktop
     @media (min-width: @grid-float-breakpoint) {
       .hide;
     }
   }
-  .imageDropdown{
-    @media(max-width: @screen-xs-max){
+  .imageDropdown {
+    @media (max-width: @screen-xs-max) {
       width: 119px !important;
     }
   }
-  .specialMenu{
+  .specialMenu {
     @media (max-width: @grid-float-breakpoint) {
       right: 60px;
     }
-    @media (max-width: @screen-sm-min){
+    @media (max-width: @screen-sm-min) {
       right: 10px;
       margin-top: 5px;
     }
   }
 
   //============================= Custom search styles
-  .searchDefault{
+  .searchDefault {
     right: 290px;
     top: 18px;
-    @media(max-width: @grid-float-breakpoint){
+    @media (max-width: @grid-float-breakpoint) {
       bottom: 15px;
       top: auto;
     }
-    @media(min-width: @screen-xs-max + 1)and(max-width: @grid-float-breakpoint){
+    @media (min-width: @screen-xs-max + 1)and(max-width: @grid-float-breakpoint) {
       left: 15px;
       right: auto;
       margin-top: -19px;
     }
-    @media(max-width: @screen-xs-max){
+    @media (max-width: @screen-xs-max) {
       margin-right: 25px;
       margin-left: 25px;
       right: 0;
       bottom: 95px;
     }
-    @media(max-device-width: @screen-xs-max) and(orientation: landscape){
+    @media (max-device-width: @screen-xs-max) and(orientation: landscape) {
       right: initial;
       left: 13px;
     }
     .newWidthPopSearch {
-        width: 165px !important;
-        padding: 6px 12px;
-        border: 1px solid #cccccc;
-      @media(max-width: @screen-xs-max){
+      width: 165px !important;
+      padding: 6px 12px;
+      border: 1px solid #cccccc;
+      @media (max-width: @screen-xs-max) {
         width: 100% !important;
       }
     }
   }
 
-  .dropdown-menu{
+  .dropdown-menu {
     border-radius: 6px;
     padding-top: 0;
     padding-bottom: 0;
     min-width: 180px;
     background-color: @gray-lighter;
-    li{
+    li {
       padding: 10px 5px 10px 5px;
       min-width: 180px;
       height: 50px;
-      &:hover{
+      &:hover {
         border-radius: 3px;
         background-color: @green;
         a {
           color: #ffffff;
           background-color: @green;
-          .glyphicon{
-           color:darkgrey;
+          .glyphicon {
+            color: darkgrey;
           }
         }
       }
     }
-    &.myProfile{
+    &.myProfile {
       margin-top: 5px;
-      @media(max-width: @grid-float-breakpoint-max){
+      @media (max-width: @grid-float-breakpoint-max) {
         left: auto !important;
       }
     }
   }
-  .navbar-brand{
+  .navbar-brand {
     padding: 0;
-    img{
+    img {
       height: 50px;
       @media (min-width: @grid-float-breakpoint) {
         padding-left: 25px;
       }
-      @media (min-width: @screen-sm-min) and (max-width: @grid-float-breakpoint-max){
+      @media (min-width: @screen-sm-min) and (max-width: @grid-float-breakpoint-max) {
         height: 40px;
         margin-top: 9px;
       }
-      @media (max-width: @screen-xs-max){
+      @media (max-width: @screen-xs-max) {
         height: 26px;
         margin-top: 12px;
       }
     }
   }
-  .profile{
+  .profile {
     position: absolute;
     right: 234px;
     @media (max-width: @grid-float-breakpoint) {
@@ -728,7 +747,7 @@ body{
     }
     margin-top: 8px;
     margin-right: 10px;
-    .btn{
+    .btn {
       .btn;
       border-color: @gray;
     }
@@ -741,30 +760,30 @@ body{
     border: 1px solid @gray-light;
     border-radius: 4px;
   }
-  .navbar-collapse{
+  .navbar-collapse {
     padding: 0;
-    @media(max-width: @screen-xs-max) and (orientation: landscape){
+    @media (max-width: @screen-xs-max) and (orientation: landscape) {
       max-height: 180px;
     }
-    .navbar-nav{
+    .navbar-nav {
       margin: 0;
-      .navbar-form{
+      .navbar-form {
         margin-left: 0;
         margin-right: 0;
       }
-      &.navbarMenu{
+      &.navbarMenu {
         padding-top: 4px;
       }
-      li{
-        &.mobileLink{
+      li {
+        &.mobileLink {
           visibility: hidden;
           display: none;
           @media (max-width: @screen-sm) {
             visibility: visible;
             display: block;
           }
-          &.dividerTop{
-            &:after{
+          &.dividerTop {
+            &:after {
               position: absolute;
               left: 15px;
               right: 15px;
@@ -774,8 +793,8 @@ body{
             }
           }
         }
-        .divider{
-          &:after{
+        .divider {
+          &:after {
             position: absolute;
             left: 15px;
             right: 15px;
@@ -787,7 +806,7 @@ body{
       }
     }
   }
-  .userDropdown{
+  .userDropdown {
     @media (min-width: @grid-float-breakpoint) {
       display: none;
       visibility: hidden;
@@ -805,23 +824,23 @@ body{
   float: left;
   position: relative;
   min-height: 35px;
-  .leftSection{
+  .leftSection {
     position: absolute;
     left: 0;
     top: 0;
     width: 80px;
-    img{
+    img {
       width: 65px;
       float: right;
       padding: 5px 0 5px 0;
     }
   }
-  .rightSection{
+  .rightSection {
     padding: 0 0 0 80px;
-    @media(max-width: @screen-xs-min){
+    @media (max-width: @screen-xs-min) {
       padding: 0 0 0 60%;
     }
-    .link{
+    .link {
       display: block;
       float: right;
       padding: 0 15px 0 0;
@@ -831,67 +850,67 @@ body{
 }
 
 //============================================================================================= PRODUCT PAGE
-.specialProductMainWrapper{
+.specialProductMainWrapper {
   margin-top: 20px;
-  #menuDiv{
+  #menuDiv {
     margin-left: 0;
-    .menuMarginBottom{
-    margin-bottom: 0;
+    .menuMarginBottom {
+      margin-bottom: 0;
     }
-    .panel-body{
+    .panel-body {
       padding: 0;
     }
-    .list-group{
+    .list-group {
       margin-bottom: 0px;
     }
-    .borderRadiusSpecial{
+    .borderRadiusSpecial {
       border-radius: 0px;
     }
-    .panel-heading{
+    .panel-heading {
       background-color: @body-bg;
     }
-    .panel-group{
+    .panel-group {
       box-shadow: 0px 3px 1px @grayLighter;
-      .panel{
+      .panel {
         margin-top: 0px;
       }
       border: 1px solid @grayLighter;
       border-top: 0px;
-      div{
+      div {
         border: 0;
         border-radius: 0px;
       }
     }
-    .parentBorderTop{
+    .parentBorderTop {
       border-top: 1px solid @grayLighter !important;
     }
-    .productPageMenu{
-      .parent{
-        a{
+    .productPageMenu {
+      .parent {
+        a {
           text-decoration: none;
         }
-        .panel-heading{
+        .panel-heading {
           .MSDgreenDarker;
-          .panel-title{
+          .panel-title {
             font-size: inherit;
           }
         }
         padding-bottom: 0;
         .parentBorderTop;
-        &.active{
+        &.active {
           background-color: @green;
           color: white;
-          .panel-heading{
+          .panel-heading {
             background-color: @green;
             color: white !important;
-            .MSDgreenDarker{
+            .MSDgreenDarker {
               color: @body-bg !important;
             }
           }
         }
       }
-      .child{
-        a{
+      .child {
+        a {
           text-decoration: none;
         }
         .MSDgreenDarker;
@@ -901,16 +920,16 @@ body{
         display: block;
         padding: 10px 15px;
         background-color: @body-bg;
-        &.active{
+        &.active {
           color: darkorange;
         }
       }
     }
-    .mobileDropdown{
+    .mobileDropdown {
       padding-bottom: 10px;
       padding-left: 0;
       padding-right: 0;
-      .glyphicon-Special-Product{
+      .glyphicon-Special-Product {
         margin-top: 2px;
       }
       .my-dropdown-menu {
@@ -923,7 +942,7 @@ body{
         box-shadow: none;
         background-clip: border-box;
         list-style: none;
-        .my-list-menu-item{
+        .my-list-menu-item {
           padding: 0;
           background-color: transparent;
           border: 0px solid @grayLighter;
@@ -931,59 +950,58 @@ body{
       }
     }
   }
-  #descriptionDiv{
-    #initialDescriptionDiv{
+  #descriptionDiv {
+    #initialDescriptionDiv {
       margin-right: -30px;
     }
-    .noPadding{
+    .noPadding {
       padding: 0;
     }
-    .specialProductTitle{
+    .specialProductTitle {
       margin-top: 20px;
       margin-bottom: 20px;
       color: @green;
       .fontXXL;
       font-weight: bold
     }
-    .justify{
+    .justify {
       text-align: justify;
     }
-    .DescriptionWrapper{
+    .DescriptionWrapper {
       background-color: @body-bg;
       border-radius: 0px;
-      .prescription{
+      .prescription {
         margin-top: 15px
       }
-      .job_id{
+      .job_id {
         margin-top: 20px
       }
-      .fileLinks{
-          color: @green-darker !important;
-        &:focus
-        {
+      .fileLinks {
+        color: @green-darker !important;
+        &:focus {
           text-decoration: none !important;
         }
       }
-      .glossary{
+      .glossary {
         font-weight: bold;
         color: @green-darker;
         padding-bottom: 10px;
-        .Description{
+        .Description {
           padding-bottom: 10px;
         }
       }
-    .glossaryPrintButtons{
-      padding-top: 5px;
-      padding-bottom: 5px;
-      i{
-        cursor: pointer;
-      }
+      .glossaryPrintButtons {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        i {
+          cursor: pointer;
+        }
       }
       .safety {
         margin-bottom: 50px;
       }
-      .siteMap{
-        ul{
+      .siteMap {
+        ul {
           list-style: none;
           font-weight: bold;
           padding: 0;
@@ -991,7 +1009,7 @@ body{
           cursor: pointer;
           color: @green !important;
         }
-        .siteMapList{
+        .siteMapList {
           cursor: pointer;
           color: @green !important;
         }
@@ -999,60 +1017,66 @@ body{
     }
   }
 }
-@media print{
-  #menuDiv{
+
+@media print {
+  #menuDiv {
     display: none;
   }
-  #descriptionDiv{
+
+  #descriptionDiv {
     width: 100%;
   }
-  #initialDescriptionDiv{
+
+  #initialDescriptionDiv {
     width: 100%;
   }
-  #siteMapDiv{
+
+  #siteMapDiv {
     width: 100%;
   }
-  #footer{
+
+  #footer {
     display: none !important;
   }
+
   a:link:after, a:visited:after {
     content: "";
   }
 }
 
-.viewSpeakers{
-  .speaker{
+.viewSpeakers {
+  .speaker {
     padding-right: 15px;
     padding-bottom: 15px;
-    .imageOuterFrame{
+    .imageOuterFrame {
       width: 70px;
       height: 70px;
       border: 1px solid @gray-lighter;
       border-radius: 100px;
       overflow: hidden;
       -webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.1);
-      -moz-box-shadow:    0px 0px 10px 0px rgba(50, 50, 50, 0.1);
-      box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.1);
-      .imageInnerFrame{
+      -moz-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.1);
+      box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.1);
+      .imageInnerFrame {
         width: 60px;
         height: 60px;
         border-radius: 100px;
         overflow: hidden;
         margin-left: 4px;
         margin-top: 4px;
-        img{
+        img {
           width: 60px;
           height: 60px;
         }
       }
     }
-    .descriptionFrame{
+    .descriptionFrame {
       cursor: pointer;
       position: relative;
       left: 0;
       top: 0;
       padding-left: 85px;
-      .ellips{
+      .ellips {
         display: block; /* Fallback for non-webkit */
         display: -webkit-box;
         //margin: 0 auto;
@@ -1061,7 +1085,7 @@ body{
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .name{
+      .name {
         color: @green;
         .fontS;
         font-weight: bold;
@@ -1069,47 +1093,48 @@ body{
         height: 3em;
         .ellips;
       }
-      .title{
+      .title {
         line-height: 1.4em;
         height: 6em;
         .ellips;
       }
-      .cell{
+      .cell {
         padding-top: 5px;
         .fontS;
-        &.bold{
+        &.bold {
           font-weight: bold;
         }
       }
     }
   }
 }
-.largeDisplaySpeaker{
-  img{
+
+.largeDisplaySpeaker {
+  img {
     width: 100%;
   }
-  .name{
+  .name {
     color: @green;
     .fontXL;
     font-weight: bold;
   }
-  .country{
+  .country {
     .fontXL;
     margin-bottom: 10px;
   }
-  .cell{
+  .cell {
     text-align: justify;
     padding-top: 5px;
     .fontS;
-    &.bold{
+    &.bold {
       font-weight: bold;
     }
   }
 }
 
 //============================================================================================= SPECIAL APPS
-#specialApp{
-  iframe{
+#specialApp {
+  iframe {
     width: 100%;
     height: 100%;
   }
@@ -1117,42 +1142,42 @@ body{
 
 //============================================================================================= MY PROFILE
 
-.MyProfileModal{
+.MyProfileModal {
   //styles to show just when the profile is opened inside a modal
 }
 
-.medicProfile{
+.medicProfile {
   .fontS;
-  .modal-header{
+  .modal-header {
     padding: 10px 15px;
-    .modal-title{
-      h3{
+    .modal-title {
+      h3 {
         .fontXL;
       }
     }
   }
-  .modal-body{
-    .panel-title{
+  .modal-body {
+    .panel-title {
       .fontL;
-      p{
+      p {
         margin: 0;
       }
     }
-    .form-group-sm{
+    .form-group-sm {
       margin-top: 10px;
     }
-    .profileImg{
-      .wrapper{
+    .profileImg {
+      .wrapper {
         padding: 0;
         overflow: hidden;
         border: 3px solid @gray-lighter;
         border-radius: 4px;
-        .align{
+        .align {
           margin-top: 50%;
           transform: translateY(-50%);
           -ms-transform: translateY(-50%);
           -webkit-transform: translateY(-50%);
-          img{
+          img {
             width: 100%;
           }
           @media (max-width: @screen-xs-max) {
@@ -1162,49 +1187,49 @@ body{
       }
     }
   }
-  .modal-footer{
+  .modal-footer {
     padding: 10px 15px;
   }
 }
 
 //============================================================================================= RESPONSIVE MODALS
-.modal-responsive{
-  .modal-dialog{
+.modal-responsive {
+  .modal-dialog {
     height: 90%;
     min-height: 400px;
-    .modal-content{
+    .modal-content {
       height: 100%;
       position: relative;
-      .modal-header{
+      .modal-header {
         height: 80px;
       }
-      .modal-body{
+      .modal-body {
         position: absolute;
         bottom: 60px;
         top: 90px;
         left: 0;
         right: 0;
         overflow-y: scroll;
-        .multimediaVideo{
+        .multimediaVideo {
           height: 80%;
         }
       }
-      .modal-footer{
+      .modal-footer {
         position: absolute;
         height: 60px;
         left: 0;
         right: 0;
         bottom: 0;
-        .positionMiddle{
+        .positionMiddle {
           position: absolute;
           top: 50%;
           -ms-transform: translateY(-50%);
           -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
-          &.right{
+          &.right {
             right: 15px;
           }
-          &.left{
+          &.left {
             left: 15px;
           }
         }
@@ -1213,8 +1238,116 @@ body{
   }
 }
 
+//=============================================================================================calendar modal tabs
+.calendarTabs {
+  margin-top: 20px;
+  ul {
+    display: inline-block;
+  }
+
+  .nav-tabs > li.active > a {
+    border: none !important;
+    color: @green !important;
+  }
+
+  .nav > li.active {
+    border: none;
+  }
+
+  .nav-tabs > li.active {
+    border: none;
+    border-bottom: 2px solid @green;
+  }
+
+  .nav > li > a {
+    color: @gray;
+  }
+  .tab-content {
+    text-align: left;
+    display: flex;
+    margin: 20px;
+    justify-content: flex-start;
+    flex-direction: row;
+  }
+
+  .speakerContainer {
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    //flex-direction:row;
+    -webkit-flex-flow: row wrap;
+
+    .speaker {
+      width: 400px;
+      height: 150px;
+      padding-left: 85px;
+      .descriptionFrame {
+        cursor: pointer;
+        position: relative;
+        left: 0;
+        top: 0;
+        padding-left: 85px;
+        .cell {
+          padding-top: 5px;
+          font-size: 12px;
+        }
+        .title {
+          line-height: 1.4em;
+          height: 6em;
+          display: block;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .name {
+          color: @green;
+          font-size: 12px;
+          font-weight: bold;
+          line-height: 1.5em;
+        }
+        .speakerDescription {
+          color: @gray;
+        }
+      }
+      .imageInnerFrame {
+        width: 60px;
+        height: 60px;
+        border-radius: 100px;
+        overflow: hidden;
+        margin-left: 4px;
+        margin-top: 4px;
+        img {
+          width: 60px;
+          height: 60px;
+        }
+      }
+
+    }
+  }
+  .programContainer {
+    .dayItem {
+      margin: 10px;
+
+      .conferenceItem {
+        margin: 15px;
+        .conferenceTitle {
+          color: @green;
+
+        }
+        .talkTitle {
+          margin: 10px 10px 10px 50px;
+        }
+      }
+    }
+  }
+
+}
+
+
 //============================================================================================= USEFUL STYLES / MIX-INS
-.unselectable{
+.unselectable {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -1222,78 +1355,104 @@ body{
   -ms-user-select: none;
   user-select: none;
 }
-.noPadding{padding:0;}
-.MSDgreen{color: @green;}
-.MSDgreenDarker{color: @green-darker;}
-.handCursor{
+
+.noPadding {
+  padding: 0;
+}
+
+.MSDgreen {
+  color: @green;
+}
+
+.MSDgreenDarker {
+  color: @green-darker;
+}
+
+.handCursor {
   cursor: pointer;
 }
-.justify{
+
+.justify {
   text-align: justify;
 }
-.noMarginTop{
+
+.noMarginTop {
   margin-top: 0px;
 }
+
 //.articlesStyles .articleDetail .articleContent .img-special {
 //  width: 300px;
 //  padding-right: 15px;
 //  padding-bottom: 15px;
 //}
-.no-text-decoration{
-  text-decoration: none !important;
-}
-.no-text-decoration a:hover{
-  text-decoration: none !important;
-}
-.no-text-decoration a:active{
-  text-decoration: none !important;
-}
-.no-text-decoration a:focus{
-  text-decoration: none !important;
-}
-.no-text-decoration:hover{
-  text-decoration: none !important;
-}
-.no-text-decoration:active{
-  text-decoration: none !important;
-}
-.no-text-decoration:focus{
+.no-text-decoration {
   text-decoration: none !important;
 }
 
-.modal-dialog{
-  .modal-header{
+.no-text-decoration a:hover {
+  text-decoration: none !important;
+}
+
+.no-text-decoration a:active {
+  text-decoration: none !important;
+}
+
+.no-text-decoration a:focus {
+  text-decoration: none !important;
+}
+
+.no-text-decoration:hover {
+  text-decoration: none !important;
+}
+
+.no-text-decoration:active {
+  text-decoration: none !important;
+}
+
+.no-text-decoration:focus {
+  text-decoration: none !important;
+}
+
+.modal-dialog {
+  .modal-header {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     color: white;
     background-color: @green;
   }
 }
-a:focus{
+
+a:focus {
   text-decoration: none;
 }
-.cookieBar{
+
+.cookieBar {
   position: fixed;
   z-index: 1060;
-  background-color: @green ;
-  bottom:0;
+  background-color: @green;
+  bottom: 0;
   line-height: 30px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:white;
+  color: white;
   padding: 5px;
 }
 
 //=================================== calendar mobile responsive
-.popover{
+.popover {
   z-index: 1000 ! important;
   width: 376px !important;
-  }
-.popover-title{
+}
+
+.popover-title {
   background: @green;
   color: white;
 }
-.popover-content{ color: black; }
-.fc-header-title{
+
+.popover-content {
+  color: black;
+}
+
+.fc-header-title {
   h2 {
     .fontXL;
     @media (max-device-width: @screen-xs) {
@@ -1301,33 +1460,37 @@ a:focus{
     }
   }
 }
-.fc-button-today{
+
+.fc-button-today {
   @media (max-device-width: @screen-xs) {
     display: none !important;
   }
 }
 
-.fc-event-time{
+.fc-event-time {
   display: none;
 }
 
 //=================================================================================================== TINY MCE CLASSES
-.specialText{
+.specialText {
   @media (max-width: @screen-xs-max) {
     width: 100% !important;
   }
 }
-.width100{
+
+.width100 {
   @media (max-width: @screen-xs-max) {
     width: 100% !important;
   }
 }
-.width50{
+
+.width50 {
   @media (max-width: @screen-xs-max) {
     width: 50% !important;
   }
 }
-.width30{
+
+.width30 {
   @media (max-width: @screen-xs-max) {
     width: 30% !important;
   }

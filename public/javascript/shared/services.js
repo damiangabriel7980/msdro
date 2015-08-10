@@ -146,8 +146,17 @@ services.factory('Utils', ['$sce', function ($sce) {
         getMonthsArray: function () {
             return ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
         },
-        customDateFormat : function(input){
-            return input.getDate() + '/' + (input.getMonth() + 1) + '/' + input.getFullYear();
+        customDateFormat : function(input, options){
+            options = options || {};
+            var day = input.getDate();
+            var month = input.getMonth()+1;
+            var year = input.getFullYear();
+            if(options.prefixZero){
+                if(day<10) day = "0"+day;
+                if(month<10) month = "0"+month;
+            }
+            var separator = options.separator || "/";
+            return options.reverse?year+separator+month+separator+day:day+separator+month+separator+year;
 
         },
         trustAsHtml: trustAsHtml,

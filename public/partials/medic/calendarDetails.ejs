@@ -1,20 +1,80 @@
 <div class="eventDetails">
-        <div class="modal-header">
-            <div class="modal-title"><i class="glyphicon glyphicon-facetime-video fontM" ng-if="itemsEvent.type==2"></i>&nbsp;{{itemsEvent['name']}}
+    <div class="modal-header">
+        <div class="modal-title"><i class="glyphicon glyphicon-facetime-video fontM"
+                                    ng-if="itemsEvent.event.type==2"></i>&nbsp;{{itemsEvent.event['name']}}
+        </div>
+        <div class="details">
+            <div class="date location">
+                <span class="label label-primary"><strong>&nbsp;{{itemsEvent.event.start | asDate | date: 'MMMM dd'}} </strong><strong>
+                        &nbsp;-&nbsp;{{itemsEvent.event.end | asDate | date: 'dd,yyyy'}}</strong> <strong
+                            convert-special
+                            conver="itemsEvent.event.place"
+                            ng-bind-html="trustAsHtml(itemsEvent.event.place)"></strong></span>
             </div>
         </div>
-        <div class="modal-body container">
-            <div class="details">
-                <div class="location">
-                    <strong>Locatie:&nbsp;</strong><strong convert-special conver="itemsEvent.place" ng-bind-html="trustAsHtml(itemsEvent.place)"></strong>
-                </div>
-                <div class="date">
-                    <span class="label label-primary">&nbsp;{{itemsEvent.start | asDate | date: 'dd/MM/yyyy'}}&nbsp;-&nbsp;{{itemsEvent.end | asDate | date: 'dd/MM/yyyy'}}</span>
-                </div>
-                <div class="description" convert-special conver="itemsEvent.description" ng-bind-html="trustAsHtml(itemsEvent.description + '&nbsp;')"></div>
-            </div>
+    </div>
+    <div class="modal-body container">
+        <div class="calendarTabs">
+            <tabset class="text-center">
+                <tab heading="About">
+                    <div class="aboutContainer" ng-bind-html="trustAsHtml(itemsEvent.event.description)">
+                    </div>
+                </tab>
+                <tab heading="Program">
+                    <div class="programContainer">
+                        <div ng-repeat="(key ,day) in itemsEvent.days" class="dayItem">
+                            <span class="eventDay" ng-click="isCollapsed =!isCollapsed"><i
+                                        ng-class="{'glyphicon glyphicon-chevron-down':isCollapsed,'glyphicon glyphicon-chevron-up':!isCollapsed}"></i>
+                                <strong>{{day[0].begin_date|asDate|date:'MMMM dd' }}</strong></span>
+
+                            <div collapse="isCollapsed">
+                                <div class="conferenceItem" ng-repeat="conference in day">
+                                    <span class="conferenceTitle" ng-click="subMenuCollapsed=!subMenuCollapsed"><i
+                                                ng-class="{'glyphicon glyphicon-chevron-down':!subMenuCollapsed,'glyphicon glyphicon-chevron-up':subMenuCollapsed}"></i> {{conference.title}}</span>
+
+                                    <div collapse="!subMenuCollapsed">
+                                        <span class="conferenceDescription">{{conference.description}}</span>
+
+                                        <div class="talkTitle" ng-repeat="talk in conference.talks">
+                                            <span>  {{talk.hour_start | asDate |date:'HH:mm' }} - {{talk.hour_end | asDate|date:'HH:mm'}} {{talk.title}} {{talk.room.room_name}}</span>
+                                            <span ng-bind-html= "trustAsHtml(talk.description)"></span>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+
+                <tab heading="Speakers">
+                    <div class="speakerContainer">
+                        <div dir-paginate="speaker in itemsEvent.speakers | itemsPerPage:8"
+                             class="col-xs-12 col-sm-6 col-md-4 noPadding speaker cell">
+                            <div class="pull-left imageOuterFrame">
+                                <div class="imageInnerFrame">
+                                    <a><img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}"></a>
+                                </div>
+                            </div>
+                            <div class="descriptionFrame">
+                                <div class="name">
+                                    <span>{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</span>
+                                </div>
+                                <div class="cell title">
+                                    {{speaker.workplace}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <dir-pagination-controls></dir-pagination-controls>
+                    </div>
+
+                </tab>
+            </tabset>
         </div>
-        <div class="modal-footer">
-            <a class="btn btn-default float-left" ng-click="closeModal()">Inchide</a>
-        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-default float-left" ng-click="closeModal()">Inchide</a>
+    </div>
 </div>

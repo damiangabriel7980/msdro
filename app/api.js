@@ -36,6 +36,7 @@ var UserModule = require('./modules/user');
 var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
 var SessionStorage = require('./modules/sessionStorage');
+var ConferencesModule = require('./modules/Conferences');
 
 //special Products
 var specialProduct = require('./models/specialProduct');
@@ -3514,11 +3515,45 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/calendar')
         .get(function(req,res) {
             if(req.query.id){
-                Events.findById(req.query.id,function(err, cont) {
+                Events.findById(req.query.id,function(err, event) {
+                    var queryResult={};
                     if(err) {
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res, cont);
+                        queryResult.event=event;
+
+                        function getConferencesInDepth(callback){
+                            ConferencesModule.getConferencesInDepth(event.listconferences, function(err,conferences){
+                                if(err){
+                                    callback(err);
+                                }
+                                else{
+                                    queryResult.conferences = conferences;
+                                    callback();
+                                }
+                            })
+                        }
+                       function getSpeakersForConferences(callback){
+                           ConferencesModule.getSpeakersForConferences(event.listconferences,function(err,speakers){
+                               if(err){
+                                   callback(err);
+                               }
+                               else{
+                                   queryResult.speakers=speakers;
+                                   callback();
+                               }
+                           })
+                       }
+
+                        async.parallel([getConferencesInDepth,getSpeakersForConferences],function(err){
+                            if(err){
+                                handleError(err);
+                            }
+                            else{
+                                handleSuccess(res,queryResult);
+                            }
+                        })
+
                     }
                 });
             }else{
