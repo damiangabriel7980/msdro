@@ -28,14 +28,14 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
             for(i=0; i<events.length; i++){
                 dateStart = new Date(events[i].start);
                 dateEnd = new Date(events[i].end);
-                if(dateEnd.getHours()===0) dateEnd.setDate(dateEnd.getDate + 1);
+                //if(dateEnd.getHours()===0) dateEnd.setDate(dateEnd.getDate + 1);
                 if(dateEnd.toString()!=="Invalid Date" && dateStart.toString()!=="Invalid Date"){
                     eventsFormatted.push({
                         id: events[i]._id,
                         title: events[i].name,
                         start: dateStart,
                         end: dateEnd,
-                        allDay: true,
+                        //allDay: true,
                         className: 'events',
                         color: '#01877B'
                     });
@@ -45,6 +45,7 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
             var calendarConfig = {
                 calendar: {
                     events: eventsFormatted,
+                    ignoreTimezone: false,
                     height: 420,
                     editable: false,
                     header: {
@@ -80,7 +81,7 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
                 element.attr("data-toggle", "popover");
                 element.attr("data-content", data.title);
                 var endDate = new Date(data.end);
-                if(endDate.getHours()===0) endDate.setDate(endDate.getDate()-1);
+                //if(endDate.getHours()===0) endDate.setDate(endDate.getDate()-1);
                 element.attr("data-original-title", Utils.customDateFormat(new Date(data.start))  + " - " +  Utils.customDateFormat(endDate));
                 $(element[0]).popover({
                     trigger:"hover",

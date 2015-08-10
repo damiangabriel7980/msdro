@@ -6554,6 +6554,10 @@ body .btn {
 .calendarWrapper .fc-event-container .fc-content {
   text-overflow: ellipsis;
 }
+.calendarWrapper .fc-event-container .fc-content .fc-time {
+  visibility: hidden;
+  display: none;
+}
 .calendarWrapper .noPadding {
   padding: 0;
 }
