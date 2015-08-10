@@ -10,19 +10,16 @@ app.controllerProvider.register('EventModal', ['$scope', 'eventsService', '$stat
         };
         $scope.itemsEvent.days = {};
         for (var i = 0; i < $scope.itemsEvent.conferences.length; i++) {
-            console.log(resetTimeInDate(new Date($scope.itemsEvent.conferences[i].begin_date)).getFullYear());
             var conferenceBeginDate = Utils.customDateFormat(resetTimeInDate(new Date($scope.itemsEvent.conferences[i].begin_date)), {
                 reverse: true,
                 prefixZero: true,
                 separator: "_"
             });
-            console.log(conferenceBeginDate);
             if (!$scope.itemsEvent.days[conferenceBeginDate])
                 $scope.itemsEvent.days[conferenceBeginDate] = [$scope.itemsEvent.conferences[i]];
             else
                 $scope.itemsEvent.days[conferenceBeginDate].push($scope.itemsEvent.conferences[i]);
         }
-        console.log($scope.itemsEvent);
     });
     $scope.setPage = function (pageNo) {
         $scope.currentPage = pageNo;

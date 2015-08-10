@@ -5,8 +5,8 @@
         </div>
         <div class="details">
             <div class="date location">
-                <span class="label label-primary"><strong>&nbsp;{{itemsEvent.event.start | asDate | date: 'MMMM dd'}}</strong><strong>
-                        &nbsp;-&nbsp;{{itemsEvent.event.end | asDate | date: 'dd yyyy'}}</strong> <strong
+                <span class="label label-primary"><strong>&nbsp;{{itemsEvent.event.start | asDate | date: 'MMMM dd'}} </strong><strong>
+                        &nbsp;-&nbsp;{{itemsEvent.event.end | asDate | date: 'dd,yyyy'}}</strong> <strong
                             convert-special
                             conver="itemsEvent.place"
                             ng-bind-html="trustAsHtml(itemsEvent.event.place)"></strong></span>
