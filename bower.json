@@ -41,7 +41,8 @@
     "he": "latest",
     "async": "latest",
     "angulartics": "~0.19.x",
-    "tinymce": "latest"
+    "tinymce": "latest",
+    "angular-ui-ace": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.x",

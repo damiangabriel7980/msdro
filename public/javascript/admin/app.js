@@ -12,7 +12,8 @@ var app = angular.module('app',
         'myMultipleSelect',
         'therapeuticSelect',
         's3UploadManager',
-        'adminEditableSingleList'
+        'adminEditableSingleList',
+        'ui.ace'
     ]);
 
 app.config(['$locationProvider', function($location) {

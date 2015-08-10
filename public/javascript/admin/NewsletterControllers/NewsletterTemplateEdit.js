@@ -16,6 +16,24 @@ controllers.controller('NewsletterTemplateEdit', ['$scope', 'idToEdit', 'Newslet
             refreshTemplates();
             $modalInstance.close();
         });
+    };
+
+    $scope.aceOptions ={
+        useWrapMode : true,
+        showGutter: false,
+        mode: 'xml',
+        onLoad: aceLoaded
+        //onChange: aceChanged
+    };
+
+    function aceLoaded(_editor) {
+        _editor.$blockScrolling = Infinity;
+        _editor.session.setMode("ace/mode/html");
+        _editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: false
+        });
     }
 
 }]);

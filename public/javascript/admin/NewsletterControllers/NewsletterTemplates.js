@@ -32,6 +32,7 @@ controllers.controller('NewsletterTemplates', ['$scope', '$state', 'NewsletterSe
         $modal.open({
             templateUrl: 'partials/admin/newsletter/templates/modalEditTemplate.html',
             windowClass: 'fade',
+            size: 'lg',
             controller: 'NewsletterTemplateEdit',
             resolve: {
                 idToEdit: function () {

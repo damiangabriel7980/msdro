@@ -132,3 +132,9 @@ a {
 .campaigns .tabViewPanel {
   margin-top: 15px;
 }
+.newsletterTemplateEdit .ace_editor {
+  height: 300px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  margin-bottom: 15px;
+}
