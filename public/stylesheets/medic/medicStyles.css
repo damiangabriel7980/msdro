@@ -7675,11 +7675,6 @@ fieldset[disabled] .navbarMedic .profile .btn {
   display: flex;
   -webkit-flex-flow: row wrap;
 }
-.calendarTabs .speakerContainer .speaker {
-  width: 400px;
-  height: 150px;
-  padding-left: 85px;
-}
 .calendarTabs .speakerContainer .speaker .descriptionFrame {
   cursor: pointer;
   position: relative;
@@ -7705,9 +7700,11 @@ fieldset[disabled] .navbarMedic .profile .btn {
   font-size: 12px;
   font-weight: bold;
   line-height: 1.5em;
+  text-overflow: ellipsis;
 }
 .calendarTabs .speakerContainer .speaker .descriptionFrame .speakerDescription {
   color: #aaaaaa;
+  text-overflow: ellipsis;
 }
 .calendarTabs .speakerContainer .speaker .imageInnerFrame {
   width: 60px;
@@ -7721,17 +7718,30 @@ fieldset[disabled] .navbarMedic .profile .btn {
   width: 60px;
   height: 60px;
 }
-.calendarTabs .programContainer .dayItem {
-  margin: 10px;
-}
-.calendarTabs .programContainer .dayItem .conferenceItem {
-  margin: 15px;
+@media screen and (min-width: 767px) {
+  .calendarTabs .speakerContainer .speaker {
+    width: 400px;
+    height: 150px;
+    padding-left: 85px;
+  }
 }
 .calendarTabs .programContainer .dayItem .conferenceItem .conferenceTitle {
   color: #01877b;
 }
-.calendarTabs .programContainer .dayItem .conferenceItem .talkTitle {
-  margin: 10px 10px 10px 50px;
+.calendarTabs .programContainer .dayItem .talkTitle {
+  margin: 10px;
+}
+@media screen and (min-width: 767px) {
+  .calendarTabs .programContainer .dayItem .conferenceItem {
+    margin: 10px;
+  }
+  .calendarTabs .programContainer .dayItem .conferenceItem .conferenceTitle {
+    margin: 15px 15px 15px 45px;
+    color: #01877b;
+  }
+  .calendarTabs .programContainer .dayItem .talkTitle {
+    margin: 10px 10px 10px 80px;
+  }
 }
 .unselectable {
   -webkit-touch-callout: none;

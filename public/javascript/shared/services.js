@@ -89,6 +89,15 @@ services.factory('Utils', ['$sce', function ($sce) {
             return htmlToPlainText(text);
         }
     };
+    var isEmptyObject = function(obj){
+        for(var key in obj) {
+            console.log(obj);
+            if (obj.hasOwnProperty(key)) {
+                return false;
+            }
+        }
+        return true;
+    }
     return{
         fileToBase64: function (file, callback) {
             var reader = new FileReader();
@@ -164,7 +173,8 @@ services.factory('Utils', ['$sce', function ($sce) {
         convertAndTrustAsHtml: convertAndTrustAsHtml,
         trimText: trimText,
         trimWords: trimWords,
-        createHeader: createHeader
+        createHeader: createHeader,
+        isEmptyObject:isEmptyObject
     }
 }]);
 services.factory('Diacritics',function(){

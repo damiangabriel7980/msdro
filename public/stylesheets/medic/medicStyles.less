@@ -1262,9 +1262,6 @@ body {
     -webkit-flex-flow: row wrap;
 
     .speaker {
-      width: 400px;
-      height: 150px;
-      padding-left: 85px;
       .descriptionFrame {
         cursor: pointer;
         position: relative;
@@ -1289,9 +1286,11 @@ body {
           font-size: 12px;
           font-weight: bold;
           line-height: 1.5em;
+          text-overflow: ellipsis;
         }
         .speakerDescription {
           color: @gray;
+          text-overflow: ellipsis;
         }
       }
       .imageInnerFrame {
@@ -1307,27 +1306,45 @@ body {
         }
       }
 
-    }
-  }
-  .programContainer {
-    .dayItem {
-      margin: 10px;
-
-      .conferenceItem {
-        margin: 15px;
-        .conferenceTitle {
-          color: @green;
-
-        }
-        .talkTitle {
-          margin: 10px 10px 10px 50px;
+      @media screen {
+        @media (min-width: @screen-xs-max) {
+          width: 400px;
+          height: 150px;
+          padding-left: 85px;
         }
       }
     }
   }
+  .programContainer {
+    .dayItem {
+      .conferenceItem{
+        .conferenceTitle{
+        color:@green;
+        }
+      }
+      .talkTitle{
+        margin:10px;
+      }
+
+      @media screen {
+        @media (min-width: @screen-xs-max) {
+          .conferenceItem {
+            margin: 10px;
+            .conferenceTitle {
+              margin: 15px 15px 15px 45px;
+              color: @green;
+            }
+          }
+          .talkTitle {
+            margin: 10px 10px 10px 80px;
+          }
+        }
+      }
+    }
+
+  }
 
 }
-
 
 //============================================================================================= USEFUL STYLES / MIX-INS
 .unselectable {
