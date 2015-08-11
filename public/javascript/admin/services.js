@@ -504,7 +504,13 @@ services.factory('NewsletterService', ['$resource', function($resource){
         return variables;
     };
     var renderTemplate = function (templateHtml, variables) {
-        return "asdasd";
+        templateHtml = templateHtml || "";
+        for(var i=0; i<variables.length; i++){
+            if(variables[i] && ["text", "html"].indexOf(variables[i].type) > -1 && variables[i].value){
+                templateHtml = templateHtml.replace(new RegExp("\\*\\|"+variables[i].name+"\\|\\*", "g"), variables[i].value);
+            }
+        }
+        return templateHtml;
     };
     return {
         campaigns: $resource('api/admin/newsletter/campaigns', {}, {

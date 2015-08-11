@@ -30,7 +30,7 @@ controllers.controller('NewsletterCampaignPopulateTemplate',['$scope', 'Newslett
 
     $scope.$watch('template.variables', function (newVariables) {
         $scope.templatePreview = NewsletterService.templates.renderTemplate(templateInfo.html, newVariables || []);
-    });
+    }, true);
 
     $scope.closeModal = function () {
         $modalInstance.close();

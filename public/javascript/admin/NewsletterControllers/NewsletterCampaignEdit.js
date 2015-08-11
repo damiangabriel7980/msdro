@@ -106,4 +106,6 @@ controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 
         return null;
     }
 
+    $scope.renderTemplate = NewsletterService.templates.renderTemplate;
+
 }]);
