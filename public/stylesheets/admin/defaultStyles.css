@@ -188,3 +188,8 @@ a {
 .newsletterChooseCampaignTemplate .template:hover {
   border: 1px solid #777;
 }
+.newsletterPopulateTemplate .templatePreview {
+  padding: 0;
+  border: 1px solid #eee;
+  margin-bottom: 15px;
+}

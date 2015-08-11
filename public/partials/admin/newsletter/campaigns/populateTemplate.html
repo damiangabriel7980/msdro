@@ -1,0 +1,28 @@
+<div class="modal-content newsletterPopulateTemplate">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h3 class="modal-title">Populeaza template</h3>
+    </div>
+    <div class="modal-body col-md-12 noPadding">
+        <div class="col-md-12" style="margin-bottom: 15px;">
+            <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 templatePreview" ng-if="templatePreview" ng-bind-html="trustAsHtml(templatePreview)"></div>
+        </div>
+        <div class="col-md-12 noPadding" ng-repeat="variable in templateInfo.variables">
+            <div class="col-md-12 form-group" ng-if="variable.type==='text'">
+                text - {{variable.name}}
+            </div>
+            <div class="col-md-12 form-group" ng-if="variable.type==='html'">
+                html - {{variable.name}}
+            </div>
+            <div class="col-md-12 form-group" ng-if="variable.type==='system'">
+                system - {{variable.name}}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Anuleaza</button>
+    </div>
+</div>

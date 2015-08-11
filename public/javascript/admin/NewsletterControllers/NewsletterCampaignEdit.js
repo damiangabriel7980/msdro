@@ -43,8 +43,21 @@ controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 
         });
     };
 
-    $scope.editTemplate = function (index) {
-        console.log(index);
+    $scope.populateTemplate = function (template) {
+        $modal.open({
+            templateUrl: 'partials/admin/newsletter/campaigns/populateTemplate.html',
+            windowClass: 'fade',
+            controller: 'NewsletterCampaignPopulateTemplate',
+            size: 'lg',
+            resolve: {
+                template: function () {
+                    return template;
+                },
+                templatesById: function () {
+                    return $scope.templatesById;
+                }
+            }
+        });
     };
 
     $scope.shiftTemplateDown = function (order_index) {

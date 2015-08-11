@@ -503,6 +503,9 @@ services.factory('NewsletterService', ['$resource', function($resource){
         }
         return variables;
     };
+    var renderTemplate = function (templateHtml, variables) {
+        return "asdasd";
+    };
     return {
         campaigns: $resource('api/admin/newsletter/campaigns', {}, {
             query: { method: 'GET', isArray: false },
@@ -523,7 +526,8 @@ services.factory('NewsletterService', ['$resource', function($resource){
                 update: { method: 'PUT', isArray: false },
                 delete: { method: 'DELETE', isArray: false }
             }),
-            parseVariables: parseTemplateVariables
+            parseVariables: parseTemplateVariables,
+            renderTemplate: renderTemplate
         },
         users: $resource('api/admin/newsletter/users', {}, {
             query: { method: 'GET', isArray: false }
