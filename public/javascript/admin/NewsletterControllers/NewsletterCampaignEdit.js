@@ -34,6 +34,7 @@ controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 
             templateUrl: 'partials/admin/newsletter/campaigns/chooseTemplate.html',
             windowClass: 'fade',
             controller: 'NewsletterCampaignChooseTemplate',
+            size: 'lg',
             resolve: {
                 templates: function () {
                     return $scope.campaign.templates;
@@ -46,8 +47,50 @@ controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 
         console.log(index);
     };
 
+    $scope.shiftTemplateDown = function (order_index) {
+        var replaceThis = findTemplateByOrderIndex(order_index);
+        var replaceWith = findTemplateByOrderIndex(order_index+1);
+        if(replaceThis !== null && replaceWith !== null){
+            replaceThis.order = order_index + 1;
+            replaceWith.order = order_index;
+        }
+    };
+
+    $scope.shiftTemplateUp = function (order_index) {
+        var replaceThis = findTemplateByOrderIndex(order_index);
+        var replaceWith = findTemplateByOrderIndex(order_index-1);
+        if(replaceThis !== null && replaceWith !== null){
+            replaceThis.order = order_index - 1;
+            replaceWith.order = order_index;
+        }
+    };
+
+    $scope.removeTemplate = function (index) {
+        //console.log(index);
+        //console.log($scope.campaign.templates);
+        //console.log(findTemplateByOrderIndex(index, true));
+        var splicedElementOrder = findTemplateByOrderIndex(index).order;
+        var spliceAt = findTemplateByOrderIndex(index, true);
+        $scope.campaign.templates.splice(spliceAt, 1);
+        var templates = $scope.campaign.templates;
+        for(var i=0; i<templates.length; i++){
+            if(templates[i].order > splicedElementOrder) templates[i].order -= 1;
+        }
+        //console.log($scope.campaign.templates);
+    };
+
     $scope.closeModal = function () {
         $modalInstance.close();
+    };
+
+    function findTemplateByOrderIndex(idx, returnIndex){
+        var templates = $scope.campaign.templates;
+        for(var i=0; i<templates.length; i++){
+            if(templates[i].order === idx){
+                return returnIndex?i:templates[i];
+            }
+        }
+        return null;
     }
 
 }]);

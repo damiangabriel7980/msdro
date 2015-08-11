@@ -1,4 +1,4 @@
-<div class="modal-content">
+<div class="modal-content newsletterEditCampaign">
     <div class="modal-header">
         <button type="button" class="close" ng-click="closeModal()">&times;</button>
         <h3 class="modal-title">Editeaza campanie</h3>
@@ -38,9 +38,15 @@
             <div class="col-md-12" style="margin-bottom: 15px">
                 <div class="btn btn-sm btn-primary" ng-click="addTemplate()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga template</div>
             </div>
-            <div class="col-md-12 templatesPreview" style="margin-bottom: 15px">
-                <div class="col-md-12 noPadding template welded" ng-repeat="template in campaign.templates | orderBy:order:'asc' track by $index"
-                     ng-click="editTemplate($index)" ng-bind-html="trustAsHtml(templatesById[template.id].html)">
+            <div class="col-md-12 manageTemplates">
+                <div class="col-md-12 template" ng-repeat="template in campaign.templates | orderBy:'order' track by $index">
+                    <div class="col-md-12 content" ng-bind-html="trustAsHtml(templatesById[template.id].html)"></div>
+                    <div class="actions">
+                        <div class="btn btn-xs btn-default" ng-click="shiftTemplateDown(template.order)"><i class="glyphicon glyphicon-arrow-down"></i></div>
+                        <div class="btn btn-xs btn-default" ng-click="shiftTemplateUp(template.order)"><i class="glyphicon glyphicon-arrow-up"></i></div>
+                        <div class="btn btn-xs btn-primary" ng-click="editTemplate($index)"><i class="glyphicon glyphicon-cog"></i></div>
+                        <div class="btn btn-xs btn-danger" ng-click="removeTemplate($index)"><i class="glyphicon glyphicon-remove"></i></div>
+                    </div>
                 </div>
             </div>
         </div>

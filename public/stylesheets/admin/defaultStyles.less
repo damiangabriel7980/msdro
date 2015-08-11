@@ -136,7 +136,8 @@ a{
   cursor: pointer;
 }
 
-.campaigns{
+//============================================================================================ NEWSLETTER
+.newsletterDashboard{
   .overallStats{
     height:100px;
     border:1px solid gray;
@@ -146,8 +147,7 @@ a{
     margin-top: 15px;
   }
 }
-
-.newsletterTemplateEdit{
+.newsletterEditTemplate{
   .ace_editor{
     height: 300px;
     border-radius: 5px;
@@ -158,8 +158,36 @@ a{
     padding: 0 0 15px 0;
   }
 }
-
-.templatesPreview{
+.newsletterEditCampaign{
+  .manageTemplates{
+    margin-bottom: 15px;
+    .template{
+      padding: 0;
+      border: 1px solid #eee;
+      position: relative;
+      min-height: 33px;
+      .content{
+        padding: 0;
+      }
+      .actions{
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        visibility: hidden;
+        display: none;
+        height: 30px;
+      }
+      &:hover{
+        border: 1px solid #777;
+        .actions{
+          visibility: visible;
+          display: block;
+        }
+      }
+    }
+  }
+}
+.newsletterChooseCampaignTemplate{
   .template{
     border: 1px solid #eee;
     margin-bottom: 15px;
