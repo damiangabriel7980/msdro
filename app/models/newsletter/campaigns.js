@@ -9,6 +9,7 @@ var schema = new Schema({
     templates: [{
         id: {type: Schema.Types.ObjectId, ref: 'newsletter_templates'},
         variables: [{
+            "type": {type: String, enum: ["text", "html", "system"]},
             name: String,
             value: String
         }],
