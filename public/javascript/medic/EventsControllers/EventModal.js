@@ -11,7 +11,7 @@ app.controllerProvider.register('EventModal', ['$scope', 'eventsService', '$stat
                 var talkBeginDate = Utils.customDateFormat(new Date($scope.itemsEvent.conferences[i].talks[j].hour_start), {
                     reverse: true,
                     prefixZero: true,
-                    separator: " "
+                    separator: "-"
                 });
 
                 if($scope.itemsEvent.days[talkBeginDate]) {
