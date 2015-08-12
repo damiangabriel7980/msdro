@@ -47,7 +47,7 @@ module.exports = function (logger) {
             }else{
                 Q.all([
                     getEmails(campaign.distribution_lists),
-                    populateTemplate(campaign.templates)
+                    populateTemplates(campaign.templates)
                 ]).then(
                     function (results) {
                         var users = results[0];
@@ -120,11 +120,41 @@ module.exports = function (logger) {
         return array1;
     }
 
-    function populateTemplate(templates){
+    function populateTemplates(templates){
         var deferred = Q.defer();
         //console.log(templates);
-        deferred.resolve("Got html");
+        var populated = {};
+        async.each(templates, function (template, callback) {
+            try{
+                if(template && template.id) populated[template.order] = populateTemplate(template.id.html, template.variables);
+                callback();
+            }catch(ex){
+                callback(ex);
+            }
+        }, function (err) {
+            if(err){
+                deferred.reject(err);
+            }else{
+                var html = "";
+                for(var key in populated){
+                    if(populated.hasOwnProperty(key)){
+                        html += populated[key];
+                    }
+                }
+                deferred.resolve(html);
+            }
+        });
         return deferred.promise;
+    }
+
+    function populateTemplate(templateHtml, variables){
+        templateHtml = templateHtml || "";
+        for(var i=0; i<variables.length; i++){
+            if(variables[i] && ["text", "html"].indexOf(variables[i].type) > -1 && variables[i].value){
+                templateHtml = templateHtml.replace(new RegExp("\\*\\|"+variables[i].name+"\\|\\*", "g"), variables[i].value);
+            }
+        }
+        return templateHtml;
     }
 
     return {
