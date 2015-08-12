@@ -7664,6 +7664,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .calendarTabs {
   margin-top: 20px;
 }
+.calendarTabs .tab-pane {
+  width: 100% !important ;
+}
 .calendarTabs ul {
   display: inline-block;
 }
@@ -7752,6 +7755,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
   margin: 10px;
 }
 @media screen and (min-width: 767px) {
+  .calendarTabs .programContainer .dayItem .eventDay {
+    margin-left: 25px;
+  }
   .calendarTabs .programContainer .dayItem .conferenceItem {
     margin: 10px;
   }

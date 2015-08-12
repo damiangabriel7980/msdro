@@ -17,14 +17,14 @@
         <div class="calendarTabs">
             <tabset class="text-center">
                 <tab heading="Despre">
-                    <p ng-show="!itemsEvent.event.description" class="text-center">Nu sunt disponibile detalii despre Eveniment</p>
+                    <p ng-show="!itemsEvent.event.description" class="text-center">Nu sunt disponibile detalii despre Eveniment.</p>
                     <div class="aboutContainer" ng-bind-html="trustAsHtml(itemsEvent.event.description)">
                     </div>
                 </tab>
                 <tab heading="Program">
                     <div class="programContainer">
                         <p ng-show="isEmpty(itemsEvent.days)" class="text-center">Nu sunt disponibile detalii
-                            despre program.
+                            despre Program.
                         </p>
                         <div ng-repeat="(key,day) in itemsEvent.days" class="dayItem">
 
@@ -57,9 +57,8 @@
                 <tab heading="Speakeri">
                     <div class="speakerContainer">
                         <p ng-show="!itemsEvent.speakers.length" class="text-center">Nu sunt disponibile detalii
-                            despre speakeri.
+                            despre Speakeri.
                         </p>
-
                         <div dir-paginate="speaker in itemsEvent.speakers | itemsPerPage:8"
                              class="col-xs-12 col-sm-6 col-md-4 noPadding speaker cell">
 
