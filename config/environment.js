@@ -14,7 +14,10 @@ module.exports = function(){
                 disablePatients: false,
                 dpocAppLink: "unavailable",
                 publicFolder: "public",
-                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss"
+                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                newsletter: {
+                    scheduleInterval: 'everyMinute'
+                }
             };
 
         case 'staging':
@@ -31,7 +34,10 @@ module.exports = function(){
                 disablePatients: false,
                 dpocAppLink: "unavailable",
                 publicFolder: "public_min",
-                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss"
+                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                newsletter: {
+                    scheduleInterval: 'everyMinute'
+                }
             };
 
         case 'production':
@@ -48,7 +54,10 @@ module.exports = function(){
                 disablePatients: true,
                 dpocAppLink: "https://msd-ios-distribution.s3.amazonaws.com/MSD_dpoc_InHouse/index.html",
                 publicFolder: "public_min",
-                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss"
+                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                newsletter: {
+                    scheduleInterval: 'everyHour'
+                }
             };
 
         default:
