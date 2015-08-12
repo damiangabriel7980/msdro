@@ -13,6 +13,10 @@
             </div>
             <div class="col-md-12 templatePreview" ng-if="templatePreview" ng-bind-html="trustAsHtml(templatePreview)"></div>
         </div>
+        <div class="col-md-12">
+            <label>Vezi variabile</label>
+            <input type="checkbox" ng-model="checkVariables">
+        </div>
         <div class="col-md-12"><hr><label>Variabile:</label></div>
         <div class="col-md-12 noPadding" ng-if="template" ng-repeat="variable in template.variables">
             <div class="col-md-12 form-group" ng-if="variable.type==='text'">

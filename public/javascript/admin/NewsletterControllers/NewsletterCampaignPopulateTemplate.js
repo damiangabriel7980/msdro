@@ -24,17 +24,23 @@ controllers.controller('NewsletterCampaignPopulateTemplate',['$scope', 'Newslett
 
     //export our data to scope
     $scope.template = template;
+    $scope.checkVariables = false;
+    $scope.tinymceOptions = {};
 
     //TODO: dynamically assign system variables
     $scope.systemVariables = ["test1", "test2"];
 
     $scope.$watch('template.variables', function (newVariables) {
-        $scope.templatePreview = NewsletterService.templates.renderTemplate(templateInfo.html, newVariables || []);
+        refreshPreview(newVariables);
     }, true);
 
-    $scope.closeModal = function () {
-        $modalInstance.close();
-    };
+    $scope.$watch('checkVariables', function () {
+        refreshPreview($scope.template.variables);
+    });
+
+    function refreshPreview(newVariables) {
+        $scope.templatePreview = $scope.checkVariables?templateInfo.html:NewsletterService.templates.renderTemplate(templateInfo.html, newVariables || []);
+    }
 
     function findVariableByName(variables, name, returnEntireObject){
         for(var i=0; i<variables.length; i++){
@@ -43,6 +49,8 @@ controllers.controller('NewsletterCampaignPopulateTemplate',['$scope', 'Newslett
         return null;
     }
 
-    $scope.tinymceOptions = {};
+    $scope.closeModal = function () {
+        $modalInstance.close();
+    };
 
 }]);
