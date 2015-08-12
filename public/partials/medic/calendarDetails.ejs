@@ -16,29 +16,36 @@
     <div class="modal-body container">
         <div class="calendarTabs">
             <tabset class="text-center">
-                <tab heading="About">
+                <tab heading="Despre">
+                    <p ng-show="!itemsEvent.event.description" class="text-center">Nu sunt disponibile detalii despre Eveniment</p>
                     <div class="aboutContainer" ng-bind-html="trustAsHtml(itemsEvent.event.description)">
                     </div>
                 </tab>
                 <tab heading="Program">
                     <div class="programContainer">
-                        <div ng-repeat="(key ,day) in itemsEvent.days" class="dayItem">
-                            <span class="eventDay" ng-click="isCollapsed =!isCollapsed"><i
-                                        ng-class="{'glyphicon glyphicon-chevron-down':isCollapsed,'glyphicon glyphicon-chevron-up':!isCollapsed}"></i>
-                                <strong>{{day[0].begin_date|asDate|date:'MMMM dd' }}</strong></span>
+                        <p ng-show="isEmpty(itemsEvent.days)" class="text-center">Nu sunt disponibile detalii
+                            despre program.
+                        </p>
+                        <div ng-repeat="(key,day) in itemsEvent.days" class="dayItem">
+
+                            <span class="eventDay" ng-click="isCollapsed =!isCollapsed"><i ng-class="{'glyphicon glyphicon-chevron-down':isCollapsed,'glyphicon glyphicon-chevron-up':!isCollapsed}"></i>
+                                <strong>{{ formatDate(key) | date: 'dd MMMM' }}</strong> </span>
 
                             <div collapse="isCollapsed">
-                                <div class="conferenceItem" ng-repeat="conference in day">
+                                <div class="conferenceItem" ng-repeat="(key ,conference) in day">
                                     <span class="conferenceTitle" ng-click="subMenuCollapsed=!subMenuCollapsed"><i
-                                                ng-class="{'glyphicon glyphicon-chevron-down':!subMenuCollapsed,'glyphicon glyphicon-chevron-up':subMenuCollapsed}"></i> {{conference.title}}</span>
+                                                ng-class="{'glyphicon glyphicon-chevron-down':!subMenuCollapsed,'glyphicon glyphicon-chevron-up':subMenuCollapsed}"></i><strong>
+                                            {{key}}</strong> </span>
 
                                     <div collapse="!subMenuCollapsed">
-                                        <span class="conferenceDescription">{{conference.description}}</span>
-
-                                        <div class="talkTitle" ng-repeat="talk in conference.talks">
-                                            <span>  {{talk.hour_start | asDate |date:'HH:mm' }} - {{talk.hour_end | asDate|date:'HH:mm'}} {{talk.title}} {{talk.room.room_name}}</span>
-                                            <span ng-bind-html= "trustAsHtml(talk.description)"></span>
-                                            <hr>
+                                        <div ng-repeat="talk in conference">
+                                            <div class="talkTitle">
+                                                <span><strong> {{talk.hour_start | asDate |date:'HH:mm' }} -
+                                                        {{talk.hour_end | asDate|date:'HH:mm'}} {{talk.title}}
+                                                        {{"- " +talk.room.room_name}}</strong></span>
+                                                <span ng-bind-html="trustAsHtml(talk.description)"></span>
+                                                <hr>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -47,10 +54,15 @@
                     </div>
                 </tab>
 
-                <tab heading="Speakers">
+                <tab heading="Speakeri">
                     <div class="speakerContainer">
+                        <p ng-show="!itemsEvent.speakers.length" class="text-center">Nu sunt disponibile detalii
+                            despre speakeri.
+                        </p>
+
                         <div dir-paginate="speaker in itemsEvent.speakers | itemsPerPage:8"
                              class="col-xs-12 col-sm-6 col-md-4 noPadding speaker cell">
+
                             <div class="pull-left imageOuterFrame">
                                 <div class="imageInnerFrame">
                                     <a><img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}"></a>
@@ -62,6 +74,7 @@
                                 </div>
                                 <div class="cell title">
                                     {{speaker.workplace}}
+                                    <span ng-bind-html="trustAsHtml(speaker.short_description)"></span>
                                 </div>
                             </div>
                         </div>
