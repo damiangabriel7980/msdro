@@ -7,23 +7,10 @@ var Newsletter = {
     templates: require('../../models/newsletter/templates')
 };
 
-module.exports = function (logger) {
-    var sendCampaign = function (campaign_id) {
-        var deferred = Q.defer();
-        Newsletter.campaigns.findOne({_id: campaign_id}, function (err, campaign) {
-            if(err){
-                deferred.reject(err);
-            }else if(!campaign){
-                deferred.reject("Campaign not found");
-            }else{
-                console.log("Send campaign - "+campaign.name);
-                deferred.resolve();
-            }
-        });
-        return deferred.promise;
-    };
+var Users = require('../../models/user');
 
-    var sendDueCampaigns = function () {
+module.exports = function (logger) {
+    function sendDueCampaigns() {
         Newsletter.campaigns.distinct("_id", {send_date: {$exists: true, $lt: Date.now()}, status: "not sent"}, function (err, campaigns_ids) {
             if(err){
                 logger.error(err);
@@ -48,7 +35,97 @@ module.exports = function (logger) {
                 })
             }
         });
-    };
+    }
+
+    function sendCampaign(campaign_id) {
+        var deferred = Q.defer();
+        Newsletter.campaigns.findOne({_id: campaign_id}).populate("templates.id").exec(function (err, campaign) {
+            if(err){
+                deferred.reject(err);
+            }else if(!campaign){
+                deferred.reject("Campaign not found");
+            }else{
+                Q.all([
+                    getEmails(campaign.distribution_lists),
+                    populateTemplate(campaign.templates)
+                ]).then(
+                    function (results) {
+                        var users = results[0];
+                        var html = results[1];
+                        console.log(users);
+                        console.log(html);
+                        deferred.resolve();
+                    },
+                    function (err) {
+                        deferred.reject(err);
+                    }
+                );
+            }
+        });
+        return deferred.promise;
+    }
+
+    function getEmails(distributionListsIds){
+        var deferred = Q.defer();
+        Q.all([
+            getEmailsFromCustomLists(distributionListsIds),
+            getEmailsFromGroups(distributionListsIds)
+        ]).then(
+            function (results) {
+                deferred.resolve(concatArraysUnique(results[0], results[1]));
+            },
+            function (err) {
+                deferred.reject(err);
+            }
+        );
+        return deferred.promise;
+    }
+
+    function getEmailsFromGroups(distributionListsIds) {
+        var deferred = Q.defer();
+        Newsletter.distributionLists.distinct("user_groups", {_id: {$in: distributionListsIds}}, function (err, groupsIds) {
+            if(err){
+                deferred.reject(err);
+            }else{
+                Users.distinct("username", {groupsID: {$in: groupsIds}}, function (err, usernames) {
+                    if(err){
+                        deferred.reject(err);
+                    }else{
+                        deferred.resolve(usernames);
+                    }
+                });
+            }
+        });
+        return deferred.promise;
+    }
+
+    function getEmailsFromCustomLists(distributionListsIds) {
+        var deferred = Q.defer();
+        Newsletter.distributionLists.distinct("emails", {_id: {$in: distributionListsIds}}, function (err, customEmails) {
+            if(err){
+                deferred.reject(err);
+            }else{
+                deferred.resolve(customEmails);
+            }
+        });
+        return deferred.promise;
+    }
+
+    function concatArraysUnique(array1, array2){
+        for(var i=0; i<array2.length; i++){
+            if(array1.indexOf(array2[i]) === -1){
+                array1.push(array2[i]);
+            }
+        }
+        return array1;
+    }
+
+    function populateTemplate(templates){
+        var deferred = Q.defer();
+        //console.log(templates);
+        deferred.resolve("Got html");
+        return deferred.promise;
+    }
 
     return {
         sendDueCampaigns: sendDueCampaigns
