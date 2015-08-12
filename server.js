@@ -57,7 +57,7 @@ var Globals = require('./config/globals.js'), globals = new Globals();
 require('./app/modules/seed');
 
 //enable scheduled jobs
-require('./app/modules/schedule')(my_config);
+require('./app/modules/schedule')(my_config, logger);
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console

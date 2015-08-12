@@ -12,6 +12,9 @@
         <td data-title="'Data trimiterii'" sortable="'send_date'">
             {{campaign.send_date | date}}
         </td>
+        <td data-title="'Status'" sortable="'status'">
+            {{campaign.status}}
+        </td>
         <td data-title="'Actiuni'">
             <div class="btn-group">
                 <div class="btn btn-primary" ng-click="editCampaign(campaign._id)"><i class="glyphicon glyphicon-cog"></i></div>

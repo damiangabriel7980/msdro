@@ -14,7 +14,8 @@ var schema = new Schema({
             value: String
         }],
         order: Number
-    }]
+    }],
+    status: {type: String, enum: ["sent", "not sent", "error"]}
 });
 
 module.exports = mongoose.model('newsletter_campaigns', schema);

@@ -3023,7 +3023,8 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
         .post(function (req, res) {
             var campaign = new Newsletter.campaigns({
                 name: "Untitled",
-                date_created: Date.now()
+                date_created: Date.now(),
+                status: "not sent"
             });
             campaign.save(function (err, saved) {
                 if(err){
@@ -3034,7 +3035,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             });
         })
         .put(function (req, res) {
-            UtilsModule.discardFields(req.body, ["_id", "date_created"]);
+            UtilsModule.discardFields(req.body, ["_id", "date_created", "status"]);
             Newsletter.campaigns.findOne({_id: req.query.id}, function (err, campaign) {
                 if(err){
                     handleError(res, err);
