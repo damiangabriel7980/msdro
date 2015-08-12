@@ -9,7 +9,7 @@ module.exports = function(){
                 pushServerPrefix: "MSD_test",
                 elasticServer: "10.200.0.221",
                 elasticPORT: "9004",
-                mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
+                mandrillKey: "3YrDrZkwVGq61q_0wTanbg",
                 GA_code: "UA-61695877-1",
                 disablePatients: false,
                 dpocAppLink: "unavailable",
