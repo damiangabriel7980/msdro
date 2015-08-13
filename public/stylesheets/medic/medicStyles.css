@@ -7672,6 +7672,12 @@ fieldset[disabled] .navbarMedic .profile .btn {
   display: -webkit-flex;
   justify-content: center;
 }
+.calendarTabs .tab-pane .paginationContainer ul li a:focus {
+  background-color: #ffffff;
+}
+.calendarTabs .tab-pane .paginationContainer ul li a:hover {
+  background-color: #eeeeee;
+}
 .calendarTabs ul {
   display: inline-block;
 }
@@ -7692,7 +7698,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .calendarTabs .tab-content {
   text-align: left;
   display: flex;
-  margin: 20px;
+  padding: 20px 20px 0 20px;
   justify-content: flex-start;
   flex-direction: row;
 }
