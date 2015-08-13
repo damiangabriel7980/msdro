@@ -7682,6 +7682,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .calendarTabs .tab-pane .paginationContainer ul li a:hover {
   background-color: #eeeeee;
 }
+.calendarTabs .tab-pane .paginationContainer ul li.active a {
+  background-color: #01877b;
+}
 .calendarTabs ul {
   display: inline-block;
 }
