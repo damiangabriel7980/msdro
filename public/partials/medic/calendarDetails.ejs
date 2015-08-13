@@ -31,11 +31,11 @@
 
                         <div ng-repeat="(key,day) in itemsEvent.days" class="dayItem">
 
-                            <span class="eventDay" ng-click="isCollapsed =!isCollapsed"><i
+                            <span class="eventDay" ng-click="dayClicked(key)"><i
                                         ng-class="{'glyphicon glyphicon-chevron-down':isCollapsed,'glyphicon glyphicon-chevron-right':!isCollapsed}"></i>
                                 <strong>{{ formatDate(key) | date: 'dd MMMM' }}</strong></span>
 
-                            <div collapse="isCollapsed">
+                            <div collapse="$parent.activeDay!==key">
                                 <accordion close-others="oneAtATime">
                                     <accordion-group class="conferenceItem"
                                                      ng-repeat="(key ,conference) in day" is-open="isOpen">

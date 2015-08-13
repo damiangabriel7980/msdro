@@ -42,7 +42,19 @@ app.controllerProvider.register('EventModal', ['$scope', 'eventsService', '$stat
 
     $scope.isOpen = false;
     $scope.oneAtATime = true;
-    $scope.isCollapsed = true;
+    $scope.activeDay = null;
+
+    $scope.dayClicked = function (key) {
+        if($scope.activeDay){
+            if($scope.activeDay===key){
+                $scope.activeDay = null;
+            }else{
+                $scope.activeDay = key;
+            }
+        }else{
+            $scope.activeDay=key;
+        }
+    };
 
     $scope.isEmpty=function(myObject) {
         for(var key in myObject) {
