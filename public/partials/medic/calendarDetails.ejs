@@ -39,19 +39,24 @@
                                 <accordion close-others="oneAtATime">
                                     <accordion-group class="conferenceItem"
                                                      ng-repeat="(key ,conference) in day" is-open="isOpen">
-                                        <accordion-heading><span><i
-                                                        ng-class="{'glyphicon glyphicon-chevron-down':!isOpen,'glyphicon glyphicon-chevron-right':isOpen}"></i>
-                                                {{key}}</span></accordion-heading>
-                                        <div ng-repeat="talk in conference">
-                                            <div class="talkTitle"><span><strong> {{talk.hour_start | asDate
-                                                        |date:'HH:mm' }} - {{talk.hour_end | asDate|date:'HH:mm'}}
-                                                        {{talk.title}}
-                                                        {{"- " +talk.room.room_name}}</strong></span>
+                                        <accordion-heading>
+                                            <span>
+                                                <i ng-class="{'glyphicon glyphicon-chevron-down':!isOpen,'glyphicon glyphicon-chevron-right':isOpen}"></i>
+                                                {{key}}
+                                            </span>
+                                        </accordion-heading>
+                                        <div class="talk" ng-repeat="talk in conference track by $index">
+                                            <div class="talkTitle">
+                                                <span>
+                                                    <strong>
+                                                        {{talk.hour_start | asDate|date:'HH:mm' }} - {{talk.hour_end | asDate|date:'HH:mm'}}
+                                                        {{talk.title + " - " +talk.room.room_name}}
+                                                    </strong>
+                                                </span>
                                                 <span ng-bind-html="trustAsHtml(talk.description)"></span>
-                                                <hr>
+                                                <hr ng-hide="$index+1===conference.length">
                                             </div>
                                         </div>
-                                        <accordion-group>
                                 </accordion>
                             </div>
                         </div>
