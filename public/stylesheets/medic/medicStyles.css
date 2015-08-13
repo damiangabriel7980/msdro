@@ -7661,6 +7661,10 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle.left {
   left: 15px;
 }
+.eventDetailsModal .modal-body {
+  max-height: 70vh;
+  overflow-y: auto;
+}
 .calendarTabs {
   margin-top: 20px;
 }
@@ -7712,12 +7716,6 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .calendarTabs .speakerContainer p {
   width: 100%;
 }
-@media screen and (max-width: 767px) {
-  .calendarTabs .speakerContainer {
-    overflow-y: scroll;
-    max-height: 300px;
-  }
-}
 .calendarTabs .speakerContainer .speaker .descriptionFrame {
   cursor: pointer;
   position: relative;
@@ -7768,16 +7766,6 @@ fieldset[disabled] .navbarMedic .profile .btn {
     width: 400px;
     height: 150px;
     padding-left: 85px;
-  }
-}
-.calendarTabs .programContainer {
-  max-height: 300px;
-  overflow-y: scroll;
-}
-@media screen and (min-width: 767px) {
-  .calendarTabs .programContainer {
-    overflow-y: scroll;
-    max-height: 620px;
   }
 }
 .calendarTabs .programContainer .dayItem .conferenceItem .conferenceTitle {

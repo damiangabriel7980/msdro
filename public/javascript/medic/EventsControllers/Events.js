@@ -59,7 +59,7 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
                             templateUrl: 'partials/medic/calendarDetails.ejs',
                             backdrop: true,
                             size: 'lg',
-                            windowClass: 'fade',
+                            windowClass: 'fade eventDetailsModal',
                             controller: 'EventModal',
                             resolve:{
                                 idEvent: function () {
@@ -104,7 +104,7 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
             templateUrl: 'partials/medic/calendarDetails.ejs',
             backdrop: true,
             size: 'lg',
-            windowClass: 'fade',
+            windowClass: 'fade eventDetailsModal',
             controller: 'EventModal',
             resolve:{
                 idEvent: function () {

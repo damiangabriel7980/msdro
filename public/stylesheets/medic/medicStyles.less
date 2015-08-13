@@ -1238,7 +1238,15 @@ body {
   }
 }
 
-//=============================================================================================calendar modal tabs
+//============================================================================================= calendar modal
+
+.eventDetailsModal{
+  .modal-body{
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+}
+
 .calendarTabs {
   .tab-pane{
     width:100% !important ;
@@ -1300,12 +1308,6 @@ body {
     p{
       width:100%;
     }
-    @media screen{
-      @media (max-width:@screen-xs-max){
-        overflow-y: scroll;
-        max-height: 300px;
-      }
-    }
     .speaker {
       .descriptionFrame {
         cursor: pointer;
@@ -1363,14 +1365,6 @@ body {
     }
   }
   .programContainer {
-    max-height:300px;
-    overflow-y:scroll;
-    @media screen{
-      @media(min-width: @screen-xs-max){
-        overflow-y: scroll;
-        max-height:620px;
-      }
-    }
     .dayItem {
       .conferenceItem{
         .conferenceTitle{
