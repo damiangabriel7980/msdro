@@ -7662,7 +7662,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
   left: 15px;
 }
 .eventDetailsModal .modal-body {
-  max-height: 70vh;
+  max-height: 60vh;
   overflow-y: auto;
 }
 .calendarTabs {
@@ -7764,7 +7764,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 @media screen and (min-width: 767px) {
   .calendarTabs .speakerContainer .speaker {
     width: 400px;
-    height: 150px;
+    height: 120px;
     padding-left: 85px;
   }
 }
