@@ -8,8 +8,12 @@ var Newsletter = {
 };
 
 var Users = require('../../models/user');
+var Parameters = require('../../models/parameters');
 
-module.exports = function (logger) {
+module.exports = function (env, logger) {
+
+    var mandrill = require('node-mandrill')(env.mandrillKey);
+
     function sendDueCampaigns() {
         Newsletter.campaigns.distinct("_id", {send_date: {$exists: true, $lt: Date.now()}, status: "not sent"}, function (err, campaigns_ids) {
             if(err){
@@ -52,9 +56,15 @@ module.exports = function (logger) {
                     function (results) {
                         var users = results[0];
                         var html = results[1];
-                        console.log(users);
-                        console.log(html);
-                        deferred.resolve();
+                        sendEmailInBatches(html, users, env.newsletter.batch.size, env.newsletter.batch.secondsBetween).then(
+                            function (batchesCount) {
+                                logger.info("Sent "+batchesCount+" batches of maximum "+env.newsletter.batch.size+" emails");
+                                deferred.resolve();
+                            },
+                            function (err) {
+                                deferred.reject(err);
+                            }
+                        );
                     },
                     function (err) {
                         deferred.reject(err);
@@ -155,6 +165,72 @@ module.exports = function (logger) {
             }
         }
         return templateHtml;
+    }
+
+    function sendEmailInBatches(html, users, batchSize, secondsBetween){
+        var deferred = Q.defer();
+        Parameters.findOne({name: "FROM_EMAIL"}, function (err, from_email) {
+            if(err){
+                deferred.reject(err);
+            }else if(!from_email){
+                deferred.reject("Cannot find system parameter FROM_EMAIL");
+            }else{
+                from_email = from_email.value || from_email.default_value;
+                //split emails into batches
+                var batches = splitArrayIntoChunks(users, batchSize);
+                //send batches
+                async.eachSeries(batches, function (batch, callback) {
+                    logger.warn("Sending batch...");
+                    sendBatch(html, batch, from_email).then(
+                        function () {
+                            logger.warn("Sent batch:");
+                            logger.warn(batch);
+                            //wait a while before sending the next one
+                            setTimeout(callback, secondsBetween * 1000);
+                        },
+                        function (err) {
+                            callback(err);
+                        }
+                    );
+                }, function (err) {
+                    if(err){
+                        deferred.reject(err);
+                    }else{
+                        deferred.resolve(batches.length);
+                    }
+                });
+            }
+        });
+        return deferred.promise;
+    }
+
+    function splitArrayIntoChunks(toSplit, chunkSize){
+        var ret = [];
+        var length = toSplit.length;
+        for (var i=0; i<length; i+=chunkSize) {
+            ret.push(toSplit.slice(i,i+chunkSize));
+        }
+        return ret;
+    }
+
+    function sendBatch(html, users, from_email) {
+        var deferred = Q.defer();
+        console.log(users);
+        mandrill('/messages/send', {
+            "message": {
+                "html": html,
+                "subject": "test",
+                from_email: from_email,
+                to: users
+            }
+        }, function(err, resp){
+            if(err){
+                deferred.reject(err);
+            }else{
+                deferred.resolve(resp);
+            }
+        });
+        return deferred.promise;
     }
 
     return {

@@ -16,7 +16,11 @@ module.exports = function(){
                 publicFolder: "public",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
                 newsletter: {
-                    scheduleInterval: 'everyMinute'
+                    scheduleInterval: 'everyMinute',
+                    batch: {
+                        size: 5,
+                        secondsBetween: 5
+                    }
                 }
             };
 
@@ -36,7 +40,11 @@ module.exports = function(){
                 publicFolder: "public_min",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
                 newsletter: {
-                    scheduleInterval: 'everyMinute'
+                    scheduleInterval: 'everyMinute',
+                    batch: {
+                        size: 100,
+                        secondsBetween: 20
+                    }
                 }
             };
 
@@ -56,7 +64,11 @@ module.exports = function(){
                 publicFolder: "public_min",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
                 newsletter: {
-                    scheduleInterval: 'everyHour'
+                    scheduleInterval: 'everyHour',
+                    batch: {
+                        size: 100,
+                        secondsBetween: 20
+                    }
                 }
             };
 

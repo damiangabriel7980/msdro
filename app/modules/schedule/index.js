@@ -8,7 +8,7 @@ var myCronFormats = {
 
 module.exports = function (env, logger) {
 
-    var NewsletterModule = require('../newsletter')(logger);
+    var NewsletterModule = require('../newsletter')(env, logger);
 
     var dueCampaigns = schedule.scheduleJob(myCronFormats[env.newsletter.scheduleInterval], function () {
         logger.warn("Scheduled job started - due campaigns");
