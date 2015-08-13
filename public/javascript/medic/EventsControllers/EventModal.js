@@ -40,6 +40,10 @@ app.controllerProvider.register('EventModal', ['$scope', 'eventsService', '$stat
         return dateOut;
     };
 
+    $scope.isOpen = false;
+    $scope.oneAtATime = true;
+    $scope.isCollapsed = true;
+
     $scope.isEmpty=function(myObject) {
         for(var key in myObject) {
             if (myObject.hasOwnProperty(key)) {
@@ -49,8 +53,8 @@ app.controllerProvider.register('EventModal', ['$scope', 'eventsService', '$stat
 
         return true;
     }
-    $scope.isCollapsed = true;
-    $scope.subMenuCollapsed = false;
+
+
 
 
     $scope.closeModal = function () {

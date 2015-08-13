@@ -7647,6 +7647,11 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .calendarTabs .tab-pane {
   width: 100% !important ;
 }
+.calendarTabs .tab-pane .paginationContainer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  justify-content: center;
+}
 .calendarTabs ul {
   display: inline-block;
 }
@@ -7678,6 +7683,15 @@ fieldset[disabled] .navbarMedic .profile .btn {
   display: flex;
   -webkit-flex-flow: row wrap;
 }
+.calendarTabs .speakerContainer p {
+  width: 100%;
+}
+@media screen and (max-width: 767px) {
+  .calendarTabs .speakerContainer {
+    overflow-y: scroll;
+    max-height: 300px;
+  }
+}
 .calendarTabs .speakerContainer .speaker .descriptionFrame {
   cursor: pointer;
   position: relative;
@@ -7708,6 +7722,8 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .calendarTabs .speakerContainer .speaker .descriptionFrame .speakerDescription {
   color: #aaaaaa;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .calendarTabs .speakerContainer .speaker .imageInnerFrame {
   width: 60px;
@@ -7728,7 +7744,46 @@ fieldset[disabled] .navbarMedic .profile .btn {
     padding-left: 85px;
   }
 }
+.calendarTabs .programContainer {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+@media screen and (min-width: 767px) {
+  .calendarTabs .programContainer {
+    overflow-y: scroll;
+    max-height: 620px;
+  }
+}
 .calendarTabs .programContainer .dayItem .conferenceItem .conferenceTitle {
+  color: #01877b;
+}
+.calendarTabs .programContainer .dayItem .talkTitle {
+  margin: 0;
+}
+.calendarTabs .programContainer .dayItem .conferenceItem {
+  margin: 0;
+}
+.calendarTabs .programContainer .dayItem .eventDay {
+  margin-left: 5px;
+}
+.calendarTabs .programContainer .dayItem .conferenceItem {
+  margin: 10px;
+  border: none!important;
+}
+.calendarTabs .programContainer .dayItem .conferenceItem .panel {
+  -webkit-box-shadow: none;
+  border: none;
+}
+.calendarTabs .programContainer .dayItem .conferenceItem .panel-heading {
+  background-color: white;
+}
+.calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title {
+  color: #01877b !important;
+  font-weight: bold;
+  font-size: 14px;
+}
+.calendarTabs .programContainer .dayItem .conferenceItem .conferenceTitle {
+  margin: 10px;
   color: #01877b;
 }
 .calendarTabs .programContainer .dayItem .talkTitle {
@@ -7739,7 +7794,20 @@ fieldset[disabled] .navbarMedic .profile .btn {
     margin-left: 25px;
   }
   .calendarTabs .programContainer .dayItem .conferenceItem {
-    margin: 10px;
+    margin: 10px 10px 10px 50px;
+    border: none!important;
+  }
+  .calendarTabs .programContainer .dayItem .conferenceItem .panel {
+    -webkit-box-shadow: none;
+    border: none;
+  }
+  .calendarTabs .programContainer .dayItem .conferenceItem .panel-heading {
+    background-color: white;
+  }
+  .calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title {
+    color: #01877b !important;
+    font-weight: bold;
+    font-size: 14px;
   }
   .calendarTabs .programContainer .dayItem .conferenceItem .conferenceTitle {
     margin: 15px 15px 15px 45px;

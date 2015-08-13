@@ -1225,6 +1225,11 @@ body {
 .calendarTabs {
   .tab-pane{
     width:100% !important ;
+    .paginationContainer{
+      display:-webkit-box;
+      display:-webkit-flex;
+      justify-content: center;
+    }
   }
   margin-top: 20px;
   ul {
@@ -1263,7 +1268,15 @@ body {
     display: flex;
     //flex-direction:row;
     -webkit-flex-flow: row wrap;
-
+    p{
+      width:100%;
+    }
+    @media screen{
+      @media (max-width:@screen-xs-max){
+        overflow-y: scroll;
+        max-height: 300px;
+      }
+    }
     .speaker {
       .descriptionFrame {
         cursor: pointer;
@@ -1294,6 +1307,8 @@ body {
         .speakerDescription {
           color: @gray;
           text-overflow: ellipsis;
+          white-space:nowrap;
+          overflow:hidden;
         }
       }
       .imageInnerFrame {
@@ -1319,6 +1334,14 @@ body {
     }
   }
   .programContainer {
+    max-height:300px;
+    overflow-y:scroll;
+    @media screen{
+      @media(min-width: @screen-xs-max){
+        overflow-y: scroll;
+        max-height:620px;
+      }
+    }
     .dayItem {
       .conferenceItem{
         .conferenceTitle{
@@ -1326,8 +1349,40 @@ body {
         }
       }
       .talkTitle{
-        margin:10px;
+        margin:0;
       }
+      .conferenceItem{
+        margin:0;
+      }
+
+
+      .eventDay{
+        margin-left:5px;
+      }
+      .conferenceItem {
+        .panel{
+          -webkit-box-shadow: none;
+          border:none;
+        }
+        margin: 10px;
+        border:none!important;
+        .panel-heading{
+          background-color: white;
+          .panel-title{
+            color:@green!important;
+            font-weight:bold;
+            font-size:14px;
+          }
+        }
+        .conferenceTitle {
+          margin: 10px;
+          color: @green;
+        }
+      }
+      .talkTitle {
+        margin: 10px;
+      }
+
 
       @media screen {
         @media (min-width: @screen-xs-max) {
@@ -1335,7 +1390,20 @@ body {
             margin-left:25px;
           }
           .conferenceItem {
-            margin: 10px;
+            .panel{
+            -webkit-box-shadow: none;
+              border:none;
+            }
+            margin: 10px 10px 10px 50px;
+            border:none!important;
+            .panel-heading{
+              background-color: white;
+              .panel-title{
+                color:@green!important;
+                font-weight:bold;
+                font-size:14px;
+              }
+            }
             .conferenceTitle {
               margin: 15px 15px 15px 45px;
               color: @green;
