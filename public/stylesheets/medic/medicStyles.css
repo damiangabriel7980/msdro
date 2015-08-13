@@ -7791,6 +7791,10 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .calendarTabs .programContainer .dayItem .eventDay {
   margin-left: 5px;
+  cursor: pointer;
+}
+.calendarTabs .programContainer .dayItem .eventDay:hover {
+  text-decoration: underline;
 }
 .calendarTabs .programContainer .dayItem .conferenceItem {
   margin: 10px;
