@@ -119,10 +119,23 @@
                 function checkMatchingText() {
                     var fo = scope.filteredOptions;
                     var it = scope.inputText;
-                    if(it && fo && fo.length === 1 && fo[0][scope.titleAttr].toLowerCase() === it.toLowerCase()){
+                    if(checkValidOption(it, fo)){
                         selectOption(fo[0], false, true);
                     }else{
                         unselectOption(false, true);
+                    }
+                }
+
+                function checkValidOption(inputText, filteredOptions) {
+                    if(inputText && filteredOptions){
+                        for(var i=0; i<filteredOptions.length; i++){
+                            if(filteredOptions[i][scope.titleAttr].toLowerCase() === inputText.toLowerCase()) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }else{
+                        return false;
                     }
                 }
 
