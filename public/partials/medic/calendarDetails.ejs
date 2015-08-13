@@ -1,4 +1,4 @@
-<div class="eventDetails">
+<div class="eventDetails lg modal-responsive MyProfileModal">
     <div class="modal-header">
         <div class="modal-title"><i class="glyphicon glyphicon-facetime-video fontM"
                                     ng-if="itemsEvent.event.type==2"></i>&nbsp;{{itemsEvent.event['name']}}
@@ -17,7 +17,9 @@
         <div class="calendarTabs">
             <tabset class="text-center">
                 <tab heading="Despre">
-                    <p ng-show="!itemsEvent.event.description" class="text-center">Nu sunt disponibile detalii despre Eveniment.</p>
+                    <p ng-show="!itemsEvent.event.description" class="text-center">Nu sunt disponibile detalii despre
+                        Eveniment.</p>
+
                     <div class="aboutContainer" ng-bind-html="trustAsHtml(itemsEvent.event.description)">
                     </div>
                 </tab>
@@ -26,36 +28,38 @@
                         <p ng-show="isEmpty(itemsEvent.days)" class="text-center">Nu sunt disponibile detalii
                             despre Program.
                         </p>
+
                         <div ng-repeat="(key,day) in itemsEvent.days" class="dayItem">
 
-                            <span class="eventDay" ng-click="isCollapsed =!isCollapsed"><i ng-class="{'glyphicon glyphicon-chevron-down':isCollapsed,'glyphicon glyphicon-chevron-up':!isCollapsed}"></i>
-                                <strong>{{ formatDate(key) | date: 'dd MMMM' }}</strong> </span>
+                            <span class="eventDay" ng-click="isCollapsed =!isCollapsed"><i
+                                        ng-class="{'glyphicon glyphicon-chevron-down':isCollapsed,'glyphicon glyphicon-chevron-right':!isCollapsed}"></i>
+                                <strong>{{ formatDate(key) | date: 'dd MMMM' }}</strong></span>
 
                             <div collapse="isCollapsed">
-                                <div class="conferenceItem" ng-repeat="(key ,conference) in day">
-                                    <span class="conferenceTitle" ng-click="subMenuCollapsed=!subMenuCollapsed"><i
-                                                ng-class="{'glyphicon glyphicon-chevron-down':!subMenuCollapsed,'glyphicon glyphicon-chevron-up':subMenuCollapsed}"></i><strong>
-                                            {{key}}</strong> </span>
-
-                                    <div collapse="!subMenuCollapsed">
+                                <accordion close-others="oneAtATime">
+                                    <accordion-group class="conferenceItem"
+                                                     ng-repeat="(key ,conference) in day" is-open="isOpen">
+                                        <accordion-heading><span><i
+                                                        ng-class="{'glyphicon glyphicon-chevron-down':!isOpen,'glyphicon glyphicon-chevron-right':isOpen}"></i>
+                                                {{key}}</span></accordion-heading>
                                         <div ng-repeat="talk in conference">
-                                            <div class="talkTitle">
-                                                <span><strong> {{talk.hour_start | asDate |date:'HH:mm' }} -
-                                                        {{talk.hour_end | asDate|date:'HH:mm'}} {{talk.title}}
+                                            <div class="talkTitle"><span><strong> {{talk.hour_start | asDate
+                                                        |date:'HH:mm' }} - {{talk.hour_end | asDate|date:'HH:mm'}}
+                                                        {{talk.title}}
                                                         {{"- " +talk.room.room_name}}</strong></span>
                                                 <span ng-bind-html="trustAsHtml(talk.description)"></span>
                                                 <hr>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                        <accordion-group>
+                                </accordion>
                             </div>
                         </div>
                     </div>
                 </tab>
 
                 <tab heading="Speakeri">
-                    <div class="speakerContainer">
+                    <div class="speakerContainer ">
                         <p ng-show="!itemsEvent.speakers.length" class="text-center">Nu sunt disponibile detalii
                             despre Speakeri.
                         </p>
@@ -73,12 +77,12 @@
                                 </div>
                                 <div class="cell title">
                                     {{speaker.workplace}}
-                                    <span ng-bind-html="trustAsHtml(speaker.short_description)"></span>
+                                    <span ng-trim ng-bind-html="trustAsHtml(speaker.short_description)"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="text-center">
+                    <div class="paginationContainer">
                         <dir-pagination-controls></dir-pagination-controls>
                     </div>
 
