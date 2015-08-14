@@ -537,6 +537,9 @@ services.factory('NewsletterService', ['$resource', function($resource){
         },
         users: $resource('api/admin/newsletter/users', {}, {
             query: { method: 'GET', isArray: false }
+        }),
+        statistics: $resource('api/admin/newsletter/statistics', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);

@@ -228,7 +228,6 @@ module.exports = function (env, logger) {
                     sendBatch(subaccountId, subject, html, batch, from_email).then(
                         function () {
                             logger.warn("Sent batch of " + batch.length + " emails");
-                            logger.warn(batch);
                             //wait a while before sending the next one
                             setTimeout(callback, secondsBetween * 1000);
                         },
@@ -267,7 +266,7 @@ module.exports = function (env, logger) {
                 "from_email": from_email,
                 "to": users,
                 "subaccount": subaccountId,
-                "tags": [getCampaignTag]
+                "tags": [getCampaignTag()]
             }
         }, function(err, resp){
             if(err){
@@ -279,7 +278,24 @@ module.exports = function (env, logger) {
         return deferred.promise;
     }
 
+    function getOverallStats() {
+        var deferred = Q.defer();
+        //console.log(users);
+        mandrill('/tags/info', {
+            "tag": getCampaignTag()
+        }, function(err, resp){
+            if(err){
+                console.log(err);
+                deferred.reject(err);
+            }else{
+                deferred.resolve(resp);
+            }
+        });
+        return deferred.promise;
+    }
+
     return {
-        sendDueCampaigns: sendDueCampaigns
+        sendDueCampaigns: sendDueCampaigns,
+        getOverallStats: getOverallStats
     };
 };

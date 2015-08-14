@@ -55,9 +55,6 @@ var fs = require('fs');
 var crypto   = require('crypto');
 var Q = require('q');
 
-var Config = require('../config/environment.js'),
-    my_config = new Config();
-
 //=========================================================================================== functions for user groups
 
 var getNonSpecificUserGroupsIds = function(user){
@@ -108,12 +105,13 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, logger, amazon, router) {
+module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     //============================================= Define injection dependent modules
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
     var handleError = require('./modules/responseHandler/error.js')(logger);
     var Auth = require('./modules/auth')(logger, sessionSecret);
+    var NewsletterModule = require('./modules/newsletter')(env, logger);
 
 
     //only logged in users can access a route
@@ -2343,7 +2341,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             },
                             {
                                 "name": "applicationLink",
-                                "content": my_config.dpocAppLink
+                                "content": env.dpocAppLink
                             },
                             {
                                 "name": "activationCode",
@@ -3146,6 +3144,18 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             }else{
                 handleError(res, false, 400, 6);
             }
+        });
+
+    router.route('/admin/newsletter/statistics')
+        .get(function (req, res) {
+            NewsletterModule.getOverallStats().then(
+                function (stats) {
+                    handleSuccess(res, stats);
+                },
+                function (err) {
+                    handleError(res, err);
+                }
+            );
         });
 
     //==================================================================================================================================== USER ROUTES
