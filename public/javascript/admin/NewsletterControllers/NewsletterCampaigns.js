@@ -34,23 +34,39 @@ controllers.controller('NewsletterCampaigns', ['$scope', '$state', 'NewsletterSe
         });
     };
 
-    $scope.editCampaign = function (id) {
-        $modal.open({
-            templateUrl: 'partials/admin/newsletter/campaigns/modalEditCampaign.html',
-            windowClass: 'fade',
-            controller: 'NewsletterCampaignEdit',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                idToEdit: function () {
-                    return id;
-                },
-                refreshCampaigns: function () {
-                    return refreshCampaigns;
+    $scope.editCampaign = function (campaign) {
+        if(campaign.status === "not sent"){
+            $modal.open({
+                templateUrl: 'partials/admin/newsletter/campaigns/modalEditCampaign.html',
+                windowClass: 'fade',
+                controller: 'NewsletterCampaignEdit',
+                backdrop: 'static',
+                keyboard: false,
+                size: 'lg',
+                resolve: {
+                    idToEdit: function () {
+                        return campaign._id;
+                    },
+                    refreshCampaigns: function () {
+                        return refreshCampaigns;
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            $modal.open({
+                templateUrl: 'partials/admin/newsletter/campaigns/modalCampaignSummary.html',
+                windowClass: 'fade',
+                controller: 'NewsletterCampaignSummary',
+                backdrop: 'static',
+                keyboard: false,
+                size: 'lg',
+                resolve: {
+                    campaign_id: function () {
+                        return campaign._id;
+                    }
+                }
+            });
+        }
     };
 
     $scope.removeCampaign = function (id) {

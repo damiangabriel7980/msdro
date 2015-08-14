@@ -3153,14 +3153,25 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/admin/newsletter/statistics')
         .get(function (req, res) {
-            NewsletterModule.getOverallStats().then(
-                function (stats) {
-                    handleSuccess(res, stats);
-                },
-                function (err) {
-                    handleError(res, err);
-                }
-            );
+            if(req.query.campaign){
+                NewsletterModule.getCampaignStats(req.query.campaign).then(
+                    function (stats) {
+                        handleSuccess(res, stats);
+                    },
+                    function (err) {
+                        handleError(res, err);
+                    }
+                );
+            }else{
+                NewsletterModule.getOverallStats().then(
+                    function (stats) {
+                        handleSuccess(res, stats);
+                    },
+                    function (err) {
+                        handleError(res, err);
+                    }
+                );
+            }
         });
 
     //==================================================================================================================================== USER ROUTES

@@ -285,7 +285,21 @@ module.exports = function (env, logger) {
             "tag": getCampaignTag()
         }, function(err, resp){
             if(err){
-                console.log(err);
+                deferred.reject(err);
+            }else{
+                deferred.resolve(resp);
+            }
+        });
+        return deferred.promise;
+    }
+
+    function getCampaignStats(campaign_id) {
+        var deferred = Q.defer();
+        //console.log(users);
+        mandrill('/subaccounts/info', {
+            "id": generateSubaccountId(campaign_id)
+        }, function(err, resp){
+            if(err){
                 deferred.reject(err);
             }else{
                 deferred.resolve(resp);
@@ -296,6 +310,7 @@ module.exports = function (env, logger) {
 
     return {
         sendDueCampaigns: sendDueCampaigns,
-        getOverallStats: getOverallStats
+        getOverallStats: getOverallStats,
+        getCampaignStats: getCampaignStats
     };
 };
