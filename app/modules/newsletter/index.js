@@ -56,15 +56,15 @@ module.exports = function (env, logger) {
                     function (results) {
                         var users = results[0];
                         var html = results[1];
-                        //sendEmailInBatches(html, users, env.newsletter.batch.size, env.newsletter.batch.secondsBetween).then(
-                        //    function (batchesCount) {
-                        //        logger.info("Sent "+batchesCount+" batches of maximum "+env.newsletter.batch.size+" emails");
-                        //        deferred.resolve();
-                        //    },
-                        //    function (err) {
-                        //        deferred.reject(err);
-                        //    }
-                        //);
+                        sendEmailInBatches(html, users, env.newsletter.batch.size, env.newsletter.batch.secondsBetween).then(
+                            function (batchesCount) {
+                                logger.info("Sent "+batchesCount+" batches of maximum "+env.newsletter.batch.size+" emails");
+                                deferred.resolve();
+                            },
+                            function (err) {
+                                deferred.reject(err);
+                            }
+                        );
                     },
                     function (err) {
                         deferred.reject(err);
@@ -195,7 +195,7 @@ module.exports = function (env, logger) {
                     logger.warn("Sending batch...");
                     sendBatch(html, batch, from_email).then(
                         function () {
-                            logger.warn("Sent batch:");
+                            logger.warn("Sent batch of " + batch.length + " emails");
                             logger.warn(batch);
                             //wait a while before sending the next one
                             setTimeout(callback, secondsBetween * 1000);
@@ -227,7 +227,7 @@ module.exports = function (env, logger) {
 
     function sendBatch(html, users, from_email) {
         var deferred = Q.defer();
-        console.log(users);
+        //console.log(users);
         mandrill('/messages/send', {
             "message": {
                 "html": html,
