@@ -12,7 +12,7 @@ var app = angular.module('app',
         'myMultipleSelect',
         'therapeuticSelect',
         's3UploadManager',
-        'adminEditableSingleList',
+        'adminEmailsList',
         'ui.ace'
     ]);
 

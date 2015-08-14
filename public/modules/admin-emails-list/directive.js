@@ -2,7 +2,7 @@
     var scripts = document.getElementsByTagName("script");
     var currentScriptPath = scripts[scripts.length-1].src;
 
-    angular.module('adminEditableSingleList', []).directive('adminEditableSingleList', ['CSVParser', function(CSVParser) {
+    angular.module('adminEmailsList', []).directive('adminEmailsList', ['CSVParser', function(CSVParser) {
         return {
             restrict: 'E',
             templateUrl: currentScriptPath.replace('directive.js', 'template.html'),
