@@ -3034,7 +3034,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .put(function (req, res) {
             UtilsModule.discardFields(req.body, ["_id", "date_created", "status"]);
-            Newsletter.campaigns.findOne({_id: req.query.id}, function (err, campaign) {
+            Newsletter.campaigns.findOne({_id: req.query.id, status: "not sent"}, function (err, campaign) {
                 if(err){
                     handleError(res, err);
                 }else if(!campaign){
