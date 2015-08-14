@@ -56,15 +56,15 @@ module.exports = function (env, logger) {
                     function (results) {
                         var users = results[0];
                         var html = results[1];
-                        sendEmailInBatches(html, users, env.newsletter.batch.size, env.newsletter.batch.secondsBetween).then(
-                            function (batchesCount) {
-                                logger.info("Sent "+batchesCount+" batches of maximum "+env.newsletter.batch.size+" emails");
-                                deferred.resolve();
-                            },
-                            function (err) {
-                                deferred.reject(err);
-                            }
-                        );
+                        //sendEmailInBatches(html, users, env.newsletter.batch.size, env.newsletter.batch.secondsBetween).then(
+                        //    function (batchesCount) {
+                        //        logger.info("Sent "+batchesCount+" batches of maximum "+env.newsletter.batch.size+" emails");
+                        //        deferred.resolve();
+                        //    },
+                        //    function (err) {
+                        //        deferred.reject(err);
+                        //    }
+                        //);
                     },
                     function (err) {
                         deferred.reject(err);
@@ -82,7 +82,7 @@ module.exports = function (env, logger) {
             getEmailsFromGroups(distributionListsIds)
         ]).then(
             function (results) {
-                deferred.resolve(concatArraysUnique(results[0], results[1]));
+                deferred.resolve(concatEmailsUnique(results[0], results[1]));
             },
             function (err) {
                 deferred.reject(err);
@@ -97,11 +97,14 @@ module.exports = function (env, logger) {
             if(err){
                 deferred.reject(err);
             }else{
-                Users.distinct("username", {groupsID: {$in: groupsIds}}, function (err, usernames) {
+                Users.aggregate([
+                    { $match: {groupsID: {$in: groupsIds}} },
+                    { $project: {_id:0, email: "$username", name: "$name"} }
+                ], function (err, users) {
                     if(err){
                         deferred.reject(err);
                     }else{
-                        deferred.resolve(usernames);
+                        deferred.resolve(users);
                     }
                 });
             }
@@ -111,7 +114,12 @@ module.exports = function (env, logger) {
 
     function getEmailsFromCustomLists(distributionListsIds) {
         var deferred = Q.defer();
-        Newsletter.distributionLists.distinct("emails", {_id: {$in: distributionListsIds}}, function (err, customEmails) {
+        Newsletter.distributionLists.aggregate([
+            { $match: {_id: {$in: distributionListsIds}} },
+            { $unwind: "$emails"},
+            { $group: {_id: "$emails.email", email: {$first: "$emails.email"}, name: {$first: "$emails.name"}} },
+            { $project: {_id: 0, email: 1, name: 1} }
+        ], function (err, customEmails) {
             if(err){
                 deferred.reject(err);
             }else{
@@ -121,13 +129,17 @@ module.exports = function (env, logger) {
         return deferred.promise;
     }
 
-    function concatArraysUnique(array1, array2){
+    function concatEmailsUnique(array1, array2){
+        var result = array1;
+        var exists;
         for(var i=0; i<array2.length; i++){
-            if(array1.indexOf(array2[i]) === -1){
-                array1.push(array2[i]);
+            exists = false;
+            for(var j=0; j<array1.length && !exists; j++){
+                if(array2[i].email === array1[j].email) exists = true;
             }
+            if(!exists) result.push(array2[i]);
         }
-        return array1;
+        return result;
     }
 
     function populateTemplates(templates){
