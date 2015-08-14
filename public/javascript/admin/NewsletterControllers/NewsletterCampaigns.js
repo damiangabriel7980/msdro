@@ -1,10 +1,5 @@
 controllers.controller('NewsletterCampaigns', ['$scope', '$state', 'NewsletterService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', '$q', function ($scope, $state, NewsletterService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, $q) {
 
-    NewsletterService.statistics.query().$promise.then(function (resp) {
-        var stats = Success.getObject(resp);
-        console.log(stats);
-    });
-
     var refreshCampaigns = function () {
         NewsletterService.campaigns.query().$promise.then(function(resp){
             var campaigns = Success.getObject(resp);

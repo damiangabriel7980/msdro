@@ -13,6 +13,7 @@ var app = angular.module('app',
         'therapeuticSelect',
         's3UploadManager',
         'adminEmailsList',
+        'adminWidgetStats',
         'ui.ace'
     ]);
 
@@ -161,7 +162,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('newsletter.dashboard',{
             url: '/dashboard',
-            templateUrl: 'partials/admin/newsletter/dashboard.html'
+            templateUrl: 'partials/admin/newsletter/dashboard.html',
+            controller: 'NewsletterDashboard'
         })
         .state('newsletter.dashboard.campaigns',{
             url: '/campaigns',
