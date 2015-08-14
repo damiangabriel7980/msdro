@@ -34,7 +34,7 @@ module.exports = function (env, logger) {
                     if(err){
                         logger.error(err);
                     }else{
-                        logger.info("Sent all campaigns");
+                        logger.warn("Finished job - due campaigns");
                     }
                 })
             }
@@ -58,7 +58,7 @@ module.exports = function (env, logger) {
                         var html = results[1];
                         sendEmailInBatches(html, users, env.newsletter.batch.size, env.newsletter.batch.secondsBetween).then(
                             function (batchesCount) {
-                                logger.info("Sent "+batchesCount+" batches of maximum "+env.newsletter.batch.size+" emails");
+                                logger.warn("Sent "+batchesCount+" batches of maximum "+env.newsletter.batch.size+" emails");
                                 deferred.resolve();
                             },
                             function (err) {
