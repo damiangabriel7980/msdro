@@ -49,17 +49,25 @@ module.exports = function (env, logger) {
             }else if(!campaign){
                 deferred.reject("Campaign not found");
             }else{
-                Q.all([
-                    getEmails(campaign.distribution_lists),
-                    populateTemplates(campaign.templates)
-                ]).then(
-                    function (results) {
-                        var users = results[0];
-                        var html = results[1];
-                        sendEmailInBatches(campaign.subject, html, users, env.newsletter.batch.size, env.newsletter.batch.secondsBetween).then(
-                            function (batchesCount) {
-                                logger.warn("Sent "+batchesCount+" batches of maximum "+env.newsletter.batch.size+" emails");
-                                deferred.resolve();
+                //first, create a subaccount for this campaign
+                generateSubaccount(campaign_id).then(
+                    function (subaccountId) {
+                        Q.all([
+                            getEmails(campaign.distribution_lists),
+                            populateTemplates(campaign.templates)
+                        ]).then(
+                            function (results) {
+                                var users = results[0];
+                                var html = results[1];
+                                sendEmailInBatches(subaccountId, campaign.subject, html, users, env.newsletter.batch.size, env.newsletter.batch.secondsBetween).then(
+                                    function (batchesCount) {
+                                        logger.warn("Sent "+batchesCount+" batches of maximum "+env.newsletter.batch.size+" emails");
+                                        deferred.resolve();
+                                    },
+                                    function (err) {
+                                        deferred.reject(err);
+                                    }
+                                );
                             },
                             function (err) {
                                 deferred.reject(err);
@@ -70,6 +78,30 @@ module.exports = function (env, logger) {
                         deferred.reject(err);
                     }
                 );
+            }
+        });
+        return deferred.promise;
+    }
+
+    function generateSubaccountId(campaign_id){
+        return "msd_newsletter_" + process.env.NODE_ENV + "_" + campaign_id;
+    }
+
+    function getCampaignTag(){
+        return "msd_" + process.env.NODE_ENV + "_campaign_mail";
+    }
+
+    function generateSubaccount(campaign_id){
+        var deferred = Q.defer();
+        var subaccountId = generateSubaccountId(campaign_id);
+        mandrill('/subaccounts/add', {
+            "id": subaccountId,
+            "name": subaccountId
+        }, function(err, resp){
+            if(err){
+                deferred.reject(err);
+            }else{
+                deferred.resolve(subaccountId);
             }
         });
         return deferred.promise;
@@ -179,7 +211,7 @@ module.exports = function (env, logger) {
         return templateHtml;
     }
 
-    function sendEmailInBatches(subject, html, users, batchSize, secondsBetween){
+    function sendEmailInBatches(subaccountId, subject, html, users, batchSize, secondsBetween){
         var deferred = Q.defer();
         Parameters.findOne({name: "FROM_EMAIL"}, function (err, from_email) {
             if(err){
@@ -193,7 +225,7 @@ module.exports = function (env, logger) {
                 //send batches
                 async.eachSeries(batches, function (batch, callback) {
                     logger.warn("Sending batch...");
-                    sendBatch(subject, html, batch, from_email).then(
+                    sendBatch(subaccountId, subject, html, batch, from_email).then(
                         function () {
                             logger.warn("Sent batch of " + batch.length + " emails");
                             logger.warn(batch);
@@ -225,15 +257,17 @@ module.exports = function (env, logger) {
         return ret;
     }
 
-    function sendBatch(subject, html, users, from_email) {
+    function sendBatch(subaccountId, subject, html, users, from_email) {
         var deferred = Q.defer();
         //console.log(users);
         mandrill('/messages/send', {
             "message": {
                 "html": html,
                 "subject": subject,
-                from_email: from_email,
-                to: users
+                "from_email": from_email,
+                "to": users,
+                "subaccount": subaccountId,
+                "tags": [getCampaignTag]
             }
         }, function(err, resp){
             if(err){
