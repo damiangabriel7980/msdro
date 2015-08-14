@@ -56,7 +56,7 @@ module.exports = function (env, logger) {
                     function (results) {
                         var users = results[0];
                         var html = results[1];
-                        sendEmailInBatches(html, users, env.newsletter.batch.size, env.newsletter.batch.secondsBetween).then(
+                        sendEmailInBatches(campaign.subject, html, users, env.newsletter.batch.size, env.newsletter.batch.secondsBetween).then(
                             function (batchesCount) {
                                 logger.warn("Sent "+batchesCount+" batches of maximum "+env.newsletter.batch.size+" emails");
                                 deferred.resolve();
@@ -179,7 +179,7 @@ module.exports = function (env, logger) {
         return templateHtml;
     }
 
-    function sendEmailInBatches(html, users, batchSize, secondsBetween){
+    function sendEmailInBatches(subject, html, users, batchSize, secondsBetween){
         var deferred = Q.defer();
         Parameters.findOne({name: "FROM_EMAIL"}, function (err, from_email) {
             if(err){
@@ -193,7 +193,7 @@ module.exports = function (env, logger) {
                 //send batches
                 async.eachSeries(batches, function (batch, callback) {
                     logger.warn("Sending batch...");
-                    sendBatch(html, batch, from_email).then(
+                    sendBatch(subject, html, batch, from_email).then(
                         function () {
                             logger.warn("Sent batch of " + batch.length + " emails");
                             logger.warn(batch);
@@ -225,13 +225,13 @@ module.exports = function (env, logger) {
         return ret;
     }
 
-    function sendBatch(html, users, from_email) {
+    function sendBatch(subject, html, users, from_email) {
         var deferred = Q.defer();
         //console.log(users);
         mandrill('/messages/send', {
             "message": {
                 "html": html,
-                "subject": "test",
+                "subject": subject,
                 from_email: from_email,
                 to: users
             }

@@ -5,6 +5,7 @@ var schema = new Schema({
     name: String,
     date_created: Date,
     send_date: Date,
+    subject: String,
     distribution_lists: [{type: Schema.Types.ObjectId, ref: "newsletter_distribution_lists"}],
     templates: [{
         id: {type: Schema.Types.ObjectId, ref: 'newsletter_templates'},
