@@ -3009,7 +3009,12 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                Newsletter.campaigns.find({}, function (err, campaigns) {
+                Newsletter.campaigns.find({}, {
+                    name: 1,
+                    date_created: 1,
+                    send_date: 1,
+                    status: 1
+                }, function (err, campaigns) {
                     if(err){
                         handleError(res, err);
                     }else{
