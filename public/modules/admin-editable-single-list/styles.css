@@ -8,19 +8,8 @@
 .adminEditableSingleList .items .item {
   border-radius: 4px;
   border: 1px solid #eee;
-  display: block;
-  width: 100%;
-  float: left;
   margin-top: 5px;
   padding: 5px;
-}
-.adminEditableSingleList .items .item .name {
-  display: block;
-  float: left;
-}
-.adminEditableSingleList .items .item .action {
-  display: block;
-  float: right;
 }
 .adminEditableSingleList .items .confirmItems {
   display: block;

@@ -12,15 +12,16 @@
                 title: '@'
             },
             link: function(scope, element, attrs) {
+
                 scope.addItem = function () {
-                    if(scope.itemName){
-                        modelInsertItem(scope.itemName);
-                        scope.itemName = null;
+                    if(scope.item){
+                        modelInsertItem(scope.item);
+                        scope.item = null;
                     }
                 };
 
-                scope.removeItem = function (name) {
-                    scope.ngModel.splice(getItemIndex(name), 1);
+                scope.removeItem = function (idx) {
+                    scope.ngModel.splice(idx, 1);
                 };
 
                 scope.fileSelected = function ($files) {
@@ -40,17 +41,20 @@
                 };
 
                 scope.addParsedItems = function () {
-                    var emails = getEmailArray(scope.parsedCSVContents);
-                    var uniqueEmails = eliminateDuplicates(emails, scope.ngModel);
+                    var items = getItemsArray(scope.parsedCSVContents);
+                    var uniqueEmails = eliminateDuplicates(items, scope.ngModel);
                     scope.ngModel = uniqueEmails.concat(scope.ngModel || []);
                     scope.parsedCSVContents = [];
                 };
 
-                function getEmailArray(parsedCSVContents) {
+                function getItemsArray(parsedCSVContents) {
                     parsedCSVContents = parsedCSVContents || [];
                     var result = [];
                     for(var i=0; i<parsedCSVContents.length; i++){
-                        if(parsedCSVContents[i].email) result.push(parsedCSVContents[i].email);
+                        if(parsedCSVContents[i].email) result.push({
+                            email: parsedCSVContents[i].email,
+                            name: parsedCSVContents[i].name
+                        });
                     }
                     return result;
                 }
@@ -58,15 +62,20 @@
                 function eliminateDuplicates(from, checkAgainst){
                     from = from || [];
                     checkAgainst = checkAgainst || [];
+                    var exists;
                     var result = [];
                     for(var i=0; i<from.length; i++){
-                        if(checkAgainst.indexOf(from[i]) === -1) result.push(from[i]);
+                        exists = false;
+                        for(var j=0; j<checkAgainst.length && !exists; j++){
+                            if(from[i].email === checkAgainst[j].email) exists = true;
+                        }
+                        if(!exists) result.push(from[i]);
                     }
                     return result;
                 }
 
                 function parseCSV(file) {
-                    CSVParser.parse(file, ["email"]).then(function (result) {
+                    CSVParser.parse(file, ["email", "name"]).then(function (result) {
                         if(result.error){
                             switch(result.error){
                                 case "headers": resetAlert("Eroare la citire. Verificati capul de tabel."); break;
@@ -86,18 +95,17 @@
                     };
                 }
 
-                function modelInsertItem(name) {
+                function modelInsertItem(item) {
+                    item = item || {};
                     if(!scope.ngModel) scope.ngModel = [];
-                    if(getItemIndex(name)===null) scope.ngModel.push(name);
+                    if(item.email && getItemIndex(item.email)===null) scope.ngModel.push(item);
                 }
 
-                function getItemIndex(name) {
-                    var idx = scope.ngModel.indexOf(name);
-                    if(idx === -1){
-                        return null;
-                    }else{
-                        return idx;
+                function getItemIndex(email) {
+                    for(var i=0; i<scope.ngModel.length; i++){
+                        if(scope.ngModel[i].email === email) return i;
                     }
+                    return null;
                 }
             }
         };
