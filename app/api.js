@@ -3024,18 +3024,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function (req, res) {
-            var campaign = new Newsletter.campaigns({
-                name: "Untitled",
-                date_created: Date.now(),
-                status: "not sent"
-            });
-            campaign.save(function (err, saved) {
-                if(err){
-                    handleError(res, err);
-                }else{
-                    handleSuccess(res, saved);
-                }
-            });
+            if(req.query.clone){
+                Newsletter.campaigns.findOne({_id: req.query.clone}, function (err, campaign) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!campaign){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        var clone = new Newsletter.campaigns({
+                            date_created: Date.now(),
+                            name: campaign.name + " (copy)",
+                            distribution_lists: campaign.distribution_lists,
+                            templates: campaign.templates,
+                            status: "not sent"
+                        });
+                        clone.save(function (err) {
+                            if(err){
+                                handleError(res, err);
+                            }else{
+                                handleSuccess(res);
+                            }
+                        });
+                    }
+                });
+            }else{
+                var campaign = new Newsletter.campaigns({
+                    name: "Untitled",
+                    date_created: Date.now(),
+                    status: "not sent"
+                });
+                campaign.save(function (err, saved) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, saved);
+                    }
+                });
+            }
         })
         .put(function (req, res) {
             UtilsModule.discardFields(req.body, ["_id", "date_created", "status"]);

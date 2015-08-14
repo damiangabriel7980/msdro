@@ -28,6 +28,12 @@ controllers.controller('NewsletterCampaigns', ['$scope', '$state', 'NewsletterSe
             refreshCampaigns();
         });
     };
+    
+    $scope.cloneCampaign = function (campaign_id) {
+        NewsletterService.campaigns.create({clone: campaign_id}, {}).$promise.then(function () {
+            refreshCampaigns();
+        });
+    };
 
     $scope.editCampaign = function (campaign) {
         if(campaign.status === "not sent"){
