@@ -3,6 +3,9 @@
         <div class="col-md-12 noPadding">
             <h3>Statistici</h3>
         </div>
+        <div class="col-md-12 noPadding" ng-if="!campaignStats">
+            Se incarca...
+        </div>
         <div class="col-md-12 noPadding" ng-if="campaignStats">
             <div class="col-md-8 noPadding">
                 <admin-widget-stats selected-stats="campaignStats[statType]"></admin-widget-stats>
