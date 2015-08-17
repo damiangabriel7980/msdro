@@ -2932,7 +2932,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     var Newsletter = {
         distributionLists: require('./models/newsletter/distribution_lists'),
         campaigns: require('./models/newsletter/campaigns'),
-        templates: require('./models/newsletter/templates')
+        templates: require('./models/newsletter/templates'),
+        unsubscribers: require('./models/newsletter/unsubscribers')
     };
 
     router.route('/admin/newsletter/distribution_lists')
@@ -3174,6 +3175,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }else{
                 handleError(res, false, 400, 6);
             }
+        });
+
+    router.route('/admin/newsletter/unsubscribedEmails')
+        .get(function (req, res) {
+            Newsletter.unsubscribers.find({}).exec(function (err, people) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, people);
+                }
+            });
         });
 
     router.route('/admin/newsletter/statistics')

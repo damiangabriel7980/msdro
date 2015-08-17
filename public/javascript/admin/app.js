@@ -180,6 +180,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/newsletter/unsubscribedUsers/unsubscribedUsers.html',
             controller: 'NewsletterUnsubscribedUsers'
         })
+        .state('newsletter.dashboard.unsubscribedEmails',{
+            url: '/unsubscribedEmails',
+            templateUrl: 'partials/admin/newsletter/unsubscribedEmails/unsubscribedEmails.html',
+            controller: 'NewsletterUnsubscribedEmails'
+        })
         .state('newsletter.dashboard.templates',{
             url: '/templates',
             templateUrl: 'partials/admin/newsletter/templates/templates.html',
