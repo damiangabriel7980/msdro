@@ -53,7 +53,7 @@ controllers.controller('NewsletterCampaigns', ['$scope', '$state', 'NewsletterSe
                     }
                 }
             });
-        }else{
+        }else if(campaign.status !== "error"){
             $modal.open({
                 templateUrl: 'partials/admin/newsletter/campaigns/modalCampaignSummary.html',
                 windowClass: 'fade',

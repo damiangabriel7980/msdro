@@ -14,6 +14,7 @@ module.exports = function (env, logger) {
 
     var mandrill = require('node-mandrill')(env.mandrillKey);
     var systemVariables = ["UNSUBSCRIBE_URL"];
+    var variableTypes = ["text", "html"];
 
     function sendDueCampaigns() {
         Newsletter.campaigns.distinct("_id", {send_date: {$exists: true, $lt: Date.now()}, status: "not sent"}, function (err, campaigns_ids) {
@@ -28,7 +29,9 @@ module.exports = function (env, logger) {
                             });
                         },
                         function (err) {
-                            callback(err);
+                            Newsletter.campaigns.update({_id: campaign_id}, {$set: {status: "error"}}, function () {
+                                callback(err);
+                            });
                         }
                     )
                 }, function (err) {
@@ -205,7 +208,7 @@ module.exports = function (env, logger) {
     function populateTemplate(templateHtml, variables){
         templateHtml = templateHtml || "";
         for(var i=0; i<variables.length; i++){
-            if(variables[i] && ["text", "html"].indexOf(variables[i].type) > -1 && variables[i].value){
+            if(variables[i] && variableTypes.indexOf(variables[i].type) > -1 && variables[i].value){
                 templateHtml = templateHtml.replace(new RegExp("\\*\\|"+variables[i].name+"\\|\\*", "g"), variables[i].value);
             }
         }
@@ -257,25 +260,84 @@ module.exports = function (env, logger) {
         return ret;
     }
 
-    function sendBatch(subaccountId, subject, html, users, from_email) {
+    function hashUserMail(email) {
+        return new Buffer(email).toString('base64');
+    }
+
+    function unhashUserMail(hasedEmail) {
+        return new Buffer(hasedEmail, 'base64').toString('ascii');
+    }
+
+    function getUnsubscribeUrl(email) {
         var deferred = Q.defer();
-        //console.log(users);
-        mandrill('/messages/send', {
-            "message": {
-                "html": html,
-                "subject": subject,
-                "from_email": from_email,
-                "to": users,
-                "subaccount": subaccountId,
-                "tags": [getCampaignTag()]
-            }
-        }, function(err, resp){
+        try{
+            deferred.resolve(env.newsletter.unsubcribe + "?user=" +hashUserMail(email));
+        }catch(ex){
+            deferred.reject(ex);
+        }
+        return deferred.promise;
+    }
+
+    function getMergeVars(users){
+        var deferred = Q.defer();
+        var mergeVars = [];
+        async.each(users, function (user, callback) {
+            Q.all([
+                getUnsubscribeUrl(user.email)
+            ]).then(
+                function (results) {
+                    var unsubscribeUrl = results[0];
+                    mergeVars.push({
+                        "rcpt": user.email,
+                        "vars": [{
+                            "name": "UNSUBSCRIBE_URL",
+                            "content": unsubscribeUrl
+                        }]
+                    });
+                    callback();
+                },
+                function (err) {
+                    callback(err);
+                }
+            );
+        }, function (err) {
             if(err){
                 deferred.reject(err);
             }else{
-                deferred.resolve(resp);
+                deferred.resolve(mergeVars);
             }
         });
+        return deferred.promise;
+    }
+
+    function sendBatch(subaccountId, subject, html, users, from_email) {
+        var deferred = Q.defer();
+        getMergeVars(users).then(
+            function (mergeVars) {
+                //console.log(users);
+                console.log(mergeVars);
+                mandrill('/messages/send', {
+                    "message": {
+                        "html": html,
+                        "subject": subject,
+                        "from_email": from_email,
+                        "to": users,
+                        "subaccount": subaccountId,
+                        "tags": [getCampaignTag()],
+                        "merge_vars": mergeVars
+                    }
+                }, function(err, resp){
+                    if(err){
+                        deferred.reject(err);
+                    }else{
+                        deferred.resolve(resp);
+                    }
+                });
+            },
+            function (err) {
+                deferred.reject(err);
+            }
+        );
         return deferred.promise;
     }
 
@@ -312,6 +374,7 @@ module.exports = function (env, logger) {
     return {
         sendDueCampaigns: sendDueCampaigns,
         getOverallStats: getOverallStats,
-        getCampaignStats: getCampaignStats
+        getCampaignStats: getCampaignStats,
+        unhashUserMail: unhashUserMail
     };
 };

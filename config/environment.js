@@ -21,7 +21,7 @@ module.exports = function(){
                         size: 5,
                         secondsBetween: 5
                     },
-                    unsubcribe: "http://localhost:8080"
+                    unsubcribe: "http://localhost:8080/unsubscribe"
                 }
             };
 
@@ -46,7 +46,7 @@ module.exports = function(){
                         size: 100,
                         secondsBetween: 20
                     },
-                    unsubcribe: "https://staging.staywell.ro"
+                    unsubcribe: "https://staging.staywell.ro/unsubscribe"
                 }
             };
 
@@ -71,7 +71,7 @@ module.exports = function(){
                         size: 100,
                         secondsBetween: 20
                     },
-                    unsubcribe: "https://staywell.ro"
+                    unsubcribe: "https://staywell.ro/unsubscribe"
                 }
             };
 
