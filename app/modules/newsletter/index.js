@@ -4,7 +4,8 @@ var Q = require('q');
 var Newsletter = {
     distributionLists: require('../../models/newsletter/distribution_lists'),
     campaigns: require('../../models/newsletter/campaigns'),
-    templates: require('../../models/newsletter/templates')
+    templates: require('../../models/newsletter/templates'),
+    unsubscribers: require('../../models/newsletter/unsubscribers')
 };
 
 var Users = require('../../models/user');
@@ -134,7 +135,7 @@ module.exports = function (env, logger) {
                 deferred.reject(err);
             }else{
                 Users.aggregate([
-                    { $match: {groupsID: {$in: groupsIds}} },
+                    { $match: {groupsID: {$in: groupsIds}, "subscriptions.newsletterStaywell": {$ne: false}} },
                     { $project: {_id:0, email: "$username", name: "$name"} }
                 ], function (err, users) {
                     if(err){
@@ -150,16 +151,28 @@ module.exports = function (env, logger) {
 
     function getEmailsFromCustomLists(distributionListsIds) {
         var deferred = Q.defer();
-        Newsletter.distributionLists.aggregate([
-            { $match: {_id: {$in: distributionListsIds}} },
-            { $unwind: "$emails"},
-            { $group: {_id: "$emails.email", email: {$first: "$emails.email"}, name: {$first: "$emails.name"}} },
-            { $project: {_id: 0, email: 1, name: 1} }
-        ], function (err, customEmails) {
+        //get unsubscribers emails lowercased
+        Newsletter.unsubscribers.aggregate([
+            {$project: {"email": {$toLower: "$email"}}},
+            {$group: {_id: null, emails: {$addToSet: "$email"}}}
+        ], function (err, result) {
             if(err){
                 deferred.reject(err);
             }else{
-                deferred.resolve(customEmails);
+                var unsubscribedEmails = (result && result[0] && result[0].emails)?result[0].emails:[];
+                Newsletter.distributionLists.aggregate([
+                    { $match: {_id: {$in: distributionListsIds}} },
+                    { $unwind: "$emails"},
+                    { $group: {_id: "$emails.email", email: {$first: "$emails.email"}, name: {$first: "$emails.name"}} },
+                    { $project: {_id: 0, email: {$toLower: "$email"}, name: 1} },
+                    { $match: {email: {$nin: unsubscribedEmails}} }
+                ], function (err, customEmails) {
+                    if(err){
+                        deferred.reject(err);
+                    }else{
+                        deferred.resolve(customEmails);
+                    }
+                });
             }
         });
         return deferred.promise;
@@ -315,7 +328,7 @@ module.exports = function (env, logger) {
         getMergeVars(users).then(
             function (mergeVars) {
                 //console.log(users);
-                console.log(mergeVars);
+                //console.log(mergeVars);
                 mandrill('/messages/send', {
                     "message": {
                         "html": html,
