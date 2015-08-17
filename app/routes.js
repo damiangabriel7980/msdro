@@ -199,6 +199,10 @@ module.exports = function(app, logger, passport) {
         res.sendFile('/private_storage/sitemap.xml', {root: __dirname});
     });
 
+    app.get('/skillshare', function (req, res) {
+        res.sendFile('/private_storage/skillshare.html', {root: __dirname});
+    });
+
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
 // =============================================================================
