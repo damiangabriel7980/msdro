@@ -17,7 +17,7 @@
             <label>Vezi variabile</label>
             <input type="checkbox" ng-model="checkVariables">
         </div>
-        <div class="col-md-12"><hr><label>Variabile:</label></div>
+        <div class="col-md-12" ng-show="template.variables && template.variables.length>0"><hr><label>Variabile:</label></div>
         <div class="col-md-12 noPadding" ng-if="template" ng-repeat="variable in template.variables">
             <div class="col-md-12 form-group" ng-if="variable.type==='text'">
                 <label>{{variable.name}}:</label>
@@ -26,11 +26,6 @@
             <div class="col-md-12 form-group" ng-if="variable.type==='html'">
                 <label>{{variable.name}}:</label>
                 <textarea ui-tinymce="tinymceOptions" ng-model="variable.value"></textarea>
-            </div>
-            <div class="col-md-12 form-group" ng-if="variable.type==='system'">
-                <label>{{variable.name}}:</label>
-                <select class="form-control" ng-model="variable.value"
-                        ng-options="v as v for v in systemVariables"></select>
             </div>
         </div>
     </div>

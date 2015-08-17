@@ -478,6 +478,8 @@ services.factory('LocationService', ['$resource', function($resource){
 }]);
 
 services.factory('NewsletterService', ['$resource', function($resource){
+    var variableTypes = ["text", "html"];
+    var systemVariables = ["UNSUBSCRIBE_URL"];
     var getVariableType = function (variableName, variables) {
         for(var i=0; i<variables.length; i++){
             if(variables[i] && variables[i].name === variableName){
@@ -493,7 +495,7 @@ services.factory('NewsletterService', ['$resource', function($resource){
         if(matches){
             for(var i=0; i<matches.length; i++){
                 variable = matches[i].replace(/\|/g,"").replace(/\*/g,"");
-                if(variable){
+                if(variable && systemVariables.indexOf(variable) === -1){
                     variables.push({
                         name: variable,
                         type: getVariableType(variable, initialVariables)
@@ -533,7 +535,9 @@ services.factory('NewsletterService', ['$resource', function($resource){
                 delete: { method: 'DELETE', isArray: false }
             }),
             parseVariables: parseTemplateVariables,
-            renderTemplate: renderTemplate
+            renderTemplate: renderTemplate,
+            variableTypes: variableTypes,
+            systemVariables: systemVariables
         },
         users: $resource('api/admin/newsletter/users', {}, {
             query: { method: 'GET', isArray: false }

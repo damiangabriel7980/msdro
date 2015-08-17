@@ -13,6 +13,7 @@ var Parameters = require('../../models/parameters');
 module.exports = function (env, logger) {
 
     var mandrill = require('node-mandrill')(env.mandrillKey);
+    var systemVariables = ["UNSUBSCRIBE_URL"];
 
     function sendDueCampaigns() {
         Newsletter.campaigns.distinct("_id", {send_date: {$exists: true, $lt: Date.now()}, status: "not sent"}, function (err, campaigns_ids) {

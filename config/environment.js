@@ -2,7 +2,7 @@ module.exports = function(){
     switch(process.env.NODE_ENV){
         case 'development':
             return {
-                database: "mongodb://msddev:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/MSDdev",
+                database: "mongodb://localhost:27017/msd",
                 amazonBucket: "msdqa",
                 amazonPrefix: "https://s3-eu-west-1.amazonaws.com/",
                 pushServerAddress: "https://notif.qualitance.com",
@@ -20,7 +20,8 @@ module.exports = function(){
                     batch: {
                         size: 5,
                         secondsBetween: 5
-                    }
+                    },
+                    unsubcribe: "http://localhost:8080"
                 }
             };
 
@@ -44,7 +45,8 @@ module.exports = function(){
                     batch: {
                         size: 100,
                         secondsBetween: 20
-                    }
+                    },
+                    unsubcribe: "https://staging.staywell.ro"
                 }
             };
 
@@ -68,7 +70,8 @@ module.exports = function(){
                     batch: {
                         size: 100,
                         secondsBetween: 20
-                    }
+                    },
+                    unsubcribe: "https://staywell.ro"
                 }
             };
 

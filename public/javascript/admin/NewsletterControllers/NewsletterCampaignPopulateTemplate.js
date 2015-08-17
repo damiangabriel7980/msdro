@@ -27,9 +27,6 @@ controllers.controller('NewsletterCampaignPopulateTemplate',['$scope', 'Newslett
     $scope.checkVariables = false;
     $scope.tinymceOptions = {};
 
-    //TODO: dynamically assign system variables
-    $scope.systemVariables = ["test1", "test2"];
-
     $scope.$watch('template.variables', function (newVariables) {
         refreshPreview(newVariables);
     }, true);
