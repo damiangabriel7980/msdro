@@ -7668,6 +7668,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .calendarTabs {
   margin-top: 20px;
 }
+.calendarTabs .accordion-toggle {
+  outline: 0;
+}
 .calendarTabs .tab-pane {
   width: 100% !important ;
 }
