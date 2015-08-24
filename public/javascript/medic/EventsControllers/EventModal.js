@@ -5,35 +5,37 @@ app.controllerProvider.register('EventModal', ['$scope', 'eventsService', '$stat
 
     eventsService.calendar.query({id: idEvent}).$promise.then(function (resp) {
         var eventDetails = Success.getObject(resp);
+        console.log(eventDetails);
         eventDetails = Success.getObject(resp);
         $scope.titleDateDisplay = formatTitleDate(eventDetails.event.start, eventDetails.event.end);
         eventDetails.days = {};
         for (var i = 0; i < eventDetails.conferences.length; i++) {
-            for (var j = 0; j < eventDetails.conferences[i].talks.length; j++) {
-                var talkBeginDate = Utils.customDateFormat(new Date(eventDetails.conferences[i].talks[j].hour_start), {
+            var conference = eventDetails.conferences[i];
+            for (var j = 0; j < conference.talks.length; j++) {
+                var talkBeginDate = Utils.customDateFormat(new Date(conference.talks[j].hour_start), {
                     reverse: true,
                     prefixZero: true,
                     separator: "-"
                 });
 
                 if(eventDetails.days[talkBeginDate]) {
-                    if (!eventDetails.days[talkBeginDate][eventDetails.conferences[i].title]) {
-                        eventDetails.days[talkBeginDate][eventDetails.conferences[i].title] = [];
-                        eventDetails.days[talkBeginDate][eventDetails.conferences[i].title].push(eventDetails.conferences[i].talks[j]);
+                    if (!eventDetails.days[talkBeginDate][conference.title]) {
+                        eventDetails.days[talkBeginDate][conference.title] = {
+                            description: conference.description,
+                            talks:[]
+                        };
                     }
-                    else {
-                        eventDetails.days[talkBeginDate][eventDetails.conferences[i].title].push(eventDetails.conferences[i].talks[j]);
-                    }
+                    eventDetails.days[talkBeginDate][conference.title].talks.push(conference.talks[j]);
                 }
                 else
                 {
-                    var conferenceId={};
-                    conferenceId[eventDetails.conferences[i].title]  = [eventDetails.conferences[i].talks[j]];
-                    eventDetails.days[talkBeginDate] = conferenceId;
+                    var conferences={};
+                    conferences[conference.title]  = {
+                        description: conference.description,
+                        talks: [conference.talks[j]]
+                    };
+                    eventDetails.days[talkBeginDate] = conferences;
                 }
-
-
-
             }
         }
         $scope.eventDetails = eventDetails;

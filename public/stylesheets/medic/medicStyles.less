@@ -1330,7 +1330,7 @@ body {
         padding-left: 85px;
         .cell {
           padding-top: 5px;
-          font-size: 12px;
+          .fontM;
         }
         .title {
           line-height: 1.4em;
@@ -1343,7 +1343,7 @@ body {
         }
         .name {
           color: @green;
-          font-size: 12px;
+          .fontM;
           font-weight: bold;
           line-height: 1.5em;
           text-overflow: ellipsis;
@@ -1379,11 +1379,7 @@ body {
   }
   .programContainer {
     .dayItem {
-      .conferenceItem{
-        .conferenceTitle{
-        color:@green;
-        }
-      }
+      .fontM;
       .talkTitle{
         margin:0;
       }
@@ -1409,14 +1405,21 @@ body {
         .panel-heading{
           background-color: white;
           .panel-title{
-            color:@green!important;
-            font-weight:bold;
-            font-size:14px;
+            .conferenceTitle{
+              color:@green;
+              font-weight:bold;
+              .fontM;
+            }
+            .conferenceDescription{
+              .fontM;
+            }
+            a:hover{
+              text-decoration: none;
+              .conferenceTitle{
+                text-decoration: underline;
+              }
+            }
           }
-        }
-        .conferenceTitle {
-          margin: 10px;
-          color: @green;
         }
       }
       .talkTitle {
@@ -1436,18 +1439,6 @@ body {
             }
             margin: 10px 10px 10px 50px;
             border:none!important;
-            .panel-heading{
-              background-color: white;
-              .panel-title{
-                color:@green!important;
-                font-weight:bold;
-                font-size:14px;
-              }
-            }
-            .conferenceTitle {
-              margin: 15px 15px 15px 45px;
-              color: @green;
-            }
           }
           .talkTitle {
             margin: 10px 10px 10px 80px;

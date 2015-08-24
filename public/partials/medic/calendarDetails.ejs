@@ -41,12 +41,14 @@
                                     <accordion-group class="conferenceItem"
                                                      ng-repeat="(key ,conference) in day" is-open="isOpen">
                                         <accordion-heading>
-                                            <span>
+                                            <span class="conferenceTitle">
                                                 <i ng-class="{'glyphicon glyphicon-chevron-down':!isOpen,'glyphicon glyphicon-chevron-right':isOpen}"></i>
                                                 {{key}}
                                             </span>
+                                            <br>
+                                            <span class="conferenceDescription" ng-bind-html="trustAsHtml(conference.description)"></span>
                                         </accordion-heading>
-                                        <div class="talk" ng-repeat="talk in conference track by $index">
+                                        <div class="talk" ng-repeat="talk in conference.talks track by $index">
                                             <div class="talkTitle">
                                                 <span>
                                                     <strong>
