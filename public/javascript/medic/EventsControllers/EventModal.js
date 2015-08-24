@@ -4,37 +4,61 @@
 app.controllerProvider.register('EventModal', ['$scope', 'eventsService', '$stateParams', '$modal', '$log', '$modalInstance', '$state', 'idEvent', '$sce', '$timeout', 'Success', 'Error', 'HomeService', 'Utils', function ($scope, eventsService, $stateParams, $modal, $log, $modalInstance, $state, idEvent, $sce, $timeout, Success, Error, HomeService, Utils) {
 
     eventsService.calendar.query({id: idEvent}).$promise.then(function (resp) {
-        $scope.itemsEvent = Success.getObject(resp);
-        $scope.itemsEvent.days = {};
-        for (var i = 0; i < $scope.itemsEvent.conferences.length; i++) {
-            for (var j = 0; j < $scope.itemsEvent.conferences[i].talks.length; j++) {
-                var talkBeginDate = Utils.customDateFormat(new Date($scope.itemsEvent.conferences[i].talks[j].hour_start), {
+        var eventDetails = Success.getObject(resp);
+        eventDetails = Success.getObject(resp);
+        $scope.titleDateDisplay = formatTitleDate(eventDetails.event.start, eventDetails.event.end);
+        eventDetails.days = {};
+        for (var i = 0; i < eventDetails.conferences.length; i++) {
+            for (var j = 0; j < eventDetails.conferences[i].talks.length; j++) {
+                var talkBeginDate = Utils.customDateFormat(new Date(eventDetails.conferences[i].talks[j].hour_start), {
                     reverse: true,
                     prefixZero: true,
                     separator: "-"
                 });
 
-                if($scope.itemsEvent.days[talkBeginDate]) {
-                    if (!$scope.itemsEvent.days[talkBeginDate][$scope.itemsEvent.conferences[i].title]) {
-                        $scope.itemsEvent.days[talkBeginDate][$scope.itemsEvent.conferences[i].title] = [];
-                        $scope.itemsEvent.days[talkBeginDate][$scope.itemsEvent.conferences[i].title].push($scope.itemsEvent.conferences[i].talks[j]);
+                if(eventDetails.days[talkBeginDate]) {
+                    if (!eventDetails.days[talkBeginDate][eventDetails.conferences[i].title]) {
+                        eventDetails.days[talkBeginDate][eventDetails.conferences[i].title] = [];
+                        eventDetails.days[talkBeginDate][eventDetails.conferences[i].title].push(eventDetails.conferences[i].talks[j]);
                     }
                     else {
-                        $scope.itemsEvent.days[talkBeginDate][$scope.itemsEvent.conferences[i].title].push($scope.itemsEvent.conferences[i].talks[j]);
+                        eventDetails.days[talkBeginDate][eventDetails.conferences[i].title].push(eventDetails.conferences[i].talks[j]);
                     }
                 }
                 else
                 {
                     var conferenceId={};
-                    conferenceId[$scope.itemsEvent.conferences[i].title]  = [$scope.itemsEvent.conferences[i].talks[j]];
-                    $scope.itemsEvent.days[talkBeginDate] = conferenceId;
+                    conferenceId[eventDetails.conferences[i].title]  = [eventDetails.conferences[i].talks[j]];
+                    eventDetails.days[talkBeginDate] = conferenceId;
                 }
 
 
 
             }
         }
+        $scope.eventDetails = eventDetails;
     });
+
+    function formatTitleDate(start, end){
+        var result = "";
+        var year = "";
+        if(start){
+            year = new Date(start).getFullYear();
+            start = Utils.customDateFormat(start, {separator: " ", hideYear: true, monthFormat: "long"});
+        }
+        if(end){
+            end = Utils.customDateFormat(end, {separator: " ", hideYear: true, monthFormat: "long"});
+        }
+        if(start){
+            result += start;
+            if(end && end !== start){
+                result += " - " + end;
+            }
+        }
+        if(result) result+= ", "+year;
+        return result;
+    }
+
     $scope.formatDate = function(date){
         var dateOut = new Date(date);
         return dateOut;

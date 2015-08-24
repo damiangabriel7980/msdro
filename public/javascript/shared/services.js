@@ -97,7 +97,46 @@ services.factory('Utils', ['$sce', function ($sce) {
             }
         }
         return true;
-    }
+    };
+    var getMonthsArray = function (long) {
+        var monthsShort = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
+        var monthsLong = ["Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie",
+            "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie"];
+        return long?monthsLong:monthsShort;
+    };
+    var customDateFormat = function(input, options){
+        try{
+            if(typeof input === "string") input = new Date(input);
+            options = options || {};
+            var day = input.getDate();
+            var month = input.getMonth()+1;
+            var year = input.getFullYear();
+            if(options.hideYear) year = "";
+            if(options.monthFormat){
+                if(options.monthFormat === "long"){
+                    month = getMonthsArray(true)[month-1];
+                }
+                if(options.monthFormat === "short"){
+                    month = getMonthsArray()[month-1];
+                }
+            }else{
+                if(options.prefixZero){
+                    if(day<10) day = "0"+day;
+                    if(month<10) month = "0"+month;
+                }
+            }
+            var separator = options.separator || "/";
+            var ret;
+            if(options.reverse){
+                ret = (options.hideYear?"":year+separator)+month+separator+day;
+            }else{
+                ret = day+separator+month+(options.hideYear?"":separator+year);
+            }
+            return ret;
+        }catch(ex){
+            return input;
+        }
+    };
     return{
         fileToBase64: function (file, callback) {
             var reader = new FileReader();
@@ -152,22 +191,8 @@ services.factory('Utils', ['$sce', function ($sce) {
                 }
             }
         },
-        getMonthsArray: function () {
-            return ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
-        },
-        customDateFormat : function(input, options){
-            options = options || {};
-            var day = input.getDate();
-            var month = input.getMonth()+1;
-            var year = input.getFullYear();
-            if(options.prefixZero){
-                if(day<10) day = "0"+day;
-                if(month<10) month = "0"+month;
-            }
-            var separator = options.separator || "/";
-            return options.reverse?year+separator+month+separator+day:day+separator+month+separator+year;
-
-        },
+        getMonthsArray: getMonthsArray,
+        customDateFormat : customDateFormat,
         trustAsHtml: trustAsHtml,
         htmlToPlainText: htmlToPlainText,
         convertAndTrustAsHtml: convertAndTrustAsHtml,

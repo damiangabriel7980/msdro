@@ -1,15 +1,16 @@
 <div class="eventDetails lg modal-responsive MyProfileModal">
     <div class="modal-header">
         <div class="modal-title"><i class="glyphicon glyphicon-facetime-video fontM"
-                                    ng-if="itemsEvent.event.type==2"></i>&nbsp;{{itemsEvent.event['name']}}
+                                    ng-if="eventDetails.event.type==2"></i>&nbsp;{{eventDetails.event['name']}}
         </div>
         <div class="details">
             <div class="date location">
-                <span class="label label-primary"><strong>&nbsp;{{itemsEvent.event.start | asDate | date: 'MMMM dd'}} </strong><strong>
-                        &nbsp;-&nbsp;{{itemsEvent.event.end | asDate | date: 'dd,yyyy'}}</strong> <strong
-                            convert-special
-                            conver="itemsEvent.event.place"
-                            ng-bind-html="trustAsHtml(itemsEvent.event.place)"></strong></span>
+                <span class="label label-primary">
+                    <strong>{{titleDateDisplay}}</strong><br>
+                </span>
+                <span class="label label-primary">
+                    <strong convert-special conver="eventDetails.event.place" ng-bind-html="trustAsHtml(eventDetails.event.place)"></strong>
+                </span>
             </div>
         </div>
     </div>
@@ -17,19 +18,19 @@
         <div class="calendarTabs">
             <tabset class="text-center">
                 <tab heading="Despre">
-                    <p ng-show="!itemsEvent.event.description" class="text-center">Nu sunt disponibile detalii despre
+                    <p ng-show="!eventDetails.event.description" class="text-center">Nu sunt disponibile detalii despre
                         Eveniment.</p>
 
-                    <div class="aboutContainer" ng-bind-html="trustAsHtml(itemsEvent.event.description)">
+                    <div class="aboutContainer" ng-bind-html="trustAsHtml(eventDetails.event.description)">
                     </div>
                 </tab>
                 <tab heading="Program">
                     <div class="programContainer">
-                        <p ng-show="isEmpty(itemsEvent.days)" class="text-center">Nu sunt disponibile detalii
+                        <p ng-show="isEmpty(eventDetails.days)" class="text-center">Nu sunt disponibile detalii
                             despre Program.
                         </p>
 
-                        <div ng-repeat="(key,day) in itemsEvent.days" class="dayItem">
+                        <div ng-repeat="(key,day) in eventDetails.days" class="dayItem">
 
                             <span class="eventDay" ng-click="dayClicked(key)"><i
                                         ng-class="{'glyphicon glyphicon-chevron-down':isCollapsed,'glyphicon glyphicon-chevron-right':!isCollapsed}"></i>
@@ -65,10 +66,10 @@
 
                 <tab heading="Speakeri">
                     <div class="speakerContainer ">
-                        <p ng-show="!itemsEvent.speakers.length" class="text-center">Nu sunt disponibile detalii
+                        <p ng-show="!eventDetails.speakers.length" class="text-center">Nu sunt disponibile detalii
                             despre Speakeri.
                         </p>
-                        <div dir-paginate="speaker in itemsEvent.speakers | itemsPerPage:6"
+                        <div dir-paginate="speaker in eventDetails.speakers | itemsPerPage:6"
                              class="col-xs-12 col-sm-6 col-md-4 noPadding speaker cell">
 
                             <div class="pull-left imageOuterFrame">
