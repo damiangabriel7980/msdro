@@ -1405,13 +1405,19 @@ body {
         .panel-heading{
           background-color: white;
           .panel-title{
-            .conferenceTitle{
-              color:@green;
-              font-weight:bold;
-              .fontM;
-            }
-            .conferenceDescription{
-              .fontM;
+            .conferenceHeading{
+              list-style-type: none;
+              padding: 0;
+              margin: 0;
+              .conferenceTitle{
+                color:@green;
+                font-weight:bold;
+                .fontM;
+              }
+              .conferenceDescription{
+                margin-top: 2px;
+                .fontM;
+              }
             }
             a:hover{
               text-decoration: none;

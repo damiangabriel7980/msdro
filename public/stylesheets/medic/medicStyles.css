@@ -7819,21 +7819,27 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .calendarTabs .programContainer .dayItem .conferenceItem .panel-heading {
   background-color: white;
 }
-.calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title .conferenceTitle {
+.calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title .conferenceHeading {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title .conferenceHeading .conferenceTitle {
   color: #01877b;
   font-weight: bold;
   font-size: 14px;
 }
 @media (max-width: 767px) {
-  .calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title .conferenceTitle {
+  .calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title .conferenceHeading .conferenceTitle {
     font-size: 13px;
   }
 }
-.calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title .conferenceDescription {
+.calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title .conferenceHeading .conferenceDescription {
+  margin-top: 2px;
   font-size: 14px;
 }
 @media (max-width: 767px) {
-  .calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title .conferenceDescription {
+  .calendarTabs .programContainer .dayItem .conferenceItem .panel-heading .panel-title .conferenceHeading .conferenceDescription {
     font-size: 13px;
   }
 }
