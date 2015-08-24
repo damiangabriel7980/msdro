@@ -1281,23 +1281,29 @@ body {
     display: inline-block;
   }
 
-  .nav-tabs > li.active > a {
-    border: none !important;
-    color: @green !important;
+  .nav-tabs{
+    li{
+      a{
+        color: @gray;
+        &:hover{
+          color: @green;
+          background-color: #ffffff;
+          border-top-color: #ffffff;
+          border-left-color: #ffffff;
+          border-right-color: #ffffff;
+        }
+      }
+      &.active{
+        border: none;
+        border-bottom: 2px solid @green;
+        a{
+          border: none !important;
+          color: @green !important;
+        }
+      }
+    }
   }
 
-  .nav > li.active {
-    border: none;
-  }
-
-  .nav-tabs > li.active {
-    border: none;
-    border-bottom: 2px solid @green;
-  }
-
-  .nav > li > a {
-    color: @gray;
-  }
   .tab-content {
     text-align: left;
     display: flex;

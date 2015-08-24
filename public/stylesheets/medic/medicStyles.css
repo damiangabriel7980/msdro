@@ -7691,19 +7691,23 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .calendarTabs ul {
   display: inline-block;
 }
-.calendarTabs .nav-tabs > li.active > a {
-  border: none !important;
-  color: #01877b !important;
+.calendarTabs .nav-tabs li a {
+  color: #aaaaaa;
 }
-.calendarTabs .nav > li.active {
-  border: none;
+.calendarTabs .nav-tabs li a:hover {
+  color: #01877b;
+  background-color: #ffffff;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #ffffff;
 }
-.calendarTabs .nav-tabs > li.active {
+.calendarTabs .nav-tabs li.active {
   border: none;
   border-bottom: 2px solid #01877b;
 }
-.calendarTabs .nav > li > a {
-  color: #aaaaaa;
+.calendarTabs .nav-tabs li.active a {
+  border: none !important;
+  color: #01877b !important;
 }
 .calendarTabs .tab-content {
   text-align: left;
