@@ -4,12 +4,11 @@
                                     ng-if="eventDetails.event.type==2"></i>&nbsp;{{eventDetails.event['name']}}
         </div>
         <div class="details">
-            <div class="date location">
+            <div class="date location" ng-show="titleDateDisplay && eventDetails">
                 <span class="label label-primary">
-                    <strong>{{titleDateDisplay}}</strong><br>
-                </span>
-                <span class="label label-primary">
+                    <strong>{{titleDateDisplay}},</strong>
                     <strong convert-special conver="eventDetails.event.place" ng-bind-html="trustAsHtml(eventDetails.event.place)"></strong>
+                    <br>
                 </span>
             </div>
         </div>
