@@ -46,6 +46,7 @@
                 <div class="col-md-12 template" ng-repeat="template in campaign.templates | orderBy:'order' track by $index">
                     <div class="col-md-12 content" ng-bind-html="trustAsHtml(renderTemplate(templatesById[template.id].html, template.variables))"></div>
                     <div class="actions">
+                        <span>{{templatesById[template.id].name}}</span>
                         <div class="btn btn-xs btn-default" ng-click="shiftTemplateDown(template.order)"><i class="glyphicon glyphicon-arrow-down"></i></div>
                         <div class="btn btn-xs btn-default" ng-click="shiftTemplateUp(template.order)"><i class="glyphicon glyphicon-arrow-up"></i></div>
                         <div class="btn btn-xs btn-primary" ng-click="populateTemplate(template)"><i class="glyphicon glyphicon-cog"></i></div>
