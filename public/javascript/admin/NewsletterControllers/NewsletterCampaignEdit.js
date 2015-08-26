@@ -34,6 +34,13 @@ controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 
             InfoModal.show("Atentie", "Trebuie sa bifati cel putin o lista de distributie");
         }else if(!toSave.templates || toSave.templates.length === 0){
             InfoModal.show("Atentie", "Trebuie sa introduceti cel putin un template");
+        }else if(templatesContainEmptyVariables(toSave.templates)){
+            ActionModal.show("Atentie", "Unele template-uri contin variabile necompletate", function () {
+                saveCampaign(toSave);
+            }, {
+                yes: "Salveaza oricum",
+                no: "Continua editarea"
+            });
         }else if(toSave.send_date){
             try{
                 if(new Date(toSave.send_date) < new Date()){
@@ -54,6 +61,18 @@ controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 
             refreshCampaigns();
             $modalInstance.close();
         });
+    }
+
+    function templatesContainEmptyVariables(templates) {
+        console.log(templates);
+        for(var i=0; i<templates.length; i++){
+            if(templates[i].variables){
+                for(var j=0; j<templates[i].variables.length; j++){
+                    if(!templates[i].variables[j] || !templates[i].variables[j].value) return true;
+                }
+            }
+        }
+        return false;
     }
 
     $scope.addTemplate = function () {
