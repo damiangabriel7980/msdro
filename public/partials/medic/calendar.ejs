@@ -1,30 +1,6 @@
-<div class="col-md-12 col-xs-12 calendarWrapper">
-    <div id="calendar" calendar="myCalendar" ui-calendar="uiConfigMobile.calendar" ng-model="realEventsMob" class="visible-xs visible-sm col-xs-12 noPadding"></div>
-    <div class="visible-xs visible-sm col-xs-12 nextEvents">
-        <h3 class="MainTitle">EVENIMENTE URMATOARE</h3>
-        <div class="col-md-12" ng-if="!eventsFiltered">
-            <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
-        </div>
-        <div ng-repeat="eventim in eventsFiltered">
-            <div class="col-md-12 col-xs-12 col-sm-12 noPadding">
-                <div class="col-md-2 col-xs-2 col-sm-1 noPadding Date">
-                    <h3 class="day">{{eventim.start | filter: asDate | date:'dd'}}</h3>
-                    <h5 class="month">{{eventim.start | filter: asDate | date:'MMM'}}</h5>
-                </div>
-
-                <div class="noPadding col-md-9 col-sm-9 col-xs-9 Title">
-
-                    <h4 ng-if="eventim.type==1" ng-click="goToEvent(eventim._id)" convert-special conver="eventim.name" ng-bind-html="trustAsHtml(eventim.name)">
-
-                    </h4>
-                    <h4 ng-if="eventim.type==2" ng-click="goToEvent(eventim._id)" convert-special conver="eventim.name" ng-bind-html="trustAsHtml(eventIcon+eventim.name)">
-
-                    </h4>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 hidden-xs hidden-sm nextEvents">
+<div class="col-xs-12 calendarWrapper">
+    <div class="col-md-8 col-md-push-4 col-sm-12" id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" ng-if="eventSources"></div>
+    <div class="col-md-4 col-md-pull-8 col-sm-12 nextEvents">
         <h3 class="MainTitle">EVENIMENTE URMATOARE</h3>
         <div class="col-md-12" ng-if="!eventsFiltered">
             <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
@@ -48,6 +24,5 @@
             </div>
         </div>
     </div>
-    <div id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="realEvents" class="col-md-8 hidden-xs hidden-sm"></div>
 </div>
 <ng-view></ng-view>

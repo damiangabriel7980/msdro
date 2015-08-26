@@ -28,12 +28,15 @@ var CM_templates =require('./models/CM_templates');
 var ActivationCodes =require('./models/activationCodes');
 var DPOC_Devices = require('./models/DPOC_Devices');
 var Parameters = require('./models/parameters');
+var JanuviaUsers = require('./models/januvia/januvia_users');
+var _ = require('underscore');
 
 //modules
 var UserModule = require('./modules/user');
 var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
 var SessionStorage = require('./modules/sessionStorage');
+var ConferencesModule = require('./modules/Conferences');
 
 //special Products
 var specialProduct = require('./models/specialProduct');
@@ -310,7 +313,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                PublicContent.findOne({_id: req.query.id}, function (err, cont) {
+                PublicContent.findOne({_id: req.query.id}).populate('therapeutic-areasID').exec(function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -638,7 +641,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                Carousel.findOne({_id: req.query.id}, function (err, cont) {
+                Carousel.findOne({_id: req.query.id}).populate("article_id").exec(function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -2436,6 +2439,165 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
             })
         });
 
+    router.route('/admin/applications/januvia/users')
+        .get(function (req, res) {
+            if(req.query.id){
+                JanuviaUsers.findOne({_id: req.query.id}).populate("city users_associated").exec(function (err, user) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!user){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, user);
+                    }
+                });
+            }else{
+                var q = {};
+                if(req.query.type){
+                    q.type = req.query.type;
+                }
+                JanuviaUsers.find(q, function (err, users) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, users);
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var user = new JanuviaUsers({
+                name: "Untitled",
+                date_created: Date.now()
+            });
+            user.save(function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, user);
+                }
+            });
+        })
+        .put(function (req, res) {
+            try{
+                var idToEdit = ObjectId(req.query.id);
+            }catch(ex){
+                return handleError(res, err);
+            }
+            var toEdit = req.body;
+            JanuviaUsers.findOne({_id: idToEdit}, function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else if(!user){
+                    handleError(res, false, 404, 1);
+                }else{
+                    _.extend(user, toEdit);
+                    user.save(function (err, user) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res, user);
+                        }
+                    });
+                }
+            })
+        })
+        .delete(function (req, res) {
+            JanuviaUsers.findOne({_id: req.query.id}, function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else if(!user){
+                    handleError(res, false, 404, 1);
+                }else{
+                    user.remove(function (err, wres) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            //cascade delete associations
+                            JanuviaUsers.update({}, {$pull: {users_associated: user._id}}, {multi: true}).exec(function (err, wres) {
+                                if(err){
+                                    handleError(res, err);
+                                }else{
+                                    handleSuccess(res);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+    router.route('/admin/applications/januvia/user_types')
+        .get(function (req, res) {
+            handleSuccess(res, new JanuviaUsers().schema.path('type').enumValues);
+        });
+
+    router.route('/admin/location/counties')
+        .get(function (req, res) {
+            if(req.query.id){
+                Counties.findOne({_id: req.query.id}, function (err, county) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!county){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, county);
+                    }
+                });
+            }else if(req.query.city){
+                Counties.findOne({citiesID: {$in: [req.query.city]}}, function (err, county) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!county){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, county);
+                    }
+                });
+            }else{
+                Counties.find({}, function (err, counties) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, counties);
+                    }
+                });
+            }
+        });
+
+    router.route('/admin/location/cities')
+        .get(function (req, res) {
+            if(req.query.id){
+                Cities.findOne({_id: req.query.id}, function (err, city) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!city){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, city);
+                    }
+                });
+            }else if(req.query.county){
+                Counties.findOne({_id: req.query.county}).populate('citiesID').exec(function (err, county) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!county){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, county.citiesID);
+                    }
+                });
+            }else{
+                Counties.find({}, function (err, counties) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, counties);
+                    }
+                });
+            }
+        });
+
     router.route('/admin/system/activationCodes/codes')
         .get(function (req, res) {
             ActivationCodes.find({}).populate('profession').exec(function (err, codes) {
@@ -3353,11 +3515,45 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/calendar')
         .get(function(req,res) {
             if(req.query.id){
-                Events.findById(req.query.id,function(err, cont) {
+                Events.findById(req.query.id,function(err, event) {
+                    var queryResult={};
                     if(err) {
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res, cont);
+                        queryResult.event=event;
+
+                        function getConferencesInDepth(callback){
+                            ConferencesModule.getConferencesInDepth(event.listconferences, function(err,conferences){
+                                if(err){
+                                    callback(err);
+                                }
+                                else{
+                                    queryResult.conferences = conferences;
+                                    callback();
+                                }
+                            })
+                        }
+                       function getSpeakersForConferences(callback){
+                           ConferencesModule.getSpeakersForConferences(event.listconferences,function(err,speakers){
+                               if(err){
+                                   callback(err);
+                               }
+                               else{
+                                   queryResult.speakers=speakers;
+                                   callback();
+                               }
+                           })
+                       }
+
+                        async.parallel([getConferencesInDepth,getSpeakersForConferences],function(err){
+                            if(err){
+                                handleError(err);
+                            }
+                            else{
+                                handleSuccess(res,queryResult);
+                            }
+                        })
+
                     }
                 });
             }else{

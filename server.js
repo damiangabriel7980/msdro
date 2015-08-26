@@ -53,6 +53,9 @@ require('./config/passport')(passport, logger); // pass passport for configurati
 //globals
 var Globals = require('./config/globals.js'), globals = new Globals();
 
+//seed
+require('./app/modules/seed');
+
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
@@ -88,6 +91,7 @@ require('./app/apiMSDDoc.js')(app, my_config, logger, tokenSecret, secureServer,
 require('./app/apiDPOC.js')(app, logger, express.Router());
 require('./app/apiCourses.js')(app, logger, tokenSecret, express.Router());
 require('./app/apiContractManagement.js')(app, logger, express.Router());
+require('./app/apiJanuvia.js')(app, logger, express.Router());
 // socket comm test =================================================================
 // require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 

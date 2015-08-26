@@ -1,4 +1,4 @@
-controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', 'Success', 'Error', function($scope, $rootScope, publicContentService, $modalInstance, $state, idToEdit, AmazonService, Success, Error){
+controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', 'Success', 'Error', 'therapeuticAreas', function($scope, $rootScope, publicContentService, $modalInstance, $state, idToEdit, AmazonService, Success, Error, therapeuticAreas){
 
     $scope.idToEdit = idToEdit;
     var contentDataLoaded = false;
@@ -45,93 +45,15 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         var areasIds = Success.getObject(resp)['therapeutic-areasID']?Success.getObject(resp)['therapeutic-areasID']:[];
 
         //get therapeutic areas
-        publicContentService.therapeuticAreas.query().$promise.then(function (resp) {
-            var areasOrganised = [];
-            areasOrganised.push({id:0, name:"Adauga arii terapeutice"});
-            areasOrganised.push({id:1, name:"Toate"});
-            for(var i=0; i<Success.getObject(resp).length; i++){
-                var thisArea = Success.getObject(resp)[i];
-                if(thisArea['therapeutic-areasID'].length == 0){
-                    //it's a parent. Add it
-                    areasOrganised.push({id: thisArea._id, name:thisArea.name});
-                    if(thisArea.has_children){
-                        //find all it's children
-                        for(var j=0; j < Success.getObject(resp).length; j++){
-                            if(Success.getObject(resp)[j]['therapeutic-areasID'].indexOf(thisArea._id)>-1){
-                                //found one children. Add it
-                                areasOrganised.push({id: Success.getObject(resp)[j]._id, name:"0"+Success.getObject(resp)[j].name});
-                            }
-                        }
-                    }
-                }
-            }
-            $scope.allAreas = areasOrganised;
-            $scope.selectedArea = $scope.allAreas[0];
-
-            //format selected therapeutic areas
-
-            var formattedAreas = [];
-            for(var k=0; k<areasIds.length; k++){
-                var area = findInFormattedAreas(areasIds[k]);
-                if(area) formattedAreas.push(area);
-            }
-            $scope.selectedTherapeuticAreas = formattedAreas;
-        }).catch(function(err){
-            $scope.statusAlert.type = "danger";
-            $scope.statusAlert.message = Error.getMessage(err);
-            $scope.statusAlert.newAlert = true;
+        therapeuticAreas.areas.query().$promise.then(function (resp) {
+            $scope.allAreas = Success.getObject(resp);
+            $scope.selectedAreas = areasIds;
         });
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
         $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
-
-    //--------------------------------------------------------------------------------- functions for therapeutic areas
-
-    var findInFormattedAreas = function (id) {
-        var i=2;
-        while(i<$scope.allAreas.length){
-            if($scope.allAreas[i].id==id){
-                return {id: $scope.allAreas[i].id, name: $scope.allAreas[i].name};
-            }
-            i++;
-        }
-        return null;
-    };
-
-    var findInUserAreas = function (id) {
-        var index = -1;
-        var i=0;
-        var found = false;
-        while(!found && i<$scope.selectedTherapeuticAreas.length){
-            if($scope.selectedTherapeuticAreas[i].id==id){
-                found = true;
-                index = i;
-            }
-            i++;
-        }
-        return index;
-    };
-    $scope.areaWasSelected = function (sel) {
-        if(sel.id!=0){
-            if(sel.id==1){
-                $scope.selectedTherapeuticAreas = [];
-                for(var i=2; i<$scope.allAreas.length; i++){
-                    $scope.selectedTherapeuticAreas.push($scope.allAreas[i]);
-                }
-            }else{
-                var index = findInUserAreas(sel.id);
-                if(index==-1) $scope.selectedTherapeuticAreas.push(sel);
-            }
-        }
-    };
-    $scope.removeUserArea = function (id) {
-        var index = findInUserAreas(id);
-        if(index>-1){
-            $scope.selectedTherapeuticAreas.splice(index,1);
-        }
-    };
 
     //----------------------------------------------------------------------------------------------------- file upload
 
@@ -258,17 +180,12 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         toUpdate.description = this.descriere?this.descriere:"";
         toUpdate.type = $scope.selectedType;
         toUpdate.category = this.selectedCategory;
-        //form array of selected areas id's
-        var areasIDs = [];
-        for(var i=0; i<$scope.selectedTherapeuticAreas.length; i++){
-            areasIDs.push($scope.selectedTherapeuticAreas[i].id);
-        }
-        toUpdate['therapeutic-areasID'] = areasIDs;
+        toUpdate['therapeutic-areasID'] = this.newAreas;
         //get content text
         toUpdate.text = this.contentText?this.contentText:"";
         //send data to server
         toUpdate.last_updated = new Date();
-        console.log(toUpdate)
+        console.log(toUpdate);
         publicContentService.publicContent.update({id: idToEdit},{toUpdate: toUpdate}).$promise.then(function (resp) {
                 $scope.statusAlert.type = "success";
                 $scope.statusAlert.message = Success.getMessage(resp);

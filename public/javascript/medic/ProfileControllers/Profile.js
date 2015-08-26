@@ -73,6 +73,15 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
         $scope.imageUser = imagePre + userData.image_path;
         $scope.selectedAreas = userData['therapeutic-areasID'] || [];
         $scope.address = userData.address;
+        $scope.selectedCounty = {
+            name: userData.county_name,
+            _id: userData.county_id
+        };
+        $scope.selectedCity = {
+            name: userData.city_name,
+            _id: userData.city_id,
+            init: true
+        };
 
         if(userData.job){
             $scope.job = userData.job;
@@ -98,47 +107,31 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
                     });
                 }
         };
-
-
-        //---------------------------------------------- counties / cities
-        $scope.county = {
-            selected: {
-                name: userData.county_name,
-                _id: userData.county_id
-            }
-        };
-        $scope.city = {
-            selected: {
-                name: userData.city_name,
-                _id: userData.city_id
-            }
-        };
-
-        var cityDefault = true;
-
-        $scope.$watch('county.selected', function () {
-            if($scope.county.selected!==undefined){
-                ProfileService.Cities.query({county_name:$scope.county.selected.name}).$promise.then(function (resp) {
-                    $scope.cities = Success.getObject(resp).sort(function(a,b){
-                        if ( a.name < b.name )
-                            return -1;
-                        if ( a.name > b.name )
-                            return 1;
-                        return 0;
-                    });
-                });
-                if(!cityDefault) $scope.city.selected = undefined;
-                cityDefault = false;
-                $scope.cities = [];
-            }
-        });
-
     });
 
     // get counties and cities
     ProfileService.Counties.query().$promise.then(function (counties) {
         $scope.counties = Success.getObject(counties);
     });
+
+    $scope.countyWasSelected = function (county) {
+        if(county && county._id){
+            ProfileService.Cities.query({county_name: county.name}).$promise.then(function (resp) {
+                $scope.cities = Success.getObject(resp).sort(function(a,b){
+                    if ( a.name < b.name )
+                        return -1;
+                    if ( a.name > b.name )
+                        return 1;
+                    return 0;
+                });
+            });
+        }else if(!($scope.selectedCity && $scope.selectedCity.init)){
+            $scope.cities = [];
+            $scope.selectedCity = {};
+        }else{
+            $scope.selectedCity.init = false;
+        }
+    };
 
     //----------------------------------------------------------------------------------------------- therapeutic areas
     therapeuticAreas.areas.query().$promise.then(function (resp) {
@@ -148,9 +141,18 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
     //------------------------------------------------------------------------------------------------ form submissions
 
     //user profile
-    $scope.userProfileAlert = {newAlert:false, type:"", message:""};
+    var resetProfileAlert = function (text, type) {
+        $scope.userProfileAlert = {
+            text: text,
+            type: type || "danger"
+        };
+    };
     $scope.submitProfileForm = function (isValid) {
-        if(isValid){
+        if(!this.selectedCounty || !this.selectedCounty._id){
+            resetProfileAlert("Va rugam selectati un judet");
+        }else if(!this.selectedCity || !this.selectedCity._id){
+            resetProfileAlert("Va rugam selectati un oras");
+        }else if(isValid){
             if(this.rememberOption){
                 SpecialFeaturesService.specialGroups.getSelected().then(function (group) {
                     IntroService.hideNextTime.setStatus(group._id, false);
@@ -161,25 +163,17 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
             toSend.title = this.userData.title;
             toSend.phone = this.phone;
             toSend['therapeutic-areasID'] = this.newAreas;
-            toSend.citiesID = [this.city.selected._id];
+            toSend.citiesID = [this.selectedCity._id];
             toSend.address = this.address;
             toSend.subscriptions = this.userData.subscriptions;
             toSend.practiceType = this.userData.practiceType;
             ProfileService.UserData.save({newData:toSend}).$promise.then(function (resp) {
-                $scope.userProfileAlert.message = Success.getMessage(resp);
-                $scope.userProfileAlert.type = "success";
-                $scope.userProfileAlert.newAlert = true;
+                resetProfileAlert(Success.getMessage(resp), "success");
             }).catch(function(err){
-                $scope.userProfileAlert.type = "danger";
-                $scope.userProfileAlert.newAlert = true;
-                $scope.userProfileAlert.message = Error.getMessage(err);
+                resetProfileAlert(Error.getMessage(err));
             });
-        }
-        else
-        {
-            $scope.userProfileAlert.newAlert = true;
-            $scope.userProfileAlert.message = "Exista campuri goale/ce contin caractere invalide! Verificati formularul inca o data!";
-            $scope.userProfileAlert.type = "danger";
+        }else{
+            resetProfileAlert("Exista campuri goale/ce contin caractere invalide! Verificati formularul inca o data!");
         }
     };
 
@@ -264,34 +258,3 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
     $scope.openFirst = true;
 
 }]);
-app.filterProvider.register('propsFilter', function() {
-    //used for select2
-    return function(items, props) {
-        var out = [];
-
-        if (angular.isArray(items)) {
-            items.forEach(function(item) {
-                var itemMatches = false;
-
-                var keys = Object.keys(props);
-                for (var i = 0; i < keys.length; i++) {
-                    var prop = keys[i];
-                    var text = props[prop].toLowerCase();
-                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-                        itemMatches = true;
-                        break;
-                    }
-                }
-
-                if (itemMatches) {
-                    out.push(item);
-                }
-            });
-        } else {
-            // Let the output be the input untouched
-            out = items;
-        }
-
-        return out;
-    }
-});

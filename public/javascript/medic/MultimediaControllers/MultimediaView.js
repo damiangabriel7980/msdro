@@ -31,10 +31,10 @@ app.controllerProvider.register('MultimediaView', ['$scope','$rootScope' ,'multi
     $scope.openMultimedia=function(multimedia) {
         if(multimedia._id) multimedia = multimedia._id;
         if(!$stateParams.idMulti){
-            $state.go('elearning.multimedia.multimediaByArea',{idArea:0,idMulti: multimedia},{},{reload: true});
+            $state.go('elearning.multimedia.multimediaByArea',{idArea: $stateParams.idArea || 0, idMulti: multimedia},{},{reload: true});
         }else{
             if(Utils.isMobile(true))
-                $state.go('elearning.multimedia.multimediaMobile',{id: multimedia});
+                $state.go('elearning.multimedia.multimediaMobile',{idArea: $stateParams.idArea || 0, id: multimedia});
             else
             {
                 $modal.open({

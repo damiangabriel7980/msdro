@@ -89,6 +89,54 @@ services.factory('Utils', ['$sce', function ($sce) {
             return htmlToPlainText(text);
         }
     };
+    var isEmptyObject = function(obj){
+        for(var key in obj) {
+            console.log(obj);
+            if (obj.hasOwnProperty(key)) {
+                return false;
+            }
+        }
+        return true;
+    };
+    var getMonthsArray = function (long) {
+        var monthsShort = ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
+        var monthsLong = ["Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie",
+            "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie"];
+        return long?monthsLong:monthsShort;
+    };
+    var customDateFormat = function(input, options){
+        try{
+            if(typeof input === "string") input = new Date(input);
+            options = options || {};
+            var day = input.getDate();
+            var month = input.getMonth()+1;
+            var year = input.getFullYear();
+            if(options.hideYear) year = "";
+            if(options.monthFormat){
+                if(options.monthFormat === "long"){
+                    month = getMonthsArray(true)[month-1];
+                }
+                if(options.monthFormat === "short"){
+                    month = getMonthsArray()[month-1];
+                }
+            }else{
+                if(options.prefixZero){
+                    if(day<10) day = "0"+day;
+                    if(month<10) month = "0"+month;
+                }
+            }
+            var separator = options.separator || "/";
+            var ret;
+            if(options.reverse){
+                ret = (options.hideYear?"":year+separator)+month+separator+day;
+            }else{
+                ret = day+separator+month+(options.hideYear?"":separator+year);
+            }
+            return ret;
+        }catch(ex){
+            return input;
+        }
+    };
     return{
         fileToBase64: function (file, callback) {
             var reader = new FileReader();
@@ -143,55 +191,19 @@ services.factory('Utils', ['$sce', function ($sce) {
                 }
             }
         },
-        getMonthsArray: function () {
-            return ["IAN","FEB","MAR","APR","MAI","IUN","IUL","AUG","SEP","OCT","NOI","DEC"];
-        },
-        customDateFormat : function(input){
-            return input.getDate() + '/' + (input.getMonth() + 1) + '/' + input.getFullYear();
-
-        },
+        getMonthsArray: getMonthsArray,
+        customDateFormat : customDateFormat,
         trustAsHtml: trustAsHtml,
         htmlToPlainText: htmlToPlainText,
         convertAndTrustAsHtml: convertAndTrustAsHtml,
         trimText: trimText,
         trimWords: trimWords,
-        createHeader: createHeader
+        createHeader: createHeader,
+        isEmptyObject:isEmptyObject
     }
 }]);
 services.factory('Diacritics',function(){
     return{
-        trimTextAndReplaceDiacritics : function(input, isMobile,trimFlag){
-            var newEventName=String(input)
-                .replace('Ă','A')
-                .replace('ă','a')
-                .replace('Â','A')
-                .replace('â','a')
-                .replace('Î','I')
-                .replace('î','i')
-                .replace('Ș','S')
-                .replace('ș','s')
-                .replace('Ş','S')
-                .replace('ş','s')
-                .replace('Ț','T')
-                .replace('ț','t')
-                .replace('Ţ','T')
-                .replace('ţ','t');
-            if(trimFlag){
-                if(isMobile){
-                    newEventName=newEventName.split(/\s+/).join(" ");
-                    newEventName=newEventName.substr(0,10)+"...";
-                    return newEventName;
-                }
-                else{
-                    newEventName=newEventName.split(/\s+/).slice(0,3).join(" ");
-                    return newEventName;
-                }
-            }
-            else{
-                return newEventName;
-            }
-
-        },
         diacriticsToHtml : function(input){
               var text = String(input)
                 .replace(/Ă/g,'&#258;')

@@ -8,8 +8,8 @@
             <alert type="{{alert.type}}" ng-if="alert.show" close="alert.show=false">{{alert.text}}</alert>
         </div>
 
-        <ng-include src="modalData.template1"></ng-include>
-        <ng-include src="modalData.template2"></ng-include>
+        <div static-include="{{modalData.template1}}"></div>
+        <div static-include="{{modalData.template2}}"></div>
     </div>
     <div class="modal-footer">
         <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>

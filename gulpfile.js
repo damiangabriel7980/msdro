@@ -347,3 +347,40 @@ gulp.task("tpaCleanup", function () {
     });
 
 });
+
+gulp.task("countyDoubleBind", function () {
+
+    var dbAddress = "mongodb://localhost:27017/msd";
+
+    var mongoose = require('mongoose');
+    mongoose.connect(dbAddress);
+    console.log("connected");
+
+    var County = require('./app/models/counties');
+    var City = require('./app/models/cities');
+
+    County.find({}, function (err, counties) {
+        if(err){
+            console.log(err);
+        }else{
+            async.each(counties, eachCounty, function (err) {
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log("done");
+                }
+            });
+        }
+    });
+
+    function eachCounty(county, callbackCounty){
+        async.each(county.citiesID, function (city_id, callback) {
+            City.update({_id: city_id}, {$set: {county: county._id}}, function (err, wres) {
+                callback(err);
+            });
+        }, function (err) {
+            callbackCounty(err);
+        });
+    }
+
+});

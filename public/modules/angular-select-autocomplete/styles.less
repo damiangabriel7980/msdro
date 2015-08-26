@@ -1,0 +1,42 @@
+@gray-light: #ddd;
+@option-highlight: #3875d7;
+@mouse-highlight: #6dbbff;
+
+.selectAutocomplete{
+  position: relative;
+  width: 100%;
+  height: 30px;
+  .input {
+    width: 100%;
+  }
+  .optionsWrapper{
+    position: relative;
+    width: 100%;
+    .options{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      z-index: 2000;
+      background-color: white;
+      border-left: 1px solid @gray-light;
+      border-right: 1px solid @gray-light;
+      border-bottom: 1px solid @gray-light;
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px;
+      .option{
+        width: 100%;
+        padding: 5px;
+        cursor: pointer;
+        &:hover{
+          background-color: @mouse-highlight;
+          color: white;
+        }
+        &.highlight{
+          background-color: @option-highlight;
+          color: white;
+        }
+      }
+    }
+  }
+}

@@ -2,12 +2,10 @@
  * Created by miricaandrei23 on 28.10.2014.
  */
 app.controllerProvider.register('Events', ['$scope','eventsService','$stateParams','$modal','$state','$position','$window','$timeout','$document','$rootScope','$sce','Utils','Diacritics', 'Success', 'SpecialFeaturesService', function($scope,eventsService,$stateParams,$modal,$state,$position,$window,$timeout,$document,$rootScope,$sce,Utils,Diacritics,Success,SpecialFeaturesService){
-var date = new Date();
-    $scope.realEvents=[];
-    $scope.realEventsMob=[];
-    var y=$(date);
     $scope.eventIcon='<i class="glyphicon glyphicon-facetime-video verySmallFont" ng-if="eventim.type==2"></i>&nbsp;';
     $scope.eventIconCalendar='<i class="glyphicon glyphicon-facetime-video verySmallFont"></i>&nbsp;';
+
+    $scope.eventSources = [];
 
     SpecialFeaturesService.specialGroups.getSelected().then(function (specialGroupSelected) {
         getContent(specialGroupSelected);
@@ -15,109 +13,85 @@ var date = new Date();
 
     var getContent = function (specialGroupSelected) {
         eventsService.calendar.query({specialGroup: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function(result){
-            $scope.events = Success.getObject(result);
-            $scope.eventsFiltered = [];
-            for (var i = 0; i < $scope.events.length; i++) {
-                if (new Date($scope.events[i].end) > date)
-                    $scope.eventsFiltered.push($scope.events[i]);
+            var i;
+            var events = Success.getObject(result);
+            var eventsFiltered = [];
+            var today = new Date();
+            for (i=0; i<events.length; i++) {
+                if (new Date(events[i].end) > today) eventsFiltered.push(events[i]);
             }
-            $scope.eventsS=[];
-            $scope.eventsMob=[];
-            for(var i = 0; i < $scope.events.length; i++)
-            {
-                var today = new Date($scope.events[i].end);
-                var tomorrow = new Date($scope.events[i].end);
-                tomorrow.setDate(today.getDate()+1);
-                $scope.eventsS.push({id:$scope.events[i]._id, title:Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,true),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#01877B', type: Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,false)});
-            }
-            for(var i = 0; i < $scope.events.length; i++)
-            {
-                var today = new Date($scope.events[i].end);
-                var tomorrow = new Date($scope.events[i].end);
-                tomorrow.setDate(today.getDate()+1);
-                $scope.eventsMob.push({id:$scope.events[i]._id, title:Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,true,true),start: new Date($scope.events[i].start), end: today.getHours()===0?tomorrow:today,allDay: false,className: 'events',color: '#01877B', type: Diacritics.trimTextAndReplaceDiacritics($scope.events[i].name,false,false)});
+            $scope.eventsFiltered = eventsFiltered;
+
+            var eventsFormatted = [];
+            var dateStart;
+            var dateEnd;
+            for(i=0; i<events.length; i++){
+                dateStart = new Date(events[i].start);
+                dateEnd = new Date(events[i].end);
+                //if(dateEnd.getHours()===0) dateEnd.setDate(dateEnd.getDate + 1);
+                if(dateEnd.toString()!=="Invalid Date" && dateStart.toString()!=="Invalid Date"){
+                    eventsFormatted.push({
+                        id: events[i]._id,
+                        title: events[i].name,
+                        start: dateStart,
+                        end: dateEnd,
+                        //allDay: true,
+                        className: 'events',
+                        color: '#01877B'
+                    });
+                }
             }
 
-            $scope.realEvents=[$scope.eventsS];
-            $scope.realEventsMob=[$scope.eventsMob];
-            $scope.eventRender = function(data, event, view){
-                angular.element('.fc-event-hori').attr("data-toggle","popover");
-                angular.element('.fc-event-hori').attr("data-content",data.type);
-                var today = new Date(data.end);
-                var tomorrow = new Date(data.end);
-                tomorrow.setDate(today.getDate()-1);
-                if(today.getHours()===0)
-                    var endDate=tomorrow;
-                else
-                    var endDate=today;
-                angular.element('.fc-event-hori').attr("data-original-title",Utils.customDateFormat(data.start)  + " - " +  Utils.customDateFormat(endDate));
+            var calendarConfig = {
+                calendar: {
+                    events: eventsFormatted,
+                    ignoreTimezone: false,
+                    height: 480,
+                    editable: false,
+                    header: {
+                        left: Utils.isMobile()?'':'month basicWeek basicDay',
+                        center: 'title',
+                        right: Utils.isMobile()?'prev,next':'today prev,next'
+                    },
+                    timeFormat: '',
+                    eventClick:function(event){
+                        $modal.open({
+                            templateUrl: 'partials/medic/calendarDetails.ejs',
+                            backdrop: true,
+                            size: 'lg',
+                            windowClass: 'fade eventDetailsModal',
+                            controller: 'EventModal',
+                            resolve:{
+                                idEvent: function () {
+                                    return event._id;
+                                }
+                            }
+                        });
+                    }
 
-                var options = {
+                }
+            };
+            if(!Utils.isMobile()){
+                calendarConfig.calendar.eventMouseover = addPopover
+            }
+            $scope.uiConfig = calendarConfig;
+
+            function addPopover (data, event, view){
+                var element = angular.element(event.currentTarget);
+                element.attr("data-toggle", "popover");
+                element.attr("data-content", data.title);
+                var endDate = new Date(data.end);
+                //if(endDate.getHours()===0) endDate.setDate(endDate.getDate()-1);
+                element.attr("data-original-title", Utils.customDateFormat(new Date(data.start))  + " - " +  Utils.customDateFormat(endDate));
+                $(element[0]).popover({
                     trigger:"hover",
                     placement:'auto',
-                    container:'body',
-                    delay: 500
-                };
-                $('[data-toggle="popover"]').popover(options);
-            };
-            $scope.uiConfig = {
-                calendar: {
-                    eventSources: $scope.realEvents,
-                    height: 400,
-                    editable: false,
-                    header: {
-                        left: 'month basicWeek basicDay',
-                        center: 'title',
-                        right: 'today prev,next'
-                    },
-                    timeFormat: '',
-                    eventMouseover: $scope.eventRender,
-                    eventClick:function(event){
-                        $modal.open({
-                            templateUrl: 'partials/medic/calendarDetails.ejs',
-                            backdrop: true,
-                            size: 'lg',
-                            windowClass: 'fade',
-                            controller: 'EventModal',
-                            resolve:{
-                                idEvent: function () {
-                                    return event._id;
-                                }
-                            }
-                        });
-                    }
+                    container:'body'
+                }).trigger("mouseenter");
+            }
 
-                }};
-            $scope.uiConfigMobile = {
-                calendar: {
-                    eventSources: $scope.realEventsMob,
-                    height: 400,
-                    editable: false,
-                    header: {
-                        left: 'month basicWeek',
-                        center: 'title',
-                        right: 'today prev,next'
-                    },
-                    timeFormat: '',
-                    eventMouseover: $scope.eventRender,
-                    eventClick:function(event){
-                        $modal.open({
-                            templateUrl: 'partials/medic/calendarDetails.ejs',
-                            backdrop: true,
-                            size: 'lg',
-                            windowClass: 'fade',
-                            controller: 'EventModal',
-                            resolve:{
-                                idEvent: function () {
-                                    return event._id;
-                                }
-                            }
-                        });
-                    }
 
-                }};
-            if($stateParams.id)
-            {
+            if($stateParams.id){
                 angular.element($document).ready(function(){
                     $scope.goToEvent($stateParams.id);
                 });
@@ -130,7 +104,7 @@ var date = new Date();
             templateUrl: 'partials/medic/calendarDetails.ejs',
             backdrop: true,
             size: 'lg',
-            windowClass: 'fade',
+            windowClass: 'fade eventDetailsModal',
             controller: 'EventModal',
             resolve:{
                 idEvent: function () {
