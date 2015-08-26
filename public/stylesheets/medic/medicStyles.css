@@ -6586,43 +6586,6 @@ body .btn {
 .calendarWrapper .nextEvents .Title h4 {
   cursor: pointer;
 }
-.eventDetails .modal-title {
-  font-size: 20px;
-}
-@media (max-width: 767px) {
-  .eventDetails .modal-title {
-    font-size: 17px;
-  }
-}
-.eventDetails .modal-body {
-  padding: 20px;
-  width: 100%;
-}
-.eventDetails .modal-body .details {
-  width: 100%;
-}
-.eventDetails .modal-body .details .location {
-  width: 50%;
-  float: left;
-}
-.eventDetails .modal-body .details .date {
-  font-size: 14px;
-  width: 50%;
-  float: left;
-  text-align: right;
-}
-@media (max-width: 767px) {
-  .eventDetails .modal-body .details .date {
-    font-size: 13px;
-  }
-}
-.eventDetails .modal-body .details .date .label {
-  padding: 0.2em 0.6em;
-}
-.eventDetails .modal-body .details .description {
-  width: 100%;
-  float: left;
-}
 .homeSearchWrapper .mainTitle {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -7661,9 +7624,19 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .modal-responsive .modal-dialog .modal-content .modal-footer .positionMiddle.left {
   left: 15px;
 }
+.eventDetailsModal .modal-title {
+  font-size: 20px;
+}
+@media (max-width: 767px) {
+  .eventDetailsModal .modal-title {
+    font-size: 17px;
+  }
+}
 .eventDetailsModal .modal-body {
   max-height: 60vh;
   overflow-y: auto;
+  padding: 20px;
+  width: 100%;
 }
 .calendarTabs {
   margin-top: 20px;
@@ -7675,9 +7648,10 @@ fieldset[disabled] .navbarMedic .profile .btn {
   width: 100% !important ;
 }
 .calendarTabs .tab-pane .paginationContainer {
-  display: -webkit-box;
-  display: -webkit-flex;
-  justify-content: center;
+  width: 100%;
+  display: block;
+  float: left;
+  text-align: center;
 }
 .calendarTabs .tab-pane .paginationContainer ul li a:focus {
   background-color: #ffffff;
@@ -7718,10 +7692,8 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .calendarTabs .speakerContainer {
   width: 100%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-flow: row wrap;
+  display: block;
+  float: left;
 }
 .calendarTabs .speakerContainer p {
   width: 100%;

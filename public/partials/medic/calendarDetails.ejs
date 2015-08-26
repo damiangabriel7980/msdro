@@ -1,104 +1,102 @@
-<div class="eventDetails lg modal-responsive MyProfileModal">
-    <div class="modal-header">
-        <div class="modal-title"><i class="glyphicon glyphicon-facetime-video fontM"
-                                    ng-if="eventDetails.event.type==2"></i>&nbsp;{{eventDetails.event['name']}}
-        </div>
-        <div class="details">
-            <div class="date location" ng-show="titleDateDisplay && eventDetails">
+<div class="modal-header">
+    <div class="modal-title">
+        <i class="glyphicon glyphicon-facetime-video fontM" ng-if="eventDetails.event.type==2"></i>&nbsp;{{eventDetails.event['name']}}
+    </div>
+    <div class="details">
+        <div class="date location" ng-show="titleDateDisplay && eventDetails">
                 <span class="label label-primary">
                     <strong>{{titleDateDisplay}},</strong>
                     <strong convert-special conver="eventDetails.event.place" ng-bind-html="trustAsHtml(eventDetails.event.place)"></strong>
                     <br>
                 </span>
-            </div>
         </div>
     </div>
-    <div class="modal-body container">
-        <div class="calendarTabs">
-            <tabset class="text-center">
-                <tab heading="Despre">
-                    <p ng-show="!eventDetails.event.description" class="text-center">Nu sunt disponibile detalii despre
-                        Eveniment.</p>
+</div>
+<div class="modal-body container">
+    <div class="calendarTabs">
+        <tabset class="text-center">
+            <tab heading="Despre">
+                <p ng-show="!eventDetails.event.description" class="text-center">Nu sunt disponibile detalii despre
+                    Eveniment.</p>
 
-                    <div class="aboutContainer" ng-bind-html="trustAsHtml(eventDetails.event.description)">
-                    </div>
-                </tab>
-                <tab heading="Program">
-                    <div class="programContainer">
-                        <p ng-show="isEmpty(eventDetails.days)" class="text-center">Nu sunt disponibile detalii
-                            despre Program.
-                        </p>
+                <div class="aboutContainer" ng-bind-html="trustAsHtml(eventDetails.event.description)">
+                </div>
+            </tab>
+            <tab heading="Program">
+                <div class="programContainer">
+                    <p ng-show="isEmpty(eventDetails.days)" class="text-center">Nu sunt disponibile detalii
+                        despre Program.
+                    </p>
 
-                        <div ng-repeat="(key,day) in eventDetails.days" class="dayItem">
+                    <div ng-repeat="(key,day) in eventDetails.days" class="dayItem">
 
                             <span class="eventDay" ng-click="dayClicked(key)"><i
                                         ng-class="{'glyphicon glyphicon-chevron-down':isCollapsed,'glyphicon glyphicon-chevron-right':!isCollapsed}"></i>
                                 <strong>{{ formatDate(key) | date: 'dd MMMM' }}</strong></span>
 
-                            <div collapse="$parent.activeDay!==key">
-                                <accordion close-others="oneAtATime">
-                                    <accordion-group class="conferenceItem"
-                                                     ng-repeat="(key ,conference) in day" is-open="isOpen">
-                                        <accordion-heading>
-                                            <ul class="conferenceHeading">
-                                                <li class="conferenceTitle">
-                                                    <i ng-class="{'glyphicon glyphicon-chevron-down':!isOpen,'glyphicon glyphicon-chevron-right':isOpen}"></i>
-                                                    {{key}}
-                                                </li>
-                                                <li class="conferenceDescription" ng-bind-html="trustAsHtml(conference.description)"></li>
-                                            </ul>
-                                        </accordion-heading>
-                                        <div class="talk" ng-repeat="talk in conference.talks track by $index">
-                                            <div class="talkTitle">
+                        <div collapse="$parent.activeDay!==key">
+                            <accordion close-others="oneAtATime">
+                                <accordion-group class="conferenceItem"
+                                                 ng-repeat="(key ,conference) in day" is-open="isOpen">
+                                    <accordion-heading>
+                                        <ul class="conferenceHeading">
+                                            <li class="conferenceTitle">
+                                                <i ng-class="{'glyphicon glyphicon-chevron-down':!isOpen,'glyphicon glyphicon-chevron-right':isOpen}"></i>
+                                                {{key}}
+                                            </li>
+                                            <li class="conferenceDescription" ng-bind-html="trustAsHtml(conference.description)"></li>
+                                        </ul>
+                                    </accordion-heading>
+                                    <div class="talk" ng-repeat="talk in conference.talks track by $index">
+                                        <div class="talkTitle">
                                                 <span>
                                                     <strong>
                                                         {{talk.hour_start | asDate|date:'HH:mm' }} - {{talk.hour_end | asDate|date:'HH:mm'}}
                                                         {{talk.title + " - " +talk.room.room_name}}
                                                     </strong>
                                                 </span>
-                                                <span ng-bind-html="trustAsHtml(talk.description)"></span>
-                                                <hr ng-hide="$index+1===conference.length">
-                                            </div>
+                                            <span ng-bind-html="trustAsHtml(talk.description)"></span>
+                                            <hr ng-hide="$index+1===conference.length">
                                         </div>
-                                </accordion>
+                                    </div>
+                            </accordion>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+
+            <tab heading="Speakeri">
+                <div class="speakerContainer ">
+                    <p ng-show="!eventDetails.speakers.length" class="text-center">Nu sunt disponibile detalii
+                        despre Speakeri.
+                    </p>
+                    <div dir-paginate="speaker in eventDetails.speakers | itemsPerPage:6"
+                         class="col-xs-12 col-sm-6 col-md-4 noPadding speaker cell">
+
+                        <div class="pull-left imageOuterFrame">
+                            <div class="imageInnerFrame">
+                                <a><img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}"></a>
+                            </div>
+                        </div>
+                        <div class="descriptionFrame">
+                            <div class="name">
+                                <span>{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</span>
+                            </div>
+                            <div class="cell title">
+                                {{speaker.workplace}}
+                                <span ng-trim ng-bind-html="trustAsHtml(speaker.short_description)"></span>
                             </div>
                         </div>
                     </div>
-                </tab>
+                </div>
+                <div class="paginationContainer">
+                    <dir-pagination-controls max-size="4"></dir-pagination-controls>
+                </div>
 
-                <tab heading="Speakeri">
-                    <div class="speakerContainer ">
-                        <p ng-show="!eventDetails.speakers.length" class="text-center">Nu sunt disponibile detalii
-                            despre Speakeri.
-                        </p>
-                        <div dir-paginate="speaker in eventDetails.speakers | itemsPerPage:6"
-                             class="col-xs-12 col-sm-6 col-md-4 noPadding speaker cell">
-
-                            <div class="pull-left imageOuterFrame">
-                                <div class="imageInnerFrame">
-                                    <a><img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}"></a>
-                                </div>
-                            </div>
-                            <div class="descriptionFrame">
-                                <div class="name">
-                                    <span>{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</span>
-                                </div>
-                                <div class="cell title">
-                                    {{speaker.workplace}}
-                                    <span ng-trim ng-bind-html="trustAsHtml(speaker.short_description)"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="paginationContainer">
-                        <dir-pagination-controls max-size="4"></dir-pagination-controls>
-                    </div>
-
-                </tab>
-            </tabset>
-        </div>
+            </tab>
+        </tabset>
     </div>
-    <div class="modal-footer">
-        <a class="btn btn-default float-left" ng-click="closeModal()">Inchide</a>
-    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn btn-default float-left" ng-click="closeModal()">Inchide</a>
 </div>
