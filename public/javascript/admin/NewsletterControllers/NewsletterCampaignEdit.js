@@ -30,6 +30,10 @@ controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 
                 yes: "Salveaza oricum",
                 no: "Continua editarea"
             });
+        }else if(!toSave.distribution_lists || toSave.distribution_lists.length === 0){
+            InfoModal.show("Atentie", "Trebuie sa bifati cel putin o lista de distributie");
+        }else if(!toSave.templates || toSave.templates.length === 0){
+            InfoModal.show("Atentie", "Trebuie sa introduceti cel putin un template");
         }else if(toSave.send_date){
             try{
                 if(new Date(toSave.send_date) < new Date()){
