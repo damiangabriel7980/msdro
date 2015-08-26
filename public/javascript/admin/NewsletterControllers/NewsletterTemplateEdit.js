@@ -1,4 +1,4 @@
-controllers.controller('NewsletterTemplateEdit', ['$scope', 'idToEdit', 'NewsletterService', 'Success', '$modalInstance', 'refreshTemplates', function ($scope, idToEdit, NewsletterService, Success, $modalInstance, refreshTemplates) {
+controllers.controller('NewsletterTemplateEdit', ['$scope', 'idToEdit', 'NewsletterService', 'Success', '$modalInstance', 'refreshTemplates', '$modal', function ($scope, idToEdit, NewsletterService, Success, $modalInstance, refreshTemplates, $modal) {
 
     $scope.variableTypes = NewsletterService.templates.variableTypes;
     $scope.template = {};
@@ -27,6 +27,20 @@ controllers.controller('NewsletterTemplateEdit', ['$scope', 'idToEdit', 'Newslet
         NewsletterService.templates.api.update({id: idToEdit}, toSave).$promise.then(function () {
             refreshTemplates();
             $modalInstance.close();
+        });
+    };
+
+    $scope.preview = function () {
+        $modal.open({
+            templateUrl: 'partials/admin/newsletter/templates/modalPreviewTemplate.html',
+            windowClass: 'fade',
+            controller: 'NewsletterTemplatePreview',
+            size: 'lg',
+            resolve: {
+                html: function () {
+                    return $scope.template.html;
+                }
+            }
         });
     };
 
