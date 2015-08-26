@@ -46,7 +46,7 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
                 calendar: {
                     events: eventsFormatted,
                     ignoreTimezone: false,
-                    height: 420,
+                    height: 480,
                     editable: false,
                     header: {
                         left: Utils.isMobile()?'':'month basicWeek basicDay',
