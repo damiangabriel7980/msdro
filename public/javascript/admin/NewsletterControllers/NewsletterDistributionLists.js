@@ -50,7 +50,9 @@ controllers.controller('NewsletterDistributionLists', ['$scope', '$state', 'News
             NewsletterService.distributionLists.delete({id: id}).$promise.then(function () {
                 $state.reload();
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
 
 }]);

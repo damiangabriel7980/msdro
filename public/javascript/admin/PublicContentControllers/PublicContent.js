@@ -68,7 +68,9 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
                     });
                 }
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
 
     $scope.toogleContentEnable = function (id, enabled) {
@@ -82,8 +84,9 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
-            },
-            "Da"
+            },{
+                yes: "Da"
+            }
         );
     };
 

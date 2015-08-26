@@ -56,7 +56,9 @@ controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminSer
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
     $scope.toggleMultimedia = function(id, isEnabled){
         ActionModal.show(
@@ -69,8 +71,9 @@ controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminSer
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
-            },
-            "Da"
+            },{
+                yes: "Da"
+            }
         );
     }
 }])

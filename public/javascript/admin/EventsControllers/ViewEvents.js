@@ -51,8 +51,9 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
                 EventsService.events.update({id: id}, {enable: !enable}).$promise.then(function () {
                     refreshEvents();
                 });
-            },
-            "Da"
+            },{
+                yes: "Da"
+            }
         );
     };
 
@@ -98,7 +99,9 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
                     refreshEvents();
                 });
             });
-        }, "Da");
+        },{
+            yes: "Da"
+        });
     };
 
 }]);

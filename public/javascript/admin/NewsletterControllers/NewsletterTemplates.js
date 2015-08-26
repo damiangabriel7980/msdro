@@ -50,7 +50,9 @@ controllers.controller('NewsletterTemplates', ['$scope', '$state', 'NewsletterSe
             NewsletterService.templates.api.delete({id: id}).$promise.then(function () {
                 $state.reload();
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
 
 }]);

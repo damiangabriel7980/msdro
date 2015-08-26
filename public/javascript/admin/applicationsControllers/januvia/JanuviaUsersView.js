@@ -54,7 +54,9 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
             JanuviaService.users.delete({id: id}).$promise.then(function () {
                 $state.reload();
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
 
 }]);

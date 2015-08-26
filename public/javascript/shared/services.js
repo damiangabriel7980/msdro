@@ -22,7 +22,8 @@ services.factory('ActionModal', ['$modal', function($modal){
     return {
         //actionName defaults to "Ok"
         //reloadState defaults to false
-        show: function (title, message, action, actionName, reloadState) {
+        show: function (title, message, action, options) {
+            options = options || {};
             $modal.open({
                 templateUrl: 'partials/shared/actionModal.html',
                 size: 'md',
@@ -38,11 +39,8 @@ services.factory('ActionModal', ['$modal', function($modal){
                     action: function () {
                         return action;
                     },
-                    actionName: function () {
-                        return actionName;
-                    },
-                    reloadState: function () {
-                        return reloadState;
+                    options: function () {
+                        return options;
                     }
                 }
             });
@@ -88,6 +86,12 @@ services.factory('Utils', ['$sce', function ($sce) {
         }else{
             return htmlToPlainText(text);
         }
+    };
+    var objectHasAllProperties = function (obj, properties) {
+        for(var i=0; i<properties.length; i++){
+            if(!obj[properties[i]]) return false;
+        }
+        return true;
     };
     return{
         fileToBase64: function (file, callback) {
@@ -155,7 +159,8 @@ services.factory('Utils', ['$sce', function ($sce) {
         convertAndTrustAsHtml: convertAndTrustAsHtml,
         trimText: trimText,
         trimWords: trimWords,
-        createHeader: createHeader
+        createHeader: createHeader,
+        objectHasAllProperties: objectHasAllProperties
     }
 }]);
 services.factory('Diacritics',function(){

@@ -91,7 +91,9 @@
                         if(findInKeys(key) > -1){
                             ActionModal.show("Fisierul exista", "Un fisier cu acelasi nume exista deja. Doriti sa il suprascrieti?", function () {
                                 uploadFile($files[0], key);
-                            }, "Da");
+                            },{
+                                yes: "Da"
+                            });
                         }else{
                             uploadFile($files[0], key);
                         }

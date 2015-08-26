@@ -75,7 +75,9 @@ controllers.controller('NewsletterCampaigns', ['$scope', '$state', 'NewsletterSe
             NewsletterService.campaigns.delete({id: id}).$promise.then(function () {
                 $state.reload();
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
 
 }]);

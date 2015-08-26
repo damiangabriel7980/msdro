@@ -1,4 +1,4 @@
-controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 'idToEdit', 'Success', '$modalInstance', 'refreshCampaigns', '$modal', function ($scope, NewsletterService, idToEdit, Success, $modalInstance, refreshCampaigns, $modal) {
+controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 'idToEdit', 'Success', '$modalInstance', 'refreshCampaigns', '$modal', 'Utils', 'ActionModal', 'InfoModal', function ($scope, NewsletterService, idToEdit, Success, $modalInstance, refreshCampaigns, $modal, Utils, ActionModal, InfoModal) {
 
     NewsletterService.campaigns.query({id: idToEdit}).$promise.then(function (resp) {
         var campaign = Success.getObject(resp);
@@ -23,11 +23,34 @@ controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 
     $scope.save = function () {
         var toSave = $scope.campaign;
         toSave.distribution_lists = $scope.selectedDistributionListsIds;
+        if(!Utils.objectHasAllProperties(toSave, ["name", "subject"])){
+            ActionModal.show("Atentie", "Campania contine campuri necompletate", function () {
+                saveCampaign(toSave);
+            }, {
+                yes: "Salveaza oricum",
+                no: "Continua editarea"
+            });
+        }else if(toSave.send_date){
+            try{
+                if(new Date(toSave.send_date) < new Date()){
+                    InfoModal.show("Atentie", "Data trimiterii nu poate fi mai devreme decat data curenta");
+                }else{
+                    saveCampaign(toSave);
+                }
+            }catch(ex){
+                console.log(ex);
+            }
+        }else{
+            saveCampaign(toSave);
+        }
+    };
+
+    function saveCampaign(toSave){
         NewsletterService.campaigns.update({id: idToEdit}, toSave).$promise.then(function () {
             refreshCampaigns();
             $modalInstance.close();
         });
-    };
+    }
 
     $scope.addTemplate = function () {
         $modal.open({
@@ -104,6 +127,13 @@ controllers.controller('NewsletterCampaignEdit',['$scope', 'NewsletterService', 
             }
         }
         return null;
+    }
+
+    function resetAlert(text, type){
+        $scope.editCampaignAlert = {
+            text: text,
+            type: type || "danger"
+        }
     }
 
     $scope.renderTemplate = NewsletterService.templates.renderTemplate;
