@@ -393,15 +393,15 @@ module.exports = function (env, logger) {
             "statistics.recorded": {$ne: true}
         }, function (err, campaign_ids) {
             if(err){
-                console.log(err);
-            }else if(!campaign_ids){
-                console.log("No campaigns sent "+env.newsletter.statistics.scheduleLockDays+" days ago were found");
+                logger.error(err);
+            }else if(campaign_ids.length === 0){
+                logger.warn("No campaigns sent "+env.newsletter.statistics.scheduleLockDays+" days ago were found");
             }else{
                 async.each(campaign_ids, recordCampaignStats, function (err) {
                     if(err){
-                        console.log(err);
+                        logger.error(err);
                     }else{
-                        console.log("Finished task - campaigns stats");
+                        logger.warn("Finished task - campaigns stats");
                     }
                 });
             }
