@@ -18,7 +18,17 @@ var schema = new Schema({
     }],
     status: {type: String, enum: ["sent", "not sent", "error"]},
     statistics: {
-        recorded: Boolean
+        recorded: {type: Boolean, default: false},
+        sent: Number,
+        hard_bounces: Number,
+        soft_bounces: Number,
+        rejects: Number,
+        complaints: Number,
+        unsubs: Number,
+        opens: Number,
+        unique_opens: Number,
+        clicks: Number,
+        unique_clicks: Number
     }
 });
 

@@ -387,14 +387,45 @@ module.exports = function (env, logger) {
     }
 
     function recordStats(){
-        Newsletter.campaigns.distinct("_id", {status: "sent", send_date: {$exists: true, $lt: UtilsModule.addDaysToDate(new Date(), (-1)*env.newsletter.statistics.scheduleLockDays)}}, function (err, campaign_ids) {
+        Newsletter.campaigns.distinct("_id", {
+            status: "sent",
+            send_date: {$exists: true, $lt: UtilsModule.addDaysToDate(new Date(), (-1)*env.newsletter.statistics.scheduleLockDays)},
+            "statistics.recorded": {$ne: true}
+        }, function (err, campaign_ids) {
             if(err){
                 console.log(err);
             }else if(!campaign_ids){
                 console.log("No campaigns sent "+env.newsletter.statistics.scheduleLockDays+" days ago were found");
             }else{
-                console.log(campaign_ids);
-                console.log(campaign_ids.length);
+                async.each(campaign_ids, recordCampaignStats, function (err) {
+                    if(err){
+                        console.log(err);
+                    }else{
+                        console.log("Finished task - campaigns stats");
+                    }
+                });
+            }
+        })
+    }
+
+    function recordCampaignStats(campaign_id, callback){
+        Newsletter.campaigns.findOne({_id: campaign_id}, function (err, campaign) {
+            if(err){
+                callback(err);
+            }else{
+                getCampaignStats(campaign_id).then(
+                    function (resp) {
+                        if(!resp || !resp.last_30_days){
+                            callback("Invalid mandrill response");
+                        }else{
+                            var statistics = resp.last_30_days;
+                            statistics.recorded = true;
+                            campaign.statistics = statistics;
+                            campaign.save(callback);
+                        }
+                    },
+                    callback
+                );
             }
         })
     }
