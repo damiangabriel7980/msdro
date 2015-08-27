@@ -1,4 +1,4 @@
-controllers.controller('NewsletterCampaignSummary', ['$scope', 'NewsletterService', 'campaign', 'Success', 'Utils', '$q', function ($scope, NewsletterService, campaign, Success, Utils, $q) {
+controllers.controller('NewsletterCampaignSummary', ['$scope', 'NewsletterService', 'campaign', 'Success', 'Utils', function ($scope, NewsletterService, campaign, Success, Utils) {
 
     $scope.campaign = campaign;
 

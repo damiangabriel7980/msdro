@@ -11,7 +11,12 @@
                 <admin-widget-stats selected-stats="campaignStats[statType]"></admin-widget-stats>
             </div>
             <div class="col-md-4 noPadding">
-                <select class="form-control" ng-model="statType" ng-options="stat.alias as stat.name for stat in statTypes"></select>
+                <div class="col-md-12 noPadding">
+                    <select class="form-control" ng-model="statType" ng-options="stat.alias as stat.name for stat in statTypes"></select>
+                </div>
+                <div class="col-md-12 noPadding" style="margin-top: 15px">
+                    <a class="btn btn-primary pull-right" ng-csv="csv.rows" filename="{{csv.filename}}">Export CSV</a>
+                </div>
             </div>
         </div>
     </div>

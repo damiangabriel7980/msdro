@@ -1,4 +1,4 @@
-controllers.controller('NewsletterDashboard', ['$scope', 'NewsletterService', 'Success', function ($scope, NewsletterService, Success) {
+controllers.controller('NewsletterDashboard', ['$scope', 'NewsletterService', 'Success', 'Utils', function ($scope, NewsletterService, Success, Utils) {
 
     $scope.statTypes = [
         {name: "Toate", alias: "all"},
@@ -9,6 +9,11 @@ controllers.controller('NewsletterDashboard', ['$scope', 'NewsletterService', 'S
     ];
     $scope.statType = $scope.statTypes[0].alias;
 
+    $scope.csv = {
+        filename: "campanii_MSD_"+Utils.customDateFormat(new Date(), {separator:'-'})+'.csv',
+        rows: []
+    };
+
     NewsletterService.statistics.query().$promise.then(function (resp) {
         var stats = Success.getObject(resp);
         $scope.campaignStats = {
@@ -18,7 +23,45 @@ controllers.controller('NewsletterDashboard', ['$scope', 'NewsletterService', 'S
             last60: stats.stats.last_60_days,
             last90: stats.stats.last_90_days
         };
+        $scope.csv.rows = formatArrayCSV($scope.campaignStats);
         console.log($scope.campaignStats);
     });
+
+    function formatArrayCSV(statistics){
+        var ret = [];
+        for(var stat_type in statistics){
+            if(statistics.hasOwnProperty(stat_type)){
+                ret.push({a: getStatsTitle(stat_type)});
+                var stats = sanitizeStats(statistics[stat_type]);
+                for(var key in stats) {
+                    if (stats.hasOwnProperty(key) && key !== 'recorded') {
+                        ret.push({a: key, b: stats[key]});
+                    }
+                }
+                ret.push({});
+            }
+        }
+        return ret;
+    }
+
+    function getStatsTitle(stat_type){
+        for(var i=0; i<$scope.statTypes.length; i++){
+            if($scope.statTypes[i].alias === stat_type) return $scope.statTypes[i].name
+        }
+        return "";
+    }
+
+    function sanitizeStats(stats){
+        return {
+            "trimise": stats.sent,
+            "netrimise": stats.soft_bounces,
+            "adrese nevalide": stats.hard_bounces,
+            "vizualizari": stats.opens,
+            "vizualizari unice": stats.unique_opens,
+            "accesari": stats.clicks,
+            "acesari unice": stats.unique_clicks,
+            "plangeri": stats.complaints
+        };
+    }
 
 }]);
