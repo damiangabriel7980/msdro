@@ -14,7 +14,7 @@ controllers.controller('NewsletterDashboard', ['$scope', 'NewsletterService', 'S
         rows: []
     };
 
-    NewsletterService.statistics.query().$promise.then(function (resp) {
+    NewsletterService.statistics.api.query().$promise.then(function (resp) {
         var stats = Success.getObject(resp);
         $scope.campaignStats = {
             all: stats,
@@ -32,7 +32,7 @@ controllers.controller('NewsletterDashboard', ['$scope', 'NewsletterService', 'S
         for(var stat_type in statistics){
             if(statistics.hasOwnProperty(stat_type)){
                 ret.push({a: getStatsTitle(stat_type)});
-                var stats = sanitizeStats(statistics[stat_type]);
+                var stats = NewsletterService.statistics.sanitize(statistics[stat_type]);
                 for(var key in stats) {
                     if (stats.hasOwnProperty(key) && key !== 'recorded') {
                         ret.push({a: key, b: stats[key]});
@@ -49,19 +49,6 @@ controllers.controller('NewsletterDashboard', ['$scope', 'NewsletterService', 'S
             if($scope.statTypes[i].alias === stat_type) return $scope.statTypes[i].name
         }
         return "";
-    }
-
-    function sanitizeStats(stats){
-        return {
-            "trimise": stats.sent,
-            "netrimise": stats.soft_bounces,
-            "adrese nevalide": stats.hard_bounces,
-            "vizualizari": stats.opens,
-            "vizualizari unice": stats.unique_opens,
-            "accesari": stats.clicks,
-            "acesari unice": stats.unique_clicks,
-            "plangeri": stats.complaints
-        };
     }
 
 }]);

@@ -7,9 +7,9 @@ controllers.controller('NewsletterCampaignSummary', ['$scope', 'NewsletterServic
         rows: []
     };
 
-    NewsletterService.statistics.query({campaign: campaign._id}).$promise.then(function (resp) {
+    NewsletterService.statistics.api.query({campaign: campaign._id}).$promise.then(function (resp) {
         var statistics = Success.getObject(resp);
-        $scope.csv.rows = formatArrayCSV(statistics);
+        $scope.csv.rows = formatArrayCSV(NewsletterService.statistics.sanitize(statistics));
         $scope.statistics = statistics;
     });
 

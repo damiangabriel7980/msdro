@@ -514,6 +514,18 @@ services.factory('NewsletterService', ['$resource', function($resource){
         }
         return templateHtml;
     };
+    var sanitizeStats = function(stats){
+        return {
+            "trimise": stats.sent,
+            "netrimise": stats.soft_bounces,
+            "adrese nevalide": stats.hard_bounces,
+            "vizualizari": stats.opens,
+            "vizualizari unice": stats.unique_opens,
+            "accesari": stats.clicks,
+            "acesari unice": stats.unique_clicks,
+            "plangeri": stats.complaints
+        };
+    };
     return {
         campaigns: $resource('api/admin/newsletter/campaigns', {}, {
             query: { method: 'GET', isArray: false },
@@ -545,9 +557,12 @@ services.factory('NewsletterService', ['$resource', function($resource){
         unsubscribedEmails: $resource('api/admin/newsletter/unsubscribedEmails', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        statistics: $resource('api/admin/newsletter/statistics', {}, {
-            query: { method: 'GET', isArray: false }
-        })
+        statistics: {
+            api: $resource('api/admin/newsletter/statistics', {}, {
+                query: { method: 'GET', isArray: false }
+            }),
+            sanitize: sanitizeStats
+        }
     }
 }]);
 
