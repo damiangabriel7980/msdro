@@ -1,7 +1,26 @@
-controllers.controller('NewsletterCampaignSummary', ['$scope', 'NewsletterService', 'campaign_id', 'Success', function ($scope, NewsletterService, campaign_id, Success) {
+controllers.controller('NewsletterCampaignSummary', ['$scope', 'NewsletterService', 'campaign', 'Success', 'Utils', '$q', function ($scope, NewsletterService, campaign, Success, Utils, $q) {
 
-    NewsletterService.statistics.query({campaign: campaign_id}).$promise.then(function (resp) {
-        $scope.statistics = Success.getObject(resp);
-    })
+    $scope.campaign = campaign;
+
+    $scope.csv = {
+        filename: campaign.name+'_'+Utils.customDateFormat(new Date(campaign.send_date), {separator:'-'})+'.csv',
+        rows: []
+    };
+
+    NewsletterService.statistics.query({campaign: campaign._id}).$promise.then(function (resp) {
+        var statistics = Success.getObject(resp);
+        $scope.csv.rows = formatArrayCSV(statistics);
+        $scope.statistics = statistics;
+    });
+
+    function formatArrayCSV(statistics){
+        var ret = [];
+        for(var key in statistics) {
+            if (statistics.hasOwnProperty(key) && key !== 'recorded') {
+                ret.push({a: key, b: statistics[key]});
+            }
+        }
+        return ret;
+    }
 
 }]);

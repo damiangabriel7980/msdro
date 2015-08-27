@@ -11,8 +11,13 @@
             <h4>Primele 30 de zile:</h4>
         </div>
         <div class="col-md-12" ng-if="!statistics">Se incarca...</div>
-        <div class="col-md-12" ng-if="statistics">
-            <admin-widget-stats selected-stats="statistics"></admin-widget-stats>
+        <div class="col-md-12 noPadding" ng-if="statistics">
+            <div class="col-md-12">
+                <admin-widget-stats selected-stats="statistics"></admin-widget-stats>
+            </div>
+            <div class="col-md-12" style="margin-top: 15px">
+                <a class="btn btn-primary" ng-csv="csv.rows" filename="{{csv.filename}}">Export CSV</a>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

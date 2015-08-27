@@ -62,8 +62,8 @@ controllers.controller('NewsletterCampaigns', ['$scope', '$state', 'NewsletterSe
                 keyboard: false,
                 size: 'lg',
                 resolve: {
-                    campaign_id: function () {
-                        return campaign._id;
+                    campaign: function () {
+                        return campaign;
                     }
                 }
             });

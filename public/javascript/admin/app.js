@@ -14,7 +14,8 @@ var app = angular.module('app',
         's3UploadManager',
         'adminEmailsList',
         'adminWidgetStats',
-        'ui.ace'
+        'ui.ace',
+        'ngCsv'
     ]);
 
 app.config(['$locationProvider', function($location) {
