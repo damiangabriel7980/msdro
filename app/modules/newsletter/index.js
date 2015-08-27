@@ -20,9 +20,10 @@ module.exports = function (env, logger) {
     var variableTypes = ["text", "html"];
 
     function sendDueCampaigns() {
+        var deferred = Q.defer();
         Newsletter.campaigns.distinct("_id", {send_date: {$exists: true, $lt: Date.now()}, status: "not sent"}, function (err, campaigns_ids) {
             if(err){
-                logger.error(err);
+                deferred.reject(err);
             }else{
                 async.eachSeries(campaigns_ids, function (campaign_id, callback) {
                     sendCampaign(campaign_id).then(
@@ -39,13 +40,14 @@ module.exports = function (env, logger) {
                     )
                 }, function (err) {
                     if(err){
-                        logger.error(err);
+                        deferred.reject(err);
                     }else{
-                        logger.warn("Finished job - due campaigns");
+                        deferred.resolve();
                     }
                 })
             }
         });
+        return deferred.promise;
     }
 
     function sendCampaign(campaign_id) {
@@ -387,25 +389,27 @@ module.exports = function (env, logger) {
     }
 
     function recordStats(){
+        var deferred = Q.defer();
         Newsletter.campaigns.distinct("_id", {
             status: "sent",
             send_date: {$exists: true, $lt: UtilsModule.addDaysToDate(new Date(), (-1)*env.newsletter.statistics.scheduleLockDays)},
             "statistics.recorded": {$ne: true}
         }, function (err, campaign_ids) {
             if(err){
-                logger.error(err);
+                deferred.reject(err);
             }else if(campaign_ids.length === 0){
-                logger.warn("No campaigns sent "+env.newsletter.statistics.scheduleLockDays+" days ago were found");
+                deferred.resolve("No campaigns sent "+env.newsletter.statistics.scheduleLockDays+" days ago were found");
             }else{
                 async.each(campaign_ids, recordCampaignStats, function (err) {
                     if(err){
-                        logger.error(err);
+                        deferred.reject(err);
                     }else{
-                        logger.warn("Finished task - campaigns stats");
+                        deferred.resolve();
                     }
                 });
             }
-        })
+        });
+        return deferred.promise;
     }
 
     function recordCampaignStats(campaign_id, callback){
