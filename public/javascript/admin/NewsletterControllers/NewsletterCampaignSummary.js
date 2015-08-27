@@ -2,7 +2,6 @@ controllers.controller('NewsletterCampaignSummary', ['$scope', 'NewsletterServic
 
     NewsletterService.statistics.query({campaign: campaign_id}).$promise.then(function (resp) {
         $scope.statistics = Success.getObject(resp);
-        console.log($scope.statistics);
     })
 
 }]);

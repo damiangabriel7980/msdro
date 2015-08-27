@@ -8,18 +8,11 @@
             <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
         </div>
         <div class="col-md-12">
-            <h4>Totaluri:</h4>
+            <h4>Primele 30 de zile:</h4>
         </div>
         <div class="col-md-12" ng-if="!statistics">Se incarca...</div>
         <div class="col-md-12" ng-if="statistics">
             <admin-widget-stats selected-stats="statistics"></admin-widget-stats>
-        </div>
-        <div class="col-md-12">
-            <h4>Ultimele 30 de zile:</h4>
-        </div>
-        <div class="col-md-12" ng-if="!statistics">Se incarca...</div>
-        <div class="col-md-12" ng-if="statistics">
-            <admin-widget-stats selected-stats="statistics.last_30_days"></admin-widget-stats>
         </div>
     </div>
     <div class="modal-footer">

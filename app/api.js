@@ -3191,14 +3191,26 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/newsletter/statistics')
         .get(function (req, res) {
             if(req.query.campaign){
-                NewsletterModule.getCampaignStats(req.query.campaign).then(
-                    function (stats) {
-                        handleSuccess(res, stats);
-                    },
-                    function (err) {
+                Newsletter.campaigns.findOne({_id: req.query.campaign}, function (err, campaign) {
+                    if(err){
                         handleError(res, err);
+                    }else if(!campaign){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        if(campaign.statistics && campaign.statistics.recorded){
+                            handleSuccess(res, campaign.statistics);
+                        }else{
+                            NewsletterModule.getCampaignStats(req.query.campaign).then(
+                                function (stats) {
+                                    handleSuccess(res, stats.last_30_days);
+                                },
+                                function (err) {
+                                    handleError(res, err);
+                                }
+                            );
+                        }
                     }
-                );
+                });
             }else{
                 NewsletterModule.getOverallStats().then(
                     function (stats) {
