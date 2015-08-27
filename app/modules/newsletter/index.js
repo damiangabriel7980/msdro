@@ -1,6 +1,8 @@
 var async = require('async');
 var Q = require('q');
 
+var UtilsModule = require('../../modules/utils');
+
 var Newsletter = {
     distributionLists: require('../../models/newsletter/distribution_lists'),
     campaigns: require('../../models/newsletter/campaigns'),
@@ -384,10 +386,24 @@ module.exports = function (env, logger) {
         return deferred.promise;
     }
 
+    function recordStats(){
+        Newsletter.campaigns.distinct("_id", {status: "sent", send_date: {$exists: true, $lt: UtilsModule.addDaysToDate(new Date(), (-1)*env.newsletter.statistics.scheduleLockDays)}}, function (err, campaign_ids) {
+            if(err){
+                console.log(err);
+            }else if(!campaign_ids){
+                console.log("No campaigns sent "+env.newsletter.statistics.scheduleLockDays+" days ago were found");
+            }else{
+                console.log(campaign_ids);
+                console.log(campaign_ids.length);
+            }
+        })
+    }
+
     return {
         sendDueCampaigns: sendDueCampaigns,
         getOverallStats: getOverallStats,
         getCampaignStats: getCampaignStats,
-        unhashUserMail: unhashUserMail
+        unhashUserMail: unhashUserMail,
+        recordStats: recordStats
     };
 };

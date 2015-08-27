@@ -16,7 +16,10 @@ var schema = new Schema({
         }],
         order: Number
     }],
-    status: {type: String, enum: ["sent", "not sent", "error"]}
+    status: {type: String, enum: ["sent", "not sent", "error"]},
+    statistics: {
+        recorded: Boolean
+    }
 });
 
 module.exports = mongoose.model('newsletter_campaigns', schema);

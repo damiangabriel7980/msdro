@@ -15,5 +15,11 @@ module.exports = function (env, logger) {
         NewsletterModule.sendDueCampaigns();
     });
 
+    var campaignStatsRecording = schedule.scheduleJob(myCronFormats[env.newsletter.statistics.scheduleInterval], function () {
+        logger.warn("Scheduled job started - campaigns stats");
+        NewsletterModule.recordStats();
+    });
+
     dueCampaigns.schedule();
+    campaignStatsRecording.schedule();
 };

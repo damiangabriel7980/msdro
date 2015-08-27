@@ -21,7 +21,11 @@ module.exports = function(){
                         size: 5,
                         secondsBetween: 5
                     },
-                    unsubcribe: "http://localhost:8080/unsubscribe"
+                    unsubcribe: "http://localhost:8080/unsubscribe",
+                    statistics:{
+                        scheduleInterval: 'everyMinute',
+                        scheduleLockDays: 6
+                    }
                 }
             };
 
@@ -46,7 +50,11 @@ module.exports = function(){
                         size: 100,
                         secondsBetween: 20
                     },
-                    unsubcribe: "https://staging.staywell.ro/unsubscribe"
+                    unsubcribe: "https://staging.staywell.ro/unsubscribe",
+                    statistics:{
+                        scheduleInterval: 'everyHour',
+                        scheduleLockDays: 30
+                    }
                 }
             };
 
@@ -71,7 +79,11 @@ module.exports = function(){
                         size: 100,
                         secondsBetween: 20
                     },
-                    unsubcribe: "https://staywell.ro/unsubscribe"
+                    unsubcribe: "https://staywell.ro/unsubscribe",
+                    statistics:{
+                        scheduleInterval: 'everyHour',
+                        scheduleLockDays: 30
+                    }
                 }
             };
 
