@@ -6,6 +6,7 @@ const DISABLE_PATIENTS = my_config.disablePatients;
 
 var User = require('./models/user');
 var Roles = require('./models/roles');
+var NewsletterUnsubscribers = require('./models/newsletter/unsubscribers');
 
 var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
@@ -25,6 +26,7 @@ module.exports = function(app, logger, passport) {
 
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
     var handleError = require('./modules/responseHandler/error.js')(logger);
+    var NewsletterModule = require('./modules/newsletter')(my_config, logger);
 
     //access control origin
     app.all("/*", function(req, res, next) {
@@ -172,6 +174,40 @@ module.exports = function(app, logger, passport) {
                     }
                 });
             }
+        }
+    });
+
+    //unusubscribe from newsletter
+    app.get('/unsubscribe', function (req, res) {
+        if(req.query.user){
+            var userEmail = NewsletterModule.unhashUserMail(req.query.user);
+            User.update({'username': UtilsModule.regexes.emailQuery(userEmail)}, {$set: {"subscriptions.newsletterStaywell": false}}, function (err, wres) {
+                if(err){
+                    res.render('newsletter/errorUnsubscribing.ejs');
+                }else if(wres === 0){
+                    //user outside of Staywell was subscribed
+                    NewsletterUnsubscribers.findOne({email: UtilsModule.regexes.emailQuery(userEmail)}, function (err, unsubscriber) {
+                        if(err){
+                            res.render('newsletter/errorUnsubscribing.ejs');
+                        }else if(!unsubscriber){
+                            var toSave = new NewsletterUnsubscribers({email: userEmail});
+                            toSave.save(function (err) {
+                                if(err){
+                                    res.render('newsletter/errorUnsubscribing.ejs');
+                                }else{
+                                    res.render('newsletter/unsubscribed.ejs');
+                                }
+                            });
+                        }else{
+                            res.render('newsletter/unsubscribed.ejs');
+                        }
+                    });
+                }else{
+                    res.render('newsletter/unsubscribed.ejs');
+                }
+            });
+        }else{
+            res.render('newsletter/errorUnsubscribing.ejs');
         }
     });
 

@@ -22,7 +22,8 @@ services.factory('ActionModal', ['$modal', function($modal){
     return {
         //actionName defaults to "Ok"
         //reloadState defaults to false
-        show: function (title, message, action, actionName, reloadState) {
+        show: function (title, message, action, options) {
+            options = options || {};
             $modal.open({
                 templateUrl: 'partials/shared/actionModal.html',
                 size: 'md',
@@ -38,11 +39,8 @@ services.factory('ActionModal', ['$modal', function($modal){
                     action: function () {
                         return action;
                     },
-                    actionName: function () {
-                        return actionName;
-                    },
-                    reloadState: function () {
-                        return reloadState;
+                    options: function () {
+                        return options;
                     }
                 }
             });
@@ -89,12 +87,18 @@ services.factory('Utils', ['$sce', function ($sce) {
             return htmlToPlainText(text);
         }
     };
-    var isEmptyObject = function(obj){
+	var isEmptyObject = function(obj){
         for(var key in obj) {
             console.log(obj);
             if (obj.hasOwnProperty(key)) {
                 return false;
             }
+        }
+        return true;
+    };
+    var objectHasAllProperties = function (obj, properties) {
+        for(var i=0; i<properties.length; i++){
+            if(!obj[properties[i]]) return false;
         }
         return true;
     };
@@ -199,7 +203,8 @@ services.factory('Utils', ['$sce', function ($sce) {
         trimText: trimText,
         trimWords: trimWords,
         createHeader: createHeader,
-        isEmptyObject:isEmptyObject
+        isEmptyObject:isEmptyObject,
+		objectHasAllProperties: objectHasAllProperties
     }
 }]);
 services.factory('Diacritics',function(){

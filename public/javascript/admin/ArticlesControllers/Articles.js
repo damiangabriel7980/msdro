@@ -64,7 +64,9 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
 
     $scope.updateArticle = function (id) {
@@ -94,8 +96,9 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
-            },
-            "Da"
+            },{
+                yes: "Da"
+            }
         );
     }
 

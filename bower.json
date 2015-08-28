@@ -42,7 +42,9 @@
     "async": "latest",
     "angulartics": "~0.19.x",
     "tinymce": "latest",
-    "angular-utils-pagination": "latest"
+    "angular-ui-ace": "latest",
+    "ng-csv": "latest",
+	"angular-utils-pagination": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.x",

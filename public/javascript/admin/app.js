@@ -11,7 +11,11 @@ var app = angular.module('app',
         'ui.bootstrap.datetimepicker',
         'myMultipleSelect',
         'therapeuticSelect',
-        's3UploadManager'
+        's3UploadManager',
+        'adminEmailsList',
+        'adminWidgetStats',
+        'ui.ace',
+        'ngCsv'
     ]);
 
 app.config(['$locationProvider', function($location) {
@@ -157,17 +161,35 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/newsletter',
             templateUrl: '/partials/admin/newsletter/newsletter.html'
         })
-        .state('newsletter.consolaNewsletter',{
-            url: '/consolaNewsletter',
-            templateUrl: 'partials/admin/newsletter/consolaNewsletter.html'
+        .state('newsletter.dashboard',{
+            url: '/dashboard',
+            templateUrl: 'partials/admin/newsletter/dashboard.html',
+            controller: 'NewsletterDashboard'
         })
-        .state('newsletter.rapoarteUtilizare',{
-            url: '/rapoarteUtilizare',
-            templateUrl: 'partials/admin/newsletter/rapoarteUtilizare.html'
+        .state('newsletter.dashboard.campaigns',{
+            url: '/campaigns',
+            templateUrl: 'partials/admin/newsletter/campaigns/campaigns.html',
+            controller: 'NewsletterCampaigns'
         })
-        .state('newsletter.rapoarteGlobale',{
-            url: '/rapoarteGlobale',
-            templateUrl: 'partials/admin/newsletter/rapoarteGlobale.html'
+        .state('newsletter.dashboard.distributionLists',{
+            url: '/distributionLists',
+            templateUrl: 'partials/admin/newsletter/distributionLists/distributionLists.html',
+            controller: 'NewsletterDistributionLists'
+        })
+        .state('newsletter.dashboard.unsubscribedUsers',{
+            url: '/unsubscribedUsers',
+            templateUrl: 'partials/admin/newsletter/unsubscribedUsers/unsubscribedUsers.html',
+            controller: 'NewsletterUnsubscribedUsers'
+        })
+        .state('newsletter.dashboard.unsubscribedEmails',{
+            url: '/unsubscribedEmails',
+            templateUrl: 'partials/admin/newsletter/unsubscribedEmails/unsubscribedEmails.html',
+            controller: 'NewsletterUnsubscribedEmails'
+        })
+        .state('newsletter.dashboard.templates',{
+            url: '/templates',
+            templateUrl: 'partials/admin/newsletter/templates/templates.html',
+            controller: 'NewsletterTemplates'
         })
         .state('elearning', {
             abstract: true,

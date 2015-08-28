@@ -50,7 +50,9 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
 
     $scope.toogleCategoryEnabled = function (id, isEnabled) {
@@ -64,8 +66,9 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
-            },
-            "Da"
+            },{
+                yes: "Da"
+            }
         );
     };
 

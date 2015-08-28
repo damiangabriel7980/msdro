@@ -1,0 +1,50 @@
+<div class="adminEditableSingleList">
+    <div class="col-md-12 noPadding">
+        <div class="col-md-12 noPadding">
+            <label>{{title}}</label>
+        </div>
+        <div class="col-md-12 noPadding">
+            <alert ng-if="csvAlert.text" type="{{csvAlert.type}}" close="csvAlert.text=null">{{csvAlert.text}}</alert>
+        </div>
+        <div class="col-md-12 noPadding">
+            <input type="text" class="form-control" placeholder="Nume" ng-model="item.name">
+        </div>
+        <div class="input-group col-md-12">
+            <input type="text" class="form-control" placeholder="Email" ng-model="item.email">
+            <div class="input-group-btn">
+                <a class="btn btn-default" ng-click="addItem()">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </a>
+                <a class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">
+                    <i class="glyphicon glyphicon-folder-open"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="csvParse" ng-if="parsedCSVContents && parsedCSVContents.length>0">
+        <label>Rezultatele citirii:</label>
+        <div class="container items">
+            <div ng-repeat="item in parsedCSVContents track by $index" class="col-md-12 item">
+                <div class="col-md-10 noPadding">{{item.email + (item.name?" (" + item.name + ")":"")}}</div>
+                <div class="col-md-2 noPadding">
+                    <a class="btn btn-sm btn-danger pull-right" ng-click="removeParsedItem($index)">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="confirmItems">
+                <a class="btn btn-primary" ng-click="addParsedItems()">Confirma adaugarea</a>
+            </div>
+        </div>
+    </div>
+    <div class="container items">
+        <div ng-repeat="item in ngModel track by $index" class="col-md-12 item">
+            <div class="col-md-10 noPadding">{{item.email + (item.name?" (" + item.name + ")":"")}}</div>
+            <div class="col-md-2 noPadding">
+                <a class="btn btn-sm btn-danger pull-right" ng-click="removeItem($index)">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

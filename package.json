@@ -41,7 +41,8 @@
     "xregexp": "latest",
     "multer": "~0.1.x",
     "q": "latest",
-    "underscore": "latest"
+    "underscore": "latest",
+    "node-schedule": "latest"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",

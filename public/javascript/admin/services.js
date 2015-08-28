@@ -476,3 +476,174 @@ services.factory('LocationService', ['$resource', function($resource){
         })
     }
 }]);
+
+services.factory('NewsletterService', ['$resource', function($resource){
+    var variableTypes = ["text", "html"];
+    var systemVariables = ["UNSUBSCRIBE_URL"];
+    var getVariableType = function (variableName, variables) {
+        for(var i=0; i<variables.length; i++){
+            if(variables[i] && variables[i].name === variableName){
+                return variables[i].type;
+            }
+        }
+        return null;
+    };
+    var parseTemplateVariables = function (html, initialVariables) {
+        var matches = html.match(/\*\|[a-zA-Z0-9_]{0,100}\|\*/g);
+        var variables = [];
+        var variable;
+        if(matches){
+            for(var i=0; i<matches.length; i++){
+                variable = matches[i].replace(/\|/g,"").replace(/\*/g,"");
+                if(variable && systemVariables.indexOf(variable) === -1){
+                    variables.push({
+                        name: variable,
+                        type: getVariableType(variable, initialVariables)
+                    });
+                }
+            }
+        }
+        return variables;
+    };
+    var renderTemplate = function (templateHtml, variables) {
+        templateHtml = templateHtml || "";
+        for(var i=0; i<variables.length; i++){
+            if(variables[i] && ["text", "html"].indexOf(variables[i].type) > -1 && variables[i].value){
+                templateHtml = templateHtml.replace(new RegExp("\\*\\|"+variables[i].name+"\\|\\*", "g"), variables[i].value);
+            }
+        }
+        return templateHtml;
+    };
+    var sanitizeStats = function(stats){
+        return {
+            "trimise": stats.sent,
+            "netrimise": stats.soft_bounces,
+            "adrese nevalide": stats.hard_bounces,
+            "vizualizari": stats.opens,
+            "vizualizari unice": stats.unique_opens,
+            "accesari": stats.clicks,
+            "acesari unice": stats.unique_clicks,
+            "plangeri": stats.complaints
+        };
+    };
+    return {
+        campaigns: $resource('api/admin/newsletter/campaigns', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        distributionLists: $resource('api/admin/newsletter/distribution_lists', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        templates: {
+            api: $resource('api/admin/newsletter/templates', {}, {
+                query: { method: 'GET', isArray: false },
+                create: { method: 'POST', isArray: false },
+                update: { method: 'PUT', isArray: false },
+                delete: { method: 'DELETE', isArray: false }
+            }),
+            parseVariables: parseTemplateVariables,
+            renderTemplate: renderTemplate,
+            variableTypes: variableTypes,
+            systemVariables: systemVariables
+        },
+        users: $resource('api/admin/newsletter/users', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        unsubscribedEmails: $resource('api/admin/newsletter/unsubscribedEmails', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        statistics: {
+            api: $resource('api/admin/newsletter/statistics', {}, {
+                query: { method: 'GET', isArray: false }
+            }),
+            sanitize: sanitizeStats
+        }
+    }
+}]);
+
+services.factory('CSVParser', ['$q', function ($q) {
+    var parseContent = function (contents, headers, separator) {
+        console.log(contents);
+        //CSV config
+        separator = separator || ",";
+        //var headers = ["name", "email"];
+
+        //init variables
+        var headerPatts = [];
+        for(var h=0; h<headers.length; h++){
+            headerPatts.push(new RegExp("^"+headers[h]));
+        }
+        var columnsCount = headerPatts.length;
+
+        //handle errors
+        var parseError = function (err) {
+            return {
+                error: err
+            };
+        };
+
+        //begin parse
+        var lines = contents.split("\n");
+        console.log(lines);
+        if(lines && lines[0]){
+            var result = [];
+            var linesUnprocessed = [];
+            for(var i=0; i<lines.length; i++){
+                //get line
+                var line = lines[i].split(separator);
+                //check line length
+                if(line.length != columnsCount && i!=0) {
+                    if(lines[i] != "") linesUnprocessed.push(lines[i]);
+                }else if(i==0){
+                    //check headers
+                    console.log(line);
+                    console.log(headerPatts);
+                    for(var j=0; j<headerPatts.length; j++){
+                        if(!headerPatts[j].test(line[j])) {
+                            return parseError("headers");
+                        }
+                    }
+                }else{
+                    //add to result
+                    var lineObj = {};
+                    for(var l=0; l < columnsCount; l++){
+                        lineObj[headers[l]] = line[l];
+                    }
+                    result.push(lineObj);
+                }
+            }
+            return {
+                headers: headers,
+                body: result,
+                unprocessed: linesUnprocessed,
+                columns: columnsCount
+            };
+        }else{
+            return parseError("lines");
+        }
+    };
+    var getContent = function (file) {
+        var deferred = $q.defer();
+        var r = new FileReader();
+        r.onload = function(e) {
+            deferred.resolve(e.target.result);
+        };
+        r.readAsText(file);
+        return deferred.promise;
+    };
+    var parseCSV = function (file, headers, separator) {
+        var deferred = $q.defer();
+        getContent(file).then(function (content) {
+            deferred.resolve(parseContent(content, headers, separator));
+        });
+        return deferred.promise;
+    };
+    return {
+        parse: parseCSV
+    };
+}]);

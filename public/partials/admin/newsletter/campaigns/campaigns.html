@@ -1,0 +1,26 @@
+<div class="col-md-12 noPadding">
+    <div class="btn btn-primary" ng-click="addCampaign()" style="margin-bottom: 15px"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga campanie</div>
+</div>
+<table ng-table="tableParams" show-filter="true" class="table table-bordered">
+    <tr ng-repeat="campaign in $data">
+        <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
+            {{campaign.name}}
+        </td>
+        <td data-title="'Data crearii'" sortable="'date_created'">
+            {{campaign.date_created | date}}
+        </td>
+        <td data-title="'Data trimiterii'" sortable="'send_date'">
+            {{campaign.send_date | date}}
+        </td>
+        <td data-title="'Status'" sortable="'status'">
+            {{campaign.status}}
+        </td>
+        <td data-title="'Actiuni'">
+            <div class="btn-group">
+                <div class="btn btn-primary" ng-click="editCampaign(campaign)"><i class="glyphicon glyphicon-cog"></i></div>
+                <div class="btn btn-info" ng-click="cloneCampaign(campaign._id)"><i class="glyphicon glyphicon-duplicate"></i></div>
+                <div class="btn btn-danger" ng-click="removeCampaign(campaign._id)"><i class="glyphicon glyphicon-trash"></i></div>
+            </div>
+        </td>
+    </tr>
+</table>

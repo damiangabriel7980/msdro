@@ -9,12 +9,24 @@ module.exports = function(){
                 pushServerPrefix: "MSD_test",
                 elasticServer: "10.200.0.221",
                 elasticPORT: "9004",
-                mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
+                mandrillKey: "3YrDrZkwVGq61q_0wTanbg",
                 GA_code: "UA-61695877-1",
                 disablePatients: false,
                 dpocAppLink: "unavailable",
                 publicFolder: "public",
-                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss"
+                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                newsletter: {
+                    scheduleInterval: 'everyMinute',
+                    batch: {
+                        size: 5,
+                        secondsBetween: 5
+                    },
+                    unsubcribe: "http://localhost:8080/unsubscribe",
+                    statistics:{
+                        scheduleInterval: 'everyMinute',
+                        scheduleLockDays: 6
+                    }
+                }
             };
 
         case 'staging':
@@ -31,7 +43,19 @@ module.exports = function(){
                 disablePatients: false,
                 dpocAppLink: "unavailable",
                 publicFolder: "public_min",
-                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss"
+                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                newsletter: {
+                    scheduleInterval: 'everyMinute',
+                    batch: {
+                        size: 100,
+                        secondsBetween: 20
+                    },
+                    unsubcribe: "https://staging.staywell.ro/unsubscribe",
+                    statistics:{
+                        scheduleInterval: 'everyHour',
+                        scheduleLockDays: 30
+                    }
+                }
             };
 
         case 'production':
@@ -48,7 +72,19 @@ module.exports = function(){
                 disablePatients: true,
                 dpocAppLink: "https://msd-ios-distribution.s3.amazonaws.com/MSD_dpoc_InHouse/index.html",
                 publicFolder: "public_min",
-                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss"
+                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                newsletter: {
+                    scheduleInterval: 'everyHour',
+                    batch: {
+                        size: 100,
+                        secondsBetween: 20
+                    },
+                    unsubcribe: "https://staywell.ro/unsubscribe",
+                    statistics:{
+                        scheduleInterval: 'everyHour',
+                        scheduleLockDays: 30
+                    }
+                }
             };
 
         default:

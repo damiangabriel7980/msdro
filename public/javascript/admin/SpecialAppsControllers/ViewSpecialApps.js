@@ -60,7 +60,9 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
             }).catch(function () {
                 InfoModal.show("Eroare", "Eroare la stergerea aplicatiei");
             });
-        }, "Da");
+        },{
+            yes: "Da"
+        });
     };
 
     $scope.toggleSpecialApp = function (app) {
@@ -73,8 +75,9 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
                 }).catch(function () {
                     InfoModal.show("Eroare", "Eroare la modificarea aplicatiei");
                 });
-            },
-            "Da"
+            },{
+                yes: "Da"
+            }
         );
     }
 

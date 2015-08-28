@@ -1,0 +1,7 @@
+<table ng-table="tableParams" show-filter="true" class="table table-bordered">
+    <tr ng-repeat="p in $data">
+        <td data-title="'Email'" filter="{ 'username': 'text' }" sortable="'username'">
+            {{p.email}}
+        </td>
+    </tr>
+</table>

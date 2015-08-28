@@ -129,6 +129,19 @@
     <script src="javascript/admin/SystemControllers/ActivationCodes/EditActivationCode.js"></script>
     <script src="javascript/admin/SystemControllers/Parameters/SystemParameters.js"></script>
     <script src="javascript/admin/SystemControllers/Parameters/EditSystemParameter.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterDashboard.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaigns.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaignEdit.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaignChooseTemplate.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaignPopulateTemplate.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterDistributionLists.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterDistributionListEdit.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterUnsubscribedUsers.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterUnsubscribedEmails.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterTemplates.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterTemplateEdit.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterTemplatePreview.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaignSummary.js"></script>
 
 
     <!--Plug-ins-->
@@ -138,7 +151,17 @@
     <script src="modules/therapeutic_select/therapeutic_select.js"></script>
     <link rel="stylesheet" href="modules/therapeutic_select/therapeutic_select.css">
     <script src="modules/s3_upload_manager/s3_upload_manager.js"></script>
+    <script src="modules/admin-emails-list/directive.js"></script>
+    <link rel="stylesheet" href="modules/admin-emails-list/styles.css">
+    <script src="modules/admin-widget-stats/directive.js"></script>
 
+    <!--ui-ace-->
+    <script type="text/javascript" src="components/ace-builds/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="components/angular-ui-ace/ui-ace.js"></script>
+    <script type="text/javascript" src="components/ace-builds/src-noconflict/ext-language_tools.js"></script>
+
+    <!--ng csv-->
+    <script type="text/javascript" src="components/ng-csv/build/ng-csv.min.js"></script>
 
     <!--Stylesheets-->
     <link rel='stylesheet' href='components/ng-table/dist/ng-table.min.css' />
@@ -204,16 +227,7 @@
                         <li ui-sref="content.publicContent.content"><a > Continut Public </a></li>
                     </ul>
                 </li>
-                <li class="dropdown" ng-class="{'active': $state.includes('newsletter')}">
-                    <a class="dropdown-toggle" data-toggle="dropdown"> Newsletter <b class="caret"></b></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li ui-sref="newsletter.consolaNewsletter"><a > Consola Newsletter </a></li>
-                        <li class="divider"></li>
-                        <li ui-sref="newsletter.rapoarteUtilizare"><a > Rapoarte Utilizare </a></li>
-                        <li class="divider"></li>
-                        <li ui-sref="newsletter.rapoarteGlobale"><a > Rapoarte Globale </a></li>
-                    </ul>
-                </li>
+                <li ng-class="{'active': $state.includes('newsletter')}"><a ui-sref="newsletter.dashboard.campaigns"> Newsletter </a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('elearning')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Elearning <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">

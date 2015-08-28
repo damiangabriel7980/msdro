@@ -47,7 +47,9 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
-            }, "Da"
+            },{
+                yes: "Da"
+            }
         );
     }
 }]);

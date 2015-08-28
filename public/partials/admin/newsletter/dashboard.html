@@ -1,0 +1,43 @@
+<div class="col-md-12 newsletterDashboard">
+    <div class="col-md-12 overallStats">
+        <div class="col-md-12 noPadding">
+            <h3>Statistici</h3>
+        </div>
+        <div class="col-md-12 noPadding" ng-if="!campaignStats">
+            Se incarca...
+        </div>
+        <div class="col-md-12 noPadding" ng-if="campaignStats">
+            <div class="col-md-8 noPadding">
+                <admin-widget-stats selected-stats="campaignStats[statType]"></admin-widget-stats>
+            </div>
+            <div class="col-md-4 noPadding">
+                <div class="col-md-12 noPadding">
+                    <select class="form-control" ng-model="statType" ng-options="stat.alias as stat.name for stat in statTypes"></select>
+                </div>
+                <div class="col-md-12 noPadding" style="margin-top: 15px">
+                    <a class="btn btn-primary pull-right" ng-csv="csv.rows" filename="{{csv.filename}}">Export CSV</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="newAccountsTabs">
+        <div class="tab" ng-class="{'active': $state.includes('newsletter.dashboard.campaigns')}" ui-sref="newsletter.dashboard.campaigns">
+            Campanii
+        </div>
+        <div class="tab" ng-class="{'active': $state.includes('newsletter.dashboard.distributionLists')}" ui-sref="newsletter.dashboard.distributionLists">
+            Liste de distributie
+        </div>
+        <div class="tab" ng-class="{'active': $state.includes('newsletter.dashboard.unsubscribedUsers')}" ui-sref="newsletter.dashboard.unsubscribedUsers">
+            Membrii dezabonati
+        </div>
+        <div class="tab" ng-class="{'active': $state.includes('newsletter.dashboard.unsubscribedEmails')}" ui-sref="newsletter.dashboard.unsubscribedEmails">
+            Neinregistrati dezabonati
+        </div>
+        <div class="tab" ng-class="{'active': $state.includes('newsletter.dashboard.templates')}" ui-sref="newsletter.dashboard.templates">
+            Template-uri
+        </div>
+    </div>
+    <div class="col-md-12 noPadding tabViewPanel">
+        <ui-view></ui-view>
+    </div>
+</div>
