@@ -118,28 +118,83 @@ module.exports = function (env, logger) {
 
     function getEmails(distributionListsIds){
         var deferred = Q.defer();
-        Q.all([
-            getEmailsFromCustomLists(distributionListsIds),
-            getEmailsFromGroups(distributionListsIds)
-        ]).then(
-            function (results) {
-                deferred.resolve(concatEmailsUnique(results[0], results[1]));
+        getUnsubscribedEmails().then(
+            function(unsubscribedEmails){
+                Q.all([
+                    getEmailsFromCustomLists(distributionListsIds, unsubscribedEmails),
+                    getEmailsFromGroups(distributionListsIds, unsubscribedEmails)
+                ]).then(
+                    function (results) {
+                        deferred.resolve(concatEmailsUnique(results[0], results[1]));
+                    },
+                    function (err) {
+                        deferred.reject(err);
+                    }
+                );
             },
-            function (err) {
+            function(err){
                 deferred.reject(err);
             }
         );
         return deferred.promise;
     }
 
-    function getEmailsFromGroups(distributionListsIds) {
+    function getUnsubscribedEmails() {
+        var deferred = Q.defer();
+        Q.all([
+            getUnsubscribedUsers(),
+            getUnsubscribedNonUsers()
+        ]).then(
+            function(results){
+                deferred.resolve(concatArraysUnique(results[0], results[1]));
+            },
+            function(err){
+                deferred.reject(err);
+            }
+        );
+        return deferred.promise;
+    }
+
+    function getUnsubscribedUsers(){
+        var deferred = Q.defer();
+        Users.aggregate([
+                    { $match: {"subscriptions.newsletterStaywell": false} },
+                    { $project: {_id: 0, email: {$toLower: "$username"}} },
+                    { $group: {_id: null, emails: {$addToSet: "$email"}} }
+                ], function (err, result) {
+                    if(err){
+                        deferred.reject(err);
+                    }else{
+                        deferred.resolve((result && result[0] && result[0].emails)?result[0].emails:[]);
+                    }
+                });
+        return deferred.promise;
+    }
+
+    function getUnsubscribedNonUsers(){
+        var deferred = Q.defer();
+        Newsletter.unsubscribers.aggregate([
+            {$project: {"email": {$toLower: "$email"}}},
+            {$group: {_id: null, emails: {$addToSet: "$email"}}}
+        ], function (err, result) {
+            if(err){
+                deferred.reject(err);
+            }else{
+                deferred.resolve((result && result[0] && result[0].emails)?result[0].emails:[]);
+            }
+        });
+        return deferred.promise;
+    }
+
+    function getEmailsFromGroups(distributionListsIds, unsubscribedEmails) {
         var deferred = Q.defer();
         Newsletter.distributionLists.distinct("user_groups", {_id: {$in: distributionListsIds}}, function (err, groupsIds) {
             if(err){
                 deferred.reject(err);
             }else{
                 Users.aggregate([
-                    { $match: {groupsID: {$in: groupsIds}, "subscriptions.newsletterStaywell": {$ne: false}} },
+                    { $project: {username: {$toLower: "$username"}, groupsID: 1, subscriptions: 1, name: 1} },
+                    { $match: {groupsID: {$in: groupsIds}, username: {$nin: unsubscribedEmails}, "subscriptions.newsletterStaywell": {$ne: false}} },
                     { $project: {_id:0, email: "$username", name: "$name"} }
                 ], function (err, users) {
                     if(err){
@@ -153,18 +208,9 @@ module.exports = function (env, logger) {
         return deferred.promise;
     }
 
-    function getEmailsFromCustomLists(distributionListsIds) {
+    function getEmailsFromCustomLists(distributionListsIds, unsubscribedEmails) {
         var deferred = Q.defer();
-        //get unsubscribers emails lowercased
-        Newsletter.unsubscribers.aggregate([
-            {$project: {"email": {$toLower: "$email"}}},
-            {$group: {_id: null, emails: {$addToSet: "$email"}}}
-        ], function (err, result) {
-            if(err){
-                deferred.reject(err);
-            }else{
-                var unsubscribedEmails = (result && result[0] && result[0].emails)?result[0].emails:[];
-                Newsletter.distributionLists.aggregate([
+        Newsletter.distributionLists.aggregate([
                     { $match: {_id: {$in: distributionListsIds}} },
                     { $unwind: "$emails"},
                     { $group: {_id: "$emails.email", email: {$first: "$emails.email"}, name: {$first: "$emails.name"}} },
@@ -177,8 +223,6 @@ module.exports = function (env, logger) {
                         deferred.resolve(customEmails);
                     }
                 });
-            }
-        });
         return deferred.promise;
     }
 
@@ -189,6 +233,19 @@ module.exports = function (env, logger) {
             exists = false;
             for(var j=0; j<array1.length && !exists; j++){
                 if(array2[i].email === array1[j].email) exists = true;
+            }
+            if(!exists) result.push(array2[i]);
+        }
+        return result;
+    }
+
+    function concatArraysUnique(array1, array2){
+        var result = array1;
+        var exists;
+        for(var i=0; i<array2.length; i++){
+            exists = false;
+            for(var j=0; j<array1.length && !exists; j++){
+                if(array2[i] === array1[j]) exists = true;
             }
             if(!exists) result.push(array2[i]);
         }
