@@ -47,8 +47,8 @@ module.exports = function(){
                 newsletter: {
                     scheduleInterval: 'everyMinute',
                     batch: {
-                        size: 100,
-                        secondsBetween: 20
+                        size: 50,
+                        secondsBetween: 60 * 10
                     },
                     unsubcribe: "https://staging.staywell.ro/unsubscribe",
                     statistics:{
@@ -76,8 +76,8 @@ module.exports = function(){
                 newsletter: {
                     scheduleInterval: 'everyHour',
                     batch: {
-                        size: 100,
-                        secondsBetween: 20
+                        size: 50,
+                        secondsBetween: 60 * 10
                     },
                     unsubcribe: "https://staywell.ro/unsubscribe",
                     statistics:{
