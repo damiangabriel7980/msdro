@@ -9,7 +9,7 @@ module.exports = function(){
                 pushServerPrefix: "MSD_test",
                 elasticServer: "10.200.0.221",
                 elasticPORT: "9004",
-                mandrillKey: "3YrDrZkwVGq61q_0wTanbg",
+                mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
                 GA_code: "UA-61695877-1",
                 disablePatients: false,
                 dpocAppLink: "unavailable",
@@ -26,6 +26,9 @@ module.exports = function(){
                         scheduleInterval: 'everyMinute',
                         scheduleLockDays: 6
                     }
+                },
+                user: {
+                    noProofDomain: "mailinator.com"
                 }
             };
 
@@ -55,6 +58,9 @@ module.exports = function(){
                         scheduleInterval: 'everyHour',
                         scheduleLockDays: 30
                     }
+                },
+                user: {
+                    noProofDomain: "merck.com"
                 }
             };
 
@@ -84,6 +90,9 @@ module.exports = function(){
                         scheduleInterval: 'everyHour',
                         scheduleLockDays: 30
                     }
+                },
+                user: {
+                    noProofDomain: "merck.com"
                 }
             };
 

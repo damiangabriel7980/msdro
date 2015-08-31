@@ -179,7 +179,7 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
     };
     var isProofRequired = function(email){
         email = email || "";
-        if(email.split("@")[1] === "merck.com"){
+        if(email.split("@")[1] === NO_PROOF_DOMAIN){
             return false;
         }else{
             return true;
@@ -239,24 +239,30 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         }
     };
     var getActivationData = function (formData, callback) {
-        var activation = {
-            type: formData.user.temp.proofType,
-            value: null
-        };
-
-        if(formData.user.temp.proofType === "file"){
-            var extension = formData.user.temp.proofFile.name.split('.').pop();
-            Utils.fileToBase64(formData.user.temp.proofFile, function (b64) {
-                activation.value = {
-                    file: b64,
-                    extension: extension
-                };
-                callback(activation);
-            });
+        var proofRequired = isProofRequired(formData.user.username);
+        if(!proofRequired){
+            callback();
         }else{
-            activation.value = formData.user.temp.activationCode;
-            callback(activation);
+            var activation = {
+                type: formData.user.temp.proofType,
+                value: null
+            };
+
+            if(formData.user.temp.proofType === "file"){
+                var extension = formData.user.temp.proofFile.name.split('.').pop();
+                Utils.fileToBase64(formData.user.temp.proofFile, function (b64) {
+                    activation.value = {
+                        file: b64,
+                        extension: extension
+                    };
+                    callback(activation);
+                });
+            }else{
+                activation.value = formData.user.temp.activationCode;
+                callback(activation);
+            }
         }
+        
     };
     var getProHref = function () {
         var href = "pro";

@@ -76,7 +76,8 @@ module.exports = function(app, logger, passport) {
                 accountActivated: accountActivated,
                 showLogin: showLogin,
                 accessRoute: accessRoute,
-                GA_code: GA_code
+                GA_code: GA_code,
+                noProofDomain: my_config.user.noProofDomain
             });
         }
     });
