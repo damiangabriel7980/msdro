@@ -21,7 +21,7 @@ module.exports = function(){
                         size: 5,
                         secondsBetween: 5
                     },
-                    unsubcribe: "http://localhost:8080/unsubscribe",
+                    unsubcribe: "http://10.200.0.250:9001/unsubscribe",
                     statistics:{
                         scheduleInterval: 'everyMinute',
                         scheduleLockDays: 6
