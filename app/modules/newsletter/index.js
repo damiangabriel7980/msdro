@@ -195,7 +195,7 @@ module.exports = function (env, logger) {
                 Users.aggregate([
                     { $project: {username: {$toLower: "$username"}, groupsID: 1, subscriptions: 1, name: 1} },
                     { $match: {groupsID: {$in: groupsIds}, username: {$nin: unsubscribedEmails}, "subscriptions.newsletterStaywell": {$ne: false}} },
-                    { $project: {_id:0, email: "$username", name: "$name"} }
+                    { $project: {_id:0, email: "$username", name: "$name", to: {$literal: "bcc"}} }
                 ], function (err, users) {
                     if(err){
                         deferred.reject(err);
@@ -214,7 +214,7 @@ module.exports = function (env, logger) {
                     { $match: {_id: {$in: distributionListsIds}} },
                     { $unwind: "$emails"},
                     { $group: {_id: "$emails.email", email: {$first: "$emails.email"}, name: {$first: "$emails.name"}} },
-                    { $project: {_id: 0, email: {$toLower: "$email"}, name: 1} },
+                    { $project: {_id: 0, email: {$toLower: "$email"}, name: 1, to: {$literal: "bcc"}} },
                     { $match: {email: {$nin: unsubscribedEmails}} }
                 ], function (err, customEmails) {
                     if(err){
