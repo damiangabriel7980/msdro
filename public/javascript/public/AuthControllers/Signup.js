@@ -110,6 +110,10 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
         }
     };
 
+    $scope.$watch("user.username", function(newValue){
+        $scope.proofRequired = AuthService.isProofRequired(newValue);
+    });
+
     //========================================================================================================== submit
 
     var sendInfoSource = function (is) {

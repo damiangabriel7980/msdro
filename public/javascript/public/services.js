@@ -177,6 +177,14 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         data.user.temp = temp;
         return data;
     };
+    var isProofRequired = function(email){
+        email = email || "";
+        if(email.split("@")[1] === "merck.com"){
+            return false;
+        }else{
+            return true;
+        }
+    };
     var validateCreate = function (formData, callback) {
         if(!formData.user.username){
             callback("Va rugam introduceti un email");
@@ -199,13 +207,15 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         var county = formData.county._id;
         var city = formData.city._id;
 
+        var proofRequired = isProofRequired(user.username);
+
         if(!user.profession){
             callback("Va rugam selectati o profesie");
         }else if(!(user.temp.proofType === 'code' || user.temp.proofType === 'file')){
             callback("Trebuie sa incarcati o dovada sau sa introduceti un cod");
-        }else if(user.temp.proofType == "code" && !user.temp.activationCode){
+        }else if(proofRequired && user.temp.proofType == "code" && !user.temp.activationCode){
             callback("Va rugam introduceti codul de activare");
-        }else if(user.temp.proofType == "file" && !user.temp.proofFile){
+        }else if(proofRequired && user.temp.proofType == "file" && !user.temp.proofFile){
             callback("Va rugam incarcati dovada");
         }else if(!user.groupsID){
             callback("Va rugam selectati un grup preferat");
@@ -314,6 +324,7 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
                 }
             });
         },
-        getProHref: getProHref
+        getProHref: getProHref,
+        isProofRequired: isProofRequired
     }
 }]);
