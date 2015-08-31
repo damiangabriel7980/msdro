@@ -50,9 +50,6 @@ var Amazon = require('./config/amazon.js'),
 //passport
 require('./config/passport')(passport, logger); // pass passport for configuration
 
-//globals
-var Globals = require('./config/globals.js'), globals = new Globals();
-
 //seed
 require('./app/modules/seed');
 
@@ -87,7 +84,7 @@ var devServer = http.createServer(app);
 // api ======================================================================
 require('./app/api.js')(app, my_config, sessionSecret, logger, amazon, express.Router()); // load our private routes and pass in our app and session secret
 require('./app/apiPublic.js')(app, logger, express.Router()); // load our public routes and pass in our app
-require('./app/apiGloballyShared.js')(app, my_config, globals, logger, amazon, sessionSecret, express.Router());
+require('./app/apiGloballyShared.js')(app, my_config, logger, amazon, sessionSecret, express.Router());
 require('./app/apiMobileShared.js')(app, logger, tokenSecret, express.Router());
 require('./app/apiConferences.js')(app, logger, tokenSecret, express.Router());
 require('./app/apiMSDDoc.js')(app, my_config, logger, tokenSecret, secureServer, express.Router());

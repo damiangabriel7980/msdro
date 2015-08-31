@@ -40,7 +40,7 @@ var mergeKeys = function (obj1, obj2){
     return obj3;
 };
 
-module.exports = function(app, env, globals, logger, amazon, sessionSecret, router) {
+module.exports = function(app, env, logger, amazon, sessionSecret, router) {
 
     //=============================================Define variables
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
@@ -99,7 +99,7 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
         //console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
 
         //validate data
-        if(!globals.validateEmail(email)){
+        if(!UtilsModule.validateEmail(email)){
             handleError(res, null, 400, 31);
         }else if(!namePatt.test(name)){
             handleError(res, null, 400, 261);
