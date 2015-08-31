@@ -3,8 +3,8 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
     //================================================================================================== init variables
     $scope.user = {
         subscriptions: {
-            newsletterStaywell: false,
-            infoMSD: false
+            newsletterStaywell: true,
+            infoMSD: true
         },
         temp: {
             proofFile: null
