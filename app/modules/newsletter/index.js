@@ -13,7 +13,9 @@ var Newsletter = {
 var Users = require('../../models/user');
 var Parameters = require('../../models/parameters');
 
-module.exports = function (env, logger) {
+var env = require('../../../config/environment')();
+
+module.exports = function (logger) {
 
     var mandrill = require('node-mandrill')(env.mandrillKey);
     var systemVariables = ["UNSUBSCRIBE_URL"];
@@ -491,11 +493,22 @@ module.exports = function (env, logger) {
         })
     }
 
+    function removeUnsubscribedEmail(email, callback) {
+        if(typeof email !== "string"){
+            callback("email must be string");
+        }else{
+            Newsletter.unsubscribers.remove({email: UtilsModule.regexes.emailQuery(email)}, function(err){
+                if(typeof callback === "function") callback(err);
+            });
+        }
+    }
+
     return {
         sendDueCampaigns: sendDueCampaigns,
         getOverallStats: getOverallStats,
         getCampaignStats: getCampaignStats,
         unhashUserMail: unhashUserMail,
-        recordStats: recordStats
+        recordStats: recordStats,
+        removeUnsubscribedEmail: removeUnsubscribedEmail
     };
 };

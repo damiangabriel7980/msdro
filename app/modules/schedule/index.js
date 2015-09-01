@@ -11,7 +11,7 @@ var lockSchedule = {};
 
 module.exports = function (env, logger) {
 
-    var NewsletterModule = require('../newsletter')(env, logger);
+    var NewsletterModule = require('../newsletter')(logger);
 
     var dueCampaigns = createUnparallelScheduledJob("due campaigns", myCronFormats[env.newsletter.scheduleInterval], NewsletterModule.sendDueCampaigns);
     var campaignStatsRecording = createUnparallelScheduledJob("campaign stats", myCronFormats[env.newsletter.statistics.scheduleInterval], NewsletterModule.recordStats);

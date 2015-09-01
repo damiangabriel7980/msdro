@@ -26,7 +26,7 @@ module.exports = function(app, logger, passport) {
 
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
     var handleError = require('./modules/responseHandler/error.js')(logger);
-    var NewsletterModule = require('./modules/newsletter')(my_config, logger);
+    var NewsletterModule = require('./modules/newsletter')(logger);
 
     //access control origin
     app.all("/*", function(req, res, next) {

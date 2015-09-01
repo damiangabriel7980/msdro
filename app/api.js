@@ -112,7 +112,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
     var handleError = require('./modules/responseHandler/error.js')(logger);
     var Auth = require('./modules/auth')(logger, sessionSecret);
-    var NewsletterModule = require('./modules/newsletter')(env, logger);
+    var NewsletterModule = require('./modules/newsletter')(logger);
 
 
     //only logged in users can access a route
