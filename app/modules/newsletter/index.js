@@ -36,7 +36,8 @@ module.exports = function (logger) {
                         },
                         function (err) {
                             Newsletter.campaigns.update({_id: campaign_id}, {$set: {status: "error"}}, function () {
-                                callback(err);
+                                logger.error(err);
+                                callback();
                             });
                         }
                     )
@@ -474,20 +475,32 @@ module.exports = function (logger) {
     function recordCampaignStats(campaign_id, callback){
         Newsletter.campaigns.findOne({_id: campaign_id}, function (err, campaign) {
             if(err){
-                callback(err);
+                logger.error(err);
+                callback();
             }else{
                 getCampaignStats(campaign_id).then(
                     function (resp) {
                         if(!resp || !resp.last_30_days){
-                            callback("Invalid mandrill response");
+                            logger.error("Invalid mandrill response:");
+                            logger.error(resp);
+                            callback();
                         }else{
                             var statistics = resp.last_30_days;
                             statistics.recorded = true;
                             campaign.statistics = statistics;
-                            campaign.save(callback);
+                            campaign.save(function(err){
+                                if(err){
+                                    logger.error(err);
+                                }else{
+                                    callback();
+                                }
+                            });
                         }
                     },
-                    callback
+                    function(err){
+                        logger.error(err);
+                        callback();
+                    }
                 );
             }
         })
