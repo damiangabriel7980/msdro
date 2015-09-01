@@ -505,22 +505,11 @@ module.exports = function (logger) {
         })
     }
 
-    function removeUnsubscribedEmail(email, callback) {
-        if(typeof email !== "string"){
-            callback("email must be string");
-        }else{
-            Newsletter.unsubscribers.remove({email: UtilsModule.regexes.emailQuery(email)}, function(err){
-                if(typeof callback === "function") callback(err);
-            });
-        }
-    }
-
     return {
         sendDueCampaigns: sendDueCampaigns,
         getOverallStats: getOverallStats,
         getCampaignStats: getCampaignStats,
         unhashUserMail: unhashUserMail,
-        recordStats: recordStats,
-        removeUnsubscribedEmail: removeUnsubscribedEmail
+        recordStats: recordStats
     };
 };

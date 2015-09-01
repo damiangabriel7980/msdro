@@ -4,7 +4,7 @@ var deepPopulate = require('mongoose-deep-populate');
 var crypto   = require('crypto-js/sha256');
 var Schema			= mongoose.Schema;
 var mongoDbIndex = require('../modules/mongooseIndex/index');
-var NewsletterService = require('../modules/newsletter')();
+var UserService = require('../modules/user');
 
 // define the schema for our user model
 var userSchema = new Schema({
@@ -62,7 +62,7 @@ userSchema.pre('save', function (next) {
 userSchema.post('save', function (doc) {
     //if the document is newly created do something
     if(this.wasNew){
-        NewsletterService.removeUnsubscribedEmail(this.username);
+        UserService.accountJustCreated(this.username);
     }
 });
 
