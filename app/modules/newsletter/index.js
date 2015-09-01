@@ -491,9 +491,8 @@ module.exports = function (logger) {
                             campaign.save(function(err){
                                 if(err){
                                     logger.error(err);
-                                }else{
-                                    callback();
                                 }
+                                callback();
                             });
                         }
                     },
