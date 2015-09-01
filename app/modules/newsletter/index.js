@@ -23,7 +23,7 @@ module.exports = function (logger) {
 
     function sendDueCampaigns() {
         var deferred = Q.defer();
-        Newsletter.campaigns.distinct("_id", {send_date: {$exists: true, $lt: Date.now()}, status: "not sent"}, function (err, campaigns_ids) {
+        Newsletter.campaigns.distinct("_id", {send_date: {$exists: true, $lt: Date.now()}, status: "not sent", deleted: {$ne: true}}, function (err, campaigns_ids) {
             if(err){
                 deferred.reject(err);
             }else{
@@ -111,7 +111,12 @@ module.exports = function (logger) {
             "name": subaccountId
         }, function(err, resp){
             if(err){
-                deferred.reject(err);
+                if(err.code == -2){
+                    //the subaccount already exists. this shouln never happen, so treat this as success
+                    deferred.resolve(subaccountId);
+                }else{
+                    deferred.reject(err);
+                }
             }else{
                 deferred.resolve(subaccountId);
             }

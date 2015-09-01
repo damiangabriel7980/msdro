@@ -3011,7 +3011,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                Newsletter.campaigns.find({}, {
+                Newsletter.campaigns.find({deleted: {$ne: true}}, {
                     name: 1,
                     date_created: 1,
                     send_date: 1,
@@ -3085,7 +3085,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
-            Newsletter.campaigns.remove({_id: idToDelete}, function (err, wres) {
+            Newsletter.campaigns.update({_id: idToDelete}, {$set: {deleted: true}}, function (err, wres) {
                 if(err){
                     handleError(res, err);
                 }else{

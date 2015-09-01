@@ -17,6 +17,7 @@ var schema = new Schema({
         order: Number
     }],
     status: {type: String, enum: ["sent", "not sent", "error"]},
+    deleted: {type: Boolean, default: false},
     statistics: {
         recorded: {type: Boolean, default: false},
         sent: Number,
