@@ -82,9 +82,26 @@
                                 default : resetAlert("Eroare la citirea fisierului."); break;
                             }
                         }else{
-                            scope.parsedCSVContents = result.body;
+                            scope.parsedCSVContents = keepValidEmails(result.body || []);
                         }
                     });
+                }
+
+                function keepValidEmails(objectsArray){
+                    var ret = [];
+                    for(var i=0; i<objectsArray.length; i++){
+                        if(isValidEmail(objectsArray[i].email)) ret.push(objectsArray[i]);
+                    }
+                    return ret;
+                }
+
+                function isValidEmail(email){
+                    console.log(email);
+                    if(typeof email === "string" && email.split(/[\s@]+/).length === 2){
+                        return true;
+                    }else{
+                        return false;
+                    }
                 }
 
                 function resetAlert(text, type){
