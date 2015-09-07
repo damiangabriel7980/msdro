@@ -203,7 +203,7 @@ module.exports = function (logger) {
                 Users.aggregate([
                     { $project: {username: {$toLower: "$username"}, groupsID: 1, subscriptions: 1, name: 1} },
                     { $match: {groupsID: {$in: groupsIds}, username: {$nin: unsubscribedEmails}, "subscriptions.newsletterStaywell": {$ne: false}} },
-                    { $project: {_id:0, email: "$username", name: "$name", to: {$literal: "bcc"}} }
+                    { $project: {_id:0, email: "$username", name: "$name", "type": {$literal: "bcc"}} }
                 ], function (err, users) {
                     if(err){
                         deferred.reject(err);
@@ -222,7 +222,7 @@ module.exports = function (logger) {
                     { $match: {_id: {$in: distributionListsIds}} },
                     { $unwind: "$emails"},
                     { $group: {_id: "$emails.email", email: {$first: "$emails.email"}, name: {$first: "$emails.name"}} },
-                    { $project: {_id: 0, email: {$toLower: "$email"}, name: 1, to: {$literal: "bcc"}} },
+                    { $project: {_id: 0, email: {$toLower: "$email"}, name: 1, "type": {$literal: "bcc"}} },
                     { $match: {email: {$nin: unsubscribedEmails}} }
                 ], function (err, customEmails) {
                     if(err){
@@ -393,6 +393,7 @@ module.exports = function (logger) {
     }
 
     function sendBatch(subaccountId, subject, html, users, from_email) {
+        console.log(users);
         var deferred = Q.defer();
         getMergeVars(users).then(
             function (mergeVars) {
