@@ -14,8 +14,7 @@
             link: function(scope, element, attrs) {
 
                 scope.addItem = function () {
-                    if(scope.item){
-                        modelInsertItem(scope.item);
+                    if(scope.item && modelInsertItem(scope.item)){
                         scope.item = null;
                     }
                 };
@@ -98,7 +97,12 @@
                 function modelInsertItem(item) {
                     item = item || {};
                     if(!scope.ngModel) scope.ngModel = [];
-                    if(item.email && getItemIndex(item.email)===null) scope.ngModel.push(item);
+                    if(item.email && getItemIndex(item.email)===null) {
+                        scope.ngModel.push(item);
+                        return true;
+                    }else{
+                        return false;
+                    }
                 }
 
                 function getItemIndex(email) {
