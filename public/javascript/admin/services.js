@@ -522,8 +522,8 @@ services.factory('NewsletterService', ['$resource', function($resource){
             "vizualizari": stats.opens,
             "vizualizari unice": stats.unique_opens,
             "accesari": stats.clicks,
-            "acesari unice": stats.unique_clicks,
-            "plangeri": stats.complaints
+            "acesari unice": stats.unique_clicks
+            //"plangeri": stats.complaints
         };
     };
     return {
