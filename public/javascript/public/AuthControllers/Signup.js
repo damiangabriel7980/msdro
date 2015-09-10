@@ -14,6 +14,8 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
 
     $scope.nonUser = {};
 
+    if($scope.modalData && $scope.modalData.username) $scope.user.username = $scope.modalData.username;
+
     $scope.lockSubmitting = false;
 
     $scope.codeTooltip = "Deoarece statul roman, prin legea 95/2006 cu HCS nr 27_11.10.2013 " +

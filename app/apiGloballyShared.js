@@ -154,7 +154,12 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
 
             var phonePatt = UtilsModule.regexes.phone;
 
-            var proofRequired = isProofRequired(staywellUser.username);
+            var proofRequired;
+            if(req.user){
+                proofRequired = isProofRequired(req.user.username);
+            }else{
+                proofRequired = isProofRequired(staywellUser.username);
+            }
 
             if(proofRequired && activation.type !== "code" && activation.type !== "file"){
                 handleError(res, null, 400, 33);

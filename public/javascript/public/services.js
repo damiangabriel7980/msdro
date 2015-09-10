@@ -325,6 +325,8 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
                     getActivationData(formData, function (activationData) {
                         completeProfile.save({user: formData.user, activation: activationData}).$promise.then(function (resp) {
                             callback(null, Success.getObject(resp));
+                        }).catch(function (resp) {
+                            callback(Error.getMessage(resp));
                         });
                     });
                 }
