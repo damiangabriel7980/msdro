@@ -129,7 +129,9 @@ controllers.controller('EditConference', ['$scope', '$rootScope', '$state', '$st
             }).catch(function () {
                 InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea talk-ului");
             });
-        }, "Da");
+        },{
+            yes: "Da"
+        });
     };
 
     $scope.editTalk = function (id) {

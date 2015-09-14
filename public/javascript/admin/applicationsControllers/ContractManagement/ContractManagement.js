@@ -97,9 +97,13 @@ controllers.controller('ContractManagement', ['$scope', '$state', 'ContractManag
                 }else{
                     ActionModal.show("Stergere reusita", "Template-ul a fost sters cu succes.", function () {
                         refreshTemplates();
-                    }, "Continua");
+                    },{
+                        yes:"Continua"
+                    });
                 }
             });
-        }, "Da");
+        },{
+            yes: "Da"
+        });
     };
 }]);

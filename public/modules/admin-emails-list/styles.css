@@ -1,0 +1,22 @@
+.adminEditableSingleList .addItem {
+  cursor: pointer;
+}
+.adminEditableSingleList .items {
+  width: 100%;
+  padding: 0;
+}
+.adminEditableSingleList .items .item {
+  border-radius: 4px;
+  border: 1px solid #eee;
+  margin-top: 5px;
+  padding: 5px;
+}
+.adminEditableSingleList .items .confirmItems {
+  display: block;
+  width: 100%;
+  float: left;
+  padding-top: 5px;
+}
+.adminEditableSingleList .items .confirmItems .btn {
+  float: right;
+}

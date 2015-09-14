@@ -54,7 +54,9 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
 
     $scope.toggleImageEnable = function (id, enabled) {
@@ -68,8 +70,9 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
-            },
-            "Da"
+            },{
+                yes: "Da"
+            }
         );
     };
 

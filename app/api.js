@@ -28,12 +28,15 @@ var CM_templates =require('./models/CM_templates');
 var ActivationCodes =require('./models/activationCodes');
 var DPOC_Devices = require('./models/DPOC_Devices');
 var Parameters = require('./models/parameters');
+var JanuviaUsers = require('./models/januvia/januvia_users');
+var _ = require('underscore');
 
 //modules
 var UserModule = require('./modules/user');
 var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
 var SessionStorage = require('./modules/sessionStorage');
+var ConferencesModule = require('./modules/Conferences');
 
 //special Products
 var specialProduct = require('./models/specialProduct');
@@ -52,9 +55,6 @@ var AWS = require('aws-sdk');
 var fs = require('fs');
 var crypto   = require('crypto');
 var Q = require('q');
-
-var Config = require('../config/environment.js'),
-    my_config = new Config();
 
 //=========================================================================================== functions for user groups
 
@@ -106,12 +106,13 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 
 //======================================================================================================================================= routes for admin
 
-module.exports = function(app, sessionSecret, logger, amazon, router) {
+module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     //============================================= Define injection dependent modules
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
     var handleError = require('./modules/responseHandler/error.js')(logger);
     var Auth = require('./modules/auth')(logger, sessionSecret);
+    var NewsletterModule = require('./modules/newsletter')(logger);
 
 
     //only logged in users can access a route
@@ -310,7 +311,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                PublicContent.findOne({_id: req.query.id}, function (err, cont) {
+                PublicContent.findOne({_id: req.query.id}).populate('therapeutic-areasID').exec(function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -638,7 +639,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
 
         .get(function(req, res) {
             if(req.query.id){
-                Carousel.findOne({_id: req.query.id}, function (err, cont) {
+                Carousel.findOne({_id: req.query.id}).populate("article_id").exec(function (err, cont) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -2341,7 +2342,7 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                             },
                             {
                                 "name": "applicationLink",
-                                "content": my_config.dpocAppLink
+                                "content": env.dpocAppLink
                             },
                             {
                                 "name": "activationCode",
@@ -2434,6 +2435,165 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                     handleError(res, true, 409, 12, processedWithErrors);
                 }
             })
+        });
+
+    router.route('/admin/applications/januvia/users')
+        .get(function (req, res) {
+            if(req.query.id){
+                JanuviaUsers.findOne({_id: req.query.id}).populate("city users_associated").exec(function (err, user) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!user){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, user);
+                    }
+                });
+            }else{
+                var q = {};
+                if(req.query.type){
+                    q.type = req.query.type;
+                }
+                JanuviaUsers.find(q, function (err, users) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, users);
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var user = new JanuviaUsers({
+                name: "Untitled",
+                date_created: Date.now()
+            });
+            user.save(function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, user);
+                }
+            });
+        })
+        .put(function (req, res) {
+            try{
+                var idToEdit = ObjectId(req.query.id);
+            }catch(ex){
+                return handleError(res, err);
+            }
+            var toEdit = req.body;
+            JanuviaUsers.findOne({_id: idToEdit}, function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else if(!user){
+                    handleError(res, false, 404, 1);
+                }else{
+                    _.extend(user, toEdit);
+                    user.save(function (err, user) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res, user);
+                        }
+                    });
+                }
+            })
+        })
+        .delete(function (req, res) {
+            JanuviaUsers.findOne({_id: req.query.id}, function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else if(!user){
+                    handleError(res, false, 404, 1);
+                }else{
+                    user.remove(function (err, wres) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            //cascade delete associations
+                            JanuviaUsers.update({}, {$pull: {users_associated: user._id}}, {multi: true}).exec(function (err, wres) {
+                                if(err){
+                                    handleError(res, err);
+                                }else{
+                                    handleSuccess(res);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+    router.route('/admin/applications/januvia/user_types')
+        .get(function (req, res) {
+            handleSuccess(res, new JanuviaUsers().schema.path('type').enumValues);
+        });
+
+    router.route('/admin/location/counties')
+        .get(function (req, res) {
+            if(req.query.id){
+                Counties.findOne({_id: req.query.id}, function (err, county) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!county){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, county);
+                    }
+                });
+            }else if(req.query.city){
+                Counties.findOne({citiesID: {$in: [req.query.city]}}, function (err, county) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!county){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, county);
+                    }
+                });
+            }else{
+                Counties.find({}, function (err, counties) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, counties);
+                    }
+                });
+            }
+        });
+
+    router.route('/admin/location/cities')
+        .get(function (req, res) {
+            if(req.query.id){
+                Cities.findOne({_id: req.query.id}, function (err, city) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!city){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, city);
+                    }
+                });
+            }else if(req.query.county){
+                Counties.findOne({_id: req.query.county}).populate('citiesID').exec(function (err, county) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!county){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, county.citiesID);
+                    }
+                });
+            }else{
+                Counties.find({}, function (err, counties) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, counties);
+                    }
+                });
+            }
         });
 
     router.route('/admin/system/activationCodes/codes')
@@ -2767,6 +2927,303 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
                 }
             });
         });
+
+    //========================================================= NEWSLETTER
+
+    var Newsletter = {
+        distributionLists: require('./models/newsletter/distribution_lists'),
+        campaigns: require('./models/newsletter/campaigns'),
+        templates: require('./models/newsletter/templates'),
+        unsubscribers: require('./models/newsletter/unsubscribers')
+    };
+
+    router.route('/admin/newsletter/distribution_lists')
+        .get(function (req, res) {
+            if(req.query.id){
+                Newsletter.distributionLists.findOne({_id: req.query.id}).populate('user_groups').exec(function (err, newsletter) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, newsletter);
+                    }
+                });
+            }else{
+                Newsletter.distributionLists.find({}, function (err, distributionLists) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, distributionLists);
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var list = new Newsletter.distributionLists({
+                name: "Untitled",
+                date_created: Date.now()
+            });
+            list.save(function (err, saved) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, saved);
+                }
+            });
+        })
+        .put(function (req, res) {
+            UtilsModule.discardFields(req.body, ["_id"]);
+            Newsletter.distributionLists.findOne({_id: req.query.id}, function (err, list) {
+                if(err){
+                    handleError(res, err);
+                }else if(!list){
+                    handleError(res, null, 404, 1);
+                }else{
+                    _.extend(list, req.body);
+                    list.save(function (err, saved) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res, saved);
+                        }
+                    });
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Newsletter.distributionLists.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res);
+                }
+            });
+        });
+
+    router.route('/admin/newsletter/campaigns')
+        .get(function (req, res) {
+            if(req.query.id){
+                Newsletter.campaigns.findOne({_id: req.query.id}).populate("distribution_lists").exec(function (err, campaign) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, campaign);
+                    }
+                });
+            }else{
+                Newsletter.campaigns.find({deleted: {$ne: true}}, {
+                    name: 1,
+                    date_created: 1,
+                    send_date: 1,
+                    status: 1
+                }, function (err, campaigns) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, campaigns);
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            if(req.query.clone){
+                Newsletter.campaigns.findOne({_id: req.query.clone}, function (err, campaign) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!campaign){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        var clone = new Newsletter.campaigns({
+                            date_created: Date.now(),
+                            name: campaign.name + " (copy)",
+                            distribution_lists: campaign.distribution_lists,
+                            templates: campaign.templates,
+                            status: "not sent"
+                        });
+                        clone.save(function (err) {
+                            if(err){
+                                handleError(res, err);
+                            }else{
+                                handleSuccess(res);
+                            }
+                        });
+                    }
+                });
+            }else{
+                var campaign = new Newsletter.campaigns({
+                    name: "Untitled",
+                    date_created: Date.now(),
+                    status: "not sent"
+                });
+                campaign.save(function (err, saved) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, saved);
+                    }
+                });
+            }
+        })
+        .put(function (req, res) {
+            UtilsModule.discardFields(req.body, ["_id", "date_created", "status"]);
+            Newsletter.campaigns.findOne({_id: req.query.id, status: "not sent"}, function (err, campaign) {
+                if(err){
+                    handleError(res, err);
+                }else if(!campaign){
+                    handleError(res, null, 404, 1);
+                }else{
+                    _.extend(campaign, req.body);
+                    campaign.save(function (err, saved) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res, saved);
+                        }
+                    });
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Newsletter.campaigns.update({_id: idToDelete}, {$set: {deleted: true}}, function (err, wres) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res);
+                }
+            });
+        });
+
+    router.route('/admin/newsletter/templates')
+        .get(function (req, res) {
+            if(req.query.id){
+                Newsletter.templates.findOne({_id: req.query.id}, function (err, template) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!template){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        handleSuccess(res, template);
+                    }
+                });
+            }else if(req.query.returnTypes){
+                handleSuccess(res, new Newsletter.templates().schema.path('type').enumValues);
+            }else{
+                var q = {};
+                if(req.query.type) q.type = req.query.type;
+                Newsletter.templates.find(q, function (err, templates) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, templates);
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var template = new Newsletter.templates({
+                name: "Untitled",
+                date_created: Date.now()
+            });
+            template.save(function (err, saved) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, saved);
+                }
+            });
+        })
+        .put(function (req, res) {
+            UtilsModule.discardFields(req.body, ["_id"]);
+            Newsletter.templates.findOne({_id: req.query.id}, function (err, template) {
+                if(err){
+                    handleError(res, err);
+                }else if(!template){
+                    handleError(res, null, 404, 1);
+                }else{
+                    _.extend(template, req.body);
+                    template.save(function (err, saved) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res, saved);
+                        }
+                    });
+                }
+            });
+        })
+        .delete(function (req, res) {
+            var idToDelete = ObjectId(req.query.id);
+            Newsletter.templates.remove({_id: idToDelete}, function (err, wres) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res);
+                }
+            });
+        });
+
+    router.route('/admin/newsletter/users')
+        .get(function (req, res) {
+            if(req.query.unsubscribed){
+                User.find({"subscriptions.newsletterStaywell": {$ne: true}}, {username: 1, name: 1}).exec(function (err, users) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, users);
+                    }
+                });
+            }else{
+                handleError(res, false, 400, 6);
+            }
+        });
+
+    router.route('/admin/newsletter/unsubscribedEmails')
+        .get(function (req, res) {
+            Newsletter.unsubscribers.find({}).exec(function (err, people) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, people);
+                }
+            });
+        });
+
+    router.route('/admin/newsletter/statistics')
+        .get(function (req, res) {
+            if(req.query.campaign){
+                Newsletter.campaigns.findOne({_id: req.query.campaign}, function (err, campaign) {
+                    if(err){
+                        handleError(res, err);
+                    }else if(!campaign){
+                        handleError(res, false, 404, 1);
+                    }else{
+                        if(campaign.statistics && campaign.statistics.recorded){
+                            handleSuccess(res, campaign.statistics);
+                        }else{
+                            NewsletterModule.getCampaignStats(req.query.campaign).then(
+                                function (stats) {
+                                    handleSuccess(res, stats.last_30_days);
+                                },
+                                function (err) {
+                                    handleError(res, err);
+                                }
+                            );
+                        }
+                    }
+                });
+            }else{
+                NewsletterModule.getOverallStats().then(
+                    function (stats) {
+                        handleSuccess(res, stats);
+                    },
+                    function (err) {
+                        handleError(res, err);
+                    }
+                );
+            }
+        });
+
     //==================================================================================================================================== USER ROUTES
 
     router.route('/user/addPhoto')
@@ -3353,11 +3810,45 @@ module.exports = function(app, sessionSecret, logger, amazon, router) {
     router.route('/calendar')
         .get(function(req,res) {
             if(req.query.id){
-                Events.findById(req.query.id,function(err, cont) {
+                Events.findById(req.query.id,function(err, event) {
+                    var queryResult={};
                     if(err) {
                         handleError(res,err,500);
                     }else{
-                        handleSuccess(res, cont);
+                        queryResult.event=event;
+
+                        function getConferencesInDepth(callback){
+                            ConferencesModule.getConferencesInDepth(event.listconferences, function(err,conferences){
+                                if(err){
+                                    callback(err);
+                                }
+                                else{
+                                    queryResult.conferences = conferences;
+                                    callback();
+                                }
+                            })
+                        }
+                       function getSpeakersForConferences(callback){
+                           ConferencesModule.getSpeakersForConferences(event.listconferences,function(err,speakers){
+                               if(err){
+                                   callback(err);
+                               }
+                               else{
+                                   queryResult.speakers=speakers;
+                                   callback();
+                               }
+                           })
+                       }
+
+                        async.parallel([getConferencesInDepth,getSpeakersForConferences],function(err){
+                            if(err){
+                                handleError(err);
+                            }
+                            else{
+                                handleSuccess(res,queryResult);
+                            }
+                        })
+
                     }
                 });
             }else{

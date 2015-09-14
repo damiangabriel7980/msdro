@@ -78,7 +78,7 @@
                             scope.output.push(scope.allObjects[i][trackBy]);
                         }
                     }
-                    console.log(scope.output);
+                    //console.log(scope.output);
                 };
 
                 var findInList = function (toFind, list) {

@@ -55,7 +55,9 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
 
     $scope.toggleImageEnable = function (image) {
@@ -68,8 +70,9 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
-            },
-            "Da"
+            },{
+                yes: "Da"
+            }
         );
     };
 

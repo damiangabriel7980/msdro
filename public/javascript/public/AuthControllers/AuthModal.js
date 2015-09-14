@@ -35,18 +35,19 @@ app.controllerProvider.register('AuthModal', ['$scope', '$modalInstance', 'inten
     };
 
     $scope.login = function () {
-
-        if(!this.email && this.password){
+        var thiz = this;
+        if(!thiz.email && thiz.password){
             $scope.resetAlert("danger", "Adresa de e-mail nu este valida");
         }else{
-            AuthService.login.query({email: this.email, password: this.password,remember: this.remember}).$promise.then(function (resp) {
+            AuthService.login.query({email: thiz.email, password: thiz.password,remember: thiz.remember}).$promise.then(function (resp) {
 
                 //redirect to pro area or proof loading
                 if(Success.getObject(resp).accepted){
                     $window.location.href = AuthService.getProHref();
                 }else{
                     $scope.renderView("completeProfile", {
-                        template: $sce.trustAsResourceUrl('partials/public/auth/signup_step2.html')
+                        template: $sce.trustAsResourceUrl('partials/public/auth/signup_step2.html'),
+                        username: thiz.email
                     });
                 }
             }).catch(function (resp) {

@@ -54,7 +54,9 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
                     refreshConferences();
                 });
             });
-        }, "Da");
+        },{
+            yes: "Da"
+        });
     };
 
     $scope.editRoom = function (id) {
@@ -68,7 +70,9 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
             }).catch(function () {
                 InfoModal.show("Stergere esuata", "A aparut o eroare la stergerea camerei");
             });
-        }, "Da");
+        },{
+            yes: "Da"
+        });
     };
 
     $scope.addConference = function () {

@@ -63,7 +63,9 @@ controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'th
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     }
 
 }])

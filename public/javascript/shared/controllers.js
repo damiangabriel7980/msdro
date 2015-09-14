@@ -9,11 +9,12 @@ controllers.controller('InfoModal', ['$scope','$modalInstance', 'title', 'messag
     }
 
 }]);
-controllers.controller('ActionModal', ['$scope','$modalInstance', '$state', 'title', 'message', 'action', 'actionName', 'reloadState', function ($scope, $modalInstance, $state, title, message, action, actionName, reloadState) {
+controllers.controller('ActionModal', ['$scope','$modalInstance', '$state', 'title', 'message', 'action', 'options', function ($scope, $modalInstance, $state, title, message, action, options) {
     $scope.actionModal = {
         title: title,
         message: message,
-        actionName: actionName || "Ok"
+        yes: options.yes || "Ok",
+        no: options.no || "Inchide"
     };
 
     $scope.closeActionModal = function () {
@@ -22,7 +23,7 @@ controllers.controller('ActionModal', ['$scope','$modalInstance', '$state', 'tit
 
     $scope.completeActionModal = function () {
         action();
-        if(reloadState) $state.reload();
+        if(options.reloadState) $state.reload();
         $modalInstance.close();
     }
 

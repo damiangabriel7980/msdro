@@ -3,16 +3,15 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.selectedType = 1;
-    $scope.content = {};
-    $scope.content.selected = {};
+    $scope.selectedContent = {};
 
     var fileSelected = null;
 
     $scope.$watch('selectedType', function (newVal) {
-        console.log(newVal);
         //load all contents of this type
         CarouselMedicService.attachedContent.query({type: newVal}).$promise.then(function (resp) {
             $scope.allContent = Success.getObject(resp);
+            console.log($scope.allContent);
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
             $scope.statusAlert.message = Error.getMessage(err);
@@ -33,7 +32,7 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
 
             //form object to add to database
             this.carouselImage.type = $scope.selectedType;
-            this.carouselImage.article_id = $scope.content.selected._id;
+            if($scope.selectedContent && $scope.selectedContent._id) this.carouselImage.article_id = $scope.selectedContent._id;
             //form object to persist
             this.carouselImage.enable = false;
             this.carouselImage.last_updated = new Date();
@@ -100,34 +99,4 @@ controllers.controller('AddCarouselMedic', ['$scope','$rootScope','$sce','Carous
         $state.reload();
     }
 
-}]).filter('propsFilter', function() {
-    //used for select2
-    return function(items, props) {
-        var out = [];
-
-        if (angular.isArray(items)) {
-            items.forEach(function(item) {
-                var itemMatches = false;
-
-                var keys = Object.keys(props);
-                for (var i = 0; i < keys.length; i++) {
-                    var prop = keys[i];
-                    var text = props[prop].toLowerCase();
-                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-                        itemMatches = true;
-                        break;
-                    }
-                }
-
-                if (itemMatches) {
-                    out.push(item);
-                }
-            });
-        } else {
-            // Let the output be the input untouched
-            out = items;
-        }
-
-        return out;
-    }
-});
+}]);

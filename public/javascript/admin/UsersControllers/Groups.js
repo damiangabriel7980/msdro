@@ -61,7 +61,9 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
                         });
                     }
                 });
-            }, "Sterge");
+            },{
+                yes: "Sterge"
+            });
         }
     };
     $scope.editGroup = function (id) {

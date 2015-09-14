@@ -1,0 +1,38 @@
+<div class="col-md-12 noPadding">
+    <div class="col-md-12 noPadding" ng-show="selectedStats.sent!==undefined">
+        Trimise: {{selectedStats.sent}}
+    </div>
+    <div class="col-md-12 noPadding" ng-show="selectedStats.soft_bounces!==undefined">
+        Netrimise: {{selectedStats.soft_bounces}}
+    </div>
+    <div class="col-md-12 noPadding" ng-show="selectedStats.sent_hourly!==undefined">
+        Trimise pe ora: {{selectedStats.sent_hourly}}
+    </div>
+    <div class="col-md-12 noPadding" ng-show="selectedStats.sent_weekly!==undefined">
+        Trimise pe saptamana: {{selectedStats.sent_weekly}}
+    </div>
+    <div class="col-md-12 noPadding" ng-show="selectedStats.sent_monthly!==undefined">
+        Trimise pe luna: {{selectedStats.sent_monthly}}
+    </div>
+    <div class="col-md-12 noPadding" ng-show="selectedStats.sent_total!==undefined">
+        Trimise in total: {{selectedStats.sent_total}}
+    </div>
+    <div class="col-md-12 noPadding" ng-show="selectedStats.hard_bounces!==undefined">
+        Adrese nevalide: {{selectedStats.hard_bounces}}
+    </div>
+    <div class="col-md-12 noPadding" ng-show="selectedStats.opens!==undefined">
+        Vizualizari: {{selectedStats.opens}}
+    </div>
+    <div class="col-md-12 noPadding" ng-show="selectedStats.unique_opens!==undefined">
+        Vizualizari unice: {{selectedStats.unique_opens}}
+    </div>
+    <div class="col-md-12 noPadding" ng-show="selectedStats.clicks!==undefined">
+        Accesari: {{selectedStats.clicks}}
+    </div>
+    <div class="col-md-12 noPadding" ng-show="selectedStats.unique_clicks!==undefined">
+        Accesari unice: {{selectedStats.unique_clicks}}
+    </div>
+    <!-- <div class="col-md-12 noPadding" ng-show="selectedStats.complaints!==undefined">
+        Plangeri: {{selectedStats.complaints}}
+    </div> -->
+</div>

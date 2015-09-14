@@ -1,0 +1,28 @@
+<div class="modal-content newsletterChooseCampaignTemplate">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h3 class="modal-title">Alege template</h3>
+    </div>
+    <div class="modal-body col-md-12 noPadding">
+        <div class="col-md-12" style="margin-bottom: 15px;">
+            <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
+        </div>
+        <div class="form-group col-md-12">
+            <label>Tip:</label>
+            <select class="form-control" ng-model="templateType" ng-options="type as type for type in templateTypes"></select>
+        </div>
+        <div class="col-md-12 noPadding chooseTemplate" ng-if="templatesPreview">
+            <div class="col-md-12">
+                <label>Alege un template:</label>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-12 noPadding template"
+                     ng-repeat="template in templatesPreview" ng-bind-html="trustAsHtml(template.html)"
+                     ng-click="addTemplate(template)" tooltip="{{template.name}}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Anuleaza</button>
+    </div>
+</div>

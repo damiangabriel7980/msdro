@@ -40,7 +40,7 @@ var mergeKeys = function (obj1, obj2){
     return obj3;
 };
 
-module.exports = function(app, env, globals, logger, amazon, sessionSecret, router) {
+module.exports = function(app, env, logger, amazon, sessionSecret, router) {
 
     //=============================================Define variables
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
@@ -99,7 +99,7 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
         //console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
 
         //validate data
-        if(!globals.validateEmail(email)){
+        if(!UtilsModule.validateEmail(email)){
             handleError(res, null, 400, 31);
         }else if(!namePatt.test(name)){
             handleError(res, null, 400, 261);
@@ -154,11 +154,18 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
 
             var phonePatt = UtilsModule.regexes.phone;
 
-            if(activation.type !== "code" && activation.type !== "file"){
+            var proofRequired;
+            if(req.user){
+                proofRequired = isProofRequired(req.user.username);
+            }else{
+                proofRequired = isProofRequired(staywellUser.username);
+            }
+
+            if(proofRequired && activation.type !== "code" && activation.type !== "file"){
                 handleError(res, null, 400, 33);
-            }else if(activation.type === "file" && !(activation.value.extension && activation.value.file)){
+            }else if(proofRequired && activation.type === "file" && !(activation.value.extension && activation.value.file)){
                 handleError(res, null, 400, 34);
-            }else if(activation.type === "code" && !activation.value){
+            }else if(proofRequired && activation.type === "code" && !activation.value){
                 handleError(res, null, 400, 35);
             }else if(!userData.profession){
                 handleError(res, null, 400, 36);
@@ -179,13 +186,17 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
                         //establish groups ids
                         userData.groupsID.push(group._id.toString());
                         //validate activation code / proof
-                        if(activation.type === "code"){
+                        if(!proofRequired){
+                            staywellUser.state = "ACCEPTED";
+							req.staywellUser = mergeKeys(staywellUser, userData);
+                            next();
+                        }else if(activation.type === "code"){
                             //validate code
                             ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
                                 if(err || !code){
                                     handleError(res, err);
                                 }else{
-                                    if(SHA512(activation.value).toString() !== code.value){
+                                    if(!activation.value || (SHA512(activation.value).toString() !== code.value)){
                                         handleError(res, null, 403, 351);
                                     }else{
                                         staywellUser.state = "ACCEPTED";
@@ -196,7 +207,7 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
                             });
                         }else{
                             //validate proof
-                            if(typeof activation.value.extension === "string" && typeof activation.value.file === "string"){
+                            if(activation.value && typeof activation.value.extension === "string" && typeof activation.value.file === "string"){
                                 staywellUser.state = "PENDING";
                                 req.staywellUser = mergeKeys(staywellUser, userData);
                                 req.staywellProof = activation.value;
@@ -212,6 +223,15 @@ module.exports = function(app, env, globals, logger, amazon, sessionSecret, rout
             handleError(res, err);
         }
     };
+
+    function isProofRequired(email){
+        email = email || "";
+        if(email.split("@")[1] === env.user.noProofDomain){
+            return false;
+        }else{
+            return true;
+        }
+    }
 
     var uploadProof = function (req, res, next) {
 

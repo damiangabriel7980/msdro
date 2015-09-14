@@ -170,12 +170,20 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         var data = {
             user: thiz.user || {},
             nonUser: thiz.nonUser || {},
-            county: thiz.county,
-            city: thiz.city
+            county: thiz.selectedCounty,
+            city: thiz.selectedCity
         };
         data = JSON.parse(JSON.stringify(data));
         data.user.temp = temp;
         return data;
+    };
+    var isProofRequired = function(email){
+        email = email || "";
+        if(email.split("@")[1] === NO_PROOF_DOMAIN){
+            return false;
+        }else{
+            return true;
+        }
     };
     var validateCreate = function (formData, callback) {
         if(!formData.user.username){
@@ -196,25 +204,27 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
     };
     var validateUpdate = function (formData, callback) {
         var user = formData.user;
-        var county = formData.county.selected._id;
-        var city = formData.city.selected._id;
+        var county = formData.county._id;
+        var city = formData.city._id;
+
+        var proofRequired = isProofRequired(user.username);
 
         if(!user.profession){
             callback("Va rugam selectati o profesie");
         }else if(!(user.temp.proofType === 'code' || user.temp.proofType === 'file')){
             callback("Trebuie sa incarcati o dovada sau sa introduceti un cod");
-        }else if(user.temp.proofType == "code" && !user.temp.activationCode){
+        }else if(proofRequired && user.temp.proofType == "code" && !user.temp.activationCode){
             callback("Va rugam introduceti codul de activare");
-        }else if(user.temp.proofType == "file" && !user.temp.proofFile){
+        }else if(proofRequired && user.temp.proofType == "file" && !user.temp.proofFile){
             callback("Va rugam incarcati dovada");
         }else if(!user.groupsID){
             callback("Va rugam selectati un grup preferat");
         }else if(!user.address){
             callback("Va rugam introduceti o adresa");
         }else if(!county){
-            callback("Va rugam selectati un judet");
+            callback("Va rugam introduceti un judet");
         }else if(!city){
-            callback("Va rugam selectati un oras");
+            callback("Va rugam introduceti un oras");
         }else if(!formData.nonUser.termsStaywell){
             callback("Trebuie sa acceptati termenii si conditiile Staywell pentru a continua");
         }else if(!formData.nonUser.termsMSD){
@@ -229,24 +239,30 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         }
     };
     var getActivationData = function (formData, callback) {
-        var activation = {
-            type: formData.user.temp.proofType,
-            value: null
-        };
-
-        if(formData.user.temp.proofType === "file"){
-            var extension = formData.user.temp.proofFile.name.split('.').pop();
-            Utils.fileToBase64(formData.user.temp.proofFile, function (b64) {
-                activation.value = {
-                    file: b64,
-                    extension: extension
-                };
-                callback(activation);
-            });
+        var proofRequired = isProofRequired(formData.user.username);
+        if(!proofRequired){
+            callback();
         }else{
-            activation.value = formData.user.temp.activationCode;
-            callback(activation);
+            var activation = {
+                type: formData.user.temp.proofType,
+                value: null
+            };
+
+            if(formData.user.temp.proofType === "file"){
+                var extension = formData.user.temp.proofFile.name.split('.').pop();
+                Utils.fileToBase64(formData.user.temp.proofFile, function (b64) {
+                    activation.value = {
+                        file: b64,
+                        extension: extension
+                    };
+                    callback(activation);
+                });
+            }else{
+                activation.value = formData.user.temp.activationCode;
+                callback(activation);
+            }
         }
+        
     };
     var getProHref = function () {
         var href = "pro";
@@ -309,11 +325,14 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
                     getActivationData(formData, function (activationData) {
                         completeProfile.save({user: formData.user, activation: activationData}).$promise.then(function (resp) {
                             callback(null, Success.getObject(resp));
+                        }).catch(function (resp) {
+                            callback(Error.getMessage(resp));
                         });
                     });
                 }
             });
         },
-        getProHref: getProHref
+        getProHref: getProHref,
+        isProofRequired: isProofRequired
     }
 }]);

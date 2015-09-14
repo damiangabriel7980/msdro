@@ -64,7 +64,9 @@ controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ng
             }).catch(function () {
                 console.log("Eroare la stergere");
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     }
 
 }]);

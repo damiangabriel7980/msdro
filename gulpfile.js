@@ -15,7 +15,9 @@ var gulp = require('gulp'),
     mysql = require('mysql'),
     async = require('async'),
     fs = require('fs'),
-    readdirR = require('fs-readdir-recursive');
+    readdirR = require('fs-readdir-recursive'),
+    Q = require('q'),
+    spawn = require('child_process').spawn;
 
 //// sass task
 //gulp.task('sass', function () {
@@ -124,7 +126,7 @@ gulp.task('run', function () {
         script: 'server.js',
         ext: 'js html css',
         env: {
-            'NODE_ENV': 'development',
+            'NODE_ENV': 'qa',
             'AWS_ACCESS_KEY_ID': 'AKIAIU26AHNKP7VDKG6A',
             'AWS_SECRET_ACCESS_KEY': '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'
         }
@@ -291,7 +293,7 @@ gulp.task('toObjectId', function () {
 
 gulp.task("tpaCleanup", function () {
 
-    var dbAddress = "mongodb://msddev:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/MSDdev";
+    var dbAddress = "mongodb://localhost:27017/msd";
 
     var mongoose = require('mongoose');
     mongoose.connect(dbAddress);
@@ -347,3 +349,160 @@ gulp.task("tpaCleanup", function () {
     });
 
 });
+
+gulp.task("countyDoubleBind", function () {
+
+    var dbAddress = "mongodb://localhost:27017/msd";
+
+    var mongoose = require('mongoose');
+    mongoose.connect(dbAddress);
+    console.log("connected");
+
+    var County = require('./app/models/counties');
+    var City = require('./app/models/cities');
+
+    County.find({}, function (err, counties) {
+        if(err){
+            console.log(err);
+        }else{
+            async.each(counties, eachCounty, function (err) {
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log("done");
+                }
+            });
+        }
+    });
+
+    function eachCounty(county, callbackCounty){
+        async.each(county.citiesID, function (city_id, callback) {
+            City.update({_id: city_id}, {$set: {county: county._id}}, function (err, wres) {
+                callback(err);
+            });
+        }, function (err) {
+            callbackCounty(err);
+        });
+    }
+
+});
+
+function spawnCommand(command, args) {
+    var deferred = Q.defer();
+    var cmd = spawn(command, args);
+    cmd.stdout.on('data', function (data) {
+        deferred.notify(data);
+    });
+
+    cmd.stderr.on('data', function (err) {
+        console.log(err.toString());
+    });
+
+    cmd.on('close', function (code) {
+        if(code === 0) {
+            deferred.resolve(command+" complete");
+        }else{
+            deferred.reject(command+" terminated with code "+code);
+        }
+    });
+
+    return deferred.promise;
+}
+
+gulp.task("populateDB", function() {
+    var workdirRel = "dbPopulate";
+    var workdirAbs;
+    spawnCommand("pwd", []).then(
+        function(success){
+            console.log(success);
+        },
+        function(err){
+            console.log(err);
+        },
+        function(data){
+            if(data){
+                workdirAbs = data.toString().replace(/\n/g,"") + "/" + workdirRel;
+                console.log("workdir:",workdirAbs);
+                dumpDB(workdirAbs).then(
+                    function() {
+                        restoreDB(workdirAbs).then(
+                            function() {
+                                clearTracesAfterPopulateDB(workdirAbs).then(
+                                    function(success){
+                                        console.log("DONE");
+                                    },
+                                    function(err) {
+                                        console.log(err);
+                                    }
+                                );
+                            }
+                        );
+                    }
+                );
+            }
+        }
+    );
+});
+
+function dumpDB(workdirAbs) {
+    var deferred = Q.defer();
+    //make a dump of the QA database
+    spawnCommand("mongodump", ["-h","10.200.0.213:27017","-u","msddev","-p","PWj4zOt_qX9oRRDH8cwiUqadb","-d","MSDdev","-o",workdirAbs]).then(
+        function(success){
+            console.log(success);
+            deferred.resolve();
+        },
+        function(err){
+            console.log(err);
+            deferred.reject();
+        },
+        function(data){
+            if(data){
+                console.log(data.toString());
+            }
+        }
+    )
+    return deferred.promise;
+}
+
+function restoreDB(workdirAbs) {
+    var deferred = Q.defer();
+    //make a dump of the QA database
+    spawnCommand("mongorestore", ["-h","localhost:27017","-d","msd","--drop","--dir="+workdirAbs+"/MSDdev"]).then(
+        function(success){
+            console.log(success);
+            deferred.resolve();
+        },
+        function(err){
+            console.log(err);
+            deferred.reject();
+        },
+        function(data){
+            if(data){
+                console.log(data.toString());
+            }
+        }
+    )
+    return deferred.promise;
+}
+
+function clearTracesAfterPopulateDB (workdirAbs) {
+    var deferred = Q.defer();
+    var paths = readdirR(workdirAbs);
+    //console.log(paths);
+    //remove all files
+    var toRemove;
+    for (var i=0; i<paths.length; i++){
+        toRemove = workdirAbs + "/" + paths[i];
+        fs.unlinkSync(toRemove);
+        console.log("Removed file: ",toRemove);
+    }
+    //remove folders
+    toRemove = workdirAbs+"/MSDdev";
+    fs.rmdirSync(toRemove);
+    console.log("Removed folder: ",toRemove);
+    fs.rmdirSync(workdirAbs);
+    console.log("Removed folder: ",workdirAbs);
+    deferred.resolve();
+    return deferred.promise;
+}

@@ -38,7 +38,9 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
             DPOCService.devices.delete({id: id}).$promise.then(function () {
                 $state.reload();
             });
-        }, "Sterge");
+        },{
+            yes:"Sterge"
+        });
     };
 
     var parseCSV = function (contents) {

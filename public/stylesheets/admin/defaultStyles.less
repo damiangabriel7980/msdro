@@ -27,6 +27,7 @@ a{
 .newAccountsTabs{
   width: 100%;
   float: left;
+  border-bottom: 1px solid darkgray;
   .tab{
     cursor: pointer;
     float: left;
@@ -36,9 +37,17 @@ a{
       border-left: 1px solid darkgray;
       border-top: 1px solid darkgray;
       border-right: 1px solid darkgray;
-      //border-bottom: none;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
+      position: relative;
+      &:after{
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        border: 1px solid white;
+      }
     }
   }
 }
@@ -125,4 +134,84 @@ a{
 }
 .pointer{
   cursor: pointer;
+}
+
+//============================================================================================ NEWSLETTER
+.newsletterDashboard{
+  .overallStats{
+    padding: 0;
+    margin-bottom: 15px;
+  }
+  .tabViewPanel{
+    margin-top: 15px;
+  }
+}
+.newsletterEditTemplate{
+  .ace_editor{
+    height: 300px;
+    border-radius: 5px;
+    border: 1px solid #eee;
+    margin-bottom: 15px;
+  }
+  .variables{
+    padding: 0 0 15px 0;
+  }
+}
+.newsletterEditCampaign{
+  .manageTemplates{
+    margin-bottom: 15px;
+    .template{
+      padding: 0;
+      border: 1px solid #eee;
+      position: relative;
+      min-height: 33px;
+      .content{
+        padding: 0;
+      }
+      .actions{
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        visibility: hidden;
+        display: none;
+        height: 30px;
+      }
+      &:hover{
+        border: 1px solid #777;
+        .actions{
+          visibility: visible;
+          display: block;
+        }
+      }
+    }
+  }
+}
+.newsletterChooseCampaignTemplate{
+  .template{
+    border: 1px solid #eee;
+    margin-bottom: 15px;
+    &.welded{
+      margin-bottom: 0;
+    }
+    cursor: pointer;
+    position: relative;
+    &:after{
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+    }
+    &:hover{
+      border: 1px solid #777;
+    }
+  }
+}
+.newsletterPopulateTemplate{
+  .templatePreview{
+    padding: 0;
+    border:1px solid #eee;
+    margin-bottom: 15px;
+  }
 }

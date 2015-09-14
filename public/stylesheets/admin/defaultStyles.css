@@ -21,6 +21,7 @@ a {
 .newAccountsTabs {
   width: 100%;
   float: left;
+  border-bottom: 1px solid darkgray;
 }
 .newAccountsTabs .tab {
   cursor: pointer;
@@ -33,6 +34,15 @@ a {
   border-right: 1px solid darkgray;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  position: relative;
+}
+.newAccountsTabs .tab.active:after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  border: 1px solid white;
 }
 .specialProductsMenu .menuBlock div {
   float: left;
@@ -113,4 +123,72 @@ a {
 }
 .pointer {
   cursor: pointer;
+}
+.newsletterDashboard .overallStats {
+  padding: 0;
+  margin-bottom: 15px;
+}
+.newsletterDashboard .tabViewPanel {
+  margin-top: 15px;
+}
+.newsletterEditTemplate .ace_editor {
+  height: 300px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  margin-bottom: 15px;
+}
+.newsletterEditTemplate .variables {
+  padding: 0 0 15px 0;
+}
+.newsletterEditCampaign .manageTemplates {
+  margin-bottom: 15px;
+}
+.newsletterEditCampaign .manageTemplates .template {
+  padding: 0;
+  border: 1px solid #eee;
+  position: relative;
+  min-height: 33px;
+}
+.newsletterEditCampaign .manageTemplates .template .content {
+  padding: 0;
+}
+.newsletterEditCampaign .manageTemplates .template .actions {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  visibility: hidden;
+  display: none;
+  height: 30px;
+}
+.newsletterEditCampaign .manageTemplates .template:hover {
+  border: 1px solid #777;
+}
+.newsletterEditCampaign .manageTemplates .template:hover .actions {
+  visibility: visible;
+  display: block;
+}
+.newsletterChooseCampaignTemplate .template {
+  border: 1px solid #eee;
+  margin-bottom: 15px;
+  cursor: pointer;
+  position: relative;
+}
+.newsletterChooseCampaignTemplate .template.welded {
+  margin-bottom: 0;
+}
+.newsletterChooseCampaignTemplate .template:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
+.newsletterChooseCampaignTemplate .template:hover {
+  border: 1px solid #777;
+}
+.newsletterPopulateTemplate .templatePreview {
+  padding: 0;
+  border: 1px solid #eee;
+  margin-bottom: 15px;
 }

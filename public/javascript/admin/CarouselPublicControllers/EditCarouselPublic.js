@@ -3,8 +3,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
     //init variables
     $scope.toEdit = {};
 
-    $scope.content = {};
-    $scope.content.selected = {};
+    $scope.selectedContent = {};
 
     $scope.linkNames = ["content", "url", null];
 
@@ -15,7 +14,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         var image = Success.getObject(resp);
         if(image.links){
             if(image.links.content){
-                $scope.content.selected = {
+                $scope.selectedContent = {
                     _id: image.links.content._id,
                     title: image.links.content.title
                 };
@@ -35,7 +34,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         var image = this.toEdit;
         //console.log(image);
         if(!image.links) image.links = {};
-        image.links.content = this.content.selected._id;
+        image.links.content = this.selectedContent._id;
         $scope.toEdit.last_updated = new Date();
         CarouselPublicService.carouselPublic.update({id: image._id}, image).$promise.then(function (resp) {
             $scope.resetAlert(Success.getMessage(resp), "success");
@@ -94,7 +93,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
     $scope.resetAlert();
 
     $scope.selectContentType = function (type) {
-        $scope.content.selected = {};
+        $scope.selectedContent = {};
         getContent(type);
     };
 
@@ -105,11 +104,10 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
                 var poz = findInContent($scope.toEdit.links.content._id);
                 if(poz > -1){
                     if($scope.allContent[poz].type === type){
-                        $scope.content.selected = {
+                        $scope.selectedContent = {
                             _id: $scope.allContent[poz]._id,
                             title: $scope.allContent[poz].title
                         };
-                        console.log($scope.content.selected);
                     }
                 }
             }
@@ -156,34 +154,4 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         $state.reload();
     }
 
-}]).filter('propsFilter', function() {
-    //used for select2
-    return function(items, props) {
-        var out = [];
-
-        if (angular.isArray(items)) {
-            items.forEach(function(item) {
-                var itemMatches = false;
-
-                var keys = Object.keys(props);
-                for (var i = 0; i < keys.length; i++) {
-                    var prop = keys[i];
-                    var text = props[prop].toLowerCase();
-                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-                        itemMatches = true;
-                        break;
-                    }
-                }
-
-                if (itemMatches) {
-                    out.push(item);
-                }
-            });
-        } else {
-            // Let the output be the input untouched
-            out = items;
-        }
-
-        return out;
-    }
-});
+}]);

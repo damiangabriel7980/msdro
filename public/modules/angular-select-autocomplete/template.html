@@ -1,0 +1,12 @@
+<div class="selectAutocomplete">
+    <div class="input">
+        <input type="text" class="input form-control" ng-focus="showSelect()" ng-blur="hideSelect()" ng-model="inputText" ng-disabled="ngDisabled">
+    </div>
+    <div class="optionsWrapper">
+        <div class="options" ng-show="showOptions && inputText && (filteredOptions && filteredOptions[0][titleAttr].toLowerCase()!==inputText.toLowerCase())">
+            <div class="option" ng-class="{'highlight':highlighted===$index}" ng-repeat="option in filteredOptions track by $index" ng-click="selectOption(option, true, true)">
+                {{option[titleAttr]}}
+            </div>
+        </div>
+    </div>
+</div>

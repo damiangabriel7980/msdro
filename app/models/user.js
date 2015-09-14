@@ -4,6 +4,7 @@ var deepPopulate = require('mongoose-deep-populate');
 var crypto   = require('crypto-js/sha256');
 var Schema			= mongoose.Schema;
 var mongoDbIndex = require('../modules/mongooseIndex/index');
+var UserService = require('../modules/user');
 
 // define the schema for our user model
 var userSchema = new Schema({
@@ -49,6 +50,22 @@ var userSchema = new Schema({
 userSchema.plugin(deepPopulate, {
     whitelist: ['profession', 'groupsID.profession']
 });
+
+userSchema.pre('save', function (next) {
+    //isNew is a predefined property present in mogoose's pre save hook
+    //we can assign it to our own wasNew property so that we can verify in the post save hook
+    //whether the saved document is newly created or just updated
+    this.wasNew = this.isNew;
+    next();
+});
+
+userSchema.post('save', function (doc) {
+    //if the document is newly created do something
+    if(this.wasNew){
+        UserService.accountJustCreated(this.username);
+    }
+});
+
 
 // generating a hash
 userSchema.methods.generateHash = function(password) {

@@ -80,7 +80,9 @@ controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce',
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });
-        }, "Sterge");
+        },{
+            yes: "Sterge"
+        });
     };
 
     $scope.renderHtml = function (htmlCode) {
