@@ -191,6 +191,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/newsletter/templates/templates.html',
             controller: 'NewsletterTemplates'
         })
+        .state('gridmanager', {
+            url: '/gridmanager',
+            templateUrl: '/partials/admin/gridmanager/index.html',
+            controller: 'GridManager'
+        })
         .state('elearning', {
             abstract: true,
             url: '/elearning',
