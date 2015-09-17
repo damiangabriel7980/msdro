@@ -5,7 +5,7 @@ var mongoose		= require('mongoose');
 var Schema			= mongoose.Schema;
 
 var answersSchema		= new Schema({
-    ratio : Number,
+    ratio : {type: Number, select: false},
     text : String
 });
 
