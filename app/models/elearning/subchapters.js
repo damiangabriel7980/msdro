@@ -1,0 +1,26 @@
+/**
+ * Created by Administrator on 16/09/15.
+ */
+/**
+ * Created by Administrator on 16/09/15.
+ */
+var mongoose		= require('mongoose');
+var Schema			= mongoose.Schema;
+var deepPopulate = require('mongoose-deep-populate');
+
+var Config = require('../../../config/environment.js'),
+    my_config = new Config();
+
+var SubChapterSchema		= new Schema({
+    title: String,
+    last_updated: Date,
+    date_created: Date,
+    description: String,
+    listSlides : [{type: Schema.Types.ObjectId, ref: 'elearning_slides'}],
+    duration: Number,
+    order: Number
+});
+
+SubChapterSchema.plugin(deepPopulate, {});
+
+module.exports = mongoose.model('elearning_subchapters', SubChapterSchema, 'elearning_subchapters');
