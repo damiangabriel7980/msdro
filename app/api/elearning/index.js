@@ -3,7 +3,7 @@ var Chapters = require('../../models/elearning/chapters');
 var Subchapters = require('../../models/elearning/subchapters');
 var Slides = require('../../models/elearning/slides');
 var Questions = require('../../models/elearning/questions');
-var Answers = require('../../models/elearning/questions');
+var Answers = require('../../models/elearning/answers');
 
 module.exports = function(env, logger, amazon, router){
 
@@ -366,4 +366,29 @@ module.exports = function(env, logger, amazon, router){
 	            handleError(res, null, 400, 6);
 	        }
 	    });
+
+	router.route('/elearning/slides')
+		.get(function(req, res){
+			if(!req.query.id){
+				handleError(res, false, 400, 6);
+			}else{
+				Slides.findOne({_id: req.query.id}).exec(function(err, slide){
+					if(err){
+						handleError(res, err);
+					}else if(!slide){
+						handleError(res, false, 404, 1);
+					}else if(slide.type === "test"){
+							Slides.deepPopulate(slide, "questions.answers", function(err, slide){
+								if(err){
+									handleError(res, err);
+								}else{
+									handleSuccess(res, slide);
+								}
+							});
+					}else{
+						handleSuccess(res, slide);
+					}
+				});
+			}
+		});
 }
