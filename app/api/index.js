@@ -1,56 +1,56 @@
-var Content     = require('./models/articles');
-var Products    = require('./models/products');
-var Therapeutic_Area = require('./models/therapeutic_areas');
-var UserGroup = require('./models/userGroup');
-var Events = require('./models/events');
-var Counties = require('./models/counties');
-var Cities = require('./models/cities');
-var Multimedia = require('./models/multimedia');
-var User = require('./models/user');
-var Job = require('./models/jobs');
-var Roles=require('./models/roles');
-var PublicContent = require('./models/publicContent');
-var PublicCategories = require('./models/publicCategories');
-var PublicCarousel = require('./models/publicCarousel');
-var Carousel=require('./models/carousel_Medic');
-var Conferences = require('./models/conferences');
-var Talks = require('./models/talks');
-var Speakers = require('./models/speakers');
-var Rooms = require('./models/rooms');
-var Topics = require('./models/qa_topics');
-var AnswerGivers = require('./models/qa_answerGivers');
-var Threads = require('./models/qa_threads');
-var qaMessages = require('./models/qa_messages');
-var Professions = require('./models/professions');
-var Presentations =require('./models/presentations');
-var CM_templates =require('./models/CM_templates');
-var ActivationCodes =require('./models/activationCodes');
-var DPOC_Devices = require('./models/DPOC_Devices');
-var Parameters = require('./models/parameters');
-var JanuviaUsers = require('./models/januvia/januvia_users');
+var Content     = require('../models/articles');
+var Products    = require('../models/products');
+var Therapeutic_Area = require('../models/therapeutic_areas');
+var UserGroup = require('../models/userGroup');
+var Events = require('../models/events');
+var Counties = require('../models/counties');
+var Cities = require('../models/cities');
+var Multimedia = require('../models/multimedia');
+var User = require('../models/user');
+var Job = require('../models/jobs');
+var Roles=require('../models/roles');
+var PublicContent = require('../models/publicContent');
+var PublicCategories = require('../models/publicCategories');
+var PublicCarousel = require('../models/publicCarousel');
+var Carousel=require('../models/carousel_Medic');
+var Conferences = require('../models/conferences');
+var Talks = require('../models/talks');
+var Speakers = require('../models/speakers');
+var Rooms = require('../models/rooms');
+var Topics = require('../models/qa_topics');
+var AnswerGivers = require('../models/qa_answerGivers');
+var Threads = require('../models/qa_threads');
+var qaMessages = require('../models/qa_messages');
+var Professions = require('../models/professions');
+var Presentations =require('../models/presentations');
+var CM_templates =require('../models/CM_templates');
+var ActivationCodes =require('../models/activationCodes');
+var DPOC_Devices = require('../models/DPOC_Devices');
+var Parameters = require('../models/parameters');
+var JanuviaUsers = require('../models/januvia/januvia_users');
 var _ = require('underscore');
 
 //E-LEARNING
-var Courses = require('./models/elearning/courses');
-var Chapters = require('./models/elearning/chapters');
-var Subchapters = require('./models/elearning/subchapters');
-var Slides = require('./models/elearning/slides');
-var Questions = require('./models/elearning/questions');
-var Answers = require('./models/elearning/questions');
+var Courses = require('../models/elearning/courses');
+var Chapters = require('../models/elearning/chapters');
+var Subchapters = require('../models/elearning/subchapters');
+var Slides = require('../models/elearning/slides');
+var Questions = require('../models/elearning/questions');
+var Answers = require('../models/elearning/questions');
 
 //modules
-var UserModule = require('./modules/user');
-var MailerModule = require('./modules/mailer');
-var UtilsModule = require('./modules/utils');
-var SessionStorage = require('./modules/sessionStorage');
-var ConferencesModule = require('./modules/Conferences');
+var UserModule = require('../modules/user');
+var MailerModule = require('../modules/mailer');
+var UtilsModule = require('../modules/utils');
+var SessionStorage = require('../modules/sessionStorage');
+var ConferencesModule = require('../modules/Conferences');
 
 //special Products
-var specialProduct = require('./models/specialProduct');
-var specialProductMenu = require('./models/specialProduct_Menu');
-var specialProductGlossary = require('./models/specialProduct_glossary');
-var specialProductFiles = require('./models/specialProduct_files');
-var specialApps = require('./models/userGroupApplications');
+var specialProduct = require('../models/specialProduct');
+var specialProductMenu = require('../models/specialProduct_Menu');
+var specialProductGlossary = require('../models/specialProduct_glossary');
+var specialProductFiles = require('../models/specialProduct_files');
+var specialApps = require('../models/userGroupApplications');
 
 var SHA256   = require('crypto-js/sha256');
 var SHA512   = require('crypto-js/sha512');
@@ -116,10 +116,10 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     //============================================= Define injection dependent modules
-    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
-    var handleError = require('./modules/responseHandler/error.js')(logger);
-    var Auth = require('./modules/auth')(logger, sessionSecret);
-    var NewsletterModule = require('./modules/newsletter')(logger);
+    var handleSuccess = require('../modules/responseHandler/success.js')(logger);
+    var handleError = require('../modules/responseHandler/error.js')(logger);
+    var Auth = require('../modules/auth')(logger, sessionSecret);
+    var NewsletterModule = require('../modules/newsletter')(logger);
 
 
     //only logged in users can access a route
@@ -2938,10 +2938,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     //========================================================= NEWSLETTER
 
     var Newsletter = {
-        distributionLists: require('./models/newsletter/distribution_lists'),
-        campaigns: require('./models/newsletter/campaigns'),
-        templates: require('./models/newsletter/templates'),
-        unsubscribers: require('./models/newsletter/unsubscribers')
+        distributionLists: require('../models/newsletter/distribution_lists'),
+        campaigns: require('../models/newsletter/campaigns'),
+        templates: require('../models/newsletter/templates'),
+        unsubscribers: require('../models/newsletter/unsubscribers')
     };
 
     router.route('/admin/newsletter/distribution_lists')
