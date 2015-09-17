@@ -4,7 +4,7 @@ var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var User = require('./models/user');
 
-var courses = require('./models/courses');
+var courses = require('./models/elearning/courses');
 
 module.exports = function(app, logger, tokenSecret, router) {
 
@@ -54,7 +54,7 @@ module.exports = function(app, logger, tokenSecret, router) {
     };
 
 
-    //=================================================================================================================== ROUTES
+    //=================================================================================================================== ROUTES FOR E-LEARNING
     router.route('/courses')
         .get(function (req, res) {
             if(req.query.id){

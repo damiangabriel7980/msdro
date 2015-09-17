@@ -192,3 +192,126 @@ a {
   border: 1px solid #eee;
   margin-bottom: 15px;
 }
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+.main-content {
+  position: absolute;
+  width: 100%;
+  top: 40px;
+  min-height: 1000px;
+  bottom: 0;
+}
+.courses-tree {
+  width: 400px;
+  border-right: 1px solid gray;
+  box-shadow: 3px 0 10px #888888;
+  height: 100%;
+  padding: 10px;
+  overflow-y: scroll;
+}
+.courses-tree .courses-panel {
+  padding: 10px 0 20px 0;
+  width: 100%;
+}
+.courses-tree .courses-panel .add {
+  color: #3c763d;
+}
+.courses-tree .courses-panel .remove {
+  color: #d9534f;
+}
+.courses-tree.firstCourse {
+  border-radius: 5px 5px 0 0;
+}
+.courses-tree.lastCourse {
+  border-radius: 0 0 5px 5px;
+}
+.editor {
+  position: absolute;
+  top: 0;
+  left: 400px;
+  padding: 20px;
+  height: 100%;
+  overflow: scroll;
+}
+.edit-content {
+  width: 600px;
+}
+.edit-content .panel-heading {
+  font-weight: bold;
+}
+.edit-content .panel-heading h4 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.edit-content .as-sortable-item-handle {
+  float: left;
+  width: 440px;
+}
+.edit-content .as-sortable-placeholder {
+  border: 1px dashed darkgrey;
+  box-sizing: border-box;
+  background-color: #ddd;
+  list-style: none;
+}
+.edit-content .as-sortable-drag {
+  opacity: .8;
+  margin-top: -40px;
+  margin-left: -400px;
+}
+.edit-content .edit-course {
+  margin-right: 0px;
+  cursor: pointer;
+  float: right;
+  width: 1px;
+  overflow: hidden;
+  -webkit-transition: width .5s;
+  transition: width .5s;
+}
+.edit-content .edit-course .content {
+  width: 50px;
+}
+.edit-content .edit-course:hover {
+  width: 50px;
+  color: #34aadc;
+}
+.edit-content .delete-course {
+  margin-right: 10px;
+  cursor: pointer;
+  float: right;
+  width: 1px;
+  overflow: hidden;
+  -webkit-transition: width .5s;
+  transition: width .5s;
+}
+.edit-content .delete-course .content {
+  width: 60px;
+}
+.edit-content .delete-course:hover {
+  width: 60px;
+  color: #ff2d55;
+}
+.edit-content .popover {
+  max-width: 350px;
+}
+.edit-content .editPopover {
+  width: 290px;
+}
+.editLink {
+  position: relative;
+  float: left;
+  left: 5px;
+  z-index: 200;
+  cursor: pointer;
+  bottom: 20px;
+}
+.editLinkSlide {
+  position: relative;
+  float: left;
+  left: 5px;
+  z-index: 200;
+  cursor: pointer;
+}

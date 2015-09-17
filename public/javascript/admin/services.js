@@ -219,6 +219,35 @@ services.factory('SpecialAppsService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('ElearningService', ['$resource', function($resource){
+    return {
+        courses: $resource('api/admin/courses', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        chapters: $resource('api/admin/chapters', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        subchapters: $resource('api/admin/subchapters', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        slides: $resource('api/admin/slides', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        })
+    }
+}]);
+
 services.factory('SystemService', ['$resource', function($resource){
     return {
         codes: $resource('api/admin/system/activationCodes/codes', {}, {

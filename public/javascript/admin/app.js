@@ -15,7 +15,9 @@ var app = angular.module('app',
         'adminEmailsList',
         'adminWidgetStats',
         'ui.ace',
-        'ngCsv'
+        'ngCsv',
+        'ngAnimate',
+        'vAccordion'
     ]);
 
 app.config(['$locationProvider', function($location) {
@@ -195,6 +197,16 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             abstract: true,
             url: '/elearning',
             templateUrl: '/partials/admin/elearning/root.html'
+        })
+        .state('elearning.courses',{
+            url: '/courses',
+            templateUrl: 'partials/admin/elearning/courses/root.html',
+            controller: 'Courses'
+        })
+        .state('elearning.courses.addCourse',{
+            url: '/addCourse',
+            templateUrl: 'partials/admin/elearning/courses/courseAdd.ejs',
+            controller: 'AddCourse'
         })
         .state('elearning.multimedia',{
             url: '/multimedia',

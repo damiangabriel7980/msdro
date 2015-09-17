@@ -1,0 +1,86 @@
+    <div class="main-content">
+
+        <div class="courses-tree col-xs-3">
+
+            <div class="courses-panel clearfix col-xs-12">
+                <div class="col-xs-6">
+                    <button type="button" class="btn btn-default pull-left" ui-sref="elearning.courses.addCourse">
+                        <span class="glyphicon glyphicon-plus-sign add"></span>
+                        &nbsp;Add Course
+                    </button>
+                </div>
+                <div class="col-xs-6">
+                    <button type="button" class="btn btn-default pull-left">
+                        <span class="glyphicon glyphicon-plus-sign add"></span>
+                        &nbsp;Add Chapter
+                    </button>
+                </div>
+            </div>
+            <div class="courses-panel clearfix col-xs-12">
+                <div class="col-xs-6">
+                <button type="button" class="btn btn-default pull-left">
+                    <span class="glyphicon glyphicon-plus-sign add"></span>
+                    &nbsp;Add SubChapter
+                </button>
+                </div>
+                <div class="col-xs-6">
+                <button type="button" class="btn btn-default pull-left">
+                    <span class="glyphicon glyphicon-plus-sign add"></span>
+                    &nbsp;Add Slide
+                </button>
+                </div>
+            </div>
+            <v-accordion class="vAccordion--default col-xs-12">
+
+                <v-pane ng-repeat="course in courses track by $index | orderBy:'-orderNumber'">
+                    <v-pane-header>
+                        {{ course.name }}
+                    </v-pane-header>
+
+                    <v-pane-content>
+                        <div class="editLink col-xs-6" ng-click="openEdit($index, $parent)"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit course&nbsp;</div>
+                        <div class="editLink col-xs-6" ng-click="deleteChapter($index, $parent)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete course&nbsp;</div>
+                        <v-accordion>
+                            <v-pane ng-repeat="chapter in course.content.chapters track by $index | orderBy:'-orderNumber'">
+                                <v-pane-header>
+                                    {{ chapter.title }}
+                                </v-pane-header>
+                                <v-pane-content>
+                                    <div class="editLink col-xs-6" ng-click="openEdit($index, $parent)"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit chapter&nbsp;</div>
+                                    <div class="editLink col-xs-6" ng-click="deleteChapter($index, $parent)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete chapter&nbsp;</div>
+                                    <v-accordion>
+                                        <v-pane ng-repeat="subChapter in chapter.subChapters track by $index | orderBy:'-orderNumber'">
+                                            <v-pane-header>
+                                                {{ subChapter.title }}
+                                            </v-pane-header>
+                                            <v-pane-content>
+                                                <div class="editLink col-xs-6" ng-click="openEdit($index, $parent)"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit sub-chapter&nbsp;</div>
+                                                <div class="editLink col-xs-6" ng-click="deleteChapter($index, $parent)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete sub-chapter&nbsp;</div>
+                                                <v-accordion>
+                                                    <v-pane ng-repeat="slide in subChapter.slides track by $index | orderBy:'-orderNumber'">
+                                                        <v-pane-header>
+                                                            {{ slide.title }}
+                                                        </v-pane-header>
+                                                        <v-pane-content>
+                                                            <div class="editLinkSlide col-xs-6" ng-click="openEdit($index, $parent)"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit slide&nbsp;</div>
+                                                            <div class="editLinkSlide col-xs-6" ng-click="deleteChapter($index, $parent)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete slide&nbsp;</div>
+                                                        </v-pane-content>
+                                                    </v-pane>
+                                                </v-accordion>
+                                            </v-pane-content>
+                                        </v-pane>
+                                    </v-accordion>
+                                </v-pane-content>
+                            </v-pane>
+                        </v-accordion>
+                    </v-pane-content>
+                </v-pane>
+            </v-accordion>
+        </div>
+
+        <div class="editor col-xs-9">
+            <div ui-view></div>
+        </div>
+
+
+    </div>

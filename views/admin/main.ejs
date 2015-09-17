@@ -107,6 +107,16 @@
     <script src="javascript/admin/TherapeuticAreasControllers/AddTherapeuticAreas.js"></script>
     <script src="javascript/admin/TherapeuticAreasControllers/EditTherapeuticAreas.js"></script>
 
+        <script src="javascript/admin/ElearningControllers/Courses.js"></script>
+        <script src="javascript/admin/ElearningControllers/AddChapter.js"></script>
+        <script src="javascript/admin/ElearningControllers/AddSubChapter.js"></script>
+        <script src="javascript/admin/ElearningControllers/AddCourse.js"></script>
+        <script src="javascript/admin/ElearningControllers/AddSlide.js"></script>
+        <script src="javascript/admin/ElearningControllers/EditChapter.js"></script>
+        <script src="javascript/admin/ElearningControllers/EditCourse.js"></script>
+        <script src="javascript/admin/ElearningControllers/EditSlide.js"></script>
+        <script src="javascript/admin/ElearningControllers/EditSubChapter.js"></script>
+
     <script src="javascript/admin/MultimediaControllers/Multimedia.js"></script>
     <script src="javascript/admin/MultimediaControllers/AddMultimedia.js"></script>
     <script src="javascript/admin/MultimediaControllers/EditMultimedia.js"></script>
@@ -154,7 +164,9 @@
     <script src="modules/admin-emails-list/directive.js"></script>
     <link rel="stylesheet" href="modules/admin-emails-list/styles.css">
     <script src="modules/admin-widget-stats/directive.js"></script>
-
+        <link href="components/v-accordion/dist/v-accordion.css" rel="stylesheet" />
+        <script src="components/angular-animate/angular-animate.js"></script>
+        <script src="components/v-accordion/dist/v-accordion.js"></script>
     <!--ui-ace-->
     <script type="text/javascript" src="components/ace-builds/src-min-noconflict/ace.js"></script>
     <script type="text/javascript" src="components/angular-ui-ace/ui-ace.js"></script>
@@ -232,6 +244,7 @@
                     <a class="dropdown-toggle" data-toggle="dropdown"> Elearning <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">
                         <li ui-sref="elearning.multimedia"><a > Multimedia </a></li>
+                            <li ui-sref="elearning.courses"><a > Cursuri & Teste </a></li>
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('ariiTerapeutice')}"><a ui-sref="ariiTerapeutice"> Arii terapeutice </a></li>
