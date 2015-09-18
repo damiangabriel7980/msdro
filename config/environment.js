@@ -29,6 +29,10 @@ module.exports = function(){
                 },
                 user: {
                     noProofDomain: "mailinator.com"
+                },
+                dev_mode: {
+                    isEnabled: false,
+                    loggedInWith: "qqq2@mailinator.com"
                 }
             };
 

@@ -6,7 +6,8 @@ var Schema			= mongoose.Schema;
 
 var questionsSchema		= new Schema({
     order : Number,
-    text : String
+    text : String,
+    answers: [{type: Schema.Types.ObjectId, ref: 'elearning_answers'}]
 });
 
 module.exports = mongoose.model('elearning_questions', questionsSchema,'elearning_questions');

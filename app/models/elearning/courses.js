@@ -20,7 +20,32 @@ var CourseSchema		= new Schema({
 });
 
 CourseSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
-CourseSchema.plugin(deepPopulate, {});
+CourseSchema.plugin(deepPopulate, {
+	whitelist: ["listChapters.listSubchapters.listSlides"],
+	populate: {
+		"listChapters": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        },
+        "listChapters.listSubchapters": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        },
+        "listChapters.listSlides": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        }
+	}
+});
 module.exports = mongoose.model('elearning_courses', CourseSchema, 'elearning_courses');
 
 var Course = mongoose.model('courses', CourseSchema,'courses');

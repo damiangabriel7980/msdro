@@ -14,7 +14,7 @@ var ChapterSchema		= new Schema({
     date_created: Date,
     description: String,
     order: Number,
-    listSubChapters : [{type: Schema.Types.ObjectId, ref: 'elearning_subchapters'}],
+    listSubchapters : [{type: Schema.Types.ObjectId, ref: 'elearning_subchapters'}],
     duration: Number
 });
 

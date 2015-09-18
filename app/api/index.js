@@ -1,56 +1,48 @@
-var Content     = require('./models/articles');
-var Products    = require('./models/products');
-var Therapeutic_Area = require('./models/therapeutic_areas');
-var UserGroup = require('./models/userGroup');
-var Events = require('./models/events');
-var Counties = require('./models/counties');
-var Cities = require('./models/cities');
-var Multimedia = require('./models/multimedia');
-var User = require('./models/user');
-var Job = require('./models/jobs');
-var Roles=require('./models/roles');
-var PublicContent = require('./models/publicContent');
-var PublicCategories = require('./models/publicCategories');
-var PublicCarousel = require('./models/publicCarousel');
-var Carousel=require('./models/carousel_Medic');
-var Conferences = require('./models/conferences');
-var Talks = require('./models/talks');
-var Speakers = require('./models/speakers');
-var Rooms = require('./models/rooms');
-var Topics = require('./models/qa_topics');
-var AnswerGivers = require('./models/qa_answerGivers');
-var Threads = require('./models/qa_threads');
-var qaMessages = require('./models/qa_messages');
-var Professions = require('./models/professions');
-var Presentations =require('./models/presentations');
-var CM_templates =require('./models/CM_templates');
-var ActivationCodes =require('./models/activationCodes');
-var DPOC_Devices = require('./models/DPOC_Devices');
-var Parameters = require('./models/parameters');
-var JanuviaUsers = require('./models/januvia/januvia_users');
+var Content     = require('../models/articles');
+var Products    = require('../models/products');
+var Therapeutic_Area = require('../models/therapeutic_areas');
+var UserGroup = require('../models/userGroup');
+var Events = require('../models/events');
+var Counties = require('../models/counties');
+var Cities = require('../models/cities');
+var Multimedia = require('../models/multimedia');
+var User = require('../models/user');
+var Job = require('../models/jobs');
+var Roles=require('../models/roles');
+var PublicContent = require('../models/publicContent');
+var PublicCategories = require('../models/publicCategories');
+var PublicCarousel = require('../models/publicCarousel');
+var Carousel=require('../models/carousel_Medic');
+var Conferences = require('../models/conferences');
+var Talks = require('../models/talks');
+var Speakers = require('../models/speakers');
+var Rooms = require('../models/rooms');
+var Topics = require('../models/qa_topics');
+var AnswerGivers = require('../models/qa_answerGivers');
+var Threads = require('../models/qa_threads');
+var qaMessages = require('../models/qa_messages');
+var Professions = require('../models/professions');
+var Presentations =require('../models/presentations');
+var CM_templates =require('../models/CM_templates');
+var ActivationCodes =require('../models/activationCodes');
+var DPOC_Devices = require('../models/DPOC_Devices');
+var Parameters = require('../models/parameters');
+var JanuviaUsers = require('../models/januvia/januvia_users');
 var _ = require('underscore');
 
-//E-LEARNING
-var Courses = require('./models/elearning/courses');
-var Chapters = require('./models/elearning/chapters');
-var Subchapters = require('./models/elearning/subchapters');
-var Slides = require('./models/elearning/slides');
-var Questions = require('./models/elearning/questions');
-var Answers = require('./models/elearning/questions');
-
 //modules
-var UserModule = require('./modules/user');
-var MailerModule = require('./modules/mailer');
-var UtilsModule = require('./modules/utils');
-var SessionStorage = require('./modules/sessionStorage');
-var ConferencesModule = require('./modules/Conferences');
+var UserModule = require('../modules/user');
+var MailerModule = require('../modules/mailer');
+var UtilsModule = require('../modules/utils');
+var SessionStorage = require('../modules/sessionStorage');
+var ConferencesModule = require('../modules/Conferences');
 
 //special Products
-var specialProduct = require('./models/specialProduct');
-var specialProductMenu = require('./models/specialProduct_Menu');
-var specialProductGlossary = require('./models/specialProduct_glossary');
-var specialProductFiles = require('./models/specialProduct_files');
-var specialApps = require('./models/userGroupApplications');
+var specialProduct = require('../models/specialProduct');
+var specialProductMenu = require('../models/specialProduct_Menu');
+var specialProductGlossary = require('../models/specialProduct_glossary');
+var specialProductFiles = require('../models/specialProduct_files');
+var specialApps = require('../models/userGroupApplications');
 
 var SHA256   = require('crypto-js/sha256');
 var SHA512   = require('crypto-js/sha512');
@@ -115,11 +107,14 @@ var getUserContent = function (user, content_type, specific_content_group_id, li
 
 module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
+    //elearning routes
+    require('./elearning')(env, logger, amazon, router);
+
     //============================================= Define injection dependent modules
-    var handleSuccess = require('./modules/responseHandler/success.js')(logger);
-    var handleError = require('./modules/responseHandler/error.js')(logger);
-    var Auth = require('./modules/auth')(logger, sessionSecret);
-    var NewsletterModule = require('./modules/newsletter')(logger);
+    var handleSuccess = require('../modules/responseHandler/success.js')(logger);
+    var handleError = require('../modules/responseHandler/error.js')(logger);
+    var Auth = require('../modules/auth')(logger, sessionSecret);
+    var NewsletterModule = require('../modules/newsletter')(logger);
 
 
     //only logged in users can access a route
@@ -2938,10 +2933,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     //========================================================= NEWSLETTER
 
     var Newsletter = {
-        distributionLists: require('./models/newsletter/distribution_lists'),
-        campaigns: require('./models/newsletter/campaigns'),
-        templates: require('./models/newsletter/templates'),
-        unsubscribers: require('./models/newsletter/unsubscribers')
+        distributionLists: require('../models/newsletter/distribution_lists'),
+        campaigns: require('../models/newsletter/campaigns'),
+        templates: require('../models/newsletter/templates'),
+        unsubscribers: require('../models/newsletter/unsubscribers')
     };
 
     router.route('/admin/newsletter/distribution_lists')
@@ -3967,363 +3962,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
-    //=================================================================================================================== ROUTES FOR E-LEARNING
-    router.route('/admin/courses')
-        .get(function (req, res) {
-            if(req.query.id){
-                Courses.findOne({_id: req.query.id}, function (err, course) {
-                    if(err){
-                        handleError(res, err);
-                    }else{
-                        handleSuccess(res, course);
-                    }
-                });
-            }else{
-                Courses.find({$query:{}, $orderby: {orderNumber: 1}}).deepPopulate('listChapters listChapters.listSubChapters listChapters.listSubChapters.listSlides').exec(function (err, courses) {
-                    if(err){
-                        handleError(res, err);
-                    }else{
-                        handleSuccess(res, courses);
-                    }
-                });
-            }
-        })
-        .post(function (req, res) {
-            var name = req.body.name;
-            var content = req.body.content;
-            if(!name || !content){
-                handleError(res, null, 400, 6);
-            }else{
-                try{
-                    content = JSON.parse(content);
-                    var toAdd = new courses({
-                        name: name,
-                        content: content,
-                        last_updated: Date.now()
-                    });
-                    toAdd.save(function (err, saved) {
-                        if(err){
-                            handleError(res, err);
-                        }else{
-                            handleSuccess(res, saved);
-                        }
-                    });
-                }catch(ex){
-                    handleError(res, ex);
-                }
-            }
-        })
-        .put(function (req, res) {
-            var id = req.query.id;
-            var data = req.body;
-            if(!id || !data.content) {
-                handleError(res, null, 400, 6);
-            }else{
-                try{
-                    data.content = JSON.parse(data.content);
-                    data.last_updated = Date.now();
-                    courses.update({_id: req.query.id}, {$set: data}, function (err, wres) {
-                        if(err){
-                            handleError(res, err);
-                        }else{
-                            courses.findOne({_id: req.query.id}, function (err, course) {
-                                if(err){
-                                    handleError(res, err);
-                                }else{
-                                    handleSuccess(res, course);
-                                }
-                            });
-                        }
-                    });
-                }catch(ex){
-                    handleError(res, ex);
-                }
-            }
-        })
-        .delete(function (req, res) {
-            var idToDelete = ObjectId(req.query.id);
-            if(idToDelete){
-                courses.remove({_id: idToDelete}, function (err, wRes) {
-                    if(err){
-                        handleError(res, err);
-                    }else if(wRes == 0){
-                        handleError(res, null, 404, 51);
-                    }else{
-                        handleSuccess(res);
-                    }
-                });
-            }else{
-                handleError(res, null, 400, 6);
-            }
-        });
-
-    router.route('/admin/chapters')
-        .get(function (req, res) {
-            if(req.query.id){
-                Chapters.findOne({_id: req.query.id}, function (err, chapter) {
-                    if(err){
-                        handleError(res, err);
-                    }else{
-                        handleSuccess(res, chapter);
-                    }
-                });
-            }else{
-                Chapters.find({}, function (err, chapters) {
-                    if(err){
-                        handleError(res, err);
-                    }else{
-                        handleSuccess(res, chapters);
-                    }
-                });
-            }
-        })
-        .post(function (req, res) {
-            var name = req.body.name;
-            var content = req.body.content;
-            if(!name || !content){
-                handleError(res, null, 400, 6);
-            }else{
-                try{
-                    content = JSON.parse(content);
-                    var toAdd = new courses({
-                        name: name,
-                        content: content,
-                        last_updated: Date.now()
-                    });
-                    toAdd.save(function (err, saved) {
-                        if(err){
-                            handleError(res, err);
-                        }else{
-                            handleSuccess(res, saved);
-                        }
-                    });
-                }catch(ex){
-                    handleError(res, ex);
-                }
-            }
-        })
-        .put(function (req, res) {
-            var id = req.query.id;
-            var data = req.body;
-            if(!id || !data.content) {
-                handleError(res, null, 400, 6);
-            }else{
-                try{
-                    data.content = JSON.parse(data.content);
-                    data.last_updated = Date.now();
-                    courses.update({_id: req.query.id}, {$set: data}, function (err, wres) {
-                        if(err){
-                            handleError(res, err);
-                        }else{
-                            courses.findOne({_id: req.query.id}, function (err, course) {
-                                if(err){
-                                    handleError(res, err);
-                                }else{
-                                    handleSuccess(res, course);
-                                }
-                            });
-                        }
-                    });
-                }catch(ex){
-                    handleError(res, ex);
-                }
-            }
-        })
-        .delete(function (req, res) {
-            var idToDelete = ObjectId(req.query.id);
-            if(idToDelete){
-                courses.remove({_id: idToDelete}, function (err, wRes) {
-                    if(err){
-                        handleError(res, err);
-                    }else if(wRes == 0){
-                        handleError(res, null, 404, 51);
-                    }else{
-                        handleSuccess(res);
-                    }
-                });
-            }else{
-                handleError(res, null, 400, 6);
-            }
-        });
-
-
-    router.route('/admin/subchapters')
-        .get(function (req, res) {
-            if(req.query.id){
-                Subchapters.findOne({_id: req.query.id}, function (err, course) {
-                    if(err){
-                        handleError(res, err);
-                    }else{
-                        handleSuccess(res, course);
-                    }
-                });
-            }else{
-                Subchapters.find({}, function (err, courses) {
-                    if(err){
-                        handleError(res, err);
-                    }else{
-                        handleSuccess(res, courses);
-                    }
-                });
-            }
-        })
-        .post(function (req, res) {
-            var name = req.body.name;
-            var content = req.body.content;
-            if(!name || !content){
-                handleError(res, null, 400, 6);
-            }else{
-                try{
-                    content = JSON.parse(content);
-                    var toAdd = new courses({
-                        name: name,
-                        content: content,
-                        last_updated: Date.now()
-                    });
-                    toAdd.save(function (err, saved) {
-                        if(err){
-                            handleError(res, err);
-                        }else{
-                            handleSuccess(res, saved);
-                        }
-                    });
-                }catch(ex){
-                    handleError(res, ex);
-                }
-            }
-        })
-        .put(function (req, res) {
-            var id = req.query.id;
-            var data = req.body;
-            if(!id || !data.content) {
-                handleError(res, null, 400, 6);
-            }else{
-                try{
-                    data.content = JSON.parse(data.content);
-                    data.last_updated = Date.now();
-                    courses.update({_id: req.query.id}, {$set: data}, function (err, wres) {
-                        if(err){
-                            handleError(res, err);
-                        }else{
-                            courses.findOne({_id: req.query.id}, function (err, course) {
-                                if(err){
-                                    handleError(res, err);
-                                }else{
-                                    handleSuccess(res, course);
-                                }
-                            });
-                        }
-                    });
-                }catch(ex){
-                    handleError(res, ex);
-                }
-            }
-        })
-        .delete(function (req, res) {
-            var idToDelete = ObjectId(req.query.id);
-            if(idToDelete){
-                courses.remove({_id: idToDelete}, function (err, wRes) {
-                    if(err){
-                        handleError(res, err);
-                    }else if(wRes == 0){
-                        handleError(res, null, 404, 51);
-                    }else{
-                        handleSuccess(res);
-                    }
-                });
-            }else{
-                handleError(res, null, 400, 6);
-            }
-        });
-
-    router.route('/admin/slides')
-        .get(function (req, res) {
-            if(req.query.id){
-                Courses.findOne({_id: req.query.id}, function (err, course) {
-                    if(err){
-                        handleError(res, err);
-                    }else{
-                        handleSuccess(res, course);
-                    }
-                });
-            }else{
-                Courses.find({}, function (err, courses) {
-                    if(err){
-                        handleError(res, err);
-                    }else{
-                        handleSuccess(res, courses);
-                    }
-                });
-            }
-        })
-        .post(function (req, res) {
-            var name = req.body.name;
-            var content = req.body.content;
-            if(!name || !content){
-                handleError(res, null, 400, 6);
-            }else{
-                try{
-                    content = JSON.parse(content);
-                    var toAdd = new courses({
-                        name: name,
-                        content: content,
-                        last_updated: Date.now()
-                    });
-                    toAdd.save(function (err, saved) {
-                        if(err){
-                            handleError(res, err);
-                        }else{
-                            handleSuccess(res, saved);
-                        }
-                    });
-                }catch(ex){
-                    handleError(res, ex);
-                }
-            }
-        })
-        .put(function (req, res) {
-            var id = req.query.id;
-            var data = req.body;
-            if(!id || !data.content) {
-                handleError(res, null, 400, 6);
-            }else{
-                try{
-                    data.content = JSON.parse(data.content);
-                    data.last_updated = Date.now();
-                    courses.update({_id: req.query.id}, {$set: data}, function (err, wres) {
-                        if(err){
-                            handleError(res, err);
-                        }else{
-                            courses.findOne({_id: req.query.id}, function (err, course) {
-                                if(err){
-                                    handleError(res, err);
-                                }else{
-                                    handleSuccess(res, course);
-                                }
-                            });
-                        }
-                    });
-                }catch(ex){
-                    handleError(res, ex);
-                }
-            }
-        })
-        .delete(function (req, res) {
-            var idToDelete = ObjectId(req.query.id);
-            if(idToDelete){
-                courses.remove({_id: idToDelete}, function (err, wRes) {
-                    if(err){
-                        handleError(res, err);
-                    }else if(wRes == 0){
-                        handleError(res, null, 404, 51);
-                    }else{
-                        handleSuccess(res);
-                    }
-                });
-            }else{
-                handleError(res, null, 400, 6);
-            }
-        });
     //============================================ regexp object
     router.route('/regexp')
         .get(function(req,res){
