@@ -367,6 +367,29 @@ module.exports = function(env, logger, amazon, router){
 	        }
 	    });
 
+	router.route('/elearning/courses')
+	    .get(function (req, res) {
+	    	if(req.query.id){
+	    		Courses.findOne({_id: req.query.id}).deepPopulate("listChapters.listSubchapters.listSlides").exec(function (err, course) {
+	    		    if(err){
+	    		        handleError(res, err);
+	    		    }else if(!course){
+	    		    	handleError(res, false, 404, 1);
+	    		    }else{
+	    		        handleSuccess(res, course);
+	    		    }
+	    		});
+	    	}else{
+	    		Courses.find({groupsID: {$in: req.user.groupsID}}).sort({"order": 1}).exec(function(err, courses){
+	    			if(err){
+	    				handleError(res, err);
+	    			}else{
+	    				handleSuccess(res, courses);
+	    			}
+	    		});
+	    	}
+	    });
+
 	router.route('/elearning/slides')
 		.get(function(req, res){
 			if(!req.query.id){
