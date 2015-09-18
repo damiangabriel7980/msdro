@@ -423,9 +423,7 @@ module.exports = function(env, logger, amazon, router){
 				slide_id = slide_id.toString();
 				Users.findOne({_id: user._id}, function(err, user){
 					if(!err && user){
-						user.save(function(err, user){
-							if(!err) markSlideViewed(slide_id, user);
-						});
+						markSlideViewed(slide_id, user);
 					}
 				});
 			}
