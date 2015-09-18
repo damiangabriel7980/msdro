@@ -79,6 +79,18 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'CoursesView',
+                files: [
+                    'javascript/medic/ELearningControllers/CoursesView.js'
+                ]
+            },
+            {
+                name: 'CoursesDetails',
+                files: [
+                    'javascript/medic/ELearningControllers/CourseDetails.js'
+                ]
+            },
+            {
                 name: 'ProductPage',
                 files: [
                     'javascript/medic/ProductPageControllers/ProductPage.js',
@@ -135,6 +147,13 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 files: [
                     'modules/angular-select-autocomplete/directive.js',
                     'modules/angular-select-autocomplete/styles.css'
+                ]
+            },
+            {
+                name: 'Accordion',
+                files: [
+                    'components/angular-ui-tree/dist/angular-ui-tree.min.css',
+                    'components/angular-ui-tree/dist/angular-ui-tree.js'
                 ]
             },
             {
@@ -302,6 +321,22 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'MultimediaView',
             resolve: {
                 loadDeps: loadStateDeps(['MultimediaView'])
+            }
+        })
+        .state('elearning.courses',{
+            url: '/cursuri',
+            templateUrl: 'partials/medic/elearning/courses/courses.ejs',
+            controller: 'CoursesView',
+            resolve: {
+                loadDeps: loadStateDeps(['CoursesView', 'Accordion'])
+            }
+        })
+        .state('elearning.slide',{
+            url: '/slide/:slideId',
+            templateUrl: 'partials/medic/elearning/courses/courseDetails.ejs',
+            controller: 'CourseDetails',
+            resolve: {
+                loadDeps: loadStateDeps(['CoursesDetails'])
             }
         })
         .state('elearning.transmisii',{

@@ -1,0 +1,79 @@
+    <div class="col-md-6 col-xs-12 col-xs-offset-0 col-md-offset-3 elearningMenu">
+        <div class="col-xs-12 title">CURSURI</div>
+        <div class="col-xs-12 ui-tree-styled">
+            <div ui-tree data-nodrop-enabled="true" data-drag-enabled="false">
+                <ol ng-if="courses.length == 1 && (courses[0].listChapters.length == 1 && courses[0].listChapters[0].listSubChapters.length == 1)" ui-tree-nodes data-nodrop-enabled="true" ng-model="courses" ng-class="{hidden: collapsed}">
+                    <li ng-repeat="course in courses track by $index | orderBy:'-orderNumber'" ui-tree-node collapsed="false">
+                        <div ui-tree-handle>
+                            <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)">
+                            <span class="glyphicon " ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}">
+
+                            </span>
+                            </a>
+                            {{course.title}}
+                            </div>
+                        <ol ui-tree-nodes data-nodrop-enabled="true" ng-model="course.listChapters[0].listSubChapters[0].listSlides" ng-class="{hidden: collapsed}">
+                            <li ng-repeat="slide in course.listChapters[0].listSubChapters[0].listSlides" ui-tree-node>
+                                <div ui-tree-handle>
+                                    <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)" collapsed="true">
+                            <span class="glyphicon glyphicon-chevron-right">
+                            </span>
+                                    </a>
+                                    {{slide.title}}
+                                </div>
+                            </li>
+                            </ol>
+                        </li>
+
+
+                </ol>
+                <ol ng-if="courses.length > 1 || (courses[0].listChapters.length > 1 && courses[0].listChapters[0].listSubChapters.length > 1)" ui-tree-nodes data-nodrop-enabled="true" ng-model="courses" ng-class="{hidden: collapsed}">
+                    <li ng-repeat="course in courses track by $index | orderBy:'-orderNumber'" ui-tree-node collapsed="true">
+                        <div ui-tree-handle>
+                            <a class="btn btn-success btn-xs" data-nodrag="" ng-click="toggle(this)">
+                            <span class="glyphicon " ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}">
+
+                            </span>
+                            </a>
+                            {{course.title}}
+                        </div>
+                        <ol ui-tree-nodes data-nodrop-enabled="true" ng-model="course.listChapters" ng-class="{hidden: collapsed}">
+                            <li ng-repeat="chapter in course.listChapters" ui-tree-node>
+                                <div ui-tree-handle>
+                                    <a class="btn btn-success btn-xs" data-nodrag="" ng-click="toggle(this)" collapsed="true">
+                            <span class="glyphicon " ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}">
+
+                            </span>
+                                    </a>
+                                    {{chapter.title}}
+                                </div>
+                                <ol ui-tree-nodes data-nodrop-enabled="true" ng-model="chapter.listSubChapters" ng-class="{hidden: collapsed}">
+                                    <li ng-repeat="subChapter in chapter.listSubChapters" ui-tree-node>
+                                        <div ui-tree-handle>
+                                            <a class="btn btn-success btn-xs" data-nodrag="" ng-click="toggle(this)" collapsed="true">
+                            <span class="glyphicon " ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}">
+
+                            </span>
+                                            </a>
+                                            {{subChapter.title}}
+                                        </div>
+                                        <ol ui-tree-nodes data-nodrop-enabled="true" ng-model="subChapter.listSlides" ng-class="{hidden: collapsed}">
+                                            <li ng-repeat="slide in subChapter.listSlides" ui-tree-node>
+                                                <div ui-tree-handle>
+                                                    <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)" collapsed="true">
+                            <span class="glyphicon glyphicon-chevron-right">
+                            </span>
+                                                    </a>
+                                                    {{slide.title}}
+                                                </div>
+                                            </li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>

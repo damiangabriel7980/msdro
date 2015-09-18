@@ -6381,6 +6381,35 @@ body .btn {
     font-size: 11px;
   }
 }
+.overflowVisible {
+  overflow-x: visible !important;
+}
+.elearningMenu {
+  position: relative;
+}
+.elearningMenu .ui-tree-styled {
+  position: absolute;
+  top: 45px;
+  left: 25px;
+}
+.elearningMenu .title {
+  padding: 0;
+  margin-bottom: 25px;
+  font-size: 20px;
+}
+@media (max-width: 767px) {
+  .elearningMenu .title {
+    font-size: 17px;
+  }
+}
+.elearningMenu .angular-ui-tree-handle {
+  background: #01877b;
+  border: 1px solid white;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 10px;
+  cursor: pointer;
+}
 .filterByTherapeuticAreas .areasMobile {
   padding: 0;
   margin-bottom: 25px;
