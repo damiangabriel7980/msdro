@@ -1,0 +1,80 @@
+<div class="col-xs-12 col-md-8 col-md-offset-2 slideWrapper">
+    <div class="col-xs-12 well well-lg noGrey">
+        <div class="col-xs-12" ng-if="slide.type != 'test'">
+            <div class="btn btn-default"  style="margin-top: 20px" ng-click="backToChapter()">Inapoi</div>
+        </div>
+        <div class="col-xs-12 justify paddingTop10" ng-if="slide.type != 'test'" convert-special conver="slide.content" ng-bind-html="trustAsHtml(slide.content)">
+
+        </div>
+        <div class="col-xs-12" ng-if="slide.type != 'test'">
+            <div class="btn btn-default" style="margin-top: 20px" ng-click="previousSlide()">Slide-ul precedent</div>
+            <div class="btn btn-default pull-right" style="margin-top: 20px" ng-click="nextSlide()">Slide-ul urmator</div>
+        </div>
+        <div class="test-container" >
+            <!-- HEADER -->
+            <div class="col-xs-12 noPadding">
+                <div class="btn btn-default"  style="margin-top: 20px" ng-click="backToChapter()">Inapoi</div>
+            </div>
+            <div class="test-header clearfix">
+                <div class="col-xs-7" >
+                    <!-- QUIZ TITLE -->
+                    <div class="row">
+                        <div class="quiz-title col-xs-10"><b>Test:</b>&nbsp; {{slide.title}}</div>
+                    </div>
+                    <!-- QUIZ RESULTS GRAPH -->
+                    <!--<div ng-if="data.testDone" class="quiz-results clearfix">-->
+                        <!--<div class="quiz-results-graph col-xs-10">-->
+                            <!--<div class="quiz-results-graph-foreground" ng-style='{width : data.testScore+"%"}'></div>-->
+                            <!--<div class="quiz-results-graph-indicator" ng-style='{left : data.testData.passLimit+"%" }'></div>-->
+                        <!--</div>-->
+                        <!--<div class="quiz-results-summary col-xs-2">-->
+                            <!--<i class="fa" ng-class="{'fa-check' : (data.testScore>=data.testData.passLimit), 'fa-times':data.testScore<data.testData.passLimit}"></i>-->
+                            <!--{{data.testScore | number}}%-->
+                        <!--</div>-->
+                        <!--<br>-->
+                        <!--<div>{{data.correctAnswered}} of {{data.testData.questionSet.length}} questions correct</div>-->
+                    <!--</div>-->
+                </div>
+                <!-- QUIZ BUTTONS -->
+                <div class="quiz-buttons-container col-xs-offset-3 col-xs-2">
+                    <div ng-if="data.testDone">
+                        <span class="quiz-link">quiz {{(data.testScore>=data.testData.passLimit ? "" : "not")}} passed</span>
+                        <button class="quiz-button uncolored" ng-click="closeTest()">NEXT</button>
+                        <button class="quiz-button colored" ng-click="data.retakeExam()">RETAKE</button>
+                    </div>
+                </div>
+            </div>
+            <!-- QUIZ QUESTIONS -->
+            <div class="test-questions">
+                <div class="question-container clearfix" ng-repeat="question in slide.questions">
+                    <!-- QUESTION META -->
+                    <div class="question-info col-xs-2">
+                        <!--<div class="question-state">-->
+                            <!--<em ng-if="data.testDone && question.answers[question.correct].selected" class="fa fa-check" style="color:#199992"></em>-->
+                            <!--<em ng-if="data.testDone && !question.answers[question.correct].selected" class="fa fa-times" style="color:lightgray"></em>-->
+                        <!--</div>-->
+                        <div class="question-number">{{$index+1}}.</div>
+                    </div>
+                    <!-- QUESTION CONTENTS -->
+                    <div class="question-contents col-xs-9">
+                        <div class="question-text">{{question.text}}</div>
+                        <div class="question-choice clearfix" ng-repeat="answer in question.answers" ng-click="data.checkAnswer($parent.$index, $index)">
+                            <div class="question-choice-bullet">
+                                <div class="bullet-outline" >
+                                    <div ng-if="answer.selected" class="bullet-selection">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="question-choice-text">
+                                {{answer.text}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="submit-bottom-container">
+                <button ng-if="!data.testDone" class="quiz-button colored centered" ng-click="data.submitTest()">SUBMIT QUIZ</button>
+            </div>
+        </div>
+    </div>
+</div>

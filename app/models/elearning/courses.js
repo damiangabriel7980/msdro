@@ -16,7 +16,8 @@ var CourseSchema		= new Schema({
     listChapters: [{type: Schema.Types.ObjectId, ref: 'elearning_chapters'}],
     duration: Number,
     order: Number,
-    groupsID: [{type: Schema.Types.ObjectId, ref: 'UserGroup'}]
+    groupsID: [{type: Schema.Types.ObjectId, ref: 'UserGroup'}],
+    image_path: String
 });
 
 CourseSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});

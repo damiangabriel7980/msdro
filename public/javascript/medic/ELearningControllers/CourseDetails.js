@@ -1,6 +1,14 @@
 /**
  * Created by Administrator on 17/09/15.
  */
-app.controllerProvider.register('CourseDetails', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce', '$timeout', 'Success', 'Error', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce, $timeout,Success,Error){
-
+app.controllerProvider.register('CourseDetails', ['$scope', '$rootScope', '$stateParams', 'CoursesService', '$state','$sce', '$timeout', 'Success', 'Error', function($scope, $rootScope, $stateParams, CoursesService, $state,$sce, $timeout,Success,Error){
+    CoursesService.courses.query({id:$stateParams.courseId}).$promise.then(function(resp){
+        $scope.course = Success.getObject(resp);
+    });
+    $scope.toggle = function(scope) {
+        scope.toggle();
+    };
+    $scope.goToSlide = function(id){
+        $state.go('elearning.slide', {slideId : id});
+    };
 }]);

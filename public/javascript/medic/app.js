@@ -91,6 +91,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'SlideView',
+                files: [
+                    'javascript/medic/ELearningControllers/SlideView.js'
+                ]
+            },
+            {
                 name: 'ProductPage',
                 files: [
                     'javascript/medic/ProductPageControllers/ProductPage.js',
@@ -331,12 +337,20 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['CoursesView', 'Accordion'])
             }
         })
-        .state('elearning.slide',{
-            url: '/slide/:slideId',
+        .state('elearning.chapters',{
+            url: '/:courseId/chapters',
             templateUrl: 'partials/medic/elearning/courses/courseDetails.ejs',
             controller: 'CourseDetails',
             resolve: {
                 loadDeps: loadStateDeps(['CoursesDetails'])
+            }
+        })
+        .state('elearning.slide',{
+            url: '/slide/:slideId',
+            templateUrl: 'partials/medic/elearning/courses/slideView.ejs',
+            controller: 'SlideView',
+            resolve: {
+                loadDeps: loadStateDeps(['SlideView'])
             }
         })
         .state('elearning.transmisii',{

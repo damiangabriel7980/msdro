@@ -321,6 +321,293 @@ body {
   }
 }
 
+.coursesWrapper {
+  .mainTitle {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    .fontXL;
+  }
+  .result {
+    padding: 0;
+    margin-bottom: 20px;
+  }
+}
+
+.slideWrapper{
+  .noGrey{
+    background-color: #ffffff;
+    border-radius: 0px;
+  }
+}
+
+.chaptersContainer{
+  border: 1px solid rgb(27, 30, 31);
+  border-radius: 7px;
+  padding-bottom: 20px;
+  max-width: @screen-md-min;
+  margin: 0px auto 10px;
+  box-sizing: border-box;
+  @media(max-width: @screen-md-min){
+    margin-right: 50px;
+    margin-left: 50px;
+  }
+  .chapter {
+    width:96%;
+    margin-left:2%;
+    position:relative;
+    padding-top:20px;
+    padding-bottom:20px;
+    .chapter-title {
+      min-height:40px;
+      .text-placeholder {
+        padding-right:90px;
+        width:100%;
+        position:absolute;
+        line-height:30px;
+        min-height:40px;
+        font-size:24px;
+        font-weight:bold;
+      }
+      .time-placeholder {
+        position:absolute;
+        height:40px;
+        width:80px;
+        right:0;
+        line-height:40px;
+        text-align:right;
+      }
+    }
+    .chapter-subtext {
+      position:relative;
+    }
+  }
+}
+.chaptersContainer .separator {
+  position:relative;
+  background-color:#fafafa;
+  border-top:1px solid #c4c4c4;
+  border-bottom:1px solid #c4c4c4;
+  padding:15px 2%;
+  .time-placeholder {
+    position:absolute;
+    height:40px;
+    width:80px;
+    right:2%;
+    top:50%;
+    margin-top:-20px;
+    line-height:40px;
+    text-align:right;
+  }
+}
+.chaptersContainer .entry {
+  padding-top:10px;
+  cursor:pointer;
+  .item-completion {
+    padding-top:5px;
+    .indicator {
+      margin:0 auto;
+      width:10px;
+      height:10px;
+      border:1px solid #073d33;
+      background-color:#1cb69a;
+      border-radius:50%;
+    }
+    .indicator.empty {
+      background-color:white;
+    }
+  }
+  .item-text {
+    border-bottom:1px solid #c3c3c3;
+    padding-bottom:10px;
+    padding-left: 35px;
+    .item-text-container {
+      padding-left:0;
+      .item-text-text {
+        font-weight:bold;
+      }
+    }
+    .item-next-up {
+      padding:10px 0;
+      font-size:14px;
+      text-align:right;
+      color:#4182ff;
+      cursor:pointer;
+    }
+    .item-next-up:hover {
+      text-decoration:underline;
+    }
+  }
+}
+.chaptersContainer .entry:hover {
+  background-color:#f0f8ff;
+}
+.chaptersContainer .entry.entry-current {
+  background-color:#c5e5e2;
+}
+.chaptersContainer .entry.entry-last .item-text {
+  border:none;
+}
+.chaptersContainer .sub-chapters-container > div:last-child .item-text {
+  border:none;
+}
+
+//TEST STYLES
+.test-container {
+  max-width:960px;
+  margin:0 auto 10px auto;
+  .test-header {
+    padding:30px 0 25px 0;
+    .quiz-name {
+      font-weight:bold;
+      float:left;
+      padding:0;
+      font-size:17px;
+      min-width:45px;
+      line-height:28px;
+    }
+    .quiz-title {
+      font-size:20px;
+      float:left;
+      padding-left:0px;
+    }
+    .quiz-summary {
+      margin-top:20px;
+    }
+    .quiz-results {
+      width:100%;
+      height:20px;
+      .quiz-results-graph {
+        margin-top:2px;
+        height:15px;
+        background-color:#bec3ca;
+        border-radius:10px;
+        padding:0;
+        .quiz-results-graph-foreground {
+          border-radius:10px;
+          height:15px;
+          background-color:#199992;
+        }
+        .quiz-results-graph-indicator {
+          position:absolute;
+          top:0;
+          width:1px;
+          height:15px;
+          border-left:1px solid black;
+        }
+      }
+      .quiz-results-summary {
+        color:#127c72;
+        font-weight:bold;
+        text-align:right;
+      }
+    }
+    .quiz-buttons-container {
+      height:100%;
+      padding:0;
+      text-align:center;
+      .quiz-link {
+        font-size:12px;
+        cursor:pointer;
+        color:gray;
+      }
+      .quiz-link.clickable {
+        color:black;
+        text-decoration:underline;
+      }
+      .quiz-link.clickable:hover {
+        color:#145fd7;
+      }
+    }
+  }
+  .quiz-button {
+    width:128px;
+    height:40px;
+    font-size:12px;
+    border-radius:6px;
+    text-align:center;
+    cursor:pointer;
+    font-weight:bold;
+  }
+  .quiz-button.colored {
+    color:#ffffff;
+    background-color:#199992;
+    border:1px solid transparent;
+  }
+  .quiz-button.colored:hover {
+    background-color:#127f76;
+  }
+  .quiz-button.uncolored {
+    margin-top:3px;
+    margin-bottom:7px;
+    color:#000000;
+    background-color:#ffffff;
+    border:1px solid #000000;
+  }
+  .quiz-button.uncolored:hover {
+    background-color:#eaefef;
+  }
+  .quiz-button.centered {
+    margin-top:20px;
+  }
+  .submit-bottom-container {
+    text-align:center;
+  }
+  .test-questions .question-container {
+    border-top:1px solid #d7d7d7;
+    .question-text {
+      font-size:18px;
+    }
+    .question-info {
+      font-size:24px;
+      padding:5px;
+      .question-state {
+        float:left;
+      }
+      .question-number {
+        float:right;
+      }
+    }
+    .question-contents {
+      padding:12px 0 15px 0;
+      .question-choice {
+        margin:5px 0;
+        cursor:pointer;
+        .question-choice-bullet {
+          padding:0;
+          margin-top:10px;
+          float:left;
+          width:5%;
+          .bullet-outline {
+            width:20px;
+            height:20px;
+            border:1px solid #3d4a53;
+            border-radius:10px;
+            padding:2px;
+            .bullet-selection {
+              background-color:#3d4a53;
+              width:14px;
+              height:14px;
+              border-radius:7px;
+            }
+          }
+        }
+        .question-choice-text {
+          float:left;
+          margin:10px 0 0 10px;
+          width:90%;
+        }
+        .question-choice-text.correct {
+          color:#199992;
+        }
+        .question-choice-text.incorrect {
+          color:lightgray;
+        }
+      }
+    }
+  }
+}
+
+
 .homeStyles {
   height: 100%;
   padding: 0 0 50px 0;

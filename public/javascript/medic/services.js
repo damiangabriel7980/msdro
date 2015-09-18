@@ -150,6 +150,17 @@ services.factory('ProfileService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('CoursesService', ['$resource', function($resource){
+    return {
+        courses: $resource('api/elearning/courses', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
+        slides: $resource('api/elearning/slides', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
 services.factory('HomeService', ['$resource', function($resource){
     return {
         events: $resource('api/userHomeEvents/', {}, {
