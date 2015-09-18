@@ -14,7 +14,16 @@ var slidesSchema		= new Schema({
 });
 
 slidesSchema.plugin(deepPopulate, {
-    whitelist: ['questions','questions.answers']
+    whitelist: ['questions','questions.answers'],
+    populate: {
+    	"questions": {
+    		options: {
+    			sort: {
+    				"order": 1
+    			}
+    		}
+    	}
+    }
 });
 
 module.exports = mongoose.model('elearning_slides', slidesSchema, 'elearning_slides');
