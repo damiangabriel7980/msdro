@@ -3,13 +3,27 @@ var cookieSig = require('express-session/node_modules/cookie-signature');
 var User = require('../../models/user');
 var Roles = require('../../models/roles');
 
+var Utils = require('../utils');
+
+var Config = require('../../../config/environment.js'),
+    my_config = new Config();
+
 module.exports = function (logger, sessionSecret) {
 
     var handleError = require('../responseHandler/error')(logger);
 
     var isLoggedIn = function(req, res, next) {
 
-        if (req.isAuthenticated()){
+        if(process.env.NODE_ENV === "development" && my_config.dev_mode.isEnabled && my_config.dev_mode.loggedInWith){
+            User.findOne({username: Utils.regexes.emailQuery(my_config.dev_mode.loggedInWith)}).exec(function(err, user){
+                if(user) {
+                    req.user = user;
+                    return next();
+                }else{
+                    handleError(res,true,403,13);
+                }
+            });
+        }else if (req.isAuthenticated()){
             return next();
         }else{
             handleError(res,true,403,13);
