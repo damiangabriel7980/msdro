@@ -4,6 +4,7 @@ var Subchapters = require('../../models/elearning/subchapters');
 var Slides = require('../../models/elearning/slides');
 var Questions = require('../../models/elearning/questions');
 var Answers = require('../../models/elearning/answers');
+var Users = require('../../models/user');
 
 module.exports = function(env, logger, amazon, router){
 
@@ -406,12 +407,35 @@ module.exports = function(env, logger, amazon, router){
 									handleError(res, err);
 								}else{
 									handleSuccess(res, slide);
+									userViewedSlide(slide._id, req.user);
 								}
 							});
 					}else{
 						handleSuccess(res, slide);
+						userViewedSlide(slide._id, req.user);
 					}
 				});
 			}
 		});
+
+		function userViewedSlide(slide_id, user){
+			if(slide_id && user){
+				slide_id = slide_id.toString();
+				Users.findOne({_id: user._id}, function(err, user){
+					if(!err && user){
+						markSlideViewed(slide_id, user);
+					}
+				});
+			}
+		};
+
+		function markSlideViewed(slide_id, user){
+			var updateQuery = {$inc: {}};
+			var upd = "elearning.slide."+slide_id+".views";
+			updateQuery.$inc[upd] = 1;
+			//console.log(updateQuery);
+			Users.findAndModify({_id: user._id}, {}, updateQuery, {upsert: false}, function(err, user){
+				if(err) console.log(err);
+			});
+		}
 }
