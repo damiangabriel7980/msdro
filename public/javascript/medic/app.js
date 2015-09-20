@@ -16,7 +16,8 @@ var app = angular.module('app',
         'verticalContentList',
         'horizontalContentList',
         'widgetMostRead',
-        'mobileContentList'
+        'mobileContentList',
+        'checklist-model'
     ]);
 
 app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {

@@ -8,7 +8,7 @@ app.controllerProvider.register('CourseDetails', ['$scope', '$rootScope', '$stat
     $scope.toggle = function(scope) {
         scope.toggle();
     };
-    $scope.goToSlide = function(id){
-        $state.go('elearning.slide', {slideId : id});
+    $scope.goToSlide = function(slide){
+        $state.go('elearning.slide', {slideId : slide._id});
     };
 }]);

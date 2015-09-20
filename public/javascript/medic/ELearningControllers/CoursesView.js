@@ -8,7 +8,4 @@ app.controllerProvider.register('CoursesView', ['$scope','$rootScope' ,'CoursesS
     $scope.navigateToCourseDetails = function (course) {
         $state.go('elearning.chapters', {courseId:course._id});
     };
-    $scope.goToSlide = function(slide){
-        $state.go('elearning.slide', {slideId : slide._id});
-    };
 }]);

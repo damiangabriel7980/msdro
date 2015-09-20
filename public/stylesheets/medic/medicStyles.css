@@ -6629,6 +6629,17 @@ body .btn {
   padding: 0;
   margin-bottom: 20px;
 }
+.courseTitle {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 25px;
+  text-align: center;
+}
+@media (max-width: 767px) {
+  .courseTitle {
+    font-size: 20px;
+  }
+}
 .coursesWrapper .mainTitle {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -6892,12 +6903,12 @@ body .btn {
 .test-container .test-questions .question-container .question-contents .question-choice .question-choice-bullet .bullet-outline {
   width: 20px;
   height: 20px;
-  border: 1px solid #3d4a53;
+  border: 1px solid #01877b;
   border-radius: 10px;
   padding: 2px;
 }
 .test-container .test-questions .question-container .question-contents .question-choice .question-choice-bullet .bullet-outline .bullet-selection {
-  background-color: #3d4a53;
+  background-color: #01877b;
   width: 14px;
   height: 14px;
   border-radius: 7px;

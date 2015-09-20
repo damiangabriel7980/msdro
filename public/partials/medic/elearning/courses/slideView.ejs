@@ -10,16 +10,13 @@
             <div class="btn btn-default" style="margin-top: 20px" ng-click="previousSlide()">Slide-ul precedent</div>
             <div class="btn btn-default pull-right" style="margin-top: 20px" ng-click="nextSlide()">Slide-ul urmator</div>
         </div>
-        <div class="test-container" >
+        <div class="test-container" ng-if="slide.type == 'test'" >
             <!-- HEADER -->
-            <div class="col-xs-12 noPadding">
-                <div class="btn btn-default"  style="margin-top: 20px" ng-click="backToChapter()">Inapoi</div>
-            </div>
-            <div class="test-header clearfix">
-                <div class="col-xs-7" >
+            <div class="test-header clearfix" ng-if="slide.type == 'test'">
+                <div class="col-xs-12 paddingTop10" >
                     <!-- QUIZ TITLE -->
                     <div class="row">
-                        <div class="quiz-title col-xs-10"><b>Test:</b>&nbsp; {{slide.title}}</div>
+                        <div class="quiz-title col-xs-12"> {{slide.title}}</div>
                     </div>
                     <!-- QUIZ RESULTS GRAPH -->
                     <!--<div ng-if="data.testDone" class="quiz-results clearfix">-->
@@ -45,7 +42,7 @@
                 </div>
             </div>
             <!-- QUIZ QUESTIONS -->
-            <div class="test-questions">
+            <div class="test-questions" ng-if="slide.type == 'test'">
                 <div class="question-container clearfix" ng-repeat="question in slide.questions">
                     <!-- QUESTION META -->
                     <div class="question-info col-xs-2">
@@ -56,24 +53,18 @@
                         <div class="question-number">{{$index+1}}.</div>
                     </div>
                     <!-- QUESTION CONTENTS -->
-                    <div class="question-contents col-xs-9">
+                    <div class="question-contents col-xs-10">
                         <div class="question-text">{{question.text}}</div>
-                        <div class="question-choice clearfix" ng-repeat="answer in question.answers" ng-click="data.checkAnswer($parent.$index, $index)">
-                            <div class="question-choice-bullet">
-                                <div class="bullet-outline" >
-                                    <div ng-if="answer.selected" class="bullet-selection">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="question-choice-text">
-                                {{answer.text}}
-                            </div>
+                        <div class="col-xs-12">
+                            <label class="col-xs-12" ng-repeat="answer in question.answers">
+                                <input type="checkbox" checklist-model="answersArray" checklist-value="answer._id" ng-change="checkAnswer(question._id,answer._id,checked)"> {{answer.text}}
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="submit-bottom-container">
-                <button ng-if="!data.testDone" class="quiz-button colored centered" ng-click="data.submitTest()">SUBMIT QUIZ</button>
+            <div class="submit-bottom-container" ng-if="slide.type == 'test'">
+                <button class="quiz-button colored centered" ng-click="submitQuiz()">FINALIZARE</button>
             </div>
         </div>
     </div>
