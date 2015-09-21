@@ -33,6 +33,9 @@ module.exports = function(){
                 dev_mode: {
                     isEnabled: false,
                     loggedInWith: "qqq2@mailinator.com"
+                },
+                elearning: {
+                    maxScore: 18
                 }
             };
 
@@ -65,6 +68,9 @@ module.exports = function(){
                 },
                 user: {
                     noProofDomain: "mailinator.com"
+                },
+                elearning: {
+                    maxScore: 18
                 }
             };
 
@@ -97,6 +103,9 @@ module.exports = function(){
                 },
                 user: {
                     noProofDomain: "merck.com"
+                },
+                elearning: {
+                    maxScore: 18
                 }
             };
 
@@ -129,6 +138,9 @@ module.exports = function(){
                 },
                 user: {
                     noProofDomain: "merck.com"
+                },
+                elearning: {
+                    maxScore: 18
                 }
             };
 
