@@ -399,12 +399,22 @@ module.exports = function(env, logger, amazon, router){
 			if(!req.query.id){
 				handleError(res, false, 400, 6);
 			}else{
+				var slideViews;
+				try{
+					slideViews = req.user.elearning.slide[req.query.id].views;
+				}catch(ex){
+					//this probably happens when trying to acccess a property of undefined
+					//so we can assume that the user hasn't viewed the slide yet
+				}
 				Slides.findOne({_id: req.query.id}).exec(function(err, slide){
 					if(err){
 						handleError(res, err);
 					}else if(!slide){
 						handleError(res, false, 404, 1);
 					}else if(slide.type === "test"){
+						if(slide.retake && slideViews && slideViews >= slide.retake){
+							return handleError(res, false, 403, 42);
+						}else{
 							Slides.deepPopulate(slide, "questions.answers", function(err, slide){
 								if(err){
 									handleError(res, err);
@@ -413,6 +423,7 @@ module.exports = function(env, logger, amazon, router){
 									userViewedSlide(slide._id, req.user);
 								}
 							});
+						}
 					}else{
 						handleSuccess(res, slide);
 						userViewedSlide(slide._id, req.user);
