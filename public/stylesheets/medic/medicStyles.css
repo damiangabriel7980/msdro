@@ -6666,6 +6666,17 @@ body .btn {
   margin: 0px auto 10px;
   box-sizing: border-box;
 }
+.chaptersContainer .disabledChapter {
+  background-color: #eeeeee;
+  border-color: #eeeeee;
+  cursor: not-allowed !important;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  opacity: .65;
+}
+.chaptersContainer .disabledChapter:hover {
+  background-color: #eeeeee !important;
+}
 @media (max-width: 992px) {
   .chaptersContainer {
     margin-right: 50px;

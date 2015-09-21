@@ -18,6 +18,14 @@ app.controllerProvider.register('SlideView', ['$scope','$rootScope' ,'CoursesSer
             $scope.arrayOfQAndA = [];
             $scope.answersArray = [];
         }
+        $scope.indexOfCurrentSlide = 0;
+        $scope.slideList = $stateParams.slideList;
+        if($scope.slideList){
+            for(var j=0; j<$scope.slideList.length; j++){
+                if($scope.slideList[j]._id == $scope.slide._id)
+                    $scope.indexOfCurrentSlide = j;
+            }
+        }
     });
 
     $scope.checkAnswer = function(questionID, value, checked){
@@ -38,21 +46,21 @@ app.controllerProvider.register('SlideView', ['$scope','$rootScope' ,'CoursesSer
         }
         var dataToSend = {};
         dataToSend[$scope.slide._id] = $scope.arrayOfQAndA;
-        CoursesService.slides.save({data: dataToSend}).$promise.then(function(resp){
+        CoursesService.slides.save({slideId: $scope.slide._id},{data: $scope.answersArray}).$promise.then(function(resp){
             console.log(resp);
         })
     };
 
     $scope.previousSlide = function(){
-
+        $state.go('elearning.slide', {courseId:$stateParams.courseId, slideId : $scope.slideList[$scope.indexOfCurrentSlide-1]._id, slideList: $scope.slideList});
     };
 
     $scope.nextSlide = function(){
-
+        $state.go('elearning.slide', {courseId:$stateParams.courseId, slideId : $scope.slideList[$scope.indexOfCurrentSlide+1]._id, slideList: $scope.slideList});
     };
 
     $scope.backToChapter = function(){
-
+        $state.go('elearning.chapters', {courseId:$stateParams.courseId});
     };
 
 }]);

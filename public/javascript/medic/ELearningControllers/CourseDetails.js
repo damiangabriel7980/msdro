@@ -9,7 +9,16 @@ app.controllerProvider.register('CourseDetails', ['$scope', '$rootScope', '$stat
     $scope.toggle = function(scope) {
         scope.toggle();
     };
-    $scope.goToSlide = function(slide){
-        $state.go('elearning.slide', {slideId : slide._id});
+
+    var sortByKey = function(array,key){
+        return array.sort(function(a, b) {
+            var x = a[key]; var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    };
+
+    $scope.goToSlide = function(slide, slideList){
+        slideList = sortByKey(slideList,'order');
+        $state.go('elearning.slide', {courseId:$stateParams.courseId, slideId : slide._id, slideList: slideList});
     };
 }]);

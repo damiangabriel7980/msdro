@@ -347,9 +347,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             }
         })
         .state('elearning.slide',{
-            url: '/slide/:slideId',
+            url: '/course/:courseId/slide/:slideId',
             templateUrl: 'partials/medic/elearning/courses/slideView.ejs',
             controller: 'SlideView',
+            params : {
+                slideList : { array: true }
+            },
             resolve: {
                 loadDeps: loadStateDeps(['SlideView'])
             }

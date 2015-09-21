@@ -7,8 +7,8 @@
 
         </div>
         <div class="col-xs-12" ng-if="slide.type != 'test'">
-            <div class="btn btn-default" style="margin-top: 20px" ng-click="previousSlide()">Slide-ul precedent</div>
-            <div class="btn btn-default pull-right" style="margin-top: 20px" ng-click="nextSlide()">Slide-ul urmator</div>
+            <div class="btn btn-default" style="margin-top: 20px" ng-if="indexOfCurrentSlide > 0" ng-click="previousSlide()">Slide-ul precedent</div>
+            <div class="btn btn-default pull-right" style="margin-top: 20px" ng-if="indexOfCurrentSlide != slideList.length - 1" ng-click="nextSlide()">Slide-ul urmator</div>
         </div>
         <div class="test-container" ng-if="slide.type == 'test'" >
             <!-- HEADER -->
@@ -18,19 +18,6 @@
                     <div class="row">
                         <div class="quiz-title col-xs-12"> {{slide.title}}</div>
                     </div>
-                    <!-- QUIZ RESULTS GRAPH -->
-                    <!--<div ng-if="data.testDone" class="quiz-results clearfix">-->
-                        <!--<div class="quiz-results-graph col-xs-10">-->
-                            <!--<div class="quiz-results-graph-foreground" ng-style='{width : data.testScore+"%"}'></div>-->
-                            <!--<div class="quiz-results-graph-indicator" ng-style='{left : data.testData.passLimit+"%" }'></div>-->
-                        <!--</div>-->
-                        <!--<div class="quiz-results-summary col-xs-2">-->
-                            <!--<i class="fa" ng-class="{'fa-check' : (data.testScore>=data.testData.passLimit), 'fa-times':data.testScore<data.testData.passLimit}"></i>-->
-                            <!--{{data.testScore | number}}%-->
-                        <!--</div>-->
-                        <!--<br>-->
-                        <!--<div>{{data.correctAnswered}} of {{data.testData.questionSet.length}} questions correct</div>-->
-                    <!--</div>-->
                 </div>
                 <!-- QUIZ BUTTONS -->
                 <div class="quiz-buttons-container col-xs-offset-3 col-xs-2">
@@ -46,10 +33,6 @@
                 <div class="question-container clearfix" ng-repeat="question in slide.questions">
                     <!-- QUESTION META -->
                     <div class="question-info col-xs-2">
-                        <!--<div class="question-state">-->
-                            <!--<em ng-if="data.testDone && question.answers[question.correct].selected" class="fa fa-check" style="color:#199992"></em>-->
-                            <!--<em ng-if="data.testDone && !question.answers[question.correct].selected" class="fa fa-times" style="color:lightgray"></em>-->
-                        <!--</div>-->
                         <div class="question-number">{{$index+1}}.</div>
                     </div>
                     <!-- QUESTION CONTENTS -->

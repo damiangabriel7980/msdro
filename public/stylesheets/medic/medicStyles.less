@@ -348,6 +348,17 @@ body {
 }
 
 .chaptersContainer{
+  .disabledChapter{
+    background-color: @pictureFrame;
+    border-color: @pictureFrame;
+    cursor: not-allowed !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: .65;
+    &:hover{
+      background-color: @pictureFrame !important;
+    }
+  }
   border: 1px solid rgb(27, 30, 31);
   border-radius: 7px;
   padding-bottom: 20px;

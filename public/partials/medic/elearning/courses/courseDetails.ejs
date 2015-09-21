@@ -2,16 +2,19 @@
     <div class="courseTitle noPadding">CUPRINS</div>
     <div class="chaptersContainer">
         <!-- chapter -->
-        <div ng-if="course.listChapters.length == 1 && course.listChapters[0].listSubchapters.length == 1" ng-repeat="slide in course.listChapters[0].listSubchapters[0].listSlides | orderBy:'-order'"
+        <div ng-if="course.listChapters.length == 1 && course.listChapters[0].listSubchapters.length == 1" ng-repeat="slide in course.listChapters[0].listSubchapters[0].listSlides | orderBy:' order'"
              class="entry clearfix"
-             ng-click="slideViews[slide._id].views >= slide.retake ? null : goToSlide(slide)">
+             ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake }"
+             ng-click="slideViews[slide._id].views >= slide.retake ? null : goToSlide(slide,course.listChapters[0].listSubchapters[0].listSlides)">
             <div class="item-text col-xs-12 clearfix">
                 <div class="item-text-container col-xs-12">
-                    <div class="item-text-text">{{slide.title}}</div>
+                    <div class="item-text-text">{{slide.title}}
+                        <span class="label label-success pull-right" ng-if="slide.type == 'test'">200</span>
+                    </div>
                 </div>
             </div>
         </div>
-        <div ng-if="course.listChapters.length > 1 || course.listChapters[0].listSubchapters.length > 1" ng-repeat="chapter in course.listChapters" >
+        <div ng-if="course.listChapters.length > 1 || course.listChapters[0].listSubchapters.length > 1" ng-repeat="chapter in course.listChapters | orderBy:' order'" >
             <div class="chapter">
                 <div class="chapter-title">
                     <div class="text-placeholder">{{ ($index+1) +'. ' + chapter.title}} </div>
@@ -22,17 +25,20 @@
                 <div class="chapter-sub-text"></div>
             </div>
             <!-- sub-chapter -->
-            <div class="sub-chapters-container" ng-repeat="subChapter in chapter.listSubchapters">
+            <div class="sub-chapters-container" ng-repeat="subChapter in chapter.listSubchapters | orderBy:' order'">
                 <div class="separator">
                     {{subChapter.title}}
                 </div>
                 <!-- slide -->
-                <div ng-repeat="slide in subChapter.listSlides"
+                <div ng-repeat="slide in subChapter.listSlides | orderBy:' order'"
                      class="entry clearfix"
-                     ng-click="slideViews[slide._id].views >= slide.retake ? null : goToSlide(slide)">
+                     ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake }"
+                     ng-click="slideViews[slide._id].views >= slide.retake ? null : goToSlide(slide,subChapter.listSlides)">
                     <div class="item-text col-xs-12 clearfix">
                         <div class="item-text-container col-xs-12">
-                            <div class="item-text-text">{{slide.title}}</div>
+                            <div class="item-text-text">{{slide.title}}
+                                <span class="label label-success pull-right" ng-if="slide.type == 'test'">{{}}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
