@@ -43,7 +43,8 @@ var errorCodes = {
     38: "Selectati un oras",
     39: "Dovada nu a putut fi incarcata",
     40: "Numele strazii trebuie sa contina doar litere si cifre, minim 5",
-    41: "Locul de munca trebuie sa contina doar litere si cifre, minim 3"
+    41: "Locul de munca trebuie sa contina doar litere si cifre, minim 3",
+    42: "Numarul maxim de incercari a fost depasit"
 };
 
 module.exports = function(logger){
