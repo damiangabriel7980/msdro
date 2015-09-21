@@ -402,29 +402,34 @@ module.exports = function(env, logger, amazon, router){
 			if(!req.query.id){
 				handleError(res, false, 400, 6);
 			}else{
-				var slideViews = getSlideViews(req.user, req.query.id);
-				Slides.findOne({_id: req.query.id}).exec(function(err, slide){
-					if(err){
-						handleError(res, err);
-					}else if(!slide){
-						handleError(res, false, 404, 1);
-					}else if(slide.type === "test"){
-						if(typeof slide.retake === "number" && slideViews >= slide.retake){
-							return handleError(res, false, 403, 42);
+				getSlide(req.query.id, req.query.previous, req.query.next).then(
+					function(slide){
+						var slideViews = getSlideViews(req.user, slide._id);
+						if(slide.type === "test"){
+							if(typeof slide.retake === "number" && slideViews >= slide.retake){
+								return handleError(res, false, 403, 42);
+							}else{
+								Slides.deepPopulate(slide, "questions.answers", function(err, slide){
+									if(err){
+										handleError(res, err);
+									}else{
+										handleSuccess(res, slide);
+									}
+								});
+							}
 						}else{
-							Slides.deepPopulate(slide, "questions.answers", function(err, slide){
-								if(err){
-									handleError(res, err);
-								}else{
-									handleSuccess(res, slide);
-								}
-							});
+							handleSuccess(res, slide);
+							userViewedSlide(slide._id, req.user);
 						}
-					}else{
-						handleSuccess(res, slide);
-						userViewedSlide(slide._id, req.user);
+					},
+					function(err){
+						if(err){
+							handleError(res, err);
+						}else{
+							handleError(res, false, 404, 1);
+						}
 					}
-				});
+				);
 			}
 		})
 		.post(function(req, res){
@@ -481,6 +486,47 @@ module.exports = function(env, logger, amazon, router){
 				});
 			}
 		});
+
+		function getSlide(id, previous, next){
+			// this handles the slide query
+			// if previous or next is specified, the previous or next slide relative to the id will be retrieved
+			// if the slide cannot not be found, the reject will be called with no params
+			var deferred = Q.defer();
+			Slides.findOne({_id: id}, function(err, slide){
+				if(err){
+					deferred.reject(err);
+				}else if(!slide){
+					deferred.reject();
+				}else if(previous || next){
+					Subchapters.findOne({listSlides: {$in: [id]}}, function(err, subchapter){
+						if(err){
+							deferred.reject(err);
+						}else if(!subchapter){
+							deferred.reject();
+						}else{
+							var cursor;
+							if(next){
+								cursor = Slides.find({_id: {$in: subchapter.listSlides}, order: {$gt: slide.order}}).sort({order: 1}).limit(1);
+							}else{
+								cursor = Slides.find({_id: {$in: subchapter.listSlides}, order: {$lt: slide.order}}).sort({order:-1}).limit(1);
+							}
+							cursor.exec(function(err, slides){
+								if(err){
+									deferred.reject(err);
+								}else if(!slides[0]){
+									deferred.reject();
+								}else{
+									deferred.resolve(slides[0]);
+								}
+							});
+						}
+					});
+				}else{
+					deferred.resolve(slide);
+				}
+			});
+			return deferred.promise;
+		};
 
 		function getUserPoints(qaMap){
 			var deferred = Q.defer();
