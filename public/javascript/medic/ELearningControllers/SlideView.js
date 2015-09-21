@@ -46,8 +46,8 @@ app.controllerProvider.register('SlideView', ['$scope','$rootScope' ,'CoursesSer
         }
         var dataToSend = {};
         dataToSend[$scope.slide._id] = $scope.arrayOfQAndA;
-        CoursesService.slides.save({slideId: $scope.slide._id},{data: $scope.answersArray}).$promise.then(function(resp){
-            console.log(resp);
+        CoursesService.slides.save({id: $scope.slide._id},$scope.mapQuestionsAnswers).$promise.then(function(resp){
+            $state.go('elearning.chapters', {courseId:$stateParams.courseId});
         })
     };
 
