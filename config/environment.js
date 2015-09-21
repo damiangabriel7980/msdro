@@ -32,7 +32,7 @@ module.exports = function(){
                 },
                 dev_mode: {
                     isEnabled: false,
-                    loggedInWith: "qqq2@mailinator.com"
+                    loggedInWith: "qqq@mailinator.com"
                 },
                 elearning: {
                     maxScore: 18

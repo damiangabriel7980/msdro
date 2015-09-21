@@ -417,7 +417,6 @@ module.exports = function(env, logger, amazon, router){
 									handleError(res, err);
 								}else{
 									handleSuccess(res, slide);
-									userViewedSlide(slide._id, req.user);
 								}
 							});
 						}
@@ -439,7 +438,7 @@ module.exports = function(env, logger, amazon, router){
 						return handleError(res, err);
 					}else if(!slide){
 						return handleError(res, false, 404, 1);
-					}else if(typeof slide.retake === 0 && slideViews > slide.retake){
+					}else if(typeof slide.retake === "number" && slideViews >= slide.retake){
 						return handleError(res, false, 403, 42);
 					}else{
 						//first we need to get a total of the answered questions and a total of all questions in parallel
@@ -464,12 +463,13 @@ module.exports = function(env, logger, amazon, router){
 								var updateQuery = {$set: {}};
 								var upd = "elearning.slide."+slide._id+".score";
 								updateQuery.$set[upd] = normalisedScore;
-								console.log(updateQuery);
+								//console.log(updateQuery);
 								Users.update({_id: req.user._id}, updateQuery, function(err){
 									if(err){
 										handleError(res, err);
 									}else{
 										handleSuccess(res, normalisedScore);
+										userViewedSlide(slide._id, req.user);
 									}
 								})
 							},
