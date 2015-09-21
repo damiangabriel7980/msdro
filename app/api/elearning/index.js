@@ -377,7 +377,10 @@ module.exports = function(env, logger, amazon, router){
 	    		    }else if(!course){
 	    		    	handleError(res, false, 404, 1);
 	    		    }else{
-	    		        handleSuccess(res, course);
+						var objectToSend = {};
+						objectToSend.courseDetails = course;
+						objectToSend.slideViews = req.user.elearning.slide;
+						handleSuccess(res, objectToSend);
 	    		    }
 	    		});
 	    	}else{

@@ -36,8 +36,11 @@ app.controllerProvider.register('SlideView', ['$scope','$rootScope' ,'CoursesSer
             newObject[property] = $scope.mapQuestionsAnswers[property];
             $scope.arrayOfQAndA.push(newObject);
         }
-        console.log($scope.answersArray);
-        //CoursesService.slides.save({answers: $scope.mapQuestionsAnswers})
+        var dataToSend = {};
+        dataToSend[$scope.slide._id] = $scope.arrayOfQAndA;
+        CoursesService.slides.save({data: dataToSend}).$promise.then(function(resp){
+            console.log(resp);
+        })
     };
 
     $scope.previousSlide = function(){

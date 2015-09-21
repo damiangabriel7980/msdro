@@ -11,7 +11,8 @@ var slidesSchema		= new Schema({
     video_paths: [{type: String}],
     "type": {type: String, enum: ["test", "slide"]},
     questions: [{type: Schema.Types.ObjectId, ref: 'elearning_questions'}],
-    title: String
+    title: String,
+    retake: Number
 });
 
 slidesSchema.plugin(deepPopulate, {
