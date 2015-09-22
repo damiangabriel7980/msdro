@@ -17,8 +17,7 @@ app.controllerProvider.register('CourseDetails', ['$scope', '$rootScope', '$stat
         });
     };
 
-    $scope.goToSlide = function(slide, slideList){
-        slideList = sortByKey(slideList,'order');
-        $state.go('elearning.slide', {courseId:$stateParams.courseId, slideId : slide._id, slideList: slideList});
+    $scope.goToSlide = function(slide, subchapterId){
+        $state.go('elearning.slide', {courseId:$stateParams.courseId, slideId : slide._id, subchapterId:subchapterId});
     };
 }]);

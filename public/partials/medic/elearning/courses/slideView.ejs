@@ -1,14 +1,14 @@
 <div class="col-xs-12 col-md-8 col-md-offset-2 slideWrapper">
     <div class="col-xs-12 well well-lg noGrey">
-        <div class="col-xs-12" ng-if="slide.type != 'test'">
+        <div class="col-xs-12" ng-class="{'noPadding': slide.type == 'test'}">
             <div class="btn btn-default"  style="margin-top: 20px" ng-click="backToChapter()">Inapoi</div>
         </div>
         <div class="col-xs-12 justify paddingTop10" ng-if="slide.type != 'test'" convert-special conver="slide.content" ng-bind-html="trustAsHtml(slide.content)">
 
         </div>
         <div class="col-xs-12" ng-if="slide.type != 'test'">
-            <div class="btn btn-default" style="margin-top: 20px" ng-if="indexOfCurrentSlide > 0" ng-click="previousSlide()">Slide-ul precedent</div>
-            <div class="btn btn-default pull-right" style="margin-top: 20px" ng-if="indexOfCurrentSlide != slideList.length - 1" ng-click="nextSlide()">Slide-ul urmator</div>
+            <div class="btn btn-default" style="margin-top: 20px" ng-if="previousSlide" ng-click="goPrevious()">Slide-ul precedent</div>
+            <div class="btn btn-default pull-right" style="margin-top: 20px" ng-if="nextSlide" ng-click="goNext()">Slide-ul urmator</div>
         </div>
         <div class="test-container" ng-if="slide.type == 'test'" >
             <!-- HEADER -->

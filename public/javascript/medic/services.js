@@ -158,7 +158,11 @@ services.factory('CoursesService', ['$resource', function($resource){
         slides: $resource('api/elearning/slides', {}, {
             query: { method: 'GET', isArray: false },
             save: {method: 'POST', isArray: false}
+        }),
+        subchapters: $resource('api/elearning/subchapters', {}, {
+            query: { method: 'GET', isArray: false }
         })
+
     }
 }]);
 

@@ -5,7 +5,7 @@
         <div ng-if="course.listChapters.length == 1 && course.listChapters[0].listSubchapters.length == 1" ng-repeat="slide in course.listChapters[0].listSubchapters[0].listSlides | orderBy:' order'"
              class="entry clearfix"
              ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake }"
-             ng-click="slideViews[slide._id].views >= slide.retake ? null : goToSlide(slide,course.listChapters[0].listSubchapters[0].listSlides)">
+             ng-click="slideViews[slide._id].views >= slide.retake ? null : goToSlide(slide,course.listChapters[0].listSubchapters[0]._id)">
             <div class="item-text col-xs-12 clearfix">
                 <div class="item-text-container col-xs-12">
                     <div class="item-text-text">{{slide.title}}
@@ -33,7 +33,7 @@
                 <div ng-repeat="slide in subChapter.listSlides | orderBy:' order'"
                      class="entry clearfix"
                      ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake }"
-                     ng-click="slideViews[slide._id].views >= slide.retake ? null : goToSlide(slide,subChapter.listSlides)">
+                     ng-click="slideViews[slide._id].views >= slide.retake ? null : goToSlide(slide,subChapter._id)">
                     <div class="item-text col-xs-12 clearfix">
                         <div class="item-text-container col-xs-12">
                             <div class="item-text-text">{{slide.title}}
