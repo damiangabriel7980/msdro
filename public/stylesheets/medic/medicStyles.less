@@ -628,8 +628,8 @@ body {
 
   //============================= Custom search styles
   .searchDefault {
-    right: 290px;
-    top: 18px;
+    top: 21px;
+    right: 0;
     @media (max-width: @grid-float-breakpoint) {
       bottom: 15px;
       top: auto;
@@ -657,6 +657,22 @@ body {
         width: 100% !important;
       }
     }
+  }
+
+  .searchNoSpecialGroups{
+    position: absolute;
+    right: 70px;
+    bottom: 59px;
+  }
+
+  .searchWithGroups{
+    position: absolute;
+    right: 304px;
+    bottom: 59px;
+  }
+
+  .profileNoSpecialGroups{
+    right: 0 !important;
   }
 
   .dropdown-menu {
