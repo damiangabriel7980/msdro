@@ -19,19 +19,18 @@ app.controllerProvider.register('SlideView', ['$scope','$rootScope' ,'CoursesSer
                         $scope.indexOfCurrentSlide = j;
                 }
             }
-        });
-        CoursesService.courses.query({id:$stateParams.courseId}).$promise.then(function(resp){
-            $scope.slideViews = Success.getObject(resp).slideViews;
-            if($scope.indexOfCurrentSlide != 0)
-                $scope.pSlide = $scope.slideList[$scope.indexOfCurrentSlide-1];
-            else
-                $scope.previousSlide = false;
-            if($scope.indexOfCurrentSlide != $scope.slideList.length - 1)
-                $scope.nSlide = $scope.slideList[$scope.indexOfCurrentSlide+1];
-            else
-                $scope.nextSlide = false;
+            CoursesService.courses.query({id:$stateParams.courseId}).$promise.then(function(resp){
+                $scope.slideViews = Success.getObject(resp).slideViews;
+                if($scope.indexOfCurrentSlide != 0)
+                    $scope.pSlide = $scope.slideList[$scope.indexOfCurrentSlide-1];
+                else
+                    $scope.previousSlide = false;
+                if($scope.indexOfCurrentSlide != $scope.slideList.length - 1)
+                    $scope.nSlide = $scope.slideList[$scope.indexOfCurrentSlide+1];
+                else
+                    $scope.nextSlide = false;
 
-            if($scope.pSlide || $scope.nSlide){
+                if($scope.pSlide || $scope.nSlide){
                     if($scope.pSlide && $scope.pSlide.type == 'test'){
                         if($scope.slideViews[$scope.pSlide._id]){
                             if($scope.slideViews[$scope.pSlide._id].views >= $scope.pSlide.retake)
@@ -40,25 +39,26 @@ app.controllerProvider.register('SlideView', ['$scope','$rootScope' ,'CoursesSer
                                 $scope.previousSlide = true;
                         }
                     }
-                if($scope.nSlide && $scope.nSlide.type == 'test'){
-                    if($scope.slideViews[$scope.nSlide._id]){
-                        if($scope.slideViews[$scope.nSlide._id].views >= $scope.nSlide.retake)
-                            $scope.nextSlide = false;
-                        else
-                            $scope.nextSlide = true;
+                    if($scope.nSlide && $scope.nSlide.type == 'test'){
+                        if($scope.slideViews[$scope.nSlide._id]){
+                            if($scope.slideViews[$scope.nSlide._id].views >= $scope.nSlide.retake)
+                                $scope.nextSlide = false;
+                            else
+                                $scope.nextSlide = true;
+                        }
                     }
                 }
-            }
+                //array of objects with answers to send to DB
+                if($scope.slide.type == 'test'){
+                    $scope.mapQuestionsAnswers = {};
+                    for(var i=0; i< $scope.slide.questions.length; i++){
+                        $scope.mapQuestionsAnswers[$scope.slide.questions[i]._id] = [];
+                    }
+                    $scope.arrayOfQAndA = [];
+                    $scope.answersArray = [];
+                }
+            });
         });
-        //array of objects with answers to send to DB
-        if($scope.slide.type == 'test'){
-            $scope.mapQuestionsAnswers = {};
-            for(var i=0; i< $scope.slide.questions.length; i++){
-                $scope.mapQuestionsAnswers[$scope.slide.questions[i]._id] = [];
-            }
-            $scope.arrayOfQAndA = [];
-            $scope.answersArray = [];
-        }
     });
 
     $scope.checkAnswer = function(questionID, value, checked){
