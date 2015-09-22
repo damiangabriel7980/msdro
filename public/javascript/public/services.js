@@ -202,7 +202,7 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
             callback(null);
         }
     };
-    var validateUpdate = function (formData, callback) {
+    var validateUpdate = function (formData, options, callback) {
         var user = formData.user;
         var county = formData.county._id;
         var city = formData.city._id;
@@ -217,7 +217,7 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
             callback("Va rugam introduceti codul de activare");
         }else if(proofRequired && user.temp.proofType == "file" && !user.temp.proofFile){
             callback("Va rugam incarcati dovada");
-        }else if(!user.groupsID){
+        }else if(!user.groupsID && options.groupRequired){
             callback("Va rugam selectati un grup preferat");
         }else if(!user.address){
             callback("Va rugam introduceti o adresa");
@@ -275,6 +275,15 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
     var createAccount = $resource('/apiGloballyShared/createAccountStaywell', {}, {
         save: { method: 'POST', isArray: false }
     });
+    var getDefaultOptions = function(thiz){
+        var options = {};
+        if(!thiz.groups || thiz.groups.length == 0){
+            options.groupRequired = false;
+        }else{
+            options.groupRequired = true;
+        }
+        return options;
+    }
     return {
         login: $resource('/login', {}, {
             query: { method: 'POST', isArray: false }
@@ -296,11 +305,12 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         }),
         createAccount: function (thiz, callback) {
             var formData = getFormData(thiz);
+            var options = getDefaultOptions(thiz);
             validateCreate(formData, function (err) {
                 if(err){
                     callback(err);
                 }else{
-                    validateUpdate(formData, function (err) {
+                    validateUpdate(formData, options, function (err) {
                         if(err){
                             callback(err);
                         }else{
@@ -318,7 +328,8 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         },
         completeProfile: function (thiz, callback) {
             var formData = getFormData(thiz);
-            validateUpdate(formData, function (err) {
+            var options = getDefaultOptions(thiz);
+            validateUpdate(formData, options, function (err) {
                 if(err){
                     callback(err);
                 }else{

@@ -67,7 +67,7 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
         AuthService.signupGroups.query({profession: $scope.user.profession}).$promise.then(function (response) {
             response = Success.getObject(response);
             $scope.groups = response;
-            if(response[0]) $scope.user.groupsID = response[0]._id;
+            $scope.user.groupsID = response[0]?response[0]._id:null;
         });
     };
 
