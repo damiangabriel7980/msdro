@@ -9,7 +9,7 @@
             <div class="item-text col-xs-12 clearfix">
                 <div class="item-text-container col-xs-12">
                     <div class="item-text-text">{{slide.title}}
-                        <span class="label label-success pull-right" ng-if="slide.type == 'test'">{{slideViews[slide._id].score ? slideViews[slide._id].score + ' puncte' : ''}}</span>
+                        <span class="label label-success pull-right" ng-if="slide.type == 'test'">{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? slideViews[slide._id].score + ' puncte' : ''}}</span>
                     </div>
                 </div>
             </div>
