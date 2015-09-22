@@ -169,55 +169,63 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                 handleError(res, null, 400, 35);
             }else if(!userData.profession){
                 handleError(res, null, 400, 36);
-            }else if(!userData.groupsID[0]){
-                handleError(res, null, 400, 37);
-            }else if(!userData.address){
-                handleError(res, null, 400, 28);
-            }else if(!userData.citiesID){
-                handleError(res, null, 400, 38);
-            }else if(userData.phone && !phonePatt.test(userData.phone)){
-                handleError(res, null, 400, 27);
             }else{
-                //establish default user group
-                UserGroup.findOne({profession: userData.profession, display_name: "Default"}, function (err, group) {
-                    if(err || !group){
+                UserGroup.find({profession: userData.profession, show_at_signup: true}, function(err, availableGroups){
+                    if(err){
                         handleError(res, err);
                     }else{
-                        //establish groups ids
-                        userData.groupsID.push(group._id.toString());
-                        //validate activation code / proof
-                        if(!proofRequired){
-                            staywellUser.state = "ACCEPTED";
-							req.staywellUser = mergeKeys(staywellUser, userData);
-                            next();
-                        }else if(activation.type === "code"){
-                            //validate code
-                            ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
-                                if(err || !code){
+                        if(!userData.groupsID[0] && availableGroups.length > 0){
+                            handleError(res, null, 400, 37);
+                        }else if(!userData.address){
+                            handleError(res, null, 400, 28);
+                        }else if(!userData.citiesID){
+                            handleError(res, null, 400, 38);
+                        }else if(userData.phone && !phonePatt.test(userData.phone)){
+                            handleError(res, null, 400, 27);
+                        }else{
+                            //establish default user group
+                            UserGroup.findOne({profession: userData.profession, display_name: "Default"}, function (err, group) {
+                                if(err || !group){
                                     handleError(res, err);
                                 }else{
-                                    if(!activation.value || (SHA512(activation.value).toString() !== code.value)){
-                                        handleError(res, null, 403, 351);
-                                    }else{
+                                    //establish groups ids
+                                    userData.groupsID.push(group._id.toString());
+                                    //validate activation code / proof
+                                    if(!proofRequired){
                                         staywellUser.state = "ACCEPTED";
                                         req.staywellUser = mergeKeys(staywellUser, userData);
                                         next();
+                                    }else if(activation.type === "code"){
+                                        //validate code
+                                        ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
+                                            if(err || !code){
+                                                handleError(res, err);
+                                            }else{
+                                                if(!activation.value || (SHA512(activation.value).toString() !== code.value)){
+                                                    handleError(res, null, 403, 351);
+                                                }else{
+                                                    staywellUser.state = "ACCEPTED";
+                                                    req.staywellUser = mergeKeys(staywellUser, userData);
+                                                    next();
+                                                }
+                                            }
+                                        });
+                                    }else{
+                                        //validate proof
+                                        if(activation.value && typeof activation.value.extension === "string" && typeof activation.value.file === "string"){
+                                            staywellUser.state = "PENDING";
+                                            req.staywellUser = mergeKeys(staywellUser, userData);
+                                            req.staywellProof = activation.value;
+                                            next();
+                                        }else{
+                                            handleError(res, null, 500, 39);
+                                        }
                                     }
                                 }
                             });
-                        }else{
-                            //validate proof
-                            if(activation.value && typeof activation.value.extension === "string" && typeof activation.value.file === "string"){
-                                staywellUser.state = "PENDING";
-                                req.staywellUser = mergeKeys(staywellUser, userData);
-                                req.staywellProof = activation.value;
-                                next();
-                            }else{
-                                handleError(res, null, 500, 39);
-                            }
                         }
                     }
-                });
+                })
             }
         }catch(ex){
             handleError(res, err);
