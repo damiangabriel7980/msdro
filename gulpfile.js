@@ -444,6 +444,75 @@ gulp.task("populateDB", function() {
     );
 });
 
+var Slides = require('./app/models/elearning/slides');
+var Questions = require('./app/models/elearning/questions');
+var Answers = require('./app/models/elearning/answers');
+
+gulp.task("fillScores", function(){
+
+    var slide_id = "55fae5ad0b42ffb9c19245dc";
+
+    var dbAddress = "mongodb://localhost:27017/msd";
+    var mongoose = require('mongoose');
+    mongoose.connect(dbAddress);
+    console.log("connected");
+    
+    Slides.findOne({_id: slide_id}, function(err, slide){
+        if(err || !slide){
+            console.log(err || "No slide");
+        }else{
+            async.each(slide.questions, function processQuestion(question_id, callback){
+                Questions.findOne({_id: question_id}, function(err, question){
+                    if(err || !question){
+                        callback(err || "No question");
+                    }else{
+                        Answers.find({_id: {$in: question.answers}}).select("+ratio").exec(function(err, answers){
+                            if(err){
+                                callback(err);
+                            }else{
+                                var totalPoints = 0;
+                                var unpointedAnswers = [];
+                                for(var i=0; i<answers.length; i++){
+                                    if(answers[i].ratio > 0){
+                                        totalPoints+=answers[i].ratio;
+                                    }else{
+                                        unpointedAnswers.push(answers[i]._id);
+                                    }
+                                }
+                                var adjustment = totalPoints / unpointedAnswers.length * -1;
+                                console.log("====================");
+                                console.log("Qestion "+question.order);
+                                console.log("Total points: "+totalPoints);
+                                console.log("Unpointed answers: "+unpointedAnswers.length);
+                                console.log("Adjustment: "+adjustment);
+                                Answers.update(
+                                    {_id: {$in: unpointedAnswers}},
+                                    {$set: {ratio: adjustment}},
+                                    {multi: true},
+                                    function(err){
+                                        if(err){
+                                            callback(err);
+                                        }else{
+                                            callback();
+                                        }
+                                    }
+                                );
+                            }
+                        });
+                    }
+                })
+            }, function done(err){
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log("done");
+                }
+                mongoose.disconnect();
+            });
+        }
+    });
+});
+
 function dumpDB(workdirAbs) {
     var deferred = Q.defer();
     //make a dump of the QA database
