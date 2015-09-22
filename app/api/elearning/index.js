@@ -398,6 +398,23 @@ module.exports = function(env, logger, amazon, router){
 	    	}
 	    });
 
+	router.route('/elearning/subchapters')
+		.get(function(req, res){
+			if(!req.query.id){
+				return handleError(res, false, 400, 6);
+			}else{
+				Subchapters.findOne({_id: req.query.id}).populate({path: 'listSlides', options: { sort: {order: 1}}}).exec(function(err, subchapter){
+					if(err){
+						return handleError(res, err);
+					}else if(!subchapter){
+						return handleError(res, err);
+					}else{
+						return handleSuccess(res, subchapter);
+					}
+				});
+			}
+		});
+
 	router.route('/elearning/slides')
 		.get(function(req, res){
 			if(!req.query.id){
