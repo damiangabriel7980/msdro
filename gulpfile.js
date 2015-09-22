@@ -350,6 +350,45 @@ gulp.task("tpaCleanup", function () {
 
 });
 
+gulp.task("farma", function () {
+
+    var dbAddress = "mongodb://localhost:27017/msd";
+
+    var mongoose = require('mongoose');
+    mongoose.connect(dbAddress);
+    console.log("connected");
+
+    var Groups = require('./app/models/userGroup');
+    var Professions = require('./app/models/professions');
+
+    //find all the Farmacist groups
+    Professions.findOne({"display_name": /farma/i}, function(err, profession){
+        if(err || !profession){
+            console.log(err || !profession);
+        }else{
+            Groups.find({profession: profession._id, display_name: {$ne: "Default"}}, function(err, groups){
+                if(err){
+                    console.log(err);
+                }else{
+                    // now we need to hide all the Farmacist groups at signup
+                    Groups.update(
+                        {profession: profession._id, display_name: {$ne: "Default"}},
+                        {$set: {show_at_signup: false}},
+                        {multi: true},
+                        function(err){
+                            if(err){
+                                console.log(err);
+                            }else{
+                                mongoose.disconnect();
+                            }
+                        });
+                }
+            });            
+        }            
+    });
+
+});
+
 gulp.task("countyDoubleBind", function () {
 
     var dbAddress = "mongodb://localhost:27017/msd";
