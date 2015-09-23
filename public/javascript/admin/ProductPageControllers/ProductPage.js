@@ -37,9 +37,8 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
     $scope.addSpecialProduct = function(){
         $modal.open({
             templateUrl: 'partials/admin/content/specialProducts/baseModalView.html',
-            windowTemplateUrl: 'partials/admin/content/specialProducts/modalTemplate.html',
             size: 'lg',
-            windowClass: 'fade',
+            windowClass: 'fade stretch',
             controller: 'ProductPageModal',
             resolve: {
                 intent: function () {
@@ -55,9 +54,8 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
     $scope.editSpecialProduct = function (id) {
         $modal.open({
             templateUrl: 'partials/admin/content/specialProducts/baseModalView.html',
-            windowTemplateUrl: 'partials/admin/content/specialProducts/modalTemplate.html',
             size: 'lg',
-            windowClass: 'fade',
+            windowClass: 'fade stretch',
             controller: 'ProductPageModal',
             resolve: {
                 intent: function () {

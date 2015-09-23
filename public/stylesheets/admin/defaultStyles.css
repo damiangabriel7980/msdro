@@ -1,6 +1,9 @@
 a {
   cursor: pointer;
 }
+.modal.stretch .modal-dialog {
+  width: 90%;
+}
 .main-view-container {
   width: 100%;
   position: absolute;
