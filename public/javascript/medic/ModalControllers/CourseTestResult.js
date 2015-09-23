@@ -3,7 +3,10 @@
  */
 app.controllerProvider.register('CourseTestResult', ['$scope', '$rootScope', '$sce', '$modal','$timeout','$state','$modalInstance','testScore', function($scope, $rootScope, $sce, $modal,$timeout,$state,$modalInstance,testScore) {
 
-    $scope.score = testScore;
+    if(testScore == true)
+        $scope.score = 0;
+    else
+        $scope.score = testScore;
 
     $scope.closeModal=function(){
         $modalInstance.close();
