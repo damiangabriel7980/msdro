@@ -7863,6 +7863,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
   width: 100%;
   height: 100%;
 }
+.testScoreModal {
+  top: 150px;
+}
 .medicProfile {
   font-size: 12px;
 }
