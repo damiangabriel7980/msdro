@@ -92,6 +92,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'CourseTestResult',
+                files: [
+                    'javascript/medic/ModalControllers/CourseTestResult.js'
+                ]
+            },
+            {
                 name: 'SlideView',
                 files: [
                     'javascript/medic/ELearningControllers/SlideView.js'
@@ -342,6 +348,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/:courseId/chapters',
             templateUrl: 'partials/medic/elearning/courses/courseDetails.ejs',
             controller: 'CourseDetails',
+            params: {
+                fromTest: {array: false},
+                testScore: {array: false}
+            },
             resolve: {
                 loadDeps: loadStateDeps(['CoursesDetails'])
             }
