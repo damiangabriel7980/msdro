@@ -7290,8 +7290,8 @@ body .btn {
   }
 }
 .navbarMedic .searchDefault {
-  right: 290px;
-  top: 18px;
+  top: 21px;
+  right: 0;
 }
 @media (max-width: 1280px) {
   .navbarMedic .searchDefault {
@@ -7329,6 +7329,19 @@ body .btn {
   .navbarMedic .searchDefault .newWidthPopSearch {
     width: 100% !important;
   }
+}
+.navbarMedic .searchNoSpecialGroups {
+  position: absolute;
+  right: 70px;
+  bottom: 59px;
+}
+.navbarMedic .searchWithGroups {
+  position: absolute;
+  right: 304px;
+  bottom: 59px;
+}
+.navbarMedic .profileNoSpecialGroups {
+  right: 0 !important;
 }
 .navbarMedic .dropdown-menu {
   border-radius: 6px;

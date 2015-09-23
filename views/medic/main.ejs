@@ -110,7 +110,8 @@
             </a>
             <special-dropdown generic-object="specialGroupSelected" array-of-objects="specialGroups" amazon-path="pathAmazonDev" default-image-url="defaultGroupPhoto" on-item-select="selectSpecialGroup">
             </special-dropdown>
-            <ul class="profile nav navbar-nav pull-right dropdown">
+
+            <ul class="profile nav navbar-nav pull-right dropdown" ng-class="{'profileNoSpecialGroups': !specialGroupSelected}">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>
                 </a>
@@ -119,7 +120,10 @@
                     <li ng-click="logoutUser()"><a>Sign Out</a></li>
                 </ul>
             </ul>
-
+                <div class="nav navbar-nav navbar-right hideOnMobile" ng-class="{'searchNoSpecialGroups': !specialGroupSelected, 'searchWithGroups': specialGroupSelected}">
+                        <bootstrap-search animated-input=true on-search="searchText">
+                        </bootstrap-search>
+                </div>
             <a class="navbar-brand" ui-sref="home"><img ng-src="{{MSDlogo}}"></a>
 
         </div>
@@ -175,10 +179,7 @@
 
                     </ul>
                 </li>
-                <ul class="nav navbar-nav navbar-right hideOnMobile">
-                    <bootstrap-search animated-input=true on-search="searchText">
-                    </bootstrap-search>
-                </ul>
+
                 <li class="mobileLink dividerTop" ng-class="{'active': $state.includes('profileMobile')}" ng-click="showProfile();closeNavbar()"><a>Contul meu</a></li>
                 <li class="mobileLink" ng-click="logoutUser()"><a>Sign out</a></li>
             </ul>
