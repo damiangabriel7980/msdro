@@ -1,19 +1,19 @@
 <div class="col-xs-12 col-md-8 col-md-offset-2 slideWrapper">
     <div class="col-xs-12 well well-lg noGrey">
-        <div class="col-xs-12" ng-class="{'noPadding': slide.type == 'test'}">
-            <div class="btn btn-default"  style="margin-top: 20px" ng-click="backToChapter()">Inapoi</div>
+        <div class="col-xs-12 noPadding">
+            <div class="btn btn-default" ng-click="backToChapter()">Inapoi la cuprins</div>
         </div>
-        <div class="col-xs-12 justify paddingTop10" ng-if="slide.type != 'test'" convert-special conver="slide.content" ng-bind-html="trustAsHtml(slide.content)">
+        <div class="col-xs-12 justify padding24" ng-if="slide.type != 'test'" convert-special conver="slide.content" ng-bind-html="trustAsHtml(slide.content)">
 
         </div>
-        <div class="col-xs-12" ng-if="slide.type != 'test'">
-            <div class="btn btn-default" style="margin-top: 20px" ng-if="previousSlide" ng-click="goPrevious()">Slide-ul precedent</div>
-            <div class="btn btn-default pull-right" style="margin-top: 20px" ng-if="nextSlide" ng-click="goNext()">Slide-ul urmator</div>
+        <div class="col-xs-12 noPadding" ng-if="slide.type != 'test'">
+            <div class="btn btn-default" ng-if="previousSlide" ng-click="goPrevious()">Pagina precedenta</div>
+            <div class="btn btn-default pull-right" ng-if="nextSlide" ng-click="goNext()">Pagina urmatoare</div>
         </div>
         <div class="test-container" ng-if="slide.type == 'test'" >
             <!-- HEADER -->
             <div class="test-header clearfix" ng-if="slide.type == 'test'">
-                <div class="col-xs-12 paddingTop10" >
+                <div class="col-xs-12 padding24" >
                     <!-- QUIZ TITLE -->
                     <div class="row">
                         <div class="quiz-title col-xs-12"> {{slide.title}}</div>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="submit-bottom-container" ng-if="slide.type == 'test'">
-                <button class="quiz-button colored centered" ng-click="submitQuiz()">FINALIZARE</button>
+                <button class="quiz-button colored centered" ng-click="submitQuiz()">TRIMITE</button>
             </div>
         </div>
     </div>

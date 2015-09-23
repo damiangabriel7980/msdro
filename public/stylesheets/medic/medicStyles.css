@@ -6631,7 +6631,8 @@ body .btn {
 }
 .courseTitle {
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  padding: 20px;
   font-size: 25px;
   text-align: center;
 }
@@ -6658,10 +6659,13 @@ body .btn {
   background-color: #ffffff;
   border-radius: 0px;
 }
+.slideWrapper .padding24 {
+  padding: 24px 0;
+}
 .chaptersContainer {
   border: 1px solid #1b1e1f;
   border-radius: 7px;
-  padding-bottom: 20px;
+  padding: 20px;
   max-width: 992px;
   margin: 0px auto 10px;
   box-sizing: border-box;
@@ -6783,10 +6787,8 @@ body .btn {
 }
 .test-container {
   max-width: 960px;
-  margin: 0 auto 10px auto;
-}
-.test-container .test-header {
-  padding: 30px 0 25px 0;
+  position: relative;
+  float: left;
 }
 .test-container .test-header .quiz-name {
   font-weight: bold;
@@ -6799,7 +6801,6 @@ body .btn {
 .test-container .test-header .quiz-title {
   font-size: 20px;
   float: left;
-  padding-left: 0px;
 }
 .test-container .test-header .quiz-summary {
   margin-top: 20px;
@@ -6877,10 +6878,11 @@ body .btn {
   background-color: #eaefef;
 }
 .test-container .quiz-button.centered {
-  margin-top: 20px;
+  margin-top: 0px;
 }
 .test-container .submit-bottom-container {
   text-align: center;
+  padding: 12px 0px;
 }
 .test-container .test-questions .question-container {
   border-top: 1px solid #d7d7d7;
@@ -6899,7 +6901,7 @@ body .btn {
   float: right;
 }
 .test-container .test-questions .question-container .question-contents {
-  padding: 12px 0 15px 0;
+  padding: 12px 0 12px 0;
 }
 .test-container .test-questions .question-container .question-contents .question-choice {
   margin: 5px 0;
