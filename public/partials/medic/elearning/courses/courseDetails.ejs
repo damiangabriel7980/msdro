@@ -1,5 +1,5 @@
 <div class="col-xs-12">
-    <div class="courseTitle noPadding">CUPRINS</div>
+    <div class="courseTitle">CUPRINS</div>
     <div class="chaptersContainer">
         <!-- chapter -->
         <div ng-if="course.listChapters.length == 1 && course.listChapters[0].listSubchapters.length == 1" ng-repeat="slide in course.listChapters[0].listSubchapters[0].listSlides | orderBy:' order'"
@@ -9,7 +9,9 @@
             <div class="item-text col-xs-12 clearfix">
                 <div class="item-text-container col-xs-12">
                     <div class="item-text-text">{{slide.title}}
-                        <span class="label label-success pull-right" ng-if="slide.type == 'test'">{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? slideViews[slide._id].score + ' puncte' : ''}}</span>
+                        <span class="label label-success pull-right" ng-if="slide.type == 'test'">
+                            <b class="fontM">{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? slideViews[slide._id].score : ''}}</b>{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? ' puncte' : ''}}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -37,7 +39,9 @@
                     <div class="item-text col-xs-12 clearfix">
                         <div class="item-text-container col-xs-12">
                             <div class="item-text-text">{{slide.title}}
-                                <span class="label label-success pull-right" ng-if="slide.type == 'test'">{{slideViews[slide._id].score ? slideViews[slide._id].score + ' puncte' : ''}}</span>
+                                <span class="label label-success pull-right" ng-if="slide.type == 'test'">
+                                    {{slideViews[slide._id].score ? slideViews[slide._id].score + ' puncte' : ''}}
+                                </span>
                             </div>
                         </div>
                     </div>

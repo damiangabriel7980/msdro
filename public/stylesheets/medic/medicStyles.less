@@ -323,7 +323,8 @@ body {
 
 .courseTitle {
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  padding: 20px;
   .fontXXL;
   text-align: center;
 }
@@ -345,6 +346,9 @@ body {
     background-color: #ffffff;
     border-radius: 0px;
   }
+  .padding24{
+    padding: 24px 0;
+  }
 }
 
 .chaptersContainer{
@@ -361,7 +365,7 @@ body {
   }
   border: 1px solid rgb(27, 30, 31);
   border-radius: 7px;
-  padding-bottom: 20px;
+  padding: 20px;
   max-width: @screen-md-min;
   margin: 0px auto 10px;
   box-sizing: border-box;
@@ -471,10 +475,10 @@ body {
 
 //TEST STYLES
 .test-container {
-  max-width:960px;
-  margin:0 auto 10px auto;
+  max-width: 960px;
+  position: relative;
+  float: left;
   .test-header {
-    padding:30px 0 25px 0;
     .quiz-name {
       font-weight:bold;
       float:left;
@@ -486,7 +490,6 @@ body {
     .quiz-title {
       font-size:20px;
       float:left;
-      padding-left:0px;
     }
     .quiz-summary {
       margin-top:20px;
@@ -565,10 +568,11 @@ body {
     background-color:#eaefef;
   }
   .quiz-button.centered {
-    margin-top:20px;
+    margin-top:0px;
   }
   .submit-bottom-container {
     text-align:center;
+    padding: 12px 0px;
   }
   .test-questions .question-container {
     border-top:1px solid #d7d7d7;
@@ -586,7 +590,7 @@ body {
       }
     }
     .question-contents {
-      padding:12px 0 15px 0;
+      padding: 12px 0 12px 0;
       .question-choice {
         margin:5px 0;
         cursor:pointer;
