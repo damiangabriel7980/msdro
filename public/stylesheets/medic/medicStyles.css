@@ -6681,7 +6681,7 @@ body .btn {
 .chaptersContainer .disabledChapter:hover {
   background-color: #eeeeee !important;
 }
-@media (max-width: 992px) {
+@media (min-width: 480px) and (max-width: 992px) {
   .chaptersContainer {
     margin-right: 50px;
     margin-left: 50px;
@@ -6786,7 +6786,6 @@ body .btn {
   border: none;
 }
 .test-container {
-  max-width: 960px;
   position: relative;
   float: left;
 }
@@ -7074,6 +7073,9 @@ body .btn {
   color: #01877b;
 }
 .widgets .glycemizerTextPadding {
+  padding-bottom: 30px;
+}
+.widgets .PharmaTextPadding {
   padding-bottom: 30px;
 }
 .widgets .handCursor {

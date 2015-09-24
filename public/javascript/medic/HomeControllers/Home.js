@@ -2,6 +2,7 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
 
     $scope.monthsArray = Utils.getMonthsArray();
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
+    $scope.PharmaUrl = $sce.trustAsResourceUrl('partials/medic/widgets/PharmaCourse.html');
     $scope.myInterval = 10;
     $scope.HomeCarousel = [];
     $scope.selectedIndexCarousel = 0;
