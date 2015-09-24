@@ -369,7 +369,7 @@ body {
   max-width: @screen-md-min;
   margin: 0px auto 10px;
   box-sizing: border-box;
-  @media(max-width: @screen-md-min){
+  @media(min-width: @screen-xs-min) and (max-width: @screen-md-min){
     margin-right: 50px;
     margin-left: 50px;
   }
@@ -475,7 +475,6 @@ body {
 
 //TEST STYLES
 .test-container {
-  max-width: 960px;
   position: relative;
   float: left;
   .test-header {
@@ -766,6 +765,9 @@ body {
     color: @green;
   }
   .glycemizerTextPadding {
+    padding-bottom: 30px;
+  }
+  .PharmaTextPadding {
     padding-bottom: 30px;
   }
   .handCursor {

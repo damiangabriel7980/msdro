@@ -4,6 +4,13 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
     SpecialFeaturesService.specialGroups.getAll().then(function (groups) {
         //console.log(groups);
         $scope.specialGroups = groups;
+        if(!$scope.specialGroups)
+            $rootScope.showFarmaWidget = true;
+        else
+            if($scope.specialGroups.length == 0)
+                $rootScope.showFarmaWidget = true;
+        else
+                $rootScope.showFarmaWidget = false;
     });
 
     //getSelectedGroup
