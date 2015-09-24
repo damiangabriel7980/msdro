@@ -181,6 +181,10 @@ gulp.task('run_production_no_min', function () {
     })
 });
 
+gulp.task('prepare_production', ['minify_all', 'copy_components', 'copy_partials', 'copy_module_templates'], function () {
+    console.log("DONE");
+});
+
 gulp.task('toObjectId', function () {
 
     var dbAddress = "localhost:27017/msd";
