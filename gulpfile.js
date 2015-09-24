@@ -121,6 +121,10 @@ gulp.task('generate_manifests', ['minify_all'], function () {
     }
 });
 
+gulp.task('prepare_production', ['minify_all', 'copy_components', 'copy_partials', 'copy_module_templates'], function () {
+    console.log("DONE");
+});
+
 gulp.task('run', function () {
     nodemon({
         script: 'server.js',
@@ -133,7 +137,7 @@ gulp.task('run', function () {
     })
 });
 
-gulp.task('run_staging', ['minify_all', 'copy_components', 'copy_partials', 'copy_module_templates'], function () {
+gulp.task('run_staging', ['prepare_production'], function () {
     nodemon({
         script: 'server.js',
         ext: 'js html css',
@@ -145,19 +149,7 @@ gulp.task('run_staging', ['minify_all', 'copy_components', 'copy_partials', 'cop
     })
 });
 
-gulp.task('run_staging_no_min', function () {
-    nodemon({
-        script: 'server.js',
-        ext: 'js html css',
-        env: {
-            'NODE_ENV': 'staging',
-            'AWS_ACCESS_KEY_ID': 'AKIAIU26AHNKP7VDKG6A',
-            'AWS_SECRET_ACCESS_KEY': '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'
-        }
-    })
-});
-
-gulp.task('run_production', ['minify_all', 'copy_components', 'copy_partials', 'copy_module_templates'], function () {
+gulp.task('run_production', ['prepare_production'], function () {
     nodemon({
         script: 'server.js',
         ext: 'js html css',
@@ -167,22 +159,6 @@ gulp.task('run_production', ['minify_all', 'copy_components', 'copy_partials', '
             'AWS_SECRET_ACCESS_KEY': 'bBPLoBHRpB6gbqjjNR8zoJ7Mxywo146R83d00p07'
         }
     })
-});
-
-gulp.task('run_production_no_min', function () {
-    nodemon({
-        script: 'server.js',
-        ext: 'js html css',
-        env: {
-            'NODE_ENV': 'production',
-            'AWS_ACCESS_KEY_ID': 'AKIAIU26AHNKP7VDKG6A',
-            'AWS_SECRET_ACCESS_KEY': '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'
-        }
-    })
-});
-
-gulp.task('prepare_production', ['minify_all', 'copy_components', 'copy_partials', 'copy_module_templates'], function () {
-    console.log("DONE");
 });
 
 gulp.task('toObjectId', function () {
