@@ -32,6 +32,11 @@
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
                 </accordion-heading>
             </accordion-group>
+            <accordion-group is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.immunologyQA')}" ui-sref="groupSpecialProduct.immunologyQA({product_id: specialProductPage._id})">
+                <accordion-heading>
+                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Immunology QA</div>
+                </accordion-heading>
+            </accordion-group>
         </accordion>
         <div dropdown is-open="isCollapsed.isFirstOpen" class="col-xs-12 col-sm-12 hidden-md hidden-lg mobileDropdown">
         <a class="btn btn-primary col-xs-12 text-center pull-left dropdown-toggle" dropdown-toggle>{{mobileMenuTitle}}<i class="glyphicon glyphicon-chevron-down pull-right glyphicon-Special-Product" ></i></a>
