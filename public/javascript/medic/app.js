@@ -104,7 +104,9 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'javascript/medic/ProductPageControllers/ProductPageMenu.js',
                     'javascript/medic/ProductPageControllers/ProductPageDownloads.js',
                     'javascript/medic/ProductPageControllers/ProductPageGlossary.js',
-                    'javascript/medic/ProductPageControllers/ProductPageSpeaker.js'
+                    'javascript/medic/ProductPageControllers/ProductPageSpeaker.js',
+                    'javascript/medic/ProductPageControllers/ProductPageQA.js',
+                    'javascript/medic/ModalControllers/immunologyQAModal.js'
                 ]
             },
             {
@@ -199,6 +201,8 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'components/video-js/dist/video-js/video.js'
                 ]
             }
+
+
         ]
     });
 }]);
@@ -410,6 +414,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             resolve: {
                 loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
             }
+        })
+        .state('groupSpecialProduct.immunologyQA',{
+            url:'/immunologyQA',
+            templateUrl:'partials/medic/groupFeatures/immunologyQA.html',
+            controller:'ProductPageQA'
         })
 }]);
 

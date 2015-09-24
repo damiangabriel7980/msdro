@@ -1931,3 +1931,147 @@ a:focus {
     width: 30% !important;
   }
 }
+
+// ========================================================================================================immunology QA
+
+#immunologyQA{
+  .glossaryPrintButtons{
+
+    span{
+      color:#10887C;
+      font-weight:bold;
+    }
+  }
+  .oddQAitem{
+    background-color:#F3F3F4;
+  }
+  .evenQAitem{
+    background-color:#EBECED;
+  }
+
+  @media screen and (max-width: 1350px){
+    .QAitem{
+      height:230px!important;
+    }
+  }
+
+  @media screen and(max-width: 635px) and (min-width:0px){
+    .QAitem{
+      height:460px!important;
+      flex-wrap: wrap;
+      -webkit-flex-wrap: wrap;
+      .question{
+        min-width:250px!important;
+        height: 230px!important;
+        span{
+          font-size:15px!important;
+        }
+      }
+      .answers{
+        min-width:250px!important;
+        height:230px!important;
+      }
+    }
+  }
+
+
+  .QAitem{
+    display: flex;
+    -webkit-display:flex;
+    flex:1;
+    -webkit-flex: 1;
+    float:left;
+    clear:left;
+    height:200px;
+    .question{
+      -webkit-display:flex ;
+      display:flex;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-justify-content: center;
+      justify-content: center;
+      flex:1;
+      -webkit-flex: 1;
+      height:inherit;
+      float:left;
+      text-align: center;
+      span{
+        color:@green;
+        font-size:25px;
+        margin:0 10px;
+      }
+    }
+    .answers{
+      width:600px;
+      flex-wrap: wrap;
+      -webkit-flex-wrap: wrap;
+      flex:1;
+      -webkit-flex: 1;
+      display:flex;
+      -webkit-display:flex;
+      height:inherit;
+      float:left;
+      @media screen and (min-width: 1351px){
+          .speakerContainer{
+            width:120px;
+        }
+      }
+      @media screen and (max-width:1350px) and (min-width:995px){
+        .speakerContainer{
+          width:100px;
+        }
+      }
+
+      @media screen and (max-width:995px){
+        .speakerContainer{
+          width:75px!important;
+        }
+      }
+
+      .speakerContainer{
+        padding-top:10px;
+        width:120px;
+      .speakerPicture{
+        &:hover{
+          cursor:pointer;
+        }
+        display:flex;
+        -webkit-flex: 1;
+        justify-content: center;
+        -webkit-justify-content: center;
+        img{
+          float:left;
+          display: flex;
+          width:50px;
+          height:50px;
+          border-radius:999px;
+          border: solid 2px #D4CCC6;
+        }
+
+
+      }
+        .speakerName{
+          display:flex;
+          -webkit-display:flex;
+          flex:1;
+          -webkit-flex: 1;
+          justify-content: center;
+          -webkit-justify-content: center;
+          text-align:center;
+          span{
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+//@media screen {
+//  @media (min-width: @screen-xs-max) {
+//    width: 400px;
+//    height: 120px;
+//    padding-left: 85px;
+//  }
+//}
