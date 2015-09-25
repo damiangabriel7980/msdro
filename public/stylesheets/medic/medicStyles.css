@@ -8313,6 +8313,9 @@ a:focus {
     width: 30% !important;
   }
 }
+#immunologyQA .padding0 {
+  padding: 0px!important;
+}
 #immunologyQA .glossaryPrintButtons span {
   color: #10887C;
   font-weight: bold;
