@@ -7,6 +7,9 @@ var Answers = require('../../models/elearning/answers');
 var Users = require('../../models/user');
 
 var Q = require('q');
+var mongoose = require('mongoose');
+var ObjectId = mongoose.Types.ObjectId;
+var async = require('async');
 
 var ElearningService = require('./elearning.service.js');
 
@@ -18,7 +21,7 @@ module.exports = function(env, logger, amazon, router){
 	router.route('/admin/elearning/courses')
 	    .get(function (req, res) {
 	        if(req.query.id){
-	            Courses.findOne({_id: req.query.id}, function (err, course) {
+	            Courses.findOne({_id: req.query.id}).populate('listChapters groupsID').exec(function (err, course) {
 	                if(err){
 	                    handleError(res, err);
 	                }else{
@@ -26,7 +29,7 @@ module.exports = function(env, logger, amazon, router){
 	                }
 	            });
 	        }else{
-	            Courses.find({$query:{}, $orderby: {orderNumber: 1}}).deepPopulate('listChapters listChapters.listSubChapters listChapters.listSubChapters.listSlides').exec(function (err, courses) {
+	            Courses.find({$query:{}, $orderby: {order: 1}}).deepPopulate("listChapters.listSubchapters.listSlides").exec(function (err, courses) {
 	                if(err){
 	                    handleError(res, err);
 	                }else{
@@ -36,18 +39,11 @@ module.exports = function(env, logger, amazon, router){
 	        }
 	    })
 	    .post(function (req, res) {
-	        var name = req.body.name;
-	        var content = req.body.content;
-	        if(!name || !content){
+	        if(!req.body.course){
 	            handleError(res, null, 400, 6);
 	        }else{
 	            try{
-	                content = JSON.parse(content);
-	                var toAdd = new courses({
-	                    name: name,
-	                    content: content,
-	                    last_updated: Date.now()
-	                });
+	                var toAdd = new Courses(req.body.course);
 	                toAdd.save(function (err, saved) {
 	                    if(err){
 	                        handleError(res, err);
@@ -61,44 +57,115 @@ module.exports = function(env, logger, amazon, router){
 	        }
 	    })
 	    .put(function (req, res) {
-	        var id = req.query.id;
-	        var data = req.body;
-	        if(!id || !data.content) {
-	            handleError(res, null, 400, 6);
-	        }else{
-	            try{
-	                data.content = JSON.parse(data.content);
-	                data.last_updated = Date.now();
-	                courses.update({_id: req.query.id}, {$set: data}, function (err, wres) {
-	                    if(err){
-	                        handleError(res, err);
-	                    }else{
-	                        courses.findOne({_id: req.query.id}, function (err, course) {
-	                            if(err){
-	                                handleError(res, err);
-	                            }else{
-	                                handleSuccess(res, course);
-	                            }
-	                        });
-	                    }
-	                });
-	            }catch(ex){
-	                handleError(res, ex);
-	            }
-	        }
+			if(req.body.imagePath){
+				var info = req.body.imagePath;
+					Courses.update({_id: req.query.id}, {$set:{image_path: info}}, function (err, wRes) {
+						if (err) {
+							handleError(res,err,500);
+						} else {
+							handleSuccess(res, {updated: wRes}, 3);
+						}
+					});
+			}else{
+				var data = req.body.course;
+				Courses.update({_id:req.query.id},{$set:data}, function(err, course) {
+					if (err){
+						handleError(res,err,500);
+					}else{
+						handleSuccess(res, {}, 3);
+					}
+				});
+			}
 	    })
 	    .delete(function (req, res) {
 	        var idToDelete = ObjectId(req.query.id);
 	        if(idToDelete){
-	            courses.remove({_id: idToDelete}, function (err, wRes) {
-	                if(err){
-	                    handleError(res, err);
-	                }else if(wRes == 0){
-	                    handleError(res, null, 404, 51);
-	                }else{
-	                    handleSuccess(res);
-	                }
-	            });
+				//first we must delete the slides, then the subchapters, chapters and finally the course
+				Courses.findOne({_id: idToDelete}).deepPopulate("listChapters.listSubchapters.listSlides.questions.answers").exec(function (err, course) {
+					if(err){
+						handleError(res, err);
+					}else{
+						async.each(course.listChapters,function(chapter,callback1){
+							async.each(chapter.listSubchapters,function(subchapter,callback2){
+								async.each(subchapter.listSlides,function(slide,callback3){
+									async.each(slide.questions,function(question,callback4){
+										Answers.remove({_id: {$in: question.answers}}).exec(function(err,resp){
+											if(err){
+												callback4(err);
+											}else{
+												callback4();
+											}
+										})
+									},function(err){
+										if(err){
+											handleError(res,err);
+										}
+										else
+										{
+											Questions.remove({_id: {$in: slide.questions}}).exec(function(err,resp){
+												if(err){
+													callback3(err);
+												}else{
+													callback3();
+												}
+											})
+										}
+									});
+								},function(err){
+									if(err){
+										handleError(res,err);
+									}
+									else
+									{
+										Slides.remove({_id: {$in: subchapter.listSlides}}).exec(function(err,resp){
+											if(err){
+												callback2(err);
+											}else{
+												callback2();
+											}
+										})
+									}
+								});
+							},function(err){
+								if(err){
+									handleError(res,err);
+								}
+								else
+								{
+									Subchapters.remove({_id: {$in: chapter.listSubchapters}}).exec(function(err,resp){
+										if(err){
+											callback1(err);
+										}else{
+											callback1();
+										}
+									})
+								}
+							});
+						},function(err){
+							if(err){
+								handleError(res,err);
+							}
+							else
+							{
+								Chapters.remove({_id: {$in: course.listChapters}}).exec(function(err,resp){
+									if(err){
+										handleError(res,err);
+									}else{
+										Courses.remove({_id: idToDelete}, function (err, wRes) {
+										    if(err){
+										        handleError(res, err);
+										    }else if(wRes == 0){
+										        handleError(res, null, 404, 51);
+										    }else{
+										        handleSuccess(res);
+										    }
+										});
+									}
+								})
+							}
+						});
+					}
+				});
 	        }else{
 	            handleError(res, null, 400, 6);
 	        }

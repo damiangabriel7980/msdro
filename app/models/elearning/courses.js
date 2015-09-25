@@ -22,7 +22,7 @@ var CourseSchema		= new Schema({
 
 CourseSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 CourseSchema.plugin(deepPopulate, {
-	whitelist: ["listChapters.listSubchapters.listSlides"],
+	whitelist: ["listChapters.listSubchapters.listSlides" , "listChapters.listSubchapters.listSlides.questions.answers"],
 	populate: {
 		"listChapters": {
             options: {
@@ -39,6 +39,20 @@ CourseSchema.plugin(deepPopulate, {
             }
         },
         "listChapters.listSlides": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        },
+        "listChapters.questions": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        },
+        "listChapters.answers": {
             options: {
                 sort: {
                     "order": 1
