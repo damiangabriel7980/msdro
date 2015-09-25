@@ -13,4 +13,16 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
+
+    $scope.deleteCourse = function (id) {
+        ActionModal.show("Stergere curs", "Sunteti sigur ca doriti sa stergeti acest curs?", function () {
+            ElearningService.courses.delete({id: id}).$promise.then(function(result){
+                $state.reload();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
+        },{
+            yes: "Sterge"
+        });
+    };
 }]);

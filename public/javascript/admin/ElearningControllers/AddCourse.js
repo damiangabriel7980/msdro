@@ -7,6 +7,8 @@ controllers.controller('AddCourse', ['$scope', '$rootScope', '$state', '$statePa
         return $sce.trustAsHtml(htmlCode);
     };
 
+    $scope.selectedGroups = [];
+
     GroupsService.groups.query().$promise.then(function (resp) {
         $scope.allGroups = Success.getObject(resp);
     });
@@ -21,7 +23,20 @@ controllers.controller('AddCourse', ['$scope', '$rootScope', '$state', '$statePa
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 
-    $scope.addCourse = function(){
+    $scope.saveCourse = function(){
+        var id_groups=[];
+        for(var i=0;i<$scope.selectedGroups.length;i++){
+            id_groups.push($scope.selectedGroups[i]._id);
+        }
 
+        $scope.course.last_updated = new Date();
+        $scope.course.date_created = new Date();
+        $scope.course.listChapters = [];
+        $scope.course.groupsID = id_groups;
+        ElearningService.courses.create({course: $scope.course}).$promise.then(function(resp){
+           $state.go('elearning.courses',{},{reload: true});
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
+        });
     };
 }]);
