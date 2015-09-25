@@ -3296,6 +3296,19 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    router.route('/defaultPharma')
+
+        .get(function(req, res) {
+            UserGroup.find({_id: {$in: req.user.groupsID}, restrict_CRUD: {$exists:true, $ne: false}}).populate('profession').exec(function(err, groups) {
+                if(err || !groups) {
+                    handleError(res,err,500);
+                }
+                else
+                {
+                    handleSuccess(res,groups[0].profession);
+                }
+            });
+        });
 
     router.route('/specialProduct')
         .get(function(req, res) {
