@@ -18,6 +18,38 @@ var ChapterSchema		= new Schema({
     duration: Number
 });
 
-ChapterSchema.plugin(deepPopulate, {});
+ChapterSchema.plugin(deepPopulate, {
+    whitelist: ["listSubchapters.listSlides.questions.answers"],
+    populate: {
+        "listSubchapters": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        },
+        "listSubchapters.listSlides": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        },
+        "listSubchapters.questions": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        },
+        "listSubchapters.answers": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        }
+    }
+});
 
 module.exports = mongoose.model('elearning_chapters', ChapterSchema, 'elearning_chapters');

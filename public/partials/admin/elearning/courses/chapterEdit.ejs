@@ -1,0 +1,32 @@
+<div class="col-md-12 noPadding">
+    <div class="col-md-12">
+        <h3>Editare capitol</h3>
+    </div>
+    <div class="col-md-12 noPadding">
+        <div class="col-md-12 form-group">
+            <label>Titlu capitol:</label>
+            <input ng-model="chapter.title" type="text" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-12 form-group">
+        <label>Sub-Capitole:</label>
+        <my-multiple-select all-objects="allSubchapters" selected-objects="selectedSubchapters" track-by="_id" display-by="title"
+                            output="selectedSubchapters"></my-multiple-select>
+    </div>
+    <div class="col-md-6">
+        <label class="label label-default">Durata:</label>
+        <input type="number" ng-model="chapter.duration" class="form-control col-xs-12">
+    </div>
+    <div class="col-md-6">
+        <label class="label label-default">Numar ordine:</label>
+
+        <input type="number" class="form-control col-xs-12" ng-model="chapter.order">
+    </div>
+    <div class="col-md-12">
+        <label>Descriere:</label>
+        <textarea ui-tinymce="tinymceOptions" ng-model="chapter.description"></textarea>
+    </div>
+    <div class="col-md-12" style="margin: 10px 0">
+        <a class="btn pull-right btn-primary" ng-click="saveChapter()">Salveaza modificarile</a>
+    </div>
+</div>

@@ -8,9 +8,14 @@ controllers.controller('AddCourse', ['$scope', '$rootScope', '$state', '$statePa
     };
 
     $scope.selectedGroups = [];
+    $scope.selectedChapters = [];
 
     GroupsService.groups.query().$promise.then(function (resp) {
         $scope.allGroups = Success.getObject(resp);
+    });
+
+    ElearningService.chapters.query().$promise.then(function(resp){
+        $scope.allChapters = Success.getObject(resp);
     });
 
     $scope.tinymceOptions = {
@@ -29,9 +34,14 @@ controllers.controller('AddCourse', ['$scope', '$rootScope', '$state', '$statePa
             id_groups.push($scope.selectedGroups[i]._id);
         }
 
+        var listChapters=[];
+        for(var i=0;i<$scope.selectedChapters.length;i++){
+            listChapters.push($scope.selectedChapters[i]._id);
+        }
+
         $scope.course.last_updated = new Date();
         $scope.course.date_created = new Date();
-        $scope.course.listChapters = [];
+        $scope.course.listChapters = listChapters;
         $scope.course.groupsID = id_groups;
         ElearningService.courses.create({course: $scope.course}).$promise.then(function(resp){
            $state.go('elearning.courses',{},{reload: true});

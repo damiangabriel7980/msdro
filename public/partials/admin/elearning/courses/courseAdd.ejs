@@ -13,6 +13,11 @@
         <my-multiple-select all-objects="allGroups" selected-objects="selectedGroups" track-by="_id" display-by="display_name"
                             split-by="profession.display_name" output="selectedGroups"></my-multiple-select>
     </div>
+    <div class="col-md-12 form-group">
+        <label>Capitole:</label>
+        <my-multiple-select all-objects="allChapters" selected-objects="selectedChapters" track-by="_id" display-by="title"
+                            output="selectedChapters"></my-multiple-select>
+    </div>
     <div class="col-md-6">
         <label class="label label-default">Durata:</label>
         <input type="number" ng-model="course.duration" class="form-control col-xs-12">

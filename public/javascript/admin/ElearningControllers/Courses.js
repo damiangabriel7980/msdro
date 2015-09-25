@@ -25,4 +25,16 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             yes: "Sterge"
         });
     };
+
+    $scope.deleteChapter = function (id) {
+        ActionModal.show("Stergere capitol", "Sunteti sigur ca doriti sa stergeti acest capitol?", function () {
+            ElearningService.chapters.delete({id: id}).$promise.then(function(result){
+                $state.reload();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
+        },{
+            yes: "Sterge"
+        });
+    };
 }]);

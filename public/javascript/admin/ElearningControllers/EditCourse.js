@@ -10,8 +10,13 @@ controllers.controller('EditCourse', ['$scope', '$rootScope', '$state', '$stateP
     ElearningService.courses.query({id: $stateParams.courseId}).$promise.then(function(resp){
        $scope.course = Success.getObject(resp);
         $scope.selectedGroups = $scope.course.groupsID;
+        $scope.selectedChapters = $scope.course.listChapters;
     }).catch(function(err){
         console.log(Error.getMessage(err));
+    });
+
+    ElearningService.chapters.query().$promise.then(function(resp){
+        $scope.allChapters = Success.getObject(resp);
     });
 
     GroupsService.groups.query().$promise.then(function (resp) {
@@ -103,8 +108,14 @@ controllers.controller('EditCourse', ['$scope', '$rootScope', '$state', '$stateP
             id_groups.push($scope.selectedGroups[i]._id);
         }
 
+        var listChapters=[];
+        for(var i=0;i<$scope.selectedChapters.length;i++){
+            listChapters.push($scope.selectedChapters[i]._id);
+        }
+
         $scope.course.last_updated = new Date();
         $scope.course.groupsID = id_groups;
+        $scope.course.listChapters = listChapters;
         ElearningService.courses.update({id: $stateParams.courseId},{course: $scope.course}).$promise.then(function(resp){
             $state.go('elearning.courses',{},{reload: true});
         }).catch(function(err){
