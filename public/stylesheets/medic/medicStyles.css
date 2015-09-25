@@ -8313,19 +8313,19 @@ a:focus {
 }
 @media screen and (max-width: 635px) and (min-width: 0px) {
   #immunologyQA .QAitem {
-    height: 460px!important;
+    height: 440px!important;
     flex-wrap: wrap;
     -webkit-flex-wrap: wrap;
   }
   #immunologyQA .QAitem .question {
-    min-width: 250px!important;
+    min-width: 260px!important;
     height: 230px!important;
   }
   #immunologyQA .QAitem .question span {
     font-size: 15px!important;
   }
   #immunologyQA .QAitem .answers {
-    min-width: 250px!important;
+    min-width: 260px!important;
     height: 230px!important;
   }
 }

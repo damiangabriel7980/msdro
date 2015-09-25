@@ -32,7 +32,7 @@
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
                 </accordion-heading>
             </accordion-group>
-            <accordion-group is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.immunologyQA')}" ui-sref="groupSpecialProduct.immunologyQA({product_id: specialProductPage._id})">
+            <accordion-group is-open="status.isFirstOpen" class="parent" ng-if="specialProductPage.speakers.length > 0" ng-class="{'active':$state.includes('groupSpecialProduct.immunologyQA')}" ui-sref="groupSpecialProduct.immunologyQA">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Immunology QA</div>
                 </accordion-heading>
@@ -70,7 +70,7 @@
                             <div><i class="glyphicon glyphicon-chevron-right" ></i>&nbsp;&nbsp;Resurse</div>
                         </accordion-heading>
                     </accordion-group>
-                    <accordion-group is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ng-click="navigateMobile('Sitemap')">
+                    <accordion-group is-open="status.isFirstOpen" class="parent" ng-if="specialProductPage" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ng-click="navigateMobile('Sitemap')">
                         <accordion-heading>
                             <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
                         </accordion-heading>
