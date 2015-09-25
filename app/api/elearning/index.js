@@ -314,7 +314,7 @@ module.exports = function(env, logger, amazon, router){
 	router.route('/admin/elearning/subchapters')
 	    .get(function (req, res) {
 	        if(req.query.id){
-	            Subchapters.findOne({_id: req.query.id}, function (err, course) {
+	            Subchapters.findOne({_id: req.query.id}).populate('listSlides').exec(function (err, course) {
 	                if(err){
 	                    handleError(res, err);
 	                }else{
@@ -332,78 +332,111 @@ module.exports = function(env, logger, amazon, router){
 	        }
 	    })
 	    .post(function (req, res) {
-	        var name = req.body.name;
-	        var content = req.body.content;
-	        if(!name || !content){
-	            handleError(res, null, 400, 6);
-	        }else{
-	            try{
-	                content = JSON.parse(content);
-	                var toAdd = new courses({
-	                    name: name,
-	                    content: content,
-	                    last_updated: Date.now()
-	                });
-	                toAdd.save(function (err, saved) {
-	                    if(err){
-	                        handleError(res, err);
-	                    }else{
-	                        handleSuccess(res, saved);
-	                    }
-	                });
-	            }catch(ex){
-	                handleError(res, ex);
-	            }
-	        }
+			if(!req.body.subChapter){
+				handleError(res, null, 400, 6);
+			}else{
+				try{
+					var toAdd = new Subchapters(req.body.subChapter);
+					toAdd.save(function (err, saved) {
+						if(err){
+							handleError(res, err);
+						}else{
+							Chapters.update({_id: req.body.chapterId}, {$addToSet: {listSubchapters: saved._id}}, function (err, wres) {
+								if(err){
+									handleError(res,err,500);
+								}else{
+									handleSuccess(res, wres);
+								}
+							});
+						}
+					});
+				}catch(ex){
+					handleError(res, ex);
+				}
+			}
 	    })
 	    .put(function (req, res) {
-	        var id = req.query.id;
-	        var data = req.body;
-	        if(!id || !data.content) {
-	            handleError(res, null, 400, 6);
-	        }else{
-	            try{
-	                data.content = JSON.parse(data.content);
-	                data.last_updated = Date.now();
-	                courses.update({_id: req.query.id}, {$set: data}, function (err, wres) {
-	                    if(err){
-	                        handleError(res, err);
-	                    }else{
-	                        courses.findOne({_id: req.query.id}, function (err, course) {
-	                            if(err){
-	                                handleError(res, err);
-	                            }else{
-	                                handleSuccess(res, course);
-	                            }
-	                        });
-	                    }
-	                });
-	            }catch(ex){
-	                handleError(res, ex);
-	            }
-	        }
+			var data = req.body.subChapter;
+			Subchapters.update({_id:req.query.id},{$set:data}, function(err, course) {
+				if (err){
+					handleError(res,err,500);
+				}else{
+					handleSuccess(res, {}, 3);
+				}
+			});
 	    })
 	    .delete(function (req, res) {
-	        var idToDelete = ObjectId(req.query.id);
-	        if(idToDelete){
-	            courses.remove({_id: idToDelete}, function (err, wRes) {
-	                if(err){
-	                    handleError(res, err);
-	                }else if(wRes == 0){
-	                    handleError(res, null, 404, 51);
-	                }else{
-	                    handleSuccess(res);
-	                }
-	            });
-	        }else{
-	            handleError(res, null, 400, 6);
-	        }
+			var idToDelete = ObjectId(req.query.id);
+			if(idToDelete){
+				//first we must delete the slides, then the subchapters, chapters and finally the course
+				Subchapters.findOne({_id: idToDelete}).deepPopulate("listSlides.questions.answers").exec(function (err, subchapter) {
+					if(err){
+						handleError(res, err);
+					}else{
+							async.each(subchapter.listSlides,function(slide,callback3){
+								async.each(slide.questions,function(question,callback4){
+									Answers.remove({_id: {$in: question.answers}}).exec(function(err,resp){
+										if(err){
+											callback4(err);
+										}else{
+											callback4();
+										}
+									})
+								},function(err){
+									if(err){
+										handleError(res,err);
+									}
+									else
+									{
+										Questions.remove({_id: {$in: slide.questions}}).exec(function(err,resp){
+											if(err){
+												callback3(err);
+											}else{
+												callback3();
+											}
+										})
+									}
+								});
+							},function(err){
+								if(err){
+									handleError(res,err);
+								}
+								else
+								{
+									Slides.remove({_id: {$in: subchapter.listSlides}}).exec(function(err,resp){
+										if(err){
+											handleError(res,err);
+										}else{
+											Chapters.update({}, {$pull: {listSubchapters: idToDelete}}, {multi: true}).exec(function (err, wres) {
+												if(err){
+													handleError(res, err);
+												}else{
+													Subchapters.remove({_id: idToDelete}, function (err, wRes) {
+														if(err){
+															handleError(res, err);
+														}else if(wRes == 0){
+															handleError(res, null, 404, 51);
+														}else{
+															handleSuccess(res);
+														}
+													});
+												}
+											});
+										}
+									})
+								}
+							});
+					}
+				});
+			}else{
+				handleError(res, null, 400, 6);
+			}
 	    });
 
 	router.route('/admin/elearning/slides')
 	    .get(function (req, res) {
 	        if(req.query.id){
-	            Courses.findOne({_id: req.query.id}, function (err, course) {
+	            Slides.findOne({_id: req.query.id}, function (err, course) {
 	                if(err){
 	                    handleError(res, err);
 	                }else{
@@ -411,7 +444,7 @@ module.exports = function(env, logger, amazon, router){
 	                }
 	            });
 	        }else{
-	            Courses.find({}, function (err, courses) {
+	            Slides.find({}, function (err, courses) {
 	                if(err){
 	                    handleError(res, err);
 	                }else{

@@ -28,7 +28,7 @@
                                     {{ chapter.title }}
                                 </v-pane-header>
                                 <v-pane-content>
-                                    <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.addSubchapter({chapterId: chapter._id})"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
+                                    <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.addSubChapter({chapterId: chapter._id})"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
                                     <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.editChapter({chapterId: chapter._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit&nbsp;</div>
                                     <div class="editLink col-xs-4 noPadding" ng-click="deleteChapter(chapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete&nbsp;</div>
                                     <v-accordion>
@@ -37,9 +37,9 @@
                                                 {{ subChapter.title }}
                                             </v-pane-header>
                                             <v-pane-content>
-                                                <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.editCourse({courseId: course._id})"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
-                                                <div class="editLink col-xs-4 noPadding" ng-click="openEdit(subChapter._id)"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit&nbsp;</div>
-                                                <div class="editLink col-xs-4 noPadding" ng-click="deleteChapter(subChapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete&nbsp;</div>
+                                                <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.addSlide({subChapterId: subChapter._id})"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
+                                                <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.editSubChapter({subChapterId: subChapter._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit&nbsp;</div>
+                                                <div class="editLink col-xs-4 noPadding" ng-click="deleteSubChapter(subChapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete&nbsp;</div>
                                                 <v-accordion>
                                                     <v-pane ng-repeat="slide in subChapter.listSlides track by $index | orderBy:' order'">
                                                         <v-pane-header>

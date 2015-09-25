@@ -223,6 +223,16 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/elearning/courses/chapterEdit.ejs',
             controller: 'EditChapter'
         })
+        .state('elearning.courses.addSubChapter',{
+            url: '/:chapterId/addSubChapter',
+            templateUrl: 'partials/admin/elearning/courses/subChapterAdd.ejs',
+            controller: 'AddSubChapter'
+        })
+        .state('elearning.courses.editSubChapter',{
+            url: '/editSubChapter/:subChapterId',
+            templateUrl: 'partials/admin/elearning/courses/subChapterEdit.ejs',
+            controller: 'EditSubChapter'
+        })
         .state('elearning.multimedia',{
             url: '/multimedia',
             templateUrl: 'partials/admin/elearning/multimedia/root.html',

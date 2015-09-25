@@ -21,6 +21,31 @@ var SubChapterSchema		= new Schema({
     order: Number
 });
 
-SubChapterSchema.plugin(deepPopulate, {});
+SubChapterSchema.plugin(deepPopulate, {
+    whitelist: ["listSlides.questions.answers"],
+    populate: {
+        "listSlides": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        },
+        "listSlides.questions": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        },
+        "listSlides.answers": {
+            options: {
+                sort: {
+                    "order": 1
+                }
+            }
+        }
+    }
+});
 
 module.exports = mongoose.model('elearning_subchapters', SubChapterSchema, 'elearning_subchapters');

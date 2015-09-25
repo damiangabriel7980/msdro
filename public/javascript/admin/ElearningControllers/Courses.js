@@ -37,4 +37,16 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             yes: "Sterge"
         });
     };
+
+    $scope.deleteSubChapter = function (id) {
+        ActionModal.show("Stergere sub-capitol", "Sunteti sigur ca doriti sa stergeti acest sub-capitol?", function () {
+            ElearningService.subchapters.delete({id: id}).$promise.then(function(result){
+                $state.reload();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
+        },{
+            yes: "Sterge"
+        });
+    };
 }]);
