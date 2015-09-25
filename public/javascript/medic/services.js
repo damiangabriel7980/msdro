@@ -60,6 +60,9 @@ services.factory('SpecialFeaturesService', ['$resource', '$rootScope', 'StorageS
         specialApps: $resource('api/specialFeatures/specialApps', {}, {
             query: { method: 'GET', isArray: false }
         }),
+        defaultPharma: $resource('api/defaultPharma', {}, {
+            query: { method: 'GET', isArray: false }
+        }),
         specialGroups: {
             getAll: getSpecialGroups,
             getSelected: getSpecialGroup,
