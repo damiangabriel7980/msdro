@@ -4,15 +4,15 @@ var deepPopulate = require('mongoose-deep-populate');
 
 var slidesSchema		= new Schema({
     content: String,
-    image_paths: [{type: String}],
     last_updated: Date,
     date_created: Date,
     order: Number,
-    video_paths: [{type: String}],
     "type": {type: String, enum: ["test", "slide"]},
     questions: [{type: Schema.Types.ObjectId, ref: 'elearning_questions'}],
     title: String,
-    retake: Number
+    retake: Number,
+    maximum: Number,
+    minimum: Number
 });
 
 slidesSchema.plugin(deepPopulate, {

@@ -124,6 +124,9 @@ a {
 .marginTop5px {
   margin-top: 5px;
 }
+.marginTop20 {
+  margin-top: 20px;
+}
 .pointer {
   cursor: pointer;
 }
@@ -209,12 +212,7 @@ a {
   bottom: 0;
 }
 .courses-tree {
-  width: 400px;
-  border-right: 1px solid gray;
-  box-shadow: 3px 0 10px #888888;
-  height: 100%;
   padding: 10px;
-  overflow-y: scroll;
 }
 .courses-tree .courses-panel {
   padding: 10px 0 20px 0;
@@ -231,14 +229,6 @@ a {
 }
 .courses-tree.lastCourse {
   border-radius: 0 0 5px 5px;
-}
-.editor {
-  position: absolute;
-  top: 0;
-  left: 400px;
-  padding: 20px;
-  height: 100%;
-  overflow: scroll;
 }
 .edit-content {
   width: 600px;

@@ -9,8 +9,8 @@
             replace: true,
             link: function(scope, element, attrs) {
 
-                var path, nameAll, label;
-
+                var path, nameAll;
+                scope.label = null;
                 scope.keys = [];
 
                 var resetS3Alert = function (type, text) {
@@ -29,7 +29,7 @@
                 });
 
                 attrs.$observe('label', function (newVal) {
-                    label = newVal;
+                    scope.label = newVal;
                 });
 
                 attrs.$observe('nameAll', function (newVal) {

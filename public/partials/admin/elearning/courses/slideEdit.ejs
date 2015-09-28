@@ -1,0 +1,100 @@
+<div class="col-md-12 noPadding">
+    <div class="col-md-12">
+        <h3>Editare slide</h3>
+    </div>
+    <div class="col-md-12 noPadding">
+        <div class="col-md-6">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="isSlide" ng-click="isSlide? isTest = false : null">
+                    Slide
+                </label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="isTest" ng-click="isTest? isSlide = false : null">
+                    Test
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 15px;">
+        <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
+    </div>
+    <div class="col-md-12 noPadding" ng-if="isSlide">
+        <div class="col-md-12 noPadding">
+            <div class="col-md-12 form-group">
+                <label>Titlu slide:</label>
+                <input ng-model="slide.title" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="label label-default">Numar ordine:</label>
+
+            <input type="number" class="form-control col-xs-12" ng-model="slide.order">
+        </div>
+        <div class="col-md-12 noPadding">
+            <div class="col-md-12">
+                <s3-upload-manager bucket="{{amazonBucket}}" label="multimedia" path="{{'elearning/courses/'+ courseId + '/slides/' +  slide._id + '/'}}"></s3-upload-manager>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label>Continut:</label>
+            <textarea ui-tinymce="tinymceOptions" ng-model="slide.content"></textarea>
+        </div>
+    </div>
+    <div class="col-md-12 noPadding" ng-if="isTest">
+        <div class="col-md-12 noPadding">
+            <div class="col-md-12 form-group">
+                <label>Titlu test:</label>
+                <input ng-model="slide.title" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="label label-default">Nr. sustineri:</label>
+            <input type="number" ng-model="slide.retake" class="form-control col-xs-12">
+        </div>
+        <div class="col-md-6">
+            <label class="label label-default">Numar ordine:</label>
+
+            <input type="number" class="form-control col-xs-12" ng-model="slide.order">
+        </div>
+        <div class="col-md-6">
+            <label class="label label-default">Punctaj minim:</label>
+            <input type="number" ng-model="slide.minimum" class="form-control col-xs-12">
+        </div>
+        <div class="col-md-6">
+            <label class="label label-default">Punctaj maxim:</label>
+
+            <input type="number" class="form-control col-xs-12" ng-model="slide.maximum">
+        </div>
+        <div class="col-md-12 marginTop20">
+            <div class="col-md-12 noPadding well" ng-repeat="question in questions | orderBy: 'order'">
+                <div class="col-md-10 form-group">
+                    <label>Intrebare:</label>
+                    <input ng-model="question.text" type="text" class="form-control">
+                </div>
+                <div class="col-md-2 form-group">
+                    <label>Nr. ordine:</label>
+                    <input ng-model="question.order" type="text" class="form-control">
+                </div>
+                <div class="col-md-offset-6 col-md-6 noPadding" ng-repeat="answer in question.answers">
+                    <div class="col-md-10 form-group">
+                        <label>Raspuns:</label>
+                        <input ng-model="answer.text" type="text" class="form-control">
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <label>Ratie:</label>
+                        <input ng-model="answer.ratio" type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12" style="margin: 10px 0">
+        <a class="btn pull-right btn-primary" ng-click="saveChanges()">Salveaza modificarile</a>
+    </div>
+</div>

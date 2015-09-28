@@ -233,6 +233,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/elearning/courses/subChapterEdit.ejs',
             controller: 'EditSubChapter'
         })
+        .state('elearning.courses.editSlide',{
+            url: '/course/:courseId/editSlide/:slideId',
+            templateUrl: 'partials/admin/elearning/courses/slideEdit.ejs',
+            controller: 'EditSlide'
+        })
         .state('elearning.multimedia',{
             url: '/multimedia',
             templateUrl: 'partials/admin/elearning/multimedia/root.html',

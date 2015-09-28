@@ -37,7 +37,7 @@
                                                 {{ subChapter.title }}
                                             </v-pane-header>
                                             <v-pane-content>
-                                                <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.addSlide({subChapterId: subChapter._id})"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
+                                                <div class="editLink col-xs-4 noPadding" ng-click="addSlide(subChapter._id)"><i class="glyphicon glyphicon-plus"></i>Add&nbsp; Slide</div>
                                                 <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.editSubChapter({subChapterId: subChapter._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit&nbsp;</div>
                                                 <div class="editLink col-xs-4 noPadding" ng-click="deleteSubChapter(subChapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete&nbsp;</div>
                                                 <v-accordion>
@@ -46,8 +46,8 @@
                                                             {{ slide.title }}
                                                         </v-pane-header>
                                                         <v-pane-content>
-                                                            <div class="editLinkSlide col-xs-6" ng-click="openEdit(slide._id)"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit slide&nbsp;</div>
-                                                            <div class="editLinkSlide col-xs-6" ng-click="deleteChapter(slide._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete slide&nbsp;</div>
+                                                            <div class="editLinkSlide col-xs-6" ui-sref="elearning.courses.editSlide({courseId: course._id, slideId: slide._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit slide&nbsp;</div>
+                                                            <div class="editLinkSlide col-xs-6" ng-click="deleteSlide(slide._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete slide&nbsp;</div>
                                                         </v-pane-content>
                                                     </v-pane>
                                                 </v-accordion>
@@ -62,7 +62,7 @@
             </v-accordion>
         </div>
 
-        <div class="editor col-xs-9">
+        <div class="col-xs-9">
             <div ui-view></div>
         </div>
 

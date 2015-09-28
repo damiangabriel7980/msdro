@@ -436,7 +436,19 @@ module.exports = function(env, logger, amazon, router){
 	router.route('/admin/elearning/slides')
 	    .get(function (req, res) {
 	        if(req.query.id){
-	            Slides.findOne({_id: req.query.id}, function (err, course) {
+	            Slides.findOne({_id: req.query.id}).deepPopulate('questions.answers',{
+					whitelist: ['questions.answers'],
+					populate : {
+						'questions.answers' : {
+							options: {
+								sort: {
+									"order": 1
+								},
+								select: 'ratio text',
+							}
+						}
+					}
+				}).exec(function (err, course) {
 	                if(err){
 	                    handleError(res, err);
 	                }else{
@@ -454,56 +466,43 @@ module.exports = function(env, logger, amazon, router){
 	        }
 	    })
 	    .post(function (req, res) {
-	        var name = req.body.name;
-	        var content = req.body.content;
-	        if(!name || !content){
-	            handleError(res, null, 400, 6);
-	        }else{
-	            try{
-	                content = JSON.parse(content);
-	                var toAdd = new courses({
-	                    name: name,
-	                    content: content,
-	                    last_updated: Date.now()
-	                });
-	                toAdd.save(function (err, saved) {
-	                    if(err){
-	                        handleError(res, err);
-	                    }else{
-	                        handleSuccess(res, saved);
-	                    }
-	                });
-	            }catch(ex){
-	                handleError(res, ex);
-	            }
-	        }
+			if(!req.body.slide){
+				handleError(res, null, 400, 6);
+			}else{
+				try{
+					var toAdd = new Slides(req.body.slide);
+					toAdd.save(function (err, saved) {
+						if(err){
+							handleError(res, err);
+						}else{
+							Subchapters.update({_id: req.body.id}, {$addToSet: {listSlides: saved._id}}, function (err, wres) {
+								if(err){
+									handleError(res,err,500);
+								}else{
+									handleSuccess(res, wres);
+								}
+							});
+						}
+					});
+				}catch(ex){
+					handleError(res, ex);
+				}
+			}
 	    })
 	    .put(function (req, res) {
-	        var id = req.query.id;
-	        var data = req.body;
-	        if(!id || !data.content) {
-	            handleError(res, null, 400, 6);
-	        }else{
-	            try{
-	                data.content = JSON.parse(data.content);
-	                data.last_updated = Date.now();
-	                courses.update({_id: req.query.id}, {$set: data}, function (err, wres) {
-	                    if(err){
-	                        handleError(res, err);
-	                    }else{
-	                        courses.findOne({_id: req.query.id}, function (err, course) {
-	                            if(err){
-	                                handleError(res, err);
-	                            }else{
-	                                handleSuccess(res, course);
-	                            }
-	                        });
-	                    }
-	                });
-	            }catch(ex){
-	                handleError(res, ex);
-	            }
-	        }
+			if(req.body.isSlide){
+				var data = req.body.slide;
+				Slides.update({_id:req.query.id},{$set:data}, function(err, course) {
+					if (err){
+						handleError(res,err,500);
+					}else{
+						handleSuccess(res, {}, 3);
+					}
+				});
+			}else{
+
+			}
+
 	    })
 	    .delete(function (req, res) {
 	        var idToDelete = ObjectId(req.query.id);

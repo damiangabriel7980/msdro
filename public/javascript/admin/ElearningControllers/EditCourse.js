@@ -31,7 +31,7 @@ controllers.controller('EditCourse', ['$scope', '$rootScope', '$state', '$stateP
     var putLogoS3 = function (body) {
         AmazonService.getClient(function (s3) {
             var extension = body.name.split('.').pop();
-            var key = "elearning/courses"+$scope.course._id+"/image"+$scope.course._id+"."+extension;
+            var key = "elearning/courses/"+$scope.course._id+"/image"+$scope.course._id+"."+extension;
             var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
                 if (err) {
                     console.log(err);
