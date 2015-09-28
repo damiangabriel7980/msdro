@@ -8386,6 +8386,7 @@ a:focus {
   -webkit-display: flex;
   height: inherit;
   float: left;
+  align-items: center;
 }
 @media screen and (min-width: 1351px) {
   #immunologyQA .QAitem .answers .speakerContainer {
@@ -8412,7 +8413,7 @@ a:focus {
   justify-content: center;
   -webkit-justify-content: center;
 }
-#immunologyQA .QAitem .answers .speakerContainer .speakerPicture:hover {
+#immunologyQA .QAitem .answers .speakerContainer .speakerPicture img:hover {
   cursor: pointer;
 }
 #immunologyQA .QAitem .answers .speakerContainer .speakerPicture img {

@@ -2040,6 +2040,7 @@ a:focus {
       -webkit-display:flex;
       height:inherit;
       float:left;
+      align-items: center;
       @media screen and (min-width: 1351px){
           .speakerContainer{
             width:120px;
@@ -2061,8 +2062,10 @@ a:focus {
         padding-top:10px;
         width:120px;
       .speakerPicture{
-        &:hover{
-          cursor:pointer;
+        img{
+          &:hover{
+            cursor:pointer;
+          }
         }
         display:flex;
         -webkit-flex: 1;
