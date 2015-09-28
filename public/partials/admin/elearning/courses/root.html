@@ -4,7 +4,7 @@
 
             <div class="courses-panel clearfix col-xs-12">
                 <div class="col-xs-6">
-                    <button type="button" class="btn btn-default pull-left" ui-sref="elearning.courses.addCourse">
+                    <button type="button" class="btn btn-default pull-left" ng-click="addCourse()">
                         <span class="glyphicon glyphicon-plus-sign add"></span>
                         &nbsp;Add Course
                     </button>
@@ -18,7 +18,7 @@
                     </v-pane-header>
                     <v-pane-content>
                         <div class="col-xs-12">
-                            <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.addChapter({courseId: course._id})"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
+                            <div class="editLink col-xs-4 noPadding" ng-click="addChapter(course._id)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
                             <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.editCourse({courseId: course._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit&nbsp;</div>
                             <div class="editLink col-xs-4 noPadding" ng-click="deleteCourse(course._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete&nbsp;</div>
                         </div>
@@ -28,7 +28,7 @@
                                     {{ chapter.title }}
                                 </v-pane-header>
                                 <v-pane-content>
-                                    <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.addSubChapter({chapterId: chapter._id})"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
+                                    <div class="editLink col-xs-4 noPadding" ng-click="addSubChapter(chapter._id)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
                                     <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.editChapter({chapterId: chapter._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit&nbsp;</div>
                                     <div class="editLink col-xs-4 noPadding" ng-click="deleteChapter(chapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete&nbsp;</div>
                                     <v-accordion>

@@ -203,30 +203,15 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/elearning/courses/root.html',
             controller: 'Courses'
         })
-        .state('elearning.courses.addCourse',{
-            url: '/addCourse',
-            templateUrl: 'partials/admin/elearning/courses/courseAdd.ejs',
-            controller: 'AddCourse'
-        })
         .state('elearning.courses.editCourse',{
             url: '/editCourse/:courseId',
             templateUrl: 'partials/admin/elearning/courses/courseEdit.ejs',
             controller: 'EditCourse'
         })
-        .state('elearning.courses.addChapter',{
-            url: '/:courseId/addChapter',
-            templateUrl: 'partials/admin/elearning/courses/chapterAdd.ejs',
-            controller: 'AddChapter'
-        })
         .state('elearning.courses.editChapter',{
             url: '/editChapter/:chapterId',
             templateUrl: 'partials/admin/elearning/courses/chapterEdit.ejs',
             controller: 'EditChapter'
-        })
-        .state('elearning.courses.addSubChapter',{
-            url: '/:chapterId/addSubChapter',
-            templateUrl: 'partials/admin/elearning/courses/subChapterAdd.ejs',
-            controller: 'AddSubChapter'
         })
         .state('elearning.courses.editSubChapter',{
             url: '/editSubChapter/:subChapterId',

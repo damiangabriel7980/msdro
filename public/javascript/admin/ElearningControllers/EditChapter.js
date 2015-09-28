@@ -12,11 +12,6 @@ controllers.controller('EditChapter', ['$scope', '$rootScope', '$state', '$state
 
     ElearningService.chapters.query({id: $stateParams.chapterId}).$promise.then(function(resp){
         $scope.chapter = Success.getObject(resp);
-        $scope.selectedSubchapters = $scope.chapter.listSubchapters;
-    });
-
-    ElearningService.subchapters.query().$promise.then(function(resp){
-        $scope.allSubchapters = Success.getObject(resp);
     });
 
     $scope.tinymceOptions = {

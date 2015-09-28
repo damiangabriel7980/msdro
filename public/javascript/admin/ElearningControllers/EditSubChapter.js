@@ -9,14 +9,10 @@ controllers.controller('EditSubChapter', ['$scope', '$rootScope', '$state', '$st
 
     ElearningService.subchapters.query({id: $stateParams.subChapterId}).$promise.then(function(resp){
         $scope.subChapter = Success.getObject(resp);
-        $scope.selectedSlides = $scope.subChapter.listSlides;
     }).catch(function(err){
         console.log(Error.getMessage(err));
     });
 
-    ElearningService.slides.query().$promise.then(function(resp){
-        $scope.allSlides = Success.getObject(resp);
-    });
 
     $scope.tinymceOptions = {
         selector: "textarea",

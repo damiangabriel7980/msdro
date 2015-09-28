@@ -38,6 +38,59 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
         });
     };
 
+    $scope.addCourse = function(){
+        $scope.course = {
+            order: 1,
+            last_updated: new Date(),
+            date_created: new Date(),
+            listChapters: [],
+            groupsID: [],
+            duration: 1,
+            title: 'New Course',
+            description: ''
+        };
+        ElearningService.courses.create({course: $scope.course}).$promise.then(function(resp){
+            $state.go('elearning.courses',{},{reload: true});
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
+        });
+    };
+
+    $scope.addChapter = function(id){
+        $scope.chapter = {
+            order: 1,
+            last_updated: new Date(),
+            date_created: new Date(),
+            listSubchapters: [],
+            duration: 1,
+            title: 'New Chapter',
+            description: ''
+        };
+        ElearningService.chapters.create({courseId: id,chapter: $scope.chapter}).$promise.then(function(resp){
+            $state.go('elearning.courses',{},{reload: true});
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
+        });
+    };
+
+    $scope.addSubChapter = function(id){
+        $scope.subChapter = {
+            order: 1,
+            last_updated: new Date(),
+            date_created: new Date(),
+            listSlides: [],
+            duration: 1,
+            title: 'New SubChapter',
+            description: ''
+        };
+        ElearningService.subchapters.create({chapterId: id, subChapter: $scope.subChapter}).$promise.then(function(resp){
+            $state.go('elearning.courses',{},{reload: true});
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
+        });
+    };
+
+
     $scope.addSlide = function(id){
         $scope.slide = {
             content: '',

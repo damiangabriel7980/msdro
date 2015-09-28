@@ -10,13 +10,8 @@ controllers.controller('EditCourse', ['$scope', '$rootScope', '$state', '$stateP
     ElearningService.courses.query({id: $stateParams.courseId}).$promise.then(function(resp){
        $scope.course = Success.getObject(resp);
         $scope.selectedGroups = $scope.course.groupsID;
-        $scope.selectedChapters = $scope.course.listChapters;
     }).catch(function(err){
         console.log(Error.getMessage(err));
-    });
-
-    ElearningService.chapters.query().$promise.then(function(resp){
-        $scope.allChapters = Success.getObject(resp);
     });
 
     GroupsService.groups.query().$promise.then(function (resp) {

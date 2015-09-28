@@ -8,11 +8,6 @@
             <input ng-model="subChapter.title" type="text" class="form-control">
         </div>
     </div>
-    <div class="col-md-12 form-group">
-        <label>Slide-uri:</label>
-        <my-multiple-select all-objects="allSlides" selected-objects="selectedSlides" track-by="_id" display-by="title"
-                            output="selectedSlides"></my-multiple-select>
-    </div>
     <div class="col-md-6">
         <label class="label label-default">Durata:</label>
         <input type="number" ng-model="subChapter.duration" class="form-control col-xs-12">
