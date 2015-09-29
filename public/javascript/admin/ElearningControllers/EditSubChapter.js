@@ -25,13 +25,7 @@ controllers.controller('EditSubChapter', ['$scope', '$rootScope', '$state', '$st
     };
 
     $scope.updateSubChapter = function(){
-        var listSlides=[];
-        for(var i=0;i<$scope.selectedSlides.length;i++){
-            listSlides.push($scope.selectedSlides[i]._id);
-        }
-
         $scope.subChapter.last_updated = new Date();
-        $scope.subChapter.listSlides = listSlides;
         ElearningService.subchapters.update({id: $stateParams.subChapterId}, {subChapter: $scope.subChapter}).$promise.then(function(resp){
             $state.go('elearning.courses',{},{reload: true});
         }).catch(function(err){

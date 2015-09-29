@@ -25,13 +25,7 @@ controllers.controller('EditChapter', ['$scope', '$rootScope', '$state', '$state
     };
 
     $scope.saveChapter = function(){
-        var listSubChapters=[];
-        for(var i=0;i<$scope.selectedSubchapters.length;i++){
-            listSubChapters.push($scope.selectedSubchapters[i]._id);
-        }
-
         $scope.chapter.last_updated = new Date();
-        $scope.chapter.listSubchapters = listSubChapters;
         ElearningService.chapters.update({id: $stateParams.chapterId} ,{chapter: $scope.chapter}).$promise.then(function(resp){
             $state.go('elearning.courses',{},{reload: true});
         }).catch(function(err){

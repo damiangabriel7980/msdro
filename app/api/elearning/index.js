@@ -21,7 +21,7 @@ module.exports = function(env, logger, amazon, router){
 	router.route('/admin/elearning/courses')
 	    .get(function (req, res) {
 	        if(req.query.id){
-	            Courses.findOne({_id: req.query.id}).populate('listChapters groupsID').exec(function (err, course) {
+	            Courses.findOne({_id: req.query.id}).populate('groupsID').exec(function (err, course) {
 	                if(err){
 	                    handleError(res, err);
 	                }else{
@@ -70,6 +70,7 @@ module.exports = function(env, logger, amazon, router){
 				var data = req.body.course;
 				Courses.update({_id:req.query.id},{$set:data}, function(err, course) {
 					if (err){
+						console.log(err);
 						handleError(res,err,500);
 					}else{
 						handleSuccess(res, {}, 3);
@@ -174,7 +175,7 @@ module.exports = function(env, logger, amazon, router){
 	router.route('/admin/elearning/chapters')
 	    .get(function (req, res) {
 	        if(req.query.id){
-	            Chapters.findOne({_id: req.query.id}).populate('listSubchapters').exec(function (err, chapter) {
+	            Chapters.findOne({_id: req.query.id}).exec(function (err, chapter) {
 	                if(err){
 	                    handleError(res, err);
 	                }else{
@@ -314,7 +315,7 @@ module.exports = function(env, logger, amazon, router){
 	router.route('/admin/elearning/subchapters')
 	    .get(function (req, res) {
 	        if(req.query.id){
-	            Subchapters.findOne({_id: req.query.id}).populate('listSlides').exec(function (err, course) {
+	            Subchapters.findOne({_id: req.query.id}).exec(function (err, course) {
 	                if(err){
 	                    handleError(res, err);
 	                }else{
