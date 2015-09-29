@@ -244,6 +244,16 @@ services.factory('ElearningService', ['$resource', function($resource){
             create: { method: 'POST', isArray: false },
             update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
+        }),
+        questions: $resource('api/admin/elearning/questions', {}, {
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        answers: $resource('api/admin/elearning/answers', {}, {
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
         })
     }
 }]);

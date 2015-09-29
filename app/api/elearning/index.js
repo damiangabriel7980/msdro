@@ -490,8 +490,8 @@ module.exports = function(env, logger, amazon, router){
 			}
 	    })
 	    .put(function (req, res) {
+			var data = req.body.slide;
 			if(req.body.isSlide){
-				var data = req.body.slide;
 				Slides.update({_id:req.query.id},{$set:data}, function(err, course) {
 					if (err){
 						handleError(res,err,500);
@@ -500,26 +500,272 @@ module.exports = function(env, logger, amazon, router){
 					}
 				});
 			}else{
-
+				var questionsIds = [];
+				async.each(data.questions,function(question,callback3){
+					var answerIds = [];
+					async.each(question.answers,function(answer,callback4){
+						Answers.update({_id: answer._id},{$set: answer}, function(err, ans) {
+							if (err){
+								callback4(err);
+							}else{
+								answerIds.push(answer._id);
+								callback4();
+							}
+						});
+					},function(err){
+						if(err){
+							handleError(res,err);
+						}
+						else
+						{
+							question.answers = answerIds;
+							Questions.update({_id: question._id},{$set: question}, function(err, quest) {
+								if (err){
+									callback3(err);
+								}else{
+									questionsIds.push(question._id);
+									callback3();
+								}
+							});
+						}
+					});
+				},function(err){
+					if(err){
+						handleError(res,err);
+					}
+					else
+					{
+						data.questions = questionsIds;
+						Slides.update({_id:data._id},{$set:data}, function(err, slide) {
+							if (err){
+								handleError(res,err,500);
+							}else{
+								handleSuccess(res, {}, 3);
+							}
+						});
+					}
+				});
 			}
 
 	    })
 	    .delete(function (req, res) {
 	        var idToDelete = ObjectId(req.query.id);
 	        if(idToDelete){
-	            courses.remove({_id: idToDelete}, function (err, wRes) {
-	                if(err){
-	                    handleError(res, err);
-	                }else if(wRes == 0){
-	                    handleError(res, null, 404, 51);
-	                }else{
-	                    handleSuccess(res);
-	                }
-	            });
+				Slides.findOne({_id: idToDelete}).deepPopulate("questions.answers").exec(function (err, slide) {
+					if(err){
+						handleError(res, err);
+					}else{
+						async.each(slide.questions,function(question,callback3){
+							async.each(question.answers,function(answer,callback4){
+								Answers.remove({_id: {$in: question.answers}}).exec(function(err,resp){
+									if(err){
+										callback4(err);
+									}else{
+										callback4();
+									}
+								})
+							},function(err){
+								if(err){
+									handleError(res,err);
+								}
+								else
+								{
+									Questions.remove({_id: {$in: slide.questions}}).exec(function(err,resp){
+										if(err){
+											callback3(err);
+										}else{
+											callback3();
+										}
+									})
+								}
+							});
+						},function(err){
+							if(err){
+								handleError(res,err);
+							}
+							else
+							{
+										Subchapters.update({}, {$pull: {listSlides: idToDelete}}, {multi: true}).exec(function (err, wres) {
+											if(err){
+												handleError(res, err);
+											}else{
+												Slides.remove({_id: idToDelete}, function (err, wRes) {
+													if(err){
+														handleError(res, err);
+													}else if(wRes == 0){
+														handleError(res, null, 404, 51);
+													}else{
+														handleSuccess(res);
+													}
+												});
+											}
+										});
+
+							}
+						});
+					}
+				});
 	        }else{
 	            handleError(res, null, 400, 6);
 	        }
 	    });
+
+
+	router.route('/admin/elearning/questions')
+			.post(function (req, res) {
+				if(!req.body.question){
+					handleError(res, null, 400, 6);
+				}else{
+					try{
+						var toAdd = req.body.question;
+						var answersIds = [];
+						async.each(toAdd.answers,function(answer,callback4){
+							var answerToAdd = new Answers(answer);
+							answerToAdd.save(function (err, saved) {
+								if(err){
+									callback4(err);
+								}else{
+									answersIds.push(saved._id);
+									callback4();
+								}
+							});
+						},function(err){
+							if(err){
+								handleError(res,err);
+							}
+							else
+							{
+								toAdd.answers = answersIds;
+								toAdd = new Questions(toAdd);
+								toAdd.save(function (err, saved2) {
+									if(err){
+										handleError(res, err);
+									}else{
+										Slides.update({_id: req.body.id}, {$addToSet: {questions: saved2._id}}, function (err, wres) {
+											if(err){
+												handleError(res,err,500);
+											}else{
+												Questions.findOne({_id: saved2._id}).populate('answers').select(' +ratio').exec(function(err, response){
+													if(err){
+														handleError(res,err);
+													}
+													else
+														handleSuccess(res, response);
+												})
+											}
+										});
+									}
+								});
+							}
+						});
+					}catch(ex){
+						handleError(res, ex);
+					}
+				}
+			})
+			.put(function (req, res) {
+				var data = req.body.question;
+				Questions.update({_id:req.query.id},{$set:data}, function(err, quest) {
+					if (err){
+						handleError(res,err,500);
+					}else{
+						handleSuccess(res, {}, 3);
+					}
+				});
+			})
+			.delete(function (req, res) {
+				var idToDelete = ObjectId(req.query.id);
+				if(idToDelete){
+					Questions.findOne({_id: idToDelete}).exec(function (err, question) {
+						if(err){
+							handleError(res, err);
+						}else{
+							Answers.remove({_id: {$in: question.answers}}).exec(function(err,resp){
+								if(err){
+									handleError(res, err);
+								}else{
+									Slides.update({}, {$pull: {questions: idToDelete}}, {multi: true}).exec(function (err, wres) {
+										if(err){
+											handleError(res, err);
+										}else{
+											Questions.remove({_id: idToDelete}, function (err, wRes) {
+												if(err){
+													handleError(res, err);
+												}else if(wRes == 0){
+													handleError(res, null, 404, 51);
+												}else{
+													handleSuccess(res);
+												}
+											});
+										}
+									});
+								}
+							})
+						}
+					});
+
+				}else{
+					handleError(res, null, 400, 6);
+				}
+			});
+
+	router.route('/admin/elearning/answers')
+			.post(function (req, res) {
+				if(!req.body.answer){
+					handleError(res, null, 400, 6);
+				}else{
+					try{
+						var toAdd = new Answers(req.body.answer);
+						toAdd.save(function (err, saved) {
+							if(err){
+								handleError(res, err);
+							}else{
+								Questions.update({_id: req.body.id}, {$addToSet: {answers: saved._id}}, function (err, wres) {
+									if(err){
+										handleError(res,err,500);
+									}else{
+										handleSuccess(res, saved);
+									}
+								});
+							}
+						});
+					}catch(ex){
+						handleError(res, ex);
+					}
+				}
+			})
+			.put(function (req, res) {
+				var data = req.body.answer;
+				Answers.update({_id:req.query.id},{$set:data}, function(err, course) {
+					if (err){
+						handleError(res,err,500);
+					}else{
+						handleSuccess(res, {}, 3);
+					}
+				});
+			})
+			.delete(function (req, res) {
+				var idToDelete = ObjectId(req.query.id);
+				if(idToDelete){
+					Questions.update({}, {$pull: {answers: idToDelete}}, {multi: true}).exec(function (err, wres) {
+										if(err){
+											handleError(res, err);
+										}else{
+											Answers.remove({_id: idToDelete}, function (err, wRes) {
+												if(err){
+													handleError(res, err);
+												}else if(wRes == 0){
+													handleError(res, null, 404, 51);
+												}else{
+													handleSuccess(res);
+												}
+											});
+										}
+									});
+				}else{
+					handleError(res, null, 400, 6);
+				}
+			});
 
 	router.route('/elearning/courses')
 	    .get(function (req, res) {

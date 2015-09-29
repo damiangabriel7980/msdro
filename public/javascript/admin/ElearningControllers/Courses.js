@@ -120,4 +120,17 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             yes: "Sterge"
         });
     };
+
+    $scope.deleteSlide = function (id) {
+        ActionModal.show("Stergere slide", "Sunteti sigur ca doriti sa stergeti acest slide?", function () {
+            ElearningService.slides.delete({id: id}).$promise.then(function(result){
+                $state.go('elearning.courses',{},{reload: true});
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
+        },{
+            yes: "Sterge"
+        });
+    };
+
 }]);

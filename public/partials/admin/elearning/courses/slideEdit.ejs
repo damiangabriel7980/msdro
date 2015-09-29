@@ -57,7 +57,7 @@
             <input type="number" ng-model="slide.retake" class="form-control col-xs-12">
         </div>
         <div class="col-md-6">
-            <label class="label label-default">Numar ordine:</label>
+            <label class="label label-default">Index:</label>
 
             <input type="number" class="form-control col-xs-12" ng-model="slide.order">
         </div>
@@ -71,24 +71,42 @@
             <input type="number" class="form-control col-xs-12" ng-model="slide.maximum">
         </div>
         <div class="col-md-12 marginTop20">
+            <button type="button" class="btn btn-default pull-left" ng-click="addQuestion()">
+                <span class="glyphicon glyphicon-plus-sign add"></span>
+                &nbsp;Add Question
+            </button>
+        </div>
+        <div class="col-md-12 marginTop20">
             <div class="col-md-12 noPadding well" ng-repeat="question in questions | orderBy: 'order'">
-                <div class="col-md-10 form-group">
+                <div class="col-md-9 form-group">
                     <label>Intrebare:</label>
                     <input ng-model="question.text" type="text" class="form-control">
                 </div>
                 <div class="col-md-2 form-group">
-                    <label>Nr. ordine:</label>
-                    <input ng-model="question.order" type="text" class="form-control">
+                    <label>Index:</label>
+                    <input ng-model="question.order" type="number" class="form-control">
+                </div>
+                <div class="col-md-1 marginTop25">
+                    <div class="btn btn-danger pull-right" ng-click="deleteQuestion(question._id)"><i class="glyphicon glyphicon-trash"></i></div>
                 </div>
                 <div class="col-md-offset-6 col-md-6 noPadding" ng-repeat="answer in question.answers">
-                    <div class="col-md-10 form-group">
+                    <div class="col-md-7 form-group">
                         <label>Raspuns:</label>
                         <input ng-model="answer.text" type="text" class="form-control">
                     </div>
-                    <div class="col-md-2 form-group">
+                    <div class="col-md-3 form-group">
                         <label>Ratie:</label>
-                        <input ng-model="answer.ratio" type="text" class="form-control">
+                        <input ng-model="answer.ratio" type="number" class="form-control">
                     </div>
+                    <div class="col-md-2 marginTop25">
+                        <div class="btn btn-danger pull-right" ng-click="deleteAnswer(answer._id)"><i class="glyphicon glyphicon-trash"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-12 padding10">
+                    <button type="button" class="btn btn-default pull-left" ng-click="addAnswer($index)">
+                        <span class="glyphicon glyphicon-plus-sign add"></span>
+                        &nbsp;Add Answer
+                    </button>
                 </div>
             </div>
         </div>

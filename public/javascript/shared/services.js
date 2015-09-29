@@ -401,6 +401,16 @@ services.factory('customOrder', function() {
                 return (a[field].toLowerCase() > b[field].toLowerCase() ? 1 : -1);
             });
             return filtered;
+        },
+        sortNumbers: function(items, field) {
+            var filtered = [];
+            angular.forEach(items, function (item) {
+                filtered.push(item);
+            });
+            filtered.sort(function (a, b) {
+                return (a[field] > b[field] ? 1 : -1);
+            });
+            return filtered;
         }
     }
 });
