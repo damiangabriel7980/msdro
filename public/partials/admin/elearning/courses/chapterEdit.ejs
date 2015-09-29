@@ -19,7 +19,8 @@
     </div>
     <div class="col-md-12">
         <label>Descriere:</label>
-        <textarea ui-tinymce="tinymceOptions" ng-model="chapter.description"></textarea>
+        <div id="mgrid" ng-bind-html="trustAsHtml(chapter.description)">
+        </div>
     </div>
     <div class="col-md-12" style="margin: 10px 0">
         <a class="btn pull-right btn-primary" ng-click="saveChapter()">Salveaza modificarile</a>

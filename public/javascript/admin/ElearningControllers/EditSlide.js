@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 17/09/15.
  */
-controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$stateParams', 'ElearningService', 'AmazonService', '$modal', 'InfoModal', 'ActionModal', 'Success', 'Error', 'GroupsService','customOrder', function ($scope, $rootScope, $state, $stateParams, ElearningService, AmazonService, $modal, InfoModal, ActionModal, Success, Error, GroupsService,customOrder) {
+controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$stateParams', 'ElearningService', 'AmazonService', '$modal', 'InfoModal', 'ActionModal', 'Success', 'Error', 'GroupsService','customOrder', 'Utils', '$timeout', function ($scope, $rootScope, $state, $stateParams, ElearningService, AmazonService, $modal, InfoModal, ActionModal, Success, Error, GroupsService,customOrder, Utils, $timeout) {
 
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
@@ -10,6 +10,7 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
     $scope.statusAlert = {newAlert:false, type:"", message:""};
 
     $scope.courseId = $stateParams.courseId;
+
 
     $scope.tinymceOptions = {
         selector: "textarea",
@@ -22,37 +23,36 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 
+    $scope.loadEditor = function(){
+        $(document).ready(function(){
+            $timeout(function(){
+                $("#mgrid").gridmanager({
+                    debug: 1,
+                    tinymce: {
+                        config: {
+                            inline: true,
+                            plugins: [
+                                "advlist autolink lists link image charmap print preview anchor",
+                                "searchreplace visualblocks code fullscreen",
+                                "insertdatetime media table contextmenu paste"
+                            ],
+                            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+                        }
+                    }
+                });
+            },200)
+        });
+    };
+
     ElearningService.slides.query({id: $stateParams.slideId}).$promise.then(function(resp){
        $scope.slide = Success.getObject(resp);
         if($scope.slide.type == 'test')
             $scope.isTest = true;
         else
             $scope.isSlide = true;
+        $scope.loadEditor();
         if($scope.slide.questions.length == 0){
-            var Question = {
-                order: 1,
-                text: 'New question',
-                answers: [
-                    {
-                        ratio: 0,
-                        text: 'New Answer'
-                    },
-                    {
-                        ratio: 0,
-                        text: 'New Answer'
-                    },
-                    {
-                        ratio: 0,
-                        text: 'New Answer'
-                    }
-                ]
-            };
-            ElearningService.questions.create({id: $stateParams.slideId, question: Question}).$promise.then(function (resp) {
                 $scope.questions = [];
-                $scope.questions.push(Success.getObject(resp));
-            }).catch(function(err){
-                console.log(Error.getMessage(err));
-            });
         }
         else
             $scope.questions = customOrder.sortNumbers($scope.slide.questions,'order');
@@ -117,6 +117,7 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
         if($scope.isSlide){
             $scope.slide.last_updated = new Date();
             $scope.slide.type = 'slide';
+            $scope.slide.content = angular.element('#gm-canvas').html();
             ElearningService.slides.update({id: $scope.slide._id},{slide: $scope.slide, isSlide: $scope.isSlide}).$promise.then(function(resp){
                 $scope.statusAlert.type = "success";
                 $scope.statusAlert.message = Success.getMessage(resp);

@@ -29,6 +29,7 @@
     "es5-shim": "latest",
     "he": "latest",
     "jquery": "latest",
+    "jquery-ui": "~1.11.x",
     "json3": "latest",
     "ng-csv": "latest",
     "ng-file-upload": "latest",
@@ -39,7 +40,7 @@
     "qtip2": "latest",
     "requestAnimationFrame": "latest",
     "shifty": "latest",
-    "tinymce": "latest",
+    "tinymce": "4.2.5",
     "v-accordion": "latest",
     "video-js": "latest",
     "videogular": "latest",
@@ -47,7 +48,9 @@
     "videogular-controls": "latest",
     "videogular-overlay-play": "latest",
     "videogular-poster": "latest",
-    "videogular-themes-default": "latest"
+    "videogular-themes-default": "latest",
+    "angular-utils-pagination": "latest",
+    "gridmanager.js": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.x",

@@ -37,7 +37,8 @@
     </div>
     <div class="col-md-12">
         <label>Descriere:</label>
-        <textarea ui-tinymce="tinymceOptions" ng-model="course.description"></textarea>
+        <div id="mgrid" ng-bind-html="trustAsHtml(course.description)">
+        </div>
     </div>
     <div class="col-md-12" style="margin: 10px 0">
         <a class="btn pull-right btn-primary" ng-click="saveChanges()">Salveaza modificarile</a>
