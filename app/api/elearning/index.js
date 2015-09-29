@@ -646,7 +646,19 @@ module.exports = function(env, logger, amazon, router){
 											if(err){
 												handleError(res,err,500);
 											}else{
-												Questions.findOne({_id: saved2._id}).populate('answers').select(' +ratio').exec(function(err, response){
+												Questions.findOne({_id: saved2._id}).deepPopulate('answers',{
+													whitelist: ['answers'],
+													populate : {
+														'answers' : {
+															options: {
+																sort: {
+																	"order": 1
+																},
+																select: 'ratio text',
+															}
+														}
+													}
+												}).exec(function(err, response){
 													if(err){
 														handleError(res,err);
 													}
