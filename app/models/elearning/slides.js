@@ -12,7 +12,8 @@ var slidesSchema		= new Schema({
     title: String,
     retake: Number,
     maximum: Number,
-    minimum: Number
+    minimum: Number,
+    enabled: Boolean
 });
 
 slidesSchema.plugin(deepPopulate, {

@@ -247,4 +247,73 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
         });
     };
 
+    $scope.disableCourse = function (course) {
+        var message;
+        if(course.enabled)
+            message = "Sunteti sigur ca doriti sa dezactivati acest curs?";
+        else
+            message = "Sunteti sigur ca doriti sa activati acest curs?";
+        ActionModal.show("Update status", message, function () {
+            ElearningService.courses.update({id: course._id},{status: {isEnabled : !course.enabled}}).$promise.then(function(result){
+                $scope.getCourses();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
+        },{
+            yes: "Actualizeaza status"
+        });
+    };
+
+    $scope.disableChapter = function (chapter) {
+        var message;
+        if(chapter.enabled)
+            message = "Sunteti sigur ca doriti sa dezactivati acest capitol?";
+        else
+            message = "Sunteti sigur ca doriti sa activati acest capitol?";
+        ActionModal.show("Update status", message, function () {
+            ElearningService.chapters.update({id: chapter._id},{status: {isEnabled : !chapter.enabled}}).$promise.then(function(result){
+                $scope.getCourses();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
+        },{
+            yes: "Actualizeaza status"
+        });
+    };
+
+    $scope.disableSubChapter = function (subchapter) {
+        var message;
+        if(subchapter.enabled)
+            message = "Sunteti sigur ca doriti sa dezactivati acest sub-capitol?";
+        else
+            message = "Sunteti sigur ca doriti sa activati acest sub-capitol?";
+        ActionModal.show("Update status", message, function () {
+            ElearningService.subchapters.update({id: subchapter._id},{status: {isEnabled : !subchapter.enabled}}).$promise.then(function(result){
+                $scope.getCourses();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
+        },{
+            yes: "Actualizeaza status"
+        });
+    };
+
+    $scope.disableSlide = function (slide) {
+        var message;
+        if(slide.enabled)
+            message = "Sunteti sigur ca doriti sa dezactivati acest slide?";
+        else
+            message = "Sunteti sigur ca doriti sa activati acest slide?";
+        ActionModal.show("Update status", message, function () {
+            ElearningService.slides.update({id: slide._id},{status: {isEnabled : !slide.enabled}}).$promise.then(function(result){
+                $scope.getCourses();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
+        },{
+            yes: "Actualizeaza status"
+        });
+    };
+
+
 }]);

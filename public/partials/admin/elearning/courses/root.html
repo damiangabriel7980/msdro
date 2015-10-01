@@ -14,8 +14,9 @@
                 <ol ui-tree-nodes="" ng-model="courses">
                     <li ng-repeat="course in courses" ui-tree-node collapsed="true">
                         <div ui-tree-handle class="tree-node tree-node-content">
-                            <a class="btn btn-success btn-xs ng-scope" data-nodrag="" ng-click="toggle(this)"><span ng-class="{'glyphicon glyphicon-chevron-right': collapsed, 'glyphicon glyphicon-chevron-down': !collapsed}"></span></a>
-                            {{course.title}}
+                            <a class="btn btn-success btn-xs" data-nodrag="" ng-click="toggle(this)"><span ng-class="{'glyphicon glyphicon-chevron-right': collapsed, 'glyphicon glyphicon-chevron-down': !collapsed}"></span></a>
+                            {{course.title}}&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-default btn-xs pull-right" data-nodrag="" ng-click="disableCourse(course)"><span ng-class="{'glyphicon glyphicon-ban-circle': course.enabled, 'glyphicon glyphicon-exclamation-sign': !course.enabled}"></span></a>
                         </div>
                         <div class="tree-node-content">
                             <span class="handCursor leftPadding5px" ng-click="addChapter(course)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add chapter&nbsp;&nbsp;</span>
@@ -25,8 +26,9 @@
                         <ol ui-tree-nodes="" ng-model="course.listChapters" ng-class="{hidden: collapsed}">
                             <li ng-repeat="chapter in course.listChapters" ui-tree-node collapsed="true">
                                 <div ui-tree-handle class="tree-node tree-node-content">
-                                    <a class="btn btn-success btn-xs ng-scope" data-nodrag="" ng-click="toggle(this)"><span ng-class="{'glyphicon glyphicon-chevron-right': collapsed, 'glyphicon glyphicon-chevron-down': !collapsed}"></span></a>
-                                    {{chapter.title}}
+                                    <a class="btn btn-success btn-xs" data-nodrag="" ng-click="toggle(this)"><span ng-class="{'glyphicon glyphicon-chevron-right': collapsed, 'glyphicon glyphicon-chevron-down': !collapsed}"></span></a>
+                                    {{chapter.title}}&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a class="btn btn-default btn-xs pull-right" data-nodrag="" ng-click="disableChapter(chapter)"><span ng-class="{'glyphicon glyphicon-ban-circle': chapter.enabled, 'glyphicon glyphicon-exclamation-sign': !chapter.enabled}"></span></a>
                                 </div>
                                 <div class="tree-node-content">
                                     <span class="handCursor leftPadding5px" ng-click="addSubChapter(chapter)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add sub-chapter&nbsp;&nbsp;</span>
@@ -36,8 +38,9 @@
                                 <ol ui-tree-nodes="" ng-model="chapter.listSubchapters" ng-class="{hidden: collapsed}">
                                     <li ng-repeat="subChapter in chapter.listSubchapters" ui-tree-node collapsed="true">
                                         <div ui-tree-handle class="tree-node tree-node-content">
-                                            <a class="btn btn-success btn-xs ng-scope" data-nodrag="" ng-click="toggle(this)"><span ng-class="{'glyphicon glyphicon-chevron-right': collapsed, 'glyphicon glyphicon-chevron-down': !collapsed}"></span></a>
-                                            {{subChapter.title}}
+                                            <a class="btn btn-success btn-xs" data-nodrag="" ng-click="toggle(this)"><span ng-class="{'glyphicon glyphicon-chevron-right': collapsed, 'glyphicon glyphicon-chevron-down': !collapsed}"></span></a>
+                                            {{subChapter.title}}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a class="btn btn-default btn-xs pull-right" data-nodrag="" ng-click="disableSubChapter(subChapter)"><span ng-class="{'glyphicon glyphicon-ban-circle': subChapter.enabled, 'glyphicon glyphicon-exclamation-sign': !subChapter.enabled}"></span></a>
                                         </div>
                                         <div class="tree-node-content">
                                             <span class="handCursor leftPadding5px" ng-click="addSlide(subChapter)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add Slide&nbsp;&nbsp;</span>
@@ -47,7 +50,8 @@
                                         <ol ui-tree-nodes="" ng-model="subChapter.listSlides" ng-class="{hidden: collapsed}">
                                             <li ng-repeat="slide in subChapter.listSlides" ui-tree-node>
                                                 <div ui-tree-handle class="tree-node tree-node-content">
-                                                    {{slide.title}}
+                                                    {{slide.title}}&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <a class="btn btn-default btn-xs pull-right" data-nodrag="" ng-click="disableSlide(slide)"><span ng-class="{'glyphicon glyphicon-ban-circle': slide.enabled, 'glyphicon glyphicon-exclamation-sign': !slide.enabled}"></span></a>
                                                 </div>
                                                 <div class="tree-node-content">
                                                     <span class="handCursor leftPadding5px" ui-sref="elearning.courses.editSlide({courseId: course._id, slideId: slide._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit Slide&nbsp;&nbsp;</span>

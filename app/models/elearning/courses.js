@@ -17,7 +17,8 @@ var CourseSchema		= new Schema({
     duration: Number,
     order: Number,
     groupsID: [{type: Schema.Types.ObjectId, ref: 'UserGroup'}],
-    image_path: String
+    image_path: String,
+    enabled: Boolean
 });
 
 CourseSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});

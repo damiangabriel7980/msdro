@@ -148,7 +148,16 @@ module.exports = function(env, logger, amazon, router){
 							handleSuccess(res, {updated: wRes}, 3);
 						}
 					});
-			}else{
+			}else if(req.body.status){
+				Courses.update({_id: req.query.id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
+					if(err){
+						handleError(res,err,500);
+					}else{
+						handleSuccess(res);
+					}
+				});
+			}
+			else{
 				var data = req.body.course;
 				Courses.update({_id:req.query.id},{$set:data}, function(err, course) {
 					if (err){
@@ -299,14 +308,25 @@ module.exports = function(env, logger, amazon, router){
 			}
 	    })
 	    .put(function (req, res) {
-				var data = req.body.chapter;
-				Chapters.update({_id:req.query.id},{$set:data}, function(err, course) {
-					if (err){
+			if(req.body.status){
+				Chapters.update({_id: req.query.id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
+					if(err){
 						handleError(res,err,500);
 					}else{
+						handleSuccess(res);
+					}
+				});
+			}
+			else {
+				var data = req.body.chapter;
+				Chapters.update({_id: req.query.id}, {$set: data}, function (err, course) {
+					if (err) {
+						handleError(res, err, 500);
+					} else {
 						handleSuccess(res, {}, 3);
 					}
 				});
+			}
 	    })
 	    .delete(function (req, res) {
 			var idToDelete = ObjectId(req.query.id);
@@ -439,14 +459,25 @@ module.exports = function(env, logger, amazon, router){
 			}
 	    })
 	    .put(function (req, res) {
-			var data = req.body.subChapter;
-			Subchapters.update({_id:req.query.id},{$set:data}, function(err, course) {
-				if (err){
-					handleError(res,err,500);
-				}else{
-					handleSuccess(res, {}, 3);
-				}
-			});
+			if(req.body.status){
+				Subchapters.update({_id: req.query.id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
+					if(err){
+						handleError(res,err,500);
+					}else{
+						handleSuccess(res);
+					}
+				});
+			}
+			else {
+				var data = req.body.subChapter;
+				Subchapters.update({_id: req.query.id}, {$set: data}, function (err, course) {
+					if (err) {
+						handleError(res, err, 500);
+					} else {
+						handleSuccess(res, {}, 3);
+					}
+				});
+			}
 	    })
 	    .delete(function (req, res) {
 			var idToDelete = ObjectId(req.query.id);
@@ -574,7 +605,16 @@ module.exports = function(env, logger, amazon, router){
 	    })
 	    .put(function (req, res) {
 			var data = req.body.slide;
-			if(req.body.isSlide){
+			if(req.body.status){
+				Slides.update({_id: req.query.id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
+					if(err){
+						handleError(res,err,500);
+					}else{
+						handleSuccess(res);
+					}
+				});
+			}
+			else if(req.body.isSlide){
 				Slides.update({_id:req.query.id},{$set:data}, function(err, course) {
 					if (err){
 						handleError(res,err,500);

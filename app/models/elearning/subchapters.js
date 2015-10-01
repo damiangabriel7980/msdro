@@ -18,7 +18,8 @@ var SubChapterSchema		= new Schema({
     description: String,
     listSlides : [{type: Schema.Types.ObjectId, ref: 'elearning_slides'}],
     duration: Number,
-    order: Number
+    order: Number,
+    enabled: Boolean
 });
 
 SubChapterSchema.plugin(deepPopulate, {

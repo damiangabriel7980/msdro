@@ -15,7 +15,8 @@ var ChapterSchema		= new Schema({
     description: String,
     order: Number,
     listSubchapters : [{type: Schema.Types.ObjectId, ref: 'elearning_subchapters'}],
-    duration: Number
+    duration: Number,
+    enabled: Boolean
 });
 
 ChapterSchema.plugin(deepPopulate, {
