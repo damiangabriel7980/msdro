@@ -23,7 +23,7 @@
     <div class="col-md-12" style="margin-bottom: 15px;">
         <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
     </div>
-    <div class="col-md-12 noPadding" ng-if="isSlide">
+    <div class="col-md-12 noPadding" ng-show="isSlide">
         <div class="col-md-12 noPadding">
             <div class="col-md-12 form-group">
                 <label>Titlu slide:</label>
@@ -42,11 +42,12 @@
         </div>
         <div class="col-md-12">
             <label>Continut:</label>
-            <div id="mgrid" ng-bind-html="trustAsHtml(slide.content)">
+            <div id="mgrid">
+
             </div>
         </div>
     </div>
-    <div class="col-md-12 noPadding" ng-if="isTest">
+    <div class="col-md-12 noPadding" ng-show="isTest">
         <div class="col-md-12 noPadding">
             <div class="col-md-12 form-group">
                 <label>Titlu test:</label>

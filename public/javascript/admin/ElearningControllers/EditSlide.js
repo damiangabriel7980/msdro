@@ -7,27 +7,29 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
         return $sce.trustAsHtml(htmlCode);
     };
 
-    $scope.statusAlert = {newAlert:false, type:"", message:""};
-
     $scope.courseId = $stateParams.courseId;
 
+    var gm;
+    $(document).ready(function(){
+        init();
+    });
 
-    $scope.tinymceOptions = {
-        selector: "textarea",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        height: 500,
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
-
-    $scope.loadEditor = function(){
-        $(document).ready(function(){
-            $timeout(function(){
-                $("#mgrid").gridmanager({
+    function init(){
+        ElearningService.slides.query({id: $stateParams.slideId}).$promise.then(function(resp){
+            $scope.slide = Success.getObject(resp);
+            if($scope.slide.type == 'test')
+                $scope.isTest = true;
+            else
+                $scope.isSlide = true;
+            if($scope.slide.questions.length == 0){
+                $scope.questions = [];
+            }
+            else
+                $scope.questions = customOrder.sortNumbers($scope.slide.questions,'order');
+            if($scope.isSlide){
+                gm = $("#mgrid").gridmanager({
                     debug: 1,
+                    controlAppend: "<div class='btn-group pull-right'><button title='Edit Source Code' type='button' class='btn btn-xs btn-primary gm-edit-mode'><span class='fa fa-code'></span></button><button title='Preview' type='button' class='btn btn-xs btn-primary gm-preview'><span class='fa fa-eye'></span></button>     <div class='dropdown pull-right gm-layout-mode'><button type='button' class='btn btn-xs btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button> <ul class='dropdown-menu' role='menu'><li><a data-width='auto' title='Desktop'><span class='fa fa-desktop'></span> Desktop</a></li><li><a title='Tablet' data-width='768'><span class='fa fa-tablet'></span> Tablet</a></li><li><a title='Phone' data-width='640'><span class='fa fa-mobile-phone'></span> Phone</a></li></ul></div></div>",
                     tinymce: {
                         config: {
                             inline: true,
@@ -40,23 +42,11 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
                         }
                     }
                 });
-            },200)
+                $("#gm-canvas").html($scope.slide.content);
+                gm.data('gridmanager').initCanvas();
+            }
         });
     };
-
-    ElearningService.slides.query({id: $stateParams.slideId}).$promise.then(function(resp){
-       $scope.slide = Success.getObject(resp);
-        if($scope.slide.type == 'test')
-            $scope.isTest = true;
-        else
-            $scope.isSlide = true;
-        $scope.loadEditor();
-        if($scope.slide.questions.length == 0){
-                $scope.questions = [];
-        }
-        else
-            $scope.questions = customOrder.sortNumbers($scope.slide.questions,'order');
-    });
 
     $scope.addQuestion = function(){
         var Question = {
@@ -115,9 +105,9 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
 
     $scope.saveChanges = function(){
         if($scope.isSlide){
-            $scope.slide.last_updated = new Date();
             $scope.slide.type = 'slide';
-            $scope.slide.content = angular.element('#gm-canvas').html();
+            gm.data('gridmanager').deinitCanvas();
+            $scope.slide.content = $("#gm-canvas").html();
             ElearningService.slides.update({id: $scope.slide._id},{slide: $scope.slide, isSlide: $scope.isSlide}).$promise.then(function(resp){
                 $scope.statusAlert.type = "success";
                 $scope.statusAlert.message = Success.getMessage(resp);
@@ -151,6 +141,8 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
                     $scope.statusAlert.type = "success";
                     $scope.statusAlert.message = Success.getMessage(resp);
                     $scope.statusAlert.newAlert = true;
+                    $scope.$parent.getCourses();
+                    gm.data('gridmanager').initCanvas();
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });

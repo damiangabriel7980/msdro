@@ -7,35 +7,36 @@ controllers.controller('EditCourse', ['$scope', '$rootScope', '$state', '$stateP
         return $sce.trustAsHtml(htmlCode);
     };
 
-    ElearningService.courses.query({id: $stateParams.courseId}).$promise.then(function(resp){
-       $scope.course = Success.getObject(resp);
-        $scope.selectedGroups = $scope.course.groupsID;
-        $scope.loadEditor();
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
+    var gm;
+    $(document).ready(function(){
+        init();
     });
 
-    $scope.loadEditor = function(){
-        $(document).ready(function(){
-            $timeout(function(){
-                $("#mgrid").gridmanager({
-                    debug: 1,
-                    tinymce: {
-                        config: {
-                            inline: true,
-                            plugins: [
-                                "advlist autolink lists link image charmap print preview anchor",
-                                "searchreplace visualblocks code fullscreen",
-                                "insertdatetime media table contextmenu paste"
-                            ],
-                            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-                        }
+    function init(){
+        ElearningService.courses.query({id: $stateParams.courseId}).$promise.then(function(resp){
+            $scope.course = Success.getObject(resp);
+            $scope.selectedGroups = $scope.course.groupsID;
+            gm = $("#mgrid").gridmanager({
+                debug: 1,
+                controlAppend: "<div class='btn-group pull-right'><button title='Edit Source Code' type='button' class='btn btn-xs btn-primary gm-edit-mode'><span class='fa fa-code'></span></button><button title='Preview' type='button' class='btn btn-xs btn-primary gm-preview'><span class='fa fa-eye'></span></button>     <div class='dropdown pull-right gm-layout-mode'><button type='button' class='btn btn-xs btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button> <ul class='dropdown-menu' role='menu'><li><a data-width='auto' title='Desktop'><span class='fa fa-desktop'></span> Desktop</a></li><li><a title='Tablet' data-width='768'><span class='fa fa-tablet'></span> Tablet</a></li><li><a title='Phone' data-width='640'><span class='fa fa-mobile-phone'></span> Phone</a></li></ul></div></div>",
+                tinymce: {
+                    config: {
+                        inline: true,
+                        plugins: [
+                            "advlist autolink lists link image charmap print preview anchor",
+                            "searchreplace visualblocks code fullscreen",
+                            "insertdatetime media table contextmenu paste"
+                        ],
+                        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
                     }
-                });
-            },200)
+                }
+            });
+            $("#gm-canvas").html($scope.course.description);
+            gm.data('gridmanager').initCanvas();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
-
 
     GroupsService.groups.query().$promise.then(function (resp) {
         $scope.allGroups = Success.getObject(resp);
@@ -109,28 +110,17 @@ controllers.controller('EditCourse', ['$scope', '$rootScope', '$state', '$stateP
 
     };
 
-
-    $scope.tinymceOptions = {
-        selector: "textarea",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
-
     $scope.saveChanges = function(){
         var id_groups=[];
         for(var i=0;i<$scope.selectedGroups.length;i++){
             id_groups.push($scope.selectedGroups[i]._id);
         }
-
-        $scope.course.last_updated = new Date();
         $scope.course.groupsID = id_groups;
-        $scope.course.description = angular.element('#gm-canvas').html();
+        gm.data('gridmanager').deinitCanvas();
+        $scope.course.description = $("#gm-canvas").html();
         ElearningService.courses.update({id: $stateParams.courseId},{course: $scope.course}).$promise.then(function(resp){
-            $state.go('elearning.courses',{},{reload: true});
+            $scope.$parent.getCourses();
+            gm.data('gridmanager').initCanvas();
         }).catch(function(err){
             console.log(Error.getMessage(err));
         });

@@ -4,8 +4,8 @@
         <!-- chapter -->
         <div ng-if="course.listChapters.length == 1 && course.listChapters[0].listSubchapters.length == 1" ng-repeat="slide in course.listChapters[0].listSubchapters[0].listSlides | orderBy:' order'"
              class="entry clearfix"
-             ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake }"
-             ng-click="slideViews[slide._id].views >= slide.retake ? null : goToSlide(slide,course.listChapters[0].listSubchapters[0]._id)">
+             ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake && slide.type == 'test' }"
+             ng-click="slideViews[slide._id].views >= slide.retake && slide.type == 'test' ? null : goToSlide(slide,course.listChapters[0].listSubchapters[0]._id)">
             <div class="item-text col-xs-12 clearfix">
                 <div class="item-text-container col-xs-12">
                     <div class="item-text-text">{{slide.title}}
@@ -21,8 +21,7 @@
                 <div class="chapter-title">
                     <div class="text-placeholder">{{ ($index+1) +'. ' + chapter.title}} </div>
                 </div>
-                <div class="chapter-subtext">
-                    {{chapter.description}}
+                <div class="chapter-subtext" convert-special conver="chapter.description" ng-bind-html="trustAsHtml(chapter.description)">
                 </div>
                 <div class="chapter-sub-text"></div>
             </div>
@@ -34,8 +33,8 @@
                 <!-- slide -->
                 <div ng-repeat="slide in subChapter.listSlides | orderBy:' order'"
                      class="entry clearfix"
-                     ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake }"
-                     ng-click="slideViews[slide._id].views >= slide.retake ? null : goToSlide(slide,subChapter._id)">
+                     ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake && slide.type == 'test'}"
+                     ng-click="slideViews[slide._id].views >= slide.retake && slide.type == 'test' ? null : goToSlide(slide,subChapter._id)">
                     <div class="item-text col-xs-12 clearfix">
                         <div class="item-text-container col-xs-12">
                             <div class="item-text-text">{{slide.title}}

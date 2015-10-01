@@ -159,6 +159,7 @@ module.exports = function(env, logger, amazon, router){
 			}
 			else{
 				var data = req.body.course;
+				data.last_updated = new Date();
 				Courses.update({_id:req.query.id},{$set:data}, function(err, course) {
 					if (err){
 						console.log(err);
@@ -319,6 +320,7 @@ module.exports = function(env, logger, amazon, router){
 			}
 			else {
 				var data = req.body.chapter;
+				data.last_updated = new Date();
 				Chapters.update({_id: req.query.id}, {$set: data}, function (err, course) {
 					if (err) {
 						handleError(res, err, 500);
@@ -470,6 +472,7 @@ module.exports = function(env, logger, amazon, router){
 			}
 			else {
 				var data = req.body.subChapter;
+				data.last_updated = new Date();
 				Subchapters.update({_id: req.query.id}, {$set: data}, function (err, course) {
 					if (err) {
 						handleError(res, err, 500);
@@ -605,6 +608,7 @@ module.exports = function(env, logger, amazon, router){
 	    })
 	    .put(function (req, res) {
 			var data = req.body.slide;
+			data.last_updated = new Date();
 			if(req.body.status){
 				Slides.update({_id: req.query.id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
 					if(err){
