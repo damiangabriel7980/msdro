@@ -10,56 +10,58 @@
                     </button>
                 </div>
             </div>
-            <v-accordion class="vAccordion--default col-xs-12">
-
-                <v-pane ng-repeat="course in courses track by $index | orderBy:' order'">
-                    <v-pane-header>
-                        {{ course.title }}
-                    </v-pane-header>
-                    <v-pane-content>
-                        <div class="col-xs-12">
-                            <div class="editLink col-xs-4 noPadding" ng-click="addChapter(course._id)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
-                            <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.editCourse({courseId: course._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit&nbsp;</div>
-                            <div class="editLink col-xs-4 noPadding" ng-click="deleteCourse(course._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete&nbsp;</div>
+            <div ui-tree="treeOptions" class="col-md-12 noPadding">
+                <ol ui-tree-nodes="" ng-model="courses">
+                    <li ng-repeat="course in courses" ui-tree-node collapsed="true">
+                        <div ui-tree-handle class="tree-node tree-node-content">
+                            <a class="btn btn-success btn-xs ng-scope" data-nodrag="" ng-click="toggle(this)"><span ng-class="{'glyphicon glyphicon-chevron-right': collapsed, 'glyphicon glyphicon-chevron-down': !collapsed}"></span></a>
+                            {{course.title}}
                         </div>
-                        <v-accordion>
-                            <v-pane ng-repeat="chapter in course.listChapters track by $index | orderBy:' order'">
-                                <v-pane-header>
-                                    {{ chapter.title }}
-                                </v-pane-header>
-                                <v-pane-content>
-                                    <div class="editLink col-xs-4 noPadding" ng-click="addSubChapter(chapter._id)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add&nbsp;</div>
-                                    <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.editChapter({chapterId: chapter._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit&nbsp;</div>
-                                    <div class="editLink col-xs-4 noPadding" ng-click="deleteChapter(chapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete&nbsp;</div>
-                                    <v-accordion>
-                                        <v-pane ng-repeat="subChapter in chapter.listSubchapters track by $index | orderBy:' order'">
-                                            <v-pane-header>
-                                                {{ subChapter.title }}
-                                            </v-pane-header>
-                                            <v-pane-content>
-                                                <div class="editLink col-xs-4 noPadding" ng-click="addSlide(subChapter._id)"><i class="glyphicon glyphicon-plus"></i>Add&nbsp; Slide</div>
-                                                <div class="editLink col-xs-4 noPadding" ui-sref="elearning.courses.editSubChapter({subChapterId: subChapter._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit&nbsp;</div>
-                                                <div class="editLink col-xs-4 noPadding" ng-click="deleteSubChapter(subChapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete&nbsp;</div>
-                                                <v-accordion>
-                                                    <v-pane ng-repeat="slide in subChapter.listSlides track by $index | orderBy:' order'">
-                                                        <v-pane-header>
-                                                            {{ slide.title }}
-                                                        </v-pane-header>
-                                                        <v-pane-content>
-                                                            <div class="editLinkSlide col-xs-6" ui-sref="elearning.courses.editSlide({courseId: course._id, slideId: slide._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit slide&nbsp;</div>
-                                                            <div class="editLinkSlide col-xs-6" ng-click="deleteSlide(slide._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete slide&nbsp;</div>
-                                                        </v-pane-content>
-                                                    </v-pane>
-                                                </v-accordion>
-                                            </v-pane-content>
-                                        </v-pane>
-                                    </v-accordion>
-                                </v-pane-content>
-                            </v-pane>
-                        </v-accordion>
-                    </v-pane-content>
-                </v-pane>
-            </v-accordion>
+                        <div class="tree-node-content">
+                            <span class="handCursor leftPadding5px" ng-click="addChapter(course)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add chapter&nbsp;&nbsp;</span>
+                            <span class="handCursor leftPadding5px" ui-sref="elearning.courses.editCourse({courseId: course._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit Course&nbsp;&nbsp;</span>
+                            <span class="handCursor leftPadding5px" ng-click="deleteCourse(course._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Course&nbsp;&nbsp;</span>
+                        </div>
+                        <ol ui-tree-nodes="" ng-model="course.listChapters" ng-class="{hidden: collapsed}">
+                            <li ng-repeat="chapter in course.listChapters" ui-tree-node collapsed="true">
+                                <div ui-tree-handle class="tree-node tree-node-content">
+                                    <a class="btn btn-success btn-xs ng-scope" data-nodrag="" ng-click="toggle(this)"><span ng-class="{'glyphicon glyphicon-chevron-right': collapsed, 'glyphicon glyphicon-chevron-down': !collapsed}"></span></a>
+                                    {{chapter.title}}
+                                </div>
+                                <div class="tree-node-content">
+                                    <span class="handCursor leftPadding5px" ng-click="addSubChapter(chapter)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add sub-chapter&nbsp;&nbsp;</span>
+                                    <span class="handCursor leftPadding5px" ui-sref="elearning.courses.editChapter({chapterId: chapter._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit Chapter&nbsp;&nbsp;</span>
+                                    <span class="handCursor leftPadding5px" ng-click="deleteChapter(chapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Chapter&nbsp;&nbsp;</span>
+                                </div>
+                                <ol ui-tree-nodes="" ng-model="chapter.listSubchapters" ng-class="{hidden: collapsed}">
+                                    <li ng-repeat="subChapter in chapter.listSubchapters" ui-tree-node collapsed="true">
+                                        <div ui-tree-handle class="tree-node tree-node-content">
+                                            <a class="btn btn-success btn-xs ng-scope" data-nodrag="" ng-click="toggle(this)"><span ng-class="{'glyphicon glyphicon-chevron-right': collapsed, 'glyphicon glyphicon-chevron-down': !collapsed}"></span></a>
+                                            {{subChapter.title}}
+                                        </div>
+                                        <div class="tree-node-content">
+                                            <span class="handCursor leftPadding5px" ng-click="addSlide(subChapter)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add Slide&nbsp;&nbsp;</span>
+                                            <span class="handCursor leftPadding5px" ui-sref="elearning.courses.editSubChapter({subChapterId: subChapter._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit Sub-Chapter&nbsp;&nbsp;</span>
+                                            <span class="handCursor leftPadding5px" ng-click="deleteSubChapter(subChapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Sub-Chapter&nbsp;&nbsp;</span>
+                                        </div>
+                                        <ol ui-tree-nodes="" ng-model="subChapter.listSlides" ng-class="{hidden: collapsed}">
+                                            <li ng-repeat="slide in subChapter.listSlides" ui-tree-node>
+                                                <div ui-tree-handle class="tree-node tree-node-content">
+                                                    {{slide.title}}
+                                                </div>
+                                                <div class="tree-node-content">
+                                                    <span class="handCursor leftPadding5px" ui-sref="elearning.courses.editSlide({courseId: course._id, slideId: slide._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit Slide&nbsp;&nbsp;</span>
+                                                    <span class="handCursor leftPadding5px" ng-click="deleteSlide(slide._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Slide&nbsp;&nbsp;</span>
+                                                </div>
+                                            </li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </div>
         </div>
 
         <div class="col-xs-9">

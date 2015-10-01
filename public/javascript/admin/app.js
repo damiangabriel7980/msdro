@@ -17,7 +17,8 @@ var app = angular.module('app',
         'ui.ace',
         'ngCsv',
         'ngAnimate',
-        'vAccordion'
+        'vAccordion',
+        'ui.tree'
     ]);
 
 app.config(['$locationProvider', function($location) {

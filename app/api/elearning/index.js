@@ -18,6 +18,88 @@ module.exports = function(env, logger, amazon, router){
 	var handleSuccess = require('../../modules/responseHandler/success.js')(logger);
     var handleError = require('../../modules/responseHandler/error.js')(logger);
 
+	router.route('/admin/elearning/updateIndex')
+			.put(function (req, res) {
+				if(req.body.courseMap){
+					var mapping = req.body.courseMap;
+					async.each(mapping,function(item,callback){
+						Courses.update({_id: item.id}, {$set:{order: item.order}}, function (err, wRes) {
+							if (err) {
+								callback(err);
+							} else {
+								callback();
+							}
+						});
+					},function(err){
+						if(err){
+							handleError(res,err,409,5);
+						}
+						else
+						{
+							handleSuccess(res);
+						}
+					});
+				}else if(req.body.chapterMap){
+					var mapping = req.body.chapterMap;
+					async.each(mapping,function(item,callback){
+						Chapters.update({_id: item.id}, {$set:{order: item.order}}, function (err, wRes) {
+							if (err) {
+								callback(err);
+							} else {
+								callback();
+							}
+						});
+					},function(err){
+						if(err){
+							handleError(res,err,409,5);
+						}
+						else
+						{
+							handleSuccess(res);
+						}
+					});
+				} else if(req.body.subChaptersMap){
+					var mapping = req.body.subChaptersMap;
+					async.each(mapping,function(item,callback){
+						Subchapters.update({_id: item.id}, {$set:{order: item.order}}, function (err, wRes) {
+							if (err) {
+								callback(err);
+							} else {
+								callback();
+							}
+						});
+					},function(err){
+						if(err){
+							handleError(res,err,409,5);
+						}
+						else
+						{
+							handleSuccess(res);
+						}
+					});
+				} else if(req.body.slidesMap){
+					var mapping = req.body.slidesMap;
+					async.each(mapping,function(item,callback){
+						Slides.update({_id: item.id}, {$set:{order: item.order}}, function (err, wRes) {
+							if (err) {
+								callback(err);
+							} else {
+								callback();
+							}
+						});
+					},function(err){
+						if(err){
+							handleError(res,err,409,5);
+						}
+						else
+						{
+							handleSuccess(res);
+						}
+					});
+				} else
+					handleError(res, null, 400, 6);
+			});
+
 	router.route('/admin/elearning/courses')
 	    .get(function (req, res) {
 	        if(req.query.id){

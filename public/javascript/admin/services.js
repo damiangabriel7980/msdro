@@ -254,6 +254,9 @@ services.factory('ElearningService', ['$resource', function($resource){
             create: { method: 'POST', isArray: false },
             update: { method: 'PUT', isArray: false },
             delete: { method: 'DELETE', isArray: false }
+        }),
+        updateIndex: $resource('api/admin/elearning/updateIndex', {}, {
+            update: { method: 'PUT', isArray: false }
         })
     }
 }]);
