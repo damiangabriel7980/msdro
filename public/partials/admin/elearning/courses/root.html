@@ -21,7 +21,7 @@
                         <div class="tree-node-content">
                             <span class="handCursor leftPadding5px" ng-click="addChapter(course)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add chapter&nbsp;&nbsp;</span>
                             <span class="handCursor leftPadding5px" ui-sref="elearning.courses.editCourse({courseId: course._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit Course&nbsp;&nbsp;</span>
-                            <span class="handCursor leftPadding5px" ng-click="deleteCourse(course._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Course&nbsp;&nbsp;</span>
+                            <span class="handCursor leftPadding5px" ng-click="deleteCourse(course._id,$index)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Course&nbsp;&nbsp;</span>
                         </div>
                         <ol ui-tree-nodes="" ng-model="course.listChapters" ng-class="{hidden: collapsed}">
                             <li ng-repeat="chapter in course.listChapters" ui-tree-node collapsed="true">
@@ -33,7 +33,7 @@
                                 <div class="tree-node-content">
                                     <span class="handCursor leftPadding5px" ng-click="addSubChapter(chapter)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add sub-chapter&nbsp;&nbsp;</span>
                                     <span class="handCursor leftPadding5px" ui-sref="elearning.courses.editChapter({chapterId: chapter._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit Chapter&nbsp;&nbsp;</span>
-                                    <span class="handCursor leftPadding5px" ng-click="deleteChapter(chapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Chapter&nbsp;&nbsp;</span>
+                                    <span class="handCursor leftPadding5px" ng-click="deleteChapter(chapter._id,course,$index)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Chapter&nbsp;&nbsp;</span>
                                 </div>
                                 <ol ui-tree-nodes="" ng-model="chapter.listSubchapters" ng-class="{hidden: collapsed}">
                                     <li ng-repeat="subChapter in chapter.listSubchapters" ui-tree-node collapsed="true">
@@ -45,7 +45,7 @@
                                         <div class="tree-node-content">
                                             <span class="handCursor leftPadding5px" ng-click="addSlide(subChapter)"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add Slide&nbsp;&nbsp;</span>
                                             <span class="handCursor leftPadding5px" ui-sref="elearning.courses.editSubChapter({subChapterId: subChapter._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit Sub-Chapter&nbsp;&nbsp;</span>
-                                            <span class="handCursor leftPadding5px" ng-click="deleteSubChapter(subChapter._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Sub-Chapter&nbsp;&nbsp;</span>
+                                            <span class="handCursor leftPadding5px" ng-click="deleteSubChapter(subChapter._id,chapter,$index)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Sub-Chapter&nbsp;&nbsp;</span>
                                         </div>
                                         <ol ui-tree-nodes="" ng-model="subChapter.listSlides" ng-class="{hidden: collapsed}">
                                             <li ng-repeat="slide in subChapter.listSlides" ui-tree-node>
@@ -55,7 +55,7 @@
                                                 </div>
                                                 <div class="tree-node-content">
                                                     <span class="handCursor leftPadding5px" ui-sref="elearning.courses.editSlide({courseId: course._id, slideId: slide._id})"><i class="glyphicon glyphicon-edit"></i>&nbsp;Edit Slide&nbsp;&nbsp;</span>
-                                                    <span class="handCursor leftPadding5px" ng-click="deleteSlide(slide._id)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Slide&nbsp;&nbsp;</span>
+                                                    <span class="handCursor leftPadding5px" ng-click="deleteSlide(slide._id,subChapter,$index)"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete Slide&nbsp;&nbsp;</span>
                                                 </div>
                                             </li>
                                         </ol>

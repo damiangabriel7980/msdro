@@ -13,12 +13,10 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
                         $scope.courses[i].listChapters[j].listSubchapters[k].listSlides = customOrder.sortNumbers($scope.courses[i].listChapters[j].listSubchapters[k].listSlides,'order');
                     }
                     $scope.courses[i].listChapters[j].listSubchapters = customOrder.sortNumbers($scope.courses[i].listChapters[j].listSubchapters,'order');
-
                 }
                 $scope.courses[i].listChapters = customOrder.sortNumbers($scope.courses[i].listChapters,'order');
             }
             $scope.courses = customOrder.sortNumbers($scope.courses,'order');
-
         }).catch(function(err){
             console.log(Error.getMessage(err));
         });
@@ -31,22 +29,45 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
 
     $scope.getCourses();
 
-    $scope.deleteCourse = function (id) {
+    var createMap = function(arrayObject, indexToStart, forDelete){
+        var mapping = [];
+        for(var i = indexToStart; i < arrayObject.length; i++)
+        {
+            var objectToAdd = {};
+            objectToAdd.id = arrayObject[i]._id;
+            objectToAdd.order = forDelete ? arrayObject[i].order - 1 : arrayObject[i].order;
+            mapping.push(objectToAdd);
+        }
+        return mapping;
+    };
+
+    $scope.deleteCourse = function (id, idx) {
         ActionModal.show("Stergere curs", "Sunteti sigur ca doriti sa stergeti acest curs?", function () {
-            ElearningService.courses.delete({id: id}).$promise.then(function(result){
-                $scope.getCourses();
+            var mappedCourses = createMap($scope.courses, idx + 1, true);
+            ElearningService.updateIndex.update({chapterMap: mappedCourses}).$promise.then(function(resp){
+                ElearningService.courses.delete({id: id}).$promise.then(function(result){
+                    $scope.getCourses();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
+                });
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });
+
         },{
             yes: "Sterge"
         });
     };
 
-    $scope.deleteChapter = function (id) {
+    $scope.deleteChapter = function (id,course,idx) {
         ActionModal.show("Stergere capitol", "Sunteti sigur ca doriti sa stergeti acest capitol?", function () {
-            ElearningService.chapters.delete({id: id}).$promise.then(function(result){
-                $scope.getCourses();
+            var chapterMap = createMap(course.listChapters, idx + 1, true);
+            ElearningService.updateIndex.update({chapterMap: chapterMap}).$promise.then(function(resp){
+                ElearningService.chapters.delete({id: id}).$promise.then(function(result){
+                    $scope.getCourses();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
+                });
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });
@@ -67,7 +88,7 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             description: ''
         };
         ElearningService.courses.create({course: $scope.course}).$promise.then(function(resp){
-            $scope.getCourses();
+            $scope.courses.push(Success.getObject(resp));
         }).catch(function(err){
             console.log(Error.getMessage(err));
         });
@@ -84,7 +105,7 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             description: ''
         };
         ElearningService.chapters.create({courseId: course._id,chapter: $scope.chapter}).$promise.then(function(resp){
-            $scope.getCourses();
+            course.listChapters.push(Success.getObject(resp));
         }).catch(function(err){
             console.log(Error.getMessage(err));
         });
@@ -101,7 +122,7 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             description: ''
         };
         ElearningService.subchapters.create({chapterId: chapter._id, subChapter: $scope.subChapter}).$promise.then(function(resp){
-            $scope.getCourses();
+            chapter.listSubchapters.push(Success.getObject(resp));
         }).catch(function(err){
             console.log(Error.getMessage(err));
         });
@@ -120,7 +141,7 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             retake: 1
         };
         ElearningService.slides.create({id: subChapter._id, slide: $scope.slide}).$promise.then(function(result){
-            $scope.getCourses();
+            subChapter.listSlides.push(Success.getObject(result));
         }).catch(function(err){
             console.log(Error.getMessage(err));
         });
@@ -164,56 +185,28 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
                 event.dest.nodesScope.$modelValue[i].order = i + 1;
             }
             if(event.dest.nodesScope.$modelValue[0].groupsID){
-                var courseMap = [];
-                for(var i = 0; i < event.dest.nodesScope.$modelValue.length; i++)
-                {
-                    var objectToAdd = {};
-                    objectToAdd.id = event.dest.nodesScope.$modelValue[i]._id;
-                    objectToAdd.order = event.dest.nodesScope.$modelValue[i].order;
-                    courseMap.push(objectToAdd);
-                }
+                var courseMap = createMap(event.dest.nodesScope.$modelValue, 0, false);
                 ElearningService.updateIndex.update({courseMap: courseMap}).$promise.then(function(resp){
                     return true;
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
             } else if(event.dest.nodesScope.$modelValue[0].listSubchapters){
-                var chapterMap = [];
-                for(var i = 0; i < event.dest.nodesScope.$modelValue.length; i++)
-                {
-                    var objectToAdd = {};
-                    objectToAdd.id = event.dest.nodesScope.$modelValue[i]._id;
-                    objectToAdd.order = event.dest.nodesScope.$modelValue[i].order;
-                    chapterMap.push(objectToAdd);
-                }
+                var chapterMap = createMap(event.dest.nodesScope.$modelValue, 0, false);
                 ElearningService.updateIndex.update({chapterMap: chapterMap}).$promise.then(function(resp){
                     return true;
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
             }else if(event.dest.nodesScope.$modelValue[0].listSlides){
-                var subChaptersMap = [];
-                for(var i = 0; i < event.dest.nodesScope.$modelValue.length; i++)
-                {
-                    var objectToAdd = {};
-                    objectToAdd.id = event.dest.nodesScope.$modelValue[i]._id;
-                    objectToAdd.order = event.dest.nodesScope.$modelValue[i].order;
-                    subChaptersMap.push(objectToAdd);
-                }
+                var subChaptersMap = createMap(event.dest.nodesScope.$modelValue, 0, false);
                 ElearningService.updateIndex.update({subChaptersMap: subChaptersMap}).$promise.then(function(resp){
                     return true;
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
             }else if(event.dest.nodesScope.$modelValue[i].questions){
-                var slidesMap = [];
-                for(var i = 0; i < event.dest.nodesScope.$modelValue.length; i++)
-                {
-                    var objectToAdd = {};
-                    objectToAdd.id = event.dest.nodesScope.$modelValue[i]._id;
-                    objectToAdd.order = event.dest.nodesScope.$modelValue[i].order;
-                    slidesMap.push(objectToAdd);
-                }
+                var slidesMap = createMap(event.dest.nodesScope.$modelValue, 0, false);
                 ElearningService.updateIndex.update({slidesMap: slidesMap}).$promise.then(function(resp){
                     return true;
                 }).catch(function(err){
@@ -223,10 +216,15 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
         }
     };
 
-    $scope.deleteSubChapter = function (id) {
+    $scope.deleteSubChapter = function (id,chapter,idx) {
         ActionModal.show("Stergere sub-capitol", "Sunteti sigur ca doriti sa stergeti acest sub-capitol?", function () {
-            ElearningService.subchapters.delete({id: id}).$promise.then(function(result){
-                $scope.getCourses();
+            var subChaptersMap = createMap(chapter.listSubchapters, idx + 1, true);
+            ElearningService.updateIndex.update({subChaptersMap: subChaptersMap}).$promise.then(function(resp){
+                ElearningService.subchapters.delete({id: id}).$promise.then(function(result){
+                    $scope.getCourses();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
+                });
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });
@@ -235,10 +233,15 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
         });
     };
 
-    $scope.deleteSlide = function (id) {
+    $scope.deleteSlide = function (id,subChapter,idx) {
         ActionModal.show("Stergere slide", "Sunteti sigur ca doriti sa stergeti acest slide?", function () {
-            ElearningService.slides.delete({id: id}).$promise.then(function(result){
-                $scope.getCourses();
+            var slidesMap = createMap(subChapter.listSlides, idx + 1, true);
+            ElearningService.updateIndex.update({slidesMap: slidesMap}).$promise.then(function(resp){
+                ElearningService.slides.delete({id: id}).$promise.then(function(result){
+                    $scope.getCourses();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
+                });
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });

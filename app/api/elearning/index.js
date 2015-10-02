@@ -298,7 +298,7 @@ module.exports = function(env, logger, amazon, router){
 								if(err){
 									handleError(res,err,500);
 								}else{
-									handleSuccess(res, wres);
+									handleSuccess(res, saved);
 								}
 							});
 						}
@@ -450,7 +450,7 @@ module.exports = function(env, logger, amazon, router){
 								if(err){
 									handleError(res,err,500);
 								}else{
-									handleSuccess(res, wres);
+									handleSuccess(res, saved);
 								}
 							});
 						}
@@ -596,7 +596,7 @@ module.exports = function(env, logger, amazon, router){
 								if(err){
 									handleError(res,err,500);
 								}else{
-									handleSuccess(res, wres);
+									handleSuccess(res, saved);
 								}
 							});
 						}
