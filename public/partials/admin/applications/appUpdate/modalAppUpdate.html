@@ -1,0 +1,31 @@
+<div class="modal-content">
+    <form name ="appEditForm">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h3 class="modal-title">Modifica detalii aplicatie</h3>
+    </div>
+    <div class="modal-body">
+        <div style="margin-bottom: 15px;">
+            <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
+        </div>
+
+        <div class="form-group">
+            <label>Nume:</label>
+            <input type="text" class="form-control" ng-model="app.name" name="app.name" required>
+        </div>
+        <div class="form-group">
+            <label>Download Url:</label>
+            <input type="text" class="form-control" ng-model="app.downloadUrl" name="app.downloadUrl"required>
+        </div>
+
+        <div style="display:inline-block; min-height:290px;">
+            <label>Data update-ului:</label>
+            <datepicker ng-model="upDate" min-date="minDate" show-weeks="true" class="well well-sm" ></datepicker>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
+        <button type="submit" class="btn btn-primary pull-right" ng-disabled="appEditForm.$invalid" ng-click="save(app)">Salveaza</button>
+    </div>
+    </form>
+</div>

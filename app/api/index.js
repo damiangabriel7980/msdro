@@ -28,6 +28,7 @@ var ActivationCodes =require('../models/activationCodes');
 var DPOC_Devices = require('../models/DPOC_Devices');
 var Parameters = require('../models/parameters');
 var JanuviaUsers = require('../models/januvia/januvia_users');
+var AppUpdate = require("../models/msd-applications.js");
 var _ = require('underscore');
 
 //modules
@@ -1373,6 +1374,61 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
+
+
+    router.route('/admin/applications/edit')
+        .get(function(req,res){
+            if(req.query.id){
+                AppUpdate.findOne({_id:req.query.id},function(err,edit){
+                    if (err){
+                        handleError(res,err,500)
+                    }else{
+                        handleSuccess(res,edit);
+                    }
+                })
+            }else {
+                AppUpdate.find({}, function (err, apps) {
+                    if (err) {
+                        handleError(res, err, 500);
+                    } else {
+                        handleSuccess(res, apps);
+                    }
+                })
+            }
+        })
+        .post(function(req,res){
+            var app = new AppUpdate({
+                name:'Untitled',
+                upDate:new Date()
+            });
+            app.save(function(err,saved){
+                if(err){
+                    handleError(res,err);
+                }else{
+                    handleSuccess(res,saved);
+                }
+            })
+        })
+        .put(function(req,res){
+            var idToEdit = ObjectId(req.query.id);
+            AppUpdate.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, wres);
+                }
+            });
+        })
+        .delete(function(req,res){
+            var idToDelete = ObjectId(req.query.id)
+            AppUpdate.remove({_id:idToDelete},function(err,wres){
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res,wres);
+                }
+            });
+        })
 
     router.route('/admin/events/events')
         .get(function (req, res) {

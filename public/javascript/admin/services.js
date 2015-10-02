@@ -506,6 +506,17 @@ services.factory('LocationService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('ApplicationService',['$resource',function($resource){
+    return{
+        app :$resource('api/admin/applications/edit',{},{
+            query:{method:'GET',isArray: false},
+            create:{method:'POST', isArray:false},
+            update:{method:'PUT', isArray:false},
+            delete:{method:'DELETE', isArray:false}
+        })
+    }
+}])
+
 services.factory('NewsletterService', ['$resource', function($resource){
     var variableTypes = ["text", "html"];
     var systemVariables = ["UNSUBSCRIBE_URL"];

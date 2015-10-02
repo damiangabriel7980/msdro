@@ -257,6 +257,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/applications/januvia/viewUsers.html',
             controller: 'JanuviaUsersView'
         })
+        .state('applications.edit',{
+            url:'/edit',
+            templateUrl:'partials/admin/applications/appUpdate/appUpdate.html',
+            controller:"AppUpdateController"
+        })
         .state('system', {
             abstract: true,
             url: '/system',

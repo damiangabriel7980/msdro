@@ -1,0 +1,31 @@
+<div class = "col-md-12 well">
+
+</div>
+<div class="col-md-12">
+    <div class="titleAndButton">
+        <div><h3>Aplicatii:</h3></div>
+        <div>
+            <div class="btn btn-primary" ng-click="addApp()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
+            <!--<button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din CSV</button>-->
+        </div>
+    </div>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="app in $data">
+            <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
+                {{app.name}}
+            </td>
+            <td data-title="'Data adaugarii'" sortable="'date_created'">
+                {{app.upDate | date}}
+            </td>
+            <td data-title="'Download Url'" sortable="'type'">
+                {{app.downloadUrl}}
+            </td>
+            <td data-title="'Actiuni'">
+                <div class="btn-group">
+                    <div class="btn btn-primary" ng-click="editApp(app._id)"><i class="glyphicon glyphicon-cog"></i></div>
+                    <div class="btn btn-danger" ng-click="removeApp(app._id)"><i class="glyphicon glyphicon-trash"></i></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
