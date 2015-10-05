@@ -93,7 +93,7 @@ app.controllerProvider.register('SlideView', ['$scope','$rootScope' ,'CoursesSer
     };
 
     $scope.backToChapter = function(){
-        $state.go('elearning.chapters', {courseId:$stateParams.courseId});
+        $state.go('elearning.chapters', {courseId:$stateParams.courseId}, {reload: true});
     };
 
 }]);

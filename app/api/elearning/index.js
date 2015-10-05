@@ -608,7 +608,6 @@ module.exports = function(env, logger, amazon, router){
 	    })
 	    .put(function (req, res) {
 			var data = req.body.slide;
-			data.last_updated = new Date();
 			if(req.body.status){
 				Slides.update({_id: req.query.id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
 					if(err){
@@ -619,6 +618,7 @@ module.exports = function(env, logger, amazon, router){
 				});
 			}
 			else if(req.body.isSlide){
+				data.last_updated = new Date();
 				Slides.update({_id:req.query.id},{$set:data}, function(err, course) {
 					if (err){
 						handleError(res,err,500);
@@ -909,7 +909,20 @@ module.exports = function(env, logger, amazon, router){
 	router.route('/elearning/courses')
 	    .get(function (req, res) {
 	    	if(req.query.id){
-	    		Courses.findOne({_id: req.query.id}).deepPopulate("listChapters.listSubchapters.listSlides").exec(function (err, course) {
+	    		Courses.findOne({$and : [{_id: req.query.id},{enabled: true}]}).deepPopulate('listChapters.listSubchapters.listSlides',{
+					whitelist: ["listChapters.listSubchapters.listSlides"],
+					populate: {
+						"listChapters": {
+							match: {enabled: true}
+						},
+						"listChapters.listSubchapters": {
+							match: {enabled: true}
+						},
+						"listChapters.listSubchapters.listSlides": {
+							match: {enabled: true}
+						}
+					}
+				}).exec(function (err, course) {
 	    		    if(err){
 	    		        handleError(res, err);
 	    		    }else if(!course){
@@ -922,7 +935,7 @@ module.exports = function(env, logger, amazon, router){
 	    		    }
 	    		});
 	    	}else{
-	    		Courses.find({groupsID: {$in: req.user.groupsID}}).sort({"order": 1}).exec(function(err, courses){
+	    		Courses.find({$and : [{groupsID: {$in: req.user.groupsID}},{enabled: true}]}).sort({"order": 1}).exec(function(err, courses){
 	    			if(err){
 	    				handleError(res, err);
 	    			}else{

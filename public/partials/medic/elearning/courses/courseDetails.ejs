@@ -22,8 +22,8 @@
         <div ng-if="course.listChapters.length > 1 || course.listChapters[0].listSubchapters.length > 1" ng-repeat="chapter in course.listChapters | orderBy:' order'" >
             <div class="chapter">
                 <div class="chapter-title">
-                    <div class="myProgress " ng-class="{'oneDigit': chapter.progress < 10 || !chapter.progress,'twoDigit': chapter.progress < 100,'threeDigit': chapter.progress == 100}">
-                        {{chapter.progress ? chapter.progress + '%' : 0 + '%'}}
+                    <div class="myProgress " ng-class="{'oneDigit': chapter.progressInPercentage < 10 || !chapter.progressInPercentage,'twoDigit': chapter.progressInPercentage < 100,'threeDigit': chapter.progressInPercentage == 100}">
+                        {{chapter.progress ? chapter.progressInPercentage + '%' : 0 + '%'}}
                     </div>
                     <div round-progress
                             max="chapter.total"

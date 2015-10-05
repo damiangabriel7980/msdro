@@ -8,13 +8,16 @@ app.controllerProvider.register('CourseDetails', ['$scope', '$rootScope', '$stat
         var nrOfSlides = 0;
         for(var i = 0; i < chapter.listSubchapters.length; i++){
             for(var j = 0; j < chapter.listSubchapters[i].listSlides.length; j++ ){
-                if($scope.slideViews[chapter.listSubchapters[i].listSlides[j]._id].views)
-                    progress += 1;
-                nrOfSlides += 1;
+                if($scope.slideViews[chapter.listSubchapters[i].listSlides[j]._id]){
+                    if($scope.slideViews[chapter.listSubchapters[i].listSlides[j]._id].views)
+                        progress += 1;
+                    nrOfSlides += 1;
+                }
             }
         }
         var objectToSend = {};
-        objectToSend.progress = Math.round((progress/nrOfSlides)*100);
+        objectToSend.progressInPercentage = Math.round((progress/nrOfSlides)*100);
+        objectToSend.progress = progress;
         objectToSend.total = nrOfSlides;
         return objectToSend;
     };
@@ -25,6 +28,7 @@ app.controllerProvider.register('CourseDetails', ['$scope', '$rootScope', '$stat
         for(var i = 0; i< $scope.course.listChapters.length ; i++){
             var extraChapterInfo = calculateCourseProgress($scope.course.listChapters[i]);
             $scope.course.listChapters[i].progress = extraChapterInfo.progress;
+            $scope.course.listChapters[i].progressInPercentage = extraChapterInfo.progressInPercentage;
             $scope.course.listChapters[i].total = extraChapterInfo.total;
         }
     });
