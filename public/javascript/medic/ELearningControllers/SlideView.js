@@ -80,7 +80,7 @@ app.controllerProvider.register('SlideView', ['$scope','$rootScope' ,'CoursesSer
         var dataToSend = {};
         dataToSend[$scope.slide._id] = $scope.arrayOfQAndA;
         CoursesService.slides.save({id: $scope.slide._id},$scope.mapQuestionsAnswers).$promise.then(function(resp){
-            $state.go('elearning.chapters', {courseId:$stateParams.courseId, fromTest: true, testScore: Success.getObject(resp)}, {reload: true});
+            $state.go('elearning.chapters', {courseId:$stateParams.courseId, fromTest: true, testScore: Success.getObject(resp), minimum: $scope.slide.minimum, maximum: $scope.slide.maximum}, {reload: true});
         })
     };
 

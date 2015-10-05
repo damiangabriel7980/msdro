@@ -205,7 +205,7 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
-            }else if(event.dest.nodesScope.$modelValue[i].questions){
+            }else if(event.dest.nodesScope.$modelValue[0].questions){
                 var slidesMap = createMap(event.dest.nodesScope.$modelValue, 0, false);
                 ElearningService.updateIndex.update({slidesMap: slidesMap}).$promise.then(function(resp){
                     return true;

@@ -8,6 +8,7 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
     };
 
     $scope.courseId = $stateParams.courseId;
+    $scope.statusAlert = {newAlert:false, type:"", message:""};
 
     var gm;
     $(document).ready(function(){
@@ -133,7 +134,7 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
                 if($scope.questions[i].order == $scope.questions.length && checkSum == 0)
                     questionCursor = true;
             }
-            if(questionCursor && overall == $scope.slide.maximum){
+            if(questionCursor){
                 $scope.slide.last_updated = new Date();
                 $scope.slide.questions = $scope.questions;
                 $scope.slide.type = 'test';
@@ -142,14 +143,9 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
                     $scope.statusAlert.message = Success.getMessage(resp);
                     $scope.statusAlert.newAlert = true;
                     $scope.$parent.getCourses();
-                    gm.data('gridmanager').initCanvas();
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
-            }else if(overall != $scope.slide.maximum && checkSum == 0) {
-                $scope.statusAlert.type = "danger";
-                $scope.statusAlert.message = 'Suma ponderilor intrebarilor nu este egala cu punctajul testului!';
-                $scope.statusAlert.newAlert = true;
             }
 
         }

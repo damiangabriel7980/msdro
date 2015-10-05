@@ -6,9 +6,12 @@
              class="entry clearfix"
              ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake && slide.type == 'test' }"
              ng-click="slideViews[slide._id].views >= slide.retake && slide.type == 'test' ? null : goToSlide(slide,course.listChapters[0].listSubchapters[0]._id)">
-            <div class="item-text col-xs-12 clearfix">
+            <div class="item-text col-xs-12 clearfix noPadding">
                 <div class="item-text-container col-xs-12">
-                    <div class="item-text-text">{{slide.title}}
+                    <div class="item-completion col-xs-1 noPadding">
+                        <div class="indicator" ng-class="{'empty' : !slideViews[slide._id].views}"></div>
+                    </div>
+                    <div class="item-text-text col-xs-11">{{slide.title}}
                         <span class="label label-success pull-right" ng-if="slide.type == 'test' && (slideViews[slide._id].score || slideViews[slide._id].score == 0)">
                             <b class="fontM">{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? slideViews[slide._id].score : ''}}</b>{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? ' puncte' : ''}}
                         </span>
@@ -19,7 +22,24 @@
         <div ng-if="course.listChapters.length > 1 || course.listChapters[0].listSubchapters.length > 1" ng-repeat="chapter in course.listChapters | orderBy:' order'" >
             <div class="chapter">
                 <div class="chapter-title">
-                    <div class="text-placeholder">{{ ($index+1) +'. ' + chapter.title}} </div>
+                    <div class="myProgress " ng-class="{'oneDigit': chapter.progress < 10 || !chapter.progress,'twoDigit': chapter.progress < 100,'threeDigit': chapter.progress == 100}">
+                        {{chapter.progress ? chapter.progress + '%' : 0 + '%'}}
+                    </div>
+                    <div round-progress
+                            max="chapter.total"
+                            current="chapter.progress"
+                            color="#006d69"
+                            bgcolor="#eaeaea"
+                            radius="20"
+                            stroke="4"
+                            semi="false"
+                            rounded="true"
+                            clockwise="true"
+                            responsive="false"
+                            duration="500"
+                            animation="easeInOutQuart" class="col-md-2 noPadding"></div>
+
+                    <div class="text-placeholder col-md-10">{{ ($index+1) +'. ' + chapter.title}} </div>
                 </div>
                 <div class="chapter-subtext" convert-special conver="chapter.description" ng-bind-html="trustAsHtml(chapter.description)">
                 </div>
@@ -35,12 +55,15 @@
                      class="entry clearfix"
                      ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake && slide.type == 'test'}"
                      ng-click="slideViews[slide._id].views >= slide.retake && slide.type == 'test' ? null : goToSlide(slide,subChapter._id)">
-                    <div class="item-text col-xs-12 clearfix">
+                    <div class="item-text col-xs-12 clearfix noPadding">
                         <div class="item-text-container col-xs-12">
-                            <div class="item-text-text">{{slide.title}}
-                                <span class="label label-success pull-right" ng-if="slide.type == 'test'">
-                                    {{slideViews[slide._id].score ? slideViews[slide._id].score + ' puncte' : ''}}
-                                </span>
+                            <div class="item-completion col-xs-1 noPadding">
+                                <div class="indicator" ng-class="{'empty' : !slideViews[slide._id].views}"></div>
+                            </div>
+                            <div class="item-text-text col-xs-11 noPadding">{{slide.title}}
+                                 <span class="label label-success pull-right" ng-if="slide.type == 'test' && (slideViews[slide._id].score || slideViews[slide._id].score == 0)">
+                            <b class="fontM">{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? slideViews[slide._id].score : ''}}</b>{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? ' puncte' : ''}}
+                        </span>
                             </div>
                         </div>
                     </div>

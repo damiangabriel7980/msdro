@@ -3,9 +3,21 @@
 </div>
 
 <div class="modal-body">
-    <p class="text-center fontXXL">Ati obtinut {{score}} puncte.</p>
+    <p class="text-justify fontXL">{{messageToShow}}</p>
+    <div class="quiz-results">
+        <div class="quiz-results-graph col-xs-10">
+            <div class="quiz-results-graph-foreground" ng-class="{'failed':scorePercent<minPercent}" ng-style="{width : scorePercent+&quot;%&quot;}" style="width: 0%;"></div>
+            <div class="quiz-results-graph-indicator" ng-style="{left : minPercent+&quot;%&quot; }" style="left: 0%;"></div>
+        </div>
+        <div class="quiz-results-summary col-xs-2 ng-binding">
+            <i class="glyphicon" ng-class="{'glyphicon-ok-circle' : (scorePercent>=minPercent), 'glyphicon-remove-circle':scorePercent<minPercent}"></i>
+           {{scorePercent + '%'}}
+        </div>
+    </div>
+    <!--<p class="text-center">-->
+        <!--<progressbar class="myProgressBg" max="maximum" value="score"><i class="styledProgress">{{score}}/{{maximum}}</i></progressbar>-->
+    <!--</p>-->
 </div>
-
 <div class="modal-footer">
     <a class="btn btn-default float-left" ng-click="closeModal()">Inchide</a>
 </div>

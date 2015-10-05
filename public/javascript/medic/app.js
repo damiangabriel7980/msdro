@@ -82,13 +82,15 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: 'CoursesView',
                 files: [
-                    'javascript/medic/ELearningControllers/CoursesView.js'
+                    'javascript/medic/ELearningControllers/CoursesView.js',
+                    'components/angular-svg-round-progressbar/build/roundProgress.js'
                 ]
             },
             {
                 name: 'CoursesDetails',
                 files: [
-                    'javascript/medic/ELearningControllers/CourseDetails.js'
+                    'javascript/medic/ELearningControllers/CourseDetails.js',
+                    'components/angular-svg-round-progressbar/build/roundProgress.js'
                 ]
             },
             {
@@ -201,8 +203,8 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: 'VideoJS',
                 files: [
-                    'components/video-js/dist/video-js/video-js.min.css',
-                    'components/video-js/dist/video-js/video.js'
+                    'components/video-js/dist/video-js.min.css',
+                    'components/video-js/dist/video.js'
                 ]
             }
         ]
@@ -350,7 +352,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'CourseDetails',
             params: {
                 fromTest: {array: false},
-                testScore: {array: false}
+                testScore: {array: false},
+                minimum: {array: false},
+                maximum: {array: false}
             },
             resolve: {
                 loadDeps: loadStateDeps(['CoursesDetails'])

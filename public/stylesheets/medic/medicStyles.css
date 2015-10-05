@@ -6662,6 +6662,14 @@ body .btn {
 .slideWrapper .padding24 {
   padding: 24px 0;
 }
+.styledProgress {
+  color: white;
+  font-weight: bold;
+  padding-left: 5px;
+}
+.myProgressBg {
+  background-color: grey;
+}
 .chaptersContainer {
   border: 1px solid #1b1e1f;
   border-radius: 7px;
@@ -6694,14 +6702,29 @@ body .btn {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+.chaptersContainer .chapter .myProgress {
+  line-height: 43px;
+  min-height: 40px;
+  bottom: auto;
+  color: black;
+  position: absolute;
+  left: 8px;
+  font-size: 10px;
+}
+.chaptersContainer .chapter .oneDigit {
+  left: 13px;
+}
+.chaptersContainer .chapter .twoDigit {
+  left: 10px;
+}
+.chaptersContainer .chapter .threeDigit {
+  left: 8px;
+}
 .chaptersContainer .chapter .chapter-title {
   min-height: 40px;
 }
 .chaptersContainer .chapter .chapter-title .text-placeholder {
-  padding-right: 90px;
-  width: 100%;
-  position: absolute;
-  line-height: 30px;
+  line-height: 35px;
   min-height: 40px;
   font-size: 24px;
   font-weight: bold;
@@ -6746,7 +6769,7 @@ body .btn {
   width: 10px;
   height: 10px;
   border: 1px solid #073d33;
-  background-color: #1cb69a;
+  background-color: #01877b;
   border-radius: 50%;
 }
 .chaptersContainer .entry .item-completion .indicator.empty {
@@ -6755,7 +6778,6 @@ body .btn {
 .chaptersContainer .entry .item-text {
   border-bottom: 1px solid #c3c3c3;
   padding-bottom: 10px;
-  padding-left: 35px;
 }
 .chaptersContainer .entry .item-text .item-text-container {
   padding-left: 0;
@@ -6785,9 +6807,43 @@ body .btn {
 .chaptersContainer .sub-chapters-container > div:last-child .item-text {
   border: none;
 }
+.quiz-results {
+  width: 100%;
+  height: 20px;
+}
+.quiz-results .quiz-results-graph {
+  margin-top: 2px;
+  height: 15px;
+  background-color: #bec3ca;
+  border-radius: 10px;
+  padding: 0;
+}
+.quiz-results .quiz-results-graph .quiz-results-graph-foreground {
+  border-radius: 10px;
+  height: 15px;
+  background-color: #199992;
+}
+.quiz-results .quiz-results-graph .failed {
+  background-color: red;
+}
+.quiz-results .quiz-results-graph .quiz-results-graph-indicator {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 15px;
+  border-left: 1px solid black;
+}
+.quiz-results .quiz-results-summary {
+  color: #127c72;
+  font-weight: bold;
+  text-align: right;
+}
 .test-container {
   position: relative;
   float: left;
+}
+.test-container .test-header .top5 {
+  top: 5px;
 }
 .test-container .test-header .quiz-name {
   font-weight: bold;
@@ -6803,34 +6859,6 @@ body .btn {
 }
 .test-container .test-header .quiz-summary {
   margin-top: 20px;
-}
-.test-container .test-header .quiz-results {
-  width: 100%;
-  height: 20px;
-}
-.test-container .test-header .quiz-results .quiz-results-graph {
-  margin-top: 2px;
-  height: 15px;
-  background-color: #bec3ca;
-  border-radius: 10px;
-  padding: 0;
-}
-.test-container .test-header .quiz-results .quiz-results-graph .quiz-results-graph-foreground {
-  border-radius: 10px;
-  height: 15px;
-  background-color: #199992;
-}
-.test-container .test-header .quiz-results .quiz-results-graph .quiz-results-graph-indicator {
-  position: absolute;
-  top: 0;
-  width: 1px;
-  height: 15px;
-  border-left: 1px solid black;
-}
-.test-container .test-header .quiz-results .quiz-results-summary {
-  color: #127c72;
-  font-weight: bold;
-  text-align: right;
 }
 .test-container .test-header .quiz-buttons-container {
   height: 100%;
