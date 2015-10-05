@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 var appUpdateSchema = new Schema({
     name : String,
     downloadUrl: String,
-    upDate:Date
+    upgradeDate:Date
 });
 
 module.exports = mongoose.model('msd-applications',appUpdateSchema,'msd-applications');

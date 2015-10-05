@@ -36,14 +36,14 @@ controllers.controller('AppUpdateController',['$scope','ApplicationService','Suc
         })
     };
 
-    $scope.editApp = function(id){
+    $scope.editApp = function(app){
             $modal.open({
                 templateUrl: 'partials/admin/applications/appUpdate/modalAppUpdate.html',
                 windowClass: 'fade',
                 controller: 'AppUpdateEdit',
                 resolve: {
-                    idToEdit: function () {
-                        return id;
+                    appToEdit: function () {
+                        return app;
                     }
                 }
             });

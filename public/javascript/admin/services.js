@@ -508,7 +508,7 @@ services.factory('LocationService', ['$resource', function($resource){
 
 services.factory('ApplicationService',['$resource',function($resource){
     return{
-        app :$resource('api/admin/applications/edit',{},{
+        app :$resource('api/admin/applications/upgrade',{},{
             query:{method:'GET',isArray: false},
             create:{method:'POST', isArray:false},
             update:{method:'PUT', isArray:false},

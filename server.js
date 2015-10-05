@@ -92,6 +92,7 @@ require('./app/apiDPOC.js')(app, logger, express.Router());
 require('./app/apiCourses.js')(app, logger, tokenSecret, express.Router());
 require('./app/apiContractManagement.js')(app, logger, express.Router());
 require('./app/apiJanuvia.js')(app, logger, express.Router());
+require('./app/apiAplicationUpgrade.js')(app, logger, express.Router());
 // socket comm test =================================================================
 // require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 

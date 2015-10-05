@@ -1376,7 +1376,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
 
-    router.route('/admin/applications/edit')
+    router.route('/admin/applications/upgrade')
         .get(function(req,res){
             if(req.query.id){
                 AppUpdate.findOne({_id:req.query.id},function(err,edit){
@@ -1387,6 +1387,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else {
+                console.log(req);
                 AppUpdate.find({}, function (err, apps) {
                     if (err) {
                         handleError(res, err, 500);
@@ -1399,7 +1400,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function(req,res){
             var app = new AppUpdate({
                 name:'Untitled',
-                upDate:new Date()
+                upgradeDate:new Date()
             });
             app.save(function(err,saved){
                 if(err){
