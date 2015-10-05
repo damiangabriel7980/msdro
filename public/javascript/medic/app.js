@@ -165,10 +165,10 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
-                name: 'Accordion',
+                name: 'vAccordion',
                 files: [
-                    'components/angular-ui-tree/dist/angular-ui-tree.min.css',
-                    'components/angular-ui-tree/dist/angular-ui-tree.js'
+                    'components/v-accordion/dist/v-accordion.min.css',
+                    'components/v-accordion/dist/v-accordion.min.js'
                 ]
             },
             {
@@ -343,7 +343,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/elearning/courses/courses.ejs',
             controller: 'CoursesView',
             resolve: {
-                loadDeps: loadStateDeps(['CoursesView', 'Accordion'])
+                loadDeps: loadStateDeps(['CoursesView'])
             }
         })
         .state('elearning.chapters',{
@@ -357,7 +357,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 maximum: {array: false}
             },
             resolve: {
-                loadDeps: loadStateDeps(['CoursesDetails'])
+                loadDeps: loadStateDeps(['CoursesDetails', 'vAccordion'])
             }
         })
         .state('elearning.slide',{
