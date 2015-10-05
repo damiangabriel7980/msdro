@@ -11,8 +11,8 @@ app.controllerProvider.register('CourseDetails', ['$scope', '$rootScope', '$stat
                 if($scope.slideViews[chapter.listSubchapters[i].listSlides[j]._id]){
                     if($scope.slideViews[chapter.listSubchapters[i].listSlides[j]._id].views)
                         progress += 1;
-                    nrOfSlides += 1;
                 }
+                nrOfSlides += 1;
             }
         }
         var objectToSend = {};

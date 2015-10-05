@@ -31,21 +31,23 @@ app.controllerProvider.register('SlideView', ['$scope','$rootScope' ,'CoursesSer
                     $scope.nextSlide = false;
 
                 if($scope.pSlide || $scope.nSlide){
-                    if($scope.pSlide && $scope.pSlide.type == 'test'){
+                    if($scope.pSlide){
                         if($scope.slideViews[$scope.pSlide._id]){
-                            if($scope.slideViews[$scope.pSlide._id].views >= $scope.pSlide.retake)
+                            if($scope.slideViews[$scope.pSlide._id].views >= $scope.pSlide.retake  && $scope.pSlide.type == 'test')
                                 $scope.previousSlide = false;
                             else
                                 $scope.previousSlide = true;
-                        }
+                        } else
+                            $scope.previousSlide = true;
                     }
-                    if($scope.nSlide && $scope.nSlide.type == 'test'){
+                    if($scope.nSlide){
                         if($scope.slideViews[$scope.nSlide._id]){
-                            if($scope.slideViews[$scope.nSlide._id].views >= $scope.nSlide.retake)
+                            if($scope.slideViews[$scope.nSlide._id].views >= $scope.nSlide.retake  && $scope.nSlide.type == 'test')
                                 $scope.nextSlide = false;
                             else
                                 $scope.nextSlide = true;
-                        }
+                        } else
+                            $scope.nextSlide = true;
                     }
                 }
                 //array of objects with answers to send to DB

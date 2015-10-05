@@ -1024,7 +1024,7 @@ module.exports = function(env, logger, amazon, router){
 							function(results){
 								var totalScore = results[0];
 								var userScore = results[1];
-								var normalisedScore = Math.round(userScore*env.elearning.maxScore/totalScore);
+								var normalisedScore = Math.round(userScore*slide.maximum/totalScore);
 								// console.log(totalScore);
 								// console.log(userScore);
 								// console.log(normalisedScore);
