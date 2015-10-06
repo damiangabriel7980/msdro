@@ -1387,7 +1387,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else {
-                console.log(req);
                 AppUpdate.find({}, function (err, apps) {
                     if (err) {
                         handleError(res, err, 500);
