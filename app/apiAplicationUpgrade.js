@@ -19,7 +19,7 @@ module.exports = function(app, logger, router) {
     router.route('/').get(function (req, res) {
 
         AppUpdate.findOne({name:req.query.name},function(err, apps)
-        {   console.log(req.query);
+        {
             if (err) {
                 handleError(err);
             }
