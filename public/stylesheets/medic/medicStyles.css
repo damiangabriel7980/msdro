@@ -6713,6 +6713,12 @@ body .btn {
 .chaptersContainer .vAccordion--default v-pane-header:before {
   background-color: darkorange;
 }
+.chaptersContainer .hideAccordionIcon:after {
+  background-color: transparent !important;
+}
+.chaptersContainer .hideAccordionIcon:before {
+  background-color: transparent !important;
+}
 .chaptersContainer .myProgress {
   line-height: 43px;
   min-height: 40px;

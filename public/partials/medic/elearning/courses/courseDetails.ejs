@@ -5,7 +5,7 @@
         <div ng-if="course.listChapters.length == 1 && course.listChapters[0].listSubchapters.length == 1" class="row paddingOnlySlides">
             <v-accordion class="vAccordion--default">
                 <v-pane ng-repeat="slide in course.listChapters[0].listSubchapters[0].listSlides | orderBy:' order'">
-                    <v-pane-header class="col-md-12" ng-click="slideViews[slide._id].views >= slide.retake && slide.type == 'test' ? null : goToSlide(slide,course.listChapters[0].listSubchapters[0]._id)" ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake && slide.type == 'test' }">
+                    <v-pane-header class="col-md-12 hideAccordionIcon" ng-click="slideViews[slide._id].views >= slide.retake && slide.type == 'test' ? null : goToSlide(slide,course.listChapters[0].listSubchapters[0]._id)" ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake && slide.type == 'test' }">
                         <div class="col-md-12 noPadding">
                             <div class="item-completion col-md-1 noPadding">
                                 <div class="indicator" ng-class="{'empty' : !slideViews[slide._id].views}"></div>
@@ -65,7 +65,7 @@
                                 </div>
                                 <v-accordion ng-if="subChapter.listSlides" multiple>
                                     <v-pane ng-repeat="slide in subChapter.listSlides | orderBy:' order'">
-                                        <v-pane-header class="col-md-12" ng-click="slideViews[slide._id].views >= slide.retake && slide.type == 'test' ? null : goToSlide(slide,subChapter._id)" ng-disabled="slideViews[slide._id].views >= slide.retake && slide.type == 'test'" ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake && slide.type == 'test'}">
+                                        <v-pane-header class="col-md-12 hideAccordionIcon" ng-click="slideViews[slide._id].views >= slide.retake && slide.type == 'test' ? null : goToSlide(slide,subChapter._id)" ng-disabled="slideViews[slide._id].views >= slide.retake && slide.type == 'test'" ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake && slide.type == 'test'}">
                                             <div class="col-md-12 noPadding">
                                                 <div class="item-completion col-md-1 noPadding">
                                                     <div class="indicator" ng-class="{'empty' : !slideViews[slide._id].views}"></div>
