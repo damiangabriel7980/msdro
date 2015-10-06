@@ -10,7 +10,7 @@
                             <div class="item-completion col-md-1 noPadding">
                                 <div class="indicator" ng-class="{'empty' : !slideViews[slide._id].views}"></div>
                             </div>
-                            <div class="item-text-text col-md-11">{{slide.title}}
+                            <div class="item-text-text col-md-11 fontM">{{slide.title}}
                     <span class="label label-success pull-right" ng-if="slide.type == 'test' && (slideViews[slide._id].score || slideViews[slide._id].score == 0)">
                     <b class="fontM">{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? slideViews[slide._id].score : ''}}</b>{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? ' puncte' : ''}}
                     </span>
@@ -23,7 +23,7 @@
             </v-accordion>
         </div>
         <div ng-if="course.listChapters.length > 1 || course.listChapters[0].listSubchapters.length > 1">
-        <v-accordion class="vAccordion--default">
+        <v-accordion class="vAccordion--default" multiple>
             <v-pane ng-repeat="chapter in course.listChapters | orderBy:' order'">
                 <v-pane-header>
                     <div class="container noPadding">
@@ -43,7 +43,7 @@
                              responsive="false"
                              duration="500"
                              animation="easeInOutQuart" class="col-md-2 noPadding"></div>
-                        <div class="col-md-10 lineHeight43">
+                        <div class="col-md-10 lineHeight43 fontXXL">
                             {{ ($index+1) +'. ' + chapter.title}}
                         </div>
                     </div>
@@ -54,23 +54,23 @@
 
                     </div>
                     <!-- accordions can be nested :) -->
-                    <v-accordion ng-if="chapter.listSubchapters">
+                    <v-accordion ng-if="chapter.listSubchapters" multiple>
                         <v-pane ng-repeat="subChapter in chapter.listSubchapters | orderBy:' order'">
-                            <v-pane-header>
+                            <v-pane-header class="fontL">
                                 {{ subChapter.title }}
                             </v-pane-header>
                             <v-pane-content>
                                 <div convert-special conver="subChapter.description" ng-bind-html="trustAsHtml(subChapter.description)">
 
                                 </div>
-                                <v-accordion ng-if="subChapter.listSlides">
+                                <v-accordion ng-if="subChapter.listSlides" multiple>
                                     <v-pane ng-repeat="slide in subChapter.listSlides | orderBy:' order'">
                                         <v-pane-header class="col-md-12" ng-click="slideViews[slide._id].views >= slide.retake && slide.type == 'test' ? null : goToSlide(slide,subChapter._id)" ng-disabled="slideViews[slide._id].views >= slide.retake && slide.type == 'test'" ng-class="{'disabledChapter': slideViews[slide._id].views >= slide.retake && slide.type == 'test'}">
                                             <div class="col-md-12 noPadding">
                                                 <div class="item-completion col-md-1 noPadding">
                                                     <div class="indicator" ng-class="{'empty' : !slideViews[slide._id].views}"></div>
                                                 </div>
-                                                <div class="item-text-text col-md-11">{{slide.title}}
+                                                <div class="item-text-text col-md-11 fontM">{{slide.title}}
                                                 <span class="label label-success pull-right" ng-if="slide.type == 'test' && (slideViews[slide._id].score || slideViews[slide._id].score == 0)">
                                                     <b class="fontM">{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? slideViews[slide._id].score : ''}}</b>{{slideViews[slide._id].score || slideViews[slide._id].score == 0 ? ' puncte' : ''}}
                                                  </span>

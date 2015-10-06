@@ -6662,6 +6662,9 @@ body .btn {
 .slideWrapper .padding24 {
   padding: 24px 0;
 }
+.slideWrapper .padding24Bottom {
+  padding: 0 0 24px 0;
+}
 .styledProgress {
   color: white;
   font-weight: bold;
@@ -6703,6 +6706,12 @@ body .btn {
 }
 .chaptersContainer .vAccordion--default v-pane-header:focus {
   color: #006d69;
+}
+.chaptersContainer .vAccordion--default v-pane-header:after {
+  background-color: darkorange;
+}
+.chaptersContainer .vAccordion--default v-pane-header:before {
+  background-color: darkorange;
 }
 .chaptersContainer .myProgress {
   line-height: 43px;

@@ -350,6 +350,9 @@ body {
   .padding24{
     padding: 24px 0;
   }
+  .padding24Bottom{
+   padding: 0 0 24px 0;
+  }
 }
 
 .styledProgress{
@@ -390,7 +393,14 @@ body {
     &:focus{
       color: @green-darker;
     }
+    &:after{
+      background-color: darkorange;
+    }
+    &:before{
+      background-color: darkorange;
+    }
   }
+
   .myProgress{
     line-height: 43px;
     min-height: 40px;
