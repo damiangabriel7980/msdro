@@ -24,7 +24,7 @@
         </div>
         <div ng-if="course.listChapters.length > 1 || course.listChapters[0].listSubchapters.length > 1">
         <v-accordion class="vAccordion--default" multiple>
-            <v-pane ng-repeat="chapter in course.listChapters | orderBy:' order'">
+            <v-pane ng-repeat="chapter in course.listChapters | orderBy:' order'" expanded>
                 <v-pane-header>
                     <div class="container noPadding">
                         <div class="myProgress " ng-class="{'oneDigit': chapter.progressInPercentage < 10 || !chapter.progressInPercentage,'twoDigit': chapter.progressInPercentage < 100,'threeDigit': chapter.progressInPercentage == 100}">
@@ -55,7 +55,7 @@
                     </div>
                     <!-- accordions can be nested :) -->
                     <v-accordion ng-if="chapter.listSubchapters" multiple>
-                        <v-pane ng-repeat="subChapter in chapter.listSubchapters | orderBy:' order'">
+                        <v-pane ng-repeat="subChapter in chapter.listSubchapters | orderBy:' order'" expanded>
                             <v-pane-header class="fontL">
                                 {{ subChapter.title }}
                             </v-pane-header>

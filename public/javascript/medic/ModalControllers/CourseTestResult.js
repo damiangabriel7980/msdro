@@ -12,10 +12,10 @@ app.controllerProvider.register('CourseTestResult', ['$scope', '$rootScope', '$s
     $scope.maximum = maximum;
     $scope.scorePercent = Math.round(($scope.score / $scope.maximum) * 100 );
     $scope.minPercent = Math.round(($scope.minimum / $scope.maximum) * 100 );
-    if($scope.scorePercent >= $scope.minPercent)
-        $scope.messageToShow = 'Felicitari! Ati trecut cu brio testul! Ati obtinut ' + $scope.score + ' puncte.';
+    if($scope.scorePercent >= $scope.minPercent && $scope.minPercent != 0)
+        $scope.messageToShow = 'Ati obtinut ' + $scope.score + ' puncte. Testul este promovat.';
     else
-        $scope.messageToShow = 'Din pacate nu ati trecut testul! Punctajul minim de trecere este de ' + $scope.minimum + ' puncte' + ', iar dvs. ati obtinut ' + $scope.score + ' puncte.';
+        $scope.messageToShow = 'Ati obtinut ' + $scope.score + ' puncte. Testul nu este promovat.';
     $scope.closeModal=function(){
         $modalInstance.close();
     };

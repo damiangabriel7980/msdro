@@ -160,6 +160,10 @@ a {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+.tree-node.active {
+  background-color: lightgrey;
+  color: black;
+}
 .group-title {
   background-color: #687074 !important;
   color: #FFF !important;
@@ -288,6 +292,9 @@ a {
 }
 .courses-tree.lastCourse {
   border-radius: 0 0 5px 5px;
+}
+.padding20 {
+  padding: 20px 0;
 }
 .edit-content {
   width: 600px;

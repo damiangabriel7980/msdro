@@ -113,6 +113,7 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
                 $scope.statusAlert.type = "success";
                 $scope.statusAlert.message = Success.getMessage(resp);
                 $scope.statusAlert.newAlert = true;
+                gm.data('gridmanager').initCanvas();
             }).catch(function(err){
                 console.log(Error.getMessage(err));
             });

@@ -41,12 +41,13 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
         return mapping;
     };
 
+
     $scope.deleteCourse = function (id, idx) {
         ActionModal.show("Stergere curs", "Sunteti sigur ca doriti sa stergeti acest curs?", function () {
             var mappedCourses = createMap($scope.courses, idx + 1, true);
             ElearningService.updateIndex.update({chapterMap: mappedCourses}).$promise.then(function(resp){
                 ElearningService.courses.delete({id: id}).$promise.then(function(result){
-                    $scope.getCourses();
+                    $scope.courses.splice(idx,1);
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
@@ -64,7 +65,7 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             var chapterMap = createMap(course.listChapters, idx + 1, true);
             ElearningService.updateIndex.update({chapterMap: chapterMap}).$promise.then(function(resp){
                 ElearningService.chapters.delete({id: id}).$promise.then(function(result){
-                    $scope.getCourses();
+                    course.listChapters.splice(idx,1);
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
@@ -221,7 +222,7 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             var subChaptersMap = createMap(chapter.listSubchapters, idx + 1, true);
             ElearningService.updateIndex.update({subChaptersMap: subChaptersMap}).$promise.then(function(resp){
                 ElearningService.subchapters.delete({id: id}).$promise.then(function(result){
-                    $scope.getCourses();
+                    chapter.listSubchapters.splice(idx,1);
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });
@@ -238,7 +239,7 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             var slidesMap = createMap(subChapter.listSlides, idx + 1, true);
             ElearningService.updateIndex.update({slidesMap: slidesMap}).$promise.then(function(resp){
                 ElearningService.slides.delete({id: id}).$promise.then(function(result){
-                    $scope.getCourses();
+                    subChapter.listSlides.splice(idx,1);
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });

@@ -149,11 +149,65 @@ module.exports = function(env, logger, amazon, router){
 						}
 					});
 			}else if(req.body.status){
-				Courses.update({_id: req.query.id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
+				Courses.findOne({_id: req.query.id}).deepPopulate("listChapters.listSubchapters.listSlides").exec(function (err, course) {
 					if(err){
-						handleError(res,err,500);
+						handleError(res, err);
 					}else{
-						handleSuccess(res);
+						async.each(course.listChapters,function(chapter,callback1){
+							async.each(chapter.listSubchapters,function(subchapter,callback2){
+								async.each(subchapter.listSlides,function(slide,callback3){
+									Slides.update({_id: slide._id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
+										if(err){
+											callback3(err);
+										}else{
+											callback3();
+										}
+									});
+								},function(err){
+									if(err){
+										handleError(res,err);
+									}
+									else
+									{
+										Subchapters.update({_id: subchapter._id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
+											if(err){
+												callback2(err);
+											}else{
+												callback2();
+											}
+										});
+									}
+								});
+							},function(err){
+								if(err){
+									handleError(res,err);
+								}
+								else
+								{
+									Chapters.update({_id: chapter._id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
+										if(err){
+											callback1(err);
+										}else{
+											callback1();
+										}
+									});
+								}
+							});
+						},function(err){
+							if(err){
+								handleError(res,err);
+							}
+							else
+							{
+								Courses.update({_id: req.query.id}, {$set:{enabled: req.body.status.isEnabled}}, function (err, wRes) {
+									if (err) {
+										handleError(res,err,500);
+									} else {
+										handleSuccess(res, {updated: wRes}, 3);
+									}
+								});
+							}
+						});
 					}
 				});
 			}
