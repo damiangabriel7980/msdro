@@ -12,7 +12,7 @@ app.controllerProvider.register('CourseTestResult', ['$scope', '$rootScope', '$s
     $scope.maximum = maximum;
     $scope.scorePercent = Math.round(($scope.score / $scope.maximum) * 100 );
     $scope.minPercent = Math.round(($scope.minimum / $scope.maximum) * 100 );
-    if($scope.scorePercent >= $scope.minPercent && $scope.minPercent != 0)
+    if($scope.scorePercent >= $scope.minPercent && $scope.scorePercent != 0)
         $scope.messageToShow = 'Ati obtinut ' + $scope.score + ' puncte. Testul este promovat.';
     else
         $scope.messageToShow = 'Ati obtinut ' + $scope.score + ' puncte. Testul nu este promovat.';

@@ -88,9 +88,9 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
         });
     };
 
-    $scope.deleteQuestion = function(id){
+    $scope.deleteQuestion = function(id, idx){
         ElearningService.questions.delete({id: id}).$promise.then(function (resp) {
-            $state.reload();
+            $scope.questions.splice(idx,1);
         }).catch(function(err){
             console.log(Error.getMessage(err));
         });

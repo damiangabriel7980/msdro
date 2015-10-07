@@ -89,7 +89,7 @@
                     <input ng-model="question.order" type="number" class="form-control">
                 </div>
                 <div class="col-md-1 marginTop25">
-                    <div class="btn btn-danger pull-right" ng-click="deleteQuestion(question._id)"><i class="glyphicon glyphicon-trash"></i></div>
+                    <div class="btn btn-danger pull-right" ng-click="deleteQuestion(question._id, $index)"><i class="glyphicon glyphicon-trash"></i></div>
                 </div>
                 <div class="col-md-offset-6 col-md-6 noPadding" ng-repeat="answer in question.answers">
                     <div class="col-md-7 form-group">
@@ -101,7 +101,7 @@
                         <input ng-model="answer.ratio" type="number" class="form-control">
                     </div>
                     <div class="col-md-2 marginTop25">
-                        <div class="btn btn-danger pull-right" ng-click="deleteAnswer(answer._id)"><i class="glyphicon glyphicon-trash"></i></div>
+                        <div class="btn btn-danger pull-right" ng-click="deleteAnswer(answer._id, question)"><i class="glyphicon glyphicon-trash"></i></div>
                     </div>
                 </div>
                 <div class="col-md-12 padding10">
