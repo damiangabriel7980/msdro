@@ -34,6 +34,7 @@ controllers.controller('AppUpdateEdit',['$scope','$modalInstance','appToEdit','A
         toUpdate.downloadUrl = app.downloadUrl;
         toUpdate.name = app.name.toLowerCase();
         toUpdate.upgradeDate = $scope.upDate;
+        toUpdate.version = $scope.app.version;
       ApplicationService.app.update({id:app._id},toUpdate).$promise.then(function(resp){
           $state.reload();
           $modalInstance.close();
