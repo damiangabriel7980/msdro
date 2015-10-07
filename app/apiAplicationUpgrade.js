@@ -24,7 +24,10 @@ module.exports = function(app, logger, router) {
                 handleError(err);
             }
             else {
-                handleSuccess(res, apps);
+                var appInfo ={};
+                appInfo.version = apps.version;
+                appInfo.downloadUrl = apps.downloadUrl;
+                handleSuccess(res, appInfo);
             }
         })
     });
