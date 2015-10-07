@@ -1399,6 +1399,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function(req,res){
             var app = new AppUpdate({
                 name:'Untitled',
+                version:'0.0',
                 upgradeDate:new Date()
             });
             app.save(function(err,saved){
