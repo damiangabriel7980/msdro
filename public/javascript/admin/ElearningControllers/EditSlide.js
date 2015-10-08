@@ -88,17 +88,36 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
         });
     };
 
+    var createMap = function(arrayObject, indexToStart, forDelete){
+        var mapping = [];
+        for(var i = indexToStart; i < arrayObject.length; i++)
+        {
+            var objectToAdd = {};
+            objectToAdd.id = arrayObject[i]._id;
+            objectToAdd.order = forDelete ? arrayObject[i].order - 1 : arrayObject[i].order;
+            mapping.push(objectToAdd);
+        }
+        return mapping;
+    };
+
     $scope.deleteQuestion = function(id, idx){
-        ElearningService.questions.delete({id: id}).$promise.then(function (resp) {
-            $scope.questions.splice(idx,1);
+        var questionsMap = createMap($scope.questions, idx + 1, true);
+        ElearningService.updateIndex.update({questionsMap: questionsMap}).$promise.then(function(resp){
+            ElearningService.questions.delete({id: id}).$promise.then(function (resp) {
+                for(var i = idx + 1 ; i< $scope.questions.length; i++)
+                    $scope.questions[i].order -= 1;
+                $scope.questions.splice(idx,1);
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
         }).catch(function(err){
             console.log(Error.getMessage(err));
         });
     };
 
-    $scope.deleteAnswer = function(id){
+    $scope.deleteAnswer = function(id, question, idx){
         ElearningService.answers.delete({id: id}).$promise.then(function (resp) {
-            $state.reload();
+            question.answers[idx].splice(idx,1);
         }).catch(function(err){
             console.log(Error.getMessage(err));
         });

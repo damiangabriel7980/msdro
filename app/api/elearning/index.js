@@ -96,6 +96,25 @@ module.exports = function(env, logger, amazon, router){
 							handleSuccess(res);
 						}
 					});
+				} else if(req.body.questionsMap){
+					var mapping = req.body.questionsMap;
+					async.each(mapping,function(item,callback){
+						Questions.update({_id: item.id}, {$set:{order: item.order}}, function (err, wRes) {
+							if (err) {
+								callback(err);
+							} else {
+								callback();
+							}
+						});
+					},function(err){
+						if(err){
+							handleError(res,err,409,5);
+						}
+						else
+						{
+							handleSuccess(res);
+						}
+					});
 				} else
 					handleError(res, null, 400, 6);
 			});
