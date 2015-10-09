@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 var appUpdateSchema = new Schema({
     name : String,
     downloadUrl: String,
-    version:String,
+    version:Number,
     upgradeDate:Date
 });
 

@@ -44,7 +44,8 @@ var errorCodes = {
     39: "Dovada nu a putut fi incarcata",
     40: "Numele strazii trebuie sa contina doar litere si cifre, minim 5",
     41: "Locul de munca trebuie sa contina doar litere si cifre, minim 3",
-    42: "Numarul maxim de incercari a fost depasit"
+    42: "Numarul maxim de incercari a fost depasit",
+    43: "Exista deja o aplicatie cu acea denumire "
 };
 
 module.exports = function(logger){
