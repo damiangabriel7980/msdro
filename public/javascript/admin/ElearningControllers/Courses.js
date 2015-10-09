@@ -29,6 +29,29 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
 
     $scope.getCourses();
 
+    $scope.editNavigation = function(elementId, index, course, chapter, subchapter){
+        $scope.courseNavigation = [];
+        if(subchapter){
+            $scope.courseNavigation[0] = course.order - 1;
+            $scope.courseNavigation[1] = chapter.order - 1;
+            $scope.courseNavigation[2] = subchapter.order - 1;
+            $scope.courseNavigation[3] = index;
+            $state.go('elearning.courses.editSlide',{courseId: course._id, slideId: elementId, courseNav: $scope.courseNavigation});
+        } else if(chapter){
+            $scope.courseNavigation[0] = course.order - 1;
+            $scope.courseNavigation[1] = chapter.order - 1;
+            $scope.courseNavigation[2] = index;
+            $state.go('elearning.courses.editSubChapter',{subChapterId: elementId, courseNav: $scope.courseNavigation});
+        } else if(course){
+            $scope.courseNavigation[0] = course.order - 1;
+            $scope.courseNavigation[1] = index;
+            $state.go('elearning.courses.editChapter',{chapterId: elementId, courseNav: $scope.courseNavigation});
+        } else {
+            $scope.courseNavigation[0] = index;
+            $state.go('elearning.courses.editCourse',{courseId: elementId, courseNav: $scope.courseNavigation});
+        }
+    };
+
     var createMap = function(arrayObject, indexToStart, forDelete){
         var mapping = [];
         for(var i = indexToStart; i < arrayObject.length; i++)
@@ -147,12 +170,6 @@ controllers.controller('Courses', ['$scope', '$rootScope', '$state', '$statePara
             console.log(Error.getMessage(err));
         });
     };
-
-    $scope.toggle = function (scope) {
-        scope.toggle();
-    };
-
-    $scope.collapsed = true;
 
     $scope.treeOptions = {
         accept: function(sourceNodeScope, destNodesScope, destIndex) {

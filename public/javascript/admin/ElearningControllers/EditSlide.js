@@ -15,6 +15,8 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
         init();
     });
 
+    $scope.courseNavigation = $stateParams.courseNav.split(",");
+
     function init(){
         ElearningService.slides.query({id: $stateParams.slideId}).$promise.then(function(resp){
             $scope.slide = Success.getObject(resp);
@@ -132,6 +134,7 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
                 $scope.statusAlert.type = "success";
                 $scope.statusAlert.message = Success.getMessage(resp);
                 $scope.statusAlert.newAlert = true;
+                $scope.$parent.courses[$scope.courseNavigation[0]].listChapters[$scope.courseNavigation[1]].listSubchapters[$scope.courseNavigation[2]].listSlides[$scope.courseNavigation[3]].title = $scope.slide.title;
                 gm.data('gridmanager').initCanvas();
             }).catch(function(err){
                 console.log(Error.getMessage(err));
@@ -162,7 +165,7 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
                     $scope.statusAlert.type = "success";
                     $scope.statusAlert.message = Success.getMessage(resp);
                     $scope.statusAlert.newAlert = true;
-                    $scope.$parent.getCourses();
+                    $scope.$parent.courses[$scope.courseNavigation[0]].listChapters[$scope.courseNavigation[1]].listSubchapters[$scope.courseNavigation[2]].listSlides[$scope.courseNavigation[3]].title = $scope.slide.title;
                 }).catch(function(err){
                     console.log(Error.getMessage(err));
                 });

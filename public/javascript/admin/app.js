@@ -205,22 +205,22 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'Courses'
         })
         .state('elearning.courses.editCourse',{
-            url: '/editCourse/:courseId',
+            url: '/editCourse/:courseId/:courseNav',
             templateUrl: 'partials/admin/elearning/courses/courseEdit.ejs',
             controller: 'EditCourse'
         })
         .state('elearning.courses.editChapter',{
-            url: '/editChapter/:chapterId',
+            url: '/editChapter/:chapterId/:courseNav',
             templateUrl: 'partials/admin/elearning/courses/chapterEdit.ejs',
             controller: 'EditChapter'
         })
         .state('elearning.courses.editSubChapter',{
-            url: '/editSubChapter/:subChapterId',
+            url: '/editSubChapter/:subChapterId/:courseNav',
             templateUrl: 'partials/admin/elearning/courses/subChapterEdit.ejs',
             controller: 'EditSubChapter'
         })
         .state('elearning.courses.editSlide',{
-            url: '/course/:courseId/editSlide/:slideId',
+            url: '/course/:courseId/editSlide/:slideId/:courseNav',
             templateUrl: 'partials/admin/elearning/courses/slideEdit.ejs',
             controller: 'EditSlide'
         })

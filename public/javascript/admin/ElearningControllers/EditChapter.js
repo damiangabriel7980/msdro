@@ -9,6 +9,7 @@ controllers.controller('EditChapter', ['$scope', '$rootScope', '$state', '$state
         $(document).ready(function(){
             init();
         });
+    $scope.courseNavigation = $stateParams.courseNav.split(",");
 
     function init(){
         ElearningService.chapters.query({id: $stateParams.chapterId}).$promise.then(function(resp){
@@ -41,7 +42,7 @@ controllers.controller('EditChapter', ['$scope', '$rootScope', '$state', '$state
         gm.data('gridmanager').deinitCanvas();
         $scope.chapter.description =  $("#gm-canvas").html();
         ElearningService.chapters.update({id: $stateParams.chapterId} ,{chapter: $scope.chapter}).$promise.then(function(resp){
-            $scope.$parent.getCourses();
+            $scope.$parent.courses[$scope.courseNavigation[0]].listChapters[$scope.courseNavigation[1]].title = $scope.chapter.title;
             gm.data('gridmanager').initCanvas();
         }).catch(function(err){
             console.log(Error.getMessage(err));

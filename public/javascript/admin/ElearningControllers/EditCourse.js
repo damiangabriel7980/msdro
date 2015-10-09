@@ -7,6 +7,8 @@ controllers.controller('EditCourse', ['$scope', '$rootScope', '$state', '$stateP
         return $sce.trustAsHtml(htmlCode);
     };
 
+    $scope.courseNavigation = $stateParams.courseNav.split(",");
+
     var gm;
     $(document).ready(function(){
         init();
@@ -119,7 +121,7 @@ controllers.controller('EditCourse', ['$scope', '$rootScope', '$state', '$stateP
         gm.data('gridmanager').deinitCanvas();
         $scope.course.description = $("#gm-canvas").html();
         ElearningService.courses.update({id: $stateParams.courseId},{course: $scope.course}).$promise.then(function(resp){
-            $scope.$parent.getCourses();
+            $scope.$parent.courses[$scope.courseNavigation[0]].title = $scope.course.title;
             gm.data('gridmanager').initCanvas();
         }).catch(function(err){
             console.log(Error.getMessage(err));

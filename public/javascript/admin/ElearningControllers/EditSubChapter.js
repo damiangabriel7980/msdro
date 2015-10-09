@@ -12,6 +12,8 @@ controllers.controller('EditSubChapter', ['$scope', '$rootScope', '$state', '$st
         init();
     });
 
+    $scope.courseNavigation = $stateParams.courseNav.split(",");
+
     function init(){
         ElearningService.subchapters.query({id: $stateParams.subChapterId}).$promise.then(function(resp){
             $scope.subChapter = Success.getObject(resp);
@@ -41,7 +43,7 @@ controllers.controller('EditSubChapter', ['$scope', '$rootScope', '$state', '$st
         gm.data('gridmanager').deinitCanvas();
         $scope.subChapter.description = $("#gm-canvas").html();
         ElearningService.subchapters.update({id: $stateParams.subChapterId}, {subChapter: $scope.subChapter}).$promise.then(function(resp){
-            $scope.$parent.getCourses();
+            $scope.$parent.courses[$scope.courseNavigation[0]].listChapters[$scope.courseNavigation[1]].listSubchapters[$scope.courseNavigation[2]].title = $scope.subChapter.title;
             gm.data('gridmanager').initCanvas();
         }).catch(function(err){
             console.log(Error.getMessage(err));
