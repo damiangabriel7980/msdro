@@ -13,7 +13,7 @@
             <div class="btn btn-default" ng-if="previousSlide" ng-click="goPrevious()">Pagina precedenta</div>
             <div class="btn btn-default pull-right" ng-if="nextSlide" ng-click="goNext()">Pagina urmatoare</div>
         </div>
-        <div class="test-container" ng-if="slide.type == 'test'" >
+        <div class="test-container col-xs-12 noPadding" ng-if="slide.type == 'test'" >
             <!-- HEADER -->
             <div class="test-header clearfix" ng-if="slide.type == 'test'">
                 <div class="col-xs-12 padding24" >
@@ -27,14 +27,14 @@
             <div class="test-questions" ng-if="slide.type == 'test'">
                 <div class="question-container clearfix" ng-repeat="question in slide.questions">
                     <!-- QUESTION META -->
-                    <div class="question-info col-xs-2">
+                    <div class="question-info col-sm-1 col-md-1">
                         <div class="question-number">{{$index+1}}.</div>
                     </div>
                     <!-- QUESTION CONTENTS -->
-                    <div class="question-contents col-xs-10">
+                    <div class="question-contents col-sm-11 col-md-11">
                         <div class="question-text">{{question.text}}</div>
-                        <div class="col-xs-12">
-                            <label class="col-xs-12" ng-repeat="answer in question.answers">
+                        <div class="col-xs-12 noPadding">
+                            <label class="col-xs-12 noPadding" ng-repeat="answer in question.answers">
                                 <input type="checkbox" checklist-model="answersArray" checklist-value="answer._id" ng-change="checkAnswer(question._id,answer._id,checked)"> {{answer.text}}
                             </label>
                         </div>
