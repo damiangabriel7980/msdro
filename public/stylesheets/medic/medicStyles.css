@@ -6684,6 +6684,11 @@ body .btn {
   margin: 0px auto 10px;
   box-sizing: border-box;
 }
+.chaptersContainer .backToCourses {
+  position: relative;
+  bottom: 155px;
+  right: 20px;
+}
 .chaptersContainer .paddingOnlySlides {
   padding: 0 15px;
 }
