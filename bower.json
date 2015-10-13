@@ -44,7 +44,7 @@
     "shifty": "latest",
     "tinymce": "4.0.16",
     "v-accordion": "latest",
-    "video-js": "latest",
+    "video-js": "4.x",
     "videogular": "latest",
     "videogular-buffering": "latest",
     "videogular-controls": "latest",

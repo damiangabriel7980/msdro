@@ -203,8 +203,8 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: 'VideoJS',
                 files: [
-                    'components/video-js/dist/video-js.min.css',
-                    'components/video-js/dist/video.js'
+                    'components/video-js/dist/video-js/video-js.min.css',
+                    'components/video-js/dist/video-js/video.js'
                 ]
             }
         ]
