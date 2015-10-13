@@ -1399,7 +1399,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function(req,res){
             var app = new AppUpdate({
                 name:'Untitled',
-                version:'0.0',
+                version:0.0,
                 upgradeDate:new Date()
             });
             app.save(function(err,saved){
@@ -1410,15 +1410,32 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
-        .put(function(req,res){
-            var idToEdit = ObjectId(req.query.id);
-            AppUpdate.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
-                if(err){
+        .put(function(req,res) {
+            AppUpdate.findOne({$or: [{'downloadUrl': req.query.downloadUrl}, {'name': req.query.name}]}, function (err, resp) {
+                if (err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res, wres);
+                    if(!resp){
+                        AppUpdate.update({_id: req.query.id}, {$set: req.body}, function (err, wres) {
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                handleSuccess(res, wres);
+                            }
+                        });
+                    } else if(req.query.id == resp._id){
+                        AppUpdate.update({_id: req.query.id}, {$set: req.body}, function (err, wres) {
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                handleSuccess(res, wres);
+                            }
+                        });
+                    } else {
+                        handleError(res,null,400,43);
+                    }
                 }
-            });
+            })
         })
         .delete(function(req,res){
             var idToDelete = ObjectId(req.query.id)
