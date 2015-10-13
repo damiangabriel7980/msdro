@@ -8,7 +8,7 @@ var app = angular.module('app', [
     'ngSanitize',
     'offClick',
     'mobileContentList',
-    'footerResponsive',
+    'stickFooter',
     'horizontalContentList',
     'widgetMostRead'
 ]);

@@ -27,7 +27,7 @@
                 if (angular.element($document).height() <= (angular.element($window).height() + angular.element($window).scrollTop()) + 60){
                     footerElement.show();
                 }
-                else if(angular.element($document).height() > (angular.element($window).height()))
+                else
                 {
                     footerElement.hide();
                 }
