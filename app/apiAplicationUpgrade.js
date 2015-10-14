@@ -21,7 +21,7 @@ module.exports = function(app, logger, router) {
         AppUpdate.findOne({name:req.query.name},function(err, apps)
         {
             if (err) {
-                handleError(err);
+                handleError(res,err,500);
             }
             else {
                 var appInfo ={};
