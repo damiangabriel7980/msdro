@@ -45,7 +45,8 @@ var errorCodes = {
     40: "Numele strazii trebuie sa contina doar litere si cifre, minim 5",
     41: "Locul de munca trebuie sa contina doar litere si cifre, minim 3",
     42: "Numarul maxim de incercari a fost depasit",
-    43: "Exista deja o aplicatie cu acea denumire "
+    43: "Exista deja o aplicatie cu acea denumire ",
+    44: "Nu exista o aplicatie cu aceasta denumire "
 };
 
 module.exports = function(logger){

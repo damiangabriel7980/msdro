@@ -18,16 +18,20 @@ module.exports = function(app, logger, router) {
 
     router.route('/').get(function (req, res) {
 
-        AppUpdate.findOne({name:req.query.name},function(err, apps)
+        AppUpdate.find({name:req.query.name}).limit(1).exec(function(err, apps)
         {
             if (err) {
-                handleError(res,err,500);
+                handleError(res,err);
             }
             else {
-                var appInfo ={};
-                appInfo.version = apps.version;
-                appInfo.downloadUrl = apps.downloadUrl;
-                handleSuccess(res, appInfo);
+                if(apps.length > 0){
+                    var appInfo ={};
+                    appInfo.version = apps[0].version;
+                    appInfo.downloadUrl = apps[0].downloadUrl;
+                    handleSuccess(res, appInfo);
+                }
+                    else
+                        handleError(res, false, 404, 44);
             }
         })
     });
