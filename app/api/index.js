@@ -3467,17 +3467,30 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/content')
         .get(function(req, res) {
             if(req.query.content_id){
-                Content.findOne({_id: req.query.content_id}, function(err, cont) {
-                    if(err || !cont) {
-                        handleError(res, err);
+                var updateQuery = {$inc: {}};
+                var upd = "nrOfViews";
+                updateQuery.$inc[upd] = 1;
+                Content.findOneAndUpdate({_id: req.query.content_id}, updateQuery, {upsert: false}, function (err, resp) {
+                    if(err){
+                        handleError(res,err,500);
                     }else{
-                        handleSuccess(res, cont);
+                        handleSuccess(res,resp);
                     }
                 })
             }else{
+                //send most read and recent articles at the same time
+                var contentToSend = [];
                 getUserContent(req.user, req.query.content_type, req.query.specialGroupSelected, null, 'created').then(
-                    function (content) {
-                        handleSuccess(res,content);
+                    function (contentRecent) {
+                        contentToSend.push(contentRecent);
+                        getUserContent(req.user, req.query.content_type, req.query.specialGroupSelected, 3, 'nrOfViews').then(
+                            function (content) {
+                                contentToSend.push(content);
+                                handleSuccess(res,contentToSend);
+                            },
+                            function (err) {
+                                handleError(res,err,500);
+                            });
                     },
                     function (err) {
                         handleError(res,err,500);

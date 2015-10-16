@@ -21,6 +21,7 @@ var articlesSchema		= new Schema({
     version:      Number,
     enable:       Boolean,
     image_path:   String,
+    nrOfViews: Number,
     groupsID:     {type: [{type: Schema.Types.ObjectId, ref: 'UserGroup'}], index: true},
     associated_images: Array
 });

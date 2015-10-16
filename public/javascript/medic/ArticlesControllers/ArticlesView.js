@@ -19,8 +19,8 @@ app.controllerProvider.register('ArticlesView', ['$scope', '$rootScope', '$state
 
     var getContent = function (specialGroupSelected) {
         ContentService.content.query({content_type: $stateParams.articleType, specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function(result){
-            $scope.content = Success.getObject(result);
-            $scope.mostRead = Success.getObject(result).slice(0, 3);
+            $scope.content = Success.getObject(result)[0];
+            $scope.mostRead = Success.getObject(result)[1];
             if($scope.content.length===0){
                 if($stateParams.articleType<3)
                     $scope.message="Nu exista stiri!";
