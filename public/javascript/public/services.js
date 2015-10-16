@@ -154,7 +154,8 @@ services.factory('HomeService', ['$resource', function($resource){
 services.factory('ContentService', ['$resource', function($resource){
     return {
         content: $resource('apiPublic/content', {}, {
-            query: { method: 'GET', isArray: false }
+            query: { method: 'GET', isArray: false },
+            update: { method: 'PUT', isArray: false }
         }),
         mobileContent: $resource('apiPublic/mobileContent', {}, {
             query: { method: 'GET', isArray: false }

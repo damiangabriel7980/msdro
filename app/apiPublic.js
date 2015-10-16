@@ -28,13 +28,27 @@ module.exports = function(app, logger, router) {
     router.route('/content')
         .get(function (req, res) {
             if(req.query.id){
-                PublicContent.findOne({_id: req.query.id, enable: true}, function (err, resp) {
-                    if(err){
-                        handleError(res,err,500);
-                    }else{
-                        handleSuccess(res,resp);
-                    }
-                })
+                var updateQuery = {$inc: {}};
+                var upd = "nrOfViews";
+                updateQuery.$inc[upd] = 1;
+                if(req.query.isFile){
+                    PublicContent.findOne({_id: req.query.id, enable: true}, function (err, resp) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res,resp);
+                        }
+                    })
+                } else {
+                    PublicContent.findOneAndUpdate({_id: req.query.id, enable: true},updateQuery, {upsert: false}, function (err, resp) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res,resp);
+                        }
+                    })
+                }
+
             }else if(req.query.type && req.query.area){
                 var params = req.query;
 
@@ -90,6 +104,18 @@ module.exports = function(app, logger, router) {
                     }
                 })
             }
+        })
+        .put(function(req,res){
+            var updateQuery = {$inc: {}};
+            var upd = "nrOfViews";
+            updateQuery.$inc[upd] = 1;
+            PublicContent.findOneAndUpdate({_id: req.query.id, enable: true},updateQuery, {upsert: false}, function (err, resp) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res,resp);
+                }
+            })
         });
 
     router.route('/mobileContent')
@@ -182,7 +208,7 @@ module.exports = function(app, logger, router) {
                 if(req.query.withFile){
                     q['file_path'] = {$exists: true, $nin:[null,""]};
                 }
-                PublicContent.find(q).sort({date_added: -1}).limit(3).exec(function (err, resp) {
+                PublicContent.find(q).sort({nrOfViews: -1}).limit(3).exec(function (err, resp) {
                     if(err){
                         handleError(res,err,500);
                     }else{

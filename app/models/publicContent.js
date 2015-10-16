@@ -22,6 +22,7 @@ var publicContentSchema		= new Schema({
     enable:       Boolean,
     image_path:   String,
     file_path:   String,
+    nrOfViews: Number,
     'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas'}],
     category: {type: Schema.Types.ObjectId, ref: 'public-categories', index: true}
 });
