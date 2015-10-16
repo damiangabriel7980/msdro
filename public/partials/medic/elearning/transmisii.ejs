@@ -1,25 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name='layout' content='user-layout'/>
-    <script>
-
-    </script>
-</head>
-
-<body>
-<div class="container" id="content">
-    <div class="row">
-        <h3 class="MSDgreenDarker">Transmisii live</h3>
-        <div id="videoContainer" align="center" class="col-md-12 well well-content" style="width: 480px;height: 350px;resize: both; overflow: auto;">
-            <div id="myContent">
+<div class="col-xs-12 conferencesWrapper" id="content">
+    <div class="col-xs-12 noPadding">
+        <h3 class="MSDgreenDarker text-center">Conferinta MERCK</h3>
+        <div class="col-xs-12 text-center noPadding">
+            <div class="camera col-xs-12 noPadding">
+                <video id="camera" autoplay controls="controls" src="{{streamSource}}" />
             </div>
+            <canvas id="snapshot" class="hidden">
+
+            </canvas>
+            <img ng-src="{{snapshotImg}}" />
         </div>
     </div>
 
-    <div class="row" style="margin-top: 20px">
-        <span class="col-xs-3"><a id="toggleFullScreen" class="btn hide">Fullscreen</a></span>
+    <div class="col-xs-12 marginTop20 speakers">
+        <div class="col-sm-2 col-xs-12" ng-repeat="speaker in speakers track by $index">
+            <div class="col-xs-12">
+                <img class="img-responsive img-thumbnail" width="160" ng-src="{{speaker.lastImage ? speaker.lastImage : 'http://static.tumblr.com/03c3dc0674e565b03ea7105994b76be4/zk7qixw/MVMn1n5s2/tumblr_static_g.zodiac.leo.jpg'}}"/>
+            </div>
+            <div class="col-xs-12">
+                {{speaker.name}}
+            </div>
+            <img />
+        </div>
     </div>
 </div>
-</body>
-</html>
