@@ -221,9 +221,42 @@ var loadStateDeps = function (deps, loadInSeries) {
     }]
 };
 
+app.factory('errorRecover', ['$q', '$injector', function($q, $injector) {
+    var errorRecover = {
+        responseError: function(response) {
+            var StateService = $injector.get('$state');
+            if (response.status == 404){
+                StateService.go('notFound');
+            } else if(response.status == 403) {
+                StateService.go('forbidden');
+            } else {
+                StateService.go('serverError');
+            }
+            return $q.reject(response);
+        }
+    };
+    return errorRecover;
+}]);
+
+app.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.interceptors.push('errorRecover');
+}]);
+
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
     $stateProvider
+        .state('notFound',{
+            url: '/404',
+            templateUrl: 'partials/shared/404.html'
+        })
+        .state('forbidden',{
+            url: '/forbidden',
+            templateUrl: 'partials/shared/403.html'
+        })
+        .state('serverError',{
+            url: '/serverError',
+            templateUrl: 'partials/shared/500.html'
+        })
         .state('home',{
             url: '/',
             templateUrl: 'partials/medic/home.ejs',
@@ -537,7 +570,6 @@ app.run(
             $rootScope.createHeader = Utils.createHeader;
             $rootScope.isMobile = Utils.isMobile;
             $rootScope.loadStateDeps = loadStateDeps;
-
 
             //=========================================== load a special css file for mobile devices / tablets only
             angular.element(document).ready(function () {

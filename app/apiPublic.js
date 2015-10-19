@@ -13,6 +13,7 @@ var Utils = require('./modules/utils');
 module.exports = function(app, logger, router) {
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
     var handleError = require('./modules/responseHandler/error.js')(logger);
+    var ContentVerifier = require('./modules/contentVerifier');
 
     router.route('/getCarouselData')
         .get(function (req, res) {
@@ -32,21 +33,21 @@ module.exports = function(app, logger, router) {
                 var upd = "nrOfViews";
                 updateQuery.$inc[upd] = 1;
                 if(req.query.isFile){
-                    PublicContent.findOne({_id: req.query.id, enable: true}, function (err, resp) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res,resp);
+                    ContentVerifier.getContentById(PublicContent,req.query.id,null,false,'enable').then(
+                      function(success){
+                          handleSuccess(res,success);
+                      },function(err){
+                            handleError(res,null,err.status,45);
                         }
-                    })
+                    );
                 } else {
-                    PublicContent.findOneAndUpdate({_id: req.query.id, enable: true},updateQuery, {upsert: false}, function (err, resp) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res,resp);
+                    ContentVerifier.getContentById(PublicContent,req.query.id,null,true,'enable').then(
+                        function(success){
+                            handleSuccess(res,success);
+                        },function(err){
+                            handleError(res,null,err.status,45);
                         }
-                    })
+                    );
                 }
 
             }else if(req.query.type && req.query.area){

@@ -37,6 +37,7 @@ var MailerModule = require('../modules/mailer');
 var UtilsModule = require('../modules/utils');
 var SessionStorage = require('../modules/sessionStorage');
 var ConferencesModule = require('../modules/Conferences');
+var ContentVerifier = require('../modules/contentVerifier');
 
 //special Products
 var specialProduct = require('../models/specialProduct');
@@ -3358,13 +3359,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else if(req.query.id){
-                specialApps.findOne({_id: req.query.id}).exec(function (err, app) {
-                    if(err){
-                        handleError(res,err,500);
-                    }else{
-                        handleSuccess(res,app);
+                ContentVerifier.getContentById(specialApps,req.query.id,req.user.groupsID,false,'isEnabled',null,'groups').then(
+                    function(success){
+                        handleSuccess(res,success);
+                    },function(err){
+                        if (err.status == 404)
+                            var message = 45;
+                        else
+                            var message = 46;
+                        handleError(res,null,err.status, message);
                     }
-                });
+                );
             }else{
                 handleError(res,null,400,6);
             }
@@ -3386,15 +3391,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/specialProduct')
         .get(function(req, res) {
-            specialProduct.findOne({_id: req.query.id}).populate('speakers').exec(function(err, product) {
-                if(err || !product) {
-                    handleError(res,err,500);
+            ContentVerifier.getContentById(specialProduct,req.query.id,req.user.groupsID,false,'enabled','speakers','groups').then(
+                function(success){
+                    handleSuccess(res,success);
+                },function(err){
+                    if (err.status == 404)
+                        var message = 45;
+                    else
+                        var message = 46;
+                    handleError(res,null,err.status, message);
                 }
-                else
-                {
-                    handleSuccess(res,product);
-                }
-            });
+            );
         });
     router.route('/specialProductMenu')
         .get(function(req, res) {
@@ -3467,16 +3474,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/content')
         .get(function(req, res) {
             if(req.query.content_id){
-                var updateQuery = {$inc: {}};
-                var upd = "nrOfViews";
-                updateQuery.$inc[upd] = 1;
-                Content.findOneAndUpdate({_id: req.query.content_id}, updateQuery, {upsert: false}, function (err, resp) {
-                    if(err){
-                        handleError(res,err,500);
-                    }else{
-                        handleSuccess(res,resp);
+                ContentVerifier.getContentById(Content,req.query.content_id,req.user.groupsID,true,'enable',null,'groupsID').then(
+                    function(success){
+                        handleSuccess(res,success);
+                    },function(err){
+                        if (err.status == 404)
+                            var message = 45;
+                        else
+                            var message = 46;
+                        handleError(res,null,err.status, message);
                     }
-                })
+                );
             }else{
                 //send most read and recent articles at the same time
                 var contentToSend = [];
@@ -3860,13 +3868,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/products')
         .get(function(req, res) {
             if(req.query.idProduct){
-                Products.findOne({_id: req.query.idProduct}, function(err, cont) {
-                    if(err) {
-                        handleError(res,err,500);
-                    }else{
-                        handleSuccess(res, cont);
+                ContentVerifier.getContentById(Products,req.query.idProduct,req.user.groupsID,false,'enable',null,'groupsID').then(
+                    function(success){
+                        handleSuccess(res,success);
+                    },function(err){
+                        if (err.status == 404)
+                            var message = 45;
+                        else
+                            var message = 46;
+                        handleError(res,null,err.status, message);
                     }
-                })
+                );
             }else{
                 getNonSpecificUserGroupsIds(req.user).then(
                     function (groups) {
@@ -3878,7 +3890,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                 if(err){
                                     handleError(res,err,500);
                                 }else{
-                                    var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}};
+                                    var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}, enable: true};
                                     if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
                                     Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                                         if(err) {
@@ -3891,7 +3903,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             });
                         }else{
                             //get allowed articles for user
-                            var q = {groupsID: {$in: groups}};
+                            var q = {groupsID: {$in: groups}, enable: true};
                             if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
                             Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                                 if(err){
@@ -3977,14 +3989,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/multimedia')
         .get(function(req,res){
             if(req.query.idMultimedia){
-                Multimedia.findById(req.query.idMultimedia,function(err, cont) {
-                    if(err) {
-                        handleError(res,err,500);
+                ContentVerifier.getContentById(Multimedia,req.query.idMultimedia,req.user.groupsID,false,'enable',null,'groupsID').then(
+                    function(success){
+                        handleSuccess(res,success);
+                    },function(err){
+                        if (err.status == 404)
+                            var message = 45;
+                        else
+                            var message = 46;
+                        handleError(res,null,err.status, message);
                     }
-                    else{
-                        handleSuccess(res, cont);
-                    }
-                });
+                );
             }else{
                 var findObj={};
                 getNonSpecificUserGroupsIds(req.user).then(

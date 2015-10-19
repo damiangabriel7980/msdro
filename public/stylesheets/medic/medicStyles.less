@@ -33,6 +33,12 @@
     font-size: 20px;
   }
 }
+.hugeFont{
+  font-size: 200px;
+  @media (max-width: @screen-xs-max) {
+    font-size: 180px;
+  }
+}
 
 body {
   &.modal-open {
@@ -1959,6 +1965,17 @@ a:focus {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
   padding: 5px;
+}
+
+//=================================== errorClasses
+.errorContainer{
+  .msdImage{
+    max-width: 100%;
+    height: 100%;
+  }
+  .padding60{
+    padding-top: 60px;
+  }
 }
 
 //=================================== calendar mobile responsive

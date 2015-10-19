@@ -46,7 +46,9 @@ var errorCodes = {
     41: "Locul de munca trebuie sa contina doar litere si cifre, minim 3",
     42: "Numarul maxim de incercari a fost depasit",
     43: "Exista deja o aplicatie cu acea denumire ",
-    44: "Nu exista o aplicatie cu aceasta denumire "
+    44: "Nu exista o aplicatie cu aceasta denumire ",
+    45: "Continutul nu este disponibil.",
+    46: "Nu aveti permisiunea de a vizualiza continutul."
 };
 
 module.exports = function(logger){

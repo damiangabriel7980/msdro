@@ -6,7 +6,8 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
     };
     specialProductService.SpecialProduct.query({id: $stateParams.product_id}).$promise.then(function(result){
         $scope.specialProductPage = Success.getObject(result);
-    }).catch(function(){
+    }).catch(function(err){
+        console.log(err);
         $state.reload();
     });
     $scope.mobileMenuTitle="";

@@ -17,6 +17,7 @@ module.exports = function(env, logger, amazon, router){
 
 	var handleSuccess = require('../../modules/responseHandler/success.js')(logger);
     var handleError = require('../../modules/responseHandler/error.js')(logger);
+	var ContentVerifier = require('../../modules/contentVerifier');
 
 	router.route('/admin/elearning/updateIndex')
 			.put(function (req, res) {
@@ -982,31 +983,20 @@ module.exports = function(env, logger, amazon, router){
 	router.route('/elearning/courses')
 	    .get(function (req, res) {
 	    	if(req.query.id){
-	    		Courses.findOne({$and : [{_id: req.query.id},{enabled: true}]}).deepPopulate('listChapters.listSubchapters.listSlides',{
-					whitelist: ["listChapters.listSubchapters.listSlides"],
-					populate: {
-						"listChapters": {
-							match: {enabled: true}
-						},
-						"listChapters.listSubchapters": {
-							match: {enabled: true}
-						},
-						"listChapters.listSubchapters.listSlides": {
-							match: {enabled: true}
+				ContentVerifier.getContentById(Courses,req.query.id,req.user.groupsID,false,'enabled','','groupsID',true).then(
+						function(success){
+							var objectToSend = {};
+							objectToSend.courseDetails = success;
+							objectToSend.slideViews = req.user.elearning.slide;
+							handleSuccess(res, objectToSend);
+						},function(err){
+							if (err.status == 404)
+								var message = 45;
+							else
+								var message = 46;
+							handleError(res,null,err.status, message);
 						}
-					}
-				}).exec(function (err, course) {
-	    		    if(err){
-	    		        handleError(res, err);
-	    		    }else if(!course){
-	    		    	handleError(res, false, 404, 1);
-	    		    }else{
-						var objectToSend = {};
-						objectToSend.courseDetails = course;
-						objectToSend.slideViews = req.user.elearning.slide;
-						handleSuccess(res, objectToSend);
-	    		    }
-	    		});
+				);
 	    	}else{
 	    		Courses.find({$and : [{groupsID: {$in: req.user.groupsID}},{enabled: true}]}).sort({"order": 1}).exec(function(err, courses){
 	    			if(err){
@@ -1040,7 +1030,7 @@ module.exports = function(env, logger, amazon, router){
 			if(!req.query.id){
 				handleError(res, false, 400, 6);
 			}else{
-				ElearningService.getSlide(req.query.id, req.query.previous, req.query.next).then(
+				ElearningService.getSlide(req.query.id, req.query.previous, req.query.next,req.user.groupsID).then(
 					function(slide){
 						var slideViews = ElearningService.getSlideViews(req.user, slide._id);
 						if(slide.type === "test"){

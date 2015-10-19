@@ -6330,6 +6330,14 @@ button.close {
     font-size: 20px;
   }
 }
+.hugeFont {
+  font-size: 200px;
+}
+@media (max-width: 767px) {
+  .hugeFont {
+    font-size: 180px;
+  }
+}
 body {
   font-size: 14px;
 }
@@ -8313,6 +8321,13 @@ a:focus {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
   padding: 5px;
+}
+.errorContainer .msdImage {
+  max-width: 100%;
+  height: 100%;
+}
+.errorContainer .padding60 {
+  padding-top: 60px;
 }
 .popover {
   z-index: 1000 ! important;

@@ -3,6 +3,7 @@ var Slides = require('../../models/elearning/slides');
 var Questions = require('../../models/elearning/questions');
 var Answers = require('../../models/elearning/answers');
 var Users = require('../../models/user');
+var ContentVerifier = require('../../modules/contentVerifier');
 
 var async = require('async');
 var Q = require('q');
@@ -12,39 +13,39 @@ function getSlide(id, previous, next){
 	// if previous or next is specified, the previous or next slide relative to the id will be retrieved
 	// if the slide cannot not be found, the reject will be called with no params
 	var deferred = Q.defer();
-	Slides.findOne({_id: id}, function(err, slide){
-		if(err){
-			deferred.reject(err);
-		}else if(!slide){
-			deferred.reject();
-		}else if(previous || next){
-			Subchapters.findOne({listSlides: {$in: [id]}}, function(err, subchapter){
-				if(err){
-					deferred.reject(err);
-				}else if(!subchapter){
-					deferred.reject();
-				}else{
-					var cursor;
-					if(next){
-						cursor = Slides.find({_id: {$in: subchapter.listSlides}, order: {$gt: slide.order}}).sort({order: 1}).limit(1);
+	ContentVerifier.getContentById(Slides,id,null,false,'enabled','').then(
+			function(success){
+				if(previous || next){
+						Subchapters.findOne({listSlides: {$in: [id]}}, function(err, subchapter){
+							if(err){
+								deferred.reject(err);
+							}else if(!subchapter){
+								deferred.reject();
+							}else{
+								var cursor;
+								if(next){
+									cursor = Slides.find({_id: {$in: subchapter.listSlides}, order: {$gt: slide.order}}).sort({order: 1}).limit(1);
+								}else{
+									cursor = Slides.find({_id: {$in: subchapter.listSlides}, order: {$lt: slide.order}}).sort({order:-1}).limit(1);
+								}
+								cursor.exec(function(err, slides){
+									if(err){
+										deferred.reject(err);
+									}else if(!slides[0]){
+										deferred.reject();
+									}else{
+										deferred.resolve(slides[0]);
+									}
+								});
+							}
+						});
 					}else{
-						cursor = Slides.find({_id: {$in: subchapter.listSlides}, order: {$lt: slide.order}}).sort({order:-1}).limit(1);
+						deferred.resolve(success);
 					}
-					cursor.exec(function(err, slides){
-						if(err){
-							deferred.reject(err);
-						}else if(!slides[0]){
-							deferred.reject();
-						}else{
-							deferred.resolve(slides[0]);
-						}
-					});
-				}
-			});
-		}else{
-			deferred.resolve(slide);
-		}
-	});
+			},function(err){
+				deferred.reject(err);
+			}
+	);
 	return deferred.promise;
 };
 
