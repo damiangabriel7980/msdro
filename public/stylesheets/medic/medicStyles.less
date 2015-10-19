@@ -1961,6 +1961,45 @@ a:focus {
 // ========================================================================================================immunology QA
 
 #immunologyQA{
+
+  @media screen and (max-width:350px){
+  .QAitem{
+    height:440px!important;
+    display: flex;
+    float:left;
+    clear:left;
+    min-width: 200px;
+    max-width: 600px;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex: 1;
+    -webkit-flex: 1;
+    -webkit-display: flex;
+    align-items: center;
+    .question{
+      float:left;
+      height:200px;
+      min-width: 200px;
+    }
+    .answers{
+      text-align:center;
+      height: 200px!important;
+      width:240px!important;
+      float:left;
+      clear:left;
+      min-width: 200px;
+      max-width: 600px;
+      flex-wrap: wrap;
+      -webkit-flex-wrap: wrap;
+      flex: 1;
+      -webkit-flex: 1;
+      display: flex;
+      -webkit-display: flex;
+      align-items: center;
+    }
+  }
+  }
+
   .padding0{
     padding:0px!important;
   }
@@ -1980,25 +2019,28 @@ a:focus {
 
   @media screen and (max-width: 1350px){
     .QAitem{
-      height:230px!important;
+      height:230px;
     }
   }
 
-  @media screen and(max-width: 635px) and (min-width:0px){
+  @media screen and(max-width: 635px) and (min-width:351px){
     .QAitem{
+      display: block!important;
       height:440px!important;
       flex-wrap: wrap;
       -webkit-flex-wrap: wrap;
       .question{
         min-width:260px!important;
-        height: 230px!important;
+        height: 200px!important;
         span{
           font-size:15px!important;
+          margin:0!important;
+          width:100%;
         }
       }
       .answers{
-        min-width:260px!important;
-        height:230px!important;
+        width:100%;
+        height:200px!important;
       }
     }
   }
@@ -2012,6 +2054,7 @@ a:focus {
     float:left;
     clear:left;
     height:200px;
+
     .question{
       -webkit-display:flex ;
       display:flex;
@@ -2021,17 +2064,22 @@ a:focus {
       justify-content: center;
       flex:1;
       -webkit-flex: 1;
-      height:inherit;
+      max-height: 300px;
       float:left;
       text-align: center;
-      span{
-        color:@green;
-        font-size:25px;
-        margin:0 10px;
+      color:@green;
+      @media screen and (min-width:560px){
+        span{
+          font-size:25px;
+          margin:0 10px;
+        }
       }
+
+
     }
     .answers{
-      width:600px;
+      max-width:600px;
+      justify-content: center;
       flex-wrap: wrap;
       -webkit-flex-wrap: wrap;
       flex:1;
@@ -2044,23 +2092,38 @@ a:focus {
       @media screen and (min-width: 1351px){
           .speakerContainer{
             width:120px;
+            height:150px;
+            .speakerName{
+              float: left;
+            }
         }
       }
       @media screen and (max-width:1350px) and (min-width:995px){
         .speakerContainer{
           width:100px;
+          height:150px;
+          .speakerName{
+            float: left;
+          }
         }
       }
 
       @media screen and (max-width:995px){
         .speakerContainer{
           width:75px!important;
+          height:150px;
+          float:left;
+          .speakerName{
+            float: left;
+          }
         }
       }
 
+
       .speakerContainer{
         padding-top:10px;
-        width:120px;
+        width:90px;
+        height:80px;
       .speakerPicture{
         img{
           &:hover{
@@ -2090,6 +2153,7 @@ a:focus {
           justify-content: center;
           -webkit-justify-content: center;
           text-align:center;
+          width:100%;
           span{
             font-size: 10px;
           }
