@@ -1,6 +1,8 @@
 /**
  * Created by user on 23.09.2015.
  */
+
+//Static page for the Imunnology QA , the videos are uploaded in the admin page,which generates a link,the links are copied from there
 app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success', 'Error','$modal', function($scope, $window,Success,Error, $modal){
         $scope.questions = [
                 {
