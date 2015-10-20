@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <div class="modal-title"><h3>Lista resurse</h3></div>
+</div>
+<div class="modal-body container" style="margin: 0; width: 100%">
+    <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
+    <div class="col-md-12">
+        <s3-upload-manager label="video-uri" bucket="{{amazonBucket}}" path="{{'productPages/'+ sessionData.idToEdit+'/videos/'}}"></s3-upload-manager>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
+    <a class="btn btn-warning pull-right" ng-click="renderView('specialProductEdit')">Inapoi</a>
+</div>

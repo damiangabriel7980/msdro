@@ -8381,3 +8381,187 @@ a:focus {
     width: 30% !important;
   }
 }
+@media screen and (max-width: 350px) {
+  #immunologyQA .QAitem {
+    height: 440px!important;
+    display: flex;
+    float: left;
+    clear: left;
+    min-width: 200px;
+    max-width: 600px;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex: 1;
+    -webkit-flex: 1;
+    -webkit-display: flex;
+    align-items: center;
+  }
+  #immunologyQA .QAitem .question {
+    float: left;
+    height: 200px;
+    min-width: 200px;
+  }
+  #immunologyQA .QAitem .answers {
+    text-align: center;
+    height: 200px!important;
+    width: 240px!important;
+    float: left;
+    clear: left;
+    min-width: 200px;
+    max-width: 600px;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex: 1;
+    -webkit-flex: 1;
+    display: flex;
+    -webkit-display: flex;
+    align-items: center;
+  }
+}
+#immunologyQA .padding0 {
+  padding: 0px!important;
+}
+#immunologyQA .glossaryPrintButtons span {
+  color: #10887C;
+  font-weight: bold;
+}
+#immunologyQA .oddQAitem {
+  background-color: #F3F3F4;
+}
+#immunologyQA .evenQAitem {
+  background-color: #EBECED;
+}
+@media screen and (max-width: 1350px) {
+  #immunologyQA .QAitem {
+    height: 230px;
+  }
+}
+@media screen and (max-width: 635px) and (min-width: 351px) {
+  #immunologyQA .QAitem {
+    display: block!important;
+    height: 440px!important;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+  }
+  #immunologyQA .QAitem .question {
+    min-width: 260px!important;
+    height: 200px!important;
+  }
+  #immunologyQA .QAitem .question span {
+    font-size: 15px!important;
+    margin: 0!important;
+    width: 100%;
+  }
+  #immunologyQA .QAitem .answers {
+    width: 100%;
+    height: 200px!important;
+  }
+}
+#immunologyQA .QAitem {
+  display: flex;
+  -webkit-display: flex;
+  flex: 1;
+  -webkit-flex: 1;
+  float: left;
+  clear: left;
+  height: 200px;
+}
+#immunologyQA .QAitem .question {
+  -webkit-display: flex ;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  justify-content: center;
+  flex: 1;
+  -webkit-flex: 1;
+  max-height: 300px;
+  float: left;
+  text-align: center;
+  color: #01877b;
+}
+@media screen and (min-width: 560px) {
+  #immunologyQA .QAitem .question span {
+    font-size: 25px;
+    margin: 0 10px;
+  }
+}
+#immunologyQA .QAitem .answers {
+  max-width: 600px;
+  justify-content: center;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  flex: 1;
+  -webkit-flex: 1;
+  display: flex;
+  -webkit-display: flex;
+  height: inherit;
+  float: left;
+  align-items: center;
+}
+@media screen and (min-width: 1351px) {
+  #immunologyQA .QAitem .answers .speakerContainer {
+    width: 120px;
+    height: 150px;
+  }
+  #immunologyQA .QAitem .answers .speakerContainer .speakerName {
+    float: left;
+  }
+}
+@media screen and (max-width: 1350px) and (min-width: 995px) {
+  #immunologyQA .QAitem .answers .speakerContainer {
+    width: 100px;
+    height: 150px;
+  }
+  #immunologyQA .QAitem .answers .speakerContainer .speakerName {
+    float: left;
+  }
+}
+@media screen and (max-width: 995px) {
+  #immunologyQA .QAitem .answers .speakerContainer {
+    width: 75px!important;
+    height: 150px;
+    float: left;
+  }
+  #immunologyQA .QAitem .answers .speakerContainer .speakerName {
+    float: left;
+  }
+}
+#immunologyQA .QAitem .answers .speakerContainer {
+  padding-top: 10px;
+  width: 90px;
+  height: 80px;
+}
+#immunologyQA .QAitem .answers .speakerContainer .speakerPicture {
+  display: flex;
+  -webkit-flex: 1;
+  justify-content: center;
+  -webkit-justify-content: center;
+}
+#immunologyQA .QAitem .answers .speakerContainer .speakerPicture img:hover {
+  cursor: pointer;
+}
+#immunologyQA .QAitem .answers .speakerContainer .speakerPicture img {
+  float: left;
+  display: flex;
+  width: 50px;
+  height: 50px;
+  border-radius: 999px;
+  border: solid 2px #D4CCC6;
+}
+#immunologyQA .QAitem .answers .speakerContainer .speakerName {
+  display: flex;
+  -webkit-display: flex;
+  flex: 1;
+  -webkit-flex: 1;
+  justify-content: center;
+  -webkit-justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+#immunologyQA .QAitem .answers .speakerContainer .speakerName span {
+  font-size: 10px;
+}
+.marginTop25px {
+  margin-top: 25px;
+}

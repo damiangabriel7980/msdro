@@ -120,7 +120,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
 
     //only logged in users can access a route
-    app.all("/api/*", Auth.isLoggedIn, function(req, res, next) {
+    app.all("/api/*", Auth.isLoggedIn,UtilsModule.fixUpdateId, function(req, res, next) {
         next(); // if the middleware allowed us to get here,
         // just move on to the next route handler
     });
@@ -130,6 +130,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         next(); // if the middleware allowed us to get here,
         // just move on to the next route handler
     });
+
 
     //================================================================================================================= ADMIN ROUTES
 

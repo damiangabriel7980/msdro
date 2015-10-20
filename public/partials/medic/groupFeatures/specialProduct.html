@@ -32,6 +32,11 @@
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
                 </accordion-heading>
             </accordion-group>
+            <accordion-group is-open="status.isFirstOpen" class="parent" ng-if="specialProductPage.speakers.length > 0" ng-class="{'active':$state.includes('groupSpecialProduct.immunologyQA')}" ui-sref="groupSpecialProduct.immunologyQA">
+                <accordion-heading>
+                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Immunology QA</div>
+                </accordion-heading>
+            </accordion-group>
         </accordion>
         <div dropdown is-open="isCollapsed.isFirstOpen" class="col-xs-12 col-sm-12 hidden-md hidden-lg mobileDropdown">
         <a class="btn btn-primary col-xs-12 text-center pull-left dropdown-toggle" dropdown-toggle>{{mobileMenuTitle}}<i class="glyphicon glyphicon-chevron-down pull-right glyphicon-Special-Product" ></i></a>
@@ -68,6 +73,11 @@
                     <accordion-group is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ng-click="navigateMobile('Sitemap')">
                         <accordion-heading>
                             <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
+                        </accordion-heading>
+                    </accordion-group>
+                    <accordion-group is-open="status.isFirstOpen" class="parent" ng-if="specialProductPage.speakers.length > 0" ng-class="{'active':$state.includes('groupSpecialProduct.immunologyQA')}" ng-click="navigateMobile('ImunologyQA')">
+                        <accordion-heading>
+                            <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Immunology QA</div>
                         </accordion-heading>
                     </accordion-group>
                 </accordion>
