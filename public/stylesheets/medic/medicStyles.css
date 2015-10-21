@@ -8383,7 +8383,7 @@ a:focus {
     height: 200px!important;
   }
   #immunologyQA .QAitem .question span {
-    font-size: 15px!important;
+    font-size: 12px;
     margin: 0!important;
     width: 100%;
   }
@@ -8417,7 +8417,7 @@ a:focus {
 }
 @media screen and (min-width: 560px) {
   #immunologyQA .QAitem .question span {
-    font-size: 25px;
+    font-size: 20px;
     margin: 0 10px;
   }
 }
@@ -8426,8 +8426,8 @@ a:focus {
   justify-content: center;
   flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
-  flex: 1;
-  -webkit-flex: 1;
+  flex: 2;
+  -webkit-flex: 2;
   display: flex;
   -webkit-display: flex;
   height: inherit;
@@ -8454,17 +8454,20 @@ a:focus {
 }
 @media screen and (max-width: 995px) {
   #immunologyQA .QAitem .answers .speakerContainer {
-    width: 75px!important;
+    width: 85px!important;
     height: 150px;
     float: left;
   }
   #immunologyQA .QAitem .answers .speakerContainer .speakerName {
     float: left;
   }
+  #immunologyQA .QAitem .answers .speakerContainer .speakerName span {
+    font-size: 12px;
+  }
 }
 #immunologyQA .QAitem .answers .speakerContainer {
   padding-top: 10px;
-  width: 90px;
+  width: 110px;
   height: 80px;
 }
 #immunologyQA .QAitem .answers .speakerContainer .speakerPicture {
@@ -8493,9 +8496,6 @@ a:focus {
   -webkit-justify-content: center;
   text-align: center;
   width: 100%;
-}
-#immunologyQA .QAitem .answers .speakerContainer .speakerName span {
-  font-size: 10px;
 }
 .marginTop25px {
   margin-top: 25px;
