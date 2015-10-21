@@ -8313,6 +8313,9 @@ a:focus {
     width: 30% !important;
   }
 }
+#immunologyQA .cursorNormal {
+  cursor: auto !important;
+}
 @media screen and (max-width: 350px) {
   #immunologyQA .QAitem {
     height: 440px!important;
@@ -8476,8 +8479,8 @@ a:focus {
 #immunologyQA .QAitem .answers .speakerContainer .speakerPicture img {
   float: left;
   display: flex;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 999px;
   border: solid 2px #D4CCC6;
 }

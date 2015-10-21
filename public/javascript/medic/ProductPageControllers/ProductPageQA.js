@@ -200,12 +200,15 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         animation: true,
                         templateUrl: 'partials/medic/modals/immunologyQAModal.html',
                         controller:'immunologyQAModal',
-                        size: size,
+                        size: 'lg',
+                        backdrop: 'static',
+                        keyboard: false,
                         resolve:{speaker:function(){
                                 return speaker
+                                }
                         }
-        }
                 })
+
         };
 
 
