@@ -96,7 +96,7 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         ]
                 },
                 {
-                        question:'As a clinician, what is your general experience with golimumab?',
+                        question:'How golimumab helps you in optimizing the outcome for your patients?',
                         speakers:[
                                 {
                                         name:'Jose Delgado Alves',
