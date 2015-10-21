@@ -1,6 +1,8 @@
 /**
  * Created by user on 23.09.2015.
  */
+
+//Static page for the Imunnology QA , the videos are uploaded in the admin page,which generates a link,the links are copied from there
 app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success', 'Error','$modal', function($scope, $window,Success,Error, $modal){
         $scope.questions = [
                 {
@@ -94,7 +96,7 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         ]
                 },
                 {
-                        question:'As a clinician, what is your general experience with golimumab?',
+                        question:'How golimumab helps you in optimizing the outcome for your patients?',
                         speakers:[
                                 {
                                         name:'Jose Delgado Alves',
@@ -198,12 +200,15 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         animation: true,
                         templateUrl: 'partials/medic/modals/immunologyQAModal.html',
                         controller:'immunologyQAModal',
-                        size: size,
+                        size: 'lg',
+                        backdrop: 'static',
+                        keyboard: false,
                         resolve:{speaker:function(){
                                 return speaker
+                                }
                         }
-        }
                 })
+
         };
 
 

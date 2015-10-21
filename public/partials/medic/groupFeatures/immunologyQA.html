@@ -3,8 +3,8 @@
         <img class="col-xs-12 noPadding" ng-if="specialProductPage.header_image" ng-src="{{pathAmazonDev+specialProductPage.header_image}}" />
     </div>
     <div class="col-xs-12 glossaryPrintButtons text-center padding0">
-            <span class="pull-left">Questions <i class="glyphicon glyphicon-question-sign"></i></span>
-            <span style="margin-left:100px;">Answers <i class="glyphicon glyphicon-film"></i></span>
+            <span class="pull-left">Questions <i class="glyphicon glyphicon-question-sign cursorNormal"></i></span>
+            <span style="margin-left:100px;">Answers <i class="glyphicon glyphicon-film cursorNormal"></i></span>
     </div>
     <div ng-repeat="question in questions" class="QAitem col-xs-12 padding0" ng-class-odd="'oddQAitem'" ng-class-even="'evenQAitem'" >
         <div class="question col-xs-12 padding0"><span> {{question.question}}</span></div>
