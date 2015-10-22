@@ -1958,7 +1958,7 @@ a:focus {
   }
 }
 
-// ========================================================================================================immunology QA
+// ======================================================================================================== Q&A
 
 #immunologyQA{
 
@@ -1999,6 +1999,7 @@ a:focus {
       flex: 1;
       -webkit-flex: 1;
       display: flex;
+      display:-webkit-flex;
       -webkit-display: flex;
       align-items: center;
     }
@@ -2009,6 +2010,17 @@ a:focus {
     padding:0px!important;
   }
   .glossaryPrintButtons{
+    display: flex;
+    display:-webkit-flex;
+    flex:1;
+    .questionIcon{
+      text-align: center;
+      flex:1;
+    }
+    .answerIcon{
+      flex:2;
+      text-align: center;
+    }
 
     span{
       color:#10887C;
@@ -2018,8 +2030,8 @@ a:focus {
   .oddQAitem{
     background-color:#F3F3F4;
   }
-  .evenQAitem{
-    background-color:#EBECED;
+  .evenQAitem {
+    background-color: #EBECED;
   }
 
   @media screen and (max-width: 1350px){
@@ -2029,6 +2041,12 @@ a:focus {
   }
 
   @media screen and(max-width: 635px) and (min-width:351px){
+    .answerIcon{
+      text-align: right;
+      span{
+        float:right!important;
+      }
+    }
     .QAitem{
       display: block!important;
       height:440px!important;
@@ -2037,8 +2055,9 @@ a:focus {
       .question{
         min-width:260px!important;
         height: 200px!important;
+        text-align: center !important;
         span{
-          font-size:12px;
+          font-size:16px !important;
           margin:0!important;
           width:100%;
         }
@@ -2070,28 +2089,37 @@ a:focus {
       flex:1;
       -webkit-flex: 1;
       max-height: 300px;
+      min-height:75px;
       float:left;
-      text-align: center;
+      text-align: left;
       color:@green;
-      @media screen and (min-width:560px){
-        span{
-          font-size:20px;
-          margin:0 10px;
+      span{
+        margin:0 0 0 50px;
+        font-size: 20px;
+      }
+      @media screen and (min-width:1210px) {
+        .question{
+          text-align: center !important;
+          span {
+            font-size: 16px;
+            margin: 0 30px;
+          }
         }
       }
-
     }
     .answers{
-      max-width:600px;
       justify-content: center;
       flex-wrap: wrap;
       -webkit-flex-wrap: wrap;
       flex:2;
       -webkit-flex: 2;
       display:flex;
+      display: -webkit-flex;
       -webkit-display:flex;
       height:inherit;
       float:left;
+      -webkit-justify-content: center;
+      justify-content: center;
       align-items: center;
       @media screen and (min-width: 1351px){
           .speakerContainer{
@@ -2113,6 +2141,11 @@ a:focus {
       }
 
       @media screen and (max-width:995px){
+        .question{
+          span{
+            font-size: 16px!important;
+          }
+        }
         .speakerContainer{
           width:85px!important;
           height:150px;
