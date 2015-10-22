@@ -126,7 +126,7 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         ]
                 },
                 {
-                        question:'What is your opinion regarding patient’s involvement in treatment decisions.',
+                        question:'What is your opinion regarding patient’s involvement in treatment decisions?',
                         speakers:[
                                 {
                                         name:'Jose Delgado Alves',
