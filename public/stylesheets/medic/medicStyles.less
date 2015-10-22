@@ -1963,6 +1963,33 @@ a:focus {
 #immunologyQA{
 
 
+
+  @media screen and (width:1024px){
+    .question{
+      text-align:center!important;
+      display: flex;
+      display: -webkit-flex;
+      span{
+        flex:1;
+        -webkit-flex:1;
+        margin:20px!important;
+      }
+    }
+  }
+
+  @media screen and (width:768px){
+    .question{
+      text-align:center!important;
+      display: flex;
+      display: -webkit-flex;
+      span{
+        flex:1;
+        -webkit-flex:1;
+        margin: 20px!important;
+      }
+    }
+  }
+
   .cursorNormal{
     cursor: auto !important;
   }
@@ -2121,16 +2148,16 @@ a:focus {
       -webkit-justify-content: center;
       justify-content: center;
       align-items: center;
-      @media screen and (min-width: 1351px){
+      @media screen and (min-width: 1366px){
           .speakerContainer{
-            width:120px;
+            width:105px!important;
             height:150px;
             .speakerName{
               float: left;
             }
         }
       }
-      @media screen and (max-width:1350px) and (min-width:995px){
+      @media screen and (max-width:1366px) and (min-width:995px){
         .speakerContainer{
           width:100px;
           height:150px;
@@ -2139,6 +2166,8 @@ a:focus {
           }
         }
       }
+
+
 
       @media screen and (max-width:995px){
         .question{
@@ -2162,7 +2191,7 @@ a:focus {
 
       .speakerContainer{
         padding-top:10px;
-        width:110px;
+        width:100px;
         height:80px;
       .speakerPicture{
         img{
@@ -2174,8 +2203,8 @@ a:focus {
         -webkit-flex: 1;
         justify-content: center;
         -webkit-justify-content: center;
+        text-align: center;
         img{
-          float:left;
           display: flex;
           width:65px;
           height:65px;
