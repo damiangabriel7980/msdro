@@ -40,7 +40,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
             $scope.mobileMenuTitle=name;
             $state.go('groupSpecialProduct.sitemap',{product_id: $scope.specialProductPage._id});
         }
-        if (name === 'ImunologyQA'){
+        if (name === 'Q & A'){
             $scope.mobileMenuTitle=name;
             $state.go("groupSpecialProduct.immunologyQA");
         }
