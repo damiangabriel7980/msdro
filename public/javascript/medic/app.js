@@ -254,11 +254,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/shared/404.html'
         })
         .state('forbidden',{
-            url: '/forbidden',
+            url: '/403',
             templateUrl: 'partials/shared/403.html'
         })
         .state('serverError',{
-            url: '/serverError',
+            url: '/500',
             templateUrl: 'partials/shared/500.html'
         })
         .state('home',{
