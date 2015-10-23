@@ -10,6 +10,9 @@
   /* Safari */
   transition: all 1s ease;
 }
+.blackButton {
+  color: black;
+}
 .btnSearchBefore {
   border-left: 1px solid !important;
   border-radius: 4px !important;
