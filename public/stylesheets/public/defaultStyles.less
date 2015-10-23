@@ -264,19 +264,59 @@ html{
     }
   }
 }
-
+.hugeFont{
+  font-size: 160px;
+  @media (max-width: @screen-xs-max) {
+    font-size: 70px;
+  }
+}
 .margin35px{
   margin-top: 35px;
 }
-
+.height100{
+  height: 100%;
+}
 //=================================== errorClasses
 .errorContainer{
+  background-image: url(../../assets/404_bg.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100%;
   .msdImage{
     max-width: 100%;
     height: 100%;
   }
   .padding60{
     padding-top: 60px;
+  }
+  .errMessageContainer{
+    position: relative;
+    top: 150px;
+    background-color: rgba(0, 109, 105, 0.6);
+    .code{
+      color: white;
+      text-align: right;
+      @media (max-width:@screen-xs-max) {
+        text-align: center;
+      }
+    }
+    .errorMessage{
+      margin-top: 4em;
+      @media (max-width:@screen-xs-max) {
+        margin-top: 0;
+      }
+      .white{
+        color: white;
+      }
+      .btnHome{
+        margin: 10px 0px;
+        @media (max-width:@screen-xs-max) {
+          margin: 25px 0px;
+        }
+      }
+    }
   }
 }
 

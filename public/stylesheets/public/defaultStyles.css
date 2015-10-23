@@ -6571,8 +6571,27 @@ html body .rootView {
     display: none !important;
   }
 }
+.hugeFont {
+  font-size: 160px;
+}
+@media (max-width: 767px) {
+  .hugeFont {
+    font-size: 70px;
+  }
+}
 .margin35px {
   margin-top: 35px;
+}
+.height100 {
+  height: 100%;
+}
+.errorContainer {
+  background-image: url(../../assets/404_bg.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100%;
 }
 .errorContainer .msdImage {
   max-width: 100%;
@@ -6580,6 +6599,39 @@ html body .rootView {
 }
 .errorContainer .padding60 {
   padding-top: 60px;
+}
+.errorContainer .errMessageContainer {
+  position: relative;
+  top: 150px;
+  background-color: rgba(0, 109, 105, 0.6);
+}
+.errorContainer .errMessageContainer .code {
+  color: white;
+  text-align: right;
+}
+@media (max-width: 767px) {
+  .errorContainer .errMessageContainer .code {
+    text-align: center;
+  }
+}
+.errorContainer .errMessageContainer .errorMessage {
+  margin-top: 4em;
+}
+@media (max-width: 767px) {
+  .errorContainer .errMessageContainer .errorMessage {
+    margin-top: 0;
+  }
+}
+.errorContainer .errMessageContainer .errorMessage .white {
+  color: white;
+}
+.errorContainer .errMessageContainer .errorMessage .btnHome {
+  margin: 10px 0px;
+}
+@media (max-width: 767px) {
+  .errorContainer .errMessageContainer .errorMessage .btnHome {
+    margin: 25px 0px;
+  }
 }
 .btnGreen {
   display: table;

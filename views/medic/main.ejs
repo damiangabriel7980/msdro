@@ -189,7 +189,7 @@
     </div>
 </div>
 
-<div id="mainContainer" ui-view class="main-view-container">
+<div id="mainContainer" ui-view class="main-view-container" ng-class="{'height100': $state.is('notFound') || $state.is('forbidden') || $state.is('serverError')}">
 </div>
 <footer-responsive stick-below-id="mainContainer" template-link="partials/medic/footerMedic.html">
 </footer-responsive>
