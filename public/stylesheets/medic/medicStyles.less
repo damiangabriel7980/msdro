@@ -1964,37 +1964,56 @@ a:focus {
 
 
 
-  @media screen and (width:1024px){
-    .question{
-      text-align:center!important;
-      display: flex;
-      display: -webkit-flex;
-      span{
-        flex:1;
-        -webkit-flex:1;
-        margin:20px!important;
+  @media screen and (width:1024px) {
+    .QAitem {
+      flex-direction: column;
+      .question {
+        text-align: center !important;
+        display: flex;
+        display: -webkit-flex;
+        height:75px;
+        span {
+          flex: 1;
+          -webkit-flex: 1;
+          margin: 20px !important;
+        }
+      }
+      .answers{
+        margin-bottom: 40px;
+        .speakerContainer{
+          padding:0;
+        }
       }
     }
   }
 
-  @media screen and (width:768px){
-    .question{
-      text-align:center!important;
-      display: flex;
-      display: -webkit-flex;
-      span{
-        flex:1;
-        -webkit-flex:1;
-        margin: 20px!important;
+  @media screen and (width:768px) {
+    .QAitem {
+      flex-direction: column;
+      .question {
+        text-align: center !important;
+        display: flex;
+        display: -webkit-flex;
+        height: 75px;
+        span {
+          flex: 1;
+          -webkit-flex: 1;
+          margin: 20px !important;
+        }
+      }
+      .answers {
+        margin-bottom: 40px;
+        .speakerContainer {
+          padding: 0;
+        }
       }
     }
   }
-
   .cursorNormal{
     cursor: auto !important;
   }
 
-  @media screen and (max-width:350px){
+  @media (max-width:@screen-xs-min){
   .QAitem{
     height:440px!important;
     display: flex;
