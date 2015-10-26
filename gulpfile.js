@@ -80,6 +80,12 @@ gulp.task('copy_components', function () {
         .pipe(gulp.dest('./public_min/components'));
 });
 
+gulp.task('copy_assets', function () {
+    return gulp.src('./public/assets/**/*.*')
+        .pipe(gulp.dest('./public_min/assets'));
+});
+
+
 gulp.task('copy_partials', function () {
     return gulp.src('./public/partials/**/*.*')
         .pipe(gulp.dest('./public_min/partials'));
@@ -121,7 +127,7 @@ gulp.task('generate_manifests', ['minify_all'], function () {
     }
 });
 
-gulp.task('prepare_production', ['minify_all', 'copy_components', 'copy_partials', 'copy_module_templates'], function () {
+gulp.task('prepare_production', ['minify_all', 'copy_components', 'copy_partials', 'copy_module_templates', 'copy_assets'], function () {
     console.log("DONE");
 });
 
