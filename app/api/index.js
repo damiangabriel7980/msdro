@@ -30,6 +30,8 @@ var Parameters = require('../models/parameters');
 var JanuviaUsers = require('../models/januvia/januvia_users');
 var AppUpdate = require("../models/msd-applications.js");
 var _ = require('underscore');
+var guidelineFile = require ("../models/guidelineFile");
+var guidelineCategory = require ("../models/guidelineCategory");
 
 //modules
 var UserModule = require('../modules/user');
@@ -1446,6 +1448,75 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleSuccess(res,wres);
                 }
             });
+        });
+
+    router.route('/admin/applications/guidelines/Category')
+        .get(function(req,res){
+              if(req.query.id){
+                  guidelineCategory.findOne({_id:req.query.id}).populate('guidelineFileIds').exec(function(err,category){
+                      if(err){
+                          handleError(res,err,500);
+                      }else {
+                          handleSuccess(res,category);
+                      }
+                  })
+              }  else{
+                  guidelineCategory.find({},function(err,categorys){
+                      if(err){
+                          handleError(res,err,500);
+                      }else{
+                          handleSuccess(res,categorys);
+                      }
+                  })
+              }
+        })
+
+        .post(function(req,res){
+
+        })
+    router.route('/admin/applications/guidelines/File')
+        .get(function(req,res){
+            if(req.query.id){
+                guidelineFile.findOne({_id:req.querry.id},function(err,file){
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res,file);
+                    }
+                })
+            }else{
+                guidelineFile.find({},function(err,files){
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res,files);
+                    }
+                })
+            }
+        })
+        .post(function(req,res){
+              var toSave = new guidelineFile({
+                  guidelineFileUrl:'none',
+                  displayName:'Untitled',
+                  creationDate:new Date(),
+                  lastModified:new Date()
+              });
+              toSave.save(function(err,saved){
+                  if(err){
+                      handleError(res,err,500);
+                  }else{
+                      handleSuccess(res,saved);
+                  }
+                })
+        })
+        .delete(function(req,res){
+           guidelineFile.remove({_id:req.query.id},function(err,wres){
+               if(err){
+                   handleError(res,err,500);
+               }else{
+                   handleSuccess(res,wres);
+               }
+           })
         })
 
     router.route('/admin/events/events')

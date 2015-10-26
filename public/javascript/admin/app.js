@@ -273,6 +273,20 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/applications/januvia/viewUsers.html',
             controller: 'JanuviaUsersView'
         })
+        .state('applications.guideLines',{
+            url:'/guidelines',
+            templateUrl:'partials/admin/applications/guideLines/guideLine.html'
+        })
+        .state('applications.guideLines.Category',{
+            url:'/guidelines.Category',
+            templateUrl:'partials/admin/applications/guideLines/guideLinesCategory.html',
+            controller:'guideLinesCategoryController'
+        })
+        .state('applications.guideLines.File',{
+            url:'/guidelines.File',
+            templateUrl:'partials/admin/applications/guideLines/guideLinesFile.html',
+            controller:'guideLineFileController'
+    })
         .state('applications.edit',{
             url:'/edit',
             templateUrl:'partials/admin/applications/appUpdate/appUpdate.html',
