@@ -1477,7 +1477,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/applications/guidelines/File')
         .get(function(req,res){
             if(req.query.id){
-                guidelineFile.findOne({_id:req.querry.id},function(err,file){
+                guidelineFile.findOne({_id:req.query.id},function(err,file){
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -1498,6 +1498,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
               var toSave = new guidelineFile({
                   guidelineFileUrl:'none',
                   displayName:'Untitled',
+                  actualName:'Untitled',
                   creationDate:new Date(),
                   lastModified:new Date()
               });
@@ -1508,6 +1509,23 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                       handleSuccess(res,saved);
                   }
                 })
+        })
+        .put(function(req,res){
+            guidelineFile.findOne({_id:req.query.id},function(err,file){
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    console.log(req.query.id);
+                    console.log(req.body);
+                    guidelineFile.update({_id:req.query.id},{$set:req.body},function(err,wres){
+                        if (err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res,wres);
+                        }
+                    })
+                }
+            })
         })
         .delete(function(req,res){
            guidelineFile.remove({_id:req.query.id},function(err,wres){
