@@ -4,8 +4,8 @@
 controllers.controller('guideLineFileController',['$scope','GuideLineService','Success','ActionModal','$state','ngTableParams','$filter','$modal',function($scope,GuideLineService,Success,ActionModal,$state,ngTableParams,$filter,$modal){
     var refreshFiles = function (){
         GuideLineService.file.query().$promise.then(function(resp){
-            console.log(resp);
             var files = Success.getObject(resp);
+            console.log(files);
             var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -28,18 +28,32 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
     refreshFiles();
     console.log('test');
 
+    $scope.resourceFileBody = null;
+
+
+
     $scope.addFile = function(){
-        console.log('asdasd');
-        GuideLineService.file.create({}).$promise.then(function(){
+        GuideLineService.file.create().$promise.then(function(resp){
             refreshFiles();
         })
     };
 
+    $scope.disableFile = function(id,file){
+        var toEdit = file;
+        toEdit.enabled = !toEdit.enabled;
+        delete toEdit['_id'];
+        GuideLineService.file.update({id:id},toEdit).$promise.then(function(resp){
+            refreshFiles();
+        }).catch(function(err){
+
+        })
+    }
+
     $scope.editFile = function(id){
         $modal.open({
-            templateUrl: 'partials/admin/applications/appUpdate/modalAppUpdate.html',
+            templateUrl: 'partials/admin/applications/guideLines/guidelineFileModal.html',
             windowClass: 'fade',
-            controller: 'AppUpdateEdit',
+            controller: 'guidelineFileModal',
             resolve: {
                 idToEdit: function () {
                     return id;

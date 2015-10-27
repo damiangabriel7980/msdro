@@ -11,19 +11,26 @@
     </div>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="file in $data">
-            <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
-                {{file.name}}
+            <td data-title="' Display Name'" filter="{ 'displayName': 'text' }" sortable="'displayName'">
+                {{file.displayName}}
             </td>
-            <td data-title="'Category'" sortable="'category'">
+            <td data-title="' Actual Name'" filter="{ 'actualName': 'text' }" sortable="'actualName'">
+                {{file.actualName}}
+            </td>
+            <td data-title="'Category'" filter="{'category':'text'}"sortable="'category'">
                 {{file.category}}
             </td>
-            <td data-title="'Download Url'" sortable="'type'">
-                {{file.downloadUrl}}
+            <td data-title="'Download Url'" sortable="'downloadUrl'">
+                {{file.guidelineFileUrl}}
             </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
                     <div class="btn btn-primary" ng-click="editFile(file._id)"><i class="glyphicon glyphicon-cog"></i></div>
+                   <button class="btn btn-default" ng-click="disableFile(file._id,file)" ng-class="{'btn-danger':!file.enabled, 'btn-default':file.enabled}">
+                       <i class="glyphicon glyphicon-lock"></i>
+                   </button>
                     <div class="btn btn-danger" ng-click="removeFile(file._id)"><i class="glyphicon glyphicon-trash"></i></div>
+
                 </div>
             </td>
         </tr>
