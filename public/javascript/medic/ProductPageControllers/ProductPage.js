@@ -26,6 +26,8 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
         $scope.mobileMenuTitle = 'Speakers';
     if($state.is('groupSpecialProduct.sitemap'))
         $scope.mobileMenuTitle = 'Sitemap';
+    if($state.is('groupSpecialProduct.immunologyQA'))
+        $scope.mobileMenuTitle = 'Q & A';
     $scope.navigateMobile = function(name){
       if(name === "Resurse"){
           $scope.mobileMenuTitle=name;
