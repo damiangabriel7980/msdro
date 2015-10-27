@@ -2,14 +2,15 @@
     var scripts = document.getElementsByTagName("script");
     var currentScriptPath = scripts[scripts.length-1].src;
 
-    angular.module('s3UploadManager', []).directive('s3UploadManager', ['AmazonService', 'ActionModal', function(AmazonService, ActionModal) {
+    angular.module('s3UploadManager', []).directive('s3UploadManager', ['AmazonService', 'ActionModal',"$rootScope", function(AmazonService, ActionModal,$rootScope) {
         return {
             restrict: 'E',
             templateUrl: currentScriptPath.replace('s3_upload_manager.js', 's3_upload_manager.html'),
             replace: true,
             link: function(scope, element, attrs) {
 
-                var path, nameAll;
+                var path, nameAll,limit;
+                scope.fileType = null;
                 scope.label = null;
                 scope.keys = [];
 
@@ -22,6 +23,15 @@
                 };
 
                 scope.bucketUrl = AmazonService.getBucketUrl();
+
+                attrs.$observe('extension',function(newVal){
+                    scope.fileType = newVal.toLowerCase();
+                });
+
+                attrs.$observe('limit',function(newVal){
+
+                   limit = Number(newVal);
+                });
 
                 attrs.$observe('path', function (newVal) {
                     path = newVal;
@@ -36,12 +46,12 @@
                     nameAll = newVal;
                 });
 
+
                 var refreshList = function (contentsArray) {
                     scope.keys = [];
                     for(var i=0; i<contentsArray.length; i++){
                         scope.keys.push(contentsArray[i].Key);
                     }
-                    console.log(scope.keys);
                     scope.showManager = true;
                     resetS3Alert();
                     scope.$apply();
@@ -78,28 +88,44 @@
                     });
                 };
 
-                scope.s3ManagerFileSelected = function ($files, $event) {
+                var selectFiles = function($files, $event){
                     if($files[0]){
                         var extension = $files[0].name.split(".").pop();
                         var key;
-                        if(nameAll){
-                            key=path+nameAll+"."+extension;
+                        //check fileType if specified
+                        if(scope.fileType && scope.fileType.toLowerCase() != extension){
+                            ActionModal.show("Fisierul selectat nu este suportat");
                         }else{
-                            key=path+$files[0].name;
-                        }
-                        //check if file exists
-                        if(findInKeys(key) > -1){
-                            ActionModal.show("Fisierul exista", "Un fisier cu acelasi nume exista deja. Doriti sa il suprascrieti?", function () {
+                            if(nameAll){
+                                key=path+nameAll+"."+extension;
+                            }else{
+                                key=path+$files[0].name;
+                            }
+                            //check if file exists
+                            if(findInKeys(key) > -1){
+                                ActionModal.show("Fisierul exista", "Un fisier cu acelasi nume exista deja. Doriti sa il suprascrieti?", function () {
+                                    uploadFile($files[0], key);
+                                },{
+                                    yes: "Da"
+                                });
+                            }else{
+                                $rootScope.$broadcast('fileUpdated',key);
                                 uploadFile($files[0], key);
-                            },{
-                                yes: "Da"
-                            });
-                        }else{
-                            uploadFile($files[0], key);
+                            }
                         }
                     }else{
                         resetS3Alert("danger", "Nu a fost gasit fisierul");
                     }
+                };
+
+                scope.s3ManagerFileSelected = function ($files, $event) {
+                   //if(limit && $files.length > limit){
+                   //    resetS3Alert("danger", "Ati incarcat deja un fisier");
+                   //}else{
+                   //    selectFiles($files,$event);
+                   //}
+                    selectFiles($files,$event);
+
                 };
 
                 scope.removeKey = function (index) {
