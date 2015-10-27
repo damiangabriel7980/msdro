@@ -6,8 +6,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
     };
     specialProductService.SpecialProduct.query({id: $stateParams.product_id}).$promise.then(function(result){
         $scope.specialProductPage = Success.getObject(result);
-    }).catch(function(err){
-        console.log(err);
+    }).catch(function(){
         $state.reload();
     });
     $scope.mobileMenuTitle="";
@@ -27,6 +26,8 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
         $scope.mobileMenuTitle = 'Speakers';
     if($state.is('groupSpecialProduct.sitemap'))
         $scope.mobileMenuTitle = 'Sitemap';
+    if($state.is('groupSpecialProduct.immunologyQA'))
+        $scope.mobileMenuTitle = 'Q & A';
     $scope.navigateMobile = function(name){
       if(name === "Resurse"){
           $scope.mobileMenuTitle=name;
@@ -40,7 +41,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
             $scope.mobileMenuTitle=name;
             $state.go('groupSpecialProduct.sitemap',{product_id: $scope.specialProductPage._id});
         }
-        if(name === 'Q&A'){
+        if (name === 'Q & A'){
             $scope.mobileMenuTitle=name;
             $state.go('groupSpecialProduct.immunologyQA',{product_id: $scope.specialProductPage._id});
         }
