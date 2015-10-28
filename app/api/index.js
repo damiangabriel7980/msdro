@@ -1453,7 +1453,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/applications/guidelines/Category')
         .get(function(req,res){
               if(req.query.id){
-                  guidelineCategory.findOne({_id:req.query.id}).populate('guidelineFileIds').exec(function(err,category){
+                  guidelineCategory.findOne({_id:req.query.id},function(err,category){
                       if(err){
                           handleError(res,err,500);
                       }else {
@@ -1472,7 +1472,42 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
 
         .post(function(req,res){
+            var toSave = new guidelineCategory({
+                name:'Untitled',
+                lastModified:new Date(),
+                creationDate : new Date()
+            });
+            toSave.save(function(err,saved){
+                if(err){
+                    handleError(res,err,500);
+                }
+                handleSuccess(res,saved);
+            })
 
+        })
+        .put(function(req,res){
+            guidelineCategory.findOne({_id:req.query.id},function(err,category){
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    guidelineCategory.update({_id:req.query.id},{$set:req.body},function(err,wres){
+                        if (err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res,wres);
+                        }
+                    })
+                }
+            })
+        })
+        .delete(function(req,res){
+            guidelineCategory.remove({_id:req.query.id},function(err,wres){
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res,wres);
+                }
+            })
         })
     router.route('/admin/applications/guidelines/File')
         .get(function(req,res){
@@ -1515,8 +1550,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if (err){
                     handleError(res,err,500);
                 }else{
-                    console.log(req.query.id);
-                    console.log(req.body);
                     guidelineFile.update({_id:req.query.id},{$set:req.body},function(err,wres){
                         if (err){
                             handleError(res,err,500);
