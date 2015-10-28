@@ -29,7 +29,6 @@
                 });
 
                 attrs.$observe('limit',function(newVal){
-
                    limit = Number(newVal);
                 });
 
@@ -130,13 +129,13 @@
 
                 scope.removeKey = function (index) {
                     resetS3Alert("warning","Se sterge fisierul...");
-                    console.log(index);
                     AmazonService.deleteFile(scope.keys[index], function (err, success) {
                         if(err){
                             resetS3Alert("danger", "Eroare la stergerea fisierului");
                         }else{
                             resetS3Alert();
                             scope.keys.splice(index,1);
+                            $rootScope.$broadcast('fileDeleted');
                             scope.$apply();
                         }
                     })
