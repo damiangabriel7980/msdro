@@ -275,7 +275,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('applications.guideLines',{
             url:'/guidelines',
-            templateUrl:'partials/admin/applications/guideLines/guideLine.html'
+            templateUrl:'partials/admin/applications/guideLines/root.html'
         })
         .state('applications.guideLines.Category',{
             url:'/guidelines.Category',
