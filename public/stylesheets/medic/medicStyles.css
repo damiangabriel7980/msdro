@@ -7561,6 +7561,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .navbarMedic .navbar-collapse .navbar-nav.navbarMenu {
   padding-top: 4px;
 }
+.navbarMedic .navbar-collapse .navbar-nav.navbarMenu .blackTextIcon {
+  color: black;
+}
 .navbarMedic .navbar-collapse .navbar-nav li.mobileLink {
   visibility: hidden;
   display: none;
