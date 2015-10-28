@@ -51,7 +51,7 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope', 'idToEdit
         if(area.name){
             if(area['therapeutic-areasID']) area['therapeutic-areasID'] = [area['therapeutic-areasID']];
             console.log(area);
-            areasAdminService.areas.update(area).$promise.then(function(){
+            areasAdminService.areas.update({id: area._id},area).$promise.then(function(){
                 $state.reload();
                 $modalInstance.close();
             }).catch(function(err){

@@ -2005,7 +2005,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .put(function(req, res) {
             var area = req.body;
             area.last_updated = Date.now();
-            Therapeutic_Area.update({_id: area._id}, {$set: area}, function (err, wres) {
+            Therapeutic_Area.update({_id: req.query.id}, {$set: area}, function (err, wres) {
                 if(err){
                     handleError(res, err);
                 }else{
