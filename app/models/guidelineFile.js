@@ -12,6 +12,7 @@ var guidelineFileSchema = new Schema({
     creationDate: Date,
     lastModified: Date,
     guidelineCategoryId:{type:Schema.Types.ObjectId,ref:'guidelineCategory'},
+    guidelineCategoryName:String,
     enabled:{type:Boolean,default:true}
 });
 
