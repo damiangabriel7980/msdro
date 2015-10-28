@@ -7,9 +7,8 @@ var mongoDbIndex = require('../modules/mongooseIndex/index');
 
 var guidelineCategorySchema = new Schema({
     name: String,
-    displayName:String,
     imageUrl: String,
-    isEnabled:Boolean,
+    enabled:{type:Boolean,default:true},
     lastModified: Date,
     creationDate:Date,
     guidelineFileIds:[{type:Schema.Types.ObjectId , ref:'guidelineFile',index:true}]
