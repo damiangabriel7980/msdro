@@ -1,7 +1,7 @@
 /**
  * Created by user on 26.10.2015.
  */
-controllers.controller('guideLineFileController',['$scope','GuideLineService','Success','ActionModal','$state','ngTableParams','$filter','$modal',function($scope,GuideLineService,Success,ActionModal,$state,ngTableParams,$filter,$modal){
+controllers.controller('guideLineFileController',['$scope','GuideLineService','Success','ActionModal','$state','ngTableParams','$filter','$modal','AmazonService',function($scope,GuideLineService,Success,ActionModal,$state,ngTableParams,$filter,$modal,AmazonService){
     var refreshFiles = function (){
         GuideLineService.file.query().$promise.then(function(resp){
             var files = Success.getObject(resp);
@@ -26,10 +26,6 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
 
     };
     refreshFiles();
-    console.log('test');
-
-    $scope.resourceFileBody = null;
-
 
 
     $scope.addFile = function(){
@@ -61,10 +57,25 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
             }
         });
     };
+    console.log($scope);
+    var deleteFromAmazon = function(path){
+        var filePath = replace(path,AmazonService.getBucketUrl(),'')
+        AmazonService.deleteFile(filePath, function (err, success) {
+            if(err){
+                resetS3Alert("danger", "Eroare la stergerea fisierului");
+            }else{
+                resetS3Alert();
+                scope.keys.splice(id,1);
+                scope.$apply();
+            }
+        })
+    };
 
-    $scope.removeFile = function (id){
+    $scope.removeFile = function (file){
+        console.log(file);
         ActionModal.show("Stergere fisier", "Sunteti sigur ca doriti sa stergeti fisierul?", function () {
-            GuideLineService.file.delete({id: id}).$promise.then(function () {
+         //   deleteFromAmazon(file.guidelineFileUrl);
+            GuideLineService.file.delete({id: file._id}).$promise.then(function () {
                 $state.reload();
             });
         },{

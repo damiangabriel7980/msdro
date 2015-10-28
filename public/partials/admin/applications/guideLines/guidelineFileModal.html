@@ -2,7 +2,7 @@
     <form name="fileEditForm">
         <div class="modal-header">
             <button type="button" class="close" ng-click="closeModal()">&times;</button>
-            <h3 class="modal-title">Modifica fisier:</h3>
+            <h3 class="modal-title">Modifica fisier</h3>
         </div>
         <div class="modal-body">
             <div style="margin-bottom: 15px;">
@@ -17,30 +17,32 @@
 
             </div>
             <div class="form-group">
-                <label>Display Name:</label>
+                <label>Display name:</label>
                 <input type="text" class="form-control" ng-model="file.displayName" name="file.displayName" required>
             </div>
-
+            <div ng-show="showErr" style="text-align: center"><p style="color:red">Exista deja un fisier cu acest nume</p></div>
             <div class="form-group">
-                <label>Donwload Url:</label>
+                <label>Donwload url:</label>
 
                 <p>{{file.guidelineFileUrl}}</p>
 
             </div>
-            <div class="for-group">
+            <div class="form-group">
                 <label>Category:</label>
 
-                <select class="form-control ng-pristine ng-valid ng-touched" style="width: 100%"
-                        ng-options="category._id as category.displayName for category in categories">
+                <select  ng-model="selectedCategory" class="form-control ng-pristine ng-valid ng-touched" style="width: 100%"
+                        ng-options="category.name for category in categories" required>
                 </select>
+                <s3-upload-manager ng-disabled="true" extension="pdf" limit="1" label="fisier" bucket="{{amazonBucket}}" path="{{'guideline/category/'+selectedCategory._id+'/file/'+file._id+'/'}}"></s3-upload-manager>
             </div>
-                <s3-upload-manager extension="pdf" limit="1" label="fisier" bucket="{{amazonBucket}}" path="{{'guideline/file/'+file._id+'/'}}"></s3-upload-manager>
+
         </div>
 
         <div class="modal-footer marginTop70">
+
             <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
-            <button type="submit" class="btn btn-primary pull-right" ng-disabled="appEditForm.$invalid"
-                    ng-click="save(file)">Salveaza
+            <button type="submit" class="btn btn-primary pull-right" ng-disabled="fileEditForm.$invalid"
+                    ng-click="save(file)" >Salveaza
             </button>
         </div>
     </form>

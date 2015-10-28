@@ -133,6 +133,7 @@
                         if(err){
                             resetS3Alert("danger", "Eroare la stergerea fisierului");
                         }else{
+                            console.log(scope.keys[index]);
                             resetS3Alert();
                             scope.keys.splice(index,1);
                             $rootScope.$broadcast('fileDeleted');
