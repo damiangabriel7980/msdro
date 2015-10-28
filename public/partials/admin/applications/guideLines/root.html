@@ -1,0 +1,13 @@
+<div class="col-md-12">
+    <div class="newAccountsTabs">
+        <div class="tab" ng-class="{'active': $state.includes('applications.guideLines.Category')}" ui-sref="applications.guideLines.Category">
+            Categori
+        </div>
+        <div class="tab" ng-class="{'active': $state.includes('applications.guideLines.File')}" ui-sref="applications.guideLines.File">
+            Fisiere
+        </div>
+    </div>
+    <div class="col-md-12 noPadding">
+        <ui-view></ui-view>
+    </div>
+</div>

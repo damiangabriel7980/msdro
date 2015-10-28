@@ -528,7 +528,25 @@ services.factory('ApplicationService',['$resource',function($resource){
             delete:{method:'DELETE', isArray:false}
         })
     }
-}])
+}]);
+
+services.factory('GuideLineService',['$resource',function($resource){
+        return{
+            category:$resource('api//admin/applications/guidelines/Category',{},{
+                query:{method:'GET',isArray:false},
+                create:{method:'POST',isArray:false},
+                update:{method:'PUT',isArray:false},
+                delete:{method:'DELETE',isArray:false}
+
+            }),
+            file:$resource('api/admin/applications/guidelines/File',{},{
+                query:{method:'GET',isArray:false},
+                create:{method:'POST',isArray:false},
+                update:{method:'PUT',isArray:false},
+                delete:{method:'DELETE',isArray:false}
+            })
+        }
+}]);
 
 services.factory('NewsletterService', ['$resource', function($resource){
     var variableTypes = ["text", "html"];
