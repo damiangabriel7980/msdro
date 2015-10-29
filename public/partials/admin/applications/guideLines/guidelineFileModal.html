@@ -33,7 +33,9 @@
                 <select  ng-model="selectedCategory" class="form-control ng-pristine ng-valid ng-touched" style="width: 100%"
                         ng-options="category.name for category in categories" required>
                 </select>
-                <s3-upload-manager ng-disabled="true" extension="pdf" limit="1" label="fisier" bucket="{{amazonBucket}}" path="{{'guideline/category/'+selectedCategory._id+'/file/'+file._id+'/'}}"></s3-upload-manager>
+            </div>
+            <div class="form-group">
+                <s3-upload-manager ng-if="!fileEditForm.$invalid" extension="pdf" label="fisier" bucket="{{amazonBucket}}" path="{{'guideline/category/'+selectedCategory._id+'/file/'+file._id+'/'}}"></s3-upload-manager>
             </div>
 
         </div>

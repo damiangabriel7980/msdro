@@ -23,7 +23,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
     });
 
     $scope.$on('fileDeleted',function(event){
-        $scope.file.guidelineFileUrl = 'none';
+        $scope.file.guidelineFileUrl = '';
         $scope.file.displayName= $scope.file.actualName = 'Untitled';
     });
 
