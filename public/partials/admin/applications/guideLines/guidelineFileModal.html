@@ -10,14 +10,14 @@
             </div>
 
             <div class="form-group">
-                <label>Actual name:</label>
+                <label>Numele fisierului:</label>
 
                 <p>{{file.actualName}}</p>
 
 
             </div>
             <div class="form-group">
-                <label>Display name:</label>
+                <label>Nume afisat:</label>
                 <input type="text" class="form-control" ng-model="file.displayName" name="file.displayName" required>
             </div>
             <div ng-show="showErr" style="text-align: center"><p style="color:red">Exista deja un fisier cu acest nume</p></div>
@@ -28,7 +28,7 @@
 
             </div>
             <div class="form-group">
-                <label>Category:</label>
+                <label>Categorie:</label>
 
                 <select  ng-model="selectedCategory" class="form-control ng-pristine ng-valid ng-touched" style="width: 100%"
                         ng-options="category.name for category in categories" required>

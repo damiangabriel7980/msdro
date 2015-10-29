@@ -3,7 +3,7 @@
 </div>
 <div class="col-md-12">
     <div class="titleAndButton">
-        <div><h3>Category:</h3></div>
+        <div><h3>Categorii:</h3></div>
         <div>
             <div class="btn btn-primary" ng-click="addCategory()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
             <!--<button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din CSV</button>-->
@@ -11,10 +11,10 @@
     </div>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="category in $data">
-            <td data-title="' Name'" filter="{ 'displayName': 'text' }" sortable="'displayName'">
+            <td data-title="' Nume'" filter="{ 'displayName': 'text' }" sortable="'displayName'">
                 {{category.name}}
             </td>
-            <td data-title="' Image Url'" >
+            <td data-title="' Url imagine'" >
                 {{category.imageUrl}}
             </td>
             <td data-title="'Actiuni'">
