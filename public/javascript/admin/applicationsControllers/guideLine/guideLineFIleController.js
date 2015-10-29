@@ -52,8 +52,9 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
     $scope.editFile = function(id){
         $modal.open({
             templateUrl: 'partials/admin/applications/guideLines/guidelineFileModal.html',
-            windowClass: 'fade',
+            windowClass: 'fade stretch',
             controller: 'guidelineFileModal',
+            backdrop:'static',
             size:'lg',
             resolve: {
                 idToEdit: function () {

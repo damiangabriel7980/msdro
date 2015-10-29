@@ -55,7 +55,7 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
     $scope.editCategory = function(id){
         $modal.open({
             templateUrl: 'partials/admin/applications/guideLines/guidelineCategoryModal.html',
-            windowClass: 'fade',
+            windowClass: 'fade stretch',
             controller: 'guidelineCategoryModal',
             backdrop:'static',
             resolve: {
