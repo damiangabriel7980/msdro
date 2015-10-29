@@ -1505,9 +1505,15 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if (err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res,wres);
+                    guidelineCategory.update({},{lastModified:new Date()},{multi:true},function(err, updated){
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res,updated);
+                        }
+                    });
                 }
-            })
+            });
         })
     router.route('/admin/applications/guidelines/File')
         .get(function(req,res){

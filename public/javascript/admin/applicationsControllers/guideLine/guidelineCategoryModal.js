@@ -16,6 +16,14 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
         $modalInstance.close();
     };
 
+    $scope.$on('fileUpdated',function(event,imgUrl){
+        $scope.category.imageUrl = imgUrl;
+    });
+
+    $scope.$on('fileDeleted',function(event){
+        $scope.category.imageUrl='';
+    });
+
     $scope.save=function(category){
       var categoryToEdit = category._id;
         category.lastModified = new Date();
