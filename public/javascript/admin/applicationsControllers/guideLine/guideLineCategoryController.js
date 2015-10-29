@@ -37,15 +37,18 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
     };
 
     $scope.disableCategory=function (id,category){
-        var toEdit = category;
-        toEdit.enabled = !toEdit.enabled;
+       ActionModal.show("Dezactiveaza fisierul","Sunteti sigur ca doriti sa dezactivati fisierul?",function(){ var toEdit = category;
+               toEdit.enabled = !toEdit.enabled;
 
-        delete toEdit['_id'];
-        GuideLineService.category.update({id:id},toEdit).$promise.then(function(resp){
-            refreshCategory();
-        }).catch(function(err){
+               delete toEdit['_id'];
+               GuideLineService.category.update({id:id},toEdit).$promise.then(function(resp){
+                   refreshCategory();
+               }).catch(function(err){
 
-        });
+               });}
+           ,{
+               yes:"Da"
+           });
 
     };
 

@@ -35,15 +35,19 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
     };
 
     $scope.disableFile = function(id,file){
-        var toEdit = file;
-        toEdit.enabled = !toEdit.enabled;
-        delete toEdit['_id'];
-        GuideLineService.file.update({id:id},toEdit).$promise.then(function(resp){
-            refreshFiles();
-        }).catch(function(err){
+        ActionModal.show("Dezactiveaza categoria","Sunteti sigur ca doriti sa dezactivati categoria?",function(){
+            var toEdit = file;
+            toEdit.enabled = !toEdit.enabled;
+            delete toEdit['_id'];
+            GuideLineService.file.update({id:id},toEdit).$promise.then(function(resp){
+                refreshFiles();
+            }).catch(function(err){
 
-        })
-    }
+            })
+        },{
+            yes:'Da'
+        });
+    };
 
     $scope.editFile = function(id){
         $modal.open({
@@ -58,21 +62,21 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
             }
         });
     };
-    console.log($scope);
-    var deleteFromAmazon = function(path){
-        var filePath = path.substring(AmazonService.getBucketUrl().length);
-        console.log(filePath);
-        AmazonService.deleteFile(filePath, function (err, success) {
-            if(err){
-                ActionModal.show("Eroare la stergerea fisierului");
-            }else{
 
-            }
-        })
+    var deleteFromAmazon = function(path){
+        if(path){
+            var filePath = path.substring(AmazonService.getBucketUrl().length);
+            AmazonService.deleteFile(filePath, function (err, success) {
+                if(err){
+                    ActionModal.show("Eroare la stergerea fisierului");
+                }else{
+
+                }
+            })
+        }
     };
 
     $scope.removeFile = function (file){
-        console.log(file);
         ActionModal.show("Stergere fisier", "Sunteti sigur ca doriti sa stergeti fisierul?", function () {
             GuideLineService.file.delete({id: file._id}).$promise.then(function () {
                 deleteFromAmazon(file.guidelineFileUrl);
