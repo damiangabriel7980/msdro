@@ -30,7 +30,7 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
 
     $scope.addFile = function(){
         GuideLineService.file.create().$promise.then(function(resp){
-            refreshFiles();
+            $state.reload();
         })
     };
 
@@ -50,6 +50,7 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
             templateUrl: 'partials/admin/applications/guideLines/guidelineFileModal.html',
             windowClass: 'fade',
             controller: 'guidelineFileModal',
+            size:'lg',
             resolve: {
                 idToEdit: function () {
                     return id;
@@ -59,14 +60,13 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
     };
     console.log($scope);
     var deleteFromAmazon = function(path){
-        var filePath = replace(path,AmazonService.getBucketUrl(),'')
+        var filePath = path.substring(AmazonService.getBucketUrl().length);
+        console.log(filePath);
         AmazonService.deleteFile(filePath, function (err, success) {
             if(err){
-                resetS3Alert("danger", "Eroare la stergerea fisierului");
+                ActionModal.show("Eroare la stergerea fisierului");
             }else{
-                resetS3Alert();
-                scope.keys.splice(id,1);
-                scope.$apply();
+
             }
         })
     };
@@ -74,8 +74,8 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
     $scope.removeFile = function (file){
         console.log(file);
         ActionModal.show("Stergere fisier", "Sunteti sigur ca doriti sa stergeti fisierul?", function () {
-         //   deleteFromAmazon(file.guidelineFileUrl);
             GuideLineService.file.delete({id: file._id}).$promise.then(function () {
+                deleteFromAmazon(file.guidelineFileUrl);
                 $state.reload();
             });
         },{

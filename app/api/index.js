@@ -1533,7 +1533,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .post(function(req,res){
               var toSave = new guidelineFile({
-                  guidelineFileUrl:'none',
                   displayName:'Untitled',
                   actualName:'Untitled',
                   creationDate:new Date(),
