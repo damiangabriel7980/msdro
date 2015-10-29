@@ -32,7 +32,7 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
 
     $scope.addCategory = function(){
         GuideLineService.category.create().$promise.then(function(resp){
-            refreshCategory();
+            $state.reload();
         })
     };
 
@@ -54,6 +54,7 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
             templateUrl: 'partials/admin/applications/guideLines/guidelineCategoryModal.html',
             windowClass: 'fade',
             controller: 'guidelineCategoryModal',
+            backdrop:'static',
             resolve: {
                 idToEdit: function () {
                     return id;
