@@ -13,6 +13,7 @@
                 <label>Name:</label>
                 <input type="text" class="form-control" ng-model="category.name" name="category.name" required>
             </div>
+            <div style="text-align: center" ng-show="showErr"><p style="color: red;">Exista o categorie cu acest nume</p></div>
 
             <div class="form-group">
                 <label>Image url:</label>

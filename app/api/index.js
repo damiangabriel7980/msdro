@@ -1486,17 +1486,29 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
         })
         .put(function(req,res){
-            guidelineCategory.findOne({_id:req.query.id},function(err,category){
+            guidelineCategory.findOne({name:req.query.name},function(err,resp){
                 if (err){
                     handleError(res,err,500);
                 }else{
-                    guidelineCategory.update({_id:req.query.id},{$set:req.body},function(err,wres){
-                        if (err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res,wres);
-                        }
-                    })
+                    if(!resp){
+                        guidelineCategory.update({_id:req.query.id},{$set:req.body},function(err,wres){
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                handleSuccess(res,wres);
+                            }
+                        });
+                    }else if(req.query.id == resp._id ){
+                        guidelineCategory.update({_id:req.query.id},{$set:req.body},function(err,wres){
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                handleSuccess(res,wres);
+                            }
+                        });
+                    }else{
+                        handleError(res,null,400,43);
+                    }
                 }
             })
         })
@@ -1564,7 +1576,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             }
                         });
                     }else if(req.query.id == resp._id){
-                        guidelineFile.update({_id:req.querry.id},{$set:req.body},function(err,wres){
+                        guidelineFile.update({_id:req.query.id},{$set:req.body},function(err,wres){
                             if(err){
                                 handleError(res,err,500);
                             }else{

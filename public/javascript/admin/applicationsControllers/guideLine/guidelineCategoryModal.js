@@ -12,6 +12,8 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
 
     onInit();
 
+    $scope.showErr=false;
+
     $scope.closeModal = function(){
         $modalInstance.close();
     };
@@ -28,10 +30,13 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
       var categoryToEdit = category._id;
         category.lastModified = new Date();
         delete category['_id'];
-        GuideLineService.category.update({id:categoryToEdit},category).$promise.then(function(resp){
+        GuideLineService.category.update({id:categoryToEdit,name:category.name},category).$promise.then(function(resp){
             $state.reload();
             $modalInstance.close();
-        })
+        }).catch(function(err){
+            $scope.showErr = true;
+            console.log(err);
+        });
 
     };
 }]);
