@@ -1517,13 +1517,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if (err){
                     handleError(res,err,500);
                 }else{
-                    guidelineCategory.update({},{lastModified:new Date()},{multi:true},function(err, updated){
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res,updated);
-                        }
-                    });
+                    handleSuccess(res,wres);
                 }
             });
         })
@@ -1597,7 +1591,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                    handleSuccess(res,wres);
                }
            })
-        })
+        });
 
     router.route('/admin/events/events')
         .get(function (req, res) {

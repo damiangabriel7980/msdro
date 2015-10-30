@@ -3,6 +3,7 @@
  */
 var guidelineCategory = require('./models/guidelineCategory');
 var guidelineFile = require ('./models/guidelineFile');
+var ModelInfos = require('./modules/modelInfos');
 var async = require('async');
 
 module.exports = function(app, logger, router) {
@@ -20,21 +21,26 @@ module.exports = function(app, logger, router) {
 
     router.route('/last_updated')
         .get(function (req, res) {
-
-        guidelineCategory.find({$and:[{'enabled':true},{'lastModified':{$gt:req.query.timestamp}}]},function(err,categories){
-            if(err){
-                handleError(res,err ,500);
-            }
-            else if (categories.length == 0){
-                handleSuccess(res,304,16);
-            }else{
-                handleSuccess(res,categories);
-            }
-        })
-    });
+            ModelInfos.getLastUpdate('guideline').then(function(resp){
+                if(new Date(resp).getTime() > req.query.timestamp){
+                    guidelineCategory.find({'enabled':true},function(err,categories){
+                        if(err){
+                            handleError(res,err ,500);
+                        }
+                        else if (categories.length == 0){
+                            handleSuccess(res,304,16);
+                        }else{
+                            handleSuccess(res,categories);
+                        }
+                    });
+                }else{
+                    handleSuccess(res,304,16);
+                }
+            });
+        });
     router.route('/category')
         .get(function(req,res){
-            guidelineFile.find({$and:[{'enabled':true},{'lastModified':{$gt:req.query.timestamp}},{'guidelineCategoryId':req.query.id}]}).select('_id type guidelineFileUrl displayName lastModified').exec(function(err,files){
+            guidelineFile.find({$and:[{'enabled':true},{'guidelineCategoryId':req.query.id}]}).select('_id type guidelineFileUrl displayName lastModified creationDate').exec(function(err,files){
                 if(err){
                     handleError(res,err,500);
                 }
@@ -44,7 +50,6 @@ module.exports = function(app, logger, router) {
                 else{
                     var filesToSend = [];
                     async.each(files,function(file,callback){
-
                         filesToSend.push(file);
                         callback();
                     },function(filesToSend){
