@@ -1,7 +1,7 @@
 /**
  * Created by user on 26.10.2015.
  */
-controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance','GuideLineService','Success','$timeout','$state',function($scope,idToEdit,$modalInstance,GuideLineService,Success,$timeout,$state){
+controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance','GuideLineService','Success','$timeout','$state','$rootScope',function($scope,idToEdit,$modalInstance,GuideLineService,Success,$timeout,$state,$rootScope){
 
     $scope.idToEdit = idToEdit;
     $scope.guidelineFileBody = null;
@@ -17,7 +17,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
 
     $scope.$on('fileUpdated',function(event,updateFileInfo){
-        $scope.file.guidelineFileUrl = $scope.bucketUrl + updateFileInfo;
+        $scope.file.guidelineFileUrl = $rootScope.pathAmazonDev + updateFileInfo;
         $scope.file.actualName = updateFileInfo.split('/').pop();
         $scope.file.displayName = $scope.file.actualName.split('.',1)
     });
