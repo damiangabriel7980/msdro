@@ -39,6 +39,7 @@ var MailerModule = require('../modules/mailer');
 var UtilsModule = require('../modules/utils');
 var SessionStorage = require('../modules/sessionStorage');
 var ConferencesModule = require('../modules/Conferences');
+var ModelInfos = require('../modules/modelInfos');
 var ContentVerifier = require('../modules/contentVerifier');
 
 //special Products
@@ -132,7 +133,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         next(); // if the middleware allowed us to get here,
         // just move on to the next route handler
     });
-
 
     //================================================================================================================= ADMIN ROUTES
 
@@ -1497,6 +1497,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
+                                ModelInfos.recordLastUpdate("guideline");
                                 handleSuccess(res,wres);
                             }
                         });
@@ -1505,6 +1506,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
+                                ModelInfos.recordLastUpdate("guideline");
                                 handleSuccess(res,wres);
                             }
                         });
@@ -1519,6 +1521,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if (err){
                     handleError(res,err,500);
                 }else{
+                    ModelInfos.recordLastUpdate("guideline");
                     handleSuccess(res,wres);
                 }
             });
@@ -1560,26 +1563,29 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .put(function(req,res){
             guidelineFile.findOne({$and:[{'displayName':req.query.displayName},{'guidelineCategoryId':req.query.guidelineCategoryId}]},function(err,resp){
-                if(err){
+                if (err){
                     handleError(res,err,500);
                 }else{
                     if(!resp){
-                        guidelineFile.update({_id:req.query.id},{$set:req.body},function(err,wres){
+                        guidelineFile.update({_id: req.query.id}, {$set: req.body}, function (err, wres) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
-                                handleSuccess(res,wres);
+                                ModelInfos.recordLastUpdate("guideline");
+                                handleSuccess(res, wres);
                             }
                         });
-                    }else if(req.query.id == resp._id){
-                        guidelineFile.update({_id:req.query.id},{$set:req.body},function(err,wres){
+                    } else if(req.query.id == resp._id){
+                        guidelineFile.update({_id: req.query.id}, {$set: req.body}, function (err, wres) {
+
                             if(err){
                                 handleError(res,err,500);
                             }else{
-                                handleSuccess(res,wres);
+                                ModelInfos.recordLastUpdate("guideline");
+                                handleSuccess(res, wres);
                             }
                         });
-                    }else{
+                    } else {
                         handleError(res,null,400,43);
                     }
                 }
@@ -1590,6 +1596,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                if(err){
                    handleError(res,err,500);
                }else{
+                   ModelInfos.recordLastUpdate("guideline");
                    handleSuccess(res,wres);
                }
            })

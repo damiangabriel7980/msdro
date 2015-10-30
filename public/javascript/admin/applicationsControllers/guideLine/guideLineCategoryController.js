@@ -1,7 +1,7 @@
 /**
  * Created by user on 23.10.2015.
  */
-controllers.controller('guideLinesCategoryController',['$scope','GuideLineService','Success','ngTableParams','ActionModal','$filter','$state','$modal',function($scope,GuideLineService,Success,ngTableParams,ActionModal,$filter,$state,$modal){
+controllers.controller('guideLinesCategoryController',['$scope','GuideLineService','Success','ngTableParams','ActionModal','$filter','$state','$modal','AmazonService',function($scope,GuideLineService,Success,ngTableParams,ActionModal,$filter,$state,$modal,AmazonService){
 
     var refreshCategory = function (){
         GuideLineService.category.query().$promise.then(function(resp){
@@ -37,7 +37,7 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
     };
 
     $scope.disableCategory=function (id,category){
-       ActionModal.show("Dezactiveaza fisierul","Sunteti sigur ca doriti sa dezactivati fisierul?",function(){ var toEdit = category;
+       ActionModal.show("Dezactiveaza categorie","Sunteti sigur ca doriti sa dezactivati categoria?",function(){ var toEdit = category;
                toEdit.enabled = !toEdit.enabled;
 
                delete toEdit['_id'];
@@ -66,7 +66,23 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
         })
     }
 
-    $scope.removeCategory = function(id){
+    var deleteFromAmazon = function(path){
+        if(path){
+            var filePath = path.substring(AmazonService.getBucketUrl().length);
+            AmazonService.deleteFile(filePath, function (err, success) {
+                if(err){
+                    ActionModal.show("Eroare la stergerea fisierului");
+                }else{
+
+                }
+            })
+        }
+    };
+
+    $scope.removeCategory = function(id,path){
+        if(path){
+            deleteFromAmazon(path);
+        }
         ActionModal.show("Stergere categorie", "Sunteti sigur ca doriti sa stergeti categoria?", function () {
             GuideLineService.category.delete({id: id}).$promise.then(function () {
                 $state.reload();

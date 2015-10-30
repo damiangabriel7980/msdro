@@ -1,7 +1,7 @@
 /**
  * Created by user on 28.10.2015.
  */
-controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','idToEdit','Success','$modalInstance','$state',function($scope,GuideLineService,idToEdit,Success,$modalInstance,$state){
+controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','idToEdit','Success','$modalInstance','$state','$rootScope',function($scope,GuideLineService,idToEdit,Success,$modalInstance,$state,$rootScope){
         $scope.toEdit = idToEdit;
 
         var onInit = function(){
@@ -19,7 +19,7 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
     };
 
     $scope.$on('fileUpdated',function(event,imgUrl){
-        $scope.category.imageUrl = imgUrl;
+        $scope.category.imageUrl =$rootScope.pathAmazonDev+ imgUrl;
     });
 
     $scope.$on('fileDeleted',function(event){

@@ -22,13 +22,6 @@ guidelineCategorySchema.pre('save',function(next){
     });
 });
 
-guidelineCategorySchema.pre('update',function(next){
-    this.last_modified = Date.now();
-    ModelInfos.recordLastUpdate("guideline").then(function () {
-        next();
-    });
-});
-
 
 guidelineCategorySchema.pre('remove',function(next){
     this.last_modified = Date.now();
