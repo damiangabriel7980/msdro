@@ -3,7 +3,7 @@
 </div>
 <div class="col-md-12">
     <div class="titleAndButton">
-        <div><h3>File:</h3></div>
+        <div><h3>Fisier:</h3></div>
         <div>
             <div class="btn btn-primary" ng-click="addFile()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
             <!--<button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din CSV</button>-->
@@ -11,13 +11,13 @@
     </div>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="file in $data">
-            <td data-title="' Display Name'" filter="{ 'displayName': 'text' }" sortable="'displayName'">
+            <td data-title="' Nume afisat'" filter="{ 'displayName': 'text' }" sortable="'displayName'">
                 {{file.displayName}}
             </td>
-            <td data-title="' Actual Name'" filter="{ 'actualName': 'text' }" sortable="'actualName'">
+            <td data-title="' Numele fisierului'" filter="{ 'actualName': 'text' }" sortable="'actualName'">
                 {{file.actualName}}
             </td>
-            <td data-title="'Category'" filter="{'category':'text'}"sortable="'category'">
+            <td data-title="'Categorie'" filter="{'category':'text'}"sortable="'category'">
                 {{file.guidelineCategoryName}}
             </td>
             <td data-title="'Download Url'" sortable="'downloadUrl'">

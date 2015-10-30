@@ -12,18 +12,31 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
 
     onInit();
 
+    $scope.showErr=false;
+
     $scope.closeModal = function(){
         $modalInstance.close();
     };
+
+    $scope.$on('fileUpdated',function(event,imgUrl){
+        $scope.category.imageUrl = imgUrl;
+    });
+
+    $scope.$on('fileDeleted',function(event){
+        $scope.category.imageUrl='';
+    });
 
     $scope.save=function(category){
       var categoryToEdit = category._id;
         category.lastModified = new Date();
         delete category['_id'];
-        GuideLineService.category.update({id:categoryToEdit},category).$promise.then(function(resp){
+        GuideLineService.category.update({id:categoryToEdit,name:category.name},category).$promise.then(function(resp){
             $state.reload();
             $modalInstance.close();
-        })
+        }).catch(function(err){
+            $scope.showErr = true;
+            console.log(err);
+        });
 
     };
 }]);

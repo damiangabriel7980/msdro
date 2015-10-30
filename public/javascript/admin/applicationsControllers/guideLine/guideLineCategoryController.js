@@ -32,28 +32,32 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
 
     $scope.addCategory = function(){
         GuideLineService.category.create().$promise.then(function(resp){
-            refreshCategory();
+            $state.reload();
         })
     };
 
     $scope.disableCategory=function (id,category){
-        var toEdit = category;
-        toEdit.enabled = !toEdit.enabled;
+       ActionModal.show("Dezactiveaza fisierul","Sunteti sigur ca doriti sa dezactivati fisierul?",function(){ var toEdit = category;
+               toEdit.enabled = !toEdit.enabled;
 
-        delete toEdit['_id'];
-        GuideLineService.category.update({id:id},toEdit).$promise.then(function(resp){
-            refreshCategory();
-        }).catch(function(err){
+               delete toEdit['_id'];
+               GuideLineService.category.update({id:id},toEdit).$promise.then(function(resp){
+                   refreshCategory();
+               }).catch(function(err){
 
-        });
+               });}
+           ,{
+               yes:"Da"
+           });
 
     };
 
     $scope.editCategory = function(id){
         $modal.open({
             templateUrl: 'partials/admin/applications/guideLines/guidelineCategoryModal.html',
-            windowClass: 'fade',
+            windowClass: 'fade stretch',
             controller: 'guidelineCategoryModal',
+            backdrop:'static',
             resolve: {
                 idToEdit: function () {
                     return id;

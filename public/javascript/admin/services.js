@@ -532,7 +532,7 @@ services.factory('ApplicationService',['$resource',function($resource){
 
 services.factory('GuideLineService',['$resource',function($resource){
         return{
-            category:$resource('api//admin/applications/guidelines/Category',{},{
+            category:$resource('api/admin/applications/guidelines/Category',{},{
                 query:{method:'GET',isArray:false},
                 create:{method:'POST',isArray:false},
                 update:{method:'PUT',isArray:false},

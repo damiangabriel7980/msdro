@@ -4,7 +4,10 @@ var q = require('q');
 exports.recordLastUpdate = function (modelName) {
 	var deferred = q.defer();
 	ModelInfos.update({model_name: modelName}, {$set: {last_update: new Date()}}, function (err, wres) {
-		deferred.resolve();
+		if(err)
+			deferred.reject(err);
+		else
+			deferred.resolve(wres);
 	});
 	return deferred.promise;
 };
