@@ -35,7 +35,8 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
     };
 
     $scope.disableFile = function(id,file){
-        ActionModal.show("Dezactiveaza categoria","Sunteti sigur ca doriti sa dezactivati categoria?",function(){
+        ActionModal.show(file.enabled?"Dezactiveaza fisierul":"Activeaza fisierul",
+            file.enabled?"Sunteti sigur ca doriti sa dezactivati fisierul?":"Sunteti sigur ca doriti sa activati fisierul?",function(){
             var toEdit = file;
             toEdit.enabled = !toEdit.enabled;
             delete toEdit['_id'];
