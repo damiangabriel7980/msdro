@@ -30,7 +30,7 @@ module.exports = function(app, logger, router) {
                         else if (categories.length == 0){
                             handleSuccess(res,304,16);
                         }else{
-                            handleSuccess(res,categories);
+                            res.send(categories);
                         }
                     });
                 }else{
