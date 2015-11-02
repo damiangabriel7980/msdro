@@ -4,16 +4,21 @@
 controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance','GuideLineService','Success','$timeout','$state','$rootScope',function($scope,idToEdit,$modalInstance,GuideLineService,Success,$timeout,$state,$rootScope){
 
     $scope.idToEdit = idToEdit;
-    $scope.guidelineFileBody = null;
+
     $scope.showErr = false;
 
-    $scope.resetAlert = function (type, text) {
-        $scope.alert = {
-            type: type?type:"danger",
-            show: text?true:false,
-            text: text
+    var checkForCategory = function(){
+        for(var i = 0 ; i< $scope.categories.length;i++){
+            if($scope.categories[i].name == $scope.file.guidelineCategoryName){
+                $scope.selectedCategory = $scope.categories[i];
+                break;
+            }
+            else{
+                $scope.selectedCategory = null;
+            }
         }
     };
+
 
 
     $scope.$on('fileUpdated',function(event,updateFileInfo){
@@ -38,10 +43,10 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
    GuideLineService.file.query({id:$scope.idToEdit}).$promise.then(function(resp){
         $scope.file = Success.getObject(resp);
-       $scope.selectedCategory = $scope.file.guidelineCategoryName;
+       checkForCategory();
     }).catch(function(err){
 
-    });
+   });
 
    };
 
@@ -52,6 +57,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
     var prepareFile = function(file){
 
         file.lastModified = new Date();
+        console.log($scope.selectedCategory);
         file.guidelineCategoryName = $scope.selectedCategory.name;
         file.guidelineCategoryId = $scope.selectedCategory._id;
         delete file['_id'];
@@ -61,6 +67,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
     $scope.save = function(file){
         var fileIdToEdit = file._id;
         var fileToEdit = prepareFile(file);
+        console.log(fileToEdit);
 
         GuideLineService.file.update({id:fileIdToEdit,displayName:file.displayName,guidelineCategoryId:file.guidelineCategoryId},fileToEdit).$promise.then(function(resp) {
             $state.reload();
