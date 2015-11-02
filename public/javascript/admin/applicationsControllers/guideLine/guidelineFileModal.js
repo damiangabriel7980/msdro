@@ -22,7 +22,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
 
     $scope.$on('fileUpdated',function(event,updateFileInfo){
-        $scope.file.guidelineFileUrl = $rootScope.pathAmazonDev + updateFileInfo;
+        $scope.file.guidelineFileUrl = updateFileInfo.replace(/\s/g, '');
         $scope.file.actualName = updateFileInfo.split('/').pop();
         $scope.file.displayName = $scope.file.actualName.split('.',1)
     });

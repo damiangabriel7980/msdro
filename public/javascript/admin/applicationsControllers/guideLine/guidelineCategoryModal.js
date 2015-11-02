@@ -20,6 +20,7 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
 
     $scope.$on('fileUpdated',function(event,imgUrl){
         $scope.category.imageUrl =$rootScope.pathAmazonDev+ imgUrl;
+        $scope.category.imageUrl = $scope.category.imageUrl.replace(/\s/g, '');
     });
 
     $scope.$on('fileDeleted',function(event){
