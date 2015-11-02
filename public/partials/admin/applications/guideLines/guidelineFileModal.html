@@ -35,7 +35,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <s3-upload-manager ng-if="!fileEditForm.$invalid" extension="pdf" label="fisier" bucket="{{amazonBucket}}" path="{{'guideline/category/'+selectedCategory._id+'/file/'+file._id+'/'}}"></s3-upload-manager>
+                <s3-upload-manager ng-if="!fileEditForm.$invalid" extension="pdf" label="fisier" bucket="{{amazonBucket}}" path="{{'guideline/category/file/'}}"></s3-upload-manager>
             </div>
 
         </div>

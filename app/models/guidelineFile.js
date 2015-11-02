@@ -11,8 +11,7 @@ var guidelineFileSchema = new Schema({
     actualName:String,
     type : {type:String,default:'PDF'},
     creationDate: Date,
-    lastModified: Date,
-    guidelineCategoryId:{type:Schema.Types.ObjectId,ref:'guidelineCategory'},
+    lastModified: {type:Date,default:new Date()},
     guidelineCategoryName:String,
     enabled:{type:Boolean,default:false}
 });

@@ -11,8 +11,8 @@ var guidelineCategorySchema = new Schema({
     imageUrl: String,
     enabled:{type:Boolean,default:false},
     lastModified: Date,
-    creationDate:Date,
-    guidelineFileIds:[{type:Schema.Types.ObjectId , ref:'guidelineFile'}]
+    creationDate:{type:Date,default:new Date()},
+    guidelineFiles:[{type:Schema.Types.ObjectId , ref:'guidelineFile'}]
 });
 
 guidelineCategorySchema.pre('save',function(next){
