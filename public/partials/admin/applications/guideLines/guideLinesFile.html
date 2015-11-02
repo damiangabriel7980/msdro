@@ -20,9 +20,6 @@
             <td data-title="'Categorie'" filter="{'guidelineCategoryName':'text'}"sortable="'guidelineCategoryName'">
                 {{file.guidelineCategoryName}}
             </td>
-            <td data-title="'Download Url'" sortable="'guidelineFileUrl'">
-                {{file.guidelineFileUrl? pathAmazonDev + file.guidelineFileUrl: ''}}
-            </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
                     <div class="btn btn-primary" ng-click="editFile(file._id)"><i class="glyphicon glyphicon-cog"></i></div>
