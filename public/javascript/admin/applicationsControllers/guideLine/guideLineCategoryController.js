@@ -37,7 +37,9 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
     };
 
     $scope.disableCategory=function (id,category){
-       ActionModal.show("Dezactiveaza categorie","Sunteti sigur ca doriti sa dezactivati categoria?",function(){ var toEdit = category;
+        console.log(category);
+       ActionModal.show(category.enabled?"Dezactiveaza categorie":"Activeaza categorie",
+           category.enabled?"Sunteti sigur ca doriti sa dezactivati categoria?":"Sunteti sigur ca doriti sa activati categoria?",function(){ var toEdit = category;
                toEdit.enabled = !toEdit.enabled;
 
                delete toEdit['_id'];

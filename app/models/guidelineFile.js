@@ -14,7 +14,7 @@ var guidelineFileSchema = new Schema({
     lastModified: Date,
     guidelineCategoryId:{type:Schema.Types.ObjectId,ref:'guidelineCategory'},
     guidelineCategoryName:String,
-    enabled:{type:Boolean,default:true}
+    enabled:{type:Boolean,default:false}
 });
 
 guidelineFileSchema.pre('save',function(next){

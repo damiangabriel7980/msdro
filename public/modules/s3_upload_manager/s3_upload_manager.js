@@ -118,11 +118,6 @@
                 };
 
                 scope.s3ManagerFileSelected = function ($files, $event) {
-                   //if(limit && $files.length > limit){
-                   //    resetS3Alert("danger", "Ati incarcat deja un fisier");
-                   //}else{
-                   //    selectFiles($files,$event);
-                   //}
                     selectFiles($files,$event);
 
                 };

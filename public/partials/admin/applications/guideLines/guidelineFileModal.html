@@ -22,9 +22,9 @@
             </div>
             <div ng-show="showErr" style="text-align: center"><p style="color:red">Exista deja un fisier cu acest nume</p></div>
             <div class="form-group">
-                <label>Donwload url:</label>
+                <label>Download URL :</label>
 
-                <p>{{file.guidelineFileUrl}}</p>
+                <p>{{file.guidelineFileUrl? pathAmazonDev + file.guidelineFileUrl:''}}</p>
 
             </div>
             <div class="form-group">

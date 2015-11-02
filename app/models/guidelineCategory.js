@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 var guidelineCategorySchema = new Schema({
     name: String,
     imageUrl: String,
-    enabled:{type:Boolean,default:true},
+    enabled:{type:Boolean,default:false},
     lastModified: Date,
     creationDate:Date,
     guidelineFileIds:[{type:Schema.Types.ObjectId , ref:'guidelineFile'}]

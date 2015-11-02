@@ -21,7 +21,7 @@
                 {{file.guidelineCategoryName}}
             </td>
             <td data-title="'Download Url'" sortable="'downloadUrl'">
-                {{file.guidelineFileUrl}}
+                {{file.guidelineFileUrl? pathAmazonDev + file.guidelineFileUrl: ''}}
             </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
