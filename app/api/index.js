@@ -1526,17 +1526,28 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             handleError(res,err,500);
                         }else if(files.length > 0){
                             async.each(files,function(file,callback){
-                                amazon.deleteObjectS3(file.guidelineFileUrl,function(err,data){
-                                    if(err){
-                                        handleError(res,err,500);
-                                    }else{
-                                        guidelineFile.findOneAndUpdate({_id:file._id},{$set:{guidelineCategoryId:null,guidelineCategoryName:null,guidelineFileUrl:null}},function(err,updated){
-                                            if(err){
-                                                handleError(res,err,500);
-                                            }
-                                        });
-                                    }
-                                });
+                                if(file.guidelineFileUrl){
+                                    amazon.deleteObjectS3(file.guidelineFileUrl,function(err,data){
+                                        if(err){
+                                            console.log(err);
+                                            handleError(res,err,500);
+                                        }else{
+                                            guidelineFile.findOneAndUpdate({_id:file._id},{$set:{guidelineCategoryId:null,guidelineCategoryName:null,guidelineFileUrl:null}},function(err,updated){
+                                                if(err){
+                                                    handleError(res,err,500);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                                else{
+                                    guidelineFile.findOneAndUpdate({_id:file._id},{$set:{guidelineCategoryId:null,guidelineCategoryName:null,guidelineFileUrl:null}},function(err,updated){
+                                        if(err){
+                                            handleError(res,err,500);
+                                        }
+                                    });
+
+                                }
                                 callback();
                             },function(){
                                 handleSuccess(res,wres);
