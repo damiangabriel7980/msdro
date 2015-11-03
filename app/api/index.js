@@ -1463,21 +1463,20 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                       }
                   })
               }  else{
-                  guidelineCategory.find({},function(err,categorys){
+                  guidelineCategory.find({}).exec(function(err,categorys){
                       if(err){
                           handleError(res,err,500);
                       }else{
                           handleSuccess(res,categorys);
                       }
-                  })
+                  });
               }
         })
 
         .post(function(req,res){
             var toSave = new guidelineCategory({
                 name:'Untitled',
-                lastModified:new Date(),
-                creationDate : new Date()
+                lastModified:new Date()
             });
             toSave.save(function(err,saved){
                 if(err){
@@ -1490,11 +1489,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .put(function(req,res){
             guidelineCategory.findOne({name:req.query.name},function(err,resp){
                 if (err){
+                    console.log(err);
                     handleError(res,err,500);
                 }else{
                     if(!resp){
                         guidelineCategory.update({_id:req.query.id},{$set:req.body},function(err,wres){
                             if(err){
+                                console.log(err);
                                 handleError(res,err,500);
                             }else{
                                 ModelInfos.recordLastUpdate("guideline");
@@ -1504,6 +1505,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }else if(req.query.id == resp._id ){
                         guidelineCategory.update({_id:req.query.id},{$set:req.body},function(err,wres){
                             if(err){
+                                console.log(err);
                                 handleError(res,err,500);
                             }else{
                                 ModelInfos.recordLastUpdate("guideline");
@@ -1517,51 +1519,38 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             })
         })
         .delete(function(req,res){
-            guidelineCategory.remove({_id:req.query.id},function(err,wres){
+            guidelineCategory.findOne({_id:req.query.id},function(err,wres){
                 if (err){
                     handleError(res,err,500);
                 }else{
-                    ModelInfos.recordLastUpdate("guideline");
-                    guidelineFile.find({guidelineCategoryId:req.query.id},function(err,files){
-                        if(err){
-                            handleError(res,err,500);
-                        }else if(files.length > 0){
-                            async.each(files,function(file,callback){
-                                if(file.guidelineFileUrl){
-                                    amazon.deleteObjectS3(file.guidelineFileUrl,function(err,data){
-                                        if(err){
-                                            console.log(err);
-                                            handleError(res,err,500);
-                                        }else{
-                                            guidelineFile.findOneAndUpdate({_id:file._id},{$set:{guidelineCategoryId:null,guidelineCategoryName:null,guidelineFileUrl:null}},function(err,updated){
-                                                if(err){
-                                                    handleError(res,err,500);
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                                else{
-                                    guidelineFile.findOneAndUpdate({_id:file._id},{$set:{guidelineCategoryId:null,guidelineCategoryName:null,guidelineFileUrl:null}},function(err,updated){
-                                        if(err){
-                                            handleError(res,err,500);
-                                        }
-                                    });
-
-                                }
-                                callback();
-                            },function(){
-                                handleSuccess(res,wres);
-                            });
-                        }
-                        else{
-                            handleSuccess(res,wres);
-                        }
-
-                    });
+                        if(wres.imageUrl){
+                        amazon.deleteObjectS3(wres.imageUrl,function(err,data){
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                guidelineCategory.remove({_id:req.query.id},function(err,deleted){
+                                    if(err){
+                                        handleError(err,500);
+                                    }else{
+                                        ModelInfos.recordLastUpdate("guideline");
+                                        handleSuccess(res,deleted);
+                                    }
+                                })
+                            }
+                        })
+                            } else {
+                                guidelineCategory.remove({_id: req.query.id}, function (err, deleted) {
+                                    if (err) {
+                                        handleError(err, 500);
+                                    } else {
+                                        ModelInfos.recordLastUpdate("guideline");
+                                        handleSuccess(res, deleted);
+                                    }
+                                })
+                            }
                 }
             });
-        })
+        });
     router.route('/admin/applications/guidelines/File')
         .get(function(req,res){
             if(req.query.id){
@@ -1586,7 +1575,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
               var toSave = new guidelineFile({
                   displayName:'Untitled',
                   actualName:'Untitled',
-                  creationDate:new Date(),
                   lastModified:new Date()
               });
               toSave.save(function(err,saved){
@@ -1598,31 +1586,46 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 })
         })
         .put(function(req,res){
-            guidelineFile.findOne({$and:[{'displayName':req.query.displayName},{'guidelineCategoryId':req.query.guidelineCategoryId}]},function(err,resp){
+            console.log(req.query);
+            guidelineFile.findOne({'displayName':req.query.displayName},function(err,resp){
                 if (err){
                     handleError(res,err,500);
                 }else{
                     if(!resp){
-                        guidelineFile.update({_id: req.query.id}, {$set: req.body}, function (err, wres) {
+                        guidelineFile.update({_id: req.query.fileId}, {$set: req.body}, function (err, wres) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
-                                ModelInfos.recordLastUpdate("guideline");
-                                handleSuccess(res, wres);
+                                guidelineCategory.update({_id:req.query.categoryId},{$push:{guidelineFiles:req.query.fileId}},function(err,nres){
+                                    if (err){
+                                        handleError(res,err,500);
+                                    }else{
+                                        ModelInfos.recordLastUpdate("guideline");
+                                        handleSuccess(res,nres);
+                                    }
+                                })
                             }
                         });
-                    } else if(req.query.id == resp._id){
-                        guidelineFile.update({_id: req.query.id}, {$set: req.body}, function (err, wres) {
-
+                    } else if(req.query.fileId == resp._id){
+                        guidelineFile.update({_id: req.query.fileId}, {$set: req.body}, function (err, wres) {
                             if(err){
                                 handleError(res,err,500);
-                            }else{
-                                ModelInfos.recordLastUpdate("guideline");
-                                handleSuccess(res, wres);
+                            }else {
+                                if (req.query.categoryId) {
+                                    guidelineCategory.update({_id:req.query.categoryId},{$pull:{guidelineFiles:req.query.fileId}},{$push:{guidelineFiles:req.query.fileId}},function(err,nres){
+                                        if (err){
+                                            handleError(res,err,500);
+                                        }else{
+                                            ModelInfos.recordLastUpdate("guideline");
+                                            handleSuccess(res,nres);
+                                        }
+                                    })
+                                }
+                                else {
+                                    handleError(res,null,400,43);
+                                }
                             }
                         });
-                    } else {
-                        handleError(res,null,400,43);
                     }
                 }
             });
@@ -1632,8 +1635,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                if(err){
                    handleError(res,err,500);
                }else{
-                   ModelInfos.recordLastUpdate("guideline");
-                   handleSuccess(res,wres);
+                   guidelineCategory.update({guidelineFiles:req.query.id},{$pull:{guidelineFiles:req.query.id}},function(err,removed){
+                       if(err){
+                           handleError(res,err,500);
+                       }else{
+                           handleSuccess(res,removed);
+                       }
+                   })
                }
            })
         });

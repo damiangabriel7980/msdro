@@ -11,11 +11,8 @@
     </div>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="category in $data">
-            <td data-title="' Nume'" filter="{ 'name': 'text' }" sortable="'displayName'">
+            <td data-title="' Nume'" filter="{ 'name': 'text' }" sortable="'name'">
                 {{category.name}}
-            </td>
-            <td data-title="' Url imagine'" >
-                {{category.imageUrl}}
             </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">

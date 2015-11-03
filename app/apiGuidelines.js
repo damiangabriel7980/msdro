@@ -21,8 +21,9 @@ module.exports = function(app, logger, router) {
 
     router.route('/last_updated')
         .get(function (req, res) {
+            if(req.query.lastModified){
             ModelInfos.getLastUpdate('guideline').then(function(resp){
-                if(new Date(resp).getTime() > req.query.timestamp){
+                if(new Date(resp).getTime() > new Date(req.query.lastModified).getTime()){
                     guidelineCategory.find({'enabled':true},function(err,categories){
                         if(err){
                             handleError(res,err ,500);
@@ -30,30 +31,39 @@ module.exports = function(app, logger, router) {
                         else if (categories.length == 0){
                             handleSuccess(res,304,16);
                         }else{
-                            handleSuccess(res,categories);
+                            res.send(categories);
                         }
                     });
                 }else{
                     handleSuccess(res,304,16);
                 }
             });
+            }else{
+                guidelineCategory.find({'enabled':true}).select('_id lastModified name creationDate imageUrl').exec(function(err,categories){
+                    if(err){
+                        handleError(res,err,500)
+                    }else{
+                        res.send(categories);
+                    }
+                })
+            }
         });
     router.route('/category')
         .get(function(req,res){
-            guidelineFile.find({$and:[{'enabled':true},{'guidelineCategoryId':req.query.id}]}).select('_id type guidelineFileUrl displayName lastModified creationDate').exec(function(err,files){
+            guidelineCategory.find({$and:[{'enabled':true},{'_id':req.query.id}]}).populate('guidelineFiles').exec(function(err,category){
                 if(err){
                     handleError(res,err,500);
                 }
-                else if (files.length == 0){
+                else if (category.length == 0){
                     handleSuccess(res,304,16);
                 }
                 else{
                     var filesToSend = [];
-                    async.each(files,function(file,callback){
+                    async.each(category[0].guidelineFiles,function(file,callback){
                         filesToSend.push(file);
-                        callback();
+                        callback(filesToSend);
                     },function(filesToSend){
-                        handleSuccess(res,files);
+                        handleSuccess(res,filesToSend);
                     })
                 }
             })

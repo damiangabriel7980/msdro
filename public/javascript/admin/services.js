@@ -18,6 +18,10 @@ services.factory('AmazonService', ['$resource', '$rootScope', 'Success', functio
             return $rootScope.pathAmazonDev;
         },
         getClient: getClient,
+
+        getFileBody:function(){
+          return fileBody;
+        },
         uploadFile: function (fileBody, key, callback) {
             getClient(function (s3) {
                 console.log("upload file");
@@ -99,6 +103,19 @@ services.factory('AmazonService', ['$resource', '$rootScope', 'Success', functio
         getContentsAtPath: function (path, callback) {
             console.log(path);
             getClient(function (s3) {
+                s3.listObjects({Bucket: $rootScope.amazonBucket, Prefix: path, Marker: path}, function (err, data) {
+                    if(err){
+                        console.log("S3 getContentsAtPath error");
+                        console.log(err);
+                        callback(err, null);
+                    }else{
+                        callback(null, data.Contents);
+                    }
+                })
+            });
+        },
+        getFileAtPath:function(path,callback){
+            getClient(function(s3){
                 s3.listObjects({Bucket: $rootScope.amazonBucket, Prefix: path, Marker: path}, function (err, data) {
                     if(err){
                         console.log("S3 getContentsAtPath error");

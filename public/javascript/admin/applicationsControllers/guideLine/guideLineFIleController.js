@@ -40,7 +40,7 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
             var toEdit = file;
             toEdit.enabled = !toEdit.enabled;
             delete toEdit['_id'];
-            GuideLineService.file.update({id:id},toEdit).$promise.then(function(resp){
+            GuideLineService.file.update({fileId:id,displayName:toEdit.displayName},toEdit).$promise.then(function(resp){
                 refreshFiles();
             }).catch(function(err){
 

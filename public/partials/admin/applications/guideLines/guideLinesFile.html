@@ -17,11 +17,8 @@
             <td data-title="' Numele fisierului'" filter="{ 'actualName': 'text' }" sortable="'actualName'">
                 {{file.actualName}}
             </td>
-            <td data-title="'Categorie'" filter="{'guidelineCategoryName':'text'}"sortable="'category'">
+            <td data-title="'Categorie'" filter="{'guidelineCategoryName':'text'}"sortable="'guidelineCategoryName'">
                 {{file.guidelineCategoryName}}
-            </td>
-            <td data-title="'Download Url'" sortable="'downloadUrl'">
-                {{file.guidelineFileUrl? pathAmazonDev + file.guidelineFileUrl: ''}}
             </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
