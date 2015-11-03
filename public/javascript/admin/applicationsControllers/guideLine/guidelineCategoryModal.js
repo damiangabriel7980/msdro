@@ -19,6 +19,8 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
     };
 
     $scope.$on('fileUpdated',function(event,imgUrl){
+        console.log(imgUrl);
+
         $scope.category.imageUrl =$rootScope.pathAmazonDev+ imgUrl;
     });
 
@@ -27,6 +29,7 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
     });
 
     $scope.save=function(category){
+      console.log(category);
       var categoryToEdit = category._id;
         category.lastModified = new Date();
         delete category['_id'];

@@ -21,7 +21,7 @@
                 <p>{{category.imageUrl}}</p>
 
             </div>
-            <s3-upload-manager limit="1" label="imagine" bucket="{{amazonBucket}}" path="{{'guideline/category/'+category._id+'/image/'}}"></s3-upload-manager>
+            <s3-upload-manager limit="1" label="imagine" bucket="{{amazonBucket}}" path="{{category.imageUrl ? category.imageUrl:'guideline/category/image/'}}"></s3-upload-manager>
         </div>
 
         <div class="modal-footer marginTop70">
