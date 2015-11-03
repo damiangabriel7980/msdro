@@ -1550,6 +1550,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
+
     router.route('/admin/applications/guidelines/File')
         .get(function(req,res){
             if(req.query.id){
@@ -1585,46 +1586,61 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 })
         })
         .put(function(req,res){
-            console.log(req.query);
-            guidelineFile.findOne({'displayName':req.query.displayName},function(err,resp){
-                if (err){
+            guidelineFile.findOne({displayName:req.query.displayName},function(err,resp){
+                if(err){
                     handleError(res,err,500);
                 }else{
                     if(!resp){
-                        guidelineFile.update({_id: req.query.fileId}, {$set: req.body}, function (err, wres) {
+                        guidelineFile.update({_id:req.query.fileId},{$set:req.body},function(err,wres){
                             if(err){
                                 handleError(res,err,500);
                             }else{
-                                guidelineCategory.update({_id:req.query.categoryId},{$push:{guidelineFiles:req.query.fileId}},function(err,nres){
-                                    if (err){
-                                        handleError(res,err,500);
-                                    }else{
-                                        ModelInfos.recordLastUpdate("guideline");
-                                        handleSuccess(res,nres);
-                                    }
-                                })
-                            }
-                        });
-                    } else if(req.query.fileId == resp._id){
-                        guidelineFile.update({_id: req.query.fileId}, {$set: req.body}, function (err, wres) {
-                            if(err){
-                                handleError(res,err,500);
-                            }else {
-                                if (req.query.categoryId) {
-                                    guidelineCategory.update({_id:req.query.categoryId},{$pull:{guidelineFiles:req.query.fileId}},{$push:{guidelineFiles:req.query.fileId}},function(err,nres){
-                                        if (err){
+                                if(req.query.categoryId){
+                                    guidelineCategory.findOneAndUpdate({guidelineFiles: req.query.fileId},{$pull:{guidelineFiles:req.query.fileId}},function(err,updated){
+                                        if(err){
                                             handleError(res,err,500);
                                         }else{
-                                            ModelInfos.recordLastUpdate("guideline");
-                                            handleSuccess(res,nres);
+                                            guidelineCategory.update({_id:req.query.categoryId},{$push:{guidelineFiles:req.query.fileId}},function(err,updated){
+                                                if(err){
+                                                    handleError(res,err,500);
+                                                }else{
+                                                    handleSuccess(res,updated);
+                                                }
+                                            });
                                         }
-                                    })
+                                    });
+                                }else{
+                                    handleSuccess(res,wres);
                                 }
-                                else {
-                                    handleError(res,null,400,43);
-                                }
+
                             }
                         });
+                    }else if (resp._id == req.query.fileId){
+                        guidelineFile.update({_id:req.query.fileId},{$set:req.body},function(err,wres){
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                if(req.query.categoryId){
+                                    guidelineCategory.findOneAndUpdate({guidelineFiles: req.query.fileId},{$pull:{guidelineFiles:req.query.fileId}},function(err,updated){
+                                        if(err){
+                                            handleError(res,err,500);
+                                        }else{
+                                            guidelineCategory.update({_id:req.query.categoryId},{$push:{guidelineFiles:req.query.fileId}},function(err,updated){
+                                                if(err){
+                                                    handleError(res,err,500);
+                                                }else{
+                                                    handleSuccess(res,updated);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }else{
+                                    handleSuccess(res,wres);
+                                }
+                            }
+                        })
+                    }else{
+                        handleError(res,null,400,43);
                     }
                 }
             });

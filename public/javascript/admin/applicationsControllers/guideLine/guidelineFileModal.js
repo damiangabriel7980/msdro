@@ -9,7 +9,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
     $scope.fileType = 'pdf';
 
-    var path =AmazonService.getBucketUrl()+ 'guideline/category/file/';
+    var path = 'guideline/category/file/';
 
     var checkForCategory = function(){
         for(var i = 0 ; i< $scope.categories.length;i++){
@@ -36,11 +36,11 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
     var initializeS3UploadManager = function () {
         resetS3Alert("warning","Loading files...");
-        AmazonService.getFileAtPath(path, function (err, contentsArray) {
+        AmazonService.getContentsAtPath(path, function (err, contentsArray) {
             if(err){
                 resetS3Alert("danger","Error loading files");
             }else{
-                refreshList(contentsArray,$scope.file.guidelineFileUrl);
+                refreshList(contentsArray,path);
             }
         });
     };
@@ -48,18 +48,15 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
     var refreshList = function (contentsArray, filePath) {
         $scope.keys = [];
         for(var i=0; i<contentsArray.length; i++){
-            if (contentsArray[i].Key == filePath){
-            $scope.keys.push(contentsArray[i].Key);
+            if (contentsArray[i].Key == filePath + $scope.file.actualName){
+            $scope.keys.push($rootScope.pathAmazonDev + contentsArray[i].Key);
             }
+            console.log($scope.keys);
         }
         if($scope.keys.length >= 1)
-        {   console.log($scope.keys.length);
             $scope.showUploadButton = false;
-        }
-            else {
-            console.log($scope.keys.length);
+        else
             $scope.showUploadButton = true;
-        }
         $scope.showManager = true;
         resetS3Alert();
         $scope.$apply();
@@ -67,6 +64,8 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
 
     var findInKeys = function (key) {
+        console.log(key);
+        console.log($scope.keys);
         for(var i=0; i<$scope.keys.length; i++){
             if($scope.keys[i] == key) return i;
         }
@@ -76,7 +75,8 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
     var uploadFile = function (file, key) {
         resetS3Alert("warning", "Se incarca fisierul...");
-        AmazonService.uploadFile(file, key, function (err, success) {
+        var newKey = key.substring($rootScope.pathAmazonDev.length);
+        AmazonService.uploadFile(file, newKey, function (err, success) {
             if(err){
                 resetS3Alert("danger", "Eroare la upload");
             }else{
@@ -101,7 +101,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
                     if ($scope.fileType && $scope.fileType.toLowerCase() != extension) {
                         ActionModal.show("Fisierul selectat nu este suportat");
                     } else {
-                        key = path + $files[0].name;
+                        key = $rootScope.pathAmazonDev + path + $files[0].name;
 
                         //check if file exists
                         if (findInKeys(key) > -1) {
