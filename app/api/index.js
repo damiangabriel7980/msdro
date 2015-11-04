@@ -1497,8 +1497,31 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                 console.log(err);
                                 handleError(res,err,500);
                             }else{
-                                ModelInfos.recordLastUpdate("guideline");
-                                handleSuccess(res,wres);
+
+                                guidelineCategory.findOne({_id:req.query.id}).populate('guidelineFiles').exec(function(err,resp){
+                                    if (err){
+                                        handleError
+                                    }else{
+                                        async.each(resp.guidelineFiles,function(file,callback){
+                                            guidelineFile.findOneAndUpdate({_id:file._id},{$set:{guidelineCategoryName:req.query.name}},function(err,nres){
+                                                if(err){
+                                                    callback(err);
+                                                }else{
+                                                    callback();
+                                                }
+                                            })
+                                        },function(err,nres){
+                                            if(err){
+                                                handleError(res,err,500);
+                                            }else{
+                                                ModelInfos.recordLastUpdate("guideline");
+                                                handleSuccess(res,nres)
+                                            }
+                                        });
+                                    }
+                                })
+                                // 
+                                // handleSuccess(res,wres);
                             }
                         });
                     }else if(req.query.id == resp._id ){
