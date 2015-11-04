@@ -24,14 +24,14 @@
             <div class="form-group">
                 <label>Download URL :</label>
 
-                <p>{{file.guidelineFileUrl? pathAmazonDev + file.guidelineFileUrl:''}}</p>
+                <p>{{file.guidelineFileUrl? file.guidelineFileUrl:''}}</p>
 
             </div>
             <div class="form-group">
                 <label>Categorie:</label>
 
                 <select  ng-model="selectedCategory" class="form-control ng-pristine ng-valid ng-touched" style="width: 100%"
-                        ng-options="category.name for category in categories" required>
+                        ng-options="category.name for category in categories" >
                 </select>
             </div>
             <!--<div class="form-group">-->
@@ -50,9 +50,9 @@
                     </div>
                     <div class="col-md-12 noPadding" style="border:1px solid #f5f5f5" ng-repeat="key in keys track by $index">
                         <div class="col-md-1 noPadding">
-                            <img style="width: 100%" ng-src="{{bucketUrl+key}}">
+                            <img style="width: 100%" ng-src="{{key}}">
                         </div>
-                        <div class="col-md-10">{{bucketUrl+key}}</div>
+                        <div class="col-md-10">{{ key}}</div>
                         <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeKey($index)"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
                     </div>
                 </div>
@@ -63,8 +63,7 @@
         <div class="modal-footer marginTop70">
 
             <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
-            <button type="submit" class="btn btn-primary pull-right" ng-disabled="fileEditForm.$invalid"
-                    ng-click="save(file)" >Salveaza
+            <button type="submit" class="btn btn-primary pull-right" ng-click="save(file)" >Salveaza
             </button>
         </div>
     </form>
