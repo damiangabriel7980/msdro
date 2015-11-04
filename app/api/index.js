@@ -1650,7 +1650,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                if(err){
                    handleError(res,err,500);
                }else{
-                   guidelineCategory.update({guidelineFiles:req.query.id},{$pull:{guidelineFiles:req.query.id}},function(err,removed){
+                   guidelineCategory.update({guidelineFiles:req.query.id},{$pull:{guidelineFiles:req.query.id},lastModified:new Date()},function(err,removed){
                        if(err){
                            handleError(res,err,500);
                        }else{
