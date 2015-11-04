@@ -110,6 +110,7 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
             }else{
                 resetS3Alert();
                 $scope.keys.splice(index,1);
+                $scope.showUploadButton = true;
                 $rootScope.$broadcast('fileDeleted');
                 $scope.$apply();
             }

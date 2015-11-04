@@ -1569,13 +1569,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
          })
 
-           // guidelineCategory.remove({_id:req.query.id},function(err,deleted){
-           //  if (err){
-           //      handleError(res,err,500);
-           //  }else{
-
-           //  }
-           // })
         });
 
     router.route('/admin/applications/guidelines/File')
@@ -1620,6 +1613,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     if(!resp){
                         guidelineFile.update({_id:req.query.fileId},{$set:req.body},function(err,wres){
                             if(err){
+                                console.log(err);
                                 handleError(res,err,500);
                             }else{
                                 if(req.query.categoryId){
