@@ -69,23 +69,24 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
         })
     }
 
-    //var deleteFromAmazon = function(path){
-    //    if(path){
-    //        var filePath = path.substring(AmazonService.getBucketUrl().length);
-    //        AmazonService.deleteFile(filePath, function (err, success) {
-    //            if(err){
-    //                ActionModal.show("Eroare la stergerea fisierului");
-    //            }else{
-    //
-    //            }
-    //        })
-    //    }
-    //};
+    var deleteFromAmazon = function(path){
+       if(path){
+           var filePath = path.substring(AmazonService.getBucketUrl().length);
+           AmazonService.deleteFile(filePath, function (err, success) {
+               if(err){
+                   ActionModal.show("Eroare la stergerea fisierului");
+               }else{
+    
+               }
+           })
+       }
+    };
 
     $scope.removeCategory = function(id,path){
 
         ActionModal.show("Stergere categorie", "Sunteti sigur ca doriti sa stergeti categoria?", function () {
             GuideLineService.category.delete({id: id}).$promise.then(function () {
+                deleteFromAmazon(path);
                 $state.reload();
             });
         },{

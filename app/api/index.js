@@ -1520,8 +1520,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                         });
                                     }
                                 })
-                                // 
-                                // handleSuccess(res,wres);
                             }
                         });
                     }else if(req.query.id == resp._id ){
@@ -1541,37 +1539,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             })
         })
         .delete(function(req,res){
-            guidelineCategory.findOne({_id:req.query.id},function(err,wres){
+            guidelineCategory.findOne({_id:req.query.id}).populate('guidelineFiles').exec(function(err,resp){
                 if (err){
-                    handleError(res,err,500);
+                    handleError
                 }else{
-                        if(wres.imageUrl){
-                        amazon.deleteObjectS3(wres.imageUrl,function(err,data){
+                 async.each(resp.guidelineFiles,function(file,callback){
+                    guidelineFile.findOneAndUpdate({_id:file._id},{$set:{guidelineCategoryName:null}},function(err,nres){
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    })
+                },function(err,nres){
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        guidelineCategory.remove({_id:req.query.id},function(err,deleted){
                             if(err){
                                 handleError(res,err,500);
-                            }else{
-                                guidelineCategory.remove({_id:req.query.id},function(err,deleted){
-                                    if(err){
-                                        handleError(err,500);
-                                    }else{
-                                        ModelInfos.recordLastUpdate("guideline");
-                                        handleSuccess(res,deleted);
-                                    }
-                                })
+                            }
+                            else{
+                                ModelInfos.recordLastUpdate("guideline");
+                                handleSuccess(res,deleted)
                             }
                         })
-                            } else {
-                                guidelineCategory.remove({_id: req.query.id}, function (err, deleted) {
-                                    if (err) {
-                                        handleError(err, 500);
-                                    } else {
-                                        ModelInfos.recordLastUpdate("guideline");
-                                        handleSuccess(res, deleted);
-                                    }
-                                })
-                            }
-                }
-            });
+                     }
+                });
+            }
+         })
+
+           // guidelineCategory.remove({_id:req.query.id},function(err,deleted){
+           //  if (err){
+           //      handleError(res,err,500);
+           //  }else{
+
+           //  }
+           // })
         });
 
     router.route('/admin/applications/guidelines/File')
