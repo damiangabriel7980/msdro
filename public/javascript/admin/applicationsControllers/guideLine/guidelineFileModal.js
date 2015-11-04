@@ -184,7 +184,12 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
     var prepareFile = function(file){
 
         file.lastModified = new Date();
-        file.guidelineCategoryName = $scope.selectedCategory.name;
+        if ($scope.selectedCategory){
+            file.guidelineCategoryName = $scope.selectedCategory.name;
+            $scope.categoryId = $scope.selectedCategory._id;
+        }else{
+            $scope.categoryId = null;
+        }
         delete file['_id'];
         return file;
     };
@@ -192,9 +197,8 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
     $scope.save = function(file){
         var fileIdToEdit = file._id;
         var fileToEdit = prepareFile(file);
-        console.log(fileToEdit);
 
-        GuideLineService.file.update({fileId:fileIdToEdit,displayName:file.displayName,categoryId:$scope.selectedCategory._id},fileToEdit).$promise.then(function(resp) {
+        GuideLineService.file.update({fileId:fileIdToEdit,displayName:file.displayName,categoryId: $scope.categoryId},fileToEdit).$promise.then(function(resp) {
             $state.reload();
             $modalInstance.close();
         }).catch(function(err){
