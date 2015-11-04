@@ -47,9 +47,11 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
     var refreshList = function (contentsArray, filePath) {
         $scope.keys = [];
+        $scope.toCompare = [];
         for(var i=0; i<contentsArray.length; i++){
+            $scope.toCompare.push(contentsArray[i].Key);
             if (contentsArray[i].Key == filePath + $scope.file.actualName){
-            $scope.keys.push($rootScope.pathAmazonDev + contentsArray[i].Key);
+                $scope.keys.push($rootScope.pathAmazonDev + contentsArray[i].Key);
             }
             console.log($scope.keys);
         }
@@ -64,10 +66,10 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
 
     var findInKeys = function (key) {
-        console.log(key);
-        console.log($scope.keys);
-        for(var i=0; i<$scope.keys.length; i++){
-            if($scope.keys[i] == key) return i;
+        key = key.substring($rootScope.pathAmazonDev.length);
+        console.log($scope.toCompare);
+        for(var i=0; i< $scope.toCompare .length; i++){
+            if( $scope.toCompare[i] == key) return i;
         }
         return -1;
     };
@@ -80,7 +82,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
             if(err){
                 resetS3Alert("danger", "Eroare la upload");
             }else{
-                if(findInKeys(key) == -1) $scope.keys.push(key);
+                if(findInKeys(newKey) == -1) $scope.keys[0] = newKey;
                 resetS3Alert();
                 $scope.showUploadButton = false;
                 $scope.$apply();
