@@ -221,20 +221,4 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
     onInit();
 
-    // $scope.moveFileAmazon = function(newCategoryId){
-    //     console.log($scope.currentPath);
-    //     var newPath = path + newCategoryId;
-    //     console.log(newPath);
-    //     resetS3Alert("warning","Fisierul este mutat...");
-    //     AmazonService.moveFile({CopySource:$scope.currentPath,Key:newPath},function(err,data){
-    //         if(err){
-    //             resetS3Alert("danger", "Eroare la mutarea fisierului");
-    //         }else{
-
-    //         }
-    //     })
-
-    // }
-
-
 }]);
