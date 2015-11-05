@@ -50,7 +50,7 @@ module.exports = function(app, logger, router) {
         });
     router.route('/category')
         .get(function(req,res){
-            guidelineCategory.find({$and:[{'enabled':true},{'_id':req.query.id}]}).populate('guidelineFiles').exec(function(err,category){
+            guidelineCategory.find({$and:[{'enabled':true},{'_id':req.query.id}]}).populate('guidelineFiles',null,{enabled:true}).exec(function(err,category){
                 if(err){
                     handleError(res,err,500);
                 }
