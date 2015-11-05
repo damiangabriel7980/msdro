@@ -180,6 +180,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
    GuideLineService.file.query({id:$scope.idToEdit}).$promise.then(function(resp){
         $scope.file = Success.getObject(resp);
+        $scope.oldCategoryName = $scope.file.guidelineCategoryName;
        checkForCategory();
        initializeS3UploadManager();
     }).catch(function(err){
@@ -209,7 +210,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
         var fileToEdit = prepareFile(file);
         console.log(file);
         console.log($scope.categoryId);
-    
+        
         GuideLineService.file.update({fileId:$scope.idToEdit,displayName:file.displayName,categoryId: $scope.categoryId},fileToEdit).$promise.then(function(resp) {
             $state.reload();
             if(!keepModalOpen)
