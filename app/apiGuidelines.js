@@ -58,13 +58,8 @@ module.exports = function(app, logger, router) {
                     handleSuccess(res,304,16);
                 }
                 else{
-                    var filesToSend = [];
-                    async.each(category[0].guidelineFiles,function(file,callback){
-                        filesToSend.push(file);
-                        callback(filesToSend);
-                    },function(filesToSend){
-                        handleSuccess(res,filesToSend);
-                    })
+                    res.status(200).send(category[0].guidelineFiles);
+
                 }
             })
 

@@ -108,7 +108,15 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
                         //check if file exists
                         if (findInKeys(key) > -1) {
                             ActionModal.show("Fisierul exista", "Un fisier cu acelasi nume exista deja. Doriti sa il suprascrieti?", function () {
-                                uploadFile($files[0], key);
+                                console.log($scope.file);
+                                GuideLineService.file.delete({id:$scope.file._id}).$promise.then(function(resp){
+                                     uploadFile($files[0], key);
+                                    $modalInstance.close();
+                                    $state.reload;
+                                }).catch(function(err){
+                                    console.log(err);
+                                });
+                                
                             }, {
                                 yes: "Da"
                             });
@@ -152,11 +160,13 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
         $scope.file.guidelineFileUrl = updateFileInfo;
         $scope.file.actualName = updateFileInfo.split('/').pop();
         $scope.file.displayName = $scope.file.actualName.split('.',1)
+        $scope.save($scope.file,true);
     });
 
     $scope.$on('fileDeleted',function(event){
         $scope.file.guidelineFileUrl = '';
         $scope.file.displayName= $scope.file.actualName = 'Untitled';
+        $scope.save($scope.file,true)
     });
 
    var onInit = function(){
@@ -170,6 +180,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
    GuideLineService.file.query({id:$scope.idToEdit}).$promise.then(function(resp){
         $scope.file = Success.getObject(resp);
+        $scope.oldCategoryName = $scope.file.guidelineCategoryName;
        checkForCategory();
        initializeS3UploadManager();
     }).catch(function(err){
@@ -191,16 +202,19 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
             $scope.categoryId = null;
         }
         delete file['_id'];
+        file.displayName = $scope.file.displayName; 
         return file;
     };
 
-    $scope.save = function(file){
-        var fileIdToEdit = file._id;
+    $scope.save = function(file,keepModalOpen){
         var fileToEdit = prepareFile(file);
-
-        GuideLineService.file.update({fileId:fileIdToEdit,displayName:file.displayName,categoryId: $scope.categoryId},fileToEdit).$promise.then(function(resp) {
+        console.log(file);
+        console.log($scope.categoryId);
+        
+        GuideLineService.file.update({fileId:$scope.idToEdit,displayName:file.displayName,categoryId: $scope.categoryId},fileToEdit).$promise.then(function(resp) {
             $state.reload();
-            $modalInstance.close();
+            if(!keepModalOpen)
+                 $modalInstance.close();
         }).catch(function(err){
             console.log(err);
             $scope.showErr = true;
