@@ -20,7 +20,6 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
 
     var refreshList = function (contentsArray) {
         $scope.keys = [];
-        console.log(contentsArray);
         for(var i=0; i<contentsArray.length; i++){
             if($rootScope.pathAmazonDev + contentsArray[i].Key == $scope.category.imageUrl)
                 $scope.keys.push(contentsArray[i].Key);
@@ -150,8 +149,6 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
     };
 
     $scope.$on('fileUpdated',function(event,imgUrl){
-        console.log(imgUrl);
-
         $scope.category.imageUrl =$rootScope.pathAmazonDev+ imgUrl;
     });
 
