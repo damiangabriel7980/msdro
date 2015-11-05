@@ -15,9 +15,11 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
         for(var i = 0 ; i< $scope.categories.length;i++){
             if($scope.categories[i].name == $scope.file.guidelineCategoryName){
                 $scope.selectedCategory = $scope.categories[i];
+                $scope.currentPath = path + $scope.selectedCategory._id;
                 break;
             }
             else{
+                $scope.currentPath = path
                 $scope.selectedCategory = null;
             }
         }
@@ -53,7 +55,6 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
             if (contentsArray[i].Key == filePath + $scope.file.actualName){
                 $scope.keys.push($rootScope.pathAmazonDev + contentsArray[i].Key);
             }
-            console.log($scope.keys);
         }
         if($scope.keys.length >= 1)
             $scope.showUploadButton = false;
@@ -67,7 +68,6 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
     var findInKeys = function (key) {
         key = key.substring($rootScope.pathAmazonDev.length);
-        console.log($scope.toCompare);
         for(var i=0; i< $scope.toCompare .length; i++){
             if( $scope.toCompare[i] == key) return i;
         }
@@ -112,9 +112,8 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
                                 GuideLineService.file.delete({id:$scope.file._id}).$promise.then(function(resp){
                                      uploadFile($files[0], key);
                                     $modalInstance.close();
-                                    $state.reload;
+                                    $state.reload();
                                 }).catch(function(err){
-                                    console.log(err);
                                 });
                                 
                             }, {
@@ -174,7 +173,6 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
    GuideLineService.category.query().$promise.then(function(resp){
        $scope.categories = Success.getObject(resp);
    }).catch(function(err){
-       console.log(err);
    });
 
 
@@ -186,6 +184,8 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
     }).catch(function(err){
 
    });
+
+
    };
 
     $scope.closeModal = function () {
@@ -208,8 +208,6 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
     $scope.save = function(file,keepModalOpen){
         var fileToEdit = prepareFile(file);
-        console.log(file);
-        console.log($scope.categoryId);
         
         GuideLineService.file.update({fileId:$scope.idToEdit,displayName:file.displayName,categoryId: $scope.categoryId},fileToEdit).$promise.then(function(resp) {
             $state.reload();
@@ -222,6 +220,21 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
     };
 
     onInit();
+
+    // $scope.moveFileAmazon = function(newCategoryId){
+    //     console.log($scope.currentPath);
+    //     var newPath = path + newCategoryId;
+    //     console.log(newPath);
+    //     resetS3Alert("warning","Fisierul este mutat...");
+    //     AmazonService.moveFile({CopySource:$scope.currentPath,Key:newPath},function(err,data){
+    //         if(err){
+    //             resetS3Alert("danger", "Eroare la mutarea fisierului");
+    //         }else{
+
+    //         }
+    //     })
+
+    // }
 
 
 }]);

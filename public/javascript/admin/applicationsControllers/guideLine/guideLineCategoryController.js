@@ -6,7 +6,6 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
     var refreshCategory = function (){
         GuideLineService.category.query().$promise.then(function(resp){
             var categories = Success.getObject(resp);
-            console.log(categories);
             var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page

@@ -5,7 +5,6 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
     var refreshFiles = function (){
         GuideLineService.file.query().$promise.then(function(resp){
             var files = Success.getObject(resp);
-            console.log(files);
             var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page

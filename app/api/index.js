@@ -1582,7 +1582,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                guidelineFile.find({},function(err,files){
+                guidelineFile.find({}).sort({'creationDate':'desc'}).exec(function(err,files){
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -1610,15 +1610,15 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             if(req.query.categoryId){
                 guidelineCategory.find({_id:req.query.categoryId}).populate('guidelineFiles',null,{displayName:req.body.displayName}).exec(function(err,resp){
                     if(resp[0].guidelineFiles.length == 0){
-                        guidelineCategory.update({guidelineFiles:req.query.fileId},{$pull:{guidelineFiles:req.fileId}},function(err,wres){
+                        guidelineCategory.update({guidelineFiles:req.query.fileId},{$pull:{guidelineFiles:req.query.fileId}},function(err,wres){
                             if(err){
                                 return handleError(res,err,500);
                             }
-                            guidelineCategory.update({_id:req.query.categoryId},{$push:{guidelineFiles:req.query.fileId}},function(err,nres){
+                            guidelineCategory.update({_id:req.query.categoryId},{$addToSet:{guidelineFiles:req.query.fileId}},function(err,nres){
                                 if(err){
                                     return handleError(res,err,500);
                                 }
-                                guidelineFile.update({_id:req.query.fileId},{$set:req.body},function(err,updated){
+                                guidelineFile.findOneAndUpdate({_id:req.query.fileId},{$set:req.body},function(err,updated){
                                     if(err){
                                         return handleError(res,err,500);
                                     }
