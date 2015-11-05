@@ -1581,7 +1581,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                guidelineFile.find({},function(err,files){
+                guidelineFile.find({}).sort({'creationDate':'desc'}).exec(function(err,files){
                     if(err){
                         handleError(res,err,500);
                     }else{
