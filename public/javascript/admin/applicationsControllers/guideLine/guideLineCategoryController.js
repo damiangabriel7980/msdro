@@ -74,8 +74,6 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
            AmazonService.deleteFile(filePath, function (err, success) {
                if(err){
                    ActionModal.show("Eroare la stergerea fisierului");
-               }else{
-    
                }
            })
        }

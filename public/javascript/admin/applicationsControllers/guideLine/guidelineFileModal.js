@@ -108,14 +108,13 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
                         //check if file exists
                         if (findInKeys(key) > -1) {
                             ActionModal.show("Fisierul exista", "Un fisier cu acelasi nume exista deja. Doriti sa il suprascrieti?", function () {
-                                console.log($scope.file);
                                 GuideLineService.file.delete({id:$scope.file._id}).$promise.then(function(resp){
                                      uploadFile($files[0], key);
                                     $modalInstance.close();
                                     $state.reload();
                                 }).catch(function(err){
                                 });
-                                
+
                             }, {
                                 yes: "Da"
                             });
@@ -202,20 +201,20 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
             $scope.categoryId = null;
         }
         delete file['_id'];
-        file.displayName = $scope.file.displayName; 
+        file.displayName = $scope.file.displayName;
         return file;
     };
 
     $scope.save = function(file,keepModalOpen){
         var fileToEdit = prepareFile(file);
-        
+
         GuideLineService.file.update({fileId:$scope.idToEdit,displayName:file.displayName,categoryId: $scope.categoryId},fileToEdit).$promise.then(function(resp) {
             $state.reload();
             if(!keepModalOpen)
                  $modalInstance.close();
         }).catch(function(err){
-            console.log(err);
-            $scope.showErr = true;
+            if(err.status == 400)
+              $scope.showErr = true;
         })
     };
 
