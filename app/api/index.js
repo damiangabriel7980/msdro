@@ -1451,28 +1451,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
-        var updateCategoryNameInFiles = function(id,name,res){
-          guidelineCategory.findOne({_id:id}).populate('guidelineFiles').exec(function(err,resp){
-            if(err){
-              return handleError(res,err,500);
-            }
+
+        var updateCategory = function(id,body,res){
+          guidelineCategory.update({_id:id},{$set:body},function(err,wres){
+              if(err){
+                  handleError(res,err,500);
+              }else{
+                  ModelInfos.recordLastUpdate("guideline");
+                  handleSuccess(res,wres);
+              }
+          });
+        };
+
+        var updateCategoryNameInFiles = function(id,name,res,body){
+        guidelineCategory.findOne({_id:id}).populate('guidelineFiles').exec(function(err,resp){
+          if (resp.guidelineFiles.length != 0){
             async.each(resp.guidelineFiles,function(file,callback){
-              guidelineFile.findOneAndUpdate({_id:file._id},{$set:{guidelineCategoryName:name}},function(err,nres){
+              guidelineFile.update({_id:file._id},{$set:{guidelineCategoryName:name}},function(err,nres){
+                console.log(err);
                 if(err){
                   callback(err);
                 }else{
                   callback();
                 }
-              },function(err,nres){
-                if(err){
-                  return handleError(res,err,500);
-                }
-                ModelInfos.recordLastUpdate("guideline");
-                handleSuccess(res,nres);
               })
+            },function(err,nres){
+              if(err){
+                handleError(res,err,500);
+              }else{
+                handleSuccess(res,nres);
+              }
             })
-          })
-        };
+
+          }else{
+            updateCategory(id,body,res);
+          }
+        })
+      };
 
     router.route('/admin/applications/guidelines/Category')
         .get(function(req,res){
@@ -1518,19 +1533,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
-                                  updateCategoryNameInFiles(req.query.id,req.query.name,res);
+                                  updateCategoryNameInFiles(req.query.id,req.query.name,res,req.body);
                             }
                         });
-                    }else if(req.query.id == resp._id ){
-                        guidelineCategory.update({_id:req.query.id},{$set:req.body},function(err,wres){
-                            if(err){
-                                handleError(res,err,500);
-                            }else{
-                                ModelInfos.recordLastUpdate("guideline");
-                                handleSuccess(res,wres);
-                            }
-                        });
-                    }else{
+                    }else if (req.query.id == resp._id ){
+                        updateCategory(req.query.id,req.body,res);
+                    }
+                    else{
                         handleError(res,null,400,43);
                     }
                 }
@@ -1643,7 +1652,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 guidelineCategory.find({_id:req.query.categoryId}).populate('guidelineFiles',null,{displayName:req.body.displayName}).exec(function(err,resp){
                     if(resp[0].guidelineFiles.length == 0){
                           putFileInNewCategory(req.query.categoryId,req.query.fileId,req.body,res);
-                    }else if(resp[0].guidelineFiles.length > 0 ){
+                    }else if(resp[0].guidelineFiles[0]._id == req.query.fileId){
+                          updateFile(req.query.fileId,req.body,res);
+                    }
+                    else if(resp[0].guidelineFiles.length > 0 ){
                         return handleError(res,null,400,43);
                     }
                 })
