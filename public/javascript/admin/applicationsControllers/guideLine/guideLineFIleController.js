@@ -72,27 +72,30 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
         });
     };
 
-    var deleteFromAmazon = function(path){
-        if(path){
-            var filePath = path.substring(AmazonService.getBucketUrl().length);
-            AmazonService.deleteFile(filePath, function (err, success) {
-                if(err){
-                    ActionModal.show("Eroare la stergerea fisierului");
-                }else{
-                    $state.reload();
-                }
-            })
-        }else {
-            $state.reload();
-        }
+
+    var deleteFromDatabase = function(id){
+      GuideLineService.file.delete({id:id}).$promise.then(function(resp){
+              $state.reload();
+      }).catch(function(err){
+          ActionModal.show("Eroare la stergerea fisierului");
+      });
     };
 
     $scope.removeFile = function (file){
         ActionModal.show("Stergere fisier", "Sunteti sigur ca doriti sa stergeti fisierul?", function () {
-            GuideLineService.file.delete({id: file._id}).$promise.then(function () {
-                resetS3Alert("danger","Se sterge fisierul...");
-                deleteFromAmazon(file.guidelineFileUrl);
-            });
+          resetS3Alert("danger","Se sterge fisierul...");
+          if(file.guidelineFileUrl){
+            AmazonService.deleteFile(file.guidelineFileUrl.substring(AmazonService.getBucketUrl().length),function(err,success){
+              if(err){
+                ActionModal.show("Eroare la stergerea fisierului");
+              }
+              else{
+                  deleteFromDatabase(file._id);
+              }
+            })
+          }else{
+            deleteFromDatabase(file._id);
+          }
         },{
             yes: "Sterge"
         });
