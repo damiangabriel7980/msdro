@@ -9,6 +9,9 @@
             <!--<button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din CSV</button>-->
         </div>
     </div>
+    <div class="col-md-12 noPadding">
+        <alert type="{{s3Alert.type}}" ng-if="s3Alert.show">{{s3Alert.text}}</alert>
+    </div>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="file in $data">
             <td data-title="' Nume afisat'" filter="{ 'displayName': 'text' }" sortable="'displayName'">
