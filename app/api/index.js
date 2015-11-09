@@ -1468,7 +1468,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
           if (resp.guidelineFiles.length != 0){
             async.each(resp.guidelineFiles,function(file,callback){
               guidelineFile.update({_id:file._id},{$set:{guidelineCategoryName:name}},function(err,nres){
-                console.log(err);
                 if(err){
                   callback(err);
                 }else{
