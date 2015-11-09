@@ -4,7 +4,7 @@
 controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','idToEdit','Success','$modalInstance','$state','$rootScope','AmazonService',function($scope,GuideLineService,idToEdit,Success,$modalInstance,$state,$rootScope,AmazonService){
         $scope.toEdit = idToEdit;
 
-    var path = 'guideline/category/image/'; 
+    var path = 'guideline/category/image/';
     $scope.showUploadButton = false;
 
 
@@ -156,18 +156,20 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
         $scope.category.imageUrl='';
     });
 
+    var prepareCategory = function(category){
+      category.lastModified = new Date();
+      delete category['_id'];
+      return category;
+    }
+
     $scope.save=function(category){
-        var categoryToEdit = category._id;
-
-        category.lastModified = new Date();
-        delete category['_id'];
-
-        GuideLineService.category.update({id:categoryToEdit,name:category.name},category).$promise.then(function(resp){
-            $state.reload();
+        var categoryToSave = prepareCategory(category);
+        GuideLineService.category.update({id:$scope.toEdit,name:category.name},categoryToSave).$promise.then(function(resp){
             $modalInstance.close();
+            $state.reload();
         }).catch(function(err){
+          if(err.status == 400)
             $scope.showErr = true;
-            console.log(err);
         });
 
     };

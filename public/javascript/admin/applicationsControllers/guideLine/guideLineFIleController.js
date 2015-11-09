@@ -26,6 +26,14 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
     };
     refreshFiles();
 
+    var resetS3Alert = function (type, text) {
+        $scope.s3Alert = {
+            type: type?type:"danger",
+            show: text?true:false,
+            text: text?text:"Unknown error"
+        }
+    };
+
 
     $scope.addFile = function(){
         GuideLineService.file.create().$promise.then(function(resp){
@@ -71,17 +79,19 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
                 if(err){
                     ActionModal.show("Eroare la stergerea fisierului");
                 }else{
-
+                    $state.reload();
                 }
             })
+        }else {
+            $state.reload();
         }
     };
 
     $scope.removeFile = function (file){
         ActionModal.show("Stergere fisier", "Sunteti sigur ca doriti sa stergeti fisierul?", function () {
             GuideLineService.file.delete({id: file._id}).$promise.then(function () {
+                resetS3Alert("danger","Se sterge fisierul...");
                 deleteFromAmazon(file.guidelineFileUrl);
-                $state.reload();
             });
         },{
             yes: "Sterge"
