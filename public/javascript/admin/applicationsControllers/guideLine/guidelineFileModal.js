@@ -134,19 +134,27 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
     };
 
+    var deleteFromAmazon = function(path,index){
+      AmazonService.deleteFile(path,function(err,success){
+        if(err){
+          resetS3Alert("danger","Eroare la stergerea fisierului");
+        }else{
+          resetS3Alert();
+          $scope.keys.splice(index,1);
+          $rootScope.$broadcast('fileDeleted');
+          $scope.showUploadButton = true;
+          $scope.$apply();
+        }
+      });
+    }
+
     $scope.removeKey = function (index) {
         resetS3Alert("warning","Se sterge fisierul...");
-        AmazonService.deleteFile($scope.keys[index], function (err, success) {
-            if(err){
-                resetS3Alert("danger", "Eroare la stergerea fisierului");
-            }else{
-                resetS3Alert();
-                $scope.keys.splice(index,1);
-                $rootScope.$broadcast('fileDeleted');
-                $scope.showUploadButton = true;
-                $scope.$apply();
-            }
-        })
+        if($scope.keys[index].search($rootScope.pathAmazonDev) == -1){
+              deleteFromAmazon($scope.keys[index],index);
+        }else{
+          deleteFromAmazon($scope.keys[index].substring($rootScope.pathAmazonDev.length),index)
+        }
     }
 
 
