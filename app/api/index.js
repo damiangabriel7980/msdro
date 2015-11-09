@@ -32,6 +32,7 @@ var AppUpdate = require("../models/msd-applications.js");
 var _ = require('underscore');
 var guidelineFile = require ("../models/guidelineFile");
 var guidelineCategory = require ("../models/guidelineCategory");
+var LiveConference = require('../models/liveConferences');
 
 //modules
 var UserModule = require('../modules/user');
@@ -173,6 +174,69 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
     //======================================
 
+    router.route('/admin/liveConferences')
+        .get(function(req,res){
+            if(req.query.id){
+                LiveConference.findById(req.query.id, function (err, conference) {
+                    if(err) { return handleError(res, err); }
+                    if(!conference) { return res.status(404).send('Not Found'); }
+                    return res.json(conference);
+                });
+            } else {
+                LiveConference.find().populate('speakers viewers').exec(function (err, conferences) {
+                    if(err) { return handleError(res, err); }
+                    return res.status(200).json({conferences: conferences});
+                });
+            }
+        })
+        .post(function(req,res){
+            LiveConference.create(req.body, function(err, conference) {
+                if(err) { return handleError(res, err); }
+                return handleSuccess(res,conference);
+            });
+        })
+        .put(function(req,res){
+            if(req.body._id) { delete req.body._id; }
+            if(req.body.isEnabled != undefined){
+                LiveConference.update({_id: req.query.id}, {enabled: !req.body.isEnabled}, function (err, wRes) {
+                    if(err){
+                        return handleError(res, err);
+                    }else{
+                        handleSuccess(res,{success: wRes});
+                    }
+                });
+            } else {
+                ///Before extracting ids we must notify do something with users that don't have an account on Staywell
+                req.body.speakers = extractIds(req.body.speakers);
+                req.body.viewers = extractIds(req.body.viewers);
+                LiveConference.update({_id: req.query.id}, {$set: req.body}, function (err, wres) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res,{success: wres});
+                    }
+                });
+            }
+        })
+        .delete(function(req,res){
+            LiveConference.findById(req.query.id, function (err, conference) {
+                if(err) { return handleError(res, err); }
+                if(!conference) { return res.status(404).send('Not Found'); }
+                if(conference.image){
+                    amazon.deleteObjectS3(conference.image, function (err, data) {
+                        if(err){
+                            return handleError(res, err);
+                        }else{
+                            conference.remove(function(err) {
+                                if(err) { return handleError(res, err); }
+                                return
+                                    handleSuccess(res, {}, 4);
+                            });
+                        }
+                    })
+                }
+            });
+        })
 
     router.route('/admin/users/groups')
 

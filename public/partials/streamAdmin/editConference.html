@@ -1,0 +1,67 @@
+<div class="modal-header">
+  <button ng-if="modal.dismissable" type="button" ng-click="$dismiss()" class="close">&times;</button>
+  <h4 ng-if="modal.title" ng-bind="modal.title" class="modal-title"></h4>
+</div>
+<div class="modal-body">
+  <div class="modal-body" style="height: 70%;">
+    <div class="row">
+      <div class="col-md-12 form-group">
+        <label>Nume:</label>
+        <input type="text" ng-model="modal.objectToEdit.name" class="form-control" required>
+      </div>
+      <div class="col-md-12 form-group">
+        <label>Descriere:</label>
+        <input type="text" ng-model="modal.objectToEdit.description" class="form-control" required>
+      </div>
+      <div class="col-md-12 form-group">
+        <label>Locatie:</label>
+        <input type="text" ng-model="modal.objectToEdit.location" class="form-control" required>
+      </div>
+      <div class="col-md-12">
+        <img no-cache-src="{{pathAmazonDev + modal.objectToEdit.image}}"  style="width:100px;">
+      </div>
+      <div class="col-md-12">
+        <button class="btn btn-default" type="file" ngf-select name="file"  ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-pattern="'image/*'" accept="image/*"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
+      </div>
+      <div class="col-md-12 form-group">
+        <datetimepicker min-date="modal.minDate" hour-step="1"
+                        minute-step="5" ng-model="modal.objectToEdit.date" show-meridian="true"
+                        date-format="dd-MMM-yyyy" date-options="dateOptions"
+                        readonly-date="false"
+                        show-spinners="true"
+                        readonly-time="false"></datetimepicker>
+        </div>
+      <div class="col-md-12 noPadding">
+        <div class="col-md-6">
+          <button class="btn btn-default pull-left" ng-click="sendInvitations()"><i class="glyphicon glyphicon-envelope"></i>&nbsp;Trimite invitatii</button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-default pull-right" ng-click="updateNotification(selectedUser)"><i class="glyphicon glyphicon-send"></i>&nbsp;Trimite notificare</button>
+        </div>
+      </div>
+        <div class="col-md-12">
+          <h4>Speakers</h4>
+          <div class="col-md-12 noPadding">
+            <button class="btn btn-default" ng-click="editSpk(modal.objectToEdit)"><i class="glyphicon glyphicon-user"></i>&nbsp;Adauga speakeri</button>
+          </div>
+          <div class="col-md-12 noPadding" ng-repeat="key in modal.objectToEdit.speakers track by $index">
+            <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.name + ' (' + key.uuid + ') '}}</div>
+            <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeSpeaker($index)"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <h4>Viewers</h4>
+          <div class="col-md-12 noPadding">
+            <button class="btn btn-default" ng-click="editVw(modal.objectToEdit)"><i class="glyphicon glyphicon-user"></i>&nbsp;Adauga vieweri</button>
+          </div>
+          <div class="col-md-12 noPadding"ng-repeat="key in modal.objectToEdit.viewers track by $index">
+            <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.name + ' (' + key.uuid + ') '}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button ng-repeat="button in modal.buttons" ng-class="button.classes" ng-click="button.click($event)" ng-bind="button.text" class="btn"></button>
+</div>

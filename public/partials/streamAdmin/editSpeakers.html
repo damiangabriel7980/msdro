@@ -1,0 +1,29 @@
+  <div class="modal-header">
+    <div class="modal-title"><h3>Editare speakeri</h3></div>
+  </div>
+  <div class="modal-body">
+    <div class="modal-body" style="height: 70%;">
+      <div class="row">
+        <div class="col-md-12 form-group-sm col-xs-12">
+          <label>Nume:</label>
+          <input type="text" class="form-control" name="nume" ng-model="selectedUser.name" ng-required="true">
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <div class="form-group-sm">
+            <label>Email:</label>
+            <angular-select-autocomplete ng-model="selectedUser" ng-select-options="speakers" id-attr="_id" title-attr="name" ng-required="true" ng-disabled="false"></angular-select-autocomplete>
+          </div>
+        </div>
+        <div class="col-md-12 paddingTop20">
+          <button class="btn btn-default pull-right" ng-click="addSpk(selectedUser)"><i class="glyphicon glyphicon-user"></i>&nbsp;Adauga speaker</button>
+        </div>
+        <div class="col-md-12 paddingTop20" ng-repeat="key in modal.objectToEdit track by $index">
+          <div class="col-md-11">{{($index + 1) + '. ' + key.name + ' (' + key.uuid + ') '}}</div>
+          <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeSpeaker($index)"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="btn btn-default pull-right" ng-click="$close()">Inapoi</a>
+  </div>
