@@ -77,7 +77,7 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
       GuideLineService.file.delete({id:id}).$promise.then(function(resp){
               $state.reload();
       }).catch(function(err){
-          ActionModal.show("Eroare la stergerea fisierului");
+          InfoModal.show("Eroare la stergerea fisierului");
       });
     };
 

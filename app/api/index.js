@@ -1513,7 +1513,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function(req,res){
             var toSave = new guidelineCategory({
                 name:'Untitled',
-                lastModified:new Date()
+                lastModified:new Date(),
+                creationDate:new Date()
             });
             toSave.save(function(err,saved){
                 if(err){
@@ -1636,7 +1637,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
               var toSave = new guidelineFile({
                   displayName:'Untitled',
                   actualName:'Untitled',
-                  lastModified:new Date()
+                  lastModified:new Date(),
+                  creationDate:new Date()
               });
               toSave.save(function(err,saved){
                   if(err){
