@@ -8,8 +8,7 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
             var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page
-                sorting: {
-                    creationDate: 'desc'     // initial sorting
+                sorting: {     // initial sorting
                 }
             };
             $scope.tableParams = new ngTableParams(params, {
@@ -77,7 +76,7 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
       GuideLineService.file.delete({id:id}).$promise.then(function(resp){
               $state.reload();
       }).catch(function(err){
-          ActionModal.show("Eroare la stergerea fisierului");
+          InfoModal.show("Eroare la stergerea fisierului");
       });
     };
 
