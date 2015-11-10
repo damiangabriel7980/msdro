@@ -1,0 +1,18 @@
+<div ng-controller="EditViewersCtrl">
+  <div class="modal-header">
+    <div class="modal-title"><h3>Editare vieweri</h3></div>
+  </div>
+  <div class="modal-body">
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+      <tr ng-repeat="viewer in $data">
+        <td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
+          {{viewer.name}}</td>
+        <td title="'Role'" filter="{ role: 'select'}" filter-data="viewer.role" sortable="'role'">
+          {{viewer.role}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <a class="btn btn-default pull-right" ng-click="$close()">Inapoi</a>
+  </div>
+</div>

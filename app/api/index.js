@@ -32,6 +32,7 @@ var AppUpdate = require("../models/msd-applications.js");
 var _ = require('underscore');
 var guidelineFile = require ("../models/guidelineFile");
 var guidelineCategory = require ("../models/guidelineCategory");
+var LiveConference = require('../models/liveConferences');
 
 //modules
 var UserModule = require('../modules/user');
@@ -134,6 +135,12 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         // just move on to the next route handler
     });
 
+    //only admin can access "/admin" routes
+    app.all("/api/streamAdmin/*", Auth.hasAdminRights, function(req, res, next) {
+        next(); // if the middleware allowed us to get here,
+        // just move on to the next route handler
+    });
+
     //================================================================================================================= ADMIN ROUTES
 
     //===== get temporary credentials for S3
@@ -173,6 +180,148 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
     //======================================
 
+    router.route('/streamAdmin/liveConferences')
+        .get(function(req,res){
+            if(req.query.id){
+                LiveConference.find({_id:req.query.id}).populate('speakers.registered viewers.registered').exec(function (err, conference) {
+                    if(err) { handleError(res, err); }
+                    if(conference.length == 0) { handleError(res,err,404,1); }
+                    else
+                        handleSuccess(res,conference[0]);
+                });
+            } else {
+                LiveConference.find().populate('speakers.registered viewers.registered').exec(function (err, conferences) {
+                    if(err) { handleError(res, err); }
+                    else
+                        handleSuccess(res,conferences);
+                });
+            }
+        })
+        .post(function(req,res){
+            LiveConference.create(req.body, function(err, conference) {
+                if(err) { return handleError(res, err); }
+                return handleSuccess(res,conference);
+            });
+        })
+        .put(function(req,res){
+            if(req.body._id)
+                { delete req.body._id; }
+            if(req.query.status){
+                LiveConference.update({_id: req.query.id}, {enabled: !req.body.isEnabled}, function (err, wRes) {
+                    if(err){
+                        return handleError(res, err);
+                    }else{
+                        handleSuccess(res,{success: wRes});
+                    }
+                });
+            } else if(req.query.updateImage) {
+                LiveConference.update({_id: req.query.id}, {$set: {image_path: req.body.image_path}}, function (err, wRes) {
+                    if(err){
+                        return handleError(res, err);
+                    }else{
+                        handleSuccess(res,{success: wRes});
+                    }
+                });
+            } else if(req.query.removeUser) {
+                var userData = req.body;
+                if (userData.role == 'speaker'){
+                    if(userData.registered) {
+                        LiveConference.update({_id: req.query.id}, {$pull: {'speakers.registered': req.query.id}}, function (err, wRes) {
+                            if(err){
+                                handleError(res, err);
+                            }else{
+                                handleSuccess(res,{success: wRes});
+                            }
+                        });
+                    } else {
+                        LiveConference.update({_id: req.query.id}, {$pull: {'speakers.unregistered': {_id: userData.id}}}, function (err, wRes) {
+                            if(err){
+                                handleError(res, err);
+                            }else{
+                                handleSuccess(res,{success: wRes});
+                            }
+                        });
+                    }
+                } else {
+                    if(userData.registered) {
+                        LiveConference.update({_id: req.query.id}, {$pull: {'viewers.registered': req.query.id}}, function (err, wRes) {
+                            if(err){
+                                handleError(res, err);
+                            }else{
+                                handleSuccess(res,{success: wRes});
+                            }
+                        });
+                    } else {
+                        LiveConference.update({_id: req.query.id}, {$pull: {'viewers.unregistered': {_id: userData.id}}}, function (err, wRes) {
+                            if(err){
+                                handleError(res, err);
+                            }else{
+                                handleSuccess(res,{success: wRes});
+                            }
+                        });
+                    }
+                }
+
+            } else if(req.query.addUsers){
+                console.log(req.body);
+                LiveConference.update({_id: req.query.id}, {$set: {speakers: req.body}}, function (err, wres) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res,{success: wres});
+                    }
+                });
+            } else {
+                LiveConference.update({_id: req.query.id}, {$set: req.body}, function (err, wres) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res,{success: wres});
+                    }
+                });
+            }
+        })
+        .delete(function(req,res){
+            LiveConference.findById(req.query.id, function (err, conference) {
+                if(err) {
+                    handleError(res, err);
+                }
+                if(conference.image){
+                    amazon.deleteObjectS3(conference.image, function (err, data) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            conference.remove(function(err) {
+                                if(err) {
+                                    handleError(res, err);
+                                } else {
+                                    handleSuccess(res, {}, 4);
+                                }
+                            });
+                        }
+                    })
+                } else {
+                    conference.remove(function(err) {
+                        if(err) {
+                            handleError(res, err);
+                        } else {
+                            handleSuccess(res, {}, 4);
+                        }
+                    });
+                }
+            });
+        });
+
+    router.route('/streamAdmin/users')
+        .get(function(req,res){
+            User.find({}, {username: 1, name: 1}).populate('groupsID').limit(0).exec(function(err, cont) {
+                if(err) {
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res,cont);
+                }
+            });
+        });
 
     router.route('/admin/users/groups')
 
