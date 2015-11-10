@@ -1,7 +1,7 @@
 /**
  * Created by user on 28.10.2015.
  */
-controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','idToEdit','Success','$modalInstance','$state','$rootScope','AmazonService',function($scope,GuideLineService,idToEdit,Success,$modalInstance,$state,$rootScope,AmazonService){
+controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','idToEdit','Success','$modalInstance','$state','$rootScope','AmazonService','InfoModal',function($scope,GuideLineService,idToEdit,Success,$modalInstance,$state,$rootScope,AmazonService,InfoModal){
         $scope.toEdit = idToEdit;
 
     var path = 'guideline/category/image/';
@@ -21,7 +21,7 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
     var refreshList = function (contentsArray) {
         $scope.keys = [];
         for(var i=0; i<contentsArray.length; i++){
-            if($rootScope.pathAmazonDev + contentsArray[i].Key == $scope.category.imageUrl)
+            if(($rootScope.pathAmazonDev + contentsArray[i].Key).replace(/\s+/g,'%20') == $scope.category.imageUrl)
                 $scope.keys.push(contentsArray[i].Key);
         }
         if($scope.keys.length >= 1)
@@ -149,11 +149,19 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
     };
 
     $scope.$on('fileUpdated',function(event,imgUrl){
-        $scope.category.imageUrl =$rootScope.pathAmazonDev+ imgUrl;
+        $scope.category.imageUrl =($rootScope.pathAmazonDev+ imgUrl).replace(/\s+/g,'%20');
     });
 
     $scope.$on('fileDeleted',function(event){
         $scope.category.imageUrl='';
+        var categoryToSave = $scope.category;
+        categoryToSave = prepareCategory(categoryToSave);
+        GuideLineService.category.update({id:$scope.toEdit,name:$scope.category.name},categoryToSave).$promise.then(function(resp){
+
+        }).catch(function(err){
+          if(err.status == 400)
+            $scope.showErr = true;
+        });
     });
 
     var prepareCategory = function(category){

@@ -9,7 +9,7 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    date_created: 'desc'     // initial sorting
+                    creationDate: 'desc'     // initial sorting
                 }
             };
             $scope.tableParams = new ngTableParams(params, {
@@ -48,7 +48,7 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
             toEdit.enabled = !toEdit.enabled;
             delete toEdit['_id'];
             GuideLineService.file.update({fileId:id,displayName:toEdit.displayName},toEdit).$promise.then(function(resp){
-                refreshFiles();
+                $state.reload();
             }).catch(function(err){
 
             })
@@ -85,7 +85,7 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
         ActionModal.show("Stergere fisier", "Sunteti sigur ca doriti sa stergeti fisierul?", function () {
           resetS3Alert("danger","Se sterge fisierul...");
           if(file.guidelineFileUrl){
-            AmazonService.deleteFile(file.guidelineFileUrl.substring(AmazonService.getBucketUrl().length),function(err,success){
+            AmazonService.deleteFile((file.guidelineFileUrl.substring(AmazonService.getBucketUrl().length).replace(/%20/g,' ')),function(err,success){
               if(err){
                 ActionModal.show("Eroare la stergerea fisierului");
               }
