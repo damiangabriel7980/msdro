@@ -8,7 +8,8 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
             var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page
-                sorting: {     // initial sorting
+                sorting: {
+                    creationDate: 'desc'     // initial sorting
                 }
             };
             $scope.tableParams = new ngTableParams(params, {
