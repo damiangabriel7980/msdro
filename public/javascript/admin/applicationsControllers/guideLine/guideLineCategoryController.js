@@ -10,7 +10,7 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    date_created: 'desc'     // initial sorting
+                  creationDate:'desc'     // initial sorting
                 }
             };
             $scope.tableParams = new ngTableParams(params, {
@@ -31,6 +31,7 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
 
     $scope.addCategory = function(){
         GuideLineService.category.create().$promise.then(function(resp){
+          refreshCategory();
             $state.reload();
         })
     };
@@ -43,7 +44,7 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
 
                delete toEdit['_id'];
                GuideLineService.category.update({id:id},toEdit).$promise.then(function(resp){
-                   refreshCategory();
+                   $state.reload();
                }).catch(function(err){
 
                });}
@@ -70,7 +71,7 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
     var deleteFromAmazon = function(path){
        if(path){
            var filePath = path.substring(AmazonService.getBucketUrl().length);
-           AmazonService.deleteFile(filePath, function (err, success) {
+           AmazonService.deleteFile(filePath.replace(/%20/g,' '), function (err, success) {
                if(err){
                    ActionModal.show("Eroare la stergerea fisierului");
                }

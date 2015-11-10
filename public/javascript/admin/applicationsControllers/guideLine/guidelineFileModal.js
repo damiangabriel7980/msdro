@@ -1,7 +1,7 @@
 /**
  * Created by user on 26.10.2015.
  */
-controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance','GuideLineService','Success','$timeout','$state','$rootScope','AmazonService','ActionModal',function($scope,idToEdit,$modalInstance,GuideLineService,Success,$timeout,$state,$rootScope,AmazonService,ActionModal){
+controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance','GuideLineService','Success','$timeout','$state','$rootScope','AmazonService','ActionModal',"InfoModal",function($scope,idToEdit,$modalInstance,GuideLineService,Success,$timeout,$state,$rootScope,AmazonService,ActionModal,InfoModal){
 
     $scope.idToEdit = idToEdit;
 
@@ -52,7 +52,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
         $scope.toCompare = [];
         for(var i=0; i<contentsArray.length; i++){
             $scope.toCompare.push(contentsArray[i].Key);
-            if (contentsArray[i].Key == filePath + $scope.file.actualName){
+            if (contentsArray[i].Key.replace(/%20/g,' ') == filePath + $scope.file.actualName){
                 $scope.keys.push($rootScope.pathAmazonDev + contentsArray[i].Key);
             }
         }
@@ -95,13 +95,13 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
         if($files[0]) {
 
             if ($files[0].size > 50000000) {
-                ActionModal.show("Fisierul selectat este prea mare");
+                InfoModal.show("Fisierul selectat este prea mare");
             } else{
                     var extension = $files[0].name.split(".").pop();
                     var key;
                     //check fileType if specified
                     if ($scope.fileType && $scope.fileType.toLowerCase() != extension) {
-                        ActionModal.show("Fisierul selectat nu este suportat");
+                        InfoModal.show("Fisierul selectat nu este suportat");
                     } else {
                         key = $rootScope.pathAmazonDev + path + $files[0].name;
 
@@ -163,7 +163,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
     $scope.bucketUrl = AmazonService.getBucketUrl();
 
     $scope.$on('fileUpdated',function(event,updateFileInfo){
-        $scope.file.guidelineFileUrl = updateFileInfo;
+        $scope.file.guidelineFileUrl = updateFileInfo.replace(/\s+/g, '%20');
         $scope.file.actualName = updateFileInfo.split('/').pop();
         $scope.file.displayName = $scope.file.actualName.split('.',1)
         $scope.save($scope.file,true);

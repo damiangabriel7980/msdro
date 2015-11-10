@@ -12,7 +12,7 @@ var guidelineFileSchema = new Schema({
     type : {type:String,default:'PDF'},
     creationDate: {type:Date,default:new Date()},
     lastModified: {type:Date,default:new Date()},
-    guidelineCategoryName:String,
+    guidelineCategoryName:{type:String,default:''},
     enabled:{type:Boolean,default:false}
 });
 
