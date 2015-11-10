@@ -1,6 +1,6 @@
 'use strict';
 
-streamAdminControllers
+controllers
   .controller('EditViewersCtrl', [ '$scope', '$filter', '$sce' ,'$state' , '$rootScope', 'user', 'ngTableParams', function ($scope, $filter, $sce, $state, $rootScope,user, ngTableParams) {
     $scope.selectedViewer = {
       name: '',

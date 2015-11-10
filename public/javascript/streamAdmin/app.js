@@ -1,15 +1,16 @@
 var streamAdminApp = angular.module('streamAdminApp',
     [
         'ui.router',
-        'streamAdminControllers',
-        'streamAdminServices',
+        'controllers',
+        'services',
         'ngCookies',
         'ngResource',
         'ngSanitize',
         'ui.bootstrap',
         'ngTable',
         'ui.bootstrap.datetimepicker',
-        'ngFileUpload'
+        'ngFileUpload',
+        'angularSelectAutocomplete'
     ]);
 
 streamAdminApp.config(['$locationProvider', function($location) {

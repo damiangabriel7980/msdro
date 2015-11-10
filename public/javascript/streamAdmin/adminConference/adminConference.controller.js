@@ -1,9 +1,9 @@
 'use strict';
 
-streamAdminControllers
-  .controller('AdminConferenceCtrl', [ '$scope', 'ngTableParams', '$filter', '$sce' , 'liveConferences','$state' , '$rootScope',function ($scope, ngTableParams, $filter, $sce, liveConferences, $state, $rootScope) {
+controllers
+  .controller('AdminConferenceCtrl', [ '$scope', 'ngTableParams', '$filter', '$sce' , 'liveConferences','$state' , '$rootScope', 'ActionModal', 'Error', '$modal', 'Success',function ($scope, ngTableParams, $filter, $sce, liveConferences, $state, $rootScope,ActionModal, Error,$modal,Success) {
       liveConferences.query().$promise.then(function(resp){
-      var data = resp.conferences;
+      var data = Success.getObject(resp);
       $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
         count: 10,          // count per page
@@ -32,46 +32,64 @@ streamAdminControllers
         name: 'Untitled',
         description: '',
         location: '',
-        image: null,
+        image_path: null,
         date: new Date(),
         therapeuticAreas: [],
-        enabled: true
+        enabled: true,
+          speakers: {
+              registered: [],
+              unregistered: []
+          },
+          viewers: {
+              registered: [],
+              unregistered: []
+          }
       };
         liveConferences.create(conference).$promise.then(function(resp){
         $state.reload();
       })
     };
 
-    //$scope.editModal = Modal.confirm.edit(function(conference){
-    //  adminConference.conferences.update({id: conference._id},conference).$promise.then(function(resp){
-    //    $state.reload();
-    //  })
-    //});
-    //
-    //
-    //$scope.deleteModal = Modal.confirm.delete(function(id){
-    //  adminConference.conferences.delete({id: id}).$promise.then(function(resp){
-    //    $state.reload();
-    //  })
-    //});
-    //
-    //$scope.changeStatus = Modal.confirm.changeStatus(function(id,status){
-    //  adminConference.conferences.update({id: id},{isEnabled: status}).$promise.then(function(resp){
-    //    $state.reload();
-    //  })
-    //});
+    $scope.editConference = function(id){
+        $modal.open({
+            templateUrl: 'partials/streamAdmin/editConference.html',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve : {
+                idToEdit: function () {
+                    return id;
+                }
+            },
+            windowClass: 'fade',
+            controller:"EditConferenceCtrl"
+        });
+    };
 
     $scope.deleteConference = function(id){
-      $scope.deleteModal(id);
+        ActionModal.show("Stergere conferinta", "Sunteti sigur ca doriti sa stergeti aceasta conferinta?", function () {
+            liveConferences.delete({id: id}).$promise.then(function(resp){
+                console.log(resp);
+                $state.reload();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
+        },{
+            yes: "Sterge"
+        });
     };
 
     $scope.statusConference = function(id, confStatus){
-      $scope.changeStatus(id,confStatus);
-    };
-
-    $scope.editConference = function(conference){
-      $scope.sessionData = conference._id;
-      $scope.editModal(conference);
+        ActionModal.show("Modificare status", "Esti sigur ca vrei sa schimbi status-ul aceastei conferinte ?", function () {
+            liveConferences.update({id: id, status: true},{isEnabled: confStatus}).$promise.then(function(resp){
+                console.log(resp);
+                $state.reload();
+            }).catch(function(err){
+                console.log(Error.getMessage(err));
+            });
+        },{
+            yes: "Update status"
+        });
     };
 
   }]);

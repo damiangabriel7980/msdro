@@ -43,3 +43,6 @@ a {
 .leftPadding5px {
   padding-left: 5px;
 }
+.noPadding {
+  padding: 0;
+}

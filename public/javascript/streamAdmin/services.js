@@ -1,7 +1,7 @@
 /**
  * Created by andreimirica on 09.11.2015.
  */
-var services = angular.module('streamAdminServices', ['ngResource']);
+var services = angular.module('services', ['ngResource']);
 services.factory('AmazonService', ['$resource', '$rootScope', 'Success', function($resource, $rootScope, Success){
     var getCredentialsFromServer = $resource('api/admin/s3tc', {}, {
         query: { method: 'GET', isArray: false }
@@ -146,7 +146,7 @@ services.factory('AmazonService', ['$resource', '$rootScope', 'Success', functio
 }]);
 
 services.factory('liveConferences', ['$resource', function($resource){
-    return $resource('api/admin/liveConferences', {}, {
+    return $resource('api/streamAdmin/liveConferences', {}, {
         query: { method: 'GET', isArray: false },
         update: { method: 'PUT', isArray: false},
         create: { method: 'POST', isArray: false},
@@ -154,3 +154,25 @@ services.factory('liveConferences', ['$resource', function($resource){
     })
 }]);
 
+services.factory('userService', ['$resource', function($resource){
+    return {
+        users: $resource('api/streamAdmin/users', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
+services.factory('getIds', [function () {
+    var extract = function (array){
+        var ids = [];
+        for(var i = 0; i < array.length; i++)
+        {
+            if(array[i]._id != null)
+                ids.push(array[i]._id)
+        }
+        return ids;
+    };
+    return {
+        extract : extract
+    }
+}]);

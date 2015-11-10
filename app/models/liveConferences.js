@@ -8,12 +8,24 @@ var LiveConferencesSchema = new Schema({
     name: String,
     description: String,
     location: String,
-    image: String,
+    image_path: String,
     date: Date,
     therapeuticAreas: Array,
     enabled: Boolean,
-    speakers: [{type: Schema.Types.ObjectId, ref:'User'}],
-    viewers: [{type: Schema.Types.ObjectId, ref:'User'}]
+    speakers: {
+        registered: [{type: Schema.Types.ObjectId, ref:'User'}],
+        unregistered: [{
+            name: String,
+            username: String
+        }]
+    } ,
+    viewers: {
+        registered: [{type: Schema.Types.ObjectId, ref:'User'}],
+        unregistered: [{
+            name: String,
+            username: String
+        }]
+    }
 });
 
 module.exports = mongoose.model('liveConferences', LiveConferencesSchema,'liveConferences');
