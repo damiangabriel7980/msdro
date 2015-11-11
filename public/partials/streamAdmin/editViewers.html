@@ -3,12 +3,52 @@
     <div class="modal-title"><h3>Editare vieweri</h3></div>
   </div>
   <div class="modal-body">
-    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+    <div class="col-md-12 form-group-sm col-xs-12 paddingBottom20">
+      <div class="col-md-12 form-group-sm col-xs-12 noPadding ">
+        <div class="col-md-10 noPadding">
+          <h4>Unregistered Viewers</h4>
+        </div>
+        <div class="col-md-2 noPadding">
+          <a class="btn btn-default pull-right" ng-click="addUser()">Adauga viewer</a>
+        </div>
+      </div>
+      <div class="col-md-12 form-group-sm col-xs-12 noPadding">
+        <label>Nume:</label>
+        <input type="text" class="form-control" name="nume" ng-model="viewerName" ng-required="false">
+      </div>
+      <div class="col-md-12 form-group-sm col-xs-12 noPadding">
+        <label>Email:</label>
+        <input type="text" class="form-control" name="email" ng-model="viewerEmail" ng-required="false">
+      </div>
+    </div>
+    <div class="col-md-12 form-group">
+      <div class="col-md-12 noPadding">
+        <h4>Registered Viewers</h4>
+      </div>
+      <div class="form-group-sm">
+        <label>Group Name:</label>
+        <angular-select-autocomplete ng-model="selectedGroup" ng-options="groups" id-attr="_id" title-attr="display_name" ng-required="false" ng-disabled="false"></angular-select-autocomplete>
+      </div>
+    </div>
+    <div class="col-md-12 form-group">
+      <div class="form-group-sm">
+        <a class="btn btn-primary pull-left" ng-click="selectAll(true)">Select All</a>
+        <a class="btn btn-warning pull-right" ng-click="selectAll(false)">Deselect All</a>
+      </div>
+    </div>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered" header="'ng-table/headers/checkbox.html'">
       <tr ng-repeat="viewer in $data">
+        <td width="30">
+          <input type="checkbox" ng-model="checkboxes.items[viewer._id]" />
+        </td>
         <td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
           {{viewer.name}}</td>
-        <td title="'Role'" filter="{ role: 'select'}" filter-data="viewer.role" sortable="'role'">
-          {{viewer.role}}</td>
+        <td title="'Email'" filter="{ username: 'text'}" sortable="'username'">
+          {{viewer.username}}</td>
+        <td title="'Groups'">
+          <li ng-repeat="group in viewer.groupsID">
+            {{group.display_name}}
+          </li></td>
       </tr>
     </table>
   </div>

@@ -314,7 +314,22 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/streamAdmin/users')
         .get(function(req,res){
-            User.find({}, {username: 1, name: 1}).populate('groupsID').limit(0).exec(function(err, cont) {
+            var data = {username: 1, name: 1};
+            if(req.query.groups)
+                data['groupsID'] = 1;
+            User.find({}, data).populate('groupsID').limit(0).exec(function(err, cont) {
+                if(err) {
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res,cont);
+                }
+            });
+        });
+
+    router.route('/streamAdmin/groups')
+        .get(function(req,res){
+            var data = {display_name: 1};
+            UserGroup.find({}, data).limit(0).exec(function(err, cont) {
                 if(err) {
                     handleError(res,err,500);
                 }else{
