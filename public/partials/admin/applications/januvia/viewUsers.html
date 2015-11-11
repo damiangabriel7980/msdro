@@ -6,7 +6,7 @@
         <div><h3>Utilizatori:</h3></div>
         <div>
             <div class="btn btn-primary" ng-click="addUser()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
-            <!--<button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din CSV</button>-->
+            <button class="btn btn-default" type="file" accept=".xlsx" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din Excel</button>
         </div>
     </div>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">

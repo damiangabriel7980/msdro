@@ -11,7 +11,9 @@ var schema		= new Schema({
     phone: String,
     users_associated: [{type: Schema.Types.ObjectId, ref: 'januvia_users'}],
     date_created: Date,
-    last_modified: Date
+    last_modified: Date,
+    workplace: String,
+    workplaceAddress: String
 });
 
 schema.plugin(deepPopulate, {

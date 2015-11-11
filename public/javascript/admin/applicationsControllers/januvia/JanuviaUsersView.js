@@ -29,6 +29,26 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
         });
     };
 
+    $scope.fileSelected = function($files, $event){
+        //make sure group data is loaded. we need to access it to form the amazon key
+        //make sure a file was actually loaded
+        if($files[0]){
+            var file = $files[0];
+            var reader = new FileReader();
+            reader.onloadend = function(evt) {
+                if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                    var data = evt.target.result;
+                    JanuviaService.parseExcel.create({file: data}).$promise.then(function(resp){
+                        $state.reload();
+                    })
+                }
+            };
+            reader.readAsBinaryString(file);
+
+        }
+
+    };
+
     $scope.editUser = function (id) {
         $modal.open({
             templateUrl: 'partials/admin/applications/januvia/modalEditUser.html',
