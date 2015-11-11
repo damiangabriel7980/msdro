@@ -1,7 +1,7 @@
 /**
  * Created by user on 23.10.2015.
  */
-controllers.controller('guideLinesCategoryController',['$scope','GuideLineService','Success','ngTableParams','ActionModal','$filter','$state','$modal','AmazonService',function($scope,GuideLineService,Success,ngTableParams,ActionModal,$filter,$state,$modal,AmazonService){
+controllers.controller('guideLinesCategoryController',['$scope','GuideLineService','Success','ngTableParams','ActionModal','$filter','$state','$modal','AmazonService','InfoModal',function($scope,GuideLineService,Success,ngTableParams,ActionModal,$filter,$state,$modal,AmazonService,InfoModal){
 
     var refreshCategory = function (){
         GuideLineService.category.query().$promise.then(function(resp){
@@ -39,15 +39,19 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
     $scope.disableCategory=function (id,category){
        ActionModal.show(category.enabled?"Dezactiveaza categorie":"Activeaza categorie",
            category.enabled?"Sunteti sigur ca doriti sa dezactivati categoria?":"Sunteti sigur ca doriti sa activati categoria?",function(){
+             if(category.imageUrl){
                var toEdit = category;
                toEdit.enabled = !toEdit.enabled;
-
                delete toEdit['_id'];
                GuideLineService.category.update({id:id},toEdit).$promise.then(function(resp){
                    $state.reload();
                }).catch(function(err){
 
-               });}
+               });
+             }else{
+               InfoModal.show("Categoria selectata nu are poza");
+             }
+            }
            ,{
                yes:"Da"
            });
