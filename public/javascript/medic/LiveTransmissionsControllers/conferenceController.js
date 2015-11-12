@@ -57,7 +57,6 @@ app.controllerProvider.register('ConferenceController',['$scope','ActionModal',f
    };
 
    $scope.toggleMenu = function(){
-     console.log("toggleMenu");
      $scope.menuToggled = !$scope.menuToggled;
    }
 
