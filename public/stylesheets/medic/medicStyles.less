@@ -2383,3 +2383,276 @@ a:focus {
 .marginTop25px{
   margin-top:25px;
 }
+
+
+
+//=====================================videoConferences
+
+
+.padding0{
+  padding:0px;
+}
+
+.conferenceDetails{
+  margin-bottom: 10px;
+  span{
+
+  }
+}
+
+.activeSpeakerContainer{
+  display: flex;
+  align-items: center;
+  height:61vh;
+}
+
+.activeSpeakers{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex:1;
+  .streamContainer{
+    margin:10px;
+    flex:1;
+    min-width: 310px;
+    min-height: 241;
+    height:100%;
+    justify-content: center;
+
+    video{
+      border-radius: 2px;
+      -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+      -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+      max-height: 603px;
+      max-width: 804px;
+      min-width: 215px;
+      display:flex;
+      flex:1;
+      width: 100%    !important;
+      height: auto   !important;
+
+    }
+  }
+
+}
+.conferenceStreamContainer{
+  background-color: #EBECED;
+  .inactiveSpeakersContainer{
+    display: flex;
+    flex:1;
+    background-color: #43555F;
+    // position: fixed;
+    // bottom: 35px;
+    height:198px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .inactiveSpeaker{
+      display: flex;
+      justify-content: center;
+      border-radius: 2px;
+      width:150px;
+      height:150px;
+      margin:0 20px;
+      background-color: @green;
+      -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+      -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+      span{
+        align-self: center;
+        color:white;
+      }
+    }
+  }
+}
+
+.redText{
+  color:red;
+}
+
+.context-Menu{
+  overflow: hidden;
+  height:0;
+  span{
+  background-color: white;
+  }
+}
+
+.conferenceDetails:hover{
+  .context-Menu{
+    -webkit-animation-name: example; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+    animation-name: revealMenu;
+    animation-duration: 0.5s;
+    height: 30px;
+    span{
+      i{
+        background-color:black;
+        border-radius: 2px;
+        border:1px solid white;
+      }
+    }
+  }
+}
+
+@-webkit-keyframes revealMenu {
+    0%   {height:0px;}
+    100% {height:30px;}
+}
+
+/* Standard syntax */
+@keyframes revealMenu {
+    0%   {height:0px;}
+    100% {height:30px;}
+}
+
+
+.padding10{
+  padding:10px;
+}
+.conferencesList{
+  height:350px;
+  display: flex;
+  justify-content: center;
+ .conferencesListItem{
+   text-align: left;
+ }
+}
+
+
+
+
+//conference chat styles
+
+.conferenceStreamContainer {
+    padding-right: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.conferenceStreamContainer.toggled {
+    padding-right: 250px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    right: 250px;
+    width: 0;
+    height: 85vh;
+    margin-top:4px;
+    margin-right: -250px;
+    overflow-y: auto;
+    background: #fff;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.width250{
+  width:250px !important;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+}
+
+.conferenceStreamContainer.toggled #page-content-wrapper {
+  //  position: absolute;
+    margin-right: -250px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    top: 30px;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+    border-bottom: 1px solid #DFE0E1;
+    color:@green;
+}
+
+.sidebar-nav li:hover {
+  background-color: @green;
+  color:white;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #999999;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 65px;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #999999;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #fff;
+    background: none;
+}
+
+@media(min-width:768px) {
+    #conferenceWrapper {
+        padding-left: 250px;
+    }
+
+    #conferenceWrapper.toggled {
+        padding-left: 0;
+    }
+
+  #conferenceWrapper {
+        width: 250px;
+    }
+
+    #conferenceWrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #conferenceWrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
