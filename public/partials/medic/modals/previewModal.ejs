@@ -1,0 +1,13 @@
+<div class="modal-header">
+  <h3>Preview</h3>
+</div>
+
+<div class="modal-body" ng-class="{'noPadding':isMobile(true)}" class="col-md-12" >
+
+        <video class="video-js vjs-default-skin vjs-big-play-centered marginTop25px" preload="auto" autoplay width="100%" height="100%">
+        </video>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger pull-left" type="button" ng-click="cancel()">Inapoi la conferinte</button>
+    <button class="btn btn-default" type="button" ng-click="goToConference()">Conferinta </button>
+</div>
