@@ -189,6 +189,14 @@ services.factory('HomeService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('ConferenceService',['$resource',function($resource){
+  return{
+    conference:$resource('api/liveConferences',{},{
+      query:{method:'GET',isArray:false}
+    })
+  }
+}]);
+
 services.factory('ProductService', ['$resource', function($resource){
     return {
         products: $resource('api/products', {}, {
