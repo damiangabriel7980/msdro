@@ -323,6 +323,27 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+        router.route('/liveConferences')
+          .get(function(req,res){
+            if(req.query.id){
+              LiveConference.find({_id:req.query.id},function(err,resp){
+                if(err){
+                  return handleError(res,err,500);
+                }else{
+                  handleSuccess(res,resp);
+                }
+              })
+            }else{
+              LiveConference.find({},function(err,resp){
+                if(err){
+                  handleError(res,err,500);
+                }else{
+                  handleSuccess(res,resp);
+                }
+              })
+            }
+          });
+
     router.route('/admin/users/groups')
 
         .get(function(req, res) {
