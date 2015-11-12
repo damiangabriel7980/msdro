@@ -138,9 +138,10 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: 'LiveTransmission',
                 files: [
-                    'javascript/medic/LiveTransmissionsControllers/swfobject.js',
-                    'javascript/medic/LiveTransmissionsControllers/require.js',
-                    'javascript/medic/LiveTransmissionsControllers/LiveTransmission.js'
+                    'javascript/medic/LiveTransmissionsControllers/LiveTransmission.js',
+                    'javascript/medic/LiveTransmissionsControllers/mainController.js',
+                    'javascript/medic/LiveTransmissionsControllers/conferenceController.js',
+                    'javascript/medic/ModalControllers/previewModalController.js'
                 ]
             },
             {
@@ -407,11 +408,19 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('elearning.transmisii',{
             url: '/transmisii',
-            templateUrl: 'partials/medic/elearning/transmisii.ejs',
-            controller: 'LiveTransmission',
-            resolve: {
-                loadDeps: loadStateDeps(['LiveTransmission'])
+            templateUrl: 'partials/medic/conferences/transmisii.ejs',
+            controller: 'ConferenceListController',
+            resolve:{
+              loadDeps: loadStateDeps(['LiveTransmission'])
             }
+        })
+        .state('elearning.conferinta',{
+          url:'/transmisii/:conferenceId',
+          templateUrl:'partials/medic/conferences/conferinta.ejs',
+          controller:'ConferenceController',
+          resolve:{
+            loadDeps: loadStateDeps(['LiveTransmission'])
+          }
         })
         .state('groupFeatures', {
             url: '/groupFeatures/:specialApp',
