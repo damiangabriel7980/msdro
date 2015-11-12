@@ -2450,6 +2450,9 @@ a:focus {
     display: flex;
     justify-content: center;
     align-items: center;
+    -webkit-box-shadow: inset 0px 3px 16px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: inset 0px 3px 16px 0px rgba(0,0,0,0.75);
+    box-shadow: inset 0px 3px 16px 0px rgba(0,0,0,0.75);
     .inactiveSpeaker{
       display: flex;
       justify-content: center;
@@ -2483,31 +2486,24 @@ a:focus {
 
 .conferenceDetails:hover{
   .context-Menu{
-    -webkit-animation-name: example; /* Chrome, Safari, Opera */
-    -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
-    animation-name: revealMenu;
-    animation-duration: 0.5s;
+    background-color: #43555F;
+    border-radius: 2px;
     height: 30px;
-    span{
-      i{
-        background-color:black;
-        border-radius: 2px;
-        border:1px solid white;
-      }
+    width:200px;
+    margin-top:5px;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    .conferenceMenuIcon{
+      width:30px;
+      margin:0 10px;
+      cursor: pointer;
     }
   }
 }
 
-@-webkit-keyframes revealMenu {
-    0%   {height:0px;}
-    100% {height:30px;}
-}
 
-/* Standard syntax */
-@keyframes revealMenu {
-    0%   {height:0px;}
-    100% {height:30px;}
-}
+
 
 
 .padding10{
@@ -2525,7 +2521,7 @@ a:focus {
 
 
 
-//conference chat styles
+//=======================================================================================conference chat styles
 
 .conferenceStreamContainer {
     padding-right: 0;
