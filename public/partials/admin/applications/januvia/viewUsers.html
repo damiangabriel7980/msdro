@@ -20,6 +20,12 @@
             <td data-title="'Tip utilizator'" sortable="'type'">
                 {{user.type}}
             </td>
+            <td data-title="'Loc de munca'" filter="{ 'workplace': 'text' }" sortable="'workplace'">
+                {{user.workplace}}
+            </td>
+            <td data-title="'Adresa loc de munca'" filter="{ 'workplaceAddress': 'text' }" sortable="'workplaceAddress'">
+                {{user.workplaceAddress}}
+            </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
                     <div class="btn btn-primary" ng-click="editUser(user._id)"><i class="glyphicon glyphicon-cog"></i></div>
