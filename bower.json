@@ -43,6 +43,7 @@
     "requestAnimationFrame": "latest",
     "shifty": "latest",
     "tinymce": "4.0.16",
+    "ui-select": "angular-ui-select#~0.13.2",
     "v-accordion": "latest",
     "video-js": "4.x",
     "videogular": "latest",

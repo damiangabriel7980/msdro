@@ -18,7 +18,8 @@ var app = angular.module('app',
         'ngCsv',
         'ngAnimate',
         'vAccordion',
-        'ui.tree'
+        'ui.tree',
+        'ui.select'
     ]);
 
 app.config(['$locationProvider', function($location) {

@@ -14,20 +14,22 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
         $scope.selectedMedics = user.users_associated;
         var city = user.city;
         if(city){
-            $scope.selectedCity = {
+            $scope.city = {};
+            $scope.city.selected = {
                 name: city.name,
                 _id: city._id
             };
             getCounty(city._id).then(function (county) {
                 getCities(county._id);
-                $scope.selectedCounty = {
+                $scope.county = {};
+                $scope.county.selected = {
                     name: county.name,
                     _id: county._id
                 };
             });
         }else{
-            $scope.selectedCity = {};
-            $scope.selectedCounty = {};
+            $scope.city  = {};
+            $scope.county = {};
         }
     });
 
@@ -44,7 +46,7 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
     //form submission
     $scope.save = function () {
         var user = $scope.user;
-        var city = $scope.selectedCity;
+        var city = $scope.city.selected;
         if(city && city._id) user.city = city._id;
         if(user.type === "reprezentant"){
             user.users_associated = $scope.selectedMedicsIds;
@@ -61,8 +63,9 @@ controllers.controller('JanuviaUserEdit', ['$scope', '$state', 'idToEdit', 'user
     $scope.countyWasSelected = function (county) {
         if(county && county._id){
             getCities(county._id);
+            $scope.city = {};
         }else{
-            $scope.cities = [$scope.selectedCity];
+            $scope.cities = [];
         }
 
     };
