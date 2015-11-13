@@ -183,7 +183,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/streamAdmin/liveConferences')
         .get(function(req,res){
             if(req.query.id){
-                LiveConference.find({_id:req.query.id}).populate('speakers.registered viewers.registered').exec(function (err, conference) {
+                LiveConference.find({_id:req.query.id}).populate('speakers.registered').populate('viewers.registered').exec(function (err, conference) {
                     if(err) { handleError(res, err); }
                     if(conference.length == 0) { handleError(res,err,404,1); }
                     else
@@ -226,7 +226,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 var userData = req.body;
                 if (userData.role == 'speaker'){
                     if(userData.registered) {
-                        LiveConference.update({_id: req.query.id}, {$pull: {'speakers.registered': req.query.id}}, function (err, wRes) {
+                        LiveConference.update({_id: req.query.id}, {$pull: {'speakers.registered': userData.id}}, function (err, wRes) {
                             if(err){
                                 handleError(res, err);
                             }else{
@@ -242,9 +242,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             }
                         });
                     }
-                } else {
+                }
+                else {
                     if(userData.registered) {
-                        LiveConference.update({_id: req.query.id}, {$pull: {'viewers.registered': req.query.id}}, function (err, wRes) {
+                        LiveConference.update({_id: req.query.id}, {$pull: {'viewers.registered': userData.id}}, function (err, wRes) {
                             if(err){
                                 handleError(res, err);
                             }else{
@@ -261,9 +262,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         });
                     }
                 }
-
-            } else if(req.query.addUsers){
-                console.log(req.body);
+            } else if(req.query.addSpeaker){
                 LiveConference.update({_id: req.query.id}, {$set: {speakers: req.body}}, function (err, wres) {
                     if(err){
                         handleError(res, err);
@@ -271,7 +270,28 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         handleSuccess(res,{success: wres});
                     }
                 });
-            } else {
+            } else if(req.query.addViewers){
+                if(req.query.single){
+                    LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers.unregistered': req.body}}, function (err, wRes) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res,wRes);
+                        }
+                    });
+                } else {
+                    LiveConference.update({_id: req.query.id}, {$set: {viewers: req.body}}, function (err, wres) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res,{success: wres});
+                        }
+                    });
+                }
+
+            }
+                else
+            {
                 LiveConference.update({_id: req.query.id}, {$set: req.body}, function (err, wres) {
                     if(err){
                         handleError(res, err);

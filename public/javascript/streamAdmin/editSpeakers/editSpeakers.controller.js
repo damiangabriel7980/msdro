@@ -57,7 +57,7 @@ controllers
 
       $scope.saveSpk = function(){
           $scope.currentUsers.registered = getIds.extract($scope.currentUsers.registered);
-          liveConferences.update({id: idToEdit, addUsers : true},$scope.currentUsers).$promise.then(function(resp){
+          liveConferences.update({id: idToEdit, addSpeaker : true},$scope.currentUsers).$promise.then(function(resp){
               $modalInstance.close();
               $rootScope.$broadcast('updatedUsers');
           });

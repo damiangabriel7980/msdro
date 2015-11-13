@@ -1,7 +1,7 @@
 'use strict';
 
 controllers
-  .controller('EditViewersCtrl', [ '$scope', '$filter', '$sce' ,'$state' , '$rootScope', 'userService', 'ngTableParams', 'Success', 'Error', 'getIds', 'liveConferences', 'filterArrayProperty', function ($scope, $filter, $sce, $state, $rootScope,userService, ngTableParams,Success,Error,getIds,liveConferences,filterArrayProperty) {
+  .controller('EditViewersCtrl', [ '$scope', '$filter', '$sce' ,'$state' , '$rootScope', 'userService', 'ngTableParams', 'Success', 'Error', 'getIds', 'liveConferences', 'filterArrayProperty', '$modalInstance', 'idToEdit', 'viewersToEdit', function ($scope, $filter, $sce, $state, $rootScope,userService, ngTableParams,Success,Error,getIds,liveConferences,filterArrayProperty,$modalInstance,idToEdit, viewersToEdit) {
     $scope.selectedGroup = {
       display_name: '',
       _id: null
@@ -10,6 +10,8 @@ controllers
     userService.groups.query().$promise.then(function(resp){
       $scope.groups = Success.getObject(resp);
     });
+
+      $scope.checkboxes = { 'checked': false, items: {} };
 
     $scope.$watch('selectedGroup',function(){
       if($scope.data){
@@ -22,7 +24,6 @@ controllers
       }
     });
 
-    $scope.checkboxes = { 'checked': false, items: {} };
 
     $scope.selectAll = function(value) {
       angular.forEach($scope.data, function(item) {
@@ -31,26 +32,43 @@ controllers
     };
 
     // watch for data checkboxes
-    $scope.$watch('checkboxes.items', function(values) {
-      if (!$scope.data) {
-        return;
-      }
-      var checked = 0, unchecked = 0,
-          total = $scope.data.length;
-      angular.forEach($scope.data, function(item) {
-        checked   +=  ($scope.checkboxes.items[item._id]) || 0;
-        unchecked += (!$scope.checkboxes.items[item._id]) || 0;
-      });
-      if ((unchecked == 0) || (checked == 0)) {
-        $scope.checkboxes.checked = (checked == total);
-      }
-    }, true);
+    $scope.checkValue = function(id,value,viewer){
+        if(!value){
+            delete $scope.checkboxes.items[id];
+            if(viewer.groupsID){
+                angular.forEach($scope.editedViewers.registered, function(item,index) {
+                    if(item._id == id)
+                        $scope.editedViewers.registered.splice(index,1);
+                });
+            } else {
+                angular.forEach($scope.editedViewers.unregistered, function(item,index) {
+                    if(item._id == id)
+                        $scope.editedViewers.unregistered.splice(index,1);
+                });
+            }
+        } else {
+            if(viewer.groupsID){
+                $scope.editedViewers.registered.push(viewer);
+            } else {
+                $scope.editedViewers.unregistered.push(viewer);
+            }
+        }
+    };
 
     userService.users.query({groups: true}).$promise.then(function(resp){
       //$scope.viewers = viewersToEdit;
       $scope.data = Success.getObject(resp);
-      $scope.oldData = Success.getObject(resp);
-      $scope.tableParams = new ngTableParams({
+        $scope.idToEdit = idToEdit;
+        $scope.editedViewers = viewersToEdit;
+        angular.forEach($scope.editedViewers.registered, function(item) {
+            $scope.checkboxes.items[item._id] = true;
+        });
+        angular.forEach($scope.editedViewers.unregistered, function(item) {
+            $scope.checkboxes.items[item._id] = true;
+            $scope.data.push(item);
+        });
+        $scope.oldData = Success.getObject(resp);
+        $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
         count: 10,          // count per page
         sorting: {
@@ -74,8 +92,25 @@ controllers
     });
 
     $scope.saveData = function(){
-
+        var temp =  $scope.editedViewers.registered;
+        $scope.editedViewers.registered = getIds.extract($scope.editedViewers.registered);
+        liveConferences.update({id: $scope.idToEdit,addViewers : true},$scope.editedViewers).$promise.then(function(resp){
+            $scope.editedViewers.registered = temp;
+            $modalInstance.close();
+            $state.reload();
+        })
     };
 
+      $scope.addViewer = function(){
+          liveConferences.update({id :$scope.idToEdit, addViewers : true, single: true},$scope.viewer).$promise.then(function(resp){
+                angular.forEach(Success.getObject(resp).viewers.unregistered, function(item) {
+                    if(item.username.toLowerCase() == $scope.viewer.username.toLowerCase()){
+                        $scope.checkboxes.items[item._id] = true;
+                        $scope.data.push(item);
+                    }
+                });
+                $scope.viewer = null;
+            })
+      };
 
   }]);

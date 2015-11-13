@@ -1,4 +1,3 @@
-<div ng-controller="EditViewersCtrl">
   <div class="modal-header">
     <div class="modal-title"><h3>Editare vieweri</h3></div>
   </div>
@@ -9,16 +8,16 @@
           <h4>Unregistered Viewers</h4>
         </div>
         <div class="col-md-2 noPadding">
-          <a class="btn btn-default pull-right" ng-click="addUser()">Adauga viewer</a>
+          <a class="btn btn-default pull-right" ng-click="addViewer()">Adauga viewer</a>
         </div>
       </div>
       <div class="col-md-12 form-group-sm col-xs-12 noPadding">
         <label>Nume:</label>
-        <input type="text" class="form-control" name="nume" ng-model="viewerName" ng-required="false">
+        <input type="text" class="form-control" name="nume" ng-model="viewer.name" ng-required="false">
       </div>
       <div class="col-md-12 form-group-sm col-xs-12 noPadding">
         <label>Email:</label>
-        <input type="text" class="form-control" name="email" ng-model="viewerEmail" ng-required="false">
+        <input type="text" class="form-control" name="email" ng-model="viewer.username" ng-required="false">
       </div>
     </div>
     <div class="col-md-12 form-group">
@@ -37,9 +36,9 @@
       </div>
     </div>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered" header="'ng-table/headers/checkbox.html'">
-      <tr ng-repeat="viewer in $data">
+      <tr ng-repeat="viewer in $data track by $index">
         <td width="30">
-          <input type="checkbox" ng-model="checkboxes.items[viewer._id]" />
+          <input type="checkbox" ng-model="checkboxes.items[viewer._id]" ng-click="checkValue(viewer._id,checkboxes.items[viewer._id],viewer)" />
         </td>
         <td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
           {{viewer.name}}</td>
@@ -53,6 +52,6 @@
     </table>
   </div>
   <div class="modal-footer">
-    <a class="btn btn-default pull-right" ng-click="$close()">Inapoi</a>
+    <a class="btn btn-default pull-left" ng-click="$close()">Inapoi</a>
+    <a class="btn btn-default pull-right" ng-click="saveData()">Salveaza</a>
   </div>
-</div>
