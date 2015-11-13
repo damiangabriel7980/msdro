@@ -110,7 +110,7 @@ var insertUsers = function(arrayOfData){
                 }
                 else {
                     CitiesTemp = data2;
-                    async.each(arrayOfData, function(item, callback){
+                    async.eachSeries(arrayOfData, function(item, callback){
                         var nameMedic = lowerString(item[medic]);
                         var nameRep = lowerString(item[rep]);
                         var CityName = lowerString(item[city]);
