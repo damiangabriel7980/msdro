@@ -25,7 +25,8 @@ var LiveConferencesSchema = new Schema({
             name: String,
             username: String
         }]
-    }
+    },
+    'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas', index: true}]
 });
 
 module.exports = mongoose.model('liveConferences', LiveConferencesSchema,'liveConferences');

@@ -183,7 +183,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/streamAdmin/liveConferences')
         .get(function(req,res){
             if(req.query.id){
-                LiveConference.find({_id:req.query.id}).populate('speakers.registered').populate('viewers.registered').exec(function (err, conference) {
+                LiveConference.find({_id:req.query.id}).populate('speakers.registered').populate('viewers.registered').populate('therapeutic-areasID').exec(function (err, conference) {
                     if(err) { handleError(res, err); }
                     if(conference.length == 0) { handleError(res,err,404,1); }
                     else
@@ -263,16 +263,16 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 }
             } else if(req.query.addSpeaker){
-                LiveConference.update({_id: req.query.id}, {$set: {speakers: req.body}}, function (err, wres) {
+                LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: {speakers: req.body}}).populate('speakers.registered').exec(function (err, wres) {
                     if(err){
                         handleError(res, err);
                     }else{
-                        handleSuccess(res,{success: wres});
+                        handleSuccess(res,wres);
                     }
                 });
             } else if(req.query.addViewers){
                 if(req.query.single){
-                    LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers.unregistered': req.body}}, function (err, wRes) {
+                    LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers.unregistered': req.body}}).exec(function (err, wRes) {
                         if(err){
                             handleError(res, err);
                         }else{
@@ -280,11 +280,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         }
                     });
                 } else {
-                    LiveConference.update({_id: req.query.id}, {$set: {viewers: req.body}}, function (err, wres) {
+                    LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: {viewers: req.body}}).populate('viewers.registered').exec(function (err, wres) {
                         if(err){
                             handleError(res, err);
                         }else{
-                            handleSuccess(res,{success: wres});
+                            handleSuccess(res,wres);
                         }
                     });
                 }
