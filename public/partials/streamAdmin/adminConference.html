@@ -19,8 +19,8 @@
         {{conference.date | date: "dd/MM/yyyy 'at' hh:mm"}}</td>
       <td data-title="'Actiuni'">
         <div class="btn-group-sm pull-right"  role="group">
-          <button class="btn" ng-class="{'btn-danger': conference.enabled, 'btn-success': !conference.enabled}" ng-click="statusConference(conference._id,conference.enabled)"><i class="glyphicon glyphicon-lock"></i></button>
           <button class="btn btn-info" ng-click="editConference(conference._id)"><i class="glyphicon glyphicon-cog"></i></button>
+          <button class="btn" ng-class="{'btn-danger': conference.enabled, 'btn-default': !conference.enabled}" ng-click="statusConference(conference._id,conference.enabled)"><i class="glyphicon glyphicon-lock"></i></button>
           <button class="btn btn-danger" ng-click="deleteConference(conference._id)"><i class="glyphicon glyphicon-trash"></i></button>
         </div>
       </td>

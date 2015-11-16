@@ -180,6 +180,12 @@ services.factory('getIds', [function () {
     }
 }]);
 
+services.factory('therapeuticAreaService', ['$resource', function($resource){
+    return $resource('api/admin/therapeutic_areas', {}, {
+        query: { method: 'GET', isArray: false }
+    });
+}]);
+
 services.factory('filterArrayProperty', [function () {
     var getData = function (mainArray,property,propName,textToSearch){
         var data = [];

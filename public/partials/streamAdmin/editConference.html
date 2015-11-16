@@ -1,20 +1,29 @@
+<form name="conferenceForm" novalidate>
 <div class="modal-header">
   <h4 class="modal-title">Editare conferinta</h4>
 </div>
 <div class="modal-body">
   <div class="modal-body" style="height: 70%;">
+    <div class="col-md-12 col-xs-12 noPadding">
+      <alert ng-if="conferenceAlert.text" type="{{conferenceAlert.type}}" close="conferenceAlert.text=null">{{conferenceAlert.text}}</alert>
+    </div>
     <div class="row">
-      <div class="col-md-12 form-group">
+      <div class="col-md-12 form-group" ng-class="{'has-error': conferenceForm.nume.$error.required}">
         <label>Nume:</label>
-        <input type="text" ng-model="objectToEdit.name" class="form-control" required>
+        <input type="text" ng-model="objectToEdit.name" id="nume" name="nume" class="form-control" ng-required="true">
+        <p class="" ng-show="conferenceForm.nume.$error.required">Numele este obligatoriu!</p>
       </div>
       <div class="col-md-12 form-group">
         <label>Descriere:</label>
-        <input type="text" ng-model="objectToEdit.description" class="form-control" required>
+        <input type="text" ng-model="objectToEdit.description" class="form-control">
       </div>
-      <div class="col-md-12 form-group">
+      <div class="col-md-12 form-group" ng-class="{'has-error': conferenceForm.locatie.$error.required}">
         <label>Locatie:</label>
-        <input type="text" ng-model="objectToEdit.location" class="form-control" required>
+        <input type="text" ng-model="objectToEdit.location" id="locatie" name="locatie" class="form-control" ng-required="true">
+        <p class="" ng-show="conferenceForm.locatie.$error.required">Locatia este obligatorie!</p>
+      </div>
+      <div class="col-md-12">
+        <therapeutic-select all-areas="areas" selected-areas="selectedAreas" returned-areas="returnedAreas"></therapeutic-select>
       </div>
       <div class="col-md-12 form-group">
         <img no-cache-src="{{pathAmazonDev + objectToEdit.image_path}}"  style="width:100px;">
@@ -47,14 +56,14 @@
           <div class="col-md-12 form-group noPadding">
             <label>Registered</label>
             <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.speakers.registered track by $index">
-              <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username}}</div>
+              <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username + ' (' + key.name + ')'}}</div>
               <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,false,'speaker')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
             </div>
           </div>
           <div class="col-md-12 form-group noPadding">
             <label>Unregistered</label>
             <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.speakers.unregistered track by $index">
-              <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username}}</div>
+              <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username  + ' (' + key.name + ')'}}</div>
               <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,true,'speaker')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
             </div>
           </div>
@@ -67,23 +76,25 @@
           <div class="col-md-12 form-group noPadding">
             <label>Registered</label>
             <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.viewers.registered track by $index">
-              <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username}}</div>
+              <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username  + ' (' + key.name + ')'}}</div>
               <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,false,'viewer')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
             </div>
           </div>
           <div class="col-md-12 form-group noPadding">
             <label>Unregistered</label>
             <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.viewers.unregistered track by $index">
-              <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username}}</div>
+              <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username  + ' (' + key.name + ')'}}</div>
               <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,true,'viewer')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+  </div>
   </div>
 </div>
 <div class="modal-footer">
   <a class="btn pull-left btn-primary" ng-click="$close()">Inchide</a>
-  <a class="btn pull-right btn-primary" ng-click="updateConference(objectToEdit._id)">Actualizeaza conferinta</a>
+  <a class="btn pull-right btn-primary" type="submit" ng-click="updateConference(objectToEdit._id,conferenceForm)">Actualizeaza conferinta</a>
 </div>
+</form>
+

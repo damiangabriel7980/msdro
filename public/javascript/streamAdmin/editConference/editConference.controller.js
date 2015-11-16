@@ -1,7 +1,7 @@
 'use strict';
 
 controllers
-  .controller('EditConferenceCtrl', [ '$scope', '$filter', '$sce' ,'$state' , 'AmazonService', '$rootScope', 'liveConferences', 'idToEdit', 'Success', '$modal', '$modalInstance', 'getIds',function ($scope, $filter, $sce, $state,AmazonService, $rootScope, liveConferences,idToEdit,Success,$modal,$modalInstance,getIds) {
+  .controller('EditConferenceCtrl', [ '$scope', '$filter', '$sce' ,'$state' , 'AmazonService', '$rootScope', 'liveConferences', 'idToEdit', 'Success', '$modal', '$modalInstance', 'getIds', 'Error', 'therapeuticAreaService',function ($scope, $filter, $sce, $state,AmazonService, $rootScope, liveConferences,idToEdit,Success,$modal,$modalInstance,getIds,Error,therapeuticAreaService) {
     var putLogoS3 = function (body) {
       AmazonService.getClient(function (s3) {
         var extension = body.name.split('.').pop();
@@ -27,12 +27,27 @@ controllers
 
       liveConferences.query({id: idToEdit}).$promise.then(function(resp){
           $scope.objectToEdit = Success.getObject(resp);
+          $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
       });
 
-      $rootScope.$on("updatedUsers", function(){
-         liveConferences.query({id: idToEdit}).$promise.then(function(resp){
-           $scope.objectToEdit = Success.getObject(resp);
-         });
+    therapeuticAreaService.query().$promise.then(function (resp) {
+      $scope.areas = Success.getObject(resp);
+    }).catch(function(err){
+      console.log(Error.getMessage(err));
+    });
+
+    var resetConferenceAlert = function (text, type) {
+      $scope.conferenceAlert = {
+        text: text,
+        type: type || "danger"
+      };
+    };
+
+      $scope.$on("updatedUsers", function(events, args){
+            if(args.viewers)
+              $scope.objectToEdit.viewers = args.newUsers;
+        else
+           $scope.objectToEdit.speakers = args.newUsers;
       });
 
       $scope.minDate = new Date();
@@ -41,15 +56,21 @@ controllers
           startingDay: 1
       };
 
-      $scope.updateConference = function(id){
-        $scope.objectToEdit.speakers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
-        $scope.objectToEdit.viewers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
-        liveConferences.update({id: id},$scope.objectToEdit).$promise.then(function(resp){
-          $modalInstance.close();
-          $state.go('liveConferences',{},{reload: true});
-        }).catch(function(err){
-          console.log(Error.getMessage(err));
-        });
+      $scope.updateConference = function(id, confForm){
+        if(confForm.nume.$valid && confForm.locatie.$valid){
+          $scope.objectToEdit.speakers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
+          $scope.objectToEdit.viewers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
+          $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;
+          liveConferences.update({id: id},$scope.objectToEdit).$promise.then(function(resp){
+            $modalInstance.close();
+            $state.go('liveConferences',{},{reload: true});
+          }).catch(function(err){
+            console.log(Error.getMessage(err));
+          });
+        } else {
+          resetConferenceAlert("Exista campuri goale! Verificati formularul inca o data!");
+        }
+
       };
 
 

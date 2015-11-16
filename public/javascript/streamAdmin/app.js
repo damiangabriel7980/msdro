@@ -10,7 +10,8 @@ var streamAdminApp = angular.module('streamAdminApp',
         'ngTable',
         'ui.bootstrap.datetimepicker',
         'ngFileUpload',
-        'angularSelectAutocomplete'
+        'angularSelectAutocomplete',
+        'therapeuticSelect'
     ]);
 
 streamAdminApp.config(['$locationProvider', function($location) {

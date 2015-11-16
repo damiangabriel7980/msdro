@@ -92,12 +92,10 @@ controllers
     });
 
     $scope.saveData = function(){
-        var temp =  $scope.editedViewers.registered;
         $scope.editedViewers.registered = getIds.extract($scope.editedViewers.registered);
         liveConferences.update({id: $scope.idToEdit,addViewers : true},$scope.editedViewers).$promise.then(function(resp){
-            $scope.editedViewers.registered = temp;
             $modalInstance.close();
-            $state.reload();
+            $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).viewers , viewers : true});
         })
     };
 
