@@ -48,14 +48,14 @@
             <label>Registered</label>
             <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.speakers.registered track by $index">
               <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username}}</div>
-              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeSpeaker($index,key)"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
+              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,false,'speaker')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
             </div>
           </div>
           <div class="col-md-12 form-group noPadding">
             <label>Unregistered</label>
             <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.speakers.unregistered track by $index">
               <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username}}</div>
-              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeSpeaker($index,key,true)"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
+              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,true,'speaker')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
             </div>
           </div>
         </div>
@@ -68,14 +68,14 @@
             <label>Registered</label>
             <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.viewers.registered track by $index">
               <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username}}</div>
-              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeViewer(objectToEdit._id,$index)"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
+              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,false,'viewer')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
             </div>
           </div>
           <div class="col-md-12 form-group noPadding">
             <label>Unregistered</label>
             <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.viewers.unregistered track by $index">
               <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username}}</div>
-              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeViewer(objectToEdit._id,$index)"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
+              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,true,'viewer')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
             </div>
           </div>
         </div>

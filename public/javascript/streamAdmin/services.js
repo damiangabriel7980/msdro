@@ -158,6 +158,9 @@ services.factory('userService', ['$resource', function($resource){
     return {
         users: $resource('api/streamAdmin/users', {}, {
             query: { method: 'GET', isArray: false }
+        }) ,
+        groups: $resource('api/streamAdmin/groups', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
@@ -174,5 +177,21 @@ services.factory('getIds', [function () {
     };
     return {
         extract : extract
+    }
+}]);
+
+services.factory('filterArrayProperty', [function () {
+    var getData = function (mainArray,property,propName,textToSearch){
+        var data = [];
+        angular.forEach(mainArray, function(item) {
+            angular.forEach(item[property], function(itemProp) {
+                if( itemProp[propName].toLowerCase().indexOf(textToSearch.toLowerCase()) >= 0 )
+                    data.push(item);
+            });
+        });
+        return data;
+    };
+    return {
+        getData : getData
     }
 }]);

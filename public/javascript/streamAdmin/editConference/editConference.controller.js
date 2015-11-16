@@ -72,26 +72,32 @@ controllers
       });
     };
 
-    $scope.removeSpeaker = function(index,user,unregistered){
+    $scope.removeUser = function(index,id,unregistered,roleUs){
       var userData = {};
       if(unregistered){
         userData = {
-          role: 'speaker',
+          role: roleUs,
           registered: false,
-          id: user._id
+          id: id
         };
         liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
-          $scope.objectToEdit.speakers.unregistered.splice(index,1);
+          if(roleUs == 'speaker')
+            $scope.objectToEdit.speakers.unregistered.splice(index,1);
+          else
+            $scope.objectToEdit.viewers.unregistered.splice(index,1);
         })
       }
       else {
         userData = {
-          role: 'speaker',
+          role: roleUs,
           registered: true,
-          id: user._id
+          id: id
         };
         liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
-          $scope.objectToEdit.speakers.registered.splice(index,1);
+          if(roleUs == 'speaker')
+            $scope.objectToEdit.speakers.registered.splice(index,1);
+          else
+            $scope.objectToEdit.viewers.registered.splice(index,1);
         })
       }
     };
