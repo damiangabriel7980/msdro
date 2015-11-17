@@ -2,23 +2,30 @@
     <div class="modal-title"><h3>Editare vieweri</h3></div>
   </div>
   <div class="modal-body">
+    <div class="col-md-12 col-xs-12">
+      <alert ng-if="statusAlert.text" type="{{statusAlert.type}}" close="statusAlert.text=null">{{statusAlert.text}}</alert>
+    </div>
     <div class="col-md-12 form-group-sm col-xs-12 paddingBottom20">
+      <form name="viewerForm" novalidate>
       <div class="col-md-12 form-group-sm col-xs-12 noPadding ">
-        <div class="col-md-10 noPadding">
-          <h4>Unregistered Viewers</h4>
-        </div>
-        <div class="col-md-2 noPadding">
-          <a class="btn btn-default pull-right" ng-click="addViewer()">Adauga viewer</a>
-        </div>
+          <div class="col-md-10 noPadding">
+            <h4>Unregistered Viewers</h4>
+          </div>
+          <div class="col-md-2 noPadding">
+            <a class="btn btn-default pull-right" type="submit" ng-click="addViewer(viewerForm.$valid)">Adauga viewer</a>
+          </div>
       </div>
-      <div class="col-md-12 form-group-sm col-xs-12 noPadding">
+      <div class="col-md-12 form-group-sm col-xs-12 noPadding" ng-class="{'has-error': viewerForm.nume.$error.required}">
         <label>Nume:</label>
-        <input type="text" class="form-control" name="nume" ng-model="viewer.name" ng-required="false">
+        <input type="text" class="form-control" name="nume" id="nume" ng-model="viewer.name" ng-required="true">
+        <p class="" ng-show="viewerForm.nume.$error.required">Numele este obligatoriu!</p>
       </div>
-      <div class="col-md-12 form-group-sm col-xs-12 noPadding">
+      <div class="col-md-12 form-group-sm col-xs-12 noPadding" ng-class="{'has-error': viewerForm.email.$error.required}">
         <label>Email:</label>
-        <input type="text" class="form-control" name="email" ng-model="viewer.username" ng-required="false">
+        <input type="text" class="form-control" name="email" id="email" ng-model="viewer.username" ng-required="true">
+        <p class="" ng-show="viewerForm.email.$error.required">Email-ul este obligatoriu!</p>
       </div>
+        </form>
     </div>
     <div class="col-md-12 form-group">
       <div class="col-md-12 noPadding">

@@ -8,22 +8,54 @@ controllers
         username: ''
     };
 
-    $scope.addSpk = function(user){
-        if(user._id == null) {
-            user.username = angular.element('.input')[1].value;
-            $scope.currentUsers.unregistered.push(user);
-        }
-        else {
-            if($scope.currentUsers.registered.length > 0){
-                var ids = getIds.extract($scope.currentUsers.registered);
-                if(ids.indexOf(user._id) > -1)
-                    return;
-                else
-                    $scope.currentUsers.registered.push(user);
-            } else
-                $scope.currentUsers.registered.push(user);
+    $scope.addSpk = function(user,isValid){
+        if(!isValid){
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.text = "Exista campuri goale! Verificati formularul inca o data!";
+            $scope.statusAlert.newAlert = true;
+        } else {
+            if(user._id == null) {
+                user.username = angular.element('.input')[1].value;
+                user.registered = false;
+                liveConferences.update({id: idToEdit, addSpeaker : true, single: true},{user: user}).$promise.then(function(resp){
+                    angular.forEach(Success.getObject(resp).speakers.unregistered, function(item) {
+                        if(item.username.toLowerCase() == user.username.toLowerCase()){
+                            $scope.currentUsers.unregistered.push(user);
+                        }
+                    });
+                }).catch(function(err){
+                    $scope.statusAlert.type = "danger";
+                    $scope.statusAlert.text = Error.getMessage(err);
+                    $scope.statusAlert.newAlert = true;
+                });
+            }
+            else {
+                if($scope.currentUsers.registered.length > 0){
+                    var ids = getIds.extract($scope.currentUsers.registered);
+                    if(ids.indexOf(user._id) > -1)
+                        return;
+                    else {
+                        user.registered = true;
+                        liveConferences.update({id: idToEdit, addSpeaker : true, single: true},{user: user}).$promise.then(function(resp){
+                            $scope.currentUsers.registered.push(user);
+                        }).catch(function(err){
+                            $scope.statusAlert.type = "danger";
+                            $scope.statusAlert.text = Error.getMessage(err);
+                            $scope.statusAlert.newAlert = true;
+                        });
+                    }
+                } else
+                    liveConferences.update({id: idToEdit, addSpeaker : true, single: true},{user: user}).$promise.then(function(resp){
+                        $scope.currentUsers.registered.push(user);
+                    }).catch(function(err){
+                        $scope.statusAlert.type = "danger";
+                        $scope.statusAlert.text = Error.getMessage(err);
+                        $scope.statusAlert.newAlert = true;
+                    });
+            }
         }
     };
+      $scope.statusAlert = {newAlert:false, type:"", message:""};
 
       $scope.currentUsers = speakersToEdit;
 

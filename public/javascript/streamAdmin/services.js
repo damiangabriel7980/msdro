@@ -3,7 +3,7 @@
  */
 var services = angular.module('services', ['ngResource']);
 services.factory('AmazonService', ['$resource', '$rootScope', 'Success', function($resource, $rootScope, Success){
-    var getCredentialsFromServer = $resource('api/admin/s3tc', {}, {
+    var getCredentialsFromServer = $resource('api/streamAdmin/s3tc', {}, {
         query: { method: 'GET', isArray: false }
     });
     var getClient = function (callback) {
@@ -181,7 +181,7 @@ services.factory('getIds', [function () {
 }]);
 
 services.factory('therapeuticAreaService', ['$resource', function($resource){
-    return $resource('api/admin/therapeutic_areas', {}, {
+    return $resource('api/streamAdmin/therapeutic_areas', {}, {
         query: { method: 'GET', isArray: false }
     });
 }]);

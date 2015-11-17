@@ -3,20 +3,26 @@
   </div>
   <div class="modal-body">
     <div class="modal-body" style="height: 70%;">
+      <div class="col-md-12 col-xs-12 noPadding">
+        <alert ng-if="statusAlert.text" type="{{statusAlert.type}}" close="statusAlert.text=null">{{statusAlert.text}}</alert>
+      </div>
       <div class="row">
+        <form name="spkForm" novalidate>
         <div class="col-md-12 form-group">
           <div class="form-group-sm">
             <label>Email:</label>
-            <angular-select-autocomplete ng-model="selectedUser" ng-options="speakers" id-attr="_id" title-attr="username" ng-required="true" ng-disabled="false"></angular-select-autocomplete>
+            <angular-select-autocomplete name="email" ng-model="selectedUser" ng-options="speakers" id-attr="_id" title-attr="username" ng-required="true" ng-disabled="false"></angular-select-autocomplete>
           </div>
         </div>
-        <div class="col-md-12 form-group-sm col-xs-12">
+        <div class="col-md-12 form-group-sm col-xs-12" ng-class="{'has-error': spkForm.nume.$error.required}">
           <label>Nume:</label>
-          <input type="text" class="form-control" name="nume" ng-model="selectedUser.name" ng-required="true">
+          <input type="text" class="form-control" name="nume" id="nume" ng-model="selectedUser.name" ng-required="true">
+          <p class="" ng-show="spkForm.nume.$error.required">Numele este obligatoriu!</p>
         </div>
         <div class="col-md-12 form-group marginTop20">
-          <button class="btn btn-default pull-right" ng-click="addSpk(selectedUser)"><i class="glyphicon glyphicon-user"></i>&nbsp;Adauga speaker</button>
+          <button class="btn btn-default pull-right" ng-click="addSpk(selectedUser,spkForm.$valid)"><i class="glyphicon glyphicon-user"></i>&nbsp;Adauga speaker</button>
         </div>
+        </form>
         <div class="col-md-12 form-group">
           <label>Registered</label>
           <div class="col-md-12 form-group" ng-repeat="key in currentUsers.registered track by $index">
