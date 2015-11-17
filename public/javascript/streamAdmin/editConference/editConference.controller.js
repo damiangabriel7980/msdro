@@ -1,7 +1,13 @@
 'use strict';
 
 controllers
-  .controller('EditConferenceCtrl', [ '$scope', '$filter', '$sce' ,'$state' , 'AmazonService', '$rootScope', 'liveConferences', 'idToEdit', 'Success', '$modal', '$modalInstance', 'getIds', 'Error', 'therapeuticAreaService',function ($scope, $filter, $sce, $state,AmazonService, $rootScope, liveConferences,idToEdit,Success,$modal,$modalInstance,getIds,Error,therapeuticAreaService) {
+  .controller('EditConferenceCtrl', [ '$scope', '$filter', '$sce' ,'$state' , 'AmazonService', '$rootScope', 'liveConferences', 'idToEdit', 'Success', '$modal', '$modalInstance', 'getIds', 'Error', 'therapeuticAreaService', 'userService',function ($scope, $filter, $sce, $state,AmazonService, $rootScope, liveConferences,idToEdit,Success,$modal,$modalInstance,getIds,Error,therapeuticAreaService,userService) {
+    $scope.selectedModerator = {
+      name: '',
+      _id: null,
+      username: ''
+    };
+
     var putLogoS3 = function (body) {
       AmazonService.getClient(function (s3) {
         var extension = body.name.split('.').pop();
@@ -25,11 +31,16 @@ controllers
       });
     };
 
-      liveConferences.query({id: idToEdit}).$promise.then(function(resp){
-          $scope.objectToEdit = Success.getObject(resp);
-          $scope.oldDate = $scope.objectToEdit.date;
-          $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
-      });
+    userService.users.query().$promise.then(function(resp){
+      $scope.users = Success.getObject(resp);
+    });
+
+    liveConferences.query({id: idToEdit}).$promise.then(function(resp){
+      $scope.objectToEdit = Success.getObject(resp);
+      $scope.oldDate = $scope.objectToEdit.date;
+      $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
+      $scope.selectedModerator = $scope.objectToEdit.moderator;
+    });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
       $scope.areas = Success.getObject(resp);
@@ -63,6 +74,7 @@ controllers
           if(new Date($scope.objectToEdit.date).getTime() < currentDate.getTime() && new Date($scope.objectToEdit.date).getTime() != new Date($scope.oldDate).getTime())
             resetConferenceAlert("Data conferintei nu poate fi mai mica decat data curenta!");
           else {
+            $scope.objectToEdit.moderator = $scope.selectedModerator._id ? $scope.selectedModerator._id : null;
             $scope.objectToEdit.speakers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
             $scope.objectToEdit.viewers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
             $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;

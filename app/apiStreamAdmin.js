@@ -32,7 +32,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/streamAdmin/liveConferences')
         .get(function(req,res){
             if(req.query.id){
-                LiveConference.find({_id:req.query.id}).populate('speakers.registered').populate('viewers.registered').populate('therapeutic-areasID').exec(function (err, conference) {
+                LiveConference.find({_id:req.query.id}).populate('speakers.registered').populate('viewers.registered').populate('therapeutic-areasID').populate('moderator').exec(function (err, conference) {
                     if(err) { handleError(res, err); }
                     if(conference.length == 0) { handleError(res,err,404,1); }
                     else
