@@ -15,7 +15,7 @@ controllers
             $scope.statusAlert.newAlert = true;
         } else {
             if(user._id == null) {
-                user.username = angular.element('.input')[1].value;
+                user.username = angular.element('#emailField')[0].value;
                 user.registered = false;
                 liveConferences.update({id: idToEdit, addSpeaker : true, single: true},{user: user}).$promise.then(function(resp){
                     angular.forEach(Success.getObject(resp).speakers.unregistered, function(item) {
