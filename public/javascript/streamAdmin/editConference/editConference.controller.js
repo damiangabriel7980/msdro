@@ -74,9 +74,9 @@ controllers
           if(new Date($scope.objectToEdit.date).getTime() < currentDate.getTime() && new Date($scope.objectToEdit.date).getTime() != new Date($scope.oldDate).getTime())
             resetConferenceAlert("Data conferintei nu poate fi mai mica decat data curenta!");
           else {
-            $scope.objectToEdit.moderator = $scope.selectedModerator._id ? $scope.selectedModerator._id : null;
+            $scope.objectToEdit.moderator = $scope.selectedModerator ? $scope.selectedModerator._id : null;
             $scope.objectToEdit.speakers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
-            $scope.objectToEdit.viewers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
+            $scope.objectToEdit.viewers.registered = getIds.extract($scope.objectToEdit.viewers.registered);
             $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;
             $scope.objectToEdit.last_modified = new Date();
             liveConferences.update({id: id},$scope.objectToEdit).$promise.then(function(resp){
