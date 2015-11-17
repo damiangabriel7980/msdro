@@ -20,11 +20,11 @@
             <td data-title="'Tip utilizator'" sortable="'type'">
                 {{user.type}}
             </td>
-            <td data-title="'Loc de munca'" filter="{ 'workplace': 'text' }" sortable="'workplace'">
-                {{user.workplace}}
+            <td data-title="'Oras'" filter="{ 'city.name': 'text' }" sortable="'city.name'">
+                {{user.city.name}}
             </td>
-            <td data-title="'Adresa loc de munca'" filter="{ 'workplaceAddress': 'text' }" sortable="'workplaceAddress'">
-                {{user.workplaceAddress}}
+            <td data-title="'Judet'" filter="{ 'city.county.name': 'text' }" sortable="'city.county.name'">
+                {{user.city.county.name}}
             </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">

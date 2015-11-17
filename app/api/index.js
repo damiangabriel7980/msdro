@@ -2534,7 +2534,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if(req.query.type){
                     q.type = req.query.type;
                 }
-                JanuviaUsers.find(q, function (err, users) {
+                JanuviaUsers.find(q).deepPopulate('city.county', {
+                    populate: {
+                        'city.county': {
+                            select: 'name'
+                        }
+                    }
+                }).exec(function (err, users) {
                     if(err){
                         handleError(res, err);
                     }else{

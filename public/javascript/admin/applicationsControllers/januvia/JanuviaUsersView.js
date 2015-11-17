@@ -12,8 +12,36 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
             $scope.tableParams = new ngTableParams(params, {
                 total: users.length, // length of data
                 getData: function($defer, params) {
+                    var filters = {};
 
-                    var orderedData = $filter('orderBy')(($filter('filter')(users, params.filter())), params.orderBy());
+                    angular.forEach(params.filter(), function(value, key) {
+                        if (key.indexOf('.') === -1) {
+                            filters[key] = value;
+                            return;
+                        }
+
+                        var createObjectTree = function (tree, properties, value) {
+                            if (!properties.length) {
+                                return value;
+                            }
+
+                            var prop = properties.shift();
+
+                            if (!prop || !/^[a-zA-Z]/.test(prop)) {
+                                throw new Error('invalid nested property name for filter');
+                            }
+
+                            tree[prop] = createObjectTree({}, properties, value);
+
+                            return tree;
+                        };
+
+                        var filter = createObjectTree({}, key.split('.'), value);
+
+                        angular.extend(filters, filter);
+                    });
+
+                    var orderedData = params.filter() ? $filter('orderBy')(($filter('filter')(users, filters)), params.orderBy()) : users;
                     params.total(orderedData.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
