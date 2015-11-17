@@ -27,6 +27,7 @@ controllers
 
       liveConferences.query({id: idToEdit}).$promise.then(function(resp){
           $scope.objectToEdit = Success.getObject(resp);
+          $scope.oldDate = $scope.objectToEdit.date;
           $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
       });
 
@@ -58,15 +59,21 @@ controllers
 
       $scope.updateConference = function(id, confForm){
         if(confForm.nume.$valid && confForm.locatie.$valid){
-          $scope.objectToEdit.speakers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
-          $scope.objectToEdit.viewers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
-          $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;
-          liveConferences.update({id: id},$scope.objectToEdit).$promise.then(function(resp){
-            $modalInstance.close();
-            $state.go('liveConferences',{},{reload: true});
-          }).catch(function(err){
-            console.log(Error.getMessage(err));
-          });
+          var currentDate = new Date();
+          if(new Date($scope.objectToEdit.date).getTime() < currentDate.getTime() && new Date($scope.objectToEdit.date).getTime() != new Date($scope.oldDate).getTime())
+            resetConferenceAlert("Data conferintei nu poate fi mai mica decat data curenta!");
+          else {
+            $scope.objectToEdit.speakers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
+            $scope.objectToEdit.viewers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
+            $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;
+            $scope.objectToEdit.last_modified = new Date();
+            liveConferences.update({id: id},$scope.objectToEdit).$promise.then(function(resp){
+              $modalInstance.close();
+              $state.go('liveConferences',{},{reload: true});
+            }).catch(function(err){
+              console.log(Error.getMessage(err));
+            });
+          }
         } else {
           resetConferenceAlert("Exista campuri goale! Verificati formularul inca o data!");
         }

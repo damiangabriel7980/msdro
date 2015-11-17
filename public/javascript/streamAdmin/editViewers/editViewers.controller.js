@@ -1,7 +1,7 @@
 'use strict';
 
 controllers
-  .controller('EditViewersCtrl', [ '$scope', '$filter', '$sce' ,'$state' , '$rootScope', 'userService', 'ngTableParams', 'Success', 'Error', 'getIds', 'liveConferences', 'filterArrayProperty', '$modalInstance', 'idToEdit', 'viewersToEdit', function ($scope, $filter, $sce, $state, $rootScope,userService, ngTableParams,Success,Error,getIds,liveConferences,filterArrayProperty,$modalInstance,idToEdit, viewersToEdit) {
+  .controller('EditViewersCtrl', [ '$scope', '$filter', '$sce' ,'$state' , '$rootScope', 'userService', 'ngTableParams', 'Success', 'Error', 'getIds', 'liveConferences', 'filterArrayProperty', '$modalInstance', 'idToEdit', 'viewersToEdit', 'Validations', function ($scope, $filter, $sce, $state, $rootScope,userService, ngTableParams,Success,Error,getIds,liveConferences,filterArrayProperty,$modalInstance,idToEdit, viewersToEdit,Validations) {
     $scope.selectedGroup = {
       display_name: '',
       _id: null
@@ -11,7 +11,7 @@ controllers
       $scope.groups = Success.getObject(resp);
     });
 
-      $scope.checkboxes = { 'checked': false, items: {} };
+      $scope.checkboxes = { items: {} };
 
     $scope.$watch('selectedGroup',function(){
       if($scope.data){
@@ -24,39 +24,23 @@ controllers
       }
     });
 
-
     $scope.selectAll = function(value) {
       angular.forEach($scope.data, function(item) {
         $scope.checkboxes.items[item._id] = value;
+          $scope.checkValue(item._id,value);
       });
     };
 
     // watch for data checkboxes
-    $scope.checkValue = function(id,value,viewer){
+    $scope.checkValue = function(id,value){
         if(!value){
             delete $scope.checkboxes.items[id];
-            if(viewer.groupsID){
-                angular.forEach($scope.editedViewers.registered, function(item,index) {
-                    if(item._id == id)
-                        $scope.editedViewers.registered.splice(index,1);
-                });
-            } else {
-                angular.forEach($scope.editedViewers.unregistered, function(item,index) {
-                    if(item._id == id)
-                        $scope.editedViewers.unregistered.splice(index,1);
-                });
-            }
         } else {
-            if(viewer.groupsID){
-                $scope.editedViewers.registered.push(viewer);
-            } else {
-                $scope.editedViewers.unregistered.push(viewer);
-            }
+            $scope.checkboxes.items[id] = value;
         }
     };
 
     userService.users.query({groups: true}).$promise.then(function(resp){
-      //$scope.viewers = viewersToEdit;
       $scope.data = Success.getObject(resp);
         $scope.idToEdit = idToEdit;
         $scope.editedViewers = viewersToEdit;
@@ -67,7 +51,7 @@ controllers
             $scope.checkboxes.items[item._id] = true;
             $scope.data.push(item);
         });
-        $scope.oldData = Success.getObject(resp);
+        $scope.oldData = $scope.data;
         $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
         count: 10,          // count per page
@@ -91,24 +75,50 @@ controllers
       }, { dataset: $scope.data});
     });
 
-    $scope.saveData = function(){
-        $scope.editedViewers.registered = getIds.extract($scope.editedViewers.registered);
+      $scope.statusAlert = {newAlert:false, type:"", message:""};
+
+
+      $scope.saveData = function(){
+        $scope.editedViewers = {
+            registered: [],
+            unregistered: []
+        };
+        angular.forEach($scope.oldData, function(item) {
+            if($scope.checkboxes.items[item._id]){
+                if(item.groupsID)
+                    $scope.editedViewers.registered.push(item._id);
+                else
+                    $scope.editedViewers.unregistered.push(item);
+            }
+        });
         liveConferences.update({id: $scope.idToEdit,addViewers : true},$scope.editedViewers).$promise.then(function(resp){
             $modalInstance.close();
             $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).viewers , viewers : true});
         })
     };
 
-      $scope.addViewer = function(){
-          liveConferences.update({id :$scope.idToEdit, addViewers : true, single: true},$scope.viewer).$promise.then(function(resp){
-                angular.forEach(Success.getObject(resp).viewers.unregistered, function(item) {
-                    if(item.username.toLowerCase() == $scope.viewer.username.toLowerCase()){
-                        $scope.checkboxes.items[item._id] = true;
-                        $scope.data.push(item);
-                    }
-                });
-                $scope.viewer = null;
-            })
+      $scope.addViewer = function(isValid){
+          if(isValid){
+              liveConferences.update({id :$scope.idToEdit, addViewers : true, single: true},$scope.viewer).$promise.then(function(resp){
+                  angular.forEach(Success.getObject(resp).viewers.unregistered, function(item) {
+                      if(item.username.toLowerCase() == $scope.viewer.username.toLowerCase()){
+                          $scope.checkboxes.items[item._id] = true;
+                          $scope.data.push(item);
+                          if($scope.data.length != $scope.oldData.length)
+                              $scope.oldData.push(item);
+                      }
+                  });
+                  $scope.viewer = null;
+                  $scope.tableParams.reload();
+              }).catch(function(err){
+                  $scope.statusAlert.type = "danger";
+                  $scope.statusAlert.text = Error.getMessage(err);
+                  $scope.statusAlert.newAlert = true;
+              });
+          } else {
+              $scope.statusAlert.type = "danger";
+              $scope.statusAlert.text = "Exista campuri goale! Verificati formularul inca o data!";
+              $scope.statusAlert.newAlert = true;
+          }
       };
-
   }]);

@@ -47,6 +47,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req,res){
+            req.body.last_modified = new Date();
             LiveConference.create(req.body, function(err, conference) {
                 if(err) { return handleError(res, err); }
                 return handleSuccess(res,conference);
@@ -112,22 +113,52 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 }
             } else if(req.query.addSpeaker){
-                LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: {speakers: req.body}}).populate('speakers.registered').exec(function (err, wres) {
-                    if(err){
-                        handleError(res, err);
-                    }else{
-                        handleSuccess(res,wres);
-                    }
-                });
-            } else if(req.query.addViewers){
                 if(req.query.single){
-                    LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers.unregistered': req.body}}).exec(function (err, wRes) {
+                    var patt = UtilsModule.regexes.email;
+                    if(!patt.test(req.body.user.username.toString())){
+                        handleError(res,null,400,31);
+                    }else {
+                        if(req.body.registered){
+                            LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'speakers.registered': req.body.user._id}}).exec(function (err, wRes) {
+                                if (err) {
+                                    handleError(res, err);
+                                } else {
+                                    handleSuccess(res, wRes);
+                                }
+                            });
+                        }else {
+                            LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'speakers.unregistered': req.body.user}}).exec(function (err, wRes) {
+                                if (err) {
+                                    handleError(res, err);
+                                } else {
+                                    handleSuccess(res, wRes);
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: {speakers: req.body}}).populate('speakers.registered').exec(function (err, wres) {
                         if(err){
                             handleError(res, err);
                         }else{
-                            handleSuccess(res,wRes);
+                            handleSuccess(res,wres);
                         }
                     });
+                }
+            } else if(req.query.addViewers){
+                if(req.query.single){
+                    var patt = UtilsModule.regexes.email;
+                    if(!patt.test(req.body.username.toString())){
+                        handleError(res,null,400,31);
+                    }else {
+                        LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers.unregistered': req.body}}).exec(function (err, wRes) {
+                            if (err) {
+                                handleError(res, err);
+                            } else {
+                                handleSuccess(res, wRes);
+                            }
+                        });
+                    }
                 } else {
                     LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: {viewers: req.body}}).populate('viewers.registered').exec(function (err, wres) {
                         if(err){
@@ -216,6 +247,12 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }else
                     handleSuccess(res, cont);
             });
+        });
+
+    router.route('/regexp')
+        .get(function(req,res){
+            var regexp = UtilsModule.validationStrings;
+            handleSuccess(res,regexp);
         });
 
     app.use('/api', router);
