@@ -35,3 +35,81 @@ exports.send = function (template_name, template_content, to, subject) {
     });
     return deferred.promise;
 };
+
+exports.sendNotification = function (template_name, template_content, to, subject,changesNotification,usersName,confDate,confHour,confName,userStatus,spkString,conferencesLink) {
+    var deferred = Q.defer();
+    //get from_email from system parameters
+    Parameters.findOne({name: "FROM_EMAIL"}, function (err, param) {
+        if(err){
+            deferred.reject(err);
+        }else{
+            //send email
+            if(changesNotification) {
+                mandrill('/messages/send-template', {
+                    "template_name": template_name,
+                    "template_content": template_content,
+                    "message": {
+                        from_email: param.value || param.default_value,
+                        to: to,
+                        subject: subject
+                    }
+                }, function(err){
+                    if(err){
+                        console.log(err);
+                        deferred.reject("Eroare la trimitere email");
+                    }else{
+                        deferred.resolve();
+                    }
+                })
+            }
+             else
+                mandrill('/messages/send-template', {
+                    "template_name": template_name,
+                    "template_content": template_content,
+                    "message": {
+                        from_email: param.value || param.default_value,
+                        to: to,
+                        subject: subject,
+                        "global_merge_vars": [
+                            {
+                                "name": "userName",
+                                "content": usersName
+                            },
+                            {
+                                "name": "confDate",
+                                "content": confDate
+                            },
+                            {
+                                "name": "confHour",
+                                "content": confHour
+                            },
+                            {
+                                "name": "confName",
+                                "content": confName
+                            },
+                            {
+                                "name": "userStatus",
+                                "content": userStatus
+                            },
+                            {
+                                "name": "spkString",
+                                "content": spkString
+                            },
+                            {
+                                "name": "conferencesLink",
+                                "content": conferencesLink
+                            }
+                        ]
+                    }
+                }, function(err){
+                    if(err){
+                        console.log(err);
+                        deferred.reject("Eroare la trimitere email");
+                    }else{
+                        deferred.resolve();
+                    }
+                })
+        }
+    });
+    return deferred.promise;
+};

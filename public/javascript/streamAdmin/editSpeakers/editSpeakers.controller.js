@@ -8,6 +8,8 @@ controllers
         username: ''
     };
 
+      $scope.newlyAddedSpk = [];
+
     $scope.addSpk = function(user,isValid){
         if(!isValid){
             $scope.statusAlert.type = "danger";
@@ -21,6 +23,7 @@ controllers
                     angular.forEach(Success.getObject(resp).speakers.unregistered, function(item) {
                         if(item.username.toLowerCase() == user.username.toLowerCase()){
                             $scope.currentUsers.unregistered.push(user);
+                            $scope.newlyAddedSpk.push(user);
                         }
                     });
                 }).catch(function(err){
@@ -38,6 +41,7 @@ controllers
                         user.registered = true;
                         liveConferences.update({id: idToEdit, addSpeaker : true, single: true},{user: user}).$promise.then(function(resp){
                             $scope.currentUsers.registered.push(user);
+                            $scope.newlyAddedSpk.push(user);
                         }).catch(function(err){
                             $scope.statusAlert.type = "danger";
                             $scope.statusAlert.text = Error.getMessage(err);
@@ -47,6 +51,7 @@ controllers
                 } else
                     liveConferences.update({id: idToEdit, addSpeaker : true, single: true},{user: user}).$promise.then(function(resp){
                         $scope.currentUsers.registered.push(user);
+                        $scope.newlyAddedSpk.push(user);
                     }).catch(function(err){
                         $scope.statusAlert.type = "danger";
                         $scope.statusAlert.text = Error.getMessage(err);
@@ -69,6 +74,11 @@ controllers
             };
             liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
                 $scope.currentUsers.unregistered.splice(index,1);
+                angular.forEach($scope.newlyAddedSpk, function(item, key) {
+                    if(item._id == user._id){
+                        $scope.newlyAddedSpk.splice(key,1);
+                    }
+                });
             })
         }
         else {
@@ -79,6 +89,11 @@ controllers
             };
             liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
                 $scope.currentUsers.registered.splice(index,1);
+                angular.forEach($scope.newlyAddedSpk, function(item, key) {
+                    if(item._id == user._id){
+                        $scope.newlyAddedSpk.splice(key,1);
+                    }
+                });
             })
         }
     };
@@ -91,7 +106,7 @@ controllers
           $scope.currentUsers.registered = getIds.extract($scope.currentUsers.registered);
           liveConferences.update({id: idToEdit, addSpeaker : true},$scope.currentUsers).$promise.then(function(resp){
               $modalInstance.close();
-              $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).speakers });
+              $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).speakers , spkToSendNotif:  $scope.newlyAddedSpk});
           });
       };
   }]);

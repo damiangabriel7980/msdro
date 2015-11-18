@@ -1,7 +1,7 @@
 'use strict';
 
 controllers
-  .controller('EditConferenceCtrl', [ '$scope', '$filter', '$sce' ,'$state' , 'AmazonService', '$rootScope', 'liveConferences', 'idToEdit', 'Success', '$modal', '$modalInstance', 'getIds', 'Error', 'therapeuticAreaService', 'userService',function ($scope, $filter, $sce, $state,AmazonService, $rootScope, liveConferences,idToEdit,Success,$modal,$modalInstance,getIds,Error,therapeuticAreaService,userService) {
+  .controller('EditConferenceCtrl', [ '$scope', '$filter', '$sce' ,'$state' , 'AmazonService', '$rootScope', 'liveConferences', 'idToEdit', 'Success', '$modal', '$modalInstance', 'getIds', 'Error', 'therapeuticAreaService', 'userService', 'sendNotification',function ($scope, $filter, $sce, $state,AmazonService, $rootScope, liveConferences,idToEdit,Success,$modal,$modalInstance,getIds,Error,therapeuticAreaService,userService,sendNotification) {
     $scope.selectedModerator = {
       name: '',
       _id: null,
@@ -55,17 +55,67 @@ controllers
       };
     };
 
+      $scope.usersToBeNotified = {
+        speakers : [],
+        viewers : []
+      };
+
       $scope.$on("updatedUsers", function(events, args){
-            if(args.viewers)
+            if(args.viewers) {
               $scope.objectToEdit.viewers = args.newUsers;
-        else
-           $scope.objectToEdit.speakers = args.newUsers;
+              $scope.usersToBeNotified.viewers = args.vwToSendNotif;
+            }
+        else {
+              $scope.objectToEdit.speakers = args.newUsers;
+              $scope.usersToBeNotified.speakers = args.spkToSendNotif;
+            }
       });
 
       $scope.minDate = new Date();
       $scope.dateOptions = {
           formatYear: 'yy',
           startingDay: 1
+      };
+
+      $scope.sendInvitations = function(){
+        var spkString = '';
+        if($scope.usersToBeNotified.speakers.length == 0 && $scope.usersToBeNotified.viewers.length == 0){
+          angular.forEach($scope.objectToEdit.speakers.registered, function(item) {
+            $scope.usersToBeNotified.speakers.push(item)
+          });
+          angular.forEach($scope.objectToEdit.speakers.unregistered, function(item) {
+            $scope.usersToBeNotified.speakers.push(item)
+          });
+          angular.forEach($scope.objectToEdit.viewers.registered, function(item) {
+            $scope.usersToBeNotified.viewers.push(item)
+          });
+          angular.forEach($scope.objectToEdit.viewers.unregistered, function(item) {
+            $scope.usersToBeNotified.viewers.push(item)
+          });
+          angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
+            if (key == 0)
+              spkString += item.name;
+            else
+              spkString += ', ' + item.name;
+          });
+          sendNotification.generalNotification.create({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
+            console.log(resp);
+          }).catch(function(err){
+            console.log(Error.getMessage(err));
+          });
+        } else {
+          angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
+            if (key == 0)
+              spkString += item.name;
+            else
+              spkString += ', ' + item.name;
+          });
+          sendNotification.generalNotification.create({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
+            console.log(resp);
+          }).catch(function(err){
+            console.log(Error.getMessage(err));
+          });
+        }
       };
 
       $scope.updateConference = function(id, confForm){

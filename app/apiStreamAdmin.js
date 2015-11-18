@@ -10,7 +10,8 @@ var Therapeutic_Area = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
 var User = require('./models/user');
 var UtilsModule = require('./modules/utils');
-
+var MailerModule = require('./modules/mailer');
+var async = require('async');
 
 
 module.exports = function(app, env, sessionSecret, logger, amazon, router) {
@@ -238,15 +239,86 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
-    router.route('/streamAdmin/therapeutic_areas')
 
-        .get(function(req, res) {
-            Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
-                if(err) {
-                    handleError(res,err,500);
-                }else
-                    handleSuccess(res, cont);
+    router.route('/streamAdmin/sendNotification')
+
+        .post(function(req, res) {
+            var eventDate = new Date(req.body.conference.date);
+            var day = eventDate.getDate();
+            var month = eventDate.getMonth() + 1;
+            var year = eventDate.getFullYear();
+            var confDate = day + '/' + month + '/' + year;
+            async.parallel([
+                function (callback) {
+                    async.each(req.body.usersToNotify.speakers,function(item,callback2){
+                        MailerModule.sendNotification(
+                            "msd_registered_users_notif",
+                            [],
+                            [{email: item.username, name: item.name}],
+                            'Invitatie la conferinta ' + req.body.conference.name,
+                            false,
+                            item.name,
+                            confDate,
+                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            req.body.conference.name,
+                            'speaker',
+                            req.body.spkString,
+                            'http://qconferences.qualitance.com'
+                        ).then(
+                            function (success) {
+                                callback2(success);
+                            },
+                            function (err) {
+                                callback2(err);
+                            }
+                        );
+                    }, function (err) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    })
+                },
+                function (callback) {
+                    async.each(req.body.usersToNotify.viewers,function(item,callback2){
+                        MailerModule.sendNotification(
+                            "msd_registered_users_notif",
+                            [],
+                            [{email: item.username, name: item.name}],
+                            'Invitatie la conferinta ' + req.body.conference.name,
+                            false,
+                            item.name,
+                            confDate,
+                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            req.body.conference.name,
+                            'viewer',
+                            req.body.spkString,
+                            'http://qconferences.qualitance.com'
+                        ).then(
+                            function (success) {
+                                callback2(success);
+                            },
+                            function (err) {
+                                callback2(err);
+                            }
+                        );
+                    }, function (err) {
+                        if(err){
+                            callback(err);
+                        }else{
+                            callback();
+                        }
+                    })
+                }
+            ], function (err) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res);
+                }
             });
+
         });
 
     router.route('/regexp')

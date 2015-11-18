@@ -11,7 +11,14 @@ controllers
       $scope.groups = Success.getObject(resp);
     });
 
+      $scope.newlyAddedVw = {
+          registered: [],
+          unregistered: []
+      };
+
+
       $scope.checkboxes = { items: {} };
+      $scope.oldCheckboxes = { items: {} };
 
     $scope.$watch('selectedGroup',function(){
       if($scope.data){
@@ -26,7 +33,6 @@ controllers
 
     $scope.selectAll = function(value) {
       angular.forEach($scope.data, function(item) {
-        $scope.checkboxes.items[item._id] = value;
           $scope.checkValue(item._id,value);
       });
     };
@@ -51,6 +57,7 @@ controllers
             $scope.checkboxes.items[item._id] = true;
             $scope.data.push(item);
         });
+        $scope.oldCheckboxes = $scope.checkboxes;
         $scope.oldData = $scope.data;
         $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
@@ -85,15 +92,21 @@ controllers
         };
         angular.forEach($scope.oldData, function(item) {
             if($scope.checkboxes.items[item._id]){
-                if(item.groupsID)
+                if(item.groupsID){
                     $scope.editedViewers.registered.push(item._id);
-                else
+                    if(!$scope.oldCheckboxes.items[item._id])
+                        $scope.newlyAddedVw.push(item);
+                }
+                else {
                     $scope.editedViewers.unregistered.push(item);
+                    if(!$scope.oldCheckboxes.items[item._id])
+                        $scope.newlyAddedVw.push(item);
+                }
             }
         });
         liveConferences.update({id: $scope.idToEdit,addViewers : true},$scope.editedViewers).$promise.then(function(resp){
             $modalInstance.close();
-            $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).viewers , viewers : true});
+            $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).viewers , viewers : true, vwToSendNotif : $scope.newlyAddedVw});
         })
     };
 
