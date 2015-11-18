@@ -15,13 +15,9 @@
             </div>
             <div style="text-align: center" ng-show="showErr"><p style="color: red;">Exista o categorie cu acest nume</p></div>
 
-<!--             </div>
-            <s3-upload-manager limit="1" label="imagine" bucket="{{amazonBucket}}" path="{{category.imageUrl ? category.imageUrl:'guideline/category/image/'}}"></s3-upload-manager>
-        </div>
- -->
-
          <div class="col-md-12 noPadding">
                 <div class="col-md-12 noPadding"><label>File upload manager</label></div>
+                <div class="col-md-12 noPadding"><label>Imaginea trebuie sa aiba dimensiunile 108x108</label></div>
                 <div class="col-md-12 noPadding">
                     <alert type="{{s3Alert.type}}" ng-if="s3Alert.show">{{s3Alert.text}}</alert>
                 </div>

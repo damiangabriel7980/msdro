@@ -1,7 +1,7 @@
 /**
  * Created by user on 26.10.2015.
  */
-controllers.controller('guideLineFileController',['$scope','GuideLineService','Success','ActionModal','$state','ngTableParams','$filter','$modal','AmazonService',function($scope,GuideLineService,Success,ActionModal,$state,ngTableParams,$filter,$modal,AmazonService){
+controllers.controller('guideLineFileController',['$scope','GuideLineService','Success','ActionModal','$state','ngTableParams','$filter','$modal','AmazonService','InfoModal',function($scope,GuideLineService,Success,ActionModal,$state,ngTableParams,$filter,$modal,AmazonService,InfoModal){
     var refreshFiles = function (){
         GuideLineService.file.query().$promise.then(function(resp){
             var files = Success.getObject(resp);
@@ -44,14 +44,19 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
     $scope.disableFile = function(id,file){
         ActionModal.show(file.enabled?"Dezactiveaza fisierul":"Activeaza fisierul",
             file.enabled?"Sunteti sigur ca doriti sa dezactivati fisierul?":"Sunteti sigur ca doriti sa activati fisierul?",function(){
-            var toEdit = file;
-            toEdit.enabled = !toEdit.enabled;
-            delete toEdit['_id'];
-            GuideLineService.file.update({fileId:id,displayName:toEdit.displayName},toEdit).$promise.then(function(resp){
-                $state.reload();
-            }).catch(function(err){
+            if(file.guidelineFileUrl){
+              var toEdit = file;
+              toEdit.enabled = !toEdit.enabled;
+              delete toEdit['_id'];
+              GuideLineService.file.update({fileId:id,displayName:toEdit.displayName},toEdit).$promise.then(function(resp){
+                  $state.reload();
+              }).catch(function(err){
 
-            })
+              })
+            }  else{
+              InfoModal.show("Elementul selectat nu are nici un fisier atasat");
+            }
+
         },{
             yes:'Da'
         });
