@@ -248,6 +248,16 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var month = eventDate.getMonth() + 1;
             var year = eventDate.getFullYear();
             var confDate = day + '/' + month + '/' + year;
+            var hour;
+            var minutes;
+                if(eventDate.getHours() < 10)
+                    hour = '0' + eventDate.getHours();
+            else
+                    hour = eventDate.getHours();
+            if(eventDate.getMinutes() < 10)
+                minutes = '0' + eventDate.getMinutes();
+            else
+                minutes = eventDate.getMinutes();
             async.parallel([
                 function (callback) {
                     async.each(req.body.usersToNotify.speakers,function(item,callback2){
@@ -259,7 +269,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             false,
                             item.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'speaker',
                             req.body.spkString,

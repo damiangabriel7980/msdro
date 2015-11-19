@@ -99,9 +99,10 @@ controllers
               spkString += ', ' + item.name;
           });
           sendNotification.generalNotification.create({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
-            console.log(resp);
+            resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
           }).catch(function(err){
             console.log(Error.getMessage(err));
+            resetConferenceAlert("Eroare la trimiterea invitatiilor!");
           });
         } else {
           angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
@@ -111,9 +112,10 @@ controllers
               spkString += ', ' + item.name;
           });
           sendNotification.generalNotification.create({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
-            console.log(resp);
+            resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
           }).catch(function(err){
             console.log(Error.getMessage(err));
+            resetConferenceAlert("Eroare la trimiterea invitatiilor!");
           });
         }
       };
@@ -164,6 +166,20 @@ controllers
 
     $scope.removeUser = function(index,id,unregistered,roleUs){
       var userData = {};
+      if($scope.usersToBeNotified.speakers.length > 0 || $scope.usersToBeNotified.viewers.length > 0){
+        if(roleUs == 'speaker')
+          angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
+             if(item._id == id){
+              $scope.usersToBeNotified.speakers.splice(key,1);
+            }
+           });
+        else
+          angular.forEach($scope.usersToBeNotified.viewers, function(item, key) {
+          if(item._id == id){
+            $scope.usersToBeNotified.viewers.splice(key,1);
+          }
+        });
+      }
       if(unregistered){
         userData = {
           role: roleUs,
@@ -171,9 +187,9 @@ controllers
           id: id
         };
         liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
-          if(roleUs == 'speaker')
+          if(roleUs == 'speaker'){
             $scope.objectToEdit.speakers.unregistered.splice(index,1);
-          else
+          } else
             $scope.objectToEdit.viewers.unregistered.splice(index,1);
         })
       }
