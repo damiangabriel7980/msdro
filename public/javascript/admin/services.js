@@ -504,6 +504,9 @@ services.factory('JanuviaService', ['$resource', function($resource){
         }),
         user_types: $resource('api/admin/applications/januvia/user_types', {}, {
             query: { method: 'GET', isArray: false }
+        }),
+        parseExcel :  $resource('api/admin/applications/januvia/parseExcel', {}, {
+            create: { method: 'POST', isArray: false }
         })
     }
 }]);

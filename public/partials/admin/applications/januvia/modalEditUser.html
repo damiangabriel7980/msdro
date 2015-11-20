@@ -12,6 +12,14 @@
             <input type="text" class="form-control" ng-model="user.name">
         </div>
         <div class="form-group">
+            <label>Loc de munca:</label>
+            <input type="text" class="form-control" ng-model="user.workplace">
+        </div>
+        <div class="form-group">
+            <label>Adresa loc de munca:</label>
+            <input type="text" class="form-control" ng-model="user.workplaceAddress">
+        </div>
+        <div class="form-group">
             <label>Tip utilizator:</label>
             <select class="form-control" ng-model="user.type" ng-options="userType for userType in userTypes"></select>
         </div>
@@ -21,11 +29,33 @@
         </div>
         <div class="form-group">
             <label>Judet:</label>
-            <angular-select-autocomplete ng-model="selectedCounty" ng-options="counties" id-attr="_id" title-attr="name" on-option-select="countyWasSelected"></angular-select-autocomplete>
+            <ui-select class="form-control noPadding" ng-model="county.selected"
+                       theme="bootstrap"
+                       ng-disabled="false"
+                       reset-search-input="false"
+                       on-select="countyWasSelected(county.selected)">
+                <ui-select-match placeholder="Alegeti un judet">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="county in counties | filter: {name: $select.search}"
+                                   refresh-delay="0">
+                    <div ng-bind-html="county.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+            <!--<angular-select-autocomplete ng-model="selectedCounty" ng-options="counties" id-attr="_id" title-attr="name" on-option-select="countyWasSelected"></angular-select-autocomplete>-->
         </div>
         <div class="form-group">
             <label>Oras:</label>
-            <angular-select-autocomplete ng-model="selectedCity" ng-options="cities" id-attr="_id" title-attr="name"></angular-select-autocomplete>
+            <ui-select class="form-control noPadding" ng-model="city.selected"
+                       theme="bootstrap"
+                       ng-disabled="false"
+                       reset-search-input="false"
+                       >
+                <ui-select-match placeholder="Alegeti un oras">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="city in cities | filter: {name: $select.search}"
+                                   refresh-delay="0">
+                    <div ng-bind-html="city.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+            <!--<angular-select-autocomplete ng-model="selectedCity" ng-options="cities" id-attr="_id" title-attr="name"></angular-select-autocomplete>-->
         </div>
     </div>
     <div class="modal-footer">

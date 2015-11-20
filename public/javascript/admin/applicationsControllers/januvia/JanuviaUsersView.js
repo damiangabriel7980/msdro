@@ -2,7 +2,6 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
     var refreshUsers = function () {
         JanuviaService.users.query().$promise.then(function(resp){
             var users = Success.getObject(resp);
-            console.log(users);
             var params = {
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -13,9 +12,40 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
             $scope.tableParams = new ngTableParams(params, {
                 total: users.length, // length of data
                 getData: function($defer, params) {
+                    var filters = {};
 
-                    var orderedData = $filter('orderBy')(($filter('filter')(users, params.filter())), params.orderBy());
+                    angular.forEach(params.filter(), function(value, key) {
+                        if (key.indexOf('.') === -1) {
+                            filters[key] = value;
+                            return;
+                        }
 
+                        var createObjectTree = function (tree, properties, value) {
+                            if (!properties.length) {
+                                return value;
+                            }
+
+                            var prop = properties.shift();
+
+                            if (!prop || !/^[a-zA-Z]/.test(prop)) {
+                                throw new Error('invalid nested property name for filter');
+                            }
+
+                            tree[prop] = createObjectTree({}, properties, value);
+
+                            return tree;
+                        };
+
+                        var filter = createObjectTree({}, key.split('.'), value);
+
+                        angular.extend(filters, filter);
+                    });
+
+                    var orderedData = params.filter() ? $filter('orderBy')(($filter('filter')(users, filters)), params.orderBy()) : users;
+                    params.total(orderedData.length);
+                    if(params.total() < (params.page() -1) * params.count()){
+                        params.page(1);
+                    }
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
@@ -27,6 +57,26 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
         JanuviaService.users.create({}).$promise.then(function () {
             refreshUsers();
         });
+    };
+
+    $scope.fileSelected = function($files, $event){
+        //make sure group data is loaded. we need to access it to form the amazon key
+        //make sure a file was actually loaded
+        if($files[0]){
+            var file = $files[0];
+            var reader = new FileReader();
+            reader.onloadend = function(evt) {
+                if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                    var data = evt.target.result;
+                    JanuviaService.parseExcel.create({file: data}).$promise.then(function(resp){
+                        $state.reload();
+                    })
+                }
+            };
+            reader.readAsBinaryString(file);
+
+        }
+
     };
 
     $scope.editUser = function (id) {

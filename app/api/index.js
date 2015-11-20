@@ -33,6 +33,9 @@ var _ = require('underscore');
 var guidelineFile = require ("../models/guidelineFile");
 var guidelineCategory = require ("../models/guidelineCategory");
 
+var xlsx = require("xlsx");
+
+
 //modules
 var UserModule = require('../modules/user');
 var MailerModule = require('../modules/mailer');
@@ -41,6 +44,7 @@ var SessionStorage = require('../modules/sessionStorage');
 var ConferencesModule = require('../modules/Conferences');
 var ModelInfos = require('../modules/modelInfos');
 var ContentVerifier = require('../modules/contentVerifier');
+var januviaImport = require('../modules/importJanuviaUsers');
 
 //special Products
 var specialProduct = require('../models/specialProduct');
@@ -2762,7 +2766,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if(req.query.type){
                     q.type = req.query.type;
                 }
-                JanuviaUsers.find(q, function (err, users) {
+                JanuviaUsers.find(q).deepPopulate('city.county', {
+                    populate: {
+                        'city.county': {
+                            select: 'name'
+                        }
+                    }
+                }).exec(function (err, users) {
                     if(err){
                         handleError(res, err);
                     }else{
@@ -2836,6 +2846,23 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/applications/januvia/user_types')
         .get(function (req, res) {
             handleSuccess(res, new JanuviaUsers().schema.path('type').enumValues);
+        });
+
+    router.route('/admin/applications/januvia/parseExcel')
+        .post(function (req, res) {
+            var file = req.body.file;
+            var workbook = xlsx.read(file, {type: 'binary'});
+            var first_sheet_name = workbook.SheetNames[0];
+            var worksheet = workbook.Sheets[first_sheet_name];
+            var toJson = xlsx.utils.sheet_to_json(worksheet);
+            januviaImport.insertUsers(toJson).then(
+                function (success) {
+                    handleSuccess(res);
+                },
+                function (err) {
+                    handleError(res,err,500);
+                }
+            );
         });
 
     router.route('/admin/location/counties')
