@@ -38,6 +38,10 @@ controllers
     liveConferences.query({id: idToEdit}).$promise.then(function(resp){
       $scope.objectToEdit = Success.getObject(resp);
       $scope.oldDate = $scope.objectToEdit.date;
+
+      $scope.oldSpks = $scope.objectToEdit.speakers.registered.concat($scope.objectToEdit.speakers.unregistered);
+      $scope.oldVws = $scope.objectToEdit.viewers.registered.concat($scope.objectToEdit.viewers.unregistered);
+
       $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
       $scope.selectedModerator = $scope.objectToEdit.moderator;
       if(!$scope.selectedModerator._id)
@@ -80,29 +84,49 @@ controllers
           startingDay: 1
       };
 
+      $scope.updateNotification = function(){
+        var spkString = '';
+        angular.forEach($scope.oldSpks, function(item, key) {
+          if (key == 0)
+            spkString += item.name;
+          else
+            spkString += ', ' + item.name;
+        });
+        angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
+            spkString += ', ' + item.name;
+        });
+        $scope.objectToEdit.moderator = {
+          username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
+        };
+        $scope.usersToNotify = {
+            speakers: $scope.oldSpks,
+            viewers: $scope.oldVws,
+            moderator: $scope.objectToEdit.moderator
+        };
+        sendNotification.notification.update({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToInvite: $scope.usersToBeNotified, usersToNotify: $scope.usersToNotify, spkString: spkString}).$promise.then(function(resp){
+          resetConferenceAlert("Notificarea si invitatiile au fost trimise cu succes!",'success');
+        }).catch(function(err){
+          console.log(Error.getMessage(err));
+          resetConferenceAlert("Eroare la trimiterea notificarii/invitatiilor!");
+        });
+      };
+
       $scope.sendInvitations = function(){
         var spkString = '';
         if($scope.usersToBeNotified.speakers.length == 0 && $scope.usersToBeNotified.viewers.length == 0){
-          angular.forEach($scope.objectToEdit.speakers.registered, function(item) {
-            $scope.usersToBeNotified.speakers.push(item)
-          });
-          angular.forEach($scope.objectToEdit.speakers.unregistered, function(item) {
-            $scope.usersToBeNotified.speakers.push(item)
-          });
-          angular.forEach($scope.objectToEdit.viewers.registered, function(item) {
-            $scope.usersToBeNotified.viewers.push(item)
-          });
-          angular.forEach($scope.objectToEdit.viewers.unregistered, function(item) {
-            $scope.usersToBeNotified.viewers.push(item)
-          });
+          $scope.usersToBeNotified.speakers = $scope.usersToBeNotified.speakers.concat($scope.objectToEdit.speakers.registered).concat($scope.objectToEdit.speakers.unregistered);
+          $scope.usersToBeNotified.viewers = $scope.usersToBeNotified.viewers.concat($scope.objectToEdit.viewers.registered).concat($scope.objectToEdit.viewers.unregistered);
           angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
             if (key == 0)
               spkString += item.name;
             else
               spkString += ', ' + item.name;
           });
+          $scope.objectToEdit.moderator = {
+            username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
+          };
           $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
-          sendNotification.generalNotification.create({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
+          sendNotification.notification.create({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
             resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
           }).catch(function(err){
             console.log(Error.getMessage(err));
@@ -115,7 +139,7 @@ controllers
             else
               spkString += ', ' + item.name;
           });
-          sendNotification.generalNotification.create({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
+          sendNotification.notification.create({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
             resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
           }).catch(function(err){
             console.log(Error.getMessage(err));

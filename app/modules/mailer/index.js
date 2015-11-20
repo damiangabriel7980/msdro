@@ -43,26 +43,6 @@ exports.sendNotification = function (template_name, template_content, to, subjec
         if(err){
             deferred.reject(err);
         }else{
-            //send email
-            if(changesNotification) {
-                mandrill('/messages/send-template', {
-                    "template_name": template_name,
-                    "template_content": template_content,
-                    "message": {
-                        from_email: param.value || param.default_value,
-                        to: to,
-                        subject: subject
-                    }
-                }, function(err){
-                    if(err){
-                        console.log(err);
-                        deferred.reject("Eroare la trimitere email");
-                    }else{
-                        deferred.resolve();
-                    }
-                })
-            }
-             else
                 mandrill('/messages/send-template', {
                     "template_name": template_name,
                     "template_content": template_content,
@@ -98,6 +78,10 @@ exports.sendNotification = function (template_name, template_content, to, subjec
                             {
                                 "name": "conferencesLink",
                                 "content": conferencesLink
+                            },
+                            {
+                                "name": "changesNotification",
+                                "content": changesNotification
                             }
                         ]
                     }

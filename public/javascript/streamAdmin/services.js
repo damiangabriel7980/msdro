@@ -156,11 +156,9 @@ services.factory('liveConferences', ['$resource', function($resource){
 
 services.factory('sendNotification', ['$resource', function($resource){
     return {
-        generalNotification: $resource('api/streamAdmin/sendNotification', {}, {
-            create: { method: 'POST', isArray: false }
-        }) ,
-        updateNotification: $resource('api/streamAdmin/sendNotification', {}, {
-            create: { method: 'POST', isArray: false }
+        notification: $resource('api/streamAdmin/sendNotification', {}, {
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false }
         })
     }
 }]);
