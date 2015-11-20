@@ -27,7 +27,9 @@ var LiveConferencesSchema = new Schema({
             username: String
         }]
     },
-    moderator: {type: Schema.Types.ObjectId, ref:'User'},
+    moderator: {
+        username: String
+    },
     'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas', index: true}]
 });
 

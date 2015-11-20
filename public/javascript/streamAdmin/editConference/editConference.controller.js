@@ -40,6 +40,8 @@ controllers
       $scope.oldDate = $scope.objectToEdit.date;
       $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
       $scope.selectedModerator = $scope.objectToEdit.moderator;
+      if(!$scope.selectedModerator._id)
+        angular.element('#moderator')[0].value = $scope.selectedModerator.username;
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
@@ -57,7 +59,8 @@ controllers
 
       $scope.usersToBeNotified = {
         speakers : [],
-        viewers : []
+        viewers : [],
+        moderator: {}
       };
 
       $scope.$on("updatedUsers", function(events, args){
@@ -98,6 +101,7 @@ controllers
             else
               spkString += ', ' + item.name;
           });
+          $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
           sendNotification.generalNotification.create({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
             resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
           }).catch(function(err){
@@ -126,7 +130,12 @@ controllers
           if(new Date($scope.objectToEdit.date).getTime() < currentDate.getTime() && new Date($scope.objectToEdit.date).getTime() != new Date($scope.oldDate).getTime())
             resetConferenceAlert("Data conferintei nu poate fi mai mica decat data curenta!");
           else {
-            $scope.objectToEdit.moderator = $scope.selectedModerator ? $scope.selectedModerator._id : null;
+            if($scope.selectedModerator && $scope.selectedModerator._id){
+              $scope.objectToEdit.moderator.username = $scope.selectedModerator.username;
+            } else
+              $scope.objectToEdit.moderator = {
+                username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
+              };
             $scope.objectToEdit.speakers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
             $scope.objectToEdit.viewers.registered = getIds.extract($scope.objectToEdit.viewers.registered);
             $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;

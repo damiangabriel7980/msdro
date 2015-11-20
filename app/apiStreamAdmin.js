@@ -33,7 +33,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/streamAdmin/liveConferences')
         .get(function(req,res){
             if(req.query.id){
-                LiveConference.find({_id:req.query.id}).populate('speakers.registered').populate('viewers.registered').populate('therapeutic-areasID').populate('moderator').exec(function (err, conference) {
+                LiveConference.find({_id:req.query.id}).populate('speakers.registered').populate('viewers.registered').populate('therapeutic-areasID').exec(function (err, conference) {
                     if(err) { handleError(res, err); }
                     if(conference.length == 0) { handleError(res,err,404,1); }
                     else
@@ -173,11 +173,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
             else
             {
-                LiveConference.update({_id: req.query.id}, {$set: req.body}, function (err, wres) {
+                LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: req.body}, function (err, wres) {
                     if(err){
                         handleError(res, err);
                     }else{
-                        handleSuccess(res,{success: wres});
+                        handleSuccess(res,wres);
                     }
                 });
             }
@@ -325,10 +325,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res, err);
                 }else{
-                    handleSuccess(res);
+                    if(req.body.usersToNotify.moderator.username){
+                        MailerModule.sendNotification(
+                            "msd_registered_users_notif",
+                            [],
+                            [{email: req.body.usersToNotify.moderator.username, name: ''}],
+                            'Invitatie la conferinta ' + req.body.conference.name,
+                            false,
+                            req.body.usersToNotify.moderator.username,
+                            confDate,
+                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            req.body.conference.name,
+                            'moderator',
+                            req.body.spkString,
+                            'http://qconferences.qualitance.com'
+                        ).then(
+                            function (success) {
+                                handleSuccess(res, success);
+                            },
+                            function (err) {
+                                handleError(res, err);
+                            }
+                        );
+                    } else
+                        handleSuccess(res);
                 }
             });
 
+        });
+
+    router.route('/streamAdmin/therapeutic_areas')
+
+        .get(function(req, res) {
+            Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
+                if(err) {
+                    handleError(res,err,500);
+                }else
+                    handleSuccess(res, cont);
+            });
         });
 
     router.route('/regexp')
