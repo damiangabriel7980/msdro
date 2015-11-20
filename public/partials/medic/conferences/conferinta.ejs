@@ -1,0 +1,88 @@
+
+
+
+  <div id="sidebar-wrapper" ng-class="{'width250':menuToggled}">
+    <span class="pull-right"><i class="glyphicon glyphicon-remove fontL" ng-click="toggleMenu()"></i></span>
+    <ul class="sidebar-nav">
+      <li ng-click="toggleMessages()">Sasdasd</li>
+      <li ng-click="toggleMessages()">Sasdasd</li>
+      <li ng-click="toggleMessages()">Sasdasd</li>
+    </ul>
+  </div>
+
+  <div id="messageMenu" ng-class="{'width250':showMessages}">
+    <span ng-click="toggleMessages()" class="pull-left fontL"><i class="glyphicon glyphicon-arrow-left" ></i> Back</span>
+    <span ng-click="toggleMessages();toggleMenu()" class="pull-right"><i class="glyphicon glyphicon-remove fontXL"></i></span>
+    <p class="speakerName"> Doctor Name</p>
+    <div class="messageContainer col-xs-12 padding0">
+      <div class="messageTop col-xs-12">
+        <span class="sender pull-left">Sender name</span>
+        <span class="timeSent pull-right">12:30</span>
+      </div>
+      <div class="message col-xs-12">
+        <span>yxcuvyibunpmok[,pl.[,kjhyvctyv buyimo,p.]]</span>
+      </div>
+    </div>
+  </div>
+<div class="conferenceStreamContainer col-xs-12 padding0" ng-class="{'toggled':menuToggled}" >
+
+
+
+<div id="page-content-wrapper padding0">
+  <div class="conferenceDetails col-xs-12 ">
+      <span class="fontXXL pull-left">Conference Name|Current Speaker | number of viewers</span>
+      <div class="pull-right context-Menu" >
+        <img src="../../../stylesheets/img/conferenceIcon1.png" class="conferenceMenuIcon" tooltip="Close conference" ng-click="closeConference()"/>
+        <img src="../../../stylesheets/img/conferenceIcon2.png" class="conferenceMenuIcon" tooltip="Exit conference" ng-click="exitConferece()"/>
+        <img src="../../../stylesheets/img/conferenceIcon3.png" class="conferenceMenuIcon" tooltip="Start screen sharing " ng-click="startScreenSharing()">
+        <img src="../../../stylesheets/img/conferenceIcon4.png" class="conferenceMenuIcon" tooltip="Open chat" ng-click="toggleMenu()" /></div>
+  </div>
+
+  <div class="activeSpeakerContainer col-xs-12 padding0">
+    <div class="activeSpeakers col-xs-12">
+
+
+      <div class="streamContainer padding0">
+          <video class="me" autoplay >
+          </video>
+      </div>
+
+      <div class="streamContainer padding0">
+          <video class="me" autoplay >s
+          </video>
+      </div>
+
+      <div class="streamContainer padding0">
+          <video class="me" autoplay >
+          </video>
+      </div>
+
+      <!-- <div class="streamContainer padding0">
+          <video class="me" autoplay >
+          </video>
+      </div> -->
+    </div>
+  </div>
+
+  <div class='inactiveSpeakersContainer col-xs-12 padding0'>
+    <div class="inactiveSpeaker col-xs-2 padding0" >
+        <span >Speaker name</span>
+
+    </div>
+    <div class="inactiveSpeaker col-xs-2 padding0" >
+
+    </div>
+    <div class="inactiveSpeaker col-xs-2 padding0" >
+
+    </div>
+    <div class="inactiveSpeaker col-xs-2 padding0" >
+
+    </div>
+    <div class="inactiveSpeaker col-xs-2 padding0" >
+
+    </div>
+  </div>
+
+</div>
+
+</div>
