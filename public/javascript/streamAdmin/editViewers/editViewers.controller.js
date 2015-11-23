@@ -1,137 +1,182 @@
 'use strict';
 
 controllers
-  .controller('EditViewersCtrl', [ '$scope', '$filter', '$sce' ,'$state' , '$rootScope', 'userService', 'ngTableParams', 'Success', 'Error', 'getIds', 'liveConferences', 'filterArrayProperty', '$modalInstance', 'idToEdit', 'viewersToEdit', 'Validations', function ($scope, $filter, $sce, $state, $rootScope,userService, ngTableParams,Success,Error,getIds,liveConferences,filterArrayProperty,$modalInstance,idToEdit, viewersToEdit,Validations) {
+  .controller('EditViewersCtrl', [ '$scope', '$filter', '$sce' ,'$state' , '$rootScope', 'userService', 'ngTableParams', 'Success', 'Error', 'getIds', 'liveConferences', 'filterArrayProperty', '$modalInstance', 'idToEdit', '$timeout', function ($scope, $filter, $sce, $state, $rootScope,userService, ngTableParams,Success,Error,getIds,liveConferences,filterArrayProperty,$modalInstance,idToEdit,$timeout) {
     $scope.selectedGroup = {
-      display_name: '',
-      _id: null
+        currentGroup : {
+            display_name: '',
+            _id: null
+        }
     };
 
     userService.groups.query().$promise.then(function(resp){
       $scope.groups = Success.getObject(resp);
     });
 
-      $scope.newlyAddedVw = {
-          registered: [],
-          unregistered: []
-      };
-
-
+      $scope.newlyAddedVw = [];
+      $scope.idToEdit = idToEdit;
       $scope.checkboxes = { items: {} };
       $scope.oldCheckboxes = { items: {} };
 
-    $scope.$watch('selectedGroup',function(){
-      if($scope.data){
-        if(!$scope.selectedGroup.display_name) {
-          $scope.data = $scope.oldData;
-        }
-        else
-          $scope.data = filterArrayProperty.getData($scope.data,'groupsID','display_name',$scope.selectedGroup.display_name);
-        $scope.tableParams.reload();
-      }
-    });
-
     $scope.selectAll = function(value) {
-      angular.forEach($scope.data, function(item) {
-          $scope.checkValue(item._id,value);
+      angular.forEach($scope.tableParams.data, function(item) {
+          $scope.checkValue(item.username,value);
       });
     };
 
     // watch for data checkboxes
-    $scope.checkValue = function(id,value){
+    $scope.checkValue = function(username,value){
         if(!value){
-            delete $scope.checkboxes.items[id];
+            delete $scope.checkboxes.items[username];
         } else {
-            $scope.checkboxes.items[id] = value;
+            $scope.checkboxes.items[username] = value;
         }
     };
 
-    userService.users.query({groups: true}).$promise.then(function(resp){
-      $scope.data = Success.getObject(resp);
-        $scope.idToEdit = idToEdit;
-        $scope.editedViewers = viewersToEdit;
-        angular.forEach($scope.editedViewers.registered, function(item) {
-            $scope.checkboxes.items[item._id] = true;
-        });
-        angular.forEach($scope.editedViewers.unregistered, function(item) {
-            $scope.checkboxes.items[item._id] = true;
-            $scope.data.push(item);
-        });
-        $scope.oldCheckboxes = $scope.checkboxes;
-        $scope.oldData = $scope.data;
-        $scope.tableParams = new ngTableParams({
-        page: 1,            // show first page
-        count: 10,          // count per page
-        sorting: {
-          name: 'asc'     // initial sorting
-        },
-        filter: {
-          name: ''       // initial filter
-        }
-      }, {
-        total: $scope.data.length, // length of data
-        getData: function($defer, params) {
+      $scope.removeViewer = function(index,user){
+          var userData;
+          userData = {
+              role: 'viewer',
+              username: user.username
+          };
+          liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
+              $scope.editedViewers.splice(index,1);
+              angular.forEach($scope.newlyAddedVw, function(item, key) {
+                  if(item.username.toLowerCase() == user.username.toLowerCase()){
+                      $scope.newlyAddedVw.splice(key,1);
+                  }
+              });
+          })
+      };
 
-          var orderedData = $filter('orderBy')(($filter('filter')($scope.data, params.filter())), params.orderBy());
-          params.total(orderedData.length);
-          if(params.total() < (params.page() -1) * params.count()){
-            params.page(1);
-          }
-          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
-      }, { dataset: $scope.data});
-    });
+      liveConferences.query({id: idToEdit, separatedViewers : true}).$promise.then(function(resp){
+          $scope.editedViewers = Success.getObject(resp);
+      });
+
+      $scope.loadUsers = function() {
+                  userService.users.query({groups: true}).$promise.then(function(resp2){
+                      $scope.data = Success.getObject(resp2);
+                      angular.forEach($scope.editedViewers.registered, function(item) {
+                          $scope.checkboxes.items[item.username] = true;
+                      });
+                      $scope.oldCheckboxes = $scope.checkboxes;
+                      $scope.oldData = $scope.data;
+                      $scope.tableParams = new ngTableParams({
+                          page: 1,            // show first page
+                          count: 10,          // count per page
+                          sorting: {
+                              name: 'asc'     // initial sorting
+                          },
+                          filter: {
+                              name: ''       // initial filter
+                          }
+                      }, {
+                          total: $scope.data.length, // length of data
+                          getData: function($defer, params) {
+
+                              var filters = {};
+
+                              angular.forEach(params.filter(), function(value, key) {
+                                  if (key.indexOf('.') === -1) {
+                                      filters[key] = value;
+                                      return;
+                                  }
+
+                                  var createObjectTree = function (tree, properties, value) {
+                                      if (!properties.length) {
+                                          return value;
+                                      }
+
+                                      var prop = properties.shift();
+
+                                      if (!prop || !/^[a-zA-Z]/.test(prop)) {
+                                          throw new Error('invalid nested property name for filter');
+                                      }
+
+                                      tree[prop] = createObjectTree({}, properties, value);
+
+                                      return tree;
+                                  };
+
+                                  var filter = createObjectTree({}, key.split('.'), value);
+
+                                  angular.extend(filters, filter);
+                              });
+
+                              var orderedData = params.filter() ? $filter('orderBy')(($filter('filter')($scope.data, filters)), params.orderBy()) : $scope.data;
+                              params.total(orderedData.length);
+                              if(params.total() < (params.page() -1) * params.count()){
+                                  params.page(1);
+                              }
+                              $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                          }
+                      }, { dataset: $scope.data});
+
+
+                  });
+                  $scope.$watch('selectedGroup.currentGroup',function(){
+                          if(!$scope.selectedGroup.currentGroup.display_name) {
+                              $scope.data = $scope.oldData;
+                          }
+                          else
+                              $scope.data = filterArrayProperty.getData($scope.data,'groupsID','display_name',$scope.selectedGroup.currentGroup.display_name);
+                          if($scope.tableParams)
+                              $scope.tableParams.reload();
+                  });
+      };
+
+
 
       $scope.statusAlert = {newAlert:false, type:"", message:""};
 
 
       $scope.saveData = function(){
-        $scope.editedViewers = {
-            registered: [],
-            unregistered: []
-        };
-        angular.forEach($scope.oldData, function(item) {
-            if($scope.checkboxes.items[item._id]){
-                if(item.groupsID){
-                    $scope.editedViewers.registered.push(item._id);
-                    if(!$scope.oldCheckboxes.items[item._id])
-                        $scope.newlyAddedVw.push(item);
-                }
-                else {
-                    $scope.editedViewers.unregistered.push(item);
-                    if(!$scope.oldCheckboxes.items[item._id])
-                        $scope.newlyAddedVw.push(item);
-                }
-            }
-        });
-        liveConferences.update({id: $scope.idToEdit,addViewers : true},$scope.editedViewers).$promise.then(function(resp){
+          if($scope.oldData){
+              angular.forEach($scope.oldData, function(item) {
+                  if($scope.checkboxes.items[item.username]){
+                          $scope.editedViewers.registered.push(item);
+                          if(!$scope.oldCheckboxes.items[item.username])
+                              $scope.newlyAddedVw.push(item);
+                  }
+              });
+          }
+        $scope.allViewers = $scope.editedViewers.registered.concat($scope.editedViewers.unregistered);
+        liveConferences.update({id: $scope.idToEdit,addViewers : true},$scope.allViewers).$promise.then(function(resp){
             $modalInstance.close();
             $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).viewers , viewers : true, vwToSendNotif : $scope.newlyAddedVw});
         })
     };
 
-      $scope.addViewer = function(isValid){
+      $scope.addViewer = function(isValid,thisForm){
           if(isValid){
-              liveConferences.update({id :$scope.idToEdit, addViewers : true, single: true},$scope.viewer).$promise.then(function(resp){
-                  angular.forEach(Success.getObject(resp).viewers.unregistered, function(item) {
-                      if(item.username.toLowerCase() == $scope.viewer.username.toLowerCase()){
-                          $scope.checkboxes.items[item._id] = true;
-                          $scope.data.push(item);
-                          if($scope.data.length != $scope.oldData.length)
-                              $scope.oldData.push(item);
-                      }
-                  });
-                  $scope.viewer = null;
-                  $scope.tableParams.reload();
+              liveConferences.update({id :$scope.idToEdit, addViewers : true, single: true},thisForm.viewer).$promise.then(function(resp){
+                  $scope.editedViewers.unregistered.push(thisForm.viewer);
+                  $scope.newlyAddedVw.push(thisForm.viewer);
+                  thisForm.viewer = null;
+                  thisForm.viewerForm.nume.$touched = false;
+                  thisForm.viewerForm.email.$touched = false;
+
               }).catch(function(err){
                   $scope.statusAlert.type = "danger";
                   $scope.statusAlert.text = Error.getMessage(err);
                   $scope.statusAlert.newAlert = true;
+                  $timeout(function(){
+                      $scope.statusAlert.newAlert = false;
+                      $scope.statusAlert.text = null;
+                  },4000);
               });
           } else {
               $scope.statusAlert.type = "danger";
               $scope.statusAlert.text = "Exista campuri goale! Verificati formularul inca o data!";
               $scope.statusAlert.newAlert = true;
+              if(!thisForm.viewer.nume)
+                  thisForm.viewerForm.nume.$touched = true;
+              if(!thisForm.viewer.email)
+                  thisForm.viewerForm.email.$touched = true;
+              $timeout(function(){
+                  $scope.statusAlert.newAlert = false;
+                  $scope.statusAlert.text = null;
+              },4000);
           }
       };
   }]);

@@ -63,7 +63,7 @@
           <div class="col-md-12 noPadding">
             <button class="btn btn-default" ng-click="editSpk(objectToEdit._id,objectToEdit.speakers)"><i class="glyphicon glyphicon-user"></i>&nbsp;Adauga speakeri</button>
           </div>
-          <div class="col-md-12 form-group noPadding marginTop20">
+          <div class="col-md-12 form-group noPadding marginTop20 scrollableList">
             <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.speakers track by $index">
               <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username + ' (' + key.name + ')'}}</div>
               <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key.username,'speaker')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
@@ -75,7 +75,7 @@
           <div class="col-md-12 noPadding">
             <button class="btn btn-default" ng-click="editVw(objectToEdit._id,objectToEdit.viewers)"><i class="glyphicon glyphicon-user"></i>&nbsp;Adauga vieweri</button>
           </div>
-          <div class="col-md-12 form-group noPadding marginTop20">
+          <div class="col-md-12 form-group noPadding marginTop20 scrollableList">
             <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.viewers track by $index">
               <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username  + ' (' + key.name + ')'}}</div>
               <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key.username,'viewer')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>

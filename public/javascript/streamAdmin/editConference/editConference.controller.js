@@ -4,7 +4,7 @@ controllers
   .controller('EditConferenceCtrl', [ '$scope', '$filter', '$sce' ,'$state' , 'AmazonService', '$rootScope', 'liveConferences', 'idToEdit', 'Success', '$modal', '$modalInstance', 'getIds', 'Error', 'therapeuticAreaService', 'userService', 'sendNotification',function ($scope, $filter, $sce, $state,AmazonService, $rootScope, liveConferences,idToEdit,Success,$modal,$modalInstance,getIds,Error,therapeuticAreaService,userService,sendNotification) {
     $scope.selectedModerator = {
       name: '',
-      _id: null,
+      _id: 0,
       username: ''
     };
 
@@ -44,7 +44,9 @@ controllers
 
       $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
       $scope.selectedModerator = $scope.objectToEdit.moderator;
-      angular.element('#moderator')[0].value = $scope.selectedModerator.username;
+      angular.element(document).ready(function () {
+        angular.element('#moderator')[0].value = $scope.selectedModerator.username ? $scope.selectedModerator.username : null;
+      });
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {

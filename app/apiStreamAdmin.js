@@ -33,12 +33,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/streamAdmin/liveConferences')
         .get(function(req,res){
             if(req.query.id){
-                LiveConference.find({_id:req.query.id}).populate('therapeutic-areasID').exec(function (err, conference) {
-                    if(err) { handleError(res, err); }
-                    if(conference.length == 0) { handleError(res,err,404,1); }
-                    else
-                        handleSuccess(res,conference[0]);
-                });
+                if(req.query.separatedViewers){
+                    LiveConference.find({_id:req.query.id}).exec(function (err, conference) {
+                        if(err) { handleError(res, err); }
+                        if(conference.length == 0) { handleError(res,err,404,1); }
+                        else
+                            var viewers = {
+                                registered: [],
+                                unregistered: []
+                            };
+                            var data = {username: 1, name: 1};
+                            async.eachSeries(conference[0].viewers, function (viewer, callback) {
+                                User.find({username : viewer.username}, data).limit(0).exec(function(err, cont) {
+                                    if(err) {
+                                        callback(err)
+                                    }else{
+                                        if(cont.length == 0)
+                                            viewers.unregistered.push(viewer);
+                                        else
+                                            viewers.registered.push(cont[0]);
+                                        callback();
+                                    }
+                                });
+                            }, function (err) {
+                                if(err){
+                                    handleError(res, err);
+                                }else{
+                                    handleSuccess(res,viewers);
+                                }
+                            });
+                    });
+                } else {
+                    LiveConference.find({_id:req.query.id}).populate('therapeutic-areasID').exec(function (err, conference) {
+                        if(err) { handleError(res, err); }
+                        if(conference.length == 0) { handleError(res,err,404,1); }
+                        else
+                            handleSuccess(res,conference[0]);
+                    });
+                }
             } else {
                 LiveConference.find().exec(function (err, conferences) {
                     if(err) { handleError(res, err); }
@@ -122,6 +154,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     if(!patt.test(req.body.username.toString())){
                         handleError(res,null,400,31);
                     }else {
+                        console.log(req.body);
                         LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers': req.body}}).exec(function (err, wRes) {
                             if (err) {
                                 handleError(res, err);
@@ -185,10 +218,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/streamAdmin/users')
         .get(function(req,res){
-            var data = {username: 1, name: 1};
+            var data = {username: 1, name: 1, profession: 1};
             if(req.query.groups)
                 data['groupsID'] = 1;
-            User.find({}, data).populate('groupsID').limit(0).exec(function(err, cont) {
+            User.find({}, data).populate('groupsID profession').limit(0).exec(function(err, cont) {
                 if(err) {
                     handleError(res,err,500);
                 }else{
@@ -359,10 +392,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         MailerModule.sendNotification(
                             "msd_users_notif",
                             [],
-                            [{email: req.body.usersToNotify.moderator.username, name: ''}],
+                            [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator}],
                             'Invitatie la conferinta ' + req.body.conference.name,
                             true,
-                            req.body.usersToNotify.moderator.username,
+                            req.body.usersToNotify.moderator.name,
                             confDate,
                             eventDate.getHours() + ':' + eventDate.getMinutes(),
                             req.body.conference.name,
@@ -472,10 +505,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     MailerModule.sendNotification(
                         "msd_users_notif",
                         [],
-                        [{email: req.body.usersToNotify.moderator.username, name: ''}],
+                        [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
                         'Invitatie la conferinta ' + req.body.conference.name,
                         false,
-                        req.body.usersToNotify.moderator.username,
+                        req.body.usersToNotify.moderator.name,
                         confDate,
                         eventDate.getHours() + ':' + eventDate.getMinutes(),
                         req.body.conference.name,

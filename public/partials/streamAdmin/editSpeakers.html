@@ -14,10 +14,9 @@
             <angular-select-autocomplete name="email" input-id="'emailField'" ng-model="selectedUser" ng-options="speakers" id-attr="_id" title-attr="username" ng-required="true" ng-disabled="false"></angular-select-autocomplete>
           </div>
         </div>
-        <div class="col-md-12 form-group-sm col-xs-12" ng-class="{'has-error': spkForm.nume.$error.required}">
+        <div class="col-md-12 form-group-sm col-xs-12">
           <label>Nume:</label>
           <input type="text" class="form-control" name="nume" id="nume" ng-model="selectedUser.name" ng-required="true">
-          <p class="" ng-show="spkForm.nume.$error.required">Numele este obligatoriu!</p>
         </div>
         <div class="col-md-12 form-group marginTop20">
           <button class="btn btn-default pull-right" ng-click="addSpk(selectedUser,spkForm.$valid)"><i class="glyphicon glyphicon-user"></i>&nbsp;Adauga speaker</button>
