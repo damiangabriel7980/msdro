@@ -45,13 +45,17 @@
           <button class="btn btn-default pull-left" ng-click="sendInvitations()"><i class="glyphicon glyphicon-envelope"></i>&nbsp;Trimite invitatii</button>
         </div>
         <div class="col-md-6 noPadding">
-          <button class="btn btn-default pull-right" ng-click="updateNotification(selectedUser)"><i class="glyphicon glyphicon-send"></i>&nbsp;Trimite notificare</button>
+          <button class="btn btn-default pull-right" ng-click="updateNotification()"><i class="glyphicon glyphicon-send"></i>&nbsp;Trimite notificare</button>
         </div>
       </div>
       <div class="col-md-12 form-group">
-        <div class="form-group-sm">
-          <label>Moderator:</label>
+        <div class="form-group-sm" ng-show="selectedModerator">
+          <label>Moderator Email:</label>
           <angular-select-autocomplete ng-model="selectedModerator" input-id="'moderator'" ng-options="users" id-attr="_id" title-attr="username" ng-required="true" ng-disabled="false"></angular-select-autocomplete>
+        </div>
+        <div class="form-group-sm">
+          <label>Moderator Name:</label>
+          <input type="text" class="form-control" name="name" id="moderatorName" ng-model="selectedModerator.name" ng-required="true">
         </div>
       </div>
         <div class="col-md-12 form-group">
@@ -59,18 +63,10 @@
           <div class="col-md-12 noPadding">
             <button class="btn btn-default" ng-click="editSpk(objectToEdit._id,objectToEdit.speakers)"><i class="glyphicon glyphicon-user"></i>&nbsp;Adauga speakeri</button>
           </div>
-          <div class="col-md-12 form-group noPadding">
-            <label>Registered</label>
-            <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.speakers.registered track by $index">
+          <div class="col-md-12 form-group noPadding marginTop20 scrollableList">
+            <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.speakers track by $index">
               <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username + ' (' + key.name + ')'}}</div>
-              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,false,'speaker')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
-            </div>
-          </div>
-          <div class="col-md-12 form-group noPadding">
-            <label>Unregistered</label>
-            <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.speakers.unregistered track by $index">
-              <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username  + ' (' + key.name + ')'}}</div>
-              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,true,'speaker')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
+              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key.username,'speaker')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
             </div>
           </div>
         </div>
@@ -79,18 +75,10 @@
           <div class="col-md-12 noPadding">
             <button class="btn btn-default" ng-click="editVw(objectToEdit._id,objectToEdit.viewers)"><i class="glyphicon glyphicon-user"></i>&nbsp;Adauga vieweri</button>
           </div>
-          <div class="col-md-12 form-group noPadding">
-            <label>Registered</label>
-            <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.viewers.registered track by $index">
+          <div class="col-md-12 form-group noPadding marginTop20 scrollableList">
+            <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.viewers track by $index">
               <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username  + ' (' + key.name + ')'}}</div>
-              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,false,'viewer')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
-            </div>
-          </div>
-          <div class="col-md-12 form-group noPadding">
-            <label>Unregistered</label>
-            <div class="col-md-12 noPadding" ng-repeat="key in objectToEdit.viewers.unregistered track by $index">
-              <div class="col-md-11 padding5">{{($index + 1) + '. ' + key.username  + ' (' + key.name + ')'}}</div>
-              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key._id,true,'viewer')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
+              <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeUser($index,key.username,'viewer')"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
             </div>
           </div>
         </div>

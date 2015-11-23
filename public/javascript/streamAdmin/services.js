@@ -154,6 +154,15 @@ services.factory('liveConferences', ['$resource', function($resource){
     })
 }]);
 
+services.factory('sendNotification', ['$resource', function($resource){
+    return {
+        notification: $resource('api/streamAdmin/sendNotification', {}, {
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false }
+        })
+    }
+}]);
+
 services.factory('userService', ['$resource', function($resource){
     return {
         users: $resource('api/streamAdmin/users', {}, {

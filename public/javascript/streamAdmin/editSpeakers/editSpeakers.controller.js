@@ -1,57 +1,58 @@
 'use strict';
 
 controllers
-  .controller('EditSpeakersCtrl', [ '$scope', '$sce' ,'$state' , '$rootScope', 'userService', '$filter','speakersToEdit', 'idToEdit', 'Success', 'Error', 'getIds', 'liveConferences', '$modalInstance', function ($scope, $sce, $state, $rootScope, userService,$filter, speakersToEdit, idToEdit,Success,Error,getIds,liveConferences,$modalInstance) {
+  .controller('EditSpeakersCtrl', [ '$scope', '$sce' ,'$state' , '$rootScope', 'userService', '$filter','speakersToEdit', 'idToEdit', 'Success', 'Error', 'getIds', 'liveConferences', '$modalInstance', '$timeout', function ($scope, $sce, $state, $rootScope, userService,$filter, speakersToEdit, idToEdit,Success,Error,getIds,liveConferences,$modalInstance,$timeout) {
     $scope.selectedUser = {
       name: '',
       _id: null,
         username: ''
     };
 
+      $scope.newlyAddedSpk = [];
+
+      $scope.showError = function(message) {
+          $scope.statusAlert.type = "danger";
+          $scope.statusAlert.newAlert = true;
+          $scope.statusAlert.text = message;
+          $timeout(function(){
+              $scope.statusAlert.newAlert = false;
+              $scope.statusAlert.text = null;
+          },4000);
+      };
+
     $scope.addSpk = function(user,isValid){
         if(!isValid){
-            $scope.statusAlert.type = "danger";
-            $scope.statusAlert.text = "Exista campuri goale! Verificati formularul inca o data!";
-            $scope.statusAlert.newAlert = true;
+            $scope.showError("Campul 'Nume' este obligatoriu!");
         } else {
-            if(user._id == null) {
+            var userExists;
+            if(user._id == null)
                 user.username = angular.element('#emailField')[0].value;
-                user.registered = false;
-                liveConferences.update({id: idToEdit, addSpeaker : true, single: true},{user: user}).$promise.then(function(resp){
-                    angular.forEach(Success.getObject(resp).speakers.unregistered, function(item) {
-                        if(item.username.toLowerCase() == user.username.toLowerCase()){
-                            $scope.currentUsers.unregistered.push(user);
-                        }
-                    });
-                }).catch(function(err){
-                    $scope.statusAlert.type = "danger";
-                    $scope.statusAlert.text = Error.getMessage(err);
-                    $scope.statusAlert.newAlert = true;
-                });
-            }
-            else {
-                if($scope.currentUsers.registered.length > 0){
-                    var ids = getIds.extract($scope.currentUsers.registered);
-                    if(ids.indexOf(user._id) > -1)
-                        return;
-                    else {
-                        user.registered = true;
-                        liveConferences.update({id: idToEdit, addSpeaker : true, single: true},{user: user}).$promise.then(function(resp){
-                            $scope.currentUsers.registered.push(user);
-                        }).catch(function(err){
-                            $scope.statusAlert.type = "danger";
-                            $scope.statusAlert.text = Error.getMessage(err);
-                            $scope.statusAlert.newAlert = true;
-                        });
+            if(user.username.length == 0){
+                $scope.showError("Campul 'Email' este obligatoriu!");
+            } else {
+                angular.forEach($scope.currentUsers, function(item) {
+                    if(item.username.toLowerCase() == user.username.toLowerCase()){
+                        userExists = true;
                     }
-                } else
+                });
+                if(!userExists){
                     liveConferences.update({id: idToEdit, addSpeaker : true, single: true},{user: user}).$promise.then(function(resp){
-                        $scope.currentUsers.registered.push(user);
+                        angular.forEach(Success.getObject(resp).speakers, function(item) {
+                            if(item.username.toLowerCase() == user.username.toLowerCase()){
+                                $scope.currentUsers.push(user);
+                                $scope.newlyAddedSpk.push(user);
+                                $scope.selectedUser = {
+                                    name: '',
+                                    _id: null,
+                                    username: ''
+                                };
+                                angular.element('#emailField')[0].value = '';
+                            }
+                        });
                     }).catch(function(err){
-                        $scope.statusAlert.type = "danger";
-                        $scope.statusAlert.text = Error.getMessage(err);
-                        $scope.statusAlert.newAlert = true;
+                        $scope.showError(Error.getMessage(err));
                     });
+                }
             }
         }
     };
@@ -59,28 +60,20 @@ controllers
 
       $scope.currentUsers = speakersToEdit;
 
-    $scope.removeSpeaker = function(index,user,unregistered){
-        var userData = {};
-        if(unregistered){
+    $scope.removeSpeaker = function(index,user){
+        var userData;
             userData = {
                 role: 'speaker',
-                registered: false,
-                id: user._id
+                username: user.username
             };
             liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
-                $scope.currentUsers.unregistered.splice(index,1);
+                $scope.currentUsers.splice(index,1);
+                angular.forEach($scope.newlyAddedSpk, function(item, key) {
+                    if(item.username.toLowerCase() == user.username.toLowerCase()){
+                        $scope.newlyAddedSpk.splice(key,1);
+                    }
+                });
             })
-        }
-        else {
-            userData = {
-                role: 'speaker',
-                registered: true,
-                id: user._id
-            };
-            liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
-                $scope.currentUsers.registered.splice(index,1);
-            })
-        }
     };
 
       userService.users.query().$promise.then(function(resp){
@@ -88,10 +81,9 @@ controllers
     });
 
       $scope.saveSpk = function(){
-          $scope.currentUsers.registered = getIds.extract($scope.currentUsers.registered);
           liveConferences.update({id: idToEdit, addSpeaker : true},$scope.currentUsers).$promise.then(function(resp){
               $modalInstance.close();
-              $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).speakers });
+              $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).speakers , spkToSendNotif:  $scope.newlyAddedSpk});
           });
       };
   }]);
