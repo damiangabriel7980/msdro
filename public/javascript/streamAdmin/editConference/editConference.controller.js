@@ -39,13 +39,11 @@ controllers
       $scope.objectToEdit = Success.getObject(resp);
       $scope.oldDate = $scope.objectToEdit.date;
 
-      $scope.oldSpks = $scope.objectToEdit.speakers.registered.concat($scope.objectToEdit.speakers.unregistered);
-      $scope.oldVws = $scope.objectToEdit.viewers.registered.concat($scope.objectToEdit.viewers.unregistered);
+      $scope.oldSpks = $scope.objectToEdit.speakers;
+      $scope.oldVws = $scope.objectToEdit.viewers;
 
       $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
       $scope.selectedModerator = $scope.objectToEdit.moderator;
-      if(!$scope.selectedModerator._id)
-        angular.element('#moderator')[0].value = $scope.selectedModerator.username;
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
@@ -96,7 +94,8 @@ controllers
             spkString += ', ' + item.name;
         });
         $scope.objectToEdit.moderator = {
-          username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
+          name: $scope.selectedModerator ? $scope.selectedModerator.name:angular.element('#name')[0].value,
+          username: $scope.selectedModerator ? $scope.selectedModerator.username:angular.element('#moderator')[0].value
         };
         $scope.usersToNotify = {
             speakers: $scope.oldSpks,
@@ -114,8 +113,8 @@ controllers
       $scope.sendInvitations = function(){
         var spkString = '';
         if($scope.usersToBeNotified.speakers.length == 0 && $scope.usersToBeNotified.viewers.length == 0){
-          $scope.usersToBeNotified.speakers = $scope.usersToBeNotified.speakers.concat($scope.objectToEdit.speakers.registered).concat($scope.objectToEdit.speakers.unregistered);
-          $scope.usersToBeNotified.viewers = $scope.usersToBeNotified.viewers.concat($scope.objectToEdit.viewers.registered).concat($scope.objectToEdit.viewers.unregistered);
+          $scope.usersToBeNotified.speakers = $scope.objectToEdit.speakers;
+          $scope.usersToBeNotified.viewers = $scope.objectToEdit.viewers;
           angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
             if (key == 0)
               spkString += item.name;
@@ -156,12 +155,12 @@ controllers
           else {
             if($scope.selectedModerator && $scope.selectedModerator._id){
               $scope.objectToEdit.moderator.username = $scope.selectedModerator.username;
+              $scope.objectToEdit.moderator.name = $scope.selectedModerator.name;
             } else
               $scope.objectToEdit.moderator = {
+                name: angular.element('#name')[0].value == '' ? null:angular.element('#name')[0].value,
                 username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
               };
-            $scope.objectToEdit.speakers.registered = getIds.extract($scope.objectToEdit.speakers.registered);
-            $scope.objectToEdit.viewers.registered = getIds.extract($scope.objectToEdit.viewers.registered);
             $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;
             $scope.objectToEdit.last_modified = new Date();
             liveConferences.update({id: id},$scope.objectToEdit).$promise.then(function(resp){
@@ -197,48 +196,32 @@ controllers
       });
     };
 
-    $scope.removeUser = function(index,id,unregistered,roleUs){
+    $scope.removeUser = function(index,username,roleUs){
       var userData = {};
       if($scope.usersToBeNotified.speakers.length > 0 || $scope.usersToBeNotified.viewers.length > 0){
         if(roleUs == 'speaker')
           angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
-             if(item._id == id){
+             if(item.username == username){
               $scope.usersToBeNotified.speakers.splice(key,1);
             }
            });
         else
           angular.forEach($scope.usersToBeNotified.viewers, function(item, key) {
-          if(item._id == id){
+          if(item.username == username){
             $scope.usersToBeNotified.viewers.splice(key,1);
           }
         });
       }
-      if(unregistered){
         userData = {
           role: roleUs,
-          registered: false,
-          id: id
+          username: username
         };
         liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
           if(roleUs == 'speaker'){
-            $scope.objectToEdit.speakers.unregistered.splice(index,1);
+            $scope.objectToEdit.speakers.splice(index,1);
           } else
-            $scope.objectToEdit.viewers.unregistered.splice(index,1);
+            $scope.objectToEdit.viewers.splice(index,1);
         })
-      }
-      else {
-        userData = {
-          role: roleUs,
-          registered: true,
-          id: id
-        };
-        liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
-          if(roleUs == 'speaker')
-            $scope.objectToEdit.speakers.registered.splice(index,1);
-          else
-            $scope.objectToEdit.viewers.registered.splice(index,1);
-        })
-      }
     };
 
     $scope.editVw = function(id, viewers){

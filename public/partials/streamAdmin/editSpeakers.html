@@ -24,17 +24,10 @@
         </div>
         </form>
         <div class="col-md-12 form-group">
-          <label>Registered</label>
-          <div class="col-md-12 form-group" ng-repeat="key in currentUsers.registered track by $index">
+          <label>Speakers</label>
+          <div class="col-md-12 form-group" ng-repeat="key in currentUsers track by $index">
             <div class="col-md-11">{{($index + 1) + '. ' + key.name + ' (' + key.username + ') '}}</div>
             <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeSpeaker($index,key)"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
-          </div>
-        </div>
-        <div class="col-md-12 form-group">
-          <label>Unregistered</label>
-          <div class="col-md-12 form-group" ng-repeat="key in currentUsers.unregistered track by $index">
-            <div class="col-md-11">{{($index + 1) + '. ' + key.name + ' (' + key.username + ') '}}</div>
-            <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeSpeaker($index,key,true)"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
           </div>
         </div>
 

@@ -13,21 +13,16 @@ var LiveConferencesSchema = new Schema({
     last_modified : Date,
     therapeuticAreas: Array,
     enabled: Boolean,
-    speakers: {
-        registered: [{type: Schema.Types.ObjectId, ref:'User'}],
-        unregistered: [{
-            name: String,
-            username: String
-        }]
-    } ,
-    viewers: {
-        registered: [{type: Schema.Types.ObjectId, ref:'User'}],
-        unregistered: [{
-            name: String,
-            username: String
-        }]
-    },
+    speakers: [{
+        name: String,
+        username: String
+    }] ,
+    viewers: [{
+        name: String,
+        username: String
+    }],
     moderator: {
+        name: String,
         username: String
     },
     'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas', index: true}]

@@ -36,13 +36,11 @@ controllers
         date: new Date(),
         therapeuticAreas: [],
         enabled: true,
-          speakers: {
-              registered: [],
-              unregistered: []
-          },
-          viewers: {
-              registered: [],
-              unregistered: []
+          speakers: [],
+          viewers: [],
+          moderator: {
+              email: null,
+              name: null
           }
       };
         liveConferences.create(conference).$promise.then(function(resp){
