@@ -49,13 +49,13 @@
         </div>
       </div>
       <div class="col-md-12 form-group">
-        <div class="form-group-sm">
+        <div class="form-group-sm" ng-show="selectedModerator">
           <label>Moderator Email:</label>
           <angular-select-autocomplete ng-model="selectedModerator" input-id="'moderator'" ng-options="users" id-attr="_id" title-attr="username" ng-required="true" ng-disabled="false"></angular-select-autocomplete>
         </div>
         <div class="form-group-sm">
           <label>Moderator Name:</label>
-          <input type="text" class="form-control" name="name" id="name" ng-model="selectedModerator.name" ng-required="true">
+          <input type="text" class="form-control" name="name" id="moderatorName" ng-model="selectedModerator.name" ng-required="true">
         </div>
       </div>
         <div class="col-md-12 form-group">

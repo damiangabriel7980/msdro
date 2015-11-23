@@ -1,7 +1,7 @@
 'use strict';
 
 controllers
-  .controller('EditConferenceCtrl', [ '$scope', '$filter', '$sce' ,'$state' , 'AmazonService', '$rootScope', 'liveConferences', 'idToEdit', 'Success', '$modal', '$modalInstance', 'getIds', 'Error', 'therapeuticAreaService', 'userService', 'sendNotification',function ($scope, $filter, $sce, $state,AmazonService, $rootScope, liveConferences,idToEdit,Success,$modal,$modalInstance,getIds,Error,therapeuticAreaService,userService,sendNotification) {
+  .controller('EditConferenceCtrl', [ '$scope', '$filter', '$sce' ,'$state' , 'AmazonService', '$rootScope', 'liveConferences', 'idToEdit', 'Success', '$modal', '$modalInstance', 'getIds', 'Error', 'therapeuticAreaService', 'userService', 'sendNotification', '$timeout',function ($scope, $filter, $sce, $state,AmazonService, $rootScope, liveConferences,idToEdit,Success,$modal,$modalInstance,getIds,Error,therapeuticAreaService,userService,sendNotification,$timeout) {
     $scope.selectedModerator = {
       name: '',
       _id: 0,
@@ -43,10 +43,10 @@ controllers
       $scope.oldVws = $scope.objectToEdit.viewers;
 
       $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
-      $scope.selectedModerator = $scope.objectToEdit.moderator;
-      angular.element(document).ready(function () {
+      $timeout(function() {
+        $scope.selectedModerator = $scope.objectToEdit.moderator;
         angular.element('#moderator')[0].value = $scope.selectedModerator.username ? $scope.selectedModerator.username : null;
-      });
+      },700);
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
@@ -161,7 +161,7 @@ controllers
               $scope.objectToEdit.moderator.name = $scope.selectedModerator.name;
             } else
               $scope.objectToEdit.moderator = {
-                name: angular.element('#name')[0].value == '' ? null:angular.element('#name')[0].value,
+                name: angular.element('#moderatorName')[0].value == '' ? null:angular.element('#moderatorName')[0].value,
                 username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
               };
             $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;
