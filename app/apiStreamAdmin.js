@@ -266,7 +266,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
                         MailerModule.sendNotification(
                             "msd_users_notif",
-                            item.name.length == 0 ? item.username : item.name,
+                            [],
                             [{email: item.username, name: item.name}],
                             'Actualizare date conferinta ' + req.body.conference.name,
                             true,
@@ -297,7 +297,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     async.eachSeries(req.body.usersToNotify.viewers,function(item,callback2){
                         MailerModule.sendNotification(
                             "msd_users_notif",
-                            item.name.length == 0 ? item.username : item.name,
+                            [],
                             [{email: item.username, name: item.name}],
                             'Actualizare date conferinta ' + req.body.conference.name,
                             true,
@@ -328,7 +328,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     async.eachSeries(req.body.usersToInvite.speakers,function(item,callback2){
                         MailerModule.sendNotification(
                             "msd_users_notif",
-                            item.name.length == 0 ? item.username : item.name,
+                            [],
                             [{email: item.username, name: item.name}],
                             'Invitatie la conferinta ' + req.body.conference.name,
                             false,
@@ -359,7 +359,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     async.eachSeries(req.body.usersToInvite.viewers,function(item,callback2){
                         MailerModule.sendNotification(
                             "msd_users_notif",
-                            item.name.length == 0 ? item.username : item.name,
+                            [],
                             [{email: item.username, name: item.name}],
                             'Invitatie la conferinta ' + req.body.conference.name,
                             false,
@@ -391,7 +391,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     if(req.body.usersToNotify.moderator.username){
                         MailerModule.sendNotification(
                             "msd_users_notif",
-                            req.body.usersToNotify.moderator.name.length == 0 ? req.body.usersToNotify.moderator.username : req.body.usersToNotify.moderator.name,
+                            [],
                             [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
                             'Invitatie la conferinta ' + req.body.conference.name,
                             true,
@@ -443,7 +443,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
                         MailerModule.sendNotification(
                             "msd_users_notif",
-                            item.name.length == 0 ? item.username : item.name,
+                            [],
                             [{email: item.username, name: item.name}],
                             'Invitatie la conferinta ' + req.body.conference.name,
                             false,
@@ -474,7 +474,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     async.eachSeries(req.body.usersToNotify.viewers,function(item,callback2){
                         MailerModule.sendNotification(
                             "msd_users_notif",
-                            item.name.length == 0 ? item.username : item.name,
+                            [],
                             [{email: item.username, name: item.name}],
                             'Invitatie la conferinta ' + req.body.conference.name,
                             false,
@@ -502,9 +502,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     })
                 }, function(callback) {
                 if(req.body.usersToNotify.moderator.username){
+                    console.log(req.body.usersToNotify.moderator);
                     MailerModule.sendNotification(
                         "msd_users_notif",
-                        req.body.usersToNotify.moderator.name.length == 0 ? req.body.usersToNotify.moderator.username : req.body.usersToNotify.moderator.name,
+                        [],
                         [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
                         'Invitatie la conferinta ' + req.body.conference.name,
                         false,

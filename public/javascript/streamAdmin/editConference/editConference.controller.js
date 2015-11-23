@@ -97,8 +97,8 @@ controllers
             spkString += ', ' + item.name;
         });
         $scope.objectToEdit.moderator = {
-          name: $scope.selectedModerator ? $scope.selectedModerator.name:angular.element('#name')[0].value,
-          username: $scope.selectedModerator ? $scope.selectedModerator.username:angular.element('#moderator')[0].value
+          name: angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value:angular.element('#moderatorName')[0].value,
+          username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
         };
         $scope.usersToNotify = {
             speakers: $scope.oldSpks,
@@ -125,6 +125,7 @@ controllers
               spkString += ', ' + item.name;
           });
           $scope.objectToEdit.moderator = {
+            name: angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value:angular.element('#moderatorName')[0].value,
             username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
           };
           $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
@@ -141,6 +142,10 @@ controllers
             else
               spkString += ', ' + item.name;
           });
+          $scope.objectToEdit.moderator = {
+            name: angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value:angular.element('#moderatorName')[0].value,
+            username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
+          };
           sendNotification.notification.create({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
             resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
           }).catch(function(err){
@@ -161,7 +166,7 @@ controllers
               $scope.objectToEdit.moderator.name = $scope.selectedModerator.name;
             } else
               $scope.objectToEdit.moderator = {
-                name: angular.element('#moderatorName')[0].value == '' ? null:angular.element('#moderatorName')[0].value,
+                name: angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value:angular.element('#moderatorName')[0].value,
                 username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
               };
             $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;
