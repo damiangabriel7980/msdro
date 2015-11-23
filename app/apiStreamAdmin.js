@@ -154,7 +154,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     if(!patt.test(req.body.username.toString())){
                         handleError(res,null,400,31);
                     }else {
-                        console.log(req.body);
                         LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers': req.body}}).exec(function (err, wRes) {
                             if (err) {
                                 handleError(res, err);
@@ -502,7 +501,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     })
                 }, function(callback) {
                 if(req.body.usersToNotify.moderator.username){
-                    console.log(req.body.usersToNotify.moderator);
                     MailerModule.sendNotification(
                         "msd_users_notif",
                         [],
