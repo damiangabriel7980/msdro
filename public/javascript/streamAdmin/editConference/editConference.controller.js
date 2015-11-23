@@ -44,6 +44,7 @@ controllers
 
       $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
       $scope.selectedModerator = $scope.objectToEdit.moderator;
+      angular.element('#moderator')[0].value = $scope.selectedModerator.username;
     });
 
     therapeuticAreaService.query().$promise.then(function (resp) {
