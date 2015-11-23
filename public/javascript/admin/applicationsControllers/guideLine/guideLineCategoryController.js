@@ -39,18 +39,14 @@ controllers.controller('guideLinesCategoryController',['$scope','GuideLineServic
     $scope.disableCategory=function (id,category){
        ActionModal.show(category.enabled?"Dezactiveaza categorie":"Activeaza categorie",
            category.enabled?"Sunteti sigur ca doriti sa dezactivati categoria?":"Sunteti sigur ca doriti sa activati categoria?",function(){
-             if(category.imageUrl){
                var toEdit = category;
                toEdit.enabled = !toEdit.enabled;
                delete toEdit['_id'];
                GuideLineService.category.update({id:id},toEdit).$promise.then(function(resp){
                    $state.reload();
                }).catch(function(err){
-
+                  console.log(err);
                });
-             }else{
-               InfoModal.show("Categoria selectata nu are poza");
-             }
             }
            ,{
                yes:"Da"
