@@ -39,13 +39,14 @@ controllers
       $scope.objectToEdit = Success.getObject(resp);
       $scope.oldDate = $scope.objectToEdit.date;
 
-      $scope.oldSpks = $scope.objectToEdit.speakers;
-      $scope.oldVws = $scope.objectToEdit.viewers;
+      $scope.oldSpks = angular.copy($scope.objectToEdit.speakers);
+      $scope.oldVws = angular.copy($scope.objectToEdit.viewers);
 
       $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
       $timeout(function() {
         $scope.selectedModerator = $scope.objectToEdit.moderator;
         angular.element('#moderator')[0].value = $scope.selectedModerator.username ? $scope.selectedModerator.username : null;
+        $scope.oldModerator = angular.copy($scope.selectedModerator);
       },700);
     });
 
@@ -103,8 +104,10 @@ controllers
         $scope.usersToNotify = {
             speakers: $scope.oldSpks,
             viewers: $scope.oldVws,
-            moderator: $scope.objectToEdit.moderator
+            moderator: $scope.oldModerator.username.toLowerCase() == $scope.objectToEdit.moderator.username.toLowerCase() ? $scope.objectToEdit.moderator : {}
         };
+        if($scope.oldModerator.username.toLowerCase() != $scope.objectToEdit.moderator.username.toLowerCase())
+          $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
         sendNotification.notification.update({id: $scope.objectToEdit.id},{conference: $scope.objectToEdit, usersToInvite: $scope.usersToBeNotified, usersToNotify: $scope.usersToNotify, spkString: spkString}).$promise.then(function(resp){
           resetConferenceAlert("Notificarea si invitatiile au fost trimise cu succes!",'success');
         }).catch(function(err){
@@ -227,8 +230,10 @@ controllers
         liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
           if(roleUs == 'speaker'){
             $scope.objectToEdit.speakers.splice(index,1);
+            $scope.oldSpks = angular.copy($scope.objectToEdit.speakers);
           } else
             $scope.objectToEdit.viewers.splice(index,1);
+            $scope.oldVws = angular.copy($scope.objectToEdit.viewers);
         })
     };
 

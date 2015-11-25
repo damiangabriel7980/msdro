@@ -275,7 +275,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 minutes = '0' + eventDate.getMinutes();
             else
                 minutes = eventDate.getMinutes();
-            async.parallel([
+            async.waterfall([
                 function (callback) {
                     async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
                         MailerModule.sendNotification(
@@ -317,7 +317,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             true,
                             item.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'viewer',
                             req.body.spkString,
@@ -348,7 +348,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             false,
                             item.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'speaker',
                             req.body.spkString,
@@ -379,7 +379,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             false,
                             item.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'viewer',
                             req.body.spkString,
@@ -407,18 +407,40 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             "msd_users_notif",
                             [],
                             [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
-                            'Invitatie la conferinta ' + req.body.conference.name,
+                            'Actualizare date conferinta ' + req.body.conference.name,
                             true,
                             req.body.usersToNotify.moderator.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'moderator',
                             req.body.spkString,
                             'http://qconferences.qualitance.com'
                         ).then(
                             function (success) {
-                                callback();
+                                callback(success);
+                            },
+                            function (err) {
+                                callback(err);
+                            }
+                        );
+                    } else if (req.body.usersToInvite.moderator.username) {
+                        MailerModule.sendNotification(
+                            "msd_users_notif",
+                            [],
+                            [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
+                            'Invitatie la conferinta ' + req.body.conference.name,
+                            false,
+                            req.body.usersToNotify.moderator.name,
+                            confDate,
+                            hour+ ':' + minutes,
+                            req.body.conference.name,
+                            'moderator',
+                            req.body.spkString,
+                            'http://qconferences.qualitance.com'
+                        ).then(
+                            function (success) {
+                                callback(success);
                             },
                             function (err) {
                                 callback(err);
@@ -452,7 +474,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 minutes = '0' + eventDate.getMinutes();
             else
                 minutes = eventDate.getMinutes();
-                async.parallel([
+                async.waterfall([
                 function (callback) {
                     async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
                         MailerModule.sendNotification(
@@ -494,7 +516,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             false,
                             item.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'viewer',
                             req.body.spkString,
@@ -524,7 +546,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         false,
                         req.body.usersToNotify.moderator.name,
                         confDate,
-                        eventDate.getHours() + ':' + eventDate.getMinutes(),
+                        hour+ ':' + minutes,
                         req.body.conference.name,
                         'moderator',
                         req.body.spkString,
