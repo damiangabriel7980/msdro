@@ -41,12 +41,9 @@ controllers
                             if(item.username.toLowerCase() == user.username.toLowerCase()){
                                 $scope.currentUsers.push(user);
                                 $scope.newlyAddedSpk.push(user);
-                                $scope.selectedUser = {
-                                    name: '',
-                                    _id: null,
-                                    username: ''
-                                };
+                                $scope.selectedUser = null;
                                 angular.element('#emailField')[0].value = '';
+                                angular.element('#spkName')[0].value = '';
                             }
                         });
                     }).catch(function(err){
