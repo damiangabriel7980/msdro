@@ -64,7 +64,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             });
                     });
                 } else {
-                    LiveConference.find({_id:req.query.id}).populate('therapeutic-areasID').exec(function (err, conference) {
+                    LiveConference.find({_id:req.query.id}).populate('therapeutic-areasID').sort({date : -1}).exec(function (err, conference) {
                         if(err) { handleError(res, err); }
                         if(conference.length == 0) { handleError(res,err,404,1); }
                         else
@@ -154,13 +154,28 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     if(!patt.test(req.body.username.toString())){
                         handleError(res,null,400,31);
                     }else {
-                        LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers': req.body}}).exec(function (err, wRes) {
-                            if (err) {
+                        //first check if the user is exists in the database
+                        User.aggregate([
+                            { $project: {username: {$toLower: "$username"}} },
+                            { $match: {username: req.body.username.toLowerCase()} },
+                            { $project: {_id:0, email: "$username"} }
+                        ], function (err, users) {
+                            if(err){
                                 handleError(res, err);
-                            } else {
-                                handleSuccess(res, wRes);
+                            }else{
+                                if(users.length > 0)
+                                    handleError(res,null,400,47);
+                                else
+                                    LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers': req.body}}).exec(function (err, wRes) {
+                                        if (err) {
+                                            handleError(res, err);
+                                        } else {
+                                            handleSuccess(res, wRes);
+                                        }
+                                    });
                             }
                         });
+
                     }
                 } else {
                     LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: {viewers: req.body}}).exec(function (err, wres) {
@@ -260,7 +275,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 minutes = '0' + eventDate.getMinutes();
             else
                 minutes = eventDate.getMinutes();
-            async.parallel([
+            async.waterfall([
                 function (callback) {
                     async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
                         MailerModule.sendNotification(
@@ -302,7 +317,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             true,
                             item.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'viewer',
                             req.body.spkString,
@@ -333,7 +348,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             false,
                             item.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'speaker',
                             req.body.spkString,
@@ -364,7 +379,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             false,
                             item.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'viewer',
                             req.body.spkString,
@@ -392,18 +407,40 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             "msd_users_notif",
                             [],
                             [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
-                            'Invitatie la conferinta ' + req.body.conference.name,
+                            'Actualizare date conferinta ' + req.body.conference.name,
                             true,
                             req.body.usersToNotify.moderator.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'moderator',
                             req.body.spkString,
                             'http://qconferences.qualitance.com'
                         ).then(
                             function (success) {
-                                callback();
+                                callback(success);
+                            },
+                            function (err) {
+                                callback(err);
+                            }
+                        );
+                    } else if (req.body.usersToInvite.moderator.username) {
+                        MailerModule.sendNotification(
+                            "msd_users_notif",
+                            [],
+                            [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
+                            'Invitatie la conferinta ' + req.body.conference.name,
+                            false,
+                            req.body.usersToNotify.moderator.name,
+                            confDate,
+                            hour+ ':' + minutes,
+                            req.body.conference.name,
+                            'moderator',
+                            req.body.spkString,
+                            'http://qconferences.qualitance.com'
+                        ).then(
+                            function (success) {
+                                callback(success);
                             },
                             function (err) {
                                 callback(err);
@@ -437,7 +474,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 minutes = '0' + eventDate.getMinutes();
             else
                 minutes = eventDate.getMinutes();
-                async.parallel([
+                async.waterfall([
                 function (callback) {
                     async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
                         MailerModule.sendNotification(
@@ -479,7 +516,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             false,
                             item.name,
                             confDate,
-                            eventDate.getHours() + ':' + eventDate.getMinutes(),
+                            hour+ ':' + minutes,
                             req.body.conference.name,
                             'viewer',
                             req.body.spkString,
@@ -509,7 +546,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         false,
                         req.body.usersToNotify.moderator.name,
                         confDate,
-                        eventDate.getHours() + ':' + eventDate.getMinutes(),
+                        hour+ ':' + minutes,
                         req.body.conference.name,
                         'moderator',
                         req.body.spkString,

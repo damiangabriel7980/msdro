@@ -40,7 +40,7 @@ controllers
               username: user.username
           };
           liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
-              $scope.editedViewers.splice(index,1);
+              $scope.editedViewers.unregistered.splice(index,1);
               angular.forEach($scope.newlyAddedVw, function(item, key) {
                   if(item.username.toLowerCase() == user.username.toLowerCase()){
                       $scope.newlyAddedVw.splice(key,1);
@@ -132,10 +132,11 @@ controllers
 
       $scope.saveData = function(){
           if($scope.oldData){
+              $scope.editedViewers.registered = [];
               angular.forEach($scope.oldData, function(item) {
                   if($scope.checkboxes.items[item.username]){
-                          $scope.editedViewers.registered.push(item);
-                          if(!$scope.oldCheckboxes.items[item.username])
+                      $scope.editedViewers.registered.push(item);
+                      if(!$scope.oldCheckboxes.items[item.username])
                               $scope.newlyAddedVw.push(item);
                   }
               });
@@ -147,28 +148,45 @@ controllers
         })
     };
 
+      $scope.showAlert = function(type,message){
+          $scope.statusAlert.type = type;
+          $scope.statusAlert.text = message;
+          $scope.statusAlert.newAlert = true;
+      };
+
       $scope.addViewer = function(isValid,thisForm){
           if(isValid){
-              liveConferences.update({id :$scope.idToEdit, addViewers : true, single: true},thisForm.viewer).$promise.then(function(resp){
-                  $scope.editedViewers.unregistered.push(thisForm.viewer);
-                  $scope.newlyAddedVw.push(thisForm.viewer);
-                  thisForm.viewer = null;
-                  thisForm.viewerForm.nume.$touched = false;
-                  thisForm.viewerForm.email.$touched = false;
-
-              }).catch(function(err){
-                  $scope.statusAlert.type = "danger";
-                  $scope.statusAlert.text = Error.getMessage(err);
-                  $scope.statusAlert.newAlert = true;
+              var checkIfAlreadyAdded;
+              angular.forEach($scope.editedViewers.unregistered, function(item) {
+                  if(item.username.toLowerCase() == thisForm.viewer.username.toLowerCase()){
+                      checkIfAlreadyAdded = true;
+                  }
+              });
+              if(checkIfAlreadyAdded) {
+                  $scope.showAlert("danger","Ati adaugat deja in lista un utilizator cu acest email!");
                   $timeout(function(){
                       $scope.statusAlert.newAlert = false;
                       $scope.statusAlert.text = null;
                   },4000);
-              });
+              }
+              else {
+                  liveConferences.update({id :$scope.idToEdit, addViewers : true, single: true},thisForm.viewer).$promise.then(function(resp){
+                      $scope.editedViewers.unregistered.push(thisForm.viewer);
+                      $scope.newlyAddedVw.push(thisForm.viewer);
+                      thisForm.viewer = null;
+                      thisForm.viewerForm.nume.$touched = false;
+                      thisForm.viewerForm.email.$touched = false;
+
+                  }).catch(function(err){
+                      $scope.showAlert("danger",Error.getMessage(err));
+                      $timeout(function(){
+                          $scope.statusAlert.newAlert = false;
+                          $scope.statusAlert.text = null;
+                      },4000);
+                  });
+              }
           } else {
-              $scope.statusAlert.type = "danger";
-              $scope.statusAlert.text = "Exista campuri goale! Verificati formularul inca o data!";
-              $scope.statusAlert.newAlert = true;
+              $scope.showAlert("danger","Exista campuri goale! Verificati formularul inca o data!");
               if(!thisForm.viewer.nume)
                   thisForm.viewerForm.nume.$touched = true;
               if(!thisForm.viewer.email)

@@ -48,7 +48,8 @@ var errorCodes = {
     43: "Exista deja o aplicatie cu acea denumire ",
     44: "Nu exista o aplicatie cu aceasta denumire ",
     45: "Continutul nu este disponibil.",
-    46: "Nu aveti permisiunea de a vizualiza continutul."
+    46: "Nu aveti permisiunea de a vizualiza continutul.",
+    47: "Exista deja un utilizator inregistrat cu acelasi email!"
 };
 
 module.exports = function(logger){
