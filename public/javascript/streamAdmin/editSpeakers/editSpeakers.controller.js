@@ -49,7 +49,8 @@ controllers
                     }).catch(function(err){
                         $scope.showError(Error.getMessage(err));
                     });
-                }
+                } else
+                    $scope.showError('Exista deja un utilizator cu acest nume in lista!');
             }
         }
     };

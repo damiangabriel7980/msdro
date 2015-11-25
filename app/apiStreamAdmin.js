@@ -64,7 +64,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             });
                     });
                 } else {
-                    LiveConference.find({_id:req.query.id}).populate('therapeutic-areasID').exec(function (err, conference) {
+                    LiveConference.find({_id:req.query.id}).populate('therapeutic-areasID').sort({date : -1}).exec(function (err, conference) {
                         if(err) { handleError(res, err); }
                         if(conference.length == 0) { handleError(res,err,404,1); }
                         else
@@ -154,13 +154,28 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     if(!patt.test(req.body.username.toString())){
                         handleError(res,null,400,31);
                     }else {
-                        LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers': req.body}}).exec(function (err, wRes) {
-                            if (err) {
+                        //first check if the user is exists in the database
+                        User.aggregate([
+                            { $project: {username: {$toLower: "$username"}} },
+                            { $match: {username: req.body.username.toLowerCase()} },
+                            { $project: {_id:0, email: "$username"} }
+                        ], function (err, users) {
+                            if(err){
                                 handleError(res, err);
-                            } else {
-                                handleSuccess(res, wRes);
+                            }else{
+                                if(users.length > 0)
+                                    handleError(res,null,400,47);
+                                else
+                                    LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers': req.body}}).exec(function (err, wRes) {
+                                        if (err) {
+                                            handleError(res, err);
+                                        } else {
+                                            handleSuccess(res, wRes);
+                                        }
+                                    });
                             }
                         });
+
                     }
                 } else {
                     LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: {viewers: req.body}}).exec(function (err, wres) {
