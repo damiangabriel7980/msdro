@@ -52,7 +52,7 @@ controllers
                       angular.forEach($scope.editedViewers.registered, function(item) {
                           $scope.checkboxes.items[item.username] = true;
                       });
-                      $scope.oldCheckboxes = $scope.checkboxes;
+                      $scope.oldCheckboxes = angular.copy($scope.checkboxes);
                       $scope.oldData = $scope.data;
                       $scope.tableParams = new ngTableParams({
                           page: 1,            // show first page
