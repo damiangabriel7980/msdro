@@ -78,7 +78,8 @@ var validationStrings = {
         options: "i"
     },
     email: {
-        str: RFC822
+        str: RFC822,
+        stringified: RFC822.toString()
     }
 };
 exports.validationStrings  = validationStrings;

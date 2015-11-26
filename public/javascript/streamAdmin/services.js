@@ -170,6 +170,9 @@ services.factory('userService', ['$resource', function($resource){
         }) ,
         groups: $resource('api/streamAdmin/groups', {}, {
             query: { method: 'GET', isArray: false }
+        }),
+        checkEmail: $resource('api/streamAdmin/checkEmail', {}, {
+            verify: { method: 'POST', isArray: false }
         })
     }
 }]);
@@ -193,6 +196,14 @@ services.factory('therapeuticAreaService', ['$resource', function($resource){
     return $resource('api/streamAdmin/therapeutic_areas', {}, {
         query: { method: 'GET', isArray: false }
     });
+}]);
+
+services.factory('Validations', ['$resource', function($resource){
+    return {
+        regexp: $resource('api/streamAdmin/regexp/', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
 }]);
 
 services.factory('filterArrayProperty', [function () {

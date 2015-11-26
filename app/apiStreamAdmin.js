@@ -126,20 +126,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         });
                 }
             } else if(req.query.addSpeaker){
-                if(req.query.single){
-                    var patt = UtilsModule.regexes.email;
-                    if(!patt.test(req.body.user.username.toString())){
-                        handleError(res,null,400,31);
-                    }else {
-                            LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'speakers': req.body.user}}).exec(function (err, wRes) {
-                                if (err) {
-                                    handleError(res, err);
-                                } else {
-                                    handleSuccess(res, wRes);
-                                }
-                            });
-                    }
-                } else {
                     LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: {speakers: req.body}}).exec(function (err, wres) {
                         if(err){
                             handleError(res, err);
@@ -147,37 +133,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             handleSuccess(res,wres);
                         }
                     });
-                }
             } else if(req.query.addViewers){
-                if(req.query.single){
-                    var patt = UtilsModule.regexes.email;
-                    if(!patt.test(req.body.username.toString())){
-                        handleError(res,null,400,31);
-                    }else {
-                        //first check if the user is exists in the database
-                        User.aggregate([
-                            { $project: {username: {$toLower: "$username"}} },
-                            { $match: {username: req.body.username.toLowerCase()} },
-                            { $project: {_id:0, email: "$username"} }
-                        ], function (err, users) {
-                            if(err){
-                                handleError(res, err);
-                            }else{
-                                if(users.length > 0)
-                                    handleError(res,null,400,47);
-                                else
-                                    LiveConference.findOneAndUpdate({_id: req.query.id}, {$push: {'viewers': req.body}}).exec(function (err, wRes) {
-                                        if (err) {
-                                            handleError(res, err);
-                                        } else {
-                                            handleSuccess(res, wRes);
-                                        }
-                                    });
-                            }
-                        });
-
-                    }
-                } else {
                     LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: {viewers: req.body}}).exec(function (err, wres) {
                         if(err){
                             handleError(res, err);
@@ -185,10 +141,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             handleSuccess(res,wres);
                         }
                     });
-                }
-
             }
-            else
+             else
             {
                 LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: req.body}, function (err, wres) {
                     if(err){
@@ -228,6 +182,33 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     });
                 }
             });
+        });
+
+    router.route('/streamAdmin/checkEmail')
+        .post(function(req,res){
+            if(req.query.checkIfExists){
+                //first check if the user is exists in the database
+                User.aggregate([
+                    { $project: {username: {$toLower: "$username"}} },
+                    { $match: {username: req.body.username.toLowerCase()} },
+                    { $project: {_id:0, email: "$username"} }
+                ], function (err, users) {
+                    if(err){
+                        handleError(res, err);
+                    }else{
+                        if(users.length > 0)
+                            handleError(res,null,400,47);
+                        else
+                            handleSuccess(res, users);
+                    }
+                });
+            } else if(req.query.checkEmailAddress) {
+                var patt = UtilsModule.regexes.email;
+                if(!patt.test(req.body.username.toString())){
+                    handleError(res,null,400,31);
+                }else
+                    handleSuccess(res);
+            }
         });
 
     router.route('/streamAdmin/users')
@@ -584,7 +565,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
-    router.route('/regexp')
+    router.route('/streamAdmin/regexp')
         .get(function(req,res){
             var regexp = UtilsModule.validationStrings;
             handleSuccess(res,regexp);
