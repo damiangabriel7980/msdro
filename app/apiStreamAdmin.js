@@ -245,7 +245,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if(err)
                     handleError(res,err,500);
                 else {
-                    var eventDate = conference[0].date;
+                    var eventDate = new Date(conference[0].date);
                     var day = eventDate.getDate();
                     var month = eventDate.getMonth() + 1;
                     var year = eventDate.getFullYear();
@@ -450,7 +450,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if(err)
                     handleError(res,err,500);
                 else {
-                    var eventDate = conference[0].date;
+                    var eventDate = new Date(conference[0].date);
                     var day = eventDate.getDate();
                     var month = eventDate.getMonth() + 1;
                     var year = eventDate.getFullYear();
