@@ -113,7 +113,7 @@ controllers
         };
         if(!moderatorIsTheSame)
           $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
-        sendNotification.notification.update({id: $scope.objectToEdit._id},{conference: $scope.objectToEdit, usersToInvite: $scope.usersToBeNotified, usersToNotify: $scope.usersToNotify, spkString: spkString}).$promise.then(function(resp){
+        sendNotification.notification.update({id: $scope.objectToEdit._id},{usersToInvite: $scope.usersToBeNotified, usersToNotify: $scope.usersToNotify, spkString: spkString}).$promise.then(function(resp){
           resetConferenceAlert("Notificarea si invitatiile au fost trimise cu succes!",'success');
         }).catch(function(err){
           console.log(Error.getMessage(err));
@@ -137,7 +137,7 @@ controllers
             username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
           };
           $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
-          sendNotification.notification.create({id: $scope.objectToEdit._id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
+          sendNotification.notification.create({id: $scope.objectToEdit._id},{usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
             resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
           }).catch(function(err){
             console.log(Error.getMessage(err));
@@ -154,7 +154,7 @@ controllers
             name: angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value:angular.element('#moderatorName')[0].value,
             username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
           };
-          sendNotification.notification.create({id: $scope.objectToEdit._id},{conference: $scope.objectToEdit, usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
+          sendNotification.notification.create({id: $scope.objectToEdit._id},{usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
             resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
           }).catch(function(err){
             console.log(Error.getMessage(err));
@@ -180,8 +180,7 @@ controllers
             $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;
             $scope.objectToEdit.last_modified = new Date();
             liveConferences.update({id: id},$scope.objectToEdit).$promise.then(function(resp){
-              $modalInstance.close();
-              $state.go('liveConferences',{},{reload: true});
+              resetConferenceAlert("Datele conferintei au fost actualizate cu succes!","success");
             }).catch(function(err){
               console.log(Error.getMessage(err));
             });
@@ -192,6 +191,10 @@ controllers
 
       };
 
+    $scope.close = function(){
+      $modalInstance.close();
+      $state.go('liveConferences',{},{reload: true});
+    };
 
     $scope.editSpk = function(id, speakers){
       $modal.open({

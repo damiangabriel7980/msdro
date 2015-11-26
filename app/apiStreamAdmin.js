@@ -241,316 +241,328 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/streamAdmin/sendNotification')
 
         .put(function (req,res) {
-            var eventDate = new Date(req.body.conference.date);
-            var day = eventDate.getDate();
-            var month = eventDate.getMonth() + 1;
-            var year = eventDate.getFullYear();
-            var confDate = day + '/' + month + '/' + year;
-            var hour;
-            var minutes;
-            if(eventDate.getHours() < 10)
-                hour = '0' + eventDate.getHours();
-            else
-                hour = eventDate.getHours();
-            if(eventDate.getMinutes() < 10)
-                minutes = '0' + eventDate.getMinutes();
-            else
-                minutes = eventDate.getMinutes();
-            async.series([
-                function (callback) {
-                    async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
-                        MailerModule.sendNotification(
-                            "msd_users_notif",
-                            [],
-                            [{email: item.username, name: item.name}],
-                            'Actualizare date conferinta ' + req.body.conference.name,
-                            true,
-                            item.name,
-                            confDate,
-                            hour+ ':' + minutes,
-                            req.body.conference.name,
-                            'speaker',
-                            req.body.spkString,
-                            'http://qconferences.qualitance.com'
-                        ).then(
-                            function (success) {
-                                callback2(success);
-                            },
-                            function (err) {
-                                callback2(err);
-                            }
-                        );
-                    }, function (err) {
-                        if(err){
-                            callback(err);
-                        }else{
-                            callback();
+            LiveConference.find({_id: req.query.id}).exec(function(err,conference){
+                if(err)
+                    handleError(res,err,500);
+                else {
+                    var eventDate = conference[0].date;
+                    var day = eventDate.getDate();
+                    var month = eventDate.getMonth() + 1;
+                    var year = eventDate.getFullYear();
+                    var confDate = day + '/' + month + '/' + year;
+                    var hour;
+                    var minutes;
+                    if(eventDate.getHours() < 10)
+                        hour = '0' + eventDate.getHours();
+                    else
+                        hour = eventDate.getHours();
+                    if(eventDate.getMinutes() < 10)
+                        minutes = '0' + eventDate.getMinutes();
+                    else
+                        minutes = eventDate.getMinutes();
+                    async.series([
+                        function (callback) {
+                            async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
+                                MailerModule.sendNotification(
+                                    "msd_users_notif",
+                                    [],
+                                    [{email: item.username, name: item.name}],
+                                    'Actualizare date conferinta ' + conference[0].name,
+                                    true,
+                                    item.name,
+                                    confDate,
+                                    hour+ ':' + minutes,
+                                    conference[0].name,
+                                    'speaker',
+                                    req.body.spkString,
+                                    'http://qconferences.qualitance.com'
+                                ).then(
+                                    function (success) {
+                                        callback2(success);
+                                    },
+                                    function (err) {
+                                        callback2(err);
+                                    }
+                                );
+                            }, function (err) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    callback();
+                                }
+                            })
+                        },
+                        function (callback) {
+                            async.eachSeries(req.body.usersToNotify.viewers,function(item,callback2){
+                                MailerModule.sendNotification(
+                                    "msd_users_notif",
+                                    [],
+                                    [{email: item.username, name: item.name}],
+                                    'Actualizare date conferinta ' + conference[0].name,
+                                    true,
+                                    item.name,
+                                    confDate,
+                                    hour+ ':' + minutes,
+                                    conference[0].name,
+                                    'viewer',
+                                    req.body.spkString,
+                                    'http://qconferences.qualitance.com'
+                                ).then(
+                                    function (success) {
+                                        callback2(success);
+                                    },
+                                    function (err) {
+                                        callback2(err);
+                                    }
+                                );
+                            }, function (err) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    callback();
+                                }
+                            })
+                        },
+                        function (callback) {
+                            async.eachSeries(req.body.usersToInvite.speakers,function(item,callback2){
+                                MailerModule.sendNotification(
+                                    "msd_users_notif",
+                                    [],
+                                    [{email: item.username, name: item.name}],
+                                    'Invitatie la conferinta ' + conference[0].name,
+                                    false,
+                                    item.name,
+                                    confDate,
+                                    hour+ ':' + minutes,
+                                    conference[0].name,
+                                    'speaker',
+                                    req.body.spkString,
+                                    'http://qconferences.qualitance.com'
+                                ).then(
+                                    function (success) {
+                                        callback2(success);
+                                    },
+                                    function (err) {
+                                        callback2(err);
+                                    }
+                                );
+                            }, function (err) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    callback();
+                                }
+                            })
+                        },
+                        function (callback) {
+                            async.eachSeries(req.body.usersToInvite.viewers,function(item,callback2){
+                                MailerModule.sendNotification(
+                                    "msd_users_notif",
+                                    [],
+                                    [{email: item.username, name: item.name}],
+                                    'Invitatie la conferinta ' + conference[0].name,
+                                    false,
+                                    item.name,
+                                    confDate,
+                                    hour+ ':' + minutes,
+                                    conference[0].name,
+                                    'viewer',
+                                    req.body.spkString,
+                                    'http://qconferences.qualitance.com'
+                                ).then(
+                                    function (success) {
+                                        callback2(success);
+                                    },
+                                    function (err) {
+                                        callback2(err);
+                                    }
+                                );
+                            }, function (err) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    callback();
+                                }
+                            })
+                        },
+                        function(callback)
+                        {
+                            if(req.body.usersToNotify.moderator.username){
+                                MailerModule.sendNotification(
+                                    "msd_users_notif",
+                                    [],
+                                    [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
+                                    'Actualizare date conferinta ' + conference[0].name,
+                                    true,
+                                    req.body.usersToNotify.moderator.name,
+                                    confDate,
+                                    hour+ ':' + minutes,
+                                    conference[0].name,
+                                    'moderator',
+                                    req.body.spkString,
+                                    'http://qconferences.qualitance.com'
+                                ).then(
+                                    function (success) {
+                                        callback(success);
+                                    },
+                                    function (err) {
+                                        callback(err);
+                                    }
+                                );
+                            } else if (req.body.usersToInvite.moderator.username) {
+                                MailerModule.sendNotification(
+                                    "msd_users_notif",
+                                    [],
+                                    [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
+                                    'Invitatie la conferinta ' + conference[0].name,
+                                    false,
+                                    req.body.usersToNotify.moderator.name,
+                                    confDate,
+                                    hour+ ':' + minutes,
+                                    conference[0].name,
+                                    'moderator',
+                                    req.body.spkString,
+                                    'http://qconferences.qualitance.com'
+                                ).then(
+                                    function (success) {
+                                        callback(success);
+                                    },
+                                    function (err) {
+                                        callback(err);
+                                    }
+                                );
+                            } else
+                                callback();
                         }
-                    })
-                },
-                function (callback) {
-                    async.eachSeries(req.body.usersToNotify.viewers,function(item,callback2){
-                        MailerModule.sendNotification(
-                            "msd_users_notif",
-                            [],
-                            [{email: item.username, name: item.name}],
-                            'Actualizare date conferinta ' + req.body.conference.name,
-                            true,
-                            item.name,
-                            confDate,
-                            hour+ ':' + minutes,
-                            req.body.conference.name,
-                            'viewer',
-                            req.body.spkString,
-                            'http://qconferences.qualitance.com'
-                        ).then(
-                            function (success) {
-                                callback2(success);
-                            },
-                            function (err) {
-                                callback2(err);
-                            }
-                        );
-                    }, function (err) {
+                    ], function (err) {
                         if(err){
-                            callback(err);
+                            handleError(res, err);
                         }else{
-                            callback();
+                            handleSuccess(res);
                         }
-                    })
-                },
-                function (callback) {
-                    async.eachSeries(req.body.usersToInvite.speakers,function(item,callback2){
-                        MailerModule.sendNotification(
-                            "msd_users_notif",
-                            [],
-                            [{email: item.username, name: item.name}],
-                            'Invitatie la conferinta ' + req.body.conference.name,
-                            false,
-                            item.name,
-                            confDate,
-                            hour+ ':' + minutes,
-                            req.body.conference.name,
-                            'speaker',
-                            req.body.spkString,
-                            'http://qconferences.qualitance.com'
-                        ).then(
-                            function (success) {
-                                callback2(success);
-                            },
-                            function (err) {
-                                callback2(err);
-                            }
-                        );
-                    }, function (err) {
-                        if(err){
-                            callback(err);
-                        }else{
-                            callback();
-                        }
-                    })
-                },
-                function (callback) {
-                    async.eachSeries(req.body.usersToInvite.viewers,function(item,callback2){
-                        MailerModule.sendNotification(
-                            "msd_users_notif",
-                            [],
-                            [{email: item.username, name: item.name}],
-                            'Invitatie la conferinta ' + req.body.conference.name,
-                            false,
-                            item.name,
-                            confDate,
-                            hour+ ':' + minutes,
-                            req.body.conference.name,
-                            'viewer',
-                            req.body.spkString,
-                            'http://qconferences.qualitance.com'
-                        ).then(
-                            function (success) {
-                                callback2(success);
-                            },
-                            function (err) {
-                                callback2(err);
-                            }
-                        );
-                    }, function (err) {
-                        if(err){
-                            callback(err);
-                        }else{
-                            callback();
-                        }
-                    })
-                },
-                function(callback)
-                {
-                    if(req.body.usersToNotify.moderator.username){
-                        MailerModule.sendNotification(
-                            "msd_users_notif",
-                            [],
-                            [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
-                            'Actualizare date conferinta ' + req.body.conference.name,
-                            true,
-                            req.body.usersToNotify.moderator.name,
-                            confDate,
-                            hour+ ':' + minutes,
-                            req.body.conference.name,
-                            'moderator',
-                            req.body.spkString,
-                            'http://qconferences.qualitance.com'
-                        ).then(
-                            function (success) {
-                                callback(success);
-                            },
-                            function (err) {
-                                callback(err);
-                            }
-                        );
-                    } else if (req.body.usersToInvite.moderator.username) {
-                        MailerModule.sendNotification(
-                            "msd_users_notif",
-                            [],
-                            [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
-                            'Invitatie la conferinta ' + req.body.conference.name,
-                            false,
-                            req.body.usersToNotify.moderator.name,
-                            confDate,
-                            hour+ ':' + minutes,
-                            req.body.conference.name,
-                            'moderator',
-                            req.body.spkString,
-                            'http://qconferences.qualitance.com'
-                        ).then(
-                            function (success) {
-                                callback(success);
-                            },
-                            function (err) {
-                                callback(err);
-                            }
-                        );
-                    } else
-                        callback();
-                }
-            ], function (err) {
-                if(err){
-                    handleError(res, err);
-                }else{
-                    handleSuccess(res);
+                    });
                 }
             });
-
         })
 
         .post(function(req, res) {
-            var eventDate = new Date(req.body.conference.date);
-            var day = eventDate.getDate();
-            var month = eventDate.getMonth() + 1;
-            var year = eventDate.getFullYear();
-            var confDate = day + '/' + month + '/' + year;
-            var hour;
-            var minutes;
-                if(eventDate.getHours() < 10)
-                    hour = '0' + eventDate.getHours();
-            else
-                    hour = eventDate.getHours();
-            if(eventDate.getMinutes() < 10)
-                minutes = '0' + eventDate.getMinutes();
-            else
-                minutes = eventDate.getMinutes();
-                async.series([
-                function (callback) {
-                    async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
-                        MailerModule.sendNotification(
-                            "msd_users_notif",
-                            [],
-                            [{email: item.username, name: item.name}],
-                            'Invitatie la conferinta ' + req.body.conference.name,
-                            false,
-                            item.name,
-                            confDate,
-                            hour+ ':' + minutes,
-                            req.body.conference.name,
-                            'speaker',
-                            req.body.spkString,
-                            'http://qconferences.qualitance.com'
-                        ).then(
-                            function (success) {
-                                callback2(success);
-                            },
-                            function (err) {
-                                callback2(err);
-                            }
-                        );
-                    }, function (err) {
-                        if(err){
-                            callback(err);
-                        }else{
-                            callback();
-                        }
-                    })
-                },
-                function (callback) {
-                    async.eachSeries(req.body.usersToNotify.viewers,function(item,callback2){
-                        MailerModule.sendNotification(
-                            "msd_users_notif",
-                            [],
-                            [{email: item.username, name: item.name}],
-                            'Invitatie la conferinta ' + req.body.conference.name,
-                            false,
-                            item.name,
-                            confDate,
-                            hour+ ':' + minutes,
-                            req.body.conference.name,
-                            'viewer',
-                            req.body.spkString,
-                            'http://qconferences.qualitance.com'
-                        ).then(
-                            function (success) {
-                                callback2(success);
-                            },
-                            function (err) {
-                                callback2(err);
-                            }
-                        );
-                    }, function (err) {
-                        if(err){
-                            callback(err);
-                        }else{
-                            callback();
-                        }
-                    })
-                }, function(callback) {
-                if(req.body.usersToNotify.moderator.username){
-                    MailerModule.sendNotification(
-                        "msd_users_notif",
-                        [],
-                        [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
-                        'Invitatie la conferinta ' + req.body.conference.name,
-                        false,
-                        req.body.usersToNotify.moderator.name,
-                        confDate,
-                        hour+ ':' + minutes,
-                        req.body.conference.name,
-                        'moderator',
-                        req.body.spkString,
-                        'http://qconferences.qualitance.com'
-                    ).then(
-                        function (success) {
-                            callback(success);
+            LiveConference.find({_id: req.query.id}).exec(function(err,conference){
+                if(err)
+                    handleError(res,err,500);
+                else {
+                    var eventDate = conference[0].date;
+                    var day = eventDate.getDate();
+                    var month = eventDate.getMonth() + 1;
+                    var year = eventDate.getFullYear();
+                    var confDate = day + '/' + month + '/' + year;
+                    var hour;
+                    var minutes;
+                    if(eventDate.getHours() < 10)
+                        hour = '0' + eventDate.getHours();
+                    else
+                        hour = eventDate.getHours();
+                    if(eventDate.getMinutes() < 10)
+                        minutes = '0' + eventDate.getMinutes();
+                    else
+                        minutes = eventDate.getMinutes();
+                    async.series([
+                        function (callback) {
+                            async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
+                                MailerModule.sendNotification(
+                                    "msd_users_notif",
+                                    [],
+                                    [{email: item.username, name: item.name}],
+                                    'Invitatie la conferinta ' + conference[0].name,
+                                    false,
+                                    item.name,
+                                    confDate,
+                                    hour+ ':' + minutes,
+                                    conference[0].name,
+                                    'speaker',
+                                    req.body.spkString,
+                                    'http://qconferences.qualitance.com'
+                                ).then(
+                                    function (success) {
+                                        callback2(success);
+                                    },
+                                    function (err) {
+                                        callback2(err);
+                                    }
+                                );
+                            }, function (err) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    callback();
+                                }
+                            })
                         },
-                        function (err) {
-                            callback(err);
+                        function (callback) {
+                            async.eachSeries(req.body.usersToNotify.viewers,function(item,callback2){
+                                MailerModule.sendNotification(
+                                    "msd_users_notif",
+                                    [],
+                                    [{email: item.username, name: item.name}],
+                                    'Invitatie la conferinta ' + conference[0].name,
+                                    false,
+                                    item.name,
+                                    confDate,
+                                    hour+ ':' + minutes,
+                                    conference[0].name,
+                                    'viewer',
+                                    req.body.spkString,
+                                    'http://qconferences.qualitance.com'
+                                ).then(
+                                    function (success) {
+                                        callback2(success);
+                                    },
+                                    function (err) {
+                                        callback2(err);
+                                    }
+                                );
+                            }, function (err) {
+                                if(err){
+                                    callback(err);
+                                }else{
+                                    callback();
+                                }
+                            })
+                        }, function(callback) {
+                            if(req.body.usersToNotify.moderator.username){
+                                MailerModule.sendNotification(
+                                    "msd_users_notif",
+                                    [],
+                                    [{email: req.body.usersToNotify.moderator.username, name: req.body.usersToNotify.moderator.name}],
+                                    'Invitatie la conferinta ' + conference[0].name,
+                                    false,
+                                    req.body.usersToNotify.moderator.name,
+                                    confDate,
+                                    hour+ ':' + minutes,
+                                    conference[0].name,
+                                    'moderator',
+                                    req.body.spkString,
+                                    'http://qconferences.qualitance.com'
+                                ).then(
+                                    function (success) {
+                                        callback(success);
+                                    },
+                                    function (err) {
+                                        callback(err);
+                                    }
+                                );
+                            } else
+                                callback();
                         }
-                    );
-                } else
-                    callback();
-            }
-            ], function (err) {
-                if(err){
-                    handleError(res, err);
-                }else{
-                    handleSuccess(res);
+                    ], function (err) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res);
+                        }
+                    });
                 }
             });
+
 
         });
 
