@@ -30,48 +30,37 @@ controllers
             if(user.username.length == 0){
                 $scope.showError("Campul 'Email' este obligatoriu!");
             } else {
-                angular.forEach($scope.currentUsers, function(item) {
-                    if(item.username.toLowerCase() == user.username.toLowerCase()){
-                        userExists = true;
-                    }
-                });
-                if(!userExists){
-                    liveConferences.update({id: idToEdit, addSpeaker : true, single: true},{user: user}).$promise.then(function(resp){
-                        angular.forEach(Success.getObject(resp).speakers, function(item) {
-                            if(item.username.toLowerCase() == user.username.toLowerCase()){
-                                $scope.currentUsers.push(user);
-                                $scope.newlyAddedSpk.push(user);
-                                $scope.selectedUser = null;
-                                angular.element('#emailField')[0].value = '';
-                                angular.element('#spkName')[0].value = '';
-                            }
-                        });
-                    }).catch(function(err){
-                        $scope.showError(Error.getMessage(err));
+                userService.checkEmail.verify({checkEmailAddress: true},user).$promise.then(function(resp){
+                    angular.forEach($scope.currentUsers, function(item) {
+                        if(item.username.toLowerCase() == user.username.toLowerCase()){
+                            userExists = true;
+                        }
                     });
-                } else
-                    $scope.showError('Exista deja un utilizator cu acest nume in lista!');
+                    if(!userExists){
+                        $scope.currentUsers.push(user);
+                        $scope.newlyAddedSpk.push(user);
+                        $scope.selectedUser = null;
+                        angular.element('#emailField')[0].value = '';
+                        angular.element('#spkName')[0].value = '';
+                    } else
+                        $scope.showError('Exista deja un utilizator cu acest nume in lista!');
+                }).catch(function(err){
+                    $scope.showError(Error.getMessage(err));
+                });
             }
         }
     };
       $scope.statusAlert = {newAlert:false, type:"", message:""};
 
-      $scope.currentUsers = speakersToEdit;
+      $scope.currentUsers = angular.copy(speakersToEdit);
 
     $scope.removeSpeaker = function(index,user){
-        var userData;
-            userData = {
-                role: 'speaker',
-                username: user.username
-            };
-            liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
-                $scope.currentUsers.splice(index,1);
-                angular.forEach($scope.newlyAddedSpk, function(item, key) {
-                    if(item.username.toLowerCase() == user.username.toLowerCase()){
-                        $scope.newlyAddedSpk.splice(key,1);
-                    }
-                });
-            })
+        $scope.currentUsers.splice(index,1);
+        angular.forEach($scope.newlyAddedSpk, function(item, key) {
+            if(item.username.toLowerCase() == user.username.toLowerCase()){
+                $scope.newlyAddedSpk.splice(key,1);
+            }
+        });
     };
 
       userService.users.query().$promise.then(function(resp){

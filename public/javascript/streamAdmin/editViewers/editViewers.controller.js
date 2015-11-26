@@ -34,19 +34,12 @@ controllers
     };
 
       $scope.removeViewer = function(index,user){
-          var userData;
-          userData = {
-              role: 'viewer',
-              username: user.username
-          };
-          liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
-              $scope.editedViewers.unregistered.splice(index,1);
-              angular.forEach($scope.newlyAddedVw, function(item, key) {
-                  if(item.username.toLowerCase() == user.username.toLowerCase()){
-                      $scope.newlyAddedVw.splice(key,1);
-                  }
-              });
-          })
+          $scope.editedViewers.unregistered.splice(index,1);
+          angular.forEach($scope.newlyAddedVw, function(item, key) {
+              if(item.username.toLowerCase() == user.username.toLowerCase()){
+                  $scope.newlyAddedVw.splice(key,1);
+              }
+          });
       };
 
       liveConferences.query({id: idToEdit, separatedViewers : true}).$promise.then(function(resp){
@@ -152,6 +145,10 @@ controllers
           $scope.statusAlert.type = type;
           $scope.statusAlert.text = message;
           $scope.statusAlert.newAlert = true;
+          $timeout(function(){
+              $scope.statusAlert.newAlert = false;
+              $scope.statusAlert.text = null;
+          },4000);
       };
 
       $scope.addViewer = function(isValid,thisForm){
@@ -164,25 +161,20 @@ controllers
               });
               if(checkIfAlreadyAdded) {
                   $scope.showAlert("danger","Ati adaugat deja in lista un utilizator cu acest email!");
-                  $timeout(function(){
-                      $scope.statusAlert.newAlert = false;
-                      $scope.statusAlert.text = null;
-                  },4000);
               }
               else {
-                  liveConferences.update({id :$scope.idToEdit, addViewers : true, single: true},thisForm.viewer).$promise.then(function(resp){
-                      $scope.editedViewers.unregistered.push(thisForm.viewer);
-                      $scope.newlyAddedVw.push(thisForm.viewer);
-                      thisForm.viewer = null;
-                      thisForm.viewerForm.nume.$touched = false;
-                      thisForm.viewerForm.email.$touched = false;
-
+                  userService.checkEmail.verify({checkEmailAddress: true},thisForm.viewer).$promise.then(function(firstResp){
+                      userService.checkEmail.verify({checkIfExists: true},thisForm.viewer).$promise.then(function(secondResp){
+                          $scope.editedViewers.unregistered.push(thisForm.viewer);
+                          $scope.newlyAddedVw.push(thisForm.viewer);
+                          thisForm.viewer = null;
+                          thisForm.viewerForm.nume.$touched = false;
+                          thisForm.viewerForm.email.$touched = false;
+                      }).catch(function(err){
+                          $scope.showAlert("danger",Error.getMessage(err));
+                      });
                   }).catch(function(err){
                       $scope.showAlert("danger",Error.getMessage(err));
-                      $timeout(function(){
-                          $scope.statusAlert.newAlert = false;
-                          $scope.statusAlert.text = null;
-                      },4000);
                   });
               }
           } else {
@@ -191,10 +183,6 @@ controllers
                   thisForm.viewerForm.nume.$touched = true;
               if(!thisForm.viewer.email)
                   thisForm.viewerForm.email.$touched = true;
-              $timeout(function(){
-                  $scope.statusAlert.newAlert = false;
-                  $scope.statusAlert.text = null;
-              },4000);
           }
       };
   }]);

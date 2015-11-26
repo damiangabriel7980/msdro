@@ -251,9 +251,6 @@ controllers
         resolve : {
           idToEdit: function () {
             return id;
-          },
-          viewersToEdit : function () {
-            return viewers;
           }
         },
         windowClass: 'fade',
