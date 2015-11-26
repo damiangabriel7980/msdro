@@ -275,7 +275,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 minutes = '0' + eventDate.getMinutes();
             else
                 minutes = eventDate.getMinutes();
-            async.waterfall([
+            async.series([
                 function (callback) {
                     async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
                         MailerModule.sendNotification(
@@ -446,7 +446,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                 callback(err);
                             }
                         );
-                    }
+                    } else
+                        callback();
                 }
             ], function (err) {
                 if(err){
@@ -474,7 +475,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 minutes = '0' + eventDate.getMinutes();
             else
                 minutes = eventDate.getMinutes();
-                async.waterfall([
+                async.series([
                 function (callback) {
                     async.eachSeries(req.body.usersToNotify.speakers,function(item,callback2){
                         MailerModule.sendNotification(
@@ -553,13 +554,14 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         'http://qconferences.qualitance.com'
                     ).then(
                         function (success) {
-                            callback();
+                            callback(success);
                         },
                         function (err) {
                             callback(err);
                         }
                     );
-                }
+                } else
+                    callback();
             }
             ], function (err) {
                 if(err){
