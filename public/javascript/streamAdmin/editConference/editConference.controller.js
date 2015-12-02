@@ -194,6 +194,7 @@ controllers
               resetConferenceAlert("Datele conferintei au fost actualizate cu succes!","success");
               $scope.oldSpks = angular.copy($scope.objectToEdit.speakers);
               $scope.oldVws = angular.copy($scope.objectToEdit.viewers);
+              $scope.oldModerator = angular.copy($scope.objectToEdit.moderator);
               $scope.usersToBeNotified = {
                 speakers : [],
                 viewers : [],
