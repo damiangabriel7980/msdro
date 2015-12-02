@@ -1,0 +1,22 @@
+<div class = "col-md-12 well">
+
+</div>
+<div class="col-md-12">
+    <div class="titleAndButton">
+        <div><h3>My prescription:</h3></div>
+    </div>
+    <div class="myPrescription col-md-12">
+        <div class="myPrescriptionTextArea">
+        	<span>General Info:</span>
+        	<textarea ng-model = "info.generalDescription"></textarea>
+        </div>
+        <div class="myPrescriptionPhone">
+          <span>Telephone: <i class="glyphicon glyphicon-plus"ng-click="addPhone()" tooltip="Add new phone number"></i></span>
+          <div class="col-md-12" ng-repeat="tele in info.telefon">
+            <input placeholder="Name" ng-model="tele.name"></input>
+            <input placeholder="Number" ng-model="tele.number"></input>
+          </div>
+        </div>
+        <button ng-click="update()">Update</button>
+    </div>
+</div>

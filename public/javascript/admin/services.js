@@ -551,6 +551,15 @@ services.factory('GuideLineService',['$resource',function($resource){
         }
 }]);
 
+services.factory('myPrescriptionService',['$resource',function($resource){
+  return{
+    info:$resource('api/admin/applications/myPrescription',{},{
+        query:{method:'GET',isArray:false},
+        update:{method:'PUT',isArray:false}
+    })
+  }
+}])
+
 services.factory('NewsletterService', ['$resource', function($resource){
     var variableTypes = ["text", "html"];
     var systemVariables = ["UNSUBSCRIBE_URL"];

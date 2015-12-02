@@ -32,6 +32,7 @@ var AppUpdate = require("../models/msd-applications.js");
 var _ = require('underscore');
 var guidelineFile = require ("../models/guidelineFile");
 var guidelineCategory = require ("../models/guidelineCategory");
+var myPrescription = require("../models/myPrescription");
 
 var xlsx = require("xlsx");
 
@@ -1683,6 +1684,26 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                }
            })
         });
+
+    router.route('/admin/applications/myPrescription')
+      .get(function(req, res){
+        myPrescription.find({},function(err,info){
+          if(err){
+            return handleError(res,err,500);
+          }else{
+            handleSuccess(res,info);
+          }
+        })
+      })
+      .put(function(req,res){
+        myPrescription.update({_id:req.query.id},{$set:req.body},function(err,updated){
+          if(err){
+            return handleError(res,err,500);
+          }else{
+            handleSuccess(res,updated);
+          }
+        })
+      })
 
     router.route('/admin/events/events')
         .get(function (req, res) {
