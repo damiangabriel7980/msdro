@@ -139,6 +139,11 @@ controllers
           $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
           sendNotification.notification.create({id: $scope.objectToEdit._id},{usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
             resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
+            $scope.usersToBeNotified = {
+              speakers : [],
+              viewers : [],
+              moderator: {}
+            };
           }).catch(function(err){
             console.log(Error.getMessage(err));
             resetConferenceAlert("Eroare la trimiterea invitatiilor!");
@@ -154,8 +159,14 @@ controllers
             name: angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value:angular.element('#moderatorName')[0].value,
             username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
           };
+          $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
           sendNotification.notification.create({id: $scope.objectToEdit._id},{usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
             resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
+            $scope.usersToBeNotified = {
+              speakers : [],
+              viewers : [],
+              moderator: {}
+            };
           }).catch(function(err){
             console.log(Error.getMessage(err));
             resetConferenceAlert("Eroare la trimiterea invitatiilor!");
@@ -181,6 +192,13 @@ controllers
             $scope.objectToEdit.last_modified = new Date();
             liveConferences.update({id: id},$scope.objectToEdit).$promise.then(function(resp){
               resetConferenceAlert("Datele conferintei au fost actualizate cu succes!","success");
+              $scope.oldSpks = angular.copy($scope.objectToEdit.speakers);
+              $scope.oldVws = angular.copy($scope.objectToEdit.viewers);
+              $scope.usersToBeNotified = {
+                speakers : [],
+                viewers : [],
+                moderator: {}
+              };
             }).catch(function(err){
               console.log(Error.getMessage(err));
             });
