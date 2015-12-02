@@ -1,4 +1,5 @@
 var ModelInfos = require('../../models/model_infos');
+var myPrescription = require('../../models/myPrescription');
 
 var async = require ('async');
 
@@ -25,3 +26,16 @@ async.each(modelsToSeed, function(model, callback){
     console.log("Finished seeding model infos");
 });
 
+myPrescription.find({},function(err,resp){
+  if(err){
+    return console.log(err);
+  }else if(resp.length == 0){
+    myPrescription.create({
+      generalDescription:'',
+      telefon:[{
+        numar:'',
+        nume:''
+      }]
+    })
+  }
+})
