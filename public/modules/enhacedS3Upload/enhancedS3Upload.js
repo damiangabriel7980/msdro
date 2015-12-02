@@ -2,17 +2,21 @@
     var scripts = document.getElementsByTagName("script");
     var currentScriptPath = scripts[scripts.length-1].src;
 
-    angular.module('s3UploadManager', []).directive('s3UploadManager', ['AmazonService', 'ActionModal',"$rootScope", function(AmazonService, ActionModal,$rootScope) {
+    angular.module('enhancedS3UploadManager', []).directive('enhancedS3UploadManager', ['AmazonService', 'ActionModal','$rootScope', function(AmazonService, ActionModal,$rootScope) {
         return {
             restrict: 'E',
-            templateUrl: currentScriptPath.replace('s3_upload_manager.js', 's3_upload_manager.html'),
-            replace: true,
+            templateUrl: currentScriptPath.replace('enhancedS3Upload.js', 'enhancedS3Upload.html'),
+            scope: {
+              label:"@",
+              onCompleteFunction:"&",
+              fileType:"@",
+              path:"@",
+              limit:"@"
+            },
             link: function(scope, element, attrs) {
+              scope.keys = [];
 
-                var path, nameAll,limit;
-                scope.fileType = null;
-                scope.label = null;
-                scope.keys = [];
+                var nameAll;
 
                 var resetS3Alert = function (type, text) {
                     scope.s3Alert = {
@@ -24,22 +28,6 @@
 
                 scope.bucketUrl = AmazonService.getBucketUrl();
 
-                attrs.$observe('extension',function(newVal){
-                    scope.fileType = newVal.toLowerCase();
-                });
-
-                attrs.$observe('limit',function(newVal){
-                   limit = Number(newVal);
-                });
-
-                attrs.$observe('path', function (newVal) {
-                    path = newVal;
-                    initialize();
-                });
-
-                attrs.$observe('label', function (newVal) {
-                    scope.label = newVal;
-                });
 
                 attrs.$observe('nameAll', function (newVal) {
                     nameAll = newVal;
@@ -57,8 +45,9 @@
                 };
 
                 var initialize = function () {
+                  scope.onCompleteFunction("asdasdasd");
                     resetS3Alert("warning","Loading files...");
-                    AmazonService.getContentsAtPath(path, function (err, contentsArray) {
+                    AmazonService.getContentsAtPath(scope.path, function (err, contentsArray) {
                         if(err){
                             resetS3Alert("danger","Error loading files");
                         }else{
@@ -96,9 +85,9 @@
                             ActionModal.show("Fisierul selectat nu este suportat");
                         }else{
                             if(nameAll){
-                                key=path+nameAll+"."+extension;
+                                key=scope.path+nameAll+"."+extension;
                             }else{
-                                key=path+$files[0].name;
+                                key=scope.path+$files[0].name;
                             }
                             //check if file exists
                             if(findInKeys(key) > -1){
@@ -108,7 +97,6 @@
                                     yes: "Da"
                                 });
                             }else{
-                                $rootScope.$broadcast('fileUpdated',key);
                                 uploadFile($files[0], key);
                             }
                         }
@@ -130,11 +118,12 @@
                         }else{
                             resetS3Alert();
                             scope.keys.splice(index,1);
-                            $rootScope.$broadcast('fileDeleted');
                             scope.$apply();
                         }
                     })
                 }
+
+                initialize();
             }
         };
     }]);

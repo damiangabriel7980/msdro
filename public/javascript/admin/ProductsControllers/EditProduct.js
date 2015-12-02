@@ -9,6 +9,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
         $scope.product=Success.getObject(result);
         $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
         $scope.selectedGroups = Success.getObject(result)['groupsID'];
+        console.log($scope.product);
     }).catch(function(err){
         console.log(Error.getMessage(err));
     });
@@ -166,6 +167,28 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
         }
 
     };
+
+
+    var updateProduct = function(){
+      ProductService.products.update({id:$scope.product._id},{product:$scope.product}).$promise.then(function(resp){
+        console.log(resp);
+      }).catch(function(err){
+        console.log(err);
+      });
+    }
+
+    $scope.onMainImageUpdate = function(){
+
+    };
+    $scope.onImagesUpdate = function(){
+
+    };
+    $scope.onVideosUpdate = function(){
+
+    };
+
+
+
     $scope.closeModal = function () {
         $modalInstance.close();
         $state.reload();

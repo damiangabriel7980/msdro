@@ -3,7 +3,7 @@
 </div>
 <div class="col-md-12 modal-body">
   <tabset>
-    <tab heading="Main">
+
       <uib-tab  heading="Main" active="true"></uib-tab>
         <div class="col-md-12">
             <label>Nume produs:</label>
@@ -12,6 +12,7 @@
         <div class="col-md-12 noPadding">
             <therapeutic-select all-areas="areas" selected-areas="selectedAreas" returned-areas="returnedAreas"></therapeutic-select>
         </div>
+            <tab heading="General">
         <div class="col-md-12">
             <div class="form-group col-md-12">
                 <label>Grupuri:</label>
@@ -47,13 +48,25 @@
             <textarea ui-tinymce="tinymceOptions" ng-model="product.description"></textarea>
         </div>
     </tab>
-    <tab heading="Multimedia">
+    <tab heading="My prescription">
         <div class="productEditMultimedia col-md-12">
+          <div class="mainHeaderImageUploder col-md-12">
+            <label>Imagine principala: </label>
+            <div class="col-md-12">
+                <enhanced-S3-Upload-Manager label="imagine principala" bucket="{{amazonBucket}}" limit="1" path="{{'produse/'+product._id+'/imaginePrincipala/'}}"></enhanced-S3-Upload-Manager>
+            </div>
+          </div>
           <div class="imageUploder col-md-12">
             <label>Imagini: </label>
+            <div class="col-md-12">
+                <enhanced-S3-Upload-Manager label="imagini" bucket="{{amazonBucket}}" path="{{'produse/'+product._id+'/imagini/'}}"></enhanced-S3-Upload-Manager>
+            </div>
           </div>
           <div class="videoUploader col-md-12">
             <label>Video:</label>
+            <div class="col-md-12">
+                <enhanced-S3-Upload-Manager label="video-uri" bucket="{{amazonBucket}}" on-complete-function="onCompleteFunction()" path="{{'produse/'+product._id+'/video/'}}"></enhanced-S3-Upload-Manager>
+            </div>
           </div>
         </div>
     </tab>
