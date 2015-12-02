@@ -7,7 +7,9 @@ var myPrescriptionSchema = new Schema({
   telefon:[{
     nume:String,
     numar:String
-  }]
+  }],
+  termsOfUseUrl:String,
+  privacyPolicyUrl:String
 });
 
 module.exports=mongoose.model('myPrescription',myPrescriptionSchema,'myPrescription');
