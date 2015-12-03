@@ -39,7 +39,7 @@ controllers
           speakers: [],
           viewers: [],
           moderator: {
-              email: null,
+              username: null,
               name: null
           }
       };

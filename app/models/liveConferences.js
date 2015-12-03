@@ -11,7 +11,6 @@ var LiveConferencesSchema = new Schema({
     image_path: String,
     date: Date,
     last_modified : Date,
-    therapeuticAreas: Array,
     enabled: Boolean,
     speakers: [{
         name: String,

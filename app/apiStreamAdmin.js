@@ -144,11 +144,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
              else
             {
-                LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: req.body}, function (err, wres) {
+                LiveConference.find({_id: req.query.id}, function (err, conference) {
                     if(err){
                         handleError(res, err);
                     }else{
-                        handleSuccess(res,wres);
+                        if(conference.length == 0)
+                            { handleError(res,err,404,1); }
+                        else {
+
+                            if(conference[0].moderator.username){
+                                if(req.body.moderator.username){
+                                    if(conference[0].moderator.username.toLowerCase() != req.body.moderator.username.toLowerCase())
+                                            conference[0].moderator = req.body.moderator;
+                                } else {
+                                    conference[0].moderator = {
+                                        name: null,
+                                        username: null
+                                    }
+                                }
+                            } else
+                                conference[0].moderator = req.body.moderator;
+                            LiveConference.findOneAndUpdate({_id: req.query.id}, {$set: {moderator: conference[0].moderator, last_modified: req.body.last_modified, name: req.body.name, description: req.body.description, location: req.body.location, date: req.body.date, 'therapeutic-areasID': req.body['therapeutic-areasID']}}).exec(function (err, wres) {
+                                if(err){
+                                    handleError(res, err);
+                                }else{
+                                    handleSuccess(res,wres);
+                                }
+                            });
+                        }
                     }
                 });
             }
