@@ -14,8 +14,8 @@ controllers
     });
 
       $scope.idToEdit = idToEdit;
-      $scope.checkboxes = { items: {} };
-      $scope.oldCheckboxes = { items: {} };
+      $scope.checkboxes = { items: {} , invited: {}};
+      $scope.oldCheckboxes = { items: {} , invited: {}};
 
     $scope.selectAll = function(value) {
       angular.forEach($scope.tableParams.data, function(item) {
@@ -27,6 +27,7 @@ controllers
     $scope.checkValue = function(username,value){
         if(!value){
             delete $scope.checkboxes.items[username];
+            delete $scope.checkboxes.invited[username];
         } else {
             $scope.checkboxes.items[username] = value;
         }
@@ -45,6 +46,8 @@ controllers
                       $scope.data = Success.getObject(resp2);
                       angular.forEach($scope.editedViewers.registered, function(item) {
                           $scope.checkboxes.items[item.username] = true;
+                          if(item.invited)
+                              $scope.checkboxes.invited[item.username] = true;
                       });
                       $scope.oldCheckboxes = angular.copy($scope.checkboxes);
                       $scope.oldData = $scope.data;
@@ -122,6 +125,8 @@ controllers
               $scope.editedViewers.registered = [];
               angular.forEach($scope.oldData, function(item) {
                   if($scope.checkboxes.items[item.username]){
+                      if($scope.checkboxes.invited[item.username])
+                        item.invited = true;
                       $scope.editedViewers.registered.push(item);
                   }
               });
