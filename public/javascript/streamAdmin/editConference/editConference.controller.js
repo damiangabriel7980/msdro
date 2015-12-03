@@ -114,11 +114,10 @@ controllers
             if($scope.selectedModerator && $scope.selectedModerator._id){
               $scope.objectToEdit.moderator.username = $scope.selectedModerator.username;
               $scope.objectToEdit.moderator.name = $scope.selectedModerator.name;
-            } else
-              $scope.objectToEdit.moderator = {
-                name: angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value:angular.element('#moderatorName')[0].value,
-                username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
-              };
+            } else {
+              $scope.objectToEdit.moderator.name = angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value : angular.element('#moderatorName')[0].value;
+              $scope.objectToEdit.moderator.username = angular.element('#moderator')[0].value == '' ? null : angular.element('#moderator')[0].value;
+            }
             $scope.objectToEdit['therapeutic-areasID'] = $scope.returnedAreas;
             $scope.objectToEdit.last_modified = new Date();
             liveConferences.update({id: id},$scope.objectToEdit).$promise.then(function(resp){
