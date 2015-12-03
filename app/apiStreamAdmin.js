@@ -366,7 +366,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if(err)
                     handleError(res,err,500);
                 else {
-                    console.log(conference[0]);
                     var eventDate = new Date(conference[0].date);
                     var day = eventDate.getDate();
                     var month = eventDate.getMonth() + 1;
@@ -414,15 +413,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                 if(err){
                                     callback(err);
                                 }else{
-                                    conference[0].save(function(err,resp){
-                                        if(err)
-                                        {
-                                            callback(err);
-                                        }
-                                        else{
-                                            callback();
-                                        }
-                                    })
+                                   callback()
                                 }
                             })
                         },
@@ -457,15 +448,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                 if(err){
                                     callback(err);
                                 }else{
-                                    conference[0].save(function(err,resp){
-                                        if(err)
-                                        {
-                                            callback(err);
-                                        }
-                                        else{
-                                            callback();
-                                        }
-                                    })
+                                    callback();
                                 }
                             })
                         }, function(callback) {
@@ -487,15 +470,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                     ).then(
                                         function (success) {
                                             conference[0].moderator.invited = true;
-                                            conference[0].save(function(err,resp){
-                                                if(err)
-                                                {
-                                                    callback(err);
-                                                }
-                                                else{
-                                                    callback();
-                                                }
-                                            })
+                                            callback(success);
                                         },
                                         function (err) {
                                             callback(err);
@@ -510,7 +485,15 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res, err);
                         }else{
-                            handleSuccess(res);
+                            conference[0].save(function(err,resp){
+                                if(err)
+                                {
+                                    handleError(res,err,500);
+                                }
+                                else{
+                                    handleSuccess(res);
+                                }
+                            })
 
                         }
                     });
