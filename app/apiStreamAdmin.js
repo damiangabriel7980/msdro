@@ -51,7 +51,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                         if(cont.length == 0)
                                             viewers.unregistered.push(viewer);
                                         else
-                                            viewers.registered.push(cont[0]);
+                                            viewers.registered.push(viewer);
                                         callback();
                                     }
                                 });
