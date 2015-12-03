@@ -38,15 +38,10 @@ controllers
     liveConferences.query({id: idToEdit}).$promise.then(function(resp){
       $scope.objectToEdit = Success.getObject(resp);
       $scope.oldDate = $scope.objectToEdit.date;
-
-      $scope.oldSpks = angular.copy($scope.objectToEdit.speakers);
-      $scope.oldVws = angular.copy($scope.objectToEdit.viewers);
-
       $scope.selectedAreas = Success.getObject(resp)['therapeutic-areasID'];
       $timeout(function() {
         $scope.selectedModerator = $scope.objectToEdit.moderator;
         angular.element('#moderator')[0].value = $scope.selectedModerator.username ? $scope.selectedModerator.username : null;
-        $scope.oldModerator = angular.copy($scope.selectedModerator);
       },700);
     });
 
@@ -63,20 +58,12 @@ controllers
       };
     };
 
-      $scope.usersToBeNotified = {
-        speakers : [],
-        viewers : [],
-        moderator: {}
-      };
-
       $scope.$on("updatedUsers", function(events, args){
             if(args.viewers) {
               $scope.objectToEdit.viewers = args.newUsers;
-              $scope.usersToBeNotified.viewers = args.vwToSendNotif;
             }
         else {
               $scope.objectToEdit.speakers = args.newUsers;
-              $scope.usersToBeNotified.speakers = args.spkToSendNotif;
             }
       });
 
@@ -88,90 +75,34 @@ controllers
 
       $scope.updateNotification = function(){
         var spkString = '';
-        angular.forEach($scope.oldSpks, function(item, key) {
+        angular.forEach($scope.objectToEdit.speakers, function(item, key) {
           if (key == 0)
             spkString += item.name;
           else
             spkString += ', ' + item.name;
         });
-        angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
-            spkString += ', ' + item.name;
-        });
-        $scope.objectToEdit.moderator = {
-          name: angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value:angular.element('#moderatorName')[0].value,
-          username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
-        };
-        var moderatorIsTheSame;
-        if($scope.oldModerator.username){
-          if($scope.oldModerator.username.toLowerCase() == $scope.objectToEdit.moderator.username.toLowerCase())
-            moderatorIsTheSame = true;
-        }
-        $scope.usersToNotify = {
-            speakers: $scope.oldSpks,
-            viewers: $scope.oldVws,
-            moderator:  moderatorIsTheSame ? $scope.objectToEdit.moderator : {}
-        };
-        if(!moderatorIsTheSame)
-          $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
-        sendNotification.notification.update({id: $scope.objectToEdit._id},{usersToInvite: $scope.usersToBeNotified, usersToNotify: $scope.usersToNotify, spkString: spkString}).$promise.then(function(resp){
-          resetConferenceAlert("Notificarea si invitatiile au fost trimise cu succes!",'success');
+        sendNotification.notification.update({id: $scope.objectToEdit._id},{spkString: spkString}).$promise.then(function(resp){
+          resetConferenceAlert("Notificarea a fost trimisa cu succes!",'success');
         }).catch(function(err){
           console.log(Error.getMessage(err));
-          resetConferenceAlert("Eroare la trimiterea notificarii/invitatiilor!");
+          resetConferenceAlert("Eroare la trimiterea notificarii!");
         });
       };
 
       $scope.sendInvitations = function(){
         var spkString = '';
-        if($scope.usersToBeNotified.speakers.length == 0 && $scope.usersToBeNotified.viewers.length == 0){
-          $scope.usersToBeNotified.speakers = $scope.objectToEdit.speakers;
-          $scope.usersToBeNotified.viewers = $scope.objectToEdit.viewers;
-          angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
-            if (key == 0)
-              spkString += item.name;
-            else
-              spkString += ', ' + item.name;
-          });
-          $scope.objectToEdit.moderator = {
-            name: angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value:angular.element('#moderatorName')[0].value,
-            username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
-          };
-          $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
-          sendNotification.notification.create({id: $scope.objectToEdit._id},{usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
-            resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
-            $scope.usersToBeNotified = {
-              speakers : [],
-              viewers : [],
-              moderator: {}
-            };
-          }).catch(function(err){
-            console.log(Error.getMessage(err));
-            resetConferenceAlert("Eroare la trimiterea invitatiilor!");
-          });
-        } else {
           angular.forEach($scope.objectToEdit.speakers, function(item, key) {
             if (key == 0)
               spkString += item.name;
             else
               spkString += ', ' + item.name;
           });
-          $scope.objectToEdit.moderator = {
-            name: angular.element('#moderatorName')[0].value == '' ? angular.element('#moderator')[0].value:angular.element('#moderatorName')[0].value,
-            username: angular.element('#moderator')[0].value == '' ? null:angular.element('#moderator')[0].value
-          };
-          $scope.usersToBeNotified.moderator = $scope.objectToEdit.moderator;
-          sendNotification.notification.create({id: $scope.objectToEdit._id},{usersToNotify: $scope.usersToBeNotified, spkString: spkString}).$promise.then(function(resp){
+          sendNotification.notification.create({id: $scope.objectToEdit._id},{spkString: spkString}).$promise.then(function(resp){
             resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
-            $scope.usersToBeNotified = {
-              speakers : [],
-              viewers : [],
-              moderator: {}
-            };
           }).catch(function(err){
             console.log(Error.getMessage(err));
             resetConferenceAlert("Eroare la trimiterea invitatiilor!");
           });
-        }
       };
 
       $scope.updateConference = function(id, confForm){
@@ -192,14 +123,6 @@ controllers
             $scope.objectToEdit.last_modified = new Date();
             liveConferences.update({id: id},$scope.objectToEdit).$promise.then(function(resp){
               resetConferenceAlert("Datele conferintei au fost actualizate cu succes!","success");
-              $scope.oldSpks = angular.copy($scope.objectToEdit.speakers);
-              $scope.oldVws = angular.copy($scope.objectToEdit.viewers);
-              $scope.oldModerator = angular.copy($scope.objectToEdit.moderator);
-              $scope.usersToBeNotified = {
-                speakers : [],
-                viewers : [],
-                moderator: {}
-              };
             }).catch(function(err){
               console.log(Error.getMessage(err));
             });
@@ -235,32 +158,15 @@ controllers
     };
 
     $scope.removeUser = function(index,username,roleUs){
-      var userData = {};
-      if($scope.usersToBeNotified.speakers.length > 0 || $scope.usersToBeNotified.viewers.length > 0){
-        if(roleUs == 'speaker')
-          angular.forEach($scope.usersToBeNotified.speakers, function(item, key) {
-             if(item.username == username){
-              $scope.usersToBeNotified.speakers.splice(key,1);
-            }
-           });
-        else
-          angular.forEach($scope.usersToBeNotified.viewers, function(item, key) {
-          if(item.username == username){
-            $scope.usersToBeNotified.viewers.splice(key,1);
-          }
-        });
-      }
-        userData = {
+      var userData = {
           role: roleUs,
           username: username
         };
         liveConferences.update({id: idToEdit,removeUser : true},userData).$promise.then(function(resp){
           if(roleUs == 'speaker'){
             $scope.objectToEdit.speakers.splice(index,1);
-            $scope.oldSpks = angular.copy($scope.objectToEdit.speakers);
           } else
             $scope.objectToEdit.viewers.splice(index,1);
-            $scope.oldVws = angular.copy($scope.objectToEdit.viewers);
         })
     };
 

@@ -8,8 +8,6 @@ controllers
         username: ''
     };
 
-      $scope.newlyAddedSpk = [];
-
       $scope.showError = function(message) {
           $scope.statusAlert.type = "danger";
           $scope.statusAlert.newAlert = true;
@@ -38,7 +36,6 @@ controllers
                     });
                     if(!userExists){
                         $scope.currentUsers.push(user);
-                        $scope.newlyAddedSpk.push(user);
                         $scope.selectedUser = null;
                         angular.element('#emailField')[0].value = '';
                         angular.element('#spkName')[0].value = '';
@@ -56,11 +53,6 @@ controllers
 
     $scope.removeSpeaker = function(index,user){
         $scope.currentUsers.splice(index,1);
-        angular.forEach($scope.newlyAddedSpk, function(item, key) {
-            if(item.username.toLowerCase() == user.username.toLowerCase()){
-                $scope.newlyAddedSpk.splice(key,1);
-            }
-        });
     };
 
       userService.users.query().$promise.then(function(resp){
@@ -70,7 +62,7 @@ controllers
       $scope.saveSpk = function(){
           liveConferences.update({id: idToEdit, addSpeaker : true},$scope.currentUsers).$promise.then(function(resp){
               $modalInstance.close();
-              $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).speakers , spkToSendNotif:  $scope.newlyAddedSpk});
+              $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).speakers});
           });
       };
   }]);
