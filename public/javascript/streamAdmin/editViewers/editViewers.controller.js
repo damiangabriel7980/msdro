@@ -13,7 +13,6 @@ controllers
       $scope.groups = Success.getObject(resp);
     });
 
-      $scope.newlyAddedVw = [];
       $scope.idToEdit = idToEdit;
       $scope.checkboxes = { items: {} };
       $scope.oldCheckboxes = { items: {} };
@@ -35,11 +34,6 @@ controllers
 
       $scope.removeViewer = function(index,user){
           $scope.editedViewers.unregistered.splice(index,1);
-          angular.forEach($scope.newlyAddedVw, function(item, key) {
-              if(item.username.toLowerCase() == user.username.toLowerCase()){
-                  $scope.newlyAddedVw.splice(key,1);
-              }
-          });
       };
 
       liveConferences.query({id: idToEdit, separatedViewers : true}).$promise.then(function(resp){
@@ -129,15 +123,13 @@ controllers
               angular.forEach($scope.oldData, function(item) {
                   if($scope.checkboxes.items[item.username]){
                       $scope.editedViewers.registered.push(item);
-                      if(!$scope.oldCheckboxes.items[item.username])
-                              $scope.newlyAddedVw.push(item);
                   }
               });
           }
         $scope.allViewers = $scope.editedViewers.registered.concat($scope.editedViewers.unregistered);
         liveConferences.update({id: $scope.idToEdit,addViewers : true},$scope.allViewers).$promise.then(function(resp){
             $modalInstance.close();
-            $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).viewers , viewers : true, vwToSendNotif : $scope.newlyAddedVw});
+            $rootScope.$broadcast ('updatedUsers', {newUsers :Success.getObject(resp).viewers , viewers : true});
         })
     };
 
@@ -166,7 +158,6 @@ controllers
                   userService.checkEmail.verify({checkEmailAddress: true},thisForm.viewer).$promise.then(function(firstResp){
                       userService.checkEmail.verify({checkIfExists: true},thisForm.viewer).$promise.then(function(secondResp){
                           $scope.editedViewers.unregistered.push(thisForm.viewer);
-                          $scope.newlyAddedVw.push(thisForm.viewer);
                           thisForm.viewer = null;
                           thisForm.viewerForm.nume.$touched = false;
                           thisForm.viewerForm.email.$touched = false;

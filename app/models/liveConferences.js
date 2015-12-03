@@ -15,17 +15,20 @@ var LiveConferencesSchema = new Schema({
     enabled: Boolean,
     speakers: [{
         name: String,
-        username: String
+        username: String,
+        invited: Boolean
     }] ,
     viewers: [{
         name: String,
-        username: String
+        username: String,
+        invited: Boolean
     }],
     moderator: {
         name: String,
-        username: String
+        username: String,
+        invited: Boolean
     },
     'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas', index: true}]
-});
+},{ minimize: false });
 
 module.exports = mongoose.model('liveConferences', LiveConferencesSchema,'liveConferences');
