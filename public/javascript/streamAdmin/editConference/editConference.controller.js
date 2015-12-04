@@ -146,9 +146,6 @@ controllers
         resolve : {
           idToEdit: function () {
             return id;
-          },
-          speakersToEdit : function () {
-            return speakers;
           }
         },
         windowClass: 'fade',

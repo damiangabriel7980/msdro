@@ -1,7 +1,7 @@
 'use strict';
 
 controllers
-  .controller('EditSpeakersCtrl', [ '$scope', '$sce' ,'$state' , '$rootScope', 'userService', '$filter','speakersToEdit', 'idToEdit', 'Success', 'Error', 'getIds', 'liveConferences', '$modalInstance', '$timeout', function ($scope, $sce, $state, $rootScope, userService,$filter, speakersToEdit, idToEdit,Success,Error,getIds,liveConferences,$modalInstance,$timeout) {
+  .controller('EditSpeakersCtrl', [ '$scope', '$sce' ,'$state' , '$rootScope', 'userService', '$filter', 'idToEdit', 'Success', 'Error', 'getIds', 'liveConferences', '$modalInstance', '$timeout', function ($scope, $sce, $state, $rootScope, userService,$filter, idToEdit,Success,Error,getIds,liveConferences,$modalInstance,$timeout) {
     $scope.selectedUser = {
       name: '',
       _id: null,
@@ -47,9 +47,13 @@ controllers
             }
         }
     };
+
       $scope.statusAlert = {newAlert:false, type:"", message:""};
 
-      $scope.currentUsers = angular.copy(speakersToEdit);
+      liveConferences.query({id: idToEdit}).$promise.then(function(resp){
+          $scope.objectToEdit = Success.getObject(resp);
+          $scope.currentUsers = $scope.objectToEdit.speakers;
+      });
 
     $scope.removeSpeaker = function(index,user){
         $scope.currentUsers.splice(index,1);
