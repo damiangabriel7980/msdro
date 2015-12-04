@@ -4,7 +4,7 @@
         <alert type="{{s3Alert.type}}" ng-if="s3Alert.show">{{s3Alert.text}}</alert>
     </div>
     <div class="col-md-12 noPadding" ng-if="showManager">
-        <div class="col-md-12 noPadding">
+        <div class="col-md-12 noPadding" ng-if="showButton">
             <a class="btn btn-default" type="file" accept="{{fileType ? '.' + fileType : ''}}" ngf-select ngf-change="s3ManagerFileSelected($files, $event)" ngf-multiple="false"
                     ><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca {{label ? label:'imagine'}}</a>
         </div>

@@ -9,12 +9,14 @@
             scope: {
               label:"@",
               onCompleteFunction:"&",
+              onDeleteFunction:"&",
               fileType:"@",
               path:"@",
               limit:"@"
             },
             link: function(scope, element, attrs) {
               scope.keys = [];
+              scope.showButton = true;
 
                 var nameAll;
 
@@ -36,7 +38,15 @@
 
                 var refreshList = function (contentsArray) {
                     scope.keys = [];
+                    console.log(contentsArray);
                     for(var i=0; i<contentsArray.length; i++){
+                    //  debugger;
+                      if(scope.limit && Number(scope.limit)-1 ==i){
+                          scope.showButton = false;
+                      }
+                       else {
+                         scope.showButton = true;
+                       }
                         scope.keys.push(contentsArray[i].Key);
                     }
                     scope.showManager = true;
@@ -45,7 +55,6 @@
                 };
 
                 var initialize = function () {
-                  scope.onCompleteFunction("asdasdasd");
                     resetS3Alert("warning","Loading files...");
                     AmazonService.getContentsAtPath(scope.path, function (err, contentsArray) {
                         if(err){
@@ -67,9 +76,11 @@
                     resetS3Alert("warning", "Se incarca fisierul...");
                     AmazonService.uploadFile(file, key, function (err, success) {
                         if(err){
-                            resetS3Alert("danger", "Eroare la upload");
+                            resetS3Alert("danger", "Eroare la uplosad");
                         }else{
                             if(findInKeys(key) == -1) scope.keys.push(key);
+                            if(scope.limit && Number(scope.limit) == scope.keys.length) scope.showButton = false;
+                            scope.onCompleteFunction({path:key});
                             resetS3Alert();
                             scope.$apply();
                         }
@@ -112,12 +123,15 @@
 
                 scope.removeKey = function (index) {
                     resetS3Alert("warning","Se sterge fisierul...");
+                    scope.onDeleteFunction({key:scope.keys[index]})
                     AmazonService.deleteFile(scope.keys[index], function (err, success) {
                         if(err){
                             resetS3Alert("danger", "Eroare la stergerea fisierului");
                         }else{
                             resetS3Alert();
                             scope.keys.splice(index,1);
+                            if(scope.limit && scope.keys.length < Number(scope.limit)) scope.showButton = true;
+                            scope.showManager = true;
                             scope.$apply();
                         }
                     })
