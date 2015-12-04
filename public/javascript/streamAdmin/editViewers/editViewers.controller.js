@@ -18,7 +18,7 @@ controllers
       $scope.oldCheckboxes = { items: {} , invited: {}};
 
     $scope.selectAll = function(value) {
-      angular.forEach($scope.tableParams.data, function(item) {
+      angular.forEach($scope.data, function(item) {
           $scope.checkValue(item.username,value);
       });
     };
