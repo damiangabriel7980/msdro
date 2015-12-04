@@ -35,6 +35,7 @@ controllers
                         }
                     });
                     if(!userExists){
+                        user.invited = false;
                         $scope.currentUsers.push(user);
                         $scope.selectedUser = null;
                         angular.element('#emailField')[0].value = '';
