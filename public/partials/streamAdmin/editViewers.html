@@ -54,23 +54,25 @@
               <a class="btn btn-warning pull-left" ng-click="selectAll(false)">Deselect All</a>
             </div>
           </div>
-          <table ng-table="tableParams" show-filter="true" class="table table-bordered" header="'ng-table/headers/checkbox.html'">
-            <tr ng-repeat="viewer in $data track by $index">
-              <td width="30">
-                <input type="checkbox" ng-model="checkboxes.items[viewer.username]" ng-click="checkValue(viewer.username,checkboxes.items[viewer.username])" />
-              </td>
-              <td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
-                {{viewer.name}}</td>
-              <td title="'Email'" filter="{ username: 'text'}" sortable="'username'">
-                {{viewer.username}}</td>
-              <td title="'Profession'" filter="{ 'profession.display_name': 'text'}" sortable="'profession.display_name'">
-                {{viewer.profession.display_name}}</td>
-              <td title="'Groups'">
-                <li ng-repeat="group in viewer.groupsID">
-                  {{group.display_name}}
-                </li></td>
-            </tr>
-          </table>
+          <div class="col-md-12 noPadding tableOverflow">
+            <table ng-table="tableParams" show-filter="true" class="table table-bordered" header="'ng-table/headers/checkbox.html'">
+              <tr ng-repeat="viewer in $data track by $index">
+                <td width="30">
+                  <input type="checkbox" ng-model="checkboxes.items[viewer.username]" ng-click="checkValue(viewer.username,checkboxes.items[viewer.username])" />
+                </td>
+                <td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
+                  {{viewer.name}}</td>
+                <td title="'Email'" filter="{ username: 'text'}" sortable="'username'">
+                  {{viewer.username}}</td>
+                <td title="'Profession'" filter="{ 'profession.display_name': 'text'}" sortable="'profession.display_name'">
+                  {{viewer.profession.display_name}}</td>
+                <td title="'Groups'">
+                  <li ng-repeat="group in viewer.groupsID">
+                    {{group.display_name}}
+                  </li></td>
+              </tr>
+            </table>
+          </div>
         </tab>
       </tabset>
     </div>

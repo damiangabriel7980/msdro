@@ -18,7 +18,7 @@ controllers
       $scope.oldCheckboxes = { items: {} , invited: {}};
 
     $scope.selectAll = function(value) {
-      angular.forEach($scope.data, function(item) {
+      angular.forEach($scope.tableParams.data, function(item) {
           $scope.checkValue(item.username,value);
       });
     };
@@ -53,7 +53,8 @@ controllers
                       $scope.oldData = $scope.data;
                       $scope.tableParams = new ngTableParams({
                           page: 1,            // show first page
-                          count: 10,          // count per page
+                          count: $scope.oldData.length,
+                          counts: [],
                           sorting: {
                               name: 'asc'     // initial sorting
                           },
@@ -95,6 +96,7 @@ controllers
 
                               var orderedData = params.filter() ? $filter('orderBy')(($filter('filter')($scope.data, filters)), params.orderBy()) : $scope.data;
                               params.total(orderedData.length);
+                              params.settings({ counts: []});
                               if(params.total() < (params.page() -1) * params.count()){
                                   params.page(1);
                               }
