@@ -1,15 +1,17 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error', function($scope,ProductService,idToEdit,$modalInstance,$state,therapeuticAreaService,AmazonService,$rootScope,GroupsService,Success,Error){
+controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','ProductQrService', function($scope,ProductService,idToEdit,$modalInstance,$state,therapeuticAreaService,AmazonService,$rootScope,GroupsService,Success,Error,ProductQrService){
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertRPC = {newAlert:false, type:"", message:""};
+    $scope.idToEdit = idToEdit;
+    var QRpath = 'produse/'+$scope.idToEdit+'/QR/qr.png';
+
 
     ProductService.products.query({id:idToEdit}).$promise.then(function(result){
         $scope.product=Success.getObject(result);
         $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
         $scope.selectedGroups = Success.getObject(result)['groupsID'];
-        console.log($scope.product);
     }).catch(function(err){
         console.log(Error.getMessage(err));
     });
@@ -170,22 +172,78 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
 
 
     var updateProduct = function(){
-      ProductService.products.update({id:$scope.product._id},{product:$scope.product}).$promise.then(function(resp){
-        console.log(resp);
+      var toUpdate = {};
+      angular.copy($scope.product,toUpdate);
+      delete toUpdate['groupsID'];
+      delete toUpdate['_id'];
+      delete toUpdate['therapeutic-areasID'];
+
+      ProductService.products.update({id:$scope.product._id},{product:toUpdate}).$promise.then(function(resp){
+        $scope.uploadAlert = {newAlert:false, type:"", message:""};
       }).catch(function(err){
         console.log(err);
       });
     }
-
-    $scope.onMainImageUpdate = function(){
+    $scope.onMainImageUpdate = function(key){
+      $scope.product.mainImageUrl = $rootScope.pathAmazonDev+key;
+      updateProduct();
+    };
+    $scope.onImagesUpdate = function(key){
+      $scope.product.imageUrls.push($rootScope.pathAmazonDev+key);
+      updateProduct();
+    };
+    $scope.onVideosUpdate = function(key){
+      $scope.product.videoUrls.push($rootScope.pathAmazonDev+key);
+      updateProduct();
+    };
+    $scope.onVideosDelete = function(key){
+      var position = $scope.product.videoUrls.indexOf($rootScope+key);
+      $scope.product.videoUrls.splice(position,1);
+      updateProduct();
+    };
+    $scope.onImagesDelete = function(key){
+      var position = $scope.product.imageUrls.indexOf($rootScope+key);
+      $scope.product.imageUrls.splice(position,1);
+      updateProduct();
 
     };
-    $scope.onImagesUpdate = function(){
-
+    $scope.onMainImageDelete = function(key){
+      $scope.product.mainImageUrl="";
+      updateProduct();
     };
-    $scope.onVideosUpdate = function(){
-
+    var getBase64QrImage = function(){
+      var qrContainer = document.getElementById("qrCodeContainer");
+      var qrImg = qrContainer.getElementsByTagName('img')[0];
+      var base64ImageString = qrImg.currentSrc;
+      return base64ImageString;
     };
+
+    var generateGUID = function(){
+     var guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = crypto.getRandomValues(new Uint8Array(1))[0]%16|0, v = c == 'x' ? r : (r&0x3|0x8);
+                return v.toString(16);
+                });
+        return guid;
+    }
+
+    $scope.generateQr= function(){
+      var qr = generateGUID();
+
+      $scope.uploadAlert = {
+        newAlert:true,
+        type:'succes',
+        message:'Se genereaza QR-ul'
+      }
+      var imageString = getBase64QrImage();
+
+      ProductQrService.qr.update({},{base64Image:imageString,path:QRpath}).$promise.then(function(resp){
+      $scope.product.codeQR = qr;
+      updateProduct();
+      }).catch(function(err){
+        console.log(err);
+      })
+    }
+
 
 
 

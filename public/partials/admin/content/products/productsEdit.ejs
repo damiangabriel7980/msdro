@@ -53,19 +53,33 @@
           <div class="mainHeaderImageUploder col-md-12">
             <label>Imagine principala: </label>
             <div class="col-md-12">
-                <enhanced-S3-Upload-Manager label="imagine principala" bucket="{{amazonBucket}}" limit="1" path="{{'produse/'+product._id+'/imaginePrincipala/'}}"></enhanced-S3-Upload-Manager>
+                <enhanced-S3-Upload-Manager label="imagine principala" on-complete-function="finishFunction(smth)" on-delete-function="onMainImageDelete(key)" limit="1" bucket="{{amazonBucket}}" path="{{'produse/'+idToEdit+'/imaginePrincipala/'}}"></enhanced-S3-Upload-Manager>
             </div>
           </div>
           <div class="imageUploder col-md-12">
             <label>Imagini: </label>
             <div class="col-md-12">
-                <enhanced-S3-Upload-Manager label="imagini" bucket="{{amazonBucket}}" path="{{'produse/'+product._id+'/imagini/'}}"></enhanced-S3-Upload-Manager>
+                <enhanced-S3-Upload-Manager label="imagini" on-complete-function="onImagesUpdate(key)" bucket="{{amazonBucket}}" on-delete-function="onImagesDelete(key)" path="{{'produse/'+idToEdit+'/imagini/'}}"></enhanced-S3-Upload-Manager>
             </div>
           </div>
           <div class="videoUploader col-md-12">
             <label>Video:</label>
             <div class="col-md-12">
-                <enhanced-S3-Upload-Manager label="video-uri" bucket="{{amazonBucket}}" on-complete-function="onCompleteFunction()" path="{{'produse/'+product._id+'/video/'}}"></enhanced-S3-Upload-Manager>
+                <enhanced-S3-Upload-Manager label="video-uri" bucket="{{amazonBucket}}" on-complete-function="onVideosUpdate(path)" on-delete-function="onVideosDelete(key)" path="{{'produse/'+idToEdit+'/video/'}}"></enhanced-S3-Upload-Manager>
+            </div>
+          </div>
+          <div class="qr-Product-code col-md-12">
+            <label>Cod QR:</label>
+            <div class="col-md-12">
+                <button class="btn btn-default padding10" ng-hide="product.codeQR" ng-click="generateQr()">Generate QR</button>
+                <button class="btn btn-default padding10" ng-show="product.codeQR" ng-click="generateQr()">Regenerate QR</button>
+                <button class="btn btn-default padding10" ng-show="product.codeQR">Download QR </button>
+                <div class="col-md-12">
+                    <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
+                </div>
+                <div class="col-md-12 padding10" id="qrCodeContainer">
+                    <qr text="product.codeQR" ng-if="product.codeQR" image="true"></qr>
+                </div>
             </div>
           </div>
         </div>

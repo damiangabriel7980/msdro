@@ -2,7 +2,7 @@
     var scripts = document.getElementsByTagName("script");
     var currentScriptPath = scripts[scripts.length-1].src;
 
-    angular.module('enhancedS3UploadManager', []).directive('enhancedS3UploadManager', ['AmazonService', 'ActionModal','$rootScope', function(AmazonService, ActionModal,$rootScope) {
+    angular.module('enhancedS3UploadManager', []).directive('enhancedS3UploadManager', ['AmazonService', 'ActionModal', function(AmazonService, ActionModal) {
         return {
             restrict: 'E',
             templateUrl: currentScriptPath.replace('enhancedS3Upload.js', 'enhancedS3Upload.html'),
@@ -38,9 +38,7 @@
 
                 var refreshList = function (contentsArray) {
                     scope.keys = [];
-                    console.log(contentsArray);
                     for(var i=0; i<contentsArray.length; i++){
-                    //  debugger;
                       if(scope.limit && Number(scope.limit)-1 ==i){
                           scope.showButton = false;
                       }
