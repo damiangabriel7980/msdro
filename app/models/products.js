@@ -20,7 +20,9 @@ var ProductSchema		= new Schema({
     groupsID: [{type: Schema.Types.ObjectId, ref: 'UserGroup', index: true}],
     'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas', index: true}],
     imageUrls:[String],
-    videoUrls:[String]
+    videoUrls:[String],
+    mainImageUrl:String,
+    codeQR:String
 });
 ProductSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 module.exports = mongoose.model('products', ProductSchema);

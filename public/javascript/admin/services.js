@@ -219,6 +219,14 @@ services.factory('SpecialAppsService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('ProductQrService',['$resource',function($resource){
+  return{
+    qr:$resource('api/admin/QRproduct',{},{
+      update:{method:'PUT',isArray:false}
+    })
+  }
+}]);
+
 services.factory('ElearningService', ['$resource', function($resource){
     return {
         courses: $resource('api/admin/elearning/courses', {}, {
