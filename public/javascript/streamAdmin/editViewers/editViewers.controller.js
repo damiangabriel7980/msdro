@@ -129,6 +129,8 @@ controllers
                   if($scope.checkboxes.items[item.username]){
                       if($scope.checkboxes.invited[item.username])
                         item.invited = true;
+                      else
+                        item.invited = false;
                       $scope.editedViewers.registered.push(item);
                   }
               });
@@ -164,6 +166,7 @@ controllers
               else {
                   userService.checkEmail.verify({checkEmailAddress: true},thisForm.viewer).$promise.then(function(firstResp){
                       userService.checkEmail.verify({checkIfExists: true},thisForm.viewer).$promise.then(function(secondResp){
+                          thisForm.viewer.invited = false;
                           $scope.editedViewers.unregistered.push(thisForm.viewer);
                           thisForm.viewer = null;
                           thisForm.viewerForm.nume.$touched = false;

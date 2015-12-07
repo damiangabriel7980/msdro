@@ -36,7 +36,7 @@ exports.send = function (template_name, template_content, to, subject) {
     return deferred.promise;
 };
 
-exports.sendNotification = function (template_name, template_content, to, subject,changesNotification,usersName,confDate,confHour,confName,userStatus,spkString,conferencesLink) {
+exports.sendNotification = function (template_name, template_content, to, subject,changesNotification,confDate,confHour,confName,userStatus,spkString,conferencesLink,mergeVars) {
     var deferred = Q.defer();
     //get from_email from system parameters
     Parameters.findOne({name: "FROM_EMAIL"}, function (err, param) {
@@ -51,10 +51,6 @@ exports.sendNotification = function (template_name, template_content, to, subjec
                         to: to,
                         subject: subject,
                         "global_merge_vars": [
-                            {
-                                "name": "userName",
-                                "content": usersName
-                            },
                             {
                                 "name": "confDate",
                                 "content": confDate
@@ -83,11 +79,11 @@ exports.sendNotification = function (template_name, template_content, to, subjec
                                 "name": "changesNotification",
                                 "content": changesNotification
                             }
-                        ]
+                        ],
+                        "merge_vars": mergeVars
                     }
                 }, function(err){
                     if(err){
-                        console.log(err);
                         deferred.reject("Eroare la trimitere email");
                     }else{
                         deferred.resolve();
