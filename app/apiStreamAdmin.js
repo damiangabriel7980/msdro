@@ -547,7 +547,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                                     [],
                                                     newUsers,
                                                     'Invitatie la conferinta ' + conference[0].name,
-                                                    true,
+                                                    false,
                                                     confDate,
                                                     hour + ':' + minutes,
                                                     conference[0].name,
