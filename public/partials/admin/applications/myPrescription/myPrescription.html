@@ -6,15 +6,25 @@
         <div><h3>My prescription:</h3></div>
     </div>
     <div class="myPrescription col-md-12">
+      <div class="col-md-12">
+          <span class="fontSize20">General Info:</span>
+      </div>
         <div class="myPrescriptionTextArea">
-        	<span>General Info:</span>
-        	<textarea ng-model = "info.generalDescription"></textarea>
+        	<textarea ui-tinymce="tinymceOptions" ng-model = "info.generalDescription"></textarea>
         </div>
         <div class="myPrescriptionPhone">
           <span>Telephone: <i class="glyphicon glyphicon-plus"ng-click="addPhone()" tooltip="Add new phone number"></i></span>
           <div class="col-md-12" ng-repeat="tele in info.telefon">
-            <input placeholder="Name" ng-model="tele.name"></input>
+            <input placeholder="Name" ng-model="tele.name"></input><i class="glyphicon glyphicon-minus marginTop10" tooltip="Delete phone number" ng-click="removePhone($index)"></i>
             <input placeholder="Number" ng-model="tele.number"></input>
+          </div>
+          <div class="col-md-12">
+            <span>Terms of use</span>
+            <input placeholder="Terms of use" type="url" ng-model="info.termsOfUseUrl"></input>
+          </div>
+          <div class="col-md-12">
+            <span>Privacy policy</span>
+            <input placeholder="Privacy policy" type="url" ng-model="info.privacyPolicyUrl"></input>
           </div>
         </div>
         <button ng-click="update()">Update</button>

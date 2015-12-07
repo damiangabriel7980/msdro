@@ -5,8 +5,8 @@ var Schema = mongoose.Schema;
 var myPrescriptionSchema = new Schema({
   generalDescription:String,
   telefon:[{
-    nume:String,
-    numar:String
+    name:String,
+    number:String
   }],
   termsOfUseUrl:String,
   privacyPolicyUrl:String

@@ -1708,7 +1708,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
       })
       .put(function(req,res){
-        myPrescription.update({_id:req.query.id},{$set:req.body},function(err,updated){
+        myPrescription.update({_id:req.query.id},{$set:req.body.update},function(err,updated){
           if(err){
             return handleError(res,err,500);
           }else{

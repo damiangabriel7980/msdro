@@ -33,9 +33,11 @@ myPrescription.find({},function(err,resp){
     myPrescription.create({
       generalDescription:'',
       telefon:[{
-        numar:'',
-        nume:''
-      }]
+        name:'',
+        number:''
+      }],
+      termsOfUseUrl:'',
+      privacyPolicyUrl:''
     })
   }
 })
