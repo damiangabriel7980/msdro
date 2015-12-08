@@ -177,13 +177,14 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
       delete toUpdate['groupsID'];
       delete toUpdate['_id'];
       delete toUpdate['therapeutic-areasID'];
+      toUpdate.last_updated = new Date();
 
       ProductService.products.update({id:$scope.product._id},{product:toUpdate}).$promise.then(function(resp){
         $scope.uploadAlert = {newAlert:false, type:"", message:""};
       }).catch(function(err){
         console.log(err);
       });
-    }
+    };
     $scope.onMainImageUpdate = function(key){
       $scope.product.mainImageUrl = $rootScope.pathAmazonDev+key;
       updateProduct();
@@ -224,7 +225,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
                 return v.toString(16);
                 });
         return guid;
-    }
+    };
 
     $scope.generateQr= function(){
       var qr = generateGUID();
@@ -233,7 +234,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
         newAlert:true,
         type:'succes',
         message:'Se genereaza QR-ul'
-      }
+      };
       var imageString = getBase64QrImage();
 
       ProductQrService.qr.update({},{base64Image:imageString,path:QRpath}).$promise.then(function(resp){
@@ -242,7 +243,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
       }).catch(function(err){
         console.log(err);
       })
-    }
+    };
 
 
 

@@ -1712,10 +1712,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
           if(err){
             return handleError(res,err,500);
           }else{
+            ModelInfos.recordLastUpdate("myPrescription");
             handleSuccess(res,updated);
           }
         })
-      })
+      });
 
     router.route('/admin/events/events')
         .get(function (req, res) {
