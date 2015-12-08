@@ -1,4 +1,4 @@
-controllers.controller('myPrescriptionController',['$scope','myPrescriptionService','Success',function($scope, myPrescriptionService,Success){
+controllers.controller('myPrescriptionController',['$scope','myPrescriptionService','Success','$timeout',function($scope, myPrescriptionService,Success,$timeout){
 
 
 		myPrescriptionService.info.query().$promise.then(function(resp){
@@ -7,28 +7,68 @@ controllers.controller('myPrescriptionController',['$scope','myPrescriptionServi
 			console.log(err);
 		});
 
+		var resetMsg = function(){
+			$timeout(function () {
+				$scope.updateStatus = {}
+			}, 3000);
+		}
 
-		var checkUrlsNumber = function(){
-			if($scope.info.privacyPolicyUrl.indexOf('https')>-1 && $scope.info.termsOfUseUrl.indexOf('https')>-1){
-					//it works
-			}else{
-				//show err
-								console.log("err");
+
+		var createErrMsg = function(msg){
+			$scope.updateStatus = {
+				show:true,
+				message:msg,
+				type:'danger'
+			}
+		};
+
+		var createSuccessMsg = function(msg){
+			$scope.updateStatus = {
+				show:true,
+				message:msg,
+				type:"success"
 			}
 		}
 
+		var checkAllFields = function(){
+			if($scope.info.privacyPolicyUrl.indexOf('https') == -1){
+				createErrMsg("Privacy Policy Url needs to be https");
+				return false;
+				}
+			else if ($scope.info.termsOfUseUrl.indexOf('https')== -1){
+				createErrMsg("Terms of use Url needs to be https");
+				return false;
+			}
+			else {
+				for(var i =0; i < $scope.info.telefon.length;i++){
+					if($scope.info.telefon[i].number && $scope.info.telefon[i].number.match(/[a-z]/i)){
+						createErrMsg("The phone number can't contain letters");
+						return false;
+						break;
+					}
+				}
+			}
+			return true;
+		}
+
 	$scope.update = function(){
-		var toUpdate = {
-			generalDescription:$scope.info.generalDescription,
-			telefon:$scope.info.telefon,
-			termsOfUseUrl:$scope.info.termsOfUseUrl,
-			privacyPolicyUrl:$scope.info.privacyPolicyUrl
-		};
-		myPrescriptionService.info.update({id:$scope.info._id},{update:toUpdate}).$promise.then(function(resp){
-			console.log(resp);
-		}).catch(function(err){
-			console.log(err);
-		})
+		var continueUpdate = checkAllFields();
+		if(continueUpdate){
+			var toUpdate = {
+				generalDescription:$scope.info.generalDescription,
+				telefon:$scope.info.telefon,
+				termsOfUseUrl:$scope.info.termsOfUseUrl,
+				privacyPolicyUrl:$scope.info.privacyPolicyUrl
+			};
+			myPrescriptionService.info.update({id:$scope.info._id},{update:toUpdate}).$promise.then(function(resp){
+				createSuccessMsg("The update was successfull");
+				resetMsg();
+			}).catch(function(err){
+				createErrMsg("Something went wrong");
+			});
+		}
+
+
 	};
 
 	$scope.addPhone = function(){
@@ -53,7 +93,7 @@ controllers.controller('myPrescriptionController',['$scope','myPrescriptionServi
 					"insertdatetime media table contextmenu paste charmap"
 			],
 			height: 240,
-			width:715,
+			width:770,
 			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
 	};
 }])
