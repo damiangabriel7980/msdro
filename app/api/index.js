@@ -33,6 +33,7 @@ var _ = require('underscore');
 var guidelineFile = require ("../models/guidelineFile");
 var guidelineCategory = require ("../models/guidelineCategory");
 var myPrescription = require("../models/myPrescription");
+var pdf = require("html-pdf");
 
 var xlsx = require("xlsx");
 
@@ -804,6 +805,24 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
           }
         })
     });
+    router.route('/admin/productPDF')
+        .post(function(req,res){
+            pdf.create(req.body.html).toFile(req.body.fileName,function(err,file){
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res,file);
+                }
+
+            })
+        })
+        .delete(function(req,res){
+            fs.unlink(req.query.filePath,function(err){
+                if(err){
+                    return handleError(res,err,500);
+                }
+            })
+        });
 
     router.route('/admin/products')
         .get(function(req, res) {

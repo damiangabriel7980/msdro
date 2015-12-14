@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 25.11.2014.
  */
-controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','ProductQrService', function($scope,ProductService,idToEdit,$modalInstance,$state,therapeuticAreaService,AmazonService,$rootScope,GroupsService,Success,Error,ProductQrService){
+controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','ProductQrService','$modal', function($scope,ProductService,idToEdit,$modalInstance,$state,therapeuticAreaService,AmazonService,$rootScope,GroupsService,Success,Error,ProductQrService,$modal){
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertRPC = {newAlert:false, type:"", message:""};
     $scope.idToEdit = idToEdit;
@@ -215,8 +215,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
     var getBase64QrImage = function(){
       var qrContainer = document.getElementById("qrCodeContainer");
       var qrImg = qrContainer.getElementsByTagName('img')[0];
-      var base64ImageString = qrImg.currentSrc;
-      return base64ImageString;
+      return qrImg.currentSrc;
     };
 
     var generateGUID = function(){
@@ -246,6 +245,22 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
     };
 
 
+    $scope.openPdfPreviewModal = function(){
+        $modal.open({
+            templateUrl:'partials/admin/content/products/productPDFPreview.html',
+            controller:'pdfPreviewController',
+            backdrop:'static',
+            keyboard:false,
+            size:'lg',
+            windowClass:'fade',
+            resolve:{
+                id:function(){
+                    return $scope.idToEdit;
+                }
+            }
+
+        })
+    };
 
 
     $scope.closeModal = function () {
