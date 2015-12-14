@@ -183,7 +183,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
       }).catch(function(err){
         console.log(err);
       });
-    }
+    };
     $scope.onMainImageUpdate = function(key){
       $scope.product.mainImageUrl = $rootScope.pathAmazonDev+key;
       updateProduct();
@@ -224,25 +224,31 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
                 return v.toString(16);
                 });
         return guid;
-    }
+    };
 
     $scope.generateQr= function(){
       var qr = generateGUID();
 
       $scope.uploadAlert = {
         newAlert:true,
-        type:'succes',
+        type:'alert',
         message:'Se genereaza QR-ul'
-      }
+      };
+      $scope.product.codeQR = qr;
+
       var imageString = getBase64QrImage();
 
       ProductQrService.qr.update({},{base64Image:imageString,path:QRpath}).$promise.then(function(resp){
-      $scope.product.codeQR = qr;
+          $scope.uploadAlert = {
+              newAlert:true,
+              type:'alert',
+              message:'Se salveaza codul QR'
+          };
       updateProduct();
       }).catch(function(err){
         console.log(err);
       })
-    }
+    };
 
 
 
