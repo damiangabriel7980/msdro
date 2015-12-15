@@ -805,21 +805,24 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
           }
         })
     });
+
     router.route('/admin/productPDF')
         .post(function(req,res){
-            pdf.create(req.body.html).toFile(req.body.fileName,function(err,file){
-                if(err){
-                    handleError(res,err,500);
-                }else{
-                    handleSuccess(res,file);
-                }
-
-            })
+            pdf.create(req.body.html).toStream(function(err,stream){
+               if(err){
+                   handleError(res,err,500);
+               }else{
+                   var StreamPDF = stream.pipe(fs.createWriteStream(req.body.filePath));
+                   handleSuccess(res,StreamPDF);
+               }
+            });
         })
         .delete(function(req,res){
-            fs.unlink(req.query.filePath,function(err){
+            fs.unlink(req.query.filePath,function(err,deleted){
                 if(err){
                     return handleError(res,err,500);
+                }else{
+                    handleSuccess(res,deleted);
                 }
             })
         });

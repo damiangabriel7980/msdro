@@ -19,8 +19,9 @@
 
 </div>
 <div class="modal-footer">
-    <div class="col-md-12">
-        <button ng-click="generatePdf()" class="btn pull-left btn-primary">Generate PDF</button>
-        <button ng-click="close()" class="btn pull-right btn-danger">Close</button>
+    <div class="col-md-12 textAlignCenter">
+        <alert type="{{alert.type}}" ng-show="disableButtons">{{alert.message}}</alert>
+        <button ng-click="close()" ng-disabled="disableButtons" class="btn pull-left btn-danger">Close</button>
+        <button ng-click="generatePdf()" ng-disabled="disableButtons" class="btn pull-right btn-primary">Download PDF</button>
     </div>
 </div>
