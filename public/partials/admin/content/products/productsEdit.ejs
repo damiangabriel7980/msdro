@@ -53,7 +53,7 @@
           <div class="mainHeaderImageUploder col-md-12">
             <label>Imagine principala: </label>
             <div class="col-md-12">
-                <enhanced-S3-Upload-Manager label="imagine principala" on-complete-function="finishFunction(smth)" on-delete-function="onMainImageDelete(key)" limit="1" bucket="{{amazonBucket}}" path="{{'produse/'+idToEdit+'/imaginePrincipala/'}}"></enhanced-S3-Upload-Manager>
+                <enhanced-S3-Upload-Manager label="imagine principala" on-complete-function="onMainImageUpdate(key)" on-delete-function="onMainImageDelete(key)" limit="1" bucket="{{amazonBucket}}" path="{{'produse/'+idToEdit+'/imaginePrincipala/'}}"></enhanced-S3-Upload-Manager>
             </div>
           </div>
           <div class="imageUploder col-md-12">
@@ -65,7 +65,7 @@
           <div class="videoUploader col-md-12">
             <label>Video:</label>
             <div class="col-md-12">
-                <enhanced-S3-Upload-Manager label="video-uri" bucket="{{amazonBucket}}" on-complete-function="onVideosUpdate(path)" on-delete-function="onVideosDelete(key)" path="{{'produse/'+idToEdit+'/video/'}}"></enhanced-S3-Upload-Manager>
+                <enhanced-S3-Upload-Manager label="video-uri" bucket="{{amazonBucket}}" on-complete-function="onVideosUpdate(key)" on-delete-function="onVideosDelete(key)" path="{{'produse/'+idToEdit+'/video/'}}"></enhanced-S3-Upload-Manager>
             </div>
           </div>
           <div class="qr-Product-code col-md-12">

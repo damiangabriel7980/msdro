@@ -185,24 +185,26 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
       });
     };
     $scope.onMainImageUpdate = function(key){
-      $scope.product.mainImageUrl = $rootScope.pathAmazonDev+key;
+      $scope.product.mainImageUrl = $rootScope.pathAmazonDev+key.replace(/\s+/g, '%20');
       updateProduct();
     };
     $scope.onImagesUpdate = function(key){
-      $scope.product.imageUrls.push($rootScope.pathAmazonDev+key);
+      var newImageUrl = $rootScope.pathAmazonDev+key.replace(/\s+/g, '%20');
+      $scope.product.imageUrls.push(newImageUrl);
       updateProduct();
     };
     $scope.onVideosUpdate = function(key){
-      $scope.product.videoUrls.push($rootScope.pathAmazonDev+key);
+      var newVideoUrl = $rootScope.pathAmazonDev+key.replace(/\s+/g, '%20');
+      $scope.product.videoUrls.push(newVideoUrl);
       updateProduct();
     };
     $scope.onVideosDelete = function(key){
-      var position = $scope.product.videoUrls.indexOf($rootScope+key);
+      var position = $scope.product.videoUrls.indexOf(key.replace(/\s+/g, '%20'));
       $scope.product.videoUrls.splice(position,1);
       updateProduct();
     };
     $scope.onImagesDelete = function(key){
-      var position = $scope.product.imageUrls.indexOf($rootScope+key);
+      var position = $scope.product.imageUrls.indexOf(key.replace(/\s+/g, '%20'));
       $scope.product.imageUrls.splice(position,1);
       updateProduct();
 
