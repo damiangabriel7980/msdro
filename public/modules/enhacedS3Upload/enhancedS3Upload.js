@@ -74,11 +74,11 @@
                     resetS3Alert("warning", "Se incarca fisierul...");
                     AmazonService.uploadFile(file, key, function (err, success) {
                         if(err){
-                            resetS3Alert("danger", "Eroare la uplosad");
+                            resetS3Alert("danger", "Eroare la upload");
                         }else{
                             if(findInKeys(key) == -1) scope.keys.push(key);
                             if(scope.limit && Number(scope.limit) == scope.keys.length) scope.showButton = false;
-                            scope.onCompleteFunction({path:key});
+                            scope.onCompleteFunction({key:key});
                             resetS3Alert();
                             scope.$apply();
                         }
