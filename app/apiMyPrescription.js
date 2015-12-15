@@ -5,6 +5,7 @@ var products =  require('./models/products.js');
 var myPrescription = require('./models/myPrescription.js');
 var ModelInfos = require('./modules/modelInfos');
 var mongoose = require('mongoose');
+var Config = require('../config/environment.js')();
 
 module.exports = function(app, logger, router) {
 
@@ -28,6 +29,8 @@ module.exports = function(app, logger, router) {
         }
       })
     };
+
+    var PathToAmazon = Config.amazonPrefix+Config.amazonBucket+"/";
 
     router.route('/config')
     .get(function (req, res) {
@@ -60,6 +63,8 @@ module.exports = function(app, logger, router) {
                     res.status(404).send();
               }else{
                   res.setHeader('last-modified',drug[0].last_updated.getTime());
+                  drug[0].rpc = Config.amazonPrefix+Config.amazonBucket+"/"+drug[0].rpc;
+                  drug[0].mainImageUrl = PathToAmazon + drug[0].mainImageUrl;
                   res.status(200).send(drug);
               }
 
@@ -77,11 +82,13 @@ module.exports = function(app, logger, router) {
                     mainImageUrl:"$mainImageUrl", imageUrls:"$imageUrls",videoUrls:"$videoUrls",last_updated:"$last_updated"}}
             ]).exec(function(err,drug){
                if (err){
+                   console.log(err);
                    return handleError(res,err,500);
                }else if(drug.length == 0){
                    res.status(404).send();
                }else{
                    if(drug[0].last_updated.getTime() > req.headers['last-modified']){
+                       drug[0].rpc = Config.amazonPrefix+Config.amazonBucket+"/"+drug[0].rpc;
                        res.setHeader('last-modified',drug[0].last_updated);
                        res.status(200).send(drug[0]);
                    }else{
