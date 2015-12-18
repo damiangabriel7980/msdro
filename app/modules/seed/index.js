@@ -3,7 +3,7 @@ var myPrescription = require('../../models/myPrescription');
 
 var async = require ('async');
 
-var modelsToSeed = ["januvia_users","guideline"];
+var modelsToSeed = ["januvia_users","guideline","myPrescription"];
 
 async.each(modelsToSeed, function(model, callback){
     ModelInfos.findOne({model_name: model}, function (err, mi) {

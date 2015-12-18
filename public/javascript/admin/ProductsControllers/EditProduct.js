@@ -177,6 +177,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
       delete toUpdate['groupsID'];
       delete toUpdate['_id'];
       delete toUpdate['therapeutic-areasID'];
+      toUpdate.last_updated = new Date();
 
       ProductService.products.update({id:$scope.product._id},{product:toUpdate}).$promise.then(function(resp){
         $scope.uploadAlert = {newAlert:false, type:"", message:""};
@@ -236,6 +237,7 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
         type:'alert',
         message:'Se genereaza QR-ul'
       };
+        
       $scope.product.codeQR = qr;
 
       var imageString = getBase64QrImage();
