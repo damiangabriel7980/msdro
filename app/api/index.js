@@ -857,7 +857,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             }else{
                 var data = req.body.product;
-                Products.update({_id:req.query.id},{$set:data}, function(err, product) {
+                Products.findOneAndUpdate({_id:req.query.id},{$set:data}, function(err, product) {
                     if (err){
                         handleError(res,err,500);
                     }else{

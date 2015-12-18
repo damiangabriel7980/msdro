@@ -78,7 +78,7 @@
                     <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
                 </div>
                 <div class="col-md-12 padding10" id="qrCodeContainer">
-                    <qr text="product.codeQR" ng-if="product.codeQR" image="true"></qr>
+                    <qr text="product.codeQR ? product.codeQR : ''" ng-show="product.codeQR" image="true"></qr>
                 </div>
             </div>
           </div>

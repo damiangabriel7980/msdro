@@ -230,15 +230,16 @@ controllers.controller('EditProduct', ['$scope','ProductService','idToEdit','$mo
     };
 
     $scope.generateQr= function(){
-      var qr = generateGUID();
+
+      $scope.product.codeQR = generateGUID();
 
       $scope.uploadAlert = {
         newAlert:true,
         type:'alert',
         message:'Se genereaza QR-ul'
       };
-        
-      $scope.product.codeQR = qr;
+
+
 
       var imageString = getBase64QrImage();
 
