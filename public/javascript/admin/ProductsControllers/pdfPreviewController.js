@@ -12,14 +12,14 @@ controllers.controller('pdfPreviewController',['$scope','id','$modalInstance','P
     };
 
     $scope.disableButtons = false;
-    $scope.QRPath = $rootScope.pathAmazonDev + 'produse/'+id+'/QR/qr.png';
+    $scope.QRPath = $rootScope.pathAmazonDev + 'produse/' + id + '/QR/qr.png';
 
 
-    ProductService.products.query({id:id}).$promise.then(function(result){
-        $scope.product=Success.getObject(result);
+    ProductService.products.query( {id:id} ).$promise.then(function(result){
+        $scope.product = Success.getObject(result);
         $scope.description = $sce.trustAsHtml($scope.product.description);
         if ($scope.product.image_path) {
-            $scope.imageUrl = $rootScope.pathAmazonDev+$scope.product.image_path
+            $scope.imageUrl = $rootScope.pathAmazonDev + $scope.product.image_path
         }
         else {
             $scope.imageUrl = $rootScope.pathAmazonResources+"piles-of-pills.jpg"
@@ -39,10 +39,10 @@ controllers.controller('pdfPreviewController',['$scope','id','$modalInstance','P
     $scope.generatePdf = function(){
         $scope.disableButtons = true;
         var htmlToPdf = document.getElementById("toPDF").outerHTML;
-        var fileName = $scope.product.name+'.pdf';
-        PDFService.pdf.create({},{html:htmlToPdf,fileName:fileName,filePath:pathToPDF+fileName}).$promise.then(function(resp){
+        var fileName = $scope.product.name + '.pdf';
+        PDFService.pdf.create({}, { html:htmlToPdf, fileName:fileName, filePath:pathToPDF + fileName } ).$promise.then(function(resp){
             var stream = Success.getObject(resp);
-            downloadURI(pathToDownloadPDF+fileName,fileName);
+            downloadURI(pathToDownloadPDF + fileName, fileName);
             $scope.disableButtons = false;
         }).catch(function(err){
             console.log(err);
@@ -51,13 +51,13 @@ controllers.controller('pdfPreviewController',['$scope','id','$modalInstance','P
 
     $scope.close = function(){
         $modalInstance.close();
-        PDFService.pdf.delete({filePath:pathToPDF+$scope.product.name+'.pdf'}).$promise
-            .then(function(resp){
+        PDFService.pdf.delete( {filePath:pathToPDF + $scope.product.name + '.pdf' } ).$promise
+          .then(function(resp){
 
-            }).catch(function(err){
+          }).catch(function(err){
             console.log(err);
         })
 
-    }
+    };
 
 }]);
