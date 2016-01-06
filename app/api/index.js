@@ -810,7 +810,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function(req,res){
             pdf.create(req.body.html).toStream(function(err,stream){
                if(err){
-                   handleError(res,err,500);
+                   res.send(err);
                }else{
                    var StreamPDF = stream.pipe(fs.createWriteStream(req.body.filePath));
                    handleSuccess(res,StreamPDF);
