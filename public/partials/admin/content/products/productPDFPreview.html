@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <div class="modal-title"><h3>Preview</h3></div>
+</div>
+<div class="col-md-12 modal-body">
+<div id="toPDF" style="padding:20px; width:730px;">
+    <img ng-src="https://s3-eu-west-1.amazonaws.com/msd-prod/resources/rsz_msd_be_well_green_gray.png" style="width:130px">
+    <div style="font-size:30px;text-align: center; margin:30px 0 40px 0;">{{product.name}}</div>
+    <div style="float:left;padding-top:10px;">
+        <img ng-src="{{imageUrl}}" width="210">
+    </div>
+    <div ng-bind-html="description" style="float:right;min-height: 210px; width:465px;"></div>
+    <div style="text-align: center;clear:both;padding:30px;">
+        <img ng-src="{{QRPath}}">
+    </div>
+    <div>
+        <p>Aplicatia poate fi descarcata .... </p>
+    </div>
+</div>
+
+</div>
+<div class="modal-footer">
+    <div class="col-md-12 textAlignCenter">
+        <alert type="{{alert.type}}" ng-show="disableButtons">{{alert.message}}</alert>
+        <button ng-click="close()" ng-disabled="disableButtons" class="btn pull-left btn-danger">Close</button>
+        <button ng-click="generatePdf()" ng-disabled="disableButtons" class="btn pull-right btn-primary">Download PDF</button>
+    </div>
+</div>

@@ -32,6 +32,8 @@ var AppUpdate = require("../models/msd-applications.js");
 var _ = require('underscore');
 var guidelineFile = require ("../models/guidelineFile");
 var guidelineCategory = require ("../models/guidelineCategory");
+var myPrescription = require("../models/myPrescription");
+var pdf = require("html-pdf");
 
 var xlsx = require("xlsx");
 
@@ -792,6 +794,39 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    router.route('/admin/QRproduct')
+    .put(function(req,res){
+        imageBuffer = new Buffer(req.body.base64Image.replace(/^data:image\/\w+;base64,/, ""),'base64');
+        amazon.addObjectS3(req.body.path,imageBuffer,function(err,uploaded){
+          if(err){
+            handleError(res,err,500);
+          }else{
+            handleSuccess(res,uploaded);
+          }
+        })
+    });
+
+    router.route('/admin/productPDF')
+        .post(function(req,res){
+            pdf.create(req.body.html).toStream(function(err,stream){
+               if(err){
+                   handleError(res,err,500);
+               }else{
+                   var StreamPDF = stream.pipe(fs.createWriteStream(req.body.filePath));
+                   handleSuccess(res,StreamPDF);
+               }
+            });
+        })
+        .delete(function(req,res){
+            fs.unlink(req.query.filePath,function(err,deleted){
+                if(err){
+                    return handleError(res,err,500);
+                }else{
+                    handleSuccess(res,deleted);
+                }
+            })
+        });
+
     router.route('/admin/products')
         .get(function(req, res) {
             if(req.query.id){
@@ -844,7 +879,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             }else{
                 var data = req.body.product;
-                Products.update({_id:req.query.id},{$set:data}, function(err, product) {
+                Products.findOneAndUpdate({_id:req.query.id},{$set:data}, function(err, product) {
                     if (err){
                         handleError(res,err,500);
                     }else{
@@ -1683,6 +1718,27 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                }
            })
         });
+
+    router.route('/admin/applications/myPrescription')
+      .get(function(req, res){
+        myPrescription.find({},function(err,info){
+          if(err){
+            return handleError(res,err,500);
+          }else{
+            handleSuccess(res,info);
+          }
+        })
+      })
+      .put(function(req,res){
+        myPrescription.update({_id:req.query.id},{$set:req.body.update},function(err,updated){
+          if(err){
+            return handleError(res,err,500);
+          }else{
+            ModelInfos.recordLastUpdate("myPrescription");
+            handleSuccess(res,updated);
+          }
+        })
+      });
 
     router.route('/admin/events/events')
         .get(function (req, res) {
