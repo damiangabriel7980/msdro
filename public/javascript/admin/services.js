@@ -165,6 +165,7 @@ services.factory('GroupsService', ['$resource', function($resource){
     }
 }]);
 
+
 services.factory('SpecialProductsService', ['$resource', function($resource){
     return {
         products: $resource('api/admin/content/specialProducts/products', {}, {
@@ -218,6 +219,16 @@ services.factory('SpecialAppsService', ['$resource', function($resource){
         })
     }
 }]);
+
+services.factory('PDFService',['$resource',function($resource){
+    return{
+        pdf:$resource('api/admin/productPDF',{},{
+            create:{method:'POST',isArray:false},
+            delete:{method:'DELETE',isArray:false}
+        })
+    }
+}]);
+
 
 services.factory('ProductQrService',['$resource',function($resource){
   return{

@@ -47,9 +47,6 @@ a {
   right: 0;
   border: 1px solid white;
 }
-.noTextOverflow {
-  overflow-wrap: break-word;
-}
 .specialProductsMenu .menuBlock div {
   float: left;
 }
@@ -391,6 +388,9 @@ a {
 }
 .marginLeft10 {
   margin-left: 10px;
+}
+.textAlignCenter {
+  text-align: center;
 }
 .myPrescription button {
   float: left;
