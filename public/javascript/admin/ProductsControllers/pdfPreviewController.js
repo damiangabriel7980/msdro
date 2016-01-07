@@ -40,7 +40,7 @@ controllers.controller('pdfPreviewController',['$scope','id','$modalInstance','P
         var htmlToPdf = document.getElementById("toPDF").outerHTML;
         var fileName = $scope.product.name + '.pdf';
         PDFService.pdf.create({}, { html:htmlToPdf, fileName:fileName, filePath:pathToPDF + fileName } ).$promise.then(function(resp){
-            var stream = Success.getObject(resp);
+            console.log(resp);
             downloadURI(pathToDownloadPDF + fileName, fileName);
             $scope.disableButtons = false;
         }).catch(function(err){

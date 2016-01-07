@@ -795,16 +795,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/productPDF')
+
         .post(function(req,res){
-            pdf.create(req.body.html).toStream(function(err,stream){
-               if(err){
-                   handleError(res,err,500);
-               }else{
-                   var StreamPDF = stream.pipe(fs.createWriteStream(req.body.filePath));
-                   handleSuccess(res,StreamPDF);
-               }
-            });
+            pdf.create(req.body.html).toFile(req.body.filePath, function(err, created){
+                if(err){
+                    handleError(res, err, 500);
+                }else{
+                    handleSuccess(res, created);
+                }
+            })
         })
+
         .delete(function(req,res){
             fs.unlink(req.query.filePath,function(err,deleted){
                 if(err){
