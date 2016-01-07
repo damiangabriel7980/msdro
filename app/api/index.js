@@ -794,18 +794,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
-    router.route('/admin/QRproduct')
-    .put(function(req,res){
-        imageBuffer = new Buffer(req.body.base64Image.replace(/^data:image\/\w+;base64,/, ""),'base64');
-        amazon.addObjectS3(req.body.path,imageBuffer,function(err,uploaded){
-          if(err){
-            handleError(res,err,500);
-          }else{
-            handleSuccess(res,uploaded);
-          }
-        })
-    });
-
     router.route('/admin/productPDF')
         .post(function(req,res){
             pdf.create(req.body.html).toStream(function(err,stream){

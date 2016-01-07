@@ -9,10 +9,10 @@
         <img ng-src="{{imageUrl}}" width="210">
     </div>
     <div ng-bind-html="description" style="float:right;min-height: 210px; width:465px;"></div>
-    <div style="text-align: center;clear:both;padding:30px;">
-        <img ng-src="{{QRPath}}">
+    <div style="float: left; clear:both; padding:30px 0;display: flex; width: inherit; justify-content: center">
+        <qr text="product.codeQR"  ng-if = "product.codeQR" image="true"></qr>
     </div>
-    <div>
+    <div style="float: left; clear:both">
         <p>Aplicatia poate fi descarcata .... </p>
     </div>
 </div>

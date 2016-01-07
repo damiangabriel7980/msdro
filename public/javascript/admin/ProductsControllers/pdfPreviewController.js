@@ -12,7 +12,6 @@ controllers.controller('pdfPreviewController',['$scope','id','$modalInstance','P
     };
 
     $scope.disableButtons = false;
-    $scope.QRPath = $rootScope.pathAmazonDev + 'produse/' + id + '/QR/qr.png';
 
 
     ProductService.products.query( {id:id} ).$promise.then(function(result){
