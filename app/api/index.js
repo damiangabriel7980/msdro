@@ -813,7 +813,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                    res.send(err);
                }else{
                    var StreamPDF = stream.pipe(fs.createWriteStream(req.body.filePath));
-                   handleSuccess(res,StreamPDF);
+                   var objectToSend = {};
+                   objectToSend.filePath = req.body.filePath;
+                   objectToSend.fileStream = fs.createWriteStream(req.body.filePath);
+                   objectToSend.StreamPDF = StreamPDF;
+                   handleSuccess(res,objectToSend);
                }
             });
         })
