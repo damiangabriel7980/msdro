@@ -38,6 +38,8 @@ app.controllerProvider.register('AuthModal', ['$scope', '$modalInstance', 'inten
         var thiz = this;
         if(!thiz.email && thiz.password){
             $scope.resetAlert("danger", "Adresa de e-mail nu este valida");
+        }else if(!AuthService.isUserAllowedLogin(thiz.email)){
+            $scope.resetAlert("danger", "Pentru moment, portalul Staywell este indisponibil");
         }else{
             AuthService.login.query({email: thiz.email, password: thiz.password,remember: thiz.remember}).$promise.then(function (resp) {
 

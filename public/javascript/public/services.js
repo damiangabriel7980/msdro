@@ -285,6 +285,20 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         }
         return options;
     }
+    var isUserAllowedLogin = function(username){
+        if(USERS_ALLOWED_LOGIN){
+            username=(username||"").toLowerCase();
+            var users = USERS_ALLOWED_LOGIN.split(",");
+            for(var i=0; i<users.length; i++){
+                if(users[i].toLowerCase() === username){
+                    return true;
+                }
+            }
+            return false;
+        }else{
+            return true;
+        }
+    }
     return {
         login: $resource('/login', {}, {
             query: { method: 'POST', isArray: false }
@@ -345,6 +359,7 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
             });
         },
         getProHref: getProHref,
-        isProofRequired: isProofRequired
+        isProofRequired: isProofRequired,
+        isUserAllowedLogin: isUserAllowedLogin
     }
 }]);
