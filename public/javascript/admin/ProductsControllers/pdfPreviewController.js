@@ -3,15 +3,15 @@
  */
 controllers.controller('pdfPreviewController',['$scope','id','$modalInstance','ProductService','PDFService','Success','Error','$sce','$rootScope',function($scope,id,$modalInstance,ProductService,PDFService,Success,Error,$sce,$rootScope){
 
-
-    var pathToPDF = 'public/temp/';
-    var pathToDownloadPDF = 'temp/';
+    
     $scope.alert={
         type:'warning',
         message:'Please wait while the file is being created'
     };
 
     $scope.disableButtons = false;
+
+    var pdfPathAmazon = 'temp/';
 
 
     ProductService.products.query( {id:id} ).$promise.then(function(result){
@@ -27,11 +27,11 @@ controllers.controller('pdfPreviewController',['$scope','id','$modalInstance','P
         console.log(Error.getMessage(err));
     });
 
-    var downloadURI = function (uri, name)
+    var downloadURI = function (adress, name)
     {
         var link = document.createElement("a");
         link.download = name;
-        link.href = uri ;
+        link.href = adress;
         link.click();
     };
 
@@ -39,9 +39,10 @@ controllers.controller('pdfPreviewController',['$scope','id','$modalInstance','P
         $scope.disableButtons = true;
         var htmlToPdf = document.getElementById("toPDF").outerHTML;
         var fileName = $scope.product.name + '.pdf';
-        PDFService.pdf.create({}, { html:htmlToPdf, fileName:fileName, filePath:pathToPDF + fileName } ).$promise.then(function(resp){
-            console.log(resp);
-            downloadURI(pathToDownloadPDF + fileName, fileName);
+        PDFService.pdf.create({}, { html:htmlToPdf, filePathAmazon:pdfPathAmazon + fileName } ).$promise.then(function(resp){
+            var downloadUrl = resp.success.Location;
+            $scope.pdfAmazonPath = resp.success.Location;
+            downloadURI(downloadUrl, fileName);
             $scope.disableButtons = false;
         }).catch(function(err){
             console.log(err);
@@ -50,12 +51,14 @@ controllers.controller('pdfPreviewController',['$scope','id','$modalInstance','P
 
     $scope.close = function(){
         $modalInstance.close();
-        PDFService.pdf.delete( {filePath:pathToPDF + $scope.product.name + '.pdf' } ).$promise
-          .then(function(resp){
+        if($scope.pdfAmazonPath){
+            PDFService.pdf.delete( {filePath: $scope.pdfAmazonPath} ).$promise
+              .then(function(resp){
 
-          }).catch(function(err){
-            console.log(err);
-        })
+              }).catch(function(err){
+                console.log(err);
+            })
+        }
 
     };
 

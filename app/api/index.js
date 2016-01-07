@@ -796,24 +796,31 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/admin/productPDF')
 
-        .post(function(req,res){
-            pdf.create(req.body.html).toFile(req.body.filePath, function(err, created){
-                if(err){
+
+        .post(function(req, res){
+            pdf.create(req.body.html).toBuffer(function(err, buffer){
+                if (err){
                     handleError(res, err, 500);
-                }else{
-                    handleSuccess(res, created);
+                } else {
+                   amazon.addObjectS3(req.body.filePathAmazon, buffer,function(err, uploaded){
+                       if (err){
+                           handleError(res, err, 500);
+                       } else {
+                           handleSuccess(res, uploaded);
+                       }
+                   })
                 }
             })
         })
-
         .delete(function(req,res){
-            fs.unlink(req.query.filePath,function(err,deleted){
+
+            amazon.deleteObjectS3(req.query.filePath, function (err, data) {
                 if(err){
-                    return handleError(res,err,500);
+                    handleError(res,null,409,4);
                 }else{
-                    handleSuccess(res,deleted);
+                    handleSuccess(res, data);
                 }
-            })
+            });
         });
 
     router.route('/admin/products')
