@@ -223,8 +223,7 @@ services.factory('SpecialAppsService', ['$resource', function($resource){
 services.factory('PDFService',['$resource',function($resource){
     return{
         pdf:$resource('api/admin/productPDF',{},{
-            create:{method:'POST',isArray:false},
-            delete:{method:'DELETE',isArray:false}
+            create:{method:'POST',isArray:false}
         })
     }
 }]);

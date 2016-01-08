@@ -798,29 +798,16 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
 
         .post(function(req, res){
-            pdf.create(req.body.html).toBuffer(function(err, buffer){
+
+        pdf.create(req.body.html).toBuffer(function(err, buffer){
                 if (err){
-                    handleError(res, err, 500);
+                    handleError(res, err, 500)
                 } else {
-                   amazon.addObjectS3(req.body.filePathAmazon, buffer,function(err, uploaded){
-                       if (err){
-                           handleError(res, err, 500);
-                       } else {
-                           handleSuccess(res, uploaded);
-                       }
-                   })
+                    var newBuffer = buffer.toString('base64');
+                    var bufferBase64 = 'data:application/octet-stream;charset=utf-16le;base64,' + newBuffer;
+                    res.send( {buffer: bufferBase64} );
                 }
             })
-        })
-        .delete(function(req,res){
-
-            amazon.deleteObjectS3(req.query.filePath, function (err, data) {
-                if(err){
-                    handleError(res,null,409,4);
-                }else{
-                    handleSuccess(res, data);
-                }
-            });
         });
 
     router.route('/admin/products')
