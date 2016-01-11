@@ -241,7 +241,7 @@ controllers
     };
 
     $scope.regenerateQr = function(){
-      ActionModal.show("Regenerare QR", "Sunte-ti sigur ca doriti sa regenerati codul QR?", function(){
+      ActionModal.show("Regenerare QR", "Sunteti sigur ca doriti sa regenerati codul QR?", function(){
         $scope.generateQr();
       }, {
         yes: "Regenereaza"
