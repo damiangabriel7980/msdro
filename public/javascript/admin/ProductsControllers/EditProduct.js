@@ -2,8 +2,8 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 controllers
-  .controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','$modal',
-  function($scope, ProductService, idToEdit, $modalInstance, $state, therapeuticAreaService, AmazonService, $rootScope, GroupsService, Success, Error, $modal){
+  .controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','$modal','ActionModal',
+  function($scope, ProductService, idToEdit, $modalInstance, $state, therapeuticAreaService, AmazonService, $rootScope, GroupsService, Success, Error, $modal, ActionModal){
     $scope.uploadAlert = { newAlert: false, type: "", message: "" };
 
     $scope.uploadAlertRPC = { newAlert: false, type: "", message: "" };
@@ -228,7 +228,7 @@ controllers
       return guid;
     };
 
-    $scope.generateQr= function(){
+    $scope.generateQr = function(){
       $scope.product.codeQR  = generateGUID();
 
       $scope.uploadAlert = {
@@ -238,6 +238,14 @@ controllers
       };
 
       updateProduct();
+    };
+
+    $scope.regenerateQr = function(){
+      ActionModal.show("Regenerare QR", "Sunte-ti sigur ca doriti sa regenerati codul QR?", function(){
+        $scope.generateQr();
+      }, {
+        yes: "Regenereaza"
+      })
     };
 
 
