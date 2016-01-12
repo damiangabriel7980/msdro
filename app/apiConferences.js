@@ -18,11 +18,19 @@ var request = require('request');
 var PushService = require('./modules/pushNotifications');
 var ConferencesModule=require('./modules/Conferences');
 
-module.exports = function(app, logger, tokenSecret, router) {
+module.exports = function(app, my_config, logger, tokenSecret, router) {
 
     //=============================================Define variables
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
     var handleError = require('./modules/responseHandler/error.js')(logger);
+    if(my_config.events.overwriteApiResponses){
+        handleSuccess = function(res, object){
+            res.send(object);
+        }
+        handleError = function(res, err){
+            res.send(err);
+        }
+    }
 
     //returns user data (parsed from token found on the request)
     var getUserData = function (req) {
@@ -90,7 +98,7 @@ module.exports = function(app, logger, tokenSecret, router) {
         .get(function (req, res) {
             var user = getUserData(req);
             if(user._id){
-                ConferenceModule.getConferencesForUser(user._id, function (err, resp) {
+                ConferencesModule.getConferencesForUser(user._id, function (err, resp) {
                     if(err){
                         handleError(res, err);
                     }else{

@@ -86,7 +86,7 @@ require('./app/api')(app, my_config, sessionSecret, logger, amazon, express.Rout
 require('./app/apiPublic.js')(app, logger, express.Router()); // load our public routes and pass in our app
 require('./app/apiGloballyShared.js')(app, my_config, logger, amazon, sessionSecret, express.Router());
 require('./app/apiMobileShared.js')(app, logger, tokenSecret, express.Router());
-require('./app/apiConferences.js')(app, logger, tokenSecret, express.Router());
+require('./app/apiConferences.js')(app, my_config, logger, tokenSecret, express.Router());
 require('./app/apiMSDDoc.js')(app, my_config, logger, tokenSecret, secureServer, express.Router());
 require('./app/apiDPOC.js')(app, logger, express.Router());
 require('./app/apiCourses.js')(app, logger, tokenSecret, express.Router());

@@ -37,6 +37,9 @@ module.exports = function(){
                 },
                 elearning: {
                     maxScore: 18
+                },
+                events: {
+                    overwriteApiResponses: true
                 }
             };
 
@@ -73,6 +76,9 @@ module.exports = function(){
                 usersAllowedLogin: [],
                 elearning: {
                     maxScore: 18
+                },
+                events: {
+                    overwriteApiResponses: true
                 }
             };
 
@@ -109,6 +115,9 @@ module.exports = function(){
                 usersAllowedLogin: [],
                 elearning: {
                     maxScore: 18
+                },
+                events: {
+                    overwriteApiResponses: true
                 }
             };
 
@@ -145,6 +154,9 @@ module.exports = function(){
                 usersAllowedLogin: [],
                 elearning: {
                     maxScore: 18
+                },
+                events: {
+                    overwriteApiResponses: true
                 }
             };
 
