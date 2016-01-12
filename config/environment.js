@@ -115,6 +115,9 @@ module.exports = function(){
                 },
                 elearning: {
                     maxScore: 18
+                },
+                events: {
+                    overwriteApiResponses: true
                 }
             };
 
