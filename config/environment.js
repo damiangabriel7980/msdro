@@ -113,7 +113,7 @@ module.exports = function(){
                 user: {
                     noProofDomain: "mailinator.com"
                 },
-                usersAllowedLogin: ["admin@msd.ro", "laura.iacob@qualitance.ro"],
+                usersAllowedLogin: [],
                 elearning: {
                     maxScore: 18
                 },
