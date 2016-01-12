@@ -16,7 +16,7 @@ var async = require('async');
 var request = require('request');
 
 var PushService = require('./modules/pushNotifications');
-var ConferenceModule=require('./modules/Conferences');
+var ConferencesModule=require('./modules/Conferences');
 
 module.exports = function(app, logger, tokenSecret, router) {
 
