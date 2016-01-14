@@ -801,11 +801,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
         pdf.create(req.body.html).toBuffer(function(err, buffer){
                 if (err){
-                    res.send( {error: err} );
+                    handleError(res, err, 500);
                 } else {
                     var newBuffer = buffer.toString('base64');
                     var bufferBase64 = 'data:application/octet-stream;charset=utf-16le;base64,' + newBuffer;
-                    res.send( {buffer: bufferBase64} );
+                    handleSuccess(res, {buffer: bufferBase64} );
                 }
             })
         });

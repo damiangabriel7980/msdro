@@ -44,7 +44,9 @@ controllers.controller('pdfPreviewController', ['$scope', 'id', '$modalInstance'
       fileName: fileName
     }).$promise.then(function (resp) {
 
-    downloadURI(resp.buffer, fileName);
+     var respObj = Success.getObject(resp);
+
+    downloadURI(respObj.buffer, fileName);
 
       $scope.disableButtons = false;
     }).catch(function (err) {
