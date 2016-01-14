@@ -223,20 +223,12 @@ services.factory('SpecialAppsService', ['$resource', function($resource){
 services.factory('PDFService',['$resource',function($resource){
     return{
         pdf:$resource('api/admin/productPDF',{},{
-            create:{method:'POST',isArray:false},
-            delete:{method:'DELETE',isArray:false}
+            create:{method:'POST',isArray:false}
         })
     }
 }]);
 
 
-services.factory('ProductQrService',['$resource',function($resource){
-  return{
-    qr:$resource('api/admin/QRproduct',{},{
-      update:{method:'PUT',isArray:false}
-    })
-  }
-}]);
 
 services.factory('ElearningService', ['$resource', function($resource){
     return {

@@ -2,20 +2,19 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 controllers
-  .controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','ProductQrService','$modal',
-  function($scope, ProductService, idToEdit, $modalInstance, $state, therapeuticAreaService, AmazonService, $rootScope, GroupsService, Success, Error, ProductQrService, $modal){
+  .controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','$modal','ActionModal',
+  function($scope, ProductService, idToEdit, $modalInstance, $state, therapeuticAreaService, AmazonService, $rootScope, GroupsService, Success, Error, $modal, ActionModal){
     $scope.uploadAlert = { newAlert: false, type: "", message: "" };
 
     $scope.uploadAlertRPC = { newAlert: false, type: "", message: "" };
 
     $scope.idToEdit = idToEdit;
 
-    var QRpath = 'produse/' + $scope.idToEdit + '/QR/qr.png';
-
     var messageTypes = {
       danger: "danger",
       success: "success"
     };
+
 
 
     ProductService.products.query( { id: idToEdit } ).$promise.then(function(result){
@@ -185,7 +184,7 @@ controllers
       delete toUpdate['therapeutic-areasID'];
       toUpdate.last_updated = new Date();
 
-    ProductService.products.update({id:$scope.product._id},{product:toUpdate}).$promise.then(function(resp){
+    ProductService.products.update( {id:$scope.product._id}, {product:toUpdate} ).$promise.then(function(resp){
       $scope.uploadAlert = { newAlert:false, type:"", message:"" };
     }).catch(function(err){
       console.log(err);
@@ -220,12 +219,6 @@ controllers
     $scope.product.mainImageUrl = "";
     updateProduct();
   };
-  var getBase64QrImage = function(){
-    var qrContainer = document.getElementById("qrCodeContainer");
-    var qrImg = qrContainer.getElementsByTagName('img')[0];
-    var base64ImageString = qrImg.currentSrc;
-    return base64ImageString;
-  };
 
     var generateGUID = function(){
       var guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -235,21 +228,23 @@ controllers
       return guid;
     };
 
-    $scope.generateQr= function(){
-      var qr = generateGUID();
+    $scope.generateQr = function(){
+      $scope.product.codeQR  = generateGUID();
 
       $scope.uploadAlert = {
         newAlert: true,
         type: messageTypes.success,
         message: 'Se genereaza QR-ul'
       };
-      var imageString = getBase64QrImage();
 
-      ProductQrService.qr.update( {}, { base64Image: imageString, path: QRpath } ).$promise.then(function(resp){
-        $scope.product.codeQR = qr;
-        updateProduct();
-      }).catch(function(err){
-        console.log(err);
+      updateProduct();
+    };
+
+    $scope.regenerateQr = function(){
+      ActionModal.show("Regenerare QR", "Sunteti sigur ca doriti sa regenerati codul QR?", function(){
+        $scope.generateQr();
+      }, {
+        yes: "Regenereaza"
       })
     };
 

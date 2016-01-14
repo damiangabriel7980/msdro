@@ -794,35 +794,18 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
-    router.route('/admin/QRproduct')
-    .put(function(req,res){
-        imageBuffer = new Buffer(req.body.base64Image.replace(/^data:image\/\w+;base64,/, ""),'base64');
-        amazon.addObjectS3(req.body.path,imageBuffer,function(err,uploaded){
-          if(err){
-            handleError(res,err,500);
-          }else{
-            handleSuccess(res,uploaded);
-          }
-        })
-    });
-
     router.route('/admin/productPDF')
-        .post(function(req,res){
-            pdf.create(req.body.html).toStream(function(err,stream){
-               if(err){
-                   handleError(res,err,500);
-               }else{
-                   var StreamPDF = stream.pipe(fs.createWriteStream(req.body.filePath));
-                   handleSuccess(res,StreamPDF);
-               }
-            });
-        })
-        .delete(function(req,res){
-            fs.unlink(req.query.filePath,function(err,deleted){
-                if(err){
-                    return handleError(res,err,500);
-                }else{
-                    handleSuccess(res,deleted);
+
+
+        .post(function(req, res){
+
+        pdf.create(req.body.html).toBuffer(function(err, buffer){
+                if (err){
+                    handleError(res, err, 500);
+                } else {
+                    var newBuffer = buffer.toString('base64');
+                    var bufferBase64 = 'data:application/octet-stream;charset=utf-16le;base64,' + newBuffer;
+                    handleSuccess(res, {buffer: bufferBase64} );
                 }
             })
         });
