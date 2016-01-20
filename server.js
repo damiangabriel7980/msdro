@@ -83,6 +83,7 @@ var devServer = http.createServer(app);
 
 // api ======================================================================
 require('./app/api')(app, my_config, sessionSecret, logger, amazon, express.Router()); // load our private routes and pass in our app and session secret
+require('./app/apiStreamAdmin')(app, my_config, sessionSecret, logger, amazon, express.Router()); // load our private routes and pass in our app and session secret
 require('./app/apiPublic.js')(app, logger, express.Router()); // load our public routes and pass in our app
 require('./app/apiGloballyShared.js')(app, my_config, logger, amazon, sessionSecret, express.Router());
 require('./app/apiMobileShared.js')(app, logger, tokenSecret, express.Router());
@@ -93,6 +94,7 @@ require('./app/apiCourses.js')(app, logger, tokenSecret, express.Router());
 require('./app/apiContractManagement.js')(app, logger, express.Router());
 require('./app/apiJanuvia.js')(app, logger, express.Router());
 require('./app/apiAplicationUpgrade.js')(app, logger, express.Router());
+require('./app/apiGuidelines.js')(app,logger,express.Router());
 // socket comm test =================================================================
 // require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="cloudStreamAdminApp">
+<html lang="en" ng-app="streamAdminApp">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
@@ -11,34 +11,41 @@
 
     <!--Core-modules-->
     <script src="components/jquery/dist/jquery.js"></script>
-    <script src="components/jquery-ui/ui/jquery-ui.js"></script>
+    <script src="components/jquery-ui/jquery-ui.js"></script>
     <script type="text/javascript" src="components/moment/moment.js"></script>
 <script type="text/javascript" src="components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="components/angular/angular.js"></script>
-    <script type="text/javascript" src="components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
-<script type="text/javascript" src="components/angular-qr/angular-qr.min.js"></script>
+    <script type="text/javascript" src="components/angular-ui-bootstrap-datetimepicker/datetimepicker.js"></script>
+    <script src="components/angular-cookies/angular-cookies.js"></script>
     <script src="components/angular-sanitize/angular-sanitize.js"></script>
     <script src="components/angular-resource/angular-resource.js"></script>
     <script src="components/angular-route/angular-route.js"></script>
     <script src="components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="components/aws-sdk/dist/aws-sdk.min.js"></script>
-
-    <!--<script src="components/flash/playerProductInstall.swf"></script>-->
-    <!--<script src="components/flash/simpleBroadcaster2.swf"></script>-->
-    <!--<script src="components/flash/simpleBroadcaster3.swf"></script>-->
-    <!--<script src="components/flash/simpleSubscriber2.swf"></script>-->
-    <!--<script src="components/flash/simpleSubscriber3.swf"></script>-->
+    <script src="components/ng-file-upload/ng-file-upload.js"></script>
+    <script src="components/ng-table/dist/ng-table.min.js"></script>
+    <script src="modules/therapeutic_select/therapeutic_select.js"></script>
+    <link rel="stylesheet" href="modules/therapeutic_select/therapeutic_select.css">
 
     <!--Controllers-->
+    <script src="modules/angular-select-autocomplete/directive.js"></script>
     <script src="javascript/streamAdmin/app.js"></script>
     <script src="javascript/streamAdmin/controllers.js"></script>
-    <script src="javascript/streamAdmin/LiveTransmission.js"></script>
-    <script src="javascript/streamAdmin/swfobject.js"></script>
+    <script src="javascript/streamAdmin/services.js"></script>
+    <script src="javascript/shared/controllers.js"></script>
+    <script src="javascript/shared/services.js"></script>
+    <script src="javascript/streamAdmin/customDirectives.js"></script>
+    <script src="javascript/streamAdmin/adminConference/adminConference.controller.js"></script>
+    <script src="javascript/streamAdmin/editConference/editConference.controller.js"></script>
+    <script src="javascript/streamAdmin/editSpeakers/editSpeakers.controller.js"></script>
+    <script src="javascript/streamAdmin/editViewers/editViewers.controller.js"></script>
 
+    <link rel='stylesheet' href='modules/angular-select-autocomplete/styles.css' />
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="stylesheets/stylesThatReignSupreme.css">
+    <link rel="stylesheet" href="stylesheets/streamadmin/streamStyles.css">
 
 </head>
 <body>
@@ -53,7 +60,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="navbar-brand" href="#">Brand</a>
+            <a class="navbar-brand" href="#">MSD_Conferences</a>
         </div>
 
         <div class="collapse navbar-collapse" collapse="navCollapsed">

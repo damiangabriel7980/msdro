@@ -61,7 +61,7 @@ module.exports = function (logger, sessionSecret) {
                             }else{
                                 var admin = false;
                                 for(var i=0; i<data.length; i++){
-                                    if(data[i].authority === "ROLE_ADMIN") admin=true;
+                                    if(data[i].authority === "ROLE_ADMIN" || data[i].authority === "ROLE_STREAM_ADMIN") admin=true;
                                 }
                                 if(admin === true){
                                     next();

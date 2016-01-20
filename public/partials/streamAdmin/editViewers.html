@@ -1,0 +1,83 @@
+  <div class="modal-header">
+    <div class="modal-title"><h3>Editare vieweri</h3></div>
+  </div>
+  <div class="modal-body">
+    <div class="container-fluid noPadding">
+      <tabset>
+        <tab heading="Unregistered Users">
+          <div class="col-md-12 col-xs-12 noPadding marginTop20">
+            <alert ng-if="statusAlert.text" type="{{statusAlert.type}}" close="statusAlert.text=null">{{statusAlert.text}}</alert>
+          </div>
+          <!--<div class="col-md-12 form-group-sm col-xs-12 paddingBottom20">-->
+          <form name="viewerForm" novalidate autocomplete="off">
+            <div class="col-md-12 form-group-sm col-xs-12 noPadding ">
+              <div class="col-md-12 noPadding">
+                <h4>Unregistered Viewers</h4>
+              </div>
+            </div>
+            <div class="col-md-12 form-group-sm col-xs-12 noPadding" ng-class="{'has-error': viewerForm.nume.$error.required && viewerForm.nume.$touched}">
+              <label>Nume:</label>
+              <input type="text" class="form-control" name="nume" id="nume" ng-model="viewer.name" ng-required="true">
+              <p class="" ng-show="viewerForm.nume.$error.required && viewerForm.nume.$touched">Numele este obligatoriu!</p>
+            </div>
+            <div class="col-md-12 form-group-sm col-xs-12 noPadding" ng-class="{'has-error': viewerForm.email.$error.required && viewerForm.email.$touched}">
+              <label>Email:</label>
+              <input type="text" class="form-control" name="email" id="email" ng-model="viewer.username" ng-required="true">
+              <p class="" ng-show="viewerForm.email.$error.required && viewerForm.email.$touched">Email-ul este obligatoriu!</p>
+            </div>
+            <div class="col-md-12 noPadding marginTop20">
+              <a class="btn btn-default pull-right" type="submit" ng-click="addViewer(viewerForm.$valid,this)">Adauga viewer</a>
+            </div>
+            <div class="col-md-12 noPadding">
+              <label>Viewers</label>
+              <div class="col-md-12 form-group" ng-repeat="key in editedViewers.unregistered track by $index">
+                <div class="col-md-11">{{($index + 1) + '. ' + key.name + ' (' + key.username + ') '}}</div>
+                <div class="col-md-1"><a class="btn btn-default pull-right" ng-click="removeViewer($index,key)"><i class="glyphicon glyphicon-remove-sign"></i></a></div>
+              </div>
+            </div>
+          </form>
+          <!--</div>-->
+        </tab>
+        <tab heading="Registered Users" select="loadUsers()">
+          <div class="col-md-12 form-group noPadding">
+            <div class="col-md-12 noPadding">
+              <h4>Registered Viewers</h4>
+            </div>
+            <div class="form-group-sm">
+              <label>Group Name:</label>
+              <angular-select-autocomplete ng-model="selectedGroup.currentGroup" ng-options="groups" id-attr="_id" title-attr="display_name" ng-required="false" ng-disabled="false"></angular-select-autocomplete>
+            </div>
+          </div>
+          <div class="col-md-12 form-group noPadding">
+            <div class="form-group-sm">
+              <a class="btn btn-primary pull-left rightMargin" ng-click="selectAll(true)">Select All</a>
+              <a class="btn btn-warning pull-left" ng-click="selectAll(false)">Deselect All</a>
+            </div>
+          </div>
+          <div class="col-md-12 noPadding tableOverflow">
+            <table ng-table="tableParams" show-filter="true" class="table table-bordered" header="'ng-table/headers/checkbox.html'">
+              <tr ng-repeat="viewer in $data track by $index">
+                <td width="30">
+                  <input type="checkbox" ng-model="checkboxes.items[viewer.username]" ng-click="checkValue(viewer.username,checkboxes.items[viewer.username])" />
+                </td>
+                <td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
+                  {{viewer.name}}</td>
+                <td title="'Email'" filter="{ username: 'text'}" sortable="'username'">
+                  {{viewer.username}}</td>
+                <td title="'Profession'" filter="{ 'profession.display_name': 'text'}" sortable="'profession.display_name'">
+                  {{viewer.profession.display_name}}</td>
+                <td title="'Groups'">
+                  <li ng-repeat="group in viewer.groupsID">
+                    {{group.display_name}}
+                  </li></td>
+              </tr>
+            </table>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="btn btn-default pull-left" ng-click="$close()">Inapoi</a>
+    <a class="btn btn-default pull-right" ng-click="saveData()">Salveaza</a>
+  </div>

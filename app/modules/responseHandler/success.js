@@ -13,7 +13,8 @@ var successCodes = {
     12: "Datele au fost modificate!",
     13: "Parola a fost schimbata",
     14: "Cautarea nu a returnat nici un rezultat!",
-    15: "Successfully unsubscribed from push notifications"
+    15: "Successfully unsubscribed from push notifications",
+    16: "Nu exista modificari"
 };
 
 module.exports = function(logger){

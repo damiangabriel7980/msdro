@@ -1,24 +1,33 @@
-var cloudStreamAdminApp = angular.module('cloudStreamAdminApp',
+var streamAdminApp = angular.module('streamAdminApp',
     [
         'ui.router',
-        'cloudStreamAdminControllers',
-        'cloudStreamAdminServices'
+        'controllers',
+        'services',
+        'ngCookies',
+        'ngResource',
+        'ngSanitize',
+        'ui.bootstrap',
+        'ngTable',
+        'ui.bootstrap.datetimepicker',
+        'ngFileUpload',
+        'angularSelectAutocomplete',
+        'therapeuticSelect'
     ]);
 
-cloudStreamAdminApp.config(['$locationProvider', function($location) {
+streamAdminApp.config(['$locationProvider', function($location) {
     $location.hashPrefix('!');
 }]);
 
-cloudStreamAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/transmisiiLive");
+streamAdminApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/liveConferences");
     $stateProvider
-        .state('transmisiiLive',{
-            url: '/transmisiiLive',
-            templateUrl: 'partials/streamAdmin/elearning/transmisiiLive.html',
-            controller: 'LiveTransmission'
+        .state('liveConferences',{
+            url: '/liveConferences',
+            templateUrl: 'partials/streamAdmin/adminConference.html',
+            controller: 'AdminConferenceCtrl'
         })
 }]);
-cloudStreamAdminApp.run(
+streamAdminApp.run(
     [            '$rootScope', '$state', '$stateParams', '$modal',
         function ($rootScope,   $state,   $stateParams, $modal) {
 
