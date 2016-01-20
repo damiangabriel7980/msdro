@@ -20,11 +20,12 @@ module.exports = function (app, logger, router) {
     next();
   });
 
-  var getMyPrescriptionInfo = function (res) {
+  var getMyPrescriptionInfo = function (res, date) {
     myPrescription.find({}).select('generalDescription privacyPolicyUrl termsOfUseUrl telefon').exec(function (err, info) {
       if (err) {
         handleError(res, err, 500);
       } else {
+        res.setHeader('last-modified', date);
         res.status(200).send(info);
       }
     })
@@ -35,11 +36,13 @@ module.exports = function (app, logger, router) {
   router.route('/config')
     .get(function (req, res) {
       if (!req.headers['last-modified']) {
-        getMyPrescriptionInfo(res);
+        ModelInfos.getLastUpdate('myPrescription').then(function(resp){
+          getMyPrescriptionInfo(res, new Date(resp).getTime());
+        });
       } else {
         ModelInfos.getLastUpdate('myPrescription').then(function (resp) {
           if (new Date(resp).getTime() > req.headers['last-modified']) {
-            getMyPrescriptionInfo(res);
+            getMyPrescriptionInfo(res, new Date(resp).getTime());
           } else {
             handleSuccess(res, 304, 16)
           }
@@ -104,7 +107,6 @@ module.exports = function (app, logger, router) {
           }
         ]).exec(function (err, drug) {
           if (err) {
-            console.log(err);
             return handleError(res, err, 500);
           } else if (drug.length == 0) {
             res.status(404).send();
