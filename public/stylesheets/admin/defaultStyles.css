@@ -395,6 +395,9 @@ a {
 .textAlignCenter {
   text-align: center;
 }
+.myPrescription .marginLeft50 {
+  margin-left: 50px;
+}
 .myPrescription button {
   float: left;
   clear: left;
@@ -427,7 +430,6 @@ a {
   float: left;
 }
 .myPrescription .myPrescriptionPhone input {
-  margin: 10px;
   width: 40% !important;
   float: left;
 }
