@@ -10,6 +10,11 @@ controllers
 
     $scope.idToEdit = idToEdit;
 
+    $scope.product = null;
+    $scope.selectAreas = null;
+    $scope.selectedGroups = null;
+    $scope.groups = null;
+
     var messageTypes = {
       danger: "danger",
       success: "success"
