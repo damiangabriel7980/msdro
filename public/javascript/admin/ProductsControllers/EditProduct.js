@@ -23,6 +23,7 @@ controllers
 
 
     ProductService.products.query( { id: idToEdit } ).$promise.then(function(result){
+      console.log( result );
       $scope.product = Success.getObject(result);
       $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
       $scope.selectedGroups = Success.getObject(result)['groupsID'];
