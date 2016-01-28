@@ -2,8 +2,8 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 controllers
-  .controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','$modal','ActionModal',
-  function($scope, ProductService, idToEdit, $modalInstance, $state, therapeuticAreaService, AmazonService, $rootScope, GroupsService, Success, Error, $modal, ActionModal){
+  .controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','$modal','ActionModal', '$timeout',
+  function($scope, ProductService, idToEdit, $modalInstance, $state, therapeuticAreaService, AmazonService, $rootScope, GroupsService, Success, Error, $modal, ActionModal, $timeout){
     $scope.uploadAlert = { newAlert: false, type: "", message: "" };
 
     $scope.uploadAlertRPC = { newAlert: false, type: "", message: "" };
@@ -23,10 +23,12 @@ controllers
 
 
     ProductService.products.query( { id: idToEdit } ).$promise.then(function(result){
-      console.log( result );
       $scope.product = Success.getObject(result);
       $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
       $scope.selectedGroups = Success.getObject(result)['groupsID'];
+      if (!$scope.$$phase) {
+        $scope.$apply();
+      }
     }).catch(function(err){
       console.log(Error.getMessage(err));
     });
