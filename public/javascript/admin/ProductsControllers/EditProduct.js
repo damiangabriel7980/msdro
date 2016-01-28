@@ -10,9 +10,9 @@ controllers
 
     $scope.idToEdit = idToEdit;
 
-    $scope.product = null;
-    $scope.selectAreas = null;
-    $scope.selectedGroups = null;
+    $scope.product = {};
+    $scope.selectAreas = [];
+    $scope.selectedGroups = [];
     $scope.groups = null;
 
     var messageTypes = {
@@ -26,9 +26,7 @@ controllers
       $scope.product = Success.getObject(result);
       $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
       $scope.selectedGroups = Success.getObject(result)['groupsID'];
-      if (!$scope.$$phase) {
-        $scope.$apply();
-      }
+      $scope.$applyAsync();
     }).catch(function(err){
       console.log(Error.getMessage(err));
     });
