@@ -2,11 +2,6 @@
  * Created by user on 02.10.2015.
  */
 controllers.controller('AppUpdateEdit',['$scope','$modalInstance','idToEdit','ApplicationService','Success','$state',function($scope,$modalInstance , idToEdit ,ApplicationService,Success,$state){
-    $scope.minDate = new Date();
-
-
-
-    $scope.showErrorMessage = false;
     $scope.toManyApps = false ;
 
    var initialize= function(){
