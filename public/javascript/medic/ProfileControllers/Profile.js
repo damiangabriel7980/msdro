@@ -173,7 +173,7 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
                 resetProfileAlert(Error.getMessage(err));
             });
         }else{
-            resetProfileAlert("Exista campuri goale/ce contin caractere invalide! Verificati formularul inca o data!");
+            resetProfileAlert("Exista campuri invalide. Va rugam sa verificati formularul inca o data.");
         }
     };
 
