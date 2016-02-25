@@ -14,6 +14,9 @@
             <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
                 {{device.name}}
             </td>
+            <td data-title="'Email Associated'" filter="{ 'email': 'text' }" sortable="'email'">
+                {{device.email}}
+            </td>
             <td data-title="'Actiuni'">
                 <div class="btn-group">
                     <div class="btn btn-danger" ng-click="removeDevice(device._id)"><i class="glyphicon glyphicon-trash"></i></div>

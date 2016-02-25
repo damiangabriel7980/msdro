@@ -2603,7 +2603,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     var addDeviceDPOC = function (name, email) {
         var deferred = Q.defer();
         if(typeof name !== "string" || typeof email !== "string"){
-            deferred.reject("Numele si email-ul sunt obligatorii");
+            deferred.reject({errorCode: 52});
         }else{
             var device = new DPOC_Devices({
                 name: name,
@@ -2630,13 +2630,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                     codeOK = false;
                                     callback();
                                 }else{
-                                    callback("Un device cu acelasi nume sau email exista deja");
+                                    callback({errorCode: 48});
                                 }
                             }else if(err.name == "ValidationError"){
-                                callback("Toate campurile sunt obligatorii");
+                                callback({errorCode: 49});
                             }else{
                                 logger.error(err);
-                                callback("Eroare la creare");
+                                callback({errorCode: 2});
                             }
                         }else{
                             callback();
@@ -2671,7 +2671,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                 deferred.resolve();
                             },
                             function (err) {
-                                deferred.reject("Eroare la trimitere email");
+                                deferred.reject({errorCode: 50});
                             }
                         );
                     }
@@ -2692,7 +2692,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                DPOC_Devices.find({}, {name: 1}, function (err, devices) {
+                DPOC_Devices.find({}, {name: 1, email: 1}, function (err, devices) {
                     if(err){
                         handleError(res, err);
                     }else{
@@ -2708,7 +2708,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleSuccess(res, true, 81);
                 },
                 function (err) {
-                    handleError(res, err);
+                    handleError(res, err, 500, err.errorCode);
                 }
             );
         })
