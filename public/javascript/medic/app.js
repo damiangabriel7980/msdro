@@ -506,11 +506,6 @@ app.run(
             };
 
             //state events
-            $rootScope.$on('$stateChangeSuccess',
-                function(){
-                    window.scrollTo(0,0);
-                });
-
             $rootScope.$on('$stateChangeStart',
                 function(event, toState, toParams, fromState, fromParams){
                     if($modalStack)
