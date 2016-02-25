@@ -405,8 +405,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['SlideView'])
             }
         })
-        .state('elearning.transmisii',{
-            url: '/transmisii',
+        .state('elearning.conferinte',{
+            url: '/conferinte',
             templateUrl: 'partials/medic/elearning/transmisii.ejs',
             controller: 'LiveTransmission',
             resolve: {
