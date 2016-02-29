@@ -1,29 +1,34 @@
 controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','ngTableParams','$modal', 'Success', 'Error', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,ngTableParams,$modal,Success,Error){
-    IntroService.intros.query().$promise.then(function (data) {
-        $scope.tableParams = new ngTableParams({
-            page: 1,            // show first page
-            count: 10,          // count per page
-            sorting: {
-                description: 'asc'     // initial sorting
-            },
-            filter: {
-                description: ''       // initial filter
-            }
-        }, {
-            total: Success.getObject(data).length, // length of data
-            getData: function($defer, params) {
-
-                var orderedData = $filter('orderBy')(($filter('filter')(Success.getObject(data), params.filter())), params.orderBy());
-                params.total(orderedData.length);
-                if(params.total() < (params.page() -1) * params.count()){
-                    params.page(1);
+    function refreshTable(){
+        IntroService.intros.query().$promise.then(function (data) {
+            $scope.tableParams = new ngTableParams({
+                page: 1,            // show first page
+                count: 10,          // count per page
+                sorting: {
+                    last_updated: 'desc'     // initial sorting
+                },
+                filter: {
+                    description: ''       // initial filter
                 }
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            }
+            }, {
+                total: Success.getObject(data).length, // length of data
+                getData: function($defer, params) {
+
+                    var orderedData = $filter('orderBy')(($filter('filter')(Success.getObject(data), params.filter())), params.orderBy());
+                    params.total(orderedData.length);
+                    if(params.total() < (params.page() -1) * params.count()){
+                        params.page(1);
+                    }
+                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                }
+            });
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
-    });
+    }
+
+    refreshTable();
+
     $scope.viewIntro= function(id){
         $modal.open({
             templateUrl: 'partials/admin/content/IntroDetails.html',
@@ -38,11 +43,10 @@ controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$statePa
         });
     };
     $scope.addIntro= function(){
-        $modal.open({
-            templateUrl: 'partials/admin/content/introAdd.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'IntroAdd'
+        IntroService.intros.create({}).$promise.then(function(resp){
+            refreshTable();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
     $scope.deleteIntro= function(id){

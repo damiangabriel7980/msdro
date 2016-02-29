@@ -5,32 +5,37 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentService','GroupsService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', 'Success', 'Error', function($scope, $rootScope, $state, ContentService, GroupsService, $stateParams,$sce,ngTableParams,$filter,$modal,ActionModal, Success, Error){
-    ContentService.content.query().$promise.then(function(result){
-        var contents = Success.getObject(result);
-        $scope.tableParams = new ngTableParams({
-            page: 1,            // show first page
-            count: 10,          // count per page
-            sorting: {
-               title: 'asc'     // initial sorting
-            },
-            filter: {
-                title: ''       // initial filter
-            }
-        }, {
-            total: contents.length, // length of data
-            getData: function($defer, params) {
 
-                var orderedData = $filter('orderBy')(($filter('filter')(contents, params.filter())), params.orderBy());
-                params.total(orderedData.length);
-                if(params.total() < (params.page() -1) * params.count()){
-                    params.page(1);
+    function refreshTable(){
+        ContentService.content.query().$promise.then(function(result){
+            var contents = Success.getObject(result);
+            $scope.tableParams = new ngTableParams({
+                page: 1,            // show first page
+                count: 10,          // count per page
+                sorting: {
+                    last_updated: 'desc'     // initial sorting
+                },
+                filter: {
+                    title: ''       // initial filter
                 }
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            }
+            }, {
+                total: contents.length, // length of data
+                getData: function($defer, params) {
+
+                    var orderedData = $filter('orderBy')(($filter('filter')(contents, params.filter())), params.orderBy());
+                    params.total(orderedData.length);
+                    if(params.total() < (params.page() -1) * params.count()){
+                        params.page(1);
+                    }
+                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                }
+            });
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
-    });
+    }
+
+    refreshTable();
 
     GroupsService.groups.query().$promise.then(function(resp){
         $scope.grupe = Success.getObject(resp);
@@ -46,13 +51,10 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
     };
 
     $scope.addArticle = function () {
-        $modal.open({
-            templateUrl: 'partials/admin/content/articles/articlesAdd.ejs',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            windowClass: 'fade',
-            controller:"AddArticles"
+        ContentService.content.create({}).$promise.then(function (resp) {
+            refreshTable();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 

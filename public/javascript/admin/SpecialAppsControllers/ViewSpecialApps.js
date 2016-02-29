@@ -1,4 +1,4 @@
-controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'SpecialAppsService', '$modal', 'ActionModal', 'InfoModal', 'Success', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, SpecialAppsService, $modal, ActionModal, InfoModal, Success){
+controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'SpecialAppsService', '$modal', 'ActionModal', 'InfoModal', 'Success', 'Error', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, SpecialAppsService, $modal, ActionModal, InfoModal, Success, Error){
 
     var refreshTable = function () {
         SpecialAppsService.apps.query().$promise.then(function (resp) {
@@ -31,11 +31,10 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
     refreshTable();
 
     $scope.addSpecialApp = function(){
-        $modal.open({
-            templateUrl: 'partials/admin/content/specialApps/modalEditSpecialApp.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'AddSpecialApp'
+        SpecialAppsService.apps.create({}).$promise.then(function () {
+            refreshTable();
+        }).catch(function (err) {
+            console.log(Error.getMessage(err));
         });
     };
 

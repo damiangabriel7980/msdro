@@ -9,7 +9,7 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    title: 'asc'     // initial sorting
+                    last_updated: 'desc'     // initial sorting
                 },
                 filter: {
                     title: ''       // initial filter
@@ -38,11 +38,10 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
     };
 
     $scope.addImage = function(){
-        $modal.open({
-            templateUrl: 'partials/admin/content/carouselMedic/modalAddMedicCarousel.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'AddCarouselMedic'
+        CarouselMedicService.carouselMedic.create({}).$promise.then(function (resp) {
+            $scope.refreshTable();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 

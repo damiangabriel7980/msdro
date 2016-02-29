@@ -2,41 +2,45 @@
  * Created by miricaandrei23 on 26.11.2014.
  */
 controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'therapeuticAreas', 'areasAdminService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', 'Success', 'Error', function($scope,$rootScope, $state, therapeuticAreas, areasAdminService,$stateParams,$sce,ngTableParams,$filter, $modal, ActionModal, Success, Error){
-    areasAdminService.areas.query().$promise.then(function(result){
-        var areas = therapeuticAreas.organiseByParent(Success.getObject(result));
-        $scope.tableParams = new ngTableParams({
-            page: 1,            // show first page
-            count: 10,          // count per page
-            sorting: {
-                name: 'asc'     // initial sorting
-            },
-            filter: {
-                name: ''       // initial filter
-            }
-        }, {
-            total: areas.length, // length of data
-            getData: function($defer, params) {
 
-                var orderedData = $filter('orderBy')(($filter('filter')(areas, params.filter())), params.orderBy());
-                params.total(orderedData.length);
-                if(params.total() < (params.page() -1) * params.count()){
-                    params.page(1);
+    function refreshTable(){
+        areasAdminService.areas.query().$promise.then(function(result){
+            var areas = therapeuticAreas.organiseByParent(Success.getObject(result));
+            $scope.tableParams = new ngTableParams({
+                page: 1,            // show first page
+                count: 10,          // count per page
+                sorting: {
+                    last_updated: 'desc'     // initial sorting
+                },
+                filter: {
+                    name: ''       // initial filter
                 }
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            }
+            }, {
+                total: areas.length, // length of data
+                getData: function($defer, params) {
+
+                    var orderedData = $filter('orderBy')(($filter('filter')(areas, params.filter())), params.orderBy());
+                    params.total(orderedData.length);
+                    if(params.total() < (params.page() -1) * params.count()){
+                        params.page(1);
+                    }
+                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                }
+            });
         });
-    });
+    };
+
+    refreshTable();
+
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
 
     $scope.addArea = function () {
-        $modal.open({
-            templateUrl: 'partials/admin/ariiTerapeutice/ariiTerapeuticeEdit.html',
-            backdrop: 'static',
-            keyboard: false,
-            windowClass: 'fade',
-            controller: 'AddTherapeuticAreas'
+        areasAdminService.areas.create({}).$promise.then(function(){
+            refreshTable();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 

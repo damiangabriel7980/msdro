@@ -8,7 +8,7 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
                 count: 10,          // count per page
                 //initalSorting
                 sorting: {
-                    name: 'asc'     // initial sorting
+                    last_updated: 'desc'     // initial sorting
                 },
                 filter: {
                     name: ''       // initial filter

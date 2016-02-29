@@ -8,7 +8,7 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    order_index: 'asc'     // initial sorting
+                    last_updated: 'desc'     // initial sorting
                 },
                 filter: {
                     title: ''       // initial filter

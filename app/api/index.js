@@ -339,7 +339,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1, date_added: 1} ,function(err, cont) {
+                PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1, date_added: 1, last_updated: 1} ,function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }else
@@ -348,26 +348,24 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req,res){
-            var data = req.body.data;
-            //validate author and title
-            var patt = UtilsModule.regexes.authorAndTitle;
-            if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
-                handleError(res,null,400,20);
-            }else{
-                //validate type
-                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    handleError(res,null,400,21);
-                }else{
-                    var content = new PublicContent(data);
-                    content.save(function (err, inserted) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, {}, 2);
-                        }
-                    });
-                }
-            }
+            var content = new PublicContent({
+                title : "Untitled",
+                author : "",
+                description :"",
+                type : 1,
+                'therapeutic-areasID': [],
+                text : "",
+                enable : false,
+                date_added : new Date(),
+                last_updated  : new Date()
+            });
+                content.save(function (err, inserted) {
+                   if(err){
+                        handleError(res,err,500);
+                   }else{
+                        handleSuccess(res, {}, 2);
+                   }
+                });
         })
         .put(function(req,res){
             if(req.body.info){
@@ -449,7 +447,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         })
         .post(function (req, res) {
-            var category = new PublicCategories(req.body);
+            var category = new PublicCategories({
+                last_updated: new Date(),
+                name: 'Untitled',
+                description: ''
+            });
             category.save(function (err, saved) {
                 if(err){
                     if(err.code == 11000 || err.code == 11001){
@@ -676,34 +678,22 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req,res){
-            var data = req.body.data.toAdd;
-            var ext = req.body.data.extension;
-            //validate type
-            if(!(typeof data.type === "number" && data.type>0 && data.type<4)){
-                handleError(res,null,400,21);
-            }else{
                 //check if content_id exists
-                if(typeof data.article_id === "string" && data.article_id.length === 24){
-                    var img = new Carousel(data);
+                    var img = new Carousel({
+                        image_path: '',
+                        indexNumber: 0,
+                        title: 'Untitled',
+                        enable:       false,
+                        last_updated: new Date(),
+                        type: 1
+                    });
                     img.save(function (err, inserted) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            //update image_path
-                            var imagePath = "carousel/medic/image_"+inserted._id+"."+ext;
-                            Carousel.update({_id: inserted._id}, {$set:{image_path: imagePath}}, function (err, wRes) {
-                                if(err){
-                                    handleError(res,err,500);
-                                }else{
-                                    handleSuccess(res, {key: imagePath}, 2);
-                                }
-                            });
+                            handleSuccess(res, {}, 3);
                         }
                     });
-                }else{
-                    handleError(res,null,400,3);
-                }
-            }
         })
         .put(function(req,res){
             if(req.body.info){
@@ -814,7 +804,14 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req, res) {
-            var product = new Products(req.body.product);
+            var product = new Products({
+                groupsID : [],
+                'therapeutic-areasID' : [],
+                last_updated: new Date(),
+                enable: true,
+                description: '',
+                name: 'Untitled'
+            });
             product.save(function(err, saved) {
                 if (err)
                     handleError(res,err,500);
@@ -915,7 +912,16 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req, res) {
-            var content = new Content(req.body.article);
+            var content = new Content({
+                title: 'Untitled',
+                author: '',
+                type: 1,
+                groupsID: [],
+                enabled: false,
+                text: '',
+                created: new Date(),
+                last_updated: new Date()
+            });
             content.save(function(err,saved) {
                 if (err){
                     handleError(res,err,500);
@@ -1020,7 +1026,26 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             })
         })
         .post(function (req, res) {
-            var toCreate = new specialProduct(req.body.toCreate);
+            var toCreate = new specialProduct({
+                product_name: 'Untitled',
+                groups: [],
+                header_title: 'Untitled',
+                job_id: '',
+                prescription: '',
+                safety_information: '',
+                logo_path: '',
+                header_image: '',
+                general_description: '',
+                site_map_description: '',
+                speakers: [],
+                enabled: true,
+                show_sitemap_prescription: true,
+                show_safety_info_for: {
+                    resources: true,
+                    glossary: true,
+                    site_map: true
+                }
+            });
             toCreate.save(function (err, saved) {
                 if(err){
                     handleError(res,err,500);
@@ -1347,7 +1372,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function (req, res) {
-            var toSave = new specialApps(req.body);
+            var toSave = new specialApps({
+                name: 'Untitled',
+                url: '',
+                groups: []
+            });
             toSave.save(function (err, saved) {
                 if(err){
                     handleError(res,err,500);
@@ -1789,7 +1818,16 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function (req, res) {
-            var toCreate = new Speakers(req.body);
+            var toCreate = new Speakers({
+                first_name: 'Untitled',
+                last_name: 'Untitled',
+                profession: '',
+                country: '',
+                last_updated: new Date(),
+                workplace: '',
+                short_description: '',
+                image_path: ''
+            });
             toCreate.save(function (err, saved) {
                 if(err){
                     handleError(res, err);
@@ -2113,7 +2151,20 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function (req, res) {
-            var toCreate = new Multimedia(req.body.newMultimedia);
+            var toCreate = new Multimedia({
+                author : 'Untitled',
+                description : '',
+                enable : false,
+                file_path : '',
+                last_updated : new Date(),
+                points : 0,
+                run_time: 0,
+                groupsID: [],
+                'therapeutic-areasID': [],
+                thumbnail_path : '',
+                title : 'Untitled',
+                type : 1
+            });
             toCreate.save(function (err, saved) {
                 if(err){
                     handleError(res,err,500);
@@ -2226,9 +2277,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req, res) {
-            var therapeutic = new Therapeutic_Area(req.body);
-            therapeutic.enabled = true;
-            therapeutic.last_updated = Date.now();
+            var therapeutic = new Therapeutic_Area({
+                is_public: false,
+                last_updated: new Date(),
+                name: 'Untitled',
+                enabled:      false,
+                "therapeutic-areasID": []
+            });
             therapeutic.save(function(err, saved) {
                 if(err){
                     handleError(res,err,500);
@@ -3224,7 +3279,12 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req,res){
-            var intro = new Presentations(req.body.intro);
+            var intro = new Presentations({
+                groupsID: [],
+                enabled: false,
+                description: 'Untitled',
+                article_content: ''
+            });
             intro.save(function (err, presentation) {
                 if(err){
                     handleError(res,err,500);

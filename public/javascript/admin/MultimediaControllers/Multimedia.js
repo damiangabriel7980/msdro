@@ -2,37 +2,51 @@
  * Created by miricaandrei23 on 26.11.2014.
  */
 controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminService','$stateParams','$sce','ngTableParams','$filter','$modal', 'ActionModal','$q','$state', 'Success', 'Error', function($scope,$rootScope,MultimediaAdminService,$stateParams,$sce,ngTableParams,$filter,$modal,ActionModal,$q,$state,Success,Error){
-    MultimediaAdminService.multimedia.query().$promise.then(function(result){
-        var multimedias = Success.getObject(result);
-        console.log(result);
-        $scope.tableParams = new ngTableParams({
-            page: 1,            // show first page
-            count: 10,          // count per page
-            sorting: {
-                title: 'asc'     // initial sorting
-            },
-            filter: {
-                title: ''       // initial filter
-            }
-        }, {
-            total: multimedias.length, // length of data
-            getData: function($defer, params) {
 
-                var orderedData = $filter('orderBy')(($filter('filter')(multimedias, params.filter())), params.orderBy());
-                params.total(orderedData.length);
-                if(params.total() < (params.page() -1) * params.count()){
-                    params.page(1);
+    function refreshTable(){
+        MultimediaAdminService.multimedia.query().$promise.then(function(result){
+            var multimedias = Success.getObject(result);
+            console.log(result);
+            $scope.tableParams = new ngTableParams({
+                page: 1,            // show first page
+                count: 10,          // count per page
+                sorting: {
+                    last_updated: 'desc'     // initial sorting
+                },
+                filter: {
+                    title: ''       // initial filter
                 }
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            }
+            }, {
+                total: multimedias.length, // length of data
+                getData: function($defer, params) {
+
+                    var orderedData = $filter('orderBy')(($filter('filter')(multimedias, params.filter())), params.orderBy());
+                    params.total(orderedData.length);
+                    if(params.total() < (params.page() -1) * params.count()){
+                        params.page(1);
+                    }
+                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                }
+            });
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
-    });
+    }
+
+    refreshTable();
 
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
+
+    $scope.addMultimedia = function(){
+        MultimediaAdminService.multimedia.create({}).$promise.then(function (resp) {
+            refreshTable();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
+        });
+    };
+
     $scope.editMultimedia = function (id) {
         $modal.open({
             templateUrl: 'partials/admin/elearning/multimedia/multimediaEdit.ejs',

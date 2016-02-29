@@ -1,4 +1,4 @@
-controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', 'Success', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal, Success){
+controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', 'Success', 'Error', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal, Success, Error){
 
     $scope.refreshTable = function () {
         SpecialProductsService.products.query().$promise.then(function (resp) {
@@ -35,19 +35,10 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
     $scope.refreshTable();
 
     $scope.addSpecialProduct = function(){
-        $modal.open({
-            templateUrl: 'partials/admin/content/specialProducts/baseModalView.html',
-            size: 'lg',
-            windowClass: 'fade stretch',
-            controller: 'ProductPageModal',
-            resolve: {
-                intent: function () {
-                    return "specialProductAdd"
-                },
-                sessionData: function () {
-                    return "test";
-                }
-            }
+        SpecialProductsService.products.create({}).$promise.then(function (resp) {
+            $scope.refreshTable();
+        }).catch(function (err) {
+            console.log(Error.getMessage(err));
         });
     };
 

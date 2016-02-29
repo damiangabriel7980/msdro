@@ -8,7 +8,7 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    title: 'asc'     // initial sorting
+                    last_updated: 'desc'     // initial sorting
                 },
                 filter: {
                     title: ''       // initial filter
@@ -43,11 +43,10 @@ controllers.controller('PublicContent', ['$scope', '$rootScope', '$state', '$fil
     };
 
     $scope.addContent = function(){
-        $modal.open({
-            templateUrl: 'partials/admin/content/publicContent/modalAddPublicContent.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'AddPublicContent'
+        publicContentService.publicContent.create({}).$promise.then(function (resp) {
+            $scope.refreshTable();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 

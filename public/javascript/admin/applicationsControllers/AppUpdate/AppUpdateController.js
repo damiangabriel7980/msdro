@@ -12,7 +12,7 @@ controllers.controller('AppUpdateController',['$scope','ApplicationService','Suc
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    date_created: 'desc'     // initial sorting
+                    upgradeDate: 'desc'     // initial sorting
                 }
             };
             $scope.tableParams = new ngTableParams(params, {

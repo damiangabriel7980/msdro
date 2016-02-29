@@ -6,14 +6,14 @@ controllers.controller('ContractManagement', ['$scope', '$state', 'ContractManag
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    name: 'asc'     // initial sorting
+                    last_modified: 'desc'     // initial sorting
                 },
                 filter: {
                     name: ''       // initial filter
                 }
             };
             if(sortByDate){
-                params.sorting = {last_updated: 'desc'};
+                params.sorting = {last_modified: 'desc'};
             }
             $scope.tableParams = new ngTableParams(params, {
                 total: events.length, // length of data

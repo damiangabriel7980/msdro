@@ -8,7 +8,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    name: 'asc'     // initial sorting
+                    last_updated: 'desc'     // initial sorting
                 },
                 filter: {
                     name: ''       // initial filter
@@ -33,11 +33,10 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
     $scope.refreshTable();
 
     $scope.addCategory = function(){
-        $modal.open({
-            templateUrl: 'partials/admin/content/publicContent/categories/modalAddCategory.html',
-            windowClass: 'fade',
-            size: 'lg',
-            controller: 'AddPublicContentCategory'
+        publicContentService.categories.create({}).$promise.then(function (resp) {
+            $scope.refreshTable();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 
