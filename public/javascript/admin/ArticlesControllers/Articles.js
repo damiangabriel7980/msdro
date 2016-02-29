@@ -76,7 +76,7 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
             templateUrl: 'partials/admin/content/articles/articlesUpdate.ejs',
             backdrop: 'static',
             keyboard: false,
-            size: 'lg',
+            size: 'xl',
             windowClass: 'fade',
             controller:"EditArticles",
             resolve: {
