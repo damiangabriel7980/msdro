@@ -22,6 +22,9 @@
         <td data-title="'Creat din'" sortable="'registeredFrom'">
             {{user.registeredFrom}}
         </td>
+        <td data-title="'Status'" sortable="enabled">
+            {{user.enabled? "Activ": "Inactiv"}}
+        </td>
         <td data-title="'Actiuni'">
             <div class="btn-group">
                 <div class="btn btn-warning" ng-click="viewUser(user._id)"><i class="glyphicon glyphicon-cog"></i></div>
