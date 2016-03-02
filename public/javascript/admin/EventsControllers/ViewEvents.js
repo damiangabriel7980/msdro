@@ -1,4 +1,4 @@
-controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', 'AmazonService', 'Success', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal, AmazonService, Success){
+controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', 'AmazonService', 'Success', '$state', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal, AmazonService, Success, $state){
 
     var refreshEvents = function (sortByDate) {
         EventsService.events.query().$promise.then(function(resp){
@@ -55,6 +55,10 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
                 yes: "Da"
             }
         );
+    };
+
+    $scope.editEvent = function(id){
+        $state.go('content.events.editEvent', {idEvent: id});
     };
 
     $scope.deleteEvent = function (event) {

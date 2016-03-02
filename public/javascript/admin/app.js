@@ -20,7 +20,8 @@ var app = angular.module('app',
         'vAccordion',
         'ui.tree',
         'ui.select',
-        'ngSanitize'
+        'ngSanitize',
+        'actionButtons'
     ]);
 
 app.config(['$locationProvider', function($location) {

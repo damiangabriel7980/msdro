@@ -15,11 +15,8 @@
                 {{linkTypeDisplay(image)}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-default" ng-click="editImage(image._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                    <div class="btn btn-danger" ng-click="deleteImage(image._id)"><i class="glyphicon glyphicon-trash"></i></div>
-                    <div class="btn " ng-class="{'btn-primary':!image.enable,'btn-warning':image.enable}" ng-click="toggleImageEnable(image)"><i class="glyphicon" ng-class="{'glyphicon-lock':image.enable,'glyphicon-share':!image.enable}"></i></div>
-                </div>
+                <action-buttons item-enable-property="image.enable" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
+                                toggle-item="toggleImageEnable(image)" update-item="editImage(image._id)" delete-item="deleteImage(image._id)"></action-buttons>
             </td>
         </tr>
     </table>

@@ -15,11 +15,8 @@
             </td>
             <td data-title="'Ultima modificare'" sortable="'last_updated'">{{template.last_modified.substr(0,10)}}</td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-default" ng-click="editTemplate(template._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                    <div class="btn btn-danger" ng-click="removeTemplate(template._id)"><i class="glyphicon glyphicon-trash"></i></div>
-                    <div class="btn" ng-class="{'btn-primary':template.isEnabled,'btn-danger':!template.isEnabled}" ng-click="toggleTemplate(template)"><i class="glyphicon" ng-class="{'glyphicon-lock':template.isEnabled,'glyphicon-share':!template.isEnabled}"></i></div>
-                </div>
+                <action-buttons item-enable-property="template.isEnabled" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
+                                toggle-item="toggleTemplate(template)" update-item="editTemplate(template._id)" delete-item="removeTemplate(template._id)"></action-buttons>
             </td>
         </tr>
     </table>

@@ -15,14 +15,8 @@
                 {{category.name}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-primary" ng-click="editCategory(category._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                    <button class="btn btn-default" ng-click="disableCategory(category._id,category)" ng-class="{'btn-danger':!category.enabled, 'btn-default':category.enabled}">
-                        <i class="glyphicon glyphicon-lock"></i>
-                    </button>
-                    <div class="btn btn-danger" ng-click="removeCategory(category._id,category.imageUrl)"><i class="glyphicon glyphicon-trash"></i></div>
-
-                </div>
+                <action-buttons item-enable-property="category.enabled" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
+                                toggle-item="disableCategory(category._id,category)" update-item="editCategory(category._id)" delete-item="removeCategory(category._id,category.imageUrl)"></action-buttons>
             </td>
         </tr>
     </table>

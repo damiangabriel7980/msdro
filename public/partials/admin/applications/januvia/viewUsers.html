@@ -27,10 +27,8 @@
                 {{user.city.county.name}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-primary" ng-click="editUser(user._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                    <div class="btn btn-danger" ng-click="removeUser(user._id)"><i class="glyphicon glyphicon-trash"></i></div>
-                </div>
+                <action-buttons show-toggle-button="false" show-edit-button="true" show-delete-button="true"
+                                update-item="editUser(user._id)" delete-item="removeUser(user._id)"></action-buttons>
             </td>
         </tr>
     </table>

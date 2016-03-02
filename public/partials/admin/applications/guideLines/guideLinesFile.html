@@ -24,14 +24,8 @@
                 {{file.guidelineCategoryName}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-primary" ng-click="editFile(file._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                   <button class="btn btn-default" ng-click="disableFile(file._id,file)" ng-class="{'btn-danger':!file.enabled, 'btn-default':file.enabled}">
-                       <i class="glyphicon glyphicon-lock"></i>
-                   </button>
-                    <div class="btn btn-danger" ng-click="removeFile(file)"><i class="glyphicon glyphicon-trash"></i></div>
-
-                </div>
+                <action-buttons item-enable-property="file.enabled" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
+                                toggle-item="disableFile(file._id,file)" update-item="editFile(file._id)" delete-item="removeFile(file)"></action-buttons>
             </td>
         </tr>
     </table>

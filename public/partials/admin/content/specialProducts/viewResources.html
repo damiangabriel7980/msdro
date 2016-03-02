@@ -17,10 +17,8 @@
                         {{r.description}}
                     </td>
                     <td data-title="'Actiuni'">
-                        <div class="btn-group">
-                            <div class="btn btn-default" ng-click="editResource(r)"><i class="glyphicon glyphicon-cog"></i></div>
-                            <div class="btn btn-danger" ng-click="deleteResource(r)"><i class="glyphicon glyphicon-trash"></i></div>
-                        </div>
+                        <action-buttons show-toggle-button="false" show-edit-button="true" show-delete-button="true"
+                                        update-item="editResource(r)" delete-item="deleteResource(r)"></action-buttons>
                     </td>
                 </tr>
             </table>

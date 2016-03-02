@@ -19,9 +19,8 @@
                         {{r.first_name}}
                     </td>
                     <td data-title="'Actiuni'">
-                        <div class="btn-group">
-                            <div class="btn btn-danger" ng-click="removeSpeaker(r)"><i class="glyphicon glyphicon-trash"></i></div>
-                        </div>
+                        <action-buttons show-toggle-button="false" show-edit-button="false" show-delete-button="true"
+                                        delete-item="removeSpeaker(r)"></action-buttons>
                     </td>
                 </tr>
             </table>

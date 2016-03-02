@@ -9,11 +9,8 @@
                 {{intro.description}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-warning" ng-click="viewIntro(intro._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                    <div class="btn btn-danger" ng-click="deleteIntro(intro._id)"><i class="glyphicon glyphicon-remove"></i></div>
-                    <div ng-class="{'btn btn-danger': intro.enabled==false,'btn btn-success': intro.enabled==true}" ng-click="toggleIntro(intro._id,intro.enabled)"><i ng-class="{'glyphicon glyphicon-remove': intro.enabled==false,'glyphicon glyphicon-ok': intro.enabled==true}"></i></div>
-                </div>
+                <action-buttons item-enable-property="intro.enabled" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
+                                toggle-item="toggleIntro(intro._id,intro.enabled)" update-item="viewIntro(intro._id)" delete-item="deleteIntro(intro._id)"></action-buttons>
             </td>
         </tr>
     </table>

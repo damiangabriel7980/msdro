@@ -13,10 +13,8 @@
             {{template.type}}
         </td>
         <td data-title="'Actiuni'">
-            <div class="btn-group">
-                <div class="btn btn-primary" ng-click="editTemplate(template._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                <div class="btn btn-danger" ng-click="removeTemplate(template._id)"><i class="glyphicon glyphicon-trash"></i></div>
-            </div>
+            <action-buttons show-toggle-button="false" show-edit-button="true" show-delete-button="true"
+                            update-item="editTemplate(template._id)" delete-item="removeTemplate(template._id)"></action-buttons>
         </td>
     </tr>
 </table>

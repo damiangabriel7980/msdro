@@ -14,9 +14,8 @@
                 {{param.value}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-default" ng-click="editParam(param)"><i class="glyphicon glyphicon-cog"></i></div>
-                </div>
+                <action-buttons show-toggle-button="false" show-edit-button="true" show-delete-button="false"
+                                update-item="editParam(param)"></action-buttons>
             </td>
         </tr>
     </table>
