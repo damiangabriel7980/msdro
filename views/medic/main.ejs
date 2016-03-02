@@ -167,6 +167,7 @@
                         <li ng-click="closeNavbar(); $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><a><i class="glyphicon glyphicon-film"></i>&nbspMultimedia</a></li>
                             <li ng-click="closeNavbar(); $state.go('elearning.courses')"><a><i class="glyphicon glyphicon-book"></i>&nbspCursuri</a></li>
                             <li ui-sref="elearning.transmisii" href="#/transmisii" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-facetime-video"></i>&nbspTransmisii live</a></li>
+                            <li ui-sref="elearning.conferences" href="#/conferences" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-facetime-video"></i>&nbspConferinte</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures') || $state.includes('groupSpecialProduct')}" ng-if="specialApps || groupProduct">

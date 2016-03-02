@@ -144,6 +144,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: "Conferences",
+                files: [
+                    'javascript/medic/ConferencesControllers/Conferences.js'
+                ]
+            },
+            {
                 name: 'PDFModal',
                 files: [
                     'javascript/medic/ModalControllers/PDFModal.js'
@@ -411,6 +417,14 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'LiveTransmission',
             resolve: {
                 loadDeps: loadStateDeps(['LiveTransmission'])
+            }
+        })
+        .state('elearning.conferences',{
+            url: '/conferences',
+            templateUrl: 'partials/medic/elearning/conferences.html',
+            controller: 'Conferences',
+            resolve: {
+                loadDeps: loadStateDeps(['Conferences'])
             }
         })
         .state('groupFeatures', {
