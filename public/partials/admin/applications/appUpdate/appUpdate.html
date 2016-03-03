@@ -2,11 +2,13 @@
 
 </div>
 <div class="col-md-12">
-    <div class="titleAndButton">
-        <div><h3>Aplicatii:</h3></div>
-        <div>
+    <div class="titleAndButton col-xs-12 noPadding">
+        <div class="col-xs-2 noPadding">
+            <h3>Aplicatii:</h3>
+        </div>
+        <div class="col-xs-10 noPadding">
             <div class="btn btn-primary" ng-click="addApp()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
-            <!--<button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din CSV</button>-->
+            <button class="btn btn-primary pull-right" ng-csv="csv.rows" csv-header="getHeader()" filename="{{csv.filename}}">Export Apps</button>
         </div>
     </div>
 

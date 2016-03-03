@@ -1,4 +1,30 @@
-controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', '$q', function ($scope, $state, JanuviaService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, $q) {
+controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', '$q', 'Utils', function ($scope, $state, JanuviaService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, $q, Utils) {
+    $scope.csv = {
+        filename: "Januvia_Users_" + Utils.customDateFormat(new Date(), {separator:'-'}) + '.csv',
+        rows: []
+    };
+
+    $scope.getHeader = function () {
+        return ['Name', 'Data crearii','Tip_User', 'Oras', 'Judet', 'Loc_munca', 'Adresa_loc_munca']
+    };
+
+    function formatArrayCSV(users){
+        var ret = [];
+        angular.forEach(users, function(value, key){
+            var objToPush = {
+                "name" : value.name,
+                "date_created": Utils.customDateFormat(value.date_created, {separator:'-'}),
+                "type": value.type ? value.type : ' ',
+                "Oras": value.city ? value.city.name : ' ',
+                "County": value.city ? value.city.county.name: ' ',
+                "workplace" : value.workplace ? value.workplace : ' ',
+                "address": value.workplaceAddress ? value.workplaceAddress : ' '
+            };
+            ret.push(objToPush);
+        });
+        return ret;
+    }
+
     var refreshUsers = function () {
         JanuviaService.users.query().$promise.then(function(resp){
             var users = Success.getObject(resp);
@@ -9,6 +35,7 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
                     date_created: 'desc'     // initial sorting
                 }
             };
+            $scope.csv.rows = formatArrayCSV(users);
             $scope.tableParams = new ngTableParams(params, {
                 total: users.length, // length of data
                 getData: function($defer, params) {

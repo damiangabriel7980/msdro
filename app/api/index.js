@@ -2735,7 +2735,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                DPOC_Devices.find({}, {name: 1, email: 1}, function (err, devices) {
+                DPOC_Devices.find({}, {name: 1, email: 1, code: 1}, function (err, devices) {
                     if(err){
                         handleError(res, err);
                     }else{
@@ -3040,7 +3040,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                User.find({state:"ACCEPTED"}).select('+enabled +phone').populate('profession').exec(function (err, users) {
+                User.find({state:"ACCEPTED"}).select('+enabled +phone').populate('profession therapeutic-areasID groupsID conferencesID').exec(function (err, users) {
                     if(err){
                         handleError(res,err,500);
                     }else{

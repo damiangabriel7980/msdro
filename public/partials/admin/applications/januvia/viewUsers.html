@@ -2,11 +2,14 @@
     <div class="col-md-9"><h3>Januvia</h3></div>
 </div>
 <div class="col-md-12">
-    <div class="titleAndButton">
-        <div><h3>Utilizatori:</h3></div>
-        <div>
-            <div class="btn btn-primary" ng-click="addUser()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
+    <div class="titleAndButton col-xs-12 noPadding">
+        <div class="col-xs-2 noPadding">
+            <h3>Utilizatori:</h3>
+        </div>
+        <div class="col-xs-10 noPadding">
+            <button class="btn btn-primary" ng-click="addUser()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</button>
             <button class="btn btn-default" type="file" accept=".xlsx" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din Excel</button>
+            <button class="btn btn-primary pull-right" ng-csv="csv.rows" csv-header="getHeader()" filename="{{csv.filename}}">Export Januvia Users</button>
         </div>
     </div>
     <bulk-operations model="januvia_users" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>

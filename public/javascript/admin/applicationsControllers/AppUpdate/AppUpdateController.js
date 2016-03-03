@@ -1,9 +1,30 @@
 /**
  * Created by user on 02.10.2015.
  */
-controllers.controller('AppUpdateController',['$scope','ApplicationService','Success','ActionModal','$state','ngTableParams','$filter','$modal',function($scope,ApplicationService,Success,ActionModal,$state,ngTableParams,$filter,$modal){
+controllers.controller('AppUpdateController',['$scope','ApplicationService','Success','ActionModal','$state','ngTableParams','$filter','$modal', 'Utils', function($scope,ApplicationService,Success,ActionModal,$state,ngTableParams,$filter,$modal, Utils){
 
+    $scope.csv = {
+        filename: "MSD_Apps_" + Utils.customDateFormat(new Date(), {separator:'-'}) + '.csv',
+        rows: []
+    };
 
+    $scope.getHeader = function () {
+        return ['Name', 'Data actualizarii','URL', 'Versiune']
+    };
+
+    function formatArrayCSV(apps){
+        var ret = [];
+        angular.forEach(apps, function(value, key){
+            var objToPush = {
+                "name" : value.name,
+                "date_created": Utils.customDateFormat(value.upgradeDate, {separator:'-'}),
+                "url": value.downloadUrl ? value.downloadUrl : ' ',
+                "version": value.version ? value.version : '0'
+            };
+            ret.push(objToPush);
+        });
+        return ret;
+    };
 
     var refreshApps = function (){
         ApplicationService.app.query().$promise.then(function(resp){
@@ -15,6 +36,7 @@ controllers.controller('AppUpdateController',['$scope','ApplicationService','Suc
                     upgradeDate: 'desc'     // initial sorting
                 }
             };
+            $scope.csv.rows = formatArrayCSV(apps);
             $scope.tableParams = new ngTableParams(params, {
                 total: apps.length, // length of data
                 getData: function($defer, params) {
