@@ -17,6 +17,7 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(files, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
 
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
@@ -25,6 +26,23 @@ controllers.controller('guideLineFileController',['$scope','GuideLineService','S
 
     };
     refreshFiles();
+
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+      if($scope.selectedItems.has(id)){
+        $scope.selectedItems.delete(id)
+      } else {
+        $scope.selectedItems.add(id);
+      }
+    };
+    $scope.checkValue = function(id){
+      if($scope.selectedItems.has(id)) {
+        return true;
+      } else {
+        return false;
+      }
+    };
 
     var resetS3Alert = function (type, text) {
         $scope.s3Alert = {

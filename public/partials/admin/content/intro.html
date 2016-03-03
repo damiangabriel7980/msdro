@@ -3,8 +3,12 @@
         <h3 class="pull-left" style="margin-top: 0px">Gestionare Intro</h3>
         <div class="btn btn-danger pull-right" ng-click="addIntro()"><i class="glyphicon glyphicon-plus-sign"></i>Adauga prezentare</div>
     </div>
+    <bulk-operations model="presentations" delete-button modify-button field="enabled" items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="intro in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(intro._id)" ng-checked="checkValue(intro._id)"/>
+            </td>
             <td data-title="'Titlu Prezentare'" filter="{ 'description': 'text' }" sortable="'description'">
                 {{intro.description}}
             </td>

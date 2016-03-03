@@ -2,9 +2,13 @@
     <div class="col-md-9"><h3>Gestionare pagini de produse speciale</h3></div>
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addSpecialProduct()">Adauga pagina produs</div></div>
 </div>
+<bulk-operations model="msd-applications" delete-button modify-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <div class="col-md-12">
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="product in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(product._id)" ng-checked="checkValue(product._id)"/>
+            </td>
             <td data-title="'Nume produs'" filter="{ 'product_name': 'text' }" sortable="'product_name'">
                 {{product.product_name}}
             </td>

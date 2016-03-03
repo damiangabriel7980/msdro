@@ -22,20 +22,35 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
                 total: contents.length, // length of data
                 getData: function($defer, params) {
 
-                    var orderedData = $filter('orderBy')(($filter('filter')(contents, params.filter())), params.orderBy());
-                    params.total(orderedData.length);
-                    if(params.total() < (params.page() -1) * params.count()){
-                        params.page(1);
-                    }
-                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                var orderedData = $filter('orderBy')(($filter('filter')(contents, params.filter())), params.orderBy());
+                $scope.resultData = orderedData;
+                params.total(orderedData.length);
+                if(params.total() < (params.page() -1) * params.count()){
+                    params.page(1);
                 }
-            });
-        }).catch(function(err){
-            console.log(Error.getMessage(err));
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
         });
-    }
+    }).catch(function(err){
+        console.log(Error.getMessage(err));
+    });
 
-    refreshTable();
+      $scope.selectedItems = new Set();
+
+      $scope.addToSelectedItems = function(id){
+          if($scope.selectedItems.has(id)){
+              $scope.selectedItems.delete(id)
+          } else {
+              $scope.selectedItems.add(id);
+          }
+      };
+      $scope.checkValue = function(id){
+          if($scope.selectedItems.has(id)) {
+              return true;
+          } else {
+              return false;
+          }
+      };
 
     GroupsService.groups.query().$promise.then(function(resp){
         $scope.grupe = Success.getObject(resp);

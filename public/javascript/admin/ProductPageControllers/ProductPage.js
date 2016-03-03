@@ -18,6 +18,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
                     params.total(orderedData.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
@@ -34,6 +35,22 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
 
     $scope.refreshTable();
 
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
     $scope.addSpecialProduct = function(){
         SpecialProductsService.products.create({}).$promise.then(function (resp) {
             $scope.refreshTable();

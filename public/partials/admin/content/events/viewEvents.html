@@ -4,9 +4,13 @@
         <a ng-click="addEvent()" class="btn btn-info pull-right margintop20px"><i class="glyphicon glyphicon-plus-sign"></i> Adauga eveniment</a>
     </div>
 </div>
+<bulk-operations model="calendar-events" delete-button modify-button field="enable" items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <div class="col-md-12 noPadding">
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="event in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(event._id)" ng-checked="checkValue(event._id)"/>
+            </td>
             <td data-title="'Denumire'" filter="{ 'name': 'text' }" sortable="'name'">{{event.name}}</td>
             <td data-title="'Tip'" sortable="'type'" ><i class="glyphicon glyphicon-calendar">{{event.type}}</i></td>
             <td data-title="'Inceput'" sortable="'start'">{{event.start.substr(0,10)}}</td>

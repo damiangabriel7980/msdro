@@ -2,12 +2,16 @@
     <div class="col-md-9"><h3>Gestionare grupuri utilizatori</h3></div>
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addGroup()">Adauga grupuri utilizatori</div></div>
 </div>
+<bulk-operations model="msd-applications" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <div class="col-md-12">
     <div class="btn btn-default sr-only" ng-click="test()">Test</div>
 </div>
 <div class="col-md-12">
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="group in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(group._id)" ng-checked="checkValue(group._id)"/>
+            </td>
             <td data-title="'Display name'" filter="{ 'display_name': 'text' }" sortable="'display_name'">
                 {{group.display_name}}
             </td>

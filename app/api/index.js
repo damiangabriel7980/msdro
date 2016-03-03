@@ -436,6 +436,47 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    router.route('/admin/bulkOperations')
+      .put(function(req, res){
+        var modelToModify = mongoose.model(req.query.model);
+
+         async.each(req.body.items, function(item, callback){
+           modelToModify.findOneAndUpdate( {_id: item}, {$set:req.body.toSet}, function(err, updated){
+             if (err){
+               callback(err);
+             } else {
+               callback();
+             }
+           })
+         }, function(err, updated){
+           if(err) {
+             handleError(res, err, 500)
+           } else {
+             handleSuccess(res, updated);
+           }
+         })
+      })
+      .post(function(req, res){
+
+          //we are making the delete operation here, because on a DELETE endpoint we cannot send the array via req.body
+        var modelToModify = mongoose.model(req.query.model);
+        async.each(req.body.items,function(item, callback){
+          modelToModify.findOneAndRemove( {_id: item}, function(err, deleted){
+            if(err){
+              callback(err)
+            } else {
+              callback();
+            }
+          })
+        }, function(err, deleted){
+          if(err) {
+            handleError(res, err, 500);
+          } else {
+            handleSuccess(res, deleted);
+          }
+        })
+      });
+
     router.route('/admin/users/publicContent/categories')
         .get(function (req, res) {
             PublicCategories.find(function (err, categories) {

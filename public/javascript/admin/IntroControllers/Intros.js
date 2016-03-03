@@ -1,5 +1,5 @@
 controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','ngTableParams','$modal', 'Success', 'Error', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,ngTableParams,$modal,Success,Error){
-    function refreshTable(){
+    function refreshTable() {
         IntroService.intros.query().$promise.then(function (data) {
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -12,22 +12,23 @@ controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$statePa
                 }
             }, {
                 total: Success.getObject(data).length, // length of data
-                getData: function($defer, params) {
+                getData: function ($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(Success.getObject(data), params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
                     params.total(orderedData.length);
-                    if(params.total() < (params.page() -1) * params.count()){
+                    if (params.total() < (params.page() - 1) * params.count()) {
                         params.page(1);
                     }
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
-        }).catch(function(err){
+        }).catch(function (err) {
             console.log(Error.getMessage(err));
         });
     }
-
     refreshTable();
+
 
     $scope.viewIntro= function(id){
         $modal.open({
@@ -41,6 +42,23 @@ controllers.controller('Intro', ['$scope','$rootScope' ,'IntroService','$statePa
                 }
             }
         });
+    };
+
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
     };
     $scope.addIntro= function(){
         IntroService.intros.create({}).$promise.then(function(resp){

@@ -21,7 +21,8 @@ var app = angular.module('app',
         'ui.tree',
         'ui.select',
         'ngSanitize',
-        'actionButtons'
+        'actionButtons',
+        'bulkOperations'
     ]);
 
 app.config(['$locationProvider', function($location) {
@@ -231,6 +232,20 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/multimedia',
             templateUrl: 'partials/admin/elearning/multimedia/root.html',
             controller: 'Multimedia'
+        })
+        .state('elearning.multimedia.adaugaMultimedia',{
+            parent:'elearning.multimedia',
+            url: '',
+            onEnter: ['$modal', '$state','$stateParams', function($modal, $state,$stateParams) {
+                $modal.open({
+                    templateUrl: 'partials/admin/elearning/multimedia/multimediaAdd.ejs',
+                    backdrop: 'static',
+                    keyboard: false,
+                    size: 'lg',
+                    windowClass: 'fade',
+                    controller:"AddMultimedia"
+                })
+            }]
         })
         .state('ariiTerapeutice',{
             url: '/ariiTerapeutice',

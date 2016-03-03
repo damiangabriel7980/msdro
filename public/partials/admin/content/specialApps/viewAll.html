@@ -2,9 +2,13 @@
     <div class="col-md-9"><h3>Gestionare aplicatii speciale</h3></div>
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addSpecialApp()">Adauga aplicatie speciala</div></div>
 </div>
+<bulk-operations model="groupsApplications" field="isEnabled" delete-button modify-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <div class="col-md-12">
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="app in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(app._id)" ng-checked="checkValue(app._id)"/>
+            </td>
             <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
                 {{app.name}}
             </td>

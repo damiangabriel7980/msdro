@@ -4,9 +4,13 @@
         <a class="btn btn-info pull-right margintop20px" ng-click="add()"><i class="glyphicon glyphicon-plus-sign"></i> Adauga speaker</a>
     </div>
 </div>
+<bulk-operations model="speakers" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <div class="col-md-12 noPadding">
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="speaker in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(speaker._id)" ng-checked="checkValue(speaker._id)"/>
+            </td>
             <td data-title="'Prenume'" filter="{ 'first_name': 'text' }" sortable="'first_name'">{{speaker.first_name}}</td>
             <td data-title="'Nume'" filter="{ 'last_name': 'text' }" sortable="'last_name'">{{speaker.last_name}}</td>
             <td>

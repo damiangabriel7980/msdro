@@ -9,8 +9,12 @@
             <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din CSV</button>
         </div>
     </div>
+    <bulk-operations model="DPOC_Devices" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="device in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(device._id)" ng-checked="checkValue(device._id)"/>
+            </td>
             <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
                 {{device.name}}
             </td>

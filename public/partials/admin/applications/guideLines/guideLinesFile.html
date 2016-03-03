@@ -12,8 +12,12 @@
     <div class="col-md-12 noPadding">
         <alert type="{{s3Alert.type}}" ng-if="s3Alert.show">{{s3Alert.text}}</alert>
     </div>
+    <bulk-operations model="guidelineFile" delete-button modify-button field="enabled" items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="file in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(file._id)" ng-checked="checkValue(file._id)"/>
+            </td>
             <td data-title="' Nume afisat'" filter="{ 'displayName': 'text' }" sortable="'displayName'">
                 {{file.displayName}}
             </td>

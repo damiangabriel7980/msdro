@@ -386,3 +386,8 @@ a {
 .marginLeft10 {
   margin-left: 10px;
 }
+.bulkOperations {
+  float: left;
+  clear: left;
+  width: 100%;
+}

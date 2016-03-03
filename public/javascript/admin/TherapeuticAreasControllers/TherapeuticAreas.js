@@ -21,6 +21,7 @@ controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'th
 
                     var orderedData = $filter('orderBy')(($filter('filter')(areas, params.filter())), params.orderBy());
                     params.total(orderedData.length);
+                    $scope.resultData = orderedData;
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
                     }
@@ -35,6 +36,23 @@ controllers.controller('TherapeuticAreas', ['$scope','$rootScope', '$state', 'th
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
+
+      $scope.selectedItems = new Set();
+
+      $scope.addToSelectedItems = function(id){
+          if($scope.selectedItems.has(id)){
+              $scope.selectedItems.delete(id)
+          } else {
+              $scope.selectedItems.add(id);
+          }
+      };
+      $scope.checkValue = function(id){
+          if($scope.selectedItems.has(id)) {
+              return true;
+          } else {
+              return false;
+          }
+      };
 
     $scope.addArea = function () {
         areasAdminService.areas.create({}).$promise.then(function(){

@@ -21,6 +21,7 @@ controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminSer
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(multimedias, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
                     params.total(orderedData.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
@@ -38,6 +39,23 @@ controllers.controller('Multimedia', ['$scope','$rootScope' ,'MultimediaAdminSer
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
+
+      $scope.selectedItems = new Set();
+
+      $scope.addToSelectedItems = function(id){
+          if($scope.selectedItems.has(id)){
+              $scope.selectedItems.delete(id)
+          } else {
+              $scope.selectedItems.add(id);
+          }
+      };
+      $scope.checkValue = function(id){
+          if($scope.selectedItems.has(id)) {
+              return true;
+          } else {
+              return false;
+          }
+      };
 
     $scope.addMultimedia = function(){
         MultimediaAdminService.multimedia.create({}).$promise.then(function (resp) {

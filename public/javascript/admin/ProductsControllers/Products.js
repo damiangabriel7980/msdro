@@ -21,6 +21,7 @@ controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce',
 
                     var orderedData = $filter('orderBy')(($filter('filter')(products, params.filter())), params.orderBy());
                     params.total(orderedData.length);
+                    $scope.resultData = orderedData;
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
                     }
@@ -51,6 +52,23 @@ controllers.controller('Products', ['$scope', '$state', 'ProductService','$sce',
     }
 
     refreshTable();
+
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     $scope.addProduct = function () {
         ProductService.products.create({}).$promise.then(function (resp) {

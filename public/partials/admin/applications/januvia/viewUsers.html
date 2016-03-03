@@ -9,8 +9,12 @@
             <button class="btn btn-default" type="file" accept=".xlsx" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din Excel</button>
         </div>
     </div>
+    <bulk-operations model="januvia_users" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="user in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(user._id)" ng-checked="checkValue(user._id)"/>
+            </td>
             <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
                 {{user.name}}
             </td>

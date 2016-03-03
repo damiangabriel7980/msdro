@@ -7,8 +7,12 @@
             </div>
         </div>
     </div>
+    <bulk-operations model="therapeutic-areas" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="parent in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(parent._id)" ng-checked="checkValue(parent._id)"/>
+            </td>
             <td data-title="'Nume arie'"  filter="{ 'name': 'text' }" sortable="'name'">{{parent.name}}</td>
             <td data-title="'Nume subarie'">
                     <div style="margin-bottom: 15px" class="col-xs-12" ng-repeat="child in parent.children | orderBy: 'name'">

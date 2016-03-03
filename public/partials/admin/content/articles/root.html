@@ -7,8 +7,12 @@
             </div>
         </div>
     </div>
+    <bulk-operations model="articles" delete-button modify-button field="enable" items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="cont in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(cont._id)" ng-checked="checkValue(cont._id)"/>
+            </td>
             <td data-title="'Titlu'" filter="{ 'title': 'text' }" sortable="'title'">{{cont.title}}</td>
             <td data-title="'Text'" sortable="'text'" >{{cont.text| htmlToPlaintext | limitTo : 200}}...</td>
             <td data-title="'Autor'" filter="{ 'author': 'text' }" sortable="'author'">{{cont.author}}</td>

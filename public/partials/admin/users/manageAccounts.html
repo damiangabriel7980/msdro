@@ -2,8 +2,13 @@
     <div class="col-md-12 well">
         <h3>Gestionare Conturi</h3>
     </div>
+
+  <bulk-operations model="msd-applications" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <table ng-table="tableParams" show-filter="true" class="table table-bordered">
     <tr ng-repeat="user in $data">
+      <td width="30">
+        <input type="checkbox" ng-click="addToSelectedItems(user._id)" ng-checked="checkValue(user._id)"/>
+      </td>
         <td data-title="'Username'" filter="{ 'username': 'text' }" sortable="'username'">
             {{user.username}}
         </td>

@@ -17,6 +17,7 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(devices, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
 
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
@@ -24,6 +25,22 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
         });
     };
     refreshDevices();
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     $scope.addDevice = function () {
         $modal.open({

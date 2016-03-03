@@ -2,9 +2,13 @@
     <div class="col-md-9"><h3>Gestionare continut public</h3></div>
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addContent()">Adauga continut</div></div>
 </div>
+<bulk-operations model="public-content" delete-button modify-button field="enable" items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <div class="col-md-12">
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="content in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(content._id)" ng-checked="checkValue(content._id)"/>
+            </td>
             <td data-title="'Titlu'" filter="{ 'title': 'text' }" sortable="'title'">
                 {{content.title}}
             </td>

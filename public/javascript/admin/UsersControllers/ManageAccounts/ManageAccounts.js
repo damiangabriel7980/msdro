@@ -16,6 +16,7 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
             getData: function($defer, params) {
 
                 var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
+                $scope.resultData = orderedData;
                 params.total(orderedData.length);
                 if(params.total() < (params.page() -1) * params.count()){
                     params.page(1);
@@ -24,6 +25,24 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
             }
         });
     });
+
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     $scope.viewUser= function(id){
         $modal.open({
             templateUrl: 'partials/admin/users/viewAccount.html',

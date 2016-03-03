@@ -8,8 +8,12 @@
             <div class="btn btn-primary" ng-click="addTemplate()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
         </div>
     </div>
+    <bulk-operations model="CM_templates" delete-button modify-button field="isEnabled" items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="template in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(template._id)" ng-checked="checkValue(template._id)"/>
+            </td>
             <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
                 {{template.name}}
             </td>

@@ -42,6 +42,8 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
                     });
 
                     var orderedData = params.filter() ? $filter('orderBy')(($filter('filter')(users, filters)), params.orderBy()) : users;
+                    $scope.resultData = orderedData;
+
                     params.total(orderedData.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
@@ -53,6 +55,22 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
     };
     refreshUsers();
 
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
     $scope.addUser = function () {
         JanuviaService.users.create({}).$promise.then(function () {
             refreshUsers();

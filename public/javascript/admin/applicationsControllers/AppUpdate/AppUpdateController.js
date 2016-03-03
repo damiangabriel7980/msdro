@@ -21,6 +21,8 @@ controllers.controller('AppUpdateController',['$scope','ApplicationService','Suc
 
                     var orderedData = $filter('orderBy')(($filter('filter')(apps, params.filter())), params.orderBy());
 
+                    $scope.resultData = orderedData;
+
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
@@ -29,6 +31,23 @@ controllers.controller('AppUpdateController',['$scope','ApplicationService','Suc
     };
     refreshApps();
 
+
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+      if($scope.selectedItems.has(id)){
+          $scope.selectedItems.delete(id)
+      } else {
+          $scope.selectedItems.add(id);
+      }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     $scope.addApp = function(){
         ApplicationService.app.create({}).$promise.then(function(){

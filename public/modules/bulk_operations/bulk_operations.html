@@ -1,0 +1,17 @@
+
+  <div class="well bulkOperations">
+    <label>
+      Selected itmes: {{itemsSet.size}}
+    </label>
+    <br/>
+    <div class="pull-left">
+      <button class="btn" ng-click="selectAll()">Select all</button>
+      <button class="btn" ng-click="deselectAll()">Deselect all</button>
+    </div>
+    <div class="pull-left marginLeft10">
+      <button class="btn btn-danger" ng-click="deleteSelectedItems()" ng-show="deleteButton"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+      <button class="btn btn-success" ng-click="updateSelectedItems(true)" ng-show="modifyButton"><span class="glyphicon glyphicon-ok"></span> Enable</button>
+      <button class="btn btn-danger" ng-click="updateSelectedItems(false)" ng-show="modifyButton"><span class="glyphicon glyphicon-lock"></span> Disable</button>
+    </div>
+  </div>
+

@@ -2,9 +2,13 @@
     <div class="col-md-9"><h3>Gestionare categorii</h3></div>
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addCategory()">Adauga categorie</div></div>
 </div>
+<bulk-operations model="public-categories" delete-button modify-button field="isEnabled" items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <div class="col-md-12">
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="category in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(category._id)" ng-checked="checkValue(category._id)"/>
+            </td>
             <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
                 {{category.name}}
             </td>
