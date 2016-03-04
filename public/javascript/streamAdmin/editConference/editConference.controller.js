@@ -81,7 +81,7 @@ controllers
           else
             spkString += ', ' + item.name;
         });
-        sendNotification.notification.update({id: $scope.objectToEdit._id},{spkString: spkString}).$promise.then(function(resp){
+        sendNotification.notification.update({id: $scope.objectToEdit._id},{spkString: spkString, conferencesStateURL: $rootScope.conferencesStateURL}).$promise.then(function(resp){
           resetConferenceAlert("Notificarea a fost trimisa cu succes!",'success');
         }).catch(function(err){
           console.log(Error.getMessage(err));
@@ -97,7 +97,7 @@ controllers
             else
               spkString += ', ' + item.name;
           });
-          sendNotification.notification.create({id: $scope.objectToEdit._id},{spkString: spkString}).$promise.then(function(resp){
+          sendNotification.notification.create({id: $scope.objectToEdit._id},{spkString: spkString, conferencesStateURL: $rootScope.conferencesStateURL}).$promise.then(function(resp){
             resetConferenceAlert("Invitatiile au fost trimise cu succes!",'success');
           }).catch(function(err){
             console.log(Error.getMessage(err));

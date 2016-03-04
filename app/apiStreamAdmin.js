@@ -348,7 +348,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                                 conference[0].name,
                                                 'speaker',
                                                 req.body.spkString,
-                                                'http://' + req.headers.host + '/pro#!/elearning/conferinte',
+                                                'http://' + req.headers.host + req.body.conferencesStateURL,
                                                 mergeVars
                                             ).then(
                                                 function (success) {
@@ -385,7 +385,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                                 conference[0].name,
                                                 'invitat',
                                                 req.body.spkString,
-                                                'http://' + req.headers.host + '/pro#!/elearning/conferinte',
+                                                'http://' + req.headers.host + req.body.conferencesStateURL,
                                                 mergeVars
                                             ).then(
                                                 function (success) {
@@ -420,7 +420,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                     conference[0].name,
                                     'moderator',
                                     req.body.spkString,
-                                    'http://' + req.headers.host + '/pro#!/elearning/conferinte',
+                                    'http://' + req.headers.host + req.body.conferencesStateURL,
                                     [{
                                         "rcpt": conference[0].moderator.username,
                                         "vars": [{
@@ -488,7 +488,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                                     conference[0].name,
                                                     'speaker',
                                                     req.body.spkString,
-                                                    'http://' + req.headers.host + '/pro#!/elearning/conferinte',
+                                                    'http://' + req.headers.host + req.body.conferencesStateURL,
                                                     mergeVars
                                                 ).then(
                                                     function (success) {
@@ -553,7 +553,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                                     conference[0].name,
                                                     'invitat',
                                                     req.body.spkString,
-                                                    'http://' + req.headers.host + '/pro#!/elearning/conferinte',
+                                                    'http://' + req.headers.host + req.body.conferencesStateURL,
                                                     mergeVars
                                                 ).then(
                                                     function (success) {
@@ -614,7 +614,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                         conference[0].name,
                                         'moderator',
                                         req.body.spkString,
-                                        'http://' + req.headers.host + '/pro#!/elearning/conferinte',
+                                        'http://' + req.headers.host + req.body.conferencesStateURL,
                                         [{
                                             "rcpt": conference[0].moderator.username,
                                             "vars": [{
