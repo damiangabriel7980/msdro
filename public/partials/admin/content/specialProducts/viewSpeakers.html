@@ -4,12 +4,12 @@
     </div>
     <div class="modal-body container" style="margin: 0; width: 100%">
         <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
-        <div class="form-group col-md-12 noPadding">
+        <div class="form-group col-md-12">
             <label>Adauga speaker:</label>
             <select class="form-control" style="width:50%" ng-model="selectedSpeaker"
                     ng-options="speaker as speaker.last_name+' '+speaker.first_name for speaker in allSpeakers" ng-change="addSpeaker()"></select>
         </div>
-        <div class="col-md-12 noPadding">
+        <div class="col-md-12">
             <table ng-table="tableParams" show-filter="true" class="table table-bordered">
                 <tr ng-repeat="r in $data">
                     <td data-title="'Nume'" filter="{ 'last_name': 'text' }" sortable="'last_name'">

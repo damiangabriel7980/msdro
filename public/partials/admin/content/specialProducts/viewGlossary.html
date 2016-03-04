@@ -4,10 +4,10 @@
     </div>
     <div class="modal-body container" style="margin: 0; width: 100%">
         <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
-        <div class="col-md-12 noPadding">
+        <div class="col-md-12">
             <button class="btn btn-default" ng-click="addTerm()">Adauga cuvant cheie</button>
         </div>
-        <div class="col-md-12 noPadding">
+        <div class="col-md-12 marginTop20">
             <table ng-table="glossaryTableParams" show-filter="true" class="table table-bordered">
                 <tr ng-repeat="g in $data">
                     <td data-title="'Cuvant cheie'" filter="{ 'keyword': 'text' }" sortable="'keyword'">
