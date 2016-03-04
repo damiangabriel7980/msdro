@@ -505,6 +505,11 @@ app.run(
                 PrintService.printWindow();
             };
 
+            $rootScope.$on('$stateChangeSuccess', function(){
+                if(!$state.is('noutati.listaArticole') && !$state.is('biblioteca.articoleStiintifice.listaArticole'))
+                    window.scrollTo(0,0);
+            });
+
             //state events
             $rootScope.$on('$stateChangeStart',
                 function(event, toState, toParams, fromState, fromParams){
