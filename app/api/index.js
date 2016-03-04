@@ -350,12 +350,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function(req,res){
             var content = new PublicContent({
                 title : "Untitled",
-                author : "",
-                description :"",
-                type : 1,
-                'therapeutic-areasID': [],
-                text : "",
-                enable : false,
                 date_added : new Date(),
                 last_updated  : new Date()
             });
@@ -490,7 +484,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function (req, res) {
             var category = new PublicCategories({
                 last_updated: new Date(),
-                name: 'Untitled',
+                name: 'Untitled_' + new Date(),
                 description: ''
             });
             category.save(function (err, saved) {
@@ -721,12 +715,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function(req,res){
                 //check if content_id exists
                     var img = new Carousel({
-                        image_path: '',
-                        indexNumber: 0,
                         title: 'Untitled',
                         enable:       false,
-                        last_updated: new Date(),
-                        type: 1
+                        last_updated: new Date()
                     });
                     img.save(function (err, inserted) {
                         if(err){
@@ -846,11 +837,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .post(function(req, res) {
             var product = new Products({
-                groupsID : [],
-                'therapeutic-areasID' : [],
                 last_updated: new Date(),
                 enable: true,
-                description: '',
                 name: 'Untitled'
             });
             product.save(function(err, saved) {
@@ -955,11 +943,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function(req, res) {
             var content = new Content({
                 title: 'Untitled',
-                author: '',
-                type: 1,
-                groupsID: [],
-                enabled: false,
-                text: '',
                 created: new Date(),
                 last_updated: new Date()
             });
@@ -1069,23 +1052,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function (req, res) {
             var toCreate = new specialProduct({
                 product_name: 'Untitled',
-                groups: [],
-                header_title: 'Untitled',
-                job_id: '',
-                prescription: '',
-                safety_information: '',
-                logo_path: '',
-                header_image: '',
-                general_description: '',
-                site_map_description: '',
-                speakers: [],
-                enabled: true,
-                show_sitemap_prescription: true,
-                show_safety_info_for: {
-                    resources: true,
-                    glossary: true,
-                    site_map: true
-                }
+                header_title: 'Untitled'
             });
             toCreate.save(function (err, saved) {
                 if(err){
@@ -1414,9 +1381,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .post(function (req, res) {
             var toSave = new specialApps({
-                name: 'Untitled',
-                url: '',
-                groups: []
+                name: 'Untitled'
             });
             toSave.save(function (err, saved) {
                 if(err){
@@ -1482,7 +1447,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function(req,res){
             var app = new AppUpdate({
                 name:'Untitled',
-                version:0.0,
                 upgradeDate:new Date()
             });
             app.save(function(err,saved){
@@ -1862,12 +1826,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var toCreate = new Speakers({
                 first_name: 'Untitled',
                 last_name: 'Untitled',
-                profession: '',
-                country: '',
-                last_updated: new Date(),
-                workplace: '',
-                short_description: '',
-                image_path: ''
+                last_updated: new Date()
             });
             toCreate.save(function (err, saved) {
                 if(err){
@@ -2194,17 +2153,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function (req, res) {
             var toCreate = new Multimedia({
                 author : 'Untitled',
-                description : '',
-                enable : false,
-                file_path : '',
                 last_updated : new Date(),
-                points : 0,
-                run_time: 0,
-                groupsID: [],
-                'therapeutic-areasID': [],
-                thumbnail_path : '',
-                title : 'Untitled',
-                type : 1
+                title : 'Untitled'
             });
             toCreate.save(function (err, saved) {
                 if(err){
@@ -2319,11 +2269,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .post(function(req, res) {
             var therapeutic = new Therapeutic_Area({
-                is_public: false,
                 last_updated: new Date(),
-                name: 'Untitled',
-                enabled:      false,
-                "therapeutic-areasID": []
+                name: 'Untitled'
             });
             therapeutic.save(function(err, saved) {
                 if(err){
@@ -3321,10 +3268,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .post(function(req,res){
             var intro = new Presentations({
-                groupsID: [],
-                enabled: false,
-                description: 'Untitled',
-                article_content: ''
+                description: 'Untitled'
             });
             intro.save(function (err, presentation) {
                 if(err){
