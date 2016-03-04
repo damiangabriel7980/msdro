@@ -1,8 +1,6 @@
 var amazon = require('../../config/amazon')();
 
 var User = require('../models/user');
-var NewsletterUnsubscribers = require('../models/newsletter/unsubscribers');
-var UtilsModule = require('./utils');
 
 var Q = require('q');
 
@@ -39,15 +37,6 @@ var updateUserImage = function (user_id, imageBody, imageExtension) {
     return deferred.promise;
 };
 
-var accountJustCreated = function(email){
-    if(typeof email === "string"){
-        NewsletterUnsubscribers.remove({email: UtilsModule.regexes.emailQuery(email)}, function(err){
-            if(typeof callback === "function") callback(err);
-        });
-    }
-}
-
 module.exports = {
-    updateUserImage: updateUserImage,
-    accountJustCreated: accountJustCreated
+    updateUserImage: updateUserImage
 };
