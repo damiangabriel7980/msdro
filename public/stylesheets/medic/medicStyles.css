@@ -8711,3 +8711,51 @@ a:focus {
 .marginTop25px {
   margin-top: 25px;
 }
+.conferencePage {
+  width: 100%;
+  max-width: 1024px;
+  margin: 80px auto;
+  padding: 3vh 15px;
+}
+.conferencePage video {
+  height: auto;
+}
+.conferencePage .confTitle {
+  margin: 0;
+}
+.conferencePage .customButtonStyle {
+  margin-right: 10px;
+}
+.conferencePage .videoWrapper {
+  margin-top: 25px;
+  min-height: 175px;
+}
+.conferencePage .twoLineHeight {
+  line-height: 2em;
+}
+.conferencePage .commands {
+  padding: 20px 0;
+}
+.conferencePage .users .user {
+  border: 1px solid gray;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+.conferencePage .noPadding {
+  padding: 0;
+}
+.conferencePage .paddingTop8 {
+  padding-top: 8px;
+}
+.conferencePage .handCursor {
+  cursor: pointer;
+}
+.conferencePage .MSDblack {
+  color: black;
+  font-weight: bold;
+}
+.conferencePage .liveLabel {
+  margin-left: 10px;
+  margin-top: 3px;
+  margin-bottom: 0;
+}
