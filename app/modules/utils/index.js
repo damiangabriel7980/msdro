@@ -1,5 +1,6 @@
 var Q = require('q');
 var async = require('async');
+var mongoose = require('mongoose');
 
 var XRegExp  = require('xregexp').XRegExp;
 
@@ -113,3 +114,7 @@ exports.regexes = {
         return new XRegExp("^" + letter, "i");
     }
 };
+
+exports.mongoose = {
+    ObjectId: mongoose.Types.ObjectId
+}
