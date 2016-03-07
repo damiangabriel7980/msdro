@@ -1,4 +1,4 @@
-controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', "Utils", function ($scope, $state, DPOCService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, Utils) {
+controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', "Utils", 'exportCSV', function ($scope, $state, DPOCService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, Utils, exportCSV) {
     $scope.csv = {
         filename: "DPOC_devices_" + Utils.customDateFormat(new Date(), {separator:'-'}) + '.csv',
         rows: []
@@ -21,7 +21,7 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
                     name: ''       // initial filter
                 }
             };
-            $scope.csv.rows = formatArrayCSV(devices);
+            $scope.csv.rows = exportCSV.formatArrayCSV(devices, ['name', 'email', 'code']);
             $scope.tableParams = new ngTableParams(params, {
                 total: devices.length, // length of data
                 getData: function($defer, params) {
@@ -51,19 +51,6 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
             return false;
         }
     };
-
-    function formatArrayCSV(devices){
-        var ret = [];
-        angular.forEach(devices, function(value, key){
-            var objToPush = {
-                "name" : value.name,
-                "email": value.email,
-                "code": value.code
-            };
-            ret.push(objToPush);
-        });
-        return ret;
-    }
 
     $scope.addDevice = function () {
         $modal.open({
