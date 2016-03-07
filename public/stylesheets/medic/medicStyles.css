@@ -8716,28 +8716,3 @@ a:focus {
   text-align: center;
   width: 100%;
 }
-.customTooltip {
-  /* Let's get this party started */
-  /* Track */
-  /* Handle */
-}
-.customTooltip .tooltip-inner {
-  background-color: white;
-  color: black;
-  height: 79px;
-  overflow-y: scroll;
-  width: 255px;
-  max-width: 255px !important;
-}
-.customTooltip ::-webkit-scrollbar {
-  width: 12px;
-}
-.customTooltip ::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  background: #808080;
-  -webkit-box-shadow: inset 0 0 6px #ffffff;
-}
-.customTooltip ::-webkit-scrollbar-thumb:window-inactive {
-  background: #EAEAEA;
-}
