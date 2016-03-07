@@ -6,8 +6,8 @@
  */
 controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentService','GroupsService','$stateParams','$sce','ngTableParams','$filter', '$modal', 'ActionModal', 'Success', 'Error', function($scope, $rootScope, $state, ContentService, GroupsService, $stateParams,$sce,ngTableParams,$filter,$modal,ActionModal, Success, Error){
 
-    function refreshTable(){
-        ContentService.content.query().$promise.then(function(result){
+    function refreshTable() {
+        ContentService.content.query().$promise.then(function (result) {
             var contents = Success.getObject(result);
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
@@ -20,20 +20,23 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
                 }
             }, {
                 total: contents.length, // length of data
-                getData: function($defer, params) {
+                getData: function ($defer, params) {
 
-                var orderedData = $filter('orderBy')(($filter('filter')(contents, params.filter())), params.orderBy());
-                $scope.resultData = orderedData;
-                params.total(orderedData.length);
-                if(params.total() < (params.page() -1) * params.count()){
-                    params.page(1);
+                    var orderedData = $filter('orderBy')(($filter('filter')(contents, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
+                    params.total(orderedData.length);
+                    if (params.total() < (params.page() - 1) * params.count()) {
+                        params.page(1);
+                    }
+                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            }
+            });
+        }).catch(function (err) {
+            console.log(Error.getMessage(err));
         });
-    }).catch(function(err){
-        console.log(Error.getMessage(err));
-    });
+    }
+
+        refreshTable();
 
       $scope.selectedItems = new Set();
 
