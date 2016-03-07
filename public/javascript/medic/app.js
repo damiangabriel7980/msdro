@@ -146,6 +146,8 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: "Conferences",
                 files: [
+                    'components/webrtc-adapter/adapter.js',
+                    'javascript/medic/ConferencesControllers/ConferencePreview.js',
                     'javascript/medic/ConferencesControllers/Conferences.js'
                 ]
             },

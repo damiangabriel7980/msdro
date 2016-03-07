@@ -119,6 +119,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     //elearning routes
     require('./elearning')(env, logger, amazon, router);
 
+    //conferences routes
+    require('./conferences')(env, logger, router);
+
     //============================================= Define injection dependent modules
     var handleSuccess = require('../modules/responseHandler/success.js')(logger);
     var handleError = require('../modules/responseHandler/error.js')(logger);

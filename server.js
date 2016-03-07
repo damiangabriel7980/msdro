@@ -98,6 +98,12 @@ require('./app/apiGuidelines.js')(app,logger,express.Router());
 // socket comm test =================================================================
 // require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 
+var conferencesConfig = {
+};
+//var conferences = require('qconferences-back-end');
+//conferences(devServer, app, conferencesConfig);
+//conferences(secureServer, app, conferencesConfig);
+
 // launch ======================================================================
 
 var devPort = my_config.devPORT || 8080;

@@ -1,1 +1,14 @@
-{{test}}
+<div class="conferencePage">
+  <ul class="list-group">
+    <li class="list-group-item col-xs-12 MSDblack" ng-repeat="conf in listOfConferences">
+      <div class="col-xs-10 twoLineHeight">
+        {{conf.date | date: "dd/MM/yyyy 'la' hh:mm"}} - {{conf.name}} (Speakers: <span ng-repeat="speaker in conf.speakers track by $index">{{speaker.name}}{{$index+1!==conf.speakers.length?",&nbsp;":""}}</span>)
+        <label ng-if="conf.date == today" class="label label-success liveLabel">LIVE</label>
+      </div>
+      <!-- <div class="col-xs-2" ng-if="conf.date == today"> -->
+      <div class="col-xs-2">
+        <a class="btn btn-primary pull-right" ng-click="call(conf)" >Participa</a>
+      </div>
+    </li>
+  </ul>
+</div>

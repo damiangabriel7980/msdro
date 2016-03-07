@@ -40,6 +40,10 @@ module.exports = function(){
                 },
                 events: {
                     overwriteApiResponses: true
+                },
+                turnConfig: {
+                    address: "188.226.200.49",
+                    port: "3478"
                 }
             };
 
@@ -79,6 +83,10 @@ module.exports = function(){
                 },
                 events: {
                     overwriteApiResponses: true
+                },
+                turnConfig: {
+                    address: "188.226.200.49",
+                    port: "3478"
                 }
             };
 
@@ -119,42 +127,10 @@ module.exports = function(){
                 },
                 events: {
                     overwriteApiResponses: true
-                }
-            };
-
-        case 'devshared':
-            return {
-                database: "mongodb://msddevshared:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/MSDdevshared",
-                amazonBucket: "msddevshared",
-                amazonPrefix: "https://s3-eu-west-1.amazonaws.com/",
-                pushServerAddress: "https://notif.qualitance.com",
-                pushServerPrefix: "MSD_dev_shared",
-                elasticServer: "10.200.0.221",
-                elasticPORT: "9004",
-                mandrillKey: "PJSTlj3uhLNKivUM1mr9jw",
-                GA_code: "UA-61695877-1",
-                disablePatients: false,
-                dpocAppLink: "unavailable",
-                publicFolder: "public",
-                tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
-                newsletter: {
-                    scheduleInterval: 'everyMinute',
-                    batch: {
-                        size: 5,
-                        secondsBetween: 5
-                    },
-                    //TODO: change unsubscribe route once we find out deployment address
-                    unsubcribe: "http://10.200.0.250:9001/unsubscribe",
-                    statistics:{
-                        scheduleInterval: 'everyMinute',
-                        scheduleLockDays: 6
-                    }
                 },
-                user: {
-                    noProofDomain: "mailinator.com"
-                },
-                elearning: {
-                    maxScore: 18
+                turnConfig: {
+                    address: "188.226.200.49",
+                    port: "3478"
                 }
             };
 
@@ -194,6 +170,10 @@ module.exports = function(){
                 },
                 events: {
                     overwriteApiResponses: true
+                },
+                turnConfig: {
+                    address: "82.196.15.98",
+                    port: "3478"
                 }
             };
 
@@ -233,6 +213,10 @@ module.exports = function(){
                 },
                 events: {
                     overwriteApiResponses: true
+                },
+                turnConfig: {
+                    address: "188.226.200.49",
+                    port: "3478"
                 }
             };
 

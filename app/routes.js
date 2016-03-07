@@ -95,6 +95,14 @@ module.exports = function(app, logger, passport) {
         }
 	});
 
+    // app.get('/conference', function(req, res){
+    //     if(req.isAuthenticated()){
+    //         res.render("conference/main.ejs", {token: "asd"});
+    //     }else{
+    //         res.redirect('/');
+    //     }
+    // });
+
 	// LOGOUT ==============================
 	app.get('/logout', function(req, res) {
         //delete presentations viewed status from current session
