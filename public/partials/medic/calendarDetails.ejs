@@ -71,7 +71,8 @@
                         despre Speakeri.
                     </p>
                     <div dir-paginate="speaker in eventDetails.speakers | itemsPerPage:6"
-                         class="col-xs-12 col-sm-6 col-md-4 noPadding speaker cell">
+                         class="col-xs-12 col-sm-6 col-md-4 noPadding speaker cell" ng-class="{ 'highlightedSpeaker': highlitedSpeakers.size === 1}"
+                         ng-hide="highlitedSpeakers.size > 0 && !highlitedSpeakers.has(speaker._id)">
 
                         <div class="pull-left imageOuterFrame">
                             <div class="imageInnerFrame">
@@ -80,11 +81,12 @@
                         </div>
                         <div class="descriptionFrame">
                             <div class="name">
-                                <span>{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</span>
+                                <span ng-click="highlightSpeaker(speaker._id)">{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</span>
                             </div>
                             <div class="cell title">
                                 {{speaker.workplace}}
                                 <span ng-trim ng-bind-html="trustAsHtml(speaker.short_description)"></span>
+                                <span ng-show="highlitedSpeakers.size === 1" ng-click="removeSpeaker()" class="backLink">Inapoi la speakeri</span>
                             </div>
                         </div>
                     </div>

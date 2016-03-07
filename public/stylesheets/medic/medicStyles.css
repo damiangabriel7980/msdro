@@ -6627,6 +6627,20 @@ body .btn {
 .calendarWrapper .nextEvents .Title h4 {
   cursor: pointer;
 }
+.highlightedSpeaker {
+  height: auto !important;
+  width: 86% !important;
+}
+.highlightedSpeaker .title {
+  height: auto !important;
+}
+.highlightedSpeaker .backLink {
+  float: left;
+  clear: left;
+  cursor: pointer;
+  color: #01877b;
+  font-weight: 900;
+}
 .homeSearchWrapper .mainTitle {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -8157,6 +8171,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
     font-size: 13px;
   }
 }
+.calendarTabs .speakerContainer .speaker .descriptionFrame .name span {
+  cursor: pointer;
+}
 .calendarTabs .speakerContainer .speaker .descriptionFrame .speakerDescription {
   color: #aaaaaa;
   text-overflow: ellipsis;
@@ -8699,252 +8716,28 @@ a:focus {
   text-align: center;
   width: 100%;
 }
-.marginTop25px {
-  margin-top: 25px;
+.customTooltip {
+  /* Let's get this party started */
+  /* Track */
+  /* Handle */
 }
-.marginBottom15 {
-  margin-bottom: 15px;
-}
-.marginBottom15 {
-  margin-bottom: 15px;
-}
-.padding0 {
-  padding: 0px;
-}
-.conferenceDetails {
-  margin-bottom: 10px;
-}
-.activeSpeakerContainer {
-  display: flex;
-  align-items: center;
-  height: 61vh;
-}
-.activeSpeakers {
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  flex: 1;
-}
-.activeSpeakers .streamContainer {
-  margin: 10px;
-  flex: 1;
-  min-width: 310px;
-  min-height: 241px;
-  height: 100%;
-  justify-content: center;
-}
-.activeSpeakers .streamContainer video {
-  border-radius: 2px;
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  max-height: 603px;
-  max-width: 804px;
-  min-width: 215px;
-  display: flex;
-  flex: 1;
-  width: 100%    !important;
-  height: auto   !important;
-}
-.conferenceStreamContainer {
-  background-color: #EBECED;
-}
-.conferenceStreamContainer .inactiveSpeakersContainer {
-  flex: 1;
-  background-color: #43555F;
-  height: 198px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  -webkit-box-shadow: inset 0px 3px 16px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: inset 0px 3px 16px 0px rgba(0, 0, 0, 0.75);
-  box-shadow: inset 0px 3px 16px 0px rgba(0, 0, 0, 0.75);
-}
-.conferenceStreamContainer .inactiveSpeakersContainer .inactiveSpeaker {
-  display: flex;
-  justify-content: center;
-  border-radius: 2px;
-  width: 150px;
-  height: 150px;
-  margin: 0 20px;
-  background-color: #01877b;
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-}
-.conferenceStreamContainer .inactiveSpeakersContainer .inactiveSpeaker span {
-  align-self: center;
-  color: white;
-}
-.context-Menu {
-  overflow: hidden;
-  height: 0;
-}
-.context-Menu span {
+.customTooltip .tooltip-inner {
   background-color: white;
+  color: black;
+  height: 79px;
+  overflow-y: scroll;
+  width: 255px;
+  max-width: 255px !important;
 }
-.conferenceDetails:hover .context-Menu {
-  background-color: #43555F;
-  border-radius: 2px;
-  height: 30px;
-  max-width: 200px;
-  display: flex;
-  margin-top: 5px;
-  -webkit-box-shadow: 0px 0px 10px 0px #43555F;
-  -moz-box-shadow: 0px 0px 10px 0px #43555F;
-  box-shadow: 0px 0px 10px 0px #43555F;
+.customTooltip ::-webkit-scrollbar {
+  width: 12px;
 }
-.conferenceDetails:hover .context-Menu .conferenceMenuIcon {
-  width: 30px;
-  margin: 0 5px;
-  cursor: pointer;
+.customTooltip ::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: #808080;
+  -webkit-box-shadow: inset 0 0 6px #ffffff;
 }
-.padding10 {
-  padding: 10px;
-}
-.conferencesList {
-  height: 350px;
-  display: flex;
-  justify-content: center;
-}
-.conferencesList .conferencesListItem {
-  text-align: left;
-}
-.conferenceStreamContainer {
-  padding-right: 0;
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
-}
-.conferenceStreamContainer.toggled {
-  padding-right: 250px;
-}
-#sidebar-wrapper {
-  z-index: 1000;
-  position: fixed;
-  right: 250px;
-  width: 0;
-  height: 85vh;
-  margin-top: 4px;
-  margin-right: -250px;
-  overflow-y: auto;
-  background: #fff;
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
-}
-#messageMenu {
-  z-index: 2000;
-  position: fixed;
-  right: 250px;
-  width: 0;
-  height: 85vh;
-  margin-top: 4px;
-  margin-right: -250px;
-  overflow-y: auto;
-  background: #fff;
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
-}
-#messageMenu .speakerName {
-  float: left;
-  clear: left;
-  color: #01877b;
-  margin: 10px 0;
-}
-#messageMenu .messageContainer {
-  border-bottom: 1px solid #E1E2E3;
-}
-#messageMenu .messageContainer .message {
-  margin-top: 5px;
-}
-.width250 {
-  width: 250px !important;
-}
-#page-content-wrapper {
-  width: 100%;
-  position: absolute;
-  padding: 15px;
-}
-.conferenceStreamContainer.toggled #page-content-wrapper {
-  margin-right: -250px;
-}
-/* Sidebar Styles */
-.sidebar-nav {
-  position: absolute;
-  top: 30px;
-  width: 250px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.sidebar-nav li {
-  text-indent: 20px;
-  line-height: 40px;
-  border-bottom: 1px solid #DFE0E1;
-  color: #01877b;
-}
-.sidebar-nav li:hover {
-  background-color: #01877b;
-  color: white;
-}
-.sidebar-nav li a {
-  display: block;
-  text-decoration: none;
-  color: #999999;
-}
-.sidebar-nav li a:hover {
-  text-decoration: none;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.2);
-}
-.sidebar-nav li a:active,
-.sidebar-nav li a:focus {
-  text-decoration: none;
-}
-.sidebar-nav > .sidebar-brand {
-  height: 65px;
-  font-size: 18px;
-  line-height: 60px;
-}
-.sidebar-nav > .sidebar-brand a {
-  color: #999999;
-}
-.sidebar-nav > .sidebar-brand a:hover {
-  color: #fff;
-  background: none;
-}
-@media (min-width: 768px) {
-  #conferenceWrapper {
-    padding-left: 250px;
-  }
-  #conferenceWrapper.toggled {
-    padding-left: 0;
-  }
-  #conferenceWrapper {
-    width: 250px;
-  }
-  #conferenceWrapper.toggled #sidebar-wrapper {
-    width: 0;
-  }
-  #page-content-wrapper {
-    padding: 20px;
-    position: relative;
-  }
-  #conferenceWrapper.toggled #page-content-wrapper {
-    position: relative;
-    margin-right: 0;
-  }
+.customTooltip ::-webkit-scrollbar-thumb:window-inactive {
+  background: #EAEAEA;
 }
