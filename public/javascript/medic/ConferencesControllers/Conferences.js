@@ -23,8 +23,7 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
             if(role === "speaker"){
               previewConference(conf._id);
             }else{
-              //conference.join(conf._id);
-              console.log("Start conference");
+              $scope.startConference(conf._id);
             }
           }else{
             console.log("This should not have happened");
@@ -32,6 +31,12 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
         }
       );
     };
+
+    $scope.startConference = function(conferenceId){
+      console.log("Start conference: "+conferenceId);
+      window.open('/conference?id='+conferenceId, 'conferenceWindow', 'width=200, height=100');
+      //conference.join(conf._id);
+    }
 
     function previewConference(conferenceId){
     	getUserMedia(
@@ -43,9 +48,10 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
     				controller: 'ConferencePreview',
     				resolve: {
     				    videoUrl: getVideoURL(stream),
-    				    conferenceDetails: {
-    				    	id: conferenceId
-    				    }
+                parentScope: $scope,
+    				    conferenceData: {
+                  id: conferenceId
+                }
     				}
     			});
     		},
