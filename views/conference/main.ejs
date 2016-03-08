@@ -1,1 +1,17 @@
-conferencee
+<!doctype html>
+<html ng-app="conferenceApp">
+	<head>
+		<script>
+			const TOKEN = "<%=token%>";
+			const CONFERENCE_ID = "<%=conference%>";
+		</script>
+		<script src="components/angular/angular.js"></script>
+		<script src="components/angular-socket-io/socket.min.js"></script>
+		<script src="components/ngDraggable/ngDraggable.js"></script>
+		<script src="javascript/conference/app.js"></script>
+		<script src="components/qconferences-front-end/src/qconferences-front-end.js"></script>
+	</head>
+	<body ng-controller="ConferenceController">
+		<q-conferences-front-end></q-conferences-front-end>
+	</body>
+</html>

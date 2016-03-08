@@ -95,13 +95,20 @@ module.exports = function(app, logger, passport) {
         }
 	});
 
-    // app.get('/conference', function(req, res){
-    //     if(req.isAuthenticated()){
-    //         res.render("conference/main.ejs", {token: "asd"});
-    //     }else{
-    //         res.redirect('/');
-    //     }
-    // });
+    app.get('/conference', function(req, res){
+        if(req.isAuthenticated()){
+            if(req.query.id){
+                res.render("conference/main.ejs", {
+                    conference: req.query.id,
+                    token: "asd"
+                });
+            }else{
+                res.redirect('/');
+            }
+        }else{
+            res.redirect('/');
+        }
+    });
 
 	// LOGOUT ==============================
 	app.get('/logout', function(req, res) {

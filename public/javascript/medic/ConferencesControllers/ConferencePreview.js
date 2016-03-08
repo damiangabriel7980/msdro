@@ -1,7 +1,7 @@
-app.controllerProvider.register('ConferencePreview', ['$scope', 'videoUrl', 'conferenceDetails', function($scope, videoUrl, conferenceDetails){
+app.controllerProvider.register('ConferencePreview', ['$scope', 'videoUrl', 'parentScope', 'conferenceData', function($scope, videoUrl, parentScope, conferenceData){
 	$scope.videoUrl = videoUrl;
 
 	$scope.startConference = function(){
-		console.log("Start conference: "+conferenceDetails.id);
+		parentScope.startConference(conferenceData.id);
 	}
 }]);

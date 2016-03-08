@@ -100,8 +100,8 @@ require('./app/apiGuidelines.js')(app,logger,express.Router());
 
 var conferencesConfig = {
 };
-//var conferences = require('qconferences-back-end');
-//conferences(devServer, app, conferencesConfig);
+var conferences = require('qconferences-back-end');
+conferences(devServer, app, conferencesConfig);
 //conferences(secureServer, app, conferencesConfig);
 
 // launch ======================================================================
