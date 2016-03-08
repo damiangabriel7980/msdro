@@ -34,7 +34,13 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
 
     $scope.startConference = function(conferenceId){
       console.log("Start conference: "+conferenceId);
-      window.open('/conference?id='+conferenceId, 'conferenceWindow', 'width=200, height=100');
+      //first we need to calculate our window dimensions and position
+      var width = window.innerWidth * 0.66 ;
+      var height = width * window.innerHeight / window.innerWidth ;
+      var top = (window.innerHeight - height) / 2;
+      var left = (window.innerWidth - width) / 2;
+      //open the window
+      window.open('/conference?id='+conferenceId, 'conferenceWindow', 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
       //conference.join(conf._id);
     }
 
