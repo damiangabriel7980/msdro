@@ -3,27 +3,17 @@
         <button type="button" class="close" ng-click="closeModal()">&times;</button>
         <h3 class="modal-title">Editeaza categorie</h3>
     </div>
-    <div class="col-md-12 modal-body padding30">
+    <div class="col-md-12 modal-body">
         <div class="col-md-12 noPadding" style="margin-bottom: 15px;">
             <alert ng-if="alert.show" type="{{alert.type}}" close="alert.newAlert=false">{{alert.text}}</alert>
         </div>
-        <tabset>
-            <tab heading="Informatii">
-                <div class="col-md-12 noPadding marginTop20">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label for="name">Nume:</label>
                         <input type="text" class="form-control" id="name" ng-model="category.name">
                     </div>
                 </div>
-                <div class="col-md-12 noPadding">
-                    <div class="form-group col-md-12 noPadding">
-                        <label for="textArea">Descriere:</label>
-                        <textarea ui-tinymce="tinymceOptions" ng-model="category.description" id="textArea"></textarea>
-                    </div>
-                </div>
-            </tab>
-            <tab heading="Multimedia">
-                <div class="col-md-12 noPadding marginTop20">
+                <div class="col-md-12">
                     <div class="col-md-6 noPadding">
                         <div class="col-md-12 noPadding">
                             <div class="col-md-6 noPadding">Incarca imagine<br>(jpg, jpeg, png):</div>
@@ -39,8 +29,12 @@
                         </div>
                     </div>
                 </div>
-            </tab>
-        </tabset>
+                <div class="col-md-12">
+                    <div class="form-group col-md-12 noPadding">
+                        <label for="textArea">Descriere:</label>
+                        <textarea ui-tinymce="tinymceOptions" ng-model="category.description" id="textArea"></textarea>
+                    </div>
+                </div>
     </div>
     <div class="col-md-12 modal-footer">
         <div class="col-xs-12">

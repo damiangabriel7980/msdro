@@ -43,7 +43,7 @@ controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$
             "searchreplace visualblocks code fullscreen",
             "insertdatetime media table contextmenu paste charmap"
         ],
-        height : 800,
+        height : 400,
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
     $scope.closeModal=function(){

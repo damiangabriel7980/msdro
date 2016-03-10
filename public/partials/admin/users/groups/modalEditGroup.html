@@ -4,20 +4,29 @@
             <button type="button" class="close" ng-click="closeModal()">&times;</button>
             <h3 class="modal-title">Modifica grup</h3>
         </div>
-        <div class="col-md-12 modal-body padding30">
+        <div class="col-md-12 modal-body">
             <div class="col-md-12" style="margin-bottom: 15px;">
                 <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
             </div>
-            <tabset>
-                <tab heading="Informatii">
-                    <div class="col-md-12 noPadding marginTop20" style="margin-bottom: 15px;">
+                    <div class="col-md-12" style="margin-bottom: 15px;">
                         <div class="col-md-12 noPadding">
                             <div class="form-group col-md-6" style="padding-left: 0;">
                                 <label for="nume">Nume:</label>
                                 <input type="text" class="form-control" id="nume" ng-model="toUpdate.display_name" ng-disabled="nume=='Default'">
                             </div>
                             <div class="col-md-6 noPadding marginTop24">
-                                <div class="col-md-12 noPadding" style="text-align: right;">
+                                <div class="col-md-6">
+                                    <div class="col-md-12 noPadding">
+                                        <div class="col-md-12 noPadding">
+                                            <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 noPadding">
+                                        <img no-cache-src="{{pathAmazonDev+toUpdate.image_path}}" ng-if="toUpdate.image_path && !fileBody" style="width:100px;">
+                                        <span ng-if="fileBody">{{fileBody.name}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 noPadding" style="text-align: right;">
                                     <div class="col-md-12 noPadding">
                                         <label for="showAtSignup">Arata la signup</label>
                                         <input type="checkbox" id="showAtSignup" ng-model="toUpdate.show_at_signup">
@@ -40,24 +49,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 noPadding">
+                    <div class="col-md-12">
                         <my-multiple-select all-objects="users" selected-objects="selectedUsers" track-by="_id" display-by="username" output="newUsers"></my-multiple-select>
                     </div>
-                </tab>
-                <tab heading="Multimedia">
-                    <div class="col-md-12 noPadding marginTop20">
-                        <div class="col-md-12 noPadding">
-                            <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
-                        </div>
-                    </div>
-                    <div class="col-md-12 noPadding marginTop20">
-                        <img no-cache-src="{{pathAmazonDev+toUpdate.image_path}}" ng-if="toUpdate.image_path && !fileBody" style="width:100px;">
-                        <span ng-if="fileBody">{{fileBody.name}}</span>
-                    </div>
-                </tab>
-            </tabset>
-
-
         </div>
         <div class="modal-footer">
             <div class="col-xs-12">

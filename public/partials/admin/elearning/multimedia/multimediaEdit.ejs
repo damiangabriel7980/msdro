@@ -31,10 +31,6 @@
                                             display-by="display_name" split-by="profession.display_name" output="notUsed"></my-multiple-select>
                     </div>
                 </div>
-                <div class="col-md-12 noPadding">
-                    <label>Descriere:</label>
-                    <textarea ui-tinymce="tinymceOptions" ng-model="multimedia.description"></textarea>
-                </div>
             </div>
         </tab>
         <tab heading="Multimedia">
@@ -59,6 +55,10 @@
                 <div class="col-md-12 noPadding">
                     <a class="btn btn-default" href="{{pathAmazonDev+multimedia.file_path}}" ng-disabled="!multimedia.file_path" target="_blank"><i class="glyphicon glyphicon-sd-video"></i>&nbsp;Descarca video</a>
                 </div>
+            </div>
+            <div class="col-md-12 noPadding">
+                <label>Descriere:</label>
+                <textarea ui-tinymce="tinymceOptions" ng-model="multimedia.description"></textarea>
             </div>
         </tab>
     </tabset>

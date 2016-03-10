@@ -4,32 +4,28 @@
             <button type="button" class="close" ng-click="closeModal()">&times;</button>
             <h3 class="modal-title">Modifica fisier</h3>
         </div>
-        <div class="modal-body col-xs-12 padding30">
+        <div class="modal-body col-xs-12 ">
             <div style="margin-bottom: 15px;">
                 <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
             </div>
-            <tabset>
-                <tab heading="Informatii">
-                    <div class="form-group col-xs-12 noPadding marginTop20">
+                    <div class="form-group col-xs-12">
                         <label>Numele fisierului:</label>
 
                         <p>{{file.actualName}}</p>
                     </div>
-                    <div class="form-group col-xs-12 noPadding">
+                    <div class="form-group col-xs-12">
                         <label>Nume afisat:</label>
                         <input type="text" class="form-control" ng-model="file.displayName" name="file.displayName">
                     </div>
                     <div ng-show="showErr" style="text-align: center"><p style="color:red">Exista deja un fisier cu acest nume</p></div>
-                    <div class="form-group col-xs-12 noPadding">
+                    <div class="form-group col-xs-12">
                         <label>Categorie:</label>
 
                         <select  ng-model="selectedCategory" class="form-control ng-pristine ng-valid ng-touched" style="width: 100%"
                                  ng-options="category.name for category in categories" >
                         </select>
                     </div>
-                </tab>
-                <tab heading="Multimedia">
-                    <div class="col-md-12 noPadding marginTop20">
+                    <div class="col-md-12">
                         <div class="col-md-12 noPadding"><label>File upload manager</label></div>
                         <div class="col-md-12 noPadding">
                             <alert type="{{s3Alert.type}}" ng-if="s3Alert.show">{{s3Alert.text}}</alert>
@@ -45,8 +41,6 @@
                             </div>
                         </div>
                     </div>
-                </tab>
-            </tabset>
         </div>
         <div class="modal-footer">
         <div class="col-xs-12">

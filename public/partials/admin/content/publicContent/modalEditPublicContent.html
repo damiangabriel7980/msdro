@@ -44,12 +44,6 @@
                             <therapeutic-select all-areas="allAreas" selected-areas="selectedAreas" returned-areas="newAreas"></therapeutic-select>
                         </div>
                     </div>
-                    <div class="col-md-12 noPadding">
-                        <div class="form-group col-md-12 noPadding">
-                            <label for="textArea">Text:</label>
-                            <textarea ui-tinymce="tinymceOptions" ng-model="contentText" id="textArea"></textarea>
-                        </div>
-                    </div>
                 </tab>
                 <tab heading="Multimedia">
                     <div class="col-md-12 noPadding marginTop20">
@@ -78,6 +72,12 @@
                             <div class="col-md-12 noPadding">
                                 <s3-upload-manager bucket="{{amazonBucket}}" label="material" path="{{'generalContent/'+idToEdit+'/resources/'}}"></s3-upload-manager>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 noPadding">
+                        <div class="form-group col-md-12 noPadding">
+                            <label for="textArea">Text:</label>
+                            <textarea ui-tinymce="tinymceOptions" ng-model="contentText" id="textArea"></textarea>
                         </div>
                     </div>
                 </tab>

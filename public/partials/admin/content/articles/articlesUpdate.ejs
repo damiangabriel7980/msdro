@@ -29,10 +29,6 @@
                                             split-by="profession.display_name" output="notUsed"></my-multiple-select>
                     </div>
                 </div>
-                <div class="col-md-12 noPadding">
-                    <label>Text:</label>
-                    <textarea ui-tinymce="tinymceOptions" ng-model="article.text"></textarea>
-                </div>
             </div>
         </tab>
         <tab heading="Multimedia">
@@ -68,6 +64,10 @@
                 <div class="col-md-12 noPadding">
                     <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
                 </div>
+            </div>
+            <div class="col-md-12 noPadding">
+                <label>Text:</label>
+                <textarea ui-tinymce="tinymceOptions" ng-model="article.text"></textarea>
             </div>
         </tab>
     </tabset>

@@ -4,19 +4,17 @@
             <button type="button" class="close" ng-click="closeModal()">&times;</button>
             <h3 class="modal-title">Editeaza imagine</h3>
         </div>
-        <div class="col-md-12 modal-body padding30">
+        <div class="col-md-12 modal-body">
             <div class="col-md-12" style="margin-bottom: 10px;">
                 <alert ng-if="statusAlert.message" type="{{statusAlert.type}}" close="resetAlert()">{{statusAlert.message}}</alert>
             </div>
-            <tabset>
-                <tab heading="Informatii">
-                    <div class="col-md-12 noPadding marginTop20">
+                    <div class="col-md-12">
                         <div class="form-group col-md-12 noPadding">
                             <label for="titlu">Titlu:</label>
                             <input type="text" class="form-control" id="titlu" ng-model="toEdit.title">
                         </div>
                     </div>
-                    <div class="col-md-12 noPadding">
+                    <div class="col-md-12">
                         <div class="form-group col-md-6 noPaddingLeft">
                             <label for="ordine">Ordine:</label>
                             <input type="text" class="form-control" id="ordine" ng-model="toEdit.order_index">
@@ -32,7 +30,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 noPadding" ng-show="toEdit.link_name === linkNames[0]">
+                    <div class="col-md-12" ng-show="toEdit.link_name === linkNames[0]">
                         <div class="form-group col-md-12 noPadding">
                             <label>Tip continut:</label>
                             <select ng-model="contentType" ng-options="contentType as contentTypeDisplay(contentType) for contentType in [1,2,3,4]"
@@ -45,7 +43,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 noPadding" ng-show="toEdit.link_name === linkNames[1]">
+                    <div class="col-md-12" ng-show="toEdit.link_name === linkNames[1]">
                         <div class="form-group col-md-12 noPadding">
                             <label>URL:</label>
                             <input type="text" class="form-control" ng-model="toEdit.links.url">
@@ -53,27 +51,23 @@
                     </div>
 
                     <!--End link tyoe selection        -->
-
-                    <div class="col-md-12 noPadding">
+            <div class="col-md-12">
+                <div class="col-md-6 noPadding">
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
+                </div>
+                <div class="col-md-6 noPadding">
+                    <a ng-if="toEdit.image_path" ng-href="{{pathAmazonDev+toEdit.image_path+'?cacheDummy='+currentDate()}}" target="_blank">
+                        <img ng-src="{{defaultSlideImage}}" style="width: 50px;">&nbsp;Descarca imagine
+                    </a>
+                </div>
+            </div>
+                    <div class="col-md-12">
                         <div class="form-group col-md-12 noPadding">
                             <label for="descriere">Descriere:</label>
                             <textarea ui-tinymce ng-model="toEdit.description" id="descriere"></textarea>
                         </div>
                     </div>
-                </tab>
-                <tab heading="Multimedia">
-                    <div class="col-md-12 noPadding marginTop20">
-                        <div class="col-md-6 noPadding">
-                            <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
-                        </div>
-                        <div class="col-md-6 noPadding">
-                            <a ng-if="toEdit.image_path" ng-href="{{pathAmazonDev+toEdit.image_path+'?cacheDummy='+currentDate()}}" target="_blank">
-                                <img ng-src="{{defaultSlideImage}}" style="width: 50px;">&nbsp;Descarca imagine
-                            </a>
-                        </div>
-                    </div>
-                </tab>
-            </tabset>
+
         </div>
         <div class="modal-footer">
             <div class="col-xs-12">
