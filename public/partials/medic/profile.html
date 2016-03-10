@@ -43,7 +43,7 @@
                             <div class="form-group-sm col-md-6 col-sm-12 col-xs-12" ng-class="{'has-error': profileForm.telefon.$error.pattern}">
                                 <label for="telefon">Telefon:</label>
                                 <input type="text" class="form-control" id="telefon" name="telefon" ng-model="phone" ng-pattern="phoneValidator">
-                                <p class="" ng-show="profileForm.telefon.$error.pattern">Numarul de telefon trebuie sa contina numai cifre, minim 10!</p>
+                                <p class="" ng-show="profileForm.telefon.$error.pattern">Numarul de telefon trebuie sa contina minim 10 cifre!</p>
                                 <p class="" ng-show="profileForm.telefon.$error.required">Numarul de telefon este obligatoriu!</p>
                             </div>
                             <div class="form-group-sm col-md-6 col-sm-12 col-xs-12">
