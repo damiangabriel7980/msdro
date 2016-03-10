@@ -26,7 +26,7 @@
                 <span>{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</span>
             </div>
             <div class="cell title">
-                {{speaker.workplace}}
+                {{speaker.workplace}}{{speaker.workplace? "...":"" }}
             </div>
             <div class="cell">
                 {{speaker.country}}
