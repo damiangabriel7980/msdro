@@ -1,4 +1,4 @@
-var conferenceApp = angular.module('conferenceApp', ['qConferencesFrontEnd']);
+var conferenceApp = angular.module('conferenceApp', ['qConferencesApp']);
 conferenceApp.controller('ConferenceController', ['$scope', function($scope){
-	$scope.test = "works man!";
+	$scope.conferenceId = CONFERENCE_ID;
 }])
