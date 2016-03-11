@@ -82,6 +82,16 @@ var authenticateToken = function (username, password) {
     return deferred.promise;
 };
 
+var getConferenceToken = function(req){
+    if(req.isAuthenticated() && req.user && req.user._id){
+        return signToken({
+            id: req.user._id
+        });
+    }else{
+        return null;
+    }
+}
+
 var refreshToken = function (req) {
     var deferred = Q.defer();
     try{
@@ -111,5 +121,6 @@ var refreshToken = function (req) {
 module.exports = {
     authenticateToken: authenticateToken,
     refreshToken: refreshToken,
-    getUserData: getUserData
+    getUserData: getUserData,
+    getConferenceToken: getConferenceToken
 };
