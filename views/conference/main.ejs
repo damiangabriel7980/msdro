@@ -5,13 +5,28 @@
 			const TOKEN = "<%=token%>";
 			const CONFERENCE_ID = "<%=conference%>";
 		</script>
-		<script src="components/angular/angular.js"></script>
+		<script src="components/angular/angular.min.js"></script>
+		<script src="components/angular-sanitize/angular-sanitize.min.js"></script>
+		<script src="components/angular-resource/angular-resource.min.js"></script>
+    	<script src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+		<script src="components/socket.io-client/socket.io.js"></script>
 		<script src="components/angular-socket-io/socket.min.js"></script>
 		<script src="components/ngDraggable/ngDraggable.js"></script>
 		<script src="javascript/conference/app.js"></script>
-		<script src="components/qconferences-front-end/src/qconferences-front-end.js"></script>
+		<link rel="stylesheet" href="components/qconferences-front-end/dist/qconferences-bundle.css">
+		<script src="components/qconferences-front-end/dist/qconferences-bundle.js"></script>
 	</head>
 	<body ng-controller="ConferenceController">
-		<q-conferences-front-end></q-conferences-front-end>
+		<q-conferences-front-end
+			conference-id="{{conferenceId}}"
+			img-src-logo="assets/conference/logo_MSD.png"
+			img-src-close-conference="assets/images/conferenceIcon1.png"
+			img-src-leave-conference="assets/images/disconnect.png"
+			img-src-toggle-menu="assets/images/conferenceIcon4.png"
+			img-src-banned-menu="assets/images/conferenceIcon5.png"
+			img-src-share-screen-start="assets/images/conferenceIcon3.png"
+			img-src-share-screen-stop="assets/images/conferenceIcon3.png"
+		>
+		</q-conferences-front-end>
 	</body>
 </html>
