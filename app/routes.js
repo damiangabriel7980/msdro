@@ -8,6 +8,7 @@ var User = require('./models/user');
 var Roles = require('./models/roles');
 var NewsletterUnsubscribers = require('./models/newsletter/unsubscribers');
 
+var TokenModule = require('./modules/tokenAuth');
 var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
 var SessionStorage = require('./modules/sessionStorage');
@@ -100,7 +101,9 @@ module.exports = function(app, logger, passport) {
             if(req.query.id){
                 res.render("conference/main.ejs", {
                     conference: req.query.id,
-                    token: "asd"
+                    token: TokenModule.getConferenceToken(req),
+                    socketPath: my_config.conference.socketPath,
+                    apiPath: my_config.conference.apiPath
                 });
             }else{
                 res.redirect('/');

@@ -41,9 +41,13 @@ module.exports = function(){
                 events: {
                     overwriteApiResponses: false
                 },
-                turnConfig: {
-                    address: "188.226.200.49",
-                    port: "3478"
+                conference: {
+                    socketPath: 'http://localhost:8080/socket.io-conferences',
+                    apiPath: 'http://localhost:8080/api/conferences/',
+                    turnConfig: {
+                        address: "188.226.200.49",
+                        port: "3478"
+                    }
                 }
             };
 
@@ -84,9 +88,13 @@ module.exports = function(){
                 events: {
                     overwriteApiResponses: false
                 },
-                turnConfig: {
-                    address: "188.226.200.49",
-                    port: "3478"
+                conference: {
+                    socketPath: 'http://localhost:8080/socket.io-conferences',
+                    apiPath: 'http://localhost:8080/api/conferences/',
+                    turnConfig: {
+                        address: "188.226.200.49",
+                        port: "3478"
+                    }
                 }
             };
 
@@ -128,9 +136,13 @@ module.exports = function(){
                 events: {
                     overwriteApiResponses: false
                 },
-                turnConfig: {
-                    address: "188.226.200.49",
-                    port: "3478"
+                conference: {
+                    socketPath: 'http://localhost:8080/socket.io-conferences',
+                    apiPath: 'http://localhost:8080/api/conferences/',
+                    turnConfig: {
+                        address: "188.226.200.49",
+                        port: "3478"
+                    }
                 }
             };
 
@@ -171,9 +183,13 @@ module.exports = function(){
                 events: {
                     overwriteApiResponses: false
                 },
-                turnConfig: {
-                    address: "82.196.15.98",
-                    port: "3478"
+                conference: {
+                    socketPath: 'http://localhost:8080/socket.io-conferences',
+                    apiPath: 'http://localhost:8080/api/conferences/',
+                    turnConfig: {
+                        address: "82.196.15.98",
+                        port: "3478"
+                    }
                 }
             };
 
@@ -214,9 +230,13 @@ module.exports = function(){
                 events: {
                     overwriteApiResponses: false
                 },
-                turnConfig: {
-                    address: "188.226.200.49",
-                    port: "3478"
+                conference: {
+                    socketPath: 'http://localhost:8080/socket.io-conferences',
+                    apiPath: 'http://localhost:8080/api/conferences/',
+                    turnConfig: {
+                        address: "188.226.200.49",
+                        port: "3478"
+                    }
                 }
             };
 

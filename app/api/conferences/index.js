@@ -54,8 +54,8 @@ module.exports = function(env, logger, router){
 			  uname: "asd",
 			  upass: "dfg",
 			  turnConfig: {
-			    address: env.turnConfig.address,
-			    port: env.turnConfig.port
+			    address: env.conference.turnConfig.address,
+			    port: env.conference.turnConfig.port
 			  }
 			});
 		});
