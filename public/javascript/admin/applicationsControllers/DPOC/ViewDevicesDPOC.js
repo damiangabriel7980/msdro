@@ -5,7 +5,7 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
     };
 
     $scope.getHeader = function () {
-        return ['Name', 'Email','Device_Code']
+        return ['Name', 'Email']
     };
 
     var refreshDevices = function (sortByDate) {
@@ -21,7 +21,7 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
                     name: ''       // initial filter
                 }
             };
-            $scope.csv.rows = exportCSV.formatArrayCSV(devices, ['name', 'email', 'code']);
+            $scope.csv.rows = exportCSV.formatArrayCSV(devices, ['name', 'email']);
             $scope.tableParams = new ngTableParams(params, {
                 total: devices.length, // length of data
                 getData: function($defer, params) {
