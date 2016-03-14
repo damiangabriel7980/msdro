@@ -5,10 +5,9 @@
     <div class="col-md-12">
         <alert ng-if="myAlert.newAlert" type="{{myAlert.type}}" close="myAlert.newAlert=false">{{myAlert.message}}</alert>
     </div>
-    <form name="profileForm col-xs-12 noPadding" novalidate>
-        <div class="col-md-12 noPadding">
-            <div class="col-md-12 noPadding">
-                <!--<div class="form-group col-md-12" ng-class="{'has-error': profileForm.nume.$invalid && !profileForm.nume.$pristine || showerrorProf && profileForm.nume.$invalid}">-->
+    <form name="profileForm" novalidate>
+        <div class="col-md-12">
+            <div class="col-md-12">
                 <div class="form-group col-md-12" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
                     <label for="nume">Nume<sup>*</sup>:</label>
                     <input type="text" class="form-control" id="nume" name="nume" ng-model="user.name" ng-pattern="/^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ-\s]{3,30}$/" ng-required="true">
@@ -21,7 +20,7 @@
                     <p class="" ng-show="profileForm.emailNew.$invalid && !profileForm.emailNew.$pristine ">Introduceti un email valid!</p>
                 </div>
             </div>
-            <div class="col-md-12 noPadding">
+            <div class="col-md-12">
                 <hr/>
                 <div class="form-group col-md-12">
                     <label for="profession">Profesie:</label>
@@ -34,12 +33,10 @@
                                         split-by="profession.display_name" output="selectedGroups"></my-multiple-select>
                 </div>
             </div>
-            </div>
+        </div>
     </form>
-    </div>
+</div>
 <div class="modal-footer">
-    <div class="col-xs-12">
-        <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
-        <a class="btn btn-default pull-right" ng-click="saveModifiedUser()">Modifica utilizator</a>
-    </div>
+    <button class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
+    <button class="btn btn-default pull-right" ng-click="saveModifiedUser()" ng-disabled="profileForm.nume.$error.pattern || profileForm.nume.$error.required || profileForm.emailNew.$invalid">Modifica utilizator {{$valid}}</button>
 </div>

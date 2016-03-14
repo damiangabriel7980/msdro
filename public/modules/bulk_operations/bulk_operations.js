@@ -19,6 +19,7 @@
       link: function(scope, element, attrs) {
 
         var toSet = {};
+        var modifyMaxItems = true;
 
         var convertSetToArray = function(){
           scope.itemsArray = [];
@@ -35,6 +36,14 @@
           }
         };
 
+        scope.$watch('filteredArray', function(newValue, oldValue){
+          if (modifyMaxItems && typeof  newValue != "undefined") {
+            scope.maxItems = newValue.length;
+            modifyMaxItems = false;
+
+          }
+        });
+
         var messageForModification = {
           title:{
             true: "Activati",
@@ -45,6 +54,8 @@
             false: "Sunteti sigur ca doriti sa dezactivati "
           }
         };
+
+
 
         scope.selectAll = function(){
           for(var i = 0; i< scope.filteredArray.length; i++){

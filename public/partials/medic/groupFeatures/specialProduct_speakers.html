@@ -21,18 +21,15 @@
                 <a><img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}"></a>
             </div>
         </div>
-        <div class="descriptionFrame" ui-sref="groupSpecialProduct.speakerDetails({speaker_id: speaker._id})">
+        <div class="descriptionFrame" ui-sref="groupSpecialProduct.speakerDetails({speaker_id: speaker._id})" tooltip="Dati click pentru descrierea completa">
             <div class="name">
                 <span>{{speaker.profession + " " + speaker.first_name + " " + speaker.last_name}}</span>
-                <!--prof. RUXANDRA MARIA IONESCU-->
             </div>
             <div class="cell title">
-                {{speaker.workplace}}
-                <!--Professor of Rheumatology and Internal Medicine at University of Medicine and Pharmacy “Iuliu Hatieganu” Cluj (teaching Rheumatology and Clinical Medicine) and Head of the Rheumatology Department at the Emergency County Hospital, both in Cluj county-->
+                {{speaker.workplace}}{{speaker.workplace? "...":"" }}
             </div>
             <div class="cell">
                 {{speaker.country}}
-                <!--ROMANIA-->
             </div>
         </div>
     </div>
