@@ -6627,6 +6627,20 @@ body .btn {
 .calendarWrapper .nextEvents .Title h4 {
   cursor: pointer;
 }
+.highlightedSpeaker {
+  height: auto !important;
+  width: 86% !important;
+}
+.highlightedSpeaker .title {
+  height: auto !important;
+}
+.highlightedSpeaker .backLink {
+  float: left;
+  clear: left;
+  cursor: pointer;
+  color: #01877b;
+  font-weight: 900;
+}
 .homeSearchWrapper .mainTitle {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -8157,6 +8171,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
     font-size: 13px;
   }
 }
+.calendarTabs .speakerContainer .speaker .descriptionFrame .name span {
+  cursor: pointer;
+}
 .calendarTabs .speakerContainer .speaker .descriptionFrame .speakerDescription {
   color: #aaaaaa;
   text-overflow: ellipsis;
@@ -8701,4 +8718,7 @@ a:focus {
 }
 .marginTop25px {
   margin-top: 25px;
+}
+.extraPaddingSpeaker {
+  padding: 0 0 25px 0 !important;
 }

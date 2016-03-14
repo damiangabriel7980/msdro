@@ -15,7 +15,7 @@
                 <i class="glyphicon glyphicon-th-list pull-right" ui-sref="groupSpecialProduct.glossary({product_id: $stateParams.product_id})">&nbsp;Glosar&nbsp;</i>
             </span>
     </div>
-    <div ng-repeat="speaker in specialProductPage.speakers" class="col-xs-12 col-sm-6 col-md-4 noPadding speaker marginBottom15">
+    <div ng-repeat="speaker in specialProductPage.speakers" class="col-xs-12 col-sm-6 col-md-4 noPadding speaker extraPaddingSpeaker">
         <div class="pull-left imageOuterFrame">
             <div class="imageInnerFrame">
                 <a><img ng-src="{{speaker.image_path?pathAmazonDev+speaker.image_path:defaultUserImage}}"></a>
