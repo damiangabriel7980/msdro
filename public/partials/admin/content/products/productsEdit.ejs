@@ -2,47 +2,126 @@
     <div class="modal-title"><h3>Editeaza produs</h3></div>
 </div>
 <div class="col-md-12 modal-body">
-    <div class="col-md-12">
-        <label>Nume produs:</label>
-        <input ng-model="product.name" type="text" class="form-control">
-    </div>
-    <div class="col-md-12 noPadding">
-        <therapeutic-select all-areas="areas" selected-areas="selectedAreas" returned-areas="returnedAreas"></therapeutic-select>
-    </div>
-    <div class="col-md-12">
-        <div class="form-group col-md-12">
-            <label>Grupuri:</label>
-            <my-multiple-select all-objects="groups" selected-objects="selectedGroups" track-by="_id"
-                                display-by="display_name" split-by="profession.display_name" output="notUsed"></my-multiple-select>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="col-md-12">
-            <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
-        </div>
-        <div class="col-md-12">
-            <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
-        </div>
-        <div class="col-md-12">
-            <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelectedRPC($files, $event)" ngf-multiple="false" ngf-accept="'.doc,.docx,.pdf'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca RPC</button>
-        </div>
-        <div class="col-md-12">
-            <alert ng-if="uploadAlertRPC.newAlert" type="{{uploadAlertRPC.type}}" close="uploadAlertRPC.newAlert=false">{{uploadAlertRPC.message}}</alert>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="col-md-12">
-            <a class="btn btn-default" href="{{pathAmazonDev+product.image_path}}" target="_self"><i class="glyphicon glyphicon-camera"></i>&nbsp;Descarca imagine</a>
-        </div>
-        <div class="col-md-12">
-            <a class="btn btn-default" href="{{pathAmazonDev+product.file_path}}" target="_self"><i class="glyphicon glyphicon-camera"></i>&nbsp;Descarca RPC</a>
-        </div>
-    </div>
+    <tabset>
 
-    <div class="col-md-12">
-        <label>Descriere:</label>
-        <textarea ui-tinymce="tinymceOptions" ng-model="product.description"></textarea>
-    </div>
+        <uib-tab heading="Main" active="true"></uib-tab>
+        <div class="col-md-12">
+            <label>Nume produs:</label>
+            <input ng-model="product.name" type="text" class="form-control">
+        </div>
+        <div class="col-md-12 noPadding">
+            <therapeutic-select all-areas="areas" selected-areas="selectedAreas"
+                                returned-areas="returnedAreas"></therapeutic-select>
+        </div>
+        <tab heading="General">
+            <div class="col-md-12">
+                <div class="form-group col-md-12">
+                    <label>Grupuri:</label>
+                    <my-multiple-select all-objects="groups" selected-objects="selectedGroups" track-by="_id"
+                                        display-by="display_name" split-by="profession.display_name"
+                                        output="notUsed"></my-multiple-select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)"
+                            ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca
+                        imagine
+                    </button>
+                </div>
+                <div class="col-md-12">
+                    <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">
+                        {{uploadAlert.message}}
+                    </alert>
+                </div>
+                <div class="col-md-12">
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelectedRPC($files, $event)"
+                            ngf-multiple="false" ngf-accept="'.doc,.docx,.pdf'"><i
+                                class="glyphicon glyphicon-camera"></i>&nbsp;Incarca RPC
+                    </button>
+                </div>
+                <div class="col-md-12">
+                    <alert ng-if="uploadAlertRPC.newAlert" type="{{uploadAlertRPC.type}}"
+                           close="uploadAlertRPC.newAlert=false">{{uploadAlertRPC.message}}
+                    </alert>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <a class="btn btn-default" href="{{pathAmazonDev+product.image_path}}" target="_self"><i
+                                class="glyphicon glyphicon-camera"></i>&nbsp;Descarca imagine</a>
+                </div>
+                <div class="col-md-12">
+                    <a class="btn btn-default" href="{{pathAmazonDev+product.file_path}}" target="_self"><i
+                                class="glyphicon glyphicon-camera"></i>&nbsp;Descarca RPC</a>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <label>Descriere:</label>
+                <textarea ui-tinymce="tinymceOptions" ng-model="product.description"></textarea>
+            </div>
+        </tab>
+        <tab heading="My prescription">
+            <div class="productEditMultimedia col-md-12">
+                <div class="mainHeaderImageUploder col-md-12">
+                    <label>Imagine principala: </label>
+
+                    <div class="col-md-12">
+                        <enhanced-S3-Upload-Manager label="imagine principala"
+                                                    on-complete-function="onMainImageUpdate(key)"
+                                                    on-delete-function="onMainImageDelete(key)" limit="1"
+                                                    bucket="{{amazonBucket}}"
+                                                    path="{{'produse/'+idToEdit+'/imaginePrincipala/'}}"></enhanced-S3-Upload-Manager>
+                    </div>
+                </div>
+                <div class="imageUploder col-md-12">
+                    <label>Imagini: </label>
+
+                    <div class="col-md-12">
+                        <enhanced-S3-Upload-Manager label="imagini" on-complete-function="onImagesUpdate(key)"
+                                                    bucket="{{amazonBucket}}" on-delete-function="onImagesDelete(key)"
+                                                    path="{{'produse/'+idToEdit+'/imagini/'}}"></enhanced-S3-Upload-Manager>
+                    </div>
+                </div>
+                <div class="videoUploader col-md-12">
+                    <label>Video:</label>
+
+                    <div class="col-md-12">
+                        <enhanced-S3-Upload-Manager label="video-uri" bucket="{{amazonBucket}}"
+                                                    on-complete-function="onVideosUpdate(key)"
+                                                    on-delete-function="onVideosDelete(key)"
+                                                    path="{{'produse/'+idToEdit+'/video/'}}"></enhanced-S3-Upload-Manager>
+                    </div>
+                </div>
+                <div class="qr-Product-code col-md-12">
+                    <label>Cod QR:</label>
+
+                    <div class="col-md-12">
+                        <button class="btn btn-default padding10" ng-hide="product.codeQR" ng-click="generateQr()">
+                            Generate QR
+                        </button>
+                        <button class="btn btn-default padding10" ng-show="product.codeQR" ng-click="regenerateQr()">
+                            Regenerate QR
+                        </button>
+                        <button class="btn btn-default padding10" ng-show="product.codeQR"
+                                ng-click="openPdfPreviewModal()">Generate PDF
+                        </button>
+                        <div class="col-md-12">
+                            <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}"
+                                   close="uploadAlert.newAlert=false">{{uploadAlert.message}}
+                            </alert>
+                        </div>
+                        <div class="col-md-12 padding10" id="qrCodeContainer" >
+                            <qr text="product.codeQR"  ng-if = "product.codeQR" image="true"></qr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </tab>
+
+    </tabset>
+
 </div>
 <div class="modal-footer">
     <div class="col-md-12">

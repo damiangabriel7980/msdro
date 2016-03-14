@@ -1,8 +1,9 @@
 var ModelInfos = require('../../models/model_infos');
+var myPrescription = require('../../models/myPrescription');
 
 var async = require ('async');
 
-var modelsToSeed = ["januvia_users","guideline"];
+var modelsToSeed = ["januvia_users","guideline","myPrescription"];
 
 async.each(modelsToSeed, function(model, callback){
     ModelInfos.findOne({model_name: model}, function (err, mi) {
@@ -25,3 +26,18 @@ async.each(modelsToSeed, function(model, callback){
     console.log("Finished seeding model infos");
 });
 
+myPrescription.find({},function(err,resp){
+  if(err){
+    return console.log(err);
+  }else if(resp.length == 0){
+    myPrescription.create({
+      generalDescription:'',
+      telefon:[{
+        name:'',
+        number:''
+      }],
+      termsOfUseUrl:'',
+      privacyPolicyUrl:''
+    })
+  }
+})

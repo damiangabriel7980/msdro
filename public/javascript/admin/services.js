@@ -165,6 +165,7 @@ services.factory('GroupsService', ['$resource', function($resource){
     }
 }]);
 
+
 services.factory('SpecialProductsService', ['$resource', function($resource){
     return {
         products: $resource('api/admin/content/specialProducts/products', {}, {
@@ -218,6 +219,16 @@ services.factory('SpecialAppsService', ['$resource', function($resource){
         })
     }
 }]);
+
+services.factory('PDFService',['$resource',function($resource){
+    return{
+        pdf:$resource('api/admin/productPDF',{},{
+            create:{method:'POST',isArray:false}
+        })
+    }
+}]);
+
+
 
 services.factory('ElearningService', ['$resource', function($resource){
     return {
@@ -550,6 +561,15 @@ services.factory('GuideLineService',['$resource',function($resource){
             })
         }
 }]);
+
+services.factory('myPrescriptionService',['$resource',function($resource){
+  return{
+    info:$resource('api/admin/applications/myPrescription',{},{
+        query:{method:'GET',isArray:false},
+        update:{method:'PUT',isArray:false}
+    })
+  }
+}])
 
 services.factory('NewsletterService', ['$resource', function($resource){
     var variableTypes = ["text", "html"];

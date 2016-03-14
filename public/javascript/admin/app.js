@@ -12,6 +12,7 @@ var app = angular.module('app',
         'myMultipleSelect',
         'therapeuticSelect',
         's3UploadManager',
+        'enhancedS3UploadManager',
         'adminEmailsList',
         'adminWidgetStats',
         'ui.ace',
@@ -288,6 +289,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl:'partials/admin/applications/guideLines/guideLinesFile.html',
             controller:'guideLineFileController'
     })
+        .state('applications.myPrescription',{
+            url:'/myPrescription',
+            templateUrl:'partials/admin/applications/myPrescription/myPrescription.html',
+            controller:'myPrescriptionController'
+        })
         .state('applications.edit',{
             url:'/edit',
             templateUrl:'partials/admin/applications/appUpdate/appUpdate.html',
