@@ -219,6 +219,16 @@ services.factory('SpecialAppsService', ['$resource', function($resource){
     }
 }]);
 
+
+services.factory('PDFService', ['$resource', function($resource){
+    return{
+        pdf:$resource('api/admin/productPDF', {}, {
+            create: { method: 'POST', isArray: false }
+        })
+    }
+}]);
+
+
 services.factory('ElearningService', ['$resource', function($resource){
     return {
         courses: $resource('api/admin/elearning/courses', {}, {
@@ -316,7 +326,8 @@ services.factory('bulkOperationsService',['$resource', function($resource){
     return {
         operations: $resource('api/admin/bulkOperations',{},{
             update: {method: "PUT", isArray: false},
-            delete: {method: "POST", isArray: false}
+            delete: {method: "POST", isArray: false},
+            query: {method: "GET", isArray: false}
         })
     }
 }]);

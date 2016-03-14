@@ -402,3 +402,15 @@ a {
   clear: left;
   width: 100%;
 }
+.customPreviewModal {
+  overflow-y: scroll;
+  height: 750px;
+}
+.customModalFooter {
+  text-align: center;
+  padding-top: 10px;
+}
+.customModalFooter .bulkPdfErrMsg {
+  font-size: large;
+  font-weight: 900;
+}

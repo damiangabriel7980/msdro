@@ -32,6 +32,7 @@ var AppUpdate = require("../models/msd-applications.js");
 var _ = require('underscore');
 var guidelineFile = require ("../models/guidelineFile");
 var guidelineCategory = require ("../models/guidelineCategory");
+var pdf = require("html-pdf");
 
 var xlsx = require("xlsx");
 
@@ -431,6 +432,29 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/bulkOperations')
+      .get(function(req,res){
+          var modelToModify = mongoose.model(req.query.model);
+
+          if (Array.isArray(req.query.items)){
+              modelToModify.find({'_id': {$in: req.query.items}}, function(err, items){
+                  if (err) {
+                      console.log(err);
+                      handleError(res, err, 500);
+                  } else {
+                      handleSuccess(res, items);
+                  }
+              })
+          } else {
+              modelToModify.find({'_id': req.query.items}).limit(1).exec(function(err, item){
+                  if (err) {
+                      handleError(res, err, 500);
+                  } else {
+                      handleSuccess(res, item)
+                  }
+              })
+          }
+
+      })
       .put(function(req, res){
         var modelToModify = mongoose.model(req.query.model);
 
@@ -684,6 +708,19 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleSuccess(res, cont);
             });
         });
+
+    router.route('/admin/productPDF')
+      .post(function(req, res){
+        pdf.create(req.body.html, {format: "A3"}).toBuffer(function(err, buffer){
+          if (err) {
+            handleError(res, err, 500);
+          } else {
+            var newBuffer = buffer.toString('base64');
+            var bufferBase64 = 'data:application/octet-stream;charset=utf-16le;base64,' + newBuffer;
+            handleSuccess(res, {buffer: bufferBase64});
+          }
+        })
+      });
 
     //Carousel Medic
     //===============================================================================================

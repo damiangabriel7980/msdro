@@ -5,7 +5,7 @@
   var scripts = document.getElementsByTagName("script");
   var currentScriptPath = scripts[scripts.length-1].src;
 
-  angular.module('bulkOperations', []).directive('bulkOperations', ['ActionModal', 'bulkOperationsService','$state', function(ActionModal, bulkOperationsService, $state) {
+  angular.module('bulkOperations', []).directive('bulkOperations', ['ActionModal', 'bulkOperationsService','$state', 'Success', '$modal', function(ActionModal, bulkOperationsService, $state, Success, $modal) {
     return {
       restrict: 'E',
       templateUrl: currentScriptPath.replace('bulk_operations.js', 'bulk_operations.html'),
@@ -20,6 +20,10 @@
 
         var toSet = {};
         var modifyMaxItems = true;
+
+        scope.deleteButton = 'deleteButton' in attrs;
+        scope.modifyButton = 'modifyButton' in attrs;
+        scope.exportPDFButton = 'exportPdf' in attrs;
 
         var convertSetToArray = function(){
           scope.itemsArray = [];
@@ -69,8 +73,7 @@
           }
         };
 
-        scope.deleteButton = 'deleteButton' in attrs;
-        scope.modifyButton = 'modifyButton' in attrs;
+
 
         scope.deleteSelectedItems = function() {
           convertSetToArray();
@@ -94,6 +97,26 @@
 
             })
           }, {yes: "Modifica"});
+        };
+
+        scope.getItems = function() {
+          convertSetToArray();
+          bulkOperationsService.operations.query( {model: scope.model, items: scope.itemsArray}).$promise.then(function(resp){
+            var itemsForPdf = Success.getObject(resp);
+            $modal.open({
+              templateUrl:'modules/bulk_operations/bulk_operations_pdf_preview.html',
+              size: 'lg',
+              windowClass:'fade stretch',
+              controller: 'bulkOperationsPdf',
+              resolve:{
+                itemsForPdf: function(){
+                  return itemsForPdf;
+                }
+              }
+            })
+          }).catch(function(err){
+            console.log(err);
+          })
         }
       }
     };
