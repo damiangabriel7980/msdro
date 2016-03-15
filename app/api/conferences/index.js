@@ -68,10 +68,43 @@ module.exports = function(env, logger, router){
 				}else if(!user){
 					handleError(res);
 				}else{
-					handleSucces(user);
+					handleSucces(res, user);
 				}
 			});
 		});
+
+	router.route('/conferences/chat/messages')
+		.get(function(req, res){
+			ConferenceService.getMessageHistory(req.user.username, req.user._id, req.query.id).then(
+				function(history){
+					handleSucces(res, history);
+				},
+				function(err){
+					handleError(res, err);
+				}
+			);
+		})
+		.post(function(req, res){
+			ConferenceService.pushChatMessage(req.body).then(
+				function(message){
+					handleSucces(res, message);
+				},
+				function(err){
+					handleError(res, err);
+				}
+			);
+		});
+
+	router.route('/conferences/chat/kickUser')
+		.post(function(req, res){
+			ConferenceService.kickUser(req.user.username, req.body.userId, req.body.conferenceId)
+				.then(function(){
+					handleSucces(res);
+				})
+				.catch(function(err){
+					handleError(res, err);
+				});
+		})
 }
 
 function handleError(res, err, status){
