@@ -3,7 +3,7 @@
       <h3 class="modal-title">Preview PDF</h3>
     </div>
     <div class="modal-body col-xs-12 customPreviewModal">
-      <div id="bulkOperationsPdfProducts" style="width:730px; float: left" ng-show="!isArticle">
+      <div id="bulkOperationsPdfProducts" style="width:730px; float: left; padding-left: 30px" ng-show="!isArticle">
         <div class="pdfItem" ng-repeat="item in items" style="float: left; border-bottom: 1px solid black; margin-top: 10px; width: 780px;">
           <div>
             <span style="font-size: 30px;">{{item.name}}</span>
@@ -14,13 +14,13 @@
           <div ng-bind-html="item.description" style="float:left; margin-left: 20px; width: 445px;"></div>
         </div>
     </div>
-      <div id="bulkOperationsPdfArticles" style="width:730px; float: left" ng-show="isArticle">
+      <div id="bulkOperationsPdfArticles" style="width:730px; float: left; padding-left: 30px" ng-show="isArticle">
         <div class="pdfItem" ng-repeat="item in items" style="float: left; border-bottom: 1px solid black; margin-top: 10px;">
           <div>
-            <p style="font-size: 30px;">{{item.title}}</p>
-            <p> {{item.author}}</p>
+            <p style="font-size: 16px;">{{item.title}}</p>
+            <p style="font-size: 14px;"> {{item.author}}</p>
           </div>
-          <div data-ng-bind-html="trustAsHtml(item.text)" style="width: 780px; padding: 10px"></div>
+          <div data-ng-bind-html="trustAsHtml(item.text)" style="width: 750px; padding: 10px; font-size: 14px;"></div>
         </div>
       </div>
     </div>

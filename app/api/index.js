@@ -711,7 +711,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/admin/productPDF')
       .post(function(req, res){
-        pdf.create(req.body.html, {format: "A3"}).toBuffer(function(err, buffer){
+        pdf.create(req.body.html, {format: "A3", header: {height: "40px"} , footer:{height: "40px"}}).toBuffer(function(err, buffer){
           if (err) {
             handleError(res, err, 500);
           } else {
