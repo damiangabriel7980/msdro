@@ -1,6 +1,7 @@
 'use strict';
 
 var Conference = require('../../models/liveConferences');
+var ConferenceMessages = require('../../models/conferenceMessages');
 
 var Utils = require('../../modules/utils');
 
@@ -91,9 +92,99 @@ function getSpeakers(conferenceId) {
 	return deferred.promise;
 }
 
+function getMessageHistory(userEmail, userId, conferenceId){
+	var deferred = Q.defer();
+	getConferenceRole(userEmail, conferenceId)
+		.then(function(role){
+			var query = {conferenceId: conferenceId};
+			if(role === "viewer"){
+				query.from = userId;
+			}
+			if(role === "speaker"){
+				query.to = userId;
+			}
+			ConferenceMessages
+				.find(query)
+				.populate('to from')
+				.sort({ timestamp: 1 })
+				.exec(function(err, payload) {
+					if(err){
+						deferred.reject(err);
+					}else{
+						deferred.resolve(payload);
+					}
+				});
+		})
+		.catch(function(err){
+			deferred.reject(err);
+		})
+	return deferred.promise;
+}
+
+function pushChatMessage(message){
+	var deferred = Q.defer();
+
+	var mess = new ConferenceMessages({
+		conferenceId: message.conferenceId,
+		to: message.to,
+		from: message.from,
+		text: message.text,
+		timestamp: message.timestamp,
+		fromSystem: message.fromSystem
+	});
+
+	mess.save(function(err, savedMessage) {
+		if (err) {
+		  	deferred.reject(err);
+		}else{
+		  	savedMessage.populate('to from', function(err, mess) {
+		  		if(err){
+		  			deferred.reject(err);
+		  		}else{
+		  			deferred.resolve(message);
+		  		}
+		  	});
+		}
+	});
+
+	return deferred.promise;
+}
+
+function kickUser(usernameRequestingKick, userIdToKick, conferenceId){
+	var deferred = Q.defer();
+
+	getConferenceRole(usernameRequestingKick, conferenceId)
+		.then(function(role){
+			if(role !== "moderator"){
+				deferred.reject("Not allowed");
+			}else if(!userIdToKick || !conferenceId){
+				deferred.reject("Required query params: userId and conferenceId");
+			}else{
+				// mark all the user's messages in this conference until now as hidden
+				ConferenceMessages.update(
+					{ from: userIdToKick, conferenceId: conferenceId },
+					{ $set: { hidden: '1' } },
+					{ multi: true },
+					function(err, response) {
+						if (err) {
+						  	deferred.reject(err);
+						}else {
+						  	deferred.resolve();
+						}
+					}
+				);
+			}
+		})
+		.catch(function(err){
+			deferred.reject(err);
+		});
+}
+
 module.exports = {
 	getAttendingConferences: getAttendingConferences,
 	getConferenceRole: getConferenceRole,
 	getConference: getConference,
-	getSpeakers: getSpeakers
+	getSpeakers: getSpeakers,
+	getMessageHistory: getMessageHistory,
+	kickUser: kickUser
 };
