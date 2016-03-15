@@ -470,8 +470,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService','$modalStack', '$ocLazyLoad',
-        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService, $modalStack, $ocLazyLoad) {
+    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService','$modalStack', '$ocLazyLoad', '$window', '$timeout', '$location', '$anchorScroll',
+        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService, $modalStack, $ocLazyLoad, $window, $timeout, $location, $anchorScroll) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -505,9 +505,20 @@ app.run(
                 PrintService.printWindow();
             };
 
+            var scrollPosCache = {};
+
             $rootScope.$on('$stateChangeSuccess', function(){
-                if(!$state.is('noutati.listaArticole') && !$state.is('biblioteca.articoleStiintifice.listaArticole'))
-                    window.scrollTo(0,0);
+                // if hash is specified explicitly, it trumps previously stored scroll position
+                if ($location.hash()) {
+                    $anchorScroll();
+
+                    // else get previous scroll position; if none, scroll to the top of the page
+                } else {
+                    var prevScrollPos = scrollPosCache[$state.current.templateUrl] || [0, 0];
+                    $timeout(function () {
+                        $window.scrollTo(prevScrollPos[0], prevScrollPos[1]);
+                    }, 0);
+                }
             });
 
             //state events
@@ -515,6 +526,12 @@ app.run(
                 function(event, toState, toParams, fromState, fromParams){
                     if($modalStack)
                         $modalStack.dismissAll();
+
+                    // store scroll position for the current view
+                    if($state.$current)
+                    {
+                      scrollPosCache[$state.current.templateUrl] = [$window.pageXOffset, $window.pageYOffset];
+                    }
                 });
             //============================================================================================= intro modal
             $rootScope.showIntroPresentation = function (groupID) {
