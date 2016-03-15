@@ -3,6 +3,9 @@
  */
 controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', 'GroupsService', 'Success', 'Error', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit,GroupsService,Success,Error){
 
+    $scope.myGroups = {
+        selectedGroups: []
+    };
     $scope.tinymceOptions = {
         plugins: [
             "advlist autolink lists link image charmap print preview anchor",
@@ -25,7 +28,14 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
         var userGroups = Success.getObject(response).groupsID;
 
         ContentService.groupsByIds.query({ids: userGroups}).$promise.then(function (groups) {
-            $scope.selectedGroups = Success.getObject(groups);
+            $scope.myGroups.selectedGroups = Success.getObject(groups);
+            GroupsService.groups.query().$promise.then(function(resp){
+                $scope.groups = Success.getObject(resp);
+            }).catch(function(err){
+                $scope.statusAlert.type = "danger";
+                $scope.statusAlert.message = Error.getMessage(err);
+                $scope.statusAlert.newAlert = true;
+            });
         }).catch(function(err){
             $scope.statusAlert.type = "danger";
             $scope.statusAlert.message = Error.getMessage(err);
@@ -37,15 +47,6 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
         $scope.statusAlert.message = Error.getMessage(err);
         $scope.statusAlert.newAlert = true;
     });
-
-    GroupsService.groups.query().$promise.then(function(resp){
-        $scope.groups = Success.getObject(resp);
-    }).catch(function(err){
-        $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err);
-        $scope.statusAlert.newAlert = true;
-    });
-
 
     var putLogoS3 = function (body) {
         AmazonService.getClient(function (s3) {
@@ -241,8 +242,8 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
 
     $scope.updateArticle=function(){
         var id_groups=[];
-        for(var i=0;i<$scope.selectedGroups.length;i++){
-            id_groups.push($scope.selectedGroups[i]._id);
+        for(var i=0;i<$scope.myGroups.selectedGroups.length;i++){
+            id_groups.push($scope.myGroups.selectedGroups[i]._id);
         }
         $scope.article.groupsID=id_groups;
         $scope.article.last_updated = Date.now();

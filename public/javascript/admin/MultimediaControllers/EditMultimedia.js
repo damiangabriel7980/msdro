@@ -4,27 +4,34 @@
 controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','GroupsService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','AmazonService','idToEdit', 'Success', 'Error', function($scope,$rootScope,MultimediaAdminService,GroupsService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,AmazonService,idToEdit,Success,Error){
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertVideo = {newAlert:false, type:"", message:""};
+    $scope.myAreas = {
+        returnedAreas: []
+    };
+    $scope.myGroups = {
+        selectedGroups: []
+    };
 
     MultimediaAdminService.multimedia.query({id:idToEdit}).$promise.then(function(result){
         $scope.multimedia = Success.getObject(result);
         $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
-        $scope.selectedGroups = Success.getObject(result)['groupsID'];
-    }).catch(function(err){
-        $scope.uploadAlert.type = "danger";
-        $scope.uploadAlert.message = Error.getMessage(err);
-        $scope.uploadAlert.newAlert = true;
-    });
+        $scope.myGroups.selectedGroups = Success.getObject(result)['groupsID'];
 
-    GroupsService.groups.query().$promise.then(function(resp){
-        $scope.groups = Success.getObject(resp);
-    }).catch(function(err){
-        $scope.uploadAlert.type = "danger";
-        $scope.uploadAlert.message = Error.getMessage(err);
-        $scope.uploadAlert.newAlert = true;
-    });
+        GroupsService.groups.query().$promise.then(function(resp){
+            $scope.groups = Success.getObject(resp);
+        }).catch(function(err){
+            $scope.uploadAlert.type = "danger";
+            $scope.uploadAlert.message = Error.getMessage(err);
+            $scope.uploadAlert.newAlert = true;
+        });
 
-    therapeuticAreaService.query().$promise.then(function (resp) {
-        $scope.areas = Success.getObject(resp);
+        therapeuticAreaService.query().$promise.then(function (resp) {
+            $scope.areas = Success.getObject(resp);
+        }).catch(function(err){
+            $scope.uploadAlert.type = "danger";
+            $scope.uploadAlert.message = Error.getMessage(err);
+            $scope.uploadAlert.newAlert = true;
+        });
+
     }).catch(function(err){
         $scope.uploadAlert.type = "danger";
         $scope.uploadAlert.message = Error.getMessage(err);
@@ -33,11 +40,11 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
 
     $scope.updateMultimedia = function(){
         var groups_id = [];
-        for(var i=0; i<$scope.selectedGroups.length; i++){
-            groups_id.push($scope.selectedGroups[i]._id);
+        for(var i=0; i<$scope.myGroups.selectedGroups.length; i++){
+            groups_id.push($scope.myGroups.selectedGroups[i]._id);
         }
         $scope.multimedia.groupsID = groups_id;
-        $scope.multimedia['therapeutic-areasID'] = $scope.returnedAreas;
+        $scope.multimedia['therapeutic-areasID'] = $scope.myAreas.returnedAreas;
         $scope.multimedia.last_updated = new Date();
 
         MultimediaAdminService.multimedia.update({id:idToEdit},{multimedia: $scope.multimedia}).$promise.then(function (resp) {
