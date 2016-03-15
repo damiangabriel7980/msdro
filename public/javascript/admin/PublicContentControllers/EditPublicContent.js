@@ -5,6 +5,11 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
+    $scope.contentType = {};
+    $scope.myCategories = {};
+    $scope.myAreas = {
+        selectedAreas: []
+    };
 
     $scope.tinymceOptions = {
         plugins: [
@@ -16,29 +21,23 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 
-    //----------------------------------------------------------------------------------------------- categories
-
-    publicContentService.categories.query().$promise.then(function (resp) {
-        if(Success.getObject(resp)){
-            $scope.categories = Success.getObject(resp);
-        }
-    }).catch(function(err){
-        $scope.statusAlert.type = "danger";
-        $scope.statusAlert.message = Error.getMessage(err);
-        $scope.statusAlert.newAlert = true;
-    });
-
     //----------------------------------------------------------------------------------------------------- get content
     publicContentService.publicContent.query({id: idToEdit}).$promise.then(function (resp) {
-        console.log(resp);
-        $scope.titlu = Success.getObject(resp).title;
-        $scope.autor = Success.getObject(resp).author;
-        $scope.descriere = Success.getObject(resp).description;
-        $scope.selectedType = Success.getObject(resp).type;
-        $scope.contentText = Success.getObject(resp).text;
-        $scope.imagePath = Success.getObject(resp).image_path;
-        $scope.filePath = Success.getObject(resp).file_path;
-        $scope.selectedCategory = Success.getObject(resp).category;
+        $scope.publicContent = Success.getObject(resp);
+
+        $scope.contentType.selectedType = $scope.publicContent.type;
+
+        $scope.myCategories.selectedCategory = Success.getObject(resp).category;
+
+        publicContentService.categories.query().$promise.then(function (resp) {
+            if(Success.getObject(resp)){
+                $scope.categories = Success.getObject(resp);
+            }
+        }).catch(function(err){
+            $scope.statusAlert.type = "danger";
+            $scope.statusAlert.message = Error.getMessage(err);
+            $scope.statusAlert.newAlert = true;
+        });
 
         contentDataLoaded = true;
 
@@ -46,8 +45,8 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
 
         //get therapeutic areas
         therapeuticAreas.areas.query().$promise.then(function (resp) {
-            $scope.allAreas = Success.getObject(resp);
             $scope.selectedAreas = areasIds;
+            $scope.allAreas = Success.getObject(resp);
         });
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
@@ -76,8 +75,8 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
                             $scope.uploadAlert.newAlert = true;
                             console.log("Upload complete");
                             //update view
-                            if(type === "image") $scope.imagePath = key;
-                            if(type === "file") $scope.filePath = key;
+                            if(type === "image") $scope.publicContent.image_path = key;
+                            if(type === "file") $scope.publicContent.file_path = key;
                     }).catch(function(err){
                         $scope.uploadAlert.type = "danger";
                         $scope.uploadAlert.message = Error.getMessage(err);
@@ -174,19 +173,12 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
     //------------------------------------------------------------------------------------------------- form submission
 
     $scope.editContent = function () {
-        var toUpdate = {};
-        toUpdate.title = this.titlu?this.titlu:"";
-        toUpdate.author = this.autor?this.autor:"";
-        toUpdate.description = this.descriere?this.descriere:"";
-        toUpdate.type = $scope.selectedType;
-        toUpdate.category = this.selectedCategory;
-        toUpdate['therapeutic-areasID'] = this.newAreas;
-        //get content text
-        toUpdate.text = this.contentText?this.contentText:"";
-        //send data to server
-        toUpdate.last_updated = new Date();
-        console.log(toUpdate);
-        publicContentService.publicContent.update({id: idToEdit},{toUpdate: toUpdate}).$promise.then(function (resp) {
+        $scope.publicContent.type = $scope.contentType.selectedType;
+        $scope.publicContent.category = $scope.myCategories.selectedCategory;
+        $scope.publicContent['therapeutic-areasID'] = $scope.myAreas.newAreas;
+        $scope.publicContent.last_updated = new Date();
+        delete $scope.publicContent._id;
+        publicContentService.publicContent.update({id: idToEdit},{toUpdate: $scope.publicContent}).$promise.then(function (resp) {
                 $scope.statusAlert.type = "success";
                 $scope.statusAlert.message = Success.getMessage(resp);
             $scope.statusAlert.newAlert = true;
