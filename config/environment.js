@@ -42,7 +42,8 @@ module.exports = function(){
                     overwriteApiResponses: true
                 },
                 conference: {
-                    socketPath: 'http://localhost:8080/socket.io-conferences',
+                    socketHost: 'http://localhost:8080',
+                    socketPath: '/socket.io-conferences',
                     apiPath: 'http://localhost:8080/api/conferences/',
                     turnConfig: {
                         address: "188.226.200.49",
@@ -89,7 +90,8 @@ module.exports = function(){
                     overwriteApiResponses: true
                 },
                 conference: {
-                    socketPath: 'http://localhost:8080/socket.io-conferences',
+                    socketHost: 'http://localhost:8080',
+                    socketPath: '/socket.io-conferences',
                     apiPath: 'http://localhost:8080/api/conferences/',
                     turnConfig: {
                         address: "188.226.200.49",
@@ -137,7 +139,8 @@ module.exports = function(){
                     overwriteApiResponses: true
                 },
                 conference: {
-                    socketPath: 'http://localhost:8080/socket.io-conferences',
+                    socketHost: 'http://localhost:8080',
+                    socketPath: '/socket.io-conferences',
                     apiPath: 'http://localhost:8080/api/conferences/',
                     turnConfig: {
                         address: "188.226.200.49",
@@ -184,7 +187,8 @@ module.exports = function(){
                     overwriteApiResponses: true
                 },
                 conference: {
-                    socketPath: 'http://localhost:8080/socket.io-conferences',
+                    socketHost: 'http://localhost:8080',
+                    socketPath: '/socket.io-conferences',
                     apiPath: 'http://localhost:8080/api/conferences/',
                     turnConfig: {
                         address: "82.196.15.98",
@@ -231,7 +235,8 @@ module.exports = function(){
                     overwriteApiResponses: true
                 },
                 conference: {
-                    socketPath: 'http://localhost:8080/socket.io-conferences',
+                    socketHost: 'http://localhost:8080',
+                    socketPath: '/socket.io-conferences',
                     apiPath: 'http://localhost:8080/api/conferences/',
                     turnConfig: {
                         address: "188.226.200.49",
