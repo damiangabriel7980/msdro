@@ -13,7 +13,6 @@ controllers.controller('bulkOperationsPdf',['$scope', '$modalInstance', 'itemsFo
 
   function onLoad(){
     $scope.items = itemsForPdf;
-    console.log($scope.items);
     checkItems();
   }
 
