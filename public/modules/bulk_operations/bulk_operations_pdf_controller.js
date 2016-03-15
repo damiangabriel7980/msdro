@@ -13,7 +13,6 @@ controllers.controller('bulkOperationsPdf',['$scope', '$modalInstance', 'itemsFo
 
   function onLoad(){
     $scope.items = itemsForPdf;
-    console.log($scope.items);
     checkItems();
   }
 
@@ -21,10 +20,10 @@ controllers.controller('bulkOperationsPdf',['$scope', '$modalInstance', 'itemsFo
     if( "author" in $scope.items[0]){
       elementForPdf = 'bulkOperationsPdfArticles';
       $scope.isArticle = true;
-      pdfTitle = 'Articole';
+      pdfTitle = 'Articole.pdf';
     } else {
       elementForPdf ='bulkOperationsPdfProducts';
-      pdfTitle = "Produse";
+      pdfTitle = "Produse.pdf";
     }
   }
 
