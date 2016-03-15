@@ -414,3 +414,9 @@ a {
   font-size: large;
   font-weight: 900;
 }
+.labelMargin30 {
+  margin-left: 30px;
+}
+.bulkOperationsClearLeft {
+  clear: left;
+}
