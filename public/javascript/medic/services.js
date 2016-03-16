@@ -228,10 +228,10 @@ services.factory('FormatService', function () {
 
 services.factory('ConferenceService', ['$resource', function($resource){
     return {
-        all: $resource('/api/conferences/', {}, {
+        all: $resource('/apiVideoConferences/', {}, {
             query: { method: 'GET', isArray: true }
         }),
-        role: $resource('/api/conferences/role', {}, {
+        role: $resource('/apiVideoConferences/role', {}, {
             query: { method: 'GET', isArray: false }
         })
     }

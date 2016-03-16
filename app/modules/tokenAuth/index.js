@@ -23,6 +23,19 @@ var signToken = function (profile) {
     return jwt.sign(profile, my_config.tokenSecret);
 };
 
+var isTokenValid = function(token){
+    return jwt.verify(token, my_config.tokenSecret);
+}
+
+var isTokenValidReq = function(req){
+    var token = getTokenReq(req);
+    if(token){
+        return isTokenValid(token);
+    }else{
+        return false;
+    }
+}
+
 var getUserData = function (req) {
     var token = getTokenReq(req);
     return token?jwt.decode(token):{};
@@ -122,5 +135,8 @@ module.exports = {
     authenticateToken: authenticateToken,
     refreshToken: refreshToken,
     getUserData: getUserData,
-    getConferenceToken: getConferenceToken
+    conference: {
+        getToken: getConferenceToken,
+    },
+    isAuthorized: isTokenValidReq
 };

@@ -1,10 +1,38 @@
 var ConferenceService = require('./service.js');
 
-var User = require('../../models/user');
+var TokenModule = require('../modules/tokenAuth');
 
-module.exports = function(env, logger, router){
+var User = require('../models/user');
 
-	router.route('/conferences/')
+module.exports = function(app, env, logger, router){
+
+    // We are going to protect /apiVideoConferences routes with both JWT and passport
+    app.use('/apiVideoConferences', function customAuthenticator(req, res, next){
+    	// first we will check if the user is authenticated via password
+    	// if not, we will check if the user is authenticated via token
+    	if(req.isAuthenticated()){
+    		next();
+    	}else if(TokenModule.isAuthorized(req)){
+    		//we need the full user info on the request
+    		var user = TokenModule.getUserData(req);
+    		if(!user){
+    			return handleError(res, "Forbidden", 403);
+    		}else{
+    			User.findOne({_id: user.id}, function(err, user){
+    				if(err || !user){
+    					return handleError(res, "Forbidden", 403);
+    				}else{
+    					req.user = user;
+    					next();
+    				}
+    			});
+    		}
+    	}else{
+			return handleError(res, "Forbidden", 403);
+		}
+	});
+
+	router.route('/')
 		.get(function(req, res){
 			ConferenceService.getAttendingConferences(req.user.username).then(
 			  function(conferences) {
@@ -16,7 +44,7 @@ module.exports = function(env, logger, router){
 			);
 		});
 
-	router.route('/conferences/conferenceDetails')
+	router.route('/conferenceDetails')
 		.get(function(req, res){
 			if (req.query.id){
 			  ConferenceService.getConference(req.query.id).then(
@@ -32,7 +60,7 @@ module.exports = function(env, logger, router){
 			}
 		});
 
-	router.route('/conferences/role')
+	router.route('/role')
 		.get(function(req, res){
 			if (req.query.id){
 				ConferenceService.getConferenceRole(req.user.username, req.query.id).then(
@@ -48,7 +76,7 @@ module.exports = function(env, logger, router){
 			}
 		});
 
-	router.route('/conferences/credentials')
+	router.route('/credentials')
 		.get(function(req, res){
 			res.status(200).json({
 			  uname: "asd",
@@ -60,7 +88,7 @@ module.exports = function(env, logger, router){
 			});
 		});
 
-	router.route('/conferences/user')
+	router.route('/user')
 		.get(function(req, res){
 			User.findOne({_id: req.user._id}).exec(function(err, user){
 				if(err){
@@ -73,7 +101,7 @@ module.exports = function(env, logger, router){
 			});
 		});
 
-	router.route('/conferences/chat/messages')
+	router.route('/chat/messages')
 		.get(function(req, res){
 			ConferenceService.getMessageHistory(req.user.username, req.user._id, req.query.id).then(
 				function(history){
@@ -95,7 +123,7 @@ module.exports = function(env, logger, router){
 			);
 		});
 
-	router.route('/conferences/chat/kickUser')
+	router.route('/chat/kickUser')
 		.post(function(req, res){
 			ConferenceService.kickUser(req.user.username, req.body.userId, req.body.conferenceId)
 				.then(function(){
@@ -104,7 +132,9 @@ module.exports = function(env, logger, router){
 				.catch(function(err){
 					handleError(res, err);
 				});
-		})
+		});
+
+	app.use('/apiVideoConferences', router);
 }
 
 function handleError(res, err, status){

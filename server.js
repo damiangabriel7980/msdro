@@ -95,6 +95,7 @@ require('./app/apiContractManagement.js')(app, logger, express.Router());
 require('./app/apiJanuvia.js')(app, logger, express.Router());
 require('./app/apiAplicationUpgrade.js')(app, logger, express.Router());
 require('./app/apiGuidelines.js')(app,logger,express.Router());
+require('./app/apiVideoConferences')(app, my_config, logger, express.Router());
 // socket comm test =================================================================
 // require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 

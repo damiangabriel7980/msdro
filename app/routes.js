@@ -101,7 +101,7 @@ module.exports = function(app, logger, passport) {
             if(req.query.id){
                 res.render("conference/main.ejs", {
                     conference: req.query.id,
-                    token: TokenModule.getConferenceToken(req),
+                    token: TokenModule.conference.getToken(req),
                     socketPath: my_config.conference.socketPath,
                     apiPath: my_config.conference.apiPath
                 });
