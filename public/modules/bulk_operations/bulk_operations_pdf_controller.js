@@ -8,9 +8,6 @@ controllers.controller('bulkOperationsPdf',['$scope', '$modalInstance', 'itemsFo
   var elementForPdf;
   var pdfTitle;
 
-
-
-
   function onLoad(){
     $scope.items = itemsForPdf;
     checkItems();
@@ -38,6 +35,31 @@ controllers.controller('bulkOperationsPdf',['$scope', '$modalInstance', 'itemsFo
   }
 
 
+  function b64toBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, {type: contentType});
+    return blob;
+  }
+
+
   $scope.downloadPDF = function(){
     $scope.isDisabled = true;
     $scope.showMsg = true;
@@ -46,12 +68,19 @@ controllers.controller('bulkOperationsPdf',['$scope', '$modalInstance', 'itemsFo
     PDFService.pdf.create({}, {
       html: htmlForPDf
     }).$promise.then(function(resp) {
+
       var respObj = Success.getObject(resp);
 
-      downloadURI(respObj.buffer);
+      var blobToDownload = b64toBlob(respObj.buffer, 'application/pdf');
+
+
+      var url = URL.createObjectURL(blobToDownload);
+
+      downloadURI(url);
 
       $scope.isDisabled = false;
       $scope.showMsg = false;
+
     }).catch(function(err) {
       console.log(err);
     })

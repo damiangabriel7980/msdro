@@ -9,7 +9,7 @@
             <span style="font-size: 30px;">{{item.name}}</span>
           </div>
           <div style="float: left;" >
-            <img ng-src="{{item.image_path? pathAmazonDev+item.image_path:$rootScope.pathAmazonResources + 'piles-of-pills.jpg'}}" width="200" />
+            <img ng-src="{{item.image_path? pathAmazonDev+item.image_path:pathAmazonResources + 'piles-of-pills.jpg'}}" width="200" />
           </div>
           <div ng-bind-html="item.description" style="float:left; margin-left: 20px; width: 445px;"></div>
         </div>

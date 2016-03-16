@@ -716,8 +716,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             handleError(res, err, 500);
           } else {
             var newBuffer = buffer.toString('base64');
-            var bufferBase64 = 'data:application/octet-stream;charset=utf-16le;base64,' + newBuffer;
-            handleSuccess(res, {buffer: bufferBase64});
+            handleSuccess(res, {buffer: newBuffer});
           }
         })
       });
