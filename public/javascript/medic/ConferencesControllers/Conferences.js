@@ -23,7 +23,7 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
             if(role === "speaker"){
               previewConference(conf._id);
             }else{
-              $scope.startConference(conf._id);
+              startConference(conf._id);
             }
           }else{
             console.log("This should not have happened");
@@ -32,7 +32,7 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
       );
     };
 
-    $scope.startConference = function(conferenceId){
+    var startConference = function(conferenceId){
       console.log("Start conference: "+conferenceId);
       //first we need to calculate our window dimensions and position
       var width = window.innerWidth * 0.66 ;
@@ -54,12 +54,15 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
     				controller: 'ConferencePreview',
     				resolve: {
     				    videoUrl: getVideoURL(stream),
-                parentScope: $scope,
     				    conferenceData: {
                   id: conferenceId
                 }
     				}
-    			});
+    			}).result.then(function(conferenceId){
+            if(conferenceId){
+              startConference(conferenceId);
+            }
+          });
     		},
     		function(err){
     			console.log(err);
