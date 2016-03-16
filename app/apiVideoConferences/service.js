@@ -1,9 +1,9 @@
 'use strict';
 
-var Conference = require('../../models/liveConferences');
-var ConferenceMessages = require('../../models/conferenceMessages');
+var Conference = require('../models/liveConferences');
+var ConferenceMessages = require('../models/conferenceMessages');
 
-var Utils = require('../../modules/utils');
+var Utils = require('../modules/utils');
 
 var Q = require('q');
 

@@ -44,7 +44,7 @@ module.exports = function(){
                 conference: {
                     socketHost: 'http://localhost:8080',
                     socketPath: '/socket.io-conferences',
-                    apiPath: 'http://localhost:8080/api/conferences/',
+                    apiPath: 'http://localhost:8080/apiVideoConferences/',
                     turnConfig: {
                         address: "188.226.200.49",
                         port: "3478"
@@ -92,7 +92,7 @@ module.exports = function(){
                 conference: {
                     socketHost: 'http://localhost:8080',
                     socketPath: '/socket.io-conferences',
-                    apiPath: 'http://localhost:8080/api/conferences/',
+                    apiPath: 'http://localhost:8080/apiVideoConferences/',
                     turnConfig: {
                         address: "188.226.200.49",
                         port: "3478"
@@ -141,7 +141,7 @@ module.exports = function(){
                 conference: {
                     socketHost: 'http://localhost:8080',
                     socketPath: '/socket.io-conferences',
-                    apiPath: 'http://localhost:8080/api/conferences/',
+                    apiPath: 'http://localhost:8080/apiVideoConferences/',
                     turnConfig: {
                         address: "188.226.200.49",
                         port: "3478"
@@ -189,7 +189,7 @@ module.exports = function(){
                 conference: {
                     socketHost: 'http://localhost:8080',
                     socketPath: '/socket.io-conferences',
-                    apiPath: 'http://localhost:8080/api/conferences/',
+                    apiPath: 'http://localhost:8080/apiVideoConferences/',
                     turnConfig: {
                         address: "82.196.15.98",
                         port: "3478"
@@ -237,7 +237,7 @@ module.exports = function(){
                 conference: {
                     socketHost: 'http://localhost:8080',
                     socketPath: '/socket.io-conferences',
-                    apiPath: 'http://localhost:8080/api/conferences/',
+                    apiPath: 'http://localhost:8080/apiVideoConferences/',
                     turnConfig: {
                         address: "188.226.200.49",
                         port: "3478"
