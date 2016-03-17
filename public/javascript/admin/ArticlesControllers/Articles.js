@@ -14,9 +14,6 @@ controllers.controller('Articles', ['$scope','$rootScope', '$state', 'ContentSer
                 count: 10,          // count per page
                 sorting: {
                     last_updated: 'desc'     // initial sorting
-                },
-                filter: {
-                    title: ''       // initial filter
                 }
             }, {
                 total: contents.length, // length of data

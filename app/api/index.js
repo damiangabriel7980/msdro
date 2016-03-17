@@ -980,7 +980,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var content = new Content({
                 title: 'Untitled',
                 created: new Date(),
-                last_updated: new Date()
+                last_updated: new Date(),
+                author: 'Untitled'
             });
             content.save(function(err,saved) {
                 if (err){
