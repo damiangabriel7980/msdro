@@ -5,7 +5,7 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
     };
 
     $scope.getHeader = function () {
-        return ['Name', 'Email']
+        return ['name', 'email']
     };
 
     var refreshDevices = function (sortByDate) {
