@@ -113,6 +113,7 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
                     //add to result
                     var lineObj = {};
                     for(var l=0; l < columnsCount; l++){
+                        line[l] = line[l].replace(/(\r\n|\n|\r)/gm,"");
                         lineObj[headers[l]] = line[l];
                     }
                     result.push(lineObj);
