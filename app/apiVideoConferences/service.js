@@ -141,7 +141,7 @@ function pushChatMessage(message){
 		  		if(err){
 		  			deferred.reject(err);
 		  		}else{
-		  			deferred.resolve(message);
+		  			deferred.resolve(mess);
 		  		}
 		  	});
 		}
@@ -186,5 +186,6 @@ module.exports = {
 	getConference: getConference,
 	getSpeakers: getSpeakers,
 	getMessageHistory: getMessageHistory,
+	pushChatMessage: pushChatMessage,
 	kickUser: kickUser
 };
