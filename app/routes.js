@@ -99,13 +99,11 @@ module.exports = function(app, logger, passport) {
     app.get('/conference', function(req, res){
         if(req.isAuthenticated()){
             if(req.query.id){
-                var appConf = my_config.conference.application;
-                var apiPath = appConf.protocol + "://" + appConf.host + appConf.apiPath + "/";
                 res.render("conference/main.ejs", {
                     conference: req.query.id,
                     token: TokenModule.conference.getToken(req),
                     socketPath: my_config.conference.socket.path,
-                    apiPath: apiPath
+                    apiPath: my_config.conference.apiFrontEnd
                 });
             }else{
                 res.redirect('/');
