@@ -104,12 +104,26 @@ module.exports = function(){
                     overwriteApiResponses: false
                 },
                 conference: {
-                    socketHost: 'http://localhost:8080',
-                    socketPath: '/socket.io-conferences',
-                    apiPath: 'http://localhost:8080/apiVideoConferences/',
                     turnConfig: {
                         address: "188.226.200.49",
                         port: "3478"
+                    },
+                    socket: {
+                        path: "/socket.io-conferences"
+                    },
+                    application: {
+                        protocol: "http",
+                        host: "localhost:8080",
+                        apiPath: "/apiVideoConferences"
+                    },
+                    kurento: {
+                        ws_uri: 'ws://185.14.186.114:8888/kurento'
+                    },
+                    auth: {
+                        token: {
+                            secret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                            expiresIn: 24*60*60 // expires in 24 hours
+                        }
                     }
                 }
             };
@@ -153,12 +167,26 @@ module.exports = function(){
                     overwriteApiResponses: false
                 },
                 conference: {
-                    socketHost: 'http://localhost:8080',
-                    socketPath: '/socket.io-conferences',
-                    apiPath: 'http://localhost:8080/apiVideoConferences/',
                     turnConfig: {
                         address: "188.226.200.49",
                         port: "3478"
+                    },
+                    socket: {
+                        path: "/socket.io-conferences"
+                    },
+                    application: {
+                        protocol: "http",
+                        host: "localhost:8080",
+                        apiPath: "/apiVideoConferences"
+                    },
+                    kurento: {
+                        ws_uri: 'ws://185.14.186.114:8888/kurento'
+                    },
+                    auth: {
+                        token: {
+                            secret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                            expiresIn: 24*60*60 // expires in 24 hours
+                        }
                     }
                 }
             };
@@ -201,12 +229,26 @@ module.exports = function(){
                     overwriteApiResponses: false
                 },
                 conference: {
-                    socketHost: 'http://localhost:8080',
-                    socketPath: '/socket.io-conferences',
-                    apiPath: 'http://localhost:8080/apiVideoConferences/',
                     turnConfig: {
-                        address: "82.196.15.98",
+                        address: "188.226.200.49",
                         port: "3478"
+                    },
+                    socket: {
+                        path: "/socket.io-conferences"
+                    },
+                    application: {
+                        protocol: "http",
+                        host: "localhost:8080",
+                        apiPath: "/apiVideoConferences"
+                    },
+                    kurento: {
+                        ws_uri: 'ws://185.14.186.114:8888/kurento'
+                    },
+                    auth: {
+                        token: {
+                            secret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                            expiresIn: 24*60*60 // expires in 24 hours
+                        }
                     }
                 }
             };
@@ -249,12 +291,26 @@ module.exports = function(){
                     overwriteApiResponses: false
                 },
                 conference: {
-                    socketHost: 'http://localhost:8080',
-                    socketPath: '/socket.io-conferences',
-                    apiPath: 'http://localhost:8080/apiVideoConferences/',
                     turnConfig: {
                         address: "188.226.200.49",
                         port: "3478"
+                    },
+                    socket: {
+                        path: "/socket.io-conferences"
+                    },
+                    application: {
+                        protocol: "http",
+                        host: "localhost:8080",
+                        apiPath: "/apiVideoConferences"
+                    },
+                    kurento: {
+                        ws_uri: 'ws://185.14.186.114:8888/kurento'
+                    },
+                    auth: {
+                        token: {
+                            secret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                            expiresIn: 24*60*60 // expires in 24 hours
+                        }
                     }
                 }
             };
