@@ -49,7 +49,8 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    application: {
+                    apiFrontEnd: "http://localhost:8080/apiVideoConferences",
+                    apiBackEnd: {
                         protocol: "http",
                         host: "localhost:8080",
                         apiPath: "/apiVideoConferences"
@@ -111,9 +112,10 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    application: {
-                        protocol: "https",
-                        host: "10.200.0.250",
+                    apiFrontEnd: "https://10.200.0.250/apiVideoConferences",
+                    apiBackEnd: {
+                        protocol: "http",
+                        host: "localhost:8080",
                         apiPath: "/apiVideoConferences"
                     },
                     kurento: {
@@ -174,7 +176,8 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    application: {
+                    apiFrontEnd: "http://localhost:8080/apiVideoConferences",
+                    apiBackEnd: {
                         protocol: "http",
                         host: "localhost:8080",
                         apiPath: "/apiVideoConferences"
@@ -236,7 +239,8 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    application: {
+                    apiFrontEnd: "http://localhost:8080/apiVideoConferences",
+                    apiBackEnd: {
                         protocol: "http",
                         host: "localhost:8080",
                         apiPath: "/apiVideoConferences"
@@ -298,7 +302,8 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    application: {
+                    apiFrontEnd: "http://localhost:8080/apiVideoConferences",
+                    apiBackEnd: {
                         protocol: "http",
                         host: "localhost:8080",
                         apiPath: "/apiVideoConferences"

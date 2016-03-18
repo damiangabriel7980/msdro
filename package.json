@@ -34,7 +34,7 @@
     "passport-local": "latest",
     "passport-twitter": "~1.0.2",
     "q": "latest",
-    "qconferences-back-end": "git+ssh://git@gitlab.qualitance.com:node_modules/qconferences-back-end.git#v1.0.0",
+    "qconferences-back-end": "git+ssh://git@gitlab.qualitance.com:node_modules/qconferences-back-end.git#v1.0.1",
     "request": "~2.47.0",
     "s3": "~4.3.1",
     "socket.io": "latest",
