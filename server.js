@@ -100,10 +100,8 @@ require('./app/apiVideoConferences')(app, my_config, logger, express.Router());
 // socket comm test =================================================================
 // require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 
-var conferencesConfig = {
-};
 var conferences = require('qconferences-back-end');
-conferences(devServer, app, conferencesConfig);
+conferences(devServer, app, my_config.conference);
 //conferences(secureServer, app, conferencesConfig);
 
 // launch ======================================================================
