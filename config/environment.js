@@ -49,7 +49,7 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    apiFrontEnd: "http://localhost:8080/apiVideoConferences",
+                    apiFrontEnd: "http://localhost:8080/apiVideoConferences/",
                     apiBackEnd: {
                         protocol: "http",
                         host: "localhost:8080",
@@ -112,7 +112,7 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    apiFrontEnd: "https://10.200.0.250/apiVideoConferences",
+                    apiFrontEnd: "https://10.200.0.250/apiVideoConferences/",
                     apiBackEnd: {
                         protocol: "http",
                         host: "localhost:8080",
@@ -176,7 +176,7 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    apiFrontEnd: "http://localhost:8080/apiVideoConferences",
+                    apiFrontEnd: "http://localhost:8080/apiVideoConferences/",
                     apiBackEnd: {
                         protocol: "http",
                         host: "localhost:8080",
@@ -239,7 +239,7 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    apiFrontEnd: "http://localhost:8080/apiVideoConferences",
+                    apiFrontEnd: "http://localhost:8080/apiVideoConferences/",
                     apiBackEnd: {
                         protocol: "http",
                         host: "localhost:8080",
@@ -302,7 +302,7 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    apiFrontEnd: "http://localhost:8080/apiVideoConferences",
+                    apiFrontEnd: "http://localhost:8080/apiVideoConferences/",
                     apiBackEnd: {
                         protocol: "http",
                         host: "localhost:8080",
