@@ -112,8 +112,8 @@ module.exports = function(){
                         path: "/socket.io-conferences"
                     },
                     application: {
-                        protocol: "http",
-                        host: "localhost:8080",
+                        protocol: "https",
+                        host: "10.200.0.250",
                         apiPath: "/apiVideoConferences"
                     },
                     kurento: {
