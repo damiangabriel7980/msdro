@@ -44,7 +44,7 @@ module.exports = function (app, logger, router) {
           if (new Date(resp).getTime() > req.headers['last-modified']) {
             getMyPrescriptionInfo(res, new Date(resp).getTime());
           } else {
-            handleSuccess(res, 304, 16)
+            handleSuccess(res, true, 16, 304)
           }
         })
       }
