@@ -4,6 +4,7 @@
 controllers.controller('AppUpdateEdit',['$scope','$modalInstance','idToEdit','ApplicationService','Success','$state',function($scope,$modalInstance , idToEdit ,ApplicationService,Success,$state){
     $scope.toManyApps = false ;
 
+    $scope.app = {};
    var initialize= function(){
        ApplicationService.app.query({id:idToEdit}).$promise.then(function(resp){
        var app = Success.getObject(resp);
@@ -15,7 +16,8 @@ controllers.controller('AppUpdateEdit',['$scope','$modalInstance','idToEdit','Ap
        else{
            $scope.upDate = new Date();
        }
-   });
+           $scope.$applyAsync();
+       });
    };
 
     initialize();

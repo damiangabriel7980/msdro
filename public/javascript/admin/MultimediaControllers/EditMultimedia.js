@@ -10,12 +10,13 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
     $scope.myGroups = {
         selectedGroups: []
     };
+    $scope.multimedia = {};
 
     MultimediaAdminService.multimedia.query({id:idToEdit}).$promise.then(function(result){
         $scope.multimedia = Success.getObject(result);
         $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
         $scope.myGroups.selectedGroups = Success.getObject(result)['groupsID'];
-
+        $scope.$applyAsync();
         GroupsService.groups.query().$promise.then(function(resp){
             $scope.groups = Success.getObject(resp);
         }).catch(function(err){

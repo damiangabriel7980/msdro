@@ -7,6 +7,7 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.contentType = {};
     $scope.myCategories = {};
+    $scope.publicContent = {};
     $scope.myAreas = {
         selectedAreas: []
     };
@@ -28,7 +29,7 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         $scope.contentType.selectedType = $scope.publicContent.type;
 
         $scope.myCategories.selectedCategory = Success.getObject(resp).category;
-
+        $scope.$applyAsync();
         publicContentService.categories.query().$promise.then(function (resp) {
             if(Success.getObject(resp)){
                 $scope.categories = Success.getObject(resp);

@@ -9,11 +9,12 @@ controllers.controller('EditGroup', ['$scope','GroupsService', '$modalInstance',
             message:message
         };
     };
-    
+    $scope.toUpdate = {};
     var groupDataLoaded = false;
 
     GroupsService.groups.query({id: idToEdit}).$promise.then(function (resp) {
         $scope.toUpdate = Success.getObject(resp);
+        $scope.$applyAsync();
         GroupsService.users.query().$promise.then(function (resp) {
             $scope.users = Success.getObject(resp);
             GroupsService.users.query({group: idToEdit}).$promise.then(function (resp) {

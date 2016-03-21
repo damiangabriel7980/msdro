@@ -5,6 +5,7 @@
  * Created by Administrator on 17/09/15.
  */
 controllers.controller('EditChapter', ['$scope', '$rootScope', '$state', '$stateParams', 'ElearningService', 'AmazonService', '$modal', 'InfoModal', 'ActionModal', 'Success', 'Error', 'GroupsService', 'Utils', '$timeout', function ($scope, $rootScope, $state, $stateParams, ElearningService, AmazonService, $modal, InfoModal, ActionModal, Success, Error, GroupsService, Utils, $timeout) {
+    $scope.chapter = {};
     var gm;
         $(document).ready(function(){
             init();
@@ -32,6 +33,7 @@ controllers.controller('EditChapter', ['$scope', '$rootScope', '$state', '$state
                     }
                 }
             });
+            $scope.$applyAsync();
             $("#gm-canvas").html($scope.chapter.description);
             gm.data('gridmanager').initCanvas();
         });
