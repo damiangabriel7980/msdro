@@ -2,9 +2,13 @@
     <div class="col-md-9"><h3>Gestionare pagini de produse speciale</h3></div>
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addSpecialProduct()">Adauga pagina produs</div></div>
 </div>
+<bulk-operations model="specialProducts" delete-button modify-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <div class="col-md-12">
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="product in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(product._id)" ng-checked="checkValue(product._id)"/>
+            </td>
             <td data-title="'Nume produs'" filter="{ 'product_name': 'text' }" sortable="'product_name'">
                 {{product.product_name}}
             </td>
@@ -16,14 +20,8 @@
                 </ul>
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <button ng-click="toggleSpecialProduct(product._id,product.enabled)"
-                            class="btn" ng-class="{'btn-danger':product.enabled, 'btn-default':!product.enabled}">
-                        <i class="glyphicon glyphicon-lock"></i>
-                    </button>
-                    <div class="btn btn-default" ng-click="editSpecialProduct(product._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                    <div class="btn btn-danger" ng-click="deleteSpecialProduct(product._id)"><i class="glyphicon glyphicon-trash"></i></div>
-                </div>
+                <action-buttons item-enable-property="product.enabled" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
+                                toggle-item="toggleSpecialProduct(product._id,product.enabled)" delete-item="deleteSpecialProduct(product._id)" update-item="editSpecialProduct(product._id)"></action-buttons>
             </td>
         </tr>
     </table>

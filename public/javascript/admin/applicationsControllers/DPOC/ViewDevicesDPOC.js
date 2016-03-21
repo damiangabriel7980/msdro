@@ -1,4 +1,13 @@
-controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', function ($scope, $state, DPOCService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success) {
+controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', "Utils", 'exportCSV', function ($scope, $state, DPOCService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, Utils, exportCSV) {
+    $scope.csv = {
+        filename: "DPOC_devices_" + Utils.customDateFormat(new Date(), {separator:'-'}) + '.csv',
+        rows: []
+    };
+
+    $scope.getHeader = function () {
+        return ['name', 'email']
+    };
+
     var refreshDevices = function (sortByDate) {
         DPOCService.devices.query().$promise.then(function(resp){
             var devices = Success.getObject(resp);
@@ -12,11 +21,13 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
                     name: ''       // initial filter
                 }
             };
+            $scope.csv.rows = exportCSV.formatArrayCSV(devices, ['name', 'email']);
             $scope.tableParams = new ngTableParams(params, {
                 total: devices.length, // length of data
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(devices, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
 
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
@@ -24,6 +35,22 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
         });
     };
     refreshDevices();
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     $scope.addDevice = function () {
         $modal.open({
@@ -86,6 +113,7 @@ controllers.controller('ViewDevicesDPOC', ['$scope', '$state', 'DPOCService', 'n
                     //add to result
                     var lineObj = {};
                     for(var l=0; l < columnsCount; l++){
+                        line[l] = line[l].replace(/(\r\n|\n|\r)/gm,"");
                         lineObj[headers[l]] = line[l];
                     }
                     result.push(lineObj);

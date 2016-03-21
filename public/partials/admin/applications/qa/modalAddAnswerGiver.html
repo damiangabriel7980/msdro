@@ -14,9 +14,9 @@
             </div>
             <div class="form-group col-md-12">
                 <label>Medic: </label>
-                <ui-select ng-model="medic.selected" theme="select2" ng-disabled="false" style="width: 100%;">
+                <ui-select ng-model="medic.selected" ng-disabled="false" style="width: 100%;">
                     <ui-select-match placeholder="Selecteaza un medic">{{$select.selected.username}}</ui-select-match>
-                    <ui-select-choices repeat="medic in medics | propsFilter: {username: $select.search}">
+                    <ui-select-choices repeat="medic in (medics | filter: {username: $select.search}) track by medic._id">
                         <div ng-bind-html="trustAsHtml((medic.username | highlight: $select.search))"></div>
                     </ui-select-choices>
                 </ui-select>

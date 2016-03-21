@@ -14,7 +14,7 @@
     "express": "~4.8.0",
     "express-jwt": "~0.3.0",
     "express-session": "latest",
-    "html-pdf": "^1.4.0",
+    "html-pdf": "latest",
     "i18n": "~0.5.0",
     "jsonwebtoken": "~2.0.0",
     "mandrill-send": "latest",
@@ -46,7 +46,7 @@
     "winston": "latest",
     "xlsx": "^0.8.0",
     "xlsx-to-json": "~0.2.4",
-    "xregexp": "latest"
+    "xregexp": "3.0.0"
   },
   "scripts": {
     "postinstall": "bower cache clean && bower install",

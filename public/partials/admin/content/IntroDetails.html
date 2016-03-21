@@ -2,29 +2,32 @@
     <div class="modal-title"><h3>Editeaza prezentare</h3></div>
 </div>
 <div class="modal-body col-xs-12">
-    <div class="col-md-12" style="margin-bottom: 15px;">
-        <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
-    </div>
-    <div class="form-group col-md-12">
-        <label>Titlu prezentare:</label>
-        <input class="form-control" type="text" ng-model="intro.description">
-    </div>
-    <div class="col-md-12">
-        <div class="form-group col-md-12">
-            <label>Grupuri:</label>
-            <my-multiple-select all-objects="groups" selected-objects="selectedGroups" track-by="_id"
-                                display-by="display_name" split-by="profession.display_name" output="notUsed"></my-multiple-select>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <label>General description:</label>
-        <textarea ui-tinymce="tinymceOptions" ng-model="intro.article_content"></textarea>
-    </div>
+            <div class="col-md-12 marginTop20" style="margin-bottom: 15px;">
+                <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
+            </div>
+            <div class="form-group col-md-12">
+                <label>Titlu prezentare:</label>
+                <input class="form-control" type="text" ng-model="intro.description">
+            </div>
+            <div class="col-md-12">
+                <div class="form-group col-md-12 noPadding">
+                    <label>Grupuri:</label>
+                    <my-multiple-select all-objects="groups" selected-objects="selectedGroups" track-by="_id"
+                                        display-by="display_name" split-by="profession.display_name" output="notUsed"></my-multiple-select>
+                </div>
+            </div>
     <div class="col-md-12">
         <s3-upload-manager bucket="{{amazonBucket}}" path="{{'presentations/'+intro._id+'/resources/'}}" label="prezentare"></s3-upload-manager>
     </div>
+            <div class="col-md-12">
+                <label>General description:</label>
+                <textarea ui-tinymce="tinymceOptions" ng-model="intro.article_content"></textarea>
+            </div>
+
 </div>
 <div class="modal-footer">
-    <a class="btn pull-left btn-primary" ng-click="closeModal()">Close</a>
-    <a class="btn pull-right btn-primary" ng-click="saveIntro()">Salveaza</a>
+    <div class="col-xs-12">
+        <a class="btn pull-left btn-primary" ng-click="closeModal()">Close</a>
+        <a class="btn pull-right btn-primary" ng-click="saveIntro()">Salveaza</a>
+    </div>
 </div>

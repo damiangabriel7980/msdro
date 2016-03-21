@@ -341,7 +341,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1, date_added: 1} ,function(err, cont) {
+                PublicContent.find({}, {title: 1, author: 1, text:1, type:1, 'therapeutic-areasID':1, enable:1, date_added: 1, last_updated: 1} ,function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }else
@@ -350,26 +350,18 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req,res){
-            var data = req.body.data;
-            //validate author and title
-            var patt = UtilsModule.regexes.authorAndTitle;
-            if(!patt.test(data.title.toString()) || !patt.test(data.author.toString())){
-                handleError(res,null,400,20);
-            }else{
-                //validate type
-                if(!(typeof data.type === "number" && data.type>0 && data.type<5)){
-                    handleError(res,null,400,21);
-                }else{
-                    var content = new PublicContent(data);
-                    content.save(function (err, inserted) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, {}, 2);
-                        }
-                    });
-                }
-            }
+            var content = new PublicContent({
+                title : "Untitled",
+                date_added : new Date(),
+                last_updated  : new Date()
+            });
+                content.save(function (err, inserted) {
+                   if(err){
+                        handleError(res,err,500);
+                   }else{
+                        handleSuccess(res, {}, 2);
+                   }
+                });
         })
         .put(function(req,res){
             if(req.body.info){
@@ -440,6 +432,70 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    router.route('/admin/bulkOperations')
+      .get(function(req,res){
+          var modelToModify = mongoose.model(req.query.model);
+
+          if (Array.isArray(req.query.items)){
+              modelToModify.find({'_id': {$in: req.query.items}}, function(err, items){
+                  if (err) {
+                      console.log(err);
+                      handleError(res, err, 500);
+                  } else {
+                      handleSuccess(res, items);
+                  }
+              })
+          } else {
+              modelToModify.find({'_id': req.query.items}).limit(1).exec(function(err, item){
+                  if (err) {
+                      handleError(res, err, 500);
+                  } else {
+                      handleSuccess(res, item)
+                  }
+              })
+          }
+
+      })
+      .put(function(req, res){
+        var modelToModify = mongoose.model(req.query.model);
+
+         async.each(req.body.items, function(item, callback){
+           modelToModify.findOneAndUpdate( {_id: item}, {$set:req.body.toSet}, function(err, updated){
+             if (err){
+               callback(err);
+             } else {
+               callback();
+             }
+           })
+         }, function(err, updated){
+           if(err) {
+             handleError(res, err, 500)
+           } else {
+             handleSuccess(res, updated);
+           }
+         })
+      })
+      .post(function(req, res){
+
+          //we are making the delete operation here, because on a DELETE endpoint we cannot send the array via req.body
+        var modelToModify = mongoose.model(req.query.model);
+        async.each(req.body.items,function(item, callback){
+          modelToModify.findOneAndRemove( {_id: item}, function(err, deleted){
+            if(err){
+              callback(err)
+            } else {
+              callback();
+            }
+          })
+        }, function(err, deleted){
+          if(err) {
+            handleError(res, err, 500);
+          } else {
+            handleSuccess(res, deleted);
+          }
+        })
+      });
+
     router.route('/admin/users/publicContent/categories')
         .get(function (req, res) {
             PublicCategories.find(function (err, categories) {
@@ -451,7 +507,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         })
         .post(function (req, res) {
-            var category = new PublicCategories(req.body);
+            var category = new PublicCategories({
+                last_updated: new Date(),
+                name: 'Untitled_' + new Date(),
+                description: ''
+            });
             category.save(function (err, saved) {
                 if(err){
                     if(err.code == 11000 || err.code == 11001){
@@ -650,6 +710,18 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    router.route('/admin/productPDF')
+      .post(function(req, res){
+        pdf.create(req.body.html, {format: "A3", header: {height: "40px"} , footer:{height: "40px"}}).toBuffer(function(err, buffer){
+          if (err) {
+            handleError(res, err, 500);
+          } else {
+            var newBuffer = buffer.toString('base64');
+            handleSuccess(res, {buffer: newBuffer});
+          }
+        })
+      });
+
     //Carousel Medic
     //===============================================================================================
 
@@ -678,34 +750,19 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req,res){
-            var data = req.body.data.toAdd;
-            var ext = req.body.data.extension;
-            //validate type
-            if(!(typeof data.type === "number" && data.type>0 && data.type<4)){
-                handleError(res,null,400,21);
-            }else{
                 //check if content_id exists
-                if(typeof data.article_id === "string" && data.article_id.length === 24){
-                    var img = new Carousel(data);
+                    var img = new Carousel({
+                        title: 'Untitled',
+                        enable:       false,
+                        last_updated: new Date()
+                    });
                     img.save(function (err, inserted) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            //update image_path
-                            var imagePath = "carousel/medic/image_"+inserted._id+"."+ext;
-                            Carousel.update({_id: inserted._id}, {$set:{image_path: imagePath}}, function (err, wRes) {
-                                if(err){
-                                    handleError(res,err,500);
-                                }else{
-                                    handleSuccess(res, {key: imagePath}, 2);
-                                }
-                            });
+                            handleSuccess(res, {}, 3);
                         }
                     });
-                }else{
-                    handleError(res,null,400,3);
-                }
-            }
         })
         .put(function(req,res){
             if(req.body.info){
@@ -794,22 +851,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
-    router.route('/admin/productPDF')
-
-
-        .post(function(req, res){
-
-        pdf.create(req.body.html).toBuffer(function(err, buffer){
-                if (err){
-                    handleError(res, err, 500);
-                } else {
-                    var newBuffer = buffer.toString('base64');
-                    var bufferBase64 = 'data:application/octet-stream;charset=utf-16le;base64,' + newBuffer;
-                    handleSuccess(res, {buffer: bufferBase64} );
-                }
-            })
-        });
-
     router.route('/admin/products')
         .get(function(req, res) {
             if(req.query.id){
@@ -832,7 +873,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req, res) {
-            var product = new Products(req.body.product);
+            var product = new Products({
+                last_updated: new Date(),
+                enable: true,
+                name: 'Untitled'
+            });
             product.save(function(err, saved) {
                 if (err)
                     handleError(res,err,500);
@@ -862,7 +907,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             }else{
                 var data = req.body.product;
-                Products.findOneAndUpdate({_id:req.query.id},{$set:data}, function(err, product) {
+                Products.update({_id:req.query.id},{$set:data}, function(err, product) {
                     if (err){
                         handleError(res,err,500);
                     }else{
@@ -933,7 +978,12 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req, res) {
-            var content = new Content(req.body.article);
+            var content = new Content({
+                title: 'Untitled',
+                created: new Date(),
+                last_updated: new Date(),
+                author: 'Untitled'
+            });
             content.save(function(err,saved) {
                 if (err){
                     handleError(res,err,500);
@@ -1038,7 +1088,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             })
         })
         .post(function (req, res) {
-            var toCreate = new specialProduct(req.body.toCreate);
+            var toCreate = new specialProduct({
+                product_name: 'Untitled',
+                header_title: 'Untitled'
+            });
             toCreate.save(function (err, saved) {
                 if(err){
                     handleError(res,err,500);
@@ -1365,7 +1418,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function (req, res) {
-            var toSave = new specialApps(req.body);
+            var toSave = new specialApps({
+                name: 'Untitled'
+            });
             toSave.save(function (err, saved) {
                 if(err){
                     handleError(res,err,500);
@@ -1430,7 +1485,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function(req,res){
             var app = new AppUpdate({
                 name:'Untitled',
-                version:0.0,
                 upgradeDate:new Date()
             });
             app.save(function(err,saved){
@@ -1828,7 +1882,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function (req, res) {
-            var toCreate = new Speakers(req.body);
+            var toCreate = new Speakers({
+                first_name: 'Untitled',
+                last_name: 'Untitled',
+                last_updated: new Date()
+            });
             toCreate.save(function (err, saved) {
                 if(err){
                     handleError(res, err);
@@ -2152,7 +2210,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function (req, res) {
-            var toCreate = new Multimedia(req.body.newMultimedia);
+            var toCreate = new Multimedia({
+                author : 'Untitled',
+                last_updated : new Date(),
+                title : 'Untitled'
+            });
             toCreate.save(function (err, saved) {
                 if(err){
                     handleError(res,err,500);
@@ -2265,9 +2327,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req, res) {
-            var therapeutic = new Therapeutic_Area(req.body);
-            therapeutic.enabled = true;
-            therapeutic.last_updated = Date.now();
+            var therapeutic = new Therapeutic_Area({
+                last_updated: new Date(),
+                name: 'Untitled'
+            });
             therapeutic.save(function(err, saved) {
                 if(err){
                     handleError(res,err,500);
@@ -2642,7 +2705,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     var addDeviceDPOC = function (name, email) {
         var deferred = Q.defer();
         if(typeof name !== "string" || typeof email !== "string"){
-            deferred.reject("Numele si email-ul sunt obligatorii");
+            deferred.reject({errorCode: 52});
         }else{
             var device = new DPOC_Devices({
                 name: name,
@@ -2669,13 +2732,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                     codeOK = false;
                                     callback();
                                 }else{
-                                    callback("Un device cu acelasi nume sau email exista deja");
+                                    callback({errorCode: 48});
                                 }
                             }else if(err.name == "ValidationError"){
-                                callback("Toate campurile sunt obligatorii");
+                                callback({errorCode: 49});
                             }else{
                                 logger.error(err);
-                                callback("Eroare la creare");
+                                callback({errorCode: 2});
                             }
                         }else{
                             callback();
@@ -2710,7 +2773,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                 deferred.resolve();
                             },
                             function (err) {
-                                deferred.reject("Eroare la trimitere email");
+                                deferred.reject({errorCode: 50});
                             }
                         );
                     }
@@ -2731,7 +2794,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                DPOC_Devices.find({}, {name: 1}, function (err, devices) {
+                DPOC_Devices.find({}, {name: 1, email: 1, code: 1}, function (err, devices) {
                     if(err){
                         handleError(res, err);
                     }else{
@@ -2747,7 +2810,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleSuccess(res, true, 81);
                 },
                 function (err) {
-                    handleError(res, err);
+                    handleError(res, err, 500, err.errorCode);
                 }
             );
         })
@@ -3036,7 +3099,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                User.find({state:"ACCEPTED"}).select('+enabled +phone').populate('profession').exec(function (err, users) {
+                User.find({state:"ACCEPTED"}).select('+enabled +phone').populate('profession therapeutic-areasID groupsID conferencesID').exec(function (err, users) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -3263,7 +3326,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         })
         .post(function(req,res){
-            var intro = new Presentations(req.body.intro);
+            var intro = new Presentations({
+                description: 'Untitled'
+            });
             intro.save(function (err, presentation) {
                 if(err){
                     handleError(res,err,500);

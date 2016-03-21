@@ -47,6 +47,8 @@ streamAdminApp.run(
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
             $rootScope.defaultFileImage = $rootScope.pathAmazonResources+"file.png";
+
+            $rootScope.conferencesStateURL = '/pro#!/elearning/conferinte';
         }
     ]
 );

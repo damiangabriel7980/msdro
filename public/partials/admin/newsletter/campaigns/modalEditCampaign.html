@@ -3,7 +3,7 @@
         <button type="button" class="close" ng-click="closeModal()">&times;</button>
         <h3 class="modal-title">Editeaza campanie</h3>
     </div>
-    <div class="modal-body col-md-12 noPadding">
+    <div class="modal-body col-md-12">
         <div class="col-md-12" style="margin-bottom: 15px;">
             <alert ng-if="editCampaignAlert.text" type="{{editCampaignAlert.type}}" close="editCampaignAlert.text=null">{{editCampaignAlert.text}}</alert>
         </div>
@@ -57,7 +57,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Anuleaza</button>
-        <button type="submit" class="btn btn-primary pull-right" ng-click="save()">Salveaza</button>
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Anuleaza</button>
+            <button type="submit" class="btn btn-primary pull-right" ng-click="save()">Salveaza</button>
+        </div>
     </div>
 </div>

@@ -4,6 +4,9 @@ a {
 .modal.stretch .modal-dialog {
   width: 90%;
 }
+.modal-xl {
+  width: 80%;
+}
 .main-view-container {
   width: 100%;
   position: absolute;
@@ -13,7 +16,6 @@ a {
 }
 .titleAndButton div {
   float: left;
-  margin-right: 20px;
 }
 .titleAndButton div .btn {
   margin-top: 16px;
@@ -46,9 +48,6 @@ a {
   left: 0;
   right: 0;
   border: 1px solid white;
-}
-.noTextOverflow {
-  overflow-wrap: break-word;
 }
 .specialProductsMenu .menuBlock div {
   float: left;
@@ -127,12 +126,6 @@ a {
 .marginTop5px {
   margin-top: 5px;
 }
-.marginTop10 {
-  margin-top: 10px;
-}
-.marginTop15 {
-  margin-top: 15px;
-}
 .marginTop20 {
   margin-top: 20px;
 }
@@ -142,8 +135,14 @@ a {
 .marginTop25 {
   margin-top: 25px;
 }
+.marginTop24 {
+  margin-top: 24px;
+}
 .padding10 {
   padding: 10px;
+}
+.padding30 {
+  padding: 30px;
 }
 .pointer {
   cursor: pointer;
@@ -159,6 +158,12 @@ a {
   border: 1px solid #dae2ea;
   color: #7c9eb2;
   padding: 10px 10px;
+}
+.noPaddingLeft {
+  padding-left: 0;
+}
+.noPaddingRight {
+  padding-right: 0;
 }
 .angular-ui-tree-handle:hover {
   color: #438eb9;
@@ -392,42 +397,26 @@ a {
 .marginLeft10 {
   margin-left: 10px;
 }
-.textAlignCenter {
+.bulkOperations {
+  float: left;
+  clear: left;
+  width: 100%;
+}
+.customPreviewModal {
+  overflow-y: scroll;
+  height: 750px;
+}
+.customModalFooter {
   text-align: center;
+  padding-top: 10px;
 }
-.myPrescription button {
-  float: left;
+.customModalFooter .bulkPdfErrMsg {
+  font-size: large;
+  font-weight: 900;
+}
+.labelMargin30 {
+  margin-left: 30px;
+}
+.bulkOperationsClearLeft {
   clear: left;
-}
-.myPrescription .fontSize20 {
-  font-size: 20px;
-}
-.myPrescription .positionAbsolute {
-  position: absolute;
-}
-.myPrescription .myPrescriptionTextArea {
-  float: left;
-  clear: left;
-  margin: 20px 50px;
-}
-.myPrescription .myPrescriptionTextArea textarea {
-  float: left;
-  clear: left;
-  resize: none;
-  width: 715px;
-  height: 240px;
-}
-.myPrescription .myPrescriptionPhone {
-  float: left;
-  clear: left;
-  margin: 20px 50px;
-}
-.myPrescription .myPrescriptionPhone span {
-  font-size: 20px;
-  float: left;
-}
-.myPrescription .myPrescriptionPhone input {
-  margin: 10px;
-  width: 40% !important;
-  float: left;
 }

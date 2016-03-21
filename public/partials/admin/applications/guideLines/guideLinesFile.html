@@ -12,8 +12,12 @@
     <div class="col-md-12 noPadding">
         <alert type="{{s3Alert.type}}" ng-if="s3Alert.show">{{s3Alert.text}}</alert>
     </div>
+    <bulk-operations model="guidelineFile" delete-button modify-button field="enabled" items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="file in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(file._id)" ng-checked="checkValue(file._id)"/>
+            </td>
             <td data-title="' Nume afisat'" filter="{ 'displayName': 'text' }" sortable="'displayName'">
                 {{file.displayName}}
             </td>
@@ -24,14 +28,8 @@
                 {{file.guidelineCategoryName}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-primary" ng-click="editFile(file._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                   <button class="btn btn-default" ng-click="disableFile(file._id,file)" ng-class="{'btn-danger':!file.enabled, 'btn-default':file.enabled}">
-                       <i class="glyphicon glyphicon-lock"></i>
-                   </button>
-                    <div class="btn btn-danger" ng-click="removeFile(file)"><i class="glyphicon glyphicon-trash"></i></div>
-
-                </div>
+                <action-buttons item-enable-property="file.enabled" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
+                                toggle-item="disableFile(file._id,file)" update-item="editFile(file._id)" delete-item="removeFile(file)"></action-buttons>
             </td>
         </tr>
     </table>

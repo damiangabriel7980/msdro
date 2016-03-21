@@ -7,8 +7,12 @@
         </div>
     </div>
 </div>
+    <bulk-operations model="products" delete-button export-pdf items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="prod in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(prod._id)" ng-checked="checkValue(prod._id)"/>
+            </td>
             <td data-title="'Name'" filter="{ 'name': 'text' }" sortable="'name'">{{prod.name}}</td>
             <td data-title="'Description'" sortable="'description'" ng-bind-html="renderHtml(prod.description)"></td>
             <td data-title="'Therapeutic Areas'" filter="{ 'therapeutic-areasID': 'text' }">
@@ -17,10 +21,8 @@
                 </li>
             </td>
             <td>
-                <div class="btn-group-sm"  role="group" style="display: flex">
-                    <button class="btn btn-danger" ng-click="deleteProduct(prod._id)"><i class="glyphicon glyphicon-trash"></i></button>
-                    <button class="btn btn-info" ng-click="editProduct(prod._id)"><i class="glyphicon glyphicon-cog"></i></button>
-                </div>
+                <action-buttons show-edit-button="true" show-delete-button="true"
+                                delete-item="deleteProduct(prod._id)" update-item="editProduct(prod._id)"></action-buttons>
             </td>
         </tr>
     </table>

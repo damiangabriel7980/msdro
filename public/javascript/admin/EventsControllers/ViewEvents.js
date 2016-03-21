@@ -1,4 +1,4 @@
-controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', 'AmazonService', 'Success', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal, AmazonService, Success){
+controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', 'AmazonService', 'Success', '$state', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal, AmazonService, Success, $state){
 
     var refreshEvents = function (sortByDate) {
         EventsService.events.query().$promise.then(function(resp){
@@ -8,7 +8,7 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
                 count: 10,          // count per page
                 //initalSorting
                 sorting: {
-                    name: 'asc'     // initial sorting
+                    last_updated: 'desc'     // initial sorting
                 },
                 filter: {
                     name: ''       // initial filter
@@ -22,6 +22,7 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(events, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
                     params.total(orderedData.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
@@ -32,6 +33,23 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
         });
     };
     refreshEvents();
+
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     $scope.addEvent = function () {
         EventsService.events.create({
@@ -55,6 +73,10 @@ controllers.controller('ViewEvents', ['$scope', '$state', 'EventsService', 'ngTa
                 yes: "Da"
             }
         );
+    };
+
+    $scope.editEvent = function(id){
+        $state.go('content.events.editEvent', {idEvent: id});
     };
 
     $scope.deleteEvent = function (event) {

@@ -4,7 +4,7 @@
     </div>
     <div class="modal-body container" style="margin: 0; width: 100%">
         <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
-        <div class="col-md-12 noPadding">
+        <div class="col-md-12">
             <div class="form-group">
                 <label>Nume</label>
                 <input type="text" class="form-control" ng-model="newItem.filename">
@@ -16,7 +16,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
-        <a class="btn btn-warning pull-right" ng-click="addResource()">Adauga</a>
+        <div class="col-xs-12">
+            <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
+            <a class="btn btn-warning pull-right" ng-click="addResource()">Adauga</a>
+        </div>
     </div>
 </div>

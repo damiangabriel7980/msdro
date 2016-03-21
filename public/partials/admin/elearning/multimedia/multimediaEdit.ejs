@@ -1,65 +1,71 @@
 <div class="modal-header">
     <div class="modal-title"><h3>Editeaza multimedia</h3></div>
 </div>
-<div class="modal-body" style="height: 70%;">
-    <div class="row">
-        <div class="col-xs-6">
-            <label class="label label-default">Titlu:</label>
-            <input type="text" ng-model="multimedia.title" class="form-control col-xs-12">
-        </div>
-        <div class="col-xs-6">
-            <label class="label label-default">Autor:</label>
+<div class="modal-body col-xs-12 padding30" style="height: 70%;">
+    <tabset>
+        <tab heading="Informatii">
+            <div class="col-xs-12 noPadding marginTop20">
+                <div class="col-xs-6 noPaddingLeft">
+                    <label class="label label-default">Titlu:</label>
+                    <input type="text" ng-model="multimedia.title" class="form-control col-xs-12">
+                </div>
+                <div class="col-xs-6 noPaddingRight">
+                    <label class="label label-default">Autor:</label>
 
-            <input type="text" class="form-control col-xs-12" ng-model="multimedia.author">
-        </div>
-        <div class="col-xs-6">
-            <label class="label label-default">Tip multimedia:</label>
-            <select class="form-control" ng-model="multimedia.type">
-                <option value="1">Film</option>
-                <option value="2">SLIDE</option>
-            </select>
-        </div>
-        <div class="col-md-12 noPadding">
-            <therapeutic-select all-areas="areas" selected-areas="selectedAreas" returned-areas="returnedAreas"></therapeutic-select>
-        </div>
-        <div class="col-md-12">
-            <div class="form-group col-md-12">
-                <label>Grupuri:</label>
-                <my-multiple-select all-objects="groups" selected-objects="selectedGroups" track-by="_id"
-                                    display-by="display_name" split-by="profession.display_name" output="notUsed"></my-multiple-select>
+                    <input type="text" class="form-control col-xs-12" ng-model="multimedia.author">
+                </div>
+                <div class="col-xs-6 noPadding">
+                    <label class="label label-default">Tip multimedia:</label>
+                    <select class="form-control" ng-model="multimedia.type">
+                        <option value="1">Film</option>
+                        <option value="2">SLIDE</option>
+                    </select>
+                </div>
+                <div class="col-md-12 noPadding">
+                    <therapeutic-select all-areas="areas" selected-areas="selectedAreas" returned-areas="myAreas.returnedAreas"></therapeutic-select>
+                </div>
+                <div class="col-md-12 noPadding">
+                    <div class="form-group col-md-12 noPadding">
+                        <label>Grupuri:</label>
+                        <my-multiple-select all-objects="groups" selected-objects="myGroups.selectedGroups" track-by="_id"
+                                            display-by="display_name" split-by="profession.display_name" output="notUsed"></my-multiple-select>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="col-md-12">
-                <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
+        </tab>
+        <tab heading="Multimedia">
+            <div class="col-md-6 noPadding marginTop20">
+                <div class="col-md-12 noPadding">
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine</button>
+                </div>
+                <div class="col-md-12 noPadding">
+                    <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
+                </div>
+                <div class="col-md-12 noPadding">
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelectedVideo($files, $event)" ngf-multiple="false" ngf-accept="'.mp4'"><i class="glyphicon glyphicon-sd-video"></i>&nbsp;Incarca video</button>
+                </div>
+                <div class="col-md-12 noPadding">
+                    <alert ng-if="uploadAlertVideo.newAlert" type="{{uploadAlertVideo.type}}" close="uploadAlertVideo.newAlert=false">{{uploadAlertVideo.message}}</alert>
+                </div>
             </div>
-            <div class="col-md-12">
-                <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
+            <div class="col-md-6 noPadding marginTop20">
+                <div class="col-md-12 noPadding">
+                    <a class="btn btn-default" href="{{pathAmazonDev+multimedia.thumbnail_path}}" ng-disabled="!multimedia.thumbnail_path" target="_self"><i class="glyphicon glyphicon-camera"></i>&nbsp;Descarca imagine</a>
+                </div>
+                <div class="col-md-12 noPadding">
+                    <a class="btn btn-default" href="{{pathAmazonDev+multimedia.file_path}}" ng-disabled="!multimedia.file_path" target="_blank"><i class="glyphicon glyphicon-sd-video"></i>&nbsp;Descarca video</a>
+                </div>
             </div>
-            <div class="col-md-12">
-                <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelectedVideo($files, $event)" ngf-multiple="false" ngf-accept="'.mp4'"><i class="glyphicon glyphicon-sd-video"></i>&nbsp;Incarca video</button>
+            <div class="col-md-12 noPadding">
+                <label>Descriere:</label>
+                <textarea ui-tinymce="tinymceOptions" ng-model="multimedia.description"></textarea>
             </div>
-            <div class="col-md-12">
-                <alert ng-if="uploadAlertVideo.newAlert" type="{{uploadAlertVideo.type}}" close="uploadAlertVideo.newAlert=false">{{uploadAlertVideo.message}}</alert>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="col-md-12">
-                <a class="btn btn-default" href="{{pathAmazonDev+multimedia.thumbnail_path}}" ng-disabled="!multimedia.thumbnail_path" target="_self"><i class="glyphicon glyphicon-camera"></i>&nbsp;Descarca imagine</a>
-            </div>
-            <div class="col-md-12">
-                <a class="btn btn-default" href="{{pathAmazonDev+multimedia.file_path}}" ng-disabled="!multimedia.file_path" target="_blank"><i class="glyphicon glyphicon-sd-video"></i>&nbsp;Descarca video</a>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <label>Descriere:</label>
-            <textarea ui-tinymce="tinymceOptions" ng-model="multimedia.description"></textarea>
-        </div>
-    </div>
+        </tab>
+    </tabset>
 </div>
 <div class="modal-footer">
     <div class="col-md-12">
-        <a class="btn pull-left btn-primary" ng-click="closeModal()">Inchide</a>
-        <a class="btn pull-right btn-danger" ng-click="updateMultimedia()">Actualizeaza</a>
+        <a class="btn pull-left btn-primary pull-left" ng-click="closeModal()">Inchide</a>
+        <a class="btn pull-right btn-danger pull-right" ng-click="updateMultimedia()">Actualizeaza</a>
     </div>
 </div>

@@ -1,0 +1,34 @@
+<div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Preview PDF</h3>
+    </div>
+    <div class="modal-body col-xs-12 customPreviewModal">
+      <div id="bulkOperationsPdfProducts" style="width:730px; float: left; padding-left: 30px" ng-show="!isArticle">
+        <div class="pdfItem" ng-repeat="item in items" style="float: left; border-bottom: 1px solid black; margin-top: 10px; width: 780px;">
+          <div>
+            <span style="font-size: 30px;">{{item.name}}</span>
+          </div>
+          <div style="float: left;" >
+            <img ng-src="{{item.image_path? pathAmazonDev+item.image_path:pathAmazonResources + 'piles-of-pills.jpg'}}" width="200" />
+          </div>
+          <div ng-bind-html="item.description" style="float:left; margin-left: 20px; width: 445px;"></div>
+        </div>
+    </div>
+      <div id="bulkOperationsPdfArticles" style="width:730px; float: left; padding-left: 30px" ng-show="isArticle">
+        <div class="pdfItem" ng-repeat="item in items" style="float: left; border-bottom: 1px solid black; margin-top: 10px;">
+          <div>
+            <p style="font-size: 16px;">{{item.title}}</p>
+            <p style="font-size: 14px;"> {{item.author}}</p>
+          </div>
+          <div data-ng-bind-html="trustAsHtml(item.text)" style="width: 750px; padding: 10px; font-size: 14px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="col-xs-12 customModalFooter">
+        <button class="btn btn-default pull-left" ng-click="closeModal()" ng-disabled="isDisabled">Inchide</button>
+        <span ng-show="showMsg" class="bulkPdfErrMsg">Pdf-ul este generat !</span>
+        <button class="btn btn-primary pull-right" ng-click="downloadPDF()" ng-disabled="isDisabled">Descarca</button>
+      </div>
+    </div>
+</div>

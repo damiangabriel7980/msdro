@@ -49,7 +49,11 @@ var errorCodes = {
     44: "Nu exista o aplicatie cu aceasta denumire ",
     45: "Continutul nu este disponibil.",
     46: "Nu aveti permisiunea de a vizualiza continutul.",
-    47: "Exista deja un utilizator inregistrat cu acelasi email!"
+    47: "Exista deja un utilizator inregistrat cu acelasi email!",
+    48: "Un device cu acelasi nume sau email exista deja!",
+    49: "Toate campurile sunt obligatorii!",
+    50: "Eroare la trimiterea email-ului!",
+    52: "Numele si email-ul sunt obligatorii!"
 };
 
 module.exports = function(logger){

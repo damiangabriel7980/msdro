@@ -5,7 +5,6 @@ app.controllerProvider.register('EventModal', ['$scope', 'eventsService', '$stat
 
     eventsService.calendar.query({id: idEvent}).$promise.then(function (resp) {
         var eventDetails = Success.getObject(resp);
-        console.log(eventDetails);
         eventDetails = Success.getObject(resp);
         $scope.titleDateDisplay = formatTitleDate(eventDetails.event.start, eventDetails.event.end);
         eventDetails.days = {};
@@ -61,9 +60,18 @@ app.controllerProvider.register('EventModal', ['$scope', 'eventsService', '$stat
         return result;
     }
 
+    $scope.highlitedSpeakers = new Set();
+
+    $scope.highlightSpeaker = function(id){
+        $scope.highlitedSpeakers.add(id);
+    };
     $scope.formatDate = function(date){
         var dateOut = new Date(date);
         return dateOut;
+    };
+
+    $scope.removeSpeaker = function(){
+      $scope.highlitedSpeakers.clear();
     };
 
     $scope.isOpen = false;

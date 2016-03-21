@@ -3,26 +3,24 @@
         <div class="row">
             <div class="col-xs-5"><h3>Gestionare Multimedia</h3></div>
             <div class="col-xs-2 pull-right">
-                <a ui-sref="elearning.multimedia.adaugaMultimedia" class="btn btn-info pull-right margintop20px" id="add-multimedia"><i class="glyphicon glyphicon-plus-sign"></i> Adauga multimedia</a>
+                <a ng-click="addMultimedia()" class="btn btn-info pull-right margintop20px" id="add-multimedia"><i class="glyphicon glyphicon-plus-sign"></i> Adauga multimedia</a>
             </div>
         </div>
     </div>
+    <bulk-operations model="multimedia" delete-button modify-button field="enable" items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="cont in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(cont._id)" ng-checked="checkValue(cont._id)"/>
+            </td>
             <td data-title="'Tip'" sortable="'type'">{{cont.type==1?"Film":"Slide"}}</td>
             <td data-title="'Nume multimedia'" filter="{ 'title': 'text' }" sortable="'title'">{{cont.title}}</td>
             <td data-title="'Autor'" filter="{ 'author': 'text' }" sortable="'author'">{{cont.author}}</td>
             <td data-title="'Descriere'" sortable="'description'" >{{cont.description}}</td>
 
             <td>
-                <div class="btn-group-sm"  role="group" style="display: flex">
-                    <button ng-click="toggleMultimedia(cont._id,cont.enable)"
-                            class="btn" ng-class="{'btn-danger':cont.enable, 'btn-default':!cont.enable}">
-                        <i class="glyphicon glyphicon-lock"></i>
-                    </button>
-                    <button class="btn btn-danger" ng-click="deleteMultimedia(cont._id)"><i class="glyphicon glyphicon-trash"></i></button>
-                    <button class="btn btn-info" ng-click="editMultimedia(cont._id)"><i class="glyphicon glyphicon-cog"></i></button>
-                </div>
+                <action-buttons item-enable-property="cont.enable"  show-toggle-button="true" show-edit-button="true" show-delete-button="true"
+                                toggle-item="toggleMultimedia(cont._id,cont.enable)" update-item="editMultimedia(cont._id)" delete-item="deleteMultimedia(cont._id)"></action-buttons>
             </td>
         </tr>
     </table>
