@@ -15,12 +15,19 @@ controllers
       success: "success"
     };
 
+    $scope.myGroups = {
+      selectedGroups: []
+    };
 
+    $scope.myAreas = {
+      selectedAreas: [],
+      returnedAreas: []
+    };
 
     ProductService.products.query( { id: idToEdit } ).$promise.then(function(result){
       $scope.product = Success.getObject(result);
-      $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
-      $scope.selectedGroups = Success.getObject(result)['groupsID'];
+      $scope.myAreas.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
+      $scope.myGroups.selectedGroups = Success.getObject(result)['groupsID'];
     }).catch(function(err){
       console.log(Error.getMessage(err));
     });
@@ -39,11 +46,11 @@ controllers
 
     $scope.updateProduct = function(){
       var groups_id = [];
-      for(var i = 0; i < $scope.selectedGroups.length; i++){
-        groups_id.push($scope.selectedGroups[i]._id);
+      for(var i = 0; i < $scope.myGroups.selectedGroups.length; i++){
+        groups_id.push($scope.myGroups.selectedGroups[i]._id);
       }
       $scope.product.groupsID = groups_id;
-      $scope.product['therapeutic-areasID'] = $scope.returnedAreas;
+      $scope.product['therapeutic-areasID'] = $scope.myAreas.returnedAreas;
       $scope.product.last_updated = Date.now();
 
       ProductService.products.update( { id: idToEdit }, { product: $scope.product } ).$promise.then(function (resp) {

@@ -26,14 +26,38 @@ controllers.controller('pdfPreviewController', ['$scope', 'id', '$modalInstance'
     console.log(Error.getMessage(err));
   });
 
-  var downloadURI = function (url, name) {
-    var link = document.createElement("a");
+    function downloadURI(url, fileName) {
+      var link = document.createElement("a");
 
-    link.download = name;
-    link.href = url;
-    link.click();
+      link.download = fileName;
+      link.href = url;
+      link.click();
+    }
 
-  };
+
+    function b64toBlob(b64Data, contentType, sliceSize) {
+      contentType = contentType || '';
+      sliceSize = sliceSize || 512;
+
+      var byteCharacters = atob(b64Data);
+      var byteArrays = [];
+
+      for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+      }
+
+      var blob = new Blob(byteArrays, {type: contentType});
+      return blob;
+    }
 
   $scope.generatePdf = function () {
     $scope.disableButtons = true;
@@ -46,7 +70,12 @@ controllers.controller('pdfPreviewController', ['$scope', 'id', '$modalInstance'
 
      var respObj = Success.getObject(resp);
 
-    downloadURI(respObj.buffer, fileName);
+      var blobToDownload = b64toBlob(respObj.buffer, 'application/pdf');
+
+
+      var url = URL.createObjectURL(blobToDownload);
+
+      downloadURI(url, fileName);
 
       $scope.disableButtons = false;
     }).catch(function (err) {
