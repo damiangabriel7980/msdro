@@ -234,6 +234,7 @@ module.exports = function(env, logger, amazon, router){
 			else{
 				var data = req.body.course;
 				data.last_updated = new Date();
+				delete data._id;
 				Courses.update({_id:req.query.id},{$set:data}, function(err, course) {
 					if (err){
 						console.log(err);

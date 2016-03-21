@@ -29,7 +29,7 @@
     "bootstrap-sass-official": "latest",
     "checklist-model": "~0.5.0",
     "es5-shim": "latest",
-    "gridmanager.js": "latest",
+    "grid-editor": "https://github.com/Frontwise/grid-editor.git",
     "he": "latest",
     "jquery": "latest",
     "jquery-ui": "~1.11.x",

@@ -14,26 +14,11 @@ controllers.controller('EditChapter', ['$scope', '$rootScope', '$state', '$state
     function init(){
         ElearningService.chapters.query({id: $stateParams.chapterId}).$promise.then(function(resp){
             $scope.chapter = Success.getObject(resp);
-            gm = $("#mgrid").gridmanager({
-                debug: 1,
-                customControls: {
-                    global_col: []
-                },
-                controlAppend: "<div class='btn-group pull-right'><button title='Edit Source Code' type='button' class='btn btn-xs btn-primary gm-edit-mode'><span class='fa fa-code'></span></button><button title='Preview' type='button' class='btn btn-xs btn-primary gm-preview'><span class='fa fa-eye'></span></button>     <div class='dropdown pull-right gm-layout-mode'><button type='button' class='btn btn-xs btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button> <ul class='dropdown-menu' role='menu'><li><a data-width='auto' title='Desktop'><span class='fa fa-desktop'></span> Desktop</a></li><li><a title='Tablet' data-width='768'><span class='fa fa-tablet'></span> Tablet</a></li><li><a title='Phone' data-width='640'><span class='fa fa-mobile-phone'></span> Phone</a></li></ul></div></div>",
-                tinymce: {
-                    config: {
-                        inline: true,
-                        plugins: [
-                            "advlist autolink lists link image charmap print preview anchor",
-                            "searchreplace visualblocks code fullscreen",
-                            "insertdatetime media table contextmenu paste"
-                        ],
-                        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-                    }
-                }
+            $('#mgrid').html($scope.chapter.description);
+            $('#mgrid').gridEditor({
+                new_row_layouts: [[12], [6, 6], [9, 3], [3, 3, 3, 3], [4, 4, 4]],
+                content_types: ['ckeditor']
             });
-            $("#gm-canvas").html($scope.chapter.description);
-            gm.data('gridmanager').initCanvas();
         });
     };
 
@@ -42,11 +27,9 @@ controllers.controller('EditChapter', ['$scope', '$rootScope', '$state', '$state
     };
 
     $scope.saveChapter = function(){
-        gm.data('gridmanager').deinitCanvas();
-        $scope.chapter.description =  $("#gm-canvas").html();
+        $scope.chapter.description =  $("#mgrid").gridEditor('getHtml');
         ElearningService.chapters.update({id: $stateParams.chapterId} ,{chapter: $scope.chapter}).$promise.then(function(resp){
             $scope.$parent.courses[$scope.courseNavigation[0]].listChapters[$scope.courseNavigation[1]].title = $scope.chapter.title;
-            gm.data('gridmanager').initCanvas();
         }).catch(function(err){
             console.log(Error.getMessage(err));
         });

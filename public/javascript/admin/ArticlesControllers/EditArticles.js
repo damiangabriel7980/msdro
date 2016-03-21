@@ -6,16 +6,14 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
     $scope.myGroups = {
         selectedGroups: []
     };
-    $scope.tinymceOptions = {
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        image_advtab: true,
-        height: 500,
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
+
+    function  initGridEditor(){
+        $('#myEditor').html($scope.article.text);
+        $('#myEditor').gridEditor({
+            new_row_layouts: [[12], [6, 6], [9, 3], [3, 3, 3, 3], [4, 4, 4]],
+            content_types: ['ckeditor']
+        });
+    }
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
@@ -24,6 +22,8 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
     ContentService.content.query({id: idToEdit}).$promise.then(function(response){
         $scope.article = Success.getObject(response);
         $scope.imagePath = $rootScope.pathAmazonDev+Success.getObject(response).image_path;
+
+        initGridEditor();
 
         var userGroups = Success.getObject(response).groupsID;
 
@@ -247,6 +247,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
         }
         $scope.article.groupsID=id_groups;
         $scope.article.last_updated = Date.now();
+        $scope.article.text = $('#myEditor').gridEditor('getHtml');
         ContentService.content.update({id: idToEdit},{article:$scope.article}).$promise.then(function (resp) {
             $scope.closeModal();
         }).catch(function(err){
