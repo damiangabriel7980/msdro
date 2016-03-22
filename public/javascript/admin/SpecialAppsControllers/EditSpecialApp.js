@@ -5,9 +5,12 @@ controllers.controller('EditSpecialApp', ['$scope','$rootScope' ,'SpecialAppsSer
         action: "Modifica"
     };
 
+    $scope.app = {};
+
     //get app
     SpecialAppsService.apps.query({id: idToEdit}).$promise.then(function (resp) {
         $scope.app = Success.getObject(resp);
+        $scope.$applyAsync();
     });
 
     //get special groups

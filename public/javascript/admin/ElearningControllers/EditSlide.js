@@ -9,6 +9,7 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
 
     $scope.courseId = $stateParams.courseId;
     $scope.statusAlert = {newAlert:false, type:"", message:""};
+    $scope.slide = {};
 
     var gm;
     $(document).ready(function(){
@@ -20,6 +21,7 @@ controllers.controller('EditSlide', ['$scope', '$rootScope', '$state', '$statePa
     function init(){
         ElearningService.slides.query({id: $stateParams.slideId}).$promise.then(function(resp){
             $scope.slide = Success.getObject(resp);
+            $scope.$applyAsync();
             if($scope.slide.type == 'test')
                 $scope.isTest = true;
             else

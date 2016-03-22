@@ -10,6 +10,8 @@ controllers
 
     $scope.idToEdit = idToEdit;
 
+    $scope.product = {};
+
     var messageTypes = {
       danger: "danger",
       success: "success"
@@ -28,6 +30,7 @@ controllers
       $scope.product = Success.getObject(result);
       $scope.myAreas.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
       $scope.myGroups.selectedGroups = Success.getObject(result)['groupsID'];
+      $scope.$applyAsync();
     }).catch(function(err){
       console.log(Error.getMessage(err));
     });

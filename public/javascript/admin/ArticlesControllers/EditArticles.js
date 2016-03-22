@@ -6,6 +6,8 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
     $scope.myGroups = {
         selectedGroups: []
     };
+
+    $scope.article = {};
     $scope.tinymceOptions = {
         plugins: [
             "advlist autolink lists link image charmap print preview anchor",
@@ -26,7 +28,7 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
         $scope.imagePath = $rootScope.pathAmazonDev+Success.getObject(response).image_path;
 
         var userGroups = Success.getObject(response).groupsID;
-
+        $scope.$applyAsync();
         ContentService.groupsByIds.query({ids: userGroups}).$promise.then(function (groups) {
             $scope.myGroups.selectedGroups = Success.getObject(groups);
             GroupsService.groups.query().$promise.then(function(resp){

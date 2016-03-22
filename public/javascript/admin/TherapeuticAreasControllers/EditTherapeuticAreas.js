@@ -13,7 +13,7 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope', 'idToEdit
             message: message};
     };
     $scope.resetAlert();
-
+    $scope.arie = {};
     $scope.modal = {
         title: "Modifica arie",
         action: "Modifica"
@@ -42,6 +42,7 @@ controllers.controller('EditTherapeuticAreas', ['$scope','$rootScope', 'idToEdit
             }
         }
         $scope.arie = area;
+        $scope.$applyAsync();
     }).catch(function(err){
         $scope.resetAlert(Error.getMessage(err));
     });

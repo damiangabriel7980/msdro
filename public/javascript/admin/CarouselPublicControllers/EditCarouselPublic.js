@@ -23,6 +23,7 @@ controllers.controller('EditCarouselPublic', ['$scope', '$rootScope', '$sce', 'C
         }
         $scope.toEdit = image;
         //console.log($scope.toEdit);
+        $scope.$applyAsync();
     }).catch(function(err){
         $scope.resetAlert(Error.getMessage(err));
     });
