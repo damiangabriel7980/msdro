@@ -1,3 +1,33 @@
+<style id="pdf-export-classes">
+  .col-md-3{
+    width: 20%;
+  }
+  .col-md-4{
+    width: 28.33333333%
+  }
+  .col-md-6{
+    width: 45%;
+  }
+  .col-md-9{
+    width: 70%;
+  }
+  .col-md-12{
+    width: 95%;
+  }
+.col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-12{
+    position: relative;
+    /*min-height: 1px;*/
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+  }
+  .row{
+    margin-right: -15px;
+    margin-left: -15px;
+    display: inline-block;
+  }
+</style>
+
 <div class="modal-content">
     <div class="modal-header">
       <h3 class="modal-title">Preview PDF</h3>
@@ -20,7 +50,7 @@
             <p style="font-size: 16px;">{{item.title}}</p>
             <p style="font-size: 14px;"> {{item.author}}</p>
           </div>
-          <div data-ng-bind-html="trustAsHtml(item.text)" style="width: 750px; padding: 10px; font-size: 14px;"></div>
+          <div data-ng-bind-html="trustAsHtml(item.text)" style="font-size: 14px; width: 750px"></div>
         </div>
       </div>
     </div>

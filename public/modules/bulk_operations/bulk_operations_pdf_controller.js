@@ -61,10 +61,12 @@ controllers.controller('bulkOperationsPdf',['$scope', '$modalInstance', 'itemsFo
 
 
   $scope.downloadPDF = function(){
+
+
     $scope.isDisabled = true;
     $scope.showMsg = true;
 
-    var htmlForPDf = document.getElementById(elementForPdf).outerHTML;
+    var htmlForPDf = document.getElementById('pdf-export-classes').outerHTML + '\n' + document.getElementById(elementForPdf).outerHTML;
     PDFService.pdf.create({}, {
       html: htmlForPDf
     }).$promise.then(function(resp) {
