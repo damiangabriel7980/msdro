@@ -32,26 +32,12 @@
             </div>
         </tab>
         <tab heading="Multimedia">
-            <div class="col-md-12 marginTop20 noPadding">
-                <button class="btn btn-default" type="file" ngf-select ngf-change="fileAssociatedSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*,video/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca multimedia</button>
-            </div>
-            <div class="col-md-12 noPadding">
-                <alert ng-if="uploadAlertImages.newAlert" type="{{uploadAlertImages.type}}" close="uploadAlertImages.newAlert=false">{{uploadAlertImages.message}}</alert>
-            </div>
-            <div class="col-xs-12 noPadding" ng-if="article.associated_images">
-                <label>Multimedia asociat:</label>
-                <ul>
-                    <li ng-repeat="images in article.associated_images" style="font-size: 12px" class="col-xs-12">
-                        {{pathAmazonDev+images}}&nbsp;<i class="glyphicon glyphicon-remove pointer" ng-click="removeImage(images)"></i>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-12 noPadding">
+            <div class="col-md-12 noPadding marginTop20">
                 <div class="col-md-12 noPadding">
-                    <img no-cache-src="{{imagePath}}" ng-if="article.image_path" style="width:100px;">
+                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca thumbnail</button>
                 </div>
                 <div class="col-md-12 marginTop20 noPadding">
-                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca fisier</button>
+                    <img no-cache-src="{{imagePath}}" ng-if="article.image_path" style="width:100px;">
                 </div>
                 <div class="col-xs-12 noPadding" ng-if="article.image_path">
                     <label>Link thumbnail:</label>
@@ -65,6 +51,21 @@
                     <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
                 </div>
             </div>
+            <div class="col-md-12 noPadding marginTop20">
+                <button class="btn btn-default" type="file" ngf-select ngf-change="fileAssociatedSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*,video/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca multimedia</button>
+            </div>
+            <div class="col-md-12 noPadding">
+                <alert ng-if="uploadAlertImages.newAlert" type="{{uploadAlertImages.type}}" close="uploadAlertImages.newAlert=false">{{uploadAlertImages.message}}</alert>
+            </div>
+            <div class="col-xs-12 noPadding" ng-if="article.associated_images">
+                <label>Multimedia asociat:</label>
+                <ul>
+                    <li ng-repeat="images in article.associated_images" style="font-size: 12px" class="col-xs-12">
+                        {{pathAmazonDev+images}}&nbsp;<i class="glyphicon glyphicon-remove pointer" ng-click="removeImage(images)"></i>
+                    </li>
+                </ul>
+            </div>
+
             <div class="col-md-12 noPadding">
                 <label>Text:</label>
                 <textarea ui-tinymce="tinymceOptions" ng-model="article.text"></textarea>
