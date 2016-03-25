@@ -3,7 +3,7 @@
  */
 
 var JanuviaUsers = require('../../models/januvia/januvia_users');
-var Cities = require('../../models/cities');
+var Counties = require('../../models/counties');
 var async = require('async');
 var Q = require('q');
 var mongoose = require('mongoose');
@@ -76,6 +76,7 @@ var rep = 'Owner';
 var workplace = 'Account';
 var workplaceAddress = 'Account Address Address 1';
 var city = 'Account Address City';
+var county = 'County';
 
 var mrObj = {};
 mrObj.map = function(){
@@ -94,87 +95,135 @@ mrObj.out = {
     inline: 1
 };
 
+var formatCitiesArray = function(citiesArray){
+    var deferred = Q.defer();
+    var citiesFormatted = [];
+    //find all group ids with non-specific content for user
+    async.eachSeries(citiesArray, function(city, callback){
+        var cityFormatted = {
+            _id: city._id,
+            name: city.name.toLowerCase().replace("-","").replace(/\s+/g, "")
+        };
+        citiesFormatted.push(cityFormatted);
+        callback();
+    }, function (err) {
+        if(err){
+            deferred.reject(err);
+        }else{
+            deferred.resolve(citiesFormatted);
+        }
+    });
+    return deferred.promise;
+};
+
+var addRep = function(fakeNameRep, realNameRep, medId, arrayOfExistingUsers){
+    var deferred = Q.defer();
+    var checkRepFirst = _.findWhere(arrayOfExistingUsers, {value: fakeNameRep});
+    if(checkRepFirst){
+        JanuviaUsers.update({_id: ObjectId(checkRepFirst._id)}, {$addToSet: {users_associated: ObjectId(medId)}}, {upsert: false}, function (err, wres) {
+            if(err){
+                deferred.reject(err);
+            }else{
+                deferred.resolve();
+            }
+        });
+    } else {
+        var repToCreate = {};
+        repToCreate['type'] = 'reprezentant';
+        repToCreate.date_created = new Date();
+        repToCreate.last_modified = new Date();
+        repToCreate.users_associated = [];
+        repToCreate.users_associated.push(ObjectId(medId));
+        repToCreate.name = realNameRep;
+        repToCreate.workplace = '';
+        repToCreate.workplaceAddress = '';
+        var toSaveRep = new JanuviaUsers(repToCreate);
+        arrayOfExistingUsers.push({_id: toSaveRep._id, value : fakeNameRep});
+        toSaveRep.save(function(err,resp){
+            if(err)
+            {
+                deferred.reject(err);
+            }
+            else{
+                deferred.resolve();
+            }
+        })
+    }
+    return deferred.promise;
+};
+
 var insertUsers = function(arrayOfData){
     var deferred = Q.defer();
     var UsersTemp = null;
-    var CitiesTemp = null;
     JanuviaUsers.mapReduce(mrObj,function(err,data,stats){
         if(err){
             deferred.reject(err);
         }
         else {
             UsersTemp = data;
-            Cities.mapReduce(mrObj,function(err,data2,stats){
-                if(err){
-                    deferred.reject(err);
-                }
-                else {
-                    CitiesTemp = data2;
-                    async.eachSeries(arrayOfData, function(item, callback){
+            async.eachSeries(arrayOfData, function(item, callback){
                         var nameMedic = lowerString(item[medic]);
                         var nameRep = lowerString(item[rep]);
                         var CityName = lowerString(item[city]);
                         var realMed = Capitalise(item[medic],true);
                         var realRep = Capitalise(item[rep],true);
-
                         var checkMedic = _.findWhere(UsersTemp, {'value': nameMedic});
-                        if(checkMedic)
-                            callback();
-                        else{
-                            var checkCity = _.findWhere(CitiesTemp, {'value': CityName});
-                            if(!checkCity)
-                                callback('City not found!');
-                            else {
-                                            var medicToCreate = {};
-                                            medicToCreate.type = 'medic';
-                                            medicToCreate.date_created = new Date();
-                                            medicToCreate.last_modified = new Date();
-                                            medicToCreate.users_associated = [];
-                                            medicToCreate.name = realMed;
-                                            medicToCreate.city = ObjectId(checkCity._id);
-                                            medicToCreate.workplace = Capitalise(item[workplace],true);
-                                            medicToCreate.workplaceAddress = Capitalise(item[workplaceAddress],true);
-                                            var toSaveMed = new JanuviaUsers(medicToCreate);
-                                            toSaveMed.save(function(err,respMed) {
-                                    if (err) {
-                                        callback(err);
-                                    }
-                                    else {
-                                        UsersTemp.push({_id: respMed._id, value: nameMedic});
-                                        var checkRep = _.findWhere(UsersTemp, {value: nameRep});
-                                        if(checkRep){
-                                            JanuviaUsers.update({_id: ObjectId(checkRep._id)}, {$push: {users_associated: ObjectId(respMed._id)}}, {upsert: false}, function (err, wres) {
-                                                if(err){
-                                                    callback(err);
-                                                }else{
-                                                  callback();
-                                                }
-                                            });
-                                        }else {
-                                           var repToCreate = {};
-                                           repToCreate['type'] = 'reprezentant';
-                                           repToCreate.date_created = new Date();
-                                           repToCreate.last_modified = new Date();
-                                           repToCreate.users_associated = [];
-                                           repToCreate.users_associated.push(ObjectId(respMed._id));
-                                           repToCreate.name = realRep;
-                                           repToCreate.workplace = '';
-                                           repToCreate.workplaceAddress = '';
-                                           var toSaveRep = new JanuviaUsers(repToCreate);
-                                            UsersTemp.push({_id: toSaveRep._id, value : nameRep});
-                                            toSaveRep.save(function(err,resp){
-                                           if(err)
-                                               {
-                                                  callback(err);
-                                               }
-                                           else{
-                                               callback();
-                                           }
-                                           })
+                        if(checkMedic){
+                            addRep(nameRep, realRep, checkMedic._id, UsersTemp).then(
+                                function(success){
+                                    callback();
+                                },
+                                function (err) {
+                                    callback(err);
+                                }
+                            );
+                        } else{
+                            //first we find the county
+                            Counties.findOne({label: item[county]}).populate('citiesID').exec(function(err, foundCounty){
+                                if(err || !foundCounty){
+                                    callback('County not found / Error processing county field');
+                                } else {
+                                    formatCitiesArray(foundCounty.citiesID).then(
+                                        function (citiesFormatted) {
+                                            var checkCity = _.findWhere(citiesFormatted, {'name': CityName});
+                                            if(!checkCity)
+                                                callback('City not found!');
+                                            else {
+                                                var medicToCreate = {};
+                                                medicToCreate.type = 'medic';
+                                                medicToCreate.date_created = new Date();
+                                                medicToCreate.last_modified = new Date();
+                                                medicToCreate.users_associated = [];
+                                                medicToCreate.name = realMed;
+                                                medicToCreate.city = ObjectId(checkCity._id);
+                                                medicToCreate.workplace = Capitalise(item[workplace],true);
+                                                medicToCreate.workplaceAddress = Capitalise(item[workplaceAddress],true);
+                                                var toSaveMed = new JanuviaUsers(medicToCreate);
+                                                toSaveMed.save(function(err,respMed) {
+                                                    if (err) {
+                                                        callback(err);
+                                                    }
+                                                    else {
+                                                        UsersTemp.push({_id: respMed._id, value: nameMedic});
+                                                        addRep(nameRep, realRep, respMed._id, UsersTemp).then(
+                                                            function(success){
+                                                                callback();
+                                                            },
+                                                            function (err) {
+                                                                callback(err);
+                                                            }
+                                                        );
+                                                    }
+                                                });
+                                            }
+                                        },
+                                        function (err) {
+                                            callback('Error while processing cities!');
                                         }
-                                    }
-                                });
-                            }
+                                    );
+
+                                }
+                            });
                         }
                     }, function (err) {
                         if(err){
@@ -183,10 +232,7 @@ var insertUsers = function(arrayOfData){
                             deferred.resolve();
                         }
                     });
-                }
-
-            });
-        }
+            }
 
     });
 
