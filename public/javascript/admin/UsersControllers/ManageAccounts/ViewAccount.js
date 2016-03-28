@@ -11,6 +11,8 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
         };
     };
 
+    $scope.user = {};
+
     ManageAccountsService.professions.query().$promise.then(function (response) {
         $scope.professions = Success.getObject(response);
     }).catch(function(err){
@@ -20,6 +22,7 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
     ManageAccountsService.users.query({id: idToView}).$promise.then(function(resp){
         var user = Success.getObject(resp);
         $scope.user = user;
+        $scope.$applyAsync();
         if(user.profession) $scope.selectedProfession = user.profession._id;
     }).catch(function(err){
         resetAlert('danger',Error.getMessage(err));

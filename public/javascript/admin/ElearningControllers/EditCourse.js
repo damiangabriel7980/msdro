@@ -7,6 +7,8 @@ controllers.controller('EditCourse', ['$scope', '$rootScope', '$state', '$stateP
         return $sce.trustAsHtml(htmlCode);
     };
 
+    $scope.course = {};
+
     $scope.courseNavigation = $stateParams.courseNav.split(",");
 
     var gm;
@@ -18,6 +20,7 @@ controllers.controller('EditCourse', ['$scope', '$rootScope', '$state', '$stateP
         ElearningService.courses.query({id: $stateParams.courseId}).$promise.then(function(resp){
             $scope.course = Success.getObject(resp);
             $scope.selectedGroups = $scope.course.groupsID;
+            $scope.$applyAsync();
             gm = $("#mgrid").gridmanager({
                 debug: 1,
                 customControls: {

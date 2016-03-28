@@ -9,7 +9,7 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    title: 'asc'     // initial sorting
+                    last_updated: 'desc'     // initial sorting
                 },
                 filter: {
                     title: ''       // initial filter
@@ -19,6 +19,7 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
                     params.total(orderedData.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
@@ -33,16 +34,32 @@ controllers.controller('CarouselMedic', ['$scope', '$state', '$rootScope','$filt
 
     $scope.refreshTable();
 
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     $scope.checkArticleDisabled = function (image) {
         return image.article_id && !image.article_id.enable;
     };
 
     $scope.addImage = function(){
-        $modal.open({
-            templateUrl: 'partials/admin/content/carouselMedic/modalAddMedicCarousel.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'AddCarouselMedic'
+        CarouselMedicService.carouselMedic.create({}).$promise.then(function (resp) {
+            $scope.refreshTable();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 

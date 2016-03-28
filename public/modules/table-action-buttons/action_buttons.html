@@ -1,0 +1,10 @@
+<div>
+    <div class="btn-group-sm actionButtons"  role="group">
+        <button ng-if="showEditButton" ng-click="updateItem()" class="btn btn-warning"><i class="glyphicon glyphicon-cog"></i></button>
+        <button ng-if="showToggleButton" ng-click="toggleItem()"
+                class="btn" ng-class="{'btn-success':itemEnableProperty, 'btn-danger':!itemEnableProperty}">
+            <i ng-class="{'glyphicon glyphicon-ok':itemEnableProperty, 'glyphicon glyphicon-ban-circle':!itemEnableProperty}"></i>
+        </button>
+        <button ng-if="showDeleteButton" ng-click="deleteItem()" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+    </div>
+</div>

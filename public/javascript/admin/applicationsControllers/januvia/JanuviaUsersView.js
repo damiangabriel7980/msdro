@@ -1,4 +1,13 @@
-controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', '$q', function ($scope, $state, JanuviaService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, $q) {
+controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', '$q', 'Utils', 'exportCSV', function ($scope, $state, JanuviaService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, $q, Utils, exportCSV) {
+    $scope.csv = {
+        filename: "Januvia_Users_" + Utils.customDateFormat(new Date(), {separator:'-'}) + '.csv',
+        rows: []
+    };
+
+    $scope.getHeader = function () {
+        return ['Name', 'Data crearii','Tip_User', 'Loc_munca', 'Adresa_loc_munca', 'Oras', 'Judet']
+    };
+
     var refreshUsers = function () {
         JanuviaService.users.query().$promise.then(function(resp){
             var users = Success.getObject(resp);
@@ -9,6 +18,7 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
                     date_created: 'desc'     // initial sorting
                 }
             };
+            $scope.csv.rows = exportCSV.formatArrayCSV(users, ['name', 'date_created', 'type', 'workplace', 'workplaceAddress'], null, [{'city': 'name'}, {'city.county': 'name'}]);
             $scope.tableParams = new ngTableParams(params, {
                 total: users.length, // length of data
                 getData: function($defer, params) {
@@ -42,6 +52,8 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
                     });
 
                     var orderedData = params.filter() ? $filter('orderBy')(($filter('filter')(users, filters)), params.orderBy()) : users;
+                    $scope.resultData = orderedData;
+
                     params.total(orderedData.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
@@ -53,6 +65,22 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
     };
     refreshUsers();
 
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
     $scope.addUser = function () {
         JanuviaService.users.create({}).$promise.then(function () {
             refreshUsers();

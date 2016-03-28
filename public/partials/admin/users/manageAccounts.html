@@ -1,9 +1,19 @@
 <div class="col-md-12">
     <div class="col-md-12 well">
-        <h3>Gestionare Conturi</h3>
+        <div class="col-xs-2 noPadding">
+            <h3>Gestionare Conturi</h3>
+        </div>
+        <div class="col-xs-10 noPadding">
+            <button class="btn btn-primary pull-right" ng-csv="csv.rows" csv-header="getHeader()" filename="{{csv.filename}}">Export Users</button>
+        </div>
     </div>
+
+  <bulk-operations model="User" modify-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <table ng-table="tableParams" show-filter="true" class="table table-bordered">
     <tr ng-repeat="user in $data">
+      <td width="30">
+        <input type="checkbox" ng-click="addToSelectedItems(user._id)" ng-checked="checkValue(user._id)"/>
+      </td>
         <td data-title="'Username'" filter="{ 'username': 'text' }" sortable="'username'">
             {{user.username}}
         </td>
@@ -22,11 +32,12 @@
         <td data-title="'Creat din'" sortable="'registeredFrom'">
             {{user.registeredFrom}}
         </td>
+        <td data-title="'Status'" sortable="enabled">
+            {{user.enabled? "Activ": "Inactiv"}}
+        </td>
         <td data-title="'Actiuni'">
-            <div class="btn-group">
-                <div class="btn btn-warning" ng-click="viewUser(user._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                <div ng-class="{'btn btn-danger': !user.enabled,'btn btn-success': user.enabled}" ng-click="toggleUser(user._id,user.enabled)"><i class="glyphicon glyphicon-remove"></i></div>
-            </div>
+            <action-buttons item-enable-property="user.enabled" show-toggle-button="true" show-edit-button="true" show-delete-button="false"
+                            toggle-item="toggleUser(user._id,user.enabled)" update-item="viewUser(user._id)"></action-buttons>
         </td>
     </tr>
 </table>

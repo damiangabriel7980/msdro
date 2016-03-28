@@ -2,9 +2,12 @@
  * Created by miricaandrei23 on 27.02.2015.
  */
 controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToView','$modalInstance','GroupsService', 'Success', 'Error', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToView,$modalInstance,GroupsService,Success,Error){
+    $scope.intro = {};
+
     IntroService.intros.query({id: idToView}).$promise.then(function(resp){
         $scope.intro = Success.getObject(resp)['onePresentation'];
         $scope.selectedGroups = $scope.intro['groupsID'];
+        $scope.$applyAsync();
     }).catch(function(err){
         $scope.statusAlert.type = "danger";
         $scope.statusAlert.message = Error.getMessage(err);
@@ -43,7 +46,7 @@ controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$
             "searchreplace visualblocks code fullscreen",
             "insertdatetime media table contextmenu paste charmap"
         ],
-        height : 800,
+        height : 400,
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
     $scope.closeModal=function(){

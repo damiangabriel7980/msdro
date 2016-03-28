@@ -414,3 +414,51 @@ services.factory('customOrder', function() {
         }
     }
 });
+services.factory('exportCSV', function(){
+    var formatArrayCSV = function(arrayOfObjects, arrayOfProperties, arrayOfPropertiesToStringify, arrayOfPropertyObjectsToAccess){
+        var arrayToReturn = [];
+        angular.forEach(arrayOfObjects, function(arrayItem, keyOfItem){
+            var objToPush = {};
+            angular.forEach(arrayOfProperties, function(property, keyOfProp){
+                objToPush[property] = arrayItem[property] ? arrayItem[property] : ' ';
+            });
+            if(arrayOfPropertyObjectsToAccess){
+                angular.forEach(arrayOfPropertyObjectsToAccess, function(item, key){
+                    var propertyName = Object.keys(item)[0];
+                    var propertyValue = item[propertyName];
+                    if(propertyName.indexOf('.') > -1){
+                        var splitStringProp = propertyName.split('.');
+                        objToPush[splitStringProp[1]] = arrayItem[splitStringProp[0]] ? arrayItem[splitStringProp[0]][[splitStringProp[1]]] ? arrayItem[splitStringProp[0]][[splitStringProp[1]]][propertyValue] : ' ' : ' ';
+                    } else {
+                        objToPush[propertyName] = arrayItem[propertyName] ? arrayItem[propertyName][propertyValue] : ' ';
+                    }
+                })
+            }
+            if(arrayOfPropertiesToStringify){
+                angular.forEach(arrayOfPropertiesToStringify, function(property, keyOfProp){
+                    var stringToReturn = '';
+                    var propertyName = Object.keys(property)[0];
+                    var propertyValue = property[propertyName];
+                    if(arrayItem[propertyName]){
+                        angular.forEach(arrayItem[propertyName], function(item, key){
+                            var comma;
+                            if(key == arrayItem[propertyName].length - 1){
+                                comma = '';
+                            } else {
+                                comma = ', ';
+                            }
+                            stringToReturn = stringToReturn + item[propertyValue] + comma;
+                        })
+                    }
+                    objToPush[propertyName] = stringToReturn;
+                });
+            }
+            arrayToReturn.push(objToPush);
+        });
+        return arrayToReturn;
+    };
+
+    return {
+        formatArrayCSV: formatArrayCSV
+    }
+});

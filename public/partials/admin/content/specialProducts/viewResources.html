@@ -4,10 +4,10 @@
     </div>
     <div class="modal-body container" style="margin: 0; width: 100%">
         <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
-        <div class="col-md-12 noPadding">
+        <div class="col-md-12">
             <button class="btn btn-default" ng-click="addResource()">Adauga resursa</button>
         </div>
-        <div class="col-md-12 noPadding">
+        <div class="col-md-12 marginTop20">
             <table ng-table="resourcesTableParams" show-filter="true" class="table table-bordered">
                 <tr ng-repeat="r in $data">
                     <td data-title="'Nume'" filter="{ 'filename': 'text' }" sortable="'filename'">
@@ -17,17 +17,17 @@
                         {{r.description}}
                     </td>
                     <td data-title="'Actiuni'">
-                        <div class="btn-group">
-                            <div class="btn btn-default" ng-click="editResource(r)"><i class="glyphicon glyphicon-cog"></i></div>
-                            <div class="btn btn-danger" ng-click="deleteResource(r)"><i class="glyphicon glyphicon-trash"></i></div>
-                        </div>
+                        <action-buttons show-toggle-button="false" show-edit-button="true" show-delete-button="true"
+                                        update-item="editResource(r)" delete-item="deleteResource(r)"></action-buttons>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
-        <a class="btn btn-warning pull-right" ng-click="renderView('specialProductEdit')">Inapoi</a>
+        <div class="col-xs-12">
+            <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
+            <a class="btn btn-warning pull-right" ng-click="renderView('specialProductEdit')">Inapoi</a>
+        </div>
     </div>
 </div>

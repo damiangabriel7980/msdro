@@ -1,0 +1,20 @@
+
+  <div class="well bulkOperations" >
+    <label class="pull-left">Total items: {{maxItems}}</label>
+    <div class="pull-left bulkOperationsClearLeft">
+      <button class="btn" ng-click="selectAll()">Select all</button>
+      <button class="btn" ng-click="deselectAll()">Deselect all</button>
+    </div>
+    <div ng-hide="itemsSet.size === 0">
+      <label class="labelMargin30">
+        Selected items: {{itemsSet.size}}
+      </label>
+      <div class="pull-right marginLeft10">
+        <button class="btn btn-danger" ng-click="deleteSelectedItems()" ng-show="deleteButton"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+        <button class="btn btn-success" ng-click="updateSelectedItems(true)" ng-show="modifyButton"><span class="glyphicon glyphicon-ok"></span> Enable</button>
+        <button class="btn btn-danger" ng-click="updateSelectedItems(false)" ng-show="modifyButton"><span class="glyphicon glyphicon-lock"></span> Disable</button>
+        <button class="btn" ng-click="getItems()" ng-show="exportPDFButton">Export PDF</button>
+      </div>
+    </div>
+  </div>
+

@@ -14,10 +14,8 @@
                 {{topic.name}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-default" ng-click="editTopic(topic._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                    <div class="btn btn-danger" ng-click="deleteTopic(topic._id)"><i class="glyphicon glyphicon-trash"></i></div>
-                </div>
+                <action-buttons show-toggle-button="false" show-edit-button="true" show-delete-button="true"
+                                update-item="editTopic(topic._id)" delete-item="deleteTopic(topic._id)"></action-buttons>
             </td>
         </tr>
     </table>
@@ -41,10 +39,8 @@
                 {{ag.id_user.username}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-default" ng-click="editAnswerGiver(ag._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                    <div class="btn btn-danger" ng-click="deleteAnswerGiver(ag._id)"><i class="glyphicon glyphicon-trash"></i></div>
-                </div>
+                <action-buttons show-toggle-button="false" show-edit-button="true" show-delete-button="true"
+                                update-item="editAnswerGiver(ag._id)" delete-item="deleteAnswerGiver(ag._id)"></action-buttons>
             </td>
         </tr>
     </table>

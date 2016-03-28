@@ -8,7 +8,7 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    order_index: 'asc'     // initial sorting
+                    last_updated: 'desc'     // initial sorting
                 },
                 filter: {
                     title: ''       // initial filter
@@ -18,6 +18,7 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
 
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
@@ -28,6 +29,23 @@ controllers.controller('CarouselPublic', ['$scope', '$state', '$rootScope','$fil
     };
 
     $scope.refreshTable();
+
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     $scope.linkTypeDisplay = function (image) {
         switch(image.link_name){

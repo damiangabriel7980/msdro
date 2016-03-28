@@ -323,6 +323,16 @@ services.factory('IntroService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('bulkOperationsService',['$resource', function($resource){
+    return {
+        operations: $resource('api/admin/bulkOperations',{},{
+            update: {method: "PUT", isArray: false},
+            delete: {method: "POST", isArray: false},
+            query: {method: "GET", isArray: false}
+        })
+    }
+}]);
+
 services.factory('publicContentService', ['$resource', function($resource){
     return {
         publicContent: $resource('api/admin/users/publicContent', {}, {

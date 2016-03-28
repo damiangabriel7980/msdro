@@ -1,9 +1,16 @@
 /**
  * Created by user on 02.10.2015.
  */
-controllers.controller('AppUpdateController',['$scope','ApplicationService','Success','ActionModal','$state','ngTableParams','$filter','$modal',function($scope,ApplicationService,Success,ActionModal,$state,ngTableParams,$filter,$modal){
+controllers.controller('AppUpdateController',['$scope','ApplicationService','Success','ActionModal','$state','ngTableParams','$filter','$modal', 'Utils', 'exportCSV', function($scope,ApplicationService,Success,ActionModal,$state,ngTableParams,$filter,$modal, Utils, exportCSV){
 
+    $scope.csv = {
+        filename: "MSD_Apps_" + Utils.customDateFormat(new Date(), {separator:'-'}) + '.csv',
+        rows: []
+    };
 
+    $scope.getHeader = function () {
+        return ['Name', 'Data actualizarii','URL', 'Versiune']
+    };
 
     var refreshApps = function (){
         ApplicationService.app.query().$promise.then(function(resp){
@@ -12,14 +19,17 @@ controllers.controller('AppUpdateController',['$scope','ApplicationService','Suc
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    date_created: 'desc'     // initial sorting
+                    upgradeDate: 'desc'     // initial sorting
                 }
             };
+            $scope.csv.rows = exportCSV.formatArrayCSV(apps, ['name', 'upgradeDate', 'downloadUrl', 'version']);
             $scope.tableParams = new ngTableParams(params, {
                 total: apps.length, // length of data
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(apps, params.filter())), params.orderBy());
+
+                    $scope.resultData = orderedData;
 
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
@@ -29,6 +39,23 @@ controllers.controller('AppUpdateController',['$scope','ApplicationService','Suc
     };
     refreshApps();
 
+
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+      if($scope.selectedItems.has(id)){
+          $scope.selectedItems.delete(id)
+      } else {
+          $scope.selectedItems.add(id);
+      }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     $scope.addApp = function(){
         ApplicationService.app.create({}).$promise.then(function(){

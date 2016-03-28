@@ -6,9 +6,7 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
 
     var path = 'guideline/category/image/';
     $scope.showUploadButton = false;
-
-
-
+    $scope.category = {};
 
     var resetS3Alert = function (type, text) {
         $scope.s3Alert = {
@@ -119,26 +117,10 @@ controllers.controller('guidelineCategoryModal',['$scope','GuideLineService','id
     var onInit = function(){
         GuideLineService.category.query({id:$scope.toEdit}).$promise.then(function(resp){
             $scope.category = Success.getObject(resp);
+            $scope.$applyAsync();
             initializeS3FileUploader();
         });
     };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     onInit();
 

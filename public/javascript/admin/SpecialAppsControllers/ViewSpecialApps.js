@@ -1,4 +1,4 @@
-controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'SpecialAppsService', '$modal', 'ActionModal', 'InfoModal', 'Success', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, SpecialAppsService, $modal, ActionModal, InfoModal, Success){
+controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$stateParams','$filter', 'ngTableParams' ,'SpecialAppsService', '$modal', 'ActionModal', 'InfoModal', 'Success', 'Error', function($scope, $rootScope, $state, $stateParams, $filter, ngTableParams, SpecialAppsService, $modal, ActionModal, InfoModal, Success, Error){
 
     var refreshTable = function () {
         SpecialAppsService.apps.query().$promise.then(function (resp) {
@@ -18,6 +18,7 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
                     params.total(orderedData.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
@@ -30,12 +31,28 @@ controllers.controller('ViewSpecialApps', ['$scope', '$rootScope', '$state', '$s
 
     refreshTable();
 
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     $scope.addSpecialApp = function(){
-        $modal.open({
-            templateUrl: 'partials/admin/content/specialApps/modalEditSpecialApp.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'AddSpecialApp'
+        SpecialAppsService.apps.create({}).$promise.then(function () {
+            refreshTable();
+        }).catch(function (err) {
+            console.log(Error.getMessage(err));
         });
     };
 

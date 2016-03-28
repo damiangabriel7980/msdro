@@ -2,15 +2,22 @@
     <div class="col-md-9"><h3>Januvia</h3></div>
 </div>
 <div class="col-md-12">
-    <div class="titleAndButton">
-        <div><h3>Utilizatori:</h3></div>
-        <div>
-            <div class="btn btn-primary" ng-click="addUser()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>
+    <div class="titleAndButton col-xs-12 noPadding">
+        <div class="col-xs-2 noPadding">
+            <h3>Utilizatori:</h3>
+        </div>
+        <div class="col-xs-10 noPadding">
+            <button class="btn btn-primary" ng-click="addUser()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</button>
             <button class="btn btn-default" type="file" accept=".xlsx" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din Excel</button>
+            <button class="btn btn-primary pull-right" ng-csv="csv.rows" csv-header="getHeader()" filename="{{csv.filename}}">Export Januvia Users</button>
         </div>
     </div>
+    <bulk-operations model="januvia_users" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="user in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(user._id)" ng-checked="checkValue(user._id)"/>
+            </td>
             <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
                 {{user.name}}
             </td>
@@ -27,10 +34,8 @@
                 {{user.city.county.name}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-primary" ng-click="editUser(user._id)"><i class="glyphicon glyphicon-cog"></i></div>
-                    <div class="btn btn-danger" ng-click="removeUser(user._id)"><i class="glyphicon glyphicon-trash"></i></div>
-                </div>
+                <action-buttons show-toggle-button="false" show-edit-button="true" show-delete-button="true"
+                                update-item="editUser(user._id)" delete-item="removeUser(user._id)"></action-buttons>
             </td>
         </tr>
     </table>

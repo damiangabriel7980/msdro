@@ -6,20 +6,21 @@ controllers.controller('ContractManagement', ['$scope', '$state', 'ContractManag
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    name: 'asc'     // initial sorting
+                    last_modified: 'desc'     // initial sorting
                 },
                 filter: {
                     name: ''       // initial filter
                 }
             };
             if(sortByDate){
-                params.sorting = {last_updated: 'desc'};
+                params.sorting = {last_modified: 'desc'};
             }
             $scope.tableParams = new ngTableParams(params, {
                 total: events.length, // length of data
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(events, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
 
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
@@ -27,6 +28,23 @@ controllers.controller('ContractManagement', ['$scope', '$state', 'ContractManag
         });
     };
     refreshTemplates();
+
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     $scope.addTemplate = function () {
         ContractManagementService.templates.create({}).$promise.then(function () {

@@ -8,7 +8,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    name: 'asc'     // initial sorting
+                    last_updated: 'desc'     // initial sorting
                 },
                 filter: {
                     name: ''       // initial filter
@@ -18,6 +18,7 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
                     params.total(orderedData.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
@@ -32,12 +33,28 @@ controllers.controller('PublicCategories', ['$scope', '$rootScope', '$state', '$
 
     $scope.refreshTable();
 
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     $scope.addCategory = function(){
-        $modal.open({
-            templateUrl: 'partials/admin/content/publicContent/categories/modalAddCategory.html',
-            windowClass: 'fade',
-            size: 'lg',
-            controller: 'AddPublicContentCategory'
+        publicContentService.categories.create({}).$promise.then(function (resp) {
+            $scope.refreshTable();
+        }).catch(function(err){
+            console.log(Error.getMessage(err));
         });
     };
 

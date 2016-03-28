@@ -8,9 +8,8 @@
                 {{code.profession.display_name}}
             </td>
             <td data-title="'Actiuni'">
-                <div class="btn-group">
-                    <div class="btn btn-default" ng-click="editActivationCode(code)"><i class="glyphicon glyphicon-cog"></i></div>
-                </div>
+                <action-buttons show-toggle-button="false" show-edit-button="true" show-delete-button="false"
+                                update-item="editActivationCode(code)"></action-buttons>
             </td>
         </tr>
     </table>

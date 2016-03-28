@@ -20,7 +20,10 @@ var app = angular.module('app',
         'ngAnimate',
         'vAccordion',
         'ui.tree',
-        'ui.select'
+        'ui.select',
+        'ngSanitize',
+        'actionButtons',
+        'bulkOperations'
     ]);
 
 app.config(['$locationProvider', function($location) {

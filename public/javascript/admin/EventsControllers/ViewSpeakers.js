@@ -1,4 +1,4 @@
-controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', 'AmazonService', 'Success', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal, AmazonService, Success){
+controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ngTableParams', '$filter', '$modal', 'ActionModal', 'AmazonService', 'Success', 'Error', function($scope, $state, EventsService, ngTableParams, $filter, $modal, ActionModal, AmazonService, Success, Error){
 
     $scope.refreshSpeakers = function () {
         EventsService.speakers.query().$promise.then(function(resp){
@@ -7,7 +7,7 @@ controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ng
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    first_name: 'asc'     // initial sorting
+                    last_updated: 'desc'     // initial sorting
                 },
                 filter: {
                     first_name: ''       // initial filter
@@ -17,6 +17,7 @@ controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ng
                 getData: function($defer, params) {
 
                     var orderedData = $filter('orderBy')(($filter('filter')(speakers, params.filter())), params.orderBy());
+                    $scope.resultData = orderedData;
                     params.total(orderedData.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
@@ -28,12 +29,28 @@ controllers.controller('ViewSpeakers', ['$scope', '$state', 'EventsService', 'ng
     };
     $scope.refreshSpeakers();
 
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     $scope.add = function () {
-        $modal.open({
-            templateUrl: 'partials/admin/content/events/modalEditSpeaker.html',
-            size: 'lg',
-            windowClass: 'fade',
-            controller: 'CreateSpeaker'
+        EventsService.speakers.create({}).$promise.then(function (resp) {
+            $scope.refreshSpeakers();
+        }).catch(function (err) {
+            console.log(Error.getMessage(err));
         });
     };
 

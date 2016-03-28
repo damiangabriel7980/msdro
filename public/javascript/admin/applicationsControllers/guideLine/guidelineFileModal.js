@@ -9,6 +9,7 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
     $scope.fileType = 'pdf';
 
+    $scope.file = {};
     var path = 'guideline/category/file/';
 
     var checkForCategory = function(){
@@ -185,7 +186,8 @@ controllers.controller('guidelineFileModal',['$scope','idToEdit','$modalInstance
 
    GuideLineService.file.query({id:$scope.idToEdit}).$promise.then(function(resp){
         $scope.file = Success.getObject(resp);
-        $scope.oldCategoryName = $scope.file.guidelineCategoryName;
+       $scope.$applyAsync();
+       $scope.oldCategoryName = $scope.file.guidelineCategoryName;
        checkForCategory();
        initializeS3UploadManager();
     }).catch(function(err){

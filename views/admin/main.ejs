@@ -16,6 +16,8 @@
 <script type="text/javascript" src="components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="components/angular/angular.min.js"></script>
     <script type="text/javascript" src="components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+    <script type="text/javascript" src="components/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
+
     <script type="text/javascript" src="components/qrcode/lib/qrcode.min.js"></script>
 <script type="text/javascript" src="components/angular-qr/angular-qr.min.js"></script>
     <script src="components/angular-sanitize/angular-sanitize.min.js"></script>
@@ -52,7 +54,6 @@
     <script src="javascript/admin/IntroControllers/Intros.js"></script>
     <script src="javascript/admin/IntroControllers/IntroDetails.js"></script>
     <script src="javascript/admin/IntroControllers/IntroDelete.js"></script>
-    <script src="javascript/admin/IntroControllers/IntroAdd.js"></script>
     <script src="javascript/admin/IntroControllers/IntroToggle.js"></script>
     <script src="javascript/admin/UsersControllers/ManageAccounts/ManageAccounts.js"></script>
     <script src="javascript/admin/UsersControllers/ManageAccounts/ViewAccount.js"></script>
@@ -67,24 +68,19 @@
     <script src="javascript/admin/UsersControllers/NewAccounts/AcceptUser.js"></script>
     <script src="javascript/admin/UsersControllers/NewAccounts/RejectUser.js"></script>
     <script src="javascript/admin/PublicContentControllers/PublicContent.js"></script>
-    <script src="javascript/admin/PublicContentControllers/AddPublicContent.js"></script>
     <script src="javascript/admin/PublicContentControllers/EditPublicContent.js"></script>
     <script src="javascript/admin/PublicContentControllers/categories/PublicCategories.js"></script>
-    <script src="javascript/admin/PublicContentControllers/categories/AddPublicContentCategory.js"></script>
     <script src="javascript/admin/PublicContentControllers/categories/EditPublicContentCategory.js"></script>
     <script src="javascript/admin/CarouselPublicControllers/CarouselPublic.js"></script>
     <script src="javascript/admin/CarouselPublicControllers/EditCarouselPublic.js"></script>
     <script src="javascript/admin/CarouselMedicControllers/CarouselMedic.js"></script>
-    <script src="javascript/admin/CarouselMedicControllers/AddCarouselMedic.js"></script>
     <script src="javascript/admin/CarouselMedicControllers/EditCarouselMedic.js"></script>
 
     <script src="javascript/admin/ProductsControllers/Products.js"></script>
-    <script src="javascript/admin/ProductsControllers/AddProduct.js"></script>
     <script src="javascript/admin/ProductsControllers/EditProduct.js"></script>
     <script src="javascript/admin/ProductsControllers/pdfPreviewController.js"></script>
     <script src="javascript/admin/ProductPageControllers/ProductPage.js"></script>
     <script src="javascript/admin/ProductPageControllers/ProductPageModal.js"></script>
-    <script src="javascript/admin/ProductPageControllers/AddProductPage.js"></script>
     <script src="javascript/admin/ProductPageControllers/DeleteProductPage.js"></script>
     <script src="javascript/admin/ProductPageControllers/EnableProductPage.js"></script>
     <script src="javascript/admin/ProductPageControllers/EditProductPage.js"></script>
@@ -97,15 +93,12 @@
     <script src="javascript/admin/ProductPageControllers/AddProductPageResource.js"></script>
     <script src="javascript/admin/ProductPageControllers/EditProductPageResource.js"></script>
     <script src="javascript/admin/ProductPageControllers/ProductPageSpeakers.js"></script>
-    <script src="javascript/admin/SpecialAppsControllers/AddSpecialApp.js"></script>
     <script src="javascript/admin/SpecialAppsControllers/EditSpecialApp.js"></script>
     <script src="javascript/admin/SpecialAppsControllers/ViewSpecialApps.js"></script>
     <script src="javascript/admin/ArticlesControllers/Articles.js"></script>
-    <script src="javascript/admin/ArticlesControllers/AddArticles.js"></script>
     <script src="javascript/admin/ArticlesControllers/EditArticles.js"></script>
     <script src="javascript/admin/EventsControllers/ViewEvents.js"></script>
     <script src="javascript/admin/EventsControllers/ViewSpeakers.js"></script>
-    <script src="javascript/admin/EventsControllers/CreateSpeaker.js"></script>
     <script src="javascript/admin/EventsControllers/UpdateSpeaker.js"></script>
     <script src="javascript/admin/EventsControllers/EditEvent.js"></script>
     <script src="javascript/admin/EventsControllers/EditConference.js"></script>
@@ -114,7 +107,6 @@
     <script src="javascript/admin/EventsControllers/ModalGenerateQR.js"></script>
 
     <script src="javascript/admin/TherapeuticAreasControllers/TherapeuticAreas.js"></script>
-    <script src="javascript/admin/TherapeuticAreasControllers/AddTherapeuticAreas.js"></script>
     <script src="javascript/admin/TherapeuticAreasControllers/EditTherapeuticAreas.js"></script>
 
         <script src="javascript/admin/ElearningControllers/Courses.js"></script>
@@ -124,7 +116,6 @@
         <script src="javascript/admin/ElearningControllers/EditSubChapter.js"></script>
 
     <script src="javascript/admin/MultimediaControllers/Multimedia.js"></script>
-    <script src="javascript/admin/MultimediaControllers/AddMultimedia.js"></script>
     <script src="javascript/admin/MultimediaControllers/EditMultimedia.js"></script>
     <script src="javascript/admin/MultimediaControllers/DeleteMultimedia.js"></script>
     <script src="javascript/admin/applicationsControllers/qa/qaController.js"></script>
@@ -165,6 +156,7 @@
     <script src="javascript/admin/NewsletterControllers/NewsletterTemplateEdit.js"></script>
     <script src="javascript/admin/NewsletterControllers/NewsletterTemplatePreview.js"></script>
     <script src="javascript/admin/NewsletterControllers/NewsletterCampaignSummary.js"></script>
+    <script src="modules/bulk_operations/bulk_operations_pdf_controller.js"></script>
 
 
     <!--Plug-ins-->
@@ -176,11 +168,16 @@
     <script src="modules/s3_upload_manager/s3_upload_manager.js"></script>
     <script src="modules/enhacedS3Upload/enhancedS3Upload.js"></script>
     <script src="modules/admin-emails-list/directive.js"></script>
+
+    <script src="modules/table-action-buttons/action_buttons.js"></script>
+    <link rel="stylesheet" href="modules/table-action-buttons/action_buttons.css">
+
     <link rel="stylesheet" href="modules/admin-emails-list/styles.css">
     <script src="modules/admin-widget-stats/directive.js"></script>
         <link href="components/v-accordion/dist/v-accordion.css" rel="stylesheet" />
         <script src="components/angular-animate/angular-animate.js"></script>
         <script src="components/v-accordion/dist/v-accordion.js"></script>
+    <script src="modules/bulk_operations/bulk_operations.js"></script>
     <!--ui-ace-->
     <script type="text/javascript" src="components/ace-builds/src-min-noconflict/ace.js"></script>
     <script type="text/javascript" src="components/angular-ui-ace/ui-ace.js"></script>

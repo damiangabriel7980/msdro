@@ -7,6 +7,8 @@ controllers.controller('EditSubChapter', ['$scope', '$rootScope', '$state', '$st
         return $sce.trustAsHtml(htmlCode);
     };
 
+    $scope.subChapter = {};
+
     var gm;
     $(document).ready(function(){
         init();
@@ -17,6 +19,7 @@ controllers.controller('EditSubChapter', ['$scope', '$rootScope', '$state', '$st
     function init(){
         ElearningService.subchapters.query({id: $stateParams.subChapterId}).$promise.then(function(resp){
             $scope.subChapter = Success.getObject(resp);
+            $scope.$applyAsync();
             gm = $("#mgrid").gridmanager({
                 debug: 1,
                 customControls: {

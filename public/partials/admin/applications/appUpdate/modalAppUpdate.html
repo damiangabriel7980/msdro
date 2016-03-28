@@ -4,31 +4,32 @@
         <button type="button" class="close" ng-click="closeModal()">&times;</button>
         <h3 class="modal-title">Modifica detalii aplicatie</h3>
     </div>
-    <div class="modal-body">
+    <div class="modal-body col-xs-12">
         <div style="margin-bottom: 15px;">
             <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
         </div>
 
-        <div class="form-group">
+        <div class="form-group col-xs-12">
             <label>Nume:</label>
             <input type="text" class="form-control" ng-model="app.name" name="app.name" required>
             <div ng-show="toManyApps"><span style="color:red;">Exista deja o aplicatie cu acest nume/url</span></div>
         </div>
-        <div class="form-group">
+        <div class="form-group col-xs-12">
             <label>Download Url:</label>
             <input class="form-control" ng-model="app.downloadUrl" name="app.downloadUrl"required>
             <div class="marginLeft10"><span class="modalUpdateExample"><i>ex:http://www.site.com</i></span></div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group col-xs-12">
             <label>Versiune:</label>
-            <input type="number" step="0.1" min="{{app.version}}" class="form-control" ng-model="app.version" name="app.version"required>
-            <div ng-show="showErrorMessage"><span style="color:red;">Versiune selectata este mai veche decat versiunea existenta</span></div>
+            <input type="number" step="0.1" class="form-control" ng-model="app.version" name="app.version"required>
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
-        <button type="submit" class="btn btn-primary pull-right" ng-disabled="appEditForm.$invalid" ng-click="save(app)">Salveaza</button>
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
+            <button type="submit" class="btn btn-primary pull-right" ng-disabled="appEditForm.$invalid" ng-click="save(app)">Salveaza</button>
+        </div>
     </div>
     </form>
 </div>

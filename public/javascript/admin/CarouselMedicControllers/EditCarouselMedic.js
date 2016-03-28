@@ -22,6 +22,7 @@ controllers.controller('EditCarouselMedic', ['$scope', '$rootScope', '$sce', 'Ca
 
     CarouselMedicService.carouselMedic.query({id: idToEdit}).$promise.then(function (resp) {
         $scope.toEdit = Success.getObject(resp);
+        $scope.$applyAsync();
         $scope.selectedContent = $scope.toEdit.article_id || {};
     }).catch(function(err){
         $scope.statusAlert.type = "danger";

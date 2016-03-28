@@ -1,7 +1,17 @@
-controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$modal', '$state','$filter', 'ngTableParams', 'ActionModal', 'Success', 'Error', function($scope, ManageAccountsService, $modal, $state,$filter,ngTableParams, ActionModal,Success,Error){
+controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$modal', '$state','$filter', 'ngTableParams', 'ActionModal', 'Success', 'Error', 'Utils', 'exportCSV', function($scope, ManageAccountsService, $modal, $state,$filter,ngTableParams, ActionModal,Success,Error, Utils, exportCSV){
+
+    $scope.csv = {
+        filename: "Users_Staywell_" + Utils.customDateFormat(new Date(), {separator:'-'}) + '.csv',
+        rows: []
+    };
+
+    $scope.getHeader = function () {
+        return ['Name', 'Username', 'Telefon', 'Url_imagine', 'Profesie', 'Conferinte', 'Grupuri', 'Arii_terapeutice']
+    };
 
     ManageAccountsService.users.query().$promise.then(function (resp) {
         var data = Success.getObject(resp);
+        $scope.csv.rows = exportCSV.formatArrayCSV(data, ['name', 'username','phone', 'image_path'],[{'conferencesID': 'title'}, {'groupsID': 'display_name'}, {'therapeutic-areasID': 'name'}], [{'profession' : 'display_name'}]);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -16,6 +26,7 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
             getData: function($defer, params) {
 
                 var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
+                $scope.resultData = orderedData;
                 params.total(orderedData.length);
                 if(params.total() < (params.page() -1) * params.count()){
                     params.page(1);
@@ -24,6 +35,24 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
             }
         });
     });
+
+    $scope.selectedItems = new Set();
+
+    $scope.addToSelectedItems = function(id){
+        if($scope.selectedItems.has(id)){
+            $scope.selectedItems.delete(id)
+        } else {
+            $scope.selectedItems.add(id);
+        }
+    };
+    $scope.checkValue = function(id){
+        if($scope.selectedItems.has(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     $scope.viewUser= function(id){
         $modal.open({
             templateUrl: 'partials/admin/users/viewAccount.html',
