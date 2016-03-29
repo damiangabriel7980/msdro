@@ -18,7 +18,7 @@ controllers
     };
 
     $scope.myGroups = {
-      selectedGroups: []
+      selectedGroups: null
     };
 
     $scope.myAreas = {

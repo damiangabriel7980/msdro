@@ -4,7 +4,7 @@
 controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', 'GroupsService', 'Success', 'Error', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit,GroupsService,Success,Error){
 
     $scope.myGroups = {
-        selectedGroups: []
+        selectedGroups: null
     };
 
     $scope.article = {};

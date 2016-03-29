@@ -8,7 +8,7 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
         returnedAreas: []
     };
     $scope.myGroups = {
-        selectedGroups: []
+        selectedGroups: null
     };
     $scope.multimedia = {};
 
