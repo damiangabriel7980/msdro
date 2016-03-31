@@ -43,7 +43,7 @@ module.exports = function(){
                 },
                 conference: {
                     turnConfig: {
-                        address: "188.226.200.49",
+                        address: "82.196.15.98",
                         port: "3478"
                     },
                     socket: {
@@ -56,7 +56,7 @@ module.exports = function(){
                         apiPath: "/apiVideoConferences"
                     },
                     kurento: {
-                        ws_uri: 'ws://185.14.186.114:8888/kurento'
+                        ws_uri: 'ws://82.196.15.98:8888/kurento'
                     },
                     auth: {
                         token: {
@@ -106,7 +106,7 @@ module.exports = function(){
                 },
                 conference: {
                     turnConfig: {
-                        address: "188.226.200.49",
+                        address: "82.196.15.98",
                         port: "3478"
                     },
                     socket: {
@@ -119,7 +119,7 @@ module.exports = function(){
                         apiPath: "/apiVideoConferences"
                     },
                     kurento: {
-                        ws_uri: 'ws://185.14.186.114:8888/kurento'
+                        ws_uri: 'ws://82.196.15.98:8888/kurento'
                     },
                     auth: {
                         token: {
@@ -170,7 +170,7 @@ module.exports = function(){
                 },
                 conference: {
                     turnConfig: {
-                        address: "188.226.200.49",
+                        address: "82.196.15.98",
                         port: "3478"
                     },
                     socket: {
@@ -183,7 +183,7 @@ module.exports = function(){
                         apiPath: "/apiVideoConferences"
                     },
                     kurento: {
-                        ws_uri: 'ws://185.14.186.114:8888/kurento'
+                        ws_uri: 'ws://82.196.15.98:8888/kurento'
                     },
                     auth: {
                         token: {
@@ -233,7 +233,7 @@ module.exports = function(){
                 },
                 conference: {
                     turnConfig: {
-                        address: "188.226.200.49",
+                        address: "82.196.15.98",
                         port: "3478"
                     },
                     socket: {
@@ -246,7 +246,7 @@ module.exports = function(){
                         apiPath: "/apiVideoConferences"
                     },
                     kurento: {
-                        ws_uri: 'ws://185.14.186.114:8888/kurento'
+                        ws_uri: 'ws://82.196.15.98:8888/kurento'
                     },
                     auth: {
                         token: {
@@ -296,7 +296,7 @@ module.exports = function(){
                 },
                 conference: {
                     turnConfig: {
-                        address: "188.226.200.49",
+                        address: "82.196.15.98",
                         port: "3478"
                     },
                     socket: {
@@ -309,7 +309,7 @@ module.exports = function(){
                         apiPath: "/apiVideoConferences"
                     },
                     kurento: {
-                        ws_uri: 'ws://185.14.186.114:8888/kurento'
+                        ws_uri: 'ws://82.196.15.98:8888/kurento'
                     },
                     auth: {
                         token: {
