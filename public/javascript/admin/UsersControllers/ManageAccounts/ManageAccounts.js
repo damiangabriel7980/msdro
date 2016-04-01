@@ -21,8 +21,13 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
         }, {
             total: data.length, // length of data
             getData: function($defer, params) {
-
-                var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
+                for (var property in params.filter()) {
+                    if (params.filter()[property] === '') {
+                        delete params.filter()[property];
+                    }
+                }
+                var filteredData = params.filter() ? $filter('filter')(data, params.filter()) : data;
+                var orderedData = params.sorting() ? $filter('orderBy')(filteredData, params.orderBy()) : data;
                 $scope.resultData = orderedData;
                 params.total(orderedData.length);
                 if(params.total() < (params.page() -1) * params.count()){
