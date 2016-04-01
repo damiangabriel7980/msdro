@@ -32,6 +32,12 @@
                     <my-multiple-select all-objects="groups" selected-objects="user.groupsID" track-by="_id" display-by="display_name"
                                         split-by="profession.display_name" output="selectedGroups"></my-multiple-select>
                 </div>
+                <div class="form-group col-md-12">
+                    <label for="routingRole">Rol Routing:</label>
+                    <select ng-model="user.routing_role" ng-options="routingRole as routingRoleDisplayName(routingRole) for routingRole in routingRolesNames"
+                            class="form-control" id="routingRole" style="width: 100%;">
+                    </select>
+                </div>
             </div>
         </div>
     </form>

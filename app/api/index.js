@@ -3091,7 +3091,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/users/ManageAccounts/users')
         .get(function (req, res) {
             if(req.query.id){
-                User.findOne({_id: req.query.id}).select('+enabled +phone').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
+                User.findOne({_id: req.query.id}).select('+enabled +phone +routing_role').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -3099,8 +3099,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                User.find({state:"ACCEPTED"}).select('+enabled +phone').populate('profession therapeutic-areasID groupsID conferencesID').exec(function (err, users) {
+                User.find({state:"ACCEPTED"}).select('+enabled +phone +routing_role').populate('profession therapeutic-areasID groupsID conferencesID').exec(function (err, users) {
                     if(err){
+                        console.log(err);
                         handleError(res,err,500);
                     }else{
                         handleSuccess(res, users);

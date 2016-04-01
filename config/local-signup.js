@@ -102,6 +102,7 @@ module.exports = function(passport) {
                                 newUser.birthday=null;
                                 newUser.phone="";
                                 newUser.image_path="";
+                                newUser.routing_role=null;
                                 //set activation token
                                 crypto.randomBytes(40, function(err, buf) {
                                     if(err) return done(err);

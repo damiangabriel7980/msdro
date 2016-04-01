@@ -34,14 +34,15 @@ var formatTokenProfile = function (user) {
         username: user.username,
         name: user.name,
         image_path: user.image_path,
-        answerer: false
+        answerer: false,
+        routing_role: user.routing_role
     };
 };
 
 var authenticateToken = function (username, password) {
     var deferred = Q.defer();
     //find user in database
-    User.findOne({ 'username' :  UtilsModule.regexes.emailQuery(username)}).select("+account_expired +account_locked +enabled +password +state").exec(function(err, user) {
+    User.findOne({ 'username' :  UtilsModule.regexes.emailQuery(username)}).select("+account_expired +account_locked +enabled +password +state +routing_role").exec(function(err, user) {
         // if there are any errors, return error status
         if (err){
             deferred.reject({status: 403, message: "Forbidden"});

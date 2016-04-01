@@ -6,20 +6,17 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
     };
 
     $scope.getHeader = function () {
-        return ['Name', 'Username', 'Telefon', 'Url_imagine', 'Profesie', 'Conferinte', 'Grupuri', 'Arii_terapeutice']
+        return ['Name', 'Username', 'Telefon', 'Url_imagine', 'Routing_Role', 'Profesie', 'Conferinte', 'Grupuri', 'Arii_terapeutice']
     };
 
     ManageAccountsService.users.query().$promise.then(function (resp) {
         var data = Success.getObject(resp);
-        $scope.csv.rows = exportCSV.formatArrayCSV(data, ['name', 'username','phone', 'image_path'],[{'conferencesID': 'title'}, {'groupsID': 'display_name'}, {'therapeutic-areasID': 'name'}], [{'profession' : 'display_name'}]);
+        $scope.csv.rows = exportCSV.formatArrayCSV(data, ['name', 'username','phone', 'image_path', 'routing_role'],[{'conferencesID': 'title'}, {'groupsID': 'display_name'}, {'therapeutic-areasID': 'name'}], [{'profession' : 'display_name'}]);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
             sorting: {
                 username: 'asc'     // initial sorting
-            },
-            filter: {
-                username: ''       // initial filter
             }
         }, {
             total: data.length, // length of data

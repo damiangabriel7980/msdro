@@ -13,6 +13,8 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
 
     $scope.user = {};
 
+    $scope.routingRolesNames = ["admin", "manager", "reprezentant", null];
+
     ManageAccountsService.professions.query().$promise.then(function (response) {
         $scope.professions = Success.getObject(response);
     }).catch(function(err){
@@ -22,6 +24,9 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
     ManageAccountsService.users.query({id: idToView}).$promise.then(function(resp){
         var user = Success.getObject(resp);
         $scope.user = user;
+        if(!$scope.user.routing_role){
+            $scope.user.routing_role = null;
+        }
         $scope.$applyAsync();
         if(user.profession) $scope.selectedProfession = user.profession._id;
     }).catch(function(err){
@@ -54,6 +59,15 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
         }).catch(function(err){
             resetAlert('danger',Error.getMessage(err));
         });
+    };
+
+    $scope.routingRoleDisplayName = function (name) {
+        switch(name){
+            case "admin": return "Administrator"; break;
+            case "manager": return "Manager"; break;
+            case "reprezentant": return "Reprezentant"; break;
+            default: return "Fara rol"; break;
+        }
     };
 
     $scope.closeModal=function(){
