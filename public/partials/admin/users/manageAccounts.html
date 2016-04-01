@@ -24,7 +24,7 @@
             {{user.profession.display_name}}
         </td>
         <td data-title="'Routing Role'" sortable="'routing_role'" filter="{ 'routing_role': 'text' }">
-            {{user.routing_role}}
+            {{routingRoleDisplayName(user.routing_role)}}
         </td>
         <td data-title="'Ultima modificare'" sortable="'last_updated'">
             {{user.last_updated.substr(0,10)}}

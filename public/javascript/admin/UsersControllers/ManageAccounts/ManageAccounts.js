@@ -38,6 +38,15 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
         });
     });
 
+    $scope.routingRoleDisplayName = function (name) {
+        switch(name){
+            case "admin": return "Administrator"; break;
+            case "manager": return "Manager"; break;
+            case "reprezentant": return "Reprezentant"; break;
+            default: return null; break;
+        }
+    };
+
     $scope.selectedItems = new Set();
 
     $scope.addToSelectedItems = function(id){
