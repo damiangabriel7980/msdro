@@ -1,4 +1,4 @@
-app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceService', '$sce', '$rootScope', '$state', '$modal', function ($scope, $http, ConferenceService, $sce,$rootScope, $state, $modal){
+app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceService', '$rootScope', '$state', '$modal', function ($scope, $http, ConferenceService,$rootScope, $state, $modal){
 	$scope.today = new Date();
     var futureDate = new Date().setMonth($scope.today.getMonth() + 2);
 
@@ -45,37 +45,20 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
     }
 
     function previewConference(conferenceId){
-    	getUserMedia(
-    		{audio: true, video: true},
-    		function(stream){
-    			$modal.open({
-    				templateUrl: 'partials/medic/elearning/conferencePreview.html',
-    				windowClass: 'fade',
-    				controller: 'ConferencePreview',
-    				resolve: {
-    				    videoUrl: getVideoURL(stream),
-    				    conferenceData: {
-                  id: conferenceId
-                }
-    				}
-    			}).result.then(function(conferenceId){
-            if(conferenceId){
-              startConference(conferenceId);
+      $modal.open({
+        templateUrl: 'partials/medic/elearning/conferencePreview.html',
+        windowClass: 'fade',
+        controller: 'ConferencePreview',
+        resolve: {
+            conferenceData: {
+              id: conferenceId
             }
-          });
-    		},
-    		function(err){
-    			console.log(err);
-    		}
-    	)
-    }
-
-    function getVideoURL(stream){
-      if (window.URL) {
-        return $sce.trustAsResourceUrl(window.URL.createObjectURL(stream));
-      } else {
-        return $sce.trustAsResourceUrl(stream);
-      }
+        }
+      }).result.then(function(conferenceId){
+        if(conferenceId){
+          startConference(conferenceId);
+        }
+      });
     }
 
 }]);
