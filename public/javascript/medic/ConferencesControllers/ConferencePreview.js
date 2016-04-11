@@ -29,8 +29,10 @@ app.controllerProvider.register('ConferencePreview', ['$scope', '$sce', '$modalI
 
 	function closeVideoStream(){
 		var deferred = $q.defer();
-		console.log(self.stream);
-		//TODO: get rid of the video stream here
+		var tracks = self.stream.getTracks();
+		for(var i=0; i<tracks.length; i++){
+			tracks[i].stop();
+		}
 		deferred.resolve();
 		return deferred.promise;
 	}
