@@ -49,6 +49,7 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
         templateUrl: 'partials/medic/elearning/conferencePreview.html',
         windowClass: 'fade',
         controller: 'ConferencePreview',
+        backdrop: 'static',
         resolve: {
             conferenceData: {
               id: conferenceId

@@ -1,7 +1,11 @@
-app.controllerProvider.register('ConferencePreview', ['$scope', '$sce', '$modalInstance', 'conferenceData', function($scope, $sce, $modalInstance, conferenceData){
+app.controllerProvider.register('ConferencePreview', ['$scope', '$sce', '$modalInstance', 'conferenceData', '$q', function($scope, $sce, $modalInstance, conferenceData, $q){
+	
+	var self = this;
+
 	getUserMedia(
 		{audio: true, video: true},
 		function(stream){
+			self.stream = stream;
 			$scope.videoUrl = getVideoURL(stream)
 		},
 		function(err){
@@ -10,7 +14,25 @@ app.controllerProvider.register('ConferencePreview', ['$scope', '$sce', '$modalI
 	)
 
 	$scope.startConference = function(){
-		$modalInstance.close(conferenceData.id);
+		$scope.closeModal(conferenceData.id);
+	}
+
+	$scope.closeModal = function(result){
+		closeVideoStream()
+			.then(function(){
+				$modalInstance.close(result);
+			})
+			.catch(function(err){
+				console.log(err);
+			});
+	}
+
+	function closeVideoStream(){
+		var deferred = $q.defer();
+		console.log(self.stream);
+		//TODO: get rid of the video stream here
+		deferred.resolve();
+		return deferred.promise;
 	}
 
 	function getVideoURL(stream){
