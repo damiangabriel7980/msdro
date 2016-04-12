@@ -239,7 +239,7 @@ module.exports = function(){
                     socket: {
                         path: "/socket.io-conferences"
                     },
-                    apiFrontEnd: "http://localhost:8080/apiVideoConferences/",
+                    apiFrontEnd: "https://staging.staywell.ro/apiVideoConferences/",
                     apiBackEnd: {
                         protocol: "http",
                         host: "localhost:8080",
