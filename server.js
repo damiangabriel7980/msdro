@@ -101,7 +101,13 @@ require('./app/apiVideoConferences')(app, my_config, logger, express.Router());
 // require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 
 var conferences = require('qconferences-back-end');
-conferences(devServer, app, my_config.conference);
+var conferencesServer;
+if(process.env.NODE_ENV === "staging"){
+	conferencesServer = secureServer;
+}else{
+	conferencesServer = devServer;
+}
+conferences(conferencesServer, app, my_config.conference);
 //conferences(secureServer, app, conferencesConfig);
 
 // launch ======================================================================
