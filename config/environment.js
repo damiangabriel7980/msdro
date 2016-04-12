@@ -241,8 +241,8 @@ module.exports = function(){
                     },
                     apiFrontEnd: "https://staging.staywell.ro/apiVideoConferences/",
                     apiBackEnd: {
-                        protocol: "https",
-                        host: "localhost:3000",
+                        protocol: "http",
+                        host: "localhost:8080",
                         apiPath: "/apiVideoConferences"
                     },
                     kurento: {
