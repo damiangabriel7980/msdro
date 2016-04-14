@@ -39,7 +39,7 @@ module.exports = function(){
                     maxScore: 18
                 },
                 events: {
-                    overwriteApiResponses: true
+                    overwriteApiResponses: false
                 }
             };
 
@@ -78,7 +78,7 @@ module.exports = function(){
                     maxScore: 18
                 },
                 events: {
-                    overwriteApiResponses: true
+                    overwriteApiResponses: false
                 }
             };
 
@@ -118,7 +118,7 @@ module.exports = function(){
                     maxScore: 18
                 },
                 events: {
-                    overwriteApiResponses: true
+                    overwriteApiResponses: false
                 }
             };
 
@@ -193,7 +193,7 @@ module.exports = function(){
                     maxScore: 18
                 },
                 events: {
-                    overwriteApiResponses: true
+                    overwriteApiResponses: false
                 }
             };
 
@@ -232,7 +232,7 @@ module.exports = function(){
                     maxScore: 18
                 },
                 events: {
-                    overwriteApiResponses: true
+                    overwriteApiResponses: false
                 }
             };
 
