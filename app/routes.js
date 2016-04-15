@@ -103,7 +103,8 @@ module.exports = function(app, logger, passport) {
                     conference: req.query.id,
                     token: TokenModule.conference.getToken(req),
                     socketPath: my_config.conference.socket.path,
-                    apiPath: my_config.conference.apiFrontEnd
+                    apiPath: my_config.conference.apiFrontEnd,
+                    screenSharingId: my_config.conference.screenSharingId
                 });
             }else{
                 res.redirect('/');

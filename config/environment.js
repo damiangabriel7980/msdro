@@ -63,7 +63,8 @@ module.exports = function(){
                             secret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
                             expiresIn: 24*60*60 // expires in 24 hours
                         }
-                    }
+                    },
+                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl"
                 }
             };
 
@@ -126,7 +127,8 @@ module.exports = function(){
                             secret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
                             expiresIn: 24*60*60 // expires in 24 hours
                         }
-                    }
+                    },
+                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl"
                 }
             };
 
@@ -190,7 +192,8 @@ module.exports = function(){
                             secret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
                             expiresIn: 24*60*60 // expires in 24 hours
                         }
-                    }
+                    },
+                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl"
                 }
             };
 
@@ -253,7 +256,8 @@ module.exports = function(){
                             secret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
                             expiresIn: 24*60*60 // expires in 24 hours
                         }
-                    }
+                    },
+                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl"
                 }
             };
 
@@ -316,7 +320,8 @@ module.exports = function(){
                             secret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
                             expiresIn: 24*60*60 // expires in 24 hours
                         }
-                    }
+                    },
+                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl"
                 }
             };
 
