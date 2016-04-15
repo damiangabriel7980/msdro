@@ -31,7 +31,7 @@ exports.isEmptyObject = function (obj) {
 };
 
 // add days to an existing date; return null if existing date is not valid
-// "days" can be negative too, which will substract days from date
+// "days" can be negative too, which will subtract days from date
 exports.addDaysToDate = function (date, days) {
     try{
         return new Date().setDate(date.getDate() + days);
@@ -39,6 +39,14 @@ exports.addDaysToDate = function (date, days) {
         return null;
     }
 };
+//same as above, but in this case you can add hours
+exports.addHoursToDate = function (date, hours) {
+    try{
+        return new Date().setTime(date.getTime() + (hours * 60 * 60 * 1000));
+    }catch(ex){
+        return null;
+    }
+}
 
 //receives an array of documents and returns an array with only the id's of those documents
 exports.getIds = function (arr, convertToString) {

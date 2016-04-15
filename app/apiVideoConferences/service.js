@@ -5,6 +5,8 @@ var ConferenceMessages = require('../models/conferenceMessages');
 
 var Utils = require('../modules/utils');
 
+var env = require('../../config/environment')();
+
 var Q = require('q');
 
 function getAttendingConferences(userEmail){
@@ -66,6 +68,28 @@ function getConference(conferenceId){
 			}else{
 				deferred.resolve(res);
 			}
+		});
+	return deferred.promise;
+}
+
+function getConferenceActiveStatus(conferenceId){
+	var deferred = Q.defer();
+	getConference(conferenceId)
+		.then(function(conference){
+			// "activeSpan" = the number of hours in which a conference will automatically end if it
+			// was not explicitly ended ("isShutDown")
+			var activeSpan = env.conference.activeSpan;
+			var now = new Date();
+			if(now < conference.date){
+			    deferred.resolve("pending");
+			}else if(conference.isShutDown || now > Utils.addHoursToDate(conference.date, activeSpan)){
+			    deferred.resolve("ended");
+			}else{
+			    deferred.resolve("live");
+			}
+		})
+		.catch(function(err){
+			deferred.reject(err);
 		});
 	return deferred.promise;
 }
@@ -184,6 +208,7 @@ module.exports = {
 	getAttendingConferences: getAttendingConferences,
 	getConferenceRole: getConferenceRole,
 	getConference: getConference,
+	getConferenceActiveStatus: getConferenceActiveStatus,
 	getSpeakers: getSpeakers,
 	getMessageHistory: getMessageHistory,
 	pushChatMessage: pushChatMessage,

@@ -64,7 +64,8 @@ module.exports = function(){
                             expiresIn: 24*60*60 // expires in 24 hours
                         }
                     },
-                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl"
+                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl",
+                    activeSpan: 12
                 }
             };
 
@@ -128,7 +129,8 @@ module.exports = function(){
                             expiresIn: 24*60*60 // expires in 24 hours
                         }
                     },
-                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl"
+                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl",
+                    activeSpan: 12
                 }
             };
 
@@ -193,7 +195,8 @@ module.exports = function(){
                             expiresIn: 24*60*60 // expires in 24 hours
                         }
                     },
-                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl"
+                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl",
+                    activeSpan: 12
                 }
             };
 
@@ -257,7 +260,8 @@ module.exports = function(){
                             expiresIn: 24*60*60 // expires in 24 hours
                         }
                     },
-                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl"
+                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl",
+                    activeSpan: 12
                 }
             };
 
@@ -321,7 +325,8 @@ module.exports = function(){
                             expiresIn: 24*60*60 // expires in 24 hours
                         }
                     },
-                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl"
+                    screenSharingId: "hoagjhdcnjonhjodkgpkljkdlmaacajl",
+                    activeSpan: 12
                 }
             };
 

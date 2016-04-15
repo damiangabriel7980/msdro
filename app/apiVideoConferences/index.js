@@ -60,6 +60,22 @@ module.exports = function(app, env, logger, router){
 			}
 		});
 
+	router.route('/conferenceStatus')
+		.get(function(req, res){
+			if (req.query.id){
+			  ConferenceService.getConferenceActiveStatus(req.query.id).then(
+			    function(status){
+			      handleSucces(res, {status: status});
+			    },
+			    function(err){
+			      handleError(res, err);
+			    }
+			  );
+			} else {
+			  handleError(res,"Missing query param: id (the id of the conference)", 400);
+			}
+		});
+
 	router.route('/role')
 		.get(function(req, res){
 			if (req.query.id){
