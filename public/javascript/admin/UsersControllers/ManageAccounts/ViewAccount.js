@@ -15,24 +15,27 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
 
     ManageAccountsService.professions.query().$promise.then(function (response) {
         $scope.professions = Success.getObject(response);
-    }).catch(function(err){
-        resetAlert('danger',Error.getMessage(err));
     });
+    //    .catch(function(err){
+    //    resetAlert('danger',Error.getMessage(err));
+    //});
 
     ManageAccountsService.users.query({id: idToView}).$promise.then(function(resp){
         var user = Success.getObject(resp);
         $scope.user = user;
         $scope.$applyAsync();
         if(user.profession) $scope.selectedProfession = user.profession._id;
-    }).catch(function(err){
-        resetAlert('danger',Error.getMessage(err));
     });
+    //    .catch(function(err){
+    //    resetAlert('danger',Error.getMessage(err));
+    //});
 
     ManageAccountsService.groups.query().$promise.then(function (resp) {
         $scope.groups = Success.getObject(resp);
-    }).catch(function(err){
-        resetAlert('danger',Error.getMessage(err));
     });
+    //    .catch(function(err){
+    //    resetAlert('danger',Error.getMessage(err));
+    //});
 
     $scope.saveSuccess = false;
 
@@ -51,9 +54,10 @@ controllers.controller('ViewAccount', ['$scope','ManageAccountsService', '$modal
                     $state.reload();
                 },2000);
             }
-        }).catch(function(err){
-            resetAlert('danger',Error.getMessage(err));
-        });
+        })
+        //    .catch(function(err){
+        //    resetAlert('danger',Error.getMessage(err));
+        //});
     };
 
     $scope.closeModal=function(){

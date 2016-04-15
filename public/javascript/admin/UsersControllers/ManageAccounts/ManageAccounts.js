@@ -10,8 +10,8 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
     };
 
     ManageAccountsService.users.query().$promise.then(function (resp) {
-        var data = Success.getObject(resp);
-        $scope.csv.rows = exportCSV.formatArrayCSV(data, ['name', 'username','phone', 'image_path'],[{'conferencesID': 'title'}, {'groupsID': 'display_name'}, {'therapeutic-areasID': 'name'}], [{'profession' : 'display_name'}]);
+        $scope.data = Success.getObject(resp);
+        $scope.csv.rows = exportCSV.formatArrayCSV($scope.data, ['name', 'username','phone', 'image_path'],[{'conferencesID': 'title'}, {'groupsID': 'display_name'}, {'therapeutic-areasID': 'name'}], [{'profession' : 'display_name'}]);
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
@@ -22,10 +22,10 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
                 username: ''       // initial filter
             }
         }, {
-            total: data.length, // length of data
+            total: $scope.data.length, // length of data
             getData: function($defer, params) {
 
-                var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
+                var orderedData = $filter('orderBy')(($filter('filter')($scope.data, params.filter())), params.orderBy());
                 $scope.resultData = orderedData;
                 params.total(orderedData.length);
                 if(params.total() < (params.page() -1) * params.count()){

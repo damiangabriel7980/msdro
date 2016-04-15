@@ -122,7 +122,7 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
 }]);
 
 app.config(['$locationProvider', function($locationProvider) {
-    $locationProvider.hashPrefix(HASH_PREFIX);
+    $locationProvider.hashPrefix('#');
 }]);
 
 var loadStateDeps = function (deps) {
@@ -134,11 +134,12 @@ var loadStateDeps = function (deps) {
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.rule(function ($injector, $location) {
         //console.log($location.url());
-        if(REQUESTED_PRO) {
-            REDIRECT_AFTER_LOGIN = $location.url();
-            REQUESTED_PRO = 0;
-            $location.path("/home/noutati");
-        }
+        //if(REQUESTED_PRO) {
+        //    REDIRECT_AFTER_LOGIN = $location.url();
+        //    REQUESTED_PRO = 0;
+        //    $location.path("/home/noutati");
+        //}
+        $location.path("/home/noutati");
     });
     $urlRouterProvider.otherwise(function ($injector, $location) {
         if(!REQUESTED_PRO) {
@@ -282,7 +283,7 @@ app.run(
     [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location', 'PublicService', '$ocLazyLoad',
         function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location,   PublicService,   $ocLazyLoad) {
 
-            $rootScope.accessRoute = ACCESS_ROUTE;
+            //$rootScope.accessRoute = ACCESS_ROUTE;
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -293,8 +294,8 @@ app.run(
             $rootScope.textToSearch="";
 
             //amazon service paths
-            $rootScope.amazonBucket = DEFAULT_AMAZON_BUCKET;
-            $rootScope.pathAmazonDev = DEFAULT_AMAZON_PREFIX+$rootScope.amazonBucket+"/";
+            $rootScope.amazonBucket = 'msdqa';
+            $rootScope.pathAmazonDev = 'https://s3-eu-west-1.amazonaws.com/' + $rootScope.amazonBucket+"/";
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
 
             $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merckManual.jpg";

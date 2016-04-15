@@ -53,16 +53,23 @@
     "start": "NODE_ENV='development' AWS_ACCESS_KEY_ID='AKIAIU26AHNKP7VDKG6A' AWS_SECRET_ACCESS_KEY='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' node server.js"
   },
   "devDependencies": {
+    "fs-readdir-recursive": "latest",
     "gulp": "^3.8.8",
     "gulp-concat": "~2.1.7",
+    "gulp-minify-css": "latest",
+    "gulp-nodemon": "latest",
     "gulp-notify": "~0.3.4-1",
     "gulp-ruby-sass": "^0.7.1",
     "gulp-uglify": "~0.1.0",
-    "gulp-minify-css": "latest",
-    "fs-readdir-recursive": "latest",
     "gulp-util": "^3.0.1",
     "gulp-watch": "~0.5.0",
     "gulp-webserver": "^0.8.2",
-    "gulp-nodemon": "latest"
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^0.2.3",
+    "karma-jasmine": "^0.3.8",
+    "karma-requirejs": "^0.2.6",
+    "karma-wiredep": "^1.0.2",
+    "requirejs": "^2.2.0"
   }
 }

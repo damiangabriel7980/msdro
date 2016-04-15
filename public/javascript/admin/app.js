@@ -331,8 +331,8 @@ app.run(
             $rootScope.$stateParams = $stateParams;
 
             //amazon service paths
-            $rootScope.amazonBucket = DEFAULT_AMAZON_BUCKET;
-            $rootScope.pathAmazonDev = DEFAULT_AMAZON_PREFIX+$rootScope.amazonBucket+"/";
+            $rootScope.amazonBucket = 'msdqa';
+            $rootScope.pathAmazonDev = 'https://s3-eu-west-1.amazonaws.com/' + $rootScope.amazonBucket+"/";
 
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
 
