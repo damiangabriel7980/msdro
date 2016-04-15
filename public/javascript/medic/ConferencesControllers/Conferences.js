@@ -39,7 +39,18 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
           if(role){
           	console.log("Role: "+role);
             if(role === "speaker"){
-              previewConference(conf._id);
+              //we should show a preview if the conference is live
+              ConferenceService.status.query({id: conf._id}).$promise
+                .then(function(data){
+                  if(data.status === "live"){
+                    previewConference(conf._id);
+                  }else{
+                    startConference(conf._id);
+                  }
+                })
+                .catch(function(err){
+                  console.log(err);
+                })
             }else{
               startConference(conf._id);
             }
