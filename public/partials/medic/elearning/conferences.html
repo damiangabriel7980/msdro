@@ -7,7 +7,7 @@
       </div>
       <!-- <div class="col-xs-2" ng-if="conf.date == today"> -->
       <div class="col-xs-2">
-        <a class="btn btn-primary pull-right" ng-click="call(conf)" >Participa</a>
+        <a class="btn btn-primary pull-right" ng-click="call(conf)" ng-class="{'disabled': conf.status === 'pending'}">{{conf.status==='ended'?'Vezi mesaje':'Participa'}}</a>
       </div>
     </li>
   </ul>

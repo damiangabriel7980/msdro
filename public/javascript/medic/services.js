@@ -233,6 +233,9 @@ services.factory('ConferenceService', ['$resource', function($resource){
         }),
         role: $resource('/apiVideoConferences/role', {}, {
             query: { method: 'GET', isArray: false }
+        }),
+        status: $resource('/apiVideoConferences/conferenceStatus', {}, {
+            query: { method: 'GET', isArray: false }
         })
     }
 }]);
