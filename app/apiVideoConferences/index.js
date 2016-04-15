@@ -76,6 +76,17 @@ module.exports = function(app, env, logger, router){
 			}
 		});
 
+	router.route('/shutDownConference')
+		.post(function(req, res){
+			ConferenceService.shutDownConference(req.user.username, req.body.id)
+				.then(function(){
+					handleSucces(res);
+				})
+				.catch(function(err){
+					handleError(res, err);
+				});
+		});
+
 	router.route('/role')
 		.get(function(req, res){
 			if (req.query.id){

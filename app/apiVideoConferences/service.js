@@ -94,6 +94,30 @@ function getConferenceActiveStatus(conferenceId){
 	return deferred.promise;
 }
 
+function shutDownConference(usernameRequestingShutdown, conferenceId){
+	var deferred = Q.defer();
+	getConferenceRole(usernameRequestingShutdown, conferenceId)
+		.then(function(role){
+			if(role !== "moderator"){
+				deferred.reject("Not allowed");
+			}else if(!conferenceId){
+				deferred.reject("Required query params: userId and conferenceId");
+			}else{
+				Conference.update({_id: conferenceId}, {$set: {isShutDown: true}}, function(err){
+					if(err){
+						deferred.reject(err)
+					}else{
+						deferred.resolve()
+					}
+				})
+			}
+		})
+		.catch(function(err){
+			deferred.reject(err);
+		});
+	return deferred.promise;
+}
+
 function getSpeakers(conferenceId) {
 	console.log('ENTERED GET SPEAKERS:');
 	var deferred = Q.defer();
@@ -202,6 +226,7 @@ function kickUser(usernameRequestingKick, userIdToKick, conferenceId){
 		.catch(function(err){
 			deferred.reject(err);
 		});
+	return deferred.promise;
 }
 
 module.exports = {
@@ -209,6 +234,7 @@ module.exports = {
 	getConferenceRole: getConferenceRole,
 	getConference: getConference,
 	getConferenceActiveStatus: getConferenceActiveStatus,
+	shutDownConference: shutDownConference,
 	getSpeakers: getSpeakers,
 	getMessageHistory: getMessageHistory,
 	pushChatMessage: pushChatMessage,
