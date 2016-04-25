@@ -1,33 +1,36 @@
 app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceService', '$rootScope', '$state', '$modal', function ($scope, $http, ConferenceService,$rootScope, $state, $modal){
 	$scope.today = new Date();
     var futureDate = new Date().setMonth($scope.today.getMonth() + 2);
-
-    //static list of Conferences
-    var displayedConferences = [];
-    ConferenceService.all.query().$promise.then(
-      function(conferences){
-        async.each(conferences, function getConferenceStatus(conference, callback){
-          ConferenceService.status.query({id: conference._id}).$promise
-            .then(function(resp){
-              conference.status = (resp||{}).status;
-              displayedConferences.push(conference);
-              callback();
-            })
-            .catch(function(err){
-              callback(err);
-            })
-        }, function gotAllStatuses(err){
-          if(err){
-            console.log(err);
-          }else{
-            console.log(displayedConferences);
-            $scope.listOfConferences = displayedConferences;
-          }
-        })
-      }
-    ).catch(function(err){
-      console.log(err);
-    });
+    
+    function refreshConferences(){
+      //static list of Conferences
+      var displayedConferences = [];
+      ConferenceService.all.query().$promise.then(
+        function(conferences){
+          async.each(conferences, function getConferenceStatus(conference, callback){
+            ConferenceService.status.query({id: conference._id}).$promise
+              .then(function(resp){
+                conference.status = (resp||{}).status;
+                displayedConferences.push(conference);
+                callback();
+              })
+              .catch(function(err){
+                callback(err);
+              })
+          }, function gotAllStatuses(err){
+            if(err){
+              console.log(err);
+            }else{
+              console.log(displayedConferences);
+              $scope.listOfConferences = displayedConferences;
+            }
+          })
+        }
+      ).catch(function(err){
+        console.log(err);
+      });
+    }
+    refreshConferences();
 
     /**
      * initializes a call
@@ -63,7 +66,10 @@ app.controllerProvider.register('Conferences', ['$scope', '$http', 'ConferenceSe
 
     var startConference = function(conferenceId){
       console.log("Start conference: "+conferenceId);
-      window.open('/conference?id='+conferenceId);
+      var conferenceWindow = window.open('/conference?id='+conferenceId);
+      conferenceWindow.onbeforeunload = function(){
+        refreshConferences();
+      }
     }
 
     function previewConference(conferenceId){
