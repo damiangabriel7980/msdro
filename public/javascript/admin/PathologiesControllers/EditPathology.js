@@ -116,7 +116,7 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
                                 $scope.uploadAlertImages.type = "success";
                                 $scope.uploadAlertImages.message = "Multimedia for pathologies updated!";
                                 $scope.uploadAlertImages.newAlert = true;
-                                console.log("Upload complete");
+                                console.log("Delete completed!");
                             }).catch(function(err){
                                 $scope.uploadAlertImages.type = "danger";
                                 $scope.uploadAlertImages.message = Error.getMessage(err);
@@ -129,6 +129,37 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
 
         }
     };
+
+    function addImageToS3(bodyOfFile, keyOfFile, s3Client){
+        $scope.pathology.associated_multimedia.push(keyOfFile);
+        var req = s3Client.putObject({Bucket: $rootScope.amazonBucket, Key: keyOfFile, Body: bodyOfFile, ACL:'public-read'}, function (err, data) {
+            if (err) {
+                console.log(err);
+                $scope.uploadAlertImages.type = "danger";
+                $scope.uploadAlertImages.message = "Upload esuat!";
+                $scope.uploadAlertImages.newAlert = true;
+                $scope.$apply();
+            } else {
+                //update database as well
+                PathologiesService.pathologies.update({id:$scope.pathology._id}, {info:{associated_multimedia:$scope.pathology.associated_multimedia}}).$promise.then(function (resp) {
+                    $scope.uploadAlertImages.type = "success";
+                    $scope.uploadAlertImages.message = "Multimedia for pathologies updated!";
+                    $scope.uploadAlertImages.newAlert = true;
+                    console.log("Upload complete");
+                }).catch(function(err){
+                    $scope.uploadAlertImages.type = "danger";
+                    $scope.uploadAlertImages.message = Error.getMessage(err);
+                    $scope.uploadAlertImages.newAlert = true;
+                });
+            }
+        });
+        req.on('httpUploadProgress', function (evt) {
+            var progress = parseInt(100.0 * evt.loaded / evt.total);
+            $scope.$apply(function() {
+                console.log(progress);
+            })
+        });
+    }
 
     var putAssociatedImagesS3 = function (body) {
         AmazonService.getClient(function (s3) {
@@ -146,66 +177,11 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
                         i=0;
                     }
                 }
-                $scope.pathology.associated_multimedia.push(key);
-                var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
-                    if (err) {
-                        console.log(err);
-                        $scope.uploadAlertImages.type = "danger";
-                        $scope.uploadAlertImages.message = "Upload esuat!";
-                        $scope.uploadAlertImages.newAlert = true;
-                        $scope.$apply();
-                    } else {
-                        //update database as well
-                        PathologiesService.pathologies.update({id:$scope.pathology._id}, {info:{associated_multimedia:$scope.pathology.associated_multimedia}}).$promise.then(function (resp) {
-                            $scope.uploadAlertImages.type = "success";
-                            $scope.uploadAlertImages.message = "Multimedia for pathologies updated!";
-                            $scope.uploadAlertImages.newAlert = true;
-                            console.log("Upload complete");
-                        }).catch(function(err){
-                            $scope.uploadAlertImages.type = "danger";
-                            $scope.uploadAlertImages.message = Error.getMessage(err);
-                            $scope.uploadAlertImages.newAlert = true;
-                        });
-                    }
-                });
-                req.on('httpUploadProgress', function (evt) {
-                    var progress = parseInt(100.0 * evt.loaded / evt.total);
-                    $scope.$apply(function() {
-                        console.log(progress);
-                    })
-                });
+                addImageToS3(body, key, s3);
             }
             else
             {
-                $scope.pathology.associated_multimedia.push(key);
-                var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
-                    if (err) {
-                        console.log(err);
-                        $scope.uploadAlertImages.type = "danger";
-                        $scope.uploadAlertImages.message = "Upload esuat!";
-                        $scope.uploadAlertImages.newAlert = true;
-                        $scope.$apply();
-                    } else {
-                        //update database as well
-                        PathologiesService.pathologies.update({id:$scope.pathology._id}, {info:{associated_multimedia:$scope.pathology.associated_multimedia}}).$promise.then(function (resp) {
-                            $scope.logo = key;
-                            $scope.uploadAlertImages.type = "success";
-                            $scope.uploadAlertImages.message = "Multimedia for pathologies updated!";
-                            $scope.uploadAlertImages.newAlert = true;
-                            console.log("Upload complete");
-                        }).catch(function(err){
-                            $scope.uploadAlertImages.type = "danger";
-                            $scope.uploadAlertImages.message = Error.getMessage(err);
-                            $scope.uploadAlertImages.newAlert = true;
-                        });
-                    }
-                });
-                req.on('httpUploadProgress', function (evt) {
-                    var progress = parseInt(100.0 * evt.loaded / evt.total);
-                    $scope.$apply(function() {
-                        console.log(progress);
-                    })
-                });
+                addImageToS3(body, key, s3);
             }
 
         });
