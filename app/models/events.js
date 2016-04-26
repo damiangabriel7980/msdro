@@ -22,7 +22,8 @@ var EventsSchema		= new Schema({
     isPublic:   Boolean,
     start: {type: Date, index: true},
     type: Number,
-    listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}]
+    listconferences:[{type: Schema.Types.ObjectId,ref: 'conferences'}],
+    pathologiesID: [{type: Schema.Types.ObjectId, ref: 'pathologies',index: true}]
 });
 EventsSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 

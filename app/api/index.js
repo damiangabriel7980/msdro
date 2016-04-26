@@ -34,6 +34,7 @@ var guidelineFile = require ("../models/guidelineFile");
 var guidelineCategory = require ("../models/guidelineCategory");
 var myPrescription = require("../models/myPrescription");
 var pdf = require("html-pdf");
+var Pathologies = require('../models/pathologies');
 
 var xlsx = require("xlsx");
 
@@ -430,6 +431,127 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             }
+        });
+
+    router.route('/admin/pathologies')
+        .get(function(req, res) {
+            if(req.query.id){
+                Pathologies.findOne({_id:req.query.id}, function(err, pathology) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, pathology);
+                    }
+                })
+            }else{
+                Pathologies.find(function(err, pathologies) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else {
+                        handleSuccess(res, pathologies);
+                    }
+                });
+            }
+        })
+        .post(function(req, res) {
+            var pathology = new Pathologies({
+                display_name: 'Untitled',
+                last_updated: new Date(),
+                enabled: true
+            });
+            pathology.save(function(err,saved) {
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, {saved: saved}, 2);
+                }
+            });
+        })
+        .put(function(req, res) {
+            if(req.body.info){
+                var info = req.body.info;
+                if(info.image){
+                    Pathologies.update({_id:req.query.id}, {$set:{header_image: info.image}}, function (err, wRes) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {updated: wRes});
+                        }
+                    });
+                }else{
+                    Pathologies.update({_id:req.query.id}, {$set:{associated_multimedia: info.associated_multimedia}}, function (err, wRes) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {updated: wRes});
+                        }
+                    });
+                }
+            }else{
+                if(req.body.enablePathology){
+                    Pathologies.update({_id:req.query.id},{$set: {enabled: req.body.enablePathology.enable}}, function(err, pathology) {
+                        if (err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {}, 3);
+                        }
+                    });
+                }else{
+                    var data = req.body.pathology;
+                    Pathologies.update({_id:req.query.id},{$set: data}, function(err, product) {
+                        if (err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, {}, 3);
+                        }
+                    });
+                }
+            }
+        })
+        .delete(function(req, res) {
+            var id = req.query.id;
+            Pathologies.findOne({_id: id}, function (err, pathology) {
+                if(pathology){
+                    var s3Key = pathology.header_image;
+                    //first we'll remove any references to this pathology
+                    var arrayOfObjectsToUpdate = [Multimedia, Content, Events, specialProduct];
+                    async.forEach(arrayOfObjectsToUpdate, function(objectToUpdate, callback){
+                        objectToUpdate.update({}, {$pull: {pathologiesID: id}}, {multi: true}, function (err, wres) {
+                            if(err){
+                                callback(err);
+                            }else{
+                               callback();
+                            }
+                        });
+                    }, function (err) {
+                        if(err){
+                            handleError(res,err,500);
+                        } else {
+                            Pathologies.remove({_id:id},function(err,cont) {
+                                if (err){
+                                    handleError(res,err,500);
+                                }
+                                else{
+                                    if(s3Key){
+                                        amazon.deleteObjectS3(s3Key, function (err, data) {
+                                            if(err){
+                                                handleError(res,err,409,4);
+                                            }else{
+                                                handleSuccess(res, {}, 7);
+                                            }
+                                        });
+                                    }else{
+                                        handleSuccess(res, {}, 4);
+                                    }
+                                }
+                            });
+                        }
+                    })
+                }else{
+                    handleError(res,err,404,1);
+                }
+            });
         });
 
     router.route('/admin/bulkOperations')

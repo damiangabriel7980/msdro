@@ -115,6 +115,8 @@
         <script src="javascript/admin/ElearningControllers/EditSlide.js"></script>
         <script src="javascript/admin/ElearningControllers/EditSubChapter.js"></script>
 
+    <script src="javascript/admin/PathologiesControllers/Pathologies.js"></script>
+    <script src="javascript/admin/PathologiesControllers/EditPathology.js"></script>
     <script src="javascript/admin/MultimediaControllers/Multimedia.js"></script>
     <script src="javascript/admin/MultimediaControllers/EditMultimedia.js"></script>
     <script src="javascript/admin/MultimediaControllers/DeleteMultimedia.js"></script>
@@ -259,6 +261,7 @@
                     </ul>
                 </li>
                 <li ng-class="{'active': $state.includes('ariiTerapeutice')}"><a ui-sref="ariiTerapeutice"> Arii terapeutice </a></li>
+                <li ng-class="{'active': $state.includes('pathologies')}"><a ui-sref="pathologies"> Patologii </a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('applications')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Aplicatii <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">

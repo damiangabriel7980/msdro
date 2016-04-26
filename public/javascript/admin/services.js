@@ -579,7 +579,18 @@ services.factory('myPrescriptionService',['$resource',function($resource){
         update:{method:'PUT',isArray:false}
     })
   }
-}])
+}]);
+
+services.factory('PathologiesService',['$resource',function($resource){
+    return{
+        pathologies : $resource('api/admin/pathologies',{},{
+            query:{method:'GET',isArray:false},
+            create:{method:'POST',isArray:false},
+            update:{method:'PUT',isArray:false},
+            delete:{method:'DELETE',isArray:false}
+        })
+    }
+}]);
 
 services.factory('NewsletterService', ['$resource', function($resource){
     var variableTypes = ["text", "html"];
