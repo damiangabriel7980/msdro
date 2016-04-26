@@ -174,8 +174,8 @@ function pushChatMessage(message){
 
 	var mess = new ConferenceMessages({
 		conferenceId: message.conferenceId,
-		to: message.to,
-		from: message.from,
+		to: message.to._id,
+		from: message.from._id,
 		text: message.text,
 		timestamp: message.timestamp,
 		fromSystem: message.fromSystem
