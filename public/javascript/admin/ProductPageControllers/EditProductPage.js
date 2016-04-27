@@ -1,17 +1,26 @@
-controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', function($scope, SpecialProductsService, AmazonService, Success, Error) {
+controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', 'PathologiesService', function($scope, SpecialProductsService, AmazonService, Success, Error, PathologiesService) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
+    PathologiesService.pathologies.query().$promise.then(function(result){
+        $scope.pathologies = Success.getObject(result);
+    });
+
     SpecialProductsService.products.query({id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
         resp = Success.getObject(resp);
         $scope.newProductPage = resp[0];
+        $scope.myPathologies.selectedPathologies = $scope.newProductPage.pathologiesID;
         $scope.selectedGroups = resp[0].groups;
         //get available groups (a group can have only one special product)
         SpecialProductsService.groups.query().$promise.then(function (resp) {
             $scope.groupsAvailable = Success.getObject(resp);
         });
     });
+
+    $scope.myPathologies = {
+        selectedPathologies: null
+    };
 
     $scope.logoImageBody = null;
     $scope.headerImageBody = null;
@@ -30,6 +39,11 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
 
     $scope.addPage = function (redirectToMenu) {
         $scope.resetAlert("warning", "Va rugam asteptati...");
+        var id_pathologies = [];
+        for(var j=0;j<$scope.myPathologies.selectedPathologies.length;j++){
+            id_pathologies.push($scope.myPathologies.selectedPathologies[j]._id);
+        }
+        $scope.newProductPage.pathologiesID = id_pathologies;
         SpecialProductsService.products.update({id: $scope.newProductPage._id}, $scope.newProductPage).$promise.then(function () {
             //generate Amazon keys and extensions for logo and header image
             var extension;

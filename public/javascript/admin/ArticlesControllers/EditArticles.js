@@ -1,10 +1,14 @@
 /**
  * Created by miricaandrei23 on 27.11.2014.
  */
-controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', 'GroupsService', 'Success', 'Error', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit,GroupsService,Success,Error){
+controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', 'GroupsService', 'Success', 'Error', 'PathologiesService', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit,GroupsService,Success,Error, PathologiesService){
 
     $scope.myGroups = {
         selectedGroups: null
+    };
+
+    $scope.myPathologies = {
+        selectedPathologies: null
     };
 
     $scope.article = {};
@@ -26,13 +30,17 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
     ContentService.content.query({id: idToEdit}).$promise.then(function(response){
         $scope.article = Success.getObject(response);
         $scope.imagePath = $rootScope.pathAmazonDev+Success.getObject(response).image_path;
-
         var userGroups = Success.getObject(response).groupsID;
         $scope.$applyAsync();
         ContentService.groupsByIds.query({ids: userGroups}).$promise.then(function (groups) {
             $scope.myGroups.selectedGroups = Success.getObject(groups);
             GroupsService.groups.query().$promise.then(function(resp){
                 $scope.groups = Success.getObject(resp);
+                $scope.myPathologies.selectedPathologies = $scope.article.pathologiesID;
+                PathologiesService.pathologies.query().$promise.then(function(result){
+                    $scope.pathologies = Success.getObject(result);
+                    $scope.$applyAsync();
+                });
             }).catch(function(err){
                 $scope.statusAlert.type = "danger";
                 $scope.statusAlert.message = Error.getMessage(err);
@@ -244,10 +252,15 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
 
     $scope.updateArticle=function(){
         var id_groups=[];
+        var id_pathologies = [];
         for(var i=0;i<$scope.myGroups.selectedGroups.length;i++){
             id_groups.push($scope.myGroups.selectedGroups[i]._id);
         }
-        $scope.article.groupsID=id_groups;
+        for(var j=0;j<$scope.myPathologies.selectedPathologies.length;j++){
+            id_pathologies.push($scope.myPathologies.selectedPathologies[j]._id);
+        }
+        $scope.article.groupsID = id_groups;
+        $scope.article.pathologiesID = id_pathologies;
         $scope.article.last_updated = Date.now();
         ContentService.content.update({id: idToEdit},{article:$scope.article}).$promise.then(function (resp) {
             $scope.closeModal();

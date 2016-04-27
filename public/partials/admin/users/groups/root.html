@@ -2,7 +2,7 @@
     <div class="col-md-9"><h3>Gestionare grupuri utilizatori</h3></div>
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addGroup()">Adauga grupuri utilizatori</div></div>
 </div>
-<bulk-operations model="UserGroup" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
+<bulk-operations model="UserGroup" connected-entities="entities" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
 <div class="col-md-12">
     <div class="btn btn-default sr-only" ng-click="test()">Test</div>
 </div>

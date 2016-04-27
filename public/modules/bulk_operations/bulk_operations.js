@@ -14,6 +14,7 @@
         model: "@",
         field: "@",
         itemsSet: "=",
+        connectedEntities: "=",
         filteredArray: "="
       },
       link: function(scope, element, attrs) {
@@ -79,7 +80,7 @@
           convertSetToArray();
 
           ActionModal.show("Sterge", "Sunteti sigur ca doriti sa stergeti " + scope.itemsArray.length +" elemente ?",function(){
-            bulkOperationsService.operations.delete( {model: scope.model} , {items :scope.itemsArray} ).$promise.then(function(resp){
+            bulkOperationsService.operations.delete( {model: scope.model} , {items :scope.itemsArray, coupledEntities: scope.connectedEntities? scope.connectedEntities : null} ).$promise.then(function(resp){
               $state.reload();
             }).catch(function(err){
 

@@ -593,7 +593,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
            if(err) {
              handleError(res, err, 500)
            } else {
-             handleSuccess(res, updated);
+             handleSuccess(res, updated);sssss
            }
          })
       })
@@ -601,12 +601,29 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
           //we are making the delete operation here, because on a DELETE endpoint we cannot send the array via req.body
         var modelToModify = mongoose.model(req.query.model);
-        async.each(req.body.items,function(item, callback){
+          async.each(req.body.items,function(item, callback){
           modelToModify.findOneAndRemove( {_id: item}, function(err, deleted){
             if(err){
               callback(err)
             } else {
-              callback();
+                if(req.body.coupledEntities){
+                    var connectedEntites = req.body.coupledEntities;
+                    async.each(Object.keys(connectedEntites), function (itemToUpdate, callbackUpdate){
+                        var propertyToRemove = connectedEntites[itemToUpdate];
+                        var modelToChange = mongoose.model(itemToUpdate);
+                        modelToChange.update({}, {$pull: {propertyToRemove: item}}, {multi: true}, function (err, wres) {
+                            if(err){
+                                callbackUpdate(err);
+                            }else{
+                                callbackUpdate();
+                            }
+                        });
+                    }, function(err) {
+                        callback();
+                    });
+                } else {
+                    callback();
+                }
             }
           })
         }, function(err, deleted){
@@ -1081,7 +1098,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/content')
         .get(function(req, res) {
             if(req.query.id){
-                Content.findOne({_id:req.query.id}, function(err, cont) {
+                Content.findOne({_id:req.query.id}).populate('pathologiesID').exec(function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }else{
@@ -1089,7 +1106,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                Content.find(function(err, cont) {
+                Content.find({}).populate('pathologiesID').exec(function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }
@@ -1201,7 +1218,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 q._id = req.query.id;
             }
-            specialProduct.find(q).deepPopulate('groups.profession').exec(function (err, products) {
+            specialProduct.find(q).populate('pathologiesID').deepPopulate('groups.profession').exec(function (err, products) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -1902,7 +1919,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/events/events')
         .get(function (req, res) {
             if(req.query.id){
-                Events.findOne({_id: req.query.id}).select('-listconferences').populate('groupsID').exec(function (err, event) {
+                Events.findOne({_id: req.query.id}).select('-listconferences').populate('groupsID pathologiesID').exec(function (err, event) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -2312,7 +2329,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/multimedia')
         .get(function(req, res) {
             if(req.query.id){
-                Multimedia.findOne({_id: req.query.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                Multimedia.findOne({_id: req.query.id}).populate("therapeutic-areasID pathologiesID groupsID").exec(function(err, product) {
                     if (err){
                         handleError(res,err,500);
                     }else{

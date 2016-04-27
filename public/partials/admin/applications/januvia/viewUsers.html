@@ -12,7 +12,7 @@
             <button class="btn btn-primary pull-right" ng-csv="csv.rows" csv-header="getHeader()" filename="{{csv.filename}}">Export Januvia Users</button>
         </div>
     </div>
-    <bulk-operations model="januvia_users" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
+    <bulk-operations model="januvia_users" connected-entities="entities" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="user in $data">
             <td width="30">

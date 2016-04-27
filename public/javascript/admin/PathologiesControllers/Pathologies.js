@@ -54,6 +54,13 @@ controllers.controller('Pathologies', ['$scope','$rootScope', '$state', 'Patholo
           }
       };
 
+    $scope.entities = {
+       'multimedia': 'pathologiesID',
+        'articles': 'pathologiesID',
+        'calendar-events': 'pathologiesID',
+        'specialProducts': 'pathologiesID'
+    };
+
     $scope.addPathology = function () {
         PathologiesService.pathologies.create({}).$promise.then(function(){
             $state.reload();

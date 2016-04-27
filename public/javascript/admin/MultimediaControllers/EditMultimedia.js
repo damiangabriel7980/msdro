@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 18.05.2015.
  */
-controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','GroupsService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','AmazonService','idToEdit', 'Success', 'Error', function($scope,$rootScope,MultimediaAdminService,GroupsService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,AmazonService,idToEdit,Success,Error){
+controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','GroupsService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','AmazonService','idToEdit', 'Success', 'Error', 'PathologiesService', function($scope,$rootScope,MultimediaAdminService,GroupsService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,AmazonService,idToEdit,Success,Error,PathologiesService){
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertVideo = {newAlert:false, type:"", message:""};
     $scope.myAreas = {
@@ -10,15 +10,24 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
     $scope.myGroups = {
         selectedGroups: null
     };
+
+    $scope.myPathologies = {
+        selectedPathologies: null
+    };
+
     $scope.multimedia = {};
 
     MultimediaAdminService.multimedia.query({id:idToEdit}).$promise.then(function(result){
         $scope.multimedia = Success.getObject(result);
         $scope.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
         $scope.myGroups.selectedGroups = Success.getObject(result)['groupsID'];
+        $scope.myPathologies.selectedPathologies = $scope.multimedia.pathologiesID;
         $scope.$applyAsync();
         GroupsService.groups.query().$promise.then(function(resp){
             $scope.groups = Success.getObject(resp);
+            PathologiesService.pathologies.query().$promise.then(function(result){
+                $scope.pathologies = Success.getObject(result);
+            });
         }).catch(function(err){
             $scope.uploadAlert.type = "danger";
             $scope.uploadAlert.message = Error.getMessage(err);
@@ -44,6 +53,11 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
         for(var i=0; i<$scope.myGroups.selectedGroups.length; i++){
             groups_id.push($scope.myGroups.selectedGroups[i]._id);
         }
+        var id_pathologies = [];
+        for(var j=0;j<$scope.myPathologies.selectedPathologies.length;j++){
+            id_pathologies.push($scope.myPathologies.selectedPathologies[j]._id);
+        }
+        $scope.multimedia.pathologiesID = id_pathologies;
         $scope.multimedia.groupsID = groups_id;
         $scope.multimedia['therapeutic-areasID'] = $scope.myAreas.returnedAreas;
         $scope.multimedia.last_updated = new Date();

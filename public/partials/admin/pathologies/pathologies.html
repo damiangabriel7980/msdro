@@ -7,7 +7,7 @@
             </div>
         </div>
     </div>
-    <bulk-operations model="pathologies" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
+    <bulk-operations model="pathologies" connected-entities="entities" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="item in $data">
             <td width="30">
