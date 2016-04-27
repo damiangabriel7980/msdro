@@ -86,8 +86,7 @@
     <script src="javascript/medic/SpecialGroupsControllers/SpecialGroupsMenu.js"></script>
     <link rel="stylesheet" href="modules/bootstrap-search/bootstrap_search.css">
     <script src="modules/bootstrap-search/bootstrap_search.js"></script>
-    <link rel="stylesheet" href="modules/bootstrap-special-dropdown/special_dropdown.css">
-    <script src="modules/bootstrap-special-dropdown/special_dropdown.js"></script>
+
     <!--TODO: find a way to lazy load theese files:-->
     <script src="modules/angular-pdf-custom/pdf.js"></script>
 
@@ -109,8 +108,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <special-dropdown generic-object="specialGroupSelected" array-of-objects="specialGroups" amazon-path="pathAmazonDev" default-image-url="defaultGroupPhoto" on-item-select="selectSpecialGroup">
-            </special-dropdown>
+
             <ul class="profile nav navbar-nav pull-right dropdown" ng-class="{'profileNoSpecialGroups': !specialGroupSelected}">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>

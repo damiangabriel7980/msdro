@@ -10,7 +10,6 @@ var app = angular.module('app',
         'angulartics',
         'angulartics.google.analytics',
         'offClick',
-        'specialDropdown',
         'bootstrapSearch',
         'footerResponsive',
         'verticalContentList',
@@ -545,7 +544,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
             }
         })
-        .state('pathologies.groupSpecialProduct.immunologyQA',{
+        .state('groupSpecialProduct.immunologyQA',{
             url:'/immunologyQA',
             templateUrl:'partials/medic/groupFeatures/immunologyQA.html',
             controller:'ProductPageQA'
