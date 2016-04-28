@@ -85,32 +85,23 @@ var getNonSpecificUserGroupsIds = function(user){
 //get content for all non content_specific groups plus one content_specific group
 //if specific content group is null, get non specific content only
 //tip: content_type can be injected; ex: {$in: [1,3]}
-var getUserContent = function (user, content_type, specific_content_group_id, limit, sortDescendingByAttribute) {
+var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     var deferred = Q.defer();
     //first get non specific content groups only
-    getNonSpecificUserGroupsIds(user).then(
-        function(arrayOfGroupsIds){
-            //if we have specific content group id, add it to our array
-            if(specific_content_group_id) arrayOfGroupsIds.push(specific_content_group_id.toString());
-            //now get user content for our array of groups
-            var myCursor = Content.find({groupsID: {$in: arrayOfGroupsIds}, enable: {$ne: false}, type: content_type});
-            if(sortDescendingByAttribute){
-                var attr = {};
-                attr[sortDescendingByAttribute] = -1;
-                myCursor = myCursor.sort(attr);
-            }
-            if(limit) myCursor=myCursor.limit(limit);
-            myCursor.exec(function (err, content) {
-                if(err){
-                    deferred.reject(err);
-                }else{
-                    deferred.resolve(content);
-                }
-            });
-        },
-        function (err) {
+    var myCursor = Content.find({enable: {$ne: false}, type: content_type});
+    if(sortDescendingByAttribute){
+        var attr = {};
+        attr[sortDescendingByAttribute] = -1;
+        myCursor = myCursor.sort(attr);
+    }
+    if(limit) myCursor=myCursor.limit(limit);
+    myCursor.exec(function (err, content) {
+        if(err){
             deferred.reject(err);
-        });
+        }else{
+            deferred.resolve(content);
+        }
+    });
     return deferred.promise;
 };
 
@@ -3990,10 +3981,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }else{
                 //send most read and recent articles at the same time
                 var contentToSend = [];
-                getUserContent(req.user, req.query.content_type, req.query.specialGroupSelected, null, 'created').then(
+                getUserContent(req.query.content_type, null, 'created').then(
                     function (contentRecent) {
                         contentToSend.push(contentRecent);
-                        getUserContent(req.user, req.query.content_type, req.query.specialGroupSelected, 3, 'nrOfViews').then(
+                        getUserContent(req.query.content_type, 3, 'nrOfViews').then(
                             function (content) {
                                 contentToSend.push(content);
                                 handleSuccess(res,contentToSend);
@@ -4230,126 +4221,83 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/userHomeCarousel/')
         .get(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if(req.query.specialGroupSelected){
-                        forGroups.push(req.query.specialGroupSelected.toString());
-                    }
-                    //get allowed articles for user
-                    Content.distinct("_id", {groupsID: {$in: forGroups}, enable:true}).exec(function (err, ids) {
+            Content.distinct("_id", {enable:true}).exec(function (err, ids) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    //get carousel content within allowed articles
+                    Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').sort({'indexNumber':1}).exec(function (err, images) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            //get carousel content within allowed articles
-                            Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').sort({'indexNumber':1}).exec(function (err, images) {
-                                if(err){
-                                    handleError(res,err,500);
-                                }else{
-                                    handleSuccess(res, images);
-                                }
-                            })
+                            handleSuccess(res, images);
                         }
-                    });
-                },
-                function (err) {
-                    handleError(res,err,500);
-                });
+                    })
+                }
+            });
         });
     router.route('/userHomeSearch/')
         .get(function(req,res){
             var data=req.query.data;
             var arr_of_items=[Products,Multimedia,Content,Events];
             var ObjectOfResults={};
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.query.specialGroupSelected) {
-                        forGroups.push(req.query.specialGroupSelected);
+            async.each(arr_of_items, function (item, callback) {
+                var hydrateOp;
+                if(item == Events){
+                    hydrateOp = {find: {enable:true,start:{$gt: new Date()}}};
+                }else{
+                    hydrateOp = {find: {enable:true }};
+                }
+
+                item.search({
+
+                    query_string: {
+                        query: data,
+                        default_operator: 'OR',
+                        lowercase_expanded_terms: true
+                        //phrase_slop: 50,
+                        //analyze_wildcard: true
                     }
 
-                    async.each(arr_of_items, function (item, callback) {
-                        var hydrateOp;
-                        if(item == Events){
-                            hydrateOp = {find: {groupsID:{$in:forGroups},enable:true,start:{$gt: new Date()}}};
-                        }else{
-                            hydrateOp = {find: {groupsID:{$in:forGroups},enable:true }};
+                },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
+                    if(err){
+                        callback(err);
+                    }else{
+                        if(results && results.hits && results.hits.hits){
+                            ObjectOfResults[item.modelName]=results.hits.hits;
                         }
-
-                        item.search({
-
-                            query_string: {
-                                query: data,
-                                default_operator: 'OR',
-                                lowercase_expanded_terms: true
-                                //phrase_slop: 50,
-                                //analyze_wildcard: true
-
-                            }
-
-                        },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
-                            if(err){
-                                callback(err);
-                            }else{
-                                if(results && results.hits && results.hits.hits){
-                                    ObjectOfResults[item.modelName]=results.hits.hits;
-                                }
-                                callback();
-                            }
-                        });
-
-                    }, function (err) {
-                        if(err)
-                            handleError(res,err,500);
-                        else{
-                            handleSuccess(res, ObjectOfResults);
-                        }
-                    })
-                },
-                function (err) {
-                    handleError(res,err,500);
+                        callback();
+                    }
                 });
+
+            }, function (err) {
+                if(err)
+                    handleError(res,err,500);
+                else{
+                    handleSuccess(res, ObjectOfResults);
+                }
+            })
         });
     router.route('/userHomeEvents')
         .get(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.query.specialGroupSelected) {
-                        forGroups.push(req.query.specialGroupSelected);
-                    }
-                    Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: true}).sort({start: 1}).exec(function (err, events) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, events);
-                        }
-                    });
-                },
-                function (err) {
+            Events.find({start: {$gte: new Date()}, enable: true}).sort({start: 1}).exec(function (err, events) {
+                if(err){
                     handleError(res,err,500);
-                });
+                }else{
+                    handleSuccess(res, events);
+                }
+            });
         });
 
     router.route('/userHomeMultimedia')
         .get(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.query.specialGroupSelected) {
-                        forGroups.push(req.query.specialGroupSelected);
-                    }
-                    Multimedia.find({groupsID: {$in: forGroups}, enable: {$ne: false}}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, multimedia);
-                        }
-                    });
-                },
-                function (err) {
+            Multimedia.find({enable: {$ne: false}}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
+                if(err){
                     handleError(res,err,500);
-                });
+                }else{
+                    handleSuccess(res, multimedia);
+                }
+            });
         });
 
     router.route('/homeNews')
@@ -4358,7 +4306,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var contentType = {$in: [1, 2]};
             if(req.query.scientific) contentType = 3;
             //get content
-            getUserContent(req.user, contentType, req.query.specialGroupSelected, 3, "created").then(
+            getUserContent(contentType, 3, "created").then(
                 function (cont) {
                     handleSuccess(res, cont);
                 },
