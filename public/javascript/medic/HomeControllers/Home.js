@@ -86,7 +86,7 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
     $scope.toDate = function (ISOdate) {
         return new Date(ISOdate);
     };
-
+    
     /* --- footer realign ---*/
 
     $scope.iconLive='<i class="glyphicon glyphicon-facetime-video" ng-if="e.type==2"></i>&nbsp;';

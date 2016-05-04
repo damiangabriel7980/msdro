@@ -17,7 +17,8 @@ var app = angular.module('app',
         'horizontalContentList',
         'widgetMostRead',
         'mobileContentList',
-        'checklist-model'
+        'checklist-model',
+        'bootstrapSubnav'
     ]);
 
 app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {
@@ -418,7 +419,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
             controller: 'DisplayFeatures'
         })
-        .state('groupSpecialProduct', {
+        .state('pathologies', {
+            url: '/pathologies/:pathology_id',
+            templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
+            controller: 'DisplayFeatures'
+        })
+        .state('pathologies.groupSpecialProduct', {
             url: '/groupSpecialProduct/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
             controller: 'ProductPage',
@@ -426,31 +432,31 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['ProductPage'])
             }
         })
-        .state('groupSpecialProduct.menuItem', {
+        .state('pathologies.groupSpecialProduct.menuItem', {
             url: '/menuItem/:menuId/:childId',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
             controller: 'ProductPageMenu'
         })
-        .state('groupSpecialProduct.speakers', {
+        .state('pathologies.groupSpecialProduct.speakers', {
             url: '/speakers',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakers.html'
         })
-        .state('groupSpecialProduct.speakerDetails', {
+        .state('pathologies.groupSpecialProduct.speakerDetails', {
             url: '/speakerDetails/:speaker_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakerDetails.html',
             controller: 'ProductPageSpeaker'
         })
-        .state('groupSpecialProduct.files', {
+        .state('pathologies.groupSpecialProduct.files', {
             url: '/selectedMenuFiles',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_files.html',
             controller: 'ProductPageDownloads'
         })
-        .state('groupSpecialProduct.glossary', {
+        .state('pathologies.groupSpecialProduct.glossary', {
             url: '/selectedGlossary',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_glossary.html',
             controller: 'ProductPageGlossary'
         })
-        .state('groupSpecialProduct.sitemap', {
+        .state('pathologies.groupSpecialProduct.sitemap', {
             url: '/sitemap',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html'
         })
@@ -462,7 +468,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
             }
         })
-        .state('groupSpecialProduct.immunologyQA',{
+        .state('pathologies.groupSpecialProduct.immunologyQA',{
             url:'/immunologyQA',
             templateUrl:'partials/medic/groupFeatures/immunologyQA.html',
             controller:'ProductPageQA'
@@ -520,7 +526,7 @@ app.run(
                     }, 0);
                 }
             });
-
+            
             //state events
             $rootScope.$on('$stateChangeStart',
                 function(event, toState, toParams, fromState, fromParams){

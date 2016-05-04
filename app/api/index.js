@@ -3843,16 +3843,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/specialFeatures/specialApps')
         .get(function (req, res) {
-            if(req.query.group){
-                specialApps.find({groups: {$in: [req.query.group]}, isEnabled: true}).exec(function (err, apps) {
-                    if(err){
-                        handleError(res,err,500);
-                    }else{
-                        handleSuccess(res,apps);
-                    }
-                });
-            }else if(req.query.id){
-                ContentVerifier.getContentById(specialApps,req.query.id,req.user.groupsID,false,'isEnabled',null,'groups').then(
+            if(req.query.id){
+                ContentVerifier.getContentById(specialApps,req.query.id,false,false,'isEnabled',null,'groups').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -3864,7 +3856,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 );
             }else{
-                handleError(res,null,400,6);
+                specialApps.find({isEnabled: true}).exec(function (err, apps) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res,apps);
+                    }
+                });
             }
         });
 
@@ -3884,17 +3882,56 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/specialProduct')
         .get(function(req, res) {
-            ContentVerifier.getContentById(specialProduct,req.query.id,req.user.groupsID,false,'enabled','speakers','groups').then(
-                function(success){
-                    handleSuccess(res,success);
-                },function(err){
-                    if (err.status == 404)
-                        var message = 45;
-                    else
-                        var message = 46;
-                    handleError(res,null,err.status, message);
-                }
-            );
+            if(req.query.id){
+                ContentVerifier.getContentById(specialProduct,req.query.id,null,false,'enabled','speakers','groups').then(
+                    function(success){
+                        handleSuccess(res,success);
+                    },function(err){
+                        if (err.status == 404)
+                            var message = 45;
+                        else
+                            var message = 46;
+                        handleError(res,null,err.status, message);
+                    }
+                );
+            } else {
+                var pathologiesToSend = [];
+                //get pathologies and for each get list of products
+                Pathologies.find({enabled: true}).sort('display_name').exec(function(err, pathologies){
+                    if(err)
+                    {
+                        handleError(res,err,500);
+                    }
+
+                    else {
+                        async.each(pathologies, function(pathology, callback){
+                            specialProduct.find({pathologiesID : {$in: [pathology._id]}}).exec(function (error, products) {
+                                if(err){
+                                    callback(err)
+                                } else  {
+                                    if(products.length > 0){
+                                        var objectToPush = {
+                                            _id: pathology._id,
+                                            display_name: pathology.display_name,
+                                            products: products
+                                        };
+                                        pathologiesToSend.push(objectToPush);
+                                        callback();
+                                    } else {
+                                        callback();
+                                    }
+                                }
+                            })
+                        }, function(err){
+                            if(err){
+                                handleError(res,err,500);
+                            } else {
+                                handleSuccess(res,pathologiesToSend);
+                            }
+                        })
+                    }
+                })
+            }
         });
     router.route('/specialProductMenu')
         .get(function(req, res) {
@@ -3967,7 +4004,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/content')
         .get(function(req, res) {
             if(req.query.content_id){
-                ContentVerifier.getContentById(Content,req.query.content_id,req.user.groupsID,true,'enable',null,'groupsID').then(
+                ContentVerifier.getContentById(Content,req.query.content_id,false,true,'enable',null,'groupsID').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -4318,7 +4355,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/products')
         .get(function(req, res) {
             if(req.query.idProduct){
-                ContentVerifier.getContentById(Products,req.query.idProduct,req.user.groupsID,false,'enable',null,'groupsID').then(
+                ContentVerifier.getContentById(Products,req.query.idProduct,false,'enable',null,'groupsID').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -4330,44 +4367,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 );
             }else{
-                getNonSpecificUserGroupsIds(req.user).then(
-                    function (groups) {
-                        if (req.query.specialGroup) {
-                            groups.push(req.query.specialGroup);
-                        }
-                        if(req.query.idArea && req.query.idArea != 0){
-                            Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function(err, areas){
-                                if(err){
-                                    handleError(res,err,500);
-                                }else{
-                                    var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}, enable: true};
-                                    if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
-                                    Products.find(q).sort({"name": 1}).exec(function(err, cont) {
-                                        if(err) {
-                                            handleError(res,err,500);
-                                        }else{
-                                            handleSuccess(res, cont);
-                                        }
-                                    })
-                                }
-                            });
+                if(req.query.idPathology && req.query.idPathology != 0){
+                    Pathologies.distinct("_id", {$or: [{_id: req.query.idPathology}]}).exec(function(err, pathologies){
+                        if(err){
+                            handleError(res,err,500);
                         }else{
-                            //get allowed articles for user
-                            var q = {groupsID: {$in: groups}, enable: true};
+                            var q = {"pathologiesID": {$in: pathologies}, enable: true};
                             if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
                             Products.find(q).sort({"name": 1}).exec(function(err, cont) {
-                                if(err){
+                                if(err) {
                                     handleError(res,err,500);
                                 }else{
                                     handleSuccess(res, cont);
                                 }
                             })
                         }
-                    },
-                    function (err) {
-                        handleError(res,err,500);
-                    }
-                );
+                    });
+                }else{
+                    //get allowed articles for user
+                    var q = {enable: true};
+                    if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                    Products.find(q).sort({"name": 1}).exec(function(err, cont) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, cont);
+                        }
+                    })
+                }
             }
         });
 
@@ -4416,30 +4443,21 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if(req.query.specialGroup){
-                        forGroups.push(req.query.specialGroup);
+                Events.find({enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
+                    if (err) {
+                        handleError(res,err,500);
                     }
-                    Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
-                        if (err) {
-                            handleError(res,err,500);
-                        }
-                        else
-                        {
-                            handleSuccess(res, cont);
-                        }
-
-                    })
-                }, function (err) {
-                    handleError(res,err,500);
+                    else
+                    {
+                        handleSuccess(res, cont);
+                    }
                 })
             }
         });
     router.route('/multimedia')
         .get(function(req,res){
             if(req.query.idMultimedia){
-                ContentVerifier.getContentById(Multimedia,req.query.idMultimedia,req.user.groupsID,false,'enable',null,'groupsID').then(
+                ContentVerifier.getContentById(Multimedia,req.query.idMultimedia,false,false,'enable',null,'groupsID').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -4452,42 +4470,25 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 );
             }else{
                 var findObj={};
-                getNonSpecificUserGroupsIds(req.user).then(
-                    function (nonSpecificGroupsIds) {
-                        var forGroups = nonSpecificGroupsIds;
-                        if (req.query.specialGroupSelected) {
-                            forGroups.push(req.query.specialGroupSelected);
+                findObj['enable']={$ne: false};
+                if(req.query.idPathology==0){
+                    Multimedia.find(findObj, function (err, multimedia) {
+                        if (err) {
+                            handleError(res,err,500);
+                        } else {
+                            handleSuccess(res, multimedia);
                         }
-                        findObj['groupsID']={$in:forGroups};
-                        findObj['enable']={$ne: false};
-                        if(req.query.idArea==0){
-                            Multimedia.find(findObj, function (err, multimedia) {
-                                if (err) {
-                                    handleError(res,err,500);
-                                } else {
-                                    handleSuccess(res, multimedia);
-                                }
-                            });
-                        }else{
-                            Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function (err, ids) {
-                                if(err){
-                                    handleError(res, err);
-                                }else{
-                                    findObj['therapeutic-areasID'] = {$in: ids};
-                                    Multimedia.find(findObj, function (err, multimedia) {
-                                        if (err) {
-                                            handleError(res,err,500);
-                                        } else {
-                                            handleSuccess(res, multimedia);
-                                        }
-                                    });
-                                }
-                            });
+                    });
+                }else{
+                    findObj['pathologiesID'] = {$in: [req.query.idPathology]};
+                    Multimedia.find(findObj, function (err, multimedia) {
+                        if (err) {
+                            handleError(res,err,500);
+                        } else {
+                            handleSuccess(res, multimedia);
                         }
-                    },
-                    function (err) {
-                        handleError(res,err,500);
-                    })
+                    });
+                }
             }
         });
 
@@ -4532,6 +4533,18 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .get(function(req,res){
             var regexp = UtilsModule.validationStrings;
             handleSuccess(res,regexp);
+        });
+
+    router.route('/pathologies')
+        .get(function(req, res) {
+                Pathologies.find({description:{ $exists: true, $ne : '' }, enabled: true},function(err, pathologies) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else {
+                        handleSuccess(res, pathologies);
+                    }
+                });
         });
 
     app.use('/api', router);

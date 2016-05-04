@@ -199,6 +199,19 @@ body {
   left: 0;
   padding-top: 70px;
   padding-bottom: 50px;
+  #prodMainContainer{
+    overflow: hidden;
+    .shortMenu{
+      height: 200px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 0 20px;
+      ::-webkit-scrollbar {
+        width: 0;  /* remove scrollbar space */
+        background: transparent;  /* optional: just make scrollbar invisible */
+      }
+    }
+  }
 }
 
 .height100{
@@ -1106,11 +1119,14 @@ body {
     padding-top: 0;
     padding-bottom: 0;
     min-width: 180px;
-    background-color: @gray-lighter;
+    background-color: white;
     li {
       padding: 10px 5px 10px 5px;
       min-width: 180px;
       height: 50px;
+      a {
+        padding: 5px 20px;
+      }
       &:hover {
         border-radius: 3px;
         background-color: @green;

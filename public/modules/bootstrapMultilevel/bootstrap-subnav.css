@@ -1,0 +1,50 @@
+.subMenu {
+  border-radius: 0 !important;
+  border-width: 0;
+  box-shadow: none;
+  color: black;
+  display: block;
+  margin: 10px 0 0 10px;
+  position: relative;
+}
+.subMenu a {
+  text-indent: 10px;
+}
+@media (max-width: 1279px) {
+  .subMenu {
+    padding-top: 15px !important;
+  }
+}
+.subMenu > li {
+  height: auto !important;
+  padding: 5px 0 !important;
+}
+.subMenu > li:hover {
+  color: white;
+}
+.parentMenu > li {
+  height: auto !important;
+  min-width: 230px !important;
+  padding: 5px 0 !important;
+}
+.parentMenu > li:hover {
+  background-color: transparent !important;
+}
+@media (max-width: 1279px) {
+  .parentMenu > li:hover a {
+    background-color: transparent !important;
+  }
+}
+.caret-right {
+  border-bottom: 4px solid transparent;
+  border-left: 4px solid;
+  border-top: 4px solid transparent;
+  display: inline-block;
+  height: 0;
+  margin-left: 3px;
+  opacity: .8;
+  position: relative;
+  top: -1px;
+  vertical-align: middle;
+  width: 0;
+}

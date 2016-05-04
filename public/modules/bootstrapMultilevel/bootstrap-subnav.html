@@ -1,0 +1,16 @@
+<li class="dropdown">
+    <a class="dropdown-toggle " data-toggle="dropdown">
+        {{menuTitle}} <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu parentMenu" role="menu" >
+        <li ng-repeat="item in objectsArray" class="dropdown">
+            <a class="dropdown-toggle subNav" ng-click="expandParent($event)" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;{{item[parentDisplayName]}}&nbsp;<span class="caret"></span>
+                <ul class="dropdown-menu subMenu" role="menu">
+                    <li ng-repeat="subitem in item[childrenProperty]" ui-sref="{{navigateTo}}" ng-click="clickOnFinalChild">
+                        &nbsp;{{subitem[childDisplayName]}}
+                    </li>
+                </ul>
+            </a>
+        </li>
+    </ul>
+</li>

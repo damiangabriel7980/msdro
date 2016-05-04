@@ -197,6 +197,14 @@ services.factory('ProductService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('PathologiesService', ['$resource', function($resource){
+    return {
+        pathologies: $resource('api/pathologies', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
 services.factory('multimediaService', ['$resource', function($resource){
     return {
         multimedia: $resource('api/multimedia', {}, {

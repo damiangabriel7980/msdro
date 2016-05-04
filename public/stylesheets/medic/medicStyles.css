@@ -6518,6 +6518,21 @@ body .btn {
   padding-top: 70px;
   padding-bottom: 50px;
 }
+.main-view-container #prodMainContainer {
+  overflow: hidden;
+}
+.main-view-container #prodMainContainer .shortMenu {
+  height: 200px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0 20px;
+}
+.main-view-container #prodMainContainer .shortMenu ::-webkit-scrollbar {
+  width: 0;
+  /* remove scrollbar space */
+  background: transparent;
+  /* optional: just make scrollbar invisible */
+}
 .height100 {
   height: 100%;
   padding-bottom: 0;
@@ -7429,12 +7444,15 @@ body .btn {
   padding-top: 0;
   padding-bottom: 0;
   min-width: 180px;
-  background-color: #eeeeee;
+  background-color: white;
 }
 .navbarMedic .dropdown-menu li {
   padding: 10px 5px 10px 5px;
   min-width: 180px;
   height: 50px;
+}
+.navbarMedic .dropdown-menu li a {
+  padding: 5px 20px;
 }
 .navbarMedic .dropdown-menu li:hover {
   border-radius: 3px;
