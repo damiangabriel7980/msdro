@@ -249,6 +249,31 @@ app.config(['$httpProvider', function($httpProvider) {
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
+    $urlRouterProvider
+        .when(/biblioteca/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            if(parsedURL.length < 5)
+                $state.go('biblioteca.articoleStiintifice.listaArticole', {articleType: 3});
+            else
+                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[2], articleId: parsedURL[4]});
+        }])
+        .when(/calendar/, ['$state','$match', function ($state, $match) {
+            $state.go('calendar');
+        }])
+        .when(/conferinte/, ['$state','$match', function ($state, $match) {
+            $state.go('conferinte');
+        }])
+        .when(/multimedia/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            if(parsedURL.length < 5)
+                $state.go('elearning.multimedia.multimediaByArea',{'idArea': parsedURL[3]});
+            else
+                $state.go('elearning.multimedia.multimediaByArea',{'idArea': parsedURL[3], idMulti: parsedURL[4]});
+        }])
+        .when(/groupFeatures/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            $state.go('groupFeatures', {specialApp : parsedURL[1]});
+        }]);
     $stateProvider
         .state('notFound',{
             url: '/404',
@@ -298,7 +323,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('biblioteca', {
             abstract: true,
-            url: '/biblioteca',
+            url: '/resurse',
             templateUrl: '/partials/medic/biblioteca/biblioteca.ejs'
         })
         .state('biblioteca.produse',{
@@ -337,7 +362,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'ArticleDetail'
         })
        .state('calendar',{
-            url: '/calendar/:id',
+            url: '/evenimente/calendar/:id',
             templateUrl: 'partials/medic/calendar.ejs',
             controller: 'Events',
             resolve: {
@@ -346,7 +371,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('elearning', {
             abstract: true,
-            url: '/elearning',
+            url: '/resurse',
             templateUrl: '/partials/medic/elearning/elearning.ejs'
         })
         .state('elearning.multimedia',{
@@ -377,7 +402,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             }
         })
         .state('elearning.courses',{
-            url: '/cursuri',
+            url: '/resurse',
             templateUrl: 'partials/medic/elearning/courses/courses.ejs',
             controller: 'CoursesView',
             resolve: {
@@ -406,8 +431,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['SlideView'])
             }
         })
-        .state('elearning.conferinte',{
-            url: '/conferinte',
+        .state('conferinte',{
+            url: '/evenimente/conferinte',
             templateUrl: 'partials/medic/elearning/transmisii.ejs',
             controller: 'LiveTransmission',
             resolve: {
@@ -415,7 +440,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             }
         })
         .state('groupFeatures', {
-            url: '/groupFeatures/:specialApp',
+            url: '/aplicatii/:specialApp',
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
             controller: 'DisplayFeatures'
         })
@@ -425,7 +450,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'DisplayFeatures'
         })
         .state('pathologies.groupSpecialProduct', {
-            url: '/groupSpecialProduct/:product_id',
+            url: '/patologii/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
             controller: 'ProductPage',
             resolve: {

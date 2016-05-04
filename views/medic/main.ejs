@@ -158,8 +158,8 @@
                         Evenimente <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu" >
-                        <li ui-sref="calendar" href="#/calendar" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-calendar"></i>&nbsp;Calendar</a></li>
-                        <li ui-sref="elearning.conferinte" href="#/conferinte" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-facetime-video"></i>&nbspConferinte live</a></li>
+                        <li ui-sref="calendar" href="#/evenimente/calendar" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-calendar"></i>&nbsp;Calendar</a></li>
+                        <li ui-sref="conferinte" href="#/evenimente/conferinte" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-facetime-video"></i>&nbspConferinte live</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
@@ -170,7 +170,6 @@
                         <li ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-file"></i>&nbspArticole stiintifice </a></li>
                         <li ng-click="goToMerckSite()"><a ng-click="closeNavbar()"><i class="glyphicon glyphicon-th-large"></i>&nbspManualul Merck</a></li>
                         <li ng-click="closeNavbar(); $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><a><i class="glyphicon glyphicon-film"></i>&nbspMultimedia</a></li>
-                        <li ng-click="closeNavbar(); $state.go('elearning.courses')"><a><i class="glyphicon glyphicon-book"></i>&nbspCursuri</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures')}" ng-if="specialApps">
