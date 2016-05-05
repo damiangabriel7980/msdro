@@ -492,7 +492,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var pathology = new Pathologies({
                 display_name: 'Untitled',
                 last_updated: new Date(),
-                enabled: true
+                enabled: false
             });
             pathology.save(function(err,saved) {
                 if (err){
