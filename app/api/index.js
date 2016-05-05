@@ -4470,7 +4470,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }else{
                 var findObj={};
                 findObj['enable']={$ne: false};
-                if(req.query.idPathology){
+                if(req.query.idPathology && req.query.idPathology != 0){
                     findObj['pathologiesID'] = {$in: [req.query.idPathology]};
                 }
                 Events.find(findObj).sort({start : 1}).limit(50).exec(function (err, cont) {

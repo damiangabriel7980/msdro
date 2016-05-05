@@ -1,9 +1,9 @@
 <div class="col-xs-12 calendarWrapper">
-    <div class="col-md-8 col-md-push-4 col-sm-12" id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" ng-if="eventSources"></div>
-    <div class="col-md-4 col-md-pull-8 col-sm-12 nextEvents">
+    <div class="col-md-12 col-sm-12" id="calendar" calendar="myCalendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" ng-if="eventSources"></div>
+    <div class="col-md-12 col-sm-12 nextEvents">
         <h3 class="MainTitle">EVENIMENTE URMATOARE</h3>
-        <div class="col-md-12" ng-if="!eventsFiltered">
-            <h3>Nu exista nici un eveniment pentru grupul dvs.!</h3>
+        <div class="col-md-12" ng-if="!eventsFiltered || !eventsFiltered.length">
+            <h3>Nu exista nici un eveniment pentru patologia selectata!</h3>
         </div>
         <div ng-repeat="eventim in eventsFiltered">
             <div class="col-md-12 col-xs-12 noPadding">

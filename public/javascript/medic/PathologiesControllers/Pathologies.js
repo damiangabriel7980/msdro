@@ -1,7 +1,7 @@
 /**
  * Created by andreimirica on 05.05.2016.
  */
-app.controllerProvider.register('PathologiesController', ['$scope', 'PathologiesService','$sce','$state', 'Success', function($scope, PathologiesService, $sce,$state, Success){
+app.controllerProvider.register('PathologiesController', ['$scope', 'PathologiesService','$sce','$state', 'Success', '$stateParams', function($scope, PathologiesService, $sce,$state, Success, $stateParams){
 
     $scope.selectedPathology = 0;
 
@@ -12,10 +12,16 @@ app.controllerProvider.register('PathologiesController', ['$scope', 'Pathologies
 
     $scope.selectPathology = function(id){
         $scope.selectedPathology = id;
-        if($state.includes('biblioteca')){
-            $state.go('biblioteca.produse.productsByArea', {id: id});
-        }else{
-            $state.go('elearning.multimedia.multimediaByArea', {idArea: id});
+        switch ($stateParams.navigateToState) {
+            case 'products' :
+                $state.go('biblioteca.produse.productsByArea', {id: id});
+                break;
+            case 'events' :
+                $state.go('calendar.events.event', {idPathology: id});
+                break;
+            case 'multimedia' :
+                $state.go('elearning.multimedia.multimediaByArea', {idArea: id});
+                break;
         }
     };
 

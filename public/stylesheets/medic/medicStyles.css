@@ -6443,7 +6443,6 @@ body .btn {
   border: 0;
   padding: 5px;
   cursor: pointer;
-  border-radius: 4px !important;
 }
 @media (min-width: 992px) {
   .filterByTherapeuticAreas .areas .menu .area:hover {

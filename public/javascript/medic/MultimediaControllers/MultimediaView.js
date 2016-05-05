@@ -19,7 +19,7 @@ app.controllerProvider.register('MultimediaView', ['$scope','$rootScope' ,'multi
     });
 
     var getMultimedia = function (specialGroupSelected) {
-        multimediaService.multimedia.query({idArea:$stateParams.idArea,specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function(result){
+        multimediaService.multimedia.query({idPathology:$stateParams.idArea}).$promise.then(function(result){
             $scope.multimedias = Success.getObject(result);
         });
     };

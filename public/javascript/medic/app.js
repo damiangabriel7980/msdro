@@ -269,6 +269,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             else
                 $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[2], articleId: parsedURL[4]});
         }])
+        .when(/noutati/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            if(parsedURL[1] == 3)
+                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[1], articleId: parsedURL[3]});
+            else
+                $state.go('noutati.articol', {articleType: parsedURL[1], articleId: parsedURL[3], fromHome: 1})
+        }])
         .when(/produse/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
             if(parsedURL[2] === 'productsByArea')
@@ -277,7 +284,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 $state.go('biblioteca.produse.prodById', {id: parsedURL[3], area: parsedURL[4]});
         }])
         .when(/calendar/, ['$state','$match', function ($state, $match) {
-            $state.go('calendar');
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            $state.go('calendar.events.event', {idPathology: parsedURL[3]});
         }])
         .when(/conferinte/, ['$state','$match', function ($state, $match) {
             $state.go('conferinte');
@@ -349,6 +357,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/produse',
             templateUrl: 'partials/medic/filterByPathology.html',
             controller: 'PathologiesController',
+            params: {
+                navigateToState: 'products'
+            },
             resolve: {
                 loadDeps: loadStateDeps(['PathologiesFilter', 'Products'])
             }
@@ -380,8 +391,24 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/noutati/articol.ejs',
             controller: 'ArticleDetail'
         })
-       .state('calendar',{
-            url: '/evenimente/calendar/:id',
+        .state('calendar', {
+            abstract: true,
+            url: '/evenimente',
+            templateUrl: '/partials/medic/calendarTemplate.ejs'
+        })
+       .state('calendar.events',{
+           url: '/calendar',
+           templateUrl: 'partials/medic/filterByPathology.html',
+           controller: 'PathologiesController',
+           params: {
+               navigateToState: 'events'
+           },
+           resolve: {
+               loadDeps: loadStateDeps(['PathologiesFilter'])
+           }
+        })
+        .state('calendar.events.event',{
+            url: '/eveniment/:idPathology/:id',
             templateUrl: 'partials/medic/calendar.ejs',
             controller: 'Events',
             resolve: {
@@ -395,10 +422,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('elearning.multimedia',{
             url: '/multimedia',
-            templateUrl: 'partials/medic/filterByTherapeuticAreas.html' ,
-            controller: 'TherapeuticAreas',
+            templateUrl: 'partials/medic/filterByPathology.html' ,
+            controller: 'PathologiesController',
+            params: {
+                navigateToState: 'multimedia'
+            },
             resolve: {
-                loadDeps: loadStateDeps(['TherapeuticAreas'])
+                loadDeps: loadStateDeps(['PathologiesFilter'])
             }
         })
         .state('elearning.multimedia.multimediaMobile',{
