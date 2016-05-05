@@ -21,6 +21,13 @@
                                             output="notUsed"></my-multiple-select>
                     </div>
                 </div>
+                <div class="col-md-12 noPadding">
+                    <div class="form-group">
+                        <label for="grupuri">Patologii:</label>
+                        <my-multiple-select all-objects="pathologies" selected-objects="myPathologies.selectedPathologies" track-by="_id" display-by="display_name"
+                                            output="notUsed"></my-multiple-select>
+                    </div>
+                </div>
                 <div class="col-md-6 noPadding">
                     <div class="col-md-12 noPaddingLeft">
                         <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)"

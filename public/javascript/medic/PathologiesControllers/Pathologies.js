@@ -1,10 +1,22 @@
 /**
- * Created by andreimirica on 28.04.2016.
+ * Created by andreimirica on 05.05.2016.
  */
-controllers.controller('PathologiesController', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'Success', 'Error', 'PathologiesService', function($scope, $rootScope, $stateParams, $state, $timeout, Success, Error, PathologiesService){
+app.controllerProvider.register('PathologiesController', ['$scope', 'PathologiesService','$sce','$state', 'Success', function($scope, PathologiesService, $sce,$state, Success){
 
-    PathologiesService.pathologies.query().$promise.then(function(response){
-        $scope.pathologies = Success.getObject(response);
+    $scope.selectedPathology = 0;
+
+    PathologiesService.pathologies.query().$promise.then(function(resp){
+        $scope.allPathologies = Success.getObject(resp);
+        $scope.allPathologies.unshift({_id: 0, display_name: 'Toate patologiile'})
     });
+
+    $scope.selectPathology = function(id){
+        $scope.selectedPathology = id;
+        if($state.includes('biblioteca')){
+            $state.go('biblioteca.produse.productsByArea', {id: id});
+        }else{
+            $state.go('elearning.multimedia.multimediaByArea', {idArea: id});
+        }
+    };
 
 }]);

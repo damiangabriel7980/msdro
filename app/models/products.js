@@ -19,6 +19,7 @@ var ProductSchema		= new Schema({
     name: {type:String,es_indexed:true, index: true},
     groupsID: [{type: Schema.Types.ObjectId, ref: 'UserGroup', index: true}],
     'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas', index: true}],
+    pathologiesID: [{type: Schema.Types.ObjectId, ref: 'pathologies',index: true}],
     imageUrls: [String],
     videoUrls: [String],
     mainImageUrl: String,

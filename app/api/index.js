@@ -105,6 +105,49 @@ var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     return deferred.promise;
 };
 
+var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNameForAssociatedItems){
+    var deferred = Q.defer();
+    var pathologiesToSend = [];
+    //get pathologies and for each get list of products
+    Pathologies.find({enabled: true}).sort('display_name').exec(function(err, pathologies){
+        if(err)
+        {
+            handleError(res,err,500);
+        }
+        else {
+            async.each(pathologies, function(pathology, callback){
+                entityToAssociate.find({pathologiesID : {$in: [pathology._id]}}).exec(function (error, associated) {
+                    if(err){
+                        callback(err)
+                    } else  {
+                        if(associated.length > 0){
+                            var objectToPush = {
+                                _id: pathology._id,
+                                display_name: pathology.display_name
+                            };
+                            objectToPush[propertyNameForAssociatedItems] = associated;
+                            pathologiesToSend.push(objectToPush);
+                            callback();
+                        } else {
+                            callback();
+                        }
+                    }
+                })
+            }, function(err){
+                if(err){
+                    deferred.reject(err);
+                } else {
+                    pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
+                        return obj.display_name;
+                    });
+                    deferred.resolve(pathologiesToSend);
+                }
+            })
+        }
+    });
+    return deferred.promise;
+};
+
 
 //======================================================================================================================================= routes for admin
 
@@ -984,7 +1027,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/products')
         .get(function(req, res) {
             if(req.query.id){
-                Products.findOne({_id: req.query.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                Products.findOne({_id: req.query.id}).populate("therapeutic-areasID pathologiesID groupsID").exec(function(err, product) {
                     if (err){
                         handleError(res,err,500);
                     }else{
@@ -3895,42 +3938,14 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 );
             } else {
-                var pathologiesToSend = [];
-                //get pathologies and for each get list of products
-                Pathologies.find({enabled: true}).sort('display_name').exec(function(err, pathologies){
-                    if(err)
-                    {
+                getAssociatedElementsForPathologies(specialProduct, 'products').then(
+                    function (success) {
+                        handleSuccess(res,success);
+                    },
+                    function (err) {
                         handleError(res,err,500);
                     }
-
-                    else {
-                        async.each(pathologies, function(pathology, callback){
-                            specialProduct.find({pathologiesID : {$in: [pathology._id]}}).exec(function (error, products) {
-                                if(err){
-                                    callback(err)
-                                } else  {
-                                    if(products.length > 0){
-                                        var objectToPush = {
-                                            _id: pathology._id,
-                                            display_name: pathology.display_name,
-                                            products: products
-                                        };
-                                        pathologiesToSend.push(objectToPush);
-                                        callback();
-                                    } else {
-                                        callback();
-                                    }
-                                }
-                            })
-                        }, function(err){
-                            if(err){
-                                handleError(res,err,500);
-                            } else {
-                                handleSuccess(res,pathologiesToSend);
-                            }
-                        })
-                    }
-                })
+                )
             }
         });
     router.route('/specialProductMenu')
@@ -4355,7 +4370,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/products')
         .get(function(req, res) {
             if(req.query.idProduct){
-                ContentVerifier.getContentById(Products,req.query.idProduct,false,'enable',null,'groupsID').then(
+                ContentVerifier.getContentById(Products,req.query.idProduct,false, false,'enable',null,'groupsID').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -4384,16 +4399,26 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         }
                     });
                 }else{
-                    //get allowed articles for user
-                    var q = {enable: true};
-                    if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
-                    Products.find(q).sort({"name": 1}).exec(function(err, cont) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, cont);
-                        }
-                    })
+                    if(req.query.forMenu){
+                        getAssociatedElementsForPathologies(Products, 'products').then(
+                            function (success) {
+                                handleSuccess(res,success);
+                            },
+                            function (err) {
+                                handleError(res,err,500);
+                            }
+                        )
+                    } else {
+                        var q = {enable: true};
+                        if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                        Products.find(q).sort({"name": 1}).exec(function(err, cont) {
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                handleSuccess(res, cont);
+                            }
+                        })
+                    }
                 }
             }
         });
@@ -4443,7 +4468,12 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                Events.find({enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
+                var findObj={};
+                findObj['enable']={$ne: false};
+                if(req.query.idPathology){
+                    findObj['pathologiesID'] = {$in: [req.query.idPathology]};
+                }
+                Events.find(findObj).sort({start : 1}).limit(50).exec(function (err, cont) {
                     if (err) {
                         handleError(res,err,500);
                     }
@@ -4537,8 +4567,18 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/pathologies')
         .get(function(req, res) {
-                Pathologies.find({description:{ $exists: true, $ne : '' }, enabled: true},function(err, pathologies) {
+            var queryObject = {
+                enabled: true
+            };
+            if(req.query.forDropdown){
+                queryObject.description = { $exists: true, $ne : '' };
+            }
+            if(req.query.id){
+                queryObject._id = ObjectId(req.query.id);
+            }
+                Pathologies.find(queryObject).sort({"display_name": 1}).exec(function(err, pathologies) {
                     if(err) {
+                        console.log(err);
                         handleError(res,err,500);
                     }
                     else {

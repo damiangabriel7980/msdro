@@ -1,4 +1,4 @@
-controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', 'IntroService', '$state', '$timeout', 'CollectionsService', 'Success', 'Error', 'PathologiesService', 'specialProductService', function($scope, $rootScope, $stateParams, SpecialFeaturesService, IntroService, $state, $timeout, CollectionsService, Success, Error, PathologiesService, specialProductService){
+controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', 'IntroService', '$state', '$timeout', 'CollectionsService', 'Success', 'Error', 'PathologiesService', 'ProductService', function($scope, $rootScope, $stateParams, SpecialFeaturesService, IntroService, $state, $timeout, CollectionsService, Success, Error, PathologiesService, ProductService){
 
     //get available groups
     SpecialFeaturesService.specialGroups.getAll().then(function (groups) {
@@ -6,12 +6,12 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         $scope.specialGroups = groups;
     });
 
-    PathologiesService.pathologies.query().$promise.then(function(resp){
+    PathologiesService.pathologies.query({forDropdown: true}).$promise.then(function(resp){
         $scope.pathologies = Success.getObject(resp).length > 0 ? Success.getObject(resp): null;
     });
 
-    specialProductService.SpecialProduct.query().$promise.then(function(resp){
-        $scope.pathologiesWithProducts = Success.getObject(resp).length > 0 ? Success.getObject(resp): null;
+    ProductService.products.query({forMenu: true}).$promise.then(function(result){
+        $scope.pathologiesWithProducts = Success.getObject(result).length > 0 ? Success.getObject(result): null;
     });
 
     //get Default Group

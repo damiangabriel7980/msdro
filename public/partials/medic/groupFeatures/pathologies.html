@@ -1,0 +1,17 @@
+<div class="row-fluid specialProductMainWrapper col-xs-offset-3">
+    <div class="col-md-8 col-xs-12" id="descriptionDiv">
+        <div class="col-xs-12 well well-lg DescriptionWrapper">
+            <div class="col-xs-12">
+                <img class="col-xs-12 noPadding" ng-if="pathology.header_image" no-cache-src="{{pathAmazonDev+pathology.header_image}}" />
+            </div>
+            <div class="col-xs-12">
+                <h3 convert-special conver="pathology.display_name" ng-bind-html="trustAsHtml(pathology.display_name)">
+
+                </h3>
+            </div>
+            <div class="col-xs-12 justify" convert-special conver="pathology.description" ng-bind-html="trustAsHtml(pathology.description)">
+
+            </div>
+        </div>
+    </div>
+</div>

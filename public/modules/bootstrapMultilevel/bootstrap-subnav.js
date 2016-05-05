@@ -9,7 +9,7 @@
     var scripts = document.getElementsByTagName("script");
     var currentScriptPath = scripts[scripts.length-1].src;
 
-    angular.module('bootstrapSubnav', []).directive('bootstrapSubnav', ['$window', '$timeout', function($window, $timeout) {
+    angular.module('bootstrapSubnav', []).directive('bootstrapSubnav', ['$state', '$timeout', function($state, $timeout) {
         return {
             restrict: 'E',
             templateUrl: currentScriptPath.replace('bootstrap-subnav.js', 'bootstrap-subnav.html'),
@@ -21,7 +21,9 @@
                 clickOnFinalChild: '@',
                 parentDisplayName: '@',
                 childDisplayName: '@',
-                navigateTo: '@'
+                stateName: '@',
+                stateParameters: '@',
+                stateParametersValues: '@'
             },
             link: function(scope, element, attrs) {
                 // expose functions
@@ -40,8 +42,16 @@
                     },0);
                 };
 
-                scope.isSubCollapsed = true;
-
+                scope.goToState = function(item){
+                    var paramIdentifiers = scope.stateParameters.split(',');
+                    var paramValues = scope.stateParametersValues.split(',');
+                    var stateParams = {};
+                    angular.forEach(paramIdentifiers, function(value, key){
+                        stateParams[value] = !isNaN(paramValues[key]) ? paramValues[key] : item[paramValues[key]];
+                    });
+                    $state.go(scope.stateName, stateParams);
+                };
+                
                 scope.expandParent = function(event){
 
                     angular.forEach(angular.element('.subNav'), function(value, key){

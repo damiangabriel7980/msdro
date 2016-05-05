@@ -151,7 +151,7 @@
                     </ul>
                 </li>
 
-                <bootstrap-subnav objects-array="pathologiesWithProducts" menu-title="Produse" children-property="products" click-on-final-child="closeNavbar" parent-display-name="display_name" child-display-name="product_name" navigate-to="pathologies({pathology_id: 1})"></bootstrap-subnav>
+                <bootstrap-subnav ng-if="pathologiesWithProducts" objects-array="pathologiesWithProducts" menu-title="Produse" children-property="products" click-on-final-child="closeNavbar" parent-display-name="display_name" child-display-name="name" state-name="biblioteca.produse.prodById" state-parameters="id,area" state-parameters-values="_id,0"></bootstrap-subnav>
 
                 <li class="dropdown" ng-class="{'active': $state.includes('events')}">
                     <a class="dropdown-toggle " data-toggle="dropdown">

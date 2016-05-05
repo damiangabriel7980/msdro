@@ -37,6 +37,18 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Pathology',
+                files: [
+                    'javascript/medic/PathologiesControllers/Pathology.js'
+                ]
+            },
+            {
+                name: 'PathologiesFilter',
+                files: [
+                    'javascript/medic/PathologiesControllers/Pathologies.js'
+                ]
+            },
+            {
                 name: 'Search',
                 files: [
                     'javascript/medic/HomeControllers/Search.js'
@@ -250,12 +262,19 @@ app.config(['$httpProvider', function($httpProvider) {
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
     $urlRouterProvider
-        .when(/biblioteca/, ['$state','$match', function ($state, $match) {
+        .when(/articoleStiintifice/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
             if(parsedURL.length < 5)
                 $state.go('biblioteca.articoleStiintifice.listaArticole', {articleType: 3});
             else
                 $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[2], articleId: parsedURL[4]});
+        }])
+        .when(/produse/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            if(parsedURL[2] === 'productsByArea')
+                $state.go('biblioteca.produse.productsByArea', {id: parsedURL[3]});
+            else
+                $state.go('biblioteca.produse.prodById', {id: parsedURL[3], area: parsedURL[4]});
         }])
         .when(/calendar/, ['$state','$match', function ($state, $match) {
             $state.go('calendar');
@@ -328,10 +347,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('biblioteca.produse',{
             url: '/produse',
-            templateUrl: 'partials/medic/filterByTherapeuticAreas.html',
-            controller: 'TherapeuticAreas',
+            templateUrl: 'partials/medic/filterByPathology.html',
+            controller: 'PathologiesController',
             resolve: {
-                loadDeps: loadStateDeps(['TherapeuticAreas', 'Products'])
+                loadDeps: loadStateDeps(['PathologiesFilter', 'Products'])
             }
         })
         .state('biblioteca.produse.productsByArea',{
@@ -446,42 +465,45 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('pathologies', {
             url: '/pathologies/:pathology_id',
-            templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
-            controller: 'DisplayFeatures'
+            templateUrl: 'partials/medic/groupFeatures/pathologies.html',
+            controller: 'PathologyController',
+            resolve: {
+                loadDeps: loadStateDeps(['Pathology'])
+            }
         })
-        .state('pathologies.groupSpecialProduct', {
-            url: '/patologii/:product_id',
+        .state('groupSpecialProduct', {
+            url: '/groupSpecialProduct/:product_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
             controller: 'ProductPage',
             resolve: {
                 loadDeps: loadStateDeps(['ProductPage'])
             }
         })
-        .state('pathologies.groupSpecialProduct.menuItem', {
+        .state('groupSpecialProduct.menuItem', {
             url: '/menuItem/:menuId/:childId',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
             controller: 'ProductPageMenu'
         })
-        .state('pathologies.groupSpecialProduct.speakers', {
+        .state('groupSpecialProduct.speakers', {
             url: '/speakers',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakers.html'
         })
-        .state('pathologies.groupSpecialProduct.speakerDetails', {
+        .state('groupSpecialProduct.speakerDetails', {
             url: '/speakerDetails/:speaker_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakerDetails.html',
             controller: 'ProductPageSpeaker'
         })
-        .state('pathologies.groupSpecialProduct.files', {
+        .state('groupSpecialProduct.files', {
             url: '/selectedMenuFiles',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_files.html',
             controller: 'ProductPageDownloads'
         })
-        .state('pathologies.groupSpecialProduct.glossary', {
+        .state('groupSpecialProduct.glossary', {
             url: '/selectedGlossary',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_glossary.html',
             controller: 'ProductPageGlossary'
         })
-        .state('pathologies.groupSpecialProduct.sitemap', {
+        .state('groupSpecialProduct.sitemap', {
             url: '/sitemap',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html'
         })
