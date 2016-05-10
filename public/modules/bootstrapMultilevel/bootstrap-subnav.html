@@ -4,13 +4,12 @@
     </a>
     <ul class="dropdown-menu parentMenu" role="menu" >
         <li ng-repeat="item in objectsArray" class="dropdown">
-            <a class="dropdown-toggle subNav" ng-click="expandParent($event)" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;{{item[parentDisplayName]}}&nbsp;<span id="caret" class="caret"></span>
-                <ul class="dropdown-menu subMenu" role="menu">
-                    <li ng-repeat="subitem in item[childrenProperty]" ng-click="goToState(subitem); clickOnFinalChild">
-                        &nbsp;{{subitem[childDisplayName]}}
+            <a class="dropdown-toggle subNav" ng-click="expandParent($event)" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;{{item[parentDisplayName]}}&nbsp;<span id="caret" class="caret"></span></a>
+            <ul class="dropdown-menu subMenu" role="menu">
+                    <li ng-repeat="subitem in item[childrenProperty]">
+                        <a ng-click="goToState(subitem); clickOnFinalChild">&nbsp;{{subitem[childDisplayName]}}</a>
                     </li>
                 </ul>
-            </a>
         </li>
     </ul>
 </li>

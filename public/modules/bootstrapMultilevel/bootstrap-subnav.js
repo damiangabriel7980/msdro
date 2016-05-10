@@ -44,7 +44,7 @@
 
                 var closeAllMenus = function(){
                     angular.forEach(angular.element('.subNav'), function(value, key){
-                        var listItem = angular.element(value).children('.dropdown-menu');
+                        var listItem = angular.element(value).parent().children('.dropdown-menu');
                         listItem.hide('fast');
                         angular.element(value).find('#caret').removeClass('caret').addClass('caret-right');
                     });
@@ -65,7 +65,7 @@
 
                     closeAllMenus();
 
-                    var $li = angular.element(event.target),
+                    var $li = angular.element(event.target).parent(),
                         $menu = $li.children('.dropdown-menu'),
                         $caret = $li.find('.caret-right, .caret');
 
