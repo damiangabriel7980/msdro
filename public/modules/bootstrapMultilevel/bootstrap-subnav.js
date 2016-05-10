@@ -42,6 +42,14 @@
                     },0);
                 };
 
+                var closeAllMenus = function(){
+                    angular.forEach(angular.element('.subNav'), function(value, key){
+                        var listItem = angular.element(value).children('.dropdown-menu');
+                        listItem.hide('fast');
+                        angular.element(value).find('#caret').removeClass('caret').addClass('caret-right');
+                    });
+                };
+
                 scope.goToState = function(item){
                     var paramIdentifiers = scope.stateParameters.split(',');
                     var paramValues = scope.stateParametersValues.split(',');
@@ -49,16 +57,13 @@
                     angular.forEach(paramIdentifiers, function(value, key){
                         stateParams[value] = !isNaN(paramValues[key]) ? paramValues[key] : item[paramValues[key]];
                     });
+                    closeAllMenus();
                     $state.go(scope.stateName, stateParams);
                 };
-                
+
                 scope.expandParent = function(event){
 
-                    angular.forEach(angular.element('.subNav'), function(value, key){
-                        var listItem = angular.element(value).children('.dropdown-menu');
-                        listItem.hide('fast');
-                        listItem.find('.caret-right, .caret').removeClass('caret').addClass('caret-right');
-                    });
+                    closeAllMenus();
 
                     var $li = angular.element(event.target),
                         $menu = $li.children('.dropdown-menu'),

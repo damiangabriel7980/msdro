@@ -17,10 +17,22 @@
 }
 .subMenu > li {
   height: auto !important;
-  padding: 5px 0 !important;
+  padding: 5px 0 5px 28px !important;
+  width: 128%;
+  right: 30px;
+  position: relative;
 }
 .subMenu > li:hover {
   color: white;
+  border-radius: 0 !important;
+  background-color: #00a39e !important;
+}
+@media (max-width: 1279px) {
+  .subMenu > li {
+    width: 100%;
+    right: 0;
+    padding: 5px 0 !important;
+  }
 }
 .parentMenu > li {
   height: auto !important;
@@ -33,6 +45,7 @@
 @media (max-width: 1279px) {
   .parentMenu > li:hover a {
     background-color: transparent !important;
+    color: #777777;
   }
 }
 .caret-right {
