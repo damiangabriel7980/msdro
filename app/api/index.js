@@ -516,7 +516,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var id = req.query.id;
             Pathologies.findOne({_id: id}, function (err, pathology) {
                 if(pathology){
-                    var s3Key = pathology.header_image;
+                    if(pathology.header_image)
+                        pathology.associated_multimedia.push(pathology.header_image);
+                    var imagesToDelete = pathology.associated_multimedia;
                     //first we'll remove any references to this pathology
                     var arrayOfObjectsToUpdate = [Multimedia, Content, Events, specialProduct];
                     async.forEach(arrayOfObjectsToUpdate, function(objectToUpdate, callback){
@@ -531,13 +533,22 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         } else {
+                            //after we have updated the references and deleted all
                             Pathologies.remove({_id:id},function(err,cont) {
                                 if (err){
                                     handleError(res,err,500);
                                 }
                                 else{
-                                    if(s3Key){
-                                        amazon.deleteObjectS3(s3Key, function (err, data) {
+                                    if(imagesToDelete.length){
+                                        async.forEach(imagesToDelete, function (imagePath, callbackImage) {
+                                            amazon.deleteObjectS3(imagePath, function (err, data) {
+                                                if(err){
+                                                    callbackImage(err);
+                                                }else{
+                                                    callbackImage();
+                                                }
+                                            });
+                                        }, function (err) {
                                             if(err){
                                                 handleError(res,err,409,4);
                                             }else{

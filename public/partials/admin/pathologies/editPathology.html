@@ -2,6 +2,9 @@
     <div class="modal-title"><h3>Actualizeaza patologie</h3></div>
 </div>
 <div class="modal-body col-xs-12 padding30" style="height: 70%;">
+    <div class="col-md-12 noPadding">
+        <alert ng-if="statusAlert.newAlert" type="{{statusAlert.type}}" close="statusAlert.newAlert=false">{{statusAlert.message}}</alert>
+    </div>
             <div class="col-xs-12 noPadding">
                 <div class="col-xs-12 noPadding">
                     <label>Denumire patologie:</label>
@@ -29,7 +32,9 @@
             </div>
             <div class="col-xs-12 noPadding" ng-if="pathology.associated_multimedia">
                     <div class="col-md-12 noPadding">
-                        <s3-upload-manager bucket="{{amazonBucket}}" label="multimedia asociat" path="{{'pathologies/'+pathology._id+'/pathology_images/'}}"></s3-upload-manager>
+                        <enhanced-S3-Upload-Manager label="multimedia asociat" on-complete-function="onMultimediaUpdate(key)"
+                                                    bucket="{{amazonBucket}}" on-delete-function="onMultimediaUpdate(key, true)"
+                                                    path="{{'pathologies/'+pathology._id+'/pathology_images/'}}"></enhanced-S3-Upload-Manager>
                     </div>
             </div>
             <div class="col-md-12 noPadding">
@@ -39,7 +44,7 @@
 </div>
 <div class="modal-footer">
     <div class="col-xs-12">
-        <a class="btn pull-left btn-primary" ng-click="closeModal()">Inchide</a>
-        <a class="btn pull-right btn-primary" ng-click="updatePathology()">Actualizeaza patologie</a>
+        <a class="btn pull-left btn-primary" ng-click="closeModal(true)">Inchide</a>
+        <a class="btn pull-right btn-primary" ng-click="updatePathology(true)">Actualizeaza patologie</a>
     </div>
 </div>
