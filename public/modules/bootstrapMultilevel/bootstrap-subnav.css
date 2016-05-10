@@ -25,6 +25,11 @@
   border-radius: 0 !important;
   background-color: #00a39e !important;
 }
+@media (max-width: 1279px) {
+  .subMenu > li:hover a {
+    color: #333333 !important;
+  }
+}
 .subMenu > li a {
   color: #333333 !important;
   background-color: #ffffff;
@@ -42,14 +47,14 @@
 }
 .parentMenu > li:hover {
   border-radius: 0 !important;
+  background-color: transparent !important;
 }
 .parentMenu > li:hover a {
   background-color: transparent !important;
 }
 @media (max-width: 1279px) {
   .parentMenu > li:hover a {
-    background-color: transparent !important;
-    color: #777777;
+    color: #01877B;
   }
 }
 .caret-right {
