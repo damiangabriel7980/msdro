@@ -105,18 +105,24 @@ var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     return deferred.promise;
 };
 
-var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNameForAssociatedItems){
+var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNameForAssociatedItems, enabledProperty){
     var deferred = Q.defer();
     var pathologiesToSend = [];
     //get pathologies and for each get list of products
     Pathologies.find({enabled: true}).sort('display_name').exec(function(err, pathologies){
         if(err)
         {
-            handleError(res,err,500);
+            deferred.reject(err);
         }
         else {
             async.each(pathologies, function(pathology, callback){
-                entityToAssociate.find({pathologiesID : {$in: [pathology._id]}}).exec(function (error, associated) {
+                var qObject = {
+                    pathologiesID : {$in: [pathology._id]}
+                };
+                if(enabledProperty){
+                    qObject[enabledProperty] = true;
+                }
+                entityToAssociate.find(qObject).exec(function (error, associated) {
                     if(err){
                         callback(err)
                     } else  {
@@ -3921,7 +3927,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 );
             } else {
-                getAssociatedElementsForPathologies(specialProduct, 'products').then(
+                getAssociatedElementsForPathologies(specialProduct, 'products', 'enabled').then(
                     function (success) {
                         handleSuccess(res,success);
                     },
@@ -4383,7 +4389,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     });
                 }else{
                     if(req.query.forMenu){
-                        getAssociatedElementsForPathologies(Products, 'products').then(
+                        getAssociatedElementsForPathologies(Products, 'products', 'enable').then(
                             function (success) {
                                 handleSuccess(res,success);
                             },
