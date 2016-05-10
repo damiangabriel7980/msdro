@@ -63,9 +63,6 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
         HomeService.events.query({specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
             $scope.events = Success.getObject(resp);
         });
-        HomeService.news.query({specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-            $scope.news = Success.getObject(resp);
-        });
         HomeService.news.query({scientific:true,specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
             $scope.scientificNews = Success.getObject(resp);
         });

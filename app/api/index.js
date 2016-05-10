@@ -120,7 +120,7 @@ var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNa
                     pathologiesID : {$in: [pathology._id]}
                 };
                 if(enabledProperty){
-                    qObject[enabledProperty] = true;
+                    qObject[enabledProperty] = { $exists: true, $ne : false };
                 }
                 entityToAssociate.find(qObject).exec(function (error, associated) {
                     if(err){
@@ -4267,7 +4267,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleError(res,err,500);
                 }else{
                     //get carousel content within allowed articles
-                    Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').sort({'indexNumber':1}).exec(function (err, images) {
+                    Carousel.find({enable:{ $exists: true, $ne : false }, article_id: {$in: ids}}).populate('article_id').sort({'indexNumber':1}).exec(function (err, images) {
                         if(err){
                             handleError(res,err,500);
                         }else{
@@ -4285,9 +4285,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             async.each(arr_of_items, function (item, callback) {
                 var hydrateOp;
                 if(item == Events){
-                    hydrateOp = {find: {enable:true,start:{$gt: new Date()}}};
+                    hydrateOp = {find: {enable:{ $exists: true, $ne : false },start:{$gt: new Date()}}};
                 }else{
-                    hydrateOp = {find: {enable:true }};
+                    hydrateOp = {find: {enable:{ $exists: true, $ne : false } }};
                 }
 
                 item.search({
@@ -4321,7 +4321,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
     router.route('/userHomeEvents')
         .get(function (req,res) {
-            Events.find({start: {$gte: new Date()}, enable: true}).sort({start: 1}).exec(function (err, events) {
+            Events.find({start: {$gte: new Date()}, enable: { $exists: true, $ne : false }}).sort({start: 1}).exec(function (err, events) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -4332,7 +4332,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/userHomeMultimedia')
         .get(function (req,res) {
-            Multimedia.find({enable: {$ne: false}}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
+            Multimedia.find({enable: { $exists: true, $ne : false }}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -4372,11 +4372,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 );
             }else{
                 if(req.query.idPathology && req.query.idPathology != 0){
-                    Pathologies.distinct("_id", {$or: [{_id: req.query.idPathology}]}).exec(function(err, pathologies){
+                    Pathologies.distinct("_id", {$and: [{_id: req.query.idPathology}, { $exists: true, $ne : false }]}).exec(function(err, pathologies){
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            var q = {"pathologiesID": {$in: pathologies}, enable: true};
+                            var q = {"pathologiesID": {$in: pathologies}, enable: { $exists: true, $ne : false }};
                             if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
                             Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                                 if(err) {
@@ -4398,7 +4398,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             }
                         )
                     } else {
-                        var q = {enable: true};
+                        var q = {enable: { $exists: true, $ne : false }};
                         if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
                         Products.find(q).sort({"name": 1}).exec(function(err, cont) {
                             if(err){
@@ -4458,7 +4458,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }else{
                 var findObj={};
-                findObj['enable']={$ne: false};
+                findObj['enable']= { $exists: true, $ne : false };
                 if(req.query.idPathology && req.query.idPathology != 0){
                     findObj['pathologiesID'] = {$in: [req.query.idPathology]};
                 }
@@ -4489,7 +4489,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 );
             }else{
                 var findObj={};
-                findObj['enable']={$ne: false};
+                findObj['enable']={ $exists: true, $ne : false };
                 if(req.query.idPathology==0){
                     Multimedia.find(findObj, function (err, multimedia) {
                         if (err) {
@@ -4515,7 +4515,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/checkIntroEnabled')
         .get(function (req, res) {
-            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: true}).exec(function (err, presentation) {
+            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -4538,7 +4538,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/introPresentation')
         .get(function (req, res) {
-            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: true}).exec(function (err, presentation) {
+            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
                 if(err){
                     handleError(res,err,500);
                 }else{
