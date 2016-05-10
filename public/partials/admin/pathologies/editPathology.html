@@ -27,21 +27,11 @@
                     <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
                 </div>
             </div>
-            <div class="col-md-12 noPadding marginTop20">
-                <button class="btn btn-default" type="file" ngf-select ngf-change="fileAssociatedSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*,video/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca multimedia</button>
-            </div>
-            <div class="col-md-12 noPadding">
-                <alert ng-if="uploadAlertImages.newAlert" type="{{uploadAlertImages.type}}" close="uploadAlertImages.newAlert=false">{{uploadAlertImages.message}}</alert>
-            </div>
             <div class="col-xs-12 noPadding" ng-if="pathology.associated_multimedia">
-                <label>Multimedia asociat:</label>
-                <ul>
-                    <li ng-repeat="images in pathology.associated_multimedia" style="font-size: 12px" class="col-xs-12">
-                        {{pathAmazonDev + images}}&nbsp;<i class="glyphicon glyphicon-remove pointer" ng-click="removeImage(images)"></i>
-                    </li>
-                </ul>
+                    <div class="col-md-12 noPadding">
+                        <s3-upload-manager bucket="{{amazonBucket}}" label="multimedia asociat" path="{{'pathologies/'+pathology._id+'/pathology_images/'}}"></s3-upload-manager>
+                    </div>
             </div>
-
             <div class="col-md-12 noPadding">
                 <label>Descriere:</label>
                 <textarea ui-tinymce="tinymceOptions" ng-model="pathology.description"></textarea>

@@ -90,7 +90,7 @@ controllers.controller('Pathologies', ['$scope','$rootScope', '$state', 'Patholo
             isEnabled?"Dezactiveaza patologie":"Activeaza patologie",
             isEnabled?"Sunteti sigur ca doriti sa dezactivati patologia?":"Sunteti sigur ca doriti sa activati patologia?",
             function () {
-                PathologiesService.pathologies.update({id: id}, {enablePathology: {enable: !isEnabled}}).$promise.then(function (resp) {
+                PathologiesService.pathologies.update({id: id}, {enabled: !isEnabled}).$promise.then(function (resp) {
                     console.log(resp);
                     $state.reload();
                 }).catch(function(err){

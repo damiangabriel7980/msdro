@@ -503,45 +503,14 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         })
         .put(function(req, res) {
-            if(req.body.info){
-                var info = req.body.info;
-                if(info.image){
-                    Pathologies.update({_id:req.query.id}, {$set:{header_image: info.image}}, function (err, wRes) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, {updated: wRes});
-                        }
-                    });
+            // the body will contain an object with the property/properties we want to update
+            Pathologies.update({_id:req.query.id},{$set: req.body}, function(err, pathology) {
+                if (err){
+                    handleError(res,err,500);
                 }else{
-                    Pathologies.update({_id:req.query.id}, {$set:{associated_multimedia: info.associated_multimedia}}, function (err, wRes) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, {updated: wRes});
-                        }
-                    });
+                    handleSuccess(res, {}, 3);
                 }
-            }else{
-                if(req.body.enablePathology){
-                    Pathologies.update({_id:req.query.id},{$set: {enabled: req.body.enablePathology.enable}}, function(err, pathology) {
-                        if (err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, {}, 3);
-                        }
-                    });
-                }else{
-                    var data = req.body.pathology;
-                    Pathologies.update({_id:req.query.id},{$set: data}, function(err, product) {
-                        if (err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, {}, 3);
-                        }
-                    });
-                }
-            }
+            });
         })
         .delete(function(req, res) {
             var id = req.query.id;
@@ -627,7 +596,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
            if(err) {
              handleError(res, err, 500)
            } else {
-             handleSuccess(res, updated);sssss
+             handleSuccess(res, updated);
            }
          })
       })
@@ -644,8 +613,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     var connectedEntites = req.body.coupledEntities;
                     async.each(Object.keys(connectedEntites), function (itemToUpdate, callbackUpdate){
                         var propertyToRemove = connectedEntites[itemToUpdate];
+                        var objectForPullOp = {
+                            propertyToRemove: item
+                        };
                         var modelToChange = mongoose.model(itemToUpdate);
-                        modelToChange.update({}, {$pull: {propertyToRemove: item}}, {multi: true}, function (err, wres) {
+                        modelToChange.update({}, {$pull: objectForPullOp}, {multi: true}, function (err, wres) {
                             if(err){
                                 callbackUpdate(err);
                             }else{
