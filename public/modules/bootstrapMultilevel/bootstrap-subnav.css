@@ -47,12 +47,15 @@
 }
 .parentMenu > li:hover {
   border-radius: 0 !important;
-  background-color: transparent !important;
 }
 .parentMenu > li:hover a {
   background-color: transparent !important;
 }
 @media (max-width: 1279px) {
+  .parentMenu > li:hover {
+    border-radius: 0 !important;
+    background-color: transparent !important;
+  }
   .parentMenu > li:hover a {
     color: #01877B;
   }
