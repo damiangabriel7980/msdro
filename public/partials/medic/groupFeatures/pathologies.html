@@ -5,11 +5,11 @@
                 <img class="col-xs-12 noPadding" ng-if="pathology.header_image" no-cache-src="{{pathAmazonDev+pathology.header_image}}" />
             </div>
             <div class="col-xs-12">
-                <h3 convert-special conver="pathology.display_name" ng-bind-html="trustAsHtml(pathology.display_name)">
+                <h3 class="specialProductTitle" ng-if="pathology.display_name!=undefined" convert-special conver="pathology.display_name" ng-bind-html="trustAsHtml(pathology.display_name)">
 
                 </h3>
             </div>
-            <div class="col-xs-12 justify" convert-special conver="pathology.description" ng-bind-html="trustAsHtml(pathology.description)">
+            <div class="col-xs-12 justify"  ng-if="pathology.description!=undefined" convert-special conver="pathology.description" ng-bind-html="trustAsHtml(pathology.description)">
 
             </div>
         </div>
