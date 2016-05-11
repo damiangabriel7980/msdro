@@ -42,7 +42,7 @@
                     },0);
                 };
 
-                var closeAllMenus = function(){
+                scope.closeAllMenus = function(){
                     angular.forEach(angular.element('.subNav'), function(value, key){
                         var listItem = angular.element(value).parent().children('.dropdown-menu');
                         listItem.hide('fast');
@@ -57,13 +57,13 @@
                     angular.forEach(paramIdentifiers, function(value, key){
                         stateParams[value] = !isNaN(paramValues[key]) ? paramValues[key] : item[paramValues[key]];
                     });
-                    closeAllMenus();
+                    scope.closeAllMenus();
                     $state.go(scope.stateName, stateParams);
                 };
 
                 scope.expandParent = function(event){
 
-                    closeAllMenus();
+                    scope.closeAllMenus();
 
                     var $li = angular.element(event.target).parent(),
                         $menu = $li.children('.dropdown-menu'),
