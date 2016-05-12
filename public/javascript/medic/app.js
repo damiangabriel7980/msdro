@@ -11,13 +11,13 @@ var app = angular.module('app',
         'angulartics.google.analytics',
         'offClick',
         'bootstrapSearch',
-        'specialDropdown',
         'footerResponsive',
         'verticalContentList',
         'horizontalContentList',
         'widgetMostRead',
         'mobileContentList',
-        'checklist-model'
+        'checklist-model',
+        'bootstrapSubnav'
     ]);
 
 app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {
@@ -33,6 +33,18 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 name: 'Home',
                 files: [
                     'javascript/medic/HomeControllers/Home.js'
+                ]
+            },
+            {
+                name: 'Pathology',
+                files: [
+                    'javascript/medic/PathologiesControllers/Pathology.js'
+                ]
+            },
+            {
+                name: 'PathologiesFilter',
+                files: [
+                    'javascript/medic/PathologiesControllers/Pathologies.js'
                 ]
             },
             {
@@ -248,6 +260,46 @@ app.config(['$httpProvider', function($httpProvider) {
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
+    $urlRouterProvider
+        .when(/articoleStiintifice/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            if(parsedURL.length < 5)
+                $state.go('biblioteca.articoleStiintifice.listaArticole', {articleType: 3});
+            else
+                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[2], articleId: parsedURL[4]});
+        }])
+        .when(/noutati/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            if(parsedURL[1] == 3)
+                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[1], articleId: parsedURL[3]});
+            else
+                $state.go('noutati.articol', {articleType: parsedURL[1], articleId: parsedURL[3], fromHome: 1})
+        }])
+        .when(/produse/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            if(parsedURL[2] === 'productsByArea')
+                $state.go('biblioteca.produse.productsByArea', {id: parsedURL[3]});
+            else
+                $state.go('biblioteca.produse.prodById', {id: parsedURL[3], area: parsedURL[4]});
+        }])
+        .when(/calendar/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            $state.go('calendar.events.event', {idPathology: parsedURL[3]});
+        }])
+        .when(/conferinte/, ['$state','$match', function ($state, $match) {
+            $state.go('conferinte');
+        }])
+        .when(/multimedia/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            if(parsedURL.length < 5)
+                $state.go('elearning.multimedia.multimediaByArea',{'idArea': parsedURL[3]});
+            else
+                $state.go('elearning.multimedia.multimediaByArea',{'idArea': parsedURL[3], idMulti: parsedURL[4]});
+        }])
+        .when(/groupFeatures/, ['$state','$match', function ($state, $match) {
+            var parsedURL = $match.input.split('/').filter(Boolean);
+            $state.go('groupFeatures', {specialApp : parsedURL[1]});
+        }]);
     $stateProvider
         .state('notFound',{
             url: '/404',
@@ -297,15 +349,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('biblioteca', {
             abstract: true,
-            url: '/biblioteca',
+            url: '/resurse',
             templateUrl: '/partials/medic/biblioteca/biblioteca.ejs'
         })
         .state('biblioteca.produse',{
             url: '/produse',
-            templateUrl: 'partials/medic/filterByTherapeuticAreas.html',
-            controller: 'TherapeuticAreas',
+            templateUrl: 'partials/medic/filterByPathology.html',
+            controller: 'PathologiesController',
+            params: {
+                navigateToState: 'products'
+            },
             resolve: {
-                loadDeps: loadStateDeps(['TherapeuticAreas', 'Products'])
+                loadDeps: loadStateDeps(['PathologiesFilter', 'Products'])
             }
         })
         .state('biblioteca.produse.productsByArea',{
@@ -335,8 +390,24 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/noutati/articol.ejs',
             controller: 'ArticleDetail'
         })
-       .state('calendar',{
-            url: '/calendar/:id',
+        .state('calendar', {
+            abstract: true,
+            url: '/evenimente',
+            templateUrl: '/partials/medic/calendarTemplate.ejs'
+        })
+       .state('calendar.events',{
+           url: '/calendar',
+           templateUrl: 'partials/medic/filterByPathology.html',
+           controller: 'PathologiesController',
+           params: {
+               navigateToState: 'events'
+           },
+           resolve: {
+               loadDeps: loadStateDeps(['PathologiesFilter'])
+           }
+        })
+        .state('calendar.events.event',{
+            url: '/eveniment/:idPathology/:id',
             templateUrl: 'partials/medic/calendar.ejs',
             controller: 'Events',
             resolve: {
@@ -345,15 +416,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('elearning', {
             abstract: true,
-            url: '/elearning',
+            url: '/resurse',
             templateUrl: '/partials/medic/elearning/elearning.ejs'
         })
         .state('elearning.multimedia',{
             url: '/multimedia',
-            templateUrl: 'partials/medic/filterByTherapeuticAreas.html' ,
-            controller: 'TherapeuticAreas',
+            templateUrl: 'partials/medic/filterByPathology.html' ,
+            controller: 'PathologiesController',
+            params: {
+                navigateToState: 'multimedia'
+            },
             resolve: {
-                loadDeps: loadStateDeps(['TherapeuticAreas'])
+                loadDeps: loadStateDeps(['PathologiesFilter'])
             }
         })
         .state('elearning.multimedia.multimediaMobile',{
@@ -376,7 +450,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             }
         })
         .state('elearning.courses',{
-            url: '/cursuri',
+            url: '/resurse',
             templateUrl: 'partials/medic/elearning/courses/courses.ejs',
             controller: 'CoursesView',
             resolve: {
@@ -405,8 +479,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['SlideView'])
             }
         })
-        .state('elearning.conferinte',{
-            url: '/conferinte',
+        .state('conferinte',{
+            url: '/evenimente/conferinte',
             templateUrl: 'partials/medic/elearning/transmisii.ejs',
             controller: 'LiveTransmission',
             resolve: {
@@ -414,9 +488,17 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             }
         })
         .state('groupFeatures', {
-            url: '/groupFeatures/:specialApp',
+            url: '/aplicatii/:specialApp',
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
             controller: 'DisplayFeatures'
+        })
+        .state('pathologies', {
+            url: '/pathologies/:pathology_id',
+            templateUrl: 'partials/medic/groupFeatures/pathologies.html',
+            controller: 'PathologyController',
+            resolve: {
+                loadDeps: loadStateDeps(['Pathology'])
+            }
         })
         .state('groupSpecialProduct', {
             url: '/groupSpecialProduct/:product_id',
@@ -520,7 +602,7 @@ app.run(
                     }, 0);
                 }
             });
-
+            
             //state events
             $rootScope.$on('$stateChangeStart',
                 function(event, toState, toParams, fromState, fromParams){

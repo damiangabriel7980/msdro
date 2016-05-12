@@ -2,8 +2,8 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 controllers
-  .controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','$modal','ActionModal',
-  function($scope, ProductService, idToEdit, $modalInstance, $state, therapeuticAreaService, AmazonService, $rootScope, GroupsService, Success, Error, $modal, ActionModal){
+  .controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','$modal','ActionModal', 'PathologiesService',
+  function($scope, ProductService, idToEdit, $modalInstance, $state, therapeuticAreaService, AmazonService, $rootScope, GroupsService, Success, Error, $modal, ActionModal, PathologiesService){
     $scope.uploadAlert = { newAlert: false, type: "", message: "" };
 
     $scope.uploadAlertRPC = { newAlert: false, type: "", message: "" };
@@ -21,6 +21,10 @@ controllers
       selectedGroups: null
     };
 
+    $scope.myPathologies = {
+      selectedPathologies: null
+    };
+
     $scope.myAreas = {
       selectedAreas: [],
       returnedAreas: []
@@ -30,6 +34,10 @@ controllers
       $scope.product = Success.getObject(result);
       $scope.myAreas.selectedAreas = Success.getObject(result)['therapeutic-areasID'];
       $scope.myGroups.selectedGroups = Success.getObject(result)['groupsID'];
+      $scope.myPathologies.selectedPathologies = $scope.product.pathologiesID;
+      PathologiesService.pathologies.query().$promise.then(function(result){
+        $scope.pathologies = Success.getObject(result);
+      });
       $scope.$applyAsync();
     }).catch(function(err){
       console.log(Error.getMessage(err));
@@ -52,6 +60,11 @@ controllers
       for(var i = 0; i < $scope.myGroups.selectedGroups.length; i++){
         groups_id.push($scope.myGroups.selectedGroups[i]._id);
       }
+      var id_pathologies = [];
+      for(var j=0;j<$scope.myPathologies.selectedPathologies.length;j++){
+        id_pathologies.push($scope.myPathologies.selectedPathologies[j]._id);
+      }
+      $scope.product.pathologiesID = id_pathologies;
       $scope.product.groupsID = groups_id;
       $scope.product['therapeutic-areasID'] = $scope.myAreas.returnedAreas;
       $scope.product.last_updated = Date.now();

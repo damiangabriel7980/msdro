@@ -23,7 +23,8 @@ var articlesSchema		= new Schema({
     image_path:   String,
     nrOfViews: Number,
     groupsID:     {type: [{type: Schema.Types.ObjectId, ref: 'UserGroup'}], index: true},
-    associated_images: Array
+    associated_images: Array,
+    pathologiesID: [{type: Schema.Types.ObjectId, ref: 'pathologies',index: true}]
 });
 articlesSchema.plugin(mongoosastic,{host:my_config.elasticServer, port:my_config.elasticPORT});
 

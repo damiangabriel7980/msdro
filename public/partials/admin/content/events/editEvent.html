@@ -58,6 +58,11 @@
         <my-multiple-select all-objects="allGroups" selected-objects="event.groupsID" track-by="_id" display-by="display_name"
                             split-by="profession.display_name" output="selectedGroups"></my-multiple-select>
     </div>
+    <div class="col-md-12 form-group">
+        <label>Patologii:</label>
+        <my-multiple-select all-objects="pathologies" selected-objects="myPathologies.selectedPathologies" track-by="_id" display-by="display_name"
+                            output="notUsed"></my-multiple-select>
+    </div>
     <div class="col-md-6">
         <label>Conferinte:</label>
         <div class="btn btn-default" ng-click="addConference()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</div>

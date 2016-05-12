@@ -29,7 +29,7 @@ app.controllerProvider.register('ProductsView', ['$scope', '$state', '$rootScope
         SpecialFeaturesService.specialGroups.getSelected().then(function (specialGroupSelected) {
             ProductService.products
                 .query({
-                    idArea:$stateParams.id,
+                    idPathology:$stateParams.id,
                     specialGroup: specialGroupSelected?specialGroupSelected._id:null,
                     firstLetter: letter
                 })

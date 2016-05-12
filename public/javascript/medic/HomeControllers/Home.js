@@ -63,9 +63,6 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
         HomeService.events.query({specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
             $scope.events = Success.getObject(resp);
         });
-        HomeService.news.query({specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
-            $scope.news = Success.getObject(resp);
-        });
         HomeService.news.query({scientific:true,specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
             $scope.scientificNews = Success.getObject(resp);
         });
@@ -86,7 +83,7 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
     $scope.toDate = function (ISOdate) {
         return new Date(ISOdate);
     };
-
+    
     /* --- footer realign ---*/
 
     $scope.iconLive='<i class="glyphicon glyphicon-facetime-video" ng-if="e.type==2"></i>&nbsp;';

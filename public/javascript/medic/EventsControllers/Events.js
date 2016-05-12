@@ -7,12 +7,8 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
 
     $scope.eventSources = [];
 
-    SpecialFeaturesService.specialGroups.getSelected().then(function (specialGroupSelected) {
-        getContent(specialGroupSelected);
-    });
-
-    var getContent = function (specialGroupSelected) {
-        eventsService.calendar.query({specialGroup: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function(result){
+    var getContent = function () {
+        eventsService.calendar.query({idPathology: $stateParams.idPathology}).$promise.then(function(result){
             var i;
             var events = Success.getObject(result);
             var eventsFiltered = [];
@@ -98,6 +94,8 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
             }
         });
     };
+
+    getContent();
 
     $scope.goToEvent=function(eventId) {
         $modal.open({

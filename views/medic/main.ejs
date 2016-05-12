@@ -70,6 +70,8 @@
     <script src="modules/widget-most-read/directive.js"></script>
     <link rel="stylesheet" href="modules/vertical-content-list/styles.css">
     <script src="modules/vertical-content-list/directive.js"></script>
+    <script src="modules/bootstrapMultilevel/bootstrap-subnav.js"></script>
+    <link rel="stylesheet" href="modules/bootstrapMultilevel/bootstrap-subnav.css">
 
     <!--Global controllers, services, directives-->
     <script src="javascript/medic/app.js"></script>
@@ -84,8 +86,6 @@
     <script src="javascript/medic/SpecialGroupsControllers/SpecialGroupsMenu.js"></script>
     <link rel="stylesheet" href="modules/bootstrap-search/bootstrap_search.css">
     <script src="modules/bootstrap-search/bootstrap_search.js"></script>
-    <link rel="stylesheet" href="modules/bootstrap-special-dropdown/special_dropdown.css">
-    <script src="modules/bootstrap-special-dropdown/special_dropdown.js"></script>
 
     <!--TODO: find a way to lazy load theese files:-->
     <script src="modules/angular-pdf-custom/pdf.js"></script>
@@ -108,8 +108,6 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <special-dropdown generic-object="specialGroupSelected" array-of-objects="specialGroups" amazon-path="pathAmazonDev" default-image-url="defaultGroupPhoto" on-item-select="selectSpecialGroup">
-            </special-dropdown>
 
             <ul class="profile nav navbar-nav pull-right dropdown" ng-class="{'profileNoSpecialGroups': !specialGroupSelected}">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -139,47 +137,47 @@
                         <button type="submit" class="btn btn-default sr-only">Submit</button>
                     </form>
                 </li>
-                <li class="dropdown" ng-class="{'active': $state.includes('noutati')}">
+
+                <li class="dropdown" ng-if="pathologies" ng-class="{'active': $state.includes('pathologies')}">
                     <a class="dropdown-toggle " data-toggle="dropdown">
-                       Noutati <b class="caret"></b>
+                        Patologii <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu" >
-                        <li ui-sref="noutati.listaArticole({articleType:1})" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-file"></i>&nbspStiri nationale</a></li>
-                        <li ui-sref="noutati.listaArticole({articleType:2})" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-folder-open"></i>&nbspStiri internationale</a></li>
+                        <li ng-repeat="pathology in pathologies" ui-sref="pathologies({pathology_id:pathology._id})" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-list-alt"></i>&nbsp;{{pathology.display_name}}</a>
+
+                        </li>
                     </ul>
                 </li>
-                <li class="dropdown" ng-class="{'active': $state.includes('biblioteca')}">
+
+                <bootstrap-subnav ng-if="pathologiesWithProducts" objects-array="pathologiesWithProducts" menu-title="Produse" children-property="products" click-on-final-child="closeNavbar" parent-display-name="display_name" child-display-name="name" active-condition="$state.includes('biblioteca.produse')" state-name="biblioteca.produse.prodById" state-parameters="id,area" state-parameters-values="_id,0"></bootstrap-subnav>
+
+                <li class="dropdown" ng-class="{'active': $state.includes('calendar') || $state.includes('conferinte')}">
+                    <a class="dropdown-toggle " data-toggle="dropdown">
+                        Evenimente <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" >
+                        <li ui-sref="calendar.events.event({idPathology: 0})" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-calendar"></i>&nbsp;Calendar</a></li>
+                        <li ui-sref="conferinte" href="#/evenimente/conferinte" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-facetime-video"></i>&nbspConferinte live</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" ng-class="{'active': ($state.includes('biblioteca') && !$state.includes('biblioteca.produse')) || $state.includes('elearning')}">
                     <a class="dropdown-toggle" data-toggle="dropdown">
-                        Biblioteca <b class="caret"></b>
+                        Resurse <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li ui-sref="biblioteca.produse.productsByArea({id:0})" ng-click="closeNavbar()" href="#/produse"><a><i class="glyphicon glyphicon-th-large"></i>&nbspProduse </a></li>
                         <li ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-file"></i>&nbspArticole stiintifice </a></li>
-                        <li ng-click="goToMerckSite()"><a ng-click="closeNavbar()"><i class="glyphicon glyphicon-th-large"></i>&nbspManualul MSD</a></li>
-                    </ul>
-                </li>
-                <li ng-class="{'active': $state.includes('calendar')}"><a ui-sref="calendar" href="#/calendar" ng-click="closeNavbar()">Calendar</a></li>
-                <li class="dropdown" ng-class="{'active': $state.includes('elearning')}">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                        E-learning <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
+                        <li ng-click="goToMerckSite()"><a ng-click="closeNavbar()"><i class="glyphicon glyphicon-th-large"></i>&nbspManualul Merck</a></li>
                         <li ng-click="closeNavbar(); $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><a><i class="glyphicon glyphicon-film"></i>&nbspMultimedia</a></li>
-                            <li ng-click="closeNavbar(); $state.go('elearning.courses')"><a><i class="glyphicon glyphicon-book"></i>&nbspCursuri</a></li>
-                            <li ui-sref="elearning.conferinte" href="#/conferinte" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-facetime-video"></i>&nbspConferinte live</a></li>
                     </ul>
                 </li>
-                <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures') || $state.includes('groupSpecialProduct')}" ng-if="specialApps || groupProduct">
+                <li class="dropdown" ng-class="{'active': $state.includes('groupFeatures')}" ng-if="specialApps">
                     <a class="dropdown-toggle" data-toggle="dropdown">
-                        {{specialGroupSelected?specialGroupSelected.display_name:""}} <b class="caret"></b>
+                        Aplicatii <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li ng-repeat="app in specialApps"  ui-sref="groupFeatures({specialApp: app._id})" ng-click="closeNavbar()"><a>{{app.name}}</a></li>
-                        <li ng-if="groupProduct" ng-repeat="groupProd in groupProduct" ui-sref="groupSpecialProduct.menuItem({product_id: groupProd._id})" ui-sref-opts="{inherit: false,reload: true}" ng-click="closeNavbar()"><a >{{groupProd.product_name}}</a></li>
-
                     </ul>
                 </li>
-
                 <li class="mobileLink dividerTop" ng-class="{'active': $state.includes('profileMobile')}" ng-click="showProfile();closeNavbar()"><a>Contul meu</a></li>
                 <li class="mobileLink" ng-click="logoutUser()"><a>Sign out</a></li>
             </ul>

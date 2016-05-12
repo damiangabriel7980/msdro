@@ -1,9 +1,17 @@
-controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', 'IntroService', '$state', '$timeout', 'CollectionsService', 'Success', 'Error', function($scope, $rootScope, $stateParams, SpecialFeaturesService, IntroService, $state, $timeout, CollectionsService, Success, Error){
+controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', 'IntroService', '$state', '$timeout', 'CollectionsService', 'Success', 'Error', 'PathologiesService', 'ProductService', function($scope, $rootScope, $stateParams, SpecialFeaturesService, IntroService, $state, $timeout, CollectionsService, Success, Error, PathologiesService, ProductService){
 
     //get available groups
     SpecialFeaturesService.specialGroups.getAll().then(function (groups) {
         //console.log(groups);
         $scope.specialGroups = groups;
+    });
+
+    PathologiesService.pathologies.query({forDropdown: true}).$promise.then(function(resp){
+        $scope.pathologies = Success.getObject(resp).length > 0 ? Success.getObject(resp): null;
+    });
+
+    ProductService.products.query({forMenu: true}).$promise.then(function(result){
+        $scope.pathologiesWithProducts = Success.getObject(result).length > 0 ? Success.getObject(result): null;
     });
 
     //get Default Group
@@ -31,7 +39,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         $scope.specialGroupSelected = group;
         handleIntro(group._id);
         loadSpecialProductPage(group._id);
-        loadSpecialGroupFeatures(group._id);
+        loadSpecialGroupFeatures();
         if($state.includes('groupFeatures') || $state.includes('groupSpecialProduct')){
             //if user changed his group while being on a feature page or product page, redirect him to home
             $state.go('home');
@@ -84,7 +92,7 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
 
     var loadSpecialGroupFeatures = function (idSelected) {
         //load group's special features (apps)
-        SpecialFeaturesService.specialApps.query({group: idSelected}).$promise.then(function (resp) {
+        SpecialFeaturesService.specialApps.query().$promise.then(function (resp) {
             if(Success.getObject(resp) && Success.getObject(resp).length > 0){
                 $scope.specialApps = Success.getObject(resp);
             }else{

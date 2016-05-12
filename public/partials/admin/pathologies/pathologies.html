@@ -1,0 +1,24 @@
+<div class="container-fluid">
+    <div class="well">
+        <div class="row">
+            <div class="col-xs-5"><h3>Gestionare patologii</h3></div>
+            <div class="col-xs-2 pull-right">
+                <a ng-click="addPathology()" class="btn btn-info pull-right margintop20px"><i class="glyphicon glyphicon-plus-sign"></i> Adauga patologie</a>
+            </div>
+        </div>
+    </div>
+    <bulk-operations model="pathologies" connected-entities="entities" modify-button field="enabled" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="item in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(item._id)" ng-checked="checkValue(item._id)"/>
+            </td>
+            <td data-title="'Nume patologie'"  filter="{ 'display_name': 'text' }" sortable="'display_name'">{{item.display_name}}</td>
+            <td data-title="'Actiuni'">
+                <action-buttons item-enable-property="item.enabled" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
+                                toggle-item="togglePathology(item._id,item.enabled)" update-item="editPathology(item._id)" delete-item="deletePathology(item._id)"></action-buttons>
+            </td>
+        </tr>
+    </table>
+
+</div>

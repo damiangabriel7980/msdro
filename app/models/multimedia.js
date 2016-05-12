@@ -24,7 +24,8 @@ var multimediaSchema		= new Schema({
     'therapeutic-areasID': [{type: Schema.Types.ObjectId, ref: 'therapeutic-areas',index: true}],
     thumbnail_path : String,
     title : {type:String,es_indexed:true},
-    type : Number
+    type : Number,
+    pathologiesID: [{type: Schema.Types.ObjectId, ref: 'pathologies',index: true}]
 });
 multimediaSchema.plugin(mongoosastic,{host:my_config.elasticServer,port:my_config.elasticPORT});
 module.exports = mongoose.model('multimedia', multimediaSchema,'multimedia');

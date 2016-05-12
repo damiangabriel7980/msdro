@@ -51,6 +51,10 @@ controllers.controller('Groups', ['$scope', '$rootScope', '$state', '$stateParam
         }
     };
 
+    $scope.entities = {
+        'UserGroup': 'groupsID'
+    };
+
     $scope.refreshTable();
 
     $scope.addGroup = function(){

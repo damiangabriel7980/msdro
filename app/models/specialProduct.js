@@ -18,6 +18,7 @@ var specialProductSchema		= new Schema({
     job_id: String,
     groups: [{type: Schema.Types.ObjectId,ref: 'UserGroup', index: true}],
     speakers: [{type: Schema.Types.ObjectId,ref: 'speakers'}],
+    pathologiesID: [{type: Schema.Types.ObjectId, ref: 'pathologies',index: true}],
     enabled: Boolean,
     show_safety_info_for: {
         resources: Boolean,

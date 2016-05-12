@@ -1,4 +1,4 @@
-controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'EventsService', 'GroupsService', 'InfoModal', 'ActionModal', 'AmazonService', 'Success', function ($scope, $state, $stateParams, EventsService, GroupsService, InfoModal, ActionModal, AmazonService, Success) {
+controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'EventsService', 'GroupsService', 'InfoModal', 'ActionModal', 'AmazonService', 'Success', 'PathologiesService', function ($scope, $state, $stateParams, EventsService, GroupsService, InfoModal, ActionModal, AmazonService, Success, PathologiesService) {
 
     var refreshConferences = function () {
         EventsService.conferences.query({event: $stateParams.idEvent}).$promise.then(function (resp) {
@@ -6,6 +6,11 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
         });
     };
     refreshConferences();
+
+
+    $scope.myPathologies = {
+        selectedPathologies: null
+    };
 
     var refreshRooms = function () {
         EventsService.rooms.query({event: $stateParams.idEvent}).$promise.then(function (resp) {
@@ -16,6 +21,12 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
 
     EventsService.events.query({id: $stateParams.idEvent}).$promise.then(function (resp) {
         $scope.event = Success.getObject(resp);
+        $scope.myPathologies.selectedPathologies = $scope.event.pathologiesID;
+    });
+
+    PathologiesService.pathologies.query().$promise.then(function(result){
+        $scope.pathologies = Success.getObject(result);
+        $scope.$applyAsync();
     });
 
     GroupsService.groups.query().$promise.then(function (resp) {
@@ -24,6 +35,11 @@ controllers.controller('EditEvent', ['$scope', '$state', '$stateParams', 'Events
 
     $scope.updateEvent = function () {
         var event = this.event;
+        var id_pathologies = [];
+        for(var i=0;i<$scope.myPathologies.selectedPathologies.length;i++){
+            id_pathologies.push($scope.myPathologies.selectedPathologies[i]._id);
+        }
+        event.pathologiesID = id_pathologies;
         if(event.listconferences) delete event.listconferences;
         console.log(event);
         var notification = this.notification || {};

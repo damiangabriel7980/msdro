@@ -34,6 +34,7 @@ var guidelineFile = require ("../models/guidelineFile");
 var guidelineCategory = require ("../models/guidelineCategory");
 var myPrescription = require("../models/myPrescription");
 var pdf = require("html-pdf");
+var Pathologies = require('../models/pathologies');
 
 var xlsx = require("xlsx");
 
@@ -84,32 +85,72 @@ var getNonSpecificUserGroupsIds = function(user){
 //get content for all non content_specific groups plus one content_specific group
 //if specific content group is null, get non specific content only
 //tip: content_type can be injected; ex: {$in: [1,3]}
-var getUserContent = function (user, content_type, specific_content_group_id, limit, sortDescendingByAttribute) {
+var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     var deferred = Q.defer();
     //first get non specific content groups only
-    getNonSpecificUserGroupsIds(user).then(
-        function(arrayOfGroupsIds){
-            //if we have specific content group id, add it to our array
-            if(specific_content_group_id) arrayOfGroupsIds.push(specific_content_group_id.toString());
-            //now get user content for our array of groups
-            var myCursor = Content.find({groupsID: {$in: arrayOfGroupsIds}, enable: {$ne: false}, type: content_type});
-            if(sortDescendingByAttribute){
-                var attr = {};
-                attr[sortDescendingByAttribute] = -1;
-                myCursor = myCursor.sort(attr);
-            }
-            if(limit) myCursor=myCursor.limit(limit);
-            myCursor.exec(function (err, content) {
+    var myCursor = Content.find({enable: {$ne: false}, type: content_type});
+    if(sortDescendingByAttribute){
+        var attr = {};
+        attr[sortDescendingByAttribute] = -1;
+        myCursor = myCursor.sort(attr);
+    }
+    if(limit) myCursor=myCursor.limit(limit);
+    myCursor.exec(function (err, content) {
+        if(err){
+            deferred.reject(err);
+        }else{
+            deferred.resolve(content);
+        }
+    });
+    return deferred.promise;
+};
+
+var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNameForAssociatedItems, enabledProperty){
+    var deferred = Q.defer();
+    var pathologiesToSend = [];
+    //get pathologies and for each get list of products
+    Pathologies.find({enabled: true}).sort('display_name').exec(function(err, pathologies){
+        if(err)
+        {
+            deferred.reject(err);
+        }
+        else {
+            async.each(pathologies, function(pathology, callback){
+                var qObject = {
+                    pathologiesID : {$in: [pathology._id]}
+                };
+                if(enabledProperty){
+                    qObject[enabledProperty] = { $exists: true, $ne : false };
+                }
+                entityToAssociate.find(qObject).exec(function (error, associated) {
+                    if(err){
+                        callback(err)
+                    } else  {
+                        if(associated.length > 0){
+                            var objectToPush = {
+                                _id: pathology._id,
+                                display_name: pathology.display_name
+                            };
+                            objectToPush[propertyNameForAssociatedItems] = associated;
+                            pathologiesToSend.push(objectToPush);
+                            callback();
+                        } else {
+                            callback();
+                        }
+                    }
+                })
+            }, function(err){
                 if(err){
                     deferred.reject(err);
-                }else{
-                    deferred.resolve(content);
+                } else {
+                    pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
+                        return obj.display_name;
+                    });
+                    deferred.resolve(pathologiesToSend);
                 }
-            });
-        },
-        function (err) {
-            deferred.reject(err);
-        });
+            })
+        }
+    });
     return deferred.promise;
 };
 
@@ -432,6 +473,107 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    router.route('/admin/pathologies')
+        .get(function(req, res) {
+            if(req.query.id){
+                Pathologies.findOne({_id:req.query.id}, function(err, pathology) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, pathology);
+                    }
+                })
+            }else{
+                Pathologies.find(function(err, pathologies) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else {
+                        handleSuccess(res, pathologies);
+                    }
+                });
+            }
+        })
+        .post(function(req, res) {
+            var pathology = new Pathologies({
+                display_name: 'Untitled',
+                last_updated: new Date(),
+                enabled: false
+            });
+            pathology.save(function(err,saved) {
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, {saved: saved}, 2);
+                }
+            });
+        })
+        .put(function(req, res) {
+            // the body will contain an object with the property/properties we want to update
+            Pathologies.update({_id:req.query.id},{$set: req.body}, function(err, pathology) {
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, {}, 3);
+                }
+            });
+        })
+        .delete(function(req, res) {
+            var id = req.query.id;
+            Pathologies.findOne({_id: id}, function (err, pathology) {
+                if(pathology){
+                    if(pathology.header_image)
+                        pathology.associated_multimedia.push(pathology.header_image);
+                    var imagesToDelete = pathology.associated_multimedia;
+                    //first we'll remove any references to this pathology
+                    var arrayOfObjectsToUpdate = [Multimedia, Content, Events, specialProduct];
+                    async.forEach(arrayOfObjectsToUpdate, function(objectToUpdate, callback){
+                        objectToUpdate.update({}, {$pull: {pathologiesID: id}}, {multi: true}, function (err, wres) {
+                            if(err){
+                                callback(err);
+                            }else{
+                               callback();
+                            }
+                        });
+                    }, function (err) {
+                        if(err){
+                            handleError(res,err,500);
+                        } else {
+                            //after we have updated the references and deleted all
+                            Pathologies.remove({_id:id},function(err,cont) {
+                                if (err){
+                                    handleError(res,err,500);
+                                }
+                                else{
+                                    if(imagesToDelete.length){
+                                        async.forEach(imagesToDelete, function (imagePath, callbackImage) {
+                                            amazon.deleteObjectS3(imagePath, function (err, data) {
+                                                if(err){
+                                                    callbackImage(err);
+                                                }else{
+                                                    callbackImage();
+                                                }
+                                            });
+                                        }, function (err) {
+                                            if(err){
+                                                handleError(res,err,409,4);
+                                            }else{
+                                                handleSuccess(res, {}, 7);
+                                            }
+                                        });
+                                    }else{
+                                        handleSuccess(res, {}, 4);
+                                    }
+                                }
+                            });
+                        }
+                    })
+                }else{
+                    handleError(res,err,404,1);
+                }
+            });
+        });
+
     router.route('/admin/bulkOperations')
       .get(function(req,res){
           var modelToModify = mongoose.model(req.query.model);
@@ -479,12 +621,32 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
           //we are making the delete operation here, because on a DELETE endpoint we cannot send the array via req.body
         var modelToModify = mongoose.model(req.query.model);
-        async.each(req.body.items,function(item, callback){
+          async.each(req.body.items,function(item, callback){
           modelToModify.findOneAndRemove( {_id: item}, function(err, deleted){
             if(err){
               callback(err)
             } else {
-              callback();
+                if(req.body.coupledEntities){
+                    var connectedEntites = req.body.coupledEntities;
+                    async.each(Object.keys(connectedEntites), function (itemToUpdate, callbackUpdate){
+                        var propertyToRemove = connectedEntites[itemToUpdate];
+                        var objectForPullOp = {
+                            propertyToRemove: item
+                        };
+                        var modelToChange = mongoose.model(itemToUpdate);
+                        modelToChange.update({}, {$pull: objectForPullOp}, {multi: true}, function (err, wres) {
+                            if(err){
+                                callbackUpdate(err);
+                            }else{
+                                callbackUpdate();
+                            }
+                        });
+                    }, function(err) {
+                        callback();
+                    });
+                } else {
+                    callback();
+                }
             }
           })
         }, function(err, deleted){
@@ -854,7 +1016,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/products')
         .get(function(req, res) {
             if(req.query.id){
-                Products.findOne({_id: req.query.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                Products.findOne({_id: req.query.id}).populate("therapeutic-areasID pathologiesID groupsID").exec(function(err, product) {
                     if (err){
                         handleError(res,err,500);
                     }else{
@@ -959,7 +1121,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/content')
         .get(function(req, res) {
             if(req.query.id){
-                Content.findOne({_id:req.query.id}, function(err, cont) {
+                Content.findOne({_id:req.query.id}).populate('pathologiesID').exec(function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }else{
@@ -967,7 +1129,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                Content.find(function(err, cont) {
+                Content.find({}).populate('pathologiesID').exec(function(err, cont) {
                     if(err) {
                         handleError(res,err,500);
                     }
@@ -1079,7 +1241,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 q._id = req.query.id;
             }
-            specialProduct.find(q).deepPopulate('groups.profession').exec(function (err, products) {
+            specialProduct.find(q).populate('pathologiesID').deepPopulate('groups.profession').exec(function (err, products) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -1780,7 +1942,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/events/events')
         .get(function (req, res) {
             if(req.query.id){
-                Events.findOne({_id: req.query.id}).select('-listconferences').populate('groupsID').exec(function (err, event) {
+                Events.findOne({_id: req.query.id}).select('-listconferences').populate('groupsID pathologiesID').exec(function (err, event) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -2190,7 +2352,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/multimedia')
         .get(function(req, res) {
             if(req.query.id){
-                Multimedia.findOne({_id: req.query.id}).populate("therapeutic-areasID").populate('groupsID').exec(function(err, product) {
+                Multimedia.findOne({_id: req.query.id}).populate("therapeutic-areasID pathologiesID groupsID").exec(function(err, product) {
                     if (err){
                         handleError(res,err,500);
                     }else{
@@ -3713,16 +3875,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/specialFeatures/specialApps')
         .get(function (req, res) {
-            if(req.query.group){
-                specialApps.find({groups: {$in: [req.query.group]}, isEnabled: true}).exec(function (err, apps) {
-                    if(err){
-                        handleError(res,err,500);
-                    }else{
-                        handleSuccess(res,apps);
-                    }
-                });
-            }else if(req.query.id){
-                ContentVerifier.getContentById(specialApps,req.query.id,req.user.groupsID,false,'isEnabled',null,'groups').then(
+            if(req.query.id){
+                ContentVerifier.getContentById(specialApps,req.query.id,false,false,'isEnabled',null,'groups').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -3734,7 +3888,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 );
             }else{
-                handleError(res,null,400,6);
+                specialApps.find({isEnabled: true}).exec(function (err, apps) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res,apps);
+                    }
+                });
             }
         });
 
@@ -3754,17 +3914,28 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/specialProduct')
         .get(function(req, res) {
-            ContentVerifier.getContentById(specialProduct,req.query.id,req.user.groupsID,false,'enabled','speakers','groups').then(
-                function(success){
-                    handleSuccess(res,success);
-                },function(err){
-                    if (err.status == 404)
-                        var message = 45;
-                    else
-                        var message = 46;
-                    handleError(res,null,err.status, message);
-                }
-            );
+            if(req.query.id){
+                ContentVerifier.getContentById(specialProduct,req.query.id,null,false,'enabled','speakers','groups').then(
+                    function(success){
+                        handleSuccess(res,success);
+                    },function(err){
+                        if (err.status == 404)
+                            var message = 45;
+                        else
+                            var message = 46;
+                        handleError(res,null,err.status, message);
+                    }
+                );
+            } else {
+                getAssociatedElementsForPathologies(specialProduct, 'products', 'enabled').then(
+                    function (success) {
+                        handleSuccess(res,success);
+                    },
+                    function (err) {
+                        handleError(res,err,500);
+                    }
+                )
+            }
         });
     router.route('/specialProductMenu')
         .get(function(req, res) {
@@ -3837,7 +4008,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/content')
         .get(function(req, res) {
             if(req.query.content_id){
-                ContentVerifier.getContentById(Content,req.query.content_id,req.user.groupsID,true,'enable',null,'groupsID').then(
+                ContentVerifier.getContentById(Content,req.query.content_id,false,true,'enable',null,'groupsID').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -3851,10 +4022,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }else{
                 //send most read and recent articles at the same time
                 var contentToSend = [];
-                getUserContent(req.user, req.query.content_type, req.query.specialGroupSelected, null, 'created').then(
+                getUserContent(req.query.content_type, null, 'created').then(
                     function (contentRecent) {
                         contentToSend.push(contentRecent);
-                        getUserContent(req.user, req.query.content_type, req.query.specialGroupSelected, 3, 'nrOfViews').then(
+                        getUserContent(req.query.content_type, 3, 'nrOfViews').then(
                             function (content) {
                                 contentToSend.push(content);
                                 handleSuccess(res,contentToSend);
@@ -4091,126 +4262,83 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/userHomeCarousel/')
         .get(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if(req.query.specialGroupSelected){
-                        forGroups.push(req.query.specialGroupSelected.toString());
-                    }
-                    //get allowed articles for user
-                    Content.distinct("_id", {groupsID: {$in: forGroups}, enable:true}).exec(function (err, ids) {
+            Content.distinct("_id", {enable:true}).exec(function (err, ids) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    //get carousel content within allowed articles
+                    Carousel.find({enable:{ $exists: true, $ne : false }, article_id: {$in: ids}}).populate('article_id').sort({'indexNumber':1}).exec(function (err, images) {
                         if(err){
                             handleError(res,err,500);
                         }else{
-                            //get carousel content within allowed articles
-                            Carousel.find({enable:true, article_id: {$in: ids}}).populate('article_id').sort({'indexNumber':1}).exec(function (err, images) {
-                                if(err){
-                                    handleError(res,err,500);
-                                }else{
-                                    handleSuccess(res, images);
-                                }
-                            })
+                            handleSuccess(res, images);
                         }
-                    });
-                },
-                function (err) {
-                    handleError(res,err,500);
-                });
+                    })
+                }
+            });
         });
     router.route('/userHomeSearch/')
         .get(function(req,res){
             var data=req.query.data;
             var arr_of_items=[Products,Multimedia,Content,Events];
             var ObjectOfResults={};
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.query.specialGroupSelected) {
-                        forGroups.push(req.query.specialGroupSelected);
+            async.each(arr_of_items, function (item, callback) {
+                var hydrateOp;
+                if(item == Events){
+                    hydrateOp = {find: {enable:{ $exists: true, $ne : false },start:{$gt: new Date()}}};
+                }else{
+                    hydrateOp = {find: {enable:{ $exists: true, $ne : false } }};
+                }
+
+                item.search({
+
+                    query_string: {
+                        query: data,
+                        default_operator: 'OR',
+                        lowercase_expanded_terms: true
+                        //phrase_slop: 50,
+                        //analyze_wildcard: true
                     }
 
-                    async.each(arr_of_items, function (item, callback) {
-                        var hydrateOp;
-                        if(item == Events){
-                            hydrateOp = {find: {groupsID:{$in:forGroups},enable:true,start:{$gt: new Date()}}};
-                        }else{
-                            hydrateOp = {find: {groupsID:{$in:forGroups},enable:true }};
+                },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
+                    if(err){
+                        callback(err);
+                    }else{
+                        if(results && results.hits && results.hits.hits){
+                            ObjectOfResults[item.modelName]=results.hits.hits;
                         }
-
-                        item.search({
-
-                            query_string: {
-                                query: data,
-                                default_operator: 'OR',
-                                lowercase_expanded_terms: true
-                                //phrase_slop: 50,
-                                //analyze_wildcard: true
-
-                            }
-
-                        },{hydrate: true,hydrateOptions:hydrateOp}, function(err, results) {
-                            if(err){
-                                callback(err);
-                            }else{
-                                if(results && results.hits && results.hits.hits){
-                                    ObjectOfResults[item.modelName]=results.hits.hits;
-                                }
-                                callback();
-                            }
-                        });
-
-                    }, function (err) {
-                        if(err)
-                            handleError(res,err,500);
-                        else{
-                            handleSuccess(res, ObjectOfResults);
-                        }
-                    })
-                },
-                function (err) {
-                    handleError(res,err,500);
+                        callback();
+                    }
                 });
+
+            }, function (err) {
+                if(err)
+                    handleError(res,err,500);
+                else{
+                    handleSuccess(res, ObjectOfResults);
+                }
+            })
         });
     router.route('/userHomeEvents')
         .get(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.query.specialGroupSelected) {
-                        forGroups.push(req.query.specialGroupSelected);
-                    }
-                    Events.find({groupsID: {$in: forGroups}, start: {$gte: new Date()}, enable: true}).sort({start: 1}).exec(function (err, events) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, events);
-                        }
-                    });
-                },
-                function (err) {
+            Events.find({start: {$gte: new Date()}, enable: { $exists: true, $ne : false }}).sort({start: 1}).exec(function (err, events) {
+                if(err){
                     handleError(res,err,500);
-                });
+                }else{
+                    handleSuccess(res, events);
+                }
+            });
         });
 
     router.route('/userHomeMultimedia')
         .get(function (req,res) {
-            getNonSpecificUserGroupsIds(req.user).then(
-                function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if (req.query.specialGroupSelected) {
-                        forGroups.push(req.query.specialGroupSelected);
-                    }
-                    Multimedia.find({groupsID: {$in: forGroups}, enable: {$ne: false}}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
-                        if(err){
-                            handleError(res,err,500);
-                        }else{
-                            handleSuccess(res, multimedia);
-                        }
-                    });
-                },
-                function (err) {
+            Multimedia.find({enable: { $exists: true, $ne : false }}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
+                if(err){
                     handleError(res,err,500);
-                });
+                }else{
+                    handleSuccess(res, multimedia);
+                }
+            });
         });
 
     router.route('/homeNews')
@@ -4219,7 +4347,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var contentType = {$in: [1, 2]};
             if(req.query.scientific) contentType = 3;
             //get content
-            getUserContent(req.user, contentType, req.query.specialGroupSelected, 3, "created").then(
+            getUserContent(contentType, 3, "created").then(
                 function (cont) {
                     handleSuccess(res, cont);
                 },
@@ -4231,7 +4359,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/products')
         .get(function(req, res) {
             if(req.query.idProduct){
-                ContentVerifier.getContentById(Products,req.query.idProduct,req.user.groupsID,false,'enable',null,'groupsID').then(
+                ContentVerifier.getContentById(Products,req.query.idProduct,false, false,'enable',null,'groupsID').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -4243,44 +4371,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 );
             }else{
-                getNonSpecificUserGroupsIds(req.user).then(
-                    function (groups) {
-                        if (req.query.specialGroup) {
-                            groups.push(req.query.specialGroup);
-                        }
-                        if(req.query.idArea && req.query.idArea != 0){
-                            Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function(err, areas){
-                                if(err){
-                                    handleError(res,err,500);
-                                }else{
-                                    var q = {"therapeutic-areasID": {$in: areas}, groupsID: {$in: groups}, enable: true};
-                                    if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
-                                    Products.find(q).sort({"name": 1}).exec(function(err, cont) {
-                                        if(err) {
-                                            handleError(res,err,500);
-                                        }else{
-                                            handleSuccess(res, cont);
-                                        }
-                                    })
-                                }
-                            });
+                if(req.query.idPathology && req.query.idPathology != 0){
+                    Pathologies.distinct("_id", {$and: [{_id: req.query.idPathology}, { enabled: { $exists: true, $ne : false }}]}).exec(function(err, pathologies){
+                        if(err){
+                            handleError(res,err,500);
                         }else{
-                            //get allowed articles for user
-                            var q = {groupsID: {$in: groups}, enable: true};
+                            var q = {"pathologiesID": {$in: pathologies}, enable: { $exists: true, $ne : false }};
                             if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
                             Products.find(q).sort({"name": 1}).exec(function(err, cont) {
-                                if(err){
+                                if(err) {
                                     handleError(res,err,500);
                                 }else{
                                     handleSuccess(res, cont);
                                 }
                             })
                         }
-                    },
-                    function (err) {
-                        handleError(res,err,500);
+                    });
+                }else{
+                    if(req.query.forMenu){
+                        getAssociatedElementsForPathologies(Products, 'products', 'enable').then(
+                            function (success) {
+                                handleSuccess(res,success);
+                            },
+                            function (err) {
+                                handleError(res,err,500);
+                            }
+                        )
+                    } else {
+                        var q = {enable: { $exists: true, $ne : false }};
+                        if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                        Products.find(q).sort({"name": 1}).exec(function(err, cont) {
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                handleSuccess(res, cont);
+                            }
+                        })
                     }
-                );
+                }
             }
         });
 
@@ -4329,30 +4457,26 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             }else{
-                getNonSpecificUserGroupsIds(req.user).then(function (nonSpecificGroupsIds) {
-                    var forGroups = nonSpecificGroupsIds;
-                    if(req.query.specialGroup){
-                        forGroups.push(req.query.specialGroup);
+                var findObj={};
+                findObj['enable']= { $exists: true, $ne : false };
+                if(req.query.idPathology && req.query.idPathology != 0){
+                    findObj['pathologiesID'] = {$in: [req.query.idPathology]};
+                }
+                Events.find(findObj).sort({start : 1}).limit(50).exec(function (err, cont) {
+                    if (err) {
+                        handleError(res,err,500);
                     }
-                    Events.find({groupsID: {$in: forGroups},enable: true}).sort({start : 1}).limit(50).exec(function (err, cont) {
-                        if (err) {
-                            handleError(res,err,500);
-                        }
-                        else
-                        {
-                            handleSuccess(res, cont);
-                        }
-
-                    })
-                }, function (err) {
-                    handleError(res,err,500);
+                    else
+                    {
+                        handleSuccess(res, cont);
+                    }
                 })
             }
         });
     router.route('/multimedia')
         .get(function(req,res){
             if(req.query.idMultimedia){
-                ContentVerifier.getContentById(Multimedia,req.query.idMultimedia,req.user.groupsID,false,'enable',null,'groupsID').then(
+                ContentVerifier.getContentById(Multimedia,req.query.idMultimedia,false,false,'enable',null,'groupsID').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -4365,42 +4489,25 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 );
             }else{
                 var findObj={};
-                getNonSpecificUserGroupsIds(req.user).then(
-                    function (nonSpecificGroupsIds) {
-                        var forGroups = nonSpecificGroupsIds;
-                        if (req.query.specialGroupSelected) {
-                            forGroups.push(req.query.specialGroupSelected);
+                findObj['enable']={ $exists: true, $ne : false };
+                if(req.query.idPathology==0){
+                    Multimedia.find(findObj, function (err, multimedia) {
+                        if (err) {
+                            handleError(res,err,500);
+                        } else {
+                            handleSuccess(res, multimedia);
                         }
-                        findObj['groupsID']={$in:forGroups};
-                        findObj['enable']={$ne: false};
-                        if(req.query.idArea==0){
-                            Multimedia.find(findObj, function (err, multimedia) {
-                                if (err) {
-                                    handleError(res,err,500);
-                                } else {
-                                    handleSuccess(res, multimedia);
-                                }
-                            });
-                        }else{
-                            Therapeutic_Area.distinct("_id", {$or: [{_id: req.query.idArea}, {"therapeutic-areasID": {$in :[req.query.idArea]}}]}).exec(function (err, ids) {
-                                if(err){
-                                    handleError(res, err);
-                                }else{
-                                    findObj['therapeutic-areasID'] = {$in: ids};
-                                    Multimedia.find(findObj, function (err, multimedia) {
-                                        if (err) {
-                                            handleError(res,err,500);
-                                        } else {
-                                            handleSuccess(res, multimedia);
-                                        }
-                                    });
-                                }
-                            });
+                    });
+                }else{
+                    findObj['pathologiesID'] = {$in: [req.query.idPathology]};
+                    Multimedia.find(findObj, function (err, multimedia) {
+                        if (err) {
+                            handleError(res,err,500);
+                        } else {
+                            handleSuccess(res, multimedia);
                         }
-                    },
-                    function (err) {
-                        handleError(res,err,500);
-                    })
+                    });
+                }
             }
         });
 
@@ -4408,7 +4515,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/checkIntroEnabled')
         .get(function (req, res) {
-            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: true}).exec(function (err, presentation) {
+            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -4431,7 +4538,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/introPresentation')
         .get(function (req, res) {
-            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: true}).exec(function (err, presentation) {
+            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -4445,6 +4552,28 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .get(function(req,res){
             var regexp = UtilsModule.validationStrings;
             handleSuccess(res,regexp);
+        });
+
+    router.route('/pathologies')
+        .get(function(req, res) {
+            var queryObject = {
+                enabled: true
+            };
+            if(req.query.forDropdown){
+                queryObject.description = { $exists: true, $ne : '' };
+            }
+            if(req.query.id){
+                queryObject._id = ObjectId(req.query.id);
+            }
+                Pathologies.find(queryObject).sort({"display_name": 1}).exec(function(err, pathologies) {
+                    if(err) {
+                        console.log(err);
+                        handleError(res,err,500);
+                    }
+                    else {
+                        handleSuccess(res, pathologies);
+                    }
+                });
         });
 
     app.use('/api', router);

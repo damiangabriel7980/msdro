@@ -53,6 +53,13 @@
                     </div>
                 </div>
         <div class="col-md-12 marginTop20">
+            <div class="form-group">
+                <label>Patologii:</label>
+                <my-multiple-select all-objects="pathologies" selected-objects="myPathologies.selectedPathologies" track-by="_id" display-by="display_name"
+                                    output="notUsed"></my-multiple-select>
+            </div>
+        </div>
+        <div class="col-md-12 marginTop20">
             <button class="btn btn-default" type="file" ngf-select ngf-change="headerSelected($files, $event)" ngf-multiple="false"
                     ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca header</button>
             <span ng-if="headerImageBody">{{headerImageBody.name}}</span>

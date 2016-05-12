@@ -67,6 +67,10 @@ controllers.controller('JanuviaUsersView', ['$scope', '$state', 'JanuviaService'
 
     $scope.selectedItems = new Set();
 
+    $scope.entities = {
+        'januvia_users': 'users_associated'
+    };
+
     $scope.addToSelectedItems = function(id){
         if($scope.selectedItems.has(id)){
             $scope.selectedItems.delete(id)
