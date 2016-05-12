@@ -23,7 +23,8 @@
                 childDisplayName: '@',
                 stateName: '@',
                 stateParameters: '@',
-                stateParametersValues: '@'
+                stateParametersValues: '@',
+                activeCondition: '='
             },
             link: function(scope, element, attrs) {
                 // expose functions

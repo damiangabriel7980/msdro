@@ -149,7 +149,7 @@
                     </ul>
                 </li>
 
-                <bootstrap-subnav ng-if="pathologiesWithProducts" objects-array="pathologiesWithProducts" menu-title="Produse" children-property="products" click-on-final-child="closeNavbar" parent-display-name="display_name" child-display-name="name" state-name="biblioteca.produse.prodById" state-parameters="id,area" state-parameters-values="_id,0"></bootstrap-subnav>
+                <bootstrap-subnav ng-if="pathologiesWithProducts" objects-array="pathologiesWithProducts" menu-title="Produse" children-property="products" click-on-final-child="closeNavbar" parent-display-name="display_name" child-display-name="name" active-condition="$state.includes('biblioteca.produse')" state-name="biblioteca.produse.prodById" state-parameters="id,area" state-parameters-values="_id,0"></bootstrap-subnav>
 
                 <li class="dropdown" ng-class="{'active': $state.includes('calendar') || $state.includes('conferinte')}">
                     <a class="dropdown-toggle " data-toggle="dropdown">
@@ -160,7 +160,7 @@
                         <li ui-sref="conferinte" href="#/evenimente/conferinte" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-facetime-video"></i>&nbspConferinte live</a></li>
                     </ul>
                 </li>
-                <li class="dropdown" ng-class="{'active': $state.includes('biblioteca') || $state.includes('elearning')}">
+                <li class="dropdown" ng-class="{'active': ($state.includes('biblioteca') && !$state.includes('biblioteca.produse')) || $state.includes('elearning')}">
                     <a class="dropdown-toggle" data-toggle="dropdown">
                         Resurse <b class="caret"></b>
                     </a>
