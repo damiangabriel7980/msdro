@@ -4372,7 +4372,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 );
             }else{
                 if(req.query.idPathology && req.query.idPathology != 0){
-                    Pathologies.distinct("_id", {$and: [{_id: req.query.idPathology}, { $exists: true, $ne : false }]}).exec(function(err, pathologies){
+                    Pathologies.distinct("_id", {$and: [{_id: req.query.idPathology}, { enabled: { $exists: true, $ne : false }}]}).exec(function(err, pathologies){
                         if(err){
                             handleError(res,err,500);
                         }else{
