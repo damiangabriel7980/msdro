@@ -105,15 +105,11 @@ var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     return deferred.promise;
 };
 
-var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNameForAssociatedItems, enabledProperty, forProductsMenu, firstLetter, propertyToSortBy, propertyToFilterBy, idPathology){
+var queryForPathologiesWithOptionalAttachedItems = function(objectToUseForPathologiesQuery, justPathologies, entityToAssociate, propertyNameForAssociatedItems, enabledPropertyForAssociatedItems, forProductsMenu, firstLetterFilter, propertyToSortAssociatedItems, propertyToFilterBy){
     var deferred = Q.defer();
     var pathologiesToSend = [];
-    var queryPathology = {
-        enabled: true
-    };
-    if(idPathology){
-        queryPathology._id = idPathology;
-    }
+    var queryPathology = objectToUseForPathologiesQuery ? objectToUseForPathologiesQuery : { enabled: true };
+    console.log(queryPathology);
     //get pathologies and for each get list of products
     Pathologies.find(queryPathology).sort('display_name').exec(function(err, pathologies){
         if(err)
@@ -121,53 +117,60 @@ var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNa
             deferred.reject(err);
         }
         else {
-            async.each(pathologies, function(pathology, callback){
-                var q = {
-                    pathologiesID : {$in: [pathology._id]}
-                };
-                var sortObject = {};
-                if(firstLetter)
-                    q[propertyToFilterBy] = UtilsModule.regexes.startsWithLetter(firstLetter);
-                if(propertyToSortBy)
-                    sortObject[propertyToSortBy] = 1;
-                if(enabledProperty){
-                    q[enabledProperty] = { $exists: true, $ne : false };
-                }
-                entityToAssociate.find(q).sort(sortObject).exec(function (error, associated) {
-                    if(err){
-                        callback(err)
-                    } else  {
-                        if(associated.length > 0){
-                            var objectToPush = {
-                                _id: pathology._id,
-                                display_name: pathology.display_name,
-                                description: pathology.description,
-                                header_image: pathology.header_image
-                            };
-                            objectToPush[propertyNameForAssociatedItems] = associated;
-                            pathologiesToSend.push(objectToPush);
-                            callback();
-                        } else {
-                            callback();
+            if(justPathologies) {
+                deferred.resolve(pathologies);
+            } else {
+                async.each(pathologies, function(pathology, callback){
+                    var q = {
+                        pathologiesID : {$in: [pathology._id]}
+                    };
+                    var sortObject = {};
+                    if(firstLetterFilter)
+                        q[propertyToFilterBy] = UtilsModule.regexes.startsWithLetter(firstLetterFilter);
+                    if(propertyToSortAssociatedItems)
+                        sortObject[propertyToSortAssociatedItems] = 1;
+                    if(enabledPropertyForAssociatedItems){
+                        q[enabledPropertyForAssociatedItems] = { $exists: true, $ne : false };
+                    }
+                    entityToAssociate.find(q).sort(sortObject).exec(function (error, associated) {
+                        if(err){
+                            callback(err)
+                        } else  {
+                            if(associated.length > 0){
+                                var objectToPush = {
+                                    _id: pathology._id,
+                                    display_name: pathology.display_name,
+                                    description: pathology.description,
+                                    header_image: pathology.header_image
+                                };
+                                objectToPush[propertyNameForAssociatedItems] = associated;
+                                pathologiesToSend.push(objectToPush);
+                                callback();
+                            } else {
+                                if(!forProductsMenu){
+                                    pathologiesToSend.push(pathology);
+                                }
+                                callback();
+                            }
                         }
+                    })
+                }, function(err){
+                    if(err){
+                        deferred.reject(err);
+                    } else {
+                        pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
+                            return obj.display_name;
+                        });
+                        if(forProductsMenu){
+                            pathologiesToSend.unshift({
+                                _id: 0,
+                                display_name: 'Toate produsele'
+                            })
+                        }
+                        deferred.resolve(pathologiesToSend);
                     }
                 })
-            }, function(err){
-                if(err){
-                    deferred.reject(err);
-                } else {
-                    pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
-                        return obj.display_name;
-                    });
-                    if(forProductsMenu){
-                        pathologiesToSend.unshift({
-                            _id: 0,
-                            display_name: 'Toate produsele'
-                        })
-                    }
-                    deferred.resolve(pathologiesToSend);
-                }
-            })
+            }
         }
     });
     return deferred.promise;
@@ -3951,7 +3954,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     forDropdownMenu = true;
                 if(req.query.firstLetter)
                     letter = req.query.firstLetter;
-                getAssociatedElementsForPathologies(specialProduct, 'products', 'enabled', forDropdownMenu, letter, 'product_name', 'product_name').then(
+                queryForPathologiesWithOptionalAttachedItems(false, false, specialProduct, 'products', 'enabled', forDropdownMenu, letter, 'product_name', 'product_name').then(
                     function (success) {
                         handleSuccess(res,success);
                     },
@@ -4413,7 +4416,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     });
                 }else{
                     if(req.query.forMenu){
-                        getAssociatedElementsForPathologies(Products, 'products', 'enable').then(
+                        queryForPathologiesWithOptionalAttachedItems(false, true, Products,  'products', 'enable').then(
                             function (success) {
                                 handleSuccess(res,success);
                             },
@@ -4583,20 +4586,22 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var queryObject = {
                 enabled: true
             };
+            var justPathologies = false;
             if(req.query.forDropdown){
                 queryObject.description = { $exists: true, $ne : '' };
+                justPathologies = true;
             }
             if(req.query.id){
                 queryObject._id = req.query.id;
             }
-                Pathologies.find(queryObject).sort({"display_name": 1}).exec(function(err, pathologies) {
-                    if(err) {
-                        handleError(res,err,500);
-                    }
-                    else {
-                        handleSuccess(res, pathologies);
-                    }
-                });
+            queryForPathologiesWithOptionalAttachedItems(queryObject, justPathologies, specialProduct, 'products', 'enabled', false, false, 'product_name', 'product_name').then(
+                function (success) {
+                    handleSuccess(res,success);
+                },
+                function (err) {
+                    handleError(res,err,500);
+                }
+            )
         });
 
     app.use('/api', router);
