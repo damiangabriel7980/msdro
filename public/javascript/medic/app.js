@@ -130,6 +130,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'ProductPageList',
+                files: [
+                    'javascript/medic/ProductPageControllers/ProductPageList.js'
+                ]
+            },
+            {
                 name: 'Profile',
                 files: [
                     'javascript/medic/ProfileControllers/Profile.js'
@@ -512,6 +518,14 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/menuItem/:menuId/:childId',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
             controller: 'ProductPageMenu'
+        })
+        .state('productList', {
+            url: '/productList',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_List.html',
+            controller: 'ProductPageList',
+            resolve: {
+                loadDeps: loadStateDeps(['ProductPageList'])
+            }
         })
         .state('groupSpecialProduct.speakers', {
             url: '/speakers',

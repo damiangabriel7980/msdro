@@ -13,6 +13,7 @@
                 defaultImagePath: '@',
                 titleAttr: '@',
                 textAttr: '@',
+                textAttrAlt: '=',
                 navigate: '='
             },
             link: function(scope, element, attrs) {

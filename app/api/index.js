@@ -105,31 +105,44 @@ var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     return deferred.promise;
 };
 
-var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNameForAssociatedItems, enabledProperty){
+var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNameForAssociatedItems, enabledProperty, forProductsMenu, firstLetter, propertyToSortBy, propertyToFilterBy, idPathology){
     var deferred = Q.defer();
     var pathologiesToSend = [];
+    var queryPathology = {
+        enabled: true
+    };
+    if(idPathology){
+        queryPathology._id = idPathology;
+    }
     //get pathologies and for each get list of products
-    Pathologies.find({enabled: true}).sort('display_name').exec(function(err, pathologies){
+    Pathologies.find(queryPathology).sort('display_name').exec(function(err, pathologies){
         if(err)
         {
             deferred.reject(err);
         }
         else {
             async.each(pathologies, function(pathology, callback){
-                var qObject = {
+                var q = {
                     pathologiesID : {$in: [pathology._id]}
                 };
+                var sortObject = {};
+                if(firstLetter)
+                    q[propertyToFilterBy] = UtilsModule.regexes.startsWithLetter(firstLetter);
+                if(propertyToSortBy)
+                    sortObject[propertyToSortBy] = 1;
                 if(enabledProperty){
-                    qObject[enabledProperty] = { $exists: true, $ne : false };
+                    q[enabledProperty] = { $exists: true, $ne : false };
                 }
-                entityToAssociate.find(qObject).exec(function (error, associated) {
+                entityToAssociate.find(q).sort(sortObject).exec(function (error, associated) {
                     if(err){
                         callback(err)
                     } else  {
                         if(associated.length > 0){
                             var objectToPush = {
                                 _id: pathology._id,
-                                display_name: pathology.display_name
+                                display_name: pathology.display_name,
+                                description: pathology.description,
+                                header_image: pathology.header_image
                             };
                             objectToPush[propertyNameForAssociatedItems] = associated;
                             pathologiesToSend.push(objectToPush);
@@ -146,6 +159,12 @@ var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNa
                     pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
                         return obj.display_name;
                     });
+                    if(forProductsMenu){
+                        pathologiesToSend.unshift({
+                            _id: 0,
+                            display_name: 'Toate produsele'
+                        })
+                    }
                     deferred.resolve(pathologiesToSend);
                 }
             })
@@ -3927,7 +3946,12 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 );
             } else {
-                getAssociatedElementsForPathologies(specialProduct, 'products', 'enabled').then(
+                var forDropdownMenu, letter = false;
+                if(req.query.forDropdownMenu)
+                    forDropdownMenu = true;
+                if(req.query.firstLetter)
+                    letter = req.query.firstLetter;
+                getAssociatedElementsForPathologies(specialProduct, 'products', 'enabled', forDropdownMenu, letter, 'product_name', 'product_name').then(
                     function (success) {
                         handleSuccess(res,success);
                     },
@@ -4563,11 +4587,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 queryObject.description = { $exists: true, $ne : '' };
             }
             if(req.query.id){
-                queryObject._id = ObjectId(req.query.id);
+                queryObject._id = req.query.id;
             }
                 Pathologies.find(queryObject).sort({"display_name": 1}).exec(function(err, pathologies) {
                     if(err) {
-                        console.log(err);
                         handleError(res,err,500);
                     }
                     else {

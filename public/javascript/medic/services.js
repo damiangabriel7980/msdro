@@ -233,3 +233,27 @@ services.factory('FormatService', function () {
         }
     }
 });
+
+services.factory('FirstLetterService', function () {
+    return {
+        firstLetters: function (arrayOfItems, propertyToUse) {
+            var firstLetters = {};
+            for(var i=0; i<arrayOfItems.length; i++){
+                firstLetters[arrayOfItems[i][propertyToUse].charAt(0).toUpperCase()] = true;
+            }
+            return firstLetters;
+        }
+    }
+});
+
+services.factory('concatService', function () {
+    return {
+        concatArrayProperties: function (arrayOfItems, propertyToUse) {
+            var arrayToSend = [];
+            for(var i=0; i < arrayOfItems.length; i++){
+                arrayToSend = arrayToSend.concat(arrayOfItems[i][propertyToUse]);
+            }
+            return arrayToSend;
+        }
+    }
+});
