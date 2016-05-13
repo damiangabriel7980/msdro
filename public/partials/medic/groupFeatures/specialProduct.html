@@ -32,9 +32,21 @@
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Q & A</div>
                 </accordion-heading>
             </accordion-group>
+        </accordion>
+        <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
             <accordion-group is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
+                </accordion-heading>
+            </accordion-group>
+            <accordion-group is-open="status.isFirstOpen" class="parent" ui-sref="pathologies({pathology_id: specialProductPage.pathologiesID[0]._id})">
+                <accordion-heading>
+                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Inapoi la {{specialProductPage.pathologiesID[0].display_name}}</div>
+                </accordion-heading>
+            </accordion-group>
+            <accordion-group is-open="status.isFirstOpen" class="parent" ui-sref="productList">
+                <accordion-heading>
+                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Vezi toate produsele</div>
                 </accordion-heading>
             </accordion-group>
         </accordion>
@@ -75,14 +87,10 @@
                             <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Q & A</div>
                         </accordion-heading>
                     </accordion-group>
-                    <accordion-group is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ng-click="navigateMobile('Sitemap')">
-                        <accordion-heading>
-                            <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
-                        </accordion-heading>
-                    </accordion-group>
                 </accordion>
             </li>
         </ul>
+
         </div>
         <img class="img-responsive hidden-sm hidden-xs img-thumbnail handCursor col-xs-12" ng-if="specialProductPage.logo_path" ng-click="selectFirstMenuItem()" ng-src="{{pathAmazonDev+specialProductPage.logo_path}}" />
     </div>

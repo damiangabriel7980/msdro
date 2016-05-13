@@ -7663,6 +7663,11 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .specialProductMainWrapper {
   margin-top: 20px;
 }
+.specialProductMainWrapper .customBorder {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid lightgrey;
+}
 .specialProductMainWrapper #menuDiv {
   margin-left: 0;
 }

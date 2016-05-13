@@ -105,7 +105,7 @@ var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     return deferred.promise;
 };
 
-var queryForPathologiesWithOptionalAttachedItems = function(objectToUseForPathologiesQuery, justPathologies, entityToAssociate, propertyNameForAssociatedItems, enabledPropertyForAssociatedItems, forProductsMenu, firstLetterFilter, propertyToSortAssociatedItems, propertyToFilterBy){
+var queryForPathologiesWithOptionalAttachedItems = function(objectToUseForPathologiesQuery, justPathologies, entityToAssociate, propertyNameForAssociatedItems, enabledPropertyForAssociatedItems, forProductsMenu, firstLetterFilter, propertyToSortAssociatedItems, propertyToFilterBy, forProductList){
     var deferred = Q.defer();
     var pathologiesToSend = [];
     var queryPathology = objectToUseForPathologiesQuery ? objectToUseForPathologiesQuery : { enabled: true };
@@ -147,7 +147,7 @@ var queryForPathologiesWithOptionalAttachedItems = function(objectToUseForPathol
                                 pathologiesToSend.push(objectToPush);
                                 callback();
                             } else {
-                                if(!forProductsMenu){
+                                if(!forProductsMenu && !forProductList){
                                     pathologiesToSend.push(pathology);
                                 }
                                 callback();
@@ -3937,7 +3937,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/specialProduct')
         .get(function(req, res) {
             if(req.query.id){
-                ContentVerifier.getContentById(specialProduct,req.query.id,null,false,'enabled','speakers','groups').then(
+                ContentVerifier.getContentById(specialProduct,req.query.id,null,false,'enabled','speakers pathologiesID','groups').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -3954,7 +3954,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     forDropdownMenu = true;
                 if(req.query.firstLetter)
                     letter = req.query.firstLetter;
-                queryForPathologiesWithOptionalAttachedItems(false, false, specialProduct, 'products', 'enabled', forDropdownMenu, letter, 'product_name', 'product_name').then(
+                queryForPathologiesWithOptionalAttachedItems(false, false, specialProduct, 'products', 'enabled', forDropdownMenu, letter, 'product_name', 'product_name', true).then(
                     function (success) {
                         handleSuccess(res,success);
                     },

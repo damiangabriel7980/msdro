@@ -251,7 +251,7 @@ services.factory('concatService', function () {
         concatArrayProperties: function (arrayOfItems, propertyToUse) {
             var arrayToSend = [];
             for(var i=0; i < arrayOfItems.length; i++){
-                arrayToSend = arrayToSend.concat(arrayOfItems[i][propertyToUse]);
+                arrayToSend = arrayToSend.concat(arrayOfItems[i][propertyToUse] ? arrayOfItems[i][propertyToUse] : []);
             }
             return arrayToSend;
         }
