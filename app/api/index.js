@@ -4542,7 +4542,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/checkIntroEnabled')
         .get(function (req, res) {
-            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
+            Presentations.findOne({enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -4565,7 +4565,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/introPresentation')
         .get(function (req, res) {
-            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
+            Presentations.findOne({enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
                 if(err){
                     handleError(res,err,500);
                 }else{
