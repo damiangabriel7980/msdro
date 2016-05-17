@@ -35,6 +35,7 @@ var guidelineCategory = require ("../models/guidelineCategory");
 var myPrescription = require("../models/myPrescription");
 var pdf = require("html-pdf");
 var Pathologies = require('../models/pathologies');
+var brochureSection = require('../models/brochureSections');
 
 var xlsx = require("xlsx");
 
@@ -590,6 +591,93 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             });
                         }
                     })
+                }else{
+                    handleError(res,err,404,1);
+                }
+            });
+        });
+
+    router.route('/admin/brochure')
+        .get(function(req, res) {
+            if(req.query.id){
+                brochureSection.findOne({_id:req.query.id}, function(err, pathology) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, pathology);
+                    }
+                })
+            }else{
+                brochureSection.find(function(err, pathologies) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else {
+                        handleSuccess(res, pathologies);
+                    }
+                });
+            }
+        })
+        .post(function(req, res) {
+            var brochure = new brochureSection({
+                title: 'Untitled',
+                last_updated: new Date(),
+                enabled: false
+            });
+            brochure.save(function(err,saved) {
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, {saved: saved}, 2);
+                }
+            });
+        })
+        .put(function(req, res) {
+            // the body will contain an object with the property/properties we want to update
+            brochureSection.update({_id:req.query.id},{$set: req.body}, function(err, pathology) {
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, {}, 3);
+                }
+            });
+        })
+        .delete(function(req, res) {
+            var id = req.query.id;
+            brochureSection.findOne({_id: id}, function (err, brochureS) {
+                if(brochureS){
+                    var imagesToDelete = [];
+                    if(brochureS.title_image)
+                        imagesToDelete.push(brochureS.title_image);
+                    if(brochureS.side_image)
+                        imagesToDelete.push(brochureS.side_image);
+                    //first we'll remove any references to this pathology
+                    brochureSection.remove({_id:id},function(err,cont) {
+                        if (err){
+                            handleError(res,err,500);
+                        }
+                        else{
+                            if(imagesToDelete.length){
+                                async.forEach(imagesToDelete, function (imagePath, callbackImage) {
+                                    amazon.deleteObjectS3(imagePath, function (err, data) {
+                                        if(err){
+                                            callbackImage(err);
+                                        }else{
+                                            callbackImage();
+                                        }
+                                    });
+                                }, function (err) {
+                                    if(err){
+                                        handleError(res,err,409,4);
+                                    }else{
+                                        handleSuccess(res, {}, 7);
+                                    }
+                                });
+                            }else{
+                                handleSuccess(res, {}, 4);
+                            }
+                        }
+                    });
                 }else{
                     handleError(res,err,404,1);
                 }
@@ -4603,6 +4691,19 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             )
         });
+
+    router.route('/brochure')
+        .get(function(req, res) {
+            var queryToExec = req.query.firstOnly ? brochureSection.find({enabled: { $exists: true, $ne : false }}).sort({orderIndex: 1}).limit(1) : brochureSection.find({enabled: { $exists: true, $ne : false }}).sort({orderIndex: 1});
+            queryToExec.exec(function (err, brochureSections) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, brochureSections);
+                }
+            });
+        });
+
 
     app.use('/api', router);
 };

@@ -205,6 +205,14 @@ services.factory('PathologiesService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('brochureService', ['$resource', function($resource){
+    return {
+        sections: $resource('api/brochure', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
 services.factory('multimediaService', ['$resource', function($resource){
     return {
         multimedia: $resource('api/multimedia', {}, {

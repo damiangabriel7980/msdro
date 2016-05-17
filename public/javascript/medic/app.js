@@ -563,6 +563,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl:'partials/medic/groupFeatures/immunologyQA.html',
             controller:'ProductPageQA'
         })
+        .state('about', {
+            url: '/about',
+            templateUrl: '/partials/medic/brochure.html'
+        })
 }]);
 
 app.run(

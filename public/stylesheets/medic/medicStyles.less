@@ -746,6 +746,39 @@ body {
         padding: 0 15px 0 0;
       }
     }
+    .aboutSection{
+      .Title {
+        padding: 0;
+        padding-bottom: 8px !important;
+      }
+      .image{
+        padding: 0;
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+        position: relative;
+      }
+      .paddingLeftBig{
+        padding-left: 30px !important;
+      }
+      .marginTop5px{
+        margin-top: 5px;
+      }
+      .descriptionWrapper{
+        padding: 0;
+        height: 12em;
+        overflow: hidden;
+        &:after{
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          min-height: 4.5em;
+          background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+        }
+      }
+    }
     &:after {
       position: absolute;
       content: '';
