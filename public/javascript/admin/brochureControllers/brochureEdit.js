@@ -98,7 +98,7 @@ controllers.controller('brochureEdit', ['$scope','$rootScope' ,'brochureService'
                             showAlertMessage('uploadAlert', 'danger', 'Eroare la stergerea pozei vechi!', true);
                             $scope.$apply();
                         }else{
-                            putLogoS3($files[0]);
+                            putLogoS3($files[0], sideImage);
                         }
                     });
                 }else{

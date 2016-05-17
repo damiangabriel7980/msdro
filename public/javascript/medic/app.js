@@ -42,6 +42,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Brochure',
+                files: [
+                    'javascript/medic/BrochureControllers/brochure.js'
+                ]
+            },
+            {
                 name: 'PathologiesFilter',
                 files: [
                     'javascript/medic/PathologiesControllers/Pathologies.js'
@@ -565,7 +571,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('about', {
             url: '/about',
-            templateUrl: '/partials/medic/brochure.html'
+            templateUrl: '/partials/medic/brochure.html',
+            controller:'brochureSections',
+            resolve: {
+                loadDeps: loadStateDeps(['Brochure'])
+            }
         })
 }]);
 
@@ -594,6 +604,7 @@ app.run(
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
             $rootScope.defaultProductImage = $rootScope.pathAmazonResources+ "piles-of-pills.jpg";
             $rootScope.defaultUserImage = $rootScope.pathAmazonResources+ "avatar_unknown.png";
+            $rootScope.brochureHeader = $rootScope.pathAmazonResources+ "brochure_header.png";
 
             $rootScope.defaultGroupPhoto = $rootScope.pathAmazonResources + 'customGroups/grup_logo2.png';
 

@@ -6392,6 +6392,12 @@ body .btn {
 .overflowVisible {
   overflow-x: visible !important;
 }
+.noPaddingLeft {
+  padding-left: 0;
+}
+.noPaddingRight {
+  padding-right: 0;
+}
 .elearningMenu {
   position: relative;
 }
