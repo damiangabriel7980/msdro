@@ -78,7 +78,7 @@
                         if(scope.stateParametersExist){
                             params = parseStateParams(scope.stateParameters, scope.stateParametersValues, item)
                         }
-                        $state.go(scope.stateName, params);
+                        $state.go(scope.stateName, params, {inherit: false,reload: true});
                     }
                     scope.closeAllMenus();
                 };
