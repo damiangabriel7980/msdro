@@ -6469,6 +6469,23 @@ body .btn {
 .productsView .noProducts {
   text-align: center;
 }
+.productsView .row-centered {
+  text-align: center;
+}
+.productsView .vertical-content-list .TextWrapper {
+  height: 8em;
+}
+.productsView .vertical-content-list .buttonWrapper {
+  text-align: center;
+}
+.productsView .col-centered {
+  display: inline-block;
+  float: none;
+  /* reset the text-align */
+  text-align: left;
+  /* inline-block space fix */
+  margin-right: -4px;
+}
 .productsView .product {
   margin-bottom: 25px;
   padding: 0 25px 0 0;
