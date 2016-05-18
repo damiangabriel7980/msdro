@@ -6,7 +6,7 @@
                 {{pathology.display_name}}
             </h3>
         </div>
-        <div class="col-md-3 col-sm-4 product" ng-repeat="prod in pathology.products | orderBy:'product_name' ">
+        <div class="col-md-3 col-sm-4 product" ng-repeat="prod in pathology.associated_items | orderBy:'product_name' ">
             <vertical-content-list content="prod" image-path-attr="logo_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
                                    title-attr="product_name" text-attr="general_description" navigate="goToSpecialProduct" with-background></vertical-content-list>
         </div>

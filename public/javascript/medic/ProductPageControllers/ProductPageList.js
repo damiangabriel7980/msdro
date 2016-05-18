@@ -9,7 +9,7 @@ app.controllerProvider.register('ProductPageList', ['$scope', '$stateParams', 's
         }).$promise.then(function(resp){
             $scope.pathologiesAndProducts = Success.getObject(resp);
             if(!letter){
-                var arrayToUseForFilter = concatService.concatArrayProperties($scope.pathologiesAndProducts, 'products');
+                var arrayToUseForFilter = concatService.concatArrayProperties($scope.pathologiesAndProducts, 'associated_items');
                 $scope.firstLetters = FirstLetterService.firstLetters(arrayToUseForFilter, 'product_name');
             }
         });

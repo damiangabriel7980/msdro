@@ -10,8 +10,10 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         $scope.pathologies = Success.getObject(resp).length > 0 ? Success.getObject(resp): null;
     });
 
-    specialProductService.SpecialProduct.query({forDropdownMenu: true}).$promise.then(function(result){
+    specialProductService.SpecialProduct.query().$promise.then(function(result){
         $scope.pathologiesWithProducts = Success.getObject(result).length > 0 ? Success.getObject(result): null;
+        if($scope.pathologiesWithProducts)
+            $scope.pathologiesWithProducts.unshift({_id: 0,display_name: 'Toate produsele'})
     });
 
     //get Default Group

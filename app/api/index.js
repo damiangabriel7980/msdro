@@ -106,11 +106,10 @@ var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     return deferred.promise;
 };
 
-var queryForPathologiesWithOptionalAttachedItems = function(objectToUseForPathologiesQuery, justPathologies, entityToAssociate, propertyNameForAssociatedItems, enabledPropertyForAssociatedItems, forProductsMenu, firstLetterFilter, propertyToSortAssociatedItems, propertyToFilterBy, forProductList){
+var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQParams){
     var deferred = Q.defer();
     var pathologiesToSend = [];
-    var queryPathology = objectToUseForPathologiesQuery ? objectToUseForPathologiesQuery : { enabled: true };
-    console.log(queryPathology);
+    var queryPathology = pathQParams ? pathQParams : { enabled: true };
     //get pathologies and for each get list of products
     Pathologies.find(queryPathology).sort('display_name').exec(function(err, pathologies){
         if(err)
@@ -118,60 +117,39 @@ var queryForPathologiesWithOptionalAttachedItems = function(objectToUseForPathol
             deferred.reject(err);
         }
         else {
-            if(justPathologies) {
-                deferred.resolve(pathologies);
-            } else {
-                async.each(pathologies, function(pathology, callback){
-                    var q = {
-                        pathologiesID : {$in: [pathology._id]}
-                    };
-                    var sortObject = {};
-                    if(firstLetterFilter)
-                        q[propertyToFilterBy] = UtilsModule.regexes.startsWithLetter(firstLetterFilter);
-                    if(propertyToSortAssociatedItems)
-                        sortObject[propertyToSortAssociatedItems] = 1;
-                    if(enabledPropertyForAssociatedItems){
-                        q[enabledPropertyForAssociatedItems] = { $exists: true, $ne : false };
-                    }
-                    entityToAssociate.find(q).sort(sortObject).exec(function (error, associated) {
-                        if(err){
-                            callback(err)
-                        } else  {
-                            if(associated.length > 0){
-                                var objectToPush = {
-                                    _id: pathology._id,
-                                    display_name: pathology.display_name,
-                                    description: pathology.description,
-                                    header_image: pathology.header_image
-                                };
-                                objectToPush[propertyNameForAssociatedItems] = associated;
-                                pathologiesToSend.push(objectToPush);
-                                callback();
-                            } else {
-                                if(!forProductsMenu && !forProductList){
-                                    pathologiesToSend.push(pathology);
-                                }
-                                callback();
-                            }
-                        }
-                    })
-                }, function(err){
+            async.each(pathologies, function(pathology, callback){
+                itemQParams.query.pathologiesID = {$in: [pathology._id]};
+                entityToAssociate.find(itemQParams.query).sort(itemQParams.sort).exec(function (error, associated) {
                     if(err){
-                        deferred.reject(err);
-                    } else {
-                        pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
-                            return obj.display_name;
-                        });
-                        if(forProductsMenu){
-                            pathologiesToSend.unshift({
-                                _id: 0,
-                                display_name: 'Toate produsele'
-                            })
+                        callback(err)
+                    } else  {
+                        if(associated.length > 0){
+                            var objectToPush = {
+                                _id: pathology._id,
+                                display_name: pathology.display_name,
+                                description: pathology.description,
+                                header_image: pathology.header_image
+                            };
+                            objectToPush['associated_items'] = associated;
+                            pathologiesToSend.push(objectToPush);
+                            callback();
+                        } else {
+                            if(queryPathology._id)
+                                pathologiesToSend.push(pathology);
+                            callback();
                         }
-                        deferred.resolve(pathologiesToSend);
                     }
                 })
-            }
+            }, function(err){
+                if(err){
+                    deferred.reject(err);
+                } else {
+                    pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
+                        return obj.display_name;
+                    });
+                    deferred.resolve(pathologiesToSend);
+                }
+            })
         }
     });
     return deferred.promise;
@@ -4037,12 +4015,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 );
             } else {
-                var forDropdownMenu, letter = false;
-                if(req.query.forDropdownMenu)
-                    forDropdownMenu = true;
+                var itemQParams = {
+                    query: {
+                        enabled: { $exists: true, $ne : false }
+                    },
+                    sort: {
+                        product_name: 1
+                    }
+                };
                 if(req.query.firstLetter)
-                    letter = req.query.firstLetter;
-                queryForPathologiesWithOptionalAttachedItems(false, false, specialProduct, 'products', 'enabled', forDropdownMenu, letter, 'product_name', 'product_name', true).then(
+                    itemQParams.query.product_name = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                getPathologiesWithItems(specialProduct, itemQParams).then(
                     function (success) {
                         handleSuccess(res,success);
                     },
@@ -4503,26 +4486,15 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         }
                     });
                 }else{
-                    if(req.query.forMenu){
-                        queryForPathologiesWithOptionalAttachedItems(false, true, Products,  'products', 'enable').then(
-                            function (success) {
-                                handleSuccess(res,success);
-                            },
-                            function (err) {
-                                handleError(res,err,500);
-                            }
-                        )
-                    } else {
-                        var q = {enable: { $exists: true, $ne : false }};
-                        if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
-                        Products.find(q).sort({"name": 1}).exec(function(err, cont) {
-                            if(err){
-                                handleError(res,err,500);
-                            }else{
-                                handleSuccess(res, cont);
-                            }
-                        })
-                    }
+                    var q = {enable: { $exists: true, $ne : false }};
+                    if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                    Products.find(q).sort({"name": 1}).exec(function(err, cont) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, cont);
+                        }
+                    })
                 }
             }
         });
@@ -4671,25 +4643,39 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/pathologies')
         .get(function(req, res) {
-            var queryObject = {
-                enabled: true
+            var queryPathObject = {
+                enabled: { $exists: true, $ne : false }
             };
-            var justPathologies = false;
-            if(req.query.forDropdown){
-                queryObject.description = { $exists: true, $ne : '' };
-                justPathologies = true;
-            }
             if(req.query.id){
-                queryObject._id = req.query.id;
+                queryPathObject._id = req.query.id;
             }
-            queryForPathologiesWithOptionalAttachedItems(queryObject, justPathologies, specialProduct, 'products', 'enabled', false, false, 'product_name', 'product_name').then(
-                function (success) {
-                    handleSuccess(res,success);
-                },
-                function (err) {
-                    handleError(res,err,500);
-                }
-            )
+            if(req.query.forDropdown){
+                queryPathObject.description = { $exists: true, $ne : '' };
+                Pathologies.find(queryPathObject).sort('display_name').exec(function (err, pathologies) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, pathologies);
+                    }
+                })
+            } else {
+                var itemQParams = {
+                    query: {
+                        enabled: { $exists: true, $ne : false }
+                    },
+                    sort: {
+                        product_name: 1
+                    }
+                };
+                getPathologiesWithItems(specialProduct, itemQParams, queryPathObject).then(
+                    function (success) {
+                        handleSuccess(res,success);
+                    },
+                    function (err) {
+                        handleError(res,err,500);
+                    }
+                )
+            }
         });
 
     router.route('/brochure')

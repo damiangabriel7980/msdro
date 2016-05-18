@@ -149,7 +149,7 @@
                     </ul>
                 </li>
 
-                <bootstrap-subnav ng-if="pathologiesWithProducts" active-conditions="$state.includes('groupSpecialProduct') || $state.includes('productList')" objects-array="pathologiesWithProducts" menu-title="Produse" children-property="products" click-on-final-child="closeNavbar" parent-display-name="display_name" child-display-name="product_name" no-children-state-name="productList" no-children-state-parameters-exist="false" state-parameters-exist="true" state-name="groupSpecialProduct.menuItem" state-parameters="product_id" state-parameters-values="_id"></bootstrap-subnav>
+                <bootstrap-subnav ng-if="pathologiesWithProducts" active-conditions="$state.includes('groupSpecialProduct') || $state.includes('productList')" objects-array="pathologiesWithProducts" menu-title="Produse" children-property="associated_items" click-on-final-child="closeNavbar" parent-display-name="display_name" child-display-name="product_name" no-children-state-name="productList" no-children-state-parameters-exist="false" state-parameters-exist="true" state-name="groupSpecialProduct.menuItem" state-parameters="product_id" state-parameters-values="_id"></bootstrap-subnav>
 
                 <li class="dropdown" ng-class="{'active': $state.includes('calendar') || $state.includes('conferinte')}">
                     <a class="dropdown-toggle " data-toggle="dropdown">
