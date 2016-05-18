@@ -7834,6 +7834,21 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .prescription {
   margin-top: 15px;
 }
+.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  float: left;
+}
+@media (max-width: 992px) {
+  .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle {
+    position: relative;
+  }
+}
+.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle .noMarginBottom {
+  margin-bottom: 0;
+  line-height: 0.8em;
+}
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .job_id {
   margin-top: 20px;
 }
@@ -8775,6 +8790,9 @@ a:focus {
 }
 .marginTop25px {
   margin-top: 25px;
+}
+.margins20 {
+  margin: 20px 0;
 }
 .extraPaddingSpeaker {
   padding: 0 0 25px 0 !important;

@@ -4,15 +4,15 @@
             <div class="col-xs-12">
                 <img class="col-xs-12 noPadding" ng-if="brochureHeader" no-cache-src="{{brochureHeader}}" />
             </div>
-            <div class="col-xs-12" ng-repeat="section in brochureSections">
-                <div class="col-xs-12">
-                    <div class="col-xs-12 col-sm-8 col-md-3 noPadding">
-                        <img class="col-xs-12 noPadding" ng-if="section.title_image" no-cache-src="{{pathAmazonDev + section.title_image}}" />
+            <div class="col-xs-12 noPadding" ng-repeat="section in brochureSections">
+                <div class="col-xs-12 lineHeight16" ng-class="{'margins20': section.title_image}">
+                    <div class="col-xs-12 col-sm-12 col-md-2 noPaddingLeft" ng-if="section.title_image">
+                        <img class="col-xs-12 noPadding" no-cache-src="{{pathAmazonDev + section.title_image}}" />
                     </div>
-                </div>
-                <div class="col-xs-12">
-                    <h3 class="specialProductTitle" ng-if="section.title" convert-special conver="section.title" ng-bind-html="trustAsHtml(section.title)">
-                    </h3>
+                    <div class="col-xs-12 col-sm-12 col-md-10 brochureTitle" ng-class="{'noPaddingLeft': isMobile()}" ng-if="section.title">
+                        <h3 class="specialProductTitle noMarginBottom" convert-special conver="section.title" ng-bind-html="trustAsHtml(section.title)">
+                        </h3>
+                    </div>
                 </div>
                 <div class="col-xs-12 justify"  ng-if="section.text">
                     <div class="col-md-5 col-sm-6 noPaddingLeft" ng-if="section.side_image">

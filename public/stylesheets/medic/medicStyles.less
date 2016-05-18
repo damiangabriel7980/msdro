@@ -1449,6 +1449,19 @@ body {
       .prescription {
         margin-top: 15px
       }
+      .brochureTitle{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        float: left;
+        @media (max-width: @screen-md-min) {
+          position: relative;
+        }
+        .noMarginBottom{
+          margin-bottom: 0;
+          line-height: 0.8em;
+        }
+      }
       .job_id {
         margin-top: 20px
       }
@@ -2461,6 +2474,10 @@ a:focus {
 
 .marginTop25px {
   margin-top: 25px;
+}
+
+.margins20 {
+  margin: 20px 0;
 }
 
 
