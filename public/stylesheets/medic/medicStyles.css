@@ -7836,7 +7836,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle {
   position: absolute;
-  right: 0;
+  left: 0;
   bottom: 0;
   float: left;
 }
@@ -7847,7 +7847,6 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle .noMarginBottom {
   margin-bottom: 0;
-  line-height: 0.8em;
 }
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .job_id {
   margin-top: 20px;
