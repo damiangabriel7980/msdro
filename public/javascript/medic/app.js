@@ -42,6 +42,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'Brochure',
+                files: [
+                    'javascript/medic/BrochureControllers/brochure.js'
+                ]
+            },
+            {
                 name: 'PathologiesFilter',
                 files: [
                     'javascript/medic/PathologiesControllers/Pathologies.js'
@@ -127,6 +133,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'javascript/medic/ProductPageControllers/ProductPageSpeaker.js',
                     'javascript/medic/ProductPageControllers/ProductPageQA.js',
                     'javascript/medic/ModalControllers/immunologyQAModal.js'
+                ]
+            },
+            {
+                name: 'ProductPageList',
+                files: [
+                    'javascript/medic/ProductPageControllers/ProductPageList.js'
                 ]
             },
             {
@@ -513,6 +525,14 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
             controller: 'ProductPageMenu'
         })
+        .state('productList', {
+            url: '/productList',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_List.html',
+            controller: 'ProductPageList',
+            resolve: {
+                loadDeps: loadStateDeps(['ProductPageList'])
+            }
+        })
         .state('groupSpecialProduct.speakers', {
             url: '/speakers',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakers.html'
@@ -549,6 +569,14 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl:'partials/medic/groupFeatures/immunologyQA.html',
             controller:'ProductPageQA'
         })
+        .state('about', {
+            url: '/about',
+            templateUrl: '/partials/medic/brochure.html',
+            controller:'brochureSections',
+            resolve: {
+                loadDeps: loadStateDeps(['Brochure'])
+            }
+        })
 }]);
 
 app.run(
@@ -576,6 +604,7 @@ app.run(
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
             $rootScope.defaultProductImage = $rootScope.pathAmazonResources+ "piles-of-pills.jpg";
             $rootScope.defaultUserImage = $rootScope.pathAmazonResources+ "avatar_unknown.png";
+            $rootScope.brochureHeader = $rootScope.pathAmazonResources+ "brochure_header.png";
 
             $rootScope.defaultGroupPhoto = $rootScope.pathAmazonResources + 'customGroups/grup_logo2.png';
 

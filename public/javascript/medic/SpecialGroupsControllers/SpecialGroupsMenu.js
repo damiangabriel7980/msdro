@@ -1,4 +1,4 @@
-controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', 'IntroService', '$state', '$timeout', 'CollectionsService', 'Success', 'Error', 'PathologiesService', 'ProductService', function($scope, $rootScope, $stateParams, SpecialFeaturesService, IntroService, $state, $timeout, CollectionsService, Success, Error, PathologiesService, ProductService){
+controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$stateParams', 'SpecialFeaturesService', 'IntroService', '$state', '$timeout', 'CollectionsService', 'Success', 'Error', 'PathologiesService', 'specialProductService', function($scope, $rootScope, $stateParams, SpecialFeaturesService, IntroService, $state, $timeout, CollectionsService, Success, Error, PathologiesService, specialProductService){
 
     //get available groups
     SpecialFeaturesService.specialGroups.getAll().then(function (groups) {
@@ -10,8 +10,10 @@ controllers.controller('SpecialGroupsMenu', ['$scope', '$rootScope', '$statePara
         $scope.pathologies = Success.getObject(resp).length > 0 ? Success.getObject(resp): null;
     });
 
-    ProductService.products.query({forMenu: true}).$promise.then(function(result){
+    specialProductService.SpecialProduct.query().$promise.then(function(result){
         $scope.pathologiesWithProducts = Success.getObject(result).length > 0 ? Success.getObject(result): null;
+        if($scope.pathologiesWithProducts)
+            $scope.pathologiesWithProducts.unshift({_id: 0,display_name: 'Toate produsele'})
     });
 
     //get Default Group

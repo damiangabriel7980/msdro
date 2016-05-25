@@ -3,7 +3,7 @@
  */
 app.controllerProvider.register('PathologiesController', ['$scope', 'PathologiesService','$sce','$state', 'Success', '$stateParams', function($scope, PathologiesService, $sce,$state, Success, $stateParams){
 
-    $scope.selectedPathology = 0;
+    $scope.selectedPathology = $state.params.idPathology ? $state.params.idPathology : $state.params.idArea;
 
     PathologiesService.pathologies.query().$promise.then(function(resp){
         $scope.allPathologies = Success.getObject(resp);

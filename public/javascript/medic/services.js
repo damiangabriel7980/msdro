@@ -205,6 +205,14 @@ services.factory('PathologiesService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('brochureService', ['$resource', function($resource){
+    return {
+        sections: $resource('api/brochure', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
 services.factory('multimediaService', ['$resource', function($resource){
     return {
         multimedia: $resource('api/multimedia', {}, {
@@ -230,6 +238,30 @@ services.factory('FormatService', function () {
             }else{
                 return null;
             }
+        }
+    }
+});
+
+services.factory('FirstLetterService', function () {
+    return {
+        firstLetters: function (arrayOfItems, propertyToUse) {
+            var firstLetters = {};
+            for(var i=0; i<arrayOfItems.length; i++){
+                firstLetters[arrayOfItems[i][propertyToUse].charAt(0).toUpperCase()] = true;
+            }
+            return firstLetters;
+        }
+    }
+});
+
+services.factory('concatService', function () {
+    return {
+        concatArrayProperties: function (arrayOfItems, propertyToUse) {
+            var arrayToSend = [];
+            for(var i=0; i < arrayOfItems.length; i++){
+                arrayToSend = arrayToSend.concat(arrayOfItems[i][propertyToUse] ? arrayOfItems[i][propertyToUse] : []);
+            }
+            return arrayToSend;
         }
     }
 });

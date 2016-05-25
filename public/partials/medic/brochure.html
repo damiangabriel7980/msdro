@@ -1,0 +1,28 @@
+<div class="row-fluid specialProductMainWrapper col-md-offset-2 col-xs-offset-0">
+    <div class="col-md-10 col-xs-12" id="descriptionDiv">
+        <div class="col-xs-12 well well-lg DescriptionWrapper">
+            <div class="col-xs-12">
+                <img class="col-xs-12 noPadding" ng-if="brochureHeader" no-cache-src="{{brochureHeader}}" />
+            </div>
+            <div class="col-xs-12 noPadding" ng-repeat="section in brochureSections">
+                <div class="col-xs-12 lineHeight16" ng-class="{'margins20': section.title_image}">
+                    <div class="col-xs-12 col-sm-12 col-md-10 brochureTitle" ng-class="{'noPaddingLeft': isMobile()}" ng-if="section.title">
+                        <h3 class="specialProductTitle noMarginBottom" convert-special conver="section.title" ng-bind-html="trustAsHtml(section.title)">
+                        </h3>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-2 noPadding pull-right" ng-if="section.title_image">
+                        <img class="col-xs-12 noPadding" no-cache-src="{{pathAmazonDev + section.title_image}}" />
+                    </div>
+                </div>
+                <div class="col-xs-12 justify"  ng-if="section.text">
+                    <div class="col-md-5 col-sm-6 noPaddingLeft" ng-if="section.side_image">
+                        <img class="col-xs-12 noPadding" no-cache-src="{{pathAmazonDev + section.side_image}}" />
+                    </div>
+                    <p convert-special conver="section.text" ng-bind-html="trustAsHtml(section.text)">
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

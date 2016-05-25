@@ -69,6 +69,14 @@ body {
   overflow-x: visible !important;
 }
 
+.noPaddingLeft{
+  padding-left: 0;
+}
+
+.noPaddingRight{
+  padding-right: 0;
+}
+
 .elearningMenu{
     position: relative;
   .ui-tree-styled{
@@ -134,9 +142,31 @@ body {
   .noProducts {
     text-align: center
   }
+  .row-centered {
+    text-align:center;
+  }
+  .vertical-content-list{
+    .TextWrapper{
+      height: 8em;
+    }
+    .buttonWrapper{
+      text-align: center;
+    }
+  }
+  .col-centered {
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:-4px;
+  }
   .product {
     margin-bottom: 25px;
     padding: 0 25px 0 0;
+  }
+  .marginLeft35{
+    margin-left: 35px;
   }
 }
 
@@ -743,6 +773,39 @@ body {
         padding: 0 15px 0 0;
       }
     }
+    .aboutSection{
+      .Title {
+        padding: 0;
+        padding-bottom: 8px !important;
+      }
+      .image{
+        padding: 0;
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+        position: relative;
+      }
+      .paddingLeftBig{
+        padding-left: 30px !important;
+      }
+      .marginTop5px{
+        margin-top: 5px;
+      }
+      .descriptionWrapper{
+        padding: 0;
+        height: 12em;
+        overflow: hidden;
+        &:after{
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          min-height: 4.5em;
+          background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+        }
+      }
+    }
     &:after {
       position: absolute;
       content: '';
@@ -1279,6 +1342,11 @@ body {
 //============================================================================================= PRODUCT PAGE
 .specialProductMainWrapper {
   margin-top: 20px;
+  .customBorder{
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid lightgrey;
+  }
   #menuDiv {
     margin-left: 0;
     .menuMarginBottom {
@@ -1399,6 +1467,18 @@ body {
       border-radius: 0px;
       .prescription {
         margin-top: 15px
+      }
+      .brochureTitle{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        float: left;
+        @media (max-width: @screen-md-min) {
+          position: relative;
+        }
+        .noMarginBottom{
+          margin-bottom: 0;
+        }
       }
       .job_id {
         margin-top: 20px
@@ -2412,6 +2492,10 @@ a:focus {
 
 .marginTop25px {
   margin-top: 25px;
+}
+
+.margins20 {
+  margin: 20px 0;
 }
 
 

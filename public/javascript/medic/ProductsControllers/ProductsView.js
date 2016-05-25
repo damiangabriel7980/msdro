@@ -7,22 +7,13 @@
  *
  * @requires $scope
  * */
-app.controllerProvider.register('ProductsView', ['$scope', '$state', '$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', 'Success', 'SpecialFeaturesService', function($scope, $state, $rootScope,ProductService,$stateParams,$sce,$window,$timeout,Success,SpecialFeaturesService){
+app.controllerProvider.register('ProductsView', ['$scope', '$state', '$rootScope' ,'ProductService','$stateParams','$sce','$window','$timeout', 'Success', 'SpecialFeaturesService', 'FirstLetterService', function($scope, $state, $rootScope,ProductService,$stateParams,$sce,$window,$timeout,Success,SpecialFeaturesService, FirstLetterService){
     $scope.lmt=8;
     $scope.status = {
         isopen: false
     };
     $scope.increaseLimit=function(){
         $scope.lmt+=8;
-    };
-
-    var refreshLetters = function (products) {
-        //keeping the letters in an object rather than an array will insure that they are alphabetically sorted
-        var firstLetters = {};
-        for(var i=0; i<products.length; i++){
-            firstLetters[products[i].name.charAt(0).toUpperCase()] = true;
-        }
-        $scope.firstLetters = firstLetters;
     };
 
     $scope.getProducts = function (letter) {
@@ -35,7 +26,8 @@ app.controllerProvider.register('ProductsView', ['$scope', '$state', '$rootScope
                 })
                 .$promise.then(function(result){
                     $scope.products = Success.getObject(result);
-                    if(!letter) refreshLetters(Success.getObject(result));
+                    if(!letter)
+                        $scope.firstLetters = FirstLetterService.firstLetters(Success.getObject(result), 'name');
                 });
         });
     };
