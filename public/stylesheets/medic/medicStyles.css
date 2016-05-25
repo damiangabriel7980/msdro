@@ -6392,6 +6392,12 @@ body .btn {
 .overflowVisible {
   overflow-x: visible !important;
 }
+.noPaddingLeft {
+  padding-left: 0;
+}
+.noPaddingRight {
+  padding-right: 0;
+}
 .elearningMenu {
   position: relative;
 }
@@ -6463,9 +6469,29 @@ body .btn {
 .productsView .noProducts {
   text-align: center;
 }
+.productsView .row-centered {
+  text-align: center;
+}
+.productsView .vertical-content-list .TextWrapper {
+  height: 8em;
+}
+.productsView .vertical-content-list .buttonWrapper {
+  text-align: center;
+}
+.productsView .col-centered {
+  display: inline-block;
+  float: none;
+  /* reset the text-align */
+  text-align: left;
+  /* inline-block space fix */
+  margin-right: -4px;
+}
 .productsView .product {
   margin-bottom: 25px;
   padding: 0 25px 0 0;
+}
+.productsView .marginLeft35 {
+  margin-left: 35px;
 }
 .pickLetter {
   padding: 0;
@@ -7042,6 +7068,37 @@ body .btn {
 }
 .homeStyles .leftSection .lastNewsWrapper .content {
   padding: 0 15px 0 0;
+}
+.homeStyles .leftSection .aboutSection .Title {
+  padding: 0;
+  padding-bottom: 8px !important;
+}
+.homeStyles .leftSection .aboutSection .image {
+  padding: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+.homeStyles .leftSection .aboutSection .paddingLeftBig {
+  padding-left: 30px !important;
+}
+.homeStyles .leftSection .aboutSection .marginTop5px {
+  margin-top: 5px;
+}
+.homeStyles .leftSection .aboutSection .descriptionWrapper {
+  padding: 0;
+  height: 12em;
+  overflow: hidden;
+}
+.homeStyles .leftSection .aboutSection .descriptionWrapper:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  min-height: 4.5em;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
 }
 .homeStyles .leftSection:after {
   position: absolute;
@@ -7660,6 +7717,11 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .specialProductMainWrapper {
   margin-top: 20px;
 }
+.specialProductMainWrapper .customBorder {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid lightgrey;
+}
 .specialProductMainWrapper #menuDiv {
   margin-left: 0;
 }
@@ -7788,6 +7850,20 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .prescription {
   margin-top: 15px;
+}
+.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  float: left;
+}
+@media (max-width: 992px) {
+  .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle {
+    position: relative;
+  }
+}
+.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle .noMarginBottom {
+  margin-bottom: 0;
 }
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .job_id {
   margin-top: 20px;
@@ -8730,6 +8806,9 @@ a:focus {
 }
 .marginTop25px {
   margin-top: 25px;
+}
+.margins20 {
+  margin: 20px 0;
 }
 .extraPaddingSpeaker {
   padding: 0 0 25px 0 !important;

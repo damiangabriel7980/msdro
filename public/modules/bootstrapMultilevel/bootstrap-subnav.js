@@ -22,9 +22,14 @@
                 parentDisplayName: '@',
                 childDisplayName: '@',
                 stateName: '@',
+                noChildrenStateName: '@',
+                stateParametersExist: '=',
+                noChildrenStateParametersExist: '=',
                 stateParameters: '@',
+                noChildrenStateParameters: '@',
                 stateParametersValues: '@',
-                activeCondition: '='
+                noChildrenStateParametersValues: '@',
+                activeConditions: '='
             },
             link: function(scope, element, attrs) {
                 // expose functions
@@ -51,15 +56,31 @@
                     });
                 };
 
-                scope.goToState = function(item){
-                    var paramIdentifiers = scope.stateParameters.split(',');
-                    var paramValues = scope.stateParametersValues.split(',');
+                function parseStateParams (identifiers, values, item){
                     var stateParams = {};
+                    var paramIdentifiers = identifiers.split(',');
+                    var paramValues = values.split(',');
                     angular.forEach(paramIdentifiers, function(value, key){
                         stateParams[value] = !isNaN(paramValues[key]) ? paramValues[key] : item[paramValues[key]];
                     });
+                    return stateParams;
+                }
+
+
+                scope.goToState = function(item, noChildren){
+                    var params = {};
+                    if(noChildren){
+                        if(scope.noChildrenStateParametersExist){
+                            params = parseStateParams(scope.noChildrenStateParameters, scope.noChildrenStateParametersValues, item)
+                        }
+                        $state.go(scope.noChildrenStateName, params);
+                    } else {
+                        if(scope.stateParametersExist){
+                            params = parseStateParams(scope.stateParameters, scope.stateParametersValues, item)
+                        }
+                        $state.go(scope.stateName, params, {inherit: false,reload: true});
+                    }
                     scope.closeAllMenus();
-                    $state.go(scope.stateName, stateParams);
                 };
 
                 scope.expandParent = function(event){

@@ -28,19 +28,22 @@
 
 <div class="col-xs-12 container homeStyles" >
     <div class="col-md-6 col-sm-7 leftSection">
-        <div class="col-xs-12 lastNewsWrapper" ng-if="news">
-            <div class="col-xs-12 Title">
-                <h3>ULTIMELE NOUTATI</h3>
+        <div class="col-xs-12 aboutSection" ng-if="brochure">
+            <div class="col-xs-12 Title noPadding">
+                <h3>MSD in Romania - Dedicati binelui</h3>
             </div>
-            <div ng-if="!isMobile()">
-                <div class="col-xs-4 content" ng-repeat="n in news">
-                    <vertical-content-list content="n" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
-                                           title-attr="title" text-attr="text" navigate="navigateToNews"></vertical-content-list>
+            <div class="col-xs-12 noPadding">
+                <div class="col-xs-3 noPadding image marginTop25px">
+                    <img ng-src="{{MSDlogo}}" ui-sref="about" width="100%">
                 </div>
-            </div>
-            <div ng-if="isMobile()">
-                <mobile-content-list content="news" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultArticleImage}}" title-attr="title"
-                                     text-attr="text" navigate="navigateToNews" limit="3"></mobile-content-list>
+                <div class="col-xs-9 paddingLeftBig">
+                    <div class="col-xs-12 descriptionWrapper" ng-bind-html="trustAsHtml(brochure.text)">
+                    </div>
+                    <br/>
+                    <div class="col-xs-12 noPadding marginTop5px">
+                        <a class="btn btn-default" ui-sref="about"> Citeste mai mult </a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-xs-12 lastNewsWrapper">

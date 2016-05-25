@@ -35,6 +35,7 @@ var guidelineCategory = require ("../models/guidelineCategory");
 var myPrescription = require("../models/myPrescription");
 var pdf = require("html-pdf");
 var Pathologies = require('../models/pathologies');
+var brochureSection = require('../models/brochureSections');
 
 var xlsx = require("xlsx");
 
@@ -105,36 +106,36 @@ var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     return deferred.promise;
 };
 
-var getAssociatedElementsForPathologies = function(entityToAssociate, propertyNameForAssociatedItems, enabledProperty){
+var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQParams){
     var deferred = Q.defer();
     var pathologiesToSend = [];
+    var queryPathology = pathQParams ? pathQParams : { enabled: true };
     //get pathologies and for each get list of products
-    Pathologies.find({enabled: true}).sort('display_name').exec(function(err, pathologies){
+    Pathologies.find(queryPathology).sort('display_name').exec(function(err, pathologies){
         if(err)
         {
             deferred.reject(err);
         }
         else {
             async.each(pathologies, function(pathology, callback){
-                var qObject = {
-                    pathologiesID : {$in: [pathology._id]}
-                };
-                if(enabledProperty){
-                    qObject[enabledProperty] = { $exists: true, $ne : false };
-                }
-                entityToAssociate.find(qObject).exec(function (error, associated) {
+                itemQParams.query.pathologiesID = {$in: [pathology._id]};
+                entityToAssociate.find(itemQParams.query).sort(itemQParams.sort).exec(function (error, associated) {
                     if(err){
                         callback(err)
                     } else  {
                         if(associated.length > 0){
                             var objectToPush = {
                                 _id: pathology._id,
-                                display_name: pathology.display_name
+                                display_name: pathology.display_name,
+                                description: pathology.description,
+                                header_image: pathology.header_image
                             };
-                            objectToPush[propertyNameForAssociatedItems] = associated;
+                            objectToPush['associated_items'] = associated;
                             pathologiesToSend.push(objectToPush);
                             callback();
                         } else {
+                            if(queryPathology._id)
+                                pathologiesToSend.push(pathology);
                             callback();
                         }
                     }
@@ -568,6 +569,93 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             });
                         }
                     })
+                }else{
+                    handleError(res,err,404,1);
+                }
+            });
+        });
+
+    router.route('/admin/brochure')
+        .get(function(req, res) {
+            if(req.query.id){
+                brochureSection.findOne({_id:req.query.id}, function(err, pathology) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, pathology);
+                    }
+                })
+            }else{
+                brochureSection.find(function(err, pathologies) {
+                    if(err) {
+                        handleError(res,err,500);
+                    }
+                    else {
+                        handleSuccess(res, pathologies);
+                    }
+                });
+            }
+        })
+        .post(function(req, res) {
+            var brochure = new brochureSection({
+                title: 'Untitled',
+                last_updated: new Date(),
+                enabled: false
+            });
+            brochure.save(function(err,saved) {
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, {saved: saved}, 2);
+                }
+            });
+        })
+        .put(function(req, res) {
+            // the body will contain an object with the property/properties we want to update
+            brochureSection.update({_id:req.query.id},{$set: req.body}, function(err, pathology) {
+                if (err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, {}, 3);
+                }
+            });
+        })
+        .delete(function(req, res) {
+            var id = req.query.id;
+            brochureSection.findOne({_id: id}, function (err, brochureS) {
+                if(brochureS){
+                    var imagesToDelete = [];
+                    if(brochureS.title_image)
+                        imagesToDelete.push(brochureS.title_image);
+                    if(brochureS.side_image)
+                        imagesToDelete.push(brochureS.side_image);
+                    //first we'll remove any references to this pathology
+                    brochureSection.remove({_id:id},function(err,cont) {
+                        if (err){
+                            handleError(res,err,500);
+                        }
+                        else{
+                            if(imagesToDelete.length){
+                                async.forEach(imagesToDelete, function (imagePath, callbackImage) {
+                                    amazon.deleteObjectS3(imagePath, function (err, data) {
+                                        if(err){
+                                            callbackImage(err);
+                                        }else{
+                                            callbackImage();
+                                        }
+                                    });
+                                }, function (err) {
+                                    if(err){
+                                        handleError(res,err,409,4);
+                                    }else{
+                                        handleSuccess(res, {}, 7);
+                                    }
+                                });
+                            }else{
+                                handleSuccess(res, {}, 4);
+                            }
+                        }
+                    });
                 }else{
                     handleError(res,err,404,1);
                 }
@@ -3915,7 +4003,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/specialProduct')
         .get(function(req, res) {
             if(req.query.id){
-                ContentVerifier.getContentById(specialProduct,req.query.id,null,false,'enabled','speakers','groups').then(
+                ContentVerifier.getContentById(specialProduct,req.query.id,null,false,'enabled','speakers pathologiesID','groups').then(
                     function(success){
                         handleSuccess(res,success);
                     },function(err){
@@ -3927,7 +4015,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 );
             } else {
-                getAssociatedElementsForPathologies(specialProduct, 'products', 'enabled').then(
+                var itemQParams = {
+                    query: {
+                        enabled: { $exists: true, $ne : false }
+                    },
+                    sort: {
+                        product_name: 1
+                    }
+                };
+                if(req.query.firstLetter)
+                    itemQParams.query.product_name = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                getPathologiesWithItems(specialProduct, itemQParams).then(
                     function (success) {
                         handleSuccess(res,success);
                     },
@@ -4388,26 +4486,15 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         }
                     });
                 }else{
-                    if(req.query.forMenu){
-                        getAssociatedElementsForPathologies(Products, 'products', 'enable').then(
-                            function (success) {
-                                handleSuccess(res,success);
-                            },
-                            function (err) {
-                                handleError(res,err,500);
-                            }
-                        )
-                    } else {
-                        var q = {enable: { $exists: true, $ne : false }};
-                        if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
-                        Products.find(q).sort({"name": 1}).exec(function(err, cont) {
-                            if(err){
-                                handleError(res,err,500);
-                            }else{
-                                handleSuccess(res, cont);
-                            }
-                        })
-                    }
+                    var q = {enable: { $exists: true, $ne : false }};
+                    if(req.query.firstLetter) q["name"] = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
+                    Products.find(q).sort({"name": 1}).exec(function(err, cont) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, cont);
+                        }
+                    })
                 }
             }
         });
@@ -4515,7 +4602,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/checkIntroEnabled')
         .get(function (req, res) {
-            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
+            Presentations.findOne({enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -4538,7 +4625,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/introPresentation')
         .get(function (req, res) {
-            Presentations.findOne({groupsID: {$in: [req.query.groupID]}, enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
+            Presentations.findOne({enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -4556,25 +4643,53 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/pathologies')
         .get(function(req, res) {
-            var queryObject = {
-                enabled: true
+            var queryPathObject = {
+                enabled: { $exists: true, $ne : false }
             };
-            if(req.query.forDropdown){
-                queryObject.description = { $exists: true, $ne : '' };
-            }
             if(req.query.id){
-                queryObject._id = ObjectId(req.query.id);
+                queryPathObject._id = req.query.id;
             }
-                Pathologies.find(queryObject).sort({"display_name": 1}).exec(function(err, pathologies) {
-                    if(err) {
-                        console.log(err);
+            if(req.query.forDropdown){
+                queryPathObject.description = { $exists: true, $ne : '' };
+                Pathologies.find(queryPathObject).sort('display_name').exec(function (err, pathologies) {
+                    if(err){
                         handleError(res,err,500);
-                    }
-                    else {
+                    }else{
                         handleSuccess(res, pathologies);
                     }
-                });
+                })
+            } else {
+                var itemQParams = {
+                    query: {
+                        enabled: { $exists: true, $ne : false }
+                    },
+                    sort: {
+                        product_name: 1
+                    }
+                };
+                getPathologiesWithItems(specialProduct, itemQParams, queryPathObject).then(
+                    function (success) {
+                        handleSuccess(res,success);
+                    },
+                    function (err) {
+                        handleError(res,err,500);
+                    }
+                )
+            }
         });
+
+    router.route('/brochure')
+        .get(function(req, res) {
+            var queryToExec = req.query.firstOnly ? brochureSection.find({enabled: { $exists: true, $ne : false }}).sort({orderIndex: 1}).limit(1) : brochureSection.find({enabled: { $exists: true, $ne : false }}).sort({orderIndex: 1});
+            queryToExec.exec(function (err, brochureSections) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, brochureSections);
+                }
+            });
+        });
+
 
     app.use('/api', router);
 };

@@ -1,4 +1,4 @@
-app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state','$anchorScroll', 'Utils', 'Success', 'SpecialFeaturesService', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state,$anchorScroll, Utils,Success,SpecialFeaturesService) {
+app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', '$sce', '$modal','$animate','$document','$window','$timeout','$state','$anchorScroll', 'Utils', 'Success', 'SpecialFeaturesService', 'brochureService', function($scope, $rootScope, HomeService, $sce, $modal,$animate,$document,$window,$timeout,$state,$anchorScroll, Utils,Success,SpecialFeaturesService, brochureService) {
 
     $scope.monthsArray = Utils.getMonthsArray();
     $scope.merckBoxUrl = $sce.trustAsResourceUrl('partials/medic/widgets/merckBox.html');
@@ -68,6 +68,10 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
         });
         HomeService.multimedia.query({specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
             $scope.multimedia = Success.getObject(resp);
+        });
+
+        brochureService.sections.query({firstOnly: true}).$promise.then(function (resp) {
+            $scope.brochure = Success.getObject(resp)[0];
         });
 
         HomeService.carousel.query({specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function(resp){

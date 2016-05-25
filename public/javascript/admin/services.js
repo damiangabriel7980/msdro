@@ -592,6 +592,17 @@ services.factory('PathologiesService',['$resource',function($resource){
     }
 }]);
 
+services.factory('brochureService',['$resource',function($resource){
+    return{
+        brochureSections : $resource('api/admin/brochure',{},{
+            query:{method:'GET',isArray:false},
+            create:{method:'POST',isArray:false},
+            update:{method:'PUT',isArray:false},
+            delete:{method:'DELETE',isArray:false}
+        })
+    }
+}]);
+
 services.factory('NewsletterService', ['$resource', function($resource){
     var variableTypes = ["text", "html"];
     var systemVariables = ["UNSUBSCRIBE_URL"];

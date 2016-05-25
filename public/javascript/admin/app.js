@@ -258,6 +258,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/pathologies/pathologies.html',
             controller: 'Pathologies'
         })
+        .state('brochure',{
+            url: '/brochure',
+            templateUrl: 'partials/admin/brochure/brochure.html',
+            controller: 'brochureController'
+        })
         .state('applications', {
             abstract: true,
             url: '/applications',
