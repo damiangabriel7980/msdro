@@ -39,7 +39,7 @@
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
                 </accordion-heading>
             </accordion-group>
-            <accordion-group is-open="status.isFirstOpen" class="parent" ui-sref="pathologies({pathology_id: specialProductPage.pathologiesID[0]._id})">
+            <accordion-group is-open="status.isFirstOpen" ng-if="specialProductPage.pathologiesID[0].description && specialProductPage.pathologiesID[0].description.length" class="parent" ui-sref="pathologies({pathology_id: specialProductPage.pathologiesID[0]._id})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Inapoi la {{specialProductPage.pathologiesID[0].display_name}}</div>
                 </accordion-heading>
