@@ -10,7 +10,8 @@ var PathologiesSchema		= new Schema({
     header_image: String,
     associated_multimedia: Array,
     last_updated: Date,
-    enabled: Boolean
+    enabled: Boolean,
+    specialApps: [{type: Schema.Types.ObjectId, ref: 'groupsApplications'}]
 });
 
 module.exports = mongoose.model('pathologies', PathologiesSchema, 'pathologies');

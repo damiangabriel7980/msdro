@@ -308,7 +308,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             else
                 $state.go('elearning.multimedia.multimediaByArea',{'idArea': parsedURL[3], idMulti: parsedURL[4]});
         }])
-        .when(/groupFeatures/, ['$state','$match', function ($state, $match) {
+        .when(/aplicatii/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
             $state.go('groupFeatures', {specialApp : parsedURL[1]});
         }]);
@@ -500,7 +500,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             }
         })
         .state('groupFeatures', {
-            url: '/aplicatii/:specialApp',
+            url: '/dovezi/:specialApp',
             templateUrl: 'partials/medic/groupFeatures/groupFeatures.html',
             controller: 'DisplayFeatures'
         })
@@ -603,6 +603,8 @@ app.run(
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
             $rootScope.defaultSlideImage = $rootScope.pathAmazonResources+"slide.png";
             $rootScope.defaultProductImage = $rootScope.pathAmazonResources+ "piles-of-pills.jpg";
+            $rootScope.defaultProofImage = $rootScope.pathAmazonResources+ "proofs.png";
+
             $rootScope.defaultUserImage = $rootScope.pathAmazonResources+ "avatar_unknown.png";
             $rootScope.brochureHeader = $rootScope.pathAmazonResources+ "brochure_header.png";
 
