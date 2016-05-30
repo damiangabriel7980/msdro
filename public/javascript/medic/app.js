@@ -627,6 +627,7 @@ app.run(
             $rootScope.defaultGroupPhoto = $rootScope.pathAmazonResources + 'customGroups/grup_logo2.png';
 
             $rootScope.MSDlogo = $rootScope.pathAmazonResources+"rsz_msd_be_well_green_gray.png";
+            $rootScope.brochureLogo = $rootScope.pathAmazonResources + 'brochure_thumbnail.png';
 
             $rootScope.loaderForSlowConn = "https://s3-eu-west-1.amazonaws.com/msddev-test/resources/page-loader.gif";
 
